@@ -90,7 +90,7 @@ Popup {
     var items = [
       {
         name: qsTr("Auto Layout"),
-        icon: "qrc:/rcc/icons/start/auto-layout.svg",
+        icon: "qrc:/icons/start/auto-layout.svg",
         visible: true,
         run: function() {
           taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
@@ -98,25 +98,25 @@ Popup {
       },
       {
         name: qsTr("Full Screen"),
-        icon: "qrc:/rcc/icons/start/full-screen.svg",
+        icon: "qrc:/icons/start/full-screen.svg",
         visible: !root.isExternalWindow && !app.runtimeMode,
         run: function() { mainWindow.toggleFullScreen() }
       },
       {
         name: qsTr("Add External Window"),
-        icon: "qrc:/rcc/icons/start/external-window.svg",
+        icon: "qrc:/icons/start/external-window.svg",
         visible: true,
         run: function() { root.externalWindowClicked() }
       },
       {
         name: qsTr("Console"),
-        icon: "qrc:/rcc/icons/start/console.svg",
+        icon: "qrc:/icons/start/console.svg",
         visible: !app.runtimeMode,
         run: function() { Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled }
       },
       {
         name: qsTr("Notifications"),
-        icon: "qrc:/rcc/icons/start/notifications.svg",
+        icon: "qrc:/icons/start/notifications.svg",
         visible: Cpp_CommercialBuild,
         run: function() {
           Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
@@ -124,25 +124,25 @@ Popup {
       },
       {
         name: qsTr("Preferences"),
-        icon: "qrc:/rcc/icons/start/settings.svg",
+        icon: "qrc:/icons/start/settings.svg",
         visible: !app.runtimeMode,
         run: function() { app.showSettingsDialog() }
       },
       {
         name: qsTr("Help Center"),
-        icon: "qrc:/rcc/icons/start/help.svg",
+        icon: "qrc:/icons/start/help.svg",
         visible: true,
         run: function() { app.showHelpCenter() }
       },
       {
         name: qsTr("MQTT"),
-        icon: "qrc:/rcc/icons/toolbar/mqtt.svg",
+        icon: "qrc:/icons/toolbar/mqtt.svg",
         visible: Cpp_CommercialBuild && !app.runtimeMode,
         run: function() { app.showMqttConfiguration() }
       },
       {
         name: qsTr("Sessions"),
-        icon: "qrc:/rcc/icons/start/sessions.svg",
+        icon: "qrc:/icons/start/sessions.svg",
         visible: Cpp_CommercialBuild
                  && (!app.runtimeMode || Cpp_Sessions_Export.exportEnabled),
         run: function() { app.showDatabaseExplorer() }
@@ -244,7 +244,7 @@ Popup {
       expandable: true
       Layout.fillWidth: true
       text: qsTr("Workspaces")
-      icon.source: "qrc:/rcc/icons/start/groups.svg"
+      icon.source: "qrc:/icons/start/groups.svg"
 
       property var popup: null
       function showMenu() {
@@ -286,7 +286,7 @@ Popup {
                        "icon": "", "separator": true})
           model.push({"id": "__new_workspace__", "separator": false,
                        "text": qsTr("New Workspace…"),
-                       "icon": "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"})
+                       "icon": "qrc:/icons/project-editor/toolbar/add-group.svg"})
         }
 
         // Update popup state
@@ -329,7 +329,7 @@ Popup {
       text: qsTr("Actions")
       Layout.fillWidth: true
       visible: Cpp_UI_Dashboard.actions.length > 0
-      icon.source: "qrc:/rcc/icons/start/actions.svg"
+      icon.source: "qrc:/icons/start/actions.svg"
 
       property var popup: null
       function showMenu() {
@@ -378,7 +378,7 @@ Popup {
       expandable: true
       text: qsTr("Plugins")
       Layout.fillWidth: true
-      icon.source: "qrc:/rcc/icons/toolbar/extensions.svg"
+      icon.source: "qrc:/icons/toolbar/extensions.svg"
       visible: Cpp_ExtensionManager.installedPlugins.length > 0
 
       property var popup: null
@@ -412,7 +412,7 @@ Popup {
         items.push({
                      "id": "__manage_plugins__",
                      "title": qsTr("Manage Plugins…"),
-                     "icon": "qrc:/rcc/icons/toolbar/extensions.svg"
+                     "icon": "qrc:/icons/toolbar/extensions.svg"
                    })
 
         _plugins.popup.model = items
@@ -457,7 +457,7 @@ Popup {
       Layout.fillWidth: true
       text: qsTr("Auto Layout")
       checked: taskBar.windowManager.autoLayoutEnabled
-      icon.source: "qrc:/rcc/icons/start/auto-layout.svg"
+      icon.source: "qrc:/icons/start/auto-layout.svg"
       onCheckedChanged: {
         if (checked !== taskBar.windowManager.autoLayoutEnabled)
           taskBar.windowManager.autoLayoutEnabled = checked
@@ -468,7 +468,7 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Full Screen")
-      icon.source: "qrc:/rcc/icons/start/full-screen.svg"
+      icon.source: "qrc:/icons/start/full-screen.svg"
       visible: !root.isExternalWindow && !app.runtimeMode
       checked: mainWindow.visibility === Window.FullScreen
       onClicked: {
@@ -481,7 +481,7 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Add External Window")
-      icon.source: "qrc:/rcc/icons/start/external-window.svg"
+      icon.source: "qrc:/icons/start/external-window.svg"
       onClicked: {
         root.close()
         root.externalWindowClicked()
@@ -502,7 +502,7 @@ Popup {
       expandable: true
       text: qsTr("Export")
       Layout.fillWidth: true
-      icon.source: "qrc:/rcc/icons/start/export.svg"
+      icon.source: "qrc:/icons/start/export.svg"
       visible: !(typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
 
       readonly property string kCsv: "csv"
@@ -531,19 +531,19 @@ Popup {
           {
             "id": _export.kCsv,
             "text": qsTr("CSV File"),
-            "icon": "qrc:/rcc/icons/start/csv-log.svg",
+            "icon": "qrc:/icons/start/csv-log.svg",
             "checked": Cpp_CSV_Export.exportEnabled
           },
           {
             "id": _export.kMdf4,
             "text": qsTr("MDF4 File"),
-            "icon": "qrc:/rcc/icons/start/mf4-log.svg",
+            "icon": "qrc:/icons/start/mf4-log.svg",
             "checked": Cpp_MDF4_Export.exportEnabled
           },
           {
             "id": _export.kConsole,
             "text": qsTr("Console Transcript"),
-            "icon": "qrc:/rcc/icons/start/console-log.svg",
+            "icon": "qrc:/icons/start/console-log.svg",
             "checked": Cpp_Console_Export.exportEnabled
           }
         ]
@@ -552,7 +552,7 @@ Popup {
           model.push({
             "id": _export.kDatabase,
             "text": qsTr("Session Database"),
-            "icon": "qrc:/rcc/icons/start/database-export.svg",
+            "icon": "qrc:/icons/start/database-export.svg",
             "checked": Cpp_Sessions_Export.exportEnabled
           })
         }
@@ -595,7 +595,7 @@ Popup {
       expandable: true
       text: qsTr("Tools")
       Layout.fillWidth: true
-      icon.source: "qrc:/rcc/icons/start/tools.svg"
+      icon.source: "qrc:/icons/start/tools.svg"
       visible: !app.runtimeMode || Cpp_CommercialBuild
 
       readonly property string kMqtt: "mqtt"
@@ -635,7 +635,7 @@ Popup {
           model.push({
             "id": _tools.kConsole,
             "text": qsTr("Console"),
-            "icon": "qrc:/rcc/icons/start/console.svg",
+            "icon": "qrc:/icons/start/console.svg",
             "checked": Cpp_UI_Dashboard.terminalEnabled
           })
         }
@@ -644,7 +644,7 @@ Popup {
           model.push({
             "id": _tools.kNotifications,
             "text": qsTr("Notifications"),
-            "icon": "qrc:/rcc/icons/start/notifications.svg",
+            "icon": "qrc:/icons/start/notifications.svg",
             "checked": Cpp_UI_Dashboard.notificationLogEnabled
           })
         }
@@ -653,7 +653,7 @@ Popup {
           model.push({
             "id": _tools.kPreferences,
             "text": qsTr("Preferences"),
-            "icon": "qrc:/rcc/icons/start/settings.svg"
+            "icon": "qrc:/icons/start/settings.svg"
           })
         }
 
@@ -663,9 +663,9 @@ Popup {
             "text": qsTr("MQTT"),
             "icon": Cpp_MQTT_Client.isConnected
                     ? (Cpp_MQTT_Client.isSubscriber
-                       ? "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg"
-                       : "qrc:/rcc/icons/toolbar/mqtt-publisher.svg")
-                    : "qrc:/rcc/icons/toolbar/mqtt.svg"
+                       ? "qrc:/icons/toolbar/mqtt-subscriber.svg"
+                       : "qrc:/icons/toolbar/mqtt-publisher.svg")
+                    : "qrc:/icons/toolbar/mqtt.svg"
           })
         }
 
@@ -674,7 +674,7 @@ Popup {
           model.push({
             "id": _tools.kSessions,
             "text": qsTr("Sessions"),
-            "icon": "qrc:/rcc/icons/start/sessions.svg"
+            "icon": "qrc:/icons/start/sessions.svg"
           })
         }
 
@@ -721,7 +721,7 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Help Center")
-      icon.source: "qrc:/rcc/icons/start/help.svg"
+      icon.source: "qrc:/icons/start/help.svg"
       onClicked: {
         root.close()
         app.showHelpCenter()
@@ -739,8 +739,8 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       icon.source: Cpp_IO_Manager.paused ?
-                     "qrc:/rcc/icons/start/resume.svg" :
-                     "qrc:/rcc/icons/start/pause.svg"
+                     "qrc:/icons/start/resume.svg" :
+                     "qrc:/icons/start/pause.svg"
       text: Cpp_IO_Manager.paused ? qsTr("Resume") :
                                     qsTr("Pause")
       onClicked: Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
@@ -750,7 +750,7 @@ Popup {
       expandable: false
       text: qsTr("Reset")
       Layout.fillWidth: true
-      icon.source: "qrc:/rcc/icons/start/reset.svg"
+      icon.source: "qrc:/icons/start/reset.svg"
       onClicked: {
         // Reset dashboard
         root.close()
@@ -770,7 +770,7 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Disconnect")
-      icon.source: "qrc:/rcc/icons/start/disconnect.svg"
+      icon.source: "qrc:/icons/start/disconnect.svg"
       onClicked: {
         root.close()
         if (typeof mainWindow !== "undefined" && mainWindow.userDisconnect)

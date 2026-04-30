@@ -100,7 +100,7 @@ Item {
       icon.width: 24
       icon.height: 24
       ToolTip.text: qsTr("Auto Center")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/crosshair.svg"
     }
 
     DashboardToolButton {
@@ -116,7 +116,7 @@ Item {
       icon.width: 24
       icon.height: 24
       ToolTip.text: qsTr("Plot Trajectory")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/poliline.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/poliline.svg"
     }
 
     Rectangle {
@@ -133,7 +133,7 @@ Item {
       icon.width: 24
       icon.height: 24
       ToolTip.text: qsTr("Zoom In")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-in.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/zoom-in.svg"
     }
 
     DashboardToolButton {
@@ -144,7 +144,7 @@ Item {
       icon.width: 24
       icon.height: 24
       ToolTip.text: qsTr("Zoom Out")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-out.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/zoom-out.svg"
     }
 
     Rectangle {
@@ -168,7 +168,7 @@ Item {
       icon.width: 24
       icon.height: 24
       ToolTip.text: qsTr("Show Weather")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/weather.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/weather.svg"
     }
 
     DashboardToolButton {
@@ -186,7 +186,7 @@ Item {
       icon.width: 24
       icon.height: 24
       ToolTip.text: qsTr("NASA Weather Overlay")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/nasa.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/nasa.svg"
     }
 
     Rectangle {
@@ -200,7 +200,7 @@ Item {
       enabled: false
       icon.height: 24
       icon.color: "transparent"
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/map.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/map.svg"
     }
 
     ComboBox {

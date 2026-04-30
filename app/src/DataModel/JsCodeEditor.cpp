@@ -540,7 +540,7 @@ void DataModel::JsCodeEditor::onThemeChanged()
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
 
   const auto path =
-    name.startsWith('/') ? name : QStringLiteral(":/rcc/themes/code-editor/%1.xml").arg(name);
+    name.startsWith('/') ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
 
   // Load syntax style XML
   QFile file(path);

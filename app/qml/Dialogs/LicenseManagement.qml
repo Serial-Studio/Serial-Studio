@@ -37,6 +37,12 @@ SmartDialog {
   minimumWidth: 520 + (contentPadding * 2)
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: column.implicitWidth
+  preferredHeight: column.implicitHeight
+
+  //
   // Window controls
   //
   dialogContent: ColumnLayout {
@@ -104,7 +110,7 @@ SmartDialog {
             sourceSize.width: 128
             sourceSize.height: 128
             Layout.alignment: Qt.AlignVCenter
-            source: "qrc:/rcc/icons/licensing/license.svg"
+            source: "qrc:/icons/licensing/license.svg"
           }
 
           ColumnLayout {
@@ -185,8 +191,8 @@ SmartDialog {
                 icon.color: palette.text
                 Layout.maximumWidth: height
                 Layout.alignment: Qt.AlignVCenter
-                icon.source: checked ? "qrc:/rcc/icons/buttons/invisible.svg" :
-                                       "qrc:/rcc/icons/buttons/visible.svg"
+                icon.source: checked ? "qrc:/icons/buttons/invisible.svg" :
+                                       "qrc:/icons/buttons/visible.svg"
                 onCheckedChanged: _key.echoMode = (checked ? TextField.Normal :
                                                              TextField.Password)
               }
@@ -219,7 +225,7 @@ SmartDialog {
           Image {
             sourceSize.width: 18
             sourceSize.height: 18
-            source: "qrc:/rcc/icons/licensing/plan.svg"
+            source: "qrc:/icons/licensing/plan.svg"
           }
 
           Label {
@@ -236,7 +242,7 @@ SmartDialog {
           Image {
             sourceSize.width: 18
             sourceSize.height: 18
-            source: "qrc:/rcc/icons/licensing/user.svg"
+            source: "qrc:/icons/licensing/user.svg"
             visible: Cpp_Licensing_LemonSqueezy.customerName.length > 0
           }
 
@@ -256,7 +262,7 @@ SmartDialog {
           Image {
             sourceSize.width: 18
             sourceSize.height: 18
-            source: "qrc:/rcc/icons/licensing/email.svg"
+            source: "qrc:/icons/licensing/email.svg"
           }
 
           Label {
@@ -273,7 +279,7 @@ SmartDialog {
           Image {
             sourceSize.width: 18
             sourceSize.height: 18
-            source: "qrc:/rcc/icons/licensing/devices.svg"
+            source: "qrc:/icons/licensing/devices.svg"
           }
 
           Label {
@@ -292,7 +298,7 @@ SmartDialog {
           Image {
             sourceSize.width: 18
             sourceSize.height: 18
-            source: "qrc:/rcc/icons/licensing/uuid.svg"
+            source: "qrc:/icons/licensing/uuid.svg"
           }
 
           Label {
@@ -338,7 +344,7 @@ SmartDialog {
           Image {
             sourceSize.width: 18
             sourceSize.height: 18
-            source: "qrc:/rcc/icons/licensing/key.svg"
+            source: "qrc:/icons/licensing/key.svg"
             visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
           }
 
@@ -402,7 +408,7 @@ SmartDialog {
           horizontalPadding: 8
           text: qsTr("Customer Portal")
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/lemonsqueezy.svg"
+          icon.source: "qrc:/icons/buttons/lemonsqueezy.svg"
           onClicked: Cpp_Licensing_LemonSqueezy.openCustomerPortal()
         }
 
@@ -416,7 +422,7 @@ SmartDialog {
           horizontalPadding: 8
           text: qsTr("Buy License")
           onClicked: Cpp_Licensing_LemonSqueezy.buy()
-          icon.source: "qrc:/rcc/icons/buttons/buy.svg"
+          icon.source: "qrc:/icons/buttons/buy.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
         }
 
@@ -428,7 +434,7 @@ SmartDialog {
           opacity: enabled ? 1 : 0.5
           visible: !Cpp_Licensing_LemonSqueezy.isActivated
           onClicked: Cpp_Licensing_LemonSqueezy.activate()
-          icon.source: "qrc:/rcc/icons/buttons/activate.svg"
+          icon.source: "qrc:/icons/buttons/activate.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
           enabled: Cpp_Licensing_LemonSqueezy.canActivate && !Cpp_Licensing_LemonSqueezy.busy
         }
@@ -443,7 +449,7 @@ SmartDialog {
           visible: Cpp_Licensing_LemonSqueezy.isActivated
           onClicked: Cpp_Licensing_LemonSqueezy.deactivate()
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/deactivate.svg"
+          icon.source: "qrc:/icons/buttons/deactivate.svg"
         }
       }
     }

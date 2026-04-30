@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("Dataset Values")
-  icon: "qrc:/rcc/icons/project-editor/treeview/dataset-values.svg"
+  icon: "qrc:/icons/project-editor/treeview/dataset-values.svg"
 
   //
   // Shared column widths and row height — header, rows, and empty-column
@@ -292,7 +292,7 @@ Widgets.Pane {
               icon.color: "transparent"
               Layout.preferredHeight: 26
               Layout.preferredWidth: root.colActionWidth
-              icon.source: "qrc:/rcc/icons/buttons/copy.svg"
+              icon.source: "qrc:/icons/buttons/copy.svg"
               ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyBtn.accessCode)
 
               background: Rectangle {
@@ -362,7 +362,7 @@ Widgets.Pane {
           Layout.preferredWidth: 14
           Layout.preferredHeight: 14
           Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+          icon.source: "qrc:/icons/buttons/apply.svg"
           icon.color: Cpp_ThemeManager.colors["highlighted_text"]
           background: Item {}
         }

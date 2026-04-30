@@ -409,7 +409,7 @@ Item {
         icon.color: _title.color
         Layout.alignment: Qt.AlignVCenter
         onClicked: root.externalWindowClicked()
-        icon.source: "qrc:/rcc/icons/miniwindow/external.svg"
+        icon.source: "qrc:/icons/miniwindow/external.svg"
 
         anchors {
           left: parent.left
@@ -454,7 +454,7 @@ Item {
           onClicked: root.minimizeClicked()
           icon.width: root.captionHeight / 2
           icon.height: root.captionHeight / 2
-          icon.source: "qrc:/rcc/icons/miniwindow/minimize.svg"
+          icon.source: "qrc:/icons/miniwindow/minimize.svg"
 
           MouseArea {
             id: minBtMa
@@ -479,8 +479,8 @@ Item {
           icon.height: root.captionHeight / 2
 
           icon.color: _title.color
-          icon.source: root.state === "maximized" ? "qrc:/rcc/icons/miniwindow/restore.svg" :
-                                                    "qrc:/rcc/icons/miniwindow/maximize.svg"
+          icon.source: root.state === "maximized" ? "qrc:/icons/miniwindow/restore.svg" :
+                                                    "qrc:/icons/miniwindow/maximize.svg"
 
           MouseArea {
             id: maxBtMa
@@ -504,7 +504,7 @@ Item {
           Layout.alignment: Qt.AlignVCenter
           icon.width: root.captionHeight / 2
           icon.height: root.captionHeight / 2
-          icon.source: "qrc:/rcc/icons/miniwindow/close.svg"
+          icon.source: "qrc:/icons/miniwindow/close.svg"
 
           MouseArea {
             id: closeBtMa

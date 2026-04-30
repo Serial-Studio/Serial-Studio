@@ -49,6 +49,12 @@ Widgets.SmartDialog {
   title: qsTr("Preferences")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Window controls
   //
   dialogContent: ColumnLayout {
@@ -233,7 +239,7 @@ Widgets.SmartDialog {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_Misc_WorkspaceManager.selectPath()
               icon.color: Cpp_ThemeManager.colors["button_text"]
-              icon.source: "qrc:/rcc/icons/buttons/open.svg"
+              icon.source: "qrc:/icons/buttons/open.svg"
             }
           }
 
@@ -1014,7 +1020,7 @@ Widgets.SmartDialog {
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
+        icon.source: "qrc:/icons/buttons/refresh.svg"
         onClicked: {
           Cpp_ThemeManager.theme = 0
           Cpp_UI_Dashboard.points = 100
@@ -1052,7 +1058,7 @@ Widgets.SmartDialog {
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
       }
 
       Button {
@@ -1063,7 +1069,7 @@ Widgets.SmartDialog {
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+        icon.source: "qrc:/icons/buttons/apply.svg"
       }
     }
   }

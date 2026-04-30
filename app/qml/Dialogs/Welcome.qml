@@ -125,7 +125,7 @@ Window {
 
           Layout.leftMargin: -1
           sourceSize.width: 164
-          source: "qrc:/rcc/images/dialog-banner.svg"
+          source: "qrc:/images/dialog-banner.svg"
         } Rectangle {
           implicitWidth: 1
           Layout.fillHeight: true
@@ -454,7 +454,7 @@ Window {
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_Licensing_LemonSqueezy.buy()
             highlighted: Cpp_Licensing_Trial.trialExpired
-            icon.source: "qrc:/rcc/icons/buttons/buy.svg"
+            icon.source: "qrc:/icons/buttons/buy.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
@@ -465,7 +465,7 @@ Window {
             text: qsTr("Activate")
             Layout.alignment: Qt.AlignVCenter
             onClicked: app.showLicenseDialog()
-            icon.source: "qrc:/rcc/icons/buttons/activate.svg"
+            icon.source: "qrc:/icons/buttons/activate.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
@@ -479,7 +479,7 @@ Window {
             horizontalPadding: 8
             Layout.alignment: Qt.AlignVCenter
             highlighted: !Cpp_Licensing_Trial.trialExpired
-            icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+            icon.source: "qrc:/icons/buttons/apply.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
             text: Cpp_Licensing_Trial.trialExpired ? qsTr("Open in Limited Mode") : (Cpp_Licensing_Trial.trialEnabled ? qsTr("Continue") : qsTr("Start Trial"))
             onClicked: {

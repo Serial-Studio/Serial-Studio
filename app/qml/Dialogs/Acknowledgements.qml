@@ -34,9 +34,17 @@ SmartDialog {
   title: qsTr("Acknowledgements")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Window controls
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 8
     anchors.centerIn: parent
 
@@ -70,7 +78,7 @@ SmartDialog {
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.source: "qrc:/icons/buttons/close.svg"
         }
 
         Item {
@@ -83,7 +91,7 @@ SmartDialog {
           text: qsTr("About Qt…")
           onClicked: Cpp_Misc_Utilities.aboutQt()
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/info.svg"
+          icon.source: "qrc:/icons/buttons/info.svg"
         }
       }
     }

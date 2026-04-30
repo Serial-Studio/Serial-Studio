@@ -22,10 +22,12 @@ Widgets.SmartDialog {
 
   staysOnTop: true
   fixedSize: false
-  preferredWidth: 520
 
-  // Page 0 is a compact summary; page 1 is the full driver picker.
-  preferredHeight: pageIndex === 0 ? 240 : 480
+  //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
 
   // dialogMode: "failed" = auto-connect never settled; "lost" = drop mid-session.
   property int pageIndex: 0
@@ -52,6 +54,8 @@ Widgets.SmartDialog {
   }
 
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 12
     anchors.centerIn: parent
 
@@ -72,7 +76,7 @@ Widgets.SmartDialog {
           sourceSize: Qt.size(64, 64)
           Layout.alignment: Qt.AlignTop
           fillMode: Image.PreserveAspectFit
-          source: "qrc:/rcc/icons/notifications/warning.svg"
+          source: "qrc:/icons/notifications/warning.svg"
         }
 
         ColumnLayout {
@@ -115,7 +119,7 @@ Widgets.SmartDialog {
               font: Cpp_Misc_CommonFonts.uiFont
               onClicked: app.quitApplication()
               icon.color: Cpp_ThemeManager.colors["button_text"]
-              icon.source: "qrc:/rcc/icons/buttons/close.svg"
+              icon.source: "qrc:/icons/buttons/close.svg"
             }
 
             Item { Layout.fillWidth: true }
@@ -127,7 +131,7 @@ Widgets.SmartDialog {
               text: qsTr("Pick Different Device")
               onClicked: root.pageIndex = 1
               icon.color: Cpp_ThemeManager.colors["button_text"]
-              icon.source: "qrc:/rcc/icons/buttons/wrench.svg"
+              icon.source: "qrc:/icons/buttons/wrench.svg"
             }
 
             Button {
@@ -138,7 +142,7 @@ Widgets.SmartDialog {
               text: root.isLost ? qsTr("Reconnect") : qsTr("Try Again")
               enabled: !Cpp_IO_Manager.isConnected
               icon.color: Cpp_ThemeManager.colors["button_text"]
-              icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
+              icon.source: "qrc:/icons/buttons/refresh.svg"
               onClicked: Cpp_IO_Manager.connectDevice()
             }
           }
@@ -193,7 +197,7 @@ Widgets.SmartDialog {
             font: Cpp_Misc_CommonFonts.uiFont
             onClicked: app.quitApplication()
             icon.color: Cpp_ThemeManager.colors["button_text"]
-            icon.source: "qrc:/rcc/icons/buttons/close.svg"
+            icon.source: "qrc:/icons/buttons/close.svg"
           }
 
           Item { Layout.fillWidth: true }
@@ -206,7 +210,7 @@ Widgets.SmartDialog {
             font: Cpp_Misc_CommonFonts.uiFont
             enabled: Cpp_IO_Manager.configurationOk && !Cpp_IO_Manager.isConnected
             icon.color: Cpp_ThemeManager.colors["button_text"]
-            icon.source: "qrc:/rcc/icons/buttons/connected.svg"
+            icon.source: "qrc:/icons/buttons/connected.svg"
             onClicked: Cpp_IO_Manager.connectDevice()
           }
         }

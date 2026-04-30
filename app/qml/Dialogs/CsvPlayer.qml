@@ -35,6 +35,12 @@ SmartDialog {
   title: qsTr("CSV Player")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: column.implicitWidth
+  preferredHeight: column.implicitHeight
+
+  //
   // Automatically display the window when the CSV file is opened
   //
   Connections {
@@ -108,7 +114,7 @@ SmartDialog {
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_CSV_Player.previousFrame()
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/media-prev.svg"
+          icon.source: "qrc:/icons/buttons/media-prev.svg"
           enabled: Cpp_CSV_Player.framePosition > 0 && !Cpp_CSV_Player.isPlaying
         }
 
@@ -119,9 +125,9 @@ SmartDialog {
           Layout.alignment: Qt.AlignVCenter
           icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: (Cpp_CSV_Player.framePosition >= Cpp_CSV_Player.frameCount - 1) ?
-                         "qrc:/rcc/icons/buttons/media-stop.svg" :
-                         (Cpp_CSV_Player.isPlaying ? "qrc:/rcc/icons/buttons/media-pause.svg" :
-                                                     "qrc:/rcc/icons/buttons/media-play.svg")
+                         "qrc:/icons/buttons/media-stop.svg" :
+                         (Cpp_CSV_Player.isPlaying ? "qrc:/icons/buttons/media-pause.svg" :
+                                                     "qrc:/icons/buttons/media-play.svg")
         }
 
         Button {
@@ -131,7 +137,7 @@ SmartDialog {
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_CSV_Player.nextFrame()
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/media-next.svg"
+          icon.source: "qrc:/icons/buttons/media-next.svg"
           enabled: (Cpp_CSV_Player.framePosition < Cpp_CSV_Player.frameCount - 1) && !Cpp_CSV_Player.isPlaying
         }
       }

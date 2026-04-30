@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("Shared Memory")
-  icon: "qrc:/rcc/icons/project-editor/treeview/shared-memory.svg"
+  icon: "qrc:/icons/project-editor/treeview/shared-memory.svg"
 
   //
   // Holds the current table summary rows. Refreshed each time the view becomes
@@ -148,7 +148,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               ToolTip.text: qsTr("Add shared table")
               onClicked: Cpp_JSON_ProjectModel.promptAddTable()
-              icon.source: "qrc:/rcc/icons/project-editor/actions/add-table.svg"
+              icon.source: "qrc:/icons/project-editor/actions/add-table.svg"
             }
 
             Item { Layout.fillWidth: true }
@@ -159,7 +159,7 @@ Widgets.Pane {
               toolbarButton: false
               Layout.alignment: Qt.AlignVCenter
               onClicked: app.showHelpCenter("data-tables")
-              icon.source: "qrc:/rcc/icons/code-editor/help.svg"
+              icon.source: "qrc:/icons/code-editor/help.svg"
               ToolTip.text: qsTr("Open help documentation for shared memory")
             }
           }

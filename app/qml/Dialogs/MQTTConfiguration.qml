@@ -36,6 +36,12 @@ Widgets.SmartDialog {
   title: qsTr("MQTT Setup")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: column.implicitWidth
+  preferredHeight: column.implicitHeight
+
+  //
   // Save settings
   //
   Settings {
@@ -325,8 +331,8 @@ Widgets.SmartDialog {
                 icon.color: palette.text
                 Layout.maximumWidth: height
                 Layout.alignment: Qt.AlignVCenter
-                icon.source: checked ? "qrc:/rcc/icons/buttons/invisible.svg" :
-                                       "qrc:/rcc/icons/buttons/visible.svg"
+                icon.source: checked ? "qrc:/icons/buttons/invisible.svg" :
+                                       "qrc:/icons/buttons/visible.svg"
                 onCheckedChanged: _password.echoMode = (checked ? TextField.Normal :
                                                                   TextField.Password)
               }
@@ -585,7 +591,7 @@ Widgets.SmartDialog {
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.source: "qrc:/icons/buttons/close.svg"
         }
 
         Item {
@@ -602,8 +608,8 @@ Widgets.SmartDialog {
           onClicked: Cpp_MQTT_Client.toggleConnection()
           icon.color: Cpp_ThemeManager.colors["button_text"]
           text: Cpp_MQTT_Client.isConnected ? qsTr("Disconnect") : qsTr("Connect")
-          icon.source: Cpp_MQTT_Client.isConnected ? "qrc:/rcc/icons/buttons/connected.svg" :
-                                                     "qrc:/rcc/icons/buttons/disconnected.svg"
+          icon.source: Cpp_MQTT_Client.isConnected ? "qrc:/icons/buttons/connected.svg" :
+                                                     "qrc:/icons/buttons/disconnected.svg"
           enabled: app.proVersion ?
                      (Cpp_MQTT_Client.isSubscriber ? !Cpp_IO_Manager.isConnected : true) :
                      false

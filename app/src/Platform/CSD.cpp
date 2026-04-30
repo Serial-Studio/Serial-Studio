@@ -160,10 +160,10 @@ void Titlebar::paint(QPainter* painter)
 #endif
 
   // clang-format off
-  const QString closeSvg = QStringLiteral(":/rcc/icons/csd/close.svg");
-  const QString minimizeSvg = QStringLiteral(":/rcc/icons/csd/minimize.svg");
-  const QString maximizeSvg = isMaximized() ? QStringLiteral(":/rcc/icons/csd/restore.svg")
-                                            : QStringLiteral(":/rcc/icons/csd/maximize.svg");
+  const QString closeSvg = QStringLiteral(":/icons/csd/close.svg");
+  const QString minimizeSvg = QStringLiteral(":/icons/csd/minimize.svg");
+  const QString maximizeSvg = isMaximized() ? QStringLiteral(":/icons/csd/restore.svg")
+                                            : QStringLiteral(":/icons/csd/maximize.svg");
   // clang-format on
 
   // Draw visible window control buttons

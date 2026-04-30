@@ -2,7 +2,7 @@
   "title": "Fluent Dark",
   "parameters":{
     "code-editor-theme":"fluent-dark",
-    "start-icon":"qrc:/rcc/logo/start-dark.svg"
+    "start-icon":"qrc:/logo/start-dark.svg"
   },
   "translations":{
     "en_US":"Fluent Dark",

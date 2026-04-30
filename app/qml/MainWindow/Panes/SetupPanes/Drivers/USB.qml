@@ -125,7 +125,7 @@ Item {
         sourceSize.width: 20
         sourceSize.height: 20
         Layout.alignment: Qt.AlignTop
-        source: "qrc:/rcc/icons/panes/info.svg"
+        source: "qrc:/icons/panes/info.svg"
       }
 
       ColumnLayout {
@@ -286,7 +286,7 @@ Item {
         sourceSize.width: 32
         sourceSize.height: 32
         Layout.alignment: Qt.AlignTop
-        source: "qrc:/rcc/icons/panes/important.svg"
+        source: "qrc:/icons/panes/important.svg"
       }
 
       ColumnLayout {
@@ -337,7 +337,7 @@ Item {
         sourceSize.width: 20
         sourceSize.height: 20
         Layout.alignment: Qt.AlignVCenter
-        source: "qrc:/rcc/icons/panes/info.svg"
+        source: "qrc:/icons/panes/info.svg"
       }
 
       Label {

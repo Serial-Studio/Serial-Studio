@@ -41,6 +41,12 @@ SmartDialog {
   title: qsTr("Search Online Icons")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Reset state when shown
   //
   onVisibleChanged: {
@@ -71,6 +77,8 @@ SmartDialog {
   // Window controls
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 4
 
     //
@@ -100,7 +108,7 @@ SmartDialog {
         highlighted: true
         horizontalPadding: 8
         text: qsTr("Search")
-        icon.source: "qrc:/rcc/icons/buttons/search.svg"
+        icon.source: "qrc:/icons/buttons/search.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: !Cpp_Misc_IconEngine.busy && searchField.text.length > 0
         onClicked: Cpp_Misc_IconEngine.searchIcons(searchField.text)
@@ -244,7 +252,7 @@ SmartDialog {
         text: qsTr("OK")
         highlighted: true
         horizontalPadding: 8
-        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+        icon.source: "qrc:/icons/buttons/apply.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: root.selectedIndex >= 0 && !Cpp_Misc_IconEngine.busy
         onClicked: Cpp_Misc_IconEngine.downloadIcon(root.selectedIndex)
@@ -255,7 +263,7 @@ SmartDialog {
         icon.height: 18
         horizontalPadding: 8
         text: qsTr("Cancel")
-        icon.source: "qrc:/rcc/icons/buttons/cancel.svg"
+        icon.source: "qrc:/icons/buttons/cancel.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: root.close()
       }

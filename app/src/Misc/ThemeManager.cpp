@@ -51,7 +51,6 @@
  */
 static QVariantMap jsonObjectToVariantMap(const QJsonObject& obj)
 {
-  // Convert all key-value pairs to a QVariantMap
   QVariantMap map;
   for (auto it = obj.constBegin(); it != obj.constEnd(); ++it)
     map.insert(it.key(), it.value().toVariant());
@@ -71,7 +70,6 @@ static QVariantMap jsonObjectToVariantMap(const QJsonObject& obj)
  */
 static QVector<QColor> extractWidgetColors(const QJsonObject& colorsObject)
 {
-  // Read the widget_colors array and convert each entry to QColor
   QVector<QColor> result;
   const QJsonArray array = colorsObject.value("widget_colors").toArray();
   result.reserve(array.size());
@@ -93,7 +91,6 @@ static QVector<QColor> extractWidgetColors(const QJsonObject& colorsObject)
  */
 static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& colorsObject)
 {
-  // Read the device_colors array and extract top/bottom gradient pairs
   QVector<QPair<QColor, QColor>> result;
   const QJsonArray array = colorsObject.value("device_colors").toArray();
   result.reserve(array.size());
@@ -136,7 +133,7 @@ Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false)
   // Load theme files
   for (const auto& theme : std::as_const(themes)) {
     // Try to read theme file
-    QFile file(QStringLiteral(":/rcc/themes/%1.json").arg(theme));
+    QFile file(QStringLiteral(":/themes/%1.json").arg(theme));
     if (!file.open(QFile::ReadOnly)) {
       qWarning() << "Failed to open theme resource:" << theme;
       continue;

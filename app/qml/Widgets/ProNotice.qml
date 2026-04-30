@@ -74,7 +74,7 @@ Rectangle {
       Image {
         sourceSize.width: 72
         anchors.centerIn: parent
-        source: "qrc:/rcc/icons/toolbar/activate.svg"
+        source: "qrc:/icons/toolbar/activate.svg"
       }
     }
 
@@ -120,7 +120,7 @@ Rectangle {
           horizontalPadding: 8
           text: qsTr("Visit Website")
           visible: !Cpp_CommercialBuild
-          icon.source: "qrc:/rcc/icons/buttons/website.svg"
+          icon.source: "qrc:/icons/buttons/website.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: Qt.openUrlExternally("https://serial-studio.com/")
         }
@@ -130,7 +130,7 @@ Rectangle {
           icon.height: 18
           horizontalPadding: 8
           text: qsTr("Buy License")
-          icon.source: "qrc:/rcc/icons/buttons/buy.svg"
+          icon.source: "qrc:/icons/buttons/buy.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
 
           onClicked: {
@@ -148,7 +148,7 @@ Rectangle {
           text: qsTr("Activate")
           visible: Cpp_CommercialBuild
           onClicked: app.showLicenseDialog()
-          icon.source: "qrc:/rcc/icons/buttons/activate.svg"
+          icon.source: "qrc:/icons/buttons/activate.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
         }
 
@@ -169,7 +169,7 @@ Rectangle {
       onClicked: root.hidden = true
       visible: root.closeButtonEnabled
       Layout.alignment: Qt.AlignRight | Qt.AlignTop
-      icon.source: "qrc:/rcc/icons/buttons/cancel.svg"
+      icon.source: "qrc:/icons/buttons/cancel.svg"
       icon.color: Cpp_ThemeManager.colors["button_text"]
     }
   }

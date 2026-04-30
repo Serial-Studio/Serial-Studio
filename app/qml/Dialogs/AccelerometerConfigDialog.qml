@@ -35,6 +35,12 @@ Widgets.SmartDialog {
   title: qsTr("Accelerometer Configuration")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Accelerometer data model pointer
   //
   property var accelModel: null
@@ -72,6 +78,8 @@ Widgets.SmartDialog {
   // Dialog controls
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 4
 
     //
@@ -212,7 +220,7 @@ Widgets.SmartDialog {
         text: qsTr("Close")
         onClicked: root.close()
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
       }
     }
   }

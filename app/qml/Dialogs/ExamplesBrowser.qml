@@ -34,6 +34,12 @@ SmartDialog {
   title: qsTr("Examples Browser")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Fixed toolbar height so the window size stays stable across page transitions
   //
   readonly property int toolbarHeight: 40
@@ -107,6 +113,8 @@ SmartDialog {
   // Window controls
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 8
     anchors.centerIn: parent
 
@@ -147,7 +155,7 @@ SmartDialog {
           anchors.right: parent.right
           anchors.verticalCenter: parent.verticalCenter
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/search.svg"
+          icon.source: "qrc:/icons/buttons/search.svg"
         }
       }
     }
@@ -180,7 +188,7 @@ SmartDialog {
           background: Item {}
           onClicked: Cpp_Examples.selectedIndex = -1
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/backward.svg"
+          icon.source: "qrc:/icons/buttons/backward.svg"
 
           HoverHandler {
             cursorShape: Qt.PointingHandCursor
@@ -233,7 +241,7 @@ SmartDialog {
           enabled: !Cpp_Examples.loading
           onClicked: Cpp_Examples.downloadExample()
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/open.svg"
+          icon.source: "qrc:/icons/buttons/open.svg"
 
           HoverHandler {
             cursorShape: Qt.PointingHandCursor
@@ -246,7 +254,7 @@ SmartDialog {
           background: Item {}
           text: qsTr("View on GitHub")
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/website.svg"
+          icon.source: "qrc:/icons/buttons/website.svg"
           onClicked: {
             var id = Cpp_Examples.selectedExample.id || ""
             if (id !== "")
@@ -609,7 +617,7 @@ SmartDialog {
               anchors.margins: 2
               anchors.fill: parent
               backgroundColor: "transparent"
-              url: "qrc:/rcc/markdown-viewer.html"
+              url: "qrc:/markdown-viewer.html"
               settings.localContentCanAccessRemoteUrls: true
 
               onLoadingChanged: function(loadRequest) {
@@ -908,7 +916,7 @@ SmartDialog {
         Image {
           sourceSize: Qt.size(96, 96)
           Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/rcc/images/no-results.svg"
+          source: "qrc:/images/no-results.svg"
         }
 
         Item {
@@ -957,7 +965,7 @@ SmartDialog {
         horizontalPadding: 8
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }

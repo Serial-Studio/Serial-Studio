@@ -50,6 +50,8 @@ typedef enum {
   kDatasetView_Units,
   kDatasetView_Widget,
   kDatasetView_FFT,
+  kDatasetView_Waterfall,
+  kDatasetView_WaterfallYAxis,
   kDatasetView_LED,
   kDatasetView_LED_High,
   kDatasetView_Plot,
@@ -129,27 +131,27 @@ static QString busTypeIcon(int busType)
 {
   switch (static_cast<SerialStudio::BusType>(busType)) {
     case SerialStudio::BusType::UART:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/uart.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/uart.svg");
     case SerialStudio::BusType::Network:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/network.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/network.svg");
     case SerialStudio::BusType::BluetoothLE:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/bluetooth.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/bluetooth.svg");
 #ifdef BUILD_COMMERCIAL
     case SerialStudio::BusType::Audio:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/audio.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/audio.svg");
     case SerialStudio::BusType::ModBus:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/modbus.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/modbus.svg");
     case SerialStudio::BusType::CanBus:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/canbus.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/canbus.svg");
     case SerialStudio::BusType::RawUsb:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/usb.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/usb.svg");
     case SerialStudio::BusType::HidDevice:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/hid.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/hid.svg");
     case SerialStudio::BusType::Process:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/process.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/process.svg");
 #endif
     default:
-      return QStringLiteral("qrc:/rcc/icons/devices/drivers/uart.svg");
+      return QStringLiteral("qrc:/icons/devices/drivers/uart.svg");
   }
 }
 
@@ -546,7 +548,7 @@ const QStringList& DataModel::ProjectEditor::availableActionIcons() const
   static QStringList icons;
 
   if (icons.isEmpty()) {
-    const auto path = QStringLiteral(":/rcc/actions/");
+    const auto path = QStringLiteral(":/actions/");
     QDirIterator it(path, QStringList() << "*.svg", QDir::Files);
     while (it.hasNext()) {
       const auto filePath = it.next();
@@ -604,6 +606,9 @@ quint8 DataModel::ProjectEditor::datasetOptions() const
 
   if (m_selectedDataset.led)
     option |= SerialStudio::DatasetLED;
+
+  if (m_selectedDataset.waterfall)
+    option |= SerialStudio::DatasetWaterfall;
 
   if (m_selectedDataset.widget == QStringLiteral("bar"))
     option |= SerialStudio::DatasetBar;
@@ -896,7 +901,7 @@ void DataModel::ProjectEditor::buildTreeModel()
   const auto& pm = DataModel::ProjectModel::instance();
   auto* root     = new QStandardItem(pm.title());
   root->setData(root->text(), TreeViewText);
-  root->setData("qrc:/rcc/icons/project-editor/treeview/project-setup.svg", TreeViewIcon);
+  root->setData("qrc:/icons/project-editor/treeview/project-setup.svg", TreeViewIcon);
   root->setData(true, TreeViewExpanded);
 
   m_treeModel->appendRow(root);
@@ -952,7 +957,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 
       auto* parserItem = new QStandardItem(tr("Frame Parser"));
       parserItem->setData(-1, TreeViewFrameIndex);
-      parserItem->setData("qrc:/rcc/icons/project-editor/treeview/code.svg", TreeViewIcon);
+      parserItem->setData("qrc:/icons/project-editor/treeview/code.svg", TreeViewIcon);
       parserItem->setData(tr("Frame Parser"), TreeViewText);
       sourceItem->appendRow(parserItem);
       m_sourceParserItems.insert(parserItem, source);
@@ -969,7 +974,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 
     auto* actionItem = new QStandardItem(action.title);
     actionItem->setData(-1, TreeViewFrameIndex);
-    actionItem->setData("qrc:/rcc/icons/project-editor/treeview/action.svg", TreeViewIcon);
+    actionItem->setData("qrc:/icons/project-editor/treeview/action.svg", TreeViewIcon);
     actionItem->setData(action.title, TreeViewText);
     root->appendRow(actionItem);
     m_actionItems.insert(actionItem, action);
@@ -983,7 +988,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 
     groupsRoot = new QStandardItem(tr("Groups"));
     groupsRoot->setData(tr("Groups"), TreeViewText);
-    groupsRoot->setData("qrc:/rcc/icons/project-editor/treeview/group.svg", TreeViewIcon);
+    groupsRoot->setData("qrc:/icons/project-editor/treeview/group.svg", TreeViewIcon);
     groupsRoot->setData(-1, TreeViewFrameIndex);
     groupsRoot->setData(true, TreeViewExpanded);
   };
@@ -1025,7 +1030,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 
       auto* datasetItem = new QStandardItem(dataset.title);
       auto widgets      = SerialStudio::getDashboardWidgets(dataset);
-      QString dIcon     = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
+      QString dIcon     = "qrc:/icons/project-editor/treeview/dataset.svg";
       if (widgets.count() > 0)
         dIcon = SerialStudio::dashboardWidgetIcon(widgets.first(), false);
 
@@ -1049,22 +1054,22 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
       QString owIcon;
       switch (ow.type) {
         case DataModel::OutputWidgetType::Button:
-          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-button.svg");
+          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-button.svg");
           break;
         case DataModel::OutputWidgetType::Slider:
-          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-slider.svg");
+          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-slider.svg");
           break;
         case DataModel::OutputWidgetType::Toggle:
-          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-toggle.svg");
+          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-toggle.svg");
           break;
         case DataModel::OutputWidgetType::TextField:
-          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-textfield.svg");
+          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-textfield.svg");
           break;
         case DataModel::OutputWidgetType::Knob:
-          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-knob.svg");
+          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-knob.svg");
           break;
         default:
-          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-widget.svg");
+          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-widget.svg");
           break;
       }
 
@@ -1107,14 +1112,14 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   if (includeSharedRoot) {
     auto* tablesRoot = new QStandardItem(tr("Shared Memory"));
     tablesRoot->setData(tr("Shared Memory"), TreeViewText);
-    tablesRoot->setData("qrc:/rcc/icons/project-editor/treeview/shared-memory.svg", TreeViewIcon);
+    tablesRoot->setData("qrc:/icons/project-editor/treeview/shared-memory.svg", TreeViewIcon);
     tablesRoot->setData(-1, TreeViewFrameIndex);
     tablesRoot->setData(true, TreeViewExpanded);
 
     // Add the read-only "Dataset Values" entry (auto-generated from the project)
     auto* sysDsItem = new QStandardItem(tr("Dataset Values"));
     sysDsItem->setData(tr("Dataset Values"), TreeViewText);
-    sysDsItem->setData("qrc:/rcc/icons/project-editor/treeview/dataset-values.svg", TreeViewIcon);
+    sysDsItem->setData("qrc:/icons/project-editor/treeview/dataset-values.svg", TreeViewIcon);
     sysDsItem->setData(-1, TreeViewFrameIndex);
     tablesRoot->appendRow(sysDsItem);
 
@@ -1125,7 +1130,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 
       auto* tableItem = new QStandardItem(table.name);
       tableItem->setData(table.name, TreeViewText);
-      tableItem->setData("qrc:/rcc/icons/project-editor/treeview/shared-table.svg", TreeViewIcon);
+      tableItem->setData("qrc:/icons/project-editor/treeview/shared-table.svg", TreeViewIcon);
       tableItem->setData(-1, TreeViewFrameIndex);
       tablesRoot->appendRow(tableItem);
       m_userTableItems.insert(tableItem, table.name);
@@ -1153,7 +1158,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   if (includeWorkspaces) {
     auto* wsRoot = new QStandardItem(tr("Workspaces"));
     wsRoot->setData(tr("Workspaces"), TreeViewText);
-    wsRoot->setData("qrc:/rcc/icons/project-editor/treeview/datagrid.svg", TreeViewIcon);
+    wsRoot->setData("qrc:/icons/project-editor/treeview/datagrid.svg", TreeViewIcon);
     wsRoot->setData(-1, TreeViewFrameIndex);
     wsRoot->setData(true, TreeViewExpanded);
 
@@ -1163,7 +1168,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 
       auto* wsItem = new QStandardItem(ws.title);
       wsItem->setData(ws.title, TreeViewText);
-      wsItem->setData(ws.icon.isEmpty() ? "qrc:/rcc/icons/project-editor/treeview/group.svg"
+      wsItem->setData(ws.icon.isEmpty() ? "qrc:/icons/project-editor/treeview/group.svg"
                                         : ws.icon,
                       TreeViewIcon);
       wsItem->setData(-1, TreeViewFrameIndex);
@@ -1298,7 +1303,7 @@ void DataModel::ProjectEditor::buildProjectModel()
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Project Information"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/project.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/project.svg", ParameterIcon);
   m_projectModel->appendRow(hdr);
 
   auto* title = new QStandardItem();
@@ -1337,7 +1342,7 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Group Information"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/group.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/group.svg", ParameterIcon);
   m_groupModel->appendRow(hdr);
 
   auto* titleItem = new QStandardItem();
@@ -1414,7 +1419,7 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     auto* imgHdr = new QStandardItem();
     imgHdr->setData(SectionHeader, WidgetType);
     imgHdr->setData(tr("Image Configuration"), PlaceholderValue);
-    imgHdr->setData("qrc:/rcc/icons/project-editor/model/image.svg", ParameterIcon);
+    imgHdr->setData("qrc:/icons/project-editor/model/image.svg", ParameterIcon);
     m_groupModel->appendRow(imgHdr);
 
     static const QStringList kImgModeValues = {QStringLiteral("autodetect"),
@@ -1482,7 +1487,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   auto* identHdr = new QStandardItem();
   identHdr->setData(SectionHeader, WidgetType);
   identHdr->setData(tr("Identity"), PlaceholderValue);
-  identHdr->setData("qrc:/rcc/icons/project-editor/model/project.svg", ParameterIcon);
+  identHdr->setData("qrc:/icons/project-editor/model/project.svg", ParameterIcon);
   m_sourceModel->appendRow(identHdr);
 
   auto* titleItem = new QStandardItem();
@@ -1499,7 +1504,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Input Device"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/project.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/project.svg", ParameterIcon);
   m_sourceModel->appendRow(hdr);
 
   auto* busItem = new QStandardItem();
@@ -1574,7 +1579,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   auto* fdHdr = new QStandardItem();
   fdHdr->setData(SectionHeader, WidgetType);
   fdHdr->setData(tr("Frame Detection"), PlaceholderValue);
-  fdHdr->setData("qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
+  fdHdr->setData("qrc:/icons/project-editor/model/frame-detection.svg", ParameterIcon);
   m_sourceModel->appendRow(fdHdr);
 
   const auto detection     = static_cast<SerialStudio::FrameDetection>(source.frameDetection);
@@ -1641,7 +1646,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   auto* ppHdr = new QStandardItem();
   ppHdr->setData(SectionHeader, WidgetType);
   ppHdr->setData(tr("Payload Processing & Validation"), PlaceholderValue);
-  ppHdr->setData("qrc:/rcc/icons/project-editor/model/data-conversion.svg", ParameterIcon);
+  ppHdr->setData("qrc:/icons/project-editor/model/data-conversion.svg", ParameterIcon);
   m_sourceModel->appendRow(ppHdr);
 
   auto* decoderItem = new QStandardItem();
@@ -1837,7 +1842,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("General Information"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/action.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/action.svg", ParameterIcon);
   m_actionModel->appendRow(hdr);
 
   auto* titleItem = new QStandardItem();
@@ -1895,7 +1900,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
   hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Data Payload"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/tx-data.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/tx-data.svg", ParameterIcon);
   m_actionModel->appendRow(hdr);
 
   auto* binaryItem = new QStandardItem();
@@ -1976,7 +1981,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
   hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Execution Behavior"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/action-behavior.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/action-behavior.svg", ParameterIcon);
   m_actionModel->appendRow(hdr);
 
   auto* autoExec = new QStandardItem();
@@ -1995,7 +2000,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
   hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Timer Behavior"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/timer.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/timer.svg", ParameterIcon);
   m_actionModel->appendRow(hdr);
 
   auto* timerMode = new QStandardItem();
@@ -2083,7 +2088,7 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("General Information"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/dataset.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/dataset.svg", ParameterIcon);
   model->appendRow(hdr);
 
   auto* titleItem = new QStandardItem();
@@ -2145,7 +2150,7 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Plot Settings"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/plot.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/plot.svg", ParameterIcon);
   model->appendRow(hdr);
 
   int plotIndex          = 0;
@@ -2227,11 +2232,14 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
  */
 void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
+  // FFT settings drive both the FFT plot and the Pro waterfall widget
+  const bool fftSettingsEditable = dataset.fft || dataset.waterfall;
+
   // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
-  hdr->setData(tr("FFT Configuration"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/fft.svg", ParameterIcon);
+  hdr->setData(tr("Frequency Analysis"), PlaceholderValue);
+  hdr->setData("qrc:/icons/project-editor/model/fft.svg", ParameterIcon);
   model->appendRow(hdr);
 
   auto* fftItem = new QStandardItem();
@@ -2245,13 +2253,45 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
   fftItem->setData(tr("Perform frequency-domain analysis of the dataset"), ParameterDescription);
   model->appendRow(fftItem);
 
+  auto* waterfallItem = new QStandardItem();
+  waterfallItem->setEditable(true);
+  waterfallItem->setData(0, PlaceholderValue);
+  waterfallItem->setData(CheckBox, WidgetType);
+  waterfallItem->setData(waterfallItem->isEditable(), Active);
+  waterfallItem->setData(dataset.waterfall, EditableValue);
+  waterfallItem->setData(kDatasetView_Waterfall, ParameterType);
+  waterfallItem->setData(tr("Enable Waterfall Plot"), ParameterName);
+  waterfallItem->setData(
+    tr("Show a scrolling spectrogram of frequency content over time (Pro)"),
+    ParameterDescription);
+  model->appendRow(waterfallItem);
+
+  // Waterfall Y-axis source — only shown when the waterfall is enabled. Default
+  // 0 = "Time" (scrolling spectrogram); any other dataset index turns the plot
+  // into a Campbell diagram (e.g. RPM on Y, frequency on X).
+  if (dataset.waterfall) {
+    auto* yAxisItem = new QStandardItem();
+    yAxisItem->setEditable(true);
+    yAxisItem->setData(ComboBox, WidgetType);
+    yAxisItem->setData(dataset.waterfallYAxis, EditableValue);
+    yAxisItem->setData(yAxisItem->isEditable(), Active);
+    yAxisItem->setData(DataModel::ProjectModel::instance().yWaterfallSources(), ComboBoxData);
+    yAxisItem->setData(kDatasetView_WaterfallYAxis, ParameterType);
+    yAxisItem->setData(tr("Waterfall Y Axis"), ParameterName);
+    yAxisItem->setData(tr("Choose Time (default) or any dataset whose value drives "
+                          "the Y axis — produces a Campbell diagram when bound "
+                          "to e.g. RPM"),
+                       ParameterDescription);
+    model->appendRow(yAxisItem);
+  }
+
   const auto windowSize = QString::number(dataset.fftSamples);
   int windowIndex       = m_fftSamples.indexOf(windowSize);
   if (windowIndex < 0)
     windowIndex = 7;
 
   auto* fftWindow = new QStandardItem();
-  fftWindow->setEditable(dataset.fft);
+  fftWindow->setEditable(fftSettingsEditable);
   fftWindow->setData(ComboBox, WidgetType);
   fftWindow->setData(m_fftSamples, ComboBoxData);
   fftWindow->setData(windowIndex, EditableValue);
@@ -2263,7 +2303,7 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
   model->appendRow(fftWindow);
 
   auto* fftRate = new QStandardItem();
-  fftRate->setEditable(dataset.fft);
+  fftRate->setEditable(fftSettingsEditable);
   fftRate->setData(IntField, WidgetType);
   fftRate->setData(100, PlaceholderValue);
   fftRate->setData(fftRate->isEditable(), Active);
@@ -2274,7 +2314,7 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
   model->appendRow(fftRate);
 
   auto* fftMin = new QStandardItem();
-  fftMin->setEditable(dataset.fft);
+  fftMin->setEditable(fftSettingsEditable);
   fftMin->setData(0, PlaceholderValue);
   fftMin->setData(FloatField, WidgetType);
   fftMin->setData(fftMin->isEditable(), Active);
@@ -2285,7 +2325,7 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
   model->appendRow(fftMin);
 
   auto* fftMax = new QStandardItem();
-  fftMax->setEditable(dataset.fft);
+  fftMax->setEditable(fftSettingsEditable);
   fftMax->setData(0, PlaceholderValue);
   fftMax->setData(FloatField, WidgetType);
   fftMax->setData(fftMax->isEditable(), Active);
@@ -2308,7 +2348,7 @@ void DataModel::ProjectEditor::addWidgetSection(CustomModel* model,
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Widget Settings"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/widget.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/widget.svg", ParameterIcon);
   model->appendRow(hdr);
 
   int widgetIndex = 0;
@@ -2373,7 +2413,7 @@ void DataModel::ProjectEditor::addAlarmSection(CustomModel* model,
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Alarm Settings"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/alarm.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/alarm.svg", ParameterIcon);
   model->appendRow(hdr);
 
   auto* alarmEnabled = new QStandardItem();
@@ -2422,7 +2462,7 @@ void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("LED Display Settings"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/led.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/led.svg", ParameterIcon);
   model->appendRow(hdr);
 
   auto* ledItem = new QStandardItem();
@@ -2836,6 +2876,13 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
       m_selectedDataset.fft = value.toBool();
       buildDatasetModel(m_selectedDataset);
       break;
+    case kDatasetView_Waterfall:
+      m_selectedDataset.waterfall = value.toBool();
+      buildDatasetModel(m_selectedDataset);
+      break;
+    case kDatasetView_WaterfallYAxis:
+      m_selectedDataset.waterfallYAxis = value.toInt();
+      break;
     case kDatasetView_LED:
       m_selectedDataset.led = value.toBool();
       buildDatasetModel(m_selectedDataset);
@@ -3159,7 +3206,7 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
   hdr->setData(true, Active);
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("General Information"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/output-widget.svg", ParameterIcon);
+  hdr->setData("qrc:/icons/project-editor/model/output-widget.svg", ParameterIcon);
   m_outputWidgetModel->appendRow(hdr);
 
   // Label
@@ -3230,7 +3277,7 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
     rangeHdr->setData(true, Active);
     rangeHdr->setData(SectionHeader, WidgetType);
     rangeHdr->setData(tr("Value Range"), PlaceholderValue);
-    rangeHdr->setData("qrc:/rcc/icons/project-editor/model/output-range.svg", ParameterIcon);
+    rangeHdr->setData("qrc:/icons/project-editor/model/output-range.svg", ParameterIcon);
     m_outputWidgetModel->appendRow(rangeHdr);
 
     // Min value

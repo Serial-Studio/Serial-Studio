@@ -17,7 +17,7 @@ Widgets.Pane {
   id: root
 
   title: qsTr("Sessions")
-  icon: "qrc:/rcc/icons/panes/sessions.svg"
+  icon: "qrc:/icons/panes/sessions.svg"
 
   //
   // Custom properties

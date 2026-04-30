@@ -71,7 +71,7 @@ Item {
     Image {
       sourceSize: Qt.size(96, 96)
       Layout.alignment: Qt.AlignHCenter
-      source: "qrc:/rcc/images/no-mic.svg"
+      source: "qrc:/images/no-mic.svg"
     }
 
     Item {

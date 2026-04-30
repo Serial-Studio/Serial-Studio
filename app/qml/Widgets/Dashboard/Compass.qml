@@ -70,7 +70,7 @@ Item {
       //
       Image {
         anchors.centerIn: parent
-        source: "qrc:/rcc/instruments/compass_background.svg"
+        source: "qrc:/instruments/compass_background.svg"
         sourceSize: Qt.size(control.widgetSize, control.widgetSize)
       }
 
@@ -80,7 +80,7 @@ Item {
       Image {
         anchors.centerIn: parent
         rotation: root.model.value
-        source: "qrc:/rcc/instruments/compass_needle.svg"
+        source: "qrc:/instruments/compass_needle.svg"
         sourceSize: Qt.size(control.widgetSize, control.widgetSize)
       }
 
@@ -89,7 +89,7 @@ Item {
       //
       Image {
         anchors.centerIn: parent
-        source: "qrc:/rcc/instruments/compass_case.svg"
+        source: "qrc:/instruments/compass_case.svg"
         sourceSize: Qt.size(control.widgetSize, control.widgetSize)
       }
     }

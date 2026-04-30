@@ -39,20 +39,22 @@ Window {
   property color backgroundColor: Cpp_ThemeManager.colors["window"]
 
   //
-  // Size hints for CSD (read from C++ via QWindow::property)
+  // Bare content size — derived dialogs override to alias their own root
+  // layout so the CSD reads through a one-hop binding (Page's implicit
+  // size propagation returns stale zeros at window-creation time).
   //
-  property int preferredWidth: contentArea.implicitWidth + (contentPadding * 2)
-  property int preferredHeight: contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight
+  property int preferredWidth: contentArea.implicitWidth
+  property int preferredHeight: contentArea.implicitHeight
 
   //
-  // Window sizing
+  // Window sizing — internal padding + titlebar wrap the preferred size
   //
-  width: preferredWidth
-  height: preferredHeight
-  minimumWidth: preferredWidth
-  minimumHeight: preferredHeight
-  maximumWidth: fixedSize ? preferredWidth : 16777215
-  maximumHeight: fixedSize ? preferredHeight : 16777215
+  width: preferredWidth + 2 * contentPadding
+  height: preferredHeight + contentPadding * 1.50 + titlebarHeight
+  minimumWidth: preferredWidth + 2 * contentPadding
+  minimumHeight: preferredHeight + contentPadding * 1.50 + titlebarHeight
+  maximumWidth: fixedSize ? preferredWidth + 2 * contentPadding : 16777215
+  maximumHeight: fixedSize ? preferredHeight + contentPadding * 1.50 + titlebarHeight : 16777215
 
   //
   // Configure window flags

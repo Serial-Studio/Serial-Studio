@@ -157,7 +157,7 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentAction()
           ToolTip.text: qsTr("Duplicate this action with all its settings")
-          icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
+          icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
         }
 
         //
@@ -170,7 +170,7 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           ToolTip.text: qsTr("Delete this action from the project")
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()
-          icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
+          icon.source: "qrc:/icons/project-editor/actions/delete.svg"
         }
       }
       }

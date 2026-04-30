@@ -173,8 +173,8 @@ Item {
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolate", root.interpolate)
       }
       icon.source: root.interpolate?
-                     "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
-                     "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
+                     "qrc:/icons/dashboard-buttons/interpolate-on.svg" :
+                     "qrc:/icons/dashboard-buttons/interpolate-off.svg"
     }
 
     DashboardToolButton {
@@ -185,7 +185,7 @@ Item {
       }
       checked: root.userShowLegends
       ToolTip.text: qsTr("Show Legends")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/labels.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/labels.svg"
     }
 
     Rectangle {
@@ -202,7 +202,7 @@ Item {
       }
       checked: root.userShowXLabel
       ToolTip.text: qsTr("Show X Axis Label")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/x.svg"
     }
 
     DashboardToolButton {
@@ -213,7 +213,7 @@ Item {
       }
       checked: root.userShowYLabel
       ToolTip.text: qsTr("Show Y Axis Label")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/y.svg"
     }
 
     Rectangle {
@@ -226,15 +226,15 @@ Item {
       checked: plot.showCrosshairs
       ToolTip.text: qsTr("Show Crosshair")
       onClicked: plot.showCrosshairs = !plot.showCrosshairs
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/crosshair.svg"
     }
 
     DashboardToolButton {
       checked: !model.running
       ToolTip.text: model.running ? qsTr("Pause") : qsTr("Resume")
       icon.source: model.running?
-                     "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
-                     "qrc:/rcc/icons/dashboard-buttons/resume.svg"
+                     "qrc:/icons/dashboard-buttons/pause.svg" :
+                     "qrc:/icons/dashboard-buttons/resume.svg"
       onClicked: model.running = !model.running
     }
 
@@ -252,12 +252,12 @@ Item {
       opacity: enabled ? 1 : 0.5
       ToolTip.text: qsTr("Reset View")
       enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/return.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/return.svg"
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Axis Range Settings")
-      icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+      icon.source: "qrc:/icons/toolbar/settings.svg"
       onClicked: axisRangeDialog.openDialog(plot, root.model)
     }
 

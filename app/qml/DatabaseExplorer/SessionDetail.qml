@@ -17,7 +17,7 @@ Widgets.Pane {
   id: root
 
   title: qsTr("Session Details")
-  icon: "qrc:/rcc/icons/panes/details.svg"
+  icon: "qrc:/icons/panes/details.svg"
 
   //
   // Custom properties
@@ -34,7 +34,9 @@ Widgets.Pane {
   readonly property bool operatorMode: typeof app !== "undefined"
                                        && app.runtimeMode
 
-  // Author mode: always editable. Operator mode: only the live session is editable.
+  //
+  // Author mode: always editable. Operator mode: only the live session is editable
+  //
   readonly property bool editsAllowed:
     !operatorMode
     || (Cpp_CommercialBuild
@@ -55,17 +57,10 @@ Widgets.Pane {
   }
 
   //
-  // Report options dialog — opened by the Generate Report button
+  // Report options dialog, opened by the Generate Report button
   //
   ReportOptionsDialog {
     id: _reportDialog
-  }
-
-  //
-  // Progress dialog — auto-opens on the busy signal, closes when done
-  //
-  ReportProgressDialog {
-    id: _progressDialog
   }
 
   //
@@ -265,7 +260,7 @@ Widgets.Pane {
                   background: Item {}
                   visible: root.editsAllowed
                   anchors.verticalCenter: parent.verticalCenter
-                  icon.source: "qrc:/rcc/icons/buttons/close.svg"
+                  icon.source: "qrc:/icons/buttons/close.svg"
                   icon.color: Cpp_ThemeManager.colors["highlighted_text"]
                   onClicked: Cpp_Sessions_Manager.removeTagFromSession(root.sessionId, modelData.tag_id)
                 }
@@ -336,7 +331,7 @@ Widgets.Pane {
             text: qsTr("Replay")
             visible: !root.operatorMode
             enabled: (root.metadata.frame_count || 0) > 0
-            icon.source: "qrc:/rcc/icons/buttons/play.svg"
+            icon.source: "qrc:/icons/buttons/play.svg"
             onClicked: Cpp_Sessions_Manager.replaySelectedSession()
           }
 
@@ -344,7 +339,7 @@ Widgets.Pane {
             icon.width: 18
             icon.height: 18
             text: qsTr("Export CSV")
-            icon.source: "qrc:/rcc/icons/buttons/export-csv.svg"
+            icon.source: "qrc:/icons/buttons/export-csv.svg"
             onClicked: Cpp_Sessions_Manager.exportSessionToCsv(root.sessionId)
             enabled: (root.metadata.frame_count || 0) > 0 && !Cpp_Sessions_Manager.csvExportBusy
           }
@@ -353,7 +348,7 @@ Widgets.Pane {
             icon.width: 18
             icon.height: 18
             text: qsTr("Generate Report")
-            icon.source: "qrc:/rcc/icons/buttons/report.svg"
+            icon.source: "qrc:/icons/buttons/report.svg"
             onClicked: _reportDialog.openFor(root.sessionId)
             enabled: (root.metadata.frame_count || 0) > 0 && !Cpp_Sessions_Manager.pdfExportBusy
           }
@@ -368,7 +363,7 @@ Widgets.Pane {
             text: qsTr("Delete")
             visible: !root.operatorMode
             enabled: !Cpp_Sessions_Manager.locked
-            icon.source: "qrc:/rcc/icons/buttons/trash.svg"
+            icon.source: "qrc:/icons/buttons/trash.svg"
             ToolTip.visible: hovered && Cpp_Sessions_Manager.locked
             ToolTip.text: qsTr("Unlock the session file to delete sessions")
             onClicked: Cpp_Sessions_Manager.confirmDeleteSession(root.sessionId)

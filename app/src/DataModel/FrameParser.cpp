@@ -101,7 +101,7 @@ void DataModel::FrameParser::setupExternalConnections()
 QString DataModel::FrameParser::defaultTemplateCode(int language)
 {
   const auto templates = loadScriptTemplateManifest(
-    QStringLiteral(":/rcc/scripts/parser/templates.json"), "DataModel::FrameParser");
+    QStringLiteral(":/scripts/parser/templates.json"), "DataModel::FrameParser");
 
   QString defaultFile;
   for (const auto& tmpl : templates) {
@@ -119,7 +119,7 @@ QString DataModel::FrameParser::defaultTemplateCode(int language)
 
   const bool isLua = (language == SerialStudio::Lua);
   const auto directory =
-    isLua ? QStringLiteral(":/rcc/scripts/parser/lua") : QStringLiteral(":/rcc/scripts/parser/js");
+    isLua ? QStringLiteral(":/scripts/parser/lua") : QStringLiteral(":/scripts/parser/js");
   const auto suffix = isLua ? QStringLiteral(".lua") : QStringLiteral(".js");
   return readTextResource(templateResourcePath(directory, defaultFile, suffix));
 }
@@ -142,7 +142,7 @@ QString DataModel::FrameParser::templateCode(int sourceId) const
   const int lang   = languageForSource(sourceId);
   const bool isLua = (lang == SerialStudio::Lua);
   const auto directory =
-    isLua ? QStringLiteral(":/rcc/scripts/parser/lua") : QStringLiteral(":/rcc/scripts/parser/js");
+    isLua ? QStringLiteral(":/scripts/parser/lua") : QStringLiteral(":/scripts/parser/js");
   const auto suffix = isLua ? QStringLiteral(".lua") : QStringLiteral(".js");
   return readTextResource(templateResourcePath(directory, m_templateFiles.at(idx), suffix));
 }
@@ -160,13 +160,13 @@ int DataModel::FrameParser::detectTemplate(const QString& code) const
     const auto& file = m_templateFiles[i];
 
     const auto luaPath = templateResourcePath(
-      QStringLiteral(":/rcc/scripts/parser/lua"), file, QStringLiteral(".lua"));
+      QStringLiteral(":/scripts/parser/lua"), file, QStringLiteral(".lua"));
     const QString luaCode = readTextResource(luaPath).trimmed();
     if (!luaCode.isEmpty() && luaCode == trimmed)
       return i;
 
     const auto jsPath =
-      templateResourcePath(QStringLiteral(":/rcc/scripts/parser/js"), file, QStringLiteral(".js"));
+      templateResourcePath(QStringLiteral(":/scripts/parser/js"), file, QStringLiteral(".js"));
     const QString jsCode = readTextResource(jsPath).trimmed();
     if (!jsCode.isEmpty() && jsCode == trimmed)
       return i;
@@ -443,7 +443,7 @@ void DataModel::FrameParser::loadTemplateNames()
   m_templateNames.clear();
 
   const auto templates = loadScriptTemplateManifest(
-    QStringLiteral(":/rcc/scripts/parser/templates.json"), "DataModel::FrameParser");
+    QStringLiteral(":/scripts/parser/templates.json"), "DataModel::FrameParser");
 
   for (const auto& tmpl : templates) {
     m_templateFiles.append(tmpl.file);

@@ -127,7 +127,7 @@ Widgets.Pane {
             checked: Cpp_JSON_ProjectEditor.outputWidgetType === SerialStudio.OutputButton
             onClicked: Cpp_JSON_ProjectModel.setOutputWidgetType(SerialStudio.OutputButton)
             ToolTip.text: qsTr("Send a command on click")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/output-button.svg"
+            icon.source: "qrc:/icons/project-editor/actions/output-button.svg"
           } Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
@@ -136,7 +136,7 @@ Widgets.Pane {
             checked: Cpp_JSON_ProjectEditor.outputWidgetType === SerialStudio.OutputSlider
             onClicked: Cpp_JSON_ProjectModel.setOutputWidgetType(SerialStudio.OutputSlider)
             ToolTip.text: qsTr("Send scaled numeric values")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/output-slider.svg"
+            icon.source: "qrc:/icons/project-editor/actions/output-slider.svg"
           } Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
@@ -145,7 +145,7 @@ Widgets.Pane {
             checked: Cpp_JSON_ProjectEditor.outputWidgetType === SerialStudio.OutputToggle
             onClicked: Cpp_JSON_ProjectModel.setOutputWidgetType(SerialStudio.OutputToggle)
             ToolTip.text: qsTr("Send on/off commands")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/output-toggle.svg"
+            icon.source: "qrc:/icons/project-editor/actions/output-toggle.svg"
           } Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
@@ -154,7 +154,7 @@ Widgets.Pane {
             checked: Cpp_JSON_ProjectEditor.outputWidgetType === SerialStudio.OutputTextField
             onClicked: Cpp_JSON_ProjectModel.setOutputWidgetType(SerialStudio.OutputTextField)
             ToolTip.text: qsTr("Type and send arbitrary commands")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/output-textfield.svg"
+            icon.source: "qrc:/icons/project-editor/actions/output-textfield.svg"
           } Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Knob")
@@ -163,7 +163,7 @@ Widgets.Pane {
             checked: Cpp_JSON_ProjectEditor.outputWidgetType === SerialStudio.OutputKnob
             onClicked: Cpp_JSON_ProjectModel.setOutputWidgetType(SerialStudio.OutputKnob)
             ToolTip.text: qsTr("Rotary input for setpoints")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/output-knob.svg"
+            icon.source: "qrc:/icons/project-editor/actions/output-knob.svg"
           }
 
           //
@@ -183,7 +183,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_JSON_ProjectModel.duplicateCurrentOutputWidget()
             ToolTip.text: qsTr("Duplicate this output widget")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
+            icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
           }
 
           //
@@ -196,7 +196,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Delete this output widget")
             onClicked: Cpp_JSON_ProjectModel.deleteCurrentOutputWidget()
-            icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
+            icon.source: "qrc:/icons/project-editor/actions/delete.svg"
           }
         }
 
@@ -267,7 +267,7 @@ Widgets.Pane {
           Image {
             sourceSize: Qt.size(18, 18)
             Layout.alignment: Qt.AlignVCenter
-            source: "qrc:/rcc/icons/project-editor/treeview/code.svg"
+            source: "qrc:/icons/project-editor/treeview/code.svg"
           }
 
           Label {
@@ -286,7 +286,7 @@ Widgets.Pane {
             horizontalLayout: true
             onClicked: outputEditor.import()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/code-editor/open.svg"
+            icon.source: "qrc:/icons/code-editor/open.svg"
             ToolTip.text: qsTr("Import transmit function from a .js file")
           }
 
@@ -297,7 +297,7 @@ Widgets.Pane {
             text: qsTr("Template")
             Layout.alignment: Qt.AlignVCenter
             onClicked: outputEditor.selectTemplate()
-            icon.source: "qrc:/rcc/icons/code-editor/template.svg"
+            icon.source: "qrc:/icons/code-editor/template.svg"
             ToolTip.text: qsTr("Select a pre-built transmit function template")
           }
 
@@ -308,7 +308,7 @@ Widgets.Pane {
             horizontalLayout: true
             Layout.alignment: Qt.AlignVCenter
             onClicked: outputEditor.testTransmitFunction()
-            icon.source: "qrc:/rcc/icons/code-editor/test.svg"
+            icon.source: "qrc:/icons/code-editor/test.svg"
             ToolTip.text: qsTr("Test the transmit function with sample input")
           }
         }

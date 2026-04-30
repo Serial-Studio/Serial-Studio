@@ -572,6 +572,21 @@ const DSP::LineSeries3D& UI::Dashboard::plotData3D(const int index) const
 
   return m_plotData3D[index];
 }
+
+/**
+ * @brief Returns the time-domain ring buffer feeding a waterfall widget.
+ * @param index The widget index for the waterfall plot.
+ * @return Reference to the corresponding AxisData buffer.
+ */
+const DSP::AxisData& UI::Dashboard::waterfallData(const int index) const
+{
+  if (index < 0 || index >= m_waterfallValues.size()) [[unlikely]] {
+    static const DSP::AxisData kEmpty;
+    return kEmpty;
+  }
+
+  return m_waterfallValues[index];
+}
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -616,6 +631,21 @@ bool UI::Dashboard::multiplotRunning(const int index)
 
   return false;
 }
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Checks whether a waterfall plot is currently active.
+ * @param index Waterfall index to query.
+ * @return true if the waterfall is running.
+ */
+bool UI::Dashboard::waterfallRunning(const int index)
+{
+  if (m_activeWaterfalls.contains(index))
+    return m_activeWaterfalls[index];
+
+  return false;
+}
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // UI configuration setters
@@ -676,6 +706,8 @@ void UI::Dashboard::resetData(const bool notify)
 #ifdef BUILD_COMMERCIAL
   m_plotData3D.clear();
   m_plotData3D.squeeze();
+  m_waterfallValues.clear();
+  m_waterfallValues.squeeze();
 #endif
 
   // Clear GPS data
@@ -700,6 +732,9 @@ void UI::Dashboard::resetData(const bool notify)
   m_activePlots.clear();
   m_activeFFTPlots.clear();
   m_activeMultiplots.clear();
+#ifdef BUILD_COMMERCIAL
+  m_activeWaterfalls.clear();
+#endif
 
   // Reset frame data
   m_lastFrame = DataModel::Frame();
@@ -729,6 +764,12 @@ void UI::Dashboard::clearPlotData()
   // Clear FFT plot data
   for (auto& fft : m_fftValues)
     fft.clear();
+
+#ifdef BUILD_COMMERCIAL
+  // Clear waterfall time-domain history
+  for (auto& wf : m_waterfallValues)
+    wf.clear();
+#endif
 
   // Clear line plot Y-axis data
   for (auto it = m_yAxisData.begin(); it != m_yAxisData.end(); ++it)
@@ -1085,6 +1126,19 @@ void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
   if (m_activeMultiplots.contains(index))
     m_activeMultiplots[index] = enabled;
 }
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Sets the active state of a waterfall plot.
+ * @param index Waterfall index to update.
+ * @param enabled true to mark running, false to pause.
+ */
+void UI::Dashboard::setWaterfallRunning(const int index, const bool enabled)
+{
+  if (m_activeWaterfalls.contains(index))
+    m_activeWaterfalls[index] = enabled;
+}
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Frame processing
@@ -1482,7 +1536,8 @@ void UI::Dashboard::updateDataSeries(int sourceId)
   const int plotCount  = widgetCount(SerialStudio::DashboardPlot);
   const int multiCount = widgetCount(SerialStudio::DashboardMultiPlot);
 #ifdef BUILD_COMMERCIAL
-  const int plot3DCount = widgetCount(SerialStudio::DashboardPlot3D);
+  const int plot3DCount     = widgetCount(SerialStudio::DashboardPlot3D);
+  const int waterfallCount  = widgetCount(SerialStudio::DashboardWaterfall);
 #endif
 
   // Resize data points if needed
@@ -1497,12 +1552,17 @@ void UI::Dashboard::updateDataSeries(int sourceId)
 #ifdef BUILD_COMMERCIAL
   if (m_plotData3D.size() != plot3DCount) [[unlikely]]
     configurePlot3DSeries();
+  if (m_waterfallValues.size() != waterfallCount) [[unlikely]]
+    configureWaterfallSeries();
 #endif
 
   // Delegate to per-type update helpers
   updateGpsSeries(sourceId);
   updateFftSeries(sourceId);
   updateLineSeries(sourceId);
+#ifdef BUILD_COMMERCIAL
+  updateWaterfallSeries(sourceId);
+#endif
 
   // Update multi-plots
   for (int i = 0; i < multiCount; ++i) {
@@ -1725,6 +1785,48 @@ void UI::Dashboard::configureFftSeries()
     m_activeFFTPlots.insert(i, true);
   }
 }
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Updates time-domain ring buffers feeding all active waterfall widgets.
+ * @param sourceId Source to update, or -1 for all sources.
+ */
+void UI::Dashboard::updateWaterfallSeries(int sourceId)
+{
+  const int waterfallCount = widgetCount(SerialStudio::DashboardWaterfall);
+  Q_ASSERT(m_waterfallValues.size() == waterfallCount);
+  Q_ASSERT(m_activeWaterfalls.size() == waterfallCount);
+
+  for (int i = 0; i < waterfallCount; ++i) {
+    if (!m_activeWaterfalls[i])
+      continue;
+
+    const auto& dataset = getDatasetWidget(SerialStudio::DashboardWaterfall, i);
+    if (sourceId >= 0 && dataset.sourceId != sourceId)
+      continue;
+
+    m_waterfallValues[i].push(dataset.numericValue);
+  }
+}
+
+/**
+ * @brief Configures the waterfall series data structure for the dashboard.
+ */
+void UI::Dashboard::configureWaterfallSeries()
+{
+  // Release existing buffers
+  m_waterfallValues.clear();
+  m_waterfallValues.squeeze();
+  m_activeWaterfalls.clear();
+
+  // Allocate ring buffers sized to each dataset's FFT sample count
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardWaterfall); ++i) {
+    const auto& dataset = getDatasetWidget(SerialStudio::DashboardWaterfall, i);
+    m_waterfallValues.append(DSP::AxisData(dataset.fftSamples));
+    m_activeWaterfalls.insert(i, true);
+  }
+}
+#endif
 
 /**
  * @brief Registers an X-axis data buffer for a dataset's custom X source.

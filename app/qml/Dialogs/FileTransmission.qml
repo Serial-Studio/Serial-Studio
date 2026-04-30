@@ -33,6 +33,12 @@ SmartDialog {
   title: qsTr("File Transmission")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: column.implicitWidth
+  preferredHeight: column.implicitHeight
+
+  //
   // Stop transmission & clear file when dialog is closed
   //
   onClosing: Cpp_IO_FileTransmission.closeFile()

@@ -145,7 +145,7 @@ Item {
         w:         nodeW,
         h:         nodeH,
         label:     qsTr("Frame Parser"),
-        icon:      "qrc:/rcc/icons/project-editor/treeview/code.svg"
+        icon:      "qrc:/icons/project-editor/treeview/code.svg"
       })
 
       // Device card (always shown)
@@ -300,7 +300,7 @@ Item {
           w:         nodeW,
           h:         nodeH,
           label:     act.title || qsTr("Action"),
-          icon:      act.icon  || "qrc:/rcc/icons/project-editor/treeview/action.svg",
+          icon:      act.icon  || "qrc:/icons/project-editor/treeview/action.svg",
           badge:     ""
         })
 
@@ -333,7 +333,7 @@ Item {
 
   // Icon helpers.
   function busTypeIcon(busType) {
-    const base = "qrc:/rcc/icons/devices/drivers/"
+    const base = "qrc:/icons/devices/drivers/"
     switch (busType) {
       case 0:  return base + "uart.svg"
       case 1:  return base + "network.svg"
@@ -349,11 +349,11 @@ Item {
   }
 
   function groupIcon(grp) {
-    const base = "qrc:/rcc/icons/project-editor/treeview/"
+    const base = "qrc:/icons/project-editor/treeview/"
 
     // Output groups use the output-panel icon
     if (grp.groupType === SerialStudio.GroupOutput)
-      return "qrc:/rcc/icons/dashboard-small/output-panel.svg"
+      return "qrc:/icons/dashboard-small/output-panel.svg"
 
     switch ((grp.widget || "").toLowerCase()) {
       case "multiplot":      return base + "multiplot.svg"
@@ -368,11 +368,11 @@ Item {
   }
 
   function datasetIcon() {
-    return "qrc:/rcc/icons/project-editor/treeview/dataset.svg"
+    return "qrc:/icons/project-editor/treeview/dataset.svg"
   }
 
   function outputWidgetIcon(type) {
-    const base = "qrc:/rcc/icons/project-editor/treeview/"
+    const base = "qrc:/icons/project-editor/treeview/"
     switch (type) {
       case SerialStudio.OutputButton:        return base + "output-button.svg"
       case SerialStudio.OutputSlider:        return base + "output-slider.svg"
@@ -695,7 +695,7 @@ Item {
       opacity: 0.25
       sourceSize: Qt.size(48, 48)
       anchors.horizontalCenter: parent.horizontalCenter
-      source: "qrc:/rcc/icons/project-editor/treeview/group.svg"
+      source: "qrc:/icons/project-editor/treeview/group.svg"
     }
 
     Text {

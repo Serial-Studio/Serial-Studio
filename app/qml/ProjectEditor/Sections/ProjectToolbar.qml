@@ -142,7 +142,7 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_JSON_ProjectModel.newJsonFile()
         ToolTip.text: qsTr("Create a new JSON project")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/new.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/new.svg"
       }
 
       GridLayout {
@@ -159,7 +159,7 @@ Rectangle {
           Layout.alignment: Qt.AlignLeft
           onClicked: Cpp_JSON_ProjectModel.openJsonFile()
           ToolTip.text: qsTr("Open an existing JSON project")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/open.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/open.svg"
         }
 
         Widgets.ToolbarButton {
@@ -170,7 +170,7 @@ Rectangle {
           enabled: Cpp_JSON_ProjectModel.modified
           ToolTip.text: qsTr("Save the current project")
           onClicked: Cpp_JSON_ProjectModel.saveJsonFile(false)
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/save.svg"
         }
 
         Widgets.ToolbarButton {
@@ -180,7 +180,7 @@ Rectangle {
           Layout.alignment: Qt.AlignLeft
           onClicked: Cpp_JSON_ProjectModel.saveJsonFile(true)
           ToolTip.text: qsTr("Save the current project under a new name")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/save-as.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/save-as.svg"
         }
       }
     }
@@ -193,7 +193,7 @@ Rectangle {
         text: qsTr("Lock")
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_JSON_ProjectModel.lockProject()
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/lock.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/lock.svg"
         ToolTip.text: qsTr("Set a password and lock the Project Editor")
       }
     }
@@ -209,7 +209,7 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_JSON_ProjectModel.addSource()
         ToolTip.text: qsTr("Add a new data source (device) to the project")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-device.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/add-device.svg"
       }
     }
 
@@ -222,7 +222,7 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_JSON_ProjectModel.addAction()
         ToolTip.text: qsTr("Add a new action to the project")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-action.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/add-action.svg"
       }
     }
 
@@ -233,14 +233,14 @@ Rectangle {
       collapsible: true
       collapsePriority: 10
       collapsedText: qsTr("Output")
-      collapsedIcon: "qrc:/rcc/icons/project-editor/toolbar/add-output-panel.svg"
+      collapsedIcon: "qrc:/icons/project-editor/toolbar/add-output-panel.svg"
 
       Widgets.ToolbarButton {
         text: qsTr("Output")
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_JSON_ProjectModel.addOutputPanel()
         ToolTip.text: qsTr("Add a new output control panel with a button")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-panel.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/add-output-panel.svg"
       }
 
       GridLayout {
@@ -256,7 +256,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output slider control")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-slider.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-output-slider.svg"
           onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputSlider)
         }
 
@@ -266,7 +266,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output toggle control")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-toggle.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-output-toggle.svg"
           onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputToggle)
         }
 
@@ -276,7 +276,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output knob control")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-knob.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-output-knob.svg"
           onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputKnob)
         }
 
@@ -286,7 +286,7 @@ Rectangle {
           text: qsTr("Text Field")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output text field control")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-textfield.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-output-textfield.svg"
           onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputTextField)
         }
 
@@ -296,7 +296,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output button control")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-button.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-output-button.svg"
           onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputButton)
         }
       }
@@ -309,13 +309,13 @@ Rectangle {
       collapsible: true
       collapsePriority: 20
       collapsedText: qsTr("Dataset")
-      collapsedIcon: "qrc:/rcc/icons/project-editor/toolbar/add-dataset.svg"
+      collapsedIcon: "qrc:/icons/project-editor/toolbar/add-dataset.svg"
 
       Widgets.ToolbarButton {
         text: qsTr("Dataset")
         Layout.alignment: Qt.AlignVCenter
         ToolTip.text: qsTr("Add a generic dataset")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-dataset.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/add-dataset.svg"
         onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
       }
 
@@ -332,7 +332,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a 2D plot dataset")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-plot.svg"
           onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
         }
 
@@ -342,7 +342,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a Fast Fourier Transform plot")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-fft.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-fft.svg"
           onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
         }
 
@@ -352,7 +352,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a gauge widget for numeric data")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gauge.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-gauge.svg"
           onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
         }
 
@@ -362,7 +362,7 @@ Rectangle {
           text: qsTr("Level Indicator")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a vertical bar level indicator")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-bar.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-bar.svg"
           onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
         }
 
@@ -372,7 +372,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a compass widget for directional data")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-compass.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-compass.svg"
           onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
         }
 
@@ -382,7 +382,7 @@ Rectangle {
           text: qsTr("LED Indicator")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an LED-style status indicator")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-led.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-led.svg"
           onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
         }
       }
@@ -395,13 +395,13 @@ Rectangle {
       collapsible: true
       collapsePriority: 30
       collapsedText: qsTr("Group")
-      collapsedIcon: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
+      collapsedIcon: "qrc:/icons/project-editor/toolbar/add-group.svg"
 
       Widgets.ToolbarButton {
         text: qsTr("Group")
         Layout.alignment: Qt.AlignVCenter
         ToolTip.text: qsTr("Add a dataset container group")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/add-group.svg"
         onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), SerialStudio.NoGroupWidget)
       }
 
@@ -409,7 +409,7 @@ Rectangle {
         text: qsTr("Image")
         Layout.alignment: Qt.AlignVCenter
         ToolTip.text: qsTr("Add an image/video stream viewer")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/image.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/image.svg"
         onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Image View"), SerialStudio.ImageView)
       }
 
@@ -426,7 +426,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a data table view")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-datagrid.svg"
           onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), SerialStudio.DataGrid)
         }
 
@@ -436,7 +436,7 @@ Rectangle {
           text: qsTr("Multi-Plot")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a 2D plot with multiple signals")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-multiplot.svg"
           onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), SerialStudio.MultiPlot)
         }
 
@@ -446,7 +446,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a 3D plot visualization")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-plot3d.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-plot3d.svg"
           onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D)
         }
 
@@ -456,7 +456,7 @@ Rectangle {
           text: qsTr("Accelerometer")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a group for 3-axis accelerometer data")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-accelerometer.svg"
           onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), SerialStudio.Accelerometer)
         }
 
@@ -465,7 +465,7 @@ Rectangle {
           horizontalLayout: true
           text: qsTr("Gyroscope")
           Layout.alignment: Qt.AlignLeft
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-gyroscope.svg"
           onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope)
           ToolTip.text: qsTr("Add a group for 3-axis gyroscope data")
         }
@@ -476,7 +476,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a map widget for GPS data")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
+          icon.source: "qrc:/icons/project-editor/toolbar/add-gps.svg"
           onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), SerialStudio.GPS)
         }
       }
@@ -495,7 +495,7 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
         onClicked: app.showHelpCenter("project-editor")
         ToolTip.text: qsTr("Open the Project Editor documentation")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/help.svg"
+        icon.source: "qrc:/icons/project-editor/toolbar/help.svg"
       }
     }
   }

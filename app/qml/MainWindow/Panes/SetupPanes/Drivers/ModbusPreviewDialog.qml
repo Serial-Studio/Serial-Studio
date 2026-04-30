@@ -364,7 +364,7 @@ Window {
           text: qsTr("Cancel")
           horizontalPadding: 8
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.source: "qrc:/icons/buttons/close.svg"
           onClicked: {
             Cpp_JSON_ModbusMapImporter.cancelImport()
             root.close()
@@ -378,7 +378,7 @@ Window {
           horizontalPadding: 8
           text: qsTr("Create Project")
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+          icon.source: "qrc:/icons/buttons/apply.svg"
           enabled: Cpp_JSON_ModbusMapImporter.registerCount > 0
           onClicked: {
             Cpp_JSON_ModbusMapImporter.confirmImport()

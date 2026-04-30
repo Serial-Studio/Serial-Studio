@@ -46,6 +46,12 @@ Widgets.SmartDialog {
   title: qsTr("Axis Range Configuration")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Display the dialog & load information from data model pointer
   //
   function openDialog(plot, model) {
@@ -132,6 +138,8 @@ Widgets.SmartDialog {
   // Dialog controls
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 4
 
     Label {
@@ -300,7 +308,7 @@ Widgets.SmartDialog {
         text: qsTr("Reset")
         onClicked: root.resetToAuto()
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
+        icon.source: "qrc:/icons/buttons/refresh.svg"
       }
 
       Item {
@@ -313,7 +321,7 @@ Widgets.SmartDialog {
         text: qsTr("Close")
         onClicked: root.close()
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
       }
     }
   }

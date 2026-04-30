@@ -36,13 +36,13 @@ Item {
   readonly property int kBlinkMs: 10000
 
   //
-  // Level → icon path mapping. Icons live in app/rcc/icons/notifications/.
+  // Level → icon path mapping. Icons live in app/icons/notifications/.
   //
   function iconForLevel(level) {
     switch (level) {
-    case 2: return "qrc:/rcc/icons/notifications/critical.svg"
-    case 1: return "qrc:/rcc/icons/notifications/warning.svg"
-    default: return "qrc:/rcc/icons/notifications/info.svg"
+    case 2: return "qrc:/icons/notifications/critical.svg"
+    case 1: return "qrc:/icons/notifications/warning.svg"
+    default: return "qrc:/icons/notifications/info.svg"
     }
   }
 
@@ -181,7 +181,7 @@ Item {
 
       ToolButton {
         ToolTip.visible: hovered
-        icon.source: "qrc:/rcc/icons/buttons/clear.svg"
+        icon.source: "qrc:/icons/buttons/clear.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         ToolTip.text: qsTr("Clear all notifications")
         onClicked: Cpp_Notifications.clearAll()
@@ -320,7 +320,7 @@ Item {
             sourceSize: Qt.size(64, 64)
             Layout.alignment: Qt.AlignHCenter
             fillMode: Image.PreserveAspectFit
-            source: "qrc:/rcc/icons/dashboard-large/notification-log.svg"
+            source: "qrc:/icons/dashboard-large/notification-log.svg"
           }
 
           Label {

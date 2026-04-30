@@ -31,8 +31,9 @@ Serial Studio: cross-platform telemetry dashboard, Qt 6.9.2 + C++20.
 Data sources: UART, TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O.
 15+ visualization widgets, 6 output (control) widgets, 256 KHz+ target data rate.
 Frame parsers in JavaScript (QJSEngine) or Lua 5.4 (embedded `lua54`). Per-dataset value transforms
-in either language. Output widgets, Modbus, CAN Bus, MDF4, 3D, ImageView, file transfer protocols
-(XMODEM/YMODEM/ZMODEM), Modbus map importer, and Session Database are Pro features.
+in either language. Output widgets, Modbus, CAN Bus, MDF4, 3D, ImageView, Waterfall (spectrogram),
+file transfer protocols (XMODEM/YMODEM/ZMODEM), Modbus map importer, and Session Database are
+Pro features.
 
 ## Directory Structure
 
@@ -229,6 +230,24 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 - **Processing order**: datasets processed in group-array then dataset-array order. A transform can read raw values of ALL datasets and final values of EARLIER datasets.
 - `applyTransform` accepts/returns `QVariant` (double or QString), not just double.
 - `Dataset` struct has `rawNumericValue`, `rawValue` (snapshots before transform), `virtual_` (no frame index, computed entirely from transforms).
+
+### Waterfall / Spectrogram (Pro)
+
+- Per-dataset Pro widget that reuses the dataset's FFT settings (`fftSamples`, `fftSamplingRate`,
+  `fftMin`, `fftMax`). Toggle independently from FFT via the `DatasetWaterfall = 0b01000000`
+  option flag (persisted as `Keys::Waterfall("waterfall")` in project JSON, omitted when false).
+- `Widgets::Waterfall` (`UI/Widgets/Waterfall.h/.cpp`) inherits `QuickPaintedItemCompat` — the
+  C++ class IS the painted item (unlike FFTPlot which is a data model for QtGraphs LineSeries).
+  The QML wrapper reparents it into `waterfallArea` (same pattern as `Widgets::Plot3D`).
+- Pipeline parallels FFT: `Dashboard::m_waterfallValues` holds per-widget time-domain ring
+  buffers, `configureWaterfallSeries()` allocates them sized to `dataset.fftSamples`,
+  `updateWaterfallSeries(sourceId)` pushes `dataset.numericValue` per frame. Each UI tick
+  (24 Hz), the widget runs FFT (Blackman-Harris window) on the time-domain buffer, converts
+  to dB, scrolls the history image down 1 row via `QImage::scroll`, and writes the new row at
+  the top. Color maps: Viridis/Inferno/Magma/Plasma/Turbo/Jet/Hot/Grayscale.
+- Schema/back-compat: `dataset.waterfall` writes only when true (default `false` on load).
+  Older Serial Studio loads files with the field as a no-op. `commercialCfg()` flags any
+  project that uses `dataset.waterfall = true` so GPL builds know they need a Pro tier.
 
 ### Output Widgets (Pro)
 

@@ -204,25 +204,25 @@ Widgets.Pane {
           Repeater {
             model: [
               {
-                icon:     "qrc:/rcc/icons/project-editor/summary/device.svg",
+                icon:     "qrc:/icons/project-editor/summary/device.svg",
                 value:    Cpp_JSON_ProjectModel.sourceCount,
                 singular: qsTr("Source"),
                 plural:   qsTr("Sources")
               },
               {
-                icon:     "qrc:/rcc/icons/project-editor/summary/group.svg",
+                icon:     "qrc:/icons/project-editor/summary/group.svg",
                 value:    Cpp_JSON_ProjectModel.groupCount,
                 singular: qsTr("Group"),
                 plural:   qsTr("Groups")
               },
               {
-                icon:     "qrc:/rcc/icons/project-editor/summary/dataset.svg",
+                icon:     "qrc:/icons/project-editor/summary/dataset.svg",
                 value:    Cpp_JSON_ProjectModel.datasetCount,
                 singular: qsTr("Dataset"),
                 plural:   qsTr("Datasets")
               },
               {
-                icon:     "qrc:/rcc/icons/project-editor/summary/action.svg",
+                icon:     "qrc:/icons/project-editor/summary/action.svg",
                 value:    statsBar.actionCount,
                 singular: qsTr("Action"),
                 plural:   qsTr("Actions")

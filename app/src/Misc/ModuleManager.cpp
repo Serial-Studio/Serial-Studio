@@ -86,6 +86,7 @@
 #  include "UI/Widgets/ImageExport.h"
 #  include "UI/Widgets/ImageView.h"
 #  include "UI/Widgets/Plot3D.h"
+#  include "UI/Widgets/Waterfall.h"
 #endif
 
 #ifdef ENABLE_GRPC
@@ -339,6 +340,7 @@ void Misc::ModuleManager::registerQmlTypes()
 #ifdef BUILD_COMMERCIAL
   qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DWidget");
   qmlRegisterType<Widgets::ImageView>("SerialStudio", 1, 0, "ImageViewModel");
+  qmlRegisterType<Widgets::Waterfall>("SerialStudio", 1, 0, "WaterfallModel");
 #endif
 
   // Register JSON custom items

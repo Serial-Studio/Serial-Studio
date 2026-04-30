@@ -33,7 +33,7 @@ Widgets.Pane {
   id: root
 
   title: qsTr("Device Setup")
-  icon: "qrc:/rcc/icons/panes/setup.svg"
+  icon: "qrc:/icons/panes/setup.svg"
   implicitHeight: layout.implicitHeight + 32
 
   //
@@ -284,84 +284,98 @@ Widgets.Pane {
       }
 
       //
-      // CSV generator
+      // Data export grid
       //
-      CheckBox {
-        id: csvLogging
-
-        Layout.leftMargin: -6
-        Layout.maximumHeight: 18
-        opacity: enabled ? 1 : 0.5
-        text: qsTr("Create CSV File")
-        Layout.alignment: Qt.AlignLeft
-        enabled: root.dataExportAllowed
+      GridLayout {
+        rowSpacing: 4
+        columnSpacing: 4
+        Layout.fillWidth: true
+        columns: Cpp_CommercialBuild ? 3 : 1
         Layout.maximumWidth: root.maxItemWidth
-        checked: root.dataExportAllowed && Cpp_CSV_Export.exportEnabled
 
-        onCheckedChanged:  {
-          if (Cpp_CSV_Export.exportEnabled !== checked)
-            Cpp_CSV_Export.exportEnabled = checked
+        Switch {
+          id: csvLogging
+
+          text: qsTr("CSV File")
+          Layout.leftMargin: -6
+          Layout.maximumHeight: 18
+          palette.accent: "#9a7820"
+          opacity: enabled ? 1 : 0.5
+          palette.highlight: "#f0c83a"
+          Layout.alignment: Qt.AlignLeft
+          enabled: root.dataExportAllowed
+          checked: root.dataExportAllowed && Cpp_CSV_Export.exportEnabled
+
+          onCheckedChanged:  {
+            if (Cpp_CSV_Export.exportEnabled !== checked)
+              Cpp_CSV_Export.exportEnabled = checked
+          }
         }
-      }
 
-      //
-      // MDF4 generator
-      //
-      CheckBox {
-        Layout.leftMargin: -6
-        Layout.maximumHeight: 18
-        opacity: enabled ? 1 : 0.5
-        text: qsTr("Create MDF4 File")
-        Layout.alignment: Qt.AlignLeft
-        enabled: root.dataExportAllowed
-        Layout.maximumWidth: root.maxItemWidth
-        checked: root.dataExportAllowed && Cpp_MDF4_Export.exportEnabled
+        Switch {
+          Layout.leftMargin: -6
+          Layout.maximumHeight: 18
+          palette.accent: "#c2185b"
+          opacity: enabled ? 1 : 0.5
+          visible: Cpp_CommercialBuild
+          palette.highlight: "#ee6097"
+          text: qsTr("Session Database")
+          Layout.alignment: Qt.AlignLeft
+          enabled: root.dataExportAllowed
+          checked: Cpp_CommercialBuild
+                   && root.dataExportAllowed
+                   && Cpp_Sessions_Export.exportEnabled
 
-        onCheckedChanged: {
-          if (Cpp_MDF4_Export.exportEnabled !== checked)
-            Cpp_MDF4_Export.exportEnabled = checked
+          onCheckedChanged: {
+            if (!Cpp_CommercialBuild)
+              return
+
+            if (Cpp_Sessions_Export.exportEnabled !== checked)
+              Cpp_Sessions_Export.exportEnabled = checked
+          }
         }
-      }
 
-      //
-      // Session log (Pro)
-      //
-      CheckBox {
-        Layout.leftMargin: -6
-        Layout.maximumHeight: 18
-        opacity: enabled ? 1 : 0.5
-        visible: Cpp_CommercialBuild
-        Layout.alignment: Qt.AlignLeft
-        text: qsTr("Create Session Log")
-        enabled: root.dataExportAllowed
-        Layout.maximumWidth: root.maxItemWidth
-        checked: Cpp_CommercialBuild
-                 && root.dataExportAllowed
-                 && Cpp_Sessions_Export.exportEnabled
-
-        onCheckedChanged: {
-          if (!Cpp_CommercialBuild)
-            return
-
-          if (Cpp_Sessions_Export.exportEnabled !== checked)
-            Cpp_Sessions_Export.exportEnabled = checked
+        Item {
+          Layout.fillWidth: true
+          visible: Cpp_CommercialBuild
         }
-      }
 
-      //
-      // Console data export
-      //
-      CheckBox {
-        Layout.leftMargin: -6
-        Layout.maximumHeight: 18
-        Layout.alignment: Qt.AlignLeft
-        text: qsTr("Export Console Data")
-        Layout.maximumWidth: root.maxItemWidth
-        checked: Cpp_Console_Export.exportEnabled
+        Switch {
+          text: qsTr("MDF4 File")
+          Layout.leftMargin: -6
+          Layout.maximumHeight: 18
+          palette.accent: "#3a8a5a"
+          opacity: enabled ? 1 : 0.5
+          palette.highlight: "#74c07b"
+          Layout.alignment: Qt.AlignLeft
+          enabled: root.dataExportAllowed
+          checked: root.dataExportAllowed && Cpp_MDF4_Export.exportEnabled
 
-        onCheckedChanged:  {
-          if (Cpp_Console_Export.exportEnabled !== checked)
-            Cpp_Console_Export.exportEnabled = checked
+          onCheckedChanged: {
+            if (Cpp_MDF4_Export.exportEnabled !== checked)
+              Cpp_MDF4_Export.exportEnabled = checked
+          }
+        }
+
+        Switch {
+          Layout.leftMargin: -6
+          Layout.maximumHeight: 18
+          palette.accent: "#3a6db0"
+          opacity: enabled ? 1 : 0.5
+          text: qsTr("Console Dump")
+          palette.highlight: "#5aa9eb"
+          Layout.alignment: Qt.AlignLeft
+          checked: Cpp_Console_Export.exportEnabled
+
+          onCheckedChanged:  {
+            if (Cpp_Console_Export.exportEnabled !== checked)
+              Cpp_Console_Export.exportEnabled = checked
+          }
+        }
+
+        Item {
+          Layout.fillWidth: true
+          visible: Cpp_CommercialBuild
         }
       }
 
@@ -454,7 +468,7 @@ Widgets.Pane {
               Image {
                 fillMode: Image.PreserveAspectFit
                 Layout.alignment: Qt.AlignHCenter
-                source: "qrc:/rcc/images/multi-device.svg"
+                source: "qrc:/images/multi-device.svg"
               }
 
               Item {
@@ -516,7 +530,7 @@ Widgets.Pane {
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("Open Project Editor")
                 onClicked: app.showProjectEditor()
-                icon.source: "qrc:/rcc/icons/buttons/wrench.svg"
+                icon.source: "qrc:/icons/buttons/wrench.svg"
                 icon.color: Cpp_ThemeManager.colors["button_text"]
               }
             }

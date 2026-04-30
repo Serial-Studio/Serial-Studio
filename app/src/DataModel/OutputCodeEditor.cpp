@@ -370,7 +370,7 @@ void DataModel::OutputCodeEditor::reload(bool guiTrigger)
 QString DataModel::OutputCodeEditor::defaultTemplate()
 {
   const auto templates = loadScriptTemplateManifest(
-    QStringLiteral(":/rcc/scripts/output/templates.json"), "DataModel::OutputCodeEditor");
+    QStringLiteral(":/scripts/output/templates.json"), "DataModel::OutputCodeEditor");
 
   QString defaultFile;
   for (const auto& tmpl : templates) {
@@ -387,7 +387,7 @@ QString DataModel::OutputCodeEditor::defaultTemplate()
     return {};
 
   return readTextResource(templateResourcePath(
-    QStringLiteral(":/rcc/scripts/output"), defaultFile, QStringLiteral(".js")));
+    QStringLiteral(":/scripts/output"), defaultFile, QStringLiteral(".js")));
 }
 
 /**
@@ -400,12 +400,12 @@ void DataModel::OutputCodeEditor::loadTemplates()
   m_templateFiles.clear();
 
   const auto templates = loadScriptTemplateManifest(
-    QStringLiteral(":/rcc/scripts/output/templates.json"), "DataModel::OutputCodeEditor");
+    QStringLiteral(":/scripts/output/templates.json"), "DataModel::OutputCodeEditor");
 
   for (const auto& tmpl : templates) {
     m_templateNames.append(tmpl.name);
     m_templateFiles.append(templateResourcePath(
-      QStringLiteral(":/rcc/scripts/output"), tmpl.file, QStringLiteral(".js")));
+      QStringLiteral(":/scripts/output"), tmpl.file, QStringLiteral(".js")));
     if (m_defaultTemplateFile.isEmpty() && tmpl.isDefault)
       m_defaultTemplateFile = tmpl.file;
   }
@@ -428,7 +428,7 @@ void DataModel::OutputCodeEditor::onThemeChanged()
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
 
   const auto path =
-    name.startsWith('/') ? name : QStringLiteral(":/rcc/themes/code-editor/%1.xml").arg(name);
+    name.startsWith('/') ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
 
   // Load syntax style XML
   QFile file(path);

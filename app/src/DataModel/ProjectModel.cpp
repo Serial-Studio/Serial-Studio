@@ -337,6 +337,33 @@ QStringList DataModel::ProjectModel::xDataSources() const
 }
 
 /**
+ * @brief Returns "Time" plus every dataset label, sorted by frame index.
+ *
+ * Mirrors xDataSources() but with "Time" as the implicit zeroth option, so the
+ * waterfall plot can swap its Y axis between elapsed time (default scrolling
+ * spectrogram) and any other dataset's value (Campbell-diagram mode).
+ */
+QStringList DataModel::ProjectModel::yWaterfallSources() const
+{
+  QStringList list;
+  list.append(tr("Time"));
+
+  QMap<int, QString> datasets;
+  for (const auto& group : m_groups) {
+    for (const auto& dataset : group.datasets) {
+      const auto index = dataset.index;
+      if (!datasets.contains(index))
+        datasets.insert(index, QString("%1 (%2)").arg(dataset.title, group.title));
+    }
+  }
+
+  for (auto it = datasets.cbegin(); it != datasets.cend(); ++it)
+    list.append(it.value());
+
+  return list;
+}
+
+/**
  * @brief Suppresses modal dialogs when true (API/headless mode).
  */
 void DataModel::ProjectModel::setSuppressMessageBoxes(const bool suppress)
@@ -2440,6 +2467,10 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
       title       = tr("New LED Indicator");
       dataset.led = true;
       break;
+    case SerialStudio::DatasetWaterfall:
+      title             = tr("New Waterfall");
+      dataset.waterfall = true;
+      break;
     default:
       break;
   }
@@ -2507,6 +2538,9 @@ void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOpt
       break;
     case SerialStudio::DatasetLED:
       m_selectedDataset.led = checked;
+      break;
+    case SerialStudio::DatasetWaterfall:
+      m_selectedDataset.waterfall = checked;
       break;
     default:
       break;
@@ -3885,7 +3919,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     DataModel::Workspace ws;
     ws.workspaceId = kOverviewId;
     ws.title       = tr("Overview");
-    ws.icon        = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
+    ws.icon        = QStringLiteral("qrc:/icons/panes/overview.svg");
     ws.widgetRefs  = overviewRefs;
     result.push_back(std::move(ws));
   }
@@ -3895,7 +3929,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     DataModel::Workspace ws;
     ws.workspaceId = kAllDataId;
     ws.title       = tr("All Data");
-    ws.icon        = QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg");
+    ws.icon        = QStringLiteral("qrc:/icons/panes/dashboard.svg");
     ws.widgetRefs  = allRefs;
     result.push_back(std::move(ws));
   }

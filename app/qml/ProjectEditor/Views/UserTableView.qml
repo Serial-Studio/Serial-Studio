@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: Cpp_JSON_ProjectEditor.selectedUserTable
-  icon: "qrc:/rcc/icons/project-editor/treeview/shared-table.svg"
+  icon: "qrc:/icons/project-editor/treeview/shared-table.svg"
 
   readonly property int rowHeight: 30
   readonly property int colTypeWidth: 140
@@ -166,7 +166,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.promptAddRegister(root.tableName)
               ToolTip.text: qsTr("Add register")
-              icon.source: "qrc:/rcc/icons/project-editor/actions/add-register.svg"
+              icon.source: "qrc:/icons/project-editor/actions/add-register.svg"
             }
 
             Widgets.ToolbarButton {
@@ -176,7 +176,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: constantsLibraryDialog.open(root.tableName)
               ToolTip.text: qsTr("Insert constant")
-              icon.source: "qrc:/rcc/icons/project-editor/actions/insert-constant.svg"
+              icon.source: "qrc:/icons/project-editor/actions/insert-constant.svg"
             }
 
             Widgets.ToolbarButton {
@@ -186,7 +186,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.importTableFromCsv(root.tableName)
               ToolTip.text: qsTr("Import registers from CSV")
-              icon.source: "qrc:/rcc/icons/project-editor/actions/import-table.svg"
+              icon.source: "qrc:/icons/project-editor/actions/import-table.svg"
             }
 
             Widgets.ToolbarButton {
@@ -196,7 +196,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.exportTableToCsv(root.tableName)
               ToolTip.text: qsTr("Export registers to CSV")
-              icon.source: "qrc:/rcc/icons/project-editor/actions/export-table.svg"
+              icon.source: "qrc:/icons/project-editor/actions/export-table.svg"
             }
 
             Item {
@@ -211,7 +211,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.promptRenameTable(root.tableName)
               ToolTip.text: qsTr("Rename table")
-              icon.source: "qrc:/rcc/icons/project-editor/actions/rename-table.svg"
+              icon.source: "qrc:/icons/project-editor/actions/rename-table.svg"
             }
 
             Widgets.ToolbarButton {
@@ -221,7 +221,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.confirmDeleteTable(root.tableName)
               ToolTip.text: qsTr("Delete table")
-              icon.source: "qrc:/rcc/icons/project-editor/actions/delete-table.svg"
+              icon.source: "qrc:/icons/project-editor/actions/delete-table.svg"
             }
 
             Rectangle {
@@ -238,7 +238,7 @@ Widgets.Pane {
               toolbarButton: false
               Layout.alignment: Qt.AlignVCenter
               onClicked: app.showHelpCenter("data-tables")
-              icon.source: "qrc:/rcc/icons/code-editor/help.svg"
+              icon.source: "qrc:/icons/code-editor/help.svg"
               ToolTip.text: qsTr("Open help documentation for shared memory")
             }
           }
@@ -333,8 +333,8 @@ Widgets.Pane {
                   fillMode: Image.PreserveAspectFit
                   sourceSize: Qt.size(14, 14)
                   source: typeCombo.currentIndex === 1
-                          ? "qrc:/rcc/icons/project-editor/permissions/read-write.svg"
-                          : "qrc:/rcc/icons/project-editor/permissions/read-only.svg"
+                          ? "qrc:/icons/project-editor/permissions/read-write.svg"
+                          : "qrc:/icons/project-editor/permissions/read-only.svg"
                 }
 
                 Label {
@@ -455,7 +455,7 @@ Widgets.Pane {
                 icon.color: "transparent"
                 Layout.preferredHeight: 26
                 Layout.preferredWidth: root.colActionWidth / 2
-                icon.source: "qrc:/rcc/icons/buttons/copy.svg"
+                icon.source: "qrc:/icons/buttons/copy.svg"
                 ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyRegBtn.accessCode)
 
                 background: Rectangle {
@@ -480,7 +480,7 @@ Widgets.Pane {
                 icon.color: "transparent"
                 Layout.preferredHeight: 26
                 Layout.preferredWidth: root.colActionWidth / 2
-                icon.source: "qrc:/rcc/icons/buttons/trash.svg"
+                icon.source: "qrc:/icons/buttons/trash.svg"
 
                 background: Rectangle {
                   border.width: 0
@@ -549,7 +549,7 @@ Widgets.Pane {
           Layout.preferredWidth: 14
           Layout.preferredHeight: 14
           Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+          icon.source: "qrc:/icons/buttons/apply.svg"
           icon.color: Cpp_ThemeManager.colors["highlighted_text"]
           background: Item {}
         }

@@ -30,7 +30,7 @@ Widgets.Pane {
   id: root
 
   title: qsTr("Project Structure")
-  icon: "qrc:/rcc/icons/project-editor/windows/project-structure.svg"
+  icon: "qrc:/icons/project-editor/windows/project-structure.svg"
 
   signal groupClicked(var title)
   signal datasetClicked(var title)
@@ -268,7 +268,7 @@ Widgets.Pane {
             opacity: hasChildren ? 1 : 0
             Layout.alignment: Qt.AlignVCenter
             rotation: model.treeViewExpanded ? 0 : 270
-            source: "qrc:/rcc/icons/project-editor/treeview/indicator.svg"
+            source: "qrc:/icons/project-editor/treeview/indicator.svg"
 
             MouseArea {
               anchors.fill: parent

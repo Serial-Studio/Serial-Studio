@@ -46,11 +46,11 @@ Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
 #endif
 
   // Register all Geist Mono variants
-  QFontDatabase::addApplicationFont(":/rcc/fonts/GeistMono-Bold.ttf");
-  QFontDatabase::addApplicationFont(":/rcc/fonts/GeistMono-Medium.ttf");
+  QFontDatabase::addApplicationFont(":/fonts/GeistMono-Bold.ttf");
+  QFontDatabase::addApplicationFont(":/fonts/GeistMono-Medium.ttf");
 
   // Use the Regular variant as the default mono font
-  const auto id = QFontDatabase::addApplicationFont(":/rcc/fonts/GeistMono-Regular.ttf");
+  const auto id = QFontDatabase::addApplicationFont(":/fonts/GeistMono-Regular.ttf");
   if (id != -1) {
     const auto families = QFontDatabase::applicationFontFamilies(id);
     if (!families.isEmpty())

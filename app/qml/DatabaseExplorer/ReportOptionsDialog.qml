@@ -24,6 +24,12 @@ Widgets.SmartDialog {
   title: qsTr("Generate PDF Report")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Dialog state
   //
   property int sessionId: -1
@@ -108,10 +114,10 @@ Widgets.SmartDialog {
     _metadataCheck.checked = _prefs.includeMetadata
     _statsCheck.checked    = _prefs.includeStats
     _chartsCheck.checked   = _prefs.includeCharts
+    _annotateStatsCheck.checked  = _prefs.annotateChartStats
 
     _lineWidthSpin.value      = Math.round(_prefs.lineWidth * 10)
     _lineStyleCombo.currentIndex = Math.max(0, _prefs.lineStyleIndex)
-    _annotateStatsCheck.checked  = _prefs.annotateChartStats
 
     root.show()
     root.raise()
@@ -290,8 +296,8 @@ Widgets.SmartDialog {
           }
 
           Label {
-            Layout.columnSpan: 2
             text: qsTr("Logo")
+            Layout.columnSpan: 2
             color: Cpp_ThemeManager.colors["pane_section_label"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             Component.onCompleted: font.capitalization = Font.AllUppercase
@@ -441,14 +447,6 @@ Widgets.SmartDialog {
             model: root.lineStyles.map(s => s.label)
           }
 
-          CheckBox {
-            id: _annotateStatsCheck
-
-            checked: true
-            Layout.columnSpan: 2
-            text: qsTr("Annotate min, max, and mean values on plots")
-          }
-
           Item {
             Layout.columnSpan: 2
             Layout.fillHeight: true
@@ -505,6 +503,9 @@ Widgets.SmartDialog {
           } CheckBox {
             id: _chartsCheck
             text: qsTr("Parameter trends (time-series chart per numeric parameter)")
+          } CheckBox {
+            id: _annotateStatsCheck
+            text: qsTr("Annotate min, max, and mean values on plots")
           }
 
           Item {
@@ -530,7 +531,7 @@ Widgets.SmartDialog {
         icon.height: 16
         text: qsTr("Cancel")
         onClicked: root.close()
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
 
@@ -538,7 +539,7 @@ Widgets.SmartDialog {
         text: qsTr("Export HTML")
         icon.width: 16
         icon.height: 16
-        icon.source: "qrc:/rcc/icons/buttons/html.svg"
+        icon.source: "qrc:/icons/buttons/html.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: _coverCheck.checked
                  || _metadataCheck.checked
@@ -556,7 +557,7 @@ Widgets.SmartDialog {
         icon.height: 16
         highlighted: true
         text: qsTr("Export PDF")
-        icon.source: "qrc:/rcc/icons/buttons/pdf.svg"
+        icon.source: "qrc:/icons/buttons/pdf.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: _coverCheck.checked
                  || _metadataCheck.checked

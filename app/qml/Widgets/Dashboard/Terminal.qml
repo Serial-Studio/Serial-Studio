@@ -223,7 +223,7 @@ Item {
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter
         onClicked: app.showFileTransmission()
-        icon.source: "qrc:/rcc/icons/buttons/attach.svg"
+        icon.source: "qrc:/icons/buttons/attach.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
 
@@ -392,7 +392,7 @@ Item {
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
         onClicked: root.sendData()
-        icon.source: "qrc:/rcc/icons/buttons/send.svg"
+        icon.source: "qrc:/icons/buttons/send.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: Cpp_IO_Manager.readWrite && (send.length > 0 || Cpp_Console_Handler.lineEnding != 0)
       }
@@ -485,7 +485,7 @@ Item {
         onClicked: root.clear()
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
-        icon.source: "qrc:/rcc/icons/buttons/clear.svg"
+        icon.source: "qrc:/icons/buttons/clear.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }

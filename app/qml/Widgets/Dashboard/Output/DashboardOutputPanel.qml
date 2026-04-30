@@ -121,7 +121,7 @@ Item {
             text: cell.owTitle.length > 0 ? cell.owTitle : qsTr("Send")
             icon.source: cell.owIcon.length > 0
                          ? cell.owIcon
-                         : "qrc:/rcc/actions/Gears.svg"
+                         : "qrc:/actions/Gears.svg"
             icon.color: cell.owMono
                         ? Cpp_ThemeManager.colors["highlighted_text"]
                         : "transparent"
@@ -270,7 +270,7 @@ Item {
               id: textSendBtn
 
               text: qsTr("Send")
-              icon.source: "qrc:/rcc/icons/buttons/send.svg"
+              icon.source: "qrc:/icons/buttons/send.svg"
               font: Cpp_Misc_CommonFonts.customUiFont(0.8, false)
 
               palette.button: cell.accentColor

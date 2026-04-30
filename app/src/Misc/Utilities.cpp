@@ -175,7 +175,7 @@ int Misc::Utilities::showMessageBox(const QString& text,
 
   // Set icon
   if (icon == QMessageBox::NoIcon)
-    box.setIconPixmap(getHiDpiPixmap(":/rcc/logo/small-icon.png"));
+    box.setIconPixmap(getHiDpiPixmap(":/logo/small-icon.png"));
   else
     box.setIcon(icon);
 

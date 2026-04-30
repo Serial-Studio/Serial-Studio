@@ -67,8 +67,8 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
 
   // Configure buttons and table
   m_parseButton->setDefault(true);
-  m_clearButton->setIcon(QIcon(":/rcc/icons/buttons/clear.svg"));
-  m_parseButton->setIcon(QIcon(":/rcc/icons/buttons/media-play.svg"));
+  m_clearButton->setIcon(QIcon(":/icons/buttons/clear.svg"));
+  m_parseButton->setIcon(QIcon(":/icons/buttons/media-play.svg"));
 
   m_table->setColumnCount(2);
   m_table->verticalHeader()->hide();

@@ -59,8 +59,8 @@ DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent) : QDialog(par
   auto* outputLayout = new QVBoxLayout(m_outputGroup);
 
   m_evaluateButton->setDefault(true);
-  m_clearButton->setIcon(QIcon(":/rcc/icons/buttons/clear.svg"));
-  m_evaluateButton->setIcon(QIcon(":/rcc/icons/buttons/media-play.svg"));
+  m_clearButton->setIcon(QIcon(":/icons/buttons/clear.svg"));
+  m_evaluateButton->setIcon(QIcon(":/icons/buttons/media-play.svg"));
 
   m_rawOutput->setReadOnly(true);
   m_hexOutput->setReadOnly(true);

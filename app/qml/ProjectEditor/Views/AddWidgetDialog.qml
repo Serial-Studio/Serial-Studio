@@ -322,8 +322,8 @@ Window {
               icon.width: 16
               icon.height: 16
               icon.source: widgetRow.alreadyAdded
-                           ? "qrc:/rcc/icons/buttons/apply.svg"
-                           : "qrc:/rcc/icons/buttons/plus.svg"
+                           ? "qrc:/icons/buttons/apply.svg"
+                           : "qrc:/icons/buttons/plus.svg"
               icon.color: "transparent"
 
               background: Rectangle {
@@ -389,7 +389,7 @@ Window {
           icon.height: 18
           text: qsTr("Close")
           horizontalPadding: 8
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.source: "qrc:/icons/buttons/close.svg"
           onClicked: root.close()
         }
       }

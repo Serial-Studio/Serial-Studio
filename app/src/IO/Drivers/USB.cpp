@@ -28,6 +28,7 @@
 #include <QMetaObject>
 #include <QTimer>
 
+#include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -618,7 +619,14 @@ void IO::Drivers::USB::setupExternalConnections()
  */
 void IO::Drivers::USB::onReadError()
 {
-  close();
+  // Already disconnected from a prior error
+  if (!isOpen())
+    return;
+
+  ConnectionManager::instance().disconnectDevice(this);
+  Misc::Utilities::showMessageBox(tr("USB Device Error"),
+                                  tr("The USB device was disconnected or "
+                                     "encountered a fatal read error."));
 }
 
 /**

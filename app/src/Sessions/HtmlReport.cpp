@@ -257,11 +257,11 @@ void Sessions::HtmlReport::render(const ReportData& data,
 QString Sessions::HtmlReport::buildHtml() const
 {
   // Load static template assets from qrc
-  QString html      = readResource(QStringLiteral(":/rcc/templates/reports/session-report.html"));
-  const QString css = readResource(QStringLiteral(":/rcc/templates/reports/session-report.css"));
-  const QString js  = readResource(QStringLiteral(":/rcc/templates/reports/session-report.js"));
-  const QString chartJs  = readResource(QStringLiteral(":/rcc/chartjs/chart.umd.min.js"));
-  const QString brandSvg = readResource(QStringLiteral(":/rcc/logo/icon.svg"));
+  QString html      = readResource(QStringLiteral(":/templates/reports/session-report.html"));
+  const QString css = readResource(QStringLiteral(":/templates/reports/session-report.css"));
+  const QString js  = readResource(QStringLiteral(":/templates/reports/session-report.js"));
+  const QString chartJs  = readResource(QStringLiteral(":/chartjs/chart.umd.min.js"));
+  const QString brandSvg = readResource(QStringLiteral(":/logo/icon.svg"));
 
   if (html.isEmpty() || css.isEmpty() || js.isEmpty() || chartJs.isEmpty())
     return QString();
@@ -807,7 +807,7 @@ void Sessions::HtmlReport::startPdfRender(const QString& html, const QString& pd
   connect(m_page, &QWebEnginePage::pdfPrintingFinished, this, &HtmlReport::onPdfPrintingFinished);
 
   // baseUrl resolves any future relative references against qrc
-  m_page->setHtml(html, QUrl(QStringLiteral("qrc:/rcc/templates/reports/")));
+  m_page->setHtml(html, QUrl(QStringLiteral("qrc:/templates/reports/")));
 }
 
 /**

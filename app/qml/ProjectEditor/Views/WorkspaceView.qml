@@ -30,7 +30,7 @@ Widgets.Pane {
 
   implicitWidth: 0
   implicitHeight: 0
-  icon: "qrc:/rcc/icons/project-editor/treeview/group.svg"
+  icon: "qrc:/icons/project-editor/treeview/group.svg"
 
   property int workspaceId: Cpp_JSON_ProjectEditor.selectedWorkspaceId
   property string workspaceName: Cpp_JSON_ProjectModel.workspaceTitle(workspaceId)
@@ -129,7 +129,7 @@ Widgets.Pane {
             ToolTip.text: qsTr("Add widget to workspace")
             enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
             onClicked: addWidgetDialog.open(root.workspaceId)
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-dataset.svg"
           }
 
           Item { Layout.fillWidth: true }
@@ -142,7 +142,7 @@ Widgets.Pane {
             ToolTip.text: qsTr("Rename workspace")
             enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
             onClicked: Cpp_JSON_ProjectModel.promptRenameWorkspace(root.workspaceId)
-            icon.source: "qrc:/rcc/icons/project-editor/actions/rename-table.svg"
+            icon.source: "qrc:/icons/project-editor/actions/rename-table.svg"
           }
 
           Widgets.ToolbarButton {
@@ -153,7 +153,7 @@ Widgets.Pane {
             ToolTip.text: qsTr("Delete workspace")
             enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
             onClicked: Cpp_JSON_ProjectModel.confirmDeleteWorkspace(root.workspaceId)
-            icon.source: "qrc:/rcc/icons/project-editor/actions/delete-table.svg"
+            icon.source: "qrc:/icons/project-editor/actions/delete-table.svg"
           }
         }
       }
@@ -277,7 +277,7 @@ Widgets.Pane {
                 hoverEnabled: true
                 anchors.centerIn: parent
                 icon.color: "transparent"
-                icon.source: "qrc:/rcc/icons/buttons/trash.svg"
+                icon.source: "qrc:/icons/buttons/trash.svg"
 
                 background: Rectangle {
                   border.width: 0

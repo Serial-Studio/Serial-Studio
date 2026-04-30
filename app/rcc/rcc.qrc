@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/rcc">
+    <qresource prefix="/">
         <file>actions/Abscissa.svg</file>
         <file>actions/Accuracy.svg</file>
         <file>actions/Add properties.svg</file>
@@ -181,6 +181,8 @@
         <file>icons/dashboard-buttons/archive.svg</file>
         <file>icons/dashboard-buttons/area.svg</file>
         <file>icons/dashboard-buttons/center.svg</file>
+        <file>icons/dashboard-buttons/clear.svg</file>
+        <file>icons/dashboard-buttons/color.svg</file>
         <file>icons/dashboard-buttons/crosshair.svg</file>
         <file>icons/dashboard-buttons/filter.svg</file>
         <file>icons/dashboard-buttons/front_view.svg</file>
@@ -223,6 +225,7 @@
         <file>icons/dashboard-large/plot.svg</file>
         <file>icons/dashboard-large/plot3d.svg</file>
         <file>icons/dashboard-large/terminal.svg</file>
+        <file>icons/dashboard-large/waterfall.svg</file>
         <file>icons/dashboard-small/accelerometer.svg</file>
         <file>icons/dashboard-small/bar.svg</file>
         <file>icons/dashboard-small/compass.svg</file>
@@ -240,6 +243,7 @@
         <file>icons/dashboard-small/plot.svg</file>
         <file>icons/dashboard-small/plot3d.svg</file>
         <file>icons/dashboard-small/terminal.svg</file>
+        <file>icons/dashboard-small/waterfall.svg</file>
         <file>icons/database/close.svg</file>
         <file>icons/database/delete.svg</file>
         <file>icons/database/export-csv.svg</file>
@@ -318,6 +322,7 @@
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/actions/rename-table.svg</file>
         <file>icons/project-editor/actions/transform.svg</file>
+        <file>icons/project-editor/actions/waterfall.svg</file>
         <file>icons/project-editor/model/action-behavior.svg</file>
         <file>icons/project-editor/model/action.svg</file>
         <file>icons/project-editor/model/alarm.svg</file>
@@ -426,8 +431,11 @@
         <file>icons/start/normal-screen.svg</file>
         <file>icons/start/notifications.svg</file>
         <file>icons/start/pause.svg</file>
+        <file>icons/start/reset.svg</file>
         <file>icons/start/resume.svg</file>
+        <file>icons/start/sessions.svg</file>
         <file>icons/start/settings.svg</file>
+        <file>icons/start/tools.svg</file>
         <file>icons/taskbar/console.svg</file>
         <file>icons/taskbar/notifications.svg</file>
         <file>icons/taskbar/pause.svg</file>
@@ -439,6 +447,7 @@
         <file>icons/toolbar/console.svg</file>
         <file>icons/toolbar/csv.svg</file>
         <file>icons/toolbar/deepwiki.svg</file>
+        <file>icons/toolbar/deploy.svg</file>
         <file>icons/toolbar/device-setup.svg</file>
         <file>icons/toolbar/disconnect.svg</file>
         <file>icons/toolbar/examples.svg</file>
@@ -689,9 +698,5 @@
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
-        <file>icons/toolbar/deploy.svg</file>
-        <file>icons/start/reset.svg</file>
-        <file>icons/start/sessions.svg</file>
-        <file>icons/start/tools.svg</file>
     </qresource>
 </RCC>

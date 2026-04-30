@@ -135,6 +135,7 @@ public:
   [[nodiscard]] QString jsonProjectsPath() const;
 
   [[nodiscard]] QStringList xDataSources() const;
+  [[nodiscard]] QStringList yWaterfallSources() const;
 
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& jsonFilePath() const noexcept;

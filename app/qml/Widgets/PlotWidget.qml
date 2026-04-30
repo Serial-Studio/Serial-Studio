@@ -33,10 +33,10 @@ Item {
   property alias graph: _graph
   property alias xAxis: _axisX
   property alias yAxis: _axisY
-  property alias xMin: _axisX.min
-  property alias xMax: _axisX.max
-  property alias yMin: _axisY.min
-  property alias yMax: _axisY.max
+  property real xMin: 0
+  property real xMax: 1
+  property real yMin: 0
+  property real yMax: 1
   property alias zoom: _axisX.zoom
   property alias yLabel: _yLabel.text
   property alias xLabel: _xLabel.text
@@ -132,20 +132,99 @@ Item {
     return Math.min(precision, 6)
   }
 
+  //
+  // Engineering-unit formatter for tick labels: 10000 → "10K", 1.5e6 → "1.5M",
+  // -2500 → "-2.5K". Values in [0.001, 1000) are shown as plain decimals
+  // (e.g. 0.5 → "0.5"). Below 0.001 we step through micro / nano / pico and
+  // then fall back to scientific notation.
+  //
+  // When @a tickInterval is supplied, every tick on the axis renders with the
+  // same number of decimal places — that's what lets a −1 … 1 axis read
+  // "−1.0, −0.5, 0.0, 0.5, 1.0" instead of mixing "−1, −0.5, 0, 0.5, 1".
+  //
+  function engineeringFormat(value, tickInterval) {
+    if (!isFinite(value))
+      return ""
+
+    const abs    = Math.abs(value)
+    const refMag = (tickInterval > 0) ? Math.max(abs, tickInterval) : abs
+
+    // Pick the engineering scale from |value| (or the tick interval, whichever
+    // is larger) so 0 lands in the same prefix as the rest of the axis.
+    let scaleFactor = 1
+    let suffix      = ""
+    if      (refMag >= 1e9)  { scaleFactor = 1e9;   suffix = "G" }
+    else if (refMag >= 1e6)  { scaleFactor = 1e6;   suffix = "M" }
+    else if (refMag >= 1e3)  { scaleFactor = 1e3;   suffix = "K" }
+    else if (refMag >= 1e-3) { scaleFactor = 1;     suffix = ""  }
+    else if (refMag >= 1e-6) { scaleFactor = 1e-6;  suffix = "µ" }
+    else if (refMag >= 1e-9) { scaleFactor = 1e-9;  suffix = "n" }
+    else if (refMag > 0)     { scaleFactor = 1e-12; suffix = "p" }
+    else                     { return "0" }
+
+    // Decimals: derive from the scaled tick interval so all ticks on the axis
+    // share the same precision. Without a tick interval we fall back to ~2
+    // significant figures past the leading digit (cursor readouts etc.).
+    let decimals
+    if (tickInterval > 0) {
+      const scaledInterval = tickInterval / scaleFactor
+      decimals = scaledInterval >= 1
+                  ? 0
+                  : Math.min(6, Math.ceil(-Math.log10(scaledInterval) + 1e-9))
+    } else if (abs === 0) {
+      decimals = 0
+    } else {
+      const scaled = abs / scaleFactor
+      decimals     = scaled >= 1
+                      ? 0
+                      : Math.min(6, Math.max(0,
+                          2 - Math.floor(Math.log10(scaled))))
+    }
+
+    return (value / scaleFactor).toFixed(decimals) + suffix
+  }
+
+  //
+  // Round an axis maximum up to the next multiple of @a interval so the
+  // rightmost / topmost tick always sits on the plot edge instead of stopping
+  // short. Range expansion never exceeds one tick interval.
+  //
+  function closeAxisMax(min, max, interval) {
+    if (!isFinite(max) || !isFinite(interval) || interval <= 0)
+      return max
+    const span = max - min
+    if (span <= 0)
+      return max
+
+    // Anchor on min so ceiling lands on a tick relative to tickAnchor.
+    const offset = max - min
+    const ticks  = Math.ceil(offset / interval - 1e-9)
+    return min + ticks * interval
+  }
+
+  // Break the otherwise-circular dep with xTickInterval/yTickInterval (which
+  // depend on xVisibleMin/Max → xMaxClosed). The closed range only needs an
+  // interval estimate from the *data* range, which is independent of zoom/pan.
+  readonly property real xMaxClosed: closeAxisMax(xMin, xMax, smartIntervalX(xMin, xMax))
+  readonly property real yMaxClosed: closeAxisMax(yMin, yMax, smartIntervalY(yMin, yMax))
+
   function isPointVisible(worldX, worldY) {
     return worldX >= xVisibleMin && worldX <= xVisibleMax &&
            worldY >= yVisibleMin && worldY <= yVisibleMax
   }
 
   //
-  // Visible range calculations for dynamic tick intervals
+  // Visible range calculations for dynamic tick intervals. These reference the
+  // *closed* axis max so cursor / pan / zoom math agrees with the rendered
+  // ValueAxis range (which extends slightly past xMax/yMax to land on a clean
+  // tick boundary).
   //
   readonly property real xVisibleMax: xVisibleMin + xVisibleRange
   readonly property real yVisibleMax: yVisibleMin + yVisibleRange
-  readonly property real xVisibleRange: (xMax - xMin) / _axisX.zoom
-  readonly property real yVisibleRange: (yMax - yMin) / _axisY.zoom
-  readonly property real xVisibleMin: xMin + (xMax - xMin) / 2 + _axisX.pan - xVisibleRange / 2
-  readonly property real yVisibleMin: yMin + (yMax - yMin) / 2 + _axisY.pan - yVisibleRange / 2
+  readonly property real xVisibleRange: (xMaxClosed - xMin) / _axisX.zoom
+  readonly property real yVisibleRange: (yMaxClosed - yMin) / _axisY.zoom
+  readonly property real xVisibleMin: xMin + (xMaxClosed - xMin) / 2 + _axisX.pan - xVisibleRange / 2
+  readonly property real yVisibleMin: yMin + (yMaxClosed - yMin) / 2 + _axisY.pan - yVisibleRange / 2
 
   //
   // Dynamic tick intervals based on visible range and available space
@@ -283,7 +362,6 @@ Item {
     _yPosLabel.text = y.toFixed(2)
   }
 
-  // Pan axis by pixel delta, clamped to axis bounds.
   function adjustAxisPan(axis, axisLength, cursorPos, dPx, inverted) {
     const fullRange = axis.max - axis.min
     const visibleRange = fullRange / axis.zoom
@@ -293,7 +371,6 @@ Item {
     const zoomDampeningFactor = 1 / axis.zoom
     let newPan = axis.pan + pxDiff * unitPerPixel * zoomDampeningFactor
 
-    // Clamp to axis bounds.
     const maxPan = (axis.max - (axis.min + visibleRange)) / 2
     const minPan = (axis.min - (axis.max - visibleRange)) / 2
     newPan = Math.min(Math.max(newPan, minPan), maxPan)
@@ -461,25 +538,69 @@ Item {
     zoomStyle: GraphsView.ZoomStyle.None
 
     //
-    // Customize Y axis
+    // Customize Y axis — max rounded up to the nearest tickInterval so the top
+    // tick always sits on the plot edge. Labels rendered via labelDelegate so
+    // they pick up engineering-unit suffixes (10000 → "10K", 1.5e6 → "1.5M").
     //
     axisY: ValueAxis {
       id: _axisY
 
+      min: root.yMin
+      max: root.yMaxClosed
       subTickCount: 1
       tickAnchor: root.yMin
       visible: root.yLabelVisible
+
+      labelDelegate: Item {
+        id: _yLabelItem
+
+        property string text
+
+        implicitWidth:  _yEngLabel.implicitWidth
+        implicitHeight: _yEngLabel.implicitHeight
+
+        Text {
+          id: _yEngLabel
+
+          anchors.centerIn: parent
+          text: root.engineeringFormat(parseFloat(_yLabelItem.text), root.yTickInterval)
+          color: Cpp_ThemeManager.colors["widget_text"]
+          font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                 Cpp_Misc_CommonFonts.widgetFont(0.83))
+        }
+      }
     }
 
     //
-    // Customize X axis
+    // Customize X axis (same engineering-unit treatment as Y)
     //
     axisX: ValueAxis {
       id: _axisX
 
+      min: root.xMin
+      max: root.xMaxClosed
       subTickCount: 1
       tickAnchor: root.xMin
       visible: root.xLabelVisible
+
+      labelDelegate: Item {
+        id: _xLabelItem
+
+        property string text
+
+        implicitWidth:  _xEngLabel.implicitWidth
+        implicitHeight: _xEngLabel.implicitHeight
+
+        Text {
+          id: _xEngLabel
+
+          anchors.centerIn: parent
+          text: root.engineeringFormat(parseFloat(_xLabelItem.text), root.xTickInterval)
+          color: Cpp_ThemeManager.colors["widget_text"]
+          font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+                 Cpp_Misc_CommonFonts.widgetFont(0.83))
+        }
+      }
     }
   }
 

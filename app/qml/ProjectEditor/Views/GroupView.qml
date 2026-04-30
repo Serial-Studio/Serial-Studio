@@ -144,7 +144,7 @@ Widgets.Pane {
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             ToolTip.text: qsTr("Add a generic dataset to the current group")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-dataset.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
           }
 
@@ -156,7 +156,7 @@ Widgets.Pane {
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             ToolTip.text: qsTr("Add a 2D plot to visualize numeric data")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-plot.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
           }
 
@@ -167,7 +167,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-fft.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
             ToolTip.text: qsTr("Add an FFT plot for frequency domain visualization")
           }
@@ -179,7 +179,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-bar.svg"
             ToolTip.text: qsTr("Add a bar or level indicator for scaled values")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
           }
@@ -191,7 +191,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-gauge.svg"
             ToolTip.text: qsTr("Add a gauge widget for analog-style visualization")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
           }
@@ -203,7 +203,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-compass.svg"
             ToolTip.text: qsTr("Add a compass to display directional or angular data")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
           }
@@ -215,7 +215,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-led.svg"
             ToolTip.text: qsTr("Add an LED indicator for binary status signals")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
           }
@@ -231,7 +231,7 @@ Widgets.Pane {
             visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputButton)
             ToolTip.text: qsTr("Add a button that sends a command on click")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-button.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-output-button.svg"
           }
 
           Widgets.ToolbarButton {
@@ -242,7 +242,7 @@ Widgets.Pane {
             visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputSlider)
             ToolTip.text: qsTr("Add a slider for sending scaled numeric values")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-slider.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-output-slider.svg"
           }
 
           Widgets.ToolbarButton {
@@ -253,7 +253,7 @@ Widgets.Pane {
             visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputToggle)
             ToolTip.text: qsTr("Add a toggle switch for on/off commands")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-toggle.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-output-toggle.svg"
           }
 
           Widgets.ToolbarButton {
@@ -264,7 +264,7 @@ Widgets.Pane {
             visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputTextField)
             ToolTip.text: qsTr("Add a text field for typing and sending commands")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-textfield.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-output-textfield.svg"
           }
 
           Widgets.ToolbarButton {
@@ -275,7 +275,7 @@ Widgets.Pane {
             visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputKnob)
             ToolTip.text: qsTr("Add a rotary knob for setpoint control")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-knob.svg"
+            icon.source: "qrc:/icons/project-editor/actions/add-output-knob.svg"
           }
 
           //
@@ -296,7 +296,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_JSON_ProjectModel.duplicateCurrentGroup()
             ToolTip.text: qsTr("Duplicate the current group and its contents")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
+            icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
           }
 
           //
@@ -308,7 +308,7 @@ Widgets.Pane {
             text: qsTr("Delete")
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_JSON_ProjectModel.deleteCurrentGroup()
-            icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
+            icon.source: "qrc:/icons/project-editor/actions/delete.svg"
             ToolTip.text: qsTr("Delete the current group and all contained datasets")
           }
         }

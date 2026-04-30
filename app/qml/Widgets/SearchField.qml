@@ -57,8 +57,8 @@ Rectangle {
       anchors.verticalCenter: parent.verticalCenter
       icon.color: Cpp_ThemeManager.colors["button_text"]
       icon.source: textField.text.length > 0
-                     ? "qrc:/rcc/icons/buttons/close.svg"
-                     : "qrc:/rcc/icons/buttons/search.svg"
+                     ? "qrc:/icons/buttons/close.svg"
+                     : "qrc:/icons/buttons/search.svg"
 
       onClicked: {
         if (textField.text.length > 0)

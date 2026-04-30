@@ -200,8 +200,8 @@ Item {
       checked: model.interpolationEnabled
       ToolTip.text: qsTr("Interpolate")
       icon.source: model.interpolationEnabled ?
-                     "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
-                     "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
+                     "qrc:/icons/dashboard-buttons/interpolate-on.svg" :
+                     "qrc:/icons/dashboard-buttons/interpolate-off.svg"
     }
 
     Rectangle {
@@ -217,7 +217,7 @@ Item {
       }
       checked: model.orbitNavigation
       ToolTip.text: qsTr("Orbit Navigation")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/orbit.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/orbit.svg"
     }
 
     DashboardToolButton {
@@ -227,7 +227,7 @@ Item {
       }
       checked: !model.orbitNavigation
       ToolTip.text: qsTr("Pan Navigation")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/pan.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/pan.svg"
     }
 
     Rectangle {
@@ -239,25 +239,25 @@ Item {
     DashboardToolButton {
       ToolTip.text: qsTr("Orthogonal View")
       onClicked: animateToView(300, 0, 225, 0, 0)
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/orthogonal_view.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/orthogonal_view.svg"
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Top View")
       onClicked: animateToView(360, 0, 360, 0, 0)
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/top_view.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/top_view.svg"
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Left View")
       onClicked: animateToView(270, 0, 270, 0, 0)
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/left_view.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/left_view.svg"
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Front View")
       onClicked: animateToView(270, 0, 180, 0, 0)
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/front_view.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/front_view.svg"
     }
 
     Rectangle {
@@ -273,7 +273,7 @@ Item {
       }
       checked: model.autoCenter
       ToolTip.text: qsTr("Auto Center")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/center.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/center.svg"
     }
 
     Rectangle {
@@ -289,7 +289,7 @@ Item {
       }
       checked: model.anaglyphEnabled
       ToolTip.text: qsTr("Anaglyph 3D")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/anaglyph.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/anaglyph.svg"
     }
 
     DashboardToolButton {
@@ -303,7 +303,7 @@ Item {
       checked: model.invertEyePositions
       opacity: model.anaglyphEnabled ? 1 : 0
       ToolTip.text: qsTr("Invert Eye Positions")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/invert.svg"
+      icon.source: "qrc:/icons/dashboard-buttons/invert.svg"
     }
 
     Slider {

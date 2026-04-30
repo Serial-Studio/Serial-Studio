@@ -87,7 +87,7 @@ const QStringList& Misc::IconEngine::iconPreviews() const noexcept
  *
  * If @p icon starts with @c "data:image/svg+xml;base64," it is treated as
  * inline SVG data and resolved to an @c image://actionicon/ provider URL.
- * Otherwise it is treated as a bundled icon name from @c qrc:/rcc/actions/.
+ * Otherwise it is treated as a bundled icon name from @c qrc:/actions/.
  *
  * @param icon The icon field from the Action struct.
  * @return A URL string usable in QML @c Image.source.
@@ -101,7 +101,7 @@ QString Misc::IconEngine::resolveActionIconSource(const QString& icon)
   }
 
   // Fall back to bundled icon from resources
-  return QStringLiteral("qrc:/rcc/actions/%1.svg").arg(icon);
+  return QStringLiteral("qrc:/actions/%1.svg").arg(icon);
 }
 
 /**

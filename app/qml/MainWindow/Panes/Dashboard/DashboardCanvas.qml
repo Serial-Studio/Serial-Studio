@@ -183,7 +183,7 @@ Item {
           opacity: 0.4
           sourceSize: Qt.size(64, 64)
           Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/rcc/icons/panes/dashboard.svg"
+          source: "qrc:/icons/panes/dashboard.svg"
         }
 
         Label {
@@ -219,7 +219,7 @@ Item {
           rightPadding: 20
           text: qsTr("Search Widgets")
           Layout.alignment: Qt.AlignHCenter
-          icon.source: "qrc:/rcc/icons/buttons/search.svg"
+          icon.source: "qrc:/icons/buttons/search.svg"
           onClicked: {
             if (root.taskbarView)
               root.taskbarView.focusSearch()

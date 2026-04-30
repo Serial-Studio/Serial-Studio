@@ -87,7 +87,7 @@ Item {
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Bluetooth_LE.startDiscovery()
-        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
+        icon.source: "qrc:/icons/buttons/refresh.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }
@@ -174,7 +174,7 @@ Item {
         visible: running
         sourceSize: Qt.size(18, 18)
         Layout.alignment: Qt.AlignVCenter
-        source: "qrc:/rcc/images/spinner.svg"
+        source: "qrc:/images/spinner.svg"
 
         property bool running: parent.visible
 
@@ -221,7 +221,7 @@ Item {
     Image {
       sourceSize: Qt.size(96, 96)
       Layout.alignment: Qt.AlignHCenter
-      source: "qrc:/rcc/images/no-bluetooth.svg"
+      source: "qrc:/images/no-bluetooth.svg"
     }
 
     Item {
@@ -259,7 +259,7 @@ Item {
     Image {
       sourceSize: Qt.size(96, 96)
       Layout.alignment: Qt.AlignVCenter
-      source: "qrc:/rcc/images/hammer.svg"
+      source: "qrc:/images/hammer.svg"
     }
 
     Item {

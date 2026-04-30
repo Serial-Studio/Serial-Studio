@@ -606,11 +606,15 @@ void IO::ConnectionManager::connectDevice()
   }
 #endif
 
+  // Wait cursor while drivers run their synchronous open() handshake
+  QApplication::setOverrideCursor(Qt::WaitCursor);
+
   connectDevice(0);
 
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
     connectAllDevices();
 
+  QApplication::restoreOverrideCursor();
   Q_EMIT connectedChanged();
 }
 
@@ -619,6 +623,9 @@ void IO::ConnectionManager::connectDevice()
  */
 void IO::ConnectionManager::disconnectDevice()
 {
+  // Wait cursor while drivers tear down (BLE/Modbus/Audio finalizers can stall briefly)
+  QApplication::setOverrideCursor(Qt::WaitCursor);
+
   disconnectDevice(0);
 
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
@@ -629,6 +636,7 @@ void IO::ConnectionManager::disconnectDevice()
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
+  QApplication::restoreOverrideCursor();
   Q_EMIT driverChanged();
   Q_EMIT connectedChanged();
 }
@@ -786,6 +794,38 @@ void IO::ConnectionManager::disconnectDevice(int deviceId)
   auto it = m_devices.find(deviceId);
   if (it != m_devices.end() && it->second)
     it->second->close();
+}
+
+/**
+ * @brief Disconnects the source owned by @p driver, keeping other sources alive.
+ */
+void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
+{
+  if (!driver)
+    return;
+
+  // Locate the device id whose live driver matches the caller
+  int deviceId = -1;
+  for (const auto& [id, dm] : m_devices) {
+    if (dm && dm->driver() == driver) {
+      deviceId = id;
+      break;
+    }
+  }
+
+  if (deviceId < 0)
+    return;
+
+  // Close just this source
+  disconnectDevice(deviceId);
+
+  // Full teardown only if no sources remain connected
+  if (!isConnected()) {
+    DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+    Q_EMIT driverChanged();
+  }
+
+  Q_EMIT connectedChanged();
 }
 
 /**

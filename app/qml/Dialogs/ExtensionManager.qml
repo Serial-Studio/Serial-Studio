@@ -31,6 +31,12 @@ SmartDialog {
 
   title: qsTr("Extension Manager")
 
+  //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
   property bool showRepos: false
   property bool readmeViewReady: false
   readonly property int toolbarHeight: 40
@@ -76,6 +82,8 @@ SmartDialog {
   }
 
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 8
     anchors.centerIn: parent
 
@@ -108,7 +116,7 @@ SmartDialog {
           icon.height: 12
           background: Item {}
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/search.svg"
+          icon.source: "qrc:/icons/buttons/search.svg"
         }
 
         TextField {
@@ -176,7 +184,7 @@ SmartDialog {
           background: Item {}
           text: qsTr("Refresh")
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
+          icon.source: "qrc:/icons/buttons/refresh.svg"
           onClicked: Cpp_ExtensionManager.refreshRepositories()
 
           HoverHandler {
@@ -191,7 +199,7 @@ SmartDialog {
           text: qsTr("Repos")
           visible: Cpp_CommercialBuild
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+          icon.source: "qrc:/icons/toolbar/settings.svg"
           onClicked: root.showRepos = true
 
           HoverHandler {
@@ -234,7 +242,7 @@ SmartDialog {
           text: qsTr("Back")
           background: Item {}
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/backward.svg"
+          icon.source: "qrc:/icons/buttons/backward.svg"
           onClicked: {
             if (root.showRepos)
               root.showRepos = false
@@ -276,7 +284,7 @@ SmartDialog {
           enabled: !Cpp_ExtensionManager.loading
                    && (Cpp_ExtensionManager.selectedExtension.platformAvailable !== false)
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/download.svg"
+          icon.source: "qrc:/icons/buttons/download.svg"
           onClicked: Cpp_ExtensionManager.installExtension()
           visible: root.showDetail && !Cpp_ExtensionManager.isInstalled(Cpp_ExtensionManager.selectedExtension.id || "")
 
@@ -291,7 +299,7 @@ SmartDialog {
           background: Item {}
           text: qsTr("Uninstall")
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.source: "qrc:/icons/buttons/close.svg"
           onClicked: Cpp_ExtensionManager.uninstallExtension()
 
           visible: {
@@ -319,7 +327,7 @@ SmartDialog {
           text: qsTr("Run")
           background: Item {}
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/media-play.svg"
+          icon.source: "qrc:/icons/buttons/media-play.svg"
           onClicked: Cpp_ExtensionManager.launchSelectedPlugin()
 
           visible: {
@@ -343,7 +351,7 @@ SmartDialog {
           text: qsTr("Stop")
           background: Item {}
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/media-stop.svg"
+          icon.source: "qrc:/icons/buttons/media-stop.svg"
           onClicked: Cpp_ExtensionManager.stopSelectedPlugin()
 
           visible: {
@@ -376,7 +384,7 @@ SmartDialog {
           visible: root.showRepos
           text: qsTr("Reset")
           icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/rcc/icons/buttons/clear.svg"
+          icon.source: "qrc:/icons/buttons/clear.svg"
           onClicked: Cpp_ExtensionManager.resetRepositories()
 
           HoverHandler {
@@ -866,7 +874,7 @@ SmartDialog {
               anchors.margins: 2
               anchors.fill: parent
               backgroundColor: "transparent"
-              url: "qrc:/rcc/markdown-viewer.html"
+              url: "qrc:/markdown-viewer.html"
               settings.localContentCanAccessRemoteUrls: true
 
               onLoadingChanged: function(loadRequest) {
@@ -1277,7 +1285,7 @@ SmartDialog {
                   icon.height: 12
                   background: Item {}
                   icon.color: Cpp_ThemeManager.colors["text"]
-                  icon.source: "qrc:/rcc/icons/buttons/close.svg"
+                  icon.source: "qrc:/icons/buttons/close.svg"
                   onClicked: Cpp_ExtensionManager.removeRepository(index)
 
                   HoverHandler {
@@ -1344,7 +1352,7 @@ SmartDialog {
                 icon.width: 12
                 icon.height: 12
                 icon.color: Cpp_ThemeManager.colors["text"]
-                icon.source: "qrc:/rcc/icons/toolbar/open-project.svg"
+                icon.source: "qrc:/icons/toolbar/open-project.svg"
                 onClicked: Cpp_ExtensionManager.browseLocalRepo()
 
                 HoverHandler {
@@ -1369,7 +1377,7 @@ SmartDialog {
         Image {
           sourceSize: Qt.size(96, 96)
           Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/rcc/images/no-results.svg"
+          source: "qrc:/images/no-results.svg"
         }
 
         Item {
@@ -1404,7 +1412,7 @@ SmartDialog {
         Image {
           sourceSize: Qt.size(96, 96)
           Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/rcc/images/no-results.svg"
+          source: "qrc:/images/no-results.svg"
         }
 
         Item {
@@ -1453,7 +1461,7 @@ SmartDialog {
         horizontalPadding: 8
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }

@@ -61,7 +61,7 @@ Misc::ShortcutGenerator::~ShortcutGenerator() = default;
  */
 QString Misc::ShortcutGenerator::defaultIconPath() const
 {
-  return QStringLiteral("qrc:/rcc/images/shortcut.svg");
+  return QStringLiteral("qrc:/images/shortcut.svg");
 }
 
 /**
@@ -319,17 +319,17 @@ bool Misc::ShortcutGenerator::hasProLicense() const
 QString Misc::ShortcutGenerator::extractDefaultIcon() const
 {
 #  if defined(Q_OS_WIN)
-  const QString src    = QStringLiteral(":/rcc/images/shortcut.ico");
+  const QString src    = QStringLiteral(":/images/shortcut.ico");
   const QString dirRel = QStringLiteral("/Shortcuts/Icons");
   const QString file   = QStringLiteral("default.ico");
   const QString base   = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
 #  elif defined(Q_OS_MAC)
-  const QString src    = QStringLiteral(":/rcc/images/shortcut.icns");
+  const QString src    = QStringLiteral(":/images/shortcut.icns");
   const QString dirRel = QStringLiteral("/Shortcuts/Icons");
   const QString file   = QStringLiteral("default.icns");
   const QString base   = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
 #  else
-  const QString src    = QStringLiteral(":/rcc/images/shortcut.svg");
+  const QString src    = QStringLiteral(":/images/shortcut.svg");
   const QString dirRel = QString();
   const QString file   = QStringLiteral("serial-studio-shortcut.svg");
   const QString base   = QDir::homePath() + QStringLiteral("/.local/share/icons");

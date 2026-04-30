@@ -210,12 +210,12 @@ QString Misc::Translator::welcomeConsoleText() const
   // Define fallback text & default message path
   QString text = QObject::tr("Failed to load welcome text :(");
 #ifdef BUILD_COMMERCIAL
-  QString path   = ":/rcc/messages/trial/Welcome_" + lang + ".txt";
+  QString path   = ":/messages/trial/Welcome_" + lang + ".txt";
   const auto& tk = Licensing::CommercialToken::current();
   if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist)
-    path = ":/rcc/messages/pro/Welcome_" + lang + ".txt";
+    path = ":/messages/pro/Welcome_" + lang + ".txt";
 #else
-  QString path = ":/rcc/messages/gpl3/Welcome_" + lang + ".txt";
+  QString path = ":/messages/gpl3/Welcome_" + lang + ".txt";
 #endif
 
   // Read welcome text from resources
@@ -236,7 +236,7 @@ QString Misc::Translator::acknowledgementsText() const
 {
   // Read acknowledgements text from bundled resources
   QString text = "";
-  QFile file(QStringLiteral(":/rcc/messages/Acknowledgements.txt"));
+  QFile file(QStringLiteral(":/messages/Acknowledgements.txt"));
   if (file.open(QFile::ReadOnly)) {
     text = QString::fromUtf8(file.readAll());
     file.close();
@@ -391,7 +391,6 @@ void Misc::Translator::setLanguage(const Language language)
  */
 void Misc::Translator::setLanguage(const QLocale& locale, const QString& language)
 {
-  // Load the translation file and install it
   qApp->removeTranslator(&m_translator);
   const auto qmPath = QStringLiteral(":/qm/%1.qm").arg(language);
   if (m_translator.load(locale, qmPath)) {

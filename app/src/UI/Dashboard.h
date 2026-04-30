@@ -145,11 +145,15 @@ public:
 
 #ifdef BUILD_COMMERCIAL
   [[nodiscard]] const DSP::LineSeries3D& plotData3D(const int index) const;
+  [[nodiscard]] const DSP::AxisData& waterfallData(const int index) const;
 #endif
 
   [[nodiscard]] bool plotRunning(const int index);
   [[nodiscard]] bool fftPlotRunning(const int index);
   [[nodiscard]] bool multiplotRunning(const int index);
+#ifdef BUILD_COMMERCIAL
+  [[nodiscard]] bool waterfallRunning(const int index);
+#endif
 
 public slots:
   void setPoints(const int points);
@@ -166,6 +170,9 @@ public slots:
   void setPlotRunning(const int index, const bool enabled);
   void setFFTPlotRunning(const int index, const bool enabled);
   void setMultiplotRunning(const int index, const bool enabled);
+#ifdef BUILD_COMMERCIAL
+  void setWaterfallRunning(const int index, const bool enabled);
+#endif
 
   void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);
 
@@ -183,6 +190,9 @@ private:
   void updateGpsSeries(int sourceId);
   void updatePlot3DSeries(int sourceId);
   void updateLineSeries(int sourceId);
+#ifdef BUILD_COMMERCIAL
+  void updateWaterfallSeries(int sourceId);
+#endif
 
   void configureGpsSeries();
   void configureFftSeries();
@@ -190,6 +200,9 @@ private:
   void configurePlot3DSeries();
   void configureMultiLineSeries();
   void configureActions(const DataModel::Frame& frame);
+#ifdef BUILD_COMMERCIAL
+  void configureWaterfallSeries();
+#endif
 
   void buildWidgetGroups(const DataModel::Frame& frame, bool pro);
   void registerWidgets();
@@ -220,6 +233,9 @@ private:
   QMap<int, bool> m_activePlots;
   QMap<int, bool> m_activeFFTPlots;
   QMap<int, bool> m_activeMultiplots;
+#ifdef BUILD_COMMERCIAL
+  QMap<int, bool> m_activeWaterfalls;
+#endif
 
   QVector<DSP::GpsSeries> m_gpsValues;
   QVector<DSP::AxisData> m_fftValues;
@@ -227,6 +243,7 @@ private:
   QVector<DSP::MultiLineSeries> m_multipltValues;
 #ifdef BUILD_COMMERCIAL
   QVector<DSP::LineSeries3D> m_plotData3D;
+  QVector<DSP::AxisData> m_waterfallValues;
 #endif
 
   QMap<int, QTimer*> m_timers;

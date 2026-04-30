@@ -162,7 +162,7 @@ Item {
       DashboardToolButton {
         ToolTip.text: qsTr("Export Images")
         checked: model && model.exportEnabled
-        icon.source: "qrc:/rcc/icons/dashboard-buttons/archive.svg"
+        icon.source: "qrc:/icons/dashboard-buttons/archive.svg"
         onClicked: {
           if (model)
             model.exportEnabled = !model.exportEnabled
@@ -171,7 +171,7 @@ Item {
 
       DashboardToolButton {
         ToolTip.text: qsTr("Open Export Folder")
-        icon.source: "qrc:/rcc/icons/dashboard-buttons/pictures-folder.svg"
+        icon.source: "qrc:/icons/dashboard-buttons/pictures-folder.svg"
         onClicked: {
           if (model)
             Cpp_Misc_Utilities.revealFile(
@@ -187,7 +187,7 @@ Item {
 
       DashboardToolButton {
         ToolTip.text: qsTr("Zoom In")
-        icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-in.svg"
+        icon.source: "qrc:/icons/dashboard-buttons/zoom-in.svg"
         onClicked: {
           const oldZoom = root.zoom
           const newZoom = Math.min(root.maxZoom, oldZoom * 1.5)
@@ -200,7 +200,7 @@ Item {
 
       DashboardToolButton {
         ToolTip.text: qsTr("Zoom Out")
-        icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-out.svg"
+        icon.source: "qrc:/icons/dashboard-buttons/zoom-out.svg"
         onClicked: {
           const oldZoom = root.zoom
           const newZoom = Math.max(root.minZoom, oldZoom / 1.5)
@@ -220,7 +220,7 @@ Item {
       DashboardToolButton {
         checked: root.showCrosshair
         ToolTip.text: qsTr("Show Crosshair")
-        icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
+        icon.source: "qrc:/icons/dashboard-buttons/crosshair.svg"
         onClicked: {
           root.showCrosshair = !root.showCrosshair
           if (!root.showCrosshair) {
@@ -243,7 +243,7 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
-        icon.source: "qrc:/rcc/icons/dashboard-buttons/filter.svg"
+        icon.source: "qrc:/icons/dashboard-buttons/color.svg"
       }
 
       ComboBox {
@@ -519,7 +519,7 @@ Item {
           sourceSize.width: 48
           sourceSize.height: 48
           Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/rcc/icons/dashboard-large/image.svg"
+          source: "qrc:/icons/dashboard-large/image.svg"
           layer.effect: MultiEffect { colorization: 1.0; colorizationColor: "white" }
         }
 

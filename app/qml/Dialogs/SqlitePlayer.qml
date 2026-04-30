@@ -24,6 +24,12 @@ SmartDialog {
   title: qsTr("Session Player")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Auto show/hide as the database is opened/closed
   //
   Connections {
@@ -48,6 +54,8 @@ SmartDialog {
   // Window controls
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 4
     anchors.centerIn: parent
 
@@ -81,7 +89,7 @@ SmartDialog {
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_Sessions_Player.previousFrame()
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/media-prev.svg"
+        icon.source: "qrc:/icons/buttons/media-prev.svg"
         enabled: Cpp_Sessions_Player.framePosition > 0 && !Cpp_Sessions_Player.isPlaying
       }
 
@@ -92,10 +100,10 @@ SmartDialog {
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: (Cpp_Sessions_Player.framePosition >= Cpp_Sessions_Player.frameCount - 1)
-                     ? "qrc:/rcc/icons/buttons/media-stop.svg"
+                     ? "qrc:/icons/buttons/media-stop.svg"
                      : (Cpp_Sessions_Player.isPlaying
-                        ? "qrc:/rcc/icons/buttons/media-pause.svg"
-                        : "qrc:/rcc/icons/buttons/media-play.svg")
+                        ? "qrc:/icons/buttons/media-pause.svg"
+                        : "qrc:/icons/buttons/media-play.svg")
       }
 
       Button {
@@ -105,7 +113,7 @@ SmartDialog {
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_Sessions_Player.nextFrame()
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/media-next.svg"
+        icon.source: "qrc:/icons/buttons/media-next.svg"
         enabled: (Cpp_Sessions_Player.framePosition < Cpp_Sessions_Player.frameCount - 1)
                  && !Cpp_Sessions_Player.isPlaying
       }

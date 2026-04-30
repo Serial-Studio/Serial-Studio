@@ -31,7 +31,7 @@ Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
   title: qsTr("Workspaces")
-  icon: "qrc:/rcc/icons/project-editor/treeview/datagrid.svg"
+  icon: "qrc:/icons/project-editor/treeview/datagrid.svg"
 
   property var summary: []
 
@@ -121,7 +121,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Edit workspaces manually")
             checked: Cpp_JSON_ProjectModel.customizeWorkspaces
-            icon.source: "qrc:/rcc/icons/project-editor/actions/customize.svg"
+            icon.source: "qrc:/icons/project-editor/actions/customize.svg"
             onClicked: Cpp_JSON_ProjectModel.customizeWorkspaces =
                        !Cpp_JSON_ProjectModel.customizeWorkspaces
           }
@@ -136,7 +136,7 @@ Widgets.Pane {
             ToolTip.text: qsTr("Add workspace")
             enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
             onClicked: Cpp_JSON_ProjectModel.promptAddWorkspace()
-            icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
+            icon.source: "qrc:/icons/project-editor/toolbar/add-group.svg"
           }
         }
       }

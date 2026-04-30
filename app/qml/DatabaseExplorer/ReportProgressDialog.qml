@@ -20,6 +20,12 @@ Widgets.SmartDialog {
   title: qsTr("Generating Report")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Auto-open / auto-close follows the busy flag
   //
   Connections {
@@ -38,6 +44,8 @@ Widgets.SmartDialog {
   // Body
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 14
     implicitWidth: 380
 

@@ -224,7 +224,7 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             onClicked: frameParser.reload(true)
-            icon.source: "qrc:/rcc/icons/code-editor/reload.svg"
+            icon.source: "qrc:/icons/code-editor/reload.svg"
             ToolTip.text: qsTr("Reset to the default parsing script")
           }
 
@@ -237,7 +237,7 @@ Widgets.Pane {
             toolbarButton: false
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/code-editor/open.svg"
+            icon.source: "qrc:/icons/code-editor/open.svg"
             ToolTip.text: qsTr("Import a script file for data parsing")
           }
 
@@ -252,7 +252,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.undoAvailable
             ToolTip.text: qsTr("Undo the last code edit")
-            icon.source: "qrc:/rcc/icons/code-editor/undo.svg"
+            icon.source: "qrc:/icons/code-editor/undo.svg"
           }
 
           //
@@ -265,7 +265,7 @@ Widgets.Pane {
             onClicked: frameParser.redo()
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.redoAvailable
-            icon.source: "qrc:/rcc/icons/code-editor/redo.svg"
+            icon.source: "qrc:/icons/code-editor/redo.svg"
             ToolTip.text: qsTr("Redo the previously undone edit")
           }
 
@@ -289,7 +289,7 @@ Widgets.Pane {
             toolbarButton: false
             onClicked: frameParser.cut()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/code-editor/cut.svg"
+            icon.source: "qrc:/icons/code-editor/cut.svg"
             ToolTip.text: qsTr("Cut selected code to clipboard")
           }
 
@@ -302,7 +302,7 @@ Widgets.Pane {
             toolbarButton: false
             onClicked: frameParser.copy()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/code-editor/copy.svg"
+            icon.source: "qrc:/icons/code-editor/copy.svg"
             ToolTip.text: qsTr("Copy selected code to clipboard")
           }
 
@@ -316,7 +316,7 @@ Widgets.Pane {
             onClicked: frameParser.paste()
             Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Paste code from clipboard")
-            icon.source: "qrc:/rcc/icons/code-editor/paste.svg"
+            icon.source: "qrc:/icons/code-editor/paste.svg"
           }
 
           //
@@ -339,7 +339,7 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             onClicked: app.showHelpCenter("javascript-api")
-            icon.source: "qrc:/rcc/icons/code-editor/help.svg"
+            icon.source: "qrc:/icons/code-editor/help.svg"
             ToolTip.text: qsTr("Open help documentation for data parsing")
           }
 
@@ -421,7 +421,7 @@ Widgets.Pane {
             text: qsTr("Select Template…")
             Layout.alignment: Qt.AlignVCenter
             onClicked: frameParser.selectTemplate()
-            icon.source: "qrc:/rcc/icons/buttons/code.svg"
+            icon.source: "qrc:/icons/buttons/code.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
@@ -436,7 +436,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             text: qsTr("Test With Sample Data")
             onClicked: frameParser.testWithSampleData()
-            icon.source: "qrc:/rcc/icons/buttons/test.svg"
+            icon.source: "qrc:/icons/buttons/test.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
@@ -448,7 +448,7 @@ Widgets.Pane {
             onClicked: frameParser.evaluate()
             Layout.alignment: Qt.AlignVCenter
             icon.color: Cpp_ThemeManager.colors["button_text"]
-            icon.source: "qrc:/rcc/icons/buttons/media-play.svg"
+            icon.source: "qrc:/icons/buttons/media-play.svg"
           }
         }
       }

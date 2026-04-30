@@ -39,9 +39,17 @@ SmartDialog {
   title: qsTr("About")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Window controls
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 4
     anchors.centerIn: parent
 
@@ -63,8 +71,8 @@ SmartDialog {
             smooth: true
             sourceSize.width: 128
             anchors.centerIn: parent
-            source: Qt.platform.os === "osx" ? "qrc:/rcc/logo/icon-macOS.png" :
-                                               "qrc:/rcc/logo/icon.svg"
+            source: Qt.platform.os === "osx" ? "qrc:/logo/icon-macOS.png" :
+                                               "qrc:/logo/icon.svg"
           }
         }
 

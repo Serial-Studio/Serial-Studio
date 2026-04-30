@@ -413,7 +413,7 @@ void DataModel::DatasetTransformEditor::onThemeChanged()
   static const auto* t = &Misc::ThemeManager::instance();
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
   const auto path =
-    name.startsWith('/') ? name : QStringLiteral(":/rcc/themes/code-editor/%1.xml").arg(name);
+    name.startsWith('/') ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
 
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {
@@ -724,7 +724,7 @@ void DataModel::DatasetTransformEditor::buildTemplates()
 
   // Read tempaltes.json file
   const auto definitions =
-    loadScriptTemplateManifest(QStringLiteral(":/rcc/scripts/transforms/templates.json"));
+    loadScriptTemplateManifest(QStringLiteral(":/scripts/transforms/templates.json"));
 
   // Clear internal members
   m_templates.clear();
@@ -736,9 +736,9 @@ void DataModel::DatasetTransformEditor::buildTemplates()
       {definition.file,
        definition.name,
        readTextResource(templateResourcePath(
-         QStringLiteral(":/rcc/scripts/transforms/lua"), definition.file, QStringLiteral(".lua"))),
+         QStringLiteral(":/scripts/transforms/lua"), definition.file, QStringLiteral(".lua"))),
        readTextResource(templateResourcePath(
-         QStringLiteral(":/rcc/scripts/transforms/js"), definition.file, QStringLiteral(".js")))});
+         QStringLiteral(":/scripts/transforms/js"), definition.file, QStringLiteral(".js")))});
   }
 
   // Skip if no combo is available

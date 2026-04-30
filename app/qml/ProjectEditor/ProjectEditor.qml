@@ -263,8 +263,8 @@ Widgets.SmartWindow {
           sourceSize: Qt.size(144, 144)
           Layout.alignment: Qt.AlignHCenter
           source: editorOverlay.lockMode
-                  ? "qrc:/rcc/images/locked.svg"
-                  : "qrc:/rcc/images/project-mode-required.svg"
+                  ? "qrc:/images/locked.svg"
+                  : "qrc:/images/project-mode-required.svg"
         }
 
         Item {
@@ -312,8 +312,8 @@ Widgets.SmartWindow {
             leftPadding: 16
             rightPadding: 12
             icon.source: editorOverlay.lockMode
-                         ? "qrc:/rcc/icons/buttons/unlock.svg"
-                         : "qrc:/rcc/icons/buttons/switch.svg"
+                         ? "qrc:/icons/buttons/unlock.svg"
+                         : "qrc:/icons/buttons/switch.svg"
             text: editorOverlay.lockMode
                   ? qsTr("Unlock")
                   : qsTr("Switch to Project Mode")
@@ -334,8 +334,8 @@ Widgets.SmartWindow {
             leftPadding: 16
             rightPadding: 16
             icon.source: editorOverlay.lockMode
-                         ? "qrc:/rcc/icons/buttons/open.svg"
-                         : "qrc:/rcc/icons/buttons/close.svg"
+                         ? "qrc:/icons/buttons/open.svg"
+                         : "qrc:/icons/buttons/close.svg"
             text: editorOverlay.lockMode
                   ? qsTr("Open Other Project")
                   : qsTr("Close")
@@ -357,7 +357,7 @@ Widgets.SmartWindow {
             icon.color: palette.buttonText
             visible: editorOverlay.lockMode
             text: qsTr("Create New Project")
-            icon.source: "qrc:/rcc/icons/buttons/new.svg"
+            icon.source: "qrc:/icons/buttons/new.svg"
             onClicked: Cpp_JSON_ProjectModel.newJsonFile()
           }
         }

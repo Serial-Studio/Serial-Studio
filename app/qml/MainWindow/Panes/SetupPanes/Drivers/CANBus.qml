@@ -42,7 +42,7 @@ Item {
     Image {
       sourceSize: Qt.size(96, 96)
       Layout.alignment: Qt.AlignHCenter
-      source: "qrc:/rcc/images/driver.svg"
+      source: "qrc:/images/driver.svg"
     }
 
     Item {
@@ -299,7 +299,7 @@ Item {
       Image {
         sourceSize: Qt.size(96, 96)
         Layout.alignment: Qt.AlignHCenter
-        source: "qrc:/rcc/images/driver.svg"
+        source: "qrc:/images/driver.svg"
       }
 
       Item {

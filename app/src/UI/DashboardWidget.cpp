@@ -40,6 +40,7 @@
 #  include "UI/Widgets/ImageView.h"
 #  include "UI/Widgets/Output/Panel.h"
 #  include "UI/Widgets/Plot3D.h"
+#  include "UI/Widgets/Waterfall.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -273,6 +274,10 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
       case SerialStudio::DashboardNotificationLog:
         m_dbWidget = nullptr;
         m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/NotificationLog.qml";
+        break;
+      case SerialStudio::DashboardWaterfall:
+        m_dbWidget = new Widgets::Waterfall(relativeIndex(), this);
+        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Waterfall.qml";
         break;
 #endif
 

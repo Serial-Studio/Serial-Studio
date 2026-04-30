@@ -148,7 +148,7 @@ Widgets.Pane {
             text: qsTr("Plot")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
+            icon.source: "qrc:/icons/project-editor/actions/plot.svg"
             ToolTip.text: qsTr("Toggle 2D plot visualization for this dataset")
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetPlot
           }
@@ -166,9 +166,27 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("FFT Plot")
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
+            icon.source: "qrc:/icons/project-editor/actions/fft.svg"
             ToolTip.text: qsTr("Toggle FFT plot to visualize frequency content")
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetFFT
+          }
+
+          //
+          // Add waterfall (Pro)
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Waterfall")
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/icons/project-editor/actions/waterfall.svg"
+            ToolTip.text: qsTr("Toggle waterfall (spectrogram) plot — uses the FFT settings")
+            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetWaterfall
+            onClicked: {
+              const option = SerialStudio.DatasetWaterfall
+              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
           }
 
           //
@@ -185,7 +203,7 @@ Widgets.Pane {
             text: qsTr("Bar/Level")
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
+            icon.source: "qrc:/icons/project-editor/actions/bar.svg"
             ToolTip.text: qsTr("Toggle bar/level indicator for this dataset")
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
           }
@@ -204,7 +222,7 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
+            icon.source: "qrc:/icons/project-editor/actions/gauge.svg"
             ToolTip.text: qsTr("Toggle gauge widget for analog-style display")
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
           }
@@ -224,7 +242,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
             ToolTip.text: qsTr("Toggle compass widget for directional data")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
+            icon.source: "qrc:/icons/project-editor/actions/compass.svg"
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetCompass
           }
 
@@ -241,7 +259,7 @@ Widgets.Pane {
             text: qsTr("LED")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
+            icon.source: "qrc:/icons/project-editor/actions/led.svg"
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED
             ToolTip.text: qsTr("Toggle LED indicator for binary or thresholded values")
           }
@@ -263,7 +281,7 @@ Widgets.Pane {
             text: qsTr("Transform")
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_JSON_ProjectEditor.openTransformEditor()
-            icon.source: "qrc:/rcc/icons/project-editor/actions/transform.svg"
+            icon.source: "qrc:/icons/project-editor/actions/transform.svg"
             ToolTip.text: qsTr("Edit a value transform expression for calibration, filtering, or unit conversion")
           }
 
@@ -288,7 +306,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
             onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
-            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
+            icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
             ToolTip.text: qsTr("Duplicate this dataset with the same configuration")
           }
 
@@ -303,7 +321,7 @@ Widgets.Pane {
             ToolTip.text: qsTr("Delete this dataset from the group")
             onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
             enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
+            icon.source: "qrc:/icons/project-editor/actions/delete.svg"
           }
         }
         }

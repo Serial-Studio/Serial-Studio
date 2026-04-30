@@ -162,6 +162,7 @@ public slots:
   void disconnectAllDevices();
   void connectDevice(int deviceId);
   void disconnectDevice(int deviceId);
+  void disconnectDevice(HAL_Driver* driver);
 
   void resetFrameReader();
   void setupExternalConnections();

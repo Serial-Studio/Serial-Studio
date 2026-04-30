@@ -195,7 +195,7 @@ Rectangle {
       Widgets.ToolbarButton {
         text: qsTr("Project Editor")
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/rcc/icons/toolbar/project-setup.svg"
+        icon.source: "qrc:/icons/toolbar/project-setup.svg"
         ToolTip.text: qsTr("Open the Project Editor to create or modify your JSON layout")
         onClicked: app.showProjectEditor()
       }
@@ -213,7 +213,7 @@ Rectangle {
           text: qsTr("Open Project")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Open an existing JSON project")
-          icon.source: "qrc:/rcc/icons/toolbar/open-project.svg"
+          icon.source: "qrc:/icons/toolbar/open-project.svg"
           onClicked: {
             Cpp_AppState.operationMode = SerialStudio.ProjectFile
             Cpp_JSON_ProjectModel.openJsonFile()
@@ -226,7 +226,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           onClicked: Cpp_CSV_Player.openFile()
-          icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
+          icon.source: "qrc:/icons/toolbar/csv.svg"
           enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
           ToolTip.text: qsTr("Play a CSV file as if it were live sensor data")
         }
@@ -237,7 +237,7 @@ Rectangle {
           text: qsTr("Open MDF4")
           Layout.alignment: Qt.AlignLeft
           onClicked: Cpp_MDF4_Player.openFile()
-          icon.source: "qrc:/rcc/icons/toolbar/mf4.svg"
+          icon.source: "qrc:/icons/toolbar/mf4.svg"
           enabled: !Cpp_MDF4_Player.isOpen && !Cpp_IO_Manager.isConnected
           ToolTip.text: qsTr("Play an MDF4 file as if it were live sensor data (Pro)")
         }
@@ -251,14 +251,14 @@ Rectangle {
       collapsePriority: 30
       collapsible: Cpp_CommercialBuild
       collapsedText: qsTr("Extensions")
-      collapsedIcon: "qrc:/rcc/icons/toolbar/extensions.svg"
+      collapsedIcon: "qrc:/icons/toolbar/extensions.svg"
 
       Widgets.ToolbarButton {
         text: qsTr("Extensions")
         Layout.alignment: Qt.AlignLeft
         onClicked: app.showExtensionManager()
         ToolTip.text: qsTr("Browse and install extensions")
-        icon.source: "qrc:/rcc/icons/toolbar/extensions.svg"
+        icon.source: "qrc:/icons/toolbar/extensions.svg"
       }
 
       Loader {
@@ -281,9 +281,9 @@ Rectangle {
               ToolTip.text: qsTr("Configure MQTT connection (publish or subscribe)")
               icon.source: Cpp_MQTT_Client.isConnected ?
                              (Cpp_MQTT_Client.isSubscriber ?
-                                "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
-                                "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
-                             "qrc:/rcc/icons/toolbar/mqtt.svg"
+                                "qrc:/icons/toolbar/mqtt-subscriber.svg" :
+                                "qrc:/icons/toolbar/mqtt-publisher.svg") :
+                             "qrc:/icons/toolbar/mqtt.svg"
             }
 
             Widgets.ToolbarButton {
@@ -292,7 +292,7 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               onClicked: app.showShortcutGenerator()
-              icon.source: "qrc:/rcc/icons/toolbar/deploy.svg"
+              icon.source: "qrc:/icons/toolbar/deploy.svg"
               ToolTip.text: qsTr("Build an operator app for the current project")
             }
 
@@ -302,7 +302,7 @@ Rectangle {
               text: qsTr("Sessions")
               Layout.alignment: Qt.AlignLeft
               onClicked: app.showDatabaseExplorer()
-              icon.source: "qrc:/rcc/icons/toolbar/sessions.svg"
+              icon.source: "qrc:/icons/toolbar/sessions.svg"
               ToolTip.text: qsTr("Browse, replay, and export recorded sessions")
             }
           }
@@ -317,13 +317,13 @@ Rectangle {
       collapsible: true
       collapsePriority: 10
       collapsedText: qsTr("Preferences")
-      collapsedIcon: "qrc:/rcc/icons/toolbar/settings.svg"
+      collapsedIcon: "qrc:/icons/toolbar/settings.svg"
 
       Widgets.ToolbarButton {
         text: qsTr("Preferences")
         Layout.alignment: Qt.AlignLeft
         onClicked: app.showSettingsDialog()
-        icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+        icon.source: "qrc:/icons/toolbar/settings.svg"
         ToolTip.text: qsTr("Open application settings and preferences")
       }
 
@@ -347,7 +347,7 @@ Rectangle {
           Layout.alignment: Qt.AlignLeft
           enabled: driverGrid.driverSelectionEnabled
           onClicked: Cpp_IO_Manager.busType = SerialStudio.UART
-          icon.source: "qrc:/rcc/icons/devices/drivers/uart.svg"
+          icon.source: "qrc:/icons/devices/drivers/uart.svg"
           ToolTip.text: qsTr("Select Serial port (UART) communication")
           font: Cpp_IO_Manager.busType === SerialStudio.UART ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
         }
@@ -365,7 +365,7 @@ Rectangle {
               enabled: driverGrid.driverSelectionEnabled
               ToolTip.text: qsTr("Select audio input device (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.Audio
-              icon.source: "qrc:/rcc/icons/devices/drivers/audio.svg"
+              icon.source: "qrc:/icons/devices/drivers/audio.svg"
               font: Cpp_IO_Manager.busType === SerialStudio.Audio ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
             }
           }
@@ -382,7 +382,7 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
-              icon.source: "qrc:/rcc/icons/devices/drivers/usb.svg"
+              icon.source: "qrc:/icons/devices/drivers/usb.svg"
               ToolTip.text: qsTr("Select raw USB communication (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.RawUsb
               font: Cpp_IO_Manager.busType === SerialStudio.RawUsb ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
@@ -396,7 +396,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           enabled: driverGrid.driverSelectionEnabled
-          icon.source: "qrc:/rcc/icons/devices/drivers/network.svg"
+          icon.source: "qrc:/icons/devices/drivers/network.svg"
           ToolTip.text: qsTr("Select TCP/UDP network communication")
           onClicked: Cpp_IO_Manager.busType = SerialStudio.Network
           font: Cpp_IO_Manager.busType === SerialStudio.Network ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
@@ -414,7 +414,7 @@ Rectangle {
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
               ToolTip.text: qsTr("Select MODBUS communication (Pro)")
-              icon.source: "qrc:/rcc/icons/devices/drivers/modbus.svg"
+              icon.source: "qrc:/icons/devices/drivers/modbus.svg"
               onClicked: Cpp_IO_Manager.busType = SerialStudio.ModBus
               font: Cpp_IO_Manager.busType === SerialStudio.ModBus ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
             }
@@ -432,7 +432,7 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
-              icon.source: "qrc:/rcc/icons/devices/drivers/hid.svg"
+              icon.source: "qrc:/icons/devices/drivers/hid.svg"
               ToolTip.text: qsTr("Select HID device communication (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.HidDevice
               font: Cpp_IO_Manager.busType === SerialStudio.HidDevice ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
@@ -446,7 +446,7 @@ Rectangle {
           text: qsTr("Bluetooth")
           Layout.alignment: Qt.AlignLeft
           enabled: driverGrid.driverSelectionEnabled
-          icon.source: "qrc:/rcc/icons/devices/drivers/bluetooth.svg"
+          icon.source: "qrc:/icons/devices/drivers/bluetooth.svg"
           ToolTip.text: qsTr("Select Bluetooth Low Energy communication")
           onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
           font: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
@@ -464,7 +464,7 @@ Rectangle {
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
               ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
-              icon.source: "qrc:/rcc/icons/devices/drivers/canbus.svg"
+              icon.source: "qrc:/icons/devices/drivers/canbus.svg"
               onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
               font: Cpp_IO_Manager.busType === SerialStudio.CanBus ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
             }
@@ -482,7 +482,7 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
-              icon.source: "qrc:/rcc/icons/devices/drivers/process.svg"
+              icon.source: "qrc:/icons/devices/drivers/process.svg"
               ToolTip.text: qsTr("Select process pipe communication (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.Process
               font: Cpp_IO_Manager.busType === SerialStudio.Process ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
@@ -500,13 +500,13 @@ Rectangle {
       showSeparator: false
       collapsePriority: 30
       collapsedText: qsTr("About")
-      collapsedIcon: "qrc:/rcc/icons/toolbar/about.svg"
+      collapsedIcon: "qrc:/icons/toolbar/about.svg"
 
       Widgets.ToolbarButton {
         text: qsTr("About")
         Layout.alignment: Qt.AlignLeft
         onClicked: app.showAboutDialog()
-        icon.source: "qrc:/rcc/icons/toolbar/about.svg"
+        icon.source: "qrc:/icons/toolbar/about.svg"
         ToolTip.text: qsTr("Show application info and license details")
       }
 
@@ -523,7 +523,7 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Browse example projects")
-          icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
+          icon.source: "qrc:/icons/toolbar/examples.svg"
           onClicked: app.showExamplesBrowser()
         }
 
@@ -533,7 +533,7 @@ Rectangle {
           text: qsTr("Help Center")
           Layout.alignment: Qt.AlignLeft
           onClicked: app.showHelpCenter()
-          icon.source: "qrc:/rcc/icons/toolbar/help.svg"
+          icon.source: "qrc:/icons/toolbar/help.svg"
           ToolTip.text: qsTr("Browse documentation, FAQ, and wiki")
         }
 
@@ -542,7 +542,7 @@ Rectangle {
           horizontalLayout: true
           text: qsTr("AI Wiki & Chat")
           Layout.alignment: Qt.AlignLeft
-          icon.source: "qrc:/rcc/icons/toolbar/deepwiki.svg"
+          icon.source: "qrc:/icons/toolbar/deepwiki.svg"
           ToolTip.text: qsTr("View detailed documentation and ask questions on DeepWiki")
           onClicked: Qt.openUrlExternally("https://deepwiki.com/Serial-Studio/Serial-Studio")
         }
@@ -581,7 +581,7 @@ Rectangle {
       text: qsTr("Activate")
       onClicked: app.showLicenseDialog()
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/activate.svg"
+      icon.source: "qrc:/icons/toolbar/activate.svg"
       ToolTip.text: qsTr("Manage license and activate Serial Studio Pro")
       visible: Cpp_CommercialBuild ? Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated : false
     }
@@ -600,8 +600,8 @@ Rectangle {
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
       checked: Cpp_IO_Manager.isConnected || mqttSubscriber
       ToolTip.text: qsTr("Connect or disconnect from device or MQTT broker")
-      icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
-                             "qrc:/rcc/icons/toolbar/disconnect.svg"
+      icon.source: checked ? "qrc:/icons/toolbar/connect.svg" :
+                             "qrc:/icons/toolbar/disconnect.svg"
 
       visible: Cpp_CommercialBuild ? (Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated ? false : true) : true
       enabled: (Cpp_IO_Manager.configurationOk

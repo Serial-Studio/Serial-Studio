@@ -108,7 +108,7 @@ RowLayout {
           icon.width: 12
           icon.height: 12
           background: Item {}
-          icon.source: "qrc:/rcc/icons/buttons/dropdown.svg"
+          icon.source: "qrc:/icons/buttons/dropdown.svg"
           icon.color: Cpp_ThemeManager.colors["toolbar_text"]
         }
       }

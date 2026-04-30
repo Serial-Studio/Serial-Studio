@@ -34,7 +34,7 @@ Widgets.Pane {
   id: root
 
   title: qsTr("Dashboard")
-  icon: "qrc:/rcc/icons/panes/dashboard.svg"
+  icon: "qrc:/icons/panes/dashboard.svg"
   headerVisible: mainWindow.toolbarVisible && !isExternalWindow
 
   //

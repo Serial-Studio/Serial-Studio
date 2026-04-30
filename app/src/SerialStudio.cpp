@@ -108,6 +108,9 @@ bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
       if (dataset.xAxisId > 0)
         return true;
 
+      if (dataset.waterfall)
+        return true;
+
       if (!dataset.transformCode.isEmpty() && transformUsesNotifications(dataset.transformCode))
         return true;
     }
@@ -139,6 +142,9 @@ bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
 
     for (const auto& dataset : std::as_const((group.datasets))) {
       if (dataset.xAxisId > 0)
+        return true;
+
+      if (dataset.waterfall)
         return true;
 
       if (!dataset.transformCode.isEmpty() && transformUsesNotifications(dataset.transformCode))
@@ -194,6 +200,9 @@ bool SerialStudio::isDatasetWidget(const DashboardWidget widget)
     case DashboardBar:
     case DashboardGauge:
     case DashboardCompass:
+#ifdef BUILD_COMMERCIAL
+    case DashboardWaterfall:
+#endif
       return true;
     default:
       return false;
@@ -209,7 +218,7 @@ bool SerialStudio::isDatasetWidget(const DashboardWidget widget)
 QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool large)
 {
   const QString iconPath =
-    large ? "qrc:/rcc/icons/dashboard-large/" : "qrc:/rcc/icons/dashboard-small/";
+    large ? "qrc:/icons/dashboard-large/" : "qrc:/icons/dashboard-small/";
 
   switch (w) {
     case DashboardDataGrid:
@@ -260,6 +269,9 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
       break;
     case DashboardNotificationLog:
       return iconPath + "notification-log.svg";
+      break;
+    case DashboardWaterfall:
+      return iconPath + "waterfall.svg";
       break;
 #endif
     case DashboardNoWidget:
@@ -375,6 +387,9 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
     case DashboardNotificationLog:
       return tr("Notifications");
       break;
+    case DashboardWaterfall:
+      return tr("Waterfalls");
+      break;
 #endif
     case DashboardNoWidget:
       return "";
@@ -465,6 +480,11 @@ QList<SerialStudio::DashboardWidget> SerialStudio::getDashboardWidgets(
 
   if (dataset.led)
     list.append(DashboardLED);
+
+#ifdef BUILD_COMMERCIAL
+  if (dataset.waterfall)
+    list.append(DashboardWaterfall);
+#endif
 
   return list;
 }

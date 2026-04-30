@@ -381,7 +381,7 @@ void DataModel::NotificationCenter::ensureTrayIcon()
     return;
 
   // Use the same logo path as the Qt main window (see app/src/main.cpp)
-  QIcon icon(QStringLiteral(":/rcc/logo/icon.svg"));
+  QIcon icon(QStringLiteral(":/logo/icon.svg"));
   if (icon.isNull())
     return;
 

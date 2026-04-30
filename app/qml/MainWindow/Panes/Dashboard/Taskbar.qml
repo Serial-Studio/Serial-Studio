@@ -266,7 +266,7 @@ Item {
           icon.width: 14
           icon.height: 14
           background: Item {}
-          icon.source: "qrc:/rcc/icons/buttons/search.svg"
+          icon.source: "qrc:/icons/buttons/search.svg"
           anchors.verticalCenter: parent.verticalCenter
           icon.color: Cpp_ThemeManager.colors["button_text"]
         }
@@ -369,7 +369,7 @@ Item {
     Widgets.TaskbarButton {
       forceVisible: true
       visible: !app.runtimeMode
-      icon.source: "qrc:/rcc/icons/taskbar/settings.svg"
+      icon.source: "qrc:/icons/taskbar/settings.svg"
       onClicked: {
         app.showSettingsDialog()
         taskBar.activeWindow = null
@@ -378,7 +378,7 @@ Item {
       visible: !app.runtimeMode
       forceVisible: !app.runtimeMode
       focused: Cpp_UI_Dashboard.terminalEnabled
-      icon.source: "qrc:/rcc/icons/taskbar/console.svg"
+      icon.source: "qrc:/icons/taskbar/console.svg"
       onClicked: {
         taskBar.activeWindow = null
         Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled
@@ -387,7 +387,7 @@ Item {
       visible: Cpp_CommercialBuild
       forceVisible: Cpp_CommercialBuild
       focused: Cpp_UI_Dashboard.notificationLogEnabled
-      icon.source: "qrc:/rcc/icons/taskbar/notifications.svg"
+      icon.source: "qrc:/icons/taskbar/notifications.svg"
       onClicked: {
         taskBar.activeWindow = null
         Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
@@ -396,8 +396,8 @@ Item {
       forceVisible: true
       focused: Cpp_IO_Manager.paused
       icon.source: Cpp_IO_Manager.paused ?
-                     "qrc:/rcc/icons/taskbar/resume.svg" :
-                     "qrc:/rcc/icons/taskbar/pause.svg"
+                     "qrc:/icons/taskbar/resume.svg" :
+                     "qrc:/icons/taskbar/pause.svg"
       onClicked: {
         taskBar.activeWindow = null
         Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
@@ -427,7 +427,7 @@ Item {
           Layout.preferredWidth: 24
           Layout.preferredHeight: 24
           visible: buttonsContainer.showNavButtons
-          icon.source: "qrc:/rcc/icons/buttons/backward.svg"
+          icon.source: "qrc:/icons/buttons/backward.svg"
           icon.color: Cpp_ThemeManager.colors["taskbar_text"]
           onClicked: {
             taskBar.activeWindow = null
@@ -508,7 +508,7 @@ Item {
           Layout.preferredHeight: 24
           Layout.alignment: Qt.AlignVCenter
           visible: buttonsContainer.showNavButtons
-          icon.source: "qrc:/rcc/icons/buttons/forward.svg"
+          icon.source: "qrc:/icons/buttons/forward.svg"
           icon.color: Cpp_ThemeManager.colors["taskbar_text"]
           onClicked: {
             taskBar.activeWindow = null
@@ -673,7 +673,7 @@ Item {
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/buttons/auto-layout.svg"
+      icon.source: "qrc:/icons/buttons/auto-layout.svg"
       icon.color: taskBar.windowManager.autoLayoutEnabled ?
                     Cpp_ThemeManager.colors["taskbar_highlight"] :
                     Cpp_ThemeManager.colors["taskbar_text"]
@@ -694,7 +694,7 @@ Item {
       Layout.preferredHeight: 24
       opacity: enabled ? 1 : 0.5
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/buttons/wrench.svg"
+      icon.source: "qrc:/icons/buttons/wrench.svg"
       enabled: taskBar && taskBar.activeGroupId >= 1000
       icon.color: Cpp_ThemeManager.colors["taskbar_text"]
       onClicked: {
@@ -719,7 +719,7 @@ Item {
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/buttons/plus.svg"
+      icon.source: "qrc:/icons/buttons/plus.svg"
       icon.color: Cpp_ThemeManager.colors["taskbar_text"]
       onClicked: root.newWorkspaceRequested()
       visible: !(typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)

@@ -41,9 +41,17 @@ SmartDialog {
   title: qsTr("Select Icon")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Window controls
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 4
 
     Rectangle {
@@ -80,7 +88,7 @@ SmartDialog {
           Image {
             anchors.centerIn: parent
             sourceSize: Qt.size(32, 32)
-            source: "qrc:/rcc/actions/" + modelData + ".svg"
+            source: "qrc:/actions/" + modelData + ".svg"
 
             MouseArea {
               anchors.fill: parent
@@ -109,7 +117,7 @@ SmartDialog {
         icon.height: 14
         horizontalPadding: 8
         text: qsTr("Search Online…")
-        icon.source: "qrc:/rcc/icons/buttons/search.svg"
+        icon.source: "qrc:/icons/buttons/search.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: {
           onlineIconPicker.showNormal()
@@ -127,7 +135,7 @@ SmartDialog {
         highlighted: true
         horizontalPadding: 8
         text: qsTr("OK")
-        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+        icon.source: "qrc:/icons/buttons/apply.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: {
           root.iconSelected(root.selectedIcon)
@@ -140,7 +148,7 @@ SmartDialog {
         icon.height: 18
         horizontalPadding: 8
         text: qsTr("Cancel")
-        icon.source: "qrc:/rcc/icons/buttons/cancel.svg"
+        icon.source: "qrc:/icons/buttons/cancel.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: root.close()
       }

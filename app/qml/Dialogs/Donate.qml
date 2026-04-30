@@ -36,6 +36,12 @@ SmartDialog {
   title: qsTr("Support Serial Studio")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: column.implicitWidth
+  preferredHeight: column.implicitHeight
+
+  //
   // Window controls
   //
   dialogContent: ColumnLayout {
@@ -52,7 +58,7 @@ SmartDialog {
         Image {
           sourceSize: Qt.size(120, 120)
           Layout.alignment: Qt.AlignVCenter
-          source: "qrc:/rcc/images/buy-qr.svg"
+          source: "qrc:/images/buy-qr.svg"
 
           Rectangle {
             border.width: 2
@@ -120,7 +126,7 @@ SmartDialog {
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.source: "qrc:/icons/buttons/close.svg"
         }
 
         Item {
@@ -133,7 +139,7 @@ SmartDialog {
           text: qsTr("Donate")
           Layout.alignment: Qt.AlignVCenter
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/paypal.svg"
+          icon.source: "qrc:/icons/buttons/paypal.svg"
           onClicked: {
             root.close()
             Qt.openUrlExternally("https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE")
@@ -150,7 +156,7 @@ SmartDialog {
           Layout.alignment: Qt.AlignVCenter
           text: qsTr("Get Serial Studio Pro")
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/buy.svg"
+          icon.source: "qrc:/icons/buttons/buy.svg"
           Component.onCompleted: Qt.callLater(forceActiveFocus)
           onClicked: {
             root.close()

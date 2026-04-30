@@ -168,7 +168,7 @@ Popup {
           icon.width: 16
           icon.height: 16
           background: Item{}
-          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+          icon.source: "qrc:/icons/buttons/apply.svg"
           visible: modelData[root.checkedRole] !== undefined ? modelData[root.checkedRole] :
                                                                root.showCheckable &&  root.currentValue === modelData[root.valueRole]
           icon.color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :

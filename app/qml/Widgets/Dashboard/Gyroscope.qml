@@ -294,7 +294,7 @@ Item {
           fillMode: Image.PreserveAspectFit
           y: instrument.centerY - height / 2
           sourceSize.height: instrument.dialSize
-          source: "qrc:/rcc/instruments/attitude_dial.svg"
+          source: "qrc:/instruments/attitude_dial.svg"
         }
 
         //
@@ -311,7 +311,7 @@ Item {
           fillMode: Image.PreserveAspectFit
           y: instrument.centerY - height / 2
           sourceSize.height: instrument.dialSize
-          source: "qrc:/rcc/instruments/attitude_pointer.svg"
+          source: "qrc:/instruments/attitude_pointer.svg"
         }
 
         //
@@ -327,7 +327,7 @@ Item {
           fillMode: Image.PreserveAspectFit
           width: instrument.dialSize * 0.75
           y: instrument.centerY - height / 2
-          source: "qrc:/rcc/instruments/attitude_crosshair.svg"
+          source: "qrc:/instruments/attitude_crosshair.svg"
         }
       }
 

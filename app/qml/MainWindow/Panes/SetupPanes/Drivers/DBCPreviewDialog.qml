@@ -345,7 +345,7 @@ Window {
           horizontalPadding: 8
           text: qsTr("Cancel")
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.source: "qrc:/icons/buttons/close.svg"
           onClicked: {
             Cpp_JSON_DBCImporter.cancelImport()
             root.close()
@@ -360,7 +360,7 @@ Window {
           text: qsTr("Create Project")
           icon.color: Cpp_ThemeManager.colors["button_text"]
           enabled: Cpp_JSON_DBCImporter.messageCount > 0
-          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+          icon.source: "qrc:/icons/buttons/apply.svg"
           onClicked: {
             Cpp_JSON_DBCImporter.confirmImport()
             root.close()

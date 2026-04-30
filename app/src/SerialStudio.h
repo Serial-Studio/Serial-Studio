@@ -180,6 +180,7 @@ public:
     DashboardImageView,
     DashboardOutputPanel,
     DashboardNotificationLog,
+    DashboardWaterfall,
 #endif
   };
   Q_ENUM(DashboardWidget)
@@ -190,13 +191,14 @@ public:
   // clang-format off
   enum DatasetOption
   {
-    DatasetGeneric = 0b00000000,
-    DatasetPlot    = 0b00000001,
-    DatasetFFT     = 0b00000010,
-    DatasetBar     = 0b00000100,
-    DatasetGauge   = 0b00001000,
-    DatasetCompass = 0b00010000,
-    DatasetLED     = 0b00100000,
+    DatasetGeneric   = 0b00000000,
+    DatasetPlot      = 0b00000001,
+    DatasetFFT       = 0b00000010,
+    DatasetBar       = 0b00000100,
+    DatasetGauge     = 0b00001000,
+    DatasetCompass   = 0b00010000,
+    DatasetLED       = 0b00100000,
+    DatasetWaterfall = 0b01000000,
   };
   Q_ENUM(DatasetOption)
   // clang-format on

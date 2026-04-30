@@ -275,6 +275,7 @@ Widgets.MiniWindow {
         }
 
         property bool hasToolbar: false
+        property int deviceIndex: 0
         readonly property bool focused: true
 
         Page {

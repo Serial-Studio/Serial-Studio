@@ -21,6 +21,7 @@
 #  include <QDir>
 #  include <QFileDialog>
 #  include <QFileInfo>
+#  include <QGuiApplication>
 #  include <QInputDialog>
 #  include <QJsonDocument>
 #  include <QJsonObject>
@@ -419,6 +420,9 @@ void Sessions::DatabaseManager::openDatabase(const QString& filePath)
   if (filePath.isEmpty())
     return;
 
+  // Wait cursor for the synchronous SQL setup that follows
+  QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
   // Close without clearing the saved path
   closeDatabase(false);
 
@@ -428,6 +432,7 @@ void Sessions::DatabaseManager::openDatabase(const QString& filePath)
   m_db             = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
   m_db.setDatabaseName(filePath);
   if (!m_db.open()) {
+    QGuiApplication::restoreOverrideCursor();
     Misc::Utilities::showMessageBox(
       tr("Cannot open session file"), m_db.lastError().text(), QMessageBox::Critical);
     closeDatabase(true);
@@ -448,6 +453,7 @@ void Sessions::DatabaseManager::openDatabase(const QString& filePath)
   loadLockState();
   m_settings.setValue("Sessions/LastDatabase", m_filePath);
 
+  QGuiApplication::restoreOverrideCursor();
   Q_EMIT openChanged();
 }
 
@@ -960,8 +966,7 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
   Q_EMIT csvExportBusyChanged();
   Q_EMIT csvExportFinished(path, true);
 
-  Misc::Utilities::showMessageBox(
-    tr("Export Complete"), tr("Session exported to:\n%1").arg(path), QMessageBox::Information);
+  Misc::Utilities::revealFile(path);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1004,11 +1009,17 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   else
     opts.format = HtmlReportOptions::Format::Pdf;
 
-  // Run the export once the output path is known
+  // Run the export once the output path is known. Heavy work (SQL data
+  // assembly + chart-series load) is chained through QTimer::singleShot so
+  // each stage yields to the event loop — the progress dialog gets a chance
+  // to paint and refresh its status text instead of freezing for seconds.
   auto startExport = [this, sessionId](HtmlReportOptions opts) {
     // HTML-only is synchronous — skip the progress dialog
     const bool reportBusy = (opts.format != HtmlReportOptions::Format::Html);
     if (reportBusy) {
+      // Wait cursor while the progress dialog is preparing to paint
+      QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
       m_pdfExportBusy     = true;
       m_pdfExportProgress = 0.0;
       m_pdfExportStatus   = tr("Preparing export…");
@@ -1016,52 +1027,89 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
       Q_EMIT pdfExportProgressChanged();
     }
 
-    // Assemble the data bundle from SQL
-    const auto data = ReportData::buildFromSession(m_db, sessionId);
+    // Stage 3: kick off rendering once data + series are ready
+    auto runRender = [this, reportBusy](ReportData data,
+                                        std::vector<DatasetSeries> series,
+                                        HtmlReportOptions opts) {
+      auto* renderer = new HtmlReport(this);
 
-    // Load time-series when charts are enabled
-    std::vector<DatasetSeries> series;
-    if (opts.includeCharts)
-      series = loadChartSeries(m_db, sessionId, 10000);
+      if (reportBusy) {
+        connect(renderer,
+                &HtmlReport::progress,
+                this,
+                [this](const QString& status, double percent) {
+                  m_pdfExportStatus   = status;
+                  m_pdfExportProgress = percent;
+                  Q_EMIT pdfExportProgressChanged();
+                });
+      }
 
-    // Create renderer parented so Qt cleans up
-    auto* renderer = new HtmlReport(this);
+      connect(renderer,
+              &HtmlReport::finished,
+              this,
+              [this, renderer, reportBusy](const QString& outputPath, bool ok) {
+                if (reportBusy) {
+                  m_pdfExportBusy     = false;
+                  m_pdfExportProgress = 1.0;
+                  m_pdfExportStatus   = ok ? tr("Done") : tr("Failed");
+                  Q_EMIT pdfExportBusyChanged();
+                  Q_EMIT pdfExportProgressChanged();
+                }
+                Q_EMIT pdfExportFinished(outputPath, ok);
 
-    if (reportBusy) {
-      connect(renderer, &HtmlReport::progress, this, [this](const QString& status, double percent) {
-        m_pdfExportStatus   = status;
-        m_pdfExportProgress = percent;
-        Q_EMIT pdfExportProgressChanged();
+                if (ok) {
+                  // Reveal in Finder/Explorer
+                  Misc::Utilities::revealFile(outputPath);
+                } else {
+                  Misc::Utilities::showMessageBox(
+                    tr("Report Failed"),
+                    tr("Could not generate the report. Check the output path and try again."),
+                    QMessageBox::Warning);
+                }
+
+                renderer->deleteLater();
+              });
+
+      renderer->render(std::move(data), std::move(series), opts);
+    };
+
+    // Stage 2: load chart series (also heavy when many samples are stored)
+    auto runChartLoad = [this, sessionId, reportBusy, runRender](ReportData data,
+                                                                 HtmlReportOptions opts) {
+      std::vector<DatasetSeries> series;
+      if (opts.includeCharts) {
+        if (reportBusy) {
+          m_pdfExportStatus = tr("Loading chart data…");
+          Q_EMIT pdfExportProgressChanged();
+        }
+
+        QTimer::singleShot(
+          0,
+          this,
+          [this, sessionId, data = std::move(data), opts = std::move(opts), runRender]() mutable {
+            auto series = loadChartSeries(m_db, sessionId, 10000);
+            runRender(std::move(data), std::move(series), std::move(opts));
+          });
+      } else {
+        runRender(std::move(data), std::move(series), std::move(opts));
+      }
+    };
+
+    // Stage 1: assemble the data bundle from SQL — defer so the dialog paints
+    QTimer::singleShot(
+      0,
+      this,
+      [this, sessionId, reportBusy, opts = std::move(opts), runChartLoad]() mutable {
+        if (reportBusy) {
+          // Dialog has painted; the progress bar takes over from the wait cursor
+          QGuiApplication::restoreOverrideCursor();
+          m_pdfExportStatus = tr("Loading session data…");
+          Q_EMIT pdfExportProgressChanged();
+        }
+
+        auto data = ReportData::buildFromSession(m_db, sessionId);
+        runChartLoad(std::move(data), std::move(opts));
       });
-    }
-
-    connect(renderer,
-            &HtmlReport::finished,
-            this,
-            [this, renderer, reportBusy](const QString& outputPath, bool ok) {
-              if (reportBusy) {
-                m_pdfExportBusy     = false;
-                m_pdfExportProgress = 1.0;
-                m_pdfExportStatus   = ok ? tr("Done") : tr("Failed");
-                Q_EMIT pdfExportBusyChanged();
-                Q_EMIT pdfExportProgressChanged();
-              }
-              Q_EMIT pdfExportFinished(outputPath, ok);
-
-              if (ok) {
-                // Reveal in Finder/Explorer
-                Misc::Utilities::revealFile(outputPath);
-              } else {
-                Misc::Utilities::showMessageBox(
-                  tr("Report Failed"),
-                  tr("Could not generate the report. Check the output path and try again."),
-                  QMessageBox::Warning);
-              }
-
-              renderer->deleteLater();
-            });
-
-    renderer->render(data, std::move(series), opts);
   };
 
   // Preset path skips the picker

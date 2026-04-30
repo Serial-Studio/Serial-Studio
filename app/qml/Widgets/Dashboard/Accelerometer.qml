@@ -168,7 +168,7 @@ Item {
       text: qsTr("Settings")
       ToolTip.text: qsTr("Settings")
       onClicked: configDialog.openDialog(root.model)
-      icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+      icon.source: "qrc:/icons/toolbar/settings.svg"
     }
 
     Item {

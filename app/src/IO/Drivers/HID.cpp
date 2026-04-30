@@ -27,6 +27,7 @@
 #include <QSet>
 #include <QTimer>
 
+#include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -282,7 +283,11 @@ void IO::Drivers::HID::setDeviceIndex(const int index)
  */
 void IO::Drivers::HID::onReadError()
 {
-  close();
+  // Already disconnected from a prior error
+  if (!isOpen())
+    return;
+
+  ConnectionManager::instance().disconnectDevice(this);
   Misc::Utilities::showMessageBox(tr("HID Device Error"),
                                   tr("The HID device was disconnected or "
                                      "encountered a fatal read error."));

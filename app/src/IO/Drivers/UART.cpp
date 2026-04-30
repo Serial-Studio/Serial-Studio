@@ -816,7 +816,7 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
     return;
 
   // Already disconnected from a prior error
-  if (!ConnectionManager::instance().isConnected())
+  if (!isOpen())
     return;
 
   if (error != QSerialPort::NoError) {
@@ -826,7 +826,7 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
         return;
     }
 
-    ConnectionManager::instance().disconnectDevice();
+    ConnectionManager::instance().disconnectDevice(this);
 
     if (!m_autoReconnect || error != QSerialPort::ResourceError) {
       const auto name = serialPort ? serialPort->portName() : tr("Unknown");

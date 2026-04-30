@@ -21,9 +21,13 @@ Widgets.SmartDialog {
   id: root
 
   fixedSize: false
-  preferredWidth: 560
-  preferredHeight: 480
   title: qsTr("New Deployment")
+
+  //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
 
   property string shortcutTitle: ""
   property string iconPathValue: ""
@@ -217,7 +221,7 @@ Widgets.SmartDialog {
                 sourceSize: Qt.size(192, 192)
                 source: root.userPickedIcon
                         ? root.iconPathValue
-                        : "qrc:/rcc/images/shortcut.svg"
+                        : "qrc:/images/shortcut.svg"
               }
 
               HoverHandler {
@@ -316,7 +320,7 @@ Widgets.SmartDialog {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.openJsonFile()
               icon.color: Cpp_ThemeManager.colors["button_text"]
-              icon.source: "qrc:/rcc/icons/buttons/open.svg"
+              icon.source: "qrc:/icons/buttons/open.svg"
             }
           }
 
@@ -511,7 +515,7 @@ Widgets.SmartDialog {
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
       }
 
       Button {
@@ -523,7 +527,7 @@ Widgets.SmartDialog {
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+        icon.source: "qrc:/icons/buttons/apply.svg"
         enabled: app.proVersion
                  && root.projectPath.length > 0
                  && root.shortcutTitle.trim().length > 0

@@ -33,6 +33,12 @@ SmartDialog {
   title: qsTr("Help Center")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Allow resizing and maximizing
   //
   width: 920
@@ -108,6 +114,8 @@ SmartDialog {
   property bool fetchingData: Cpp_HelpCenter.count === 0 && Cpp_HelpCenter.searchFilter === ""
 
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 8
 
     //
@@ -289,7 +297,7 @@ SmartDialog {
           anchors.margins: 2
           anchors.fill: parent
           backgroundColor: "transparent"
-          url: "qrc:/rcc/markdown-viewer.html"
+          url: "qrc:/markdown-viewer.html"
           visible: Cpp_HelpCenter.pageContent !== ""
           settings.localContentCanAccessRemoteUrls: true
 
@@ -451,7 +459,7 @@ SmartDialog {
         horizontalPadding: 8
         text: qsTr("View Online")
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/rcc/icons/buttons/website.svg"
+        icon.source: "qrc:/icons/buttons/website.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: {
           var url = "https://serial-studio.com/help"
@@ -484,7 +492,7 @@ SmartDialog {
         horizontalPadding: 8
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }

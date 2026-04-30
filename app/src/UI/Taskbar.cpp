@@ -901,8 +901,12 @@ void UI::Taskbar::rebuildModel()
       }
     }
 
-    // Extract the main group widget from the lists
-    int mainWindowId = 0;
+    // Extract the main group widget from the lists. mainWindowId starts at -1
+    // because 0 is a *valid* windowId (Dashboard counts from 0); using 0 as the
+    // "none" sentinel made groups with widget="" (groupType=NoWidget) collide
+    // with the first dataset widget — findItemByWindowId(0) would then return
+    // the group instead of the actual widget.
+    int mainWindowId = -1;
     for (int i = 0; i < windowIds.count(); ++i) {
       if (widgetTypes[i] == groupType) {
         mainWindowId = windowIds[i];
@@ -929,7 +933,7 @@ void UI::Taskbar::rebuildModel()
       groupItem->setData(true, TaskbarModel::OverviewRole);
 
     // Map widget ID to window ID for the main group widget
-    if (groupType != SerialStudio::DashboardNoWidget) {
+    if (groupType != SerialStudio::DashboardNoWidget && mainWindowId >= 0) {
       auto widgetIds = registry.widgetIdsByType(groupType);
       for (const auto& wid : std::as_const(widgetIds)) {
         auto info = registry.widgetInfo(wid);
@@ -1596,7 +1600,7 @@ QVariantList UI::Taskbar::workspaceModel() const
     entry[QStringLiteral("text")]      = ws.title;
     entry[QStringLiteral("separator")] = false;
     entry[QStringLiteral("icon")] =
-      ws.icon.isEmpty() ? QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg") : ws.icon;
+      ws.icon.isEmpty() ? QStringLiteral("qrc:/icons/panes/dashboard.svg") : ws.icon;
     model.append(entry);
   }
 

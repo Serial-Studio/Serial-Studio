@@ -213,7 +213,7 @@ Widgets.SmartWindow {
               Layout.alignment: Qt.AlignVCenter
               ToolTip.text: qsTr("Open a session file")
               onClicked: Cpp_Sessions_Manager.openDatabase()
-              icon.source: "qrc:/rcc/icons/database/open.svg"
+              icon.source: "qrc:/icons/database/open.svg"
             }
 
             Widgets.ToolbarButton {
@@ -222,7 +222,7 @@ Widgets.SmartWindow {
               enabled: Cpp_Sessions_Manager.isOpen
               ToolTip.text: qsTr("Close session file")
               onClicked: Cpp_Sessions_Manager.closeDatabase()
-              icon.source: "qrc:/rcc/icons/database/close.svg"
+              icon.source: "qrc:/icons/database/close.svg"
             }
           }
 
@@ -239,7 +239,7 @@ Widgets.SmartWindow {
                        && Cpp_Sessions_Manager.selectedSessionId >= 0
               ToolTip.text: qsTr("Replay selected session on the dashboard")
               onClicked: Cpp_Sessions_Manager.replaySelectedSession()
-              icon.source: "qrc:/rcc/icons/database/replay.svg"
+              icon.source: "qrc:/icons/database/replay.svg"
             }
 
             Widgets.ToolbarButton {
@@ -253,7 +253,7 @@ Widgets.SmartWindow {
                             : qsTr("Delete the selected session")
               onClicked: Cpp_Sessions_Manager.confirmDeleteSession(
                            Cpp_Sessions_Manager.selectedSessionId)
-              icon.source: "qrc:/rcc/icons/database/delete.svg"
+              icon.source: "qrc:/icons/database/delete.svg"
             }
           }
 
@@ -270,8 +270,8 @@ Widgets.SmartWindow {
                     ? qsTr("Unlock")
                     : qsTr("Lock")
               icon.source: Cpp_Sessions_Manager.locked
-                           ? "qrc:/rcc/icons/database/unlock.svg"
-                           : "qrc:/rcc/icons/database/lock.svg"
+                           ? "qrc:/icons/database/unlock.svg"
+                           : "qrc:/icons/database/lock.svg"
               ToolTip.text: Cpp_Sessions_Manager.locked
                             ? qsTr("Unlock the session file to allow deletions")
                             : qsTr("Set a password to prevent session deletions")
@@ -297,7 +297,7 @@ Widgets.SmartWindow {
               ToolTip.text: qsTr("Export selected session to CSV")
               onClicked: Cpp_Sessions_Manager.exportSessionToCsv(
                            Cpp_Sessions_Manager.selectedSessionId)
-              icon.source: "qrc:/rcc/icons/database/export-csv.svg"
+              icon.source: "qrc:/icons/database/export-csv.svg"
             }
 
             Widgets.ToolbarButton {
@@ -308,7 +308,7 @@ Widgets.SmartWindow {
                        && !Cpp_Sessions_Manager.pdfExportBusy
               ToolTip.text: qsTr("Generate a PDF report for the selected session")
               onClicked: _reportDialog.openFor(Cpp_Sessions_Manager.selectedSessionId)
-              icon.source: "qrc:/rcc/icons/database/export-pdf.svg"
+              icon.source: "qrc:/icons/database/export-pdf.svg"
             }
           }
 
@@ -326,7 +326,7 @@ Widgets.SmartWindow {
                        && Cpp_Sessions_Manager.selectedSessionId >= 0
               ToolTip.text: qsTr("Restore the project file from this session file")
               onClicked: Cpp_Sessions_Manager.restoreProjectFromDb()
-              icon.source: "qrc:/rcc/icons/database/restore.svg"
+              icon.source: "qrc:/icons/database/restore.svg"
             }
           }
 

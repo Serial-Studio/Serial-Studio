@@ -52,6 +52,12 @@ Widgets.SmartDialog {
                   : qsTr("New Workspace")
 
   //
+  // Direct CSD size hints (bypasses Page implicit-size propagation)
+  //
+  preferredWidth: layout.implicitWidth
+  preferredHeight: layout.implicitHeight
+
+  //
   // Open dialog in "new" mode
   //
   function openNew(tb) {
@@ -129,6 +135,8 @@ Widgets.SmartDialog {
   // Dialog content
   //
   dialogContent: ColumnLayout {
+    id: layout
+
     spacing: 8
 
     //
@@ -289,7 +297,7 @@ Widgets.SmartDialog {
         icon.height: 18
         text: qsTr("Cancel")
         onClicked: root.close()
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.source: "qrc:/icons/buttons/close.svg"
       }
 
       Button {
@@ -300,7 +308,7 @@ Widgets.SmartDialog {
         onClicked: root.apply()
         opacity: enabled ? 1 : 0.5
         enabled: _nameField.text.trim().length > 0
-        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+        icon.source: "qrc:/icons/buttons/apply.svg"
       }
     }
   }

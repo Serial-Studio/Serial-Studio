@@ -203,7 +203,7 @@ int main(int argc, char** argv)
 
 #if !defined(Q_OS_MAC)
   // Set window icon
-  QIcon appIcon(QStringLiteral(":/rcc/logo/icon.svg"));
+  QIcon appIcon(QStringLiteral(":/logo/icon.svg"));
   if (!appIcon.isNull())
     app.setWindowIcon(appIcon);
 #endif

@@ -380,7 +380,7 @@ Window {
           icon.height: 18
           text: qsTr("Close")
           horizontalPadding: 8
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.source: "qrc:/icons/buttons/close.svg"
           onClicked: root.close()
         }
       }

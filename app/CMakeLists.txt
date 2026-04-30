@@ -523,6 +523,7 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/Plot3D.h
     src/UI/Widgets/ImageView.h
     src/UI/Widgets/ImageExport.h
+    src/UI/Widgets/Waterfall.h
     src/UI/ImageProvider.h
     src/DataModel/DBCImporter.h
     src/DataModel/ModbusMapImporter.h
@@ -570,6 +571,7 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/Plot3D.cpp
     src/UI/Widgets/ImageView.cpp
     src/UI/Widgets/ImageExport.cpp
+    src/UI/Widgets/Waterfall.cpp
     src/UI/ImageProvider.cpp
     src/DataModel/DBCImporter.cpp
     src/DataModel/ModbusMapImporter.cpp
@@ -620,6 +622,7 @@ if(BUILD_COMMERCIAL)
     qml/Widgets/Dashboard/Plot3D.qml
     qml/Widgets/Dashboard/ImageView.qml
     qml/Widgets/Dashboard/NotificationLog.qml
+    qml/Widgets/Dashboard/Waterfall.qml
     qml/Widgets/Dashboard/Output/DashboardButton.qml
     qml/Widgets/Dashboard/Output/DashboardSlider.qml
     qml/Widgets/Dashboard/Output/DashboardToggle.qml

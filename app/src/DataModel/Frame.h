@@ -77,6 +77,8 @@ inline constexpr KeyView FrameParserLanguage("frameParserLanguage");
 inline constexpr KeyView FFT("fft");
 inline constexpr KeyView LED("led");
 inline constexpr KeyView Log("log");
+inline constexpr KeyView Waterfall("waterfall");
+inline constexpr KeyView WaterfallYAxis("waterfallYAxis");
 inline constexpr KeyView Min("min");
 inline constexpr KeyView Max("max");
 inline constexpr KeyView Graph("graph");
@@ -349,6 +351,7 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
 struct alignas(8) Dataset {
   int index              = 0;      ///< Frame offset index
   int xAxisId            = -1;     ///< Optional reference to x-axis dataset
+  int waterfallYAxis     = 0;      ///< Y source for the waterfall — 0 = Time, N = dataset.index
   int groupId            = 0;      ///< Owning group ID
   int sourceId           = 0;      ///< Source this dataset belongs to
   int uniqueId           = 0;      ///< Unique ID within frame
@@ -360,6 +363,7 @@ struct alignas(8) Dataset {
   bool led               = false;  ///< Enables LED widget
   bool log               = false;  ///< Enables logging
   bool plt               = false;  ///< Enables plotting
+  bool waterfall         = false;  ///< Enables waterfall (spectrogram) widget — Pro
   bool alarmEnabled      = false;  ///< Enable/disable alarm values
   bool overviewDisplay   = false;  ///< Show in overview
   bool isNumeric         = false;  ///< True if value was parsed as numeric
@@ -950,6 +954,10 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::LED, d.led);
   obj.insert(Keys::Log, d.log);
   obj.insert(Keys::Graph, d.plt);
+  if (d.waterfall)
+    obj.insert(Keys::Waterfall, true);
+  if (d.waterfallYAxis != 0)
+    obj.insert(Keys::WaterfallYAxis, d.waterfallYAxis);
   obj.insert(Keys::Index, d.index);
   obj.insert(Keys::XAxis, d.xAxisId);
   obj.insert(Keys::LedHigh, d.ledHigh);
@@ -1187,6 +1195,8 @@ void read_io_settings(QByteArray& frameStart,
   d.led               = ss_jsr(obj, Keys::LED, false).toBool();
   d.log               = ss_jsr(obj, Keys::Log, false).toBool();
   d.plt               = ss_jsr(obj, Keys::Graph, false).toBool();
+  d.waterfall         = ss_jsr(obj, Keys::Waterfall, false).toBool();
+  d.waterfallYAxis    = ss_jsr(obj, Keys::WaterfallYAxis, 0).toInt();
   d.xAxisId           = ss_jsr(obj, Keys::XAxis, -1).toInt();
   d.fftMin            = ss_jsr(obj, Keys::FFTMin, 0).toDouble();
   d.fftMax            = ss_jsr(obj, Keys::FFTMax, 0).toDouble();

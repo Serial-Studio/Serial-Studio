@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="13.5pt" height="13.5pt" viewBox="0 0 13.5 13.5" version="1.1">
+<g id="surface_waterfall_small">
+<!-- Cream plot area (rounded rect) -->
+<path style="stroke:none;fill-rule:nonzero;fill:rgb(88.235295%,92.156863%,94.901961%);fill-opacity:1;" d="M 0.8125 11.78125 C 0.589844 11.78125 0.40625 11.597656 0.40625 11.375 L 0.40625 0.8125 C 0.40625 0.589844 0.589844 0.40625 0.8125 0.40625 L 11.375 0.40625 C 11.597656 0.40625 11.78125 0.589844 11.78125 0.8125 L 11.78125 11.375 C 11.78125 11.597656 11.597656 11.78125 11.375 11.78125 Z M 0.8125 11.78125 "/>
+<!-- Grey border -->
+<path style="stroke:none;fill-rule:nonzero;fill:rgb(47.058824%,54.509807%,61.176473%);fill-opacity:1;" d="M 11.375 0.8125 L 11.375 11.375 L 0.8125 11.375 L 0.8125 0.8125 L 11.375 0.8125 M 11.375 0 L 0.8125 0 C 0.363281 0 0 0.363281 0 0.8125 L 0 11.375 C 0 11.824219 0.363281 12.1875 0.8125 12.1875 L 11.375 12.1875 C 11.824219 12.1875 12.1875 11.824219 12.1875 11.375 L 12.1875 0.8125 C 12.1875 0.363281 11.824219 0 11.375 0 Z M 11.375 0 "/>
+<!-- Light-grey crosshair axes (kept for visual consistency with the plot icon) -->
+<path style="stroke:none;fill-rule:nonzero;fill:rgb(71.372551%,78.823531%,83.92157%);fill-opacity:1;" d="M 5.6875 0.8125 L 6.5 0.8125 L 6.5 11.375 L 5.6875 11.375 Z M 5.6875 0.8125 "/>
+<path style="stroke:none;fill-rule:nonzero;fill:rgb(71.372551%,78.823531%,83.92157%);fill-opacity:1;" d="M 0.8125 5.6875 L 11.375 5.6875 L 11.375 6.5 L 0.8125 6.5 Z M 0.8125 5.6875 "/>
+<!-- Spectrogram stripes (top=hot/recent, bottom=cold/older) -->
+<rect x="1.65" y="1.85" width="8.9" height="1.55" fill="rgb(217,56,35)"/>
+<rect x="1.65" y="3.40" width="8.9" height="1.55" fill="rgb(245,166,36)"/>
+<rect x="1.65" y="4.95" width="8.9" height="1.55" fill="rgb(149,223,60)"/>
+<rect x="1.65" y="6.50" width="8.9" height="1.55" fill="rgb(60,180,220)"/>
+<rect x="1.65" y="8.05" width="8.9" height="1.55" fill="rgb(56,80,200)"/>
+<rect x="1.65" y="9.60" width="8.9" height="1.55" fill="rgb(48,18,91)"/>
+<!-- Subtle row separators to reinforce the time-stacked appearance -->
+<rect x="1.65" y="3.36" width="8.9" height="0.12" fill="rgba(0,0,0,0.18)"/>
+<rect x="1.65" y="4.91" width="8.9" height="0.12" fill="rgba(0,0,0,0.18)"/>
+<rect x="1.65" y="6.46" width="8.9" height="0.12" fill="rgba(0,0,0,0.18)"/>
+<rect x="1.65" y="8.01" width="8.9" height="0.12" fill="rgba(0,0,0,0.18)"/>
+<rect x="1.65" y="9.56" width="8.9" height="0.12" fill="rgba(0,0,0,0.18)"/>
+</g>
+</svg>

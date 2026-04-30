@@ -2,7 +2,7 @@
   "title":"Fluent Light",
   "parameters":{
     "code-editor-theme":"fluent-light",
-    "start-icon":"qrc:/rcc/logo/start.svg"
+    "start-icon":"qrc:/logo/start.svg"
   },
   "translations":{
     "en_US":"Fluent Light",
