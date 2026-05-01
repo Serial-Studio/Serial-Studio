@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -68,7 +68,7 @@ static void openSafeLibs(lua_State* L)
     lua_setglobal(L, name);
   }
 
-  // Strip string.dump — bytecode exfiltration vector pairs with unsafe loaders.
+  // Strip string.dump -- bytecode exfiltration vector pairs with unsafe loaders.
   lua_getglobal(L, "string");
   if (lua_istable(L, -1)) {
     lua_pushnil(L);
@@ -130,7 +130,7 @@ void DataModel::LuaScriptEngine::createState()
   // Install instruction-count watchdog hook
   lua_sethook(m_state, watchdogHook, LUA_MASKCOUNT, kHookInstructionCount);
 
-  // Deadline starts "never" — set per-call before entering Lua
+  // Deadline starts "never" -- set per-call before entering Lua
   m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
   m_loaded   = false;
 }
@@ -191,11 +191,11 @@ void DataModel::LuaScriptEngine::watchdogHook(lua_State* L, lua_Debug* ar)
   auto* self = static_cast<LuaScriptEngine*>(lua_touserdata(L, -1));
   lua_pop(L, 1);
 
-  // No engine pointer stored — ignore (defensive, shouldn't happen)
+  // No engine pointer stored -- ignore (defensive, shouldn't happen)
   if (!self) [[unlikely]]
     return;
 
-  // Deadline reached → abort the current Lua call
+  // Deadline reached -> abort the current Lua call
   if (self->m_deadline.hasExpired()) [[unlikely]]
     luaL_error(L, "execution timed out after %d ms", kRuntimeWatchdogMs);
 }
@@ -236,7 +236,7 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
     return false;
   }
 
-  // Run the chunk under the watchdog — file-scope loops would hang otherwise.
+  // Run the chunk under the watchdog -- file-scope loops would hang otherwise.
   m_deadline.setRemainingTime(kRuntimeWatchdogMs);
   status     = lua_pcall(m_state, 0, 0, 0);
   m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
@@ -489,14 +489,14 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
       break;
   }
 
-  // Pure 1D array — all scalars
+  // Pure 1D array -- all scalars
   if (!hasTable) {
     results.append(tableToStringList(-1));
     lua_pop(m_state, 1);
     return results;
   }
 
-  // Pure 2D array — all sub-tables
+  // Pure 2D array -- all sub-tables
   if (hasTable && !hasScalar) {
     results.reserve(len);
     for (int i = 1; i <= qMin(len, kMaxElements); ++i) {
@@ -513,7 +513,7 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
     return results;
   }
 
-  // Mixed array — scalars + sub-tables (same unzip logic as JS engine)
+  // Mixed array -- scalars + sub-tables (same unzip logic as JS engine)
   QStringList scalars;
   QList<QStringList> vectors;
   qsizetype maxVectorLength = 0;
@@ -540,7 +540,7 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
 
   lua_pop(m_state, 1);
 
-  // No vectors found — treat as flat frame
+  // No vectors found -- treat as flat frame
   if (vectors.isEmpty()) {
     results.append(scalars);
     return results;

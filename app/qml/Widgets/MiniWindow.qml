@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -37,11 +37,16 @@ Item {
   property bool headerVisible: true
   property bool shadowEnabled: true
   readonly property int defaultRadius: 0
+  property bool windowControlsVisible: true
 
+  //
   // Drag-region geometry consumed by the C++ window manager.
+  //
   readonly property int externControlWidth: externalWinBt.width
   readonly property int captionHeight: root.headerVisible ? 28 : 0
-  readonly property int windowControlsWidth: minBtMa.width + maxBtMa.width + closeBtMa.width
+  readonly property int windowControlsWidth: root.windowControlsVisible
+                                             ? minBtMa.width + maxBtMa.width + closeBtMa.width
+                                             : 0
 
   //
   // Custom properties...to be set by the items that subclass this object
@@ -285,17 +290,23 @@ Item {
     source: _shadowSrc
     anchors.fill: _shadowSrc
 
+    //
     // Blur config
+    //
     blurEnabled: true
     blur: root.focused ? 0.6 : 0.3
     blurMax: root.focused ? 24 : 12
 
+    //
     // Shadow config
+    //
     shadowEnabled: true
     shadowOpacity: root.focused ? 0.07 : 0.035
     shadowColor: Cpp_ThemeManager.colors["shadow"]
 
+    //
     // Only enabled when using RHI
+    //
     enabled: root.shadowEnabled
     visible: root.shadowEnabled
   }
@@ -450,6 +461,7 @@ Item {
           flat: true
           background: Item {}
           icon.color: _title.color
+          visible: root.windowControlsVisible
           Layout.alignment: Qt.AlignVCenter
           onClicked: root.minimizeClicked()
           icon.width: root.captionHeight / 2
@@ -474,6 +486,7 @@ Item {
               root.maximizeClicked()
           }
           background: Item {}
+          visible: root.windowControlsVisible
           Layout.alignment: Qt.AlignVCenter
           icon.width: root.captionHeight / 2
           icon.height: root.captionHeight / 2
@@ -503,6 +516,7 @@ Item {
           onClicked: root.closeClicked()
           Layout.alignment: Qt.AlignVCenter
           icon.width: root.captionHeight / 2
+          visible: root.windowControlsVisible
           icon.height: root.captionHeight / 2
           icon.source: "qrc:/icons/miniwindow/close.svg"
 
@@ -572,7 +586,7 @@ Item {
   }
 
   //
-  // Highlight overlay — flashing border for search navigation
+  // Highlight overlay -- flashing border for search navigation
   //
   Rectangle {
     id: highlightBorder

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is part of Serial Studio Pro. All rights reserved.
  *
@@ -274,7 +274,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setPipePath(const QString& i
 /**
  * @brief Refresh and return the list of running processes.
  *
- * Calls refreshProcessList() and returns the updated list — useful for
+ * Calls refreshProcessList() and returns the updated list -- useful for
  * picking a process from which to derive a named-pipe path.
  */
 API::CommandResponse API::Handlers::ProcessHandler::getRunningProcesses(const QString& id,

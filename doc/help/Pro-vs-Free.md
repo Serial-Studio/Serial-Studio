@@ -12,7 +12,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 **Pro version:**
 - Everything in the free version, plus:
 - Advanced protocols: MQTT, Modbus, CAN Bus, Audio Input, raw USB, HID, Process I/O.
-- Pro widgets: 3D Plot, XY Plot, Image View (live camera feed).
+- Pro widgets: 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera feed).
 - Binary Direct mode (high-performance parsing).
 - MDF4 file export and playback.
 - Commercial use rights.
@@ -60,6 +60,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | LED Panel | ✅ | ✅ |
 | | 3D Plot | ❌ | ✅ |
 | | XY Plot (phase diagrams) | ❌ | ✅ |
+| | Waterfall (spectrogram, order tracking) | ❌ | ✅ |
 | | Image View (live camera/image feed) | ❌ | ✅ |
 | **Data Export** | | | |
 | | CSV Export | ✅ | ✅ |
@@ -253,6 +254,27 @@ function parse(frame) {
 
 ---
 
+### Waterfall Widget
+
+**What it is:** Scrolling time-frequency plot (spectrogram) per dataset. Each row is one FFT magnitude spectrum, with the newest spectrum at the top.
+
+**How it works:**
+- Reuses the dataset's FFT settings (`fftSamples`, `fftSamplingRate`, `fftMin`, `fftMax`).
+- Magnitude is converted to dB; dynamic range is adjustable from the widget toolbar.
+- Eight built-in color maps (Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Grayscale).
+- Mouse wheel to zoom, drag to pan, hover for a frequency/time readout.
+- Y-axis defaults to elapsed time. Set `waterfallYAxis` to another dataset's frame index to drive the Y axis from that dataset's value (order tracking — for example RPM vs. frequency).
+
+**Use cases:**
+- Vibration order tracking on rotating machinery
+- Audio spectrograms and acoustic event analysis
+- RF / SDR band monitoring
+- Capturing transient frequency events (chirps, harmonics)
+
+**Learn more:** [Widget Reference - Waterfall](Widget-Reference.md#waterfall-pro)
+
+---
+
 ### Raw USB
 
 **What it is:** Direct bulk, control, and isochronous USB access via libusb, bypassing OS serial/HID abstraction layers.
@@ -403,7 +425,7 @@ function parse(frame) {
 - ✅ You need raw USB (bulk/isochronous via libusb), HID, or Process I/O.
 - ✅ You're doing industrial automation.
 - ✅ You're doing automotive diagnostics or telemetry.
-- ✅ You need 3D/XY plots or live Image View (camera feeds).
+- ✅ You need 3D/XY plots, Waterfall (spectrogram), or live Image View (camera feeds).
 - ✅ You want MDF4 export and playback.
 - ✅ You need Binary Direct mode for performance.
 - ✅ You want email support.
@@ -610,7 +632,7 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 |---|--------------|-----|
 | **Best for** | Hobbyists, students, open-source | Professionals, businesses, industry |
 | **Protocols** | Basic (Serial, Network, BLE) | Advanced (MQTT, Modbus, CAN, Audio, Raw USB, HID, Process I/O) |
-| **Widgets** | Standard | Standard + 3D Plot, XY Plot, Image View |
+| **Widgets** | Standard | Standard + 3D Plot, XY Plot, Waterfall, Image View |
 | **Performance** | Hex/Base64 decoding | Binary Direct mode |
 | **Export** | CSV | CSV + MDF4 |
 | **Commercial use** | ❌ | ✅ |

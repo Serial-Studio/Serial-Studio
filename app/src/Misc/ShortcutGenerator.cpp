@@ -131,10 +131,13 @@ QString Misc::ShortcutGenerator::iconFileFilter() const
 QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
                                                     bool fullscreen,
                                                     bool actionsPanel,
+                                                    bool fileTransmission,
                                                     bool csvExport,
                                                     bool mdfExport,
                                                     bool sessionExport,
-                                                    bool consoleExport) const
+                                                    bool consoleExport,
+                                                    const QString& taskbarMode,
+                                                    const QStringList& taskbarButtons) const
 {
   QStringList args;
   const QString resolvedProject =
@@ -152,6 +155,9 @@ QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
   if (actionsPanel)
     args << QStringLiteral("--actions-panel");
 
+  if (fileTransmission)
+    args << QStringLiteral("--file-transmission");
+
   if (csvExport)
     args << QStringLiteral("--csv-export");
 
@@ -163,6 +169,16 @@ QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
 
   if (consoleExport)
     args << QStringLiteral("--console-export");
+
+  // Operator-mode taskbar layout
+  const QString tbm = taskbarMode.toLower();
+  if (tbm == QStringLiteral("autohide") || tbm == QStringLiteral("hidden"))
+    args << QStringLiteral("--taskbar-mode") << tbm;
+
+  if (!taskbarButtons.isEmpty()) {
+    args << QStringLiteral("--taskbar-buttons");
+    args << taskbarButtons.join(QLatin1Char(','));
+  }
 
   return args;
 }
@@ -180,10 +196,13 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
                                        const QString& projectFile,
                                        bool fullscreen,
                                        bool actionsPanel,
+                                       bool fileTransmission,
                                        bool csvExport,
                                        bool mdfExport,
                                        bool sessionExport,
-                                       bool consoleExport)
+                                       bool consoleExport,
+                                       const QString& taskbarMode,
+                                       const QStringList& taskbarButtons)
 {
   if (!hasProLicense()) {
     Q_EMIT shortcutFailed(tr("A Pro license is required to generate shortcuts."));
@@ -207,8 +226,16 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
   const QString resolvedProject =
     QUrl(projectFile).isLocalFile() ? QUrl(projectFile).toLocalFile() : projectFile;
 
-  QStringList args = buildArguments(
-    resolvedProject, fullscreen, actionsPanel, csvExport, mdfExport, sessionExport, consoleExport);
+  QStringList args = buildArguments(resolvedProject,
+                                    fullscreen,
+                                    actionsPanel,
+                                    fileTransmission,
+                                    csvExport,
+                                    mdfExport,
+                                    sessionExport,
+                                    consoleExport,
+                                    taskbarMode,
+                                    taskbarButtons);
 
   // Pass shortcut path so a relaunch can offer to delete it if the project is gone
   args << QStringLiteral("--shortcut-path") << resolvedPath;

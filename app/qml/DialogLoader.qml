@@ -26,7 +26,9 @@ Loader {
 
   active: false
 
+  //
   // WebEngineView-hosting dialogs must override this to false on Linux to avoid GPU races.
+  //
   asynchronous: true
 
   //
@@ -66,7 +68,9 @@ Loader {
     }
   }
 
+  //
   // Prefer SmartWindow.displayWindow() so authoring windows restore geometry on reopen.
+  //
   onLoaded: {
     root.dialog = item
     dialog.onClosing.connect(function() {

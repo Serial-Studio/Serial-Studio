@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary features of Serial Studio and is
  * licensed under the Serial Studio Commercial License.
@@ -401,7 +401,7 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
     else if (tag_name == QLatin1String("register")) {
       const auto attrs = xml.attributes();
 
-      // Validate the address attribute — skip the element if missing or malformed
+      // Validate the address attribute -- skip the element if missing or malformed
       bool addrOk              = false;
       const auto addrText      = attrs.value("address").toString();
       const quint16 addrParsed = addrText.toUShort(&addrOk);
@@ -629,12 +629,14 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
 
         // Select widget based on units and range
         const auto u = entry.units.toLower();
+        // code-verify off
         if (u == QLatin1String("%") || (entry.min == 0 && entry.max == 100))
           dataset.widget = QStringLiteral("bar");
         else if (u.contains(QLatin1String("°")) || u == QLatin1String("rpm")
                  || u == QLatin1String("psi") || u == QLatin1String("bar")
                  || u == QLatin1String("kpa") || u == QLatin1String("v") || u == QLatin1String("a"))
           dataset.widget = QStringLiteral("gauge");
+        // code-verify on
 
         dataset.plt = dataset.widget.isEmpty();
       }

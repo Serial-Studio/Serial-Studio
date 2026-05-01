@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary features of Serial Studio and is
  * licensed under the Serial Studio Commercial License.
@@ -32,7 +32,7 @@
 namespace Widgets {
 
 /**
- * @brief Pro waterfall (spectrogram) widget — scrolling time-frequency plot.
+ * @brief Pro waterfall (spectrogram) widget -- scrolling time-frequency plot.
  *
  * Reuses the dataset's FFT settings (samples, sampling rate, min/max) and
  * maintains a history of FFT magnitude rows rendered as a color-mapped image.
@@ -79,6 +79,10 @@ class Waterfall : public QuickPaintedItemCompat {
              READ axisVisible
              WRITE setAxisVisible
              NOTIFY axisVisibleChanged)
+  Q_PROPERTY(bool colorbarVisible
+             READ colorbarVisible
+             WRITE setColorbarVisible
+             NOTIFY colorbarVisibleChanged)
   Q_PROPERTY(double xZoom
              READ xZoom
              NOTIFY viewChanged)
@@ -108,6 +112,7 @@ signals:
   void axisVisibleChanged();
   void cursorEnabledChanged();
   void dynamicRangeChanged();
+  void colorbarVisibleChanged();
 
 public:
   /**
@@ -146,12 +151,10 @@ public:
   [[nodiscard]] double yPan() const noexcept;
   [[nodiscard]] bool atDefaultView() const noexcept;
   [[nodiscard]] bool cursorEnabled() const noexcept;
+  [[nodiscard]] bool colorbarVisible() const noexcept;
 
   Q_INVOKABLE [[nodiscard]] QString colorMapName(int index) const;
   Q_INVOKABLE [[nodiscard]] QColor colorAt(double normalized) const;
-  Q_INVOKABLE void zoomBy(double factor, double anchorX, double anchorY);
-  Q_INVOKABLE void panBy(double normDx, double normDy);
-  Q_INVOKABLE void resetView();
 
   void paint(QPainter* painter) override;
 
@@ -166,6 +169,9 @@ protected:
   void geometryChange(const QRectF& newGeom, const QRectF& oldGeom) override;
 
 public slots:
+  void zoomBy(double factor, double anchorX, double anchorY);
+  void panBy(double normDx, double normDy);
+  void resetView();
   void setRunning(const bool enabled);
   void setColorMap(const int map);
   void setHistorySize(const int size);
@@ -173,6 +179,7 @@ public slots:
   void setMaxDb(const double value);
   void setAxisVisible(const bool enabled);
   void setCursorEnabled(const bool enabled);
+  void setColorbarVisible(const bool enabled);
   void clearHistory();
 
 private slots:
@@ -182,7 +189,7 @@ private slots:
 
 private:
   /**
-   * @brief Result of axis tick generation — sampled values + step + display max.
+   * @brief Result of axis tick generation -- sampled values + step + display max.
    */
   struct AxisTicks {
     std::vector<double> values;
@@ -216,6 +223,7 @@ private:
   int m_writeRow;
   bool m_filledOnce;
   bool m_axisVisible;
+  bool m_colorbarVisible;
 
   double m_minDb;
   double m_maxDb;
@@ -236,7 +244,7 @@ private:
   bool m_cursorHovering;
   QPointF m_cursorPos;
 
-  // Cached axis layer — rebuilt only when zoom/pan/size/theme changes
+  // Cached axis layer -- rebuilt only when zoom/pan/size/theme changes
   bool m_axisDirty;
   QRectF m_cachedPlotRect;
   QImage m_axisLayer;
@@ -248,8 +256,6 @@ private:
   QColor m_textColor;
   QColor m_gridColor;
 
-  // Campbell-mode state — when m_campbellMode is true the Y axis is driven by
-  // an external dataset's value (e.g. RPM) instead of elapsed time.
   bool m_campbellMode;
   int m_yDatasetIndex;
   QString m_yAxisTitle;

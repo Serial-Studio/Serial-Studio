@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -53,6 +53,12 @@ Widgets.SmartWindow {
   property bool firstValidFrame: false
   property bool userInitiatedDisconnect: false
   property alias toolbarVisible: toolbar.toolbarEnabled
+
+  //
+  // Toolbar full-screen restore state
+  //
+  property bool _toolbarAutoHidden: false
+  property bool _toolbarVisibleBeforeFullScreen: true
 
   //
   // Wraps any QML disconnect entry point so device-initiated drops can be told apart.
@@ -186,7 +192,8 @@ Widgets.SmartWindow {
     else if (Cpp_AppState.operationMode == SerialStudio.QuickPlot)
       documentTitle = qsTr("Quick Plot Mode")
 
-    else if (Cpp_AppState.projectFileName.length > 0)
+    // Prefer the project title whenever it's set
+    else if (Cpp_JSON_ProjectModel.title.length > 0)
       documentTitle = Cpp_JSON_ProjectModel.title
 
     else
@@ -208,15 +215,21 @@ Widgets.SmartWindow {
 
     // Defer dialogs and update checks until after window is fully rendered
     Qt.callLater(function() {
-      // Runtime mode is unattended — skip nags entirely.
+      //
+      // Runtime mode is unattended -- skip nags entirely.
+      //
       if (app.runtimeMode)
         return
 
-      // Show donations dialog every 15 launches (GPL builds only — Pro skips it)
+      //
+      // Show donations dialog every 15 launches (GPL builds only -- Pro skips it)
+      //
       if (root.appLaunchCount % 15 == 0 && !Cpp_CommercialBuild)
         donateDialog.activate()
 
+      //
       // Auto-update is opt-out: enabled by default, user can disable in Settings.
+      //
       if (Cpp_Misc_ModuleManager.automaticUpdates && Cpp_UpdaterEnabled)
         Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
     })
@@ -250,6 +263,10 @@ Widgets.SmartWindow {
       setup.show()
       root.showConsole()
       root.firstValidFrame = false
+
+      // Drop out of full-screen on disconnect
+      if (root.visibility === Window.FullScreen)
+        root.showNormal()
     }
   }
 
@@ -286,15 +303,48 @@ Widgets.SmartWindow {
   // Handle platform-specific window initialization code
   //
   onVisibilityChanged: {
-    if (visible) {
+    if (root.visible) {
       const tint = app.runtimeMode
-                   ? Cpp_ThemeManager.colors["dashboard_background"]
-                   : ""
+                 ? Cpp_ThemeManager.colors["dashboard_background"]
+                 : ""
       Cpp_NativeWindow.addWindow(root, tint)
     }
 
     else
       Cpp_NativeWindow.removeWindow(root)
+
+    // Auto-hide the toolbar in full-screen with the dashboard active
+    if (root.visibility === Window.FullScreen && dashboard.visible) {
+      if (!root._toolbarAutoHidden) {
+        root._toolbarVisibleBeforeFullScreen = root.toolbarVisible
+        root._toolbarAutoHidden              = true
+        root.toolbarVisible                  = false
+      }
+    }
+
+    else if (root._toolbarAutoHidden) {
+      root.toolbarVisible    = root._toolbarVisibleBeforeFullScreen
+      root._toolbarAutoHidden = false
+    }
+  }
+
+  //
+  // Returns true if the active focus item consumes Tab
+  //
+  function _focusOwnsTab() {
+    var item = root.activeFocusItem
+    if (!item)
+      return false
+
+    // TextInput / TextEdit primitives behind TextField, TextArea, SpinBox, ComboBox editor
+    if (item instanceof TextInput || item instanceof TextEdit)
+      return true
+
+    // QCodeEditor (QPlainTextEdit wrapped in QQuickWidget)
+    if (item.objectName === "QCodeEditor")
+      return true
+
+    return false
   }
 
   //
@@ -311,6 +361,83 @@ Widgets.SmartWindow {
     enabled: !app.runtimeMode
     sequences: [StandardKey.Open]
     onActivated: Cpp_CSV_Player.openFile()
+  } Shortcut {
+    sequence: "Ctrl+F"
+    enabled: dashboard.visible && Cpp_UI_TaskbarSettings.searchEnabled
+    onActivated: dashboard.focusTaskbarSearch()
+  } Shortcut {
+    sequence: "Ctrl+M"
+    enabled: dashboard.visible
+    context: Qt.ApplicationShortcut
+    onActivated: dashboard.toggleStartMenu()
+  } Shortcut {
+    sequence: "PgDown"
+    enabled: dashboard.visible
+    onActivated: dashboard.cycleWorkspace(+1)
+  } Shortcut {
+    sequence: "PgUp"
+    enabled: dashboard.visible
+    onActivated: dashboard.cycleWorkspace(-1)
+  } Shortcut {
+    enabled: dashboard.visible && !root._focusOwnsTab()
+    sequences: ["Tab"]
+    onActivated: dashboard.cycleWindow(-1)
+  } Shortcut {
+    enabled: dashboard.visible && !root._focusOwnsTab()
+    sequences: ["Backtab", "Shift+Tab"]
+    onActivated: dashboard.cycleWindow(+1)
+  } Shortcut {
+    sequence: "Ctrl+Shift+W"
+    enabled: dashboard.visible
+    onActivated: dashboard.closeActiveWindow()
+  } Shortcut {
+    sequence: "Ctrl+Shift+M"
+    enabled: dashboard.visible
+    onActivated: dashboard.minimizeActiveWindow()
+  } Shortcut {
+    sequence: "Ctrl+Shift+L"
+    enabled: dashboard.visible
+    onActivated: dashboard.toggleAutoLayout()
+  } Shortcut {
+    sequence: "Ctrl+Home"
+    enabled: dashboard.visible
+    onActivated: dashboard.clearActiveWindow()
+  } Shortcut {
+    sequence: "Ctrl+1"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(0)
+  } Shortcut {
+    sequence: "Ctrl+2"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(1)
+  } Shortcut {
+    sequence: "Ctrl+3"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(2)
+  } Shortcut {
+    sequence: "Ctrl+4"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(3)
+  } Shortcut {
+    sequence: "Ctrl+5"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(4)
+  } Shortcut {
+    sequence: "Ctrl+6"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(5)
+  } Shortcut {
+    sequence: "Ctrl+7"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(6)
+  } Shortcut {
+    sequence: "Ctrl+8"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(7)
+  } Shortcut {
+    sequence: "Ctrl+9"
+    enabled: dashboard.visible
+    onActivated: dashboard.jumpToWorkspaceIndex(8)
   }
 
   //
@@ -378,9 +505,9 @@ Widgets.SmartWindow {
 
           Layout.fillWidth: true
           Layout.fillHeight: true
+          Layout.minimumWidth: terminal.implicitWidth
           initialItem: app.runtimeMode ? dashboard : terminal
           Layout.minimumHeight: Math.max(terminal.implicitHeight, setup.implicitHeight)
-          Layout.minimumWidth: terminal.implicitWidth + (setup.visible ? 0 : setup.kMinPaneWidth + 1)
 
           data: [
             Panes.Console {
@@ -429,20 +556,20 @@ Widgets.SmartWindow {
             property int _startWidth: 0
 
             onPressed: (mouse) => {
-              _startX = mouse.x
-              _startWidth = setup.width
-            }
+                         _startX = mouse.x
+                         _startWidth = setup.width
+                       }
 
             onPositionChanged: (mouse) => {
-              if (!pressed)
-                return
+                                 if (!pressed)
+                                 return
 
-              const delta = _startX - mouse.x
-              const maxW = mainLayout.width - stack.Layout.minimumWidth - 1
-              const newW = Math.max(setup.kMinPaneWidth,
-                                    Math.min(_startWidth + delta, maxW))
-              setup.userPaneWidth = newW
-            }
+                                 const delta = _startX - mouse.x
+                                 const maxW = mainLayout.width - stack.Layout.minimumWidth - 1
+                                 const newW = Math.max(setup.kMinPaneWidth,
+                                                       Math.min(_startWidth + delta, maxW))
+                                 setup.userPaneWidth = newW
+                               }
           }
         }
 
@@ -452,12 +579,14 @@ Widgets.SmartWindow {
         Panes.Setup {
           id: setup
 
+          readonly property int kMaxPaneWidth: 720
+
           Layout.fillHeight: true
           visible: !app.runtimeMode
           Layout.rightMargin: setupMargin
           Layout.minimumWidth: app.runtimeMode ? 0 : setup.kMinPaneWidth
+          Layout.maximumWidth: app.runtimeMode ? 0 : setup.kMaxPaneWidth
           Layout.preferredWidth: app.runtimeMode ? 0 : setup.displayedWidth
-          Layout.maximumWidth: mainLayout.width - stack.Layout.minimumWidth - 1
         }
       }
     }
@@ -471,7 +600,7 @@ Widgets.SmartWindow {
     }
 
     //
-    // Runtime-mode "Connecting…" overlay shown until the first valid frame.
+    // Runtime-mode "Connecting..." overlay shown until the first valid frame.
     //
     Rectangle {
       id: connectingOverlay

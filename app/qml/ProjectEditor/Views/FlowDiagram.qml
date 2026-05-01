@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -53,7 +53,9 @@ Item {
   property real contentW: 0
   property real contentH: 0
 
+  //
   // Public interface.
+  //
   function reloadDiagram() {
     layoutDiagram(
       Cpp_JSON_ProjectModel.sourcesForDiagram(),
@@ -68,18 +70,20 @@ Item {
     flickable.contentY = 0
   }
 
-  // Columns L→R: Device | Frame Parser/Actions | Groups | Dataset pills.
+  //
+  // Columns L->R: Device | Frame Parser/Actions | Groups | Dataset pills.
+  //
   function layoutDiagram(sources, groups, actions) {
     const newNodes  = []
     const newArrows = []
 
-    // ── column x positions ────────────────────────────────────────────────
+    // -- column x positions ------------------------------------------------
     const colDev  = pad                               // device column
     const colFP   = pad + nodeW + hGap                // frame-parser / action column
     const colGrp  = colFP  + nodeW + hGap            // group column
     const colChip = colGrp + nodeW + hGap            // dataset column
 
-    // ── slot height helper ─────────────────────────────────────────────────
+    // -- slot height helper -------------------------------------------------
     function slotH(dsCount) {
       if (dsCount === 0) return nodeH
       return Math.max(nodeH, dsCount * (chipH + vGap) - vGap)
@@ -114,7 +118,7 @@ Item {
     for (const sid in srcTotalH)
       srcTotalH[sid] = Math.max((srcTotalH[sid] || 0) - vGap, nodeH)
 
-    // sources stack vertically — compute starting y for each source's block
+    // sources stack vertically -- compute starting y for each source's block
     const srcBlockY = {}
     let   nextBlockY = pad
     for (const src of srcList) {
@@ -123,7 +127,7 @@ Item {
       nextBlockY += srcTotalH[src.sourceId] + vGap * 3   // extra gap between sources
     }
 
-    // ── place device + frame-parser nodes ─────────────────────────────────
+    // -- place device + frame-parser nodes ---------------------------------
     const fpNodeY = {}   // frame-parser card y per source (for arrow origins)
 
     for (const src of srcList) {
@@ -133,7 +137,9 @@ Item {
 
       fpNodeY[sid] = midY
 
+      //
       // Frame-parser card (always shown)
+      //
       newNodes.push({
         type:      "frameparser",
         sourceId:  sid,
@@ -148,7 +154,9 @@ Item {
         icon:      "qrc:/icons/project-editor/treeview/code.svg"
       })
 
+      //
       // Device card (always shown)
+      //
       const devTitle = src.title || qsTr("Device %1").arg(sid + 1)
       newNodes.push({
         type:      "source",
@@ -167,7 +175,9 @@ Item {
           : ""
       })
 
-      // Arrow: device → frame-parser
+      //
+      // Arrow: device -> frame-parser
+      //
       newArrows.push({
         x1: colDev + nodeW, y1: midY + nodeH / 2,
         x2: colFP,          y2: midY + nodeH / 2,
@@ -176,13 +186,15 @@ Item {
 
     }
 
-    // ── place group + dataset/output nodes ─────────────────────────────────
+    // -- place group + dataset/output nodes ---------------------------------
     for (const grp of groups) {
       const sid       = grp.sourceId || 0
       const isOutput  = grp.groupType === SerialStudio.GroupOutput
       const dsList    = grp.datasets || []
 
+      //
       // Build pills list: datasets for viz groups, output widget names for output groups
+      //
       const pills = []
       if (isOutput) {
         const owList = grp.outputWidgets || []
@@ -210,7 +222,9 @@ Item {
       const slotTop = groupY[sid] !== undefined ? groupY[sid] : pad
       const cardY   = slotTop + (sh - nodeH) / 2
 
+      //
       // Group card
+      //
       newNodes.push({
         type:      "group",
         sourceId:  sid,
@@ -226,7 +240,9 @@ Item {
         badge:     ""
       })
 
-      // Arrow: frame-parser → group
+      //
+      // Arrow: frame-parser -> group
+      //
       const fpMidY = fpNodeY[sid] !== undefined
         ? fpNodeY[sid] + nodeH / 2
         : cardY + nodeH / 2
@@ -236,7 +252,9 @@ Item {
         dashed: false
       })
 
+      //
       // Pills (datasets or output widgets)
+      //
       if (pillCount > 0) {
         const blockH   = pillCount * chipH + (pillCount - 1) * vGap
         const blockTop = slotTop + (sh - blockH) / 2
@@ -261,7 +279,9 @@ Item {
             badge:     ""
           })
 
-          // Arrow: group → pill
+          //
+          // Arrow: group -> pill
+          //
           newArrows.push({
             x1: colGrp + nodeW, y1: cardY + nodeH / 2,
             x2: colChip,        y2: chipY + chipH / 2,
@@ -270,14 +290,20 @@ Item {
         }
       }
 
+      //
       // Advance cursor for this source
+      //
       if (groupY[sid] !== undefined)
         groupY[sid] = slotTop + sh + vGap
     }
 
+    //
     // Action cards stack below the frame-parser column with dashed arrows to the device.
+    //
     if (actions.length > 0) {
+      //
       // Find the y start for actions: below all content so far
+      //
       let maxGroupY = pad
       for (const sid in groupY)
         maxGroupY = Math.max(maxGroupY, groupY[sid])
@@ -304,7 +330,9 @@ Item {
           badge:     ""
         })
 
+        //
         // Dashed arrow from action to the target device (TX direction)
+        //
         const devMidY = fpNodeY[sid] !== undefined
           ? fpNodeY[sid] + nodeH / 2
           : pad + nodeH / 2
@@ -316,7 +344,9 @@ Item {
       }
     }
 
-    // ── content bounds ─────────────────────────────────────────────────────
+    //
+    // -- content bounds -----------------------------------------------------
+    //
     let maxX = 0, maxY = 0
     for (const n of newNodes) {
       maxX = Math.max(maxX, n.x + n.w)
@@ -410,7 +440,9 @@ Item {
     ScrollBar.vertical:   ScrollBar { policy: ScrollBar.AsNeeded }
     ScrollBar.horizontal: ScrollBar { policy: ScrollBar.AsNeeded }
 
-    // Ctrl+Wheel → zoom toward cursor
+    //
+    // Ctrl+Wheel -> zoom toward cursor
+    //
     WheelHandler {
       acceptedModifiers: Qt.ControlModifier
       onWheel: (ev) => {
@@ -426,7 +458,9 @@ Item {
       }
     }
 
-    // Plain wheel → vertical scroll; Shift+Wheel → horizontal
+    //
+    // Plain wheel -> vertical scroll; Shift+Wheel -> horizontal
+    //
     WheelHandler {
       acceptedModifiers: Qt.NoModifier
       onWheel: (ev) => {
@@ -441,7 +475,9 @@ Item {
       }
     }
 
-    // Middle-button drag → pan
+    //
+    // Middle-button drag -> pan
+    //
     MouseArea {
       property real lx: 0
       property real ly: 0
@@ -456,12 +492,16 @@ Item {
       }
     }
 
-    // ── Scaled content item ──────────────────────────────────────────────
+    //
+    // -- Scaled content item ----------------------------------------------
+    //
     Item {
       width:  root.contentW * root.zoom
       height: root.contentH * root.zoom
 
+      //
       // Arrow canvas
+      //
       Canvas {
         id: canvas
 
@@ -489,10 +529,14 @@ Item {
               ctx.setLineDash([])
             }
 
+            //
             // Arrowhead length
+            //
             const hl  = 7 * z
 
+            //
             // End curve at the arrowhead's back so the tip touches the target cleanly.
+            //
             const x2a = x2 - hl
             const mx  = (x1 + x2a) / 2
 
@@ -501,7 +545,9 @@ Item {
             ctx.bezierCurveTo(mx, y1, mx, y2, x2a, y2)
             ctx.stroke()
 
-            // Arrowhead — tangent is always horizontal
+            //
+            // Arrowhead -- tangent is always horizontal
+            //
             const sin = Math.sin(Math.PI / 6)
             ctx.setLineDash([])
             ctx.beginPath()
@@ -523,7 +569,9 @@ Item {
         onHeightChanged: requestPaint()
       }
 
+      //
       // Node repeater
+      //
       Repeater {
         model: root.nodes
 
@@ -543,7 +591,9 @@ Item {
           property bool isDataset: modelData.type === "dataset"
           property bool isFP:      modelData.type === "frameparser"
 
-          // ── Pill (dataset / output widget) ───────────────────────────
+          //
+          // -- Pill (dataset / output widget) ---------------------------
+          //
           Rectangle {
             visible: nd.isPill
             anchors.fill: parent
@@ -584,7 +634,9 @@ Item {
             }
           }
 
-          // ── Card (source / group / frame-parser) ─────────────────────
+          //
+          // -- Card (source / group / frame-parser) ---------------------
+          //
           Rectangle {
             visible: !nd.isPill
             anchors.fill: parent
@@ -637,7 +689,9 @@ Item {
               }
             }
 
+            //
             // Badge [A] [B] on source cards
+            //
             Text {
               visible: nd.isSource && (modelData.badge || "") !== ""
               anchors { right: parent.right; bottom: parent.bottom; margins: 4 * root.zoom }
@@ -685,7 +739,9 @@ Item {
     }
   }
 
+  //
   // Empty-state placeholder.
+  //
   Column {
     spacing: 8
     anchors.centerIn: parent

@@ -159,8 +159,8 @@ int DataModel::FrameParser::detectTemplate(const QString& code) const
   for (int i = 0; i < m_templateFiles.size(); ++i) {
     const auto& file = m_templateFiles[i];
 
-    const auto luaPath = templateResourcePath(
-      QStringLiteral(":/scripts/parser/lua"), file, QStringLiteral(".lua"));
+    const auto luaPath =
+      templateResourcePath(QStringLiteral(":/scripts/parser/lua"), file, QStringLiteral(".lua"));
     const QString luaCode = readTextResource(luaPath).trimmed();
     if (!luaCode.isEmpty() && luaCode == trimmed)
       return i;

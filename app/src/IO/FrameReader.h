@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -48,7 +48,7 @@ enum class ValidationStatus {
  * @brief Frame extractor for detecting and processing streamed data.
  *
  * Runs on the main thread. Configuration is immutable for the FrameReader's
- * lifetime — callers must recreate the instance via
+ * lifetime -- callers must recreate the instance via
  * ConnectionManager::resetFrameReader() or DeviceManager::reconfigure() to
  * apply new settings. Do NOT add mutexes.
  */
@@ -110,6 +110,6 @@ private:
   SerialStudio::FrameDetection m_frameDetectionMode;
   CircularBuffer<QByteArray, char> m_circularBuffer;
   std::deque<PendingChunk> m_pendingChunks;
-  moodycamel::ReaderWriterQueue<IO::CapturedDataPtr> m_queue{65536};
+  moodycamel::ReaderWriterQueue<IO::CapturedDataPtr> m_queue;
 };
 }  // namespace IO

@@ -349,6 +349,7 @@ Plotly Dash is a Python framework for building web-based analytical dashboards.
 | **Gauges**                     | Yes           | No              | Manual      | Yes      | Manual   | Yes       | Yes       |
 | **GPS maps**                   | Yes           | No              | Manual      | Toolbox  | Manual   | Partial   | Plugin    |
 | **FFT spectrum**               | Pro           | No              | Manual      | Yes      | Manual   | Yes       | Partial   |
+| **Waterfall (spectrogram)**    | Pro           | No              | Manual      | Yes      | Manual   | Yes       | Partial   |
 | **3D visualization**           | Pro           | No              | Yes         | Yes      | Yes      | Yes       | Partial   |
 | **Live image/camera stream**   | Pro           | No              | Manual      | Yes      | Manual   | Yes       | Plugin    |
 | **Custom parsing**             | JS            | No              | Yes         | Yes      | Yes      | Yes       | Partial   |

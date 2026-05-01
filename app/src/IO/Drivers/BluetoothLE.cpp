@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -747,7 +747,7 @@ void IO::Drivers::BluetoothLE::initializeSharedState()
 }
 
 /**
- * @brief Static callback — registers a discovered BLE device in the shared list.
+ * @brief Static callback -- registers a discovered BLE device in the shared list.
  */
 void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& device)
 {
@@ -791,7 +791,7 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& de
 }
 
 /**
- * @brief Static callback — notifies all instances of a discovery error.
+ * @brief Static callback -- notifies all instances of a discovery error.
  */
 void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error e)
 {
@@ -819,7 +819,7 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::
 }
 
 /**
- * @brief Static callback — handles Bluetooth adapter power state changes.
+ * @brief Static callback -- handles Bluetooth adapter power state changes.
  */
 void IO::Drivers::BluetoothLE::onHostModeStateChanged(QBluetoothLocalDevice::HostMode state)
 {
@@ -834,7 +834,7 @@ void IO::Drivers::BluetoothLE::onHostModeStateChanged(QBluetoothLocalDevice::Hos
   for (auto* inst : std::as_const(s_instances))
     Q_EMIT inst->adapterAvailabilityChanged();
 
-  // Adapter lost — close all connections and clear shared device list
+  // Adapter lost -- close all connections and clear shared device list
   if (!s_adapterAvailable) {
     if (s_discoveryAgent && s_discoveryAgent->isActive())
       s_discoveryAgent->stop();
@@ -914,7 +914,7 @@ bool IO::Drivers::BluetoothLE::selectByIdentifier(const QJsonObject& id)
     return true;
   }
 
-  // Device not found yet — save for deferred matching and start discovery
+  // Device not found yet -- save for deferred matching and start discovery
   m_pendingIdentifier = id;
   if (!s_discoveryAgent || !s_discoveryAgent->isActive())
     startDiscovery();

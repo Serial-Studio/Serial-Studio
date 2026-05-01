@@ -57,8 +57,8 @@ SmartDialog {
 
         Image {
           sourceSize: Qt.size(120, 120)
-          Layout.alignment: Qt.AlignVCenter
           source: "qrc:/images/buy-qr.svg"
+          Layout.alignment: Qt.AlignVCenter
 
           Rectangle {
             border.width: 2

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -496,7 +496,7 @@ struct DownsampleWorkspace {
    *
    * @post
    *  - cnt[c] is zero for all c
-   *  - minY[c] is +inf and maxY[c] is −inf for all c
+   *  - minY[c] is +inf and maxY[c] is -inf for all c
    *  - index arrays keep their size C and will be assigned by the caller
    */
   void reset(std::size_t C)

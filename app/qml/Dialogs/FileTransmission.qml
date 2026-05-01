@@ -488,7 +488,9 @@ SmartDialog {
               radius: 2
             }
 
+            //
             // Auto-scroll to bottom
+            //
             onTextChanged: {
               _logArea.cursorPosition = _logArea.length
             }

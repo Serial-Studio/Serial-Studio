@@ -109,11 +109,11 @@ public slots:
   void registerWindow(const int id, QQuickItem* item);
 
 private:
-  int getIdForWindow(QQuickItem* item) const;
-  int determineNewIndexFromMousePos(const QPoint& pos) const;
+  [[nodiscard]] int getIdForWindow(QQuickItem* item) const;
+  [[nodiscard]] int determineNewIndexFromMousePos(const QPoint& pos) const;
 
-  QRect extractGeometry(QQuickItem* item) const;
-  ResizeEdge detectResizeEdge(QQuickItem* target) const;
+  [[nodiscard]] QRect extractGeometry(QQuickItem* item) const;
+  [[nodiscard]] ResizeEdge detectResizeEdge(QQuickItem* target) const;
   QQuickItem* getWindow(const int x, const int y) const;
 
 protected:

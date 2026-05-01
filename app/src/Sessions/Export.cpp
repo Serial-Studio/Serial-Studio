@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -114,7 +114,7 @@ void Sessions::ExportWorker::processData()
   if (!consumerEnabled())
     return;
 
-  // Console-only has no frames — open schema-less DB when raw bytes arrive
+  // Console-only has no frames -- open schema-less DB when raw bytes arrive
   if (!m_dbOpen
       && m_operationMode->load(std::memory_order_relaxed)
            == static_cast<int>(SerialStudio::ConsoleOnly)) {
@@ -216,10 +216,10 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
   // Create every table the session format expects
   createSchema(pragma);
 
-  // Insert the new session row — abandon the open on failure
+  // Insert the new session row -- abandon the open on failure
   insertSession(frame, dt);
   if (m_sessionId < 0) [[unlikely]] {
-    qWarning() << "[SQLite] Aborting database open — session row was not inserted";
+    qWarning() << "[SQLite] Aborting database open -- session row was not inserted";
     m_db.close();
     m_db = QSqlDatabase();
     QSqlDatabase::removeDatabase(connName);
@@ -277,25 +277,63 @@ void Sessions::ExportWorker::insertSession(const DataModel::Frame& frame, const 
  */
 void Sessions::ExportWorker::writeColumnDefs(const DataModel::Frame& frame)
 {
-  m_schema = DataModel::buildExportSchema(frame);
+  // Build the schema from the full project snapshot (per-source frames are partial)
+  DataModel::Frame projectFrame;
+  bool haveProjectFrame = false;
+  {
+    QMutexLocker locker(m_projectSnapshotMutex);
+    if (!m_projectSnapshot->isEmpty()) {
+      const auto doc = QJsonDocument::fromJson(*m_projectSnapshot);
+      if (doc.isObject())
+        haveProjectFrame = DataModel::read(projectFrame, doc.object());
+    }
+  }
+
+  m_schema = haveProjectFrame ? DataModel::buildExportSchema(projectFrame)
+                              : DataModel::buildExportSchema(frame);
+
+  if (m_schema.columns.empty()) {
+    qWarning() << "[Sessions::Export] writeColumnDefs: schema has 0 columns --"
+               << "frame has" << frame.groups.size() << "groups, project snapshot "
+               << (haveProjectFrame ? "available" : "unavailable")
+               << ". Check that the project's groups are populated before export starts.";
+    return;
+  }
 
   QSqlQuery colQuery(m_db);
-  colQuery.prepare(
-    "INSERT INTO columns (session_id, unique_id, group_title, title, units, widget, is_virtual) "
-    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+  if (!colQuery.prepare("INSERT INTO columns (session_id, unique_id, source_id, source_title, "
+                        "                     group_title, title, units, widget, is_virtual) "
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+    qWarning() << "[Sessions::Export] columns INSERT prepare failed:"
+               << colQuery.lastError().text();
+    return;
+  }
 
   m_db.transaction();
+  int written = 0;
   for (const auto& col : m_schema.columns) {
     colQuery.bindValue(0, m_sessionId);
     colQuery.bindValue(1, col.uniqueId);
-    colQuery.bindValue(2, col.groupTitle);
-    colQuery.bindValue(3, col.title);
-    colQuery.bindValue(4, col.units);
-    colQuery.bindValue(5, col.widget);
-    colQuery.bindValue(6, col.isVirtual ? 1 : 0);
-    colQuery.exec();
+    colQuery.bindValue(2, col.sourceId);
+    colQuery.bindValue(3, col.sourceTitle);
+    colQuery.bindValue(4, col.groupTitle);
+    colQuery.bindValue(5, col.title);
+    colQuery.bindValue(6, col.units);
+    colQuery.bindValue(7, col.widget);
+    colQuery.bindValue(8, col.isVirtual ? 1 : 0);
+    if (!colQuery.exec()) {
+      qWarning() << "[Sessions::Export] columns INSERT failed for uid" << col.uniqueId << ":"
+                 << colQuery.lastError().text();
+      continue;
+    }
+    ++written;
   }
   m_db.commit();
+
+  if (written == 0) {
+    qWarning() << "[Sessions::Export] writeColumnDefs: 0 rows inserted out of"
+               << m_schema.columns.size() << "-- report will be empty.";
+  }
 }
 
 /**
@@ -353,7 +391,7 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
     return json;
   }
 
-  // QuickPlot fallback — synthesise a minimal project from the frame
+  // QuickPlot fallback -- synthesise a minimal project from the frame
   QJsonObject json;
   json.insert(Keys::Title, frame.title);
 

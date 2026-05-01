@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QSet>
 #include <QTimer>
 #include <QtMath>
 
@@ -314,7 +315,7 @@ void CSV::Player::parseCsvRows(QTextStream& stream)
   }
 
   if (m_csvData.size() >= kMaxCsvRows) [[unlikely]]
-    qWarning() << "[CSV::Player] Row limit reached:" << kMaxCsvRows << "— file may be truncated";
+    qWarning() << "[CSV::Player] Row limit reached:" << kMaxCsvRows << "-- file may be truncated";
 }
 
 /**
@@ -353,7 +354,7 @@ void CSV::Player::initializeTimestamps()
     return;
   }
 
-  // No recognized timestamp — prompt user for a strategy
+  // No recognized timestamp -- prompt user for a strategy
   m_useHighPrecisionTimestamps = false;
   m_timestampCache.clear();
 }
@@ -919,25 +920,56 @@ void CSV::Player::buildMultiSourceMapping()
   // Clear previous mapping before rebuilding
   m_columnToSource.clear();
   m_sourceColumnCount.clear();
+  m_sourceColumnsByIndex.clear();
 
   const auto& groups = DataModel::ProjectModel::instance().groups();
 
-  // Collect (uniqueId, sourceId) pairs for all datasets
-  QVector<QPair<int, int>> uidSourcePairs;
+  // Per-column metadata (uid, sourceId, parserIndex)
+  struct ColMeta {
+    int uid;
+    int sourceId;
+    int parserIndex;
+  };
+
+  QVector<ColMeta> cols;
   for (const auto& g : groups)
     for (const auto& d : g.datasets)
-      uidSourcePairs.append(qMakePair(d.uniqueId, d.sourceId));
+      cols.append({DataModel::dataset_unique_id(g, d), g.sourceId, d.index});
 
-  // Sort by uniqueId to match export column order
-  std::sort(uidSourcePairs.begin(), uidSourcePairs.end(), [](const auto& a, const auto& b) {
-    return a.first < b.first;
-  });
+  // Sort by uniqueId to match the file's column layout produced by the export
+  std::sort(
+    cols.begin(), cols.end(), [](const ColMeta& a, const ColMeta& b) { return a.uid < b.uid; });
 
-  // Map column index (0-based, excluding timestamp) to sourceId
-  for (int col = 0; col < uidSourcePairs.size(); ++col) {
-    const int srcId       = uidSourcePairs[col].second;
-    m_columnToSource[col] = srcId;
-    m_sourceColumnCount[srcId]++;
+  // Walk the sorted layout
+  for (int col = 0; col < cols.size(); ++col) {
+    const auto& m         = cols[col];
+    m_columnToSource[col] = m.sourceId;
+    m_sourceColumnCount[m.sourceId]++;
+  }
+
+  // For each source, build the channel array the parser expects (parserIndex slots, sparse-aware)
+  QMap<int, QMap<int, int>> indexToFileCol;
+  QMap<int, int> sourceMaxIndex;
+  for (int col = 0; col < cols.size(); ++col) {
+    const auto& m = cols[col];
+    if (m.parserIndex < 1)
+      continue;
+
+    auto& slotMap = indexToFileCol[m.sourceId];
+    if (!slotMap.contains(m.parserIndex))
+      slotMap.insert(m.parserIndex, col);
+
+    sourceMaxIndex[m.sourceId] = std::max(sourceMaxIndex.value(m.sourceId, 0), m.parserIndex);
+  }
+
+  for (auto it = indexToFileCol.constBegin(); it != indexToFileCol.constEnd(); ++it) {
+    const int srcId    = it.key();
+    const int maxIndex = sourceMaxIndex.value(srcId, 0);
+    QVector<int> ordered(maxIndex, -1);
+    for (auto sit = it.value().constBegin(); sit != it.value().constEnd(); ++sit)
+      ordered[sit.key() - 1] = sit.value();
+
+    m_sourceColumnsByIndex[srcId] = std::move(ordered);
   }
 
   m_multiSource = !m_columnToSource.isEmpty() && m_sourceColumnCount.size() > 1;
@@ -958,22 +990,37 @@ void CSV::Player::injectFrame(const QByteArray& frame)
     return;
   }
 
-  // Multi-source: split CSV columns by source
+  // Multi-source: split CSV columns by source and reorder into parser-index order
   const auto fields = QString::fromUtf8(frame).trimmed().split(',');
 
   QMap<int, QStringList> sourceFields;
-  for (int col = 0; col < fields.size(); ++col) {
-    auto it = m_columnToSource.find(col);
-    if (it == m_columnToSource.end())
-      continue;
-
-    sourceFields[it.value()].append(fields[col]);
+  QSet<int> sourcesPresent;
+  for (auto it = m_sourceColumnsByIndex.constBegin(); it != m_sourceColumnsByIndex.constEnd();
+       ++it) {
+    const int srcId         = it.key();
+    const auto& orderedCols = it.value();
+    QStringList orderedCells;
+    orderedCells.reserve(orderedCols.size());
+    for (int col : orderedCols) {
+      const QString cell = (col >= 0 && col < fields.size()) ? fields[col] : QString();
+      orderedCells.append(cell);
+      if (!cell.isEmpty())
+        sourcesPresent.insert(srcId);
+    }
+    sourceFields.insert(srcId, std::move(orderedCells));
   }
 
-  // Build per-source payloads
+  // Build per-source payloads, but only for sources that contributed data
   QMap<int, QByteArray> sourcePayloads;
-  for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it)
+  for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it) {
+    if (!sourcesPresent.contains(it.key()))
+      continue;
+
     sourcePayloads[it.key()] = it.value().join(',').toUtf8() + '\n';
+  }
+
+  if (sourcePayloads.isEmpty())
+    return;
 
   IO::ConnectionManager::instance().processMultiSourcePayload(frame, sourcePayloads);
 }

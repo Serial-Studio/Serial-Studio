@@ -68,7 +68,7 @@ public:
   ~ExportWorker() override;
 
   void closeResources() override;
-  bool isResourceOpen() const override;
+  [[nodiscard]] bool isResourceOpen() const override;
 
 protected:
   void processItems(const std::vector<ExportDataPtr>& items) override;

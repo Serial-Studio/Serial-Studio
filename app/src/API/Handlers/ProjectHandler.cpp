@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -162,7 +162,7 @@ void API::Handlers::ProjectHandler::registerCommands()
                            emptySchema,
                            &groupDuplicate);
 
-  // project.group.select — set the current group for delete/duplicate.
+  // project.group.select -- set the current group for delete/duplicate.
   {
     QJsonObject props;
     props[QStringLiteral("groupId")] = QJsonObject{
@@ -227,7 +227,7 @@ void API::Handlers::ProjectHandler::registerCommands()
                              &datasetSetOption);
   }
 
-  // project.dataset.setVirtual — gate the frame-index field
+  // project.dataset.setVirtual -- gate the frame-index field
   {
     QJsonObject props;
     props[Keys::GroupId] = QJsonObject{
@@ -258,7 +258,7 @@ void API::Handlers::ProjectHandler::registerCommands()
       &datasetSetVirtual);
   }
 
-  // project.dataset.setTransformCode — set Lua/JS transform source
+  // project.dataset.setTransformCode -- set Lua/JS transform source
   {
     QJsonObject props;
     props[Keys::GroupId] = QJsonObject{
@@ -338,7 +338,7 @@ void API::Handlers::ProjectHandler::registerCommands()
       {       QStringLiteral("type"),                               QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Frame parser script code (JS or Lua)")}
     };
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),                  QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
     };
@@ -368,7 +368,7 @@ void API::Handlers::ProjectHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),                  QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
     };
@@ -387,7 +387,7 @@ void API::Handlers::ProjectHandler::registerCommands()
       {       QStringLiteral("type"),                                  QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Script language: 0 = JavaScript, 1 = Lua")}
     };
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),                       QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source identifier (default 0)")}
     };
@@ -404,7 +404,7 @@ void API::Handlers::ProjectHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),                       QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source identifier (default 0)")}
     };
@@ -420,7 +420,7 @@ void API::Handlers::ProjectHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),                  QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
     };
@@ -879,7 +879,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetVirtual(const QStr
       ErrorCode::InvalidParam,
       QStringLiteral("Dataset id not found in group: %1/%2").arg(groupId).arg(datasetId));
 
-  // Apply the flag — updateDataset validates, emits signals, and rebuilds the tree
+  // Apply the flag -- updateDataset validates, emits signals, and rebuilds the tree
   DataModel::Dataset updated = *dit;
   updated.virtual_           = isVirt;
   pm.updateDataset(groupId, datasetId, updated, true);
@@ -1061,7 +1061,7 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDuplicate(const 
  * "language" is absent the legacy fire-and-forget behaviour is preserved
  * for backwards compatibility with existing clients.
  *
- * @param params Requires "code" (string). Optional "sourceId" (int, default 0),
+ * @param params Requires "code" (string). Optional Keys::SourceId (int, default 0),
  *               "language" (int: 0 = JavaScript, 1 = Lua).
  */
 API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString& id,
@@ -1075,9 +1075,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
 
   // Resolve code and sourceId, validate bounds
   const QString code = params.value(QStringLiteral("code")).toString();
-  const int sourceId = params.contains(QStringLiteral("sourceId"))
-                       ? params.value(QStringLiteral("sourceId")).toInt()
-                       : 0;
+  const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
   auto& model        = DataModel::ProjectModel::instance();
   const int srcCount = static_cast<int>(model.sources().size());
 
@@ -1085,7 +1083,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Invalid sourceId"));
 
-  // Optional language flip — validate under the new engine and roll back if invalid.
+  // Optional language flip -- validate under the new engine and roll back if invalid.
   const bool hasLanguage = params.contains(QStringLiteral("language"));
   int savedLanguage      = 0;
   if (hasLanguage) {
@@ -1124,28 +1122,26 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
     }
   }
 
-  // Persist: source 0 → setFrameParserCode; source >0 → updateSourceFrameParser.
+  // Persist: source 0 -> setFrameParserCode; source >0 -> updateSourceFrameParser.
   if (sourceId == 0)
     model.setFrameParserCode(code);
   else
     model.updateSourceFrameParser(sourceId, code);
 
   QJsonObject result;
-  result[QStringLiteral("sourceId")]   = sourceId;
+  result[Keys::SourceId]               = sourceId;
   result[QStringLiteral("codeLength")] = code.length();
   return CommandResponse::makeSuccess(id, result);
 }
 
 /**
  * @brief Get frame parser code for a source.
- * @param params Optional "sourceId" (int, default 0).
+ * @param params Optional Keys::SourceId (int, default 0).
  */
 API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString& id,
                                                                   const QJsonObject& params)
 {
-  const int sourceId = params.contains(QStringLiteral("sourceId"))
-                       ? params.value(QStringLiteral("sourceId")).toInt()
-                       : 0;
+  const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
   const auto& model  = DataModel::ProjectModel::instance();
   const int srcCount = static_cast<int>(model.sources().size());
 
@@ -1157,7 +1153,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString&
     sourceId == 0 ? model.frameParserCode() : model.sources()[sourceId].frameParserCode;
 
   QJsonObject result;
-  result[QStringLiteral("sourceId")]   = sourceId;
+  result[Keys::SourceId]               = sourceId;
   result[QStringLiteral("code")]       = code;
   result[QStringLiteral("codeLength")] = code.length();
   return CommandResponse::makeSuccess(id, result);
@@ -1167,7 +1163,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString&
  * @brief Set the scripting language for a frame parser source.
  *
  * @param params Requires "language" (int: 0 = JavaScript, 1 = Lua).
- *               Optional "sourceId" (int, default 0).
+ *               Optional Keys::SourceId (int, default 0).
  */
 API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QString& id,
                                                                       const QJsonObject& params)
@@ -1178,9 +1174,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: language"));
 
   // Resolve sourceId (logical, default 0)
-  const int sourceId = params.contains(QStringLiteral("sourceId"))
-                       ? params.value(QStringLiteral("sourceId")).toInt()
-                       : 0;
+  const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
 
   // Validate language value against the SerialStudio::ScriptLanguage enum
   const int language = params.value(QStringLiteral("language")).toInt();
@@ -1209,7 +1203,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
   DataModel::FrameParser::instance().loadDefaultTemplate(sourceId, true);
 
   QJsonObject result;
-  result[QStringLiteral("sourceId")] = sourceId;
+  result[Keys::SourceId]             = sourceId;
   result[QStringLiteral("language")] = language;
   return CommandResponse::makeSuccess(id, result);
 }
@@ -1217,15 +1211,13 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
 /**
  * @brief Get the scripting language for a frame parser source.
  *
- * @param params Optional "sourceId" (int, default 0).
+ * @param params Optional Keys::SourceId (int, default 0).
  */
 API::CommandResponse API::Handlers::ProjectHandler::parserGetLanguage(const QString& id,
                                                                       const QJsonObject& params)
 {
   // Resolve sourceId (logical, default 0)
-  const int sourceId = params.contains(QStringLiteral("sourceId"))
-                       ? params.value(QStringLiteral("sourceId")).toInt()
-                       : 0;
+  const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
 
   // Verify the source exists before reporting a language
   const auto& model   = DataModel::ProjectModel::instance();
@@ -1241,7 +1233,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetLanguage(const QStr
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
 
   QJsonObject result;
-  result[QStringLiteral("sourceId")] = sourceId;
+  result[Keys::SourceId]             = sourceId;
   result[QStringLiteral("language")] = it->frameParserLanguage;
   return CommandResponse::makeSuccess(id, result);
 }
@@ -1346,7 +1338,7 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
       id, ErrorCode::InvalidParam, QStringLiteral("config cannot be empty"));
   }
 
-  // In-memory load — no temp file, no file association
+  // In-memory load -- no temp file, no file association
   auto& project = DataModel::ProjectModel::instance();
   project.setSuppressMessageBoxes(true);
   const bool ok = project.loadFromJsonDocument(QJsonDocument(config));
@@ -1371,7 +1363,7 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
 /**
  * @brief Configure frame parser settings for a specific source.
  *
- * Optional "sourceId" (int, default 0) selects which source to configure.
+ * Optional Keys::SourceId (int, default 0) selects which source to configure.
  * When sourceId == 0 the top-level ProjectModel setters are used so that
  * the ConnectionManager's FrameReader is updated immediately. For sourceId > 0
  * the Source struct is updated directly via updateSource().
@@ -1387,9 +1379,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
   auto& manager = IO::ConnectionManager::instance();
   bool updated  = false;
 
-  const int sourceId = params.contains(QStringLiteral("sourceId"))
-                       ? params.value(QStringLiteral("sourceId")).toInt()
-                       : 0;
+  const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
   const int srcCount = static_cast<int>(model.sources().size());
 
   if (sourceId < 0 || (!model.sources().empty() && sourceId >= srcCount))
@@ -1405,7 +1395,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
   }
 
   if (sourceId == 0) {
-    // Route through top-level setters — they sync into source[0] and update the FrameReader.
+    // Route through top-level setters -- they sync into source[0] and update the FrameReader.
     if (params.contains(QStringLiteral("startSequence"))) {
       const QString start = params.value(QStringLiteral("startSequence")).toString();
       manager.setStartSequence(start.toUtf8());
@@ -1468,8 +1458,8 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
     manager.resetFrameReader();
 
   QJsonObject result;
-  result[QStringLiteral("updated")]  = updated;
-  result[QStringLiteral("sourceId")] = sourceId;
+  result[QStringLiteral("updated")] = updated;
+  result[Keys::SourceId]            = sourceId;
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -1491,7 +1481,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
   for (const auto& f : cfg.finishSequences)
     endArr.append(QString::fromUtf8(f));
 
-  // Primary (source[0]) delimiters as singular scalars — single-source clients
+  // Primary (source[0]) delimiters as singular scalars -- single-source clients
   const QString primaryStart =
     cfg.startSequences.isEmpty() ? QString() : QString::fromUtf8(cfg.startSequences.first());
   const QString primaryEnd =

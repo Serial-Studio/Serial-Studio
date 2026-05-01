@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary features of Serial Studio and is
  * licensed under the Serial Studio Commercial License.
@@ -79,7 +79,7 @@ QString joinForCmdLine(const QStringList& args, std::function<QString(const QStr
  * Uses SHA-1(absolute shortcut path) truncated to 16 hex chars so each .lnk
  * pins under its own taskbar group, even when several shortcuts target the
  * same project file. Must stay byte-identical to shortcutIdentityHash() in
- * main.cpp — both sides need to derive the same string from the same path.
+ * main.cpp -- both sides need to derive the same string from the same path.
  */
 QString shortcutAumidFor(const QString& shortcutPath)
 {
@@ -136,7 +136,7 @@ bool Misc::ShortcutGenerator::writeWindowsLnk(const QString& outputPath,
   link->SetDescription(reinterpret_cast<LPCWSTR>(title.utf16()));
   link->SetIconLocation(reinterpret_cast<LPCWSTR>(resolved_icon.utf16()), 0);
 
-  // Per-shortcut AppUserModelID — derived from path, recomputed in main.cpp via --shortcut-path
+  // Per-shortcut AppUserModelID -- derived from path, recomputed in main.cpp via --shortcut-path
   IPropertyStore* propStore = nullptr;
   if (SUCCEEDED(link->QueryInterface(IID_IPropertyStore, reinterpret_cast<void**>(&propStore)))
       && propStore != nullptr) {

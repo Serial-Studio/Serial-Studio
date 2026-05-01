@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -30,7 +30,7 @@
 // Compatibility shim for Lua 5.1 / 5.2 names removed in 5.3 / 5.4
 //--------------------------------------------------------------------------------------------------
 
-// Re-adds 5.1/5.2 math/table/unpack/bit32 names — pure Lua, watchdog applies.
+// Re-adds 5.1/5.2 math/table/unpack/bit32 names -- pure Lua, watchdog applies.
 static const char* const kLuaCompat = R"LUA(
 -- math: removed/renamed in 5.3+
 if math.log10 == nil then math.log10 = function(x) return math.log(x, 10) end end

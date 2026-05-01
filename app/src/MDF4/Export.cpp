@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -245,6 +245,12 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
     const bool usingTemplate = !m_templateFrame.groups.empty();
     const auto& allGroups    = usingTemplate ? m_templateFrame.groups : frame.groups;
 
+    // Source-id -> source-title lookup
+    QMap<int, QString> sourceTitles;
+    const auto& srcRefs = usingTemplate ? m_templateFrame.sources : frame.sources;
+    for (const auto& s : srcRefs)
+      sourceTitles.insert(s.sourceId, s.title);
+
     // Build numeric type lookup from the live frame for template groups
     std::map<std::pair<int, int>, bool> numericLookup;
     if (usingTemplate) {
@@ -253,7 +259,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
           numericLookup[{g.groupId, d.datasetId}] = d.isNumeric;
     }
 
-    // Skip image groups entirely — they have no telemetry datasets
+    // Skip image groups entirely -- they have no telemetry datasets
     for (const auto& group : allGroups) {
       if (group.widget == QLatin1String("image"))
         continue;
@@ -262,7 +268,10 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
       if (!channelGroup)
         continue;
 
-      channelGroup->Name(group.title.toStdString());
+      const auto srcTitle = sourceTitles.value(group.sourceId);
+      const auto cgName =
+        srcTitle.isEmpty() ? group.title : QStringLiteral("%1 / %2").arg(srcTitle, group.title);
+      channelGroup->Name(cgName.toStdString());
 
       ChannelGroupInfo info;
       info.channelGroup = channelGroup;
@@ -307,7 +316,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
         info.channels.push_back(channel);
         info.isNumeric.push_back(isNum);
 
-        // Raw (pre-transform) channel — always pushed (null included) to keep indices aligned
+        // Raw (pre-transform) channel -- always pushed (null included) to keep indices aligned
         auto* rawChannel = channelGroup->CreateChannel();
         if (rawChannel) {
           const auto rawName = dataset.title.toStdString() + " (raw)";
@@ -524,7 +533,7 @@ void MDF4::Export::setExportEnabled(const bool enabled)
     return;
   }
 
-  // License invalid or missing — force disable
+  // License invalid or missing -- force disable
   closeFile();
   setConsumerEnabled(false);
   if (m_persistSettings)

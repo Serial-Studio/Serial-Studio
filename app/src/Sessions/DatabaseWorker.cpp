@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -35,9 +35,7 @@
  * @brief Initializes worker state; the SQL connection is opened lazily.
  */
 Sessions::DatabaseWorker::DatabaseWorker(QObject* parent)
-  : QObject(parent)
-  , m_locked(false)
-  , m_cancelRequested(false)
+  : QObject(parent), m_locked(false), m_cancelRequested(false)
 {}
 
 /**
@@ -78,9 +76,8 @@ void Sessions::DatabaseWorker::openDatabase(const QString& filePath)
     return;
   }
 
-  m_filePath = filePath;
-  m_connectionName =
-    QStringLiteral("ss_dbmgr_%1").arg(QDateTime::currentMSecsSinceEpoch());
+  m_filePath       = filePath;
+  m_connectionName = QStringLiteral("ss_dbmgr_%1").arg(QDateTime::currentMSecsSinceEpoch());
 
   m_db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
   m_db.setDatabaseName(filePath);
@@ -467,8 +464,7 @@ void Sessions::DatabaseWorker::storeProjectMetadata(const QString& projectJson,
   q.bindValue(0, projectTitle);
   ok = ok && q.exec();
 
-  q.prepare(
-    "INSERT OR REPLACE INTO project_metadata (key, value) VALUES ('last_modified_at', ?)");
+  q.prepare("INSERT OR REPLACE INTO project_metadata (key, value) VALUES ('last_modified_at', ?)");
   q.bindValue(0, now);
   ok = ok && q.exec();
 
@@ -527,7 +523,7 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
 
   // Load column order
   QSqlQuery colQ(m_db);
-  colQ.prepare("SELECT unique_id, group_title, title, units FROM columns "
+  colQ.prepare("SELECT unique_id, group_title, title, units, source_title FROM columns "
                "WHERE session_id = ? ORDER BY column_id ASC");
   colQ.bindValue(0, sessionId);
   if (!colQ.exec()) {
@@ -541,10 +537,14 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
   headerCells.append("Timestamp (s)");
   while (colQ.next()) {
     uniqueIds.push_back(colQ.value(0).toInt());
-    const auto group = colQ.value(1).toString();
-    const auto title = colQ.value(2).toString();
-    const auto units = colQ.value(3).toString();
-    auto label       = group + "/" + title;
+    const auto group       = colQ.value(1).toString();
+    const auto title       = colQ.value(2).toString();
+    const auto units       = colQ.value(3).toString();
+    const auto sourceTitle = colQ.value(4).toString();
+    auto label             = group + "/" + title;
+    if (!sourceTitle.isEmpty())
+      label = sourceTitle + "/" + label;
+
     if (!units.isEmpty())
       label += " (" + units + ")";
 
@@ -561,7 +561,7 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
       totalRows = cnt.value(0).toLongLong();
   }
 
-  // uid → column index
+  // uid -> column index
   QMap<int, int> uidToCol;
   for (int i = 0; i < static_cast<int>(uniqueIds.size()); ++i)
     uidToCol.insert(uniqueIds[static_cast<size_t>(i)], i);
@@ -588,8 +588,8 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
 
   qint64 currentTs = -1;
   QStringList row;
-  const int colCount     = static_cast<int>(uniqueIds.size());
-  qint64 processed       = 0;
+  const int colCount      = static_cast<int>(uniqueIds.size());
+  qint64 processed        = 0;
   qint64 nextProgressTick = totalRows > 0 ? (totalRows / 100 + 1) : 0;
 
   auto flushRow = [&]() {
@@ -652,14 +652,15 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
 }
 
 //--------------------------------------------------------------------------------------------------
-// Report data load (SQL only — rendering stays on main thread)
+// Report data load (SQL only -- rendering stays on main thread)
 //--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Builds the report data + chart series bundle, ships it via shared_ptr.
  */
-void Sessions::DatabaseWorker::runReportDataLoad(int sessionId, bool includeCharts,
-                                                  int chartMaxSamples)
+void Sessions::DatabaseWorker::runReportDataLoad(int sessionId,
+                                                 bool includeCharts,
+                                                 int chartMaxSamples)
 {
   auto payload       = std::make_shared<ReportPayload>();
   payload->sessionId = sessionId;
@@ -711,15 +712,15 @@ void Sessions::DatabaseWorker::refreshSessionListInternal()
       return;
 
     QVariantMap row;
-    const int sessionId    = q.value(0).toInt();
-    row["session_id"]      = sessionId;
-    row["project_title"]   = q.value(1).toString();
-    row["started_at_iso"]  = q.value(2).toString();
-    row["ended_at_iso"]    = q.value(3).toString();
-    row["started_at"]      = formatDateForDisplay(q.value(2).toString());
-    row["ended_at"]        = formatDateForDisplay(q.value(3).toString());
-    row["notes"]           = q.value(4).toString();
-    row["frame_count"]     = q.value(5).toInt();
+    const int sessionId   = q.value(0).toInt();
+    row["session_id"]     = sessionId;
+    row["project_title"]  = q.value(1).toString();
+    row["started_at_iso"] = q.value(2).toString();
+    row["ended_at_iso"]   = q.value(3).toString();
+    row["started_at"]     = formatDateForDisplay(q.value(2).toString());
+    row["ended_at"]       = formatDateForDisplay(q.value(3).toString());
+    row["notes"]          = q.value(4).toString();
+    row["frame_count"]    = q.value(5).toInt();
 
     const auto tags = tagsForSession(sessionId);
     QStringList labels;
@@ -826,7 +827,9 @@ QString Sessions::DatabaseWorker::formatDateForDisplay(const QString& isoDate)
   if (!dt.isValid())
     return isoDate;
 
+  // code-verify off
   return dt.toString(QStringLiteral("MMM d, yyyy — h:mm AP"));
+  // code-verify on
 }
 
 #endif  // BUILD_COMMERCIAL

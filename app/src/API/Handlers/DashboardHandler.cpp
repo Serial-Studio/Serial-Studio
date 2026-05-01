@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -302,7 +302,7 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
   QJsonObject result;
   result[QStringLiteral("operationMode")] = modeIndex;
 
-  // Bounds-guarded mode name — same rationale as getOperationMode
+  // Bounds-guarded mode name -- same rationale as getOperationMode
   static const QStringList kModeNames = {
     QStringLiteral("ProjectFile"), QStringLiteral("ConsoleOnly"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("operationModeName")] = (modeIndex >= 0 && modeIndex < kModeNames.size())

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -38,16 +38,16 @@
  * \f]
  *
  * where the coefficients are:
- * - a₀ = 0.35875
- * - a₁ = 0.48829
- * - a₂ = 0.14128
- * - a₃ = 0.01168
+ * - a_0 = 0.35875
+ * - a_1 = 0.48829
+ * - a_2 = 0.14128
+ * - a_3 = 0.01168
  *
- * @param i Index of the coefficient (0 ≤ i < N).
+ * @param i Index of the coefficient (0 <= i < N).
  * @param N Total number of points in the window.
  * @return The computed window coefficient for index @p i.
  *
- * @note If N ≤ 1, the function returns 1.0f.
+ * @note If N <= 1, the function returns 1.0f.
  */
 inline float blackman_harris_coeff(unsigned int i, unsigned int N)
 {
@@ -93,7 +93,7 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
   , m_plan(nullptr)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index)) {
-    // Clamp fftSamples — project JSON is user-controlled, unbounded would OOM
+    // Clamp fftSamples -- project JSON is user-controlled, unbounded would OOM
     static constexpr int kMaxFftSamples = 65536;
     const auto& dataset                 = GET_DATASET(SerialStudio::DashboardFFT, m_index);
     const int clampedSamples            = qBound(8, dataset.fftSamples, kMaxFftSamples);

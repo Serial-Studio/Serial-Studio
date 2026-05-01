@@ -18,6 +18,7 @@ Widgets.Pane {
 
   title: qsTr("Sessions")
   icon: "qrc:/icons/panes/sessions.svg"
+  headerVisible: typeof app === "undefined" || !app.runtimeMode
 
   //
   // Custom properties

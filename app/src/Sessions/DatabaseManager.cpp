@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -128,30 +128,30 @@ void Sessions::DatabaseManager::initWorker()
   m_worker = new DatabaseWorker;
   m_worker->moveToThread(m_thread);
 
-  connect(m_worker, &DatabaseWorker::opened,
-          this, &DatabaseManager::onWorkerOpened);
-  connect(m_worker, &DatabaseWorker::openFailed,
-          this, &DatabaseManager::onWorkerOpenFailed);
-  connect(m_worker, &DatabaseWorker::closed,
-          this, &DatabaseManager::onWorkerClosed);
-  connect(m_worker, &DatabaseWorker::sessionListRefreshed,
-          this, &DatabaseManager::onWorkerSessionListRefreshed);
-  connect(m_worker, &DatabaseWorker::tagListRefreshed,
-          this, &DatabaseManager::onWorkerTagListRefreshed);
-  connect(m_worker, &DatabaseWorker::lockStateChanged,
-          this, &DatabaseManager::onWorkerLockStateChanged);
-  connect(m_worker, &DatabaseWorker::notesUpdated,
-          this, &DatabaseManager::onWorkerNotesUpdated);
-  connect(m_worker, &DatabaseWorker::mutationFinished,
-          this, &DatabaseManager::onWorkerMutationFinished);
-  connect(m_worker, &DatabaseWorker::csvExportProgress,
-          this, &DatabaseManager::onWorkerCsvProgress);
-  connect(m_worker, &DatabaseWorker::csvExportFinished,
-          this, &DatabaseManager::onWorkerCsvFinished);
-  connect(m_worker, &DatabaseWorker::reportDataReady,
-          this, &DatabaseManager::onWorkerReportDataReady);
-  connect(m_worker, &DatabaseWorker::globalProjectJsonReady,
-          this, &DatabaseManager::onWorkerGlobalProjectJsonReady);
+  connect(m_worker, &DatabaseWorker::opened, this, &DatabaseManager::onWorkerOpened);
+  connect(m_worker, &DatabaseWorker::openFailed, this, &DatabaseManager::onWorkerOpenFailed);
+  connect(m_worker, &DatabaseWorker::closed, this, &DatabaseManager::onWorkerClosed);
+  connect(m_worker,
+          &DatabaseWorker::sessionListRefreshed,
+          this,
+          &DatabaseManager::onWorkerSessionListRefreshed);
+  connect(
+    m_worker, &DatabaseWorker::tagListRefreshed, this, &DatabaseManager::onWorkerTagListRefreshed);
+  connect(
+    m_worker, &DatabaseWorker::lockStateChanged, this, &DatabaseManager::onWorkerLockStateChanged);
+  connect(m_worker, &DatabaseWorker::notesUpdated, this, &DatabaseManager::onWorkerNotesUpdated);
+  connect(
+    m_worker, &DatabaseWorker::mutationFinished, this, &DatabaseManager::onWorkerMutationFinished);
+  connect(
+    m_worker, &DatabaseWorker::csvExportProgress, this, &DatabaseManager::onWorkerCsvProgress);
+  connect(
+    m_worker, &DatabaseWorker::csvExportFinished, this, &DatabaseManager::onWorkerCsvFinished);
+  connect(
+    m_worker, &DatabaseWorker::reportDataReady, this, &DatabaseManager::onWorkerReportDataReady);
+  connect(m_worker,
+          &DatabaseWorker::globalProjectJsonReady,
+          this,
+          &DatabaseManager::onWorkerGlobalProjectJsonReady);
 
   m_thread->start();
 }
@@ -173,9 +173,7 @@ void Sessions::DatabaseManager::shutdown()
     m_thread->wait(5000);
   }
 
-  // Thread has exited — its event loop is dead, so deleteLater would never
-  // fire. Delete the worker directly from this thread now that nothing else
-  // can be running on it.
+  // Thread is dead -- delete worker directly (deleteLater would never fire)
   delete m_worker;
   m_worker = nullptr;
 
@@ -428,8 +426,8 @@ void Sessions::DatabaseManager::openDatabase(const QString& filePath)
     return;
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "openDatabase", Qt::QueuedConnection,
-                            Q_ARG(QString, filePath));
+  QMetaObject::invokeMethod(
+    m_worker, "openDatabase", Qt::QueuedConnection, Q_ARG(QString, filePath));
 }
 
 /**
@@ -490,8 +488,11 @@ void Sessions::DatabaseManager::lockDatabase()
     QString::fromLatin1(QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "persistLock", Qt::QueuedConnection,
-                            Q_ARG(QString, hash), Q_ARG(quint64, nextToken()));
+  QMetaObject::invokeMethod(m_worker,
+                            "persistLock",
+                            Qt::QueuedConnection,
+                            Q_ARG(QString, hash),
+                            Q_ARG(quint64, nextToken()));
 }
 
 /**
@@ -504,8 +505,11 @@ void Sessions::DatabaseManager::unlockDatabase()
 
   if (m_passwordHash.isEmpty()) {
     setBusy(true);
-    QMetaObject::invokeMethod(m_worker, "persistLock", Qt::QueuedConnection,
-                              Q_ARG(QString, QString()), Q_ARG(quint64, nextToken()));
+    QMetaObject::invokeMethod(m_worker,
+                              "persistLock",
+                              Qt::QueuedConnection,
+                              Q_ARG(QString, QString()),
+                              Q_ARG(quint64, nextToken()));
     return;
   }
 
@@ -533,8 +537,11 @@ void Sessions::DatabaseManager::unlockDatabase()
   }
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "persistLock", Qt::QueuedConnection,
-                            Q_ARG(QString, QString()), Q_ARG(quint64, nextToken()));
+  QMetaObject::invokeMethod(m_worker,
+                            "persistLock",
+                            Qt::QueuedConnection,
+                            Q_ARG(QString, QString()),
+                            Q_ARG(quint64, nextToken()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -578,8 +585,11 @@ void Sessions::DatabaseManager::setSelectedSessionNotes(const QString& notes)
   Q_EMIT selectedSessionChanged();
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "setSessionNotes", Qt::QueuedConnection,
-                            Q_ARG(int, m_selectedSessionId), Q_ARG(QString, notes),
+  QMetaObject::invokeMethod(m_worker,
+                            "setSessionNotes",
+                            Qt::QueuedConnection,
+                            Q_ARG(int, m_selectedSessionId),
+                            Q_ARG(QString, notes),
                             Q_ARG(quint64, nextToken()));
 }
 
@@ -594,8 +604,11 @@ void Sessions::DatabaseManager::deleteSession(int sessionId)
     return;
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "deleteSession", Qt::QueuedConnection,
-                            Q_ARG(int, sessionId), Q_ARG(quint64, nextToken()));
+  QMetaObject::invokeMethod(m_worker,
+                            "deleteSession",
+                            Qt::QueuedConnection,
+                            Q_ARG(int, sessionId),
+                            Q_ARG(quint64, nextToken()));
 
   if (m_selectedSessionId == sessionId) {
     m_selectedSessionId = -1;
@@ -655,8 +668,8 @@ void Sessions::DatabaseManager::addTag(const QString& label)
     return;
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "addTag", Qt::QueuedConnection,
-                            Q_ARG(QString, label), Q_ARG(quint64, nextToken()));
+  QMetaObject::invokeMethod(
+    m_worker, "addTag", Qt::QueuedConnection, Q_ARG(QString, label), Q_ARG(quint64, nextToken()));
 }
 
 /**
@@ -668,8 +681,8 @@ void Sessions::DatabaseManager::deleteTag(int tagId)
     return;
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "deleteTag", Qt::QueuedConnection,
-                            Q_ARG(int, tagId), Q_ARG(quint64, nextToken()));
+  QMetaObject::invokeMethod(
+    m_worker, "deleteTag", Qt::QueuedConnection, Q_ARG(int, tagId), Q_ARG(quint64, nextToken()));
 }
 
 /**
@@ -681,8 +694,11 @@ void Sessions::DatabaseManager::renameTag(int tagId, const QString& newLabel)
     return;
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "renameTag", Qt::QueuedConnection,
-                            Q_ARG(int, tagId), Q_ARG(QString, newLabel),
+  QMetaObject::invokeMethod(m_worker,
+                            "renameTag",
+                            Qt::QueuedConnection,
+                            Q_ARG(int, tagId),
+                            Q_ARG(QString, newLabel),
                             Q_ARG(quint64, nextToken()));
 }
 
@@ -695,8 +711,11 @@ void Sessions::DatabaseManager::assignTagToSession(int sessionId, int tagId)
     return;
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "assignTag", Qt::QueuedConnection,
-                            Q_ARG(int, sessionId), Q_ARG(int, tagId),
+  QMetaObject::invokeMethod(m_worker,
+                            "assignTag",
+                            Qt::QueuedConnection,
+                            Q_ARG(int, sessionId),
+                            Q_ARG(int, tagId),
                             Q_ARG(quint64, nextToken()));
 }
 
@@ -709,8 +728,11 @@ void Sessions::DatabaseManager::removeTagFromSession(int sessionId, int tagId)
     return;
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "unassignTag", Qt::QueuedConnection,
-                            Q_ARG(int, sessionId), Q_ARG(int, tagId),
+  QMetaObject::invokeMethod(m_worker,
+                            "unassignTag",
+                            Qt::QueuedConnection,
+                            Q_ARG(int, sessionId),
+                            Q_ARG(int, tagId),
                             Q_ARG(quint64, nextToken()));
 }
 
@@ -745,8 +767,8 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
   Q_EMIT csvExportBusyChanged();
   Q_EMIT csvExportProgressChanged();
 
-  QMetaObject::invokeMethod(m_worker, "runCsvExport", Qt::QueuedConnection,
-                            Q_ARG(int, sessionId), Q_ARG(QString, path));
+  QMetaObject::invokeMethod(
+    m_worker, "runCsvExport", Qt::QueuedConnection, Q_ARG(int, sessionId), Q_ARG(QString, path));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -799,7 +821,9 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
       Q_EMIT pdfExportProgressChanged();
     }
 
-    QMetaObject::invokeMethod(m_worker, "runReportDataLoad", Qt::QueuedConnection,
+    QMetaObject::invokeMethod(m_worker,
+                              "runReportDataLoad",
+                              Qt::QueuedConnection,
                               Q_ARG(int, sessionId),
                               Q_ARG(bool, m_pendingPdfOpts.includeCharts),
                               Q_ARG(int, 10000));
@@ -823,8 +847,8 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   QDir().mkpath(dir);
 
   const QString baseName  = opts.documentTitle.isEmpty()
-                              ? QStringLiteral("session_%1").arg(sessionId)
-                              : sanitiseTitleForPath(opts.documentTitle);
+                            ? QStringLiteral("session_%1").arg(sessionId)
+                            : sanitiseTitleForPath(opts.documentTitle);
   const QString suggested = QStringLiteral("%1/%2.%3").arg(dir, baseName, ext);
 
   auto* dialog = new QFileDialog(nullptr, title, suggested, filter);
@@ -859,7 +883,7 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
  */
 void Sessions::DatabaseManager::renderReportFromPayload(const ReportPayloadPtr& payload)
 {
-  // Stale payload from a superseded request — drop silently
+  // Stale payload from a superseded request -- drop silently
   if (!m_pendingPdfActive)
     return;
 
@@ -892,14 +916,11 @@ void Sessions::DatabaseManager::renderReportFromPayload(const ReportPayloadPtr& 
   auto* renderer = new HtmlReport(this);
 
   if (reportBusy) {
-    connect(renderer,
-            &HtmlReport::progress,
-            this,
-            [this](const QString& status, double percent) {
-              m_pdfExportStatus   = status;
-              m_pdfExportProgress = percent;
-              Q_EMIT pdfExportProgressChanged();
-            });
+    connect(renderer, &HtmlReport::progress, this, [this](const QString& status, double percent) {
+      m_pdfExportStatus   = status;
+      m_pdfExportProgress = percent;
+      Q_EMIT pdfExportProgressChanged();
+    });
   }
 
   connect(renderer,
@@ -966,14 +987,17 @@ void Sessions::DatabaseManager::storeProjectMetadata()
   const auto json = QJsonDocument(pm.serializeToJson()).toJson(QJsonDocument::Compact);
 
   setBusy(true);
-  QMetaObject::invokeMethod(m_worker, "storeProjectMetadata", Qt::QueuedConnection,
+  QMetaObject::invokeMethod(m_worker,
+                            "storeProjectMetadata",
+                            Qt::QueuedConnection,
                             Q_ARG(QString, QString::fromUtf8(json)),
                             Q_ARG(QString, pm.title()),
                             Q_ARG(quint64, nextToken()));
 }
 
 /**
- * @brief Dispatches the JSON fetch to the worker; reply continues in onWorkerGlobalProjectJsonReady.
+ * @brief Dispatches the JSON fetch to the worker; reply continues in
+ * onWorkerGlobalProjectJsonReady.
  */
 void Sessions::DatabaseManager::restoreProjectFromDb()
 {
@@ -984,7 +1008,7 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
 }
 
 /**
- * @brief Worker handed back the global project JSON — finish the restore on the main thread.
+ * @brief Worker handed back the global project JSON -- finish the restore on the main thread.
  */
 void Sessions::DatabaseManager::runRestoreProjectFromJson(const QString& json)
 {
@@ -1092,12 +1116,13 @@ void Sessions::DatabaseManager::setBusy(bool busy)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Worker finished opening the file — populate caches and emit signals.
+ * @brief Worker finished opening the file -- populate caches and emit signals.
  */
 void Sessions::DatabaseManager::onWorkerOpened(const QString& filePath,
-                                                const QVariantList& sessionList,
-                                                const QVariantList& tagList,
-                                                bool locked, const QString& passwordHash)
+                                               const QVariantList& sessionList,
+                                               const QVariantList& tagList,
+                                               bool locked,
+                                               const QString& passwordHash)
 {
   m_filePath        = filePath;
   m_open            = true;
@@ -1120,26 +1145,25 @@ void Sessions::DatabaseManager::onWorkerOpened(const QString& filePath,
 }
 
 /**
- * @brief Worker reported an open failure — surface it to the user.
+ * @brief Worker reported an open failure -- surface it to the user.
  */
 void Sessions::DatabaseManager::onWorkerOpenFailed(const QString& filePath, const QString& error)
 {
   Q_UNUSED(filePath)
   setBusy(false);
 
-  Misc::Utilities::showMessageBox(
-    tr("Cannot open session file"), error, QMessageBox::Critical);
+  Misc::Utilities::showMessageBox(tr("Cannot open session file"), error, QMessageBox::Critical);
 }
 
 /**
- * @brief Worker confirmed the file is closed — clear caches and notify QML.
+ * @brief Worker confirmed the file is closed -- clear caches and notify QML.
  */
 void Sessions::DatabaseManager::onWorkerClosed()
 {
   const bool wasOpen   = m_open;
   const bool wasLocked = m_locked;
 
-  m_open              = false;
+  m_open = false;
   m_filePath.clear();
   m_sessionList.clear();
   m_tagList.clear();
@@ -1158,7 +1182,7 @@ void Sessions::DatabaseManager::onWorkerClosed()
 }
 
 /**
- * @brief Worker shipped a refreshed session list — rebroadcast to QML.
+ * @brief Worker shipped a refreshed session list -- rebroadcast to QML.
  */
 void Sessions::DatabaseManager::onWorkerSessionListRefreshed(const QVariantList& sessionList)
 {
@@ -1168,7 +1192,7 @@ void Sessions::DatabaseManager::onWorkerSessionListRefreshed(const QVariantList&
 }
 
 /**
- * @brief Worker shipped a refreshed tag list — rebroadcast to QML.
+ * @brief Worker shipped a refreshed tag list -- rebroadcast to QML.
  */
 void Sessions::DatabaseManager::onWorkerTagListRefreshed(const QVariantList& tagList)
 {
@@ -1178,7 +1202,7 @@ void Sessions::DatabaseManager::onWorkerTagListRefreshed(const QVariantList& tag
 }
 
 /**
- * @brief Worker reported a lock-state change — update local mirror.
+ * @brief Worker reported a lock-state change -- update local mirror.
  */
 void Sessions::DatabaseManager::onWorkerLockStateChanged(bool locked, const QString& passwordHash)
 {
@@ -1190,7 +1214,7 @@ void Sessions::DatabaseManager::onWorkerLockStateChanged(bool locked, const QStr
 }
 
 /**
- * @brief Worker confirmed the notes write — propagate to any QML waiting on signal.
+ * @brief Worker confirmed the notes write -- propagate to any QML waiting on signal.
  */
 void Sessions::DatabaseManager::onWorkerNotesUpdated(int sessionId, const QString& notes)
 {
@@ -1200,10 +1224,11 @@ void Sessions::DatabaseManager::onWorkerNotesUpdated(int sessionId, const QStrin
 }
 
 /**
- * @brief Worker finished a mutation — clear the busy bit and report errors.
+ * @brief Worker finished a mutation -- clear the busy bit and report errors.
  */
-void Sessions::DatabaseManager::onWorkerMutationFinished(quint64 token, bool ok,
-                                                          const QString& error)
+void Sessions::DatabaseManager::onWorkerMutationFinished(quint64 token,
+                                                         bool ok,
+                                                         const QString& error)
 {
   Q_UNUSED(token)
   setBusy(false);
@@ -1213,7 +1238,7 @@ void Sessions::DatabaseManager::onWorkerMutationFinished(quint64 token, bool ok,
 }
 
 /**
- * @brief Worker is streaming CSV — update the percentage cache.
+ * @brief Worker is streaming CSV -- update the percentage cache.
  */
 void Sessions::DatabaseManager::onWorkerCsvProgress(double percent)
 {
@@ -1222,10 +1247,11 @@ void Sessions::DatabaseManager::onWorkerCsvProgress(double percent)
 }
 
 /**
- * @brief Worker finished writing the CSV — report status, reveal in the OS shell.
+ * @brief Worker finished writing the CSV -- report status, reveal in the OS shell.
  */
-void Sessions::DatabaseManager::onWorkerCsvFinished(const QString& outputPath, bool ok,
-                                                     const QString& error)
+void Sessions::DatabaseManager::onWorkerCsvFinished(const QString& outputPath,
+                                                    bool ok,
+                                                    const QString& error)
 {
   Q_UNUSED(error)
   m_csvExportBusy     = false;
@@ -1240,7 +1266,7 @@ void Sessions::DatabaseManager::onWorkerCsvFinished(const QString& outputPath, b
 }
 
 /**
- * @brief Worker shipped the report data bundle — kick off rendering on the main thread.
+ * @brief Worker shipped the report data bundle -- kick off rendering on the main thread.
  */
 void Sessions::DatabaseManager::onWorkerReportDataReady(const ReportPayloadPtr& payload)
 {
@@ -1248,7 +1274,7 @@ void Sessions::DatabaseManager::onWorkerReportDataReady(const ReportPayloadPtr& 
 }
 
 /**
- * @brief Worker handed back the global project JSON — finish the restore flow.
+ * @brief Worker handed back the global project JSON -- finish the restore flow.
  */
 void Sessions::DatabaseManager::onWorkerGlobalProjectJsonReady(const QString& json)
 {
@@ -1276,15 +1302,40 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
 
   // Column definitions exported from ExportSchema at session start
   q.exec("CREATE TABLE IF NOT EXISTS columns ("
-         "  column_id   INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "  session_id  INTEGER NOT NULL REFERENCES sessions,"
-         "  unique_id   INTEGER NOT NULL,"
-         "  group_title TEXT NOT NULL,"
-         "  title       TEXT NOT NULL,"
-         "  units       TEXT,"
-         "  widget      TEXT,"
-         "  is_virtual  INTEGER NOT NULL DEFAULT 0"
+         "  column_id    INTEGER PRIMARY KEY AUTOINCREMENT,"
+         "  session_id   INTEGER NOT NULL REFERENCES sessions,"
+         "  unique_id    INTEGER NOT NULL,"
+         "  source_id    INTEGER NOT NULL DEFAULT 0,"
+         "  source_title TEXT NOT NULL DEFAULT '',"
+         "  group_title  TEXT NOT NULL,"
+         "  title        TEXT NOT NULL,"
+         "  units        TEXT,"
+         "  widget       TEXT,"
+         "  is_virtual   INTEGER NOT NULL DEFAULT 0"
          ")");
+
+  // Migration for pre-(source_id, source_title) sessions databases
+  auto columnExists = [&q](const QString& column) {
+    if (!q.exec(QStringLiteral("PRAGMA table_info(\"columns\")"))) {
+      qWarning() << "[Sessions] PRAGMA table_info failed:" << q.lastError().text();
+      return false;
+    }
+    while (q.next())
+      if (q.value(1).toString().compare(column, Qt::CaseInsensitive) == 0)
+        return true;
+
+    return false;
+  };
+
+  if (!columnExists(QStringLiteral("source_id"))) {
+    if (!q.exec("ALTER TABLE \"columns\" ADD COLUMN source_id INTEGER NOT NULL DEFAULT 0"))
+      qWarning() << "[Sessions] ALTER add source_id failed:" << q.lastError().text();
+  }
+
+  if (!columnExists(QStringLiteral("source_title"))) {
+    if (!q.exec("ALTER TABLE \"columns\" ADD COLUMN source_title TEXT NOT NULL DEFAULT ''"))
+      qWarning() << "[Sessions] ALTER add source_title failed:" << q.lastError().text();
+  }
 
   // One row per dataset per frame; surrogate PK allows same-ns frames to coexist
   q.exec("CREATE TABLE IF NOT EXISTS readings ("
@@ -1327,7 +1378,7 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
   q.exec("CREATE INDEX IF NOT EXISTS idx_snapshots_session_ts "
          "ON table_snapshots (session_id, timestamp_ns, table_name)");
 
-  // Free-form tags and the session → tag join
+  // Free-form tags and the session -> tag join
   q.exec("CREATE TABLE IF NOT EXISTS tags ("
          "  tag_id INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  label  TEXT NOT NULL UNIQUE COLLATE NOCASE"

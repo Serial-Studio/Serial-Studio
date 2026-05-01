@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -118,6 +118,7 @@ Window {
   //
   // Curated library of commonly-useful constants.
   //
+  // code-verify off
   readonly property var constants: [
     // Fundamental physics
     { category: qsTr("Fundamental"), name: qsTr("Speed of light in vacuum"),        symbol: "c",    suggestedName: "speed_of_light",         value: 299792458.0,       units: "m/s"         },
@@ -152,6 +153,7 @@ Window {
     { category: qsTr("Math"), name: qsTr("Euler's number"),  symbol: "e", suggestedName: "euler", value: 2.718281828459045, units: "" },
     { category: qsTr("Math"), name: qsTr("Golden ratio"),    symbol: "φ", suggestedName: "phi",   value: 1.618033988749895, units: "" }
   ]
+  // code-verify on
 
   //
   // Search filter state
@@ -360,7 +362,7 @@ Window {
       Item { implicitHeight: 4 }
 
       //
-      // Footer — count + Close button
+      // Footer -- count + Close button
       //
       RowLayout {
         spacing: 8

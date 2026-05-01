@@ -49,7 +49,7 @@ void DataModel::finalize_frame(DataModel::Frame& frame)
   for (auto& group : frame.groups) {
     for (auto& dataset : group.datasets) {
       dataset.sourceId = group.sourceId;
-      dataset.uniqueId = group.sourceId * 1000000 + dataset.groupId * 10000 + dataset.datasetId;
+      dataset.uniqueId = dataset_unique_id(group.sourceId, dataset.groupId, dataset.datasetId);
     }
   }
 }

@@ -1829,7 +1829,7 @@ class Dashboard:
         eta_s = (total_total - total_done) / rate if rate > 0 else 0.0
 
         bits = [
-            f"{_ANSI_BOLD}translate-progress{_ANSI_RESET}",
+            f"  {_ANSI_BOLD}Progress{_ANSI_RESET}",
             f"elapsed {_format_duration(elapsed)}",
             f"active {active}",
             f"done {finished}/{len(rows)}",
@@ -2030,7 +2030,7 @@ def main():
         and workers > 1
     )
 
-    banner = (f"  {_ANSI_BOLD}Serial Studio · translate-progress{_ANSI_RESET}"
+    banner = (f"  {_ANSI_BOLD}Serial Studio · Translation Progress{_ANSI_RESET}"
               f"  {_ANSI_DIM}provider {PROVIDER} · model {LLM_MODEL}{_ANSI_RESET}")
 
     progress = Progress(lang_codes)

@@ -179,8 +179,8 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           onClicked: Cpp_JSON_ProjectModel.saveJsonFile(true)
-          ToolTip.text: qsTr("Save the current project under a new name")
           icon.source: "qrc:/icons/project-editor/toolbar/save-as.svg"
+          ToolTip.text: qsTr("Save the current project under a new name")
         }
       }
     }
@@ -208,8 +208,8 @@ Rectangle {
         text: qsTr("Add Device")
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_JSON_ProjectModel.addSource()
-        ToolTip.text: qsTr("Add a new data source (device) to the project")
         icon.source: "qrc:/icons/project-editor/toolbar/add-device.svg"
+        ToolTip.text: qsTr("Add a new data source (device) to the project")
       }
     }
 
@@ -494,8 +494,8 @@ Rectangle {
         text: qsTr("Help Center")
         Layout.alignment: Qt.AlignVCenter
         onClicked: app.showHelpCenter("project-editor")
-        ToolTip.text: qsTr("Open the Project Editor documentation")
         icon.source: "qrc:/icons/project-editor/toolbar/help.svg"
+        ToolTip.text: qsTr("Open the Project Editor documentation")
       }
     }
   }

@@ -74,14 +74,11 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
     if (editor.currentView() != DataModel::ProjectEditor::OutputWidgetView)
       return;
 
-    auto& pm  = DataModel::ProjectModel::instance();
-    auto& sel = editor.selectedOutputWidget();
+    const auto& sel = editor.selectedOutputWidget();
     if (sel.groupId < 0 || sel.widgetId < 0)
       return;
 
-    DataModel::OutputWidget updated = sel;
-    updated.transmitFunction        = text();
-    pm.updateOutputWidget(sel.groupId, sel.widgetId, updated, false);
+    editor.setSelectedOutputWidgetTransmitFunction(text());
   });
 
   // Reload when the output widget model changes
@@ -386,8 +383,8 @@ QString DataModel::OutputCodeEditor::defaultTemplate()
   if (defaultFile.isEmpty())
     return {};
 
-  return readTextResource(templateResourcePath(
-    QStringLiteral(":/scripts/output"), defaultFile, QStringLiteral(".js")));
+  return readTextResource(
+    templateResourcePath(QStringLiteral(":/scripts/output"), defaultFile, QStringLiteral(".js")));
 }
 
 /**
@@ -404,8 +401,8 @@ void DataModel::OutputCodeEditor::loadTemplates()
 
   for (const auto& tmpl : templates) {
     m_templateNames.append(tmpl.name);
-    m_templateFiles.append(templateResourcePath(
-      QStringLiteral(":/scripts/output"), tmpl.file, QStringLiteral(".js")));
+    m_templateFiles.append(
+      templateResourcePath(QStringLiteral(":/scripts/output"), tmpl.file, QStringLiteral(".js")));
     if (m_defaultTemplateFile.isEmpty() && tmpl.isDefault)
       m_defaultTemplateFile = tmpl.file;
   }

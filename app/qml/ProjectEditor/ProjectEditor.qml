@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -114,7 +114,9 @@ Widgets.SmartWindow {
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
+    //
     // Always rendered so lock/mode overlays have something to blur; disabled when locked.
+    //
     ColumnLayout {
       id: layout
 
@@ -135,7 +137,7 @@ Widgets.SmartWindow {
       }
 
       //
-      // Main Layout — kept visible when locked; the lock overlay sits on top
+      // Main Layout -- kept visible when locked; the lock overlay sits on top
       //
       Widgets.PaneSplitter {
         id: splitter
@@ -155,7 +157,9 @@ Widgets.SmartWindow {
         }
 
         rightPanel: Component {
+          //
           // Only the active view loads; tab switches destroy and reinstantiate.
+          //
           Loader {
             asynchronous: false
             anchors.fill: parent
@@ -217,7 +221,7 @@ Widgets.SmartWindow {
       }
 
       //
-      // Preserve native-style window drag on the opaque top strip — the
+      // Preserve native-style window drag on the opaque top strip -- the
       // toolbar's own DragHandler is unreachable while the overlay is up
       //
       DragHandler {
@@ -252,7 +256,9 @@ Widgets.SmartWindow {
         }
       }
 
+      //
       // Centered lock/mode call-to-action; offset to align with the perceived editor body.
+      //
       ColumnLayout {
         spacing: 16
         anchors.centerIn: parent

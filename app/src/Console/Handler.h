@@ -267,7 +267,7 @@ private:
     bool lastCharWasCR  = false;
   };
 
-  bool hasImageWidget() const;
+  [[nodiscard]] bool hasImageWidget() const;
   QString dataToString(QByteArrayView data);
   QString plainTextStr(QByteArrayView data);
   QString hexadecimalStr(QByteArrayView data);

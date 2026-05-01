@@ -82,7 +82,7 @@ rm -f "$tempfile"
 #done
 
 # Format C/C++ files under known directories. Two passes are run with the
-# code-format step in between because code-format inserts blank lines after
+# code-verify step in between because code-verify inserts blank lines after
 # brace-free single-statement bodies; running clang-format afterwards lets
 # those new blank lines settle into clang-format's canonical layout (column
 # alignment, trailing whitespace, etc.) before we look at the diff.
@@ -99,18 +99,26 @@ run_clang_format() {
 echo "Running clang-format (pass 1)..."
 run_clang_format
 
-# code-format covers the rules clang-format can't express:
+# code-verify covers the rules clang-format can't express:
 # - QML property "christmas-tree" ordering (shortest line first)
 # - QML `id:` placement and the blank line that must follow it
 # - Blank line after brace-free single-statement control-flow bodies
 #   (applies to QML, .h, and .cpp under app/qml + app/src)
-if [[ -f scripts/code-format.py ]]; then
-    echo "Running code-format..."
-    python3 scripts/code-format.py --fix || echo "code-format failed"
+if [[ -f scripts/code-verify.py ]]; then
+    echo "Running code-verify..."
+    python3 scripts/code-verify.py --fix || echo "code-verify failed"
 fi
 
 echo "Running clang-format (pass 2)..."
 run_clang_format
+
+# Regenerate `.code-report` after the fix + format settle. --check doesn't
+# rewrite anything; it just walks the tree and writes the up-to-date report
+# (errors + advisories) so reviewers see what survived the auto-fix pass.
+if [[ -f scripts/code-verify.py ]]; then
+    echo "Regenerating .code-report..."
+    python3 scripts/code-verify.py --check > /dev/null || echo "code-verify --check found issues"
+fi
 
 # Get a list of changed files (unstaged + staged)
 echo "Checking for changes..."

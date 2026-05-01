@@ -33,6 +33,9 @@ Output Controls (requires Serial Studio Pro):
     HDG <-180-180> Apply heading offset in degrees
     CAM ON|OFF     Enable/disable camera image transmission
     RTH            Return to helipad, land, and recharge
+    CRASH          Simulate catastrophic failure — drops the TCP link
+                   on the receiving drone so Serial Studio sees the
+                   source go dark while the other drone keeps flying.
 
 Run this script first (it starts two TCP servers), then open
 "Dual Drone Telemetry.ssproj" in Serial Studio and connect both sources.
@@ -52,6 +55,7 @@ import math
 import os
 import random
 import socket
+import struct
 import sys
 import threading
 import time
@@ -761,6 +765,7 @@ class CommandState:
         self.camera_on = True
         self.rth = False
         self.tko = False
+        self.crash = False
 
     def parse(self, raw: bytes):
         """Parse one or more newline-delimited commands."""
@@ -783,6 +788,8 @@ class CommandState:
                 self.rth = True
             elif cmd == "TKO":
                 self.tko = True
+            elif cmd == "CRASH":
+                self.crash = True
 
 
 class TCPServer:
@@ -835,6 +842,21 @@ class TCPServer:
             self.client = None
             return None
 
+    def drop_client(self):
+        """Forcefully terminate the current client connection (RST, no FIN)."""
+        if not self.client:
+            return
+        try:
+            # Linger=0 → send TCP RST instead of clean FIN, mimicking a
+            # link drop / radio loss rather than an orderly shutdown.
+            self.client.setsockopt(
+                socket.SOL_SOCKET, socket.SO_LINGER, struct.pack("ii", 1, 0)
+            )
+            self.client.close()
+        except OSError:
+            pass
+        self.client = None
+
     def close(self):
         if self.client:
             self.client.close()
@@ -886,6 +908,15 @@ def run_alpha(host, fps, stop_event):
                     cmds.parse(raw)
 
                 if not server.client:
+                    break
+
+                # CRASH command: simulate radio loss / catastrophic failure
+                if cmds.crash:
+                    print(f"\n[Alpha] CRASH command received — dropping link")
+                    with _display_lock:
+                        _display["alpha"] = "CRASHED"
+                    _refresh_display()
+                    server.drop_client()
                     break
 
                 data = drone.step(dt, cmds)
@@ -962,6 +993,15 @@ def run_bravo(host, fps, stop_event):
                     cmds.parse(raw)
 
                 if not server.client:
+                    break
+
+                # CRASH command: simulate radio loss / catastrophic failure
+                if cmds.crash:
+                    print(f"\n[Bravo] CRASH command received — dropping link")
+                    with _display_lock:
+                        _display["bravo"] = "CRASHED"
+                    _refresh_display()
+                    server.drop_client()
                     break
 
                 data = drone.step(dt, cmds)

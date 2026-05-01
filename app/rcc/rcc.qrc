@@ -424,6 +424,7 @@
         <file>icons/start/disconnect.svg</file>
         <file>icons/start/export.svg</file>
         <file>icons/start/external-window.svg</file>
+        <file>icons/start/file-transmission.svg</file>
         <file>icons/start/full-screen.svg</file>
         <file>icons/start/groups.svg</file>
         <file>icons/start/help.svg</file>
@@ -437,6 +438,7 @@
         <file>icons/start/settings.svg</file>
         <file>icons/start/tools.svg</file>
         <file>icons/taskbar/console.svg</file>
+        <file>icons/taskbar/file-transmission.svg</file>
         <file>icons/taskbar/notifications.svg</file>
         <file>icons/taskbar/pause.svg</file>
         <file>icons/taskbar/resume.svg</file>
@@ -698,5 +700,6 @@
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
+        <file>icons/dashboard-buttons/camcoder.svg</file>
     </qresource>
 </RCC>

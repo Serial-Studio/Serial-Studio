@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -175,8 +175,11 @@ public slots:
   void refreshSessionList();
 
 private slots:
-  void onWorkerOpened(const QString& filePath, const QVariantList& sessionList,
-                      const QVariantList& tagList, bool locked, const QString& passwordHash);
+  void onWorkerOpened(const QString& filePath,
+                      const QVariantList& sessionList,
+                      const QVariantList& tagList,
+                      bool locked,
+                      const QString& passwordHash);
   void onWorkerOpenFailed(const QString& filePath, const QString& error);
   void onWorkerClosed();
   void onWorkerSessionListRefreshed(const QVariantList& sessionList);
@@ -217,7 +220,7 @@ private:
   QVariantList m_sessionList;
   QVariantList m_tagList;
 
-  // Pending PDF render context — paired with worker reply by sessionId
+  // Pending PDF render context -- paired with worker reply by sessionId
   HtmlReportOptions m_pendingPdfOpts;
   int m_pendingPdfSessionId;
   bool m_pendingPdfActive;

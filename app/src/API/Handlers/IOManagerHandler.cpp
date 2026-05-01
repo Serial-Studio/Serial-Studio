@@ -196,7 +196,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::setPaused(const QString& i
 
 /**
  * @brief Set the bus type
- * @param params Requires "busType" (int: 0=UART, 1=Network, 2=BLE)
+ * @param params Requires Keys::BusType (int: 0=UART, 1=Network, 2=BLE)
  */
 API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& id,
                                                                  const QJsonObject& params)

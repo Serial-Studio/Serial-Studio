@@ -64,6 +64,31 @@ jobs:
       with:
         submodules: 'recursive'
 
+    # Fail-fast static-analysis pass: runs before the heavy Qt + gRPC +
+    # build steps so a broken-convention PR doesn't burn ~15 min of CI
+    # before flagging the issue. Errors block the build; advisories
+    # populate `.code-report` (uploaded as an artifact for an LLM cleanup
+    # pass). Rules live in scripts/code_verify_rules.py.
+    - name: '🐍 Set up Python'
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: '🐍 Install Python dependencies'
+      run: pip install -r tests/requirements.txt
+
+    - name: '🔬 Verify code conventions'
+      run: python3 scripts/code-verify.py --check
+
+    - name: '📤 Upload code-verify report'
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: code-verify-report
+        path: .code-report
+        if-no-files-found: ignore
+
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
@@ -183,15 +208,6 @@ jobs:
 
     - name: '🚧 Build application'
       run: cmake --build build --config Release -j$(nproc)
-
-    - name: '🐍 Set up Python'
-      uses: actions/setup-python@v6
-      with:
-        python-version: '3.11'
-        cache: 'pip'
-
-    - name: '🐍 Install Python dependencies'
-      run: pip install -r tests/requirements.txt
 
     - name: '🔑 Activate Serial Studio license'
       env:

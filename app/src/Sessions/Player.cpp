@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -330,7 +330,7 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
   // Snapshot mode + project path before restoreProjectFromJson mutates them
   capturePreSessionState();
 
-  // Prompt to disconnect live devices — must happen on main thread
+  // Prompt to disconnect live devices -- must happen on main thread
   if (IO::ConnectionManager::instance().isConnected()) {
     auto response =
       Misc::Utilities::showMessageBox(tr("Device Connection Active"),
@@ -351,12 +351,12 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
   m_loading          = true;
   Q_EMIT loadingChanged();
 
-  QMetaObject::invokeMethod(m_worker, "openAndLoad", Qt::QueuedConnection,
-                            Q_ARG(QString, filePath), Q_ARG(int, sessionId));
+  QMetaObject::invokeMethod(
+    m_worker, "openAndLoad", Qt::QueuedConnection, Q_ARG(QString, filePath), Q_ARG(int, sessionId));
 }
 
 /**
- * @brief Worker shipped session bundle — finalize setup on the main thread.
+ * @brief Worker shipped session bundle -- finalize setup on the main thread.
  */
 void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
 {
@@ -385,8 +385,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
 
   if (!payload->ok) {
     Misc::Utilities::showMessageBox(tr("Cannot open session file"),
-                                    payload->error.isEmpty() ? tr("Unknown error")
-                                                              : payload->error,
+                                    payload->error.isEmpty() ? tr("Unknown error") : payload->error,
                                     QMessageBox::Critical);
 
     m_loading = false;
@@ -399,7 +398,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
     return;
   }
 
-  // Restore project — must happen on the main thread before column alignment
+  // Restore project -- must happen on the main thread before column alignment
   if (!payload->projectJson.isEmpty()) {
     (void)restoreProjectFromJson(payload->projectJson);
   } else {
@@ -457,7 +456,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Local DB connection (per-frame fetch — main thread)
+// Local DB connection (per-frame fetch -- main thread)
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -465,8 +464,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
  */
 bool Sessions::Player::openLocalDb(const QString& filePath)
 {
-  m_connectionName =
-    QStringLiteral("ss_sqlite_player_%1").arg(QDateTime::currentMSecsSinceEpoch());
+  m_connectionName = QStringLiteral("ss_sqlite_player_%1").arg(QDateTime::currentMSecsSinceEpoch());
 
   m_db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
   m_db.setDatabaseName(filePath);
@@ -752,12 +750,15 @@ void Sessions::Player::alignColumnsToProject()
   if (m_columnUniqueIds.empty())
     return;
 
-  // Build uid → (sourceId, datasetIndex) from the restored project
+  // Recompute uniqueId locally (ProjectModel doesn't run finalize_frame)
   QMap<int, QPair<int, int>> uidToSrcIndex;
   const auto& groups = DataModel::ProjectModel::instance().groups();
-  for (const auto& g : groups)
-    for (const auto& d : g.datasets)
-      uidToSrcIndex.insert(d.uniqueId, qMakePair(d.sourceId, d.index));
+  for (const auto& g : groups) {
+    for (const auto& d : g.datasets) {
+      const int uid = DataModel::dataset_unique_id(g, d);
+      uidToSrcIndex.insert(uid, qMakePair(g.sourceId, d.index));
+    }
+  }
 
   // Bucket session columns by source so each source ends up index-sorted
   QMap<int, std::vector<QPair<int, int>>> bySource;
@@ -796,19 +797,30 @@ void Sessions::Player::alignColumnsToProject()
 }
 
 /**
- * @brief Builds the column→sourceId map; must run after alignColumnsToProject.
+ * @brief Builds the column->sourceId map; must run after alignColumnsToProject.
  */
 void Sessions::Player::buildMultiSourceMapping()
 {
   m_columnToSource.clear();
   m_sourceColumnCount.clear();
+  m_uidToParser.clear();
+  m_sourceMaxIndex.clear();
 
-  // Walk the (already aligned) column order and tag each column with its source
+  // Recompute uniqueId locally and capture dataset.index per uid
   QMap<int, int> uidToSource;
   const auto& groups = DataModel::ProjectModel::instance().groups();
-  for (const auto& g : groups)
-    for (const auto& d : g.datasets)
-      uidToSource.insert(d.uniqueId, d.sourceId);
+  for (const auto& g : groups) {
+    for (const auto& d : g.datasets) {
+      const int uid = DataModel::dataset_unique_id(g, d);
+      uidToSource.insert(uid, g.sourceId);
+
+      // Datasets sharing dataset.index collapse to the same channel slot
+      if (d.index > 0) {
+        m_uidToParser.insert(uid, qMakePair(g.sourceId, d.index));
+        m_sourceMaxIndex[g.sourceId] = std::max(m_sourceMaxIndex.value(g.sourceId, 0), d.index);
+      }
+    }
+  }
 
   for (int col = 0; col < static_cast<int>(m_columnUniqueIds.size()); ++col) {
     const int uid    = m_columnUniqueIds[static_cast<size_t>(col)];
@@ -836,6 +848,8 @@ QByteArray Sessions::Player::buildFrameAt(qint64 timestampNs)
   cells.reserve(static_cast<int>(m_columnUniqueIds.size()));
   for (size_t i = 0; i < m_columnUniqueIds.size(); ++i)
     cells.append(QString());
+
+  m_sourcesAtCurrentTs.clear();
 
   // Lazy-prepare the per-frame fetch query once and reuse it across ticks
   if (!m_frameQueryPrepared) {
@@ -868,6 +882,11 @@ QByteArray Sessions::Player::buildFrameAt(qint64 timestampNs)
     } else {
       cells[it.value()] = m_frameQuery.value(2).toString();
     }
+
+    // Track which sources contributed data at this timestamp
+    const auto srcIt = m_columnToSource.constFind(it.value());
+    if (srcIt != m_columnToSource.constEnd())
+      m_sourcesAtCurrentTs.insert(srcIt.value());
   }
 
   m_frameQuery.finish();
@@ -890,20 +909,41 @@ void Sessions::Player::injectFrame(const QByteArray& frame)
     return;
   }
 
-  // Multi-source: slice the CSV row into per-source payloads by column position
+  // Multi-source: synthesize per-source channel arrays via column -> (sourceId, parserIndex)
   const auto fields = QString::fromUtf8(frame).trimmed().split(',');
 
-  QMap<int, QStringList> sourceFields;
-  for (int col = 0; col < fields.size(); ++col) {
-    auto it = m_columnToSource.constFind(col);
-    if (it == m_columnToSource.constEnd())
+  // Allocate per-source channel arrays with maxIndex slots.
+  QHash<int, QStringList> sourceChannels;
+  for (auto it = m_sourceMaxIndex.constBegin(); it != m_sourceMaxIndex.constEnd(); ++it)
+    if (m_sourcesAtCurrentTs.contains(it.key()))
+      sourceChannels[it.key()] = QStringList(it.value(), QString());
+
+  for (int col = 0; col < fields.size() && col < static_cast<int>(m_columnUniqueIds.size());
+       ++col) {
+    const int uid  = m_columnUniqueIds[static_cast<size_t>(col)];
+    const auto pIt = m_uidToParser.constFind(uid);
+    if (pIt == m_uidToParser.constEnd())
       continue;
 
-    sourceFields[it.value()].append(fields[col]);
+    const int srcId     = pIt.value().first;
+    const int parserIdx = pIt.value().second;
+    if (!m_sourcesAtCurrentTs.contains(srcId))
+      continue;
+
+    auto cit = sourceChannels.find(srcId);
+    if (cit == sourceChannels.end())
+      continue;
+
+    auto& slotList = cit.value();
+    if (parserIdx >= 1 && parserIdx <= slotList.size())
+      slotList[parserIdx - 1] = fields[col];
   }
 
+  if (sourceChannels.isEmpty())
+    return;
+
   QMap<int, QByteArray> sourcePayloads;
-  for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it)
+  for (auto it = sourceChannels.constBegin(); it != sourceChannels.constEnd(); ++it)
     sourcePayloads[it.key()] = it.value().join(',').toUtf8() + '\n';
 
   IO::ConnectionManager::instance().processMultiSourcePayload(frame, sourcePayloads);

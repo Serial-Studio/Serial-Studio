@@ -287,21 +287,21 @@ Widgets.Pane {
       // Data export grid
       //
       GridLayout {
+        columns: 1
         rowSpacing: 4
         columnSpacing: 4
         Layout.fillWidth: true
-        columns: Cpp_CommercialBuild ? 3 : 1
         Layout.maximumWidth: root.maxItemWidth
 
         Switch {
           id: csvLogging
 
-          text: qsTr("CSV File")
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
-          palette.accent: "#9a7820"
+          palette.accent: "#1f6b3a"
           opacity: enabled ? 1 : 0.5
-          palette.highlight: "#f0c83a"
+          palette.highlight: "#2e9c52"
+          text: qsTr("CSV Spreadsheet")
           Layout.alignment: Qt.AlignLeft
           enabled: root.dataExportAllowed
           checked: root.dataExportAllowed && Cpp_CSV_Export.exportEnabled
@@ -315,11 +315,11 @@ Widgets.Pane {
         Switch {
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
-          palette.accent: "#c2185b"
+          palette.accent: "#1f4f8a"
           opacity: enabled ? 1 : 0.5
           visible: Cpp_CommercialBuild
-          palette.highlight: "#ee6097"
-          text: qsTr("Session Database")
+          palette.highlight: "#2e7dd1"
+          text: qsTr("Session Recording")
           Layout.alignment: Qt.AlignLeft
           enabled: root.dataExportAllowed
           checked: Cpp_CommercialBuild
@@ -335,18 +335,13 @@ Widgets.Pane {
           }
         }
 
-        Item {
-          Layout.fillWidth: true
-          visible: Cpp_CommercialBuild
-        }
-
         Switch {
-          text: qsTr("MDF4 File")
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
-          palette.accent: "#3a8a5a"
+          palette.accent: "#8a1a1a"
           opacity: enabled ? 1 : 0.5
-          palette.highlight: "#74c07b"
+          text: qsTr("MDF4 Recording")
+          palette.highlight: "#c62828"
           Layout.alignment: Qt.AlignLeft
           enabled: root.dataExportAllowed
           checked: root.dataExportAllowed && Cpp_MDF4_Export.exportEnabled
@@ -360,10 +355,10 @@ Widgets.Pane {
         Switch {
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
-          palette.accent: "#3a6db0"
+          palette.accent: "#4a5663"
+          text: qsTr("Console Log")
           opacity: enabled ? 1 : 0.5
-          text: qsTr("Console Dump")
-          palette.highlight: "#5aa9eb"
+          palette.highlight: "#7d8a98"
           Layout.alignment: Qt.AlignLeft
           checked: Cpp_Console_Export.exportEnabled
 
@@ -371,11 +366,6 @@ Widgets.Pane {
             if (Cpp_Console_Export.exportEnabled !== checked)
               Cpp_Console_Export.exportEnabled = checked
           }
-        }
-
-        Item {
-          Layout.fillWidth: true
-          visible: Cpp_CommercialBuild
         }
       }
 

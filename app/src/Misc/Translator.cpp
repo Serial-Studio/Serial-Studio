@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -257,6 +257,7 @@ QStringList& Misc::Translator::availableLanguages()
   // Build the list of available translations on first call
   static QStringList list;
   if (list.isEmpty()) {
+    // code-verify off
     list.append(QStringLiteral("English"));
     list.append(QStringLiteral("Español"));
     list.append(QStringLiteral("简体中文"));
@@ -275,6 +276,7 @@ QStringList& Misc::Translator::availableLanguages()
     list.append(QStringLiteral("Nederlands"));
     list.append(QStringLiteral("Română"));
     list.append(QStringLiteral("Svenska"));
+    // code-verify on
   }
 
   return list;

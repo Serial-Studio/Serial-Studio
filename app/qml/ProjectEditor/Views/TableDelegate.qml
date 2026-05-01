@@ -709,23 +709,35 @@ ColumnLayout {
                 if (originalText !== formattedText) {
                   _hexComponent.text = formattedText;
 
+                  //
                   // Restore the cursor position, adjusting for added spaces
+                  //
                   if (!cursorAtEnd) {
+                    //
                     // Remove spaces from originalText and formattedText to compare lengths
+                    //
                     const cleanedOriginalText = originalText.replace(/ /g, '');
                     const cleanedFormattedText = formattedText.replace(/ /g, '');
 
+                    //
                     // Calculate the difference in length due to formatting
+                    //
                     const lengthDifference = cleanedFormattedText.length - cleanedOriginalText.length;
 
+                    //
                     // Count spaces before the cursor in both texts
+                    //
                     let spacesBeforeCursorOriginal = (originalText.slice(0, currentCursorPosition).match(/ /g) || []).length;
                     let spacesBeforeCursorFormatted = (formattedText.slice(0, currentCursorPosition).match(/ /g) || []).length;
 
+                    //
                     // Calculate adjustment factor
+                    //
                     const adjustment = spacesBeforeCursorFormatted - spacesBeforeCursorOriginal + lengthDifference;
 
+                    //
                     // Restore the cursor position with adjustment
+                    //
                     _hexComponent.cursorPosition = Math.min(currentCursorPosition + adjustment, _hexComponent.text.length);
                   }
                 }

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -81,8 +81,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_autoSaveTimer(new QTimer(this))
   , m_autoSaveSuspended(false)
 {
-  // Debounce widgetSettings autosave so a flurry of drag/resize/workspace
-  // events coalesces into a single disk write
+  // Debounce widgetSettings autosave
   m_autoSaveTimer->setSingleShot(true);
   m_autoSaveTimer->setInterval(1500);
   connect(m_autoSaveTimer, &QTimer::timeout, this, &ProjectModel::autoSave);
@@ -90,16 +89,17 @@ DataModel::ProjectModel::ProjectModel()
   connect(this, &ProjectModel::widgetSettingsChanged, this, [this] {
     if (m_autoSaveSuspended || m_filePath.isEmpty() || m_locked)
       return;
+
     if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
       return;
 
     m_autoSaveTimer->start();
   });
 
-  // newJsonFile() before wiring auto-regen — it emits groupsChanged and AppState is mid-init
+  // newJsonFile() before wiring auto-regen -- it emits groupsChanged and AppState is mid-init
   newJsonFile();
 
-  // Structural change → rebuild auto workspaces, or merge into hand-edited list
+  // Structural change -> rebuild auto workspaces, or merge into hand-edited list
   connect(this, &ProjectModel::groupsChanged, this, [this] {
     if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
       return;
@@ -200,7 +200,7 @@ bool DataModel::ProjectModel::validateProject(const bool silent)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Project lock — UX read-only flag (plain MD5, not crypto)
+// Project lock -- UX read-only flag (plain MD5, not crypto)
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -1004,7 +1004,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
       if (path.isEmpty())
         return;
 
-      // Enforce .ssproj extension — append when missing
+      // Enforce .ssproj extension -- append when missing
       QString finalPath = path;
       if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
         finalPath += QStringLiteral(".ssproj");
@@ -1056,7 +1056,7 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
     return false;
   }
 
-  // Enforce .ssproj extension — append when missing
+  // Enforce .ssproj extension -- append when missing
   QString finalPath = path;
   if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
     finalPath += QStringLiteral(".ssproj");
@@ -1225,7 +1225,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_tables.clear();
   m_customizeWorkspaces = false;
 
-  // Clear the lock — a fresh project starts unlocked with no password set
+  // Clear the lock -- a fresh project starts unlocked with no password set
   const bool wasLocked = m_locked;
   m_passwordHash.clear();
   m_locked = false;
@@ -1461,8 +1461,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   if (document.isEmpty())
     return false;
 
-  // Suspend the debounced autosave so the load itself doesn't immediately
-  // schedule a write of freshly-loaded data
+  // Suspend autosave during load
   m_autoSaveSuspended = true;
   if (m_autoSaveTimer)
     m_autoSaveTimer->stop();
@@ -1501,7 +1500,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   // Capture creator stamp so we round-trip it on save without overwriting
   m_writerVersionAtCreation = json.value(Keys::WriterVersionAtCreation).toString();
 
-  // Restore lock — file with a hash opens read-only until user unlocks
+  // Restore lock -- file with a hash opens read-only until user unlocks
   m_passwordHash       = json.value(Keys::PasswordHash).toString();
   const bool wasLocked = m_locked;
   m_locked             = !m_passwordHash.isEmpty();
@@ -1621,7 +1620,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   m_workspaces.clear();
   m_customizeWorkspaces = json.value(QStringLiteral("customizeWorkspaces")).toBool(false);
 
-  // Pre-v3.3: workspaces array without customize flag → auto-promote
+  // Pre-v3.3: workspaces array without customize flag -> auto-promote
   if (!m_customizeWorkspaces && json.contains(Keys::Workspaces)
       && !json.value(Keys::Workspaces).toArray().isEmpty())
     m_customizeWorkspaces = true;
@@ -1768,7 +1767,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   if (!m_widgetSettings.isEmpty())
     Q_EMIT widgetSettingsChanged();
 
-  // Auto-save legacy → multi-source migration; skip in-memory loads
+  // Auto-save legacy -> multi-source migration; skip in-memory loads
   if (legacyFormat && !m_filePath.isEmpty()) {
     qInfo() << "[ProjectModel] Migrating legacy project to multi-source format, saving...";
     QFile f(m_filePath);
@@ -1778,8 +1777,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
     }
   }
 
-  // Resume autosave now that load is complete; setModified(false) above already
-  // cleared the dirty flag so the timer won't fire on its own.
+  // Resume autosave
   m_autoSaveSuspended = false;
 
   return true;
@@ -2043,7 +2041,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   if (m_customizeWorkspaces)
     deletedTypeCounts = widgetTypeCountsForGroup(m_groups[groupId]);
 
-  // Per-type counts the dataset contributes — used to shift later refs if group survives
+  // Per-type counts the dataset contributes -- used to shift later refs if group survives
   QMap<int, int> datasetTypeCounts;
   if (m_customizeWorkspaces) {
     const auto& ds  = m_groups[groupId].datasets[datasetId];
@@ -2067,7 +2065,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
         d->groupId = id;
     }
 
-    // Empty group was removed — shift refs using the pre-delete per-type counts
+    // Empty group was removed -- shift refs using the pre-delete per-type counts
     if (m_customizeWorkspaces)
       shiftWorkspaceRefsAfterGroupDelete(groupId, deletedTypeCounts);
 
@@ -2084,7 +2082,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   for (auto dataset = begin; dataset != end; ++dataset, ++id)
     dataset->datasetId = id;
 
-  // Group survives — shift later same-type refs by datasetTypeCounts
+  // Group survives -- shift later same-type refs by datasetTypeCounts
   if (m_customizeWorkspaces)
     shiftWorkspaceRefsAfterDatasetDelete(groupId, datasetTypeCounts);
 
@@ -2736,9 +2734,11 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
     y.index = nextDatasetIndex() + 1;
     z.index = nextDatasetIndex() + 2;
 
+    // code-verify off
     x.units = "m/s²";
     y.units = "m/s²";
     z.units = "m/s²";
+    // code-verify on
 
     x.wgtMin    = 0;
     x.wgtMax    = 0;
@@ -2832,8 +2832,10 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
     lon.index = nextDatasetIndex() + 1;
     alt.index = nextDatasetIndex() + 2;
 
+    // code-verify off
     lat.units = "°";
     lon.units = "°";
+    // code-verify on
     alt.units = "m";
 
     lat.widget    = "lat";
@@ -2967,7 +2969,7 @@ void DataModel::ProjectModel::updateSourceFrameParserLanguage(int sourceId, int 
       return src.sourceId == sourceId;
     });
 
-  // Unknown source → nothing to do
+  // Unknown source -> nothing to do
   if (it == m_sources.end())
     return;
 
@@ -3014,7 +3016,7 @@ void DataModel::ProjectModel::storeFrameParserCode(int sourceId, const QString& 
  * @brief Stages the active dashboard tab group ID.
  *
  * Stored in m_widgetSettings so it survives a save/load cycle and marks
- * the project as modified. No disk write happens here — the standard
+ * the project as modified. No disk write happens here -- the standard
  * save workflow is responsible for flushing. No-op outside ProjectFile
  * mode so QuickPlot/ConsoleOnly can't pollute the loaded project.
  */
@@ -3035,8 +3037,7 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
   else
     m_widgetSettings.remove(Keys::kActiveGroupSubKey);
 
-  // Mark the project dirty and notify listeners — widgetSettingsChanged drives
-  // the debounced autosave so workspace selection persists across reconnects
+  // Mark the project dirty and notify listeners
   setModified(true);
   Q_EMIT activeGroupIdChanged();
   Q_EMIT widgetSettingsChanged();
@@ -3046,7 +3047,7 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
  * @brief Stages the widget layout for a specific group.
  *
  * Stores the layout under the canonical key produced by Keys::layoutKey()
- * and marks the project as modified. No disk write happens here — the
+ * and marks the project as modified. No disk write happens here -- the
  * standard save workflow is responsible for flushing. No-op outside
  * ProjectFile mode so QuickPlot/ConsoleOnly can't pollute the loaded project.
  *
@@ -3296,7 +3297,7 @@ void DataModel::ProjectModel::deleteRegister(const QString& table, const QString
 }
 
 /**
- * @brief Updates an existing register — rename, retype, and/or default value.
+ * @brief Updates an existing register -- rename, retype, and/or default value.
  */
 void DataModel::ProjectModel::updateRegister(const QString& table,
                                              const QString& registerName,
@@ -3512,7 +3513,7 @@ void DataModel::ProjectModel::confirmDeleteRegister(const QString& table,
 /**
  * @brief Exports a table's registers to a CSV file chosen by the user.
  *
- * Format: name,type,value — one row per register, no header row.
+ * Format: name,type,value -- one row per register, no header row.
  */
 void DataModel::ProjectModel::exportTableToCsv(const QString& tableName)
 {
@@ -3810,10 +3811,10 @@ bool DataModel::ProjectModel::customizeWorkspaces() const noexcept
 /**
  * @brief Flips the customize switch.
  *
- * Off → On: m_workspaces is already the auto layout; simply stop
+ * Off -> On: m_workspaces is already the auto layout; simply stop
  *   regenerating it so the user's subsequent edits stick.
  *
- * On → Off: discard the hand-edited list and re-seed from the current
+ * On -> Off: discard the hand-edited list and re-seed from the current
  *   project structure.
  */
 void DataModel::ProjectModel::setCustomizeWorkspaces(const bool enabled)
@@ -3859,7 +3860,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
   QMap<SerialStudio::DashboardWidget, int> groupIdx;
   QMap<SerialStudio::DashboardWidget, int> datasetIdx;
 
-  // Mirror Dashboard's non-Pro Plot3D → MultiPlot remap so refs resolve correctly
+  // Mirror Dashboard's non-Pro Plot3D -> MultiPlot remap so refs resolve correctly
   const bool pro = SerialStudio::proWidgetsEnabled();
 
   // Refs collected once, reused for all three workspace categories
@@ -3875,12 +3876,16 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
 
     std::vector<DataModel::WidgetRef> groupRefs;
 
-    // Plot3D → MultiPlot fallback on non-Pro to match Dashboard registration
+    // Plot3D -> MultiPlot fallback on non-Pro to match Dashboard registration
     auto groupKey = SerialStudio::getDashboardWidget(group);
     if (groupKey == SerialStudio::DashboardPlot3D && !pro)
       groupKey = SerialStudio::DashboardMultiPlot;
 
-    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
+    // Skip empty output panels -- nothing to render on the dashboard.
+    const bool isEmptyOutputPanel =
+      group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
+
+    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel) {
       DataModel::WidgetRef r;
       r.widgetType       = static_cast<int>(groupKey);
       r.groupId          = group.groupId;
@@ -3938,12 +3943,12 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
   if (eligibleGroups == 0)
     return result;
 
-  // Fixed workspace ID slots — stable across group add/remove
+  // Fixed workspace ID slots -- stable across group add/remove
   static constexpr int kOverviewId      = 1000;
   static constexpr int kAllDataId       = 1001;
   static constexpr int kPerGroupIdStart = 1002;
 
-  // "Overview" workspace — first so users land here by default
+  // "Overview" workspace -- first so users land here by default
   if (overviewRefs.size() >= 2) {
     DataModel::Workspace ws;
     ws.workspaceId = kOverviewId;
@@ -3953,7 +3958,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     result.push_back(std::move(ws));
   }
 
-  // "All Data" — every widget across every group.
+  // "All Data" -- every widget across every group.
   if (eligibleGroups >= 2) {
     DataModel::Workspace ws;
     ws.workspaceId = kAllDataId;
@@ -3984,7 +3989,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
  *
  * Called on project load and on every groupsChanged signal while
  * customizeWorkspaces is off. Does not touch m_customizeWorkspaces and does
- * not call setModified() — auto-regeneration is not a user-visible edit.
+ * not call setModified() -- auto-regeneration is not a user-visible edit.
  * Caller is responsible for emitting editor/activeWorkspacesChanged() when appropriate.
  */
 void DataModel::ProjectModel::regenerateAutoWorkspaces()
@@ -4001,7 +4006,7 @@ void DataModel::ProjectModel::regenerateAutoWorkspaces()
  *
  * In customize mode the user owns m_workspaces, so we cannot wholesale
  * regenerate it. Instead we diff the current auto layout against the last
- * snapshot — refs and per-group workspaces that appear for the first time are
+ * snapshot -- refs and per-group workspaces that appear for the first time are
  * merged in (preserving user-removed refs from prior generations), while
  * existing per-group workspaces inherit the latest group title. Returns true
  * when m_workspaces was modified.
@@ -4087,7 +4092,7 @@ int DataModel::ProjectModel::autoGenerateWorkspaces()
   if (m_customizeWorkspaces && !m_workspaces.empty())
     return m_workspaces.front().workspaceId;
 
-  // Bail out if nothing eligible — don't flip customize mode on an empty list
+  // Bail out if nothing eligible -- don't flip customize mode on an empty list
   auto seed = buildAutoWorkspaces();
   if (seed.empty())
     return -1;
@@ -4123,12 +4128,16 @@ QMap<int, int> DataModel::ProjectModel::widgetTypeCountsForGroup(const Group& g)
   if (!SerialStudio::groupEligibleForWorkspace(g))
     return counts;
 
-  // Mirror buildAutoWorkspaces's non-Pro Plot3D → MultiPlot remap
+  // Mirror buildAutoWorkspaces's non-Pro Plot3D -> MultiPlot remap
   auto groupKey = SerialStudio::getDashboardWidget(g);
   if (groupKey == SerialStudio::DashboardPlot3D && !SerialStudio::proWidgetsEnabled())
     groupKey = SerialStudio::DashboardMultiPlot;
 
-  if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey))
+  // Skip empty output panels -- nothing to render on the dashboard.
+  const bool isEmptyOutputPanel =
+    g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
+
+  if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
     counts[static_cast<int>(groupKey)] += 1;
 
   // Dataset widgets; LED collapses to a single per-group entry
@@ -4193,7 +4202,7 @@ void DataModel::ProjectModel::shiftWorkspaceRefsAfterGroupDelete(
  *
  * The running per-widget-type counter used by Dashboard walks groups in order,
  * then datasets inside each group. A dataset removed from groupId "steals" N
- * positions from the counter for each widget type the dataset contributed —
+ * positions from the counter for each widget type the dataset contributed --
  * refs whose relativeIndex is at or above that position need to shift down.
  * Refs pointing at the removed dataset itself (same groupId, relativeIndex in
  * the stolen range) are dropped.
@@ -4217,7 +4226,12 @@ void DataModel::ProjectModel::shiftWorkspaceRefsAfterDatasetDelete(
       break;
 
     const auto groupKey = SerialStudio::getDashboardWidget(g);
-    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey))
+
+    // Skip empty output panels -- nothing to render on the dashboard.
+    const bool isEmptyOutputPanel =
+      g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
+
+    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
       runningAtGroup[static_cast<int>(groupKey)] += 1;
 
     for (const auto& ds : g.datasets) {
@@ -4326,7 +4340,7 @@ void DataModel::ProjectModel::showGroup(int groupId)
  *        sessions that have no backing project file.
  *
  * Skips when a file is loaded so a project's state survives across mode
- * switches and connection cycles — even when the user runs QuickPlot on
+ * switches and connection cycles -- even when the user runs QuickPlot on
  * top of an open project.
  */
 void DataModel::ProjectModel::clearTransientState()
@@ -4381,9 +4395,9 @@ QVariantList DataModel::ProjectModel::sourcesForDiagram() const
 
   for (const auto& src : m_sources) {
     QVariantMap map;
-    map[QStringLiteral("sourceId")] = src.sourceId;
-    map[QStringLiteral("busType")]  = src.busType;
-    map[QStringLiteral("title")]    = src.title;
+    map[Keys::SourceId] = src.sourceId;
+    map[Keys::BusType]  = src.busType;
+    map[Keys::Title]    = src.title;
     result.append(map);
   }
 
@@ -4406,32 +4420,32 @@ QVariantList DataModel::ProjectModel::groupsForDiagram() const
 
     for (const auto& ds : grp.datasets) {
       QVariantMap dsMap;
-      dsMap[QStringLiteral("datasetId")] = ds.datasetId;
-      dsMap[QStringLiteral("title")]     = ds.title;
-      dsMap[QStringLiteral("units")]     = ds.units;
-      dsMap[QStringLiteral("widget")]    = ds.widget;
+      dsMap[Keys::DatasetId] = ds.datasetId;
+      dsMap[Keys::Title]     = ds.title;
+      dsMap[Keys::Units]     = ds.units;
+      dsMap[Keys::Widget]    = ds.widget;
       datasets.append(dsMap);
     }
 
     // Serialize output widgets
     QVariantMap map;
-    map[QStringLiteral("groupId")] = grp.groupId;
+    map[Keys::GroupId] = grp.groupId;
     QVariantList outputWidgets;
     outputWidgets.reserve(static_cast<qsizetype>(grp.outputWidgets.size()));
     for (const auto& ow : grp.outputWidgets) {
       QVariantMap owMap;
-      owMap[QStringLiteral("title")] = ow.title;
-      owMap[QStringLiteral("type")]  = static_cast<int>(ow.type);
+      owMap[Keys::Title]      = ow.title;
+      owMap[Keys::OutputType] = static_cast<int>(ow.type);
       outputWidgets.append(owMap);
     }
 
     // Assemble the group entry
-    map[QStringLiteral("sourceId")]      = grp.sourceId;
-    map[QStringLiteral("title")]         = grp.title;
-    map[QStringLiteral("widget")]        = grp.widget;
-    map[QStringLiteral("groupType")]     = static_cast<int>(grp.groupType);
-    map[QStringLiteral("datasets")]      = datasets;
-    map[QStringLiteral("outputWidgets")] = outputWidgets;
+    map[Keys::SourceId]      = grp.sourceId;
+    map[Keys::Title]         = grp.title;
+    map[Keys::Widget]        = grp.widget;
+    map[Keys::GroupType]     = static_cast<int>(grp.groupType);
+    map[Keys::Datasets]      = datasets;
+    map[Keys::OutputWidgets] = outputWidgets;
     result.append(map);
   }
 
@@ -4449,10 +4463,10 @@ QVariantList DataModel::ProjectModel::actionsForDiagram() const
 
   for (const auto& act : m_actions) {
     QVariantMap map;
-    map[QStringLiteral("actionId")] = act.actionId;
-    map[QStringLiteral("sourceId")] = act.sourceId;
-    map[QStringLiteral("title")]    = act.title;
-    map[QStringLiteral("icon")]     = Misc::IconEngine::resolveActionIconSource(act.icon);
+    map[Keys::ActionId] = act.actionId;
+    map[Keys::SourceId] = act.sourceId;
+    map[Keys::Title]    = act.title;
+    map[Keys::Icon]     = Misc::IconEngine::resolveActionIconSource(act.icon);
     result.append(map);
   }
 
@@ -4463,7 +4477,7 @@ QVariantList DataModel::ProjectModel::actionsForDiagram() const
  * @brief Silently writes the current project to disk; called from the debounce timer.
  *
  * Bypasses validateProject and the @c jsonFileChanged / @c sourceStructureChanged
- * cascade because nothing structural changed — autosave only flushes layout
+ * cascade because nothing structural changed -- autosave only flushes layout
  * and widget-setting edits that already live in @c m_widgetSettings.
  */
 void DataModel::ProjectModel::autoSave()

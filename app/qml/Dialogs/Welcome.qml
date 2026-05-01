@@ -279,8 +279,8 @@ Window {
             Label {
               wrapMode: Label.WordWrap
               Layout.maximumWidth: parent.width
-              text: qsTr("You’re currently using the fully-featured trial " +
-                         "of %1 Pro. It’s valid for 14 days of personal, " +
+              text: qsTr("You're currently using the fully-featured trial " +
+                         "of %1 Pro. It's valid for 14 days of personal, " +
                          "non-commercial use.").arg(Cpp_AppName)
             }
 

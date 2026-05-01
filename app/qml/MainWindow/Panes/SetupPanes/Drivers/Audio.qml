@@ -31,7 +31,9 @@ Item {
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
+  //
   // Resync combos when C++ clamps the selection (writing currentIndex breaks the binding).
+  //
   Connections {
     target: Cpp_IO_Audio
     function onInputSettingsChanged() {
@@ -70,8 +72,8 @@ Item {
 
     Image {
       sourceSize: Qt.size(96, 96)
-      Layout.alignment: Qt.AlignHCenter
       source: "qrc:/images/no-mic.svg"
+      Layout.alignment: Qt.AlignHCenter
     }
 
     Item {

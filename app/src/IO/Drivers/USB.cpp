@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary features of Serial Studio and is
  * licensed under the Serial Studio Commercial License.
@@ -688,8 +688,10 @@ void IO::Drivers::USB::enumerateDevices()
       const QString mfr  = fetchStr(desc.iManufacturer);
       const QString prod = fetchStr(desc.iProduct);
 
+      // code-verify off
       if (!mfr.isEmpty() || !prod.isEmpty())
         label += QStringLiteral(" – %1 %2").arg(mfr, prod).trimmed();
+      // code-verify on
 
       libusb_close(tmp);
     }
@@ -795,10 +797,12 @@ void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
   info.maxPacketSize   = ep.wMaxPacketSize;
   info.interfaceNumber = ifNum;
   const QString epHex  = QString::number(ep.bEndpointAddress, 16).toUpper().rightJustified(2, '0');
-  info.label           = QStringLiteral("EP 0x%1 – %2 %3  (IF%4, max %5 B)")
+  // code-verify off
+  info.label = QStringLiteral("EP 0x%1 – %2 %3  (IF%4, max %5 B)")
                  .arg(epHex, typeStr, dirStr)
                  .arg(ifNum)
                  .arg(ep.wMaxPacketSize);
+  // code-verify on
 
   if (isIn) {
     m_inEndpoints.append(info);

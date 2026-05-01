@@ -36,6 +36,7 @@ SplitView {
   property string settingsKey: ""
   property Component leftPanel: null
   property Component rightPanel: null
+  property bool captionSeparatorVisible: true
 
   //
   // 1px handle matching the app theme
@@ -46,6 +47,7 @@ SplitView {
 
     Rectangle {
       height: 32
+      visible: root.captionSeparatorVisible
       color: Cpp_ThemeManager.colors["pane_caption_border"]
       anchors {
         top: parent.top

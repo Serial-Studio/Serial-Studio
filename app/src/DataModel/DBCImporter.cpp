@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary features of Serial Studio and is
  * licensed under the Serial Studio Commercial License.
@@ -698,9 +698,11 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
   if (unit == "%" || (signal.minimum() == 0 && signal.maximum() == 100))
     return SerialStudio::datasetWidgetId(SerialStudio::Bar);
 
+  // code-verify off
   if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc") || unit.contains("degf")
       || name.contains("temp") || name.contains("temperature"))
     return SerialStudio::datasetWidgetId(SerialStudio::Bar);
+  // code-verify on
 
   if (unit.contains("rpm") || unit.contains("km/h") || unit.contains("mph") || unit.contains("v")
       || unit.contains("a") || unit.contains("psi") || unit.contains("bar") || unit.contains("nm")
@@ -880,8 +882,10 @@ DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
   if (hasNumberedPattern(signalList) && allSimilarUnits(signalList)) {
     if (!signalList.isEmpty()) {
       const auto unit = signalList.first().physicalUnit().toLower();
+      // code-verify off
       if (unit.contains("°") || unit.contains("deg"))
         return Temperatures;
+      // code-verify on
 
       if (unit.contains("v") && !unit.contains("rev"))
         return Voltages;
@@ -920,8 +924,10 @@ bool DataModel::DBCImporter::isCriticalSignal(const QCanSignalDescription& signa
   if (name.contains("temp") || name.contains("temperature"))
     return true;
 
+  // code-verify off
   if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc") || unit.contains("degf"))
     return true;
+  // code-verify on
 
   if ((name.contains("volt") || unit.contains("v")) && !unit.contains("rev"))
     return true;

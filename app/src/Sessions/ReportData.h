@@ -38,6 +38,7 @@ struct DatasetStats {
   double stddev;
   double firstValue;
   double lastValue;
+  QString sourceTitle;
   QString group;
   QString title;
   QString units;
@@ -49,6 +50,7 @@ struct DatasetStats {
 struct DatasetSeries {
   int uniqueId;
   qint64 totalSamples;
+  QString sourceTitle;
   QString group;
   QString title;
   QString units;

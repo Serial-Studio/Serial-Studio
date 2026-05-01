@@ -28,8 +28,8 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Configures item flags, sets fill color and connects signals/slots to
- * automatically resize the contained widget to the QML item's size.
+ * @brief Configures item flags and wires geometry/visibility signals so the embedded QWidget tracks
+ * the QML item.
  */
 DeclarativeWidget::DeclarativeWidget(QQuickItem* parent)
   : QuickPaintedItemCompat(parent)
@@ -74,7 +74,8 @@ QWidget* DeclarativeWidget::widget() const
 }
 
 /**
- * Returns the palette currently used by the widget.
+ * @brief Returns the palette currently used by the embedded widget, or an empty palette when
+ * absent.
  */
 QPalette DeclarativeWidget::palette() const
 {
@@ -89,9 +90,7 @@ QPalette DeclarativeWidget::palette() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Allows the sub-class widget to define its own content width hint for the
- * QML user interface. This is useful to add scrolling support using native
- * QML elements.
+ * @brief Returns the sub-class widget's content-width hint used by the QML scroller.
  */
 int DeclarativeWidget::contentWidth() const
 {
@@ -99,9 +98,7 @@ int DeclarativeWidget::contentWidth() const
 }
 
 /**
- * Allows the sub-class widget to define its own content height hint for the
- * QML user interface. This is useful to add scrolling support using native
- * QML elements.
+ * @brief Returns the sub-class widget's content-height hint used by the QML scroller.
  */
 int DeclarativeWidget::contentHeight() const
 {
@@ -113,9 +110,8 @@ int DeclarativeWidget::contentHeight() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Grabs an image/pixmap of the contained widget. The pixmap is later
- * used to render the widget in the QML interface without causing signal/slot
- * interferences with the scenegraph render thread.
+ * @brief Grabs the embedded widget into an image so the scenegraph can render it without thread
+ * crosstalk.
  */
 void DeclarativeWidget::redraw(const QRect& rect)
 {
@@ -133,8 +129,7 @@ void DeclarativeWidget::redraw(const QRect& rect)
 }
 
 /**
- * Displays the pixmap generated in the @c update() function in the QML
- * interface through the given @a painter pointer.
+ * @brief Paints the cached widget image onto the QML scenegraph through the supplied painter.
  */
 void DeclarativeWidget::paint(QPainter* painter)
 {
@@ -147,7 +142,7 @@ void DeclarativeWidget::paint(QPainter* painter)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Resizes the widget to fit inside the QML painted item.
+ * @brief Resizes the embedded widget to match the current QML painted-item geometry.
  */
 void DeclarativeWidget::resizeWidget()
 {
@@ -174,7 +169,7 @@ void DeclarativeWidget::requestUpdate()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Changes the @param widget to be rendered in the QML interface.
+ * @brief Sets the embedded QWidget rendered into the QML item, ignoring null or unchanged values.
  */
 void DeclarativeWidget::setWidget(QWidget* widget)
 {
@@ -186,9 +181,7 @@ void DeclarativeWidget::setWidget(QWidget* widget)
 }
 
 /**
- * Allows the sub-class widget to define its own content width hint for the
- * QML user interface. This is useful to add scrolling support using native
- * QML elements.
+ * @brief Updates the content-width hint reported to QML and signals geometryChanged on change.
  */
 void DeclarativeWidget::setContentWidth(const int width)
 {
@@ -200,9 +193,7 @@ void DeclarativeWidget::setContentWidth(const int width)
 }
 
 /**
- * Allows the sub-class widget to define its own content height hint for the
- * QML user interface. This is useful to add scrolling support using native
- * QML elements.
+ * @brief Updates the content-height hint reported to QML and signals geometryChanged on change.
  */
 void DeclarativeWidget::setContentHeight(const int height)
 {
@@ -214,7 +205,7 @@ void DeclarativeWidget::setContentHeight(const int height)
 }
 
 /**
- * Modifies the palette used by the widget.
+ * @brief Applies the given palette to the embedded widget and triggers a redraw.
  */
 void DeclarativeWidget::setPalette(const QPalette& palette)
 {

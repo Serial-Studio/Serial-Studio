@@ -169,8 +169,10 @@ Popup {
           icon.height: 16
           background: Item{}
           icon.source: "qrc:/icons/buttons/apply.svg"
-          visible: modelData[root.checkedRole] !== undefined ? modelData[root.checkedRole] :
-                                                               root.showCheckable &&  root.currentValue === modelData[root.valueRole]
+          //
+          // Only show the checkmark when the model entry carries `checked`
+          //
+          visible: modelData[root.checkedRole] === true
           icon.color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :
                                                  Cpp_ThemeManager.colors["start_menu_text"]
         }

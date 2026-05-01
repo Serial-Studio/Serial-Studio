@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -715,7 +715,7 @@ void Misc::ExtensionManager::autoUpdateExtensions()
   // Schedule next update via a queued hop so applyFilter() finishes before re-entry
   if (!m_autoUpdateQueue.isEmpty()) {
     if (found && m_loading) {
-      // Remote install in progress — wait for completion, then queue
+      // Remote install in progress -- wait for completion, then queue
       connect(
         this,
         &ExtensionManager::extensionInstalled,
@@ -870,7 +870,7 @@ void Misc::ExtensionManager::onFileDownloadReply()
     return;
   }
 
-  // All downloads complete — register using saved metadata snapshot
+  // All downloads complete -- register using saved metadata snapshot
   QJsonObject info;
   info.insert("version", m_currentInstallMeta.value("version").toString());
   info.insert("type", m_currentInstallMeta.value("type").toString());
@@ -1186,7 +1186,7 @@ QString Misc::ExtensionManager::currentPlatformKey() const
  * key (e.g. "darwin/\*"), and finally returns the top-level fields.
  *
  * The returned object always contains "entry", "runtime", "terminal", and
- * "files" keys — merging the platform override on top of the base metadata.
+ * "files" keys -- merging the platform override on top of the base metadata.
  *
  * @param meta The parsed info.json content.
  * @return Resolved metadata object with platform-appropriate values.
@@ -1259,7 +1259,7 @@ QString Misc::ExtensionManager::pluginOutput(const QString& id) const
 }
 
 /**
- * @brief Convenience — launches the currently selected addon if it's a plugin.
+ * @brief Convenience -- launches the currently selected addon if it's a plugin.
  */
 void Misc::ExtensionManager::launchSelectedPlugin()
 {
@@ -1268,7 +1268,7 @@ void Misc::ExtensionManager::launchSelectedPlugin()
 }
 
 /**
- * @brief Convenience — stops the currently selected addon if it's a running plugin.
+ * @brief Convenience -- stops the currently selected addon if it's a running plugin.
  */
 void Misc::ExtensionManager::stopSelectedPlugin()
 {
@@ -1414,7 +1414,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     const auto exes = obj.value("executables").toArray();
     const auto url  = obj.value("url").toString();
 
-    // Skip pip-managed dependencies — handled by run.sh/run.cmd venv
+    // Skip pip-managed dependencies -- handled by run.sh/run.cmd venv
     if (obj.contains("pip")) {
       hasPipDeps = true;
       continue;
@@ -1577,7 +1577,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   // Notify user about first-run setup when pip dependencies need installation
   if (hasPipDeps && !QDir(pluginDir + "/venv").exists()) {
     m_pluginOutput[id] +=
-      QStringLiteral("[Setup] Installing required packages — this may take a moment...\n");
+      QStringLiteral("[Setup] Installing required packages -- this may take a moment...\n");
   }
 
   Q_EMIT pluginOutputChanged(id);
@@ -1719,11 +1719,11 @@ void Misc::ExtensionManager::onDashboardAvailableChanged()
 {
   const bool available = UI::Dashboard::instance().available();
 
-  // Dashboard just became visible — restore plugins
+  // Dashboard just became visible -- restore plugins
   if (available && !m_dashboardWasAvailable)
     restoreRunningPlugins();
 
-  // Dashboard just became hidden — save & stop plugins
+  // Dashboard just became hidden -- save & stop plugins
   else if (!available && m_dashboardWasAvailable)
     stopAllPlugins();
 

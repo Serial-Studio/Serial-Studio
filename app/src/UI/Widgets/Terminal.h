@@ -177,11 +177,14 @@ private:
   void replaceData(int x, int y, const QChar& byte);
   void applyAnsiColor(const QList<int>& codes);
   void updateAnsiColorPalette();
-  QColor getColor256(int index) const;
+  [[nodiscard]] QColor getColor256(int index) const;
   static QColor getColor256Static(int index);
 
-  int findCharAtPixelX(const QString& line, int segStart, int segEnd, int pixelX) const;
-  int calcCursorPixelX(
+  [[nodiscard]] int findCharAtPixelX(const QString& line,
+                                     int segStart,
+                                     int segEnd,
+                                     int pixelX) const;
+  [[nodiscard]] int calcCursorPixelX(
     QPainter* painter, const QString& line, int segStart, int cursorCol, int segEnd) const;
   void drawCursor(QPainter* painter, int firstLine, int lastVLine, int lineHeight);
   void drawSegmentSelection(

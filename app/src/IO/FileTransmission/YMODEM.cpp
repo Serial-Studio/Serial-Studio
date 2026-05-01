@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -88,7 +88,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
     const quint8 ch = static_cast<quint8>(byte);
 
     switch (m_yState) {
-      // Receiver sends 'C' to start — send block 0 (filename + size)
+      // Receiver sends 'C' to start -- send block 0 (filename + size)
       case YState::WaitingForInitialC:
         if (ch == kCRC) {
           m_timeoutTimer.stop();
@@ -111,7 +111,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
         }
         break;
 
-      // Receiver sends 'C' after ACK of block 0 — start data blocks
+      // Receiver sends 'C' after ACK of block 0 -- start data blocks
       case YState::WaitingForDataC:
         if (ch == kCRC) {
           m_timeoutTimer.stop();
@@ -152,7 +152,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
 
           Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
 
-          // Rewind by actual bytes read — fixed 1024 over-rewinds the final partial block.
+          // Rewind by actual bytes read -- fixed 1024 over-rewinds the final partial block.
           m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
           if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
             m_file.close();
@@ -192,7 +192,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
         }
         break;
 
-      // Receiver sends 'C' after final EOT — send empty block 0
+      // Receiver sends 'C' after final EOT -- send empty block 0
       case YState::WaitingForEndBatchC:
         if (ch == kCRC) {
           m_timeoutTimer.stop();
@@ -232,7 +232,7 @@ void IO::Protocols::YMODEM::sendBlock0()
   QByteArray fileNameUtf8  = info.fileName().toUtf8();
   const QByteArray sizeStr = QByteArray::number(m_fileSize);
 
-  // Truncate long filenames — 24 bytes reserved for size string + terminators.
+  // Truncate long filenames -- 24 bytes reserved for size string + terminators.
   static constexpr int kMaxFileNameBytes = 128 - 24;
   if (fileNameUtf8.size() > kMaxFileNameBytes)
     fileNameUtf8.truncate(kMaxFileNameBytes);

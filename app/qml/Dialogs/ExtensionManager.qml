@@ -885,7 +885,9 @@ SmartDialog {
                 }
               }
 
+              //
               // Survive Chromium render-process death instead of crashing.
+              //
               onRenderProcessTerminated: function(terminationStatus, exitCode) {
                 console.warn("ExtensionManager readme view: render process terminated",
                              terminationStatus, "exit", exitCode)

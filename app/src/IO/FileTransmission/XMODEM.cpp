@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -165,7 +165,7 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
                                  .arg(m_retryCount)
                                  .arg(m_maxRetries));
 
-          // Rewind by actual bytes read — fixed blockSize over-rewinds the final partial block.
+          // Rewind by actual bytes read -- fixed blockSize over-rewinds the final partial block.
           m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
           if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
             m_file.close();

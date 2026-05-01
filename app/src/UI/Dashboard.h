@@ -68,10 +68,6 @@ class Dashboard : public QObject {
              READ  autoHideToolbar
              WRITE setAutoHideToolbar
              NOTIFY autoHideToolbarChanged)
-  Q_PROPERTY(bool showTaskbarButtons
-             READ  showTaskbarButtons
-             WRITE setShowTaskbarButtons
-             NOTIFY showTaskbarButtonsChanged)
   Q_PROPERTY(bool containsCommercialFeatures
              READ containsCommercialFeatures
              NOTIFY containsCommercialFeaturesChanged)
@@ -92,7 +88,6 @@ signals:
   void showActionPanelChanged();
   void terminalEnabledChanged();
   void notificationLogEnabledChanged();
-  void showTaskbarButtonsChanged();
   void autoHideToolbarChanged();
   void containsCommercialFeaturesChanged();
 
@@ -112,7 +107,6 @@ public:
   [[nodiscard]] bool terminalEnabled() const noexcept;
   [[nodiscard]] bool notificationLogEnabled() const noexcept;
   [[nodiscard]] bool autoHideToolbar() const noexcept;
-  [[nodiscard]] bool showTaskbarButtons() const noexcept;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool containsCommercialFeatures() const noexcept;
 
@@ -163,7 +157,6 @@ public slots:
   void setTerminalEnabled(const bool enabled);
   void setNotificationLogEnabled(const bool enabled);
   void setAutoHideToolbar(const bool enabled);
-  void setShowTaskbarButtons(const bool enabled);
   void setSettingsPersistent(const bool persistent);
   void activateAction(const int index, const bool guiTrigger = false);
 
@@ -217,6 +210,7 @@ private:
       int sourceId;
       const bool* activeFlag;
     };
+
     std::vector<Consumer> consumers;
     DSP::AxisData* buf;
     const double* value;
@@ -232,7 +226,6 @@ private:
   bool m_notificationLogEnabled;
   WidgetID m_notificationLogWidgetId;
   bool m_autoHideToolbar;
-  bool m_showTaskbarButtons;
   bool m_persistSettings;
 
   bool m_updateRetryInProgress;

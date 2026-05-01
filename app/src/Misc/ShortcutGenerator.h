@@ -83,10 +83,13 @@ public slots:
                 const QString& projectFile,
                 bool fullscreen,
                 bool actionsPanel,
+                bool fileTransmission,
                 bool csvExport,
                 bool mdfExport,
                 bool sessionExport,
-                bool consoleExport);
+                bool consoleExport,
+                const QString& taskbarMode,
+                const QStringList& taskbarButtons);
 
   void deleteShortcut(const QString& shortcutPath);
 
@@ -94,10 +97,13 @@ private:
   [[nodiscard]] QStringList buildArguments(const QString& projectFile,
                                            bool fullscreen,
                                            bool actionsPanel,
+                                           bool fileTransmission,
                                            bool csvExport,
                                            bool mdfExport,
                                            bool sessionExport,
-                                           bool consoleExport) const;
+                                           bool consoleExport,
+                                           const QString& taskbarMode,
+                                           const QStringList& taskbarButtons) const;
 
   [[nodiscard]] bool writeShortcutFile(const QString& outputPath,
                                        const QString& title,

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -170,9 +170,7 @@ int UI::WindowManager::zOrder(QQuickItem* item) const
  */
 QJsonObject UI::WindowManager::serializeLayout() const
 {
-  // Always capture geometries (even in auto mode) — restoreLayout still tiles
-  // when autoLayout=true, but storing the positions means a later auto→manual
-  // flip restores the cached layout instead of cascading from scratch.
+  // Always capture geometries (caches positions for auto->manual flips)
   QJsonObject layout;
   QJsonArray geometries;
   for (int id : m_windowOrder) {
@@ -1032,7 +1030,7 @@ int UI::WindowManager::determineNewIndexFromMousePos(const QPoint& pos) const
 }
 
 /**
- * @brief Utility function to extract a window’s actual geometry from its
+ * @brief Utility function to extract a window's actual geometry from its
  *        QQuickItem.
  *
  * @param item Pointer to the QQuickItem.
@@ -1490,9 +1488,7 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
 
     loadLayout();
 
-    // Persist the reordered windowOrder via Taskbar's geometryChanged hook —
-    // auto-mode drags otherwise never reach saveLayout and the new order is
-    // lost on the next connect cycle.
+    // Persist reordered windowOrder via Taskbar's geometryChanged hook
     if (reordered && m_dragWindow)
       Q_EMIT geometryChanged(m_dragWindow);
   }

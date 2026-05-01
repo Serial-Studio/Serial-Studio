@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2026 Alex Spataru
+ * Copyright (C) 2020-2026 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -37,7 +37,7 @@ namespace DataModel {
 /**
  * @class NotificationCenter
  * @brief Central in-memory event bus (ring buffer, dedup, tray) for dashboard
- *        notifications. Main thread only — workers route via QueuedConnection.
+ *        notifications. Main thread only -- workers route via QueuedConnection.
  */
 class NotificationCenter : public QObject {
   // clang-format off

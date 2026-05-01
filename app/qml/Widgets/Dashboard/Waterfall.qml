@@ -84,6 +84,9 @@ Item {
     if (s["cursorEnabled"] !== undefined)
       model.cursorEnabled = s["cursorEnabled"]
 
+    if (s["colorbarVisible"] !== undefined)
+      model.colorbarVisible = s["colorbarVisible"]
+
     root.updateWidgetOptions()
   }
 
@@ -180,8 +183,8 @@ Item {
       implicitHeight: 28
       snapMode: RangeSlider.SnapAlways
       Layout.alignment: Qt.AlignVCenter
-      first.value: root.model ? root.model.minDb : -100
       second.value: root.model ? root.model.maxDb : 0
+      first.value: root.model ? root.model.minDb : -100
 
       first.onMoved: {
         if (!root.model)
@@ -226,8 +229,21 @@ Item {
     }
 
     DashboardToolButton {
-      checked: root.model && root.model.axisVisible
+      ToolTip.text: qsTr("Show Colorbar")
+      checked: root.model && root.model.colorbarVisible
+      icon.source: "qrc:/icons/dashboard-buttons/color.svg"
+      onClicked: {
+        if (!root.model)
+          return
+
+        root.model.colorbarVisible = !root.model.colorbarVisible
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "colorbarVisible", root.model.colorbarVisible)
+      }
+    }
+
+    DashboardToolButton {
       ToolTip.text: qsTr("Show Axes & Grid")
+      checked: root.model && root.model.axisVisible
       icon.source: "qrc:/icons/dashboard-buttons/abscissa.svg"
       onClicked: {
         if (!root.model)
@@ -239,8 +255,8 @@ Item {
     }
 
     DashboardToolButton {
-      checked: root.model && root.model.cursorEnabled
       ToolTip.text: qsTr("Show Crosshair")
+      checked: root.model && root.model.cursorEnabled
       icon.source: "qrc:/icons/dashboard-buttons/crosshair.svg"
       onClicked: {
         if (!root.model)
@@ -260,12 +276,6 @@ Item {
       onClicked: model.running = !model.running
     }
 
-    DashboardToolButton {
-      ToolTip.text: qsTr("Clear History")
-      icon.source: "qrc:/icons/dashboard-buttons/clear.svg"
-      onClicked: model.clearHistory()
-    }
-
     Item {
       Layout.fillWidth: true
     }
@@ -277,8 +287,9 @@ Item {
   Item {
     id: contentArea
 
-    readonly property int outerMargin: axesOn ? 8 : 0
+    readonly property int outerMargin: axesOn || colorbarOn ? 8 : 0
     readonly property bool axesOn: root.model && root.model.axisVisible
+    readonly property bool colorbarOn: root.model && root.model.colorbarVisible
 
     anchors {
       left: parent.left
@@ -288,11 +299,12 @@ Item {
       topMargin: contentArea.outerMargin
       leftMargin: contentArea.outerMargin
       bottomMargin: contentArea.outerMargin
-      rightMargin: contentArea.axesOn ? 8 : 0
+      rightMargin: contentArea.colorbarOn ? 8 : 0
     }
 
     //
     // Plot area
+    //
     Item {
       id: plotArea
 
@@ -300,8 +312,8 @@ Item {
         top: parent.top
         left: parent.left
         bottom: parent.bottom
-        rightMargin: contentArea.axesOn ? 8 : 0
-        right: contentArea.axesOn ? colorbarColumn.left : parent.right
+        rightMargin: contentArea.colorbarOn ? 8 : 0
+        right: contentArea.colorbarOn ? colorbarColumn.left : parent.right
       }
     }
 
@@ -312,7 +324,7 @@ Item {
       id: colorbarColumn
 
       width: 56
-      visible: contentArea.axesOn
+      visible: contentArea.colorbarOn
 
       anchors {
         top: parent.top
@@ -348,8 +360,8 @@ Item {
         Canvas {
           id: colorbarCanvas
 
-          anchors.fill: parent
           anchors.margins: 1
+          anchors.fill: parent
 
           Connections {
             target: model

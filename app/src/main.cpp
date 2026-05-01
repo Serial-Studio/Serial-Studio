@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -56,9 +56,11 @@
 #include "AppState.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
+#include "IO/FileTransmission.h"
 #include "Misc/ModuleManager.h"
 #include "Misc/TimerEvents.h"
 #include "UI/Dashboard.h"
+#include "UI/TaskbarSettings.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include <QAbstractButton>
@@ -123,6 +125,9 @@ public:
   using QObject::QObject;
 
 protected:
+  /**
+   * @brief Intercepts QFileOpenEvent and loads the referenced .ssproj into the project model.
+   */
   bool eventFilter(QObject* obj, QEvent* event) override
   {
     if (event->type() == QEvent::FileOpen) {
@@ -239,6 +244,9 @@ int main(int argc, char** argv)
   QCLO sessionExportOpt("session-export", "Enable session database export on startup (Pro)");
   QCLO consoleExportOpt("console-export", "Enable console log export on startup (Pro)");
   QCLO actionsPanelOpt("actions-panel", "Show the actions panel in operator runtime mode (Pro)");
+  QCLO fileTransmissionOpt("file-transmission", "Allow opening the File Transmission dialog in operator runtime mode (Pro)");
+  QCLO taskbarModeOpt("taskbar-mode", "Operator-mode dashboard taskbar visibility: shown / autohide / hidden (Pro)", "mode");
+  QCLO taskbarButtonsOpt("taskbar-buttons", "Comma-separated taskbar pin IDs for operator mode (Pro)", "ids");
   QCLO activateOpt("activate", "Activate a license key and exit (for CI/headless setup)", "key");
   QCLO deactivateOpt("deactivate", "Deactivate the current license instance and exit (for CI cleanup)");
   QCLO modbusRtuOpt("modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port");
@@ -284,6 +292,9 @@ int main(int argc, char** argv)
   parser.addOption(sessionExportOpt);
   parser.addOption(consoleExportOpt);
   parser.addOption(actionsPanelOpt);
+  parser.addOption(fileTransmissionOpt);
+  parser.addOption(taskbarModeOpt);
+  parser.addOption(taskbarButtonsOpt);
   parser.addOption(activateOpt);
   parser.addOption(deactivateOpt);
   parser.addOption(modbusRtuOpt);
@@ -434,6 +445,7 @@ int main(int argc, char** argv)
     Sessions::Export::instance().setSettingsPersistent(false);
     Console::Export::instance().setSettingsPersistent(false);
     UI::Dashboard::instance().setSettingsPersistent(false);
+    UI::TaskbarSettings::instance().setSettingsPersistent(false);
 
     CSV::Export::instance().setExportEnabled(parser.isSet(csvExportOpt));
     MDF4::Export::instance().setExportEnabled(parser.isSet(mdfExportOpt));
@@ -443,6 +455,28 @@ int main(int argc, char** argv)
     UI::Dashboard::instance().setTerminalEnabled(false);
     UI::Dashboard::instance().setNotificationLogEnabled(false);
     UI::Dashboard::instance().setShowActionPanel(parser.isSet(actionsPanelOpt));
+    IO::FileTransmission::instance().setRuntimeAccessAllowed(parser.isSet(fileTransmissionOpt));
+
+    // Operator-mode taskbar layout
+    auto& tbs = UI::TaskbarSettings::instance();
+    if (parser.isSet(taskbarModeOpt)) {
+      const QString mode = parser.value(taskbarModeOpt).toLower();
+      tbs.setTaskbarHidden(mode == QStringLiteral("hidden"));
+      tbs.setAutohide(mode == QStringLiteral("autohide"));
+    } else {
+      tbs.setTaskbarHidden(false);
+      tbs.setAutohide(false);
+    }
+    if (parser.isSet(taskbarButtonsOpt)) {
+      const QString raw = parser.value(taskbarButtonsOpt);
+      QStringList ids;
+      const auto parts = raw.split(QLatin1Char(','), Qt::SkipEmptyParts);
+      ids.reserve(parts.size());
+      for (const auto& p : parts)
+        ids.append(p.trimmed());
+
+      tbs.setPinnedButtons(ids);
+    }
   } else {
     if (parser.isSet(csvExportOpt))
       CSV::Export::instance().setExportEnabled(true);
@@ -789,11 +823,10 @@ int main(int argc, char** argv)
   const auto status = app.exec();
 
 #ifdef Q_OS_WIN
-  // Free memory used by the injected font configuration arguments in Windows
+  // Free Windows font-config args
   for (int i = 0; i < argc; ++i)
     free(argv[i]);
 
-  // Free the memory used by the arguments array
   free(argv);
 #endif
 
@@ -824,8 +857,8 @@ static bool argvHasFlag(int argc, char** argv, const char* flag)
 /**
  * @brief Reads the value following @p flag in raw argv before Qt parses arguments.
  *
- * Used to read flags like @c --shortcut-path very early — before QApplication
- * is constructed — so the per-shortcut taskbar identity and settings suffix
+ * Used to read flags like @c --shortcut-path very early -- before QApplication
+ * is constructed -- so the per-shortcut taskbar identity and settings suffix
  * can be configured before any window is created.
  *
  * @param argc Argument count.
@@ -845,7 +878,7 @@ static QString argvValueFor(int argc, char** argv, const char* flag)
 /**
  * @brief Computes a stable short identity hash for a shortcut path.
  *
- * Returns the first 16 hex characters of SHA-1(path) — distinct enough to
+ * Returns the first 16 hex characters of SHA-1(path) -- distinct enough to
  * separate shortcuts that target the same project file, stable across launches,
  * and short enough to fit cleanly into AUMID and QSettings category strings.
  *
@@ -1161,7 +1194,7 @@ static void registerWindowsFileAssociation()
  * @brief Pins the process to a stable Windows AppUserModelID.
  *
  * Without an explicit AUMID, Windows derives one from the executable path and
- * launch arguments — so normal launches and shortcut launches end up under
+ * launch arguments -- so normal launches and shortcut launches end up under
  * different taskbar identities, and the taskbar can serve a stale cached icon
  * (often the previous shortcut's custom icon) for the next normal launch.
  * When @p shortcutPath is non-empty, a shortcut-specific AUMID is used so the

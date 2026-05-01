@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -126,7 +126,7 @@ bool Widgets::Bar::alarmTriggered() const noexcept
 /**
  * @brief Returns the measurement units associated with the dataset.
  *
- * This value is displayed alongside the bar for context (e.g., "°C", "V").
+ * This value is displayed alongside the bar for context (e.g., "degC", "V").
  *
  * @return A constant reference to the units string.
  */

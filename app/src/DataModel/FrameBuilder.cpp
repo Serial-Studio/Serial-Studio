@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -54,7 +54,7 @@
 #endif
 
 /**
- * @brief Hotpath CSV split — comma delimiter only; users needing other delimiters write a custom
+ * @brief Hotpath CSV split -- comma delimiter only; users needing other delimiters write a custom
  * parser.
  */
 void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveHint)
@@ -109,7 +109,7 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
  */
 DataModel::FrameBuilder::FrameBuilder() : m_quickPlotChannels(-1), m_quickPlotHasHeader(false)
 {
-  // JS transform watchdog — flips interrupt flag to unwind runaway scripts.
+  // JS transform watchdog -- flips interrupt flag to unwind runaway scripts.
   m_jsTransformWatchdog.setSingleShot(true);
   m_jsTransformWatchdog.setInterval(kTransformWatchdogMs);
   connect(&m_jsTransformWatchdog, &QTimer::timeout, this, [this]() {
@@ -125,7 +125,7 @@ DataModel::FrameBuilder::FrameBuilder() : m_quickPlotChannels(-1), m_quickPlotHa
           [this] { syncFromProjectModel(); });
 #endif
 
-  // Tear down engines before static destruction — QJSEngine depends on live Qt.
+  // Tear down engines before static destruction -- QJSEngine depends on live Qt.
   if (auto* app = QCoreApplication::instance())
     connect(app, &QCoreApplication::aboutToQuit, this, [this]() { destroyTransformEngines(); });
 }
@@ -173,7 +173,7 @@ void DataModel::FrameBuilder::setupExternalConnections()
           this,
           &DataModel::FrameBuilder::onConnectedChanged);
 
-  // Wipe transform engines on source-delete — IDs renumber, stale refs would misfire.
+  // Wipe transform engines on source-delete -- IDs renumber, stale refs would misfire.
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::sourceDeleted,
           this,
@@ -210,6 +210,7 @@ void DataModel::FrameBuilder::syncFromProjectModel()
   m_frame.title   = pm.title();
   m_frame.groups  = pm.groups();
   m_frame.actions = pm.actions();
+  m_frame.sources = pm.sources();
 
   finalize_frame(m_frame);
   compileTransforms();
@@ -268,7 +269,7 @@ void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
 }
 
 /**
- * @brief Per-source variant of hotpathRxFrame — routes data through the matching source parser.
+ * @brief Per-source variant of hotpathRxFrame -- routes data through the matching source parser.
  */
 void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::CapturedDataPtr& data)
 {
@@ -290,7 +291,7 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::Captu
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Wipes transform engines on source deletion — ProjectModel renumbers IDs and engines
+ * @brief Wipes transform engines on source deletion -- ProjectModel renumbers IDs and engines
  * recompile lazily.
  */
 void DataModel::FrameBuilder::onSourceRemoved()
@@ -441,7 +442,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
           m_tableStore.setDatasetRaw(
             dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
 
-        // Apply transform (skip for CSV/MDF4 playback — those stores hold transformed values)
+        // Apply transform (skip for CSV/MDF4 playback -- those stores hold transformed values)
         if (!dataset.transformCode.isEmpty() && !SerialStudio::isFinalValuePlayerOpen())
           [[unlikely]] {
           const auto input =
@@ -545,7 +546,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
       it = m_sourceFrames.insert(sourceId, std::move(newFrame));
     }
 
-    // Reset computed registers per frame — shared DataTableStore state across sources.
+    // Reset computed registers per frame -- shared DataTableStore state across sources.
     if (m_tableStore.isInitialized())
       m_tableStore.resetComputedRegisters();
 
@@ -575,7 +576,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
           m_tableStore.setDatasetRaw(
             dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
 
-        // Apply transform (skip for CSV/MDF4 playback — those stores hold transformed values)
+        // Apply transform (skip for CSV/MDF4 playback -- those stores hold transformed values)
         if (!dataset.transformCode.isEmpty() && !SerialStudio::isFinalValuePlayerOpen())
           [[unlikely]] {
           const auto input =
@@ -911,7 +912,7 @@ static void openSafeLibsForTransform(lua_State* L)
     lua_setglobal(L, name);
   }
 
-  // Strip string.dump — bytecode serialization paired with the loader is unsafe.
+  // Strip string.dump -- bytecode serialization paired with the loader is unsafe.
   lua_getglobal(L, "string");
   if (lua_istable(L, -1)) {
     lua_pushnil(L);
@@ -932,7 +933,7 @@ void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* 
   auto* engine = static_cast<TransformEngine*>(lua_touserdata(L, -1));
   lua_pop(L, 1);
 
-  // Defensive — registry entry should always be present for our states
+  // Defensive -- registry entry should always be present for our states
   if (!engine) [[unlikely]]
     return;
 
@@ -966,7 +967,7 @@ void DataModel::FrameBuilder::compileTransforms()
 
   // Compile one engine per (source, language) key
   for (auto& [key, entries] : byKey) {
-    // Insert before compile — the Lua watchdog captures &engine by pointer
+    // Insert before compile -- the Lua watchdog captures &engine by pointer
     auto [it, inserted] = m_transformEngines.emplace(key, TransformEngine{});
     Q_ASSERT(inserted);
     TransformEngine& engine = it->second;
@@ -1002,7 +1003,7 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
   // Inject table/dataset/variant API before any user code runs
   injectTableApiLua(L);
 
-  // Notification API — gated internally on the active license tier
+  // Notification API -- gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(L);
 
   // Stash engine pointer in registry so the watchdog hook can find it.
@@ -1037,7 +1038,7 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
       continue;
     }
 
-    // Move transform → __tf_<id> so the next dataset can reuse the name
+    // Move transform -> __tf_<id> so the next dataset can reuse the name
     const auto alias = QStringLiteral("__tf_%1").arg(entry.uniqueId);
     lua_setglobal(L, alias.toUtf8().constData());
     lua_pushnil(L);
@@ -1055,7 +1056,7 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
     engine.luaRefs[entry.uniqueId] = luaL_ref(L, LUA_REGISTRYINDEX);
   }
 
-  // Disarm the deadline — subsequent arming happens per-call
+  // Disarm the deadline -- subsequent arming happens per-call
   engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
   engine.luaState    = L;
 }
@@ -1072,7 +1073,7 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
   // Inject table/dataset/variant API before any user code runs
   injectTableApiJS(js);
 
-  // Notification API — gated internally on the active license tier
+  // Notification API -- gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(js);
 
   for (const auto& entry : entries) {
@@ -1084,7 +1085,7 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
                      "})();")
         .arg(entry.code);
 
-    // Evaluate the IIFE — its return value is the transform function
+    // Evaluate the IIFE -- its return value is the transform function
     auto evalResult = js->evaluate(wrapped);
     if (evalResult.isError()) {
       qWarning() << "[FrameBuilder] Transform compile error for"

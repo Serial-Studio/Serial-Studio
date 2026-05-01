@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary features of Serial Studio and is
  * licensed under the Serial Studio Commercial License.
@@ -59,7 +59,7 @@ Item {
   readonly property real maxZoom: 5.0
 
   //
-  // Image filter — index into filterModel
+  // Image filter -- index into filterModel
   //
   property int filterIndex: 0
   readonly property var currentFilter: filterModel[filterIndex]
@@ -75,12 +75,14 @@ Item {
   ]
 
   //
-  // Pixel coordinate of the cursor inside the original image (–1 = outside)
+  // Pixel coordinate of the cursor inside the original image (-1 = outside)
   //
   property int cursorImgX: -1
   property int cursorImgY: -1
 
+  //
   // Unzoomed painted size derived from image + area, no stale layout reads.
+  //
   function basePaintedSize() {
     const pw = mainImage.paintedWidth
     const ph = mainImage.paintedHeight
@@ -99,13 +101,17 @@ Item {
     return Qt.size(imageArea.width, imageArea.width / imageAspect)
   }
 
+  //
   // Zoomed painted dimensions and absolute position of the image rect.
+  //
   readonly property real paintedW: mainImage.paintedWidth  * zoom
   readonly property real paintedH: mainImage.paintedHeight * zoom
   readonly property real paintedX: imageArea.x + (imageArea.width  - paintedW) / 2 + panX
   readonly property real paintedY: imageArea.y + (imageArea.height - paintedH) / 2 + panY
 
+  //
   // Clamp pan so image edges never retreat past the area; takes explicit zoom.
+  //
   function clampPan(z) {
     const z2   = (z !== undefined) ? z : zoom
     const base = basePaintedSize()
@@ -162,7 +168,7 @@ Item {
       DashboardToolButton {
         ToolTip.text: qsTr("Export Images")
         checked: model && model.exportEnabled
-        icon.source: "qrc:/icons/dashboard-buttons/archive.svg"
+        icon.source: "qrc:/icons/dashboard-buttons/camcoder.svg"
         onClicked: {
           if (model)
             model.exportEnabled = !model.exportEnabled
@@ -350,9 +356,12 @@ Item {
       }
 
       //
-      // Interaction handler
+      // Interaction host -- wraps the modern PinchHandler (Qt 6 replacement
+      // for the deprecated PinchArea) and the click-drag MouseArea below.
       //
-      PinchArea {
+      Item {
+        id: interactionHost
+
         anchors.fill: parent
         enabled: model && model.frameCount > 0
 
@@ -360,19 +369,32 @@ Item {
         property real startPanX: 0.0
         property real startPanY: 0.0
 
-        onPinchStarted: {
-          startZoom = root.zoom
-          startPanX = root.panX
-          startPanY = root.panY
-        }
+        PinchHandler {
+          target: null  // we drive root.zoom/panX/panY manually below
 
-        onPinchUpdated: (pinch) => {
-                          const newZoom = Math.max(root.minZoom, Math.min(root.maxZoom, startZoom * pinch.scale))
-                          root.zoom = newZoom
-                          root.panX = startPanX + pinch.center.x - pinch.startCenter.x
-                          root.panY = startPanY + pinch.center.y - pinch.startCenter.y
-                          root.clampPan(newZoom)
-                        }
+          onActiveChanged: {
+            if (active) {
+              interactionHost.startZoom = root.zoom
+              interactionHost.startPanX = root.panX
+              interactionHost.startPanY = root.panY
+            }
+          }
+
+          onActiveScaleChanged: {
+            if (!active)
+              return
+
+            const newZoom = Math.max(root.minZoom,
+                                     Math.min(root.maxZoom,
+                                              interactionHost.startZoom * activeScale))
+            root.zoom = newZoom
+            root.panX = interactionHost.startPanX + centroid.position.x
+                      - centroid.pressPosition.x
+            root.panY = interactionHost.startPanY + centroid.position.y
+                      - centroid.pressPosition.y
+            root.clampPan(newZoom)
+          }
+        }
 
         MouseArea {
           anchors.fill: parent
@@ -506,7 +528,7 @@ Item {
       }
 
       //
-      // "Waiting for image…" placeholder
+      // "Waiting for image..." placeholder
       //
       ColumnLayout {
         spacing: 8

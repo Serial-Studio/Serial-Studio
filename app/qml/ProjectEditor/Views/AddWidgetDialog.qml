@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -130,7 +130,7 @@ Window {
   }
 
   //
-  // Data model — updated by refresh()
+  // Data model -- updated by refresh()
   //
   property var allWidgets: []
   property var existingKeys: []   // keys like "widgetType:groupId:relativeIndex"
@@ -227,29 +227,41 @@ Window {
         onTextChanged: root.searchText = text
       }
 
-      Widgets.ProjectTableHeader {
-        Layout.fillWidth: true
-        columns: [
-          { title: qsTr("Widget"), width: 160 },
-          { title: qsTr("Group"),  width: 220 },
-          { title: qsTr("Name"),   width: -1  },
-          { title: "",             width: 48  }
-        ]
-      }
-
-      ListView {
-        id: list
-
-        clip: true
-        spacing: 0
+      Rectangle {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        model: root.filteredWidgets
-        boundsBehavior: Flickable.StopAtBounds
+        border.width: 1
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        color: Cpp_ThemeManager.colors["groupbox_background"]
 
-        ScrollBar.vertical: ScrollBar {
-          policy: ScrollBar.AsNeeded
-        }
+        ColumnLayout {
+          spacing: 0
+          anchors.margins: 1
+          anchors.fill: parent
+
+          Widgets.ProjectTableHeader {
+            Layout.fillWidth: true
+            columns: [
+              { title: qsTr("Widget"), width: 160 },
+              { title: qsTr("Group"),  width: 220 },
+              { title: qsTr("Name"),   width: -1  },
+              { title: "",             width: 48  }
+            ]
+          }
+
+          ListView {
+            id: list
+
+            clip: true
+            spacing: 0
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            model: root.filteredWidgets
+            boundsBehavior: Flickable.StopAtBounds
+
+            ScrollBar.vertical: ScrollBar {
+              policy: ScrollBar.AsNeeded
+            }
 
         delegate: Widgets.ProjectTableRow {
           id: widgetRow
@@ -357,15 +369,17 @@ Window {
           }
         }
 
-        Label {
-          anchors.centerIn: parent
-          opacity: 0.5
-          color: palette.text
-          visible: list.count === 0
-          horizontalAlignment: Text.AlignHCenter
-          text: root.allWidgets.length === 0
-                ? qsTr("No widgets available.")
-                : qsTr("No widgets match.")
+            Label {
+              anchors.centerIn: parent
+              opacity: 0.5
+              color: palette.text
+              visible: list.count === 0
+              horizontalAlignment: Text.AlignHCenter
+              text: root.allWidgets.length === 0
+                    ? qsTr("No widgets available.")
+                    : qsTr("No widgets match.")
+            }
+          }
         }
       }
 

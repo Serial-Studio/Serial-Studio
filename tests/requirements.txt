@@ -25,3 +25,7 @@ jsonschema>=4.19.0
 # Performance monitoring
 psutil>=5.9.0
 memory-profiler>=0.61.0
+
+# Static-analysis backend for scripts/code-format.py (semantic Qt/C++ rules)
+tree-sitter>=0.23,<0.25
+tree-sitter-cpp>=0.23,<0.24

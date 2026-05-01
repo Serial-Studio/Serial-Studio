@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -59,7 +59,7 @@
  * When a per-group master time channel is present, the observer reads the
  * timestamp from each record and uses it (quantised to nanoseconds) as the
  * cache key. This allows records from independent channel groups that share
- * the same wall-clock time to be merged correctly — which is essential for
+ * the same wall-clock time to be merged correctly -- which is essential for
  * multi-source MDF4 files where each source writes its own channel groups.
  *
  * When no per-group time channel is available, the raw sample index is
@@ -771,7 +771,7 @@ void MDF4::Player::buildFrameIndex()
           continue;
         }
 
-        // Skip raw pre-transform channels — playback injects only final values
+        // Skip raw pre-transform channels -- playback injects only final values
         const std::string& chName               = ch->Name();
         static constexpr const char* kRawSuffix = " (raw)";
         if (chName.size() >= 6 && chName.compare(chName.size() - 6, 6, kRawSuffix) == 0)
@@ -1093,24 +1093,53 @@ void MDF4::Player::buildMultiSourceMapping()
   // Reset mapping state
   m_channelToSource.clear();
   m_sourceChannelCount.clear();
+  m_sourceChannelsByIndex.clear();
 
-  // Collect (uniqueId, sourceId) pairs for all datasets
+  // Per-channel metadata (uid, sourceId, parserIndex)
+  struct ChMeta {
+    int uid;
+    int sourceId;
+    int parserIndex;
+  };
+
   const auto& groups = DataModel::ProjectModel::instance().groups();
-  QVector<QPair<int, int>> uidSourcePairs;
+  QVector<ChMeta> chs;
   for (const auto& g : groups)
     for (const auto& d : g.datasets)
-      uidSourcePairs.append(qMakePair(d.uniqueId, d.sourceId));
+      chs.append({DataModel::dataset_unique_id(g, d), g.sourceId, d.index});
 
-  // Sort by uniqueId to match export channel order
-  std::sort(uidSourcePairs.begin(), uidSourcePairs.end(), [](const auto& a, const auto& b) {
-    return a.first < b.first;
-  });
+  // Sort by uniqueId to match the file's channel layout
+  std::sort(chs.begin(), chs.end(), [](const ChMeta& a, const ChMeta& b) { return a.uid < b.uid; });
 
-  // Map channel index (0-based) to sourceId
-  for (int ch = 0; ch < uidSourcePairs.size(); ++ch) {
-    const int srcId       = uidSourcePairs[ch].second;
-    m_channelToSource[ch] = srcId;
-    m_sourceChannelCount[srcId]++;
+  for (int ch = 0; ch < chs.size(); ++ch) {
+    const auto& m         = chs[ch];
+    m_channelToSource[ch] = m.sourceId;
+    m_sourceChannelCount[m.sourceId]++;
+  }
+
+  // Build the parser channel array (parserIndex slots, sparse-aware)
+  QMap<int, QMap<int, int>> indexToFileCh;
+  QMap<int, int> sourceMaxIndex;
+  for (int ch = 0; ch < chs.size(); ++ch) {
+    const auto& m = chs[ch];
+    if (m.parserIndex < 1)
+      continue;
+
+    auto& slotMap = indexToFileCh[m.sourceId];
+    if (!slotMap.contains(m.parserIndex))
+      slotMap.insert(m.parserIndex, ch);
+
+    sourceMaxIndex[m.sourceId] = std::max(sourceMaxIndex.value(m.sourceId, 0), m.parserIndex);
+  }
+
+  for (auto it = indexToFileCh.constBegin(); it != indexToFileCh.constEnd(); ++it) {
+    const int srcId    = it.key();
+    const int maxIndex = sourceMaxIndex.value(srcId, 0);
+    QVector<int> ordered(maxIndex, -1);
+    for (auto sit = it.value().constBegin(); sit != it.value().constEnd(); ++sit)
+      ordered[sit.key() - 1] = sit.value();
+
+    m_sourceChannelsByIndex[srcId] = std::move(ordered);
   }
 
   m_multiSource = !m_channelToSource.isEmpty() && m_sourceChannelCount.size() > 1;
@@ -1147,36 +1176,33 @@ void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
       active = &ait->second;
   }
 
-  // Multi-source: split CSV columns by source, skipping inactive sources
+  // Multi-source: split channels by source and reorder into parser-index order
   const auto fields = QString::fromUtf8(frame).trimmed().split(',');
 
   QMap<int, QStringList> sourceFields;
-  for (int ch = 0; ch < fields.size(); ++ch) {
-    auto it = m_channelToSource.find(ch);
-    if (it == m_channelToSource.end())
-      continue;
-
-    sourceFields[it.value()].append(fields[ch]);
+  QMap<int, bool> sourceHasActive;
+  for (auto it = m_sourceChannelsByIndex.constBegin(); it != m_sourceChannelsByIndex.constEnd();
+       ++it) {
+    const int srcId        = it.key();
+    const auto& orderedChs = it.value();
+    QStringList orderedCells;
+    orderedCells.reserve(orderedChs.size());
+    bool anyActive = !active;  // when no active mask is available, accept all
+    for (int ch : orderedChs) {
+      const QString cell = (ch >= 0 && ch < fields.size()) ? fields[ch] : QString();
+      orderedCells.append(cell);
+      if (active && ch >= 0 && ch < static_cast<int>(active->size()) && (*active)[ch])
+        anyActive = true;
+    }
+    sourceFields.insert(srcId, std::move(orderedCells));
+    sourceHasActive.insert(srcId, anyActive);
   }
 
   // Only include sources that have at least one active channel
   QMap<int, QByteArray> sourcePayloads;
   for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it) {
-    if (active) {
-      bool hasData = false;
-      for (int ch = 0; ch < fields.size(); ++ch) {
-        auto cit = m_channelToSource.find(ch);
-        if (cit != m_channelToSource.end() && cit.value() == it.key()) {
-          if (ch < static_cast<int>(active->size()) && (*active)[ch]) {
-            hasData = true;
-            break;
-          }
-        }
-      }
-
-      if (!hasData)
-        continue;
-    }
+    if (!sourceHasActive.value(it.key(), true))
+      continue;
 
     sourcePayloads[it.key()] = it.value().join(',').toUtf8() + '\n';
   }

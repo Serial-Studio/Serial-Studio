@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -178,6 +178,9 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_datasetModel(nullptr)
   , m_outputWidgetModel(nullptr)
   , m_transformEditor(nullptr)
+  , m_pendingSelectionKind(PendingSelectionKind::None)
+  , m_pendingSelectionGroupId(-1)
+  , m_pendingSelectionItemId(-1)
 {
   generateComboBoxModels();
 
@@ -238,24 +241,6 @@ DataModel::ProjectEditor::ProjectEditor()
 
   connect(
     &pm,
-    &DataModel::ProjectModel::groupAdded,
-    this,
-    [this](int groupId) {
-      if (!m_selectionModel)
-        return;
-
-      for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
-        if (it.value().groupId != groupId)
-          continue;
-
-        m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
-        break;
-      }
-    },
-    Qt::QueuedConnection);
-
-  connect(
-    &pm,
     &DataModel::ProjectModel::groupDeleted,
     this,
     [this] {
@@ -276,6 +261,28 @@ DataModel::ProjectEditor::ProjectEditor()
 
   connect(
     &pm,
+    &DataModel::ProjectModel::groupAdded,
+    this,
+    [this](int groupId) {
+      if (!m_selectionModel)
+        return;
+
+      for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
+        if (it.value().groupId != groupId)
+          continue;
+
+        m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+        return;
+      }
+
+      m_pendingSelectionKind    = PendingSelectionKind::Group;
+      m_pendingSelectionGroupId = groupId;
+      m_pendingSelectionItemId  = -1;
+    },
+    Qt::QueuedConnection);
+
+  connect(
+    &pm,
     &DataModel::ProjectModel::datasetAdded,
     this,
     [this](int groupId, int datasetId) {
@@ -287,8 +294,13 @@ DataModel::ProjectEditor::ProjectEditor()
           continue;
 
         m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
-        break;
+        return;
       }
+
+      // The tree rebuild scheduled by groupsChanged hasn't run yet -- defer.
+      m_pendingSelectionKind    = PendingSelectionKind::Dataset;
+      m_pendingSelectionGroupId = groupId;
+      m_pendingSelectionItemId  = datasetId;
     },
     Qt::QueuedConnection);
 
@@ -365,8 +377,13 @@ DataModel::ProjectEditor::ProjectEditor()
           continue;
 
         m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
-        break;
+        return;
       }
+
+      // The tree rebuild scheduled by groupsChanged hasn't run yet -- defer.
+      m_pendingSelectionKind    = PendingSelectionKind::OutputWidget;
+      m_pendingSelectionGroupId = groupId;
+      m_pendingSelectionItemId  = widgetId;
     },
     Qt::QueuedConnection);
 
@@ -403,8 +420,12 @@ DataModel::ProjectEditor::ProjectEditor()
           continue;
 
         m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
-        break;
+        return;
       }
+
+      m_pendingSelectionKind    = PendingSelectionKind::Source;
+      m_pendingSelectionGroupId = -1;
+      m_pendingSelectionItemId  = sourceId;
     },
     Qt::QueuedConnection);
 
@@ -694,6 +715,29 @@ void DataModel::ProjectEditor::setSelectedSourceFrameParserCode(const QString& c
 }
 
 /**
+ * @brief Updates the transmit function of the selected output widget.
+ */
+void DataModel::ProjectEditor::setSelectedOutputWidgetTransmitFunction(const QString& code)
+{
+  if (m_selectedOutputWidget.transmitFunction == code)
+    return;
+
+  m_selectedOutputWidget.transmitFunction = code;
+
+  // Sync the tree-item cache
+  for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
+    if (it.value().groupId == m_selectedOutputWidget.groupId
+        && it.value().widgetId == m_selectedOutputWidget.widgetId) {
+      m_outputWidgetItems[it.key()].transmitFunction = code;
+      break;
+    }
+  }
+
+  DataModel::ProjectModel::instance().updateOutputWidget(
+    m_selectedOutputWidget.groupId, m_selectedOutputWidget.widgetId, m_selectedOutputWidget, false);
+}
+
+/**
  * @brief Opens the dataset value transform editor for the selected dataset.
  */
 void DataModel::ProjectEditor::openTransformEditor()
@@ -919,8 +963,69 @@ void DataModel::ProjectEditor::buildTreeModel()
 
   Q_EMIT treeModelChanged();
 
-  // Restore the previously selected item by matching IDs
-  restoreTreeSelection();
+  // Reveal queued add-* node, otherwise restore prior selection by ID
+  const auto revealIndex = consumePendingSelection();
+  if (!revealIndex.isValid())
+    restoreTreeSelection();
+
+  Q_EMIT treeRebuildFinished(revealIndex);
+}
+
+/**
+ * @brief Selects a node queued by a deferred add-* signal handler.
+ */
+QModelIndex DataModel::ProjectEditor::consumePendingSelection()
+{
+  if (m_pendingSelectionKind == PendingSelectionKind::None || !m_selectionModel)
+    return {};
+
+  const auto kind = m_pendingSelectionKind;
+  const auto gid  = m_pendingSelectionGroupId;
+  const auto iid  = m_pendingSelectionItemId;
+
+  m_pendingSelectionKind    = PendingSelectionKind::None;
+  m_pendingSelectionGroupId = -1;
+  m_pendingSelectionItemId  = -1;
+
+  if (kind == PendingSelectionKind::Source) {
+    for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
+      if (it.value().sourceId != iid)
+        continue;
+
+      const auto idx = it.key()->index();
+      m_selectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
+      return idx;
+    }
+  } else if (kind == PendingSelectionKind::Group) {
+    for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
+      if (it.value().groupId != gid)
+        continue;
+
+      const auto idx = it.key()->index();
+      m_selectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
+      return idx;
+    }
+  } else if (kind == PendingSelectionKind::Dataset) {
+    for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+      if (it.value().groupId != gid || it.value().datasetId != iid)
+        continue;
+
+      const auto idx = it.key()->index();
+      m_selectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
+      return idx;
+    }
+  } else if (kind == PendingSelectionKind::OutputWidget) {
+    for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
+      if (it.value().groupId != gid || it.value().widgetId != iid)
+        continue;
+
+      const auto idx = it.key()->index();
+      m_selectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
+      return idx;
+    }
+  }
+
+  return {};
 }
 
 /**
@@ -937,7 +1042,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   const auto& sources    = pm.sources();
   const bool multiSource = sources.size() > 1;
 
-  // Tree search query — non-empty filters items by title (case-insensitive).
+  // Tree search query -- non-empty filters items by title (case-insensitive).
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
   const auto matches      = [&q](const QString& s) {
@@ -1168,8 +1273,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 
       auto* wsItem = new QStandardItem(ws.title);
       wsItem->setData(ws.title, TreeViewText);
-      wsItem->setData(ws.icon.isEmpty() ? "qrc:/icons/project-editor/treeview/group.svg"
-                                        : ws.icon,
+      wsItem->setData(ws.icon.isEmpty() ? "qrc:/icons/project-editor/treeview/group.svg" : ws.icon,
                       TreeViewIcon);
       wsItem->setData(-1, TreeViewFrameIndex);
       wsRoot->appendRow(wsItem);
@@ -1266,7 +1370,7 @@ void DataModel::ProjectEditor::restoreTreeSelection()
       }
     }
 
-    // Workspace was deleted — fall back to the Workspaces category.
+    // Workspace was deleted -- fall back to the Workspaces category.
     if (!toSelect)
       toSelect = m_workspacesRootItem;
   }
@@ -2261,14 +2365,11 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
   waterfallItem->setData(dataset.waterfall, EditableValue);
   waterfallItem->setData(kDatasetView_Waterfall, ParameterType);
   waterfallItem->setData(tr("Enable Waterfall Plot"), ParameterName);
-  waterfallItem->setData(
-    tr("Show a scrolling spectrogram of frequency content over time (Pro)"),
-    ParameterDescription);
+  waterfallItem->setData(tr("Show a scrolling spectrogram of frequency content over time (Pro)"),
+                         ParameterDescription);
   model->appendRow(waterfallItem);
 
-  // Waterfall Y-axis source — only shown when the waterfall is enabled. Default
-  // 0 = "Time" (scrolling spectrogram); any other dataset index turns the plot
-  // into a Campbell diagram (e.g. RPM on Y, frequency on X).
+  // Waterfall Y-axis source (0 = time, any dataset index = Campbell diagram)
   if (dataset.waterfall) {
     auto* yAxisItem = new QStandardItem();
     yAxisItem->setEditable(true);
@@ -2279,7 +2380,7 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
     yAxisItem->setData(kDatasetView_WaterfallYAxis, ParameterType);
     yAxisItem->setData(tr("Waterfall Y Axis"), ParameterName);
     yAxisItem->setData(tr("Choose Time (default) or any dataset whose value drives "
-                          "the Y axis — produces a Campbell diagram when bound "
+                          "the Y axis -- produces a Campbell diagram when bound "
                           "to e.g. RPM"),
                        ParameterDescription);
     model->appendRow(yAxisItem);
@@ -2790,7 +2891,7 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
 
     Q_EMIT selectedTextChanged();
   } else {
-    // updateAction(rebuildTree=false) skips the tree refresh — sync the cache here.
+    // updateAction(rebuildTree=false) skips the tree refresh -- sync the cache here.
     for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
       if (it.value().actionId == actionId) {
         m_actionItems[it.key()] = m_selectedAction;
@@ -3434,7 +3535,7 @@ void DataModel::ProjectEditor::restoreExpandedStateMap(QStandardItem* item,
 }
 
 //--------------------------------------------------------------------------------------------------
-// Data tables — read-only summaries for QML views
+// Data tables -- read-only summaries for QML views
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -3557,7 +3658,7 @@ QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
 
   for (const auto& group : groups) {
     for (const auto& ds : group.datasets) {
-      const int uid = group.sourceId * 1000000 + ds.groupId * 10000 + ds.datasetId;
+      const int uid = DataModel::dataset_unique_id(group.sourceId, ds.groupId, ds.datasetId);
 
       QVariantMap row;
       row["uniqueId"]   = uid;
@@ -3575,7 +3676,7 @@ QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
 }
 
 //--------------------------------------------------------------------------------------------------
-// Workspaces — read-only summaries for QML views
+// Workspaces -- read-only summaries for QML views
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -3640,7 +3741,11 @@ QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) cons
     if (groupKey == SerialStudio::DashboardPlot3D && !pro)
       groupKey = SerialStudio::DashboardMultiPlot;
 
-    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
+    // Skip empty output panels -- nothing to render on the dashboard.
+    const bool isEmptyOutputPanel =
+      g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
+
+    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel) {
       const int typeKey = static_cast<int>(groupKey);
       const int relIdx  = groupRunning.value(typeKey, 0);
       groupRunning.insert(typeKey, relIdx + 1);
@@ -3707,12 +3812,16 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
     if (!SerialStudio::groupEligibleForWorkspace(group))
       continue;
 
-    // Group-level widget — mirror Dashboard's non-Pro Plot3D fallback.
+    // Group-level widget -- mirror Dashboard's non-Pro Plot3D fallback.
     auto groupKey = SerialStudio::getDashboardWidget(group);
     if (groupKey == SerialStudio::DashboardPlot3D && !pro)
       groupKey = SerialStudio::DashboardMultiPlot;
 
-    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
+    // Skip empty output panels -- nothing to offer in the picker.
+    const bool isEmptyOutputPanel =
+      group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
+
+    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel) {
       QVariantMap row;
       row["widgetType"]    = static_cast<int>(groupKey);
       row["groupId"]       = group.groupId;

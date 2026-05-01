@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -20,6 +20,7 @@
  */
 
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -37,6 +38,7 @@ Widgets.MiniWindow {
   implicitWidth: minimumWidth
   implicitHeight: minimumHeight
   focused: taskBar.activeWindow === root
+  windowControlsVisible: !Cpp_UI_TaskbarSettings.taskbarHidden
   visible: root.state === "normal" || root.state === "maximized"
   shadowEnabled: root.state === "normal" && !windowManager.autoLayoutEnabled
 
@@ -232,6 +234,32 @@ Widgets.MiniWindow {
   }
 
   //
+  // Per-source connection state (suppressed during replay)
+  //
+  property bool sourceDisconnected: false
+  readonly property bool replayActive: SerialStudio.isAnyPlayerOpen()
+  function _refreshSourceConnection() {
+    sourceDisconnected = !replayActive
+                         && !Cpp_IO_Manager.isDeviceConnected(root.deviceIndex)
+  }
+  Component.onCompleted: _refreshSourceConnection()
+  onDeviceIndexChanged: _refreshSourceConnection()
+  Connections {
+    target: Cpp_IO_Manager
+    function onConnectedChanged() { root._refreshSourceConnection() }
+  } Connections {
+    target: Cpp_CSV_Player
+    function onOpenChanged() { root._refreshSourceConnection() }
+  } Connections {
+    target: Cpp_MDF4_Player
+    function onOpenChanged() { root._refreshSourceConnection() }
+  } Connections {
+    target: Cpp_Sessions_Player
+    enabled: typeof Cpp_Sessions_Player !== "undefined"
+    function onOpenChanged() { root._refreshSourceConnection() }
+  }
+
+  //
   // Embedded contents
   //
   Item {
@@ -242,6 +270,78 @@ Widgets.MiniWindow {
     anchors.fill: parent
     anchors.topMargin: root.captionHeight
     Component.onCompleted: widgetLoader.createObject(container, {windowRoot: root})
+
+    //
+    // Disable interaction with the widget's controls while disconnected
+    //
+    enabled: !root.sourceDisconnected
+
+    //
+    // Grayscale + slight blur when disconnected
+    //
+    layer.enabled: root.sourceDisconnected
+    layer.effect: MultiEffect {
+      blur: 0.4
+      blurMax: 16
+      saturation: -1.0
+      brightness: -0.15
+      blurEnabled: true
+    }
+  }
+
+  //
+  // Disconnected overlay -- blocks input + shows a warning badge centered over
+  // the widget content. Sits above container so it isn't itself desaturated.
+  //
+  Item {
+    id: disconnectedOverlay
+
+    anchors.fill: container
+    visible: root.sourceDisconnected
+
+    //
+    // Eat clicks and wheel events so the user can't drive a dead widget
+    //
+    MouseArea {
+      hoverEnabled: true
+      anchors.fill: parent
+      acceptedButtons: Qt.AllButtons
+      onWheel: function(wheel) { wheel.accepted = true }
+    }
+
+    Rectangle {
+      id: badge
+
+      radius: 6
+      border.width: 1
+      anchors.centerIn: parent
+      color: Cpp_ThemeManager.colors["widget_window"]
+      border.color: Cpp_ThemeManager.colors["window_border"]
+      implicitWidth: badgeRow.implicitWidth + 24
+      implicitHeight: badgeRow.implicitHeight + 16
+      opacity: 0.95
+
+      RowLayout {
+        id: badgeRow
+
+        spacing: 10
+        anchors.centerIn: parent
+
+        Image {
+          Layout.preferredWidth: 24
+          Layout.preferredHeight: 24
+          sourceSize: Qt.size(24, 24)
+          fillMode: Image.PreserveAspectFit
+          source: "qrc:/icons/notifications/warning.svg"
+        }
+
+        Label {
+          text: qsTr("Device Disconnected")
+          color: Cpp_ThemeManager.colors["text"]
+          font: Cpp_Misc_CommonFonts.boldUiFont
+        }
+      }
+    }
   }
 
   //
@@ -274,8 +374,8 @@ Widgets.MiniWindow {
           }
         }
 
-        property bool hasToolbar: false
         property int deviceIndex: 0
+        property bool hasToolbar: false
         readonly property bool focused: true
 
         Page {

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -49,7 +49,7 @@ void API::Handlers::SourceHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),             QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source ID to delete")},
       {    QStringLiteral("minimum"),                                     1}
@@ -57,7 +57,7 @@ void API::Handlers::SourceHandler::registerCommands()
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("sourceId")};
+    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId};
     registry.registerCommand(QStringLiteral("project.source.delete"),
                              QStringLiteral("Delete a source (Commercial; sourceId >= 1)"),
                              schema,
@@ -66,7 +66,7 @@ void API::Handlers::SourceHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),             QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source ID to update")},
       {    QStringLiteral("minimum"),                                     0}
@@ -76,13 +76,13 @@ void API::Handlers::SourceHandler::registerCommands()
       {QStringLiteral("description"), QStringLiteral("New title for the source")}
     };
     props[Keys::BusType] = QJsonObject{
-      {       QStringLiteral("type"),                               QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Bus type index (0=UART, 1=Network, …)")}
+      {       QStringLiteral("type"),                                 QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Bus type index (0=UART, 1=Network, ...)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("sourceId")};
+    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId};
     registry.registerCommand(QStringLiteral("project.source.update"),
                              QStringLiteral("Update source fields (Commercial)"),
                              schema,
@@ -96,7 +96,7 @@ void API::Handlers::SourceHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),   QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source ID")},
       {    QStringLiteral("minimum"),                           0}
@@ -111,8 +111,8 @@ void API::Handlers::SourceHandler::registerCommands()
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{
-      QStringLiteral("sourceId"), QStringLiteral("key"), QStringLiteral("propertyValue")};
+    schema[QStringLiteral("required")] =
+      QJsonArray{Keys::SourceId, QStringLiteral("key"), QStringLiteral("propertyValue")};
     registry.registerCommand(
       QStringLiteral("project.source.setProperty"),
       QStringLiteral("Set a driver connection property (params: sourceId, key, value)"),
@@ -122,7 +122,7 @@ void API::Handlers::SourceHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),   QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source ID")},
       {    QStringLiteral("minimum"),                           0}
@@ -134,8 +134,7 @@ void API::Handlers::SourceHandler::registerCommands()
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("sourceId"), QStringLiteral("settings")};
+    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId, QStringLiteral("settings")};
     registry.registerCommand(
       QStringLiteral("project.source.configure"),
       QStringLiteral("Set multiple driver properties at once (params: sourceId, settings)"),
@@ -145,7 +144,7 @@ void API::Handlers::SourceHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),   QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source ID")},
       {    QStringLiteral("minimum"),                           0}
@@ -153,7 +152,7 @@ void API::Handlers::SourceHandler::registerCommands()
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("sourceId")};
+    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId};
     registry.registerCommand(QStringLiteral("project.source.getConfiguration"),
                              QStringLiteral("Get full source configuration (params: sourceId)"),
                              schema,
@@ -162,7 +161,7 @@ void API::Handlers::SourceHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),   QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source ID")},
       {    QStringLiteral("minimum"),                           0}
@@ -174,8 +173,7 @@ void API::Handlers::SourceHandler::registerCommands()
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("sourceId"), QStringLiteral("code")};
+    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId, QStringLiteral("code")};
     registry.registerCommand(
       QStringLiteral("project.source.setFrameParserCode"),
       QStringLiteral("Set per-source JS frame parser (params: sourceId, code)"),
@@ -185,7 +183,7 @@ void API::Handlers::SourceHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("sourceId")] = QJsonObject{
+    props[Keys::SourceId] = QJsonObject{
       {       QStringLiteral("type"),   QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source ID")},
       {    QStringLiteral("minimum"),                           0}
@@ -193,7 +191,7 @@ void API::Handlers::SourceHandler::registerCommands()
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("sourceId")};
+    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId};
     registry.registerCommand(QStringLiteral("project.source.getFrameParserCode"),
                              QStringLiteral("Get per-source JS frame parser (params: sourceId)"),
                              schema,
@@ -259,7 +257,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceAdd(const QString& id,
       id, QStringLiteral("OPERATION_FAILED"), QStringLiteral("Failed to add source"));
 
   QJsonObject result;
-  result[QStringLiteral("sourceId")] = countAfter - 1;
+  result[Keys::SourceId] = countAfter - 1;
   return CommandResponse::makeSuccess(id, result);
 #endif
 }
@@ -276,11 +274,11 @@ API::CommandResponse API::Handlers::SourceHandler::sourceDelete(const QString& i
                                     QStringLiteral("COMMERCIAL_REQUIRED"),
                                     QStringLiteral("Multiple data sources require a Pro license"));
 #else
-  if (!params.contains(QStringLiteral("sourceId")))
+  if (!params.contains(Keys::SourceId))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));
 
-  const int sourceId = params[QStringLiteral("sourceId")].toInt(-1);
+  const int sourceId = params[Keys::SourceId].toInt(-1);
   if (sourceId <= 0)
     return CommandResponse::makeError(
       id,
@@ -308,12 +306,12 @@ API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& i
                                     QStringLiteral("COMMERCIAL_REQUIRED"),
                                     QStringLiteral("Multiple data sources require a Pro license"));
 #else
-  if (!params.contains(QStringLiteral("sourceId")))
+  if (!params.contains(Keys::SourceId))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));
 
   // Copy source and apply field updates
-  const int sourceId    = params[QStringLiteral("sourceId")].toInt(-1);
+  const int sourceId    = params[Keys::SourceId].toInt(-1);
   const auto& sources   = DataModel::ProjectModel::instance().sources();
   const int sourceCount = static_cast<int>(sources.size());
 
@@ -367,11 +365,11 @@ API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString
                                                                    const QJsonObject& params)
 {
   // Validate required parameter
-  if (!params.contains(QStringLiteral("sourceId")) || !params.contains(QStringLiteral("settings")))
+  if (!params.contains(Keys::SourceId) || !params.contains(QStringLiteral("settings")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and settings are required"));
 
-  const int sourceId    = params[QStringLiteral("sourceId")].toInt(-1);
+  const int sourceId    = params[Keys::SourceId].toInt(-1);
   const auto& model     = DataModel::ProjectModel::instance();
   const int sourceCount = static_cast<int>(model.sources().size());
 
@@ -421,7 +419,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
                                                                      const QJsonObject& params)
 {
   // Validate required parameter
-  if (!params.contains(QStringLiteral("sourceId")) || !params.contains(QStringLiteral("key")))
+  if (!params.contains(Keys::SourceId) || !params.contains(QStringLiteral("key")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and key are required"));
 
@@ -431,7 +429,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("propertyValue is required"));
 
-  const int sourceId = params[QStringLiteral("sourceId")].toInt(-1);
+  const int sourceId = params[Keys::SourceId].toInt(-1);
   if (sourceId < 0)
     return CommandResponse::makeError(
       id, QStringLiteral("INVALID_PARAM"), QStringLiteral("Invalid sourceId"));
@@ -464,11 +462,11 @@ API::CommandResponse API::Handlers::SourceHandler::sourceGetConfiguration(const 
                                                                           const QJsonObject& params)
 {
   // Validate required parameter
-  if (!params.contains(QStringLiteral("sourceId")))
+  if (!params.contains(Keys::SourceId))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));
 
-  const int sourceId    = params[QStringLiteral("sourceId")].toInt(-1);
+  const int sourceId    = params[Keys::SourceId].toInt(-1);
   const auto& sources   = DataModel::ProjectModel::instance().sources();
   const int sourceCount = static_cast<int>(sources.size());
 
@@ -488,11 +486,11 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetFrameParserCode(
   const QString& id, const QJsonObject& params)
 {
   // Validate required parameter
-  if (!params.contains(QStringLiteral("sourceId")) || !params.contains(QStringLiteral("code")))
+  if (!params.contains(Keys::SourceId) || !params.contains(QStringLiteral("code")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and code are required"));
 
-  const int sourceId = params[QStringLiteral("sourceId")].toInt(-1);
+  const int sourceId = params[Keys::SourceId].toInt(-1);
   const QString code = params[QStringLiteral("code")].toString();
 
   const auto& sources   = DataModel::ProjectModel::instance().sources();
@@ -518,11 +516,11 @@ API::CommandResponse API::Handlers::SourceHandler::sourceGetFrameParserCode(
   const QString& id, const QJsonObject& params)
 {
   // Validate required parameter
-  if (!params.contains(QStringLiteral("sourceId")))
+  if (!params.contains(Keys::SourceId))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));
 
-  const int sourceId    = params[QStringLiteral("sourceId")].toInt(-1);
+  const int sourceId    = params[Keys::SourceId].toInt(-1);
   const auto& sources   = DataModel::ProjectModel::instance().sources();
   const int sourceCount = static_cast<int>(sources.size());
 

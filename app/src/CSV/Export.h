@@ -45,7 +45,7 @@ public:
   using DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>::FrameConsumerWorker;
 
   void closeResources() override;
-  bool isResourceOpen() const override;
+  [[nodiscard]] bool isResourceOpen() const override;
 
 protected:
   void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
@@ -61,6 +61,8 @@ private:
   QTextStream m_textStream;
   DataModel::ExportSchema m_schema;
   DataModel::TimestampedFrame::SteadyTimePoint m_referenceTimestamp;
+
+  QMap<int, QString> m_lastFinalValues;
 };
 
 /**

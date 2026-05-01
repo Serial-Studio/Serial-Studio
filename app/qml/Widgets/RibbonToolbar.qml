@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2026 Alex Spataru
+ * Copyright (C) 2020-2026 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -74,7 +74,7 @@ Item {
   }
 
   //
-  // Collapse logic — runs whenever width changes
+  // Collapse logic -- runs whenever width changes
   //
   property bool _updating: false
 
@@ -130,7 +130,9 @@ Item {
       if (currentWidth <= available)
         break
 
+      //
       // Collapsing saves: expandedWidth - collapsedWidth
+      //
       var savings = sections[c].expandedWidth - sections[c].collapsedWidth
       sections[c].collapsed = true
       currentWidth -= savings

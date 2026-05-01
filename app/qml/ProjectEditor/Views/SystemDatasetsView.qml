@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -34,7 +34,7 @@ Widgets.Pane {
   icon: "qrc:/icons/project-editor/treeview/dataset-values.svg"
 
   //
-  // Shared column widths and row height — header, rows, and empty-column
+  // Shared column widths and row height -- header, rows, and empty-column
   // spacers stay aligned. Matches TableDelegate's 30-px row height.
   //
   readonly property int rowHeight: 30
@@ -49,11 +49,13 @@ Widgets.Pane {
   property var datasets: []
 
   //
-  // Single search string — matches any column (case-insensitive OR).
+  // Single search string -- matches any column (case-insensitive OR).
   //
   property string searchText: ""
 
+  //
   // Pad uniqueIds to the largest entry's digit count (min 5); display only.
+  //
   readonly property int idPadWidth: {
     let max = 0
     for (let i = 0; i < datasets.length; ++i) {
@@ -68,7 +70,7 @@ Widgets.Pane {
   }
 
   //
-  // Filtered view — recomputed whenever the search text or dataset list changes.
+  // Filtered view -- recomputed whenever the search text or dataset list changes.
   //
   property var filteredDatasets: {
     const q = String(searchText || "").toLowerCase().trim()
@@ -167,7 +169,7 @@ Widgets.Pane {
       }
 
       //
-      // Column headers — driven by the shared ProjectTableHeader component.
+      // Column headers -- driven by the shared ProjectTableHeader component.
       //
       Widgets.ProjectTableHeader {
         z: 2

@@ -23,7 +23,7 @@
                     "plotMin": 0,
                     "title": "Battery Level",
                     "units": "%",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "gauge",
                     "widgetMax": 100,
                     "widgetMin": 0,

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -28,7 +28,7 @@ Rectangle {
   id: row
 
   //
-  // Theme passthroughs — saves callers the long `Cpp_ThemeManager.colors[…]`
+  // Theme passthroughs -- saves callers the long `Cpp_ThemeManager.colors[...]`
   // lookups when wiring the cells.
   //
   readonly property color separatorColor: Cpp_ThemeManager.colors["table_separator"]
@@ -41,7 +41,7 @@ Rectangle {
   property int rowHeight: 30
 
   //
-  // Default sizing — picks up the parent ListView's width and the standard
+  // Default sizing -- picks up the parent ListView's width and the standard
   // 30-px row height.
   //
   width: ListView.view ? ListView.view.width : 0

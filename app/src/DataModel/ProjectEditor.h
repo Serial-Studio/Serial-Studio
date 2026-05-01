@@ -134,6 +134,7 @@ signals:
   void datasetOptionsChanged();
   void editableOptionsChanged();
   void outputWidgetModelChanged();
+  void treeRebuildFinished(const QModelIndex& revealIndex);
 
 private:
   explicit ProjectEditor();
@@ -256,6 +257,7 @@ public slots:
   void selectOutputWidget(int groupId, int widgetId);
   void selectFrameParser(int sourceId);
   void setSelectedSourceFrameParserCode(const QString& code);
+  void setSelectedOutputWidgetTransmitFunction(const QString& code);
   void openTransformEditor();
 
 private slots:
@@ -280,6 +282,7 @@ private:
 
   void buildTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
   void restoreTreeSelection();
+  QModelIndex consumePendingSelection();
 
   void saveExpandedStateMap(QStandardItem* item, QHash<QString, bool>& map, const QString& title);
   void restoreExpandedStateMap(QStandardItem* item,
@@ -340,6 +343,18 @@ private:
   QTimer m_rebuildTimer;
   QMetaObject::Connection m_deviceListConn;
   QMetaObject::Connection m_currentSelectionConnection;
+
+  /** @brief Kind of node queued for selection after the next tree rebuild. */
+  enum class PendingSelectionKind {
+    None,
+    Source,
+    Group,
+    Dataset,
+    OutputWidget
+  };
+  PendingSelectionKind m_pendingSelectionKind;
+  int m_pendingSelectionGroupId;
+  int m_pendingSelectionItemId;
 
   QMap<QString, QString> m_eolSequences;
   QMap<QString, QString> m_groupWidgets;

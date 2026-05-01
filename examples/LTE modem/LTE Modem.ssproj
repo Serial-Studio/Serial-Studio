@@ -23,7 +23,7 @@
                     "min": 0,
                     "title": "Cell id",
                     "units": "",
-                    "value": "--.--",
+                    "value": "",
                     "widget": ""
                 },
                 {
@@ -40,7 +40,7 @@
                     "min": -20,
                     "title": "RSRQ",
                     "units": "dB",
-                    "value": "--.--",
+                    "value": "",
                     "widget": ""
                 },
                 {
@@ -57,7 +57,7 @@
                     "min": -120,
                     "title": "RSRP",
                     "units": "dBm",
-                    "value": "--.--",
+                    "value": "",
                     "widget": ""
                 },
                 {
@@ -74,7 +74,7 @@
                     "min": -100,
                     "title": "RSSI",
                     "units": "dBm",
-                    "value": "--.--",
+                    "value": "",
                     "widget": ""
                 },
                 {

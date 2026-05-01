@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -62,7 +62,6 @@ UI::Dashboard::Dashboard()
   , m_notificationLogEnabled(false)
   , m_notificationLogWidgetId(kInvalidWidgetId)
   , m_autoHideToolbar(false)
-  , m_showTaskbarButtons(false)
   , m_persistSettings(true)
   , m_updateRetryInProgress(false)
   , m_pltXAxis(kDefaultPlotPoints)
@@ -133,11 +132,10 @@ UI::Dashboard::Dashboard()
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
 
   // Load persisted settings
-  m_points             = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
-  m_autoHideToolbar    = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
-  m_showActionPanel    = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
-  m_showTaskbarButtons = m_settings.value("Dashboard/ShowTaskbarButtons", false).toBool();
-  m_terminalEnabled    = m_settings.value("Dashboard/TerminalEnabled", false).toBool();
+  m_points          = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
+  m_autoHideToolbar = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
+  m_showActionPanel = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
+  m_terminalEnabled = m_settings.value("Dashboard/TerminalEnabled", false).toBool();
   m_notificationLogEnabled = m_settings.value("Dashboard/NotificationLogEnabled", false).toBool();
 }
 
@@ -230,14 +228,6 @@ bool UI::Dashboard::terminalEnabled() const noexcept
 bool UI::Dashboard::notificationLogEnabled() const noexcept
 {
   return m_notificationLogEnabled;
-}
-
-/**
- * @brief Determines if the taskbar buttons should always be visible.
- */
-bool UI::Dashboard::showTaskbarButtons() const noexcept
-{
-  return m_showTaskbarButtons;
 }
 
 /**
@@ -702,8 +692,7 @@ void UI::Dashboard::resetData(const bool notify)
   m_pltValues.squeeze();
   m_multipltValues.squeeze();
 
-  // Drop pre-resolved hotpath push tables; they hold pointers into the
-  // m_yAxisData/m_xAxisData/m_activePlots maps cleared below.
+  // Drop pre-resolved hotpath push tables (point into maps cleared below)
   m_yLinePushes.clear();
   m_xLinePushes.clear();
   m_yLinePushes.shrink_to_fit();
@@ -969,7 +958,7 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
     m_settings.setValue("Dashboard/NotificationLogEnabled", m_notificationLogEnabled);
 
 #ifdef BUILD_COMMERCIAL
-  // Unlike Terminal, NotificationLog can be the only widget — only a live source frame is required
+  // Unlike Terminal, NotificationLog can be the only widget -- only a live source frame is required
   if (!m_sourceRawFrames.isEmpty()) {
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
@@ -993,20 +982,8 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
   Q_EMIT widgetCountChanged();
   Q_EMIT notificationLogEnabledChanged();
 
-  // Re-evaluate Setup → Dashboard transition in MainWindow
+  // Re-evaluate Setup -> Dashboard transition in MainWindow
   Q_EMIT updated();
-}
-
-/**
- * @brief Enables or disables displaying all taskbar buttons regardless of window state.
- */
-void UI::Dashboard::setShowTaskbarButtons(const bool enabled)
-{
-  if (m_showTaskbarButtons != enabled) {
-    m_showTaskbarButtons = enabled;
-    m_settings.setValue("Dashboard/ShowTaskbarButtons", m_showTaskbarButtons);
-    Q_EMIT showTaskbarButtonsChanged();
-  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1543,8 +1520,8 @@ void UI::Dashboard::updateDataSeries(int sourceId)
   const int plotCount  = widgetCount(SerialStudio::DashboardPlot);
   const int multiCount = widgetCount(SerialStudio::DashboardMultiPlot);
 #ifdef BUILD_COMMERCIAL
-  const int plot3DCount     = widgetCount(SerialStudio::DashboardPlot3D);
-  const int waterfallCount  = widgetCount(SerialStudio::DashboardWaterfall);
+  const int plot3DCount    = widgetCount(SerialStudio::DashboardPlot3D);
+  const int waterfallCount = widgetCount(SerialStudio::DashboardWaterfall);
 #endif
 
   // Resize data points if needed
@@ -1707,14 +1684,12 @@ void UI::Dashboard::updateLineSeries(int sourceId)
   Q_ASSERT(m_pltValues.size() == widgetCount(SerialStudio::DashboardPlot));
   Q_ASSERT(m_activePlots.size() == widgetCount(SerialStudio::DashboardPlot));
 
-  // Hotpath: walk pre-resolved push tables built in configureLineSeries.
-  // No QSet/QHash allocations, no map lookups, no getDatasetWidget calls.
-  // Fires the push iff at least one consuming plot widget passes BOTH
-  // (sourceId match) and (active) — same conjunction as the original loop.
+  // Hotpath: walk pre-resolved push tables (no allocations, no lookups)
   auto fire = [sourceId](const LinePush& p) {
     for (const auto& c : p.consumers) {
       if (sourceId >= 0 && c.sourceId != sourceId)
         continue;
+
       if (*c.activeFlag) {
         p.buf->push(*p.value);
         return;
@@ -1918,18 +1893,14 @@ void UI::Dashboard::configureLineSeries()
     m_activePlots.insert(i, true);
   }
 
-  // Build the pre-resolved push tables consumed by the per-frame hotpath.
-  // Each unique ring buffer (Y keyed by uniqueId, X keyed by xAxisId) becomes
-  // one entry. Multiple plot widgets that share a buffer collapse into the
-  // same entry and each contribute one Consumer{sourceId, activeFlag} record;
-  // the hotpath fires the push as soon as one Consumer passes both checks.
+  // Build the pre-resolved push tables consumed on the hotpath
   QHash<int, std::size_t> yByUid;
   QHash<int, std::size_t> xByXAxisId;
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
-    const auto& yDataset   = getDatasetWidget(SerialStudio::DashboardPlot, i);
+    const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
     const LinePush::Consumer consumer{yDataset.sourceId, &m_activePlots[i]};
 
-    // Y push entry — one per uniqueId
+    // Y push entry -- one per uniqueId
     auto yIt = m_yAxisData.find(yDataset.uniqueId);
     if (yIt != m_yAxisData.end()) {
       auto cacheIt = yByUid.find(yDataset.uniqueId);
@@ -1945,13 +1916,13 @@ void UI::Dashboard::configureLineSeries()
       }
     }
 
-    // X push entry — one per xAxisId
+    // X push entry -- one per xAxisId
 #ifdef BUILD_COMMERCIAL
-    const auto& tk    = Licensing::CommercialToken::current();
-    const int xAxisId = (tk.isValid() && SS_LICENSE_GUARD()
-                         && tk.featureTier() >= Licensing::FeatureTier::Trial)
-                          ? yDataset.xAxisId
-                          : 0;
+    const auto& tk = Licensing::CommercialToken::current();
+    const int xAxisId =
+      (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial)
+        ? yDataset.xAxisId
+        : 0;
 #else
     const int xAxisId = 0;
 #endif

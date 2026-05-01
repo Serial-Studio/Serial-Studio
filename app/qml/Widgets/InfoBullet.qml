@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -36,9 +36,12 @@ RowLayout {
   Label {
     id: bullet
 
-    text: "✔"
     color: "#27AE60"
     font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
+
+    // code-verify off
+    text: "✔"
+    // code-verify on
   }
 
   Label {

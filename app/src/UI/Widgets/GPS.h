@@ -115,13 +115,13 @@ private:
   void paintAttributionText(QPainter* painter, const QSize& view);
 
 private:
-  QPointF clampCenterTile(QPointF tile) const;
+  [[nodiscard]] QPointF clampCenterTile(QPointF tile) const;
   QPointF tileToLatLon(const QPointF& tile, double zoom);
   QPointF latLonToTile(double lat, double lon, double zoom);
 
-  QString tileUrl(const int tx, const int ty, const int zoom) const;
-  QString referenceUrl(const int tx, const int ty, const int zoom) const;
-  QString nasaWeatherUrl(const int tx, const int ty, const int zoom) const;
+  [[nodiscard]] QString tileUrl(const int tx, const int ty, const int zoom) const;
+  [[nodiscard]] QString referenceUrl(const int tx, const int ty, const int zoom) const;
+  [[nodiscard]] QString nasaWeatherUrl(const int tx, const int ty, const int zoom) const;
 
   void requestTileIfNeeded(const QString& url);
   void preloadNextZoomTiles(int tx, int ty, int baseZoom);

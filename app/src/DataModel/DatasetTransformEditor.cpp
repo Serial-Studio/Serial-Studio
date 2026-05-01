@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -67,7 +67,7 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   m_editor->setFont(Misc::CommonFonts::instance().monoFont());
   m_editor->setMinimumHeight(200);
 
-  // Language selector (Lua first — it's the project default)
+  // Language selector (Lua first -- it's the project default)
   m_languageCombo = new QComboBox(this);
   m_languageCombo->addItems({tr("Lua"), tr("JavaScript")});
 
@@ -86,8 +86,7 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   // Test area
   m_testInput = new QLineEdit(this);
   m_testInput->setPlaceholderText(tr("Enter raw value (e.g., 1024)"));
-
-  m_testOutput = new QLineEdit(QStringLiteral("—"), this);
+  m_testOutput = new QLineEdit(QStringLiteral("--.--"), this);
   m_testOutput->setReadOnly(true);
   m_testOutput->setMinimumWidth(120);
 
@@ -198,7 +197,7 @@ void DataModel::DatasetTransformEditor::displayDialog(
   m_templateCombo->setCurrentIndex(tmplIdx >= 0 ? tmplIdx + 1 : 0);
 
   // Reset test output
-  m_testOutput->setText(QStringLiteral("—"));
+  m_testOutput->setText(QStringLiteral("--.--"));
 
   // Display the window & focus the text editor
   showNormal();
@@ -356,7 +355,7 @@ void DataModel::DatasetTransformEditor::onClear()
 {
   m_editor->setPlainText(defaultPlaceholder(m_language));
   m_testInput->clear();
-  m_testOutput->setText(QStringLiteral("—"));
+  m_testOutput->setText(QStringLiteral("--.--"));
   m_templateCombo->setCurrentIndex(0);
 }
 
@@ -365,7 +364,7 @@ void DataModel::DatasetTransformEditor::onClear()
  */
 void DataModel::DatasetTransformEditor::onTemplateSelected(int index)
 {
-  // Index 0 is the "Select Template…" placeholder
+  // Index 0 is the "Select Template..." placeholder
   if (index <= 0 || index > m_templates.size())
     return;
 
@@ -491,7 +490,7 @@ QString DataModel::DatasetTransformEditor::defaultPlaceholder(int language)
             " *\n"
             " * Globals declared at the top level persist between frames,\n"
             " * which is useful for filters, accumulators, and any other\n"
-            " * stateful transform — just like a frame parser script:\n"
+            " * stateful transform -- just like a frame parser script:\n"
             " *\n"
             " *   var alpha = 0.1;\n"
             " *   var ema;\n"

@@ -15,13 +15,13 @@
 
 #ifdef BUILD_COMMERCIAL
 
+#  include <atomic>
+#  include <memory>
 #  include <QObject>
 #  include <QSqlDatabase>
 #  include <QString>
 #  include <QVariantList>
 #  include <QVariantMap>
-#  include <atomic>
-#  include <memory>
 #  include <vector>
 
 #  include "Sessions/ReportData.h"
@@ -39,6 +39,9 @@ struct ReportPayload {
   std::vector<DatasetSeries> series;
 };
 
+/**
+ * @brief Shared pointer alias for ReportPayload, exchanged across threads.
+ */
 using ReportPayloadPtr = std::shared_ptr<ReportPayload>;
 
 /**
@@ -48,8 +51,11 @@ class DatabaseWorker : public QObject {
   Q_OBJECT
 
 signals:
-  void opened(const QString& filePath, const QVariantList& sessionList,
-              const QVariantList& tagList, bool locked, const QString& passwordHash);
+  void opened(const QString& filePath,
+              const QVariantList& sessionList,
+              const QVariantList& tagList,
+              bool locked,
+              const QString& passwordHash);
   void openFailed(const QString& filePath, const QString& error);
   void closed();
   void sessionListRefreshed(const QVariantList& sessionList);

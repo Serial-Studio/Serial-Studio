@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -253,7 +253,7 @@ SmartDialog {
       }
 
       //
-      // Right content area — WebEngineView
+      // Right content area -- WebEngineView
       //
       Item {
         Layout.fillWidth: true
@@ -328,18 +328,24 @@ SmartDialog {
           onNavigationRequested: function(request) {
             var url = request.url.toString()
 
+            //
             // Allow initial page load from qrc
+            //
             if (url.startsWith("qrc:"))
               return
 
-            // External link — open in browser
+            //
+            // External link -- open in browser
+            //
             if (url.startsWith("ext:")) {
               request.reject()
               Qt.openUrlExternally(url.substring(4))
               return
             }
 
+            //
             // Copy code to clipboard
+            //
             if (url.startsWith("copy:")) {
               request.reject()
               var text = decodeURIComponent(url.substring(5))
@@ -348,22 +354,30 @@ SmartDialog {
               return
             }
 
+            //
             // Internal page navigation
+            //
             if (url.startsWith("nav:")) {
               request.reject()
               var link = url.substring(4)
 
+              //
               // Decode percent-encoded characters
+              //
               link = decodeURIComponent(link)
 
+              //
               // Try internal navigation
+              //
               if (!Cpp_HelpCenter.navigateToPage(link))
                 Qt.openUrlExternally(link)
 
               return
             }
 
+            //
             // Block all other navigations
+            //
             request.reject()
           }
         }

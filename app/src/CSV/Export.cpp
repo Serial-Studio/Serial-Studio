@@ -38,10 +38,8 @@
 namespace {
 
 /**
- * RFC 4180 CSV field escape: quote fields containing separators, quotes, or
- * newlines and double any embedded quotes. Returning the input unchanged for
- * safe values keeps the common-case hotpath allocation-free.
- **/
+ * @brief Escapes a CSV field per RFC 4180, quoting only when special characters require it.
+ */
 static QString escapeCsvField(const QString& s)
 {
   // Bail early when no special characters are present
@@ -81,6 +79,7 @@ void CSV::ExportWorker::closeResources()
   m_csvFile.close();
   m_schema = DataModel::ExportSchema{};
   m_textStream.setDevice(nullptr);
+  m_lastFinalValues.clear();
   DataModel::clear_frame(m_templateFrame);
 }
 
@@ -114,14 +113,14 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
     const double seconds     = static_cast<double>(nanoseconds) / 1'000'000'000.0;
     m_textStream << QString::number(seconds, 'f', 9);
 
-    QMap<int, QString> finalValues;
+    // Refresh per-dataset last-known cache (carry forward across columns)
     for (const auto& g : i->data.groups)
       for (const auto& d : g.datasets)
-        finalValues[d.uniqueId] = d.value.simplified();
+        m_lastFinalValues[d.uniqueId] = d.value.simplified();
 
     for (int j = 0; j < colCount; ++j) {
       const int uid = m_schema.columns[static_cast<size_t>(j)].uniqueId;
-      m_textStream << ',' << escapeCsvField(finalValues.value(uid, QString()));
+      m_textStream << ',' << escapeCsvField(m_lastFinalValues.value(uid, QString()));
     }
 
     m_textStream << '\n';
@@ -162,6 +161,9 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
     return;
   }
 
+  // Reset the forward-fill cache for the new file
+  m_lastFinalValues.clear();
+
   m_textStream.setDevice(&m_csvFile);
   m_textStream.setGenerateByteOrderMark(true);
   m_textStream.setEncoding(QStringConverter::Utf8);
@@ -172,7 +174,10 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
   // Header: elapsed seconds from session start (not wall-clock), then per-column titles
   m_textStream << "Elapsed (s)";
   for (const auto& col : m_schema.columns) {
-    const auto label = QString("%1/%2").arg(col.groupTitle, col.title).simplified();
+    auto label = QString("%1/%2").arg(col.groupTitle, col.title).simplified();
+    if (!col.sourceTitle.isEmpty())
+      label = col.sourceTitle + "/" + label;
+
     m_textStream << ',' << escapeCsvField(label);
   }
 

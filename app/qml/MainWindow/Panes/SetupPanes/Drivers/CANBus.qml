@@ -41,8 +41,8 @@ Item {
 
     Image {
       sourceSize: Qt.size(96, 96)
-      Layout.alignment: Qt.AlignHCenter
       source: "qrc:/images/driver.svg"
+      Layout.alignment: Qt.AlignHCenter
     }
 
     Item {
@@ -298,8 +298,8 @@ Item {
 
       Image {
         sourceSize: Qt.size(96, 96)
-        Layout.alignment: Qt.AlignHCenter
         source: "qrc:/images/driver.svg"
+        Layout.alignment: Qt.AlignHCenter
       }
 
       Item {

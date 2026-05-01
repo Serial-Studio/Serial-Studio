@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -29,12 +29,11 @@
  * @brief Initializes the cancellation flag.
  */
 Sessions::PlayerLoaderWorker::PlayerLoaderWorker(QObject* parent)
-  : QObject(parent)
-  , m_cancelRequested(false)
+  : QObject(parent), m_cancelRequested(false)
 {}
 
 /**
- * @brief Trivial destructor — no owned resources outside per-call scope.
+ * @brief Trivial destructor -- no owned resources outside per-call scope.
  */
 Sessions::PlayerLoaderWorker::~PlayerLoaderWorker() = default;
 
@@ -85,7 +84,7 @@ void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sess
 
     if (!db.open()) {
       payload->error = db.lastError().text();
-      db = QSqlDatabase();
+      db             = QSqlDatabase();
       QSqlDatabase::removeDatabase(connName);
       Q_EMIT loaded(payload);
       return;
@@ -137,7 +136,7 @@ void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sess
         payload->projectJson = q.value(0).toString();
     }
 
-    // Column order — must match the live FrameBuilder
+    // Column order -- must match the live FrameBuilder
     {
       QSqlQuery q(db);
       q.setForwardOnly(true);
@@ -174,7 +173,7 @@ void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sess
       return;
     }
 
-    // Timestamp index — the heaviest single query on big sessions
+    // Timestamp index -- the heaviest single query on big sessions
     {
       QSqlQuery q(db);
       q.setForwardOnly(true);
@@ -193,8 +192,7 @@ void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sess
       // Periodic cancel checks for huge result sets
       qint64 row = 0;
       while (q.next()) {
-        if ((row & 0xFFFF) == 0
-            && m_cancelRequested.load(std::memory_order_acquire)) {
+        if ((row & 0xFFFF) == 0 && m_cancelRequested.load(std::memory_order_acquire)) {
           db.close();
           db = QSqlDatabase();
           QSqlDatabase::removeDatabase(connName);

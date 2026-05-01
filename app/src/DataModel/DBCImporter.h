@@ -98,20 +98,21 @@ private:
   QString generateSignalExtraction(const QCanSignalDescription& signal);
   QString generateMessageDecoder(const QCanMessageDescription& message, int& datasetIndex);
 
-  SignalFamily detectSignalFamily(const QList<QCanSignalDescription>& signalList) const;
-  bool hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
-                            const QStringList& positions) const;
-  bool hasNumberedPattern(const QList<QCanSignalDescription>& signalList) const;
-  bool allSimilarUnits(const QList<QCanSignalDescription>& signalList) const;
-  bool hasBatterySignals(const QList<QCanSignalDescription>& signalList) const;
-  bool allStatusSignals(const QList<QCanSignalDescription>& signalList) const;
-  int countPlottable(const QList<QCanSignalDescription>& signalList) const;
-  bool isCriticalSignal(const QCanSignalDescription& signal) const;
-  bool shouldAssignIndividualWidget(const QString& groupWidget,
-                                    const QCanSignalDescription& signal,
-                                    bool isSingleBit) const;
+  [[nodiscard]] SignalFamily detectSignalFamily(
+    const QList<QCanSignalDescription>& signalList) const;
+  [[nodiscard]] bool hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
+                                          const QStringList& positions) const;
+  [[nodiscard]] bool hasNumberedPattern(const QList<QCanSignalDescription>& signalList) const;
+  [[nodiscard]] bool allSimilarUnits(const QList<QCanSignalDescription>& signalList) const;
+  [[nodiscard]] bool hasBatterySignals(const QList<QCanSignalDescription>& signalList) const;
+  [[nodiscard]] bool allStatusSignals(const QList<QCanSignalDescription>& signalList) const;
+  [[nodiscard]] int countPlottable(const QList<QCanSignalDescription>& signalList) const;
+  [[nodiscard]] bool isCriticalSignal(const QCanSignalDescription& signal) const;
+  [[nodiscard]] bool shouldAssignIndividualWidget(const QString& groupWidget,
+                                                  const QCanSignalDescription& signal,
+                                                  bool isSingleBit) const;
 
-  int countTotalSignals(const QList<QCanMessageDescription>& messages) const;
+  [[nodiscard]] int countTotalSignals(const QList<QCanMessageDescription>& messages) const;
 
 private:
   QString m_dbcFilePath;

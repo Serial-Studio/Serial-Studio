@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -45,10 +45,10 @@ Widgets.SmartWindow {
   readonly property bool busy: Cpp_Sessions_Manager.busy || (Cpp_CommercialBuild && Cpp_Sessions_Player.loading)
 
   //
-  // Native window management
+  // Native window management: author mode uses integrated titlebar; operator mode keeps OS chrome
   //
   onVisibleChanged: {
-    if (visible)
+    if (visible && !root.operatorMode)
       Cpp_NativeWindow.addWindow(root)
     else
       Cpp_NativeWindow.removeWindow(root)
@@ -108,16 +108,16 @@ Widgets.SmartWindow {
       anchors.fill: parent
 
       //
-      // Toolbar — hidden entirely in operator mode (deployed shortcuts) so the
-      // explorer becomes a read-only viewer with no destructive controls
+      // Toolbar -- hidden in operator mode (deployed shortcut) so the explorer
+      // becomes a read-only viewer using the standard OS window chrome.
       //
       Rectangle {
         id: toolbar
 
         z: 2
-        visible: !root.operatorMode
         Layout.fillWidth: true
         Layout.minimumWidth: 720
+        visible: !root.operatorMode
         Layout.minimumHeight: visible ? titlebarHeight + 80 : 0
         Layout.maximumHeight: visible ? titlebarHeight + 80 : 0
 
@@ -353,6 +353,7 @@ Widgets.SmartWindow {
           minRightWidth: 360
           anchors.fill: parent
           settingsKey: "DatabaseExplorer"
+          captionSeparatorVisible: !root.operatorMode
 
           leftPanel: Component {
             SessionList {}
@@ -377,8 +378,8 @@ Widgets.SmartWindow {
           MouseArea {
             anchors.fill: parent
             preventStealing: true
-            acceptedButtons: Qt.AllButtons
             cursorShape: Qt.WaitCursor
+            acceptedButtons: Qt.AllButtons
             onWheel: function(w) { w.accepted = true }
           }
 
@@ -387,10 +388,10 @@ Widgets.SmartWindow {
             anchors.centerIn: parent
 
             BusyIndicator {
-              running: busyOverlay.visible
-              Layout.alignment: Qt.AlignHCenter
               Layout.preferredWidth: 48
               Layout.preferredHeight: 48
+              running: busyOverlay.visible
+              Layout.alignment: Qt.AlignHCenter
             }
 
             Label {

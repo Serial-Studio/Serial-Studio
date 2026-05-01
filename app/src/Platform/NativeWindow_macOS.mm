@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -33,6 +33,9 @@
 
 static NativeWindow *s_nativeWindowInstance = nullptr;
 
+/**
+ * @brief Swizzled applicationShouldTerminate that defers to Qt and cancels native termination.
+ */
 static NSApplicationTerminateReply swizzled_applicationShouldTerminate(id self, SEL _cmd,
                                                                        NSApplication *sender)
 {
@@ -141,6 +144,37 @@ void NativeWindow::removeWindow(QObject *window)
 }
 
 /**
+ * @brief Applies the integrated-titlebar style to a raw NSWindow.
+ *
+ * Also remaps the green traffic-light button to perform a regular zoom
+ * (maximize within the current Space, keep the title bar) instead of the
+ * macOS Spaces-style full-screen toggle. Spaces full-screen plays badly with
+ * Serial Studio's own UI flow -- the user clicked Connect and would suddenly
+ * find the window flipping out of the chrome they were just using. Holding
+ * Option while clicking the button still triggers the legacy behavior, and
+ * `View -> Enter Full Screen` (or programmatic `showFullScreen()`) still works
+ * because AppKit honours those independently of the auxiliary flag.
+ */
+static void applyMacOSWindowStyleToNSWindow(NSWindow *w)
+{
+  if (!w)
+    return;
+
+  [w setStyleMask:([w styleMask] | NSWindowStyleMaskFullSizeContentView)];
+  [w setTitlebarAppearsTransparent:YES];
+  [w setTitleVisibility:NSWindowTitleHidden];
+
+  // Mark the window as full-screen "auxiliary" so the green button does plain zoom
+  NSWindowCollectionBehavior behaviour = [w collectionBehavior];
+  behaviour &= ~NSWindowCollectionBehaviorFullScreenPrimary;
+  behaviour |=  NSWindowCollectionBehaviorFullScreenAuxiliary;
+  [w setCollectionBehavior:behaviour];
+
+  NSButton *zoomButton = [w standardWindowButton:NSWindowZoomButton];
+  [zoomButton setEnabled:YES];
+}
+
+/**
  * @brief Applies native window customization for macOS.
  *
  * This is a helper function that applies the actual native window styling.
@@ -158,25 +192,7 @@ static void applyMacOSWindowStyle(QWindow *win)
   if (!view)
     return;
 
-  NSWindow *w = [view window];
-
-  if (w)
-  {
-    [w setStyleMask:([w styleMask] | NSWindowStyleMaskFullSizeContentView)];
-    [w setTitlebarAppearsTransparent:YES];
-    [w setTitleVisibility:NSWindowTitleHidden];
-
-    NSButton *zoomButton = [w standardWindowButton:NSWindowZoomButton];
-    [zoomButton setEnabled:YES];
-
-    [NSApp activateIgnoringOtherApps:YES];
-    [w makeKeyAndOrderFront:nil];
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC),
-                   dispatch_get_main_queue(), ^{
-                     [w makeKeyAndOrderFront:nil];
-                   });
-  }
+  applyMacOSWindowStyleToNSWindow([view window]);
 }
 
 /**
@@ -209,6 +225,20 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
     m_windows.append(win);
     connect(win, &QWindow::windowStateChanged, this,
             &NativeWindow::onWindowStateChanged);
+
+    // Listen for AppKit's post-fullscreen-exit notification to reapply the style
+    NSView *view = reinterpret_cast<NSView *>(win->winId());
+    NSWindow *nsWin = view ? [view window] : nil;
+    if (nsWin)
+    {
+      [[NSNotificationCenter defaultCenter]
+          addObserverForName:NSWindowDidExitFullScreenNotification
+                      object:nsWin
+                       queue:[NSOperationQueue mainQueue]
+                  usingBlock:^(NSNotification *note) {
+                    applyMacOSWindowStyleToNSWindow((NSWindow *)note.object);
+                  }];
+    }
   }
 }
 

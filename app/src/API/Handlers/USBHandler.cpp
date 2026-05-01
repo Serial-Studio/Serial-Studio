@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is part of Serial Studio Pro. All rights reserved.
  *
@@ -278,7 +278,7 @@ API::CommandResponse API::Handlers::USBHandler::setOutEndpointIndex(const QStrin
 
 /**
  * @brief Set the ISO transfer packet size.
- * @param params Requires "size" (int, 1–49152)
+ * @param params Requires "size" (int, 1-49152)
  */
 API::CommandResponse API::Handlers::USBHandler::setIsoPacketSize(const QString& id,
                                                                  const QJsonObject& params)

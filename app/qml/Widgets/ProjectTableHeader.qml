@@ -47,7 +47,9 @@ Rectangle {
     color: Cpp_ThemeManager.colors["table_border_header"]
   }
 
+  //
   // Labels and 1-px separators interleaved to match the row delegate geometry.
+  //
   RowLayout {
     spacing: 0
     anchors.fill: parent

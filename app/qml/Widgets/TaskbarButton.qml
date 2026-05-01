@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -31,6 +31,15 @@ Item {
   // Signals
   //
   signal clicked()
+  signal dragStarted()
+  signal dragMoved(real dx)
+  signal dragEnded()
+
+  //
+  // Optional drag-to-reorder support
+  //
+  property int dragThreshold: 6
+  property bool draggable: false
 
   //
   // Display properties
@@ -78,7 +87,7 @@ Item {
   // Tooltip
   //
   ToolTip.delay: 500
-  ToolTip.visible: _mouseArea.containsMouse && ToolTip.text !== ""
+  ToolTip.visible: root.hovered && ToolTip.text !== ""
 
   //
   // General Opacity
@@ -98,17 +107,23 @@ Item {
     State {
       name: "closed"
       when: !root.open
+      //
       //PropertyChanges { target: _label; opacity: 0.3 }
+      //
     },
     State {
       name: "minimized"
       when: root.open && root.minimized
+      //
       //PropertyChanges { target: _label; opacity: 0.5 }
+      //
     },
     State {
       name: "focused"
       when: root.open && !root.minimized && root.focused
+      //
       //PropertyChanges { target: _label; font: Cpp_Misc_CommonFonts.boldUiFont }
+      //
       PropertyChanges { target: _label; color: Cpp_ThemeManager.colors["taskbar_indicator_active"] }
     },
     State {
@@ -129,6 +144,17 @@ Item {
   ]
 
   //
+  // Hover state via HoverHandler (survives modal grab steals)
+  //
+  readonly property bool hovered: _hoverHandler.hovered
+
+  HoverHandler {
+    id: _hoverHandler
+
+    blocking: false
+  }
+
+  //
   // Background
   //
   Rectangle {
@@ -136,11 +162,11 @@ Item {
 
     visible: false
     anchors.fill: parent
-    border.width: root.focused || _mouseArea.containsMouse ? 1 : 0
+    border.width: root.focused || root.hovered ? 1 : 0
     border.color: Cpp_ThemeManager.colors["taskbar_checked_button_border"]
 
     property real baseVisibility: root.startMenu ? 0 : (root.enabled ? 1 : 0.5)
-    property real hoverStateOpacity: root.focused ? root.focusedOpacity : (_mouseArea.containsMouse ? root.hoverOpacity : 0)
+    property real hoverStateOpacity: root.focused ? root.focusedOpacity : (root.hovered ? root.hoverOpacity : 0)
 
     gradient: Gradient {
       GradientStop {
@@ -161,10 +187,10 @@ Item {
     source: _background
     anchors.fill: _background
     opacity: baseVisibility * hoverStateOpacity
-    brightness: root.enabled && _mouseArea.containsMouse ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
+    brightness: root.enabled && root.hovered ? (_mouseArea.pressed ? -0.07 : 0.07) : 0
 
     property real baseVisibility: root.startMenu ? 0 : (root.enabled ? 1 : 0.5)
-    property real hoverStateOpacity: root.focused ? root.focusedOpacity : (_mouseArea.containsMouse ? root.hoverOpacity : 0)
+    property real hoverStateOpacity: root.focused ? root.focusedOpacity : (root.hovered ? root.hoverOpacity : 0)
   }
 
   //
@@ -198,8 +224,8 @@ Item {
 
         source: _icon
         anchors.fill: _icon
-        saturation: !root.open ? -1 : (_mouseArea.containsMouse && root.enabled ? 0.07 : 0)
-        brightness: _mouseArea.containsMouse && root.enabled ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
+        saturation: !root.open ? -1 : (root.hovered && root.enabled ? 0.07 : 0)
+        brightness: root.hovered && root.enabled ? (_mouseArea.pressed ? -0.07 : 0.07) : 0
       }
     }
 
@@ -223,9 +249,46 @@ Item {
   MouseArea {
     id: _mouseArea
 
-    hoverEnabled: true
+    //
+    // Hover tracked by sibling HoverHandler -- keep hoverEnabled off
+    //
     anchors.fill: parent
-    onClicked: {
+
+    property real _pressX: 0
+    property bool _dragging: false
+
+    onPressed: (mouse) => {
+      _pressX   = mouse.x
+      _dragging = false
+    }
+
+    onPositionChanged: (mouse) => {
+      if (!root.draggable || !pressed)
+        return
+
+      const dx = mouse.x - _pressX
+      if (!_dragging) {
+        if (Math.abs(dx) >= root.dragThreshold) {
+          _dragging = true
+          root.dragStarted()
+          root.dragMoved(dx)
+        }
+      } else {
+        root.dragMoved(dx)
+      }
+    }
+
+    onReleased: () => {
+      if (_dragging) {
+        _dragging = false
+        root.dragEnded()
+      }
+    }
+
+    onClicked: () => {
+      if (_dragging)
+        return
+
       if (root.checkable)
         root.focused = !root.focused
 

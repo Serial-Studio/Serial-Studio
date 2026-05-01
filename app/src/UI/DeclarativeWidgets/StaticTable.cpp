@@ -21,19 +21,73 @@
 
 #include "StaticTable.h"
 
+#include <QApplication>
 #include <QHeaderView>
 #include <QLabel>
+#include <QPainter>
 #include <QScrollBar>
+#include <QStyle>
 #include <QToolButton>
 
 #include "Misc/ThemeManager.h"
+
+//--------------------------------------------------------------------------------------------------
+// Placeholder-aware item delegate
+//--------------------------------------------------------------------------------------------------
+
+namespace {
+/**
+ * @brief Item delegate that draws a placeholder string in cells whose value is empty.
+ */
+class PlaceholderDelegate : public QStyledItemDelegate {
+public:
+  /**
+   * @brief Builds the delegate, capturing a non-owning pointer to the placeholder text source.
+   */
+  explicit PlaceholderDelegate(const QString* text, QObject* parent = nullptr)
+    : QStyledItemDelegate(parent), m_text(text)
+  {}
+
+  /**
+   * @brief Paints the cell, substituting the placeholder string when the cell value is empty.
+   */
+  void paint(QPainter* painter,
+             const QStyleOptionViewItem& option,
+             const QModelIndex& index) const override
+  {
+    // Defer to base painting when the cell already has text or no placeholder is set
+    const QString cell = index.data(Qt::DisplayRole).toString();
+    if (!cell.isEmpty() || !m_text || m_text->isEmpty()) {
+      QStyledItemDelegate::paint(painter, option, index);
+      return;
+    }
+
+    // Paint background + frame using the current style
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
+    opt.text.clear();
+    const auto* style = opt.widget ? opt.widget->style() : QApplication::style();
+    style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, opt.widget);
+
+    // Draw the placeholder text using the placeholder palette role
+    painter->save();
+    painter->setPen(opt.palette.color(QPalette::PlaceholderText));
+    painter->drawText(opt.rect, opt.displayAlignment, *m_text);
+    painter->restore();
+  }
+
+private:
+  const QString* m_text;
+};
+}  // namespace
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & setup
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Constructor function
+ * @brief Builds the static table widget, installs the placeholder delegate, and applies the current
+ * theme.
  */
 StaticTable::StaticTable(QQuickItem* parent) : DeclarativeWidget(parent)
 {
@@ -48,6 +102,9 @@ StaticTable::StaticTable(QQuickItem* parent) : DeclarativeWidget(parent)
   m_widget.setEditTriggers(QAbstractItemView::NoEditTriggers);
   m_widget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_widget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  // Install delegate that draws placeholder text in empty cells
+  m_widget.setItemDelegate(new PlaceholderDelegate(&m_placeholderText, &m_widget));
 
   // React to theme changes
   connect(&Misc::ThemeManager::instance(),
@@ -81,6 +138,14 @@ const QFont& StaticTable::headerFont() const
 }
 
 /**
+ * Returns the placeholder text shown in cells whose value is empty.
+ */
+const QString& StaticTable::placeholderText() const
+{
+  return m_placeholderText;
+}
+
+/**
  * Returns the data model used to generate the widget.
  */
 const QList<QStringList>& StaticTable::data() const
@@ -93,7 +158,7 @@ const QList<QStringList>& StaticTable::data() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Updates the font used for the table widget to display data
+ * @brief Updates the table-cell font and triggers a redraw when the value changes.
  */
 void StaticTable::setFont(const QFont& font)
 {
@@ -109,7 +174,7 @@ void StaticTable::setFont(const QFont& font)
 }
 
 /**
- * Updates the font used for the table widget's column headers
+ * @brief Updates the header font and triggers a redraw when the value changes.
  */
 void StaticTable::setHeaderFont(const QFont& font)
 {
@@ -125,7 +190,21 @@ void StaticTable::setHeaderFont(const QFont& font)
 }
 
 /**
- * Updates the data visualized by the widget.
+ * @brief Updates the placeholder string drawn in empty cells and refreshes the rendered table.
+ */
+void StaticTable::setPlaceholderText(const QString& text)
+{
+  if (m_placeholderText == text)
+    return;
+
+  m_placeholderText = text;
+  setData(m_data);
+
+  Q_EMIT placeholderTextChanged();
+}
+
+/**
+ * @brief Replaces the table model, rebuilding rows/columns and recomputing scroll-content size.
  */
 void StaticTable::setData(const QList<QStringList>& data)
 {
@@ -148,7 +227,8 @@ void StaticTable::setData(const QList<QStringList>& data)
       m_widget.insertRow(i);
       const auto& row = data[i + 1];
       for (int j = 0; j < row.count(); ++j) {
-        auto* item = new QTableWidgetItem(" " + row[j] + " ");
+        const QString& cell = row[j];
+        auto* item          = new QTableWidgetItem(cell.isEmpty() ? QString() : " " + cell + " ");
         item->setTextAlignment(Qt::AlignCenter);
         item->setFont(m_font);
         m_widget.setItem(i, j, item);
@@ -178,7 +258,7 @@ void StaticTable::setData(const QList<QStringList>& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Set's the widgets theme based on the current theme manager values
+ * @brief Rebuilds the table palette from the current ThemeManager colors and applies it.
  */
 void StaticTable::loadTheme()
 {

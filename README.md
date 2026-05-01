@@ -19,7 +19,7 @@ It runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Connect to almost anything.** Serial/UART, Bluetooth LE, TCP/UDP, CAN Bus, Modbus TCP/RTU, MQTT, Audio, raw USB (libusb), HID (gamepads, custom devices), and Process I/O. One project can talk to several devices at once, each on its own protocol.
 
-**Visualize data live.** 15+ widget types: line plots, XY plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed. 60 FPS with under 50 ms latency.
+**Visualize data live.** 15+ widget types: line plots, XY plots, gauges, bar charts, GPS maps, FFT spectrum, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed. 60 FPS with under 50 ms latency.
 
 **Configure dashboards without custom code.** The Project Editor lets you define groups, datasets, and widgets through structured forms, closer to editing a schema than coding a UI. Or skip the project file entirely with Quick Plot: print comma-separated values from your device and see them plot instantly. Workspaces split large projects into focused tabs, with a taskbar search for big setups.
 
@@ -95,7 +95,7 @@ An ARM64 AppImage is available for Raspberry Pi and similar boards. Performance 
 ### At a glance
 
 - **Protocols:** Serial/UART, Bluetooth LE, TCP/UDP, Audio, raw USB, HID, Process I/O, plus MQTT, Modbus TCP/RTU, and CAN Bus (Pro).
-- **Visualization:** 15+ widgets — line plots, gauges, bar charts, GPS maps, FFT, accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed (some Pro).
+- **Visualization:** 15+ widgets — line plots, gauges, bar charts, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed (some Pro).
 - **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
 - **Custom parsing:** JavaScript or Lua 5.4 frame parsers, plus 20+ templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, …).
 - **Per-dataset transforms:** short JS or Lua snippets to filter, scale, calibrate, or derive values every frame.

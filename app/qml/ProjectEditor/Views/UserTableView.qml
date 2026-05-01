@@ -454,8 +454,8 @@ Widgets.Pane {
                 ToolTip.visible: hovered
                 icon.color: "transparent"
                 Layout.preferredHeight: 26
-                Layout.preferredWidth: root.colActionWidth / 2
                 icon.source: "qrc:/icons/buttons/copy.svg"
+                Layout.preferredWidth: root.colActionWidth / 2
                 ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyRegBtn.accessCode)
 
                 background: Rectangle {
@@ -479,8 +479,8 @@ Widgets.Pane {
                 hoverEnabled: true
                 icon.color: "transparent"
                 Layout.preferredHeight: 26
-                Layout.preferredWidth: root.colActionWidth / 2
                 icon.source: "qrc:/icons/buttons/trash.svg"
+                Layout.preferredWidth: root.colActionWidth / 2
 
                 background: Rectangle {
                   border.width: 0

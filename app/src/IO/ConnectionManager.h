@@ -153,6 +153,7 @@ public:
 
   [[nodiscard]] Q_INVOKABLE qint64 writeData(const QByteArray& data);
   [[nodiscard]] Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data);
+  [[nodiscard]] Q_INVOKABLE bool isDeviceConnected(int deviceId) const;
 
 public slots:
   void connectDevice();

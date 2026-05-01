@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2026 Alex Spataru
+ * Copyright (C) 2020-2026 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -142,7 +142,7 @@ void DataModel::NotificationCenter::post(int level,
                                          const QString& title,
                                          const QString& subtitle)
 {
-  // Main-thread only — see class doc; workers must use QueuedConnection
+  // Main-thread only -- see class doc; workers must use QueuedConnection
   Q_ASSERT(thread() == QThread::currentThread());
 
   // Clamp level to enum range
@@ -152,7 +152,7 @@ void DataModel::NotificationCenter::post(int level,
   const QString chan = channel.trimmed();
   const QString ttl  = title.trimmed();
 
-  // Reject empty channel + title — nothing to display
+  // Reject empty channel + title -- nothing to display
   if (chan.isEmpty() && ttl.isEmpty())
     return;
 
@@ -415,7 +415,7 @@ void DataModel::NotificationCenter::appendEvent(Event&& e)
   const QString title    = e.title;
   const QString subtitle = e.subtitle;
 
-  // Snapshot for notificationPosted + tray — moves invalidate e
+  // Snapshot for notificationPosted + tray -- moves invalidate e
   const QVariantMap variant = toVariant(e);
 
   // Push into the ring buffer
@@ -449,7 +449,9 @@ void DataModel::NotificationCenter::appendEvent(Event&& e)
     ensureTrayIcon();
     if (m_tray) {
       const auto icon = (level == Critical) ? QSystemTrayIcon::Critical : QSystemTrayIcon::Warning;
+      // code-verify off
       const QString header = chan.isEmpty() ? title : QStringLiteral("%1 — %2").arg(chan, title);
+      // code-verify on
       m_tray->showMessage(header, subtitle, icon, kTrayTimeoutMs);
     }
   }
@@ -478,8 +480,8 @@ namespace {
  * @brief Resolves positional notify* arguments into (channel, title, subtitle).
  *
  * `baseIdx` is the 1-based index of the first string argument. Arg-count
- * overloads (relative to baseIdx): 1 → (title); 2 → (title, subtitle);
- * 3 → (channel, title, subtitle). The default channel is "Dashboard".
+ * overloads (relative to baseIdx): 1 -> (title); 2 -> (title, subtitle);
+ * 3 -> (channel, title, subtitle). The default channel is "Dashboard".
  */
 void resolveLuaArgs(lua_State* L, int baseIdx, QString& channel, QString& title, QString& subtitle)
 {
@@ -645,9 +647,9 @@ void DataModel::NotificationCenter::installScriptApi(QJSEngine* js)
     js->evaluate(
       QStringLiteral("function __ssNotifyArgs(args) {\n"
                      "  // Accept (title), (title, subtitle), or (channel, title, subtitle).\n"
-                     "  // 1 arg  → title on 'Dashboard' channel\n"
-                     "  // 2 args → (title, subtitle) on 'Dashboard' channel\n"
-                     "  // 3 args → (channel, title, subtitle)\n"
+                     "  // 1 arg  -> title on 'Dashboard' channel\n"
+                     "  // 2 args -> (title, subtitle) on 'Dashboard' channel\n"
+                     "  // 3 args -> (channel, title, subtitle)\n"
                      "  if (args.length <= 1)\n"
                      "    return ['Dashboard', args[0] || '', ''];\n"
                      "  if (args.length === 2)\n"

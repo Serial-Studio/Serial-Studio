@@ -245,9 +245,16 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
   (24 Hz), the widget runs FFT (Blackman-Harris window) on the time-domain buffer, converts
   to dB, scrolls the history image down 1 row via `QImage::scroll`, and writes the new row at
   the top. Color maps: Viridis/Inferno/Magma/Plasma/Turbo/Jet/Hot/Grayscale.
-- Schema/back-compat: `dataset.waterfall` writes only when true (default `false` on load).
-  Older Serial Studio loads files with the field as a no-op. `commercialCfg()` flags any
-  project that uses `dataset.waterfall = true` so GPL builds know they need a Pro tier.
+- Y-axis source: defaults to elapsed time. Setting `Keys::WaterfallYAxis("waterfallYAxis")`
+  to another dataset's `index` switches the widget into **Campbell mode** —
+  `Widgets::Waterfall::m_campbellMode` flips on, `m_yDatasetIndex` is bound to that dataset,
+  and rows are placed by the external value (e.g. RPM) instead of time. Used for
+  order-tracking plots. Project Editor exposes this via `kDatasetView_WaterfallYAxis` with
+  options from `ProjectModel::yWaterfallSources()`. Only shown when `waterfall: true`.
+- Schema/back-compat: `dataset.waterfall` writes only when true (default `false` on load);
+  `dataset.waterfallYAxis` writes only when non-zero (default `0` = time on load). Older
+  Serial Studio loads both fields as no-ops. `commercialCfg()` flags any project that uses
+  `dataset.waterfall = true` so GPL builds know they need a Pro tier.
 
 ### Output Widgets (Pro)
 

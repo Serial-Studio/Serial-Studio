@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -43,8 +43,17 @@ Item {
   property var combinedSearchResults: []
 
   //
-  // Rebuilds the unified search list — widget hits first, then start menu
-  // actions — whenever the filter or widget index changes.
+  // True while a popup or the search field has focus
+  //
+  readonly property bool isBusy: (searchField && searchField.activeFocus)
+                                 || (searchPopup && searchPopup.opened)
+                                 || (_switcher && _switcher.popup && _switcher.popup.opened)
+                                 || (_tbContextMenu && _tbContextMenu.opened)
+                                 || (startMenu && startMenu.visible)
+
+  //
+  // Rebuilds the unified search list -- widget hits first, then start menu
+  // actions -- whenever the filter or widget index changes.
   //
   function refreshCombinedSearchResults() {
     var widgetHits = taskBar ? taskBar.searchResults : []
@@ -67,7 +76,9 @@ Item {
       searchResultsList.currentIndex = combinedSearchResults.length > 0 ? 0 : -1
   }
 
+  //
   // Snapshot entry fields before dismissSearch() rebuilds the model.
+  //
   function triggerSearchEntry(entry) {
     if (!entry)
       return
@@ -110,8 +121,36 @@ Item {
   // Focus the search field (called externally)
   //
   function focusSearch() {
+    if (!Cpp_UI_TaskbarSettings.searchEnabled)
+      return
+
     searchField.forceActiveFocus(Qt.MouseFocusReason)
     searchPopup.open()
+  }
+
+  //
+  // Trigger the Start menu (called externally via shortcut)
+  //
+  function toggleStartMenu() {
+    root.startClicked()
+    taskBar.activeWindow = null
+  }
+
+  //
+  // Cycle workspaces (called externally via shortcut). delta = +1 / -1.
+  //
+  function cycleWorkspace(delta) {
+    if (!taskBar)
+      return
+
+    const list = taskBar.workspaceModel
+    if (!list || list.length === 0)
+      return
+
+    const cur = Math.max(0, taskBar.activeGroupIndex)
+    const next = ((cur + delta) % list.length + list.length) % list.length
+    if (next !== cur)
+      taskBar.activeGroupIndex = next
   }
 
   //
@@ -170,8 +209,9 @@ Item {
       id: searchContainer
 
       Layout.preferredHeight: 22
-      Layout.preferredWidth: 172
       Layout.alignment: Qt.AlignVCenter
+      Layout.preferredWidth: visible ? 172 : 0
+      visible: Cpp_UI_TaskbarSettings.searchEnabled
 
       function clearSearch() {
         searchField.text = ""
@@ -364,43 +404,171 @@ Item {
     }
 
     //
-    // Shortcuts
+    // Pinned shortcut buttons -- registry-driven, drag-reorderable
     //
-    Widgets.TaskbarButton {
-      forceVisible: true
-      visible: !app.runtimeMode
-      icon.source: "qrc:/icons/taskbar/settings.svg"
-      onClicked: {
-        app.showSettingsDialog()
-        taskBar.activeWindow = null
+    Row {
+      id: pinRow
+
+      spacing: 2
+      Layout.alignment: Qt.AlignVCenter
+      Layout.preferredHeight: 24
+      Layout.preferredWidth: displayedPins.length === 0
+                             ? 0
+                             : displayedPins.length * pinSlotWidth
+                               + (displayedPins.length - 1) * spacing
+
+      //
+      // True when the given pin id should appear in the current build/mode
+      //
+      function pinVisible(id) {
+        switch (id) {
+        case "settings":          return !app.runtimeMode
+        case "console":           return !app.runtimeMode
+        case "notifications":     return Cpp_CommercialBuild
+        case "pause":             return true
+        case "file_transmission": return Cpp_CommercialBuild
+                                         && (!app.runtimeMode
+                                             || Cpp_IO_FileTransmission.runtimeAccessAllowed)
+        }
+        return false
       }
-    } Widgets.TaskbarButton {
-      visible: !app.runtimeMode
-      forceVisible: !app.runtimeMode
-      focused: Cpp_UI_Dashboard.terminalEnabled
-      icon.source: "qrc:/icons/taskbar/console.svg"
-      onClicked: {
-        taskBar.activeWindow = null
-        Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled
+
+      //
+      // Filtered + ordered model -- pinned IDs whose registry entry is visible.
+      //
+      readonly property var displayedPins: {
+        // Touch the reactive inputs so this binding re-evaluates on change.
+        void Cpp_UI_TaskbarSettings.pinnedButtons
+        void app.runtimeMode
+        const out = []
+        const ids = Cpp_UI_TaskbarSettings.pinnedButtons
+        for (let i = 0; i < ids.length; ++i) {
+          if (pinVisible(ids[i]))
+            out.push(ids[i])
+        }
+        return out
       }
-    } Widgets.TaskbarButton {
-      visible: Cpp_CommercialBuild
-      forceVisible: Cpp_CommercialBuild
-      focused: Cpp_UI_Dashboard.notificationLogEnabled
-      icon.source: "qrc:/icons/taskbar/notifications.svg"
-      onClicked: {
-        taskBar.activeWindow = null
-        Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
-      }
-    } Widgets.TaskbarButton {
-      forceVisible: true
-      focused: Cpp_IO_Manager.paused
-      icon.source: Cpp_IO_Manager.paused ?
-                     "qrc:/icons/taskbar/resume.svg" :
-                     "qrc:/icons/taskbar/pause.svg"
-      onClicked: {
-        taskBar.activeWindow = null
-        Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
+
+      //
+      // Per-pin slot width (kept in sync with TaskbarButton.implicitWidth)
+      //
+      readonly property int pinSlotWidth: 24
+
+      Repeater {
+        model: pinRow.displayedPins
+
+        delegate: Widgets.TaskbarButton {
+          id: pinButton
+
+          required property string modelData
+          property real dragOffset: 0
+          property bool isDragging: false
+
+          height: 24
+          forceVisible: true
+          z: isDragging ? 10 : 0
+          width: pinRow.pinSlotWidth
+          draggable: !app.runtimeMode
+          opacity: isDragging ? 0.7 : 1.0
+
+          //
+          // Visual offset applied while the user is reordering this pin.
+          //
+          transform: Translate {
+            x: pinButton.dragOffset
+            Behavior on x {
+              enabled: !pinButton.isDragging
+              NumberAnimation { duration: 120; easing.type: Easing.OutCubic }
+            }
+          }
+
+          ToolTip.text: {
+            switch (modelData) {
+            case "settings":          return qsTr("Settings")
+            case "console":           return qsTr("Console")
+            case "notifications":     return qsTr("Notifications")
+            case "pause":             return Cpp_IO_Manager.paused ? qsTr("Resume") : qsTr("Pause")
+            case "file_transmission": return qsTr("File Transmission")
+            }
+            return ""
+          }
+
+          icon.source: {
+            switch (modelData) {
+            case "settings":          return "qrc:/icons/taskbar/settings.svg"
+            case "console":           return "qrc:/icons/taskbar/console.svg"
+            case "notifications":     return "qrc:/icons/taskbar/notifications.svg"
+            case "pause":             return Cpp_IO_Manager.paused
+                                             ? "qrc:/icons/taskbar/resume.svg"
+                                             : "qrc:/icons/taskbar/pause.svg"
+            case "file_transmission": return "qrc:/icons/taskbar/file-transmission.svg"
+            }
+            return ""
+          }
+
+          //
+          // Stateful pins light up when their backing state is active
+          //
+          focused: {
+            switch (modelData) {
+            case "console":       return Cpp_UI_Dashboard.terminalEnabled
+            case "notifications": return Cpp_UI_Dashboard.notificationLogEnabled
+            case "pause":         return Cpp_IO_Manager.paused
+            }
+            return false
+          }
+
+          onClicked: {
+            switch (modelData) {
+            case "settings":
+              app.showSettingsDialog()
+              taskBar.activeWindow = null
+              break
+            case "console":
+              taskBar.activeWindow = null
+              Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled
+              break
+            case "notifications":
+              taskBar.activeWindow = null
+              Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
+              break
+            case "pause":
+              taskBar.activeWindow = null
+              Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
+              break
+            case "file_transmission":
+              taskBar.activeWindow = null
+              app.showFileTransmission()
+              break
+            }
+          }
+
+          onDragStarted: isDragging = true
+
+          onDragMoved: (dx) => { dragOffset = dx }
+
+          onDragEnded: {
+            const slotW = pinRow.pinSlotWidth + pinRow.spacing
+            const delta = Math.round(dragOffset / slotW)
+            dragOffset = 0
+            isDragging = false
+
+            if (delta !== 0) {
+              const ids = pinRow.displayedPins
+              const fromIdx = ids.indexOf(modelData)
+              const targetIdx = Math.max(0, Math.min(ids.length - 1, fromIdx + delta))
+              if (fromIdx !== targetIdx) {
+                //
+                // Translate the visible-only delta into the full pinnedButtons index
+                //
+                const neighborId = ids[targetIdx]
+                const fullIds = Cpp_UI_TaskbarSettings.pinnedButtons.slice()
+                const fullTarget = fullIds.indexOf(neighborId)
+                Cpp_UI_TaskbarSettings.movePinnedButton(modelData, fullTarget)
+              }
+            }
+          }
+        }
       }
     }
 
@@ -454,7 +622,7 @@ Item {
 
             text: model.widgetName
             icon.source: SerialStudio.dashboardWidgetIcon(model.widgetType)
-            forceVisible: Cpp_UI_Dashboard.showTaskbarButtons
+            forceVisible: Cpp_UI_TaskbarSettings.showTaskbarButtons
                           || (taskBar && taskBar.hasMaximizedWindow)
 
             width: opacity > 0 ? 144 : 0

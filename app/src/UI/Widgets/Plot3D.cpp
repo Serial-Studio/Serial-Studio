@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary feature set of Serial Studio
  * and is licensed under the Serial Studio Commercial License.
@@ -124,8 +124,8 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
 /**
  * @brief Renders the complete 3D plot scene, including optional anaglyph.
  *
- * This method composites all plot layers—background, grid, plot data,
- * and camera indicator—into the provided QPainter target. It handles
+ * This method composites all plot layers--background, grid, plot data,
+ * and camera indicator--into the provided QPainter target. It handles
  * dirty flags to re-render components as needed.
  *
  * If anaglyph mode is enabled, it:
@@ -941,7 +941,7 @@ void Widgets::Plot3D::drawBackground()
 /**
  * @brief Renders the 3D camera indicator.
  *
- * This function draws a small 3D axis indicator that shows the camera’s
+ * This function draws a small 3D axis indicator that shows the camera's
  * orientation.
  *
  * Marks m_dirtyCameraIndicator as false to avoid unnecessary re-rendering.
@@ -991,7 +991,7 @@ void Widgets::Plot3D::drawCameraIndicator()
  * @brief Computes a clean grid step based on current world scale.
  *
  * This function returns a visually consistent grid step in world units by
- * snapping the scale-adjusted unit size to a clean, human-readable value—
+ * snapping the scale-adjusted unit size to a clean, human-readable value--
  * specifically 1, 2, or 5 multiplied by a power of 10.
  *
  * The result is based on the inverse of the world scale (i.e., how many world

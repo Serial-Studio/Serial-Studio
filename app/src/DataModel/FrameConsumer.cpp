@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -38,7 +38,7 @@ DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent)
 DataModel::FrameConsumerWorkerBase::~FrameConsumerWorkerBase() = default;
 
 //--------------------------------------------------------------------------------------------------
-// Monotonic clock tracker — shared by every export worker
+// Monotonic clock tracker -- shared by every export worker
 //--------------------------------------------------------------------------------------------------
 
 /**

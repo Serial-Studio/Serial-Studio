@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary feature set of Serial Studio
  * and is licensed under the Serial Studio Commercial License.
@@ -214,7 +214,7 @@ void Licensing::MachineID::readInformation()
   }
 #endif
 
-  // Warn when every platform fallback returned empty — derivation still proceeds
+  // Warn when every platform fallback returned empty -- derivation still proceeds
   if (id.isEmpty()) [[unlikely]]
     qWarning() << "[MachineID] fallback produced empty fingerprint";
 

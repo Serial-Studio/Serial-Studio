@@ -20,6 +20,7 @@
  */
 
 import QtQuick
+import QtQuick.Window
 import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -46,6 +47,8 @@ Widgets.Pane {
   // Custom properties
   //
   property bool isExternalWindow: false
+  readonly property bool operatorMode: !isExternalWindow && app.runtimeMode
+  readonly property bool zeroBottom: operatorMode && Cpp_UI_TaskbarSettings.taskbarHidden
 
   //
   // Signals
@@ -57,6 +60,78 @@ Widgets.Pane {
   //
   function loadLayout() {
     _canvas.windowManager.loadLayout()
+  }
+
+  //
+  // Force auto-layout while taskbar is hidden -- no controls to escape manual overlap
+  //
+  Connections {
+    target: Cpp_UI_TaskbarSettings
+    function onTaskbarHiddenChanged() {
+      if (Cpp_UI_TaskbarSettings.taskbarHidden && taskBar && taskBar.windowManager)
+        taskBar.windowManager.autoLayoutEnabled = true
+    }
+  }
+  Connections {
+    target: taskBar && taskBar.windowManager ? taskBar.windowManager : null
+    function onAutoLayoutEnabledChanged() {
+      if (Cpp_UI_TaskbarSettings.taskbarHidden
+          && taskBar.windowManager
+          && !taskBar.windowManager.autoLayoutEnabled)
+        taskBar.windowManager.autoLayoutEnabled = true
+    }
+  }
+  Component.onCompleted: {
+    if (Cpp_UI_TaskbarSettings.taskbarHidden && taskBar && taskBar.windowManager)
+      taskBar.windowManager.autoLayoutEnabled = true
+  }
+
+  //
+  // Shortcut hooks
+  //
+  function focusTaskbarSearch()   { _taskbar.focusSearch() }
+  function toggleStartMenu()      { _taskbar.toggleStartMenu() }
+  function cycleWorkspace(delta)  { _taskbar.cycleWorkspace(delta) }
+
+  function cycleWindow(delta) {
+    const next = taskBar.nextActiveWindow(delta)
+    if (!next)
+      return
+
+    if (taskBar.windowState(next) !== SS_Ui.TaskbarModel.WindowNormal)
+      taskBar.showWindow(next)
+
+    taskBar.activeWindow = next
+    taskBar.windowManager.bringToFront(next)
+  }
+
+  function closeActiveWindow() {
+    if (taskBar.activeWindow)
+      taskBar.closeWindow(taskBar.activeWindow)
+  }
+
+  function minimizeActiveWindow() {
+    if (taskBar.activeWindow)
+      taskBar.minimizeWindow(taskBar.activeWindow)
+  }
+
+  function clearActiveWindow() {
+    taskBar.activeWindow = null
+  }
+
+  function toggleAutoLayout() {
+    taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
+  }
+
+  function jumpToWorkspaceIndex(index) {
+    if (!taskBar)
+      return
+
+    const list = taskBar.workspaceModel
+    if (!list || index < 0 || index >= list.length)
+      return
+
+    taskBar.activeGroupIndex = index
   }
 
   //
@@ -140,10 +215,10 @@ Widgets.Pane {
   //
   Item {
     anchors.fill: parent
-    anchors.topMargin: -16
-    anchors.leftMargin: -9
-    anchors.rightMargin: -9
-    anchors.bottomMargin: -9
+    anchors.topMargin: zeroBottom ? -18 : -16
+    anchors.leftMargin: zeroBottom ? -14 : -9
+    anchors.rightMargin: zeroBottom ? -14 : -9
+    anchors.bottomMargin: zeroBottom ? -14 : -9
 
     //
     // Default background
@@ -241,36 +316,137 @@ Widgets.Pane {
       }
 
       //
-      // Taskbar
+      // Taskbar (with autohide wrapper)
       //
-      Taskbar {
-        id: _taskbar
+      Item {
+        id: _taskbarHost
 
-        taskBar: root.taskBar
-        startMenu: _startMenu
         Layout.fillWidth: true
-
-        opacity: Cpp_UI_Dashboard.available ? 1 : 0
-        Behavior on opacity {
-          NumberAnimation { duration: 350; easing.type: Easing.OutCubic }
+        Layout.preferredHeight: hidden ? 0 : (revealed ? _taskbar.implicitHeight : 0)
+        //
+        // Slide the layout slot open/closed
+        //
+        Behavior on Layout.preferredHeight {
+          NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
         }
+        clip: true
+        visible: !hidden
 
-        transform: Translate {
-          y: Cpp_UI_Dashboard.available ? 0 : 24
-          Behavior on y {
-            NumberAnimation { duration: 350; easing.type: Easing.OutCubic }
+        property bool hovered: false
+        property bool revealed: !autohide
+        readonly property bool busy: _taskbar.isBusy
+        readonly property bool hidden: Cpp_UI_TaskbarSettings.taskbarHidden
+        readonly property bool autohide: Cpp_UI_TaskbarSettings.autohide && !hidden
+
+        //
+        // Reset visibility when autohide flips
+        //
+        onAutohideChanged: revealed = !autohide
+
+        //
+        // Inactivity timer
+        //
+        Timer {
+          id: _hideTimer
+
+          repeat: false
+          interval: Cpp_UI_TaskbarSettings.autohideDelayMs
+          onTriggered: {
+            if (_taskbarHost.autohide && !_taskbarHost.hovered && !_taskbarHost.busy)
+              _taskbarHost.revealed = false
           }
         }
 
-        onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
-        onEditWorkspaceRequested: (wsId, name) => _wsDialog.openEdit(root.taskBar, wsId, name)
-        onStartClicked: {
-          if (_startMenu.visible)
-            _startMenu.close()
-          else
-            _startMenu.open()
+        function poke() {
+          if (!autohide)
+            return
+
+          revealed = true
+          _hideTimer.restart()
+        }
+
+        //
+        // Re-arm whenever the user hovers or the busy state clears
+        //
+        onHoveredChanged: {
+          if (autohide && hovered) {
+            revealed = true
+            _hideTimer.stop()
+          } else if (autohide && !hovered) {
+            _hideTimer.restart()
+          }
+        }
+
+        onBusyChanged: {
+          if (autohide && busy) {
+            revealed = true
+            _hideTimer.stop()
+          } else if (autohide && !busy) {
+            _hideTimer.restart()
+          }
+        }
+
+        Taskbar {
+          id: _taskbar
+
+          width: parent.width
+          taskBar: root.taskBar
+          startMenu: _startMenu
+
+          //
+          // Anchor to the bottom of the host
+          //
+          y: parent.height - height
+
+          opacity: Cpp_UI_Dashboard.available ? 1 : 0
+          Behavior on opacity {
+            NumberAnimation { duration: 350; easing.type: Easing.OutCubic }
+          }
+
+          onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
+          onEditWorkspaceRequested: (wsId, name) => _wsDialog.openEdit(root.taskBar, wsId, name)
+          onStartClicked: {
+            if (_startMenu.visible)
+              _startMenu.close()
+            else
+              _startMenu.open()
+          }
+        }
+
+        // Mouse tracking over the taskbar (HoverHandler avoids stealing button hover)
+        HoverHandler {
+          id: _taskbarHover
+
+          target: _taskbar
+          onHoveredChanged: {
+            _taskbarHost.hovered = hovered
+            if (hovered)
+              _taskbarHost.poke()
+          }
         }
       }
+    }
+
+    //
+    // 12 px hot-zone for taskbar autohide reveal
+    //
+    MouseArea {
+      id: _autohideHotZone
+
+      hoverEnabled: true
+      acceptedButtons: Qt.NoButton
+
+      anchors {
+        left: parent.left
+        right: parent.right
+        bottom: parent.bottom
+      }
+      height: 12
+
+      visible: Cpp_UI_TaskbarSettings.autohide
+               && !Cpp_UI_TaskbarSettings.taskbarHidden
+               && !_taskbarHost.revealed
+      onEntered: _taskbarHost.poke()
     }
 
     //

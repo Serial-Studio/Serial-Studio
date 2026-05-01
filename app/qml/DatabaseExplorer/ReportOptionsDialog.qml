@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
@@ -55,7 +55,7 @@ Widgets.SmartDialog {
   }
 
   //
-  // Line style options — index maps to C++ string keys
+  // Line style options -- index maps to C++ string keys
   //
   readonly property var lineStyles: [
     { label: qsTr("Solid"),  value: "solid"  },
@@ -493,6 +493,7 @@ Widgets.SmartDialog {
 
           CheckBox {
             id: _coverCheck
+
             text: qsTr("Cover page (logo, document title, test subtitle)")
           } CheckBox {
             id: _metadataCheck

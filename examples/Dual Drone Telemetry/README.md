@@ -102,6 +102,7 @@ Serial Studio sends commands back to the simulator over the same TCP connection.
 | `CAM`   | `ON` or `OFF`   | Enable or disable camera image transmission |
 | `TKO`   |                 | Launch from helipad (only when grounded) |
 | `RTH`   |                 | Return to helipad, land, and recharge battery |
+| `CRASH` |                 | Simulate catastrophic failure — drops the TCP link with a RST. Useful for testing how Serial Studio behaves when one source goes dark in multi-device mode while the other keeps streaming. |
 
 Commands are parsed on each simulation tick. Multiple commands can arrive per tick and are applied in order.
 

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -185,7 +185,9 @@ QString Titlebar::title() const
 #if defined(Q_OS_WIN)
   return m_title + " - Serial Studio";
 #else
+  // code-verify off
   return m_title + " — Serial Studio";
+  // code-verify on
 #endif
 }
 

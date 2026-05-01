@@ -330,12 +330,15 @@ int leadingWhitespaceCount(QStringView line)
   return i;
 }
 
-/** @brief Builds (lineInfos, depthAtStart) for every line, updating scanner state across lines. */
+/** @brief Result of a full-file scan: per-line info paired with the brace depth at line start. */
 struct ScanResult {
   QList<LineInfo> infos;
   QList<int> depthAtStart;
 };
 
+/**
+ * @brief Builds per-line LineInfo and depth-at-start arrays, threading scanner state across lines.
+ */
 ScanResult scanAllLines(const QStringList& lines, Language lang)
 {
   ScanResult result;

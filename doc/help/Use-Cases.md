@@ -401,7 +401,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 - Serial Studio receives UDP packets
 - FFT widget (Pro) displays frequency spectrum
 - Signal strength plotted over time
-- Waterfall display for band monitoring
+- Waterfall widget (Pro) for time-frequency band monitoring
 
 **Hardware:** RTL-SDR + Raspberry Pi + upconverter
 **Frequency Range:** 24 MHz - 1.7 GHz

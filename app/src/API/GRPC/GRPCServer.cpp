@@ -243,7 +243,8 @@ private:
 /**
  * @brief Constructs the gRPC server singleton.
  */
-API::GRPC::GRPCServer::GRPCServer() : m_enabled(false)
+API::GRPC::GRPCServer::GRPCServer()
+  : m_enabled(false), m_clientCount(0), m_writerRunning(false), m_frameQueue(4096), m_rawQueue(4096)
 {
   auto& server = API::Server::instance();
 
@@ -292,7 +293,7 @@ bool API::GRPC::GRPCServer::enabled() const noexcept
 }
 
 /**
- * @brief Returns true — gRPC support was compiled in.
+ * @brief Returns true -- gRPC support was compiled in.
  */
 bool API::GRPC::GRPCServer::grpcAvailable() const noexcept
 {
@@ -462,7 +463,7 @@ void API::GRPC::GRPCServer::stopServer()
  * @brief Background thread that drains the frame and raw data queues
  *        and writes to all active gRPC stream clients.
  *
- * Serialization (Frame → JSON → protobuf Struct) and the blocking
+ * Serialization (Frame -> JSON -> protobuf Struct) and the blocking
  * gRPC Write() calls happen here, keeping the main thread free.
  */
 void API::GRPC::GRPCServer::writerLoop()

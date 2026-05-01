@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary features of Serial Studio and is
  * licensed under the Serial Studio Commercial License.
@@ -32,7 +32,7 @@ Item {
   implicitWidth: layout.implicitWidth + 16
 
   //
-  // Process picker window — instantiated once, shown on demand
+  // Process picker window -- instantiated once, shown on demand
   //
   ProcessPicker {
     id: picker
@@ -282,7 +282,7 @@ Item {
     Item { implicitHeight: 4 } Item { implicitHeight: 4 }
 
     //
-    // Info block — always visible, spans both columns
+    // Info block -- always visible, spans both columns
     //
     RowLayout {
       spacing: 8

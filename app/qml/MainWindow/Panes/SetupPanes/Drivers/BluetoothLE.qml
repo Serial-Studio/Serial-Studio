@@ -258,8 +258,8 @@ Item {
 
     Image {
       sourceSize: Qt.size(96, 96)
-      Layout.alignment: Qt.AlignVCenter
       source: "qrc:/images/hammer.svg"
+      Layout.alignment: Qt.AlignVCenter
     }
 
     Item {
@@ -287,4 +287,3 @@ Item {
     }
   }
 }
-

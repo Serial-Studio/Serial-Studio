@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2026 Alex Spataru
+ * Copyright (C) 2020-2026 Alex Spataru
  *
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
@@ -54,7 +54,7 @@ RowLayout {
   readonly property real collapsedWidth: collapsedBtn.implicitWidth + 4 + (showSeparator ? 1 : 0)
 
   //
-  // Content row — visible when NOT collapsed
+  // Content row -- visible when NOT collapsed
   //
   RowLayout {
     id: contentRow

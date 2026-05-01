@@ -180,8 +180,8 @@ Widgets.Pane {
             text: qsTr("Waterfall")
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/project-editor/actions/waterfall.svg"
-            ToolTip.text: qsTr("Toggle waterfall (spectrogram) plot — uses the FFT settings")
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetWaterfall
+            ToolTip.text: qsTr("Toggle waterfall (spectrogram) plot — uses the FFT settings")
             onClicked: {
               const option = SerialStudio.DatasetWaterfall
               const value = Cpp_JSON_ProjectEditor.datasetOptions & option
@@ -241,8 +241,8 @@ Widgets.Pane {
             text: qsTr("Compass")
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            ToolTip.text: qsTr("Toggle compass widget for directional data")
             icon.source: "qrc:/icons/project-editor/actions/compass.svg"
+            ToolTip.text: qsTr("Toggle compass widget for directional data")
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetCompass
           }
 

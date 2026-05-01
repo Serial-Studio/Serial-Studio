@@ -17,7 +17,7 @@ flowchart TD
     Group --> G1["Data Grid · MultiPlot<br/>Accelerometer · Gyroscope"]
     Group --> G2["GPS Map · LED Panel<br/>3D Plot · Image View"]
 
-    Dataset --> D1["Plot · FFT Plot<br/>Bar · Gauge · Compass"]
+    Dataset --> D1["Plot · FFT Plot · Waterfall<br/>Bar · Gauge · Compass"]
 ```
 
 ## Group widgets
@@ -133,6 +133,20 @@ flowchart TD
 - Best for: vibration frequency analysis, audio spectrum, signal quality.
 - Configuration fields: `fftSamples` (window size), `fftSamplingRate` (Hz), `fftMin`, `fftMax`.
 
+### Waterfall (Pro)
+
+- Auto-created for datasets with `waterfall: true`.
+- Scrolling time-frequency plot (spectrogram). Each row is one FFT magnitude spectrum, with the newest row drawn at the top and older rows scrolling down.
+- Reuses the dataset's FFT settings — `fftSamples`, `fftSamplingRate`, `fftMin`, `fftMax`. Enable both `fft: true` and `waterfall: true` if you want the FFT plot alongside the waterfall.
+- Magnitude is converted to dB. The dynamic range (`minDb` / `maxDb`) is adjustable from the widget toolbar.
+- Built-in color maps: Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Grayscale.
+- Mouse wheel to zoom, drag to pan, hover for a frequency/time readout. Reset view from the toolbar.
+- Configurable history depth (number of stored rows).
+- **Y-axis source.** Defaults to elapsed time. Set `waterfallYAxis` to another dataset's frame index to drive the Y axis from that dataset's value instead — typically used for order-tracking plots (for example RPM vs. frequency).
+- Best for: vibration order tracking, audio spectrograms, RF band monitoring, transient frequency events.
+- Configuration fields: `waterfall: true`, `waterfallYAxis` (0 = time; otherwise the index of the dataset to use as the Y axis), plus the FFT fields above.
+- Pro license required.
+
 ### Bar
 
 - Dataset widget key: `"bar"`.
@@ -172,6 +186,7 @@ flowchart TD
 | Image View    | Group   | `image`        | 0            | binary stream (Pro)                          |
 | Plot          | Dataset | auto           | —            | `graph: true`, `pltMin`/`pltMax`             |
 | FFT Plot      | Dataset | auto           | —            | `fft: true`, `fftSamples`, `fftSamplingRate` |
+| Waterfall     | Dataset | auto           | —            | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
 | Bar           | Dataset | `bar`          | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
 | Gauge         | Dataset | `gauge`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
 | Compass       | Dataset | `compass`      | —            | value 0-360                                  |
@@ -188,6 +203,8 @@ Every dataset in a project file supports these visualization-related fields:
 | `widget`           | string | `""`    | Dataset widget type: `"bar"`, `"gauge"`, or `"compass"`. |
 | `plt` (graph)      | bool   | false   | Enable time-series plot. |
 | `fft`              | bool   | false   | Enable FFT spectrum plot. |
+| `waterfall`        | bool   | false   | Enable waterfall (spectrogram) plot. Pro. |
+| `waterfallYAxis`   | int    | 0       | Waterfall Y-axis source: 0 = time, otherwise the frame index of another dataset (order tracking). |
 | `led`              | bool   | false   | Enable LED indicator. |
 | `log`              | bool   | false   | Enable logging to file. |
 | `overviewDisplay`  | bool   | false   | Show in the overview/status bar. |
@@ -215,7 +232,7 @@ Every dataset in a project file supports these visualization-related fields:
 - Right-click the canvas for a context menu: tile windows, set wallpaper.
 - Widget positions and sizes are saved per project via `widgetSettings` and persist between sessions.
 - The Actions panel (if the project defines actions) shows up as a horizontal bar above the widgets.
-- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, ImageView.
+- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, ImageView, OutputPanel, NotificationLog, Waterfall.
 
 ## Picking the right widget
 
@@ -227,6 +244,7 @@ Every dataset in a project file supports these visualization-related fields:
 | Rotation (X, Y, Z)               | Gyroscope (group)           |
 | Heading or bearing               | Compass                     |
 | Audio or vibration frequency     | FFT Plot                    |
+| Time-frequency / spectrogram     | Waterfall (Pro)             |
 | Boolean status flags             | LED Panel (group)           |
 | Mixed numeric and text values    | Data Grid (group)           |
 | 3D trajectory or position        | 3D Plot (group, Pro)        |

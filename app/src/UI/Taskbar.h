@@ -146,6 +146,7 @@ public:
   Q_INVOKABLE [[nodiscard]] QQuickItem* windowData(const int id) const;
   Q_INVOKABLE [[nodiscard]] QVariantList workspaceWidgetIds(int workspaceId) const;
   Q_INVOKABLE [[nodiscard]] TaskbarModel::WindowState windowState(QQuickItem* window) const;
+  Q_INVOKABLE [[nodiscard]] QQuickItem* nextActiveWindow(int delta) const;
 
 public slots:
   void saveLayout();
@@ -192,6 +193,7 @@ private:
   int m_activeGroupId;
   bool m_rebuildInProgress;
   bool m_batchUpdateInProgress;
+  bool m_restoringLayout;
   QString m_searchFilter;
 
   QQuickItem* m_activeWindow;

@@ -97,6 +97,10 @@ class FileTransmission : public QObject {
   Q_PROPERTY(QStringList logEntries
              READ logEntries
              NOTIFY logChanged)
+  Q_PROPERTY(bool runtimeAccessAllowed
+             READ runtimeAccessAllowed
+             WRITE setRuntimeAccessAllowed
+             NOTIFY runtimeAccessAllowedChanged)
   // clang-format on
 
 signals:
@@ -111,6 +115,7 @@ signals:
   void transferModeChanged();
   void transferSpeedChanged();
   void protocolTimeoutChanged();
+  void runtimeAccessAllowedChanged();
   void lineTransmissionIntervalChanged();
 
 private:
@@ -136,6 +141,7 @@ public:
 
   [[nodiscard]] bool active() const;
   [[nodiscard]] bool fileOpen() const;
+  [[nodiscard]] bool runtimeAccessAllowed() const noexcept;
   [[nodiscard]] int errorCount() const noexcept;
   [[nodiscard]] int blockSize() const noexcept;
   [[nodiscard]] int maxRetries() const noexcept;
@@ -163,6 +169,7 @@ public slots:
   void setTransferMode(int mode);
   void setProtocolTimeout(int msec);
   void setLineTransmissionInterval(int msec);
+  void setRuntimeAccessAllowed(bool allowed);
   void onRawDataReceived(const QByteArray& data);
 
 private slots:
@@ -197,6 +204,7 @@ private:
   int m_blockSize;
   int m_maxRetries;
   int m_protocolTimeout;
+  bool m_runtimeAccessAllowed;
 
   QElapsedTimer m_speedTimer;
   QTimer m_speedUpdateTimer;

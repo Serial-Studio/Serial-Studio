@@ -51,6 +51,7 @@ IO::FileTransmission::FileTransmission()
   , m_blockSize(1024)
   , m_maxRetries(10)
   , m_protocolTimeout(10000)
+  , m_runtimeAccessAllowed(false)
   , m_lastSpeedBytes(0)
 {
   // Configure periodic line/block transmission timer
@@ -119,6 +120,14 @@ bool IO::FileTransmission::active() const
 bool IO::FileTransmission::fileOpen() const
 {
   return m_file.isOpen() && IO::ConnectionManager::instance().isConnected();
+}
+
+/**
+ * @brief Returns @c true if the file-transmission UI is allowed in operator mode.
+ */
+bool IO::FileTransmission::runtimeAccessAllowed() const noexcept
+{
+  return m_runtimeAccessAllowed;
 }
 
 /**
@@ -564,6 +573,18 @@ void IO::FileTransmission::setLineTransmissionInterval(int msec)
 
   m_timer.setInterval(effective);
   Q_EMIT lineTransmissionIntervalChanged();
+}
+
+/**
+ * @brief Toggles whether the File Transmission UI is reachable in operator mode.
+ */
+void IO::FileTransmission::setRuntimeAccessAllowed(bool allowed)
+{
+  if (m_runtimeAccessAllowed == allowed)
+    return;
+
+  m_runtimeAccessAllowed = allowed;
+  Q_EMIT runtimeAccessAllowedChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

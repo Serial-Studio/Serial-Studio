@@ -212,8 +212,8 @@ Rectangle {
           horizontalLayout: true
           text: qsTr("Open Project")
           Layout.alignment: Qt.AlignLeft
-          ToolTip.text: qsTr("Open an existing JSON project")
           icon.source: "qrc:/icons/toolbar/open-project.svg"
+          ToolTip.text: qsTr("Open an existing JSON project")
           onClicked: {
             Cpp_AppState.operationMode = SerialStudio.ProjectFile
             Cpp_JSON_ProjectModel.openJsonFile()
@@ -257,8 +257,8 @@ Rectangle {
         text: qsTr("Extensions")
         Layout.alignment: Qt.AlignLeft
         onClicked: app.showExtensionManager()
-        ToolTip.text: qsTr("Browse and install extensions")
         icon.source: "qrc:/icons/toolbar/extensions.svg"
+        ToolTip.text: qsTr("Browse and install extensions")
       }
 
       Loader {
@@ -413,8 +413,8 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
-              ToolTip.text: qsTr("Select MODBUS communication (Pro)")
               icon.source: "qrc:/icons/devices/drivers/modbus.svg"
+              ToolTip.text: qsTr("Select MODBUS communication (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.ModBus
               font: Cpp_IO_Manager.busType === SerialStudio.ModBus ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
             }
@@ -463,8 +463,8 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
-              ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
               icon.source: "qrc:/icons/devices/drivers/canbus.svg"
+              ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
               font: Cpp_IO_Manager.busType === SerialStudio.CanBus ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
             }

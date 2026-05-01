@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -324,7 +324,9 @@ Widgets.Pane {
                    : Cpp_ThemeManager.colors["groupbox_background"]
 
             Text {
+              // code-verify off
               text: "−"
+              // code-verify on
               anchors.centerIn: parent
               font: Cpp_Misc_CommonFonts.customUiFont(Cpp_Misc_CommonFonts.kScaleLarge)
               color: zoomOutArea.pressed

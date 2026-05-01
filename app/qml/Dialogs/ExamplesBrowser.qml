@@ -628,7 +628,9 @@ SmartDialog {
                 }
               }
 
+              //
               // Survive Chromium render-process death instead of crashing.
+              //
               onRenderProcessTerminated: function(terminationStatus, exitCode) {
                 console.warn("ExamplesBrowser readme view: render process terminated",
                              terminationStatus, "exit", exitCode)
@@ -638,11 +640,15 @@ SmartDialog {
               onNavigationRequested: function(request) {
                 var url = request.url.toString()
 
+                //
                 // Allow initial page load from qrc
+                //
                 if (url.startsWith("qrc:"))
                   return
 
+                //
                 // Copy code to clipboard
+                //
                 if (url.startsWith("copy:")) {
                   request.reject()
                   var text = decodeURIComponent(url.substring(5))
@@ -651,7 +657,9 @@ SmartDialog {
                   return
                 }
 
+                //
                 // Open all links externally
+                //
                 request.reject()
                 if (url.startsWith("ext:"))
                   Qt.openUrlExternally(url.substring(4))

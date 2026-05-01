@@ -22,7 +22,7 @@ Item {
   implicitHeight: 320
 
   //
-  // Widget data inputs (unused — NotificationLog is global, not per-group)
+  // Widget data inputs (unused -- NotificationLog is global, not per-group)
   //
   property var color
   property var model
@@ -30,13 +30,13 @@ Item {
   property string widgetId
 
   //
-  // Blink state — armed for kBlinkMs whenever a non-Info event arrives
+  // Blink state -- armed for kBlinkMs whenever a non-Info event arrives
   //
   property bool blinking: false
   readonly property int kBlinkMs: 10000
 
   //
-  // Level → icon path mapping. Icons live in app/icons/notifications/.
+  // Level -> icon path mapping. Icons live in app/icons/notifications/.
   //
   function iconForLevel(level) {
     switch (level) {
@@ -47,7 +47,7 @@ Item {
   }
 
   //
-  // Level → display color. Critical + Warning share `alarm`; Info uses `link`.
+  // Level -> display color. Critical + Warning share `alarm`; Info uses `link`.
   //
   function colorForLevel(level) {
     switch (level) {
@@ -305,7 +305,7 @@ Item {
         }
 
         //
-        // Empty-state placeholder — large icon, heading, hint text
+        // Empty-state placeholder -- large icon, heading, hint text
         //
         ColumnLayout {
           spacing: 12

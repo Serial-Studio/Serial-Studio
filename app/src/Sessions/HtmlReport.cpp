@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -37,6 +37,8 @@
 #  include <QUrl>
 #  include <QWebEnginePage>
 #  include <QWebEngineProfile>
+
+#  include "DataModel/Frame.h"
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -84,7 +86,9 @@ static QString escapeHtml(const QString& in)
 static QString formatNumber(double v)
 {
   if (!std::isfinite(v))
+    // code-verify off
     return QStringLiteral("—");
+  // code-verify on
 
   const double abs_v = std::fabs(v);
   if (abs_v != 0.0 && (abs_v < 1.0e-3 || abs_v >= 1.0e6))
@@ -99,7 +103,9 @@ static QString formatNumber(double v)
 static QString formatDuration(qint64 ms)
 {
   if (ms <= 0)
+    // code-verify off
     return QStringLiteral("—");
+  // code-verify on
 
   const qint64 totalSeconds = ms / 1000;
   const qint64 hours        = totalSeconds / 3600;
@@ -118,13 +124,17 @@ static QString formatDuration(qint64 ms)
 static QString formatDate(const QString& iso)
 {
   if (iso.isEmpty())
+    // code-verify off
     return QStringLiteral("—");
+  // code-verify on
 
   const auto dt = QDateTime::fromString(iso, Qt::ISODate);
   if (!dt.isValid())
     return iso;
 
+  // code-verify off
   return dt.toString(QStringLiteral("MMM d, yyyy — h:mm:ss AP"));
+  // code-verify on
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,7 +191,7 @@ QString Sessions::HtmlReport::readResource(const QString& path)
  *
  * Always writes the HTML artifact when the format asks for it, then starts
  * the PDF printing pipeline when requested. Exactly one @c finished() is
- * emitted per call — regardless of which path runs.
+ * emitted per call -- regardless of which path runs.
  */
 void Sessions::HtmlReport::render(const ReportData& data,
                                   std::vector<DatasetSeries> series,
@@ -200,7 +210,7 @@ void Sessions::HtmlReport::render(const ReportData& data,
 
   Q_EMIT progress(tr("Assembling report…"), 0.10);
 
-  // Build the single HTML string — used for both outputs
+  // Build the single HTML string -- used for both outputs
   m_htmlCache = buildHtml();
   if (m_htmlCache.isEmpty()) {
     Q_EMIT finished(QString(), false);
@@ -209,7 +219,7 @@ void Sessions::HtmlReport::render(const ReportData& data,
 
   Q_EMIT progress(tr("Writing output…"), 0.30);
 
-  // Resolve sibling output paths (e.g. foo.pdf → foo.html for "Both" mode)
+  // Resolve sibling output paths (e.g. foo.pdf -> foo.html for "Both" mode)
   const QFileInfo outInfo(opts.outputPath);
   const QString stem = outInfo.completeBaseName();
   const QString dir  = outInfo.absolutePath();
@@ -251,15 +261,15 @@ void Sessions::HtmlReport::render(const ReportData& data,
  * @brief Loads the template + stylesheet + runtime + Chart.js and expands
  *        every ``{{PLACEHOLDER}}`` with the concrete value.
  *
- * Placeholder substitution is a simple multi-pass @c QString::replace —
+ * Placeholder substitution is a simple multi-pass @c QString::replace --
  * safe because template keys are unambiguous and never user-controlled.
  */
 QString Sessions::HtmlReport::buildHtml() const
 {
   // Load static template assets from qrc
-  QString html      = readResource(QStringLiteral(":/templates/reports/session-report.html"));
-  const QString css = readResource(QStringLiteral(":/templates/reports/session-report.css"));
-  const QString js  = readResource(QStringLiteral(":/templates/reports/session-report.js"));
+  QString html           = readResource(QStringLiteral(":/templates/reports/session-report.html"));
+  const QString css      = readResource(QStringLiteral(":/templates/reports/session-report.css"));
+  const QString js       = readResource(QStringLiteral(":/templates/reports/session-report.js"));
   const QString chartJs  = readResource(QStringLiteral(":/chartjs/chart.umd.min.js"));
   const QString brandSvg = readResource(QStringLiteral(":/logo/icon.svg"));
 
@@ -273,7 +283,7 @@ QString Sessions::HtmlReport::buildHtml() const
   const QString chartsHtml =
     (m_opts.includeCharts && !m_series.empty()) ? buildChartsSection() : QString();
 
-  // Template expansion (multi-pass replace — one per placeholder)
+  // Template expansion (multi-pass replace -- one per placeholder)
   html.replace(QStringLiteral("{{CHART_JS}}"), chartJs);
   html.replace(QStringLiteral("{{REPORT_CSS}}"), css);
   html.replace(QStringLiteral("{{REPORT_JS}}"), js);
@@ -355,7 +365,7 @@ QString Sessions::HtmlReport::buildCoverSection() const
                             ? QString()
                             : QStringLiteral("<div class=\"logo\">%1</div>").arg(logoMarkup);
 
-  // Cover facts strip — at-a-glance document identity
+  // Cover facts strip -- at-a-glance document identity
   const QString facts =
     QStringLiteral(
       "<div class=\"cover-facts\">"
@@ -411,7 +421,9 @@ QString Sessions::HtmlReport::buildMetadataSection() const
   };
 
   const std::vector<Row> rows = {
+    // code-verify off
     {          tr("Project"), m_data.projectTitle.isEmpty() ? QStringLiteral("—") : m_data.projectTitle},
+    // code-verify on
     {  tr("Test identifier"),                               QStringLiteral("#%1").arg(m_data.sessionId)},
     {       tr("Start time"),                                              formatDate(m_data.startedAt)},
     {         tr("End time"),                                                formatDate(m_data.endedAt)},
@@ -471,7 +483,7 @@ QString Sessions::HtmlReport::buildSummarySection() const
                                     m_data.datasets.end(),
                                     [](const DatasetStats& d) { return !d.units.isEmpty(); });
 
-  // Table header — data-sort-type drives the JS comparator
+  // Table header -- data-sort-type drives the JS comparator
   QString header = QStringLiteral("<thead><tr>")
                  + QStringLiteral("<th class=\"align-left\" data-sort-type=\"text\">%1</th>")
                      .arg(escapeHtml(tr("Parameter")));
@@ -494,11 +506,15 @@ QString Sessions::HtmlReport::buildSummarySection() const
   // One row per dataset; data-sort-value preserves raw numeric order
   QString body;
   for (const auto& ds : m_data.datasets) {
-    const QString fullName =
+    QString fullName =
       ds.group.isEmpty() ? ds.title : QStringLiteral("%1 / %2").arg(ds.group, ds.title);
+    if (!ds.sourceTitle.isEmpty())
+      fullName = QStringLiteral("%1 / %2").arg(ds.sourceTitle, fullName);
 
     const bool numeric = ds.numericSamples > 0;
+    // code-verify off
     const QString dash = QStringLiteral("—");
+    // code-verify on
 
     auto numCell = [&](double v) {
       if (!numeric)
@@ -548,8 +564,10 @@ QString Sessions::HtmlReport::buildChartsSection() const
 {
   QString cards;
   for (const auto& s : m_series) {
-    const QString fullName =
+    QString fullName =
       s.group.isEmpty() ? s.title : QStringLiteral("%1 / %2").arg(s.group, s.title);
+    if (!s.sourceTitle.isEmpty())
+      fullName = QStringLiteral("%1 / %2").arg(s.sourceTitle, fullName);
 
     const QString units =
       s.units.isEmpty() ? QString() : QStringLiteral(" (%1)").arg(escapeHtml(s.units));
@@ -615,13 +633,18 @@ QString Sessions::HtmlReport::buildReportDataJson() const
       values.append(std::isfinite(v) ? v : 0.0);
 
     QJsonObject entry;
-    entry["uniqueId"] = s.uniqueId;
-    entry["title"]  = s.group.isEmpty() ? s.title : QStringLiteral("%1 / %2").arg(s.group, s.title);
+    entry[Keys::UniqueId] = s.uniqueId;
+    QString seriesTitle =
+      s.group.isEmpty() ? s.title : QStringLiteral("%1 / %2").arg(s.group, s.title);
+    if (!s.sourceTitle.isEmpty())
+      seriesTitle = QStringLiteral("%1 / %2").arg(s.sourceTitle, seriesTitle);
+
+    entry["title"]  = seriesTitle;
     entry["units"]  = s.units;
     entry["times"]  = times;
     entry["values"] = values;
 
-    // Per-series stats payload — only emitted when the dataset has numeric samples
+    // Per-series stats payload -- only emitted when the dataset has numeric samples
     const auto it = statsByUid.find(s.uniqueId);
     if (it != statsByUid.end() && it->second->numericSamples > 0) {
       QJsonObject stats;
@@ -653,7 +676,7 @@ QString Sessions::HtmlReport::buildReportDataJson() const
   root["style"]   = style;
   root["options"] = options;
 
-  // Compact form — whitespace would bloat the inline blob for big sessions
+  // Compact form -- whitespace would bloat the inline blob for big sessions
   return QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
 }
 
@@ -696,9 +719,11 @@ QString Sessions::HtmlReport::buildPrintFooterLeft() const
     m_opts.documentTitle.isEmpty() ? tr("Session Report") : m_opts.documentTitle;
 
   // CSS content:"..." strings need doubled backslashes; escape newline and quote
+  // code-verify off
   QString s = QStringLiteral("Serial Studio · %1").arg(docPart);
   s.replace('\\', QStringLiteral("\\\\"));
   s.replace('"', QStringLiteral("\\\""));
+  // code-verify on
   return s;
 }
 
@@ -790,7 +815,7 @@ void Sessions::HtmlReport::writeHtmlArtifact(const QString& htmlPath,
  *
  * The page's runtime flips @c window.__reportReady synchronously after
  * Chart.js finishes building every canvas. We read that flag via
- * @c runJavaScript — the callback runs even on hidden (off-screen) pages,
+ * @c runJavaScript -- the callback runs even on hidden (off-screen) pages,
  * unlike @c requestAnimationFrame which Chromium suspends for pages that
  * aren't attached to a visible view.
  */
@@ -811,7 +836,7 @@ void Sessions::HtmlReport::startPdfRender(const QString& html, const QString& pd
 }
 
 /**
- * @brief Page parse done — probe the readiness flag.
+ * @brief Page parse done -- probe the readiness flag.
  */
 void Sessions::HtmlReport::onLoadFinished(bool ok)
 {
@@ -833,7 +858,7 @@ void Sessions::HtmlReport::onLoadFinished(bool ok)
  * only from inside the previous callback so at most one probe is in flight
  * at any time (no queue buildup, no races).
  *
- * Upper bound: 30 attempts × 100 ms = 3 s — generous for the synchronous
+ * Upper bound: 30 attempts x 100 ms = 3 s -- generous for the synchronous
  * ready flag, but we still cap it so a broken template can't hang.
  */
 void Sessions::HtmlReport::probeReadiness()
@@ -843,7 +868,7 @@ void Sessions::HtmlReport::probeReadiness()
 
   constexpr int kMaxAttempts = 30;
   if (++m_readinessAttempts > kMaxAttempts) {
-    qWarning() << "[HtmlReport] Ready flag never set — printing anyway";
+    qWarning() << "[HtmlReport] Ready flag never set -- printing anyway";
     startPrinting();
     return;
   }
@@ -883,7 +908,7 @@ void Sessions::HtmlReport::startPrinting()
 }
 
 /**
- * @brief WebEngine signal → final @c finished() emission.
+ * @brief WebEngine signal -> final @c finished() emission.
  *
  * For @c Both mode the emitted path is the PDF (primary artifact); the
  * caller can separately check the HTML was also written by inspecting the

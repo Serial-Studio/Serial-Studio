@@ -106,16 +106,16 @@ private:
 
 private:
   bool m_enabled;
-  std::atomic<int> m_clientCount{0};
-  std::atomic<bool> m_writerRunning{false};
+  std::atomic<int> m_clientCount;
+  std::atomic<bool> m_writerRunning;
 
   std::unique_ptr<grpc::Server> m_grpcServer;
   std::unique_ptr<SerialStudioServiceImpl> m_service;
   std::thread m_serverThread;
   std::thread m_writerThread;
 
-  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> m_frameQueue{4096};
-  moodycamel::ReaderWriterQueue<IO::ByteArrayPtr> m_rawQueue{4096};
+  moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr> m_frameQueue;
+  moodycamel::ReaderWriterQueue<IO::ByteArrayPtr> m_rawQueue;
 
   std::mutex m_frameStreamsMutex;
   std::vector<std::shared_ptr<FrameStreamContext>> m_frameStreams;

@@ -54,6 +54,7 @@ private slots:
 
 private:
   QStringList getRow(const DataModel::Dataset& dataset);
+  QString formatValue(const DataModel::Dataset& dataset);
 
 private:
   int m_index;

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -36,7 +36,7 @@
  */
 AppState::AppState() : m_operationMode(SerialStudio::QuickPlot)
 {
-  // Clamp persisted int — out-of-range trips FrameReader's mode assertion.
+  // Clamp persisted int -- out-of-range trips FrameReader's mode assertion.
   const int saved   = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
   const int clamped = (saved >= SerialStudio::ProjectFile && saved <= SerialStudio::QuickPlot)
                       ? saved
@@ -199,7 +199,7 @@ IO::FrameConfig AppState::deriveFrameConfig() const
   IO::FrameConfig cfg;
   cfg.operationMode = m_operationMode;
 
-  // QuickPlot: LF first (most common → single KMP scan), then CRLF, CR.
+  // QuickPlot: LF first (most common -> single KMP scan), then CRLF, CR.
   if (m_operationMode == SerialStudio::QuickPlot) {
     cfg.startSequences    = {};
     cfg.finishSequences   = {QByteArray("\n"), QByteArray("\r\n"), QByteArray("\r")};

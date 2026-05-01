@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -33,7 +33,7 @@
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
-// Monotonic counter for session IDs — socket addresses can be reused.
+// Monotonic counter for session IDs -- socket addresses can be reused.
 static QAtomicInteger<quintptr> s_nextSessionId{1};
 
 //--------------------------------------------------------------------------------------------------
@@ -606,7 +606,7 @@ void API::Server::broadcastLifecycleEvent(const QString& eventName)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Server — data reception helpers
+// Server -- data reception helpers
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -945,7 +945,7 @@ void API::Server::processNoNewlineBuffer(QTcpSocket* socket, ConnectionState& st
   const qint64 written = IO::ConnectionManager::instance().writeData(buffer);
   if (written < 0) [[unlikely]]
     qWarning() << "[API] writeData() failed for raw buffer"
-               << "— data not sent to device";
+               << "-- data not sent to device";
 
   buffer.clear();
 }
@@ -1089,11 +1089,11 @@ void API::Server::processRawLine(QTcpSocket* socket, ConnectionState& state, con
   const qint64 written = IO::ConnectionManager::instance().writeData(line);
   if (written < 0) [[unlikely]]
     qWarning() << "[API] writeData() failed for raw line"
-               << "— data not sent to device";
+               << "-- data not sent to device";
 }
 
 //--------------------------------------------------------------------------------------------------
-// Server — data reception & dispatch
+// Server -- data reception & dispatch
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -1135,7 +1135,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
 
     const int newlineIndex = buffer.indexOf('\n');
 
-    // No newline found — attempt to process partial buffer
+    // No newline found -- attempt to process partial buffer
     if (newlineIndex < 0) {
       processNoNewlineBuffer(socket, state);
       return;

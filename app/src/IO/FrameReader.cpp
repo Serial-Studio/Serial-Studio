@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -38,6 +38,7 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_circularBuffer(1024 * 1024)
+  , m_queue(65536)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -74,7 +75,7 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
     const auto overflow = m_circularBuffer.overflowCount();
     if (overflow > 0) [[unlikely]] {
       qWarning() << "[FrameReader] Buffer overflow:" << overflow
-                 << "bytes lost — data rate exceeds processing capacity";
+                 << "bytes lost -- data rate exceeds processing capacity";
       discardPendingBytes(overflow);
       m_circularBuffer.resetOverflowCount();
     }
@@ -351,7 +352,7 @@ void IO::FrameReader::readStartDelimitedFrames()
       const auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
         if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
-          qWarning() << "[FrameReader] Frame queue full — frame dropped";
+          qWarning() << "[FrameReader] Frame queue full -- frame dropped";
         consumeBytes(frameEndPos);
       }
 
@@ -414,7 +415,7 @@ void IO::FrameReader::readStartEndDelimitedFrames()
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
         if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
-          qWarning() << "[FrameReader] Frame queue full — frame dropped";
+          qWarning() << "[FrameReader] Frame queue full -- frame dropped";
         consumeBytes(frameEndPos);
       }
 
@@ -445,7 +446,7 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
   Q_ASSERT(!frame.isEmpty());
   Q_ASSERT(crcPosition >= 0);
 
-  // No checksum configured — always valid
+  // No checksum configured -- always valid
   if (m_checksumLength == 0)
     return ValidationStatus::FrameOk;
 

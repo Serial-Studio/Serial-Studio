@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary feature set of Serial Studio
  * and is licensed under the Serial Studio Commercial License.
@@ -29,7 +29,9 @@ Widgets.SmartDialog {
   preferredWidth: layout.implicitWidth
   preferredHeight: layout.implicitHeight
 
+  //
   // dialogMode: "failed" = auto-connect never settled; "lost" = drop mid-session.
+  //
   property int pageIndex: 0
   property string dialogMode: "failed"
 
@@ -44,7 +46,9 @@ Widgets.SmartDialog {
       pageIndex = 0
   }
 
+  //
   // Auto-dismiss when the operator establishes a connection.
+  //
   Connections {
     target: Cpp_IO_Manager
     function onConnectedChanged() {
@@ -65,7 +69,7 @@ Widgets.SmartDialog {
       currentIndex: root.pageIndex
 
       //
-      // Page 0 — failure / loss summary
+      // Page 0 -- failure / loss summary
       //
       RowLayout {
         spacing: 16
@@ -150,7 +154,7 @@ Widgets.SmartDialog {
       }
 
       //
-      // Page 1 — driver picker
+      // Page 1 -- driver picker
       //
       ColumnLayout {
         spacing: 8

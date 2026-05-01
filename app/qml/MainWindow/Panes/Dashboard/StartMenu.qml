@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -84,7 +84,9 @@ Popup {
   signal newWorkspaceRequested()
   signal renameWorkspaceRequested(int workspaceId, string currentName)
 
+  //
   // Returns visible actions whose name matches `filter`; each item is { name, icon, run }.
+  //
   function searchableItems(filter) {
     var runtimeMode = (typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
     var items = [
@@ -146,6 +148,13 @@ Popup {
         visible: Cpp_CommercialBuild
                  && (!app.runtimeMode || Cpp_Sessions_Export.exportEnabled),
         run: function() { app.showDatabaseExplorer() }
+      },
+      {
+        name: qsTr("File Transmission"),
+        icon: "qrc:/icons/taskbar/file-transmission.svg",
+        visible: Cpp_CommercialBuild
+                 && (!app.runtimeMode || Cpp_IO_FileTransmission.runtimeAccessAllowed),
+        run: function() { app.showFileTransmission() }
       }
     ]
 
@@ -274,11 +283,18 @@ Popup {
           })
         }
 
-        // Workspace model + separator + "New Workspace…" (hidden in operator runtime mode).
+        //
+        // Workspace model + separator + "New Workspace..." (hidden in operator runtime mode)
+        //
         var items = taskBar.workspaceModel
         var model = []
-        for (var i = 0; i < items.length; ++i)
-          model.push(items[i])
+        for (var i = 0; i < items.length; ++i) {
+          var item = Object.assign({}, items[i])
+          if (item["id"] === taskBar.activeGroupId)
+            item["checked"] = true
+
+          model.push(item)
+        }
 
         var runtimeMode = (typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
         if (!runtimeMode) {
@@ -289,7 +305,9 @@ Popup {
                        "icon": "qrc:/icons/project-editor/toolbar/add-group.svg"})
         }
 
+        //
         // Update popup state
+        //
         _groups.popup.y = root.y
         _groups.popup.showCheckable = true
         _groups.popup.model = model
@@ -298,10 +316,14 @@ Popup {
         _groups.popup.currentValue = taskBar.activeGroupId
         _groups.popup.placeholderText = qsTr("No Workspaces Available")
 
+        //
         // Open the popup
+        //
         _groups.popup.open()
 
+        //
         // Close other menus
+        //
         if (_actions.popup)
           _actions.popup.close()
 
@@ -328,8 +350,8 @@ Popup {
       expandable: true
       text: qsTr("Actions")
       Layout.fillWidth: true
-      visible: Cpp_UI_Dashboard.actions.length > 0
       icon.source: "qrc:/icons/start/actions.svg"
+      visible: Cpp_UI_Dashboard.actions.length > 0
 
       property var popup: null
       function showMenu() {
@@ -400,7 +422,9 @@ Popup {
                                       })
         }
 
-        // Build model: plugins + separator + "Manage Plugins…"
+        //
+        // Build model: plugins + separator + "Manage Plugins..."
+        //
         var items = []
         var plugins = Cpp_ExtensionManager.installedPlugins
         for (var i = 0; i < plugins.length; ++i)
@@ -456,8 +480,8 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Auto Layout")
-      checked: taskBar.windowManager.autoLayoutEnabled
       icon.source: "qrc:/icons/start/auto-layout.svg"
+      checked: taskBar.windowManager.autoLayoutEnabled
       onCheckedChanged: {
         if (checked !== taskBar.windowManager.autoLayoutEnabled)
           taskBar.windowManager.autoLayoutEnabled = checked
@@ -603,6 +627,7 @@ Popup {
       readonly property string kSessions: "sessions"
       readonly property string kPreferences: "preferences"
       readonly property string kNotifications: "notifications"
+      readonly property string kFileTransmission: "file_transmission"
 
       property var popup: null
       function showMenu() {
@@ -624,11 +649,16 @@ Popup {
             } else if (value === _tools.kSessions && Cpp_CommercialBuild) {
               root.close()
               app.showDatabaseExplorer()
+            } else if (value === _tools.kFileTransmission && Cpp_CommercialBuild) {
+              root.close()
+              app.showFileTransmission()
             }
           })
         }
 
+        //
         // Filter the model to items applicable to the current build/runtime mode.
+        //
         var model = []
 
         if (!app.runtimeMode) {
@@ -678,7 +708,18 @@ Popup {
           })
         }
 
+        if (Cpp_CommercialBuild
+            && (!app.runtimeMode || Cpp_IO_FileTransmission.runtimeAccessAllowed)) {
+          model.push({
+            "id": _tools.kFileTransmission,
+            "text": qsTr("File Transmission"),
+            "icon": "qrc:/icons/taskbar/file-transmission.svg"
+          })
+        }
+
+        //
         // Update popup state
+        //
         _tools.popup.model = model
         _tools.popup.showCheckable = true
         _tools.popup.maximumHeight = root.height
@@ -686,10 +727,14 @@ Popup {
         _tools.popup.y = _tools.y + _layout.y + root.y + 4
         _tools.popup.placeholderText = qsTr("No Tools Available")
 
+        //
         // Open the popup
+        //
         _tools.popup.open()
 
+        //
         // Close other menus
+        //
         if (_groups.popup)
           _groups.popup.close()
 

@@ -158,7 +158,7 @@ private:
   void drawCameraIndicator();
 
 private:
-  double gridStep(const double scale = -1) const;
+  [[nodiscard]] double gridStep(const double scale = -1) const;
   std::vector<QPointF> screenProjection(const DSP::LineSeries3D& points, const QMatrix4x4& matrix);
   void drawLine3D(QPainter& painter,
                   const QMatrix4x4& matrix,

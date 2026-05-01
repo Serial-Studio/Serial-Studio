@@ -321,7 +321,9 @@ Window {
                          : palette.text
                   font: Cpp_Misc_CommonFonts.monoFont
 
+                  //
                   // Show only the name part before " ["
+                  //
                   text: {
                     const s = model.name
                     const bracket = s.lastIndexOf(" [")
@@ -338,7 +340,9 @@ Window {
                   opacity: 0.7
                   font: Cpp_Misc_CommonFonts.monoFont
 
+                  //
                   // Show only the PID part inside "[ ]"
+                  //
                   text: {
                     const s = model.name
                     const m = s.match(/\[(\d+)\]$/)

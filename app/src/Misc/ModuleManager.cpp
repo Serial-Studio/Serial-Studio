@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -58,6 +58,7 @@
 #include "UI/Dashboard.h"
 #include "UI/DashboardWidget.h"
 #include "UI/Taskbar.h"
+#include "UI/TaskbarSettings.h"
 #include "UI/Widgets/Accelerometer.h"
 #include "UI/Widgets/Bar.h"
 #include "UI/Widgets/Compass.h"
@@ -168,7 +169,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   const QString channel = QStringLiteral("System");
   const QString title   = isCritical ? QObject::tr("Critical") : QObject::tr("Warning");
 
-  // Forward on the GUI thread — post() asserts main-thread affinity
+  // Forward on the GUI thread -- post() asserts main-thread affinity
   QMetaObject::invokeMethod(
     &nc,
     [level = isCritical ? 2 : 1, channel, title, msg]() {
@@ -268,6 +269,9 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
  */
 void Misc::ModuleManager::onQuit()
 {
+  // Restore default handler so late qWarning() during static destruction is safe
+  qInstallMessageHandler(nullptr);
+
   // Stop all plugins and active modules
   Misc::ExtensionManager::instance().stopAllPlugins();
   Misc::TimerEvents::instance().stopTimers();
@@ -398,6 +402,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto mdf4Export           = &MDF4::Export::instance();
   auto mdf4Player           = &MDF4::Player::instance();
   auto uiDashboard          = &UI::Dashboard::instance();
+  auto uiTaskbarSettings    = &UI::TaskbarSettings::instance();
   auto ioSerial             = ioManager->uart();
   auto pluginsBridge        = &API::Server::instance();
   auto miscUtilities        = &Misc::Utilities::instance();
@@ -511,8 +516,9 @@ void Misc::ModuleManager::initializeQmlInterface()
           notificationCenter,
           &DataModel::NotificationCenter::clearAll);
 
-  // Install custom message handler to redirect qDebug output to console
+  // Redirect qDebug to console; restore default at teardown to keep late warnings safe
   qInstallMessageHandler(MessageHandler);
+  qAddPostRoutine([]() { qInstallMessageHandler(nullptr); });
 
   // Obtain build date/time
   const auto buildDate = QStringLiteral(__DATE__);
@@ -546,6 +552,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_MDF4_Player", mdf4Player);
   c->setContextProperty("Cpp_Misc_ModuleManager", this);
   c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
+  c->setContextProperty("Cpp_UI_TaskbarSettings", uiTaskbarSettings);
   c->setContextProperty("Cpp_Console_Export", consoleExport);
   c->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
   c->setContextProperty("Cpp_API_Server", pluginsBridge);

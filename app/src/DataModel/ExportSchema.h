@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -37,6 +37,7 @@ struct ExportColumn {
   int uniqueId = 0;
   int groupId  = 0;
   int sourceId = 0;
+  QString sourceTitle;
   QString groupTitle;
   QString title;
   QString units;
@@ -59,21 +60,27 @@ struct ExportSchema {
   ExportSchema schema;
   schema.frameTitle = frame.title;
 
+  // Source-id -> source-title lookup
+  QMap<int, QString> sourceTitles;
+  for (const auto& s : frame.sources)
+    sourceTitles.insert(s.sourceId, s.title);
+
   for (const auto& group : frame.groups) {
     if (group.groupType == GroupType::Output)
       continue;
 
     for (const auto& dataset : group.datasets) {
       ExportColumn col;
-      col.uniqueId   = dataset.uniqueId;
-      col.groupId    = group.groupId;
-      col.sourceId   = dataset.sourceId;
-      col.groupTitle = group.title;
-      col.title      = dataset.title;
-      col.units      = dataset.units;
-      col.widget     = dataset.widget;
-      col.isNumeric  = dataset.isNumeric;
-      col.isVirtual  = dataset.virtual_;
+      col.uniqueId    = dataset.uniqueId;
+      col.groupId     = group.groupId;
+      col.sourceId    = dataset.sourceId;
+      col.sourceTitle = sourceTitles.value(dataset.sourceId);
+      col.groupTitle  = group.title;
+      col.title       = dataset.title;
+      col.units       = dataset.units;
+      col.widget      = dataset.widget;
+      col.isNumeric   = dataset.isNumeric;
+      col.isVirtual   = dataset.virtual_;
       schema.columns.push_back(col);
     }
   }

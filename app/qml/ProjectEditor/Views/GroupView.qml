@@ -295,8 +295,8 @@ Widgets.Pane {
             text: qsTr("Duplicate")
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_JSON_ProjectModel.duplicateCurrentGroup()
-            ToolTip.text: qsTr("Duplicate the current group and its contents")
             icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
+            ToolTip.text: qsTr("Duplicate the current group and its contents")
           }
 
           //

@@ -113,7 +113,7 @@ private:
   void buildMultiSourceMapping();
   void injectFrame(const QByteArray& frame, int frameIndex = -1);
   QByteArray getFrame(const int index);
-  QString formatTimestamp(double timestamp) const;
+  [[nodiscard]] QString formatTimestamp(double timestamp) const;
 
 protected:
   bool handleKeyPress(QKeyEvent* keyEvent);
@@ -144,5 +144,7 @@ private:
 
   QMap<int, int> m_channelToSource;
   QMap<int, int> m_sourceChannelCount;
+
+  QMap<int, QVector<int>> m_sourceChannelsByIndex;
 };
 }  // namespace MDF4

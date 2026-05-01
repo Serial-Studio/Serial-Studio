@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -103,6 +103,7 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   , m_activeGroupId(-1)
   , m_rebuildInProgress(false)
   , m_batchUpdateInProgress(false)
+  , m_restoringLayout(false)
   , m_activeWindow(nullptr)
   , m_windowManager(nullptr)
   , m_fullModel(new TaskbarModel(this))
@@ -222,7 +223,7 @@ int UI::Taskbar::activeGroupIndex() const
     ++index;
   }
 
-  // No match — signal "not found" rather than an out-of-bounds index
+  // No match -- signal "not found" rather than an out-of-bounds index
   return -1;
 }
 
@@ -312,7 +313,7 @@ bool UI::Taskbar::hasMaximizedWindow() const
 /**
  * @brief Returns the QML window (QQuickItem) for a given window ID.
  *
- * Looks up the internal window ID → QQuickItem map to retrieve the actual
+ * Looks up the internal window ID -> QQuickItem map to retrieve the actual
  * instance.
  *
  * @param id The windowId of the widget.
@@ -358,12 +359,55 @@ UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem* window) const
 }
 
 /**
+ * @brief Returns the next/previous non-closed window in taskbar order.
+ */
+QQuickItem* UI::Taskbar::nextActiveWindow(int delta) const
+{
+  if (!m_taskbarButtons || delta == 0)
+    return nullptr;
+
+  // Snapshot the visible, non-closed windows in taskbar order.
+  QList<QQuickItem*> windows;
+  windows.reserve(m_taskbarButtons->rowCount());
+  for (int i = 0; i < m_taskbarButtons->rowCount(); ++i) {
+    auto* row = m_taskbarButtons->item(i);
+    if (!row)
+      continue;
+
+    const int wid = row->data(TaskbarModel::WindowIdRole).toInt();
+    auto* win     = windowData(wid);
+    if (!win)
+      continue;
+
+    const auto state =
+      static_cast<TaskbarModel::WindowState>(row->data(TaskbarModel::WindowStateRole).toInt());
+    if (state == TaskbarModel::WindowClosed)
+      continue;
+
+    windows.append(win);
+  }
+
+  if (windows.isEmpty())
+    return nullptr;
+
+  const int currentIdx = windows.indexOf(m_activeWindow);
+  const int n          = windows.size();
+  const int base       = currentIdx >= 0 ? currentIdx : (delta > 0 ? -1 : 0);
+  const int nextIdx    = ((base + delta) % n + n) % n;
+  return windows.at(nextIdx);
+}
+
+/**
  * @brief Serializes the active group's layout and writes it to the project file.
  */
 void UI::Taskbar::saveLayout()
 {
   // Abort if no window manager, no windows, or invalid group
   if (!m_windowManager || m_windowIDs.isEmpty() || m_activeGroupId < -2)
+    return;
+
+  // Skip while a restore is mid-flight; restoreLayout's emissions would feed back into saveLayout
+  if (m_restoringLayout)
     return;
 
   // Only persist layout in project file mode
@@ -715,6 +759,10 @@ void UI::Taskbar::setWindowManager(UI::WindowManager* manager)
       saveLayout();
   });
 
+  // Persist auto-layout toggle so it survives the next launch even without a window move
+  connect(
+    m_windowManager, &UI::WindowManager::autoLayoutEnabledChanged, this, &UI::Taskbar::saveLayout);
+
   Q_EMIT windowManagerChanged();
 }
 
@@ -745,14 +793,18 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
 
   // Restore saved layout once all windows are registered
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager) {
+    m_restoringLayout = true;
     const auto opMode = AppState::instance().operationMode();
     if (opMode == SerialStudio::ProjectFile) {
       const auto layout = DataModel::ProjectModel::instance().groupLayout(m_activeGroupId);
-      if (!layout.isEmpty() && m_windowManager->restoreLayout(layout))
+      if (!layout.isEmpty() && m_windowManager->restoreLayout(layout)) {
+        m_restoringLayout = false;
         return;
+      }
     }
 
     m_windowManager->loadLayout();
+    m_restoringLayout = false;
   }
 }
 
@@ -901,11 +953,7 @@ void UI::Taskbar::rebuildModel()
       }
     }
 
-    // Extract the main group widget from the lists. mainWindowId starts at -1
-    // because 0 is a *valid* windowId (Dashboard counts from 0); using 0 as the
-    // "none" sentinel made groups with widget="" (groupType=NoWidget) collide
-    // with the first dataset widget — findItemByWindowId(0) would then return
-    // the group instead of the actual widget.
+    // Extract the main group widget (-1 sentinel -- 0 is a valid windowId)
     int mainWindowId = -1;
     for (int i = 0; i < windowIds.count(); ++i) {
       if (widgetTypes[i] == groupType) {
@@ -1052,7 +1100,7 @@ QStandardItem* UI::Taskbar::findItemByWindowId(int windowId,
                                                QStandardItem* parentItem,
                                                int depth) const
 {
-  // Bounded recursion (NASA PoT Rule 1) — tree is at most 2 levels deep.
+  // Bounded recursion (NASA PoT Rule 1) -- tree is at most 2 levels deep.
   static constexpr int kMaxDepth = 4;
   Q_ASSERT(depth <= kMaxDepth);
   if (depth > kMaxDepth) [[unlikely]]
@@ -1447,7 +1495,7 @@ void UI::Taskbar::setSearchFilter(const QString& filter)
  *
  * Each entry is a QVariantMap with: windowId, widgetName, widgetIcon,
  * widgetType, groupName, groupId. Limited to 30 results. Workspace entries
- * are not included — search is for navigating to individual widgets only.
+ * are not included -- search is for navigating to individual widgets only.
  */
 QVariantList UI::Taskbar::searchResults() const
 {

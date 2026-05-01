@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -34,7 +34,9 @@ Rectangle {
   color: Cpp_ThemeManager.colors["groupbox_background"]
   border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
+  //
   // Reassign (don't push) so the property notifies and width/height bindings stay live.
+  //
   property var buses: []
   readonly property int kPaddingV: 8
   readonly property int kFadeHeight: 12
@@ -53,7 +55,9 @@ Rectangle {
     return maxW
   }
 
-  // Flickable scrolls tall drivers (Modbus, BLE, CAN Bus…) without stretching the pane.
+  //
+  // Flickable scrolls tall drivers (Modbus, BLE, CAN Bus...) without stretching the pane.
+  //
   Flickable {
     id: scroll
 
@@ -221,7 +225,9 @@ Rectangle {
     }
   }
 
+  //
   // Edge fade gradient; hidden at the scroll boundary.
+  //
   Rectangle {
     z: 2
     visible: opacity > 0.01

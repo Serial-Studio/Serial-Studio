@@ -156,8 +156,8 @@ Widgets.Pane {
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentAction()
-          ToolTip.text: qsTr("Duplicate this action with all its settings")
           icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
+          ToolTip.text: qsTr("Duplicate this action with all its settings")
         }
 
         //

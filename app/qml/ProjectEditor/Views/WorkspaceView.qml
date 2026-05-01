@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -91,7 +91,7 @@ Widgets.Pane {
       anchors.fill: parent
 
       //
-      // Secondary toolbar — Rename, Delete
+      // Secondary toolbar -- Rename, Delete
       //
       Rectangle {
         id: toolbar
@@ -166,7 +166,7 @@ Widgets.Pane {
       }
 
       //
-      // Widgets list — header + rows via the shared ProjectTable components.
+      // Widgets list -- header + rows via the shared ProjectTable components.
       //
       Widgets.ProjectTableHeader {
         Layout.fillWidth: true

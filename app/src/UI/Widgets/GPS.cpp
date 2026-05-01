@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -1199,7 +1199,7 @@ void Widgets::GPS::paintPathData(QPainter* painter, const QSize& view)
 
   // Render the indicator three times: centre plus one wrap left / right
   for (int wrap = -1; wrap <= 1; ++wrap) {
-    // Shift X by ±world tiles to handle east/west wrap-around
+    // Shift X by +/-world tiles to handle east/west wrap-around
     const QPointF delta = deltaBase + QPointF(wrap * world, 0);
 
     // Convert tile delta to on-screen pixel position (base zoom tiles * scale)
@@ -1253,8 +1253,10 @@ void Widgets::GPS::paintAttributionText(QPainter* painter, const QSize& view)
   }
 
   // Attribution string to display
-  const int margin    = 6;
+  const int margin = 6;
+  // code-verify off
   QString attribution = "Copyright © Esri, Maxar, Earthstar Geographics";
+  // code-verify on
   if (m_showNasaWeather && m_zoom <= WEATHER_GIBS_MAX_ZOOM)
     attribution += " | NASA EOSDIS GIBS, Suomi NPP VIIRS";
   else if (m_showWeather && m_zoom <= WEATHER_MAX_ZOOM)

@@ -39,7 +39,7 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   m_rateLimiter.start();
   installProtocolHelpers(m_jsEngine);
 
-  // Arm the watchdog timer — flips the interrupt flag to unwind runaway transmit scripts
+  // Arm the watchdog timer -- flips the interrupt flag to unwind runaway transmit scripts
   m_watchdog.setSingleShot(true);
   m_watchdog.setInterval(kTransmitWatchdogMs);
   connect(&m_watchdog, &QTimer::timeout, this, [this]() { m_jsEngine.setInterrupted(true); });
@@ -213,7 +213,7 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
   else
     data = result.toVariant().toByteArray();
 
-  // Enforce hard payload size cap — oversized returns indicate runaway / hostile scripts
+  // Enforce hard payload size cap -- oversized returns indicate runaway / hostile scripts
   if (data.size() > kMaxPayloadBytes) [[unlikely]] {
     Q_EMIT transmitError(tr("Payload exceeds maximum size"));
     return {};
@@ -287,7 +287,7 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
     "    (canId >> 8) & 0xFF, canId & 0xFF, dlc) + data;"
     "}"
 
-    // Send a numeric value packed into a CAN frame (big-endian, 1–8 bytes).
+    // Send a numeric value packed into a CAN frame (big-endian, 1-8 bytes).
     "function canSendValue(id, value, bytes) {"
     "  bytes = bytes || 2;"
     "  var arr = [];"

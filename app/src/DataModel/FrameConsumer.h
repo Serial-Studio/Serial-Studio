@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -95,7 +95,9 @@ public:
                       std::atomic<bool>* enabled,
                       std::atomic<size_t>* queueSize)
     : FrameConsumerWorkerBase(nullptr), m_queue(queue), m_enabled(enabled), m_queueSize(queueSize)
-  {}
+  {
+    m_writeBuffer.reserve(kMaxItemsPerBatch);
+  }
 
   ~FrameConsumerWorker() override = default;
 
@@ -112,16 +114,17 @@ public:
 
     m_writeBuffer.clear();
 
-    constexpr size_t kMaxItemsPerBatch = 10000;
     T item;
     size_t dequeued = 0;
+    // code-verify off: m_writeBuffer is pre-reserved to kMaxItemsPerBatch in the constructor
     while (dequeued < kMaxItemsPerBatch && m_queue->try_dequeue(item)) {
       m_writeBuffer.push_back(std::move(item));
       ++dequeued;
     }
+    // code-verify on
 
     if (dequeued >= kMaxItemsPerBatch) [[unlikely]]
-      qWarning() << "[FrameConsumer] Batch size limit reached — remaining items deferred";
+      qWarning() << "[FrameConsumer] Batch size limit reached -- remaining items deferred";
 
     const auto count = m_writeBuffer.size();
     if (count == 0)
@@ -129,7 +132,6 @@ public:
 
     m_queueSize->fetch_sub(count, std::memory_order_relaxed);
 
-    // Guard against exceptions - they must never propagate through Qt's event loop.
     const bool wasOpen = isResourceOpen();
     try {
       processItems(m_writeBuffer);
@@ -181,7 +183,7 @@ protected:
    *
    * @return true if resources are open, false otherwise
    */
-  virtual bool isResourceOpen() const = 0;
+  [[nodiscard]] virtual bool isResourceOpen() const = 0;
 
   /**
    * @brief Returns whether processing is currently enabled.
@@ -192,6 +194,7 @@ protected:
   }
 
 private:
+  static constexpr size_t kMaxItemsPerBatch = 10000;
   std::vector<T> m_writeBuffer;
   moodycamel::ReaderWriterQueue<T>* m_queue;
   std::atomic<bool>* m_enabled;
@@ -200,7 +203,7 @@ private:
 
 /**
  * @class FrameConsumer
- * @brief Main-thread façade that owns a `FrameConsumerWorker` on a dedicated
+ * @brief Main-thread facade that owns a `FrameConsumerWorker` on a dedicated
  *        QThread. Provides a lock-free `enqueueData()` hotpath with periodic +
  *        threshold-based flushing.
  *

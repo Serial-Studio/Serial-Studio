@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -63,7 +63,7 @@ bool SerialStudio::activated()
  *
  * Single source of truth for the Pro-widget gate used by
  * Dashboard::reconfigureDashboard and ProjectModel::buildAutoWorkspaces.
- * Matches the stricter Trial+ tier check those callers share — a bare
+ * Matches the stricter Trial+ tier check those callers share -- a bare
  * Hobbyist token does not unlock Pro widgets.
  */
 bool SerialStudio::proWidgetsEnabled()
@@ -217,8 +217,7 @@ bool SerialStudio::isDatasetWidget(const DashboardWidget widget)
  */
 QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool large)
 {
-  const QString iconPath =
-    large ? "qrc:/icons/dashboard-large/" : "qrc:/icons/dashboard-small/";
+  const QString iconPath = large ? "qrc:/icons/dashboard-large/" : "qrc:/icons/dashboard-small/";
 
   switch (w) {
     case DashboardDataGrid:
@@ -292,9 +291,8 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
  */
 bool SerialStudio::groupEligibleForWorkspace(const DataModel::Group& g)
 {
-  if (g.groupType == DataModel::GroupType::Output)
-    return false;
-
+  // Output panels filter downstream via groupWidgetEligibleForWorkspace
+  Q_UNUSED(g);
   return true;
 }
 
@@ -317,7 +315,7 @@ bool SerialStudio::groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget
 /**
  * @brief Returns whether a dataset-level widget key should appear on workspaces.
  *
- * LED is intentionally excluded — LEDs are aggregated into a single panel by
+ * LED is intentionally excluded -- LEDs are aggregated into a single panel by
  * Dashboard and don't get per-dataset entries in a workspace.
  */
 bool SerialStudio::datasetWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w)
@@ -383,6 +381,9 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
       return tr("Image Views");
+      break;
+    case DashboardOutputPanel:
+      return tr("Output Panels");
       break;
     case DashboardNotificationLog:
       return tr("Notifications");
@@ -1082,7 +1083,7 @@ QByteArray SerialStudio::encodeText(const QString& text, SerialStudio::TextEncod
 /**
  * @brief Decodes raw bytes to a QString using the given text encoding.
  *
- * This is a stateless one-shot decode — callers that stream data across
+ * This is a stateless one-shot decode -- callers that stream data across
  * multiple chunks should keep their own `QStringDecoder`/`QTextDecoder`
  * so partial multi-byte sequences are carried across boundaries.
  */

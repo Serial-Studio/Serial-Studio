@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -30,13 +30,13 @@ Item {
   //
   // Plot properties
   //
-  property alias graph: _graph
-  property alias xAxis: _axisX
-  property alias yAxis: _axisY
   property real xMin: 0
   property real xMax: 1
   property real yMin: 0
   property real yMax: 1
+  property alias graph: _graph
+  property alias xAxis: _axisX
+  property alias yAxis: _axisY
   property alias zoom: _axisX.zoom
   property alias yLabel: _yLabel.text
   property alias xLabel: _xLabel.text
@@ -127,20 +127,13 @@ Item {
 
     const magnitude = Math.floor(Math.log10(visibleRange))
 
-    // Aim for ~3-4 significant digits across zoom levels.
+    // ~3-4 significant digits across zoom levels
     const precision = Math.max(0, 2 - magnitude)
     return Math.min(precision, 6)
   }
 
   //
-  // Engineering-unit formatter for tick labels: 10000 → "10K", 1.5e6 → "1.5M",
-  // -2500 → "-2.5K". Values in [0.001, 1000) are shown as plain decimals
-  // (e.g. 0.5 → "0.5"). Below 0.001 we step through micro / nano / pico and
-  // then fall back to scientific notation.
-  //
-  // When @a tickInterval is supplied, every tick on the axis renders with the
-  // same number of decimal places — that's what lets a −1 … 1 axis read
-  // "−1.0, −0.5, 0.0, 0.5, 1.0" instead of mixing "−1, −0.5, 0, 0.5, 1".
+  // Engineering-unit formatter for tick labels (K/M/G, u/n/p)
   //
   function engineeringFormat(value, tickInterval) {
     if (!isFinite(value))
@@ -149,8 +142,8 @@ Item {
     const abs    = Math.abs(value)
     const refMag = (tickInterval > 0) ? Math.max(abs, tickInterval) : abs
 
-    // Pick the engineering scale from |value| (or the tick interval, whichever
-    // is larger) so 0 lands in the same prefix as the rest of the axis.
+    // Pick the engineering scale from refMag, ignore millis range
+    // code-verify off
     let scaleFactor = 1
     let suffix      = ""
     if      (refMag >= 1e9)  { scaleFactor = 1e9;   suffix = "G" }
@@ -161,10 +154,9 @@ Item {
     else if (refMag >= 1e-9) { scaleFactor = 1e-9;  suffix = "n" }
     else if (refMag > 0)     { scaleFactor = 1e-12; suffix = "p" }
     else                     { return "0" }
+    // code-verify on
 
-    // Decimals: derive from the scaled tick interval so all ticks on the axis
-    // share the same precision. Without a tick interval we fall back to ~2
-    // significant figures past the leading digit (cursor readouts etc.).
+    // Decimals derive from the scaled tick interval
     let decimals
     if (tickInterval > 0) {
       const scaledInterval = tickInterval / scaleFactor
@@ -185,26 +177,25 @@ Item {
   }
 
   //
-  // Round an axis maximum up to the next multiple of @a interval so the
-  // rightmost / topmost tick always sits on the plot edge instead of stopping
-  // short. Range expansion never exceeds one tick interval.
+  // Round an axis maximum up to the next multiple of @a interval
   //
   function closeAxisMax(min, max, interval) {
     if (!isFinite(max) || !isFinite(interval) || interval <= 0)
       return max
+
     const span = max - min
     if (span <= 0)
       return max
 
-    // Anchor on min so ceiling lands on a tick relative to tickAnchor.
+    // Anchor on min so ceiling lands on a tick relative to tickAnchor
     const offset = max - min
     const ticks  = Math.ceil(offset / interval - 1e-9)
     return min + ticks * interval
   }
 
-  // Break the otherwise-circular dep with xTickInterval/yTickInterval (which
-  // depend on xVisibleMin/Max → xMaxClosed). The closed range only needs an
-  // interval estimate from the *data* range, which is independent of zoom/pan.
+  //
+  // Break the circular dep with xTickInterval/yTickInterval
+  //
   readonly property real xMaxClosed: closeAxisMax(xMin, xMax, smartIntervalX(xMin, xMax))
   readonly property real yMaxClosed: closeAxisMax(yMin, yMax, smartIntervalY(yMin, yMax))
 
@@ -214,10 +205,7 @@ Item {
   }
 
   //
-  // Visible range calculations for dynamic tick intervals. These reference the
-  // *closed* axis max so cursor / pan / zoom math agrees with the rendered
-  // ValueAxis range (which extends slightly past xMax/yMax to land on a clean
-  // tick boundary).
+  // Visible range calculations for dynamic tick intervals
   //
   readonly property real xVisibleMax: xVisibleMin + xVisibleRange
   readonly property real yVisibleMax: yVisibleMin + yVisibleRange
@@ -378,7 +366,9 @@ Item {
     axis.pan = newPan
   }
 
+  //
   // Cursor-centered zoom: keeps the world point under the cursor fixed.
+  //
   function applyCursorZoom(axis, oldZoom, newZoom, cursorPos, axisLength, inverted) {
     // Ensure that zoom level stays limited
     const minZoom = 1
@@ -472,14 +462,18 @@ Item {
     theme: GraphsTheme {
       id: _theme
 
+      //
       // Background
+      //
       borderColors: [Cpp_ThemeManager.colors["widget_border"]]
       plotAreaBackgroundVisible: true
       theme: GraphsTheme.Theme.UserDefined
       backgroundColor: Cpp_ThemeManager.colors["widget_window"]
       plotAreaBackgroundColor: Cpp_ThemeManager.colors["widget_base"]
 
+      //
       // Axis and grid colors
+      //
       axisX.subWidth: 1
       axisY.subWidth: 1
       axisX.mainWidth: 1
@@ -491,23 +485,31 @@ Item {
       axisX.labelTextColor: Cpp_ThemeManager.colors["widget_text"]
       axisY.labelTextColor: Cpp_ThemeManager.colors["widget_text"]
 
+      //
       // Axis label fonts and colors
+      //
       labelTextColor: Cpp_ThemeManager.colors["widget_text"]
       axisXLabelFont: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
       axisYLabelFont: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
 
+      //
       // Grid settings
+      //
       grid.subWidth: 1
       gridVisible: true
       grid.mainWidth: 1
       grid.subColor: Cpp_ThemeManager.colors["widget_border"]
       grid.mainColor: Cpp_ThemeManager.colors["widget_border"]
 
+      //
       // Highlight colors for better contrast
+      //
       multiHighlightColor: Cpp_ThemeManager.colors["widget_highlight"]
       singleHighlightColor: Cpp_ThemeManager.colors["widget_highlighted_text"]
 
+      //
       // Force refresh all theme colors on theme change
+      //
       Connections {
         target: Cpp_ThemeManager
         function onThemeChanged() {
@@ -538,16 +540,14 @@ Item {
     zoomStyle: GraphsView.ZoomStyle.None
 
     //
-    // Customize Y axis — max rounded up to the nearest tickInterval so the top
-    // tick always sits on the plot edge. Labels rendered via labelDelegate so
-    // they pick up engineering-unit suffixes (10000 → "10K", 1.5e6 → "1.5M").
+    // Customize Y axis (engineering-unit tick labels)
     //
     axisY: ValueAxis {
       id: _axisY
 
       min: root.yMin
-      max: root.yMaxClosed
       subTickCount: 1
+      max: root.yMaxClosed
       tickAnchor: root.yMin
       visible: root.yLabelVisible
 
@@ -578,8 +578,8 @@ Item {
       id: _axisX
 
       min: root.xMin
-      max: root.xMaxClosed
       subTickCount: 1
+      max: root.xMaxClosed
       tickAnchor: root.xMin
       visible: root.xLabelVisible
 
@@ -681,18 +681,24 @@ Item {
         if (root.cursorMode) {
           draggedCursor = getNearestCursor(mouse.x, mouse.y)
 
+          //
           // Right click to clear cursors (immediate action)
+          //
           if (mouse.button === Qt.RightButton) {
             if (draggedCursor === "A") {
               root.clearCursorA()
             } else if (draggedCursor === "B") {
               root.clearCursorB()
             } else {
+              //
               // Clear both if not clicking on a specific cursor
+              //
               root.clearAllCursors()
             }
           }
+          //
           // Left-click placement deferred to onReleased so drag still pans.
+          //
         }
 
         mouse.accepted = true
@@ -704,15 +710,21 @@ Item {
           const worldX = root.pixelToWorldX(mouse.x)
           const worldY = root.pixelToWorldY(mouse.y)
 
+          //
           // Place cursor A if not visible
+          //
           if (!root.cursorAVisible)
             root.setCursorA(worldX, worldY)
 
+          //
           // Cursor A visible, place cursor B
+          //
           else if (!root.cursorBVisible)
             root.setCursorB(worldX, worldY)
 
+          //
           // Both cursors exist, replace cursor A
+          //
           else
             root.setCursorA(worldX, worldY)
         }
@@ -787,17 +799,25 @@ Item {
             root.cursorBY = worldY
           }
         }
+        //
         // Micro-pan when dragging the plot (when not dragging a cursor)
+        //
         else if (_overlayMouse.dragging) {
+          //
           // Obtain drag distance
+          //
           const dx = mouse.x - _lastX
           const dy = mouse.y - _lastY
 
+          //
           // Update pan
+          //
           root.adjustAxisPan(_axisX, _graph.plotArea.width, mouse.x, dx, true)
           root.adjustAxisPan(_axisY, _graph.plotArea.height, mouse.y, dy, false)
 
+          //
           // Update drag start point
+          //
           _lastX = mouse.x
           _lastY = mouse.y
         }
@@ -814,7 +834,9 @@ Item {
       y: root.worldToPixelY(root.cursorAY)
       visible: root.cursorMode && root.cursorAVisible && (root.cursorAXInRange || root.cursorAYInRange)
 
+      //
       // Vertical line with dash-dot pattern (full height) - visible when X is in range
+      //
       Canvas {
         id: _cursorAVertical
 
@@ -839,7 +861,9 @@ Item {
         }
       }
 
+      //
       // Horizontal line with dash-dot pattern (full width) - visible when Y is in range
+      //
       Canvas {
         id: _cursorAHorizontal
 
@@ -864,7 +888,9 @@ Item {
         }
       }
 
+      //
       // Center marker - only visible when fully in view
+      //
       Rectangle {
         width: 10
         radius: 5
@@ -876,7 +902,9 @@ Item {
         border.color: Cpp_ThemeManager.colors["widget_base"]
       }
 
+      //
       // Cursor A identifier label - only visible when fully in view
+      //
       Label {
         text: "A"
         padding: 4
@@ -896,7 +924,9 @@ Item {
         }
       }
 
+      //
       // Trigger repaint when cursor moves
+      //
       onXChanged: {
         _cursorAVertical.requestPaint()
         _cursorAHorizontal.requestPaint()
@@ -917,7 +947,9 @@ Item {
       y: root.worldToPixelY(root.cursorBY)
       visible: root.cursorMode && root.cursorBVisible && (root.cursorBXInRange || root.cursorBYInRange)
 
+      //
       // Vertical line with dash-dot pattern (full height) - visible when X is in range
+      //
       Canvas {
         id: _cursorBVertical
 
@@ -942,7 +974,9 @@ Item {
         }
       }
 
+      //
       // Horizontal line with dash-dot pattern (full width) - visible when Y is in range
+      //
       Canvas {
         id: _cursorBHorizontal
 
@@ -967,7 +1001,9 @@ Item {
         }
       }
 
+      //
       // Center marker - only visible when fully in view
+      //
       Rectangle {
         width: 10
         radius: 5
@@ -979,7 +1015,9 @@ Item {
         border.color: Cpp_ThemeManager.colors["widget_base"]
       }
 
+      //
       // Cursor B identifier label - only visible when fully in view
+      //
       Label {
         text: "B"
         padding: 4
@@ -999,7 +1037,9 @@ Item {
         }
       }
 
+      //
       // Trigger repaint when cursor moves
+      //
       onXChanged: {
         _cursorBVertical.requestPaint()
         _cursorBHorizontal.requestPaint()

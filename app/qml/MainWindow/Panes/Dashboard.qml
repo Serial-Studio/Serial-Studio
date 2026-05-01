@@ -43,6 +43,19 @@ Item {
   }
 
   //
+  // Shortcut hooks (proxied to the DashboardLayout's Taskbar)
+  //
+  function focusTaskbarSearch()      { _mainLayout.focusTaskbarSearch() }
+  function toggleStartMenu()         { _mainLayout.toggleStartMenu() }
+  function cycleWorkspace(delta)     { _mainLayout.cycleWorkspace(delta) }
+  function cycleWindow(delta)        { _mainLayout.cycleWindow(delta) }
+  function closeActiveWindow()       { _mainLayout.closeActiveWindow() }
+  function minimizeActiveWindow()    { _mainLayout.minimizeActiveWindow() }
+  function clearActiveWindow()       { _mainLayout.clearActiveWindow() }
+  function toggleAutoLayout()        { _mainLayout.toggleAutoLayout() }
+  function jumpToWorkspaceIndex(i)   { _mainLayout.jumpToWorkspaceIndex(i) }
+
+  //
   // Taskbar helper
   //
   property SS_UI.TaskBar taskBar: SS_UI.TaskBar {}

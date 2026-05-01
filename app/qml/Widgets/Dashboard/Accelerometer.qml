@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -236,8 +236,11 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+
+            // code-verify off
             text: (root.currentG.toFixed(2) + "").padStart(5, ' ') + " @ " +
                   (root.normalize360(root.currentTheta).toFixed(0) + "").padStart(3, ' ') + "°"
+            // code-verify on
           }
         }
       }
@@ -268,8 +271,11 @@ Item {
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
-            text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+
+            // code-verify off
+            text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
+            // code-verify on
           }
         }
       }
@@ -300,8 +306,11 @@ Item {
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
-            text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
+
+            // code-verify off
+            text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
+            // code-verify on
           }
         }
       }
@@ -350,7 +359,7 @@ Item {
         height: polarArea.gaugeSize
 
         //
-        // Radial dotted lines for each 30° angle
+        // Radial dotted lines for each 30 deg angle
         //
         Canvas {
           opacity: 0.15
@@ -470,7 +479,9 @@ Item {
             y: rings.height / 2 - radius * Math.sin(angleRad) - height / 2
 
             opacity: 0.5
+            // code-verify off
             text: angle + "°"
+            // code-verify on
             color: Cpp_ThemeManager.colors["polar_foreground"]
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.6))
           }
@@ -599,8 +610,10 @@ Item {
             elide: Text.ElideRight
             anchors.centerIn: parent
             color: Cpp_ThemeManager.colors["tooltip_text"]
+            // code-verify off
             text: cursorTracker.cursorMagnitude.toFixed(2) + "G @ " +
                   cursorTracker.cursorAngle.toFixed(0) + "°"
+            // code-verify on
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
           }
         }

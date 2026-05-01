@@ -110,7 +110,7 @@ private:
   QDateTime getDateTime(const QString& cell);
   double getTimestampSeconds(int row);
   double getTimestampSeconds(const QString& cell);
-  QString formatTimestamp(double seconds) const;
+  [[nodiscard]] QString formatTimestamp(double seconds) const;
 
   QByteArray getFrame(const int row);
 
@@ -140,5 +140,7 @@ private:
 
   QMap<int, int> m_columnToSource;
   QMap<int, int> m_sourceColumnCount;
+
+  QMap<int, QVector<int>> m_sourceColumnsByIndex;
 };
 }  // namespace CSV

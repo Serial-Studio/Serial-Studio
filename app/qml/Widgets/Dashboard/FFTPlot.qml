@@ -212,8 +212,8 @@ Item {
       }
       opacity: enabled ? 1 : 0.5
       ToolTip.text: qsTr("Reset View")
-      enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
       icon.source: "qrc:/icons/dashboard-buttons/return.svg"
+      enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
     }
 
     DashboardToolButton {

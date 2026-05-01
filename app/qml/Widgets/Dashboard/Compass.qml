@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -107,7 +107,6 @@ Item {
     VisualRange {
       id: range
 
-      units: "°"
       minValue: 0
       alarm: false
       maxValue: 360
@@ -116,6 +115,10 @@ Item {
       maximumWidth: root.width * 0.3
       Layout.alignment: Qt.AlignHCenter
       Layout.minimumWidth: implicitWidth
+
+      // code-verify off
+      units: "°"
+      // code-verify on
     }
 
     //

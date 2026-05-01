@@ -135,11 +135,13 @@ if(BUILD_COMMERCIAL)
   set(QT_MODULES
     ${QT_MODULES}
     Mqtt
+    Multimedia
     SerialBus
   )
   set(QT_LIBS
     ${QT_LIBS}
     Qt6::Mqtt
+    Qt6::Multimedia
     Qt6::SerialBus
   )
 endif()
@@ -215,6 +217,7 @@ set(SOURCES
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Taskbar.cpp
+  src/UI/TaskbarSettings.cpp
   src/UI/WindowManager.cpp
   src/UI/UISessionRegistry.cpp
   src/UI/WidgetRegistry.cpp
@@ -310,6 +313,7 @@ set(HEADERS
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
   src/UI/Taskbar.h
+  src/UI/TaskbarSettings.h
   src/UI/WindowManager.h
   src/UI/WidgetRegistry.h
   src/UI/Widgets/GPS.h

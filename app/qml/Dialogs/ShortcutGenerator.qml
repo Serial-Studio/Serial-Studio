@@ -33,9 +33,19 @@ Widgets.SmartDialog {
   property string iconPathValue: ""
   property string lastErrorText: ""
   property bool userPickedIcon: false
+  property string taskbarMode: "shown"
 
   readonly property string projectPath: Cpp_AppState.projectFilePath
   readonly property string projectTitle: Cpp_JSON_ProjectModel.title
+
+  function selectedTaskbarButtons() {
+    var ids = []
+    if (pinConsole.checked)          ids.push("console")
+    if (pinNotifications.checked)    ids.push("notifications")
+    if (pinPause.checked)            ids.push("pause")
+    if (pinFileTransmission.checked) ids.push("file_transmission")
+    return ids
+  }
 
   onVisibleChanged: {
     if (visible) {
@@ -43,10 +53,15 @@ Widgets.SmartDialog {
       iconPathValue = Cpp_ShortcutGenerator.defaultIconPath
       userPickedIcon = false
       lastErrorText = ""
+      taskbarMode = "shown"
+      if (taskbarModeCombo)
+        taskbarModeCombo.currentIndex = 0
     }
   }
 
+  //
   // Keep the title in sync whenever a new project is loaded
+  //
   Connections {
     target: Cpp_JSON_ProjectModel
     function onTitleChanged() {
@@ -96,10 +111,13 @@ Widgets.SmartDialog {
             root.projectPath,
             fullscreen.checked,
             actionsPanel.checked,
+            fileTransmission.checked,
             csvExport.checked,
             mdfExport.checked,
             sessionExport.checked,
-            consoleExport.checked)
+            consoleExport.checked,
+            root.taskbarMode,
+            root.selectedTaskbarButtons())
     }
   }
 
@@ -125,6 +143,12 @@ Widgets.SmartDialog {
       }
 
       TabButton {
+        text: qsTr("Taskbar")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
+      }
+
+      TabButton {
         text: qsTr("Logging")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
@@ -142,7 +166,9 @@ Widgets.SmartDialog {
       Layout.minimumWidth: 520
       currentIndex: _tab.currentIndex
       Layout.topMargin: -parent.spacing - 1
-      implicitHeight: Math.max(generalTab.implicitHeight, loggingTab.implicitHeight)
+      implicitHeight: Math.max(generalTab.implicitHeight,
+                               taskbarTab.implicitHeight,
+                               loggingTab.implicitHeight)
 
       //
       // General tab
@@ -369,6 +395,16 @@ Widgets.SmartDialog {
           }
 
           Label {
+            text: qsTr("File Transmission")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: fileTransmission
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
+
+          Label {
             Layout.columnSpan: 2
             Layout.topMargin: 4
             Layout.fillWidth: true
@@ -379,6 +415,178 @@ Widgets.SmartDialog {
                        + "the live dashboard for this project. There's no toolbar "
                        + "or setup pane, just the data, and Serial Studio quits "
                        + "as soon as the device disconnects.")
+          }
+
+          Item { Layout.fillHeight: true }
+        }
+      }
+
+      //
+      // Taskbar tab
+      //
+      Item {
+        id: taskbarTab
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        implicitHeight: taskbarLayout.implicitHeight + 16
+
+        Rectangle {
+          radius: 2
+          border.width: 1
+          anchors.fill: parent
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        GridLayout {
+          id: taskbarLayout
+
+          columns: 2
+          rowSpacing: 4
+          columnSpacing: 8
+          anchors.margins: 8
+          anchors.fill: parent
+
+          //
+          // Section: Visibility
+          //
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 2
+            text: qsTr("Visibility")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            text: qsTr("Mode")
+            color: Cpp_ThemeManager.colors["text"]
+          } ComboBox {
+            id: taskbarModeCombo
+
+            Layout.fillWidth: false
+            Layout.minimumWidth: 220
+            Layout.alignment: Qt.AlignRight
+            model: [
+              { value: "shown",    label: qsTr("Always shown") },
+              { value: "autohide", label: qsTr("Auto-hide") },
+              { value: "hidden",   label: qsTr("Hidden") }
+            ]
+            textRole: "label"
+            currentIndex: 0
+            onActivated: root.taskbarMode = model[currentIndex].value
+          }
+
+          Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 4
+            Layout.fillWidth: true
+            wrapMode: Label.Wrap
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            color: Cpp_ThemeManager.colors["placeholder_text"]
+            text: root.taskbarMode === "hidden"
+                  ? qsTr("Hiding the taskbar removes window minimize/maximize/close "
+                       + "buttons and forces auto-layout, so the dashboard always "
+                       + "fills the available area.")
+                  : root.taskbarMode === "autohide"
+                    ? qsTr("The taskbar slides in when the user moves the cursor "
+                         + "near the bottom edge.")
+                    : qsTr("The taskbar is permanently visible at the bottom of "
+                         + "the dashboard.")
+          }
+
+          //
+          // Section: Buttons
+          //
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Pinned Buttons")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            enabled: root.taskbarMode !== "hidden"
+            opacity: enabled ? 1 : 0.5
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            text: qsTr("Console")
+            color: Cpp_ThemeManager.colors["text"]
+            enabled: root.taskbarMode !== "hidden"
+            opacity: enabled ? 1 : 0.5
+          } Switch {
+            id: pinConsole
+            checked: false
+            enabled: root.taskbarMode !== "hidden"
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
+
+          Label {
+            text: qsTr("Notifications")
+            color: Cpp_ThemeManager.colors["text"]
+            enabled: root.taskbarMode !== "hidden"
+            opacity: enabled ? 1 : 0.5
+          } Switch {
+            id: pinNotifications
+            checked: true
+            enabled: root.taskbarMode !== "hidden"
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
+
+          Label {
+            text: qsTr("Pause")
+            color: Cpp_ThemeManager.colors["text"]
+            enabled: root.taskbarMode !== "hidden"
+            opacity: enabled ? 1 : 0.5
+          } Switch {
+            id: pinPause
+            checked: true
+            enabled: root.taskbarMode !== "hidden"
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
+
+          Label {
+            text: qsTr("File Transmission")
+            color: Cpp_ThemeManager.colors["text"]
+            enabled: root.taskbarMode !== "hidden" && fileTransmission.checked
+            opacity: enabled ? 1 : 0.5
+          } Switch {
+            id: pinFileTransmission
+            checked: false
+            enabled: root.taskbarMode !== "hidden" && fileTransmission.checked
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
           }
 
           Item { Layout.fillHeight: true }

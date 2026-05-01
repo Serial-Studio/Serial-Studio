@@ -38,11 +38,15 @@ DropArea {
         dropRectangle.color = Qt.darker(palette.highlight, 1.4)
       }
 
+      //
       // Invalid file name, show red rectangle
+      //
       else
         dropRectangle.color = Cpp_ThemeManager.colors["error"]
 
+      //
       // Show drag&drop rectangle
+      //
       dropRectangle.opacity = 0.8
     }
   }

@@ -58,7 +58,7 @@ public:
   ~ExportWorker() override;
 
   void closeResources() override;
-  bool isResourceOpen() const override;
+  [[nodiscard]] bool isResourceOpen() const override;
   void processData() override;
 
 protected:
@@ -74,7 +74,7 @@ private:
   void writeRawBytes();
   void finalizeSession();
 
-  QJsonObject buildReplayProjectJson(const DataModel::Frame& frame) const;
+  [[nodiscard]] QJsonObject buildReplayProjectJson(const DataModel::Frame& frame) const;
 
 private:
   bool m_dbOpen;

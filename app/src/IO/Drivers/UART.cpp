@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -974,7 +974,7 @@ bool IO::Drivers::UART::selectByIdentifier(const QJsonObject& id)
     if (!savedDesc.isEmpty() && info.description() == savedDesc)
       score += 10;
 
-    // Port name match (weakest — differs per OS)
+    // Port name match (weakest -- differs per OS)
     if (!savedName.isEmpty() && info.portName() == savedName)
       score += 5;
 

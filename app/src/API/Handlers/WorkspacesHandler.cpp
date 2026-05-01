@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -84,7 +84,7 @@ void API::Handlers::WorkspacesHandler::registerCommands()
                            emptySchema,
                            &list);
 
-  // project.workspaces.get — id required
+  // project.workspaces.get -- id required
   {
     QJsonObject props;
     props[QStringLiteral("id")] = QJsonObject{
@@ -426,7 +426,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::customizeGet(const QStrin
 /**
  * @brief Flips the customizeWorkspaces flag.
  *
- * On off→on, seeds m_workspaces from the synthetic auto list; on on→off,
+ * On off->on, seeds m_workspaces from the synthetic auto list; on on->off,
  * drops the customised list and returns to automatic mode.
  */
 API::CommandResponse API::Handlers::WorkspacesHandler::customizeSet(const QString& id,
@@ -452,7 +452,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::customizeSet(const QStrin
 /**
  * @brief Attaches a widget ref to a workspace.
  *
- * Implicitly flips customizeWorkspaces on if it wasn't already — the project
+ * Implicitly flips customizeWorkspaces on if it wasn't already -- the project
  * must be in customize mode to persist a widget ref.
  */
 API::CommandResponse API::Handlers::WorkspacesHandler::widgetAdd(const QString& id,

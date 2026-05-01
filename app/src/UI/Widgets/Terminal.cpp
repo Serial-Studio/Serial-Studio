@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -365,7 +365,9 @@ void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLi
     if (line.isEmpty()) {
       if (i == cursorLine) {
         painter->setPen(m_palette.color(QPalette::Text));
+        // code-verify off
         painter->drawText(m_borderX, visualLineY + m_cHeight, QStringLiteral("█"));
+        // code-verify on
         cursorDrawn = true;
         break;
       }
@@ -380,7 +382,9 @@ void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLi
       if (i == cursorLine && cursorCol >= start && cursorCol <= end) {
         const int cursorX = calcCursorPixelX(painter, line, start, cursorCol, end);
         painter->setPen(m_palette.color(QPalette::Text));
+        // code-verify off
         painter->drawText(cursorX, visualLineY + m_cHeight, QStringLiteral("█"));
+        // code-verify on
         cursorDrawn = true;
         break;
       }
@@ -395,7 +399,9 @@ void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLi
 
   if (!cursorDrawn && cursorLine >= m_data.size()) {
     painter->setPen(m_palette.color(QPalette::Text));
+    // code-verify off
     painter->drawText(m_borderX, visualLineY + m_cHeight, QStringLiteral("█"));
+    // code-verify on
   }
 }
 
@@ -723,18 +729,18 @@ int Widgets::Terminal::terminalRows() const
  * without any QML-level workarounds.
  *
  * Keys handled:
- * - Printable characters → UTF-8 bytes
- * - Return / Enter      → CR (\r)
- * - Backspace           → BS (\x7f) per modern xterm default
- * - Delete              → ESC[3~
- * - Tab                 → HT (\t)
- * - Escape              → ESC (\x1b)
- * - Arrow keys          → ESC[A … ESC[D
- * - Home / End          → ESC[H / ESC[F
- * - Page Up / Down      → ESC[5~ / ESC[6~
- * - Insert              → ESC[2~
- * - F1–F12              → standard xterm sequences
- * - Ctrl+letter         → control codes 0x01–0x1a
+ * - Printable characters -> UTF-8 bytes
+ * - Return / Enter      -> CR (\r)
+ * - Backspace           -> BS (\x7f) per modern xterm default
+ * - Delete              -> ESC[3~
+ * - Tab                 -> HT (\t)
+ * - Escape              -> ESC (\x1b)
+ * - Arrow keys          -> ESC[A ... ESC[D
+ * - Home / End          -> ESC[H / ESC[F
+ * - Page Up / Down      -> ESC[5~ / ESC[6~
+ * - Insert              -> ESC[2~
+ * - F1-F12              -> standard xterm sequences
+ * - Ctrl+letter         -> control codes 0x01-0x1a
  *
  * @param event The key press event.
  */
@@ -752,7 +758,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   const Qt::KeyboardModifiers mods = event->modifiers();
   const int key                    = event->key();
 
-  // Ctrl+letter → control code
+  // Ctrl+letter -> control code
   if ((mods & Qt::ControlModifier) && key >= Qt::Key_A && key <= Qt::Key_Z) {
     seq.append(char(key - Qt::Key_A + 1));
     (void)IO::ConnectionManager::instance().writeData(seq);
@@ -760,7 +766,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
     return;
   }
 
-  // Ctrl+[ → ESC
+  // Ctrl+[ -> ESC
   if ((mods & Qt::ControlModifier) && key == Qt::Key_BracketLeft) {
     seq.append('\x1b');
     (void)IO::ConnectionManager::instance().writeData(seq);
@@ -1288,10 +1294,12 @@ void Widgets::Terminal::loadWelcomeGuide()
 {
   // Define logo
   // clang-format off
+  // code-verify off
   static const QString logo = \
     "▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ▒█▀▀█ ▒█░░░   ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█\n" \
     "░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░   ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█\n" \
     "▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█   ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█\n\n";
+  // code-verify on
   // clang-format on
 
   clear();
@@ -1356,7 +1364,7 @@ void Widgets::Terminal::append(const QString& data)
         if (ch == 0x1b || ch == '\n' || ch == '\r' || ch == '\b' || ch == 0x7F || ch == '\t')
           break;
 
-        // Non-printable → replaced with space by replaceData anyway
+        // Non-printable -> replaced with space by replaceData anyway
         if (ch >= 0x20) {
           ++pos;
           continue;
@@ -1581,13 +1589,13 @@ void Widgets::Terminal::initBuffer()
  *
  * This method handles normal text input processing, managing different
  * character cases:
- * - ESC (0x1B) with VT-100 on → flush text and enter Escape state.
- * - CR (`\r`) with VT-100 on → move cursor to column 0.
- * - LF (`\n`) → move cursor to next line.
- * - BS (`\b`) with VT-100 on → move cursor left one column.
- * - DEL (0x7F) with VT-100 on → delete character under cursor.
- * - TAB (`\t`) with VT-100 on → advance to next 8-column tab stop.
- * - Printable characters → append to accumulated @p text.
+ * - ESC (0x1B) with VT-100 on -> flush text and enter Escape state.
+ * - CR (`\r`) with VT-100 on -> move cursor to column 0.
+ * - LF (`\n`) -> move cursor to next line.
+ * - BS (`\b`) with VT-100 on -> move cursor left one column.
+ * - DEL (0x7F) with VT-100 on -> delete character under cursor.
+ * - TAB (`\t`) with VT-100 on -> advance to next 8-column tab stop.
+ * - Printable characters -> append to accumulated @p text.
  *
  * This function helps manage cursor positioning and character input depending
  * on the current state.
@@ -1650,13 +1658,13 @@ void Widgets::Terminal::processText(const QChar& byte, QString& text)
  *
  * Dispatches to the correct follow-on state or performs a single-character
  * ESC action:
- * - `[` → CSI (Format state for cursor/SGR sequences)
- * - `(` → Designate character set (ResetFont state, consumed silently)
- * - `]` → OSC string (title, colour palette, etc.)
- * - `7` → Save cursor position (DECSC)
- * - `8` → Restore cursor position (DECRC)
- * - `M` → Reverse index (scroll up one line)
- * - All others → silently ignored, return to Text state
+ * - `[` -> CSI (Format state for cursor/SGR sequences)
+ * - `(` -> Designate character set (ResetFont state, consumed silently)
+ * - `]` -> OSC string (title, colour palette, etc.)
+ * - `7` -> Save cursor position (DECSC)
+ * - `8` -> Restore cursor position (DECRC)
+ * - `M` -> Reverse index (scroll up one line)
+ * - All others -> silently ignored, return to Text state
  *
  * @see processFormat(), m_state
  */
@@ -1698,24 +1706,24 @@ void Widgets::Terminal::processEscape(const QChar& byte, QString& text)
 }
 
 /**
- * @brief Processes one byte of a CSI (ESC[…) parameter or final sequence.
+ * @brief Processes one byte of a CSI (ESC[...) parameter or final sequence.
  *
  * @param byte The character to process.
  * @param text Accumulated printable text (unused here; passed for API symmetry).
  *
  * Accumulates numeric parameters separated by `;`, then dispatches on the
  * final letter:
- * - `m`     — SGR: apply ANSI colors/attributes
- * - `A`–`F` — cursor movement (up/down/right/left/next-line/prev-line)
- * - `H`/`f` — cursor position (CUP / HVP), 1-based row;col
- * - `G`     — cursor horizontal absolute (1-based column)
- * - `d`     — cursor vertical absolute (1-based row)
- * - `J`     — erase in display (0=to end, 1=to start, 2/3=full clear)
- * - `K`     — erase in line (0=to end, 1=to start, 2=whole line)
- * - `P`     — delete characters
- * - `s`/`u` — save/restore cursor position (ANSI)
- * - `h`/`l` — DEC private mode set/reset (`?25h` show cursor, `?25l` hide)
- * - All other final letters → silently consumed, return to Text state
+ * - `m`     -- SGR: apply ANSI colors/attributes
+ * - `A`-`F` -- cursor movement (up/down/right/left/next-line/prev-line)
+ * - `H`/`f` -- cursor position (CUP / HVP), 1-based row;col
+ * - `G`     -- cursor horizontal absolute (1-based column)
+ * - `d`     -- cursor vertical absolute (1-based row)
+ * - `J`     -- erase in display (0=to end, 1=to start, 2/3=full clear)
+ * - `K`     -- erase in line (0=to end, 1=to start, 2=whole line)
+ * - `P`     -- delete characters
+ * - `s`/`u` -- save/restore cursor position (ANSI)
+ * - `h`/`l` -- DEC private mode set/reset (`?25h` show cursor, `?25l` hide)
+ * - All other final letters -> silently consumed, return to Text state
  *
  * @see setCursorPosition(), removeStringFromCursor(), applyAnsiColor()
  */
@@ -1728,7 +1736,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
     m_currentFormatValue = m_currentFormatValue * 10 + (byte.cell() - '0');
   }
 
-  // DEC private mode prefix — silently note it, stay in Format state
+  // DEC private mode prefix -- silently note it, stay in Format state
   else if (byte == '?' || byte == '>' || byte == '=') {
     m_privateMode = true;
   }
@@ -1753,7 +1761,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // s — save cursor position (ANSI)
+    // s -- save cursor position (ANSI)
     else if (byte == 's') {
       if (!m_privateMode)
         m_savedCursorPosition = m_cursorPosition;
@@ -1761,7 +1769,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // u — restore cursor position (ANSI)
+    // u -- restore cursor position (ANSI)
     else if (byte == 'u') {
       if (!m_privateMode)
         setCursorPosition(m_savedCursorPosition);
@@ -1800,7 +1808,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // Move cursor to position — H (CUP) and f (HVP), 1-based row;col
+    // Move cursor to position -- H (CUP) and f (HVP), 1-based row;col
     else if (byte == 'H' || byte == 'f') {
       if (!m_privateMode) {
         const int row = qMax(0, m_formatValues.value(0, 1) - 1);
@@ -1812,7 +1820,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // G — Cursor Horizontal Absolute (1-based column)
+    // G -- Cursor Horizontal Absolute (1-based column)
     else if (byte == 'G') {
       if (!m_privateMode) {
         const int col = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
@@ -1822,7 +1830,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // d — Cursor Vertical Absolute (1-based row)
+    // d -- Cursor Vertical Absolute (1-based row)
     else if (byte == 'd') {
       if (!m_privateMode) {
         const int row = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
@@ -1832,7 +1840,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // J function — Erase in display
+    // J function -- Erase in display
     else if (byte == 'J') {
       if (!m_privateMode) {
         const int cy = m_cursorPosition.y();
@@ -1870,7 +1878,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // K function — Erase in line
+    // K function -- Erase in line
     else if (byte == 'K') {
       if (!m_privateMode) {
         switch (m_currentFormatValue) {
@@ -1892,7 +1900,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // P function — Delete characters
+    // P function -- Delete characters
     else if (byte == 'P') {
       if (!m_privateMode) {
         removeStringFromCursor(LeftDirection, m_currentFormatValue);
@@ -1902,7 +1910,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       m_state = Text;
     }
 
-    // h / l — DEC private mode set/reset (e.g. ?25h show cursor, ?25l hide cursor)
+    // h / l -- DEC private mode set/reset (e.g. ?25h show cursor, ?25l hide cursor)
     else if (byte == 'h' || byte == 'l') {
       if (m_privateMode && m_currentFormatValue == 25) {
         m_cursorHidden = (byte == 'l');

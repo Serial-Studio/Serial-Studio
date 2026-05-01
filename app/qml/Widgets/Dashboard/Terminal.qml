@@ -110,7 +110,9 @@ Item {
     terminal.selectAll()
   }
 
+  //
   // VT-100 read-write mode forwards Ctrl+C / Ctrl+A as SIGINT / SOH.
+  //
   readonly property bool vt100Interactive: Cpp_Console_Handler.vt100Emulation
                                            && Cpp_IO_Manager.readWrite
 
@@ -275,7 +277,9 @@ Item {
             const currentCursorPosition = send.cursorPosition;
             const cursorAtEnd = (currentCursorPosition === send.text.length);
 
+            //
             // Format the text
+            //
             const originalText = send.text;
             const formattedText = Cpp_Console_Handler.formatUserHex(send.text);
             const isValid = Cpp_Console_Handler.validateUserHex(formattedText);
@@ -283,23 +287,35 @@ Item {
             if (originalText !== formattedText) {
               send.text = formattedText;
 
+              //
               // Restore the cursor position, adjusting for added spaces
+              //
               if (!cursorAtEnd) {
+                //
                 // Remove spaces from originalText and formattedText to compare lengths
+                //
                 const cleanedOriginalText = originalText.replace(/ /g, '');
                 const cleanedFormattedText = formattedText.replace(/ /g, '');
 
+                //
                 // Calculate the difference in length due to formatting
+                //
                 const lengthDifference = cleanedFormattedText.length - cleanedOriginalText.length;
 
+                //
                 // Count spaces before the cursor in both texts
+                //
                 let spacesBeforeCursorOriginal = (originalText.slice(0, currentCursorPosition).match(/ /g) || []).length;
                 let spacesBeforeCursorFormatted = (formattedText.slice(0, currentCursorPosition).match(/ /g) || []).length;
 
+                //
                 // Calculate adjustment factor
+                //
                 const adjustment = spacesBeforeCursorFormatted - spacesBeforeCursorOriginal + lengthDifference;
 
+                //
                 // Restore the cursor position with adjustment
+                //
                 send.cursorPosition = Math.min(currentCursorPosition + adjustment, send.text.length);
               }
             }

@@ -19,6 +19,7 @@
 #  include <QKeyEvent>
 #  include <QMap>
 #  include <QObject>
+#  include <QSet>
 #  include <QSqlDatabase>
 #  include <QSqlQuery>
 #  include <QString>
@@ -158,6 +159,11 @@ private:
 
   QMap<int, int> m_columnToSource;
   QMap<int, int> m_sourceColumnCount;
+
+  QSet<int> m_sourcesAtCurrentTs;
+
+  QHash<int, QPair<int, int>> m_uidToParser;
+  QHash<int, int> m_sourceMaxIndex;
 
   bool m_preSessionCaptured;
   SerialStudio::OperationMode m_preSessionOperationMode;

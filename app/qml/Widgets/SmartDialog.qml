@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -39,19 +39,17 @@ Window {
   property color backgroundColor: Cpp_ThemeManager.colors["window"]
 
   //
-  // Bare content size — derived dialogs override to alias their own root
-  // layout so the CSD reads through a one-hop binding (Page's implicit
-  // size propagation returns stale zeros at window-creation time).
+  // Bare content size (derived dialogs alias their own layout)
   //
   property int preferredWidth: contentArea.implicitWidth
   property int preferredHeight: contentArea.implicitHeight
 
   //
-  // Window sizing — internal padding + titlebar wrap the preferred size
+  // Window sizing -- internal padding + titlebar wrap the preferred size
   //
   width: preferredWidth + 2 * contentPadding
-  height: preferredHeight + contentPadding * 1.50 + titlebarHeight
   minimumWidth: preferredWidth + 2 * contentPadding
+  height: preferredHeight + contentPadding * 1.50 + titlebarHeight
   minimumHeight: preferredHeight + contentPadding * 1.50 + titlebarHeight
   maximumWidth: fixedSize ? preferredWidth + 2 * contentPadding : 16777215
   maximumHeight: fixedSize ? preferredHeight + contentPadding * 1.50 + titlebarHeight : 16777215
@@ -106,11 +104,20 @@ Window {
   //
   // Enable window dragging via titlebar
   //
-  DragHandler {
-    target: null
-    onActiveChanged: {
-      if (active)
-        root.startSystemMove()
+  Item {
+    height: root.titlebarHeight
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+
+    DragHandler {
+      target: null
+      onActiveChanged: {
+        if (active)
+          root.startSystemMove()
+      }
     }
   }
 

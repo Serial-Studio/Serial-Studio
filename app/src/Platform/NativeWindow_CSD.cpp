@@ -40,6 +40,9 @@ static QHash<QWindow*, CSD::Window*> s_decorators;
 // Helper function to detect Windows 11
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns true when the running OS reports Windows 11 or later.
+ */
 static bool isWindows11()
 {
 #if defined(Q_OS_WIN)

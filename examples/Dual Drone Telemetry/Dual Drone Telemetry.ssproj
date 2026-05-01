@@ -1,6 +1,7 @@
 {
     "actions": [
     ],
+    "customizeWorkspaces": true,
     "groups": [
         {
             "datasets": [
@@ -17,22 +18,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 1,
                     "index": 1,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Latitude",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "lat",
                     "widgetMax": 90,
                     "widgetMin": -90,
@@ -42,22 +45,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 1,
                     "index": 2,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Longitude",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "lon",
                     "widgetMax": 180,
                     "widgetMin": -180,
@@ -67,22 +72,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 2,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": true,
+                    "graph": false,
+                    "groupId": 1,
                     "index": 4,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
-                    "plotMax": 0,
+                    "numericValue": 0,
+                    "plotMax": 300,
                     "plotMin": 0,
                     "title": "Alpha Altitude",
                     "units": "m",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "alt",
                     "widgetMax": 500,
                     "widgetMin": 0,
@@ -98,22 +105,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 2,
                     "index": 3,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Heading",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "compass",
                     "widgetMax": 360,
                     "widgetMin": 0,
@@ -129,22 +138,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 3,
                     "index": 7,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Roll",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "roll",
                     "widgetMax": 45,
                     "widgetMin": -45,
@@ -154,22 +165,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 3,
                     "index": 8,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Pitch",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "pitch",
                     "widgetMax": 30,
                     "widgetMin": -30,
@@ -179,22 +192,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 2,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 3,
                     "index": 3,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Yaw",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "yaw",
                     "widgetMax": 360,
                     "widgetMin": 0,
@@ -210,22 +225,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 4,
                     "index": 5,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Airspeed",
                     "units": "m/s",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "gauge",
                     "widgetMax": 40,
                     "widgetMin": 0,
@@ -235,22 +252,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 4,
                     "index": 4,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
-                    "plotMax": 0,
+                    "numericValue": 0,
+                    "plotMax": 300,
                     "plotMin": 0,
                     "title": "Alpha Altitude",
                     "units": "m",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "gauge",
                     "widgetMax": 300,
                     "widgetMin": 0,
@@ -260,22 +279,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 2,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 4,
                     "index": 6,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha V/S",
                     "units": "m/s",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "bar",
                     "widgetMax": 10,
                     "widgetMin": -10,
@@ -291,22 +312,24 @@
                     "alarmEnabled": true,
                     "alarmHigh": 21,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 5,
                     "index": 9,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Voltage",
                     "units": "V",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "gauge",
                     "widgetMax": 25.2,
                     "widgetMin": 18,
@@ -316,22 +339,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 5,
                     "index": 10,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Current",
                     "units": "A",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "bar",
                     "widgetMax": 40,
                     "widgetMin": 0,
@@ -341,22 +366,24 @@
                     "alarmEnabled": true,
                     "alarmHigh": 20,
                     "alarmLow": 0,
+                    "datasetId": 2,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 5,
                     "index": 11,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Alpha Battery",
                     "units": "%",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
@@ -382,22 +409,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 7,
                     "index": 1,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Latitude",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "lat",
                     "widgetMax": 90,
                     "widgetMin": -90,
@@ -407,22 +436,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 7,
                     "index": 2,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Longitude",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "lon",
                     "widgetMax": 180,
                     "widgetMin": -180,
@@ -432,22 +463,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 2,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
-                    "graph": true,
+                    "graph": false,
+                    "groupId": 7,
                     "index": 4,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
-                    "plotMax": 0,
+                    "numericValue": 0,
+                    "plotMax": 300,
                     "plotMin": 0,
                     "title": "Bravo Altitude",
                     "units": "m",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "alt",
                     "widgetMax": 500,
                     "widgetMin": 0,
@@ -464,22 +497,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 8,
                     "index": 3,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Heading",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "compass",
                     "widgetMax": 360,
                     "widgetMin": 0,
@@ -496,22 +531,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 9,
                     "index": 7,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Roll",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "roll",
                     "widgetMax": 45,
                     "widgetMin": -45,
@@ -521,22 +558,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 9,
                     "index": 8,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Pitch",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "pitch",
                     "widgetMax": 30,
                     "widgetMin": -30,
@@ -546,22 +585,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 2,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 9,
                     "index": 3,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Yaw",
                     "units": "°",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "yaw",
                     "widgetMax": 360,
                     "widgetMin": 0,
@@ -578,22 +619,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 10,
                     "index": 5,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Airspeed",
                     "units": "m/s",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "gauge",
                     "widgetMax": 40,
                     "widgetMin": 0,
@@ -603,22 +646,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 10,
                     "index": 4,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
-                    "plotMax": 0,
+                    "numericValue": 0,
+                    "plotMax": 300,
                     "plotMin": 0,
                     "title": "Bravo Altitude",
                     "units": "m",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "gauge",
                     "widgetMax": 300,
                     "widgetMin": 0,
@@ -628,22 +673,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 2,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 10,
                     "index": 6,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo V/S",
                     "units": "m/s",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "bar",
                     "widgetMax": 10,
                     "widgetMin": -10,
@@ -660,22 +707,24 @@
                     "alarmEnabled": true,
                     "alarmHigh": 21,
                     "alarmLow": 0,
+                    "datasetId": 0,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 11,
                     "index": 9,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Voltage",
                     "units": "V",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "gauge",
                     "widgetMax": 25.2,
                     "widgetMin": 18,
@@ -685,22 +734,24 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
+                    "datasetId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
+                    "groupId": 11,
                     "index": 10,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Current",
                     "units": "A",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "bar",
                     "widgetMax": 40,
                     "widgetMin": 0,
@@ -710,22 +761,24 @@
                     "alarmEnabled": true,
                     "alarmHigh": 20,
                     "alarmLow": 0,
+                    "datasetId": 2,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
+                    "groupId": 11,
                     "index": 11,
                     "led": false,
                     "ledHigh": 100,
                     "log": false,
-                    "overviewDisplay": false,
+                    "numericValue": 0,
                     "plotMax": 0,
                     "plotMin": 0,
                     "title": "Bravo Battery",
                     "units": "%",
-                    "value": "--.--",
+                    "value": "",
                     "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
@@ -747,6 +800,7 @@
                     "outputMax": 100,
                     "outputMin": 0,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 1,
                     "sourceId": 0,
                     "title": "Throttle",
@@ -758,6 +812,7 @@
                     "outputMax": 180,
                     "outputMin": -180,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 4,
                     "sourceId": 0,
                     "title": "Heading",
@@ -769,32 +824,50 @@
                     "outputMax": 100,
                     "outputMin": 0,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 2,
                     "sourceId": 0,
                     "title": "Camera",
                     "transmitFunction": "function transmit(value) {\n  return value ? \"CAM ON\\r\\n\" : \"CAM OFF\\r\\n\";\n}"
                 },
                 {
-                    "icon": "",
+                    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEuNSI+PHBhdGggZD0iTTEgMmg5bTQgMGg5TTIgN2gyMHY1SDJ6bTE2IDVhNiA2IDAgMCAxLTEyIDBtLjUgM0wzIDE4LjVWMjMiLz48cGF0aCBkPSJtMTcuNSAxNWwzLjUgMy41VjIzTTUuNSAydjVtMTMtNXY1Ii8+PC9nPjwvc3ZnPg==",
                     "initialValue": 0,
+                    "monoIcon": true,
                     "outputMax": 100,
                     "outputMin": 0,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 0,
                     "sourceId": 0,
                     "title": "Takeoff",
                     "transmitFunction": "function transmit(value) {\n  return \"TKO\\r\\n\";\n}"
                 },
                 {
-                    "icon": "",
+                    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0iTTYgMTloM3YtNmg2djZoM3YtOWwtNi00LjVMNiAxMHptLTIgMlY5bDgtNmw4IDZ2MTJoLTd2LTZoLTJ2NnptOC04Ljc1Ii8+PC9zdmc+",
                     "initialValue": 0,
+                    "monoIcon": true,
                     "outputMax": 100,
                     "outputMin": 0,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 0,
                     "sourceId": 0,
                     "title": "Return to Home",
                     "transmitFunction": "function transmit(value) {\n  return \"RTH\\r\\n\";\n}"
+                },
+                {
+                    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0iTTEyLjcxMyAxNi43MTNRMTMgMTYuNDI1IDEzIDE2dC0uMjg4LS43MTJUMTIgMTV0LS43MTIuMjg4VDExIDE2dC4yODguNzEzVDEyIDE3dC43MTMtLjI4OE0xMSAxM2gyVjdoLTJ6bTEgOXEtMi4wNzUgMC0zLjktLjc4OHQtMy4xNzUtMi4xMzdUMi43ODggMTUuOVQyIDEydC43ODgtMy45dDIuMTM3LTMuMTc1VDguMSAyLjc4OFQxMiAydDMuOS43ODh0My4xNzUgMi4xMzdUMjEuMjEzIDguMVQyMiAxMnQtLjc4OCAzLjl0LTIuMTM3IDMuMTc1dC0zLjE3NSAyLjEzOFQxMiAyMm0wLTJxMy4zNSAwIDUuNjc1LTIuMzI1VDIwIDEydC0yLjMyNS01LjY3NVQxMiA0VDYuMzI1IDYuMzI1VDQgMTJ0Mi4zMjUgNS42NzVUMTIgMjBtMC04Ii8+PC9zdmc+",
+                    "initialValue": 0,
+                    "monoIcon": true,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputTxEncoding": 0,
+                    "outputType": 0,
+                    "sourceId": 0,
+                    "title": "Crash",
+                    "transmitFunction": "function transmit(value) {\n  return \"CRASH\\r\\n\";\n}\n"
                 }
             ],
             "title": "Alpha Controls",
@@ -811,6 +884,7 @@
                     "outputMax": 100,
                     "outputMin": 0,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 1,
                     "sourceId": 1,
                     "title": "Throttle",
@@ -822,6 +896,7 @@
                     "outputMax": 180,
                     "outputMin": -180,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 4,
                     "sourceId": 1,
                     "title": "Heading",
@@ -833,32 +908,50 @@
                     "outputMax": 100,
                     "outputMin": 0,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 2,
                     "sourceId": 1,
                     "title": "Camera",
                     "transmitFunction": "function transmit(value) {\n  return value ? \"CAM ON\\r\\n\" : \"CAM OFF\\r\\n\";\n}"
                 },
                 {
-                    "icon": "",
+                    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjEuNSI+PHBhdGggZD0iTTEgMmg5bTQgMGg5TTIgN2gyMHY1SDJ6bTE2IDVhNiA2IDAgMCAxLTEyIDBtLjUgM0wzIDE4LjVWMjMiLz48cGF0aCBkPSJtMTcuNSAxNWwzLjUgMy41VjIzTTUuNSAydjVtMTMtNXY1Ii8+PC9nPjwvc3ZnPg==",
                     "initialValue": 0,
+                    "monoIcon": true,
                     "outputMax": 100,
                     "outputMin": 0,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 0,
                     "sourceId": 1,
                     "title": "Takeoff",
                     "transmitFunction": "function transmit(value) {\n  return \"TKO\\r\\n\";\n}"
                 },
                 {
-                    "icon": "",
+                    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0iTTYgMTloM3YtNmg2djZoM3YtOWwtNi00LjVMNiAxMHptLTIgMlY5bDgtNmw4IDZ2MTJoLTd2LTZoLTJ2NnptOC04Ljc1Ii8+PC9zdmc+",
                     "initialValue": 0,
+                    "monoIcon": true,
                     "outputMax": 100,
                     "outputMin": 0,
                     "outputStep": 1,
+                    "outputTxEncoding": 0,
                     "outputType": 0,
                     "sourceId": 1,
                     "title": "Return to Home",
                     "transmitFunction": "function transmit(value) {\n  return \"RTH\\r\\n\";\n}"
+                },
+                {
+                    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0iTTEyLjcxMyAxNi43MTNRMTMgMTYuNDI1IDEzIDE2dC0uMjg4LS43MTJUMTIgMTV0LS43MTIuMjg4VDExIDE2dC4yODguNzEzVDEyIDE3dC43MTMtLjI4OE0xMSAxM2gyVjdoLTJ6bTEgOXEtMi4wNzUgMC0zLjktLjc4OHQtMy4xNzUtMi4xMzdUMi43ODggMTUuOVQyIDEydC43ODgtMy45dDIuMTM3LTMuMTc1VDguMSAyLjc4OFQxMiAydDMuOS43ODh0My4xNzUgMi4xMzdUMjEuMjEzIDguMVQyMiAxMnQtLjc4OCAzLjl0LTIuMTM3IDMuMTc1dC0zLjE3NSAyLjEzOFQxMiAyMm0wLTJxMy4zNSAwIDUuNjc1LTIuMzI1VDIwIDEydC0yLjMyNS01LjY3NVQxMiA0VDYuMzI1IDYuMzI1VDQgMTJ0Mi4zMjUgNS42NzVUMTIgMjBtMC04Ii8+PC9zdmc+",
+                    "initialValue": 0,
+                    "monoIcon": true,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputTxEncoding": 0,
+                    "outputType": 0,
+                    "sourceId": 1,
+                    "title": "Crash",
+                    "transmitFunction": "function transmit(value) {\n  return \"CRASH\\r\\n\";\n}\n"
                 }
             ],
             "sourceId": 1,
@@ -867,7 +960,8 @@
         }
     ],
     "hexadecimalDelimiters": false,
-    "pointCount": 1000,
+    "pointCount": 100,
+    "schemaVersion": 1,
     "sources": [
         {
             "busType": 1,
@@ -910,12 +1004,19 @@
     ],
     "title": "Dual Drone Telemetry",
     "widgetSettings": {
+        "5:1:-1": {
+            "autoCenter": true,
+            "mapType": 0,
+            "showNasaWeather": false,
+            "showWeather": false
+        },
         "5:7:-1": {
             "autoCenter": false,
             "mapType": 0,
             "showNasaWeather": true,
             "showWeather": false
         },
+        "activeGroup": 1001,
         "layout:-1": {
             "data": {
                 "autoLayout": true,
@@ -977,21 +1078,539 @@
         "layout:1000": {
             "data": {
                 "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 247,
+                        "id": 2,
+                        "state": "normal",
+                        "width": 533,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 4,
+                        "state": "normal",
+                        "width": 533,
+                        "x": 536,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 8,
+                        "state": "normal",
+                        "width": 356,
+                        "x": 4,
+                        "y": 250
+                    },
+                    {
+                        "height": 247,
+                        "id": 10,
+                        "state": "normal",
+                        "width": 356,
+                        "x": 359,
+                        "y": 250
+                    },
+                    {
+                        "height": 247,
+                        "id": 6,
+                        "state": "normal",
+                        "width": 356,
+                        "x": 714,
+                        "y": 250
+                    }
+                ],
                 "windowOrder": [
                     2,
-                    6,
                     4,
-                    8
+                    8,
+                    10,
+                    6
                 ]
             }
         },
         "layout:1001": {
             "data": {
                 "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 247,
+                        "id": 5,
+                        "state": "normal",
+                        "width": 533,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 3,
+                        "state": "normal",
+                        "width": 533,
+                        "x": 536,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 9,
+                        "state": "normal",
+                        "width": 356,
+                        "x": 4,
+                        "y": 250
+                    },
+                    {
+                        "height": 247,
+                        "id": 18,
+                        "state": "normal",
+                        "width": 356,
+                        "x": 359,
+                        "y": 250
+                    },
+                    {
+                        "height": 247,
+                        "id": 7,
+                        "state": "normal",
+                        "width": 356,
+                        "x": 714,
+                        "y": 250
+                    }
+                ],
                 "windowOrder": [
                     5,
-                    7,
                     3,
+                    9,
+                    18,
+                    7
+                ]
+            }
+        },
+        "layout:1002": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 6,
+                        "state": "normal",
+                        "width": 1913,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    6
+                ]
+            }
+        },
+        "layout:1003": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 4,
+                        "state": "normal",
+                        "width": 957,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 1076,
+                        "id": 10,
+                        "state": "normal",
+                        "width": 957,
+                        "x": 960,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    4,
+                    10
+                ]
+            }
+        },
+        "layout:1004": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 34,
+                        "state": "normal",
+                        "width": 1913,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    34
+                ]
+            }
+        },
+        "layout:1005": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 2,
+                        "state": "normal",
+                        "width": 1913,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    2
+                ]
+            }
+        },
+        "layout:1006": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 538,
+                        "id": 28,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 11,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 641,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 29,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 1278,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 12,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 4,
+                        "y": 541
+                    },
+                    {
+                        "height": 538,
+                        "id": 22,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 641,
+                        "y": 541
+                    },
+                    {
+                        "height": 538,
+                        "id": 13,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 1278,
+                        "y": 541
+                    }
+                ],
+                "windowOrder": [
+                    28,
+                    11,
+                    29,
+                    12,
+                    22,
+                    13
+                ]
+            }
+        },
+        "layout:1007": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 538,
+                        "id": 30,
+                        "state": "normal",
+                        "width": 957,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 14,
+                        "state": "normal",
+                        "width": 957,
+                        "x": 960,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 23,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 4,
+                        "y": 541
+                    },
+                    {
+                        "height": 538,
+                        "id": 24,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 641,
+                        "y": 541
+                    },
+                    {
+                        "height": 538,
+                        "id": 15,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 1278,
+                        "y": 541
+                    }
+                ],
+                "windowOrder": [
+                    30,
+                    14,
+                    23,
+                    24,
+                    15
+                ]
+            }
+        },
+        "layout:1008": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 7,
+                        "state": "normal",
+                        "width": 1913,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    7
+                ]
+            }
+        },
+        "layout:1009": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 5,
+                        "state": "normal",
+                        "width": 957,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 1076,
+                        "id": 16,
+                        "state": "normal",
+                        "width": 957,
+                        "x": 960,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    5,
+                    16
+                ]
+            }
+        },
+        "layout:1010": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 35,
+                        "state": "normal",
+                        "width": 1913,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    35
+                ]
+            }
+        },
+        "layout:1011": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 3,
+                        "state": "normal",
+                        "width": 1913,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    3
+                ]
+            }
+        },
+        "layout:1012": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 538,
+                        "id": 31,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 17,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 641,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 32,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 1278,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 18,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 4,
+                        "y": 541
+                    },
+                    {
+                        "height": 538,
+                        "id": 25,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 641,
+                        "y": 541
+                    },
+                    {
+                        "height": 538,
+                        "id": 19,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 1278,
+                        "y": 541
+                    }
+                ],
+                "windowOrder": [
+                    31,
+                    17,
+                    32,
+                    18,
+                    25,
+                    19
+                ]
+            }
+        },
+        "layout:1013": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 538,
+                        "id": 33,
+                        "state": "normal",
+                        "width": 957,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 20,
+                        "state": "normal",
+                        "width": 957,
+                        "x": 960,
+                        "y": 4
+                    },
+                    {
+                        "height": 538,
+                        "id": 26,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 4,
+                        "y": 541
+                    },
+                    {
+                        "height": 538,
+                        "id": 27,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 641,
+                        "y": 541
+                    },
+                    {
+                        "height": 538,
+                        "id": 21,
+                        "state": "normal",
+                        "width": 638,
+                        "x": 1278,
+                        "y": 541
+                    }
+                ],
+                "windowOrder": [
+                    33,
+                    20,
+                    26,
+                    27,
+                    21
+                ]
+            }
+        },
+        "layout:1014": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 8,
+                        "state": "normal",
+                        "width": 1913,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
+                    8
+                ]
+            }
+        },
+        "layout:1015": {
+            "data": {
+                "autoLayout": true,
+                "geometries": [
+                    {
+                        "height": 1076,
+                        "id": 9,
+                        "state": "normal",
+                        "width": 1913,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "windowOrder": [
                     9
                 ]
             }
@@ -1029,14 +1648,14 @@
                     "widgetType": 5
                 },
                 {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 14
-                },
-                {
                     "groupId": 12,
                     "relativeIndex": 0,
                     "widgetType": 15
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 14
                 }
             ],
             "workspaceId": 1000
@@ -1055,17 +1674,333 @@
                     "widgetType": 5
                 },
                 {
+                    "groupId": 13,
+                    "relativeIndex": 1,
+                    "widgetType": 15
+                },
+                {
                     "groupId": 6,
                     "relativeIndex": 1,
                     "widgetType": 14
                 },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 6,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 11,
+                    "relativeIndex": 9,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 4,
+                    "relativeIndex": 0,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 5,
+                    "relativeIndex": 3,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 5,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 11,
+                    "relativeIndex": 8,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1001
+        },
+        {
+            "title": "Alpha Camera",
+            "widgetRefs": [
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 14
+                }
+            ],
+            "workspaceId": 1002
+        },
+        {
+            "title": "Alpha Navigation",
+            "widgetRefs": [
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 5
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1003
+        },
+        {
+            "title": "Alpha Heading",
+            "widgetRefs": [
+                {
+                    "groupId": 2,
+                    "relativeIndex": 0,
+                    "widgetType": 12
+                }
+            ],
+            "workspaceId": 1004
+        },
+        {
+            "title": "Alpha Attitude",
+            "widgetRefs": [
+                {
+                    "groupId": 3,
+                    "relativeIndex": 0,
+                    "widgetType": 4
+                }
+            ],
+            "workspaceId": 1005
+        },
+        {
+            "title": "Alpha Flight",
+            "widgetRefs": [
+                {
+                    "groupId": 4,
+                    "relativeIndex": 0,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 4,
+                    "relativeIndex": 1,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 4,
+                    "relativeIndex": 1,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 4,
+                    "relativeIndex": 2,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 4,
+                    "relativeIndex": 0,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 4,
+                    "relativeIndex": 3,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 4,
+                    "relativeIndex": 0,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1006
+        },
+        {
+            "title": "Alpha Power",
+            "widgetRefs": [
+                {
+                    "groupId": 5,
+                    "relativeIndex": 2,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 5,
+                    "relativeIndex": 4,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 5,
+                    "relativeIndex": 1,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 5,
+                    "relativeIndex": 2,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 5,
+                    "relativeIndex": 5,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 5,
+                    "relativeIndex": 3,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1007
+        },
+        {
+            "title": "Bravo Camera",
+            "widgetRefs": [
+                {
+                    "groupId": 6,
+                    "relativeIndex": 1,
+                    "widgetType": 14
+                }
+            ],
+            "workspaceId": 1008
+        },
+        {
+            "title": "Bravo Navigation",
+            "widgetRefs": [
+                {
+                    "groupId": 7,
+                    "relativeIndex": 1,
+                    "widgetType": 5
+                },
+                {
+                    "groupId": 7,
+                    "relativeIndex": 6,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1009
+        },
+        {
+            "title": "Bravo Heading",
+            "widgetRefs": [
+                {
+                    "groupId": 8,
+                    "relativeIndex": 1,
+                    "widgetType": 12
+                }
+            ],
+            "workspaceId": 1010
+        },
+        {
+            "title": "Bravo Attitude",
+            "widgetRefs": [
+                {
+                    "groupId": 9,
+                    "relativeIndex": 1,
+                    "widgetType": 4
+                }
+            ],
+            "workspaceId": 1011
+        },
+        {
+            "title": "Bravo Flight",
+            "widgetRefs": [
+                {
+                    "groupId": 10,
+                    "relativeIndex": 3,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 7,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 4,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 8,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 3,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 9,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 6,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 10,
+                    "relativeIndex": 5,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1012
+        },
+        {
+            "title": "Bravo Power",
+            "widgetRefs": [
+                {
+                    "groupId": 11,
+                    "relativeIndex": 5,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 11,
+                    "relativeIndex": 10,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 11,
+                    "relativeIndex": 4,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 11,
+                    "relativeIndex": 5,
+                    "widgetType": 10
+                },
+                {
+                    "groupId": 11,
+                    "relativeIndex": 11,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 11,
+                    "relativeIndex": 9,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 11,
+                    "relativeIndex": 8,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1013
+        },
+        {
+            "title": "Alpha Controls",
+            "widgetRefs": [
+                {
+                    "groupId": 12,
+                    "relativeIndex": 0,
+                    "widgetType": 15
+                }
+            ],
+            "workspaceId": 1014
+        },
+        {
+            "title": "Bravo Controls",
+            "widgetRefs": [
                 {
                     "groupId": 13,
                     "relativeIndex": 1,
                     "widgetType": 15
                 }
             ],
-            "workspaceId": 1001
+            "workspaceId": 1015
         }
-    ]
+    ],
+    "writerVersion": "3.2.7",
+    "writerVersionAtCreation": "3.2.7"
 }

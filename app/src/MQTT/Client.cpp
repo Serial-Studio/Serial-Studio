@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -736,7 +736,7 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
     if (index == verifyMode) {
       // Warn when TLS peer verification is disabled
       if (i.value() == QSslSocket::VerifyNone) [[unlikely]]
-        qWarning() << "[MQTT] TLS peer verification disabled — connection vulnerable to MITM";
+        qWarning() << "[MQTT] TLS peer verification disabled -- connection vulnerable to MITM";
 
       m_sslConfiguration.setPeerVerifyMode(i.value());
       Q_EMIT sslConfigurationChanged();

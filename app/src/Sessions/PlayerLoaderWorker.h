@@ -15,10 +15,10 @@
 
 #ifdef BUILD_COMMERCIAL
 
-#  include <QObject>
-#  include <QString>
 #  include <atomic>
 #  include <memory>
+#  include <QObject>
+#  include <QString>
 #  include <vector>
 
 namespace Sessions {
@@ -36,6 +36,9 @@ struct PlayerSessionPayload {
   std::vector<qint64> timestampsNs;
 };
 
+/**
+ * @brief Shared pointer alias for PlayerSessionPayload, exchanged across threads.
+ */
 using PlayerSessionPayloadPtr = std::shared_ptr<PlayerSessionPayload>;
 
 /**

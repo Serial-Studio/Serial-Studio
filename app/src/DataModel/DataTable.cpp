@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -334,7 +334,7 @@ int DataModel::DataTableStore::indexOf(const QString& table, const QString& reg)
 }
 
 //--------------------------------------------------------------------------------------------------
-// TableApiBridge — QJSEngine bridge methods
+// TableApiBridge -- QJSEngine bridge methods
 //--------------------------------------------------------------------------------------------------
 
 /**

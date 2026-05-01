@@ -38,7 +38,9 @@ ColumnLayout {
   property bool rangeVisible: false
   property real maximumWidth: root.width
 
+  //
   // Longest formatted label length, for visual alignment.
+  //
   function maxTextLength() {
     const minStr = Cpp_UI_Dashboard.formatValue(root.minValue, root.minValue, root.maxValue)
     const maxStr = Cpp_UI_Dashboard.formatValue(root.maxValue, root.minValue, root.maxValue)
@@ -48,7 +50,9 @@ ColumnLayout {
     return maxLen
   }
 
+  //
   // Left-pad the formatted value to match the longest min/max/value label.
+  //
   function getPaddedText(value) {
     const referenceLen = maxTextLength()
     const valueText = Cpp_UI_Dashboard.formatValue(value, root.minValue, root.maxValue)
@@ -56,14 +60,18 @@ ColumnLayout {
     return padding + valueText
   }
 
+  //
   // Pixel-width metrics matching valueLabel's font.
+  //
   FontMetrics {
     id: fontMetrics
 
     font: valueLabel.font
   }
 
+  //
   // Maximum value, rendered at the top.
+  //
   Label {
     opacity: 0.8
     elide: Qt.ElideRight
@@ -99,7 +107,9 @@ ColumnLayout {
   //
   Item { implicitHeight: 8 }
 
+  //
   // Current value (centered, font scales when rangeVisible).
+  //
   Label {
     id: valueLabel
 
@@ -111,7 +121,9 @@ ColumnLayout {
            root.rangeVisible ? Cpp_Misc_CommonFonts.widgetFont(1.16) :
                                Cpp_Misc_CommonFonts.widgetFont(1))
 
+    //
     // Calculate max text width
+    //
     readonly property string paddedMaxText: root.getPaddedText(root.maxValue) + " " + root.units
     readonly property int labelWidth: Math.min(
       fontMetrics.boundingRect(paddedMaxText).width + 32,
@@ -162,7 +174,9 @@ ColumnLayout {
   //
   Item { implicitHeight: 4 }
 
+  //
   // Minimum value, rendered at the bottom.
+  //
   Label {
     opacity: 0.8
     elide: Qt.ElideRight

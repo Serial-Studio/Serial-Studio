@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -74,7 +74,7 @@ Widgets.SmartDialog {
   }
 
   //
-  // Open dialog in "edit" mode — pre-populate with workspace widgets
+  // Open dialog in "edit" mode -- pre-populate with workspace widgets
   //
   function openEdit(tb, wsId, currentName) {
     root.taskBar = tb
@@ -105,10 +105,14 @@ Widgets.SmartDialog {
       return
 
     if (root.editMode) {
+      //
       // Rename
+      //
       root.taskBar.renameWorkspace(root.workspaceId, name)
 
+      //
       // Collect checked window IDs and update workspace contents
+      //
       var ids = []
       var keys = Object.keys(root.checkedWidgets)
       for (var i = 0; i < keys.length; ++i) {
@@ -120,7 +124,9 @@ Widgets.SmartDialog {
     } else {
       root.taskBar.createWorkspace(name)
 
+      //
       // Add checked widgets to the new workspace
+      //
       var newKeys = Object.keys(root.checkedWidgets)
       for (var j = 0; j < newKeys.length; ++j) {
         if (root.checkedWidgets[newKeys[j]])

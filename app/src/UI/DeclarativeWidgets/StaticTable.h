@@ -41,22 +41,29 @@ class StaticTable : public DeclarativeWidget {
              READ headerFont
              WRITE setHeaderFont
              NOTIFY headerFontChanged)
+  Q_PROPERTY(QString placeholderText
+             READ placeholderText
+             WRITE setPlaceholderText
+             NOTIFY placeholderTextChanged)
   // clang-format on
 
 signals:
   void fontChanged();
   void headerFontChanged();
+  void placeholderTextChanged();
 
 public:
   explicit StaticTable(QQuickItem* parent = nullptr);
 
   [[nodiscard]] const QFont& font() const;
   [[nodiscard]] const QFont& headerFont() const;
+  [[nodiscard]] const QString& placeholderText() const;
   [[nodiscard]] const QList<QStringList>& data() const;
 
 public slots:
   void setFont(const QFont& font);
   void setHeaderFont(const QFont& font);
+  void setPlaceholderText(const QString& text);
   void setData(const QList<QStringList>& data);
 
 private slots:
@@ -65,6 +72,7 @@ private slots:
 private:
   QFont m_font;
   QFont m_headerFont;
+  QString m_placeholderText;
   QTableWidget m_widget;
   QList<QStringList> m_data;
 };

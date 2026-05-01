@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
@@ -17,6 +17,7 @@ Widgets.Pane {
   id: root
 
   title: qsTr("Session Details")
+  headerVisible: !root.operatorMode
   icon: "qrc:/icons/panes/details.svg"
 
   //
@@ -132,9 +133,9 @@ Widgets.Pane {
           }
           Label {
             Layout.fillWidth: true
-            text: root.metadata.project_title || "—"
             color: Cpp_ThemeManager.colors["text"]
             elide: Text.ElideRight
+            text: root.metadata.project_title || "--.--"
           }
 
           Label {
@@ -145,9 +146,9 @@ Widgets.Pane {
           }
           Label {
             Layout.fillWidth: true
-            text: root.metadata.started_at || "—"
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.monoFont
+            text: root.metadata.started_at || "--.--"
           }
 
           Label {
@@ -330,8 +331,8 @@ Widgets.Pane {
             icon.height: 18
             text: qsTr("Replay")
             visible: !root.operatorMode
-            enabled: (root.metadata.frame_count || 0) > 0
             icon.source: "qrc:/icons/buttons/play.svg"
+            enabled: (root.metadata.frame_count || 0) > 0
             onClicked: Cpp_Sessions_Manager.replaySelectedSession()
           }
 

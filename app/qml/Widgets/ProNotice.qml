@@ -46,10 +46,10 @@ Rectangle {
   border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
   //
-  // Notification visibility control
+  // Visibility: GPL builds opening a Pro-feature project only; commercial builds never show this
   //
   onActivationFlagChanged: hidden = false
-  visible: root.activationFlag && !app.proVersion && !hidden
+  visible: root.activationFlag && !Cpp_CommercialBuild && !hidden
 
   //
   // Main layout

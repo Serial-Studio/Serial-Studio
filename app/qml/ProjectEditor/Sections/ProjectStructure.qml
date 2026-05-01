@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -95,25 +95,36 @@ Widgets.Pane {
       interactive: true
       Layout.fillWidth: true
       Layout.fillHeight: true
+      boundsBehavior: Flickable.StopAtBounds
       model: Cpp_JSON_ProjectEditor.treeModel
-      boundsBehavior: TreeView.DragAndOvershootBounds
       selectionModel: Cpp_JSON_ProjectEditor.selectionModel
-
-      // Snapshot scroll position before the model swap and restore it after relayout.
-      property real savedContentY: 0
 
       Connections {
         target: Cpp_JSON_ProjectEditor
-        function onTreeModelChanged() {
+
+        //
+        // Fired at the end of every buildTreeModel()
+        //
+        function onTreeRebuildFinished(revealIndex) {
+          // Snapshot before the new model resets contentY to 0
+          const previousY = treeView.contentY
+
           Qt.callLater(function() {
-            treeView.contentY = Math.min(
-              treeView.savedContentY,
-              Math.max(0, treeView.contentHeight - treeView.height))
+            if (revealIndex && revealIndex.valid) {
+              treeView.expandToIndex(revealIndex)
+              treeView.forceLayout()
+              const row = treeView.rowAtIndex(revealIndex)
+              if (row >= 0)
+                treeView.positionViewAtRow(row, Qt.AlignVCenter)
+
+              return
+            }
+
+            const maxY = Math.max(0, treeView.contentHeight - treeView.height)
+            treeView.contentY = Math.min(previousY, maxY)
           })
         }
       }
-
-      onContentYChanged: savedContentY = contentY
 
       ScrollBar.vertical: ScrollBar {
         policy: treeView.contentHeight > treeView.height ? ScrollBar.AlwaysOn :
@@ -121,7 +132,7 @@ Widgets.Pane {
       }
 
       //
-      // Override default scroll speed — TreeView's small delegate heights
+      // Override default scroll speed -- TreeView's small delegate heights
       // (18 px) make the built-in scroll feel sluggish on all platforms.
       //
       WheelHandler {

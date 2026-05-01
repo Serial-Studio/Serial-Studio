@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -30,9 +30,7 @@ SmartDialog {
   preferredHeight: layout.implicitHeight
 
   //
-  // Auto show/hide as the database is opened/closed (or while it's loading,
-  // so the user gets visible feedback while the worker thread builds the
-  // timestamp index of a large recording)
+  // Auto show/hide as the database opens/closes/loads
   //
   Connections {
     target: Cpp_Sessions_Player
@@ -52,9 +50,7 @@ SmartDialog {
   }
 
   //
-  // Close the file when the dialog is dismissed (also aborts an in-flight
-  // load so the worker thread doesn't keep building a timestamp index for
-  // a session the user already abandoned)
+  // Close the file when the dialog is dismissed
   //
   onVisibilityChanged: {
     if (!visible && (Cpp_Sessions_Player.isOpen || Cpp_Sessions_Player.loading))
@@ -71,7 +67,7 @@ SmartDialog {
     anchors.centerIn: parent
 
     //
-    // Loading placeholder — shown while the worker thread is loading the
+    // Loading placeholder -- shown while the worker thread is loading the
     // session, hidden once isOpen flips true
     //
     ColumnLayout {
@@ -83,9 +79,9 @@ SmartDialog {
 
       BusyIndicator {
         running: parent.visible
-        Layout.alignment: Qt.AlignHCenter
         Layout.preferredWidth: 48
         Layout.preferredHeight: 48
+        Layout.alignment: Qt.AlignHCenter
       }
 
       Label {
@@ -97,7 +93,7 @@ SmartDialog {
     }
 
     //
-    // Playback controls — visible only once the worker has finished loading
+    // Playback controls -- visible only once the worker has finished loading
     //
     Label {
       Layout.alignment: Qt.AlignLeft

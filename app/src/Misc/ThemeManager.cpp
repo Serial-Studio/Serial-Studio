@@ -56,8 +56,8 @@ static QVariantMap jsonObjectToVariantMap(const QJsonObject& obj)
     map.insert(it.key(), it.value().toVariant());
 
   if (map.contains("start-icon")) {
-    auto str = map["start-icon"].toString();
-    str = str.replace("/rcc/", "/");
+    auto str          = map["start-icon"].toString();
+    str               = str.replace("/rcc/", "/");
     map["start-icon"] = str;
   }
 

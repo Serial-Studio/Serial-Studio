@@ -171,7 +171,7 @@ private slots:
   void handleError(QSerialPort::SerialPortError error);
 
 private:
-  QVector<QSerialPortInfo> validPorts() const;
+  [[nodiscard]] QVector<QSerialPortInfo> validPorts() const;
 
 private:
   QSerialPort* m_port;

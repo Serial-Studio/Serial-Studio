@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary feature set of Serial Studio
  * and is licensed under the Serial Studio Commercial License.
@@ -25,7 +25,7 @@
 #include <QCryptographicHash>
 
 //--------------------------------------------------------------------------------------------------
-// Obfuscated salt storage — split into 4 XOR-masked 16-bit volatiles to defeat constant folding
+// Obfuscated salt storage -- split into 4 XOR-masked 16-bit volatiles to defeat constant folding
 //--------------------------------------------------------------------------------------------------
 
 // clang-format off
@@ -97,7 +97,7 @@ void Licensing::CommercialToken::clearCurrent()
  *
  * Recomputes the HMAC from the token's data fields and the compile-time
  * build salt, then compares it against the stored HMAC.  Patching this
- * function to return true doesn't help — downstream code reads the actual
+ * function to return true doesn't help -- downstream code reads the actual
  * fields (featureTier, variantName, etc.) which remain empty/zero without
  * a real token.
  *

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2026 Alex Spataru
+ * Copyright (C) 2020-2026 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -85,7 +85,7 @@ void API::Handlers::NotificationsHandler::registerCommands()
   eventProps[QStringLiteral("title")]    = stringProp(QStringLiteral("Event title"));
   eventProps[QStringLiteral("subtitle")] = stringProp(QStringLiteral("Event detail (optional)"));
 
-  // notifications.post — full form with level
+  // notifications.post -- full form with level
   {
     QJsonObject props              = eventProps;
     props[QStringLiteral("level")] = QJsonObject{
@@ -113,13 +113,13 @@ void API::Handlers::NotificationsHandler::registerCommands()
                            makeSchema(eventProps, QJsonArray()),
                            &postCritical);
 
-  // notifications.resolve — emit a companion Info "Resolved: <title>"
+  // notifications.resolve -- emit a companion Info "Resolved: <title>"
   registry.registerCommand(QStringLiteral("notifications.resolve"),
                            QStringLiteral("Emit a companion 'Resolved' Info event"),
                            makeSchema(eventProps, QJsonArray()),
                            &resolve);
 
-  // notifications.list — optional channel filter + limit
+  // notifications.list -- optional channel filter + limit
   {
     QJsonObject props;
     props[QStringLiteral("channel")] = stringProp(QStringLiteral("Filter by channel (optional)"));

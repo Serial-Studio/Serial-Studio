@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -45,6 +45,7 @@ namespace Keys {
 using KeyView = QLatin1StringView;
 
 // Action keys
+inline constexpr KeyView ActionId("actionId");
 inline constexpr KeyView EOL("eol");
 inline constexpr KeyView Icon("icon");
 inline constexpr KeyView Title("title");
@@ -104,6 +105,7 @@ inline constexpr KeyView FFTSamplingRate("fftSamplingRate");
 inline constexpr KeyView TransformCode("transformCode");
 inline constexpr KeyView TransformLanguage("transformLanguage");
 inline constexpr KeyView DatasetId("datasetId");
+inline constexpr KeyView UniqueId("uniqueId");
 inline constexpr KeyView NumericValue("numericValue");
 
 // Frame container keys
@@ -164,7 +166,7 @@ inline constexpr KeyView SchemaVersion("schemaVersion");
 inline constexpr KeyView WriterVersion("writerVersion");
 inline constexpr KeyView WriterVersionAtCreation("writerVersionAtCreation");
 
-// Project lock — MD5 of optional Project Editor password (UX gate, not crypto).
+// Project lock -- MD5 of optional Project Editor password (UX gate, not crypto).
 inline constexpr KeyView PasswordHash("passwordHash");
 
 inline QString layoutKey(int groupId)
@@ -351,7 +353,7 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
 struct alignas(8) Dataset {
   int index              = 0;      ///< Frame offset index
   int xAxisId            = -1;     ///< Optional reference to x-axis dataset
-  int waterfallYAxis     = 0;      ///< Y source for the waterfall — 0 = Time, N = dataset.index
+  int waterfallYAxis     = 0;      ///< Y source for the waterfall -- 0 = Time, N = dataset.index
   int groupId            = 0;      ///< Owning group ID
   int sourceId           = 0;      ///< Source this dataset belongs to
   int uniqueId           = 0;      ///< Unique ID within frame
@@ -363,7 +365,7 @@ struct alignas(8) Dataset {
   bool led               = false;  ///< Enables LED widget
   bool log               = false;  ///< Enables logging
   bool plt               = false;  ///< Enables plotting
-  bool waterfall         = false;  ///< Enables waterfall (spectrogram) widget — Pro
+  bool waterfall         = false;  ///< Enables waterfall (spectrogram) widget -- Pro
   bool alarmEnabled      = false;  ///< Enable/disable alarm values
   bool overviewDisplay   = false;  ///< Show in overview
   bool isNumeric         = false;  ///< True if value was parsed as numeric
@@ -382,7 +384,7 @@ struct alignas(8) Dataset {
   QString value;                   ///< Raw string value after transforms
   QString rawValue;                ///< Raw string value before transforms
   QString title;                   ///< Human-readable title
-  QString units;                   ///< Measurement units (e.g., °C)
+  QString units;                   ///< Measurement units (e.g., degC)
   QString widget;                  ///< Widget type (bar, gauge, etc.)
   QString transformCode;           ///< Optional per-dataset transform script
 };
@@ -703,6 +705,7 @@ struct alignas(8) Frame {
   QString writerVersionAtCreation;          ///< App version that first created this file
   std::vector<Group> groups;                ///< Sensor groups in this frame
   std::vector<Action> actions;              ///< Triggerable actions
+  std::vector<Source> sources;              ///< Sources/devices the frame was assembled from
   bool containsCommercialFeatures = false;  ///< Feature gating flag
 };
 
@@ -747,8 +750,10 @@ inline void clear_frame(Frame& frame) noexcept
   frame.writerVersionAtCreation.clear();
   frame.groups.clear();
   frame.actions.clear();
+  frame.sources.clear();
   frame.groups.shrink_to_fit();
   frame.actions.shrink_to_fit();
+  frame.sources.shrink_to_fit();
   frame.containsCommercialFeatures = false;
   frame.schemaVersion              = 0;
 }
@@ -817,7 +822,7 @@ inline void copy_frame_values(Frame& dst, const Frame& src) noexcept
  * **Performance:**
  * - Best case: O(1) when group counts differ
  * - Average case: O(g) where g = number of groups (when early mismatch)
- * - Worst case: O(g × d) where d = average datasets per group
+ * - Worst case: O(g x d) where d = average datasets per group
  *
  * **Thread Safety:** Safe if both frames are immutable during comparison
  *
@@ -855,6 +860,38 @@ inline void copy_frame_values(Frame& dst, const Frame& src) noexcept
   }
 
   return true;
+}
+
+/**
+ * @brief Stride applied to a dataset's source id when computing its uniqueId.
+ */
+inline constexpr int kSourceIdStride = 1000000;
+
+/**
+ * @brief Stride applied to a dataset's group id when computing its uniqueId.
+ */
+inline constexpr int kGroupIdStride = 10000;
+
+/**
+ * @brief Single source of truth for the (source, group, dataset) -> uniqueId mapping.
+ *
+ * Every consumer that needs to derive a uniqueId from project metadata should
+ * route through this helper instead of inlining the formula. Keeping the
+ * arithmetic in one place means a future schema change only touches Frame.h.
+ */
+[[nodiscard]] inline constexpr int dataset_unique_id(int sourceId,
+                                                     int groupId,
+                                                     int datasetId) noexcept
+{
+  return sourceId * kSourceIdStride + groupId * kGroupIdStride + datasetId;
+}
+
+/**
+ * @brief Convenience overload taking a Group + Dataset directly.
+ */
+[[nodiscard]] inline constexpr int dataset_unique_id(const Group& g, const Dataset& d) noexcept
+{
+  return dataset_unique_id(g.sourceId, g.groupId, d.datasetId);
 }
 
 /**
@@ -956,8 +993,10 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Graph, d.plt);
   if (d.waterfall)
     obj.insert(Keys::Waterfall, true);
+
   if (d.waterfallYAxis != 0)
     obj.insert(Keys::WaterfallYAxis, d.waterfallYAxis);
+
   obj.insert(Keys::Index, d.index);
   obj.insert(Keys::XAxis, d.xAxisId);
   obj.insert(Keys::LedHigh, d.ledHigh);
@@ -1220,9 +1259,7 @@ void read_io_settings(QByteArray& frameStart,
   d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();
   d.virtual_          = ss_jsr(obj, Keys::Virtual, false).toBool();
 
-  if (d.value.isEmpty())
-    d.value = QStringLiteral("--.--");
-  else
+  if (!d.value.isEmpty())
     d.numericValue = d.value.toDouble(&d.isNumeric);
 
   // Legacy fallback: pre-3.x projects used a shared min/max for FFT/plot/widget.
@@ -1410,6 +1447,18 @@ void read_io_settings(QByteArray& frameStart,
           f.actions.push_back(action);
         else
           break;
+      }
+    }
+
+    // Sources are optional
+    if (ok) {
+      const auto sources = obj.value(Keys::Sources).toArray();
+      f.sources.clear();
+      f.sources.reserve(sources.count());
+      for (qsizetype i = 0; i < sources.count(); ++i) {
+        Source src;
+        if (read(src, sources[i].toObject()))
+          f.sources.push_back(src);
       }
     }
 

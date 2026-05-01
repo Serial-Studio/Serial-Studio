@@ -51,6 +51,7 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem* parent)
   for (const auto& dataset : group.datasets)
     rows.append(getRow(dataset));
 
+  setPlaceholderText(tr("Awaiting data…"));
   setData(rows);
   onFontsChanged();
   connect(
@@ -146,19 +147,9 @@ void Widgets::DataGrid::updateData()
 
   // Update values for every dataset in the group
   for (size_t i = 0; i < group.datasets.size(); ++i) {
-    // Obtain a reference to the dataset object & read its value
+    // Obtain a reference to the dataset object & format its value
     const auto& dataset = group.datasets[i];
-    QString value       = dataset.value;
-
-    // Convert the dataset to a number if needed
-    bool isNumber;
-    const double n = value.toDouble(&isNumber);
-    if (isNumber)
-      value = FMT_VAL(n, dataset);
-
-    // Append dataset units (if available)
-    if (!dataset.units.isEmpty())
-      value += " " + dataset.units;
+    QString value       = formatValue(dataset);
 
     // Obtain the row index for the current dataset
     const int rowIndex = i + 1;
@@ -202,13 +193,28 @@ void Widgets::DataGrid::updateData()
  */
 QStringList Widgets::DataGrid::getRow(const DataModel::Dataset& dataset)
 {
-  // Build a title-value pair, appending units when present
-  const QString title = dataset.title;
-  const QString units = dataset.units;
+  return {dataset.title, formatValue(dataset)};
+}
 
+/**
+ * @brief Formats a dataset value for display; returns empty when no sample has arrived.
+ */
+QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset)
+{
+  // Leave the cell empty so StaticTable can render its placeholder
+  if (dataset.value.isEmpty())
+    return QString();
+
+  // Format numeric values; pass strings through verbatim
   QString value = dataset.value;
-  if (!units.isEmpty())
-    value += " " + units;
+  bool isNumber;
+  const double n = value.toDouble(&isNumber);
+  if (isNumber)
+    value = FMT_VAL(n, dataset);
 
-  return {title, value};
+  // Append dataset units (if available)
+  if (!dataset.units.isEmpty())
+    value += " " + dataset.units;
+
+  return value;
 }

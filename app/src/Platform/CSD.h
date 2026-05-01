@@ -191,7 +191,7 @@ private slots:
   void updateContentContainerGeometry();
 
 private:
-  QSize preferredSize() const;
+  [[nodiscard]] QSize preferredSize() const;
 
 private:
   enum class ResizeEdge {

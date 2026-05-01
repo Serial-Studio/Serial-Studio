@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
  * This file is part of the proprietary features of Serial Studio and is
  * licensed under the Serial Studio Commercial License.
@@ -22,113 +22,181 @@
 
 #include "UI/Widgets/ImageExport.h"
 
-#include <JlCompress.h>
-
 #include <QDateTime>
-#include <QFile>
+#include <QDir>
+#include <QEventLoop>
+#include <QImage>
+#include <QMediaCaptureSession>
+#include <QMediaFormat>
+#include <QMediaRecorder>
+#include <QPainter>
+#include <QTimer>
+#include <QUrl>
+#include <QVideoFrame>
+#include <QVideoFrameFormat>
+#include <QVideoFrameInput>
 
 #include "IO/ConnectionManager.h"
 #include "Misc/WorkspaceManager.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
-// ImageExportWorker
+// VideoExportWorker
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns @c true if any per-group session is currently open.
- */
-bool Widgets::ImageExportWorker::isResourceOpen() const
-{
-  return !m_sessions.isEmpty();
-}
-
-/**
- * @brief Closes all open sessions, zipping each one.
+ * @brief Stops every active recorder and waits for muxer trailers to flush.
  *
- * Called on full disconnect or application shutdown.
+ * Skips the QEventLoop spin used in mid-session stops -- the worker thread is
+ * winding down here, and re-entering its own event loop from inside a
+ * destructor risks deadlocks and PAC failures on macOS 26 if a queued signal
+ * fires after the recorder has already started disposing of its private d-ptr.
  */
-void Widgets::ImageExportWorker::closeResources()
+Widgets::VideoExportWorker::~VideoExportWorker()
 {
-  for (auto& session : m_sessions)
-    zipAndClean(session);
+  for (auto& [groupId, session] : m_sessions) {
+    if (session.recorder && session.recording) {
+      session.recording = false;
+      session.recorder->stop();
+    }
+
+    if (session.captureSession) {
+      session.captureSession->setRecorder(nullptr);
+      session.captureSession->setVideoFrameInput(nullptr);
+    }
+
+    session.frameInput.reset();
+    session.recorder.reset();
+    session.captureSession.reset();
+  }
 
   m_sessions.clear();
 }
 
 /**
- * @brief Closes and zips only the session for the given group.
- *
- * Called when a single @c ImageView widget disables its export toggle.
- * @param groupId  Group ID identifying the session to close.
+ * @brief Returns @c true if any per-group video recorder is currently active.
  */
-void Widgets::ImageExportWorker::closeGroup(int groupId)
+bool Widgets::VideoExportWorker::isResourceOpen() const
 {
-  // Flush pending data, then zip and remove the session for this group
+  return !m_sessions.empty();
+}
+
+/**
+ * @brief Stops every active recorder, finalising each .mp4 trailer.
+ *
+ * Called on full disconnect or application shutdown.
+ */
+void Widgets::VideoExportWorker::closeResources()
+{
+  for (auto& [groupId, session] : m_sessions)
+    stopSession(session);
+
+  m_sessions.clear();
+}
+
+/**
+ * @brief Stops only the recorder for @p groupId and finalises its file.
+ */
+void Widgets::VideoExportWorker::closeGroup(int groupId)
+{
+  // Drain any pending frames before stopping so the recorder picks them up
   processData();
 
   auto it = m_sessions.find(groupId);
   if (it == m_sessions.end())
     return;
 
-  zipAndClean(it.value());
+  stopSession(it->second);
   m_sessions.erase(it);
   Q_EMIT resourceOpenChanged();
 }
 
 /**
- * @brief Writes a batch of image frames, routing each to its per-group session.
- *
- * Sessions are created lazily on the first frame for each group.
- * @param items  Batch of image payloads dequeued from the lock-free queue.
+ * @brief Decodes each queued image and pushes it into its session's QVideoSink.
  */
-void Widgets::ImageExportWorker::processItems(const std::vector<ImageExportItem>& items)
+void Widgets::VideoExportWorker::processItems(const std::vector<ImageExportItem>& items)
 {
   for (const auto& item : items) {
     if (item.data.isEmpty())
       continue;
 
-    if (!m_sessions.contains(item.groupId)) {
-      if (!ensureSession(item.groupId, item.projectTitle, item.groupTitle))
+    QImage img = QImage::fromData(item.data);
+    if (img.isNull())
+      continue;
+
+    // Convert to RGB32 so QVideoFrame accepts the buffer directly
+    if (img.format() != QImage::Format_RGB32)
+      img = img.convertToFormat(QImage::Format_RGB32);
+
+    auto sit = m_sessions.find(item.groupId);
+    if (sit == m_sessions.end()) {
+      if (!ensureSession(item.groupId, item.projectTitle, item.groupTitle, img))
+        continue;
+
+      sit = m_sessions.find(item.groupId);
+      if (sit == m_sessions.end())
         continue;
     }
 
-    auto& session      = m_sessions[item.groupId];
-    const QString ext  = item.format.toLower();
-    const QString name = QStringLiteral("frame_%1.%2")
-                           .arg(session.frameIndex, 4, 10, QChar('0'))
-                           .arg(ext.isEmpty() ? QStringLiteral("bin") : ext);
+    auto& session = sit->second;
+    if (!session.frameInput || !session.recording)
+      continue;
 
-    if (!session.dir.exists())
-      session.dir.mkpath(QStringLiteral("."));
-
-    QFile file(session.dir.filePath(name));
-    if (file.open(QIODevice::WriteOnly)) {
-      file.write(item.data);
-      file.close();
-      ++session.frameIndex;
-    } else {
-      qWarning() << "ImageExport: cannot write" << file.fileName();
+    // Reject frames whose resolution changed mid-stream
+    if (img.size() != session.frameSize) {
+      img = img.scaled(session.frameSize, Qt::KeepAspectRatio, Qt::SmoothTransformation)
+              .convertToFormat(QImage::Format_RGB32);
+      if (img.size() != session.frameSize) {
+        QImage padded(session.frameSize, QImage::Format_RGB32);
+        padded.fill(Qt::black);
+        QPainter p(&padded);
+        const int x = (session.frameSize.width() - img.width()) / 2;
+        const int y = (session.frameSize.height() - img.height()) / 2;
+        p.drawImage(x, y, img);
+        p.end();
+        img = padded;
+      }
     }
+
+    QVideoFrame frame(QVideoFrameFormat(session.frameSize, QVideoFrameFormat::Format_BGRA8888));
+    if (!frame.map(QVideoFrame::WriteOnly))
+      continue;
+
+    // RGB32 <-> BGRA8888 -- copy line-by-line (strides may differ)
+    const qsizetype dstStride = frame.bytesPerLine(0);
+    const qsizetype srcStride = img.bytesPerLine();
+    const qsizetype copyBytes = std::min(dstStride, srcStride);
+    uchar* dst                = frame.bits(0);
+    const uchar* src          = img.constBits();
+    for (int y = 0; y < session.frameSize.height(); ++y)
+      std::memcpy(dst + y * dstStride, src + y * srcStride, static_cast<size_t>(copyBytes));
+
+    frame.unmap();
+
+    // Real-time pacing: elapsed-microseconds frame timestamps
+    const auto elapsedUs =
+      std::chrono::duration_cast<std::chrono::microseconds>(item.timestamp - session.startTime)
+        .count();
+    frame.setStartTime(elapsedUs);
+    frame.setEndTime(elapsedUs);
+
+    session.frameInput->sendVideoFrame(frame);
+    ++session.frameCount;
   }
 }
 
 /**
- * @brief Creates the timestamped session directory for a group.
- * @param groupId       Unique group ID used as the session map key.
- * @param projectTitle  Dashboard project title used as a sub-directory name.
- * @param groupTitle    Widget group title used as the directory name.
- * @return @c true on success, @c false if the directory could not be created.
+ * @brief Sets up the QMediaRecorder pipeline for a new per-group .mp4.
  */
-bool Widgets::ImageExportWorker::ensureSession(int groupId,
+bool Widgets::VideoExportWorker::ensureSession(int groupId,
                                                const QString& projectTitle,
-                                               const QString& groupTitle)
+                                               const QString& groupTitle,
+                                               const QImage& firstFrame)
 {
   const auto dt      = QDateTime::currentDateTime();
-  const auto session = dt.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss-zzz"));
-
-  const auto base    = Misc::WorkspaceManager::instance().path(QStringLiteral("Images"));
-  const QString path = QStringLiteral("%1/%2/%3/%4").arg(base, projectTitle, groupTitle, session);
+  const auto stamp   = dt.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss-zzz"));
+  const auto base    = Misc::WorkspaceManager::instance().path(QStringLiteral("Video Recordings"));
+  const QString path = QStringLiteral("%1/%2/%3").arg(base, projectTitle, groupTitle);
 
   QDir dir(path);
   if (!dir.exists() && !dir.mkpath(QStringLiteral("."))) {
@@ -136,32 +204,102 @@ bool Widgets::ImageExportWorker::ensureSession(int groupId,
     return false;
   }
 
-  m_sessions.insert(groupId, ImageSession{dir, 0});
+  const QString file = dir.filePath(stamp + QStringLiteral(".mp4"));
+
+  VideoSession session;
+  session.outputPath     = file;
+  session.frameSize      = firstFrame.size();
+  session.startTime      = std::chrono::steady_clock::now();
+  session.captureSession = std::make_unique<QMediaCaptureSession>();
+  session.recorder       = std::make_unique<QMediaRecorder>();
+  session.frameInput     = std::make_unique<QVideoFrameInput>();
+
+  // QMediaCaptureSession routes the pushed frames to the recorder.
+  session.captureSession->setVideoFrameInput(session.frameInput.get());
+  session.captureSession->setRecorder(session.recorder.get());
+
+  QMediaFormat format;
+  format.setFileFormat(QMediaFormat::FileFormat::MPEG4);
+  format.setVideoCodec(QMediaFormat::VideoCodec::H264);
+  session.recorder->setMediaFormat(format);
+  session.recorder->setQuality(QMediaRecorder::HighQuality);
+  session.recorder->setOutputLocation(QUrl::fromLocalFile(file));
+
+  session.recorder->record();
+
+  // Wait for QMediaRecorder to transition to RecordingState
+  QEventLoop loop;
+  QTimer timeoutTimer;
+  timeoutTimer.setSingleShot(true);
+  timeoutTimer.setInterval(1500);
+  QObject::connect(session.recorder.get(),
+                   &QMediaRecorder::recorderStateChanged,
+                   &loop,
+                   [&loop](QMediaRecorder::RecorderState state) {
+                     if (state == QMediaRecorder::RecordingState)
+                       loop.quit();
+                   });
+  QObject::connect(&timeoutTimer, &QTimer::timeout, &loop, &QEventLoop::quit);
+  if (session.recorder->recorderState() != QMediaRecorder::RecordingState) {
+    timeoutTimer.start();
+    loop.exec();
+  }
+
+  if (session.recorder->recorderState() != QMediaRecorder::RecordingState) {
+    qWarning() << "ImageExport: recorder failed to start for" << file << "--"
+               << session.recorder->errorString();
+    return false;
+  }
+
+  session.recording = true;
+
+  m_sessions.emplace(groupId, std::move(session));
   Q_EMIT resourceOpenChanged();
   return true;
 }
 
 /**
- * @brief Compresses a session directory into a ZIP archive and removes the raw folder.
- *
- * If compression fails the raw directory is kept for manual recovery.
- * @param session  The session whose directory should be zipped.
+ * @brief Stops the recorder and waits for the muxer trailer to flush to disk.
  */
-void Widgets::ImageExportWorker::zipAndClean(ImageSession& session)
+void Widgets::VideoExportWorker::stopSession(VideoSession& session)
 {
-  // Skip empty sessions
-  if (session.frameIndex == 0)
+  if (!session.recorder || !session.recording)
     return;
 
-  const QString dirPath = session.dir.absolutePath();
-  const QString zipPath = dirPath + QStringLiteral(".zip");
+  session.recording = false;
+  session.recorder->stop();
 
-  if (!JlCompress::compressDir(zipPath, dirPath, true)) {
-    qWarning() << "ImageExport: failed to create archive:" << zipPath;
-    return;
+  // Wait for .mp4 muxer to flush its moov atom
+  if (session.recorder->recorderState() != QMediaRecorder::StoppedState) {
+    QEventLoop loop;
+    QTimer timeoutTimer;
+    timeoutTimer.setSingleShot(true);
+    timeoutTimer.setInterval(3000);
+    QObject::connect(session.recorder.get(),
+                     &QMediaRecorder::recorderStateChanged,
+                     &loop,
+                     [&loop](QMediaRecorder::RecorderState state) {
+                       if (state == QMediaRecorder::StoppedState)
+                         loop.quit();
+                     });
+    QObject::connect(&timeoutTimer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    timeoutTimer.start();
+    loop.exec();
   }
 
-  session.dir.removeRecursively();
+  // Drop empty output files
+  if (session.frameCount == 0)
+    QFile::remove(session.outputPath);
+
+  // Detach inputs before tearing down (QMediaCaptureSession holds raw pointers)
+  if (session.captureSession) {
+    session.captureSession->setRecorder(nullptr);
+    session.captureSession->setVideoFrameInput(nullptr);
+  }
+
+  session.frameInput.reset();
+  session.recorder.reset();
+  session.captureSession.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -169,15 +307,12 @@ void Widgets::ImageExportWorker::zipAndClean(ImageSession& session)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the singleton, initializing the worker thread and
- *        restoring the last-saved "save by default" preference from QSettings.
- *
- * The worker thread is always started and ready; @c m_exportEnabled controls
- * only whether newly created @c ImageView widgets inherit the export-on state.
+ * @brief Constructs the singleton, starts the encoding thread, and restores
+ *        the persisted "save by default" preference.
  */
 Widgets::ImageExport::ImageExport()
   : DataModel::FrameConsumer<ImageExportItem>(
-      {.queueCapacity = 512, .flushThreshold = 32, .timerIntervalMs = 1000})
+      {.queueCapacity = 512, .flushThreshold = 8, .timerIntervalMs = 33})
 {
   m_exportEnabled = m_settings.value(QStringLiteral("ImageExport/enabled"), false).toBool();
 
@@ -200,16 +335,15 @@ Widgets::ImageExport& Widgets::ImageExport::instance()
 }
 
 /**
- * @brief Factory method called by @c FrameConsumer to instantiate the worker.
- * @return Newly allocated @c ImageExportWorker on the worker thread.
+ * @brief Factory called by @c FrameConsumer to create the encoder worker.
  */
 DataModel::FrameConsumerWorkerBase* Widgets::ImageExport::createWorker()
 {
-  return new ImageExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
+  return new VideoExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
 }
 
 /**
- * @brief Returns @c true if the image export consumer is currently active.
+ * @brief Returns the current "save videos by default" preference.
  */
 bool Widgets::ImageExport::exportEnabled() const
 {
@@ -217,23 +351,17 @@ bool Widgets::ImageExport::exportEnabled() const
 }
 
 /**
- * @brief Returns the group-level directory path used for image exports.
- *
- * The path does not include the per-session timestamp subdirectory, making it
- * suitable for opening a stable folder in the file manager.
- * @param groupTitle    Widget group title.
- * @param projectTitle  Dashboard project title.
- * @return Absolute path to @c <workspace>/Images/<project>/<group>.
+ * @brief Returns the group-level directory path used for video exports.
  */
 QString Widgets::ImageExport::imagesPath(const QString& groupTitle,
                                          const QString& projectTitle) const
 {
-  const auto base = Misc::WorkspaceManager::instance().path(QStringLiteral("Images"));
+  const auto base = Misc::WorkspaceManager::instance().path(QStringLiteral("Video Recordings"));
   return QStringLiteral("%1/%2/%3").arg(base, projectTitle, groupTitle);
 }
 
 /**
- * @brief Signals the worker to close all sessions (used on disconnect).
+ * @brief Asks the worker to stop and finalise every active recording.
  */
 void Widgets::ImageExport::closeSession()
 {
@@ -241,23 +369,18 @@ void Widgets::ImageExport::closeSession()
 }
 
 /**
- * @brief Signals the worker to close only the session for @p groupTitle.
- *
- * Called when a single @c ImageView widget disables its export toggle,
- * leaving other widgets' sessions untouched.
- * @param groupTitle  Group title identifying the session to close.
+ * @brief Asks the worker to stop and finalise the recording for @p groupId.
  */
 void Widgets::ImageExport::closeSession(int groupId)
 {
-  QMetaObject::invokeMethod(static_cast<ImageExportWorker*>(m_worker),
+  QMetaObject::invokeMethod(static_cast<VideoExportWorker*>(m_worker),
                             "closeGroup",
                             Qt::QueuedConnection,
                             Q_ARG(int, groupId));
 }
 
 /**
- * @brief Connects @c IO::ConnectionManager signals so sessions close automatically on
- *        device disconnect or stream pause.
+ * @brief Wires connection-manager signals so recordings stop on disconnect or pause.
  */
 void Widgets::ImageExport::setupExternalConnections()
 {
@@ -274,35 +397,20 @@ void Widgets::ImageExport::setupExternalConnections()
 }
 
 /**
- * @brief Sets the "save images by default" preference and persists it.
- *
- * This preference controls whether newly created @c ImageView widgets start
- * with export enabled. It does not affect the worker thread lifecycle.
- * The value is saved to QSettings under @c "ImageExport/enabled".
- * @param enabled  @c true to save by default, @c false to opt out.
+ * @brief Persists the "save videos by default" preference and notifies QML.
  */
 void Widgets::ImageExport::setExportEnabled(bool enabled)
 {
-  // Guard unchanged value
   if (m_exportEnabled == enabled)
     return;
 
-  // Persist the new preference and notify QML
   m_exportEnabled = enabled;
   m_settings.setValue(QStringLiteral("ImageExport/enabled"), enabled);
   Q_EMIT enabledChanged();
 }
 
 /**
- * @brief Enqueues a decoded image frame for async export to disk.
- *
- * No-op during playback. The worker thread is always running; the per-widget
- * @c exportEnabled flag on @c ImageView is the sole gatekeeper for whether
- * frames are submitted here.
- * @param data          Raw bytes of the decoded image.
- * @param format        Format string such as "JPEG" or "PNG".
- * @param groupTitle    Widget group title (used for the directory structure).
- * @param projectTitle  Dashboard project title (used for the directory structure).
+ * @brief Enqueues a decoded image frame for asynchronous video encoding.
  */
 void Widgets::ImageExport::enqueueImage(const QByteArray& data,
                                         const QString& format,
@@ -310,11 +418,16 @@ void Widgets::ImageExport::enqueueImage(const QByteArray& data,
                                         const QString& groupTitle,
                                         const QString& projectTitle)
 {
-  // Skip during playback mode
+  // Skip during playback -- we never re-encode replayed frames.
   if (SerialStudio::isAnyPlayerOpen())
     return;
 
-  // Submit the frame to the lock-free export queue
-  ImageExportItem item{data, format, groupId, groupTitle, projectTitle};
+  ImageExportItem item;
+  item.data         = data;
+  item.format       = format;
+  item.groupId      = groupId;
+  item.groupTitle   = groupTitle;
+  item.projectTitle = projectTitle;
+  item.timestamp    = std::chrono::steady_clock::now();
   enqueueData(item);
 }

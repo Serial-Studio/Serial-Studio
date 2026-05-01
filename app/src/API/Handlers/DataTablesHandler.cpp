@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -86,7 +86,7 @@ void API::Handlers::DataTablesHandler::registerCommands()
                            emptySchema,
                            &tablesList);
 
-  // project.tables.get — name required
+  // project.tables.get -- name required
   {
     QJsonObject props;
     props[QStringLiteral("name")] = QJsonObject{
@@ -103,7 +103,7 @@ void API::Handlers::DataTablesHandler::registerCommands()
                              &tableGet);
   }
 
-  // project.tables.add — optional name (auto-uniquified)
+  // project.tables.add -- optional name (auto-uniquified)
   {
     QJsonObject props;
     props[QStringLiteral("name")] = QJsonObject{

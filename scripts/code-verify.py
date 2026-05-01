@@ -40,23 +40,24 @@ pragmas (`// clang-format off/on`, `// NOLINT`, `// cppcheck-suppress`,
 `// fallthrough`) are skipped. Findings are grouped by rule into
 `.code-report` at the repo root for a follow-up human or LLM pass.
 
-Wrap a region with `// code-format off` / `// code-format on` to disable
+Wrap a region with `// code-verify off` / `// code-verify on` to disable
 every rule between the fences (the `/* ... */` equivalent works too).
+`code-format off/on` is accepted as a legacy synonym.
 
 Usage:
-    python3 scripts/code-format.py                          # fix everything under app/qml + app/src
-    python3 scripts/code-format.py --check                  # report-only, whole tree
-    python3 scripts/code-format.py --check app/qml          # report-only, explicit path
-    python3 scripts/code-format.py --fix app/src            # rewrite C++ files
-    python3 scripts/code-format.py --check app/qml/Foo.qml  # single file
-    python3 scripts/code-format.py --fix --diff app/qml     # show changes
+    python3 scripts/code-verify.py                          # fix everything under app/qml + app/src
+    python3 scripts/code-verify.py --check                  # report-only, whole tree
+    python3 scripts/code-verify.py --check app/qml          # report-only, explicit path
+    python3 scripts/code-verify.py --fix app/src            # rewrite C++ files
+    python3 scripts/code-verify.py --check app/qml/Foo.qml  # single file
+    python3 scripts/code-verify.py --fix --diff app/qml     # show changes
 
 Called with no arguments the script defaults to --fix on the entire
 <repo>/app/qml and <repo>/app/src trees.
 
 Exit codes:
     0 - clean (check) or rewrote files (fix)
-    1 - violations found (check)
+    1 - errors found (check) -- advisories alone don't fail
     2 - argument error
 """
 
@@ -64,12 +65,31 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import importlib.util
 import os
 import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable
+
+# Optional semantic-rules module (scripts/code_verify_rules.py). Loaded by
+# absolute path so the dashed `code-verify.py` filename doesn't trip up
+# Python's import system. None when tree-sitter isn't installed.
+_SEMANTIC_RULES = None
+try:
+    _rules_spec = importlib.util.spec_from_file_location(
+        "code_verify_rules",
+        Path(__file__).with_name("code_verify_rules.py"),
+    )
+    if _rules_spec is not None and _rules_spec.loader is not None:
+        _rules_mod = importlib.util.module_from_spec(_rules_spec)
+        # Register before exec so @dataclass can resolve cls.__module__.
+        sys.modules["code_verify_rules"] = _rules_mod
+        _rules_spec.loader.exec_module(_rules_mod)
+        _SEMANTIC_RULES = _rules_mod
+except Exception:
+    _SEMANTIC_RULES = None
 
 
 # ---------------------------------------------------------------------------
@@ -839,11 +859,13 @@ def _check_shallow_id(
 # Comment-style checks (flag-only — humans collapse / refactor)
 # ---------------------------------------------------------------------------
 
-# `// code-format off` and `// code-format on` fence raw lines out of every
-# rule the script enforces. The fence text is matched on a stripped line —
+# `// code-verify off` and `// code-verify on` fence raw lines out of every
+# rule the script enforces. The fence text is matched on a stripped line --
 # both `//` and `/*…*/` forms are accepted so QML and C++ can both opt out.
-_FENCE_OFF_RE = re.compile(r"^\s*(?://|/\*)\s*code-format\s+off\b")
-_FENCE_ON_RE  = re.compile(r"^\s*(?://|/\*)\s*code-format\s+on\b")
+# `code-format off/on` is accepted as a legacy synonym; the fixer uses
+# `code-verify` going forward.
+_FENCE_OFF_RE = re.compile(r"^\s*(?://|/\*)\s*code-(?:verify|format)\s+off\b")
+_FENCE_ON_RE  = re.compile(r"^\s*(?://|/\*)\s*code-(?:verify|format)\s+on\b")
 
 
 def _compute_fence_mask(lines: list[str]) -> list[bool]:
@@ -875,7 +897,7 @@ def _is_line_comment(line: str) -> bool:
 
 
 _TOOLING_PRAGMA_RE = re.compile(
-    r"^\s*(?:clang-format|code-format|NOLINT|cppcheck-suppress|fallthrough)\b",
+    r"^\s*(?:clang-format|code-(?:verify|format)|NOLINT|cppcheck-suppress|fallthrough)\b",
     re.IGNORECASE,
 )
 
@@ -942,6 +964,50 @@ def find_comment_style_violations(
     Banner shapes are intentional and skipped:
       - `//---` / `//===` decorator rules (with or without a label),
       - QML `//` / `// label` / `//` sandwich.
+
+    EDGE CASE FOR LLMs FIXING THESE FLAGS — QML SANDWICH PRESERVATION
+    ----------------------------------------------------------------
+    QML files use a 3-line sandwich convention to label the type/section
+    that follows:
+
+        //
+        // Plot area
+        //
+        Item { ... }
+
+    This shape is INTENTIONAL and the linter skips it (see `_is_banner_run`
+    sandwich rule). When you collapse a flagged 5+ line QML prose block
+    (multi-line text wrapped between `//` decorators), DO NOT drop the
+    decorators — keep the sandwich, just shorten the inner label to a
+    single line. Wrong fix: replace the whole block with `// Plot area`
+    above the `Item { }`. Right fix:
+
+        //
+        // Plot area
+        //
+        Item { ... }
+
+    For C++/.cpp/.h/.mm files, the convention is the opposite — a one-line
+    `// Section header` directly above the block, no decorators:
+
+        // Reset the forward-fill cache for the new file
+        m_lastFinalValues.clear();
+
+    Banners with `//---` or `//===` decorators are also intentional in C++
+    and separate concern groups (see CLAUDE.md "98-dash banners separate
+    concern groups"). Don't touch those.
+
+    HEADER FILES (.h)
+    -----------------
+    CLAUDE.md forbids `//` comments before member-variable / signal /
+    function declarations in headers. When you encounter a flagged
+    multi-line `//` block above a member variable in a header, DELETE
+    the whole block — don't shorten it. Names and types are the
+    documentation. The only `//` allowed in headers is the SPDX banner
+    at the top; the only block-doc allowed is a `/** @brief */` directly
+    above a TYPE-LEVEL definition (class, struct, enum, top-level
+    typedef/using). If the flagged block is above an enum or struct, you
+    can convert it to a one-line `/** @brief ... */`.
 
     Tooling pragmas (`// clang-format off/on`, `// NOLINT`,
     `// cppcheck-suppress`, `// fallthrough`) are run-breakers — they're
@@ -1105,7 +1171,7 @@ def find_ai_narration_violations(
         if not stripped_payload or set(stripped_payload) <= {"-", "="}:
             continue
         # Skip `// clang-format off/on` and other tooling pragmas.
-        if re.match(r"^\s*(?:clang-format|code-format|NOLINT|cppcheck-suppress)", payload, re.IGNORECASE):
+        if re.match(r"^\s*(?:clang-format|code-(?:verify|format)|NOLINT|cppcheck-suppress)", payload, re.IGNORECASE):
             continue
 
         for kind, pattern in _AI_PATTERNS:
@@ -1120,6 +1186,254 @@ def find_ai_narration_violations(
                 )
                 # One violation per line is enough — the worst pattern wins
                 break
+
+    return violations
+
+
+# Names for the most common non-ASCII characters that show up in AI-written
+# code, so the report can point at them instead of just listing codepoints.
+_NON_ASCII_NAMES: dict[str, str] = {
+    "—": "em dash (U+2014, type `--` or ` - `)",
+    "–": "en dash (U+2013, type `-`)",
+    "‘": "left single quote (U+2018, type `'`)",
+    "’": "right single quote / apostrophe (U+2019, type `'`)",
+    "“": "left double quote (U+201C, type `\"`)",
+    "”": "right double quote (U+201D, type `\"`)",
+    "…": "ellipsis (U+2026, type `...`)",
+    "→": "right arrow (U+2192, type `->`)",
+    "←": "left arrow (U+2190, type `<-`)",
+    "↔": "two-way arrow (U+2194, type `<->`)",
+    "⇒": "double right arrow (U+21D2, type `=>`)",
+    " ": "non-breaking space (U+00A0, type a regular space)",
+    "·": "middle dot (U+00B7)",
+    "×": "multiplication sign (U+00D7, type `x` or `*`)",
+    "µ": "micro sign (U+00B5, type `u` or `micro`)",
+    "μ": "greek mu (U+03BC, type `u` or `micro`)",
+    "°": "degree sign (U+00B0, type `deg` or `degrees`)",
+    "−": "minus sign (U+2212, type `-`)",
+    "±": "plus-minus sign (U+00B1, type `+/-`)",
+    "≈": "approximately equal (U+2248, type `~=`)",
+    "≤": "less-or-equal (U+2264, type `<=`)",
+    "≥": "greater-or-equal (U+2265, type `>=`)",
+    "≠": "not-equal (U+2260, type `!=`)",
+    "²": "superscript 2 (U+00B2, type `^2`)",
+    "³": "superscript 3 (U+00B3, type `^3`)",
+    "√": "square root (U+221A, type `sqrt`)",
+    "∞": "infinity (U+221E, type `inf`)",
+    "•": "bullet (U+2022, type `*` or `-`)",
+    "½": "one half (U+00BD, type `1/2`)",
+    "¼": "one quarter (U+00BC, type `1/4`)",
+    "¾": "three quarters (U+00BE, type `3/4`)",
+}
+
+
+def _describe_non_ascii(ch: str) -> str:
+    """Return a short human label for a non-ASCII character. Falls back to
+    the codepoint when the character isn't in the curated table — that way
+    the report names every offender without needing an exhaustive map."""
+    if ch in _NON_ASCII_NAMES:
+        return _NON_ASCII_NAMES[ch]
+    cp = ord(ch)
+    return f"U+{cp:04X} ({ch!r})"
+
+
+# Translation calls — non-ASCII inside their string args is allowed because
+# the strings are user-facing localized text (em dashes, ellipses, ×, °, ²
+# all show up in UI labels and unit suffixes). Matched by name; the regex
+# below scrubs the call's argument span before scanning the line.
+_TRANSLATION_CALL_RE = re.compile(
+    r"\b(?:qsTr|qsTrId|qsTranslate|qsTrNoOp|QT_TR_NOOP|QT_TRANSLATE_NOOP|"
+    r"QT_TRID_NOOP|tr|trUtf8|translate)\s*\("
+)
+
+# Copyright-style year-range lines (`Copyright (C) 2020-2025 Name`) — the
+# en-dash there is conventional and lives in the SPDX banner, not in code.
+_COPYRIGHT_LINE_RE = re.compile(r"\bCopyright\b.*?\b\d{4}", re.IGNORECASE)
+
+
+def _strip_translation_args(line: str) -> str:
+    """Replace the inside of `qsTr(...)` / similar calls with ASCII filler so
+    only non-ASCII outside the call body is reported. Handles balanced parens,
+    string-aware so nested parens inside string literals don't end the call
+    early."""
+    out: list[str] = []
+    i = 0
+    n = len(line)
+    while i < n:
+        m = _TRANSLATION_CALL_RE.match(line, i)
+        if not m:
+            out.append(line[i])
+            i += 1
+            continue
+
+        out.append(line[i:m.end()])
+        i = m.end()
+        depth = 1
+        in_str: str | None = None
+        escape = False
+        while i < n and depth > 0:
+            ch = line[i]
+            if in_str is not None:
+                if escape:
+                    escape = False
+                elif ch == "\\":
+                    escape = True
+                elif ch == in_str:
+                    in_str = None
+                # Replace any non-ASCII *inside* the string with a placeholder
+                # so the outer scan ignores it.
+                out.append("." if ord(ch) >= 128 else ch)
+                i += 1
+                continue
+
+            if ch in ("'", '"', "`"):
+                in_str = ch
+                out.append(ch)
+            elif ch == "(":
+                depth += 1
+                out.append(ch)
+            elif ch == ")":
+                depth -= 1
+                out.append(ch)
+            else:
+                out.append("." if ord(ch) >= 128 else ch)
+            i += 1
+    return "".join(out)
+
+
+def find_non_ascii_violations(
+    lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag non-ASCII characters in code, comments, and non-translation
+    strings. Em dashes, smart quotes, arrows, and non-breaking spaces are
+    AI-prose smells that also break older toolchains: MSVC without `/utf-8`
+    mis-decodes them, some legacy editors mojibake them, and grep/diff tools
+    render them as escape goo. Words and ASCII operators read fine for both
+    humans and LLMs — type `->`, `<=`, `1/2` instead of arrows, less-or-equal
+    glyphs, fraction glyphs.
+
+    Lines INTENTIONALLY skipped:
+      - `// code-verify off` fences,
+      - `Copyright ... 20YY-20YY ...` SPDX banner lines (en-dash year range),
+      - text inside `qsTr(...)`, `tr(...)`, `QT_TR_NOOP(...)`, etc. — those
+        are user-facing localized strings where em dashes, ellipses, ×, °,
+        and superscripts are conventional. Only non-ASCII OUTSIDE the
+        translation call's argument span is reported."""
+    violations: list[Violation] = []
+    for i, line in enumerate(lines):
+        if fence_mask[i]:
+            continue
+        if _COPYRIGHT_LINE_RE.search(line):
+            continue
+
+        scan_target = _strip_translation_args(line) if "(" in line else line
+
+        offenders: list[str] = []
+        seen: set[str] = set()
+        for ch in scan_target:
+            if ord(ch) < 128 or ch == "\t":
+                continue
+            if ch in seen:
+                continue
+            seen.add(ch)
+            offenders.append(_describe_non_ascii(ch))
+        if not offenders:
+            continue
+        violations.append(
+            Violation(
+                path,
+                i + 1,
+                "non-ascii",
+                "non-ASCII character(s) — replace with ASCII equivalents: "
+                + "; ".join(offenders),
+            )
+        )
+    return violations
+
+
+def find_qml_inline_comment_violations(
+    lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag single-line `//` comments that sit inside a QML object body
+    (`Item { }`, `Rectangle { }`, etc.) but NOT inside a JavaScript body
+    (`function () { }`, `onClicked: { }`, `() => { }`).
+
+    QML object bodies hold declarative property bindings — labelling them
+    with inline `//` notes is the AI-narration smell CLAUDE.md bans. JS
+    function bodies are imperative code and follow the same one-line
+    section-header rule as `.cpp` files; flagging those would double-tax
+    the multi-line-comment rule, so they're left alone here.
+
+    Banner shapes (`//`, `//---`, `//===`, sandwich runs) are NOT flagged —
+    they're handled by the multi-line / banner rules. Tooling pragmas
+    (`// clang-format off/on`, `// NOLINT`, `// code-verify off/on`) are
+    directives, not prose, and skipped."""
+    if path.suffix != ".qml":
+        return []
+
+    violations: list[Violation] = []
+    n = len(lines)
+
+    # Stack of body kinds — "qml" for an object body, "js" for a JS body.
+    # We push when a line opens a body and pop on the matching close. The
+    # top of the stack tells us where the current line lives.
+    body_stack: list[str] = []
+
+    for i, line in enumerate(lines):
+        if fence_mask[i]:
+            continue
+
+        stripped = line.strip()
+
+        # Skip comment-only lines for stack maintenance — they don't open
+        # or close bodies.
+        if stripped.startswith("//") or stripped.startswith("/*") or stripped.startswith("*"):
+            payload = _comment_payload(line)
+            if payload is not None and not _is_tooling_pragma(line):
+                p = payload.strip()
+                # Skip blank `//` lines and `//---`/`//===` decorator rules —
+                # those are banner pieces handled by the multi-line rule.
+                is_decorator = (not p) or set(p) <= {"-", "=", "*"}
+                if not is_decorator and body_stack and body_stack[-1] == "qml":
+                    # Lookahead: only flag a SINGLE-line `//` block. If the
+                    # next or prev non-blank line is also a `//` comment,
+                    # the multi-line-comment rule covers it instead.
+                    nxt = i + 1
+                    while nxt < n and lines[nxt].strip() == "":
+                        nxt += 1
+                    next_is_comment = (
+                        nxt < n
+                        and lines[nxt].lstrip().startswith("//")
+                        and not _is_tooling_pragma(lines[nxt])
+                    )
+                    prev = i - 1
+                    while prev >= 0 and lines[prev].strip() == "":
+                        prev -= 1
+                    prev_is_comment = (
+                        prev >= 0
+                        and lines[prev].lstrip().startswith("//")
+                        and not _is_tooling_pragma(lines[prev])
+                    )
+                    if not next_is_comment and not prev_is_comment:
+                        violations.append(
+                            Violation(
+                                path,
+                                i + 1,
+                                "qml-inline-comment",
+                                "single-line `//` comment inside a QML object "
+                                "body — use the `//\\n// Label\\n//` sandwich "
+                                "above the declaration, or drop the comment "
+                                f"({p[:60]})",
+                            )
+                        )
+            continue
+
+        # Body open / close tracking on non-comment lines.
+        if stripped.endswith("{"):
+            body_stack.append("js" if opens_js_body(line) else "qml")
+        elif stripped.startswith("}"):
+            if body_stack:
+                body_stack.pop()
 
     return violations
 
@@ -1169,6 +1483,14 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
     if first_party and path.suffix in _BRACE_FREE_SUFFIXES:
         violations.extend(find_comment_style_violations(raw_lines, path, fence_mask))
         violations.extend(find_ai_narration_violations(raw_lines, path, fence_mask))
+        violations.extend(find_non_ascii_violations(raw_lines, path, fence_mask))
+        violations.extend(find_qml_inline_comment_violations(raw_lines, path, fence_mask))
+
+        # Static-analysis rules (Qt/C++ semantic checks + QML conventions).
+        # The rules module degrades gracefully when tree-sitter is missing.
+        if _SEMANTIC_RULES is not None:
+            for f in _SEMANTIC_RULES.analyze(path, raw_text, fence_mask):
+                violations.append(Violation(path, f.line, f.kind, f.message))
 
     # Christmas-tree property sort + id-placement check are QML-specific.
     if is_qml:
@@ -1285,7 +1607,7 @@ def default_targets() -> list[Path]:
     text files (CMakeLists.txt, *.md, *.yml) are picked up via individual
     file paths — `os.walk` from `repo` would also descend `build/`, which
     `_SKIP_DIRS` filters but at the cost of stat-ing every entry."""
-    # scripts/code-format.py  ->  <repo>
+    # scripts/code-verify.py  ->  <repo>
     repo = Path(__file__).resolve().parent.parent
     targets: list[Path] = [
         repo / "app",
@@ -1310,11 +1632,41 @@ _AUTO_FIXABLE_KINDS = frozenset({
     "christmas-tree",
 })
 
+# Advisory rules: reported, written to `.code-report`, but DO NOT fail
+# `--check`. These are CLAUDE.md guidance (length / nesting limits, doc
+# coverage, opportunistic Keys::* migration) where the existing codebase
+# has accumulated baseline debt. New code should still aim to clear them
+# -- a reviewer reading `.code-report` is the enforcement mechanism, not
+# CI. Errors (everything not in this set) are the contract CI enforces.
+_ADVISORY_KINDS = frozenset({
+    # CLAUDE.md guidance with broad existing-code debt -- promote to
+    # error once the report-driven cleanup catches up.
+    "cxx-function-too-long",
+    "cxx-nesting-too-deep",
+    "qt-missing-nodiscard",
+    "doc-missing-brief-cpp",
+    "doc-missing-brief-h",
+    "keys-hardcoded-literal",
+    # AI-narration / multi-line-comment / qml-inline-comment are
+    # heuristic-only and intentionally never fail CI. They populate the
+    # report so a human / LLM cleanup pass has a checklist.
+    "ai-first-person",
+    "ai-throat-clearing",
+    "ai-tutorial-voice",
+    "ai-this-is-narration",
+    "ai-rot-reference",
+    "ai-hedging",
+    "ai-restate-obvious",
+    "ai-todo-no-context",
+    "multi-line-comment",
+    "qml-inline-comment",
+})
+
 
 _REPORT_HEADER = """\
 # Code Quality Report
 
-Generated by `scripts/code-format.py`. Each entry below was flagged by a
+Generated by `scripts/code-verify.py`. Each entry below was flagged by a
 heuristic that often signals AI-generated narration or a CLAUDE.md style
 violation. The script will not auto-fix these — judgement calls belong
 to a human or an LLM that has read the surrounding context.
@@ -1324,6 +1676,20 @@ to a human or an LLM that has read the surrounding context.
 - **One-line `//` section headers only.** Multi-line `//` blocks should
   collapse to one line or be deleted. Comments label sections; they do
   not narrate. (CLAUDE.md → "Comments & Doxygen".)
+- **QML files use a 3-line sandwich.** Above a top-level `Item { }` /
+  `Rectangle { }` / `function ... { }` / `property ...` declaration the
+  convention is decorator + label + decorator (a blank `//` line, then
+  `// Label`, then another blank `//` line). DO NOT collapse the
+  sandwich to a bare one-liner. When a flagged 5+ line QML block is
+  wrapped between `//` decorators, keep the decorators and shorten only
+  the inner prose to a single line. C++ files use the opposite
+  convention: a bare `// Label` above the block, no decorators
+  (decorators in C++ are `//---`/`//===` and separate concern groups).
+- **Header (.h) files: delete, don't shorten.** Member-variable, signal,
+  function-declaration `//` blocks are forbidden in headers entirely.
+  Drop the whole block. The only block-doc allowed in a header is
+  `/** @brief ... */` directly above a TYPE-LEVEL definition (class,
+  struct, enum, typedef, using-alias).
 - **Hoist comments out of `{` bodies.** A `// ...` as the first line
   inside a `{` block should move above the block. Often the block itself
   can drop its braces.
@@ -1345,12 +1711,70 @@ to a human or an LLM that has read the surrounding context.
 - **No empty TODOs.** "TODO: implement this" / "FIXME: handle edge
   case" without a ticket reference is noise — write the issue or the
   ticket, not the placeholder.
+- **ASCII only.** Non-ASCII characters (em dashes, smart quotes, arrows
+  like the right arrow, non-breaking spaces, micro signs, super/subscripts)
+  break older toolchains and read as escape goo in legacy editors. Type
+  `->` not the arrow, `<=` not the less-or-equal glyph, `1/2` not the
+  fraction glyph, `--` or `-` not the dash glyph, `'` and `"` not smart
+  quotes. Words always work: `degrees`, `micro`, `approx`, `infinity`.
+  If you can't type it on a US keyboard, don't put it in source. Doesn't
+  matter how confidently the model emitted it — humans and LLMs both
+  read words fine.
+- **No QML inline comments inside object bodies.** A `// note` on its
+  own line inside an `Item { }` / `Rectangle { }` / etc. is the
+  AI-narration smell CLAUDE.md bans. Either use the QML sandwich
+  (`//\n// Label\n//`) above the declaration, or delete the comment.
+  This rule does not apply to JS function bodies (`function f() { }`,
+  `onClicked: { }`, `() => { }`) — those follow C++ comment rules.
+
+## Static-analysis rules (semantic)
+
+These come from `scripts/code_format_rules.py` and use a tree-sitter
+C++ AST plus targeted line scans. CLAUDE.md is the source of truth;
+the kinds below are short labels.
+
+**Errors (block CI):**
+- `qt-bare-emit` — bare `emit signalName()` outside strings/comments;
+  use `Q_EMIT`.
+- `qt-uppercase-signal-slot` — `Q_SIGNALS:` / `Q_SLOTS:` section labels;
+  use lowercase `signals:` / `slots:`.
+- `qt-invokable-void` — `Q_INVOKABLE void f();` is wrong; move to
+  `public slots:`. `Q_INVOKABLE` is for non-void returns.
+- `qt-disconnect-nullptr` — `disconnect(<conn>, nullptr)` (the 2-arg
+  form) drops every slot; capture and disconnect the
+  `QMetaObject::Connection`.
+- `qt-direct-jsengine-call` — `parseFunction.call(...)` bypasses the
+  runtime watchdog; route through `IScriptEngine::guardedCall()`.
+- `qt-header-member-init` — `int m_foo = 0;` inside a `Q_OBJECT` /
+  `Q_GADGET` class body; move to the constructor member-init list.
+- `cxx-goto-or-jmp` — `goto` / `setjmp` / `longjmp` (NASA P10 rule 1).
+- `hotpath-allocation` — `new` / `make_shared` / `.append(` /
+  `.push_back(` / bare `emit` inside a known hotpath method
+  (`hotpathRxFrame`, `processData`, `applyTransform`, …).
+- `qml-font-pixel` — `font.pixelSize` / `font.family` outside the
+  dashboard widget allow-list; use `font: Cpp_Misc_CommonFonts.uiFont`
+  (or another helper).
+- `qml-bus-type-int` — `busType: 0` literal int; use
+  `SerialStudio.BusType.<NAME>`.
+
+**Advisories (don't block CI):**
+- `cxx-function-too-long` — function body > 100 lines (NASA P10 rule 4).
+- `cxx-nesting-too-deep` — control-flow nesting > 3 levels (CLAUDE.md).
+- `qt-missing-nodiscard` — non-void const member function in a header
+  without `[[nodiscard]]`.
+- `doc-missing-brief-cpp` — `.cpp` function definition without a
+  preceding `/** @brief ... */`.
+- `doc-missing-brief-h` — header type-level definition (class /
+  struct / enum / typedef / using-alias) without `/** @brief ... */`.
+- `keys-hardcoded-literal` — raw `"busType"` / `"frameStart"` / etc.
+  literal in a writer or reader; use `Keys::*` from `Frame.h`.
 
 ## Opt-out
 
-Wrap a region with `// code-format off` / `// code-format on` (or the
+Wrap a region with `// code-verify off` / `// code-verify on` (or the
 `/* ... */` equivalent) to disable every rule between the fences. Use
 sparingly and explain why in a one-line comment above the fence.
+`code-format off/on` is accepted as a legacy synonym.
 
 ## Findings
 """
@@ -1358,23 +1782,52 @@ sparingly and explain why in a one-line comment above the fence.
 
 def _write_report(report_path: Path, flag_only: list[Violation]) -> None:
     """Write `.code-report` at the repo root grouping flag-only violations
-    by kind, then by file. Skips writing when there's nothing to report
-    and removes any stale report from a previous run."""
+    by severity, then by kind, then by file. Errors are listed first
+    (these block CI; an LLM cleanup pass should fix them). Advisories
+    follow (CLAUDE.md guidance with existing-codebase debt -- worth
+    addressing but they don't fail the build). Skips writing when there's
+    nothing to report and removes any stale report from a previous run."""
     if not flag_only:
         if report_path.exists():
             report_path.unlink()
         return
 
-    by_kind: dict[str, list[Violation]] = {}
+    errors_by_kind: dict[str, list[Violation]] = {}
+    advisory_by_kind: dict[str, list[Violation]] = {}
     for v in flag_only:
-        by_kind.setdefault(v.kind, []).append(v)
+        bucket = advisory_by_kind if v.kind in _ADVISORY_KINDS else errors_by_kind
+        bucket.setdefault(v.kind, []).append(v)
 
     out: list[str] = [_REPORT_HEADER]
-    for kind in sorted(by_kind):
-        entries = by_kind[kind]
-        out.append(f"\n### `{kind}` ({len(entries)})\n")
-        for v in entries:
-            out.append(f"- `{v.path}:{v.line}` — {v.message}\n")
+
+    if errors_by_kind:
+        total = sum(len(vs) for vs in errors_by_kind.values())
+        out.append(
+            f"\n## Errors ({total}) -- block CI\n\n"
+            "These violations fail `code-verify.py --check`. An LLM cleanup\n"
+            "pass should fix them before the next CI run -- the rules below\n"
+            "encode CLAUDE.md's hard requirements (Qt conventions, hotpath\n"
+            "safety, fence-protected non-ASCII, line endings, …).\n"
+        )
+        for kind in sorted(errors_by_kind):
+            entries = errors_by_kind[kind]
+            out.append(f"\n### `{kind}` ({len(entries)})\n")
+            for v in entries:
+                out.append(f"- `{v.path}:{v.line}` — {v.message}\n")
+
+    if advisory_by_kind:
+        total = sum(len(vs) for vs in advisory_by_kind.values())
+        out.append(
+            f"\n## Advisories ({total}) -- CI passes, fix when convenient\n\n"
+            "CLAUDE.md guidance with broad existing-code debt. New code\n"
+            "should aim to clear these. They populate the report so an\n"
+            "incremental cleanup pass has a checklist; CI does not block.\n"
+        )
+        for kind in sorted(advisory_by_kind):
+            entries = advisory_by_kind[kind]
+            out.append(f"\n### `{kind}` ({len(entries)})\n")
+            for v in entries:
+                out.append(f"- `{v.path}:{v.line}` — {v.message}\n")
 
     out.append(f"\n---\n\n_Total flagged: {len(flag_only)}_\n")
     report_path.write_text("".join(out), encoding="utf-8", newline="\n")
@@ -1416,6 +1869,8 @@ def main(argv: list[str]) -> int:
 
     total_violations = 0
     total_changed = 0
+    error_count = 0
+    advisory_count = 0
     flag_only: list[Violation] = []
 
     for path in files:
@@ -1423,8 +1878,17 @@ def main(argv: list[str]) -> int:
         total_violations += len(violations)
 
         for v in violations:
-            print(f"{v.path}:{v.line}: {v.kind}: {v.message}")
-            if v.kind not in _AUTO_FIXABLE_KINDS:
+            severity = "advisory" if v.kind in _ADVISORY_KINDS else "error"
+            print(f"{v.path}:{v.line}: {severity}: {v.kind}: {v.message}")
+            if v.kind in _ADVISORY_KINDS:
+                advisory_count += 1
+            else:
+                error_count += 1
+            # Include in report if not auto-fixable, OR if auto-fixable but
+            # we're in --check mode (not actually fixing). Auto-fixable
+            # violations in --fix mode are written away, so reporting them
+            # would be noise.
+            if v.kind not in _AUTO_FIXABLE_KINDS or args.check:
                 flag_only.append(v)
 
         if new_text is not None:
@@ -1444,12 +1908,16 @@ def main(argv: list[str]) -> int:
         _write_report(repo_root / ".code-report", flag_only)
 
     if args.check:
-        print(f"\n{len(files)} files scanned, {total_violations} violations "
-              f"({len(flag_only)} flag-only)", file=sys.stderr)
-        return 1 if total_violations else 0
+        print(f"\n{len(files)} files scanned, {error_count} errors, "
+              f"{advisory_count} advisory ({len(flag_only)} flag-only)",
+              file=sys.stderr)
+        # CI gate: fail on errors only. Advisory findings populate
+        # `.code-report` for follow-up but don't block the build.
+        return 1 if error_count else 0
 
     print(f"\n{len(files)} files scanned, {total_changed} rewritten, "
-          f"{len(flag_only)} flag-only violations", file=sys.stderr)
+          f"{error_count} errors, {advisory_count} advisory "
+          f"({len(flag_only)} flag-only)", file=sys.stderr)
     return 0
 
 

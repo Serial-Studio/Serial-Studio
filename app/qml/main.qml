@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -87,7 +87,7 @@ Item {
                                     || mqttSubscriber
 
   //
-  // Cross-launch app flags — shared store, NOT per-deployment
+  // Cross-launch app flags -- shared store, NOT per-deployment
   //
   Settings {
     category: "App"
@@ -103,7 +103,7 @@ Item {
   }
 
   //
-  // Centralized quit — save prompt in author mode, then defer C++ teardown
+  // Centralized quit -- save prompt in author mode, then defer C++ teardown
   //
   function quitApplication() {
     if (app.quitting)
@@ -133,7 +133,7 @@ Item {
   }
 
   //
-  // Boot path — runtime mode skips the welcome dialog
+  // Boot path -- runtime mode skips the welcome dialog
   //
   Component.onCompleted: {
     if (Cpp_CommercialBuild
@@ -159,7 +159,7 @@ Item {
   }
 
   //
-  // Main window — hosts dashboard, terminal, and every transient dialog
+  // Main window -- hosts dashboard, terminal, and every transient dialog
   //
   MainWindow.MainWindow {
     id: mainWindow
@@ -217,7 +217,7 @@ Item {
     }
 
     //
-    // Help center — synchronous load (WebEngineView races on Linux otherwise)
+    // Help center -- synchronous load (WebEngineView races on Linux otherwise)
     //
     DialogLoader {
       id: helpCenter
@@ -319,7 +319,7 @@ Item {
     }
 
     //
-    // CSV file playback dialog — auto-shown by Cpp_CSV_Player.isOpen
+    // CSV file playback dialog -- auto-shown by Cpp_CSV_Player.isOpen
     //
     Loader {
       id: csvPlayerLoader
@@ -331,7 +331,7 @@ Item {
     }
 
     //
-    // MDF4 file playback dialog (Pro) — auto-shown by Cpp_MDF4_Player.isOpen
+    // MDF4 file playback dialog (Pro) -- auto-shown by Cpp_MDF4_Player.isOpen
     //
     Loader {
       id: mdf4PlayerLoader
@@ -343,7 +343,7 @@ Item {
     }
 
     //
-    // Session-database playback dialog (Pro) — auto-shown by Cpp_Sessions_Player.isOpen
+    // Session-database playback dialog (Pro) -- auto-shown by Cpp_Sessions_Player.isOpen
     //
     Loader {
       id: sqlitePlayerLoader
@@ -353,7 +353,7 @@ Item {
     }
 
     //
-    // Project-editor icon picker — direct instance, resolved by id from editor views
+    // Project-editor icon picker -- direct instance, resolved by id from editor views
     //
     Dialogs.IconPicker {
       id: actionIconPicker
@@ -372,7 +372,7 @@ Item {
   }
 
   //
-  // Project editor — separate top-level window, skipped in runtime mode
+  // Project editor -- separate top-level window, skipped in runtime mode
   //
   Loader {
     id: projectEditorLoader
@@ -386,7 +386,7 @@ Item {
   }
 
   //
-  // Database explorer (Pro) — lazy DialogLoader keeps its QSettings out of operator builds
+  // Database explorer (Pro) -- lazy DialogLoader keeps its QSettings out of operator builds
   //
   DialogLoader {
     id: dbExplorerLoader
@@ -420,7 +420,7 @@ Item {
   }
 
   //
-  // Help center — accessible to operators, may pre-select a page id
+  // Help center -- accessible to operators, may pre-select a page id
   //
   function showHelpCenter(pageId) {
     if (pageId)
@@ -430,7 +430,7 @@ Item {
   }
 
   //
-  // License activation dialog — accessible to operators
+  // License activation dialog -- accessible to operators
   //
   function showLicenseDialog() {
     if (Cpp_CommercialBuild)
@@ -453,7 +453,7 @@ Item {
   }
 
   //
-  // Welcome dialog — short-circuits to the main window if trial banner is dismissed
+  // Welcome dialog -- short-circuits to the main window if trial banner is dismissed
   //
   function showWelcomeDialog() {
     if (!Cpp_CommercialBuild)
@@ -469,7 +469,7 @@ Item {
   }
 
   //
-  // About dialog — author-only
+  // About dialog -- author-only
   //
   function showAboutDialog() {
     if (!app.runtimeMode)
@@ -477,7 +477,7 @@ Item {
   }
 
   //
-  // App preferences — author-only
+  // App preferences -- author-only
   //
   function showSettingsDialog() {
     if (!app.runtimeMode)
@@ -485,7 +485,7 @@ Item {
   }
 
   //
-  // Acknowledgements — author-only
+  // Acknowledgements -- author-only
   //
   function showAcknowledgements() {
     if (!app.runtimeMode)
@@ -493,7 +493,7 @@ Item {
   }
 
   //
-  // File transmission — author-only
+  // File transmission -- author-only
   //
   function showFileTransmission() {
     if (!app.runtimeMode)
@@ -501,7 +501,7 @@ Item {
   }
 
   //
-  // Examples browser — author-only
+  // Examples browser -- author-only
   //
   function showExamplesBrowser() {
     if (!app.runtimeMode)
@@ -509,7 +509,7 @@ Item {
   }
 
   //
-  // Extension manager — author-only
+  // Extension manager -- author-only
   //
   function showExtensionManager() {
     if (!app.runtimeMode)
@@ -517,7 +517,7 @@ Item {
   }
 
   //
-  // Project editor — author-only
+  // Project editor -- author-only
   //
   function showProjectEditor() {
     if (!app.runtimeMode && projectEditorLoader.item)
@@ -525,7 +525,7 @@ Item {
   }
 
   //
-  // Database explorer — author-only by default; in operator mode requires
+  // Database explorer -- author-only by default; in operator mode requires
   // session-export ON, and pins the explorer to the project's session DB.
   //
   function showDatabaseExplorer() {
@@ -544,7 +544,7 @@ Item {
   }
 
   //
-  // MQTT configuration — Pro, author-only
+  // MQTT configuration -- Pro, author-only
   //
   function showMqttConfiguration() {
     if (Cpp_CommercialBuild && !app.runtimeMode)
@@ -552,7 +552,7 @@ Item {
   }
 
   //
-  // Operator-deployment generator — Pro, author-only
+  // Operator-deployment generator -- Pro, author-only
   //
   function showShortcutGenerator() {
     if (Cpp_CommercialBuild && !app.runtimeMode)

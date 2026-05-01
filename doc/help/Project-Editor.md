@@ -147,6 +147,11 @@ Datasets map to individual data fields in your device's output.
 - **FFT Sampling Rate.** In Hz. Has to match the actual data rate for correct frequency axis labeling.
 - **FFT Min / FFT Max.** Y-axis range for the FFT plot.
 
+**Waterfall (Pro)**
+
+- **Enable Waterfall Plot.** Show a scrolling time-frequency plot (spectrogram) for this dataset. Reuses the FFT settings above (samples, sampling rate, range).
+- **Waterfall Y Axis.** Source for the vertical axis. Default is **Time** (older spectra scroll down). Pick another dataset here to drive the Y axis from that dataset's value instead — typically used for order tracking (for example RPM vs. frequency).
+
 **LED**
 
 - **LED.** Show this dataset in the LED panel.

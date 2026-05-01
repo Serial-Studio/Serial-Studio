@@ -113,7 +113,9 @@ Widgets.Pane {
             verticalCenter: parent.verticalCenter
           }
 
+          //
           // Off: synthetic layout read-only. On: editable, persisted workspaces.
+          //
           Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is licensed under the Serial Studio Commercial License.
  *
@@ -35,8 +35,8 @@
 /**
  * @brief Computes duration between two ISO8601 timestamps in milliseconds.
  *
- * Returns 0 when either string cannot be parsed — callers render the value
- * as "—" so a parse failure degrades gracefully.
+ * Returns 0 when either string cannot be parsed -- callers render the value
+ * as "--" so a parse failure degrades gracefully.
  */
 static qint64 computeDurationMs(const QString& startedIso, const QString& endedIso)
 {
@@ -87,9 +87,9 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
   out.frameCount   = q.value(4).toLongLong();
   out.durationMs   = computeDurationMs(out.startedAt, out.endedAt);
 
-  // Load column metadata (group/title/units per unique_id)
+  // Load column metadata (group/title/units/source per unique_id)
   QSqlQuery colQ(db);
-  colQ.prepare("SELECT unique_id, group_title, title, units "
+  colQ.prepare("SELECT unique_id, group_title, title, units, source_title "
                "FROM columns WHERE session_id = ? ORDER BY column_id ASC");
   colQ.bindValue(0, sessionId);
   if (!colQ.exec())
@@ -102,6 +102,7 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
     ds.group          = colQ.value(1).toString();
     ds.title          = colQ.value(2).toString();
     ds.units          = colQ.value(3).toString();
+    ds.sourceTitle    = colQ.value(4).toString();
     ds.numericSamples = 0;
     ds.stringSamples  = 0;
     ds.minValue       = 0.0;
@@ -138,7 +139,7 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
     it->stddev          = std::sqrt(var);
   }
 
-  // Count string samples per dataset (separate query — keeps the aggregate pass tight)
+  // Count string samples per dataset (separate query -- keeps the aggregate pass tight)
   QSqlQuery strQ(db);
   strQ.prepare("SELECT unique_id, COUNT(*) FROM readings "
                "WHERE session_id = ? AND is_numeric = 0 GROUP BY unique_id");
@@ -218,6 +219,7 @@ namespace {
  */
 struct ChartMeta {
   int uid;
+  QString sourceTitle;
   QString group;
   QString title;
   QString units;
@@ -430,7 +432,7 @@ std::vector<ChartMeta> loadChartParameters(QSqlDatabase& db, int sessionId)
   std::vector<ChartMeta> metas;
 
   QSqlQuery q(db);
-  q.prepare("SELECT unique_id, group_title, title, units FROM columns "
+  q.prepare("SELECT unique_id, group_title, title, units, source_title FROM columns "
             "WHERE session_id = ? ORDER BY column_id ASC");
   q.bindValue(0, sessionId);
 
@@ -441,10 +443,11 @@ std::vector<ChartMeta> loadChartParameters(QSqlDatabase& db, int sessionId)
 
   while (q.next()) {
     ChartMeta m;
-    m.uid   = q.value(0).toInt();
-    m.group = q.value(1).toString();
-    m.title = q.value(2).toString();
-    m.units = q.value(3).toString();
+    m.uid         = q.value(0).toInt();
+    m.group       = q.value(1).toString();
+    m.title       = q.value(2).toString();
+    m.units       = q.value(3).toString();
+    m.sourceTitle = q.value(4).toString();
     metas.push_back(std::move(m));
   }
 
@@ -545,6 +548,7 @@ std::vector<Sessions::DatasetSeries> Sessions::loadChartSeries(QSqlDatabase& db,
     DatasetSeries series;
     series.uniqueId     = m.uid;
     series.totalSamples = total;
+    series.sourceTitle  = m.sourceTitle;
     series.group        = m.group;
     series.title        = m.title;
     series.units        = m.units;
