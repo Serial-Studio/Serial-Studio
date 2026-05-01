@@ -117,6 +117,7 @@ jobs:
           libxkbcommon-dev \
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev \
+          libpulse-dev \
     - name: '⚙️ Download prebuilt gRPC'
       run: |
         gh release download v1.78.1 \
@@ -287,6 +288,7 @@ jobs:
           libxkbcommon-dev \
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev \
+          libpulse-dev \
     - name: '⚙️ Download prebuilt gRPC'
       run: |
         gh release download v1.78.1 \

@@ -127,6 +127,7 @@ jobs:
           libxkbcommon-dev \
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev \
+          libpulse-dev \
           nodejs \
           npm \
     - name: '⚙️ Download prebuilt gRPC'
