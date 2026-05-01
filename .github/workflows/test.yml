@@ -128,6 +128,8 @@ jobs:
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev \
           libpulse-dev \
+          libgstreamer1.0-0 \
+          libgstreamer-plugins-base1.0-0 \
           nodejs \
           npm \
     - name: '⚙️ Download prebuilt gRPC'

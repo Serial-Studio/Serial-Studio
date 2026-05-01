@@ -325,6 +325,7 @@ def test_session_report_series_preserve_raw_points_under_budget():
     """Session report charts should keep raw samples up to the 10k budget."""
     report = _read("app/src/Sessions/ReportData.cpp")
     manager = _read("app/src/Sessions/DatabaseManager.cpp")
+    worker = _read("app/src/Sessions/DatabaseWorker.cpp")
     runtime = _read("app/rcc/templates/reports/session-report.js")
 
     assert "x.clear();" in report
@@ -334,7 +335,8 @@ def test_session_report_series_preserve_raw_points_under_budget():
     assert "appendBudgetFillSamples(count, budget, indices);" in report
     assert "std::sort(indices.begin(), indices.end());" in report
     assert "series.values.size() == std::min<std::size_t>(count, maxSamples)" in report
-    assert "series = loadChartSeries(m_db, sessionId, 10000);" in manager
+    assert "Q_ARG(int, 10000)" in manager
+    assert "loadChartSeries(m_db, sessionId, chartMaxSamples)" in worker
     assert runtime.count("tension: 0") >= 2
     assert runtime.count("decimation: { enabled: false }") >= 2
 
