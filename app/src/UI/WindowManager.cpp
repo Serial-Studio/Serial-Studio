@@ -1093,31 +1093,36 @@ int UI::WindowManager::getIdForWindow(QQuickItem* item) const
 }
 
 /**
- * @brief Calculates the target index for reordering a dragged window.
- *
- * Uses the current mouse position to determine which window is hovered,
- * then returns the appropriate insertion index.
- *
- * If no window is hovered, returns m_windowOrder.size() to indicate the end.
- *
- * @param pos Mouse position relative to the WindowManager.
- * @return Target index for reordering.
+ * @brief Finds the non-drag window with the largest area overlap with the dragged rect.
  */
-int UI::WindowManager::determineNewIndexFromMousePos(const QPoint& pos) const
+QQuickItem* UI::WindowManager::findOverlapTarget(const QRect& dragRect) const
 {
-  // Find the hovered window and return its position in m_windowOrder
-  QQuickItem* hoveredWindow = getWindow(pos.x(), pos.y());
-  if (!hoveredWindow)
-    return m_windowOrder.size();
+  // Track the candidate with the greatest intersection area
+  QQuickItem* best = nullptr;
+  qint64 bestArea  = 0;
 
-  if (hoveredWindow->state() != "normal")
-    return m_windowOrder.size();
+  for (auto it = m_windows.constBegin(); it != m_windows.constEnd(); ++it) {
+    QQuickItem* win = it.value();
+    if (!win || win == m_dragWindow || !win->isVisible())
+      continue;
 
-  int hoveredId = getIdForWindow(hoveredWindow);
-  if (hoveredId < 0)
-    return m_windowOrder.size();
+    if (win->state() != "normal")
+      continue;
 
-  return m_windowOrder.indexOf(hoveredId);
+    const QRect winRect(static_cast<int>(win->x()),
+                        static_cast<int>(win->y()),
+                        static_cast<int>(win->width()),
+                        static_cast<int>(win->height()));
+
+    const QRect inter = dragRect.intersected(winRect);
+    const qint64 area = static_cast<qint64>(inter.width()) * static_cast<qint64>(inter.height());
+    if (area > bestArea) {
+      bestArea = area;
+      best     = win;
+    }
+  }
+
+  return best;
 }
 
 /**
@@ -1260,7 +1265,7 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
 
   // Drag window to new position
   if (m_dragWindow && dragDistance >= 20) {
-    handleDragMove(event, currentPos, delta);
+    handleDragMove(event, delta);
     return;
   }
 
@@ -1298,9 +1303,7 @@ void UI::WindowManager::updateManualSnapIndicator(
 /**
  * @brief Applies a drag delta to the focused window and updates snap indicators.
  */
-void UI::WindowManager::handleDragMove(QMouseEvent* event,
-                                       const QPoint& currentPos,
-                                       const QPoint& delta)
+void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
 {
   int newX          = m_initialGeometry.x() + delta.x();
   int newY          = m_initialGeometry.y() + delta.y();
@@ -1330,10 +1333,11 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event,
     return;
   }
 
-  // Auto-layout: pick a target window for reorder feedback
-  const int targetIndex = determineNewIndexFromMousePos(currentPos);
-  if (targetIndex >= 0 && targetIndex < m_windowOrder.size())
-    m_targetWindow = m_windows.value(m_windowOrder[targetIndex]);
+  // Auto-layout: pick the tile with the largest overlap so the indicator
+  // tracks the dragged window's body rather than the cursor (which sits on
+  // the dragged caption and would always be skipped by getWindow)
+  const QRect dragRect(newX, newY, w, h);
+  m_targetWindow = findOverlapTarget(dragRect);
 
   // Snap to target window if hovering over a different one
   if (m_targetWindow && m_targetWindow != m_dragWindow) {
