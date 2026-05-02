@@ -94,6 +94,14 @@ private:
 
   void drawButton(QPainter* painter, Button button, const QString& svgPath);
 
+  [[nodiscard]] QColor buttonIconColor(Button button, bool hovered, bool pressed) const;
+  void drawButtonHoverBackground(QPainter* painter, Button button, bool hovered, bool pressed);
+  [[nodiscard]] QPixmap renderColorizedSvg(const QString& svgPath,
+                                           const QSize& pixelSize,
+                                           const QRectF& logicalRect,
+                                           qreal dpr,
+                                           const QColor& iconColor) const;
+
 private:
   QString m_title;
   QPixmap m_icon;

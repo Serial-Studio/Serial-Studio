@@ -510,30 +510,22 @@ void Sessions::DatabaseWorker::fetchGlobalProjectJson()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Streams a session's readings into a CSV file row-by-row, emitting progress.
+ * @brief Loads CSV column metadata, populating the uniqueId order and header cells.
  */
-void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& outputPath)
+bool Sessions::DatabaseWorker::loadCsvColumns(int sessionId,
+                                              std::vector<int>& uniqueIds,
+                                              QStringList& headerCells,
+                                              QString& errorOut)
 {
-  m_cancelRequested.store(false, std::memory_order_release);
-
-  if (!m_db.isOpen()) {
-    Q_EMIT csvExportFinished(outputPath, false, tr("Database not open"));
-    return;
-  }
-
-  // Load column order
   QSqlQuery colQ(m_db);
   colQ.prepare("SELECT unique_id, group_title, title, units, source_title FROM columns "
                "WHERE session_id = ? ORDER BY column_id ASC");
   colQ.bindValue(0, sessionId);
   if (!colQ.exec()) {
-    Q_EMIT csvExportFinished(outputPath, false, colQ.lastError().text());
-    return;
+    errorOut = colQ.lastError().text();
+    return false;
   }
 
-  // Build header from column metadata
-  std::vector<int> uniqueIds;
-  QStringList headerCells;
   headerCells.append("Timestamp (s)");
   while (colQ.next()) {
     uniqueIds.push_back(colQ.value(0).toInt());
@@ -551,40 +543,22 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
     headerCells.append(label);
   }
 
-  // Approx total reading count for progress reporting
-  qint64 totalRows = 0;
-  {
-    QSqlQuery cnt(m_db);
-    cnt.prepare("SELECT COUNT(*) FROM readings WHERE session_id = ?");
-    cnt.bindValue(0, sessionId);
-    if (cnt.exec() && cnt.next())
-      totalRows = cnt.value(0).toLongLong();
-  }
+  return true;
+}
 
-  // uid -> column index
+/**
+ * @brief Iterates the readings result set, writing one CSV row per timestamp into out.
+ */
+bool Sessions::DatabaseWorker::streamCsvRows(QSqlQuery& readQ,
+                                             QFile& file,
+                                             QTextStream& out,
+                                             const std::vector<int>& uniqueIds,
+                                             qint64 totalRows,
+                                             const QString& outputPath)
+{
   QMap<int, int> uidToCol;
   for (int i = 0; i < static_cast<int>(uniqueIds.size()); ++i)
     uidToCol.insert(uniqueIds[static_cast<size_t>(i)], i);
-
-  QSqlQuery readQ(m_db);
-  readQ.setForwardOnly(true);
-  readQ.prepare(
-    "SELECT timestamp_ns, unique_id, final_numeric_value, final_string_value, is_numeric "
-    "FROM readings WHERE session_id = ? ORDER BY timestamp_ns, reading_id");
-  readQ.bindValue(0, sessionId);
-  if (!readQ.exec()) {
-    Q_EMIT csvExportFinished(outputPath, false, readQ.lastError().text());
-    return;
-  }
-
-  QFile file(outputPath);
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    Q_EMIT csvExportFinished(outputPath, false, file.errorString());
-    return;
-  }
-
-  QTextStream out(&file);
-  out << headerCells.join(',') << '\n';
 
   qint64 currentTs = -1;
   QStringList row;
@@ -616,7 +590,7 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
       file.close();
       file.remove();
       Q_EMIT csvExportFinished(outputPath, false, tr("Cancelled"));
-      return;
+      return false;
     }
 
     const qint64 ts  = readQ.value(0).toLongLong();
@@ -645,8 +619,62 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
   }
 
   flushRow();
-  file.close();
+  return true;
+}
 
+/**
+ * @brief Streams a session's readings into a CSV file row-by-row, emitting progress.
+ */
+void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& outputPath)
+{
+  m_cancelRequested.store(false, std::memory_order_release);
+
+  if (!m_db.isOpen()) {
+    Q_EMIT csvExportFinished(outputPath, false, tr("Database not open"));
+    return;
+  }
+
+  std::vector<int> uniqueIds;
+  QStringList headerCells;
+  QString error;
+  if (!loadCsvColumns(sessionId, uniqueIds, headerCells, error)) {
+    Q_EMIT csvExportFinished(outputPath, false, error);
+    return;
+  }
+
+  qint64 totalRows = 0;
+  {
+    QSqlQuery cnt(m_db);
+    cnt.prepare("SELECT COUNT(*) FROM readings WHERE session_id = ?");
+    cnt.bindValue(0, sessionId);
+    if (cnt.exec() && cnt.next())
+      totalRows = cnt.value(0).toLongLong();
+  }
+
+  QSqlQuery readQ(m_db);
+  readQ.setForwardOnly(true);
+  readQ.prepare(
+    "SELECT timestamp_ns, unique_id, final_numeric_value, final_string_value, is_numeric "
+    "FROM readings WHERE session_id = ? ORDER BY timestamp_ns, reading_id");
+  readQ.bindValue(0, sessionId);
+  if (!readQ.exec()) {
+    Q_EMIT csvExportFinished(outputPath, false, readQ.lastError().text());
+    return;
+  }
+
+  QFile file(outputPath);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    Q_EMIT csvExportFinished(outputPath, false, file.errorString());
+    return;
+  }
+
+  QTextStream out(&file);
+  out << headerCells.join(',') << '\n';
+
+  if (!streamCsvRows(readQ, file, out, uniqueIds, totalRows, outputPath))
+    return;
+
+  file.close();
   Q_EMIT csvExportProgress(1.0);
   Q_EMIT csvExportFinished(outputPath, true, QString());
 }

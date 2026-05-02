@@ -199,6 +199,12 @@ private:
   void renderReportFromPayload(const ReportPayloadPtr& payload);
   void runRestoreProjectFromJson(const QString& json);
 
+  static void createSchemaSessionTables(QSqlQuery& q);
+  static void migrateColumnsTable(QSqlQuery& q);
+  static void createSchemaSampleTables(QSqlQuery& q);
+  static void createSchemaTagTables(QSqlQuery& q);
+  static void createSchemaProjectMetadata(QSqlQuery& q);
+
 private:
   QThread* m_thread;
   DatabaseWorker* m_worker;

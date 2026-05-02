@@ -27,6 +27,7 @@
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QSet>
 #include <QSettings>
 #include <QUrl>
@@ -183,6 +184,36 @@ private:
   [[nodiscard]] bool isPathSafe(const QString& filePath, const QString& baseDir) const;
   [[nodiscard]] QJsonObject resolvePlatform(const QJsonObject& meta) const;
   [[nodiscard]] QUrl resolveFileUrl(const QString& repoBaseUrl, const QString& relativePath) const;
+
+  [[nodiscard]] bool catalogEntryMatchesFilters(const QJsonObject& entry) const;
+  [[nodiscard]] QVariantMap buildCatalogEntryMap(const QJsonObject& entry) const;
+  void appendOrphanedInstalledEntries();
+  void restoreSelectionByPreviousId();
+
+  [[nodiscard]] bool checkLaunchPreconditions(const QString& id);
+  [[nodiscard]] bool readPluginMetadata(const QString& id,
+                                        const QString& pluginDir,
+                                        QJsonObject& resolvedOut);
+  [[nodiscard]] bool ensureApiServerForLaunch(const QString& id, bool usesGrpc);
+  [[nodiscard]] bool resolveAndValidateEntry(const QString& id,
+                                             const QString& pluginDir,
+                                             const QString& entry,
+                                             QString& entryPathOut);
+  [[nodiscard]] bool checkPluginDependencies(const QString& id,
+                                             const QJsonArray& deps,
+                                             bool& hasPipDepsOut);
+  [[nodiscard]] QProcessEnvironment buildPluginEnvironment() const;
+  void wirePluginProcessSignals(QProcess* process, const QString& id);
+  void startPluginProcess(QProcess* process,
+                          const QString& runtime,
+                          const QString& entryPath,
+                          bool terminal);
+  void registerRunningPlugin(const QString& id,
+                             QProcess* process,
+                             const QJsonObject& resolved,
+                             const QString& pluginDir,
+                             bool terminal,
+                             bool hasPipDeps);
 
 private:
   bool m_loading;

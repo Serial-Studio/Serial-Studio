@@ -95,6 +95,9 @@ private slots:
   void updateData();
 
 private:
+  bool rebuildFftPlan(int newSize);
+  void computeSmoothedSpectrum(int spectrumSize);
+
   int m_size;
   int m_index;
   int m_samplingRate;

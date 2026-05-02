@@ -126,6 +126,12 @@ private:
   void readDeactivationResponse(const QByteArray& data);
   void readValidationResponse(const QByteArray& data, const bool cachedResponse);
 
+  void handleEmptyValidationResponse();
+  [[nodiscard]] bool checkValidationRules(const QJsonObject& json, const bool cachedResponse);
+  void updateAppNameFromVariant(const QString& variantName);
+  void applyValidatedLicense(const QJsonObject& json, const bool cachedResponse);
+  [[nodiscard]] bool checkActivationRules(const QJsonObject& json);
+
 private:
   bool m_busy;
   int m_seatLimit;

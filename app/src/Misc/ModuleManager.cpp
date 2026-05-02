@@ -383,103 +383,70 @@ void Misc::ModuleManager::registerQmlTypes()
  */
 void Misc::ModuleManager::initializeQmlInterface()
 {
-  // Initialize licensing module first
-#ifdef BUILD_COMMERCIAL
-  auto lemonSqueezy = &Licensing::LemonSqueezy::instance();
-  auto trial        = &Licensing::Trial::instance();
-#endif
-
-  // Initialize heavily used modules first
-  auto miscTranslator   = &Misc::Translator::instance();
-  auto miscThemeManager = &Misc::ThemeManager::instance();
-
-  // Initialize modules
-  auto appState             = &AppState::instance();
-  auto ioManager            = &IO::ConnectionManager::instance();
-  auto csvExport            = &CSV::Export::instance();
-  auto csvPlayer            = &CSV::Player::instance();
-  auto mdf4Export           = &MDF4::Export::instance();
-  auto mdf4Player           = &MDF4::Player::instance();
-  auto uiDashboard          = &UI::Dashboard::instance();
-  auto uiTaskbarSettings    = &UI::TaskbarSettings::instance();
-  auto ioSerial             = ioManager->uart();
-  auto pluginsBridge        = &API::Server::instance();
-  auto miscUtilities        = &Misc::Utilities::instance();
-  auto consoleExport        = &Console::Export::instance();
-  auto ioNetwork            = ioManager->network();
-  auto frameBuilder         = &DataModel::FrameBuilder::instance();
-  auto notificationCenter   = &DataModel::NotificationCenter::instance();
-  auto projectModel         = &DataModel::ProjectModel::instance();
-  auto projectEditor        = &DataModel::ProjectEditor::instance();
-  auto consoleHandler       = &Console::Handler::instance();
-  auto miscTimerEvents      = &Misc::TimerEvents::instance();
-  auto miscCommonFonts      = &Misc::CommonFonts::instance();
-  auto ioBluetoothLE        = ioManager->bluetoothLE();
-  auto ioFileTransmission   = &IO::FileTransmission::instance();
-  auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
-  auto miscExamples         = &Misc::Examples::instance();
-  auto miscHelpCenter       = &Misc::HelpCenter::instance();
-  auto miscExtensionManager = &Misc::ExtensionManager::instance();
-  auto miscIconEngine       = &Misc::IconEngine::instance();
-  auto frameParser          = &DataModel::FrameParser::instance();
-
-  // Initialize commercial modules
-#ifdef BUILD_COMMERCIAL
-  const bool qtCommercialAvailable = true;
-  auto mqttClient                  = &MQTT::Client::instance();
-  auto sqliteExport                = &Sessions::Export::instance();
-  auto sqlitePlayer                = &Sessions::Player::instance();
-  auto sqliteDbManager             = &Sessions::DatabaseManager::instance();
-  auto dbcImporter                 = &DataModel::DBCImporter::instance();
-  auto modbusMapImporter           = &DataModel::ModbusMapImporter::instance();
-  auto shortcutGenerator           = &Misc::ShortcutGenerator::instance();
-  auto audioDriver                 = ioManager->audio();
-  auto canBusDriver                = ioManager->canBus();
-  auto modbusDriver                = ioManager->modbus();
-  auto usbDriver                   = ioManager->usb();
-  auto hidDriver                   = ioManager->hid();
-  auto processDriver               = ioManager->process();
-#else
-  const bool qtCommercialAvailable = false;
-#endif
-
-  // Initialize gRPC server (optional)
 #ifdef ENABLE_GRPC
-  auto grpcServer          = &API::GRPC::GRPCServer::instance();
+  (void)API::GRPC::GRPCServer::instance();
   const bool grpcAvailable = true;
 #else
   const bool grpcAvailable = false;
 #endif
 
-  // Initialize third-party modules (not needed in headless mode)
-  QSimpleUpdater* updater = m_headless ? nullptr : QSimpleUpdater::getInstance();
+  Misc::TimerEvents::instance().startTimers();
 
-  // Start common event timers
-  miscTimerEvents->startTimers();
-
-  // Retranslate the QML interface automatically
-  connect(miscTranslator,
+  connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           &m_engine,
           &QQmlApplicationEngine::retranslate);
 
-  // Setup singleton module interconnections
-  appState->setupExternalConnections();
-  csvExport->setupExternalConnections();
-  ioManager->setupExternalConnections();
-  mdf4Export->setupExternalConnections();
-  frameParser->setupExternalConnections();
-  projectModel->setupExternalConnections();
-  frameBuilder->setupExternalConnections();
-  consoleExport->setupExternalConnections();
-  consoleHandler->setupExternalConnections();
-  ioFileTransmission->setupExternalConnections();
+  setupCrossModuleConnections();
+
+  qInstallMessageHandler(MessageHandler);
+  qAddPostRoutine([]() { qInstallMessageHandler(nullptr); });
+
+  const auto c = m_engine.rootContext();
+  registerCoreContextProperties(c);
 #ifdef BUILD_COMMERCIAL
-  sqliteExport->setupExternalConnections();
-  sqliteDbManager->setupExternalConnections();
+  registerCommercialContextProperties(c);
+#endif
+  registerAppMetadataProperties(c, grpcAvailable);
+
+  if (!m_headless)
+    registerImageProvidersAndLoadQml();
+
+#ifdef BUILD_COMMERCIAL
+  auto& lemonSqueezy = Licensing::LemonSqueezy::instance();
+  if (!lemonSqueezy.licensingData().isEmpty())
+    QMetaObject::invokeMethod(&lemonSqueezy, &Licensing::LemonSqueezy::validate);
+#endif
+}
+
+/**
+ * @brief Wires inter-module signals and runs each module's setupExternalConnections.
+ */
+void Misc::ModuleManager::setupCrossModuleConnections()
+{
+  auto* appState             = &AppState::instance();
+  auto* ioManager            = &IO::ConnectionManager::instance();
+  auto* pluginsBridge        = &API::Server::instance();
+  auto* uiDashboard          = &UI::Dashboard::instance();
+  auto* notificationCenter   = &DataModel::NotificationCenter::instance();
+  auto* miscExtensionManager = &Misc::ExtensionManager::instance();
+  auto* miscThemeManager     = &Misc::ThemeManager::instance();
+
+  appState->setupExternalConnections();
+  CSV::Export::instance().setupExternalConnections();
+  ioManager->setupExternalConnections();
+  MDF4::Export::instance().setupExternalConnections();
+  DataModel::FrameParser::instance().setupExternalConnections();
+  DataModel::ProjectModel::instance().setupExternalConnections();
+  DataModel::FrameBuilder::instance().setupExternalConnections();
+  Console::Export::instance().setupExternalConnections();
+  Console::Handler::instance().setupExternalConnections();
+  IO::FileTransmission::instance().setupExternalConnections();
+#ifdef BUILD_COMMERCIAL
+  Sessions::Export::instance().setupExternalConnections();
+  Sessions::DatabaseManager::instance().setupExternalConnections();
 #endif
 
-  // Wire addon manager signals to theme manager for hot-reloading user themes
   connect(miscExtensionManager,
           &Misc::ExtensionManager::extensionInstalled,
           miscThemeManager,
@@ -489,7 +456,6 @@ void Misc::ModuleManager::initializeQmlInterface()
           miscThemeManager,
           &Misc::ThemeManager::onExtensionUninstalled);
 
-  // Broadcast lifecycle events to API clients so plugins can save/restore state
   connect(ioManager,
           &IO::ConnectionManager::connectedChanged,
           pluginsBridge,
@@ -499,31 +465,92 @@ void Misc::ModuleManager::initializeQmlInterface()
                                                      : QStringLiteral("disconnected"));
           });
 
-  // Restore last project after all modules are wired so all signals fire correctly
   appState->restoreLastProject();
 
-  // Refresh extensions; plugins auto-launch/stop with the dashboard
   miscExtensionManager->refreshRepositories();
   connect(uiDashboard,
           &UI::Dashboard::widgetCountChanged,
           miscExtensionManager,
           &Misc::ExtensionManager::onDashboardAvailableChanged);
 
-  // Clear notification history when the dashboard resets (disconnect/project reload)
   connect(uiDashboard,
           &UI::Dashboard::dataReset,
           notificationCenter,
           &DataModel::NotificationCenter::clearAll);
+}
 
-  // Redirect qDebug to console; restore default at teardown to keep late warnings safe
-  qInstallMessageHandler(MessageHandler);
-  qAddPostRoutine([]() { qInstallMessageHandler(nullptr); });
+/**
+ * @brief Registers every always-available C++ singleton as a QML context property.
+ */
+void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
+{
+  auto* ioManager = &IO::ConnectionManager::instance();
 
-  // Obtain build date/time
-  const auto buildDate = QStringLiteral(__DATE__);
-  const auto buildTime = QStringLiteral(__TIME__);
+  ctx->setContextProperty("Cpp_AppState", &AppState::instance());
+  ctx->setContextProperty("Cpp_Updater", m_headless ? nullptr : QSimpleUpdater::getInstance());
+  ctx->setContextProperty("Cpp_IO_Serial", ioManager->uart());
+  ctx->setContextProperty("Cpp_CSV_Export", &CSV::Export::instance());
+  ctx->setContextProperty("Cpp_CSV_Player", &CSV::Player::instance());
+  ctx->setContextProperty("Cpp_IO_Manager", ioManager);
+  ctx->setContextProperty("Cpp_IO_Network", ioManager->network());
+  ctx->setContextProperty("Cpp_MDF4_Export", &MDF4::Export::instance());
+  ctx->setContextProperty("Cpp_MDF4_Player", &MDF4::Player::instance());
+  ctx->setContextProperty("Cpp_Misc_ModuleManager", this);
+  ctx->setContextProperty("Cpp_UI_Dashboard", &UI::Dashboard::instance());
+  ctx->setContextProperty("Cpp_UI_TaskbarSettings", &UI::TaskbarSettings::instance());
+  ctx->setContextProperty("Cpp_Console_Export", &Console::Export::instance());
+  ctx->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
+  ctx->setContextProperty("Cpp_API_Server", &API::Server::instance());
+  ctx->setContextProperty("Cpp_Misc_Utilities", &Misc::Utilities::instance());
+  ctx->setContextProperty("Cpp_IO_Bluetooth_LE", ioManager->bluetoothLE());
+  ctx->setContextProperty("Cpp_ThemeManager", &Misc::ThemeManager::instance());
+  ctx->setContextProperty("Cpp_Console_Handler", &Console::Handler::instance());
+  ctx->setContextProperty("Cpp_Misc_Translator", &Misc::Translator::instance());
+  ctx->setContextProperty("Cpp_JSON_ProjectModel", &DataModel::ProjectModel::instance());
+  ctx->setContextProperty("Cpp_JSON_ProjectEditor", &DataModel::ProjectEditor::instance());
+  ctx->setContextProperty("Cpp_JSON_FrameBuilder", &DataModel::FrameBuilder::instance());
+  ctx->setContextProperty("Cpp_Notifications", &DataModel::NotificationCenter::instance());
+  ctx->setContextProperty("Cpp_Misc_TimerEvents", &Misc::TimerEvents::instance());
+  ctx->setContextProperty("Cpp_Misc_CommonFonts", &Misc::CommonFonts::instance());
+  ctx->setContextProperty("Cpp_IO_FileTransmission", &IO::FileTransmission::instance());
+  ctx->setContextProperty("Cpp_Misc_WorkspaceManager", &Misc::WorkspaceManager::instance());
+  ctx->setContextProperty("Cpp_Examples", &Misc::Examples::instance());
+  ctx->setContextProperty("Cpp_HelpCenter", &Misc::HelpCenter::instance());
+  ctx->setContextProperty("Cpp_ExtensionManager", &Misc::ExtensionManager::instance());
+  ctx->setContextProperty("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
+}
 
-  // Construct a QML-friendly list of available screens
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Registers Pro-only C++ singletons as QML context properties.
+ */
+void Misc::ModuleManager::registerCommercialContextProperties(QQmlContext* ctx)
+{
+  auto* ioManager = &IO::ConnectionManager::instance();
+
+  ctx->setContextProperty("Cpp_IO_Audio", ioManager->audio());
+  ctx->setContextProperty("Cpp_IO_CANBus", ioManager->canBus());
+  ctx->setContextProperty("Cpp_IO_Modbus", ioManager->modbus());
+  ctx->setContextProperty("Cpp_IO_USB", ioManager->usb());
+  ctx->setContextProperty("Cpp_IO_HID", ioManager->hid());
+  ctx->setContextProperty("Cpp_IO_Process", ioManager->process());
+  ctx->setContextProperty("Cpp_JSON_DBCImporter", &DataModel::DBCImporter::instance());
+  ctx->setContextProperty("Cpp_JSON_ModbusMapImporter", &DataModel::ModbusMapImporter::instance());
+  ctx->setContextProperty("Cpp_Licensing_Trial", &Licensing::Trial::instance());
+  ctx->setContextProperty("Cpp_MQTT_Client", &MQTT::Client::instance());
+  ctx->setContextProperty("Cpp_Licensing_LemonSqueezy", &Licensing::LemonSqueezy::instance());
+  ctx->setContextProperty("Cpp_Sessions_Export", &Sessions::Export::instance());
+  ctx->setContextProperty("Cpp_Sessions_Player", &Sessions::Player::instance());
+  ctx->setContextProperty("Cpp_Sessions_Manager", &Sessions::DatabaseManager::instance());
+  ctx->setContextProperty("Cpp_ShortcutGenerator", &Misc::ShortcutGenerator::instance());
+}
+#endif
+
+/**
+ * @brief Registers app metadata, build info, and screen list QML context properties.
+ */
+void Misc::ModuleManager::registerAppMetadataProperties(QQmlContext* ctx, bool grpcAvailable)
+{
   QVariantList screenList;
   QVariantMap primaryScreen;
   if (!m_headless) {
@@ -538,108 +565,53 @@ void Misc::ModuleManager::initializeQmlInterface()
     primaryScreen["geometry"] = qApp->primaryScreen()->geometry();
   }
 
-  // Register C++ modules with QML
-  const auto c = m_engine.rootContext();
-  c->setContextProperty("Cpp_AppState", appState);
-  c->setContextProperty("Cpp_Updater", updater);
-  c->setContextProperty("Cpp_IO_Serial", ioSerial);
-  c->setContextProperty("Cpp_CSV_Export", csvExport);
-  c->setContextProperty("Cpp_CSV_Player", csvPlayer);
-  c->setContextProperty("Cpp_IO_Manager", ioManager);
-  c->setContextProperty("Cpp_IO_Network", ioNetwork);
-  c->setContextProperty("Cpp_MDF4_Export", mdf4Export);
-  c->setContextProperty("Cpp_MDF4_Player", mdf4Player);
-  c->setContextProperty("Cpp_Misc_ModuleManager", this);
-  c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
-  c->setContextProperty("Cpp_UI_TaskbarSettings", uiTaskbarSettings);
-  c->setContextProperty("Cpp_Console_Export", consoleExport);
-  c->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
-  c->setContextProperty("Cpp_API_Server", pluginsBridge);
-  c->setContextProperty("Cpp_Misc_Utilities", miscUtilities);
-  c->setContextProperty("Cpp_IO_Bluetooth_LE", ioBluetoothLE);
-  c->setContextProperty("Cpp_ThemeManager", miscThemeManager);
-  c->setContextProperty("Cpp_Console_Handler", consoleHandler);
-  c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
-  c->setContextProperty("Cpp_JSON_ProjectModel", projectModel);
-  c->setContextProperty("Cpp_JSON_ProjectEditor", projectEditor);
-  c->setContextProperty("Cpp_JSON_FrameBuilder", frameBuilder);
-  c->setContextProperty("Cpp_Notifications", notificationCenter);
-  c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
-  c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
-  c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
-  c->setContextProperty("Cpp_Misc_WorkspaceManager", miscWorkspaceManager);
-  c->setContextProperty("Cpp_Examples", miscExamples);
-  c->setContextProperty("Cpp_HelpCenter", miscHelpCenter);
-  c->setContextProperty("Cpp_ExtensionManager", miscExtensionManager);
-  c->setContextProperty("Cpp_Misc_IconEngine", miscIconEngine);
-
-  // Register commercial C++ modules with QML
 #ifdef BUILD_COMMERCIAL
-  c->setContextProperty("Cpp_IO_Audio", audioDriver);
-  c->setContextProperty("Cpp_IO_CANBus", canBusDriver);
-  c->setContextProperty("Cpp_IO_Modbus", modbusDriver);
-  c->setContextProperty("Cpp_IO_USB", usbDriver);
-  c->setContextProperty("Cpp_IO_HID", hidDriver);
-  c->setContextProperty("Cpp_IO_Process", processDriver);
-  c->setContextProperty("Cpp_JSON_DBCImporter", dbcImporter);
-  c->setContextProperty("Cpp_JSON_ModbusMapImporter", modbusMapImporter);
-  c->setContextProperty("Cpp_Licensing_Trial", trial);
-  c->setContextProperty("Cpp_MQTT_Client", mqttClient);
-  c->setContextProperty("Cpp_Licensing_LemonSqueezy", lemonSqueezy);
-  c->setContextProperty("Cpp_Sessions_Export", sqliteExport);
-  c->setContextProperty("Cpp_Sessions_Player", sqlitePlayer);
-  c->setContextProperty("Cpp_Sessions_Manager", sqliteDbManager);
-  c->setContextProperty("Cpp_ShortcutGenerator", shortcutGenerator);
+  const bool qtCommercialAvailable = true;
+#else
+  const bool qtCommercialAvailable = false;
 #endif
 
-  // Register app info with QML
-  c->setContextProperty("Cpp_AppName", APP_NAME);
-  c->setContextProperty("Cpp_BuildDate", buildDate);
-  c->setContextProperty("Cpp_BuildTime", buildTime);
-  c->setContextProperty("Cpp_ScreenList", screenList);
-  c->setContextProperty("Cpp_AppVersion", APP_VERSION);
-  c->setContextProperty("Cpp_PrimaryScreen", primaryScreen);
-  c->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
-  c->setContextProperty("Cpp_AppOrganization", APP_DEVELOPER);
-  c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
-  c->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
-  c->setContextProperty("Cpp_GrpcAvailable", grpcAvailable);
-  c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
+  ctx->setContextProperty("Cpp_AppName", APP_NAME);
+  ctx->setContextProperty("Cpp_BuildDate", QStringLiteral(__DATE__));
+  ctx->setContextProperty("Cpp_BuildTime", QStringLiteral(__TIME__));
+  ctx->setContextProperty("Cpp_ScreenList", screenList);
+  ctx->setContextProperty("Cpp_AppVersion", APP_VERSION);
+  ctx->setContextProperty("Cpp_PrimaryScreen", primaryScreen);
+  ctx->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
+  ctx->setContextProperty("Cpp_AppOrganization", APP_DEVELOPER);
+  ctx->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
+  ctx->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
+  ctx->setContextProperty("Cpp_GrpcAvailable", grpcAvailable);
+  ctx->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
 #ifdef ENABLE_GRPC
-  c->setContextProperty("Cpp_GRPC_Server", grpcServer);
+  ctx->setContextProperty("Cpp_GRPC_Server", &API::GRPC::GRPCServer::instance());
 #endif
+}
 
-  if (!m_headless) {
-    // Register image provider for inline SVG action icons
-    m_engine.addImageProvider(QStringLiteral("actionicon"), new Misc::ActionIconProvider());
+/**
+ * @brief Installs QML image providers, loads main.qml, and wires the macOS quit interceptor.
+ */
+void Misc::ModuleManager::registerImageProvidersAndLoadQml()
+{
+  m_engine.addImageProvider(QStringLiteral("actionicon"), new Misc::ActionIconProvider());
 
-    // Register image provider for Image View widget (pro only)
 #ifdef BUILD_COMMERCIAL
-    auto* imgProvider = new UI::ImageProvider();
-    UI::ImageProvider::setGlobal(imgProvider);
-    m_engine.addImageProvider(QStringLiteral("serial-studio-img"), imgProvider);
+  auto* imgProvider = new UI::ImageProvider();
+  UI::ImageProvider::setGlobal(imgProvider);
+  m_engine.addImageProvider(QStringLiteral("serial-studio-img"), imgProvider);
 
-    auto imageExport = &Widgets::ImageExport::instance();
-    imageExport->setupExternalConnections();
-    c->setContextProperty("Cpp_Image_Export", imageExport);
+  auto* imageExport = &Widgets::ImageExport::instance();
+  imageExport->setupExternalConnections();
+  m_engine.rootContext()->setContextProperty("Cpp_Image_Export", imageExport);
 #endif
 
-    // Load main.qml
-    m_engine.load(QUrl("qrc:/serial-studio.com/gui/qml/main.qml"));
+  m_engine.load(QUrl("qrc:/serial-studio.com/gui/qml/main.qml"));
 
-    // Install macOS quit interceptor and wire it to QML
-    m_nativeWindow.installMacOSQuitInterceptor();
-    connect(&m_nativeWindow, &NativeWindow::quitRequested, this, [this]() {
-      auto roots = m_engine.rootObjects();
-      if (!roots.isEmpty())
-        QMetaObject::invokeMethod(roots.first(), "quitApplication");
-    });
-  }
-
-  // Try to contact activation server to validate license
-#ifdef BUILD_COMMERCIAL
-  if (!lemonSqueezy->licensingData().isEmpty())
-    QMetaObject::invokeMethod(lemonSqueezy, &Licensing::LemonSqueezy::validate);
-#endif
+  m_nativeWindow.installMacOSQuitInterceptor();
+  connect(&m_nativeWindow, &NativeWindow::quitRequested, this, [this]() {
+    auto roots = m_engine.rootObjects();
+    if (!roots.isEmpty())
+      QMetaObject::invokeMethod(roots.first(), "quitApplication");
+  });
 }

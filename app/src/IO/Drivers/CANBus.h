@@ -132,6 +132,10 @@ private:
   [[nodiscard]] bool canSupportAvailable() const;
   [[nodiscard]] QString noInterfacesHint(const QString& plugin) const;
 
+  void showCanSupportError();
+  [[nodiscard]] bool validateOpenPreconditions();
+  void wireCanBusSignals();
+
 private:
   QCanBusDevice* m_device;
 

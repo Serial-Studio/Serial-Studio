@@ -23,6 +23,10 @@
 
 #include <QQuickItem>
 
+namespace DataModel {
+struct Group;
+}  // namespace DataModel
+
 namespace Widgets {
 /**
  * @brief Attitude indicator widget for visualizing 3-axis gyroscope data.
@@ -55,6 +59,16 @@ private slots:
   void updateData();
 
 private:
+  void readAxisInputs(const DataModel::Group& gyro,
+                      double& yawInput,
+                      double& rollInput,
+                      double& pitchInput,
+                      bool& hasYaw,
+                      bool& hasRoll,
+                      bool& hasPitch) const;
+  void applyEmaUpdate(
+    double yawInput, double rollInput, double pitchInput, bool hasYaw, bool hasRoll, bool hasPitch);
+
   int m_index;
 
   double m_yaw;

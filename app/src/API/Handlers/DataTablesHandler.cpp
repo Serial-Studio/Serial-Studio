@@ -25,6 +25,7 @@
 #include <QJsonObject>
 
 #include "API/CommandRegistry.h"
+#include "API/SchemaBuilder.h"
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
 
@@ -70,184 +71,155 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Builds the property descriptor for a table register's defaultValue.
+ *
+ * The defaultValue accepts either a number or a string, which makeSchema()
+ * cannot express. Helpers below splice this object into manually-built schemas.
+ */
+[[nodiscard]] static QJsonObject defaultValueProp()
+{
+  return QJsonObject{
+    {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
+    {QStringLiteral("description"),             QStringLiteral("Default value (number or string)")}
+  };
+}
+
+/**
  * @brief Register all data-table commands with the command registry.
  */
 void API::Handlers::DataTablesHandler::registerCommands()
 {
-  auto& registry = CommandRegistry::instance();
+  registerTableQueryCommands();
+  registerTableMutationCommands();
+  registerRegisterCommands();
+}
 
-  // Parameterless schema for simple list queries
-  QJsonObject emptySchema;
-  emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
-  emptySchema[QStringLiteral("properties")] = QJsonObject();
+/**
+ * @brief Register read-only table query commands.
+ */
+void API::Handlers::DataTablesHandler::registerTableQueryCommands()
+{
+  auto& registry = CommandRegistry::instance();
 
   registry.registerCommand(QStringLiteral("project.tables.list"),
                            QStringLiteral("List all user-defined data tables"),
-                           emptySchema,
+                           API::emptySchema(),
                            &tablesList);
+  registry.registerCommand(
+    QStringLiteral("project.tables.get"),
+    QStringLiteral("Return the register list for a table (params: name)"),
+    API::makeSchema({
+      {QStringLiteral("name"), QStringLiteral("string"), QStringLiteral("Table name")}
+  }),
+    &tableGet);
+}
 
-  // project.tables.get -- name required
-  {
-    QJsonObject props;
-    props[QStringLiteral("name")] = QJsonObject{
-      {       QStringLiteral("type"),     QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Table name")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("name")};
-    registry.registerCommand(QStringLiteral("project.tables.get"),
-                             QStringLiteral("Return the register list for a table (params: name)"),
-                             schema,
-                             &tableGet);
-  }
+/**
+ * @brief Register table create/delete/rename mutation commands.
+ */
+void API::Handlers::DataTablesHandler::registerTableMutationCommands()
+{
+  auto& registry = CommandRegistry::instance();
 
-  // project.tables.add -- optional name (auto-uniquified)
-  {
-    QJsonObject props;
-    props[QStringLiteral("name")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Desired table name (uniquified on collision)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    registry.registerCommand(
-      QStringLiteral("project.tables.add"),
-      QStringLiteral("Create a new empty table (params: name=\"Shared Table\")"),
-      schema,
-      &tableAdd);
-  }
+  registry.registerCommand(
+    QStringLiteral("project.tables.add"),
+    QStringLiteral("Create a new empty table (params: name=\"Shared Table\")"),
+    API::makeSchema(
+      {
+  },
+      {{QStringLiteral("name"),
+        QStringLiteral("string"),
+        QStringLiteral("Desired table name (uniquified on collision)")}}),
+    &tableAdd);
+  registry.registerCommand(
+    QStringLiteral("project.tables.delete"),
+    QStringLiteral("Delete a table (params: name)"),
+    API::makeSchema({
+      {QStringLiteral("name"), QStringLiteral("string"), QStringLiteral("Table name")}
+  }),
+    &tableDelete);
+  registry.registerCommand(
+    QStringLiteral("project.tables.rename"),
+    QStringLiteral("Rename a table (params: oldName, newName)"),
+    API::makeSchema({
+      {QStringLiteral("oldName"), QStringLiteral("string"), QStringLiteral("Current table name")},
+      {QStringLiteral("newName"), QStringLiteral("string"),     QStringLiteral("New table name")}
+  }),
+    &tableRename);
+}
 
-  // project.tables.delete
-  {
-    QJsonObject props;
-    props[QStringLiteral("name")] = QJsonObject{
-      {       QStringLiteral("type"),     QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Table name")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("name")};
-    registry.registerCommand(QStringLiteral("project.tables.delete"),
-                             QStringLiteral("Delete a table (params: name)"),
-                             schema,
-                             &tableDelete);
-  }
+/**
+ * @brief Register register-level add/delete/update commands.
+ */
+void API::Handlers::DataTablesHandler::registerRegisterCommands()
+{
+  auto& registry = CommandRegistry::instance();
 
-  // project.tables.rename
-  {
-    QJsonObject props;
-    props[QStringLiteral("oldName")] = QJsonObject{
-      {       QStringLiteral("type"),             QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Current table name")}
-    };
-    props[QStringLiteral("newName")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("New table name")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("oldName"), QStringLiteral("newName")};
-    registry.registerCommand(QStringLiteral("project.tables.rename"),
-                             QStringLiteral("Rename a table (params: oldName, newName)"),
-                             schema,
-                             &tableRename);
-  }
+  // register.add: defaultValue accepts number|string, splice manually.
+  QJsonObject addProps;
+  addProps[QStringLiteral("table")] = QJsonObject{
+    {       QStringLiteral("type"),            QStringLiteral("string")},
+    {QStringLiteral("description"), QStringLiteral("Owning table name")}
+  };
+  addProps[QStringLiteral("name")] = QJsonObject{
+    {       QStringLiteral("type"),                          QStringLiteral("string")},
+    {QStringLiteral("description"), QStringLiteral("Register name (auto-uniquified)")}
+  };
+  addProps[QStringLiteral("computed")] = QJsonObject{
+    {       QStringLiteral("type"),QStringLiteral("boolean")                                   },
+    {QStringLiteral("description"),
+     QStringLiteral("true=computed (writable by transforms), false=constant")}
+  };
+  addProps[QStringLiteral("defaultValue")] = defaultValueProp();
+  QJsonObject addSchema;
+  addSchema[QStringLiteral("type")]       = QStringLiteral("object");
+  addSchema[QStringLiteral("properties")] = addProps;
+  addSchema[QStringLiteral("required")] =
+    QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
+  registry.registerCommand(
+    QStringLiteral("project.tables.register.add"),
+    QStringLiteral("Append a register (params: table, name, computed=true, defaultValue=0)"),
+    addSchema,
+    &registerAdd);
 
-  // project.tables.register.add
-  {
-    QJsonObject props;
-    props[QStringLiteral("table")] = QJsonObject{
-      {       QStringLiteral("type"),            QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Owning table name")}
-    };
-    props[QStringLiteral("name")] = QJsonObject{
-      {       QStringLiteral("type"),                          QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Register name (auto-uniquified)")}
-    };
-    props[QStringLiteral("computed")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("boolean")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("true=computed (writable by transforms), false=constant")}
-    };
-    props[QStringLiteral("defaultValue")] = QJsonObject{
-      {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
-      {QStringLiteral("description"),             QStringLiteral("Default value (number or string)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
-    registry.registerCommand(
-      QStringLiteral("project.tables.register.add"),
-      QStringLiteral("Append a register (params: table, name, computed=true, defaultValue=0)"),
-      schema,
-      &registerAdd);
-  }
+  registry.registerCommand(
+    QStringLiteral("project.tables.register.delete"),
+    QStringLiteral("Delete a register (params: table, name)"),
+    API::makeSchema({
+      {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
+      { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Register name")}
+  }),
+    &registerDelete);
 
-  // project.tables.register.delete
-  {
-    QJsonObject props;
-    props[QStringLiteral("table")] = QJsonObject{
-      {       QStringLiteral("type"),            QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Owning table name")}
-    };
-    props[QStringLiteral("name")] = QJsonObject{
-      {       QStringLiteral("type"),        QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Register name")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
-    registry.registerCommand(QStringLiteral("project.tables.register.delete"),
-                             QStringLiteral("Delete a register (params: table, name)"),
-                             schema,
-                             &registerDelete);
-  }
-
-  // project.tables.register.update
-  {
-    QJsonObject props;
-    props[QStringLiteral("table")] = QJsonObject{
-      {       QStringLiteral("type"),            QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Owning table name")}
-    };
-    props[QStringLiteral("name")] = QJsonObject{
-      {       QStringLiteral("type"),                QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Current register name")}
-    };
-    props[QStringLiteral("newName")] = QJsonObject{
-      {       QStringLiteral("type"),                       QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("New register name (optional)")}
-    };
-    props[QStringLiteral("computed")] = QJsonObject{
-      {       QStringLiteral("type"),                               QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Switch to computed (true) or constant")}
-    };
-    props[QStringLiteral("defaultValue")] = QJsonObject{
-      {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
-      {QStringLiteral("description"),             QStringLiteral("Default value (number or string)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
-    registry.registerCommand(
-      QStringLiteral("project.tables.register.update"),
-      QStringLiteral("Update a register (params: table, name, newName?, computed?, defaultValue?)"),
-      schema,
-      &registerUpdate);
-  }
+  // register.update: defaultValue accepts number|string, splice manually.
+  QJsonObject updProps;
+  updProps[QStringLiteral("table")] = QJsonObject{
+    {       QStringLiteral("type"),            QStringLiteral("string")},
+    {QStringLiteral("description"), QStringLiteral("Owning table name")}
+  };
+  updProps[QStringLiteral("name")] = QJsonObject{
+    {       QStringLiteral("type"),                QStringLiteral("string")},
+    {QStringLiteral("description"), QStringLiteral("Current register name")}
+  };
+  updProps[QStringLiteral("newName")] = QJsonObject{
+    {       QStringLiteral("type"),                       QStringLiteral("string")},
+    {QStringLiteral("description"), QStringLiteral("New register name (optional)")}
+  };
+  updProps[QStringLiteral("computed")] = QJsonObject{
+    {       QStringLiteral("type"),                               QStringLiteral("boolean")},
+    {QStringLiteral("description"), QStringLiteral("Switch to computed (true) or constant")}
+  };
+  updProps[QStringLiteral("defaultValue")] = defaultValueProp();
+  QJsonObject updSchema;
+  updSchema[QStringLiteral("type")]       = QStringLiteral("object");
+  updSchema[QStringLiteral("properties")] = updProps;
+  updSchema[QStringLiteral("required")] =
+    QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
+  registry.registerCommand(
+    QStringLiteral("project.tables.register.update"),
+    QStringLiteral("Update a register (params: table, name, newName?, computed?, defaultValue?)"),
+    updSchema,
+    &registerUpdate);
 }
 
 //--------------------------------------------------------------------------------------------------

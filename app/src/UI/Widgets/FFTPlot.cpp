@@ -274,86 +274,49 @@ void Widgets::FFTPlot::setRunning(const bool enabled)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the FFT data.
+ * @brief Rebuilds the FFT plan and window when the input size changes.
  */
-void Widgets::FFTPlot::updateData()
+bool Widgets::FFTPlot::rebuildFftPlan(int newSize)
 {
-  // Share workspace data
-  static thread_local DSP::DownsampleWorkspace ws;
+  m_size = newSize;
 
-  // Skip if widget is disabled
-  if (!isEnabled())
-    return;
+  m_window.resize(m_size);
+  m_samples.resize(m_size);
+  m_fftOutput.resize(m_size);
 
-  // Only work with valid data
-  if (!VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
-    return;
+  const auto windowSize = static_cast<unsigned int>(m_size);
+  for (unsigned int i = 0; i < windowSize; ++i)
+    m_window[i] = blackman_harris_coeff(i, windowSize);
 
-  // Fetch time-domain data
-  const auto& data = UI::Dashboard::instance().fftData(m_index);
-
-  // Re-initialize FFT structures if data size changes
-  const int newSize = static_cast<int>(data.size());
-  if (newSize != m_size) {
-    m_size = newSize;
-
-    m_window.resize(m_size);
-    m_samples.resize(m_size);
-    m_fftOutput.resize(m_size);
-
-    const auto windowSize = static_cast<unsigned int>(m_size);
-    for (unsigned int i = 0; i < windowSize; ++i)
-      m_window[i] = blackman_harris_coeff(i, windowSize);
-
-    if (m_plan) {
-      kiss_fft_free(m_plan);
-      m_plan = nullptr;
-    }
-
-    m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
-    if (!m_plan) {
-      qWarning() << "FFT plan allocation failed for size:" << m_size;
-      return;
-    }
+  if (m_plan) {
+    kiss_fft_free(m_plan);
+    m_plan = nullptr;
   }
 
-  if (newSize <= 0)
-    return;
-
-  // Access the internal buffer and state of the circular queue
-  const double* in      = data.raw();
-  std::size_t idx       = data.frontIndex();
-  const std::size_t cap = data.capacity();
-
-  // Normalize time-domain input samples into [-1, 1] range
-  const double offset = m_scaleIsValid ? -m_center : 0.0;
-  const double scale  = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
-  for (int i = 0; i < m_size; ++i) {
-    const double raw = in[idx];
-    const float v    = std::isfinite(raw) ? static_cast<float>((raw + offset) * scale) : 0.0f;
-    m_samples[i].r   = v * m_window[i];
-    m_samples[i].i   = 0.0f;
-    idx              = (idx + 1) % cap;
+  m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
+  if (!m_plan) {
+    qWarning() << "FFT plan allocation failed for size:" << m_size;
+    return false;
   }
 
-  // Run FFT
-  kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
+  return true;
+}
 
-  // Constants
+/**
+ * @brief Converts the FFT output to dB, smooths the spectrum, and fills the
+ *        x/y axis buffers used by the downsampler.
+ */
+void Widgets::FFTPlot::computeSmoothedSpectrum(int spectrumSize)
+{
   constexpr float floorDB       = -100.0f;
   constexpr int smoothingWindow = 3;
   constexpr float eps_squared   = 1e-24f;
   constexpr int halfWindow      = smoothingWindow / 2;
 
-  // Compute number of frequency bins (Nyquist rate)
-  const int spectrumSize = static_cast<size_t>(m_size) / 2;
-
-  // Allocate dB cache only if needed
   static thread_local std::vector<float> dbCache;
   if (dbCache.size() < static_cast<size_t>(spectrumSize))
     dbCache.resize(spectrumSize);
 
-  // Precompute dB values
   const float normFactor = static_cast<float>(m_size) * static_cast<float>(m_size);
   for (int i = 0; i < spectrumSize; ++i) {
     const float re    = m_fftOutput[i].r;
@@ -362,19 +325,16 @@ void Widgets::FFTPlot::updateData()
     dbCache[i]        = std::max(10.0f * std::log10(power), floorDB);
   }
 
-  // Resize X buffer if needed
   if (m_xData.size() != static_cast<size_t>(spectrumSize)) {
     m_xData.resize(spectrumSize);
     m_xData.clear();
   }
 
-  // Resize Y buffer if needed
   if (m_yData.size() != static_cast<size_t>(spectrumSize)) {
     m_yData.resize(spectrumSize);
     m_yData.clear();
   }
 
-  // Smoothing and XY point generation
   for (int i = 0; i < spectrumSize; ++i) {
     const int minIdx = std::max(0, i - halfWindow);
     const int maxIdx = std::min(spectrumSize - 1, i + halfWindow);
@@ -389,7 +349,47 @@ void Widgets::FFTPlot::updateData()
     m_xData.push(freq);
     m_yData.push(smoothedDB);
   }
+}
 
-  // Downsample data
+/**
+ * @brief Updates the FFT data.
+ */
+void Widgets::FFTPlot::updateData()
+{
+  static thread_local DSP::DownsampleWorkspace ws;
+
+  if (!isEnabled())
+    return;
+
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
+    return;
+
+  // Fetch time-domain data
+  const auto& data  = UI::Dashboard::instance().fftData(m_index);
+  const int newSize = static_cast<int>(data.size());
+  if (newSize != m_size && !rebuildFftPlan(newSize))
+    return;
+
+  if (newSize <= 0)
+    return;
+
+  // Normalize time-domain input samples into [-1, 1] range
+  const double* in      = data.raw();
+  std::size_t idx       = data.frontIndex();
+  const std::size_t cap = data.capacity();
+  const double offset   = m_scaleIsValid ? -m_center : 0.0;
+  const double scale    = m_scaleIsValid ? (1.0 / m_halfRange) : 1.0;
+  for (int i = 0; i < m_size; ++i) {
+    const double raw = in[idx];
+    const float v    = std::isfinite(raw) ? static_cast<float>((raw + offset) * scale) : 0.0f;
+    m_samples[i].r   = v * m_window[i];
+    m_samples[i].i   = 0.0f;
+    idx              = (idx + 1) % cap;
+  }
+
+  // Run FFT, smooth the resulting spectrum, and downsample for the line series
+  kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
+  const int spectrumSize = static_cast<size_t>(m_size) / 2;
+  computeSmoothedSpectrum(spectrumSize);
   DSP::downsampleMonotonic(m_xData, m_yData, m_dataW, m_dataH, m_data, &ws);
 }

@@ -136,6 +136,22 @@ private:
     QPainter* painter, int wrappedTx, int ty, int baseZoom, const QRect& targetRect);
   void renderReferenceOverlay(
     QPainter* painter, int wrappedTx, int ty, int baseZoom, const QRect& targetRect);
+  void renderCloudOverlay(QPainter* painter,
+                          int wrappedTx,
+                          int ty,
+                          int baseZoom,
+                          const QRect& targetRect,
+                          double scaledTileSize);
+  void renderTrajectoryPath(QPainter* painter,
+                            const QSize& view,
+                            int baseZoom,
+                            double scale,
+                            const QPointF& centerTileBase);
+  void renderPositionIndicator(QPainter* painter,
+                               const QSize& view,
+                               int baseZoom,
+                               double scale,
+                               const QPointF& centerTileBase);
 
 protected:
   void wheelEvent(QWheelEvent* event) override;

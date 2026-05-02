@@ -297,6 +297,55 @@ private:
                                QHash<QString, bool>& map,
                                const QString& title);
 
+  void wireProjectModelRebuilds();
+  void wireGroupSignals();
+  void wireDatasetSignals();
+  void wireActionSignals();
+  void wireOutputWidgetSignals();
+  void wireSourceSignals();
+  void wireEditorSelfSignals();
+  void wireExternalSignals();
+
+  void appendSourceTreeItems(QStandardItem* root);
+  void appendActionTreeItems(QStandardItem* root);
+  void appendGroupTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
+  void appendSharedMemoryTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
+  void appendWorkspaceTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
+  void appendDatasetChildren(QStandardItem* groupItem, const DataModel::Group& group);
+  void appendOutputWidgetChildren(QStandardItem* groupItem, const DataModel::Group& group);
+
+  void buildGroupGeneralSection(const DataModel::Group& group);
+  void buildGroupSourceSection(const DataModel::Group& group);
+  void buildGroupImageSection(const DataModel::Group& group);
+
+  void buildSourceCommonRows(const DataModel::Source& source);
+  void buildSourceFrameDetectionRows(const DataModel::Source& source);
+  void buildSourceConnectionSection(const DataModel::Source& source);
+
+  void handleSourceTitleChange(QStandardItem* item);
+  void handleSourceBusTypeChange(QStandardItem* item);
+  void handleSourcePropertyChange(QStandardItem* item);
+  void handleSourceFrameDetectionChange(QStandardItem* item, DataModel::Source& source);
+  void handleSourceFrameStartEndChange(QStandardItem* item, DataModel::Source& source);
+  void handleSourceDecoderChecksumChange(QStandardItem* item, DataModel::Source& source);
+
+  void buildActionGeneralRows(const DataModel::Action& action);
+  void buildActionPayloadRows(const DataModel::Action& action);
+  void buildActionTimingRows(const DataModel::Action& action);
+
+  void buildFftGeneralRows(CustomModel* model, const DataModel::Dataset& dataset);
+  void buildFftRangeRows(CustomModel* model, const DataModel::Dataset& dataset);
+
+  void onDatasetCommonItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
+  void onDatasetWidgetItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
+  void onDatasetRangeItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
+  void onDatasetFftItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
+  void onDatasetFlagItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
+
+  void buildOutputWidgetCommonRows(const DataModel::OutputWidget& widget);
+  void buildOutputWidgetValueRows(const DataModel::OutputWidget& widget);
+  void buildOutputWidgetTransmitRow(const DataModel::OutputWidget& widget);
+
 private:
   CurrentView m_currentView;
 

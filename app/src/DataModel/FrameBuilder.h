@@ -96,6 +96,19 @@ private:
   void buildQuickPlotFrame(const QStringList& channels);
   void buildQuickPlotAudioFrame(const QStringList& channels);
 
+  void decodeProjectChannels(int sourceId,
+                             bool applyPerSourceOverride,
+                             const IO::CapturedDataPtr& data,
+                             QList<QStringList>& outChannels);
+  [[nodiscard]] SerialStudio::DecoderMethod resolveDecoderMethod(int sourceId,
+                                                                 bool applyPerSourceOverride) const;
+  [[nodiscard]] DataModel::Frame& ensureSourceFrame(int sourceId);
+  void applyDatasetValues(DataModel::Frame& frame, const QStringList& channels, int sourceId);
+  void applyDatasetValue(Dataset& dataset,
+                         const QString* channelData,
+                         int channelCount,
+                         int sourceId);
+
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
   void publishSourceTemplateFrame(const DataModel::Source& src);
 
@@ -125,6 +138,12 @@ private:
                                         int language,
                                         int uniqueId,
                                         const QVariant& rawValue);
+  [[nodiscard]] QVariant applyTransformLua(TransformEngine& engine,
+                                           int uniqueId,
+                                           const QVariant& rawValue);
+  [[nodiscard]] QVariant applyTransformJs(TransformEngine& engine,
+                                          int uniqueId,
+                                          const QVariant& rawValue);
   void initializeTableStore();
 
   struct EngineKey {

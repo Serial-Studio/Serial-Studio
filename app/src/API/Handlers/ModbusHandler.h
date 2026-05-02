@@ -34,6 +34,12 @@ public:
   static void registerCommands();
 
 private:
+  static void registerCommonCommands();
+  static void registerTcpCommands();
+  static void registerRtuCommands();
+  static void registerRegisterGroupCommands();
+  static void registerQueryCommands();
+
   static CommandResponse setProtocolIndex(const QString& id, const QJsonObject& params);
   static CommandResponse setSlaveAddress(const QString& id, const QJsonObject& params);
   static CommandResponse setPollInterval(const QString& id, const QJsonObject& params);

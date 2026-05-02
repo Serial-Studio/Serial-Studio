@@ -34,6 +34,10 @@ public:
   static void registerCommands();
 
 private:
+  static void registerWorkspaceCrudCommands();
+  static void registerCustomizeCommands();
+  static void registerWidgetRefCommands();
+
   static CommandResponse list(const QString& id, const QJsonObject& params);
   static CommandResponse get(const QString& id, const QJsonObject& params);
   static CommandResponse add(const QString& id, const QJsonObject& params);

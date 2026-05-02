@@ -34,6 +34,12 @@ public:
   static void registerCommands();
 
 private:
+  static void registerConnectionCommands();
+  static void registerAuthCommands();
+  static void registerWillCommands();
+  static void registerSslCommands();
+  static void registerQueryCommands();
+
   static CommandResponse setMode(const QString& id, const QJsonObject& params);
   static CommandResponse setHostname(const QString& id, const QJsonObject& params);
   static CommandResponse setPort(const QString& id, const QJsonObject& params);

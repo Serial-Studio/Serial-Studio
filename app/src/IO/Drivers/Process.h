@@ -129,6 +129,8 @@ private slots:
 private:
   void doClose();
   void pipeReadLoop();
+  void pipeReadLoopWindows();
+  void pipeReadLoopPosix();
 
   static QStringList extraSearchPaths();
   static QString resolveExecutable(const QString& name);

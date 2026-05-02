@@ -23,6 +23,7 @@
 #include "API/Handlers/ModbusHandler.h"
 
 #include "API/CommandRegistry.h"
+#include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -34,290 +35,198 @@
  */
 void API::Handlers::ModbusHandler::registerCommands()
 {
+  registerCommonCommands();
+  registerTcpCommands();
+  registerRtuCommands();
+  registerRegisterGroupCommands();
+  registerQueryCommands();
+}
+
+/**
+ * @brief Register protocol / shared mutation commands.
+ */
+void API::Handlers::ModbusHandler::registerCommonCommands()
+{
   auto& registry = CommandRegistry::instance();
 
-  // Mutation commands
-  QJsonObject setProtocolIndexSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Protocol index (0=RTU, 1=TCP)");
-    props.insert("protocolIndex", prop);
-    setProtocolIndexSchema.insert("type", "object");
-    setProtocolIndexSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("protocolIndex");
-    setProtocolIndexSchema.insert("required", req);
-  }
   registry.registerCommand(
     QStringLiteral("io.driver.modbus.setProtocolIndex"),
     QStringLiteral("Set Modbus protocol (params: protocolIndex - 0=RTU, 1=TCP)"),
-    setProtocolIndexSchema,
+    API::makeSchema({
+      {QStringLiteral("protocolIndex"),
+       QStringLiteral("integer"),
+       QStringLiteral("Protocol index (0=RTU, 1=TCP)")}
+  }),
     &setProtocolIndex);
-
-  QJsonObject setSlaveAddressSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Modbus slave address (1-247)");
-    props.insert("address", prop);
-    setSlaveAddressSchema.insert("type", "object");
-    setSlaveAddressSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("address");
-    setSlaveAddressSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("io.driver.modbus.setSlaveAddress"),
                            QStringLiteral("Set Modbus slave address (params: address)"),
-                           setSlaveAddressSchema,
+                           API::makeSchema({
+                             {QStringLiteral("address"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Modbus slave address (1-247)")}
+  }),
                            &setSlaveAddress);
-
-  QJsonObject setPollIntervalSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Polling interval in milliseconds (minimum 10)");
-    props.insert("intervalMs", prop);
-    setPollIntervalSchema.insert("type", "object");
-    setPollIntervalSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("intervalMs");
-    setPollIntervalSchema.insert("required", req);
-  }
   registry.registerCommand(
     QStringLiteral("io.driver.modbus.setPollInterval"),
     QStringLiteral("Set polling interval in milliseconds (params: intervalMs)"),
-    setPollIntervalSchema,
+    API::makeSchema({
+      {QStringLiteral("intervalMs"),
+       QStringLiteral("integer"),
+       QStringLiteral("Polling interval in milliseconds (minimum 10)")}
+  }),
     &setPollInterval);
+}
 
-  QJsonObject setHostSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "string");
-    prop.insert("description", "TCP host address");
-    props.insert("host", prop);
-    setHostSchema.insert("type", "object");
-    setHostSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("host");
-    setHostSchema.insert("required", req);
-  }
-  registry.registerCommand(QStringLiteral("io.driver.modbus.setHost"),
-                           QStringLiteral("Set TCP host (params: host)"),
-                           setHostSchema,
-                           &setHost);
+/**
+ * @brief Register TCP transport mutation commands.
+ */
+void API::Handlers::ModbusHandler::registerTcpCommands()
+{
+  auto& registry = CommandRegistry::instance();
 
-  QJsonObject setPortSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "TCP port number (1-65535)");
-    props.insert("port", prop);
-    setPortSchema.insert("type", "object");
-    setPortSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("port");
-    setPortSchema.insert("required", req);
-  }
+  registry.registerCommand(
+    QStringLiteral("io.driver.modbus.setHost"),
+    QStringLiteral("Set TCP host (params: host)"),
+    API::makeSchema({
+      {QStringLiteral("host"), QStringLiteral("string"), QStringLiteral("TCP host address")}
+  }),
+    &setHost);
   registry.registerCommand(QStringLiteral("io.driver.modbus.setPort"),
                            QStringLiteral("Set TCP port (params: port)"),
-                           setPortSchema,
+                           API::makeSchema({
+                             {QStringLiteral("port"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("TCP port number (1-65535)")}
+  }),
                            &setPort);
+}
 
-  QJsonObject setSerialPortIndexSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Index of the serial port to select");
-    props.insert("portIndex", prop);
-    setSerialPortIndexSchema.insert("type", "object");
-    setSerialPortIndexSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("portIndex");
-    setSerialPortIndexSchema.insert("required", req);
-  }
+/**
+ * @brief Register RTU/serial transport mutation commands.
+ */
+void API::Handlers::ModbusHandler::registerRtuCommands()
+{
+  auto& registry = CommandRegistry::instance();
+
   registry.registerCommand(QStringLiteral("io.driver.modbus.setSerialPortIndex"),
                            QStringLiteral("Set RTU serial port by index (params: portIndex)"),
-                           setSerialPortIndexSchema,
+                           API::makeSchema({
+                             {QStringLiteral("portIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Index of the serial port to select")}
+  }),
                            &setSerialPortIndex);
-
-  QJsonObject setBaudRateSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Baud rate value (must be positive)");
-    props.insert("baudRate", prop);
-    setBaudRateSchema.insert("type", "object");
-    setBaudRateSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("baudRate");
-    setBaudRateSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("io.driver.modbus.setBaudRate"),
                            QStringLiteral("Set RTU baud rate (params: baudRate)"),
-                           setBaudRateSchema,
+                           API::makeSchema({
+                             {QStringLiteral("baudRate"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Baud rate value (must be positive)")}
+  }),
                            &setBaudRate);
-
-  QJsonObject setParityIndexSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Index of the parity option to select");
-    props.insert("parityIndex", prop);
-    setParityIndexSchema.insert("type", "object");
-    setParityIndexSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("parityIndex");
-    setParityIndexSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("io.driver.modbus.setParityIndex"),
                            QStringLiteral("Set RTU parity (params: parityIndex)"),
-                           setParityIndexSchema,
+                           API::makeSchema({
+                             {QStringLiteral("parityIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Index of the parity option to select")}
+  }),
                            &setParityIndex);
-
-  QJsonObject setDataBitsIndexSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Index of the data bits option to select");
-    props.insert("dataBitsIndex", prop);
-    setDataBitsIndexSchema.insert("type", "object");
-    setDataBitsIndexSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("dataBitsIndex");
-    setDataBitsIndexSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("io.driver.modbus.setDataBitsIndex"),
                            QStringLiteral("Set RTU data bits (params: dataBitsIndex)"),
-                           setDataBitsIndexSchema,
+                           API::makeSchema({
+                             {QStringLiteral("dataBitsIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Index of the data bits option to select")}
+  }),
                            &setDataBitsIndex);
-
-  QJsonObject setStopBitsIndexSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Index of the stop bits option to select");
-    props.insert("stopBitsIndex", prop);
-    setStopBitsIndexSchema.insert("type", "object");
-    setStopBitsIndexSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("stopBitsIndex");
-    setStopBitsIndexSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("io.driver.modbus.setStopBitsIndex"),
                            QStringLiteral("Set RTU stop bits (params: stopBitsIndex)"),
-                           setStopBitsIndexSchema,
+                           API::makeSchema({
+                             {QStringLiteral("stopBitsIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Index of the stop bits option to select")}
+  }),
                            &setStopBitsIndex);
+}
 
-  QJsonObject addRegisterGroupSchema;
-  {
-    QJsonObject props;
-    QJsonObject typeProp;
-    typeProp.insert("type", "integer");
-    typeProp.insert("description", "Register type index");
-    props.insert("type", typeProp);
-    QJsonObject startProp;
-    startProp.insert("type", "integer");
-    startProp.insert("description", "Start address (0-65535)");
-    props.insert("startAddress", startProp);
-    QJsonObject countProp;
-    countProp.insert("type", "integer");
-    countProp.insert("description", "Number of registers to read (1-125)");
-    props.insert("count", countProp);
-    addRegisterGroupSchema.insert("type", "object");
-    addRegisterGroupSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("type");
-    req.append("startAddress");
-    req.append("count");
-    addRegisterGroupSchema.insert("required", req);
-  }
-  registry.registerCommand(QStringLiteral("io.driver.modbus.addRegisterGroup"),
-                           QStringLiteral("Add register group (params: type, startAddress, count)"),
-                           addRegisterGroupSchema,
-                           &addRegisterGroup);
+/**
+ * @brief Register register-group add/remove/clear commands.
+ */
+void API::Handlers::ModbusHandler::registerRegisterGroupCommands()
+{
+  auto& registry = CommandRegistry::instance();
 
-  QJsonObject removeRegisterGroupSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Index of the register group to remove");
-    props.insert("groupIndex", prop);
-    removeRegisterGroupSchema.insert("type", "object");
-    removeRegisterGroupSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("groupIndex");
-    removeRegisterGroupSchema.insert("required", req);
-  }
+  registry.registerCommand(
+    QStringLiteral("io.driver.modbus.addRegisterGroup"),
+    QStringLiteral("Add register group (params: type, startAddress, count)"),
+    API::makeSchema({
+      {        QStringLiteral("type"),QStringLiteral("integer"),QStringLiteral("Register type index")                      },
+      {QStringLiteral("startAddress"),
+       QStringLiteral("integer"),
+       QStringLiteral("Start address (0-65535)")            },
+      {       QStringLiteral("count"),
+       QStringLiteral("integer"),
+       QStringLiteral("Number of registers to read (1-125)")}
+  }),
+    &addRegisterGroup);
   registry.registerCommand(QStringLiteral("io.driver.modbus.removeRegisterGroup"),
                            QStringLiteral("Remove register group by index (params: groupIndex)"),
-                           removeRegisterGroupSchema,
+                           API::makeSchema({
+                             {QStringLiteral("groupIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Index of the register group to remove")}
+  }),
                            &removeRegisterGroup);
-
-  QJsonObject emptySchema;
-  emptySchema.insert("type", "object");
-  emptySchema.insert("properties", QJsonObject());
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.clearRegisterGroups"),
                            QStringLiteral("Clear all register groups"),
-                           emptySchema,
+                           API::emptySchema(),
                            &clearRegisterGroups);
+}
 
-  // Query commands
+/**
+ * @brief Register read-only configuration / list query commands.
+ */
+void API::Handlers::ModbusHandler::registerQueryCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = API::emptySchema();
+
   registry.registerCommand(QStringLiteral("io.driver.modbus.getConfiguration"),
                            QStringLiteral("Get current Modbus configuration"),
-                           emptySchema,
+                           empty,
                            &getConfiguration);
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.getProtocolList"),
                            QStringLiteral("Get list of supported protocols"),
-                           emptySchema,
+                           empty,
                            &getProtocolList);
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.getSerialPortList"),
                            QStringLiteral("Get list of available serial ports"),
-                           emptySchema,
+                           empty,
                            &getSerialPortList);
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.getParityList"),
                            QStringLiteral("Get list of parity options"),
-                           emptySchema,
+                           empty,
                            &getParityList);
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.getDataBitsList"),
                            QStringLiteral("Get list of data bits options"),
-                           emptySchema,
+                           empty,
                            &getDataBitsList);
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.getStopBitsList"),
                            QStringLiteral("Get list of stop bits options"),
-                           emptySchema,
+                           empty,
                            &getStopBitsList);
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.getBaudRateList"),
                            QStringLiteral("Get list of baud rate options"),
-                           emptySchema,
+                           empty,
                            &getBaudRateList);
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.getRegisterTypeList"),
                            QStringLiteral("Get list of register type names"),
-                           emptySchema,
+                           empty,
                            &getRegisterTypeList);
-
   registry.registerCommand(QStringLiteral("io.driver.modbus.getRegisterGroups"),
                            QStringLiteral("Get all configured register groups"),
-                           emptySchema,
+                           empty,
                            &getRegisterGroups);
 }
 

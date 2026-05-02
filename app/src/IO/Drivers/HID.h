@@ -100,8 +100,27 @@ private slots:
   void enumerateDevices();
 
 private:
+  /**
+   * @brief Internal description of one enumerated HID device.
+   */
+  struct DeviceEntry {
+    QString label;
+    QString path;
+    uint16_t usagePage;
+    uint16_t usage;
+  };
+
   void cleanupDevice();
   void readLoop();
+
+  [[nodiscard]] QList<DeviceEntry> collectHidDeviceEntries() const;
+  void composeHidDeviceLists(const QList<DeviceEntry>& entries,
+                             QStringList& labels,
+                             QList<QString>& paths,
+                             QList<uint16_t>& usagePages,
+                             QList<uint16_t>& usages) const;
+  [[nodiscard]] int restoreHidSelectionIndex(const QString& prevPath);
+  void updateHidUsageCache();
 
   hid_device* m_handle;
   hid_device_info* m_deviceInfoList;

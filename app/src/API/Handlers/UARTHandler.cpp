@@ -25,6 +25,7 @@
 #include <QMetaObject>
 
 #include "API/CommandRegistry.h"
+#include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -38,180 +39,95 @@ void API::Handlers::UARTHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // Mutation commands
-  {
-    QJsonObject props;
-    props[QStringLiteral("device")] = QJsonObject{
-      {       QStringLiteral("type"),                                QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Device path (e.g. COM3, /dev/ttyUSB0)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("device")};
-    registry.registerCommand(QStringLiteral("io.driver.uart.setDevice"),
-                             QStringLiteral("Set serial port by device name (params: device)"),
-                             schema,
-                             &setDevice);
-  }
+  // Port selection
+  registry.registerCommand(QStringLiteral("io.driver.uart.setDevice"),
+                           QStringLiteral("Set serial port by device name (params: device)"),
+                           API::makeSchema({
+                             {QStringLiteral("device"),
+                              QStringLiteral("string"),
+                              QStringLiteral("Device path (e.g. COM3, /dev/ttyUSB0)")}
+  }),
+                           &setDevice);
+  registry.registerCommand(QStringLiteral("io.driver.uart.setPortIndex"),
+                           QStringLiteral("Set serial port by index (params: portIndex)"),
+                           API::makeSchema({
+                             {QStringLiteral("portIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Serial port index (0-based)")}
+  }),
+                           &setPortIndex);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("portIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                     QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Serial port index (0-based)")},
-      {    QStringLiteral("minimum"),                                             0}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("portIndex")};
-    registry.registerCommand(QStringLiteral("io.driver.uart.setPortIndex"),
-                             QStringLiteral("Set serial port by index (params: portIndex)"),
-                             schema,
-                             &setPortIndex);
-  }
+  // Line settings
+  registry.registerCommand(QStringLiteral("io.driver.uart.setBaudRate"),
+                           QStringLiteral("Set baud rate (params: baudRate)"),
+                           API::makeSchema({
+                             {QStringLiteral("baudRate"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Baud rate in bits per second")}
+  }),
+                           &setBaudRate);
+  registry.registerCommand(
+    QStringLiteral("io.driver.uart.setParity"),
+    QStringLiteral("Set parity (params: parityIndex - 0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)"),
+    API::makeSchema({
+      {QStringLiteral("parityIndex"),
+       QStringLiteral("integer"),
+       QStringLiteral("Parity index (0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)")}
+  }),
+    &setParity);
+  registry.registerCommand(
+    QStringLiteral("io.driver.uart.setDataBits"),
+    QStringLiteral("Set data bits (params: dataBitsIndex - 0=5, 1=6, 2=7, 3=8)"),
+    API::makeSchema({
+      {QStringLiteral("dataBitsIndex"),
+       QStringLiteral("integer"),
+       QStringLiteral("Data bits index (0=5, 1=6, 2=7, 3=8)")}
+  }),
+    &setDataBits);
+  registry.registerCommand(
+    QStringLiteral("io.driver.uart.setStopBits"),
+    QStringLiteral("Set stop bits (params: stopBitsIndex - 0=1, 1=1.5, 2=2)"),
+    API::makeSchema({
+      {QStringLiteral("stopBitsIndex"),
+       QStringLiteral("integer"),
+       QStringLiteral("Stop bits index (0=1, 1=1.5, 2=2)")}
+  }),
+    &setStopBits);
+  registry.registerCommand(
+    QStringLiteral("io.driver.uart.setFlowControl"),
+    QStringLiteral("Set flow control (params: flowControlIndex - 0=None, 1=Hardware, 2=Software)"),
+    API::makeSchema({
+      {QStringLiteral("flowControlIndex"),
+       QStringLiteral("integer"),
+       QStringLiteral("Flow control index (0=None, 1=Hardware, 2=Software)")}
+  }),
+    &setFlowControl);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("baudRate")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),            QStringLiteral("Baud rate in bits per second")},
-      {       QStringLiteral("enum"),
-       QJsonArray{
-       110, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600}  },
-      {    QStringLiteral("default"),                                                    115200}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("baudRate")};
-    registry.registerCommand(QStringLiteral("io.driver.uart.setBaudRate"),
-                             QStringLiteral("Set baud rate (params: baudRate)"),
-                             schema,
-                             &setBaudRate);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("parityIndex")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Parity index (0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)")},
-      {       QStringLiteral("enum"),                QJsonArray{0, 1, 2, 3, 4}},
-      {    QStringLiteral("default"),                                        0}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("parityIndex")};
-    registry.registerCommand(
-      QStringLiteral("io.driver.uart.setParity"),
-      QStringLiteral("Set parity (params: parityIndex - 0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)"),
-      schema,
-      &setParity);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("dataBitsIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                              QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Data bits index (0=5, 1=6, 2=7, 3=8)")},
-      {       QStringLiteral("enum"),                                 QJsonArray{0, 1, 2, 3}},
-      {    QStringLiteral("default"),                                                      3}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("dataBitsIndex")};
-    registry.registerCommand(
-      QStringLiteral("io.driver.uart.setDataBits"),
-      QStringLiteral("Set data bits (params: dataBitsIndex - 0=5, 1=6, 2=7, 3=8)"),
-      schema,
-      &setDataBits);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("stopBitsIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                           QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Stop bits index (0=1, 1=1.5, 2=2)")},
-      {       QStringLiteral("enum"),                                 QJsonArray{0, 1, 2}},
-      {    QStringLiteral("default"),                                                   0}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("stopBitsIndex")};
-    registry.registerCommand(
-      QStringLiteral("io.driver.uart.setStopBits"),
-      QStringLiteral("Set stop bits (params: stopBitsIndex - 0=1, 1=1.5, 2=2)"),
-      schema,
-      &setStopBits);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("flowControlIndex")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Flow control index (0=None, 1=Hardware, 2=Software)")},
-      {       QStringLiteral("enum"),                    QJsonArray{0, 1, 2}},
-      {    QStringLiteral("default"),                                      0}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("flowControlIndex")};
-    registry.registerCommand(
-      QStringLiteral("io.driver.uart.setFlowControl"),
-      QStringLiteral(
-        "Set flow control (params: flowControlIndex - 0=None, 1=Hardware, 2=Software)"),
-      schema,
-      &setFlowControl);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("dtrEnabled")] = QJsonObject{
-      {       QStringLiteral("type"),           QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Enable DTR signal")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("dtrEnabled")};
-    registry.registerCommand(QStringLiteral("io.driver.uart.setDtrEnabled"),
-                             QStringLiteral("Enable/disable DTR signal (params: dtrEnabled)"),
-                             schema,
-                             &setDtrEnabled);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("autoReconnect")] = QJsonObject{
-      {       QStringLiteral("type"),               QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Enable auto-reconnect")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("autoReconnect")};
-    registry.registerCommand(QStringLiteral("io.driver.uart.setAutoReconnect"),
-                             QStringLiteral("Set auto-reconnect behavior (params: autoReconnect)"),
-                             schema,
-                             &setAutoReconnect);
-  }
+  // Signals + reconnect
+  registry.registerCommand(QStringLiteral("io.driver.uart.setDtrEnabled"),
+                           QStringLiteral("Enable/disable DTR signal (params: dtrEnabled)"),
+                           API::makeSchema({
+                             {QStringLiteral("dtrEnabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Enable DTR signal")}
+  }),
+                           &setDtrEnabled);
+  registry.registerCommand(QStringLiteral("io.driver.uart.setAutoReconnect"),
+                           QStringLiteral("Set auto-reconnect behavior (params: autoReconnect)"),
+                           API::makeSchema({
+                             {QStringLiteral("autoReconnect"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Enable auto-reconnect")}
+  }),
+                           &setAutoReconnect);
 
   // Query commands
   registry.registerCommand(QStringLiteral("io.driver.uart.getPortList"),
                            QStringLiteral("Get list of available serial ports"),
                            &getPortList);
-
   registry.registerCommand(QStringLiteral("io.driver.uart.getBaudRateList"),
                            QStringLiteral("Get list of common baud rates"),
                            &getBaudRateList);
-
   registry.registerCommand(QStringLiteral("io.driver.uart.getConfiguration"),
                            QStringLiteral("Get current UART configuration"),
                            &getConfiguration);

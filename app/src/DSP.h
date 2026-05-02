@@ -578,6 +578,181 @@ inline void spanFromFixedQueue(
 }
 
 //--------------------------------------------------------------------------------------------------
+// Downsample helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Bounds and finite-range result returned by dsScanFiniteRange().
+ */
+struct DownsampleBounds {
+  ssfp_t xmin;
+  ssfp_t xmax;
+  ssfp_t ymin;
+  ssfp_t ymax;
+  std::size_t firstFinite;
+  std::size_t lastFinite;
+};
+
+/**
+ * @brief Scan ring-buffer spans to compute finite (X,Y) bounds and endpoints.
+ */
+template<typename XAt, typename YAt>
+inline DownsampleBounds dsScanFiniteRange(std::size_t n, XAt xAt, YAt yAt)
+{
+  DownsampleBounds b;
+  b.firstFinite = n;
+  b.lastFinite  = n;
+  b.xmin        = std::numeric_limits<ssfp_t>::infinity();
+  b.ymin        = std::numeric_limits<ssfp_t>::infinity();
+  b.xmax        = -std::numeric_limits<ssfp_t>::infinity();
+  b.ymax        = -std::numeric_limits<ssfp_t>::infinity();
+
+  for (std::size_t i = 0; i < n; ++i) {
+    const ssfp_t xv = xAt(i);
+    const ssfp_t yv = yAt(i);
+    if (!std::isfinite(xv) || !std::isfinite(yv))
+      continue;
+
+    if (xv < b.xmin)
+      b.xmin = xv;
+
+    if (xv > b.xmax)
+      b.xmax = xv;
+
+    if (yv < b.ymin)
+      b.ymin = yv;
+
+    if (yv > b.ymax)
+      b.ymax = yv;
+
+    if (b.firstFinite == n)
+      b.firstFinite = i;
+
+    b.lastFinite = i;
+  }
+
+  return b;
+}
+
+/**
+ * @brief Emit a stepped polyline for the degenerate xmin==xmax case.
+ */
+template<typename XAt, typename YAt>
+inline void dsEmitSteppedFallback(std::size_t n,
+                                  int w,
+                                  std::size_t firstFinite,
+                                  std::size_t lastFinite,
+                                  XAt xAt,
+                                  YAt yAt,
+                                  QList<QPointF>& out)
+{
+  std::size_t step = n / (std::max(1, w));
+  if (step < 1)
+    step = 1;
+
+  for (std::size_t i = firstFinite; i <= lastFinite; i += step)
+    out.append(QPointF(xAt(i), yAt(i)));
+
+  if (out.isEmpty() || out.back().x() != xAt(lastFinite))
+    out.append(QPointF(xAt(lastFinite), yAt(lastFinite)));
+}
+
+/**
+ * @brief Accumulate per-column min/max/first/last indices into the workspace.
+ */
+template<typename XAt, typename YAt>
+inline void dsAccumulateBuckets(
+  std::size_t n, int w, ssfp_t xmin, ssfp_t scaleX, XAt xAt, YAt yAt, DownsampleWorkspace* ws)
+{
+  auto getColFromX = [&](ssfp_t x) -> std::size_t {
+    auto c = static_cast<long>((x - xmin) * scaleX);
+    if (c < 0)
+      c = 0;
+
+    else if (c >= w)
+      c = w - 1;
+
+    return std::size_t(c);
+  };
+
+  for (std::size_t i = 0; i < n; ++i) {
+    const ssfp_t xv = xAt(i);
+    const ssfp_t yv = yAt(i);
+    if (!std::isfinite(xv) || !std::isfinite(yv))
+      continue;
+
+    const std::size_t c = getColFromX(xv);
+
+    if (ws->cnt[c] == 0) {
+      ws->firstI[c] = ws->lastI[c] = i;
+      ws->minI[c] = ws->maxI[c] = i;
+      ws->minY[c] = ws->maxY[c] = yv;
+      ws->cnt[c]                = 1;
+      continue;
+    }
+
+    if (yv < ws->minY[c]) {
+      ws->minY[c] = yv;
+      ws->minI[c] = i;
+    }
+
+    if (yv > ws->maxY[c]) {
+      ws->maxY[c] = yv;
+      ws->maxI[c] = i;
+    }
+
+    ws->lastI[c] = i;
+    ++ws->cnt[c];
+  }
+}
+
+/**
+ * @brief Emit time-ordered first/min/max/last points for a single column.
+ */
+template<typename XAt, typename YAt>
+inline void dsEmitColumnPoints(std::size_t c,
+                               ssfp_t scaleY,
+                               const DownsampleWorkspace* ws,
+                               XAt xAt,
+                               YAt yAt,
+                               QList<QPointF>& out)
+{
+  int k = 0;
+  std::size_t tmp[4];
+  auto push_unique = [&](std::size_t v) {
+    for (int j = 0; j < k; ++j)
+      if (tmp[j] == v)
+        return;
+
+    tmp[k++] = v;
+  };
+
+  push_unique(ws->firstI[c]);
+
+  const ssfp_t vspan_px = (ws->maxY[c] - ws->minY[c]) * scaleY;
+  if (vspan_px >= 1.0) {
+    push_unique(ws->minI[c]);
+    push_unique(ws->maxI[c]);
+  }
+
+  push_unique(ws->lastI[c]);
+
+  for (int a = 1; a < k; ++a) {
+    int b         = a - 1;
+    std::size_t v = tmp[a];
+    while (b >= 0 && tmp[b] > v) {
+      tmp[b + 1] = tmp[b];
+      --b;
+    }
+
+    tmp[b + 1] = v;
+  }
+
+  for (int j = 0; j < k; ++j)
+    out.append(QPointF(xAt(tmp[j]), yAt(tmp[j])));
+}
+
+//--------------------------------------------------------------------------------------------------
 // Downsample 2D series into screen-space pixels
 //--------------------------------------------------------------------------------------------------
 
@@ -617,19 +792,16 @@ inline void spanFromFixedQueue(
 inline bool downsampleMonotonic(
   const AxisData& X, const AxisData& Y, int w, int h, QList<QPointF>& out, DownsampleWorkspace* ws)
 {
-  // Clear the buffer and validate input data
   out.clear();
   const std::size_t n = std::min<std::size_t>(X.size(), Y.size());
   if (n == 0 || w <= 0 || h <= 0)
     return true;
 
-  // Extract ring buffer spans from data containers
   std::size_t xn0, xn1, yn0, yn1;
   const ssfp_t *xp0, *xp1, *yp0, *yp1;
   spanFromFixedQueue(X, xp0, xn0, xp1, xn1);
   spanFromFixedQueue(Y, yp0, yn0, yp1, yn1);
 
-  // Functions to map logical indexes to X and Y independently
   auto xAt = [&](std::size_t i) -> ssfp_t {
     return (i < xn0) ? xp0[i] : xp1[i - xn0];
   };
@@ -637,168 +809,31 @@ inline bool downsampleMonotonic(
     return (i < yn0) ? yp0[i] : yp1[i - yn0];
   };
 
-  // Find data bounds
-  std::size_t lastFinite  = n;
-  std::size_t firstFinite = n;
-  ssfp_t xmin             = std::numeric_limits<ssfp_t>::infinity();
-  ssfp_t ymin             = std::numeric_limits<ssfp_t>::infinity();
-  ssfp_t xmax             = -std::numeric_limits<ssfp_t>::infinity();
-  ssfp_t ymax             = -std::numeric_limits<ssfp_t>::infinity();
-  for (std::size_t i = 0; i < n; ++i) {
-    // Get & validate raw points
-    const ssfp_t xv = xAt(i);
-    const ssfp_t yv = yAt(i);
-    if (!std::isfinite(xv) || !std::isfinite(yv))
-      continue;
-
-    // Update data boundaries
-    if (xv < xmin)
-      xmin = xv;
-
-    if (xv > xmax)
-      xmax = xv;
-
-    if (yv < ymin)
-      ymin = yv;
-
-    if (yv > ymax)
-      ymax = yv;
-
-    // Set first valid point
-    if (firstFinite == n)
-      firstFinite = i;
-
-    // Update last valid point
-    lastFinite = i;
-  }
-
-  // Catch edge cases where all the data is invalid
-  if (firstFinite == n)
+  const DownsampleBounds b = dsScanFiniteRange(n, xAt, yAt);
+  if (b.firstFinite == n)
     return false;
 
-  if (!(xmin < xmax)) {
-    // Calculate step size
-    std::size_t step = n / (std::max(1, w));
-    if (step < 1)
-      step = 1;
-
-    // Add a point for each step
-    for (std::size_t i = firstFinite; i <= lastFinite; i += step)
-      out.append(QPointF(xAt(i), yAt(i)));
-
-    // Add last point if needed
-    if (out.isEmpty() || out.back().x() != xAt(lastFinite))
-      out.append(QPointF(xAt(lastFinite), yAt(lastFinite)));
-
-    // Early exit
+  if (!(b.xmin < b.xmax)) {
+    dsEmitSteppedFallback(n, w, b.firstFinite, b.lastFinite, xAt, yAt, out);
     return true;
   }
 
-  // Prepare buckets
   const std::size_t C = std::size_t(w);
   ws->reset(C);
 
-  // Scaling constants
-  const auto scaleX = static_cast<ssfp_t>(w - 1) / std::max(1e-12, xmax - xmin);
-  const auto scaleY = static_cast<ssfp_t>(h) / std::max(1e-12, ymax - ymin);
+  const auto scaleX = static_cast<ssfp_t>(w - 1) / std::max(1e-12, b.xmax - b.xmin);
+  const auto scaleY = static_cast<ssfp_t>(h) / std::max(1e-12, b.ymax - b.ymin);
 
-  // Lambda function to obtain the column index for a "raw" x index
-  auto getColFromX = [&](ssfp_t x) -> std::size_t {
-    auto c = static_cast<long>((x - xmin) * scaleX);
-    if (c < 0)
-      c = 0;
+  dsAccumulateBuckets(n, w, b.xmin, scaleX, xAt, yAt, ws);
 
-    else if (c >= w)
-      c = w - 1;
-
-    return std::size_t(c);
-  };
-
-  // Fill buckets
-  for (std::size_t i = 0; i < n; ++i) {
-    // Obtain raw points & validate them
-    const ssfp_t xv = xAt(i);
-    const ssfp_t yv = yAt(i);
-    if (!std::isfinite(xv) || !std::isfinite(yv))
-      continue;
-
-    // Get column
-    const std::size_t c = getColFromX(xv);
-
-    // Register first point for column
-    if (ws->cnt[c] == 0) {
-      ws->firstI[c] = ws->lastI[c] = i;
-      ws->minI[c] = ws->maxI[c] = i;
-      ws->minY[c] = ws->maxY[c] = yv;
-      ws->cnt[c]                = 1;
-    }
-
-    // Register min/max values for column
-    else {
-      if (yv < ws->minY[c]) {
-        ws->minY[c] = yv;
-        ws->minI[c] = i;
-      }
-
-      if (yv > ws->maxY[c]) {
-        ws->maxY[c] = yv;
-        ws->maxI[c] = i;
-      }
-
-      ws->lastI[c] = i;
-      ++ws->cnt[c];
-    }
-  }
-
-  // Register time-ordered points per column: first, min, max, last
   out.reserve(w * 3 / 2 + 8);
   for (std::size_t c = 0; c < C; ++c) {
-    // Skip columns widhout data
     if (ws->cnt[c] == 0)
       continue;
 
-    // Utility lambda to avoid adding duplicated points
-    int k = 0;
-    std::size_t tmp[4];
-    auto push_unique = [&](std::size_t v) {
-      for (int j = 0; j < k; ++j)
-        if (tmp[j] == v)
-          return;
-
-      tmp[k++] = v;
-    };
-
-    // Add first point
-    push_unique(ws->firstI[c]);
-
-    // Add minimum & maximum points (if needed)
-    const ssfp_t vspan_px = (ws->maxY[c] - ws->minY[c]) * scaleY;
-    if (vspan_px >= 1.0) {
-      push_unique(ws->minI[c]);
-      push_unique(ws->maxI[c]);
-    }
-
-    // Add last point
-    push_unique(ws->lastI[c]);
-
-    // Sort the column points into ascending order
-    for (int a = 1; a < k; ++a) {
-      int b         = a - 1;
-      std::size_t v = tmp[a];
-      while (b >= 0 && tmp[b] > v) {
-        tmp[b + 1] = tmp[b];
-        --b;
-      }
-
-      tmp[b + 1] = v;
-    }
-
-    // Append the generated points
-    for (int j = 0; j < k; ++j)
-      out.append(QPointF(xAt(tmp[j]), yAt(tmp[j])));
+    dsEmitColumnPoints(c, scaleY, ws, xAt, yAt, out);
   }
 
-  // Success
   return true;
 }
 

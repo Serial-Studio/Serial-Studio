@@ -54,8 +54,19 @@ public slots:
   void processData(const IO::CapturedDataPtr& data);
 
 private:
+  enum class StepResult {
+    Continue,
+    Break,
+    Unhandled
+  };
+
   void processAutodetect();
   void processManual();
+
+  StepResult extractWebpFrame();
+  StepResult extractBmpFrame();
+  StepResult extractMarkerFrame();
+  bool seekToFrameStart();
 
   DetectionMode m_mode;
   QByteArray m_startSeq;

@@ -485,7 +485,6 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   if (!m_init || m_isOpen || !configurationOk())
     return false;
 
-  // Reset config and wire in the audio callback
   m_config = ma_device_config_init(ma_device_type_duplex);
 
   // clang-format off
@@ -494,18 +493,43 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   m_config.sampleRate = m_inputCapabilities[m_selectedInputDevice].supportedSampleRates[m_selectedSampleRate];
   // clang-format on
 
-  // Disable clipping and denormal suppression, allow variable frame sizes
   m_config.noClip                    = MA_FALSE;
   m_config.noDisableDenormals        = MA_FALSE;
   m_config.noFixedSizedCallback      = MA_TRUE;
   m_config.noPreSilencedOutputBuffer = MA_FALSE;
 
-  // macOS configuration
+  applyPlatformAudioConfig();
+  configureCaptureFormat(mode);
+  if (!configurePlaybackFormat(mode))
+    return false;
+
+  std::memset(&m_device, 0, sizeof(m_device));
+  if (ma_device_init(&m_context, &m_config, &m_device) != MA_SUCCESS) {
+    qWarning() << "Failed to initialize miniaudio device.";
+    return false;
+  }
+
+  if (ma_device_start(&m_device) != MA_SUCCESS) {
+    qWarning() << "Failed to start miniaudio device.";
+    ma_device_uninit(&m_device);
+    return false;
+  }
+
+  startInputWorker();
+
+  m_isOpen = true;
+  return true;
+}
+
+/**
+ * @brief Applies platform-specific miniaudio backend tweaks to m_config.
+ */
+void IO::Drivers::Audio::applyPlatformAudioConfig()
+{
 #ifdef Q_OS_MAC
   m_config.coreaudio.allowNominalSampleRateChange = MA_TRUE;
 #endif
 
-  // Windows configuration
 #ifdef Q_OS_WIN
   m_config.wasapi.noAutoConvertSRC     = MA_FALSE;
   m_config.wasapi.noDefaultQualitySRC  = MA_FALSE;
@@ -513,74 +537,70 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   m_config.wasapi.noHardwareOffloading = MA_TRUE;
 #endif
 
-  // Linux configuration
 #ifdef Q_OS_LINUX
   m_config.alsa.noMMap         = MA_FALSE;
   m_config.alsa.noAutoFormat   = MA_FALSE;
   m_config.alsa.noAutoChannels = MA_FALSE;
   m_config.alsa.noAutoResample = MA_FALSE;
 #endif
+}
 
-  // Configure capture from the selected input device
+/**
+ * @brief Sets capture format/channels on m_config based on the requested mode.
+ */
+void IO::Drivers::Audio::configureCaptureFormat(QIODevice::OpenMode mode)
+{
   if (mode & QIODevice::ReadOnly) {
     // clang-format off
     m_config.capture.pDeviceID = &m_inputDevices[m_selectedInputDevice].id;
     m_config.capture.format = m_inputCapabilities[m_selectedInputDevice].supportedFormats[m_selectedInputSampleFormat];
     m_config.capture.channels = m_inputCapabilities[m_selectedInputDevice].supportedChannelCounts[m_selectedInputChannelConfiguration];
     // clang-format on
+    return;
   }
 
-  // No capture requested, disable input channels
-  else {
-    m_config.capture.format   = ma_format_unknown;
-    m_config.capture.channels = 0;
-  }
+  m_config.capture.format   = ma_format_unknown;
+  m_config.capture.channels = 0;
+}
 
-  // Configure playback from the selected output device
-  if (mode & QIODevice::WriteOnly) {
-    if (m_selectedOutputDevice < 0 || m_selectedOutputDevice >= m_outputDevices.size()
-        || m_selectedOutputDevice >= m_outputCapabilities.size()) {
-      qWarning() << "Audio::open: output device index out of range";
-      return false;
-    }
-
-    const auto& oc = m_outputCapabilities[m_selectedOutputDevice];
-    if (m_selectedOutputSampleFormat < 0
-        || m_selectedOutputSampleFormat >= oc.supportedFormats.size()
-        || m_selectedOutputChannelConfiguration < 0
-        || m_selectedOutputChannelConfiguration >= oc.supportedChannelCounts.size()) {
-      qWarning() << "Audio::open: output format/channel index out of range";
-      return false;
-    }
-
-    // clang-format off
-    m_config.playback.pDeviceID = &m_outputDevices[m_selectedOutputDevice].id;
-    m_config.playback.format = oc.supportedFormats[m_selectedOutputSampleFormat];
-    m_config.playback.channels = oc.supportedChannelCounts[m_selectedOutputChannelConfiguration];
-    // clang-format on
-  }
-
-  // No playback requested, disable output channels
-  else {
+/**
+ * @brief Validates and sets playback format/channels on m_config; false on error.
+ */
+bool IO::Drivers::Audio::configurePlaybackFormat(QIODevice::OpenMode mode)
+{
+  if (!(mode & QIODevice::WriteOnly)) {
     m_config.playback.format   = ma_format_unknown;
     m_config.playback.channels = 0;
+    return true;
   }
 
-  // Try to initialize the duplex device
-  std::memset(&m_device, 0, sizeof(m_device));
-  if (ma_device_init(&m_context, &m_config, &m_device) != MA_SUCCESS) {
-    qWarning() << "Failed to initialize miniaudio device.";
+  if (m_selectedOutputDevice < 0 || m_selectedOutputDevice >= m_outputDevices.size()
+      || m_selectedOutputDevice >= m_outputCapabilities.size()) {
+    qWarning() << "Audio::open: output device index out of range";
     return false;
   }
 
-  // Start the audio device
-  if (ma_device_start(&m_device) != MA_SUCCESS) {
-    qWarning() << "Failed to start miniaudio device.";
-    ma_device_uninit(&m_device);
+  const auto& oc = m_outputCapabilities[m_selectedOutputDevice];
+  if (m_selectedOutputSampleFormat < 0 || m_selectedOutputSampleFormat >= oc.supportedFormats.size()
+      || m_selectedOutputChannelConfiguration < 0
+      || m_selectedOutputChannelConfiguration >= oc.supportedChannelCounts.size()) {
+    qWarning() << "Audio::open: output format/channel index out of range";
     return false;
   }
 
-  // Configure audio processing thread and timer
+  // clang-format off
+  m_config.playback.pDeviceID = &m_outputDevices[m_selectedOutputDevice].id;
+  m_config.playback.format = oc.supportedFormats[m_selectedOutputSampleFormat];
+  m_config.playback.channels = oc.supportedChannelCounts[m_selectedOutputChannelConfiguration];
+  // clang-format on
+  return true;
+}
+
+/**
+ * @brief Lazily creates the input worker timer/thread and starts the read tick.
+ */
+void IO::Drivers::Audio::startInputWorker()
+{
   if (!m_inputWorkerTimer) {
     m_inputWorkerTimer = new QTimer();
     m_inputWorkerTimer->setInterval(10);
@@ -590,17 +610,12 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
     connect(m_inputWorkerTimer, &QTimer::timeout, this, &IO::Drivers::Audio::processInputBuffer);
   }
 
-  // Start the worker thread
   if (!m_inputWorkerThread.isRunning()) {
     m_inputWorkerThread.start();
     m_inputWorkerThread.setPriority(QThread::HighestPriority);
   }
 
-  // Start the read timer @ 100 Hz
   QMetaObject::invokeMethod(m_inputWorkerTimer, "start", Qt::QueuedConnection);
-
-  m_isOpen = true;
-  return true;
 }
 
 //--------------------------------------------------------------------------------------------------

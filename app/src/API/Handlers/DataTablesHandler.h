@@ -34,6 +34,10 @@ public:
   static void registerCommands();
 
 private:
+  static void registerTableQueryCommands();
+  static void registerTableMutationCommands();
+  static void registerRegisterCommands();
+
   static CommandResponse tablesList(const QString& id, const QJsonObject& params);
   static CommandResponse tableGet(const QString& id, const QJsonObject& params);
   static CommandResponse tableAdd(const QString& id, const QJsonObject& params);

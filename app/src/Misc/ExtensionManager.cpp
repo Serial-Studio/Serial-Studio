@@ -941,61 +941,96 @@ void Misc::ExtensionManager::downloadNextFile()
  */
 void Misc::ExtensionManager::applyFilter()
 {
-  // Rebuild the filtered list from the full catalog
   m_filteredExtensions.clear();
 
   for (const auto& entry : std::as_const(m_allExtensions)) {
     const auto obj = entry.toObject();
+    if (!catalogEntryMatchesFilters(obj))
+      continue;
 
-    if (!m_filterType.isEmpty() && m_filterType != QStringLiteral("All")) {
-      if (obj.value("type").toString() != m_filterType)
-        continue;
-    }
-
-    if (!m_filterCategory.isEmpty() && m_filterCategory != QStringLiteral("All")) {
-      const auto category = obj.value("category").toString();
-      if (!category.contains(m_filterCategory, Qt::CaseInsensitive))
-        continue;
-    }
-
-    if (!m_searchFilter.isEmpty()) {
-      const auto title  = obj.value("title").toString();
-      const auto desc   = obj.value("description").toString();
-      const auto author = obj.value("author").toString();
-
-      const bool matches = title.contains(m_searchFilter, Qt::CaseInsensitive)
-                        || desc.contains(m_searchFilter, Qt::CaseInsensitive)
-                        || author.contains(m_searchFilter, Qt::CaseInsensitive);
-
-      if (!matches)
-        continue;
-    }
-
-    auto map      = obj.toVariantMap();
-    const auto id = obj.value("id").toString();
-    map.insert("installed", isInstalled(id));
-    map.insert("updateAvailable", hasUpdate(id));
-    map.insert("installedVersion", installedVersion(id));
-    map.insert("pluginRunning", isPluginRunning(id));
-
-    // Check platform compatibility for plugins with platform overrides
-    const auto plats = obj.value("platforms").toObject();
-    if (!plats.isEmpty()) {
-      const auto key = currentPlatformKey();
-      const auto os  = key.left(key.indexOf('/'));
-      const bool compatible =
-        plats.contains(key) || plats.contains(os + "/*") || plats.contains("*");
-      map.insert("platformAvailable", compatible);
-    }
-
-    else {
-      map.insert("platformAvailable", true);
-    }
-
-    m_filteredExtensions.append(map);
+    m_filteredExtensions.append(buildCatalogEntryMap(obj));
   }
 
-  // Include orphaned installed extensions (repo removed but still installed)
+  appendOrphanedInstalledEntries();
+
+  static const QMap<QString, int> typeOrder = {
+    {          QStringLiteral("plugin"), 0},
+    {           QStringLiteral("theme"), 1},
+    {    QStringLiteral("frame-parser"), 2},
+    {QStringLiteral("project-template"), 3},
+  };
+
+  std::stable_sort(m_filteredExtensions.begin(),
+                   m_filteredExtensions.end(),
+                   [](const QVariant& a, const QVariant& b) {
+                     const auto ta = a.toMap().value("type").toString();
+                     const auto tb = b.toMap().value("type").toString();
+                     return typeOrder.value(ta, 99) < typeOrder.value(tb, 99);
+                   });
+
+  restoreSelectionByPreviousId();
+
+  Q_EMIT selectedIndexChanged();
+  Q_EMIT filteredExtensionsChanged();
+}
+
+/**
+ * @brief Returns true when @p entry passes the current type/category/search filters.
+ */
+bool Misc::ExtensionManager::catalogEntryMatchesFilters(const QJsonObject& entry) const
+{
+  if (!m_filterType.isEmpty() && m_filterType != QStringLiteral("All"))
+    if (entry.value("type").toString() != m_filterType)
+      return false;
+
+  if (!m_filterCategory.isEmpty() && m_filterCategory != QStringLiteral("All")) {
+    const auto category = entry.value("category").toString();
+    if (!category.contains(m_filterCategory, Qt::CaseInsensitive))
+      return false;
+  }
+
+  if (m_searchFilter.isEmpty())
+    return true;
+
+  const auto title  = entry.value("title").toString();
+  const auto desc   = entry.value("description").toString();
+  const auto author = entry.value("author").toString();
+
+  return title.contains(m_searchFilter, Qt::CaseInsensitive)
+      || desc.contains(m_searchFilter, Qt::CaseInsensitive)
+      || author.contains(m_searchFilter, Qt::CaseInsensitive);
+}
+
+/**
+ * @brief Builds the QML-friendly variant map for a catalog entry, including install state.
+ */
+QVariantMap Misc::ExtensionManager::buildCatalogEntryMap(const QJsonObject& entry) const
+{
+  auto map      = entry.toVariantMap();
+  const auto id = entry.value("id").toString();
+  map.insert("installed", isInstalled(id));
+  map.insert("updateAvailable", hasUpdate(id));
+  map.insert("installedVersion", installedVersion(id));
+  map.insert("pluginRunning", isPluginRunning(id));
+
+  const auto plats = entry.value("platforms").toObject();
+  if (plats.isEmpty()) {
+    map.insert("platformAvailable", true);
+    return map;
+  }
+
+  const auto key        = currentPlatformKey();
+  const auto os         = key.left(key.indexOf('/'));
+  const bool compatible = plats.contains(key) || plats.contains(os + "/*") || plats.contains("*");
+  map.insert("platformAvailable", compatible);
+  return map;
+}
+
+/**
+ * @brief Appends entries for installed extensions whose source repo is no longer available.
+ */
+void Misc::ExtensionManager::appendOrphanedInstalledEntries()
+{
   QSet<QString> catalogIds;
   for (const auto& entry : std::as_const(m_filteredExtensions))
     catalogIds.insert(entry.toMap().value("id").toString());
@@ -1012,7 +1047,6 @@ void Misc::ExtensionManager::applyFilter()
       if (type != m_filterType)
         continue;
 
-    // Build a minimal entry from installed metadata + info.json on disk
     QVariantMap map;
     map.insert("id", id);
     map.insert("type", type);
@@ -1022,7 +1056,6 @@ void Misc::ExtensionManager::applyFilter()
     map.insert("installedVersion", info.value("version").toString());
     map.insert("pluginRunning", isPluginRunning(id));
 
-    // Try to read title/description from the installed info.json
     const auto addonJsonPath = extensionsPath() + "/" + type + "/" + id + "/info.json";
     QFile addonFile(addonJsonPath);
     if (addonFile.open(QIODevice::ReadOnly)) {
@@ -1050,39 +1083,26 @@ void Misc::ExtensionManager::applyFilter()
 
     m_filteredExtensions.append(map);
   }
+}
 
-  // Sort by type: plugins first, then themes, parsers, templates
-  static const QMap<QString, int> typeOrder = {
-    {          QStringLiteral("plugin"), 0},
-    {           QStringLiteral("theme"), 1},
-    {    QStringLiteral("frame-parser"), 2},
-    {QStringLiteral("project-template"), 3},
-  };
-
-  std::stable_sort(m_filteredExtensions.begin(),
-                   m_filteredExtensions.end(),
-                   [](const QVariant& a, const QVariant& b) {
-                     const auto ta = a.toMap().value("type").toString();
-                     const auto tb = b.toMap().value("type").toString();
-                     return typeOrder.value(ta, 99) < typeOrder.value(tb, 99);
-                   });
-
-  // Try to preserve current selection by matching extension ID
+/**
+ * @brief Restores the selected extension index by matching the previous entry's ID.
+ */
+void Misc::ExtensionManager::restoreSelectionByPreviousId()
+{
   const auto previousAddon = selectedExtension();
   const auto previousId    = previousAddon.value("id").toString();
   m_selectedIndex          = -1;
 
-  if (!previousId.isEmpty()) {
-    for (int i = 0; i < m_filteredExtensions.count(); ++i) {
-      if (m_filteredExtensions.at(i).toMap().value("id").toString() == previousId) {
-        m_selectedIndex = i;
-        break;
-      }
+  if (previousId.isEmpty())
+    return;
+
+  for (int i = 0; i < m_filteredExtensions.count(); ++i) {
+    if (m_filteredExtensions.at(i).toMap().value("id").toString() == previousId) {
+      m_selectedIndex = i;
+      return;
     }
   }
-
-  Q_EMIT selectedIndexChanged();
-  Q_EMIT filteredExtensionsChanged();
 }
 
 /**
@@ -1312,17 +1332,71 @@ void Misc::ExtensionManager::stopSelectedPlugin()
  */
 void Misc::ExtensionManager::launchPlugin(const QString& id)
 {
-  // Validate plugin ID
   if (id.isEmpty())
     return;
 
-  // Clear user-closed flag so the plugin can auto-restore in future sessions
   m_userClosedPlugins.remove(id);
 
+  if (!checkLaunchPreconditions(id))
+    return;
+
+  const auto pluginDir = extensionsPath() + "/plugin/" + id;
+  QJsonObject resolved;
+  if (!readPluginMetadata(id, pluginDir, resolved))
+    return;
+
+  const auto entry    = resolved.value("entry").toString();
+  const auto runtime  = resolved.value("runtime").toString("python3");
+  const auto terminal = resolved.value("terminal").toBool(false);
+  const auto usesGrpc = resolved.value("grpc").toBool(false);
+
+  if (!ensureApiServerForLaunch(id, usesGrpc))
+    return;
+
+  QString entryPath;
+  if (!resolveAndValidateEntry(id, pluginDir, entry, entryPath))
+    return;
+
+  bool hasPipDeps = false;
+  if (!checkPluginDependencies(id, resolved.value("dependencies").toArray(), hasPipDeps))
+    return;
+
+  auto* process = new QProcess(this);
+  process->setWorkingDirectory(pluginDir);
+  process->setProcessEnvironment(buildPluginEnvironment());
+
+  if (terminal)
+    process->setProcessChannelMode(QProcess::ForwardedChannels);
+  else {
+    process->setProcessChannelMode(QProcess::MergedChannels);
+    process->setStandardInputFile(QProcess::nullDevice());
+  }
+
+  m_pluginOutput.insert(id, QString());
+  wirePluginProcessSignals(process, id);
+
+  startPluginProcess(process, runtime, entryPath, terminal);
+
+  if (!process->waitForStarted(3000)) {
+    m_pluginOutput[id] +=
+      QStringLiteral("[Error] Failed to start: ") + process->errorString() + "\n";
+    Q_EMIT pluginOutputChanged(id);
+    delete process;
+    return;
+  }
+
+  registerRunningPlugin(id, process, resolved, pluginDir, terminal, hasPipDeps);
+}
+
+/**
+ * @brief Verifies a plugin can be launched: not running, installed, and of type "plugin".
+ */
+bool Misc::ExtensionManager::checkLaunchPreconditions(const QString& id)
+{
   if (isPluginRunning(id)) {
     m_pluginOutput[id] += QStringLiteral("[Already running]\n");
     Q_EMIT pluginOutputChanged(id);
-    return;
+    return false;
   }
 
   if (!isInstalled(id)) {
@@ -1330,10 +1404,9 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     Q_EMIT pluginOutputChanged(id);
     Misc::Utilities::showMessageBox(
       tr("Plugin Error"), tr("Plugin \"%1\" is not installed.").arg(id), QMessageBox::Critical);
-    return;
+    return false;
   }
 
-  // Read plugin metadata
   const auto info = m_installedExtensions.value(id).toObject();
   const auto type = info.value("type").toString();
   if (type != QStringLiteral("plugin")) {
@@ -1343,11 +1416,19 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
       tr("Plugin Error"),
       tr("Extension \"%1\" is not a plugin (type: %2).").arg(id, type),
       QMessageBox::Critical);
-    return;
+    return false;
   }
 
-  // Find the entry point from info.json
-  const auto pluginDir = extensionsPath() + "/plugin/" + id;
+  return true;
+}
+
+/**
+ * @brief Reads the plugin info.json and resolves platform-specific overrides.
+ */
+bool Misc::ExtensionManager::readPluginMetadata(const QString& id,
+                                                const QString& pluginDir,
+                                                QJsonObject& resolvedOut)
+{
   QFile metaFile(pluginDir + "/info.json");
   if (!metaFile.open(QIODevice::ReadOnly)) {
     m_pluginOutput[id] += QStringLiteral("[Error] Cannot read %1/info.json\n").arg(pluginDir);
@@ -1356,17 +1437,19 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
       tr("Plugin Error"),
       tr("Cannot read plugin metadata file:\n%1/info.json").arg(pluginDir),
       QMessageBox::Critical);
-    return;
+    return false;
   }
 
-  const auto metaDoc  = QJsonDocument::fromJson(metaFile.readAll());
-  const auto resolved = resolvePlatform(metaDoc.object());
-  const auto entry    = resolved.value("entry").toString();
-  const auto runtime  = resolved.value("runtime").toString("python3");
-  const auto terminal = resolved.value("terminal").toBool(false);
-  const auto usesGrpc = resolved.value("grpc").toBool(false);
+  const auto metaDoc = QJsonDocument::fromJson(metaFile.readAll());
+  resolvedOut        = resolvePlatform(metaDoc.object());
+  return true;
+}
 
-  // Check gRPC build support for plugins that require it
+/**
+ * @brief Verifies gRPC build support and prompts the user to enable the API server.
+ */
+bool Misc::ExtensionManager::ensureApiServerForLaunch(const QString& id, bool usesGrpc)
+{
 #ifndef ENABLE_GRPC
   if (usesGrpc) {
     m_pluginOutput[id] += QStringLiteral(
@@ -1376,82 +1459,98 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
       tr("Plugin Error"),
       tr("Plugin \"%1\" requires gRPC but this build does not include gRPC support.").arg(id),
       QMessageBox::Critical);
-    return;
+    return false;
   }
 #endif
 
-  // Enable the API server if not already running (gRPC follows automatically)
-  if (!API::Server::instance().enabled()) {
-    const auto msg = usesGrpc ? tr("This plugin uses gRPC for high-performance data streaming. "
-                                   "The API server needs to be enabled.\n\n"
-                                   "Would you like to enable it now?")
-                              : tr("Plugins need the API server to communicate with Serial Studio. "
-                                   "Would you like to enable it now?");
+  if (API::Server::instance().enabled())
+    return true;
 
-    const auto result = Misc::Utilities::showMessageBox(tr("API Server Required"),
-                                                        msg,
-                                                        QMessageBox::Question,
-                                                        QString(),
-                                                        QMessageBox::Yes | QMessageBox::No,
-                                                        QMessageBox::Yes);
+  const auto msg = usesGrpc ? tr("This plugin uses gRPC for high-performance data streaming. "
+                                 "The API server needs to be enabled.\n\n"
+                                 "Would you like to enable it now?")
+                            : tr("Plugins need the API server to communicate with Serial Studio. "
+                                 "Would you like to enable it now?");
 
-    if (result == QMessageBox::Yes)
-      API::Server::instance().setEnabled(true);
-    else {
-      m_pluginOutput[id] += QStringLiteral("[Cancelled] API Server not enabled.\n");
-      Q_EMIT pluginOutputChanged(id);
-      return;
-    }
+  const auto result = Misc::Utilities::showMessageBox(tr("API Server Required"),
+                                                      msg,
+                                                      QMessageBox::Question,
+                                                      QString(),
+                                                      QMessageBox::Yes | QMessageBox::No,
+                                                      QMessageBox::Yes);
+
+  if (result == QMessageBox::Yes) {
+    API::Server::instance().setEnabled(true);
+    return true;
   }
 
+  m_pluginOutput[id] += QStringLiteral("[Cancelled] API Server not enabled.\n");
+  Q_EMIT pluginOutputChanged(id);
+  return false;
+}
+
+/**
+ * @brief Resolves the absolute entry-point path and validates it stays within the plugin dir.
+ */
+bool Misc::ExtensionManager::resolveAndValidateEntry(const QString& id,
+                                                     const QString& pluginDir,
+                                                     const QString& entry,
+                                                     QString& entryPathOut)
+{
   if (entry.isEmpty()) {
     m_pluginOutput[id] += QStringLiteral("[Error] No 'entry' field in info.json\n");
     Q_EMIT pluginOutputChanged(id);
     Misc::Utilities::showMessageBox(tr("Plugin Error"),
                                     tr("Plugin \"%1\" has no 'entry' field in info.json.").arg(id),
                                     QMessageBox::Critical);
-    return;
+    return false;
   }
 
-  const auto entryPath = pluginDir + "/" + entry;
-  if (!QFile::exists(entryPath)) {
-    m_pluginOutput[id] += QStringLiteral("[Error] Entry point not found: %1\n").arg(entryPath);
+  entryPathOut = pluginDir + "/" + entry;
+  if (!QFile::exists(entryPathOut)) {
+    m_pluginOutput[id] += QStringLiteral("[Error] Entry point not found: %1\n").arg(entryPathOut);
     Q_EMIT pluginOutputChanged(id);
-    Misc::Utilities::showMessageBox(
-      tr("Plugin Error"), tr("Entry point not found:\n%1").arg(entryPath), QMessageBox::Critical);
-    return;
+    Misc::Utilities::showMessageBox(tr("Plugin Error"),
+                                    tr("Entry point not found:\n%1").arg(entryPathOut),
+                                    QMessageBox::Critical);
+    return false;
   }
 
-  // Validate entry point stays within plugin directory
-  if (!isPathSafe(entryPath, pluginDir)) {
+  if (!isPathSafe(entryPathOut, pluginDir)) {
     m_pluginOutput[id] += QStringLiteral("[Error] Invalid entry point path\n");
     Q_EMIT pluginOutputChanged(id);
     Misc::Utilities::showMessageBox(tr("Plugin Error"),
                                     tr("Plugin \"%1\" has an invalid entry point path.").arg(id),
                                     QMessageBox::Critical);
-    return;
+    return false;
   }
 
-  // Check plugin dependencies
-  bool hasPipDeps = false;
-  const auto deps = resolved.value("dependencies").toArray();
+  return true;
+}
+
+/**
+ * @brief Walks the plugin's dependency list, prompting for any missing executables.
+ */
+bool Misc::ExtensionManager::checkPluginDependencies(const QString& id,
+                                                     const QJsonArray& deps,
+                                                     bool& hasPipDepsOut)
+{
+  hasPipDepsOut = false;
+
   for (const auto& dep : deps) {
     const auto obj  = dep.toObject();
     const auto name = obj.value("name").toString();
     const auto exes = obj.value("executables").toArray();
     const auto url  = obj.value("url").toString();
 
-    // Skip pip-managed dependencies -- handled by run.sh/run.cmd venv
     if (obj.contains("pip")) {
-      hasPipDeps = true;
+      hasPipDepsOut = true;
       continue;
     }
 
-    // Skip dependencies with no executables to check
     if (exes.isEmpty())
       continue;
 
-    // Look for any of the listed executables
     bool found = false;
     for (const auto& exe : exes) {
       if (!QStandardPaths::findExecutable(exe.toString()).isEmpty()) {
@@ -1460,28 +1559,35 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
       }
     }
 
-    // Prompt user to download the missing dependency
-    if (!found) {
-      const auto result = Misc::Utilities::showMessageBox(
-        tr("Missing Dependency"),
-        tr("This plugin requires \"%1\" but it was not found on your "
-           "system.\n\nWould you like to open the download page?")
-          .arg(name),
-        QMessageBox::Warning,
-        QString(),
-        QMessageBox::Yes | QMessageBox::Cancel,
-        QMessageBox::Yes);
+    if (found)
+      continue;
 
-      if (result == QMessageBox::Yes && !url.isEmpty())
-        QDesktopServices::openUrl(QUrl(url));
+    const auto result =
+      Misc::Utilities::showMessageBox(tr("Missing Dependency"),
+                                      tr("This plugin requires \"%1\" but it was not found on your "
+                                         "system.\n\nWould you like to open the download page?")
+                                        .arg(name),
+                                      QMessageBox::Warning,
+                                      QString(),
+                                      QMessageBox::Yes | QMessageBox::Cancel,
+                                      QMessageBox::Yes);
 
-      m_pluginOutput[id] += QStringLiteral("[Error] Missing dependency: %1\n").arg(name);
-      Q_EMIT pluginOutputChanged(id);
-      return;
-    }
+    if (result == QMessageBox::Yes && !url.isEmpty())
+      QDesktopServices::openUrl(QUrl(url));
+
+    m_pluginOutput[id] += QStringLiteral("[Error] Missing dependency: %1\n").arg(name);
+    Q_EMIT pluginOutputChanged(id);
+    return false;
   }
 
-  // Build environment with common tool paths
+  return true;
+}
+
+/**
+ * @brief Builds the QProcessEnvironment for plugin processes, prepending common tool paths.
+ */
+QProcessEnvironment Misc::ExtensionManager::buildPluginEnvironment() const
+{
   auto env  = QProcessEnvironment::systemEnvironment();
   auto path = env.value("PATH");
 #ifdef Q_OS_MACOS
@@ -1498,28 +1604,20 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 #endif
   env.insert("PATH", path);
   env.insert("TK_SILENCE_DEPRECATION", "1");
+  return env;
+}
 
-  // Launch the plugin process
-  auto* process = new QProcess(this);
-  process->setWorkingDirectory(pluginDir);
-  process->setProcessEnvironment(env);
-
-  if (terminal)
-    process->setProcessChannelMode(QProcess::ForwardedChannels);
-  else {
-    process->setProcessChannelMode(QProcess::MergedChannels);
-    process->setStandardInputFile(QProcess::nullDevice());
-  }
-
-  // Capture output for the log view
+/**
+ * @brief Connects readyRead/finished/errorOccurred handlers for a plugin's QProcess.
+ */
+void Misc::ExtensionManager::wirePluginProcessSignals(QProcess* process, const QString& id)
+{
   const auto pluginId = id;
-  m_pluginOutput.insert(id, QString());
 
   connect(process, &QProcess::readyRead, this, [this, pluginId, process]() {
     const auto text = QString::fromUtf8(process->readAll());
     m_pluginOutput[pluginId] += text;
 
-    // Keep output buffer reasonable (last 64KB)
     auto& buf = m_pluginOutput[pluginId];
     if (buf.size() > 65536)
       buf = buf.right(32768);
@@ -1538,8 +1636,16 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     m_pluginOutput[pluginId] += msg;
     Q_EMIT pluginOutputChanged(pluginId);
   });
+}
 
-  // Native executables need execute permission on Unix
+/**
+ * @brief Starts a plugin process directly or via the platform-native terminal emulator.
+ */
+void Misc::ExtensionManager::startPluginProcess(QProcess* process,
+                                                const QString& runtime,
+                                                const QString& entryPath,
+                                                bool terminal)
+{
   const bool isNative = runtime.isEmpty();
 #ifndef Q_OS_WIN
   if (isNative)
@@ -1547,61 +1653,59 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
       entryPath, QFile::permissions(entryPath) | QFileDevice::ExeUser | QFileDevice::ExeGroup);
 #endif
 
-  // Launch via system terminal or directly
-  if (terminal) {
-#ifdef Q_OS_MACOS
-    process->start("open", {"-a", "Terminal", entryPath});
-#elif defined(Q_OS_WIN)
-    if (isNative)
-      process->start("cmd.exe", {"/c", "start", "cmd.exe", "/k", entryPath});
-    else
-      process->start("cmd.exe", {"/c", "start", "cmd.exe", "/k", runtime, entryPath});
-#else
-    const QStringList terms = {
-      "x-terminal-emulator", "gnome-terminal", "konsole", "xfce4-terminal", "xterm"};
-    bool launched = false;
-    for (const auto& term : terms) {
-      if (QStandardPaths::findExecutable(term).isEmpty())
-        continue;
-
-      if (isNative)
-        process->start(term, {"--", entryPath});
-      else
-        process->start(term, {"--", runtime, entryPath});
-
-      launched = true;
-      break;
-    }
-
-    if (!launched) {
-      if (isNative)
-        process->start(entryPath);
-      else
-        process->start(runtime, {entryPath});
-    }
-#endif
-  }
-
-  else {
+  if (!terminal) {
     if (isNative)
       process->start(entryPath);
     else
       process->start(runtime, {entryPath});
-  }
 
-  if (!process->waitForStarted(3000)) {
-    m_pluginOutput[id] +=
-      QStringLiteral("[Error] Failed to start: ") + process->errorString() + "\n";
-    Q_EMIT pluginOutputChanged(id);
-    delete process;
     return;
   }
 
+#ifdef Q_OS_MACOS
+  Q_UNUSED(isNative)
+  process->start("open", {"-a", "Terminal", entryPath});
+#elif defined(Q_OS_WIN)
+  if (isNative)
+    process->start("cmd.exe", {"/c", "start", "cmd.exe", "/k", entryPath});
+  else
+    process->start("cmd.exe", {"/c", "start", "cmd.exe", "/k", runtime, entryPath});
+#else
+  const QStringList terms = {
+    "x-terminal-emulator", "gnome-terminal", "konsole", "xfce4-terminal", "xterm"};
+  for (const auto& term : terms) {
+    if (QStandardPaths::findExecutable(term).isEmpty())
+      continue;
+
+    if (isNative)
+      process->start(term, {"--", entryPath});
+    else
+      process->start(term, {"--", runtime, entryPath});
+
+    return;
+  }
+
+  if (isNative)
+    process->start(entryPath);
+  else
+    process->start(runtime, {entryPath});
+#endif
+}
+
+/**
+ * @brief Records a successfully started plugin and refreshes related UI state.
+ */
+void Misc::ExtensionManager::registerRunningPlugin(const QString& id,
+                                                   QProcess* process,
+                                                   const QJsonObject& resolved,
+                                                   const QString& pluginDir,
+                                                   bool terminal,
+                                                   bool hasPipDeps)
+{
   const auto mode = terminal ? QStringLiteral(" (terminal)") : QString();
   m_pluginOutput[id] +=
     QStringLiteral("[Started] PID ") + QString::number(process->processId()) + mode + "\n";
 
-  // Notify user about first-run setup when pip dependencies need installation
   if (hasPipDeps && !QDir(pluginDir + "/venv").exists()) {
     m_pluginOutput[id] +=
       QStringLiteral("[Setup] Installing required packages -- this may take a moment...\n");
@@ -1609,7 +1713,6 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 
   Q_EMIT pluginOutputChanged(id);
 
-  // Register the running plugin and update UI state
   m_plugins.insert(id, process);
 
   QVariantMap entry_map;

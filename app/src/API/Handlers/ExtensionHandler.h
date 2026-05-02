@@ -32,6 +32,12 @@ public:
   static void registerCommands();
 
 private:
+  static void registerCatalogCommands();
+  static void registerStateCommands();
+#ifdef BUILD_COMMERCIAL
+  static void registerRepositoryCommands();
+#endif
+
   static CommandResponse listAddons(const QString& id, const QJsonObject& params);
   static CommandResponse getAddonInfo(const QString& id, const QJsonObject& params);
   static CommandResponse installExtension(const QString& id, const QJsonObject& params);

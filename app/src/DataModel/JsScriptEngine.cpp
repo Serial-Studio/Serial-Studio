@@ -481,7 +481,6 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!script.isEmpty());
 
-  // Save existing parse function in case validation fails
   QJSValue prevParseFn  = m_parseFunction;
   QJSValue prevHexToArr = m_hexToArray;
 
@@ -490,74 +489,19 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
     m_hexToArray    = prevHexToArr;
   };
 
-  // Syntax check
   if (!validateScriptSyntax(script, sourceId, showMessageBoxes)) {
     restorePrevious();
     return false;
   }
 
-  // Verify the 'parse' function exists and has a valid signature
   auto parseFunction = validateParseFunction(sourceId, showMessageBoxes);
   if (parseFunction.isNull()) {
     restorePrevious();
     return false;
   }
 
-  // Full signature + probe validation only for source 0
   if (sourceId == 0) {
-    static QRegularExpression functionRegex(
-      R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
-    const auto match = functionRegex.match(script);
-    if (!match.hasMatch()) {
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(
-          QObject::tr("Invalid Function Declaration"),
-          QObject::tr("No valid 'parse' function declaration found.\n\n"
-                      "Expected format:\nfunction parse(frame) { ... }"),
-          QMessageBox::Critical);
-      } else {
-        qWarning() << "[JsScriptEngine] No valid 'parse' function "
-                      "declaration found";
-      }
-      restorePrevious();
-      return false;
-    }
-
-    const QString firstArg  = match.captured(1);
-    const QString secondArg = match.captured(3);
-
-    if (firstArg.isEmpty()) {
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(
-          QObject::tr("Invalid Function Parameter"),
-          QObject::tr("The 'parse' function must have at least one parameter."
-                      "\n\nExpected format:\n"
-                      "function parse(frame) { ... }"),
-          QMessageBox::Critical);
-      } else {
-        qWarning() << "[JsScriptEngine] Parse function must have at "
-                      "least one parameter";
-      }
-      restorePrevious();
-      return false;
-    }
-
-    if (!secondArg.isEmpty()) {
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(
-          QObject::tr("Deprecated Function Signature"),
-          QObject::tr("The 'parse' function uses the old two-parameter "
-                      "format: parse(%1, %2)\n\n"
-                      "This format is no longer supported. Please update "
-                      "to the new single-parameter format:\n"
-                      "function parse(%1) { ... }\n\n"
-                      "The separator parameter is no longer needed.")
-            .arg(firstArg, secondArg),
-          QMessageBox::Warning);
-      } else {
-        qWarning() << "[JsScriptEngine] Deprecated two-parameter "
-                      "parse function";
-      }
+    if (!validateParseSignature(script, showMessageBoxes)) {
       restorePrevious();
       return false;
     }
@@ -570,12 +514,73 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
 
   m_parseFunction = parseFunction;
 
-  // Hex-to-byte-array helper for binary frame parsing
   m_engine.evaluate(QStringLiteral("function __ss_internal_hex_to_array__(h){"
                                    "var n=h.length>>1,a=new Array(n);"
                                    "for(var i=0,j=0;i<h.length;i+=2,j++)"
                                    "a[j]=parseInt(h.substr(i,2),16);return a;}"));
   m_hexToArray = m_engine.globalObject().property(QStringLiteral("__ss_internal_hex_to_array__"));
+
+  return true;
+}
+
+/**
+ * @brief Verifies the script declares a single-parameter parse() function.
+ */
+bool DataModel::JsScriptEngine::validateParseSignature(const QString& script, bool showMessageBoxes)
+{
+  static QRegularExpression functionRegex(
+    R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
+  const auto match = functionRegex.match(script);
+  if (!match.hasMatch()) {
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        QObject::tr("Invalid Function Declaration"),
+        QObject::tr("No valid 'parse' function declaration found.\n\n"
+                    "Expected format:\nfunction parse(frame) { ... }"),
+        QMessageBox::Critical);
+    } else {
+      qWarning() << "[JsScriptEngine] No valid 'parse' function "
+                    "declaration found";
+    }
+    return false;
+  }
+
+  const QString firstArg  = match.captured(1);
+  const QString secondArg = match.captured(3);
+
+  if (firstArg.isEmpty()) {
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        QObject::tr("Invalid Function Parameter"),
+        QObject::tr("The 'parse' function must have at least one parameter."
+                    "\n\nExpected format:\n"
+                    "function parse(frame) { ... }"),
+        QMessageBox::Critical);
+    } else {
+      qWarning() << "[JsScriptEngine] Parse function must have at "
+                    "least one parameter";
+    }
+    return false;
+  }
+
+  if (!secondArg.isEmpty()) {
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        QObject::tr("Deprecated Function Signature"),
+        QObject::tr("The 'parse' function uses the old two-parameter "
+                    "format: parse(%1, %2)\n\n"
+                    "This format is no longer supported. Please update "
+                    "to the new single-parameter format:\n"
+                    "function parse(%1) { ... }\n\n"
+                    "The separator parameter is no longer needed.")
+          .arg(firstArg, secondArg),
+        QMessageBox::Warning);
+    } else {
+      qWarning() << "[JsScriptEngine] Deprecated two-parameter "
+                    "parse function";
+    }
+    return false;
+  }
 
   return true;
 }

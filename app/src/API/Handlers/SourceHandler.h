@@ -34,6 +34,9 @@ public:
   static void registerCommands();
 
 private:
+  static void registerPropertyCommands();
+  static void registerFrameParserCommands();
+
   static CommandResponse sourceList(const QString& id, const QJsonObject& params);
   static CommandResponse sourceAdd(const QString& id, const QJsonObject& params);
   static CommandResponse sourceDelete(const QString& id, const QJsonObject& params);

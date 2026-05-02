@@ -214,14 +214,12 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!script.isEmpty());
 
-  // Recreate state with clean environment
   destroyState();
   createState();
 
-  // Evaluate the script
   const QByteArray utf8 = script.toUtf8();
   const auto fileName   = QStringLiteral("parser_%1.lua").arg(sourceId).toUtf8();
-  int status = luaL_loadbuffer(m_state, utf8.constData(), utf8.size(), fileName.constData());
+  const int status = luaL_loadbuffer(m_state, utf8.constData(), utf8.size(), fileName.constData());
   if (status != LUA_OK) {
     const QString errorMsg = QString::fromUtf8(lua_tostring(m_state, -1));
     lua_pop(m_state, 1);
@@ -236,108 +234,131 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
     return false;
   }
 
-  // Run the chunk under the watchdog -- file-scope loops would hang otherwise.
-  m_deadline.setRemainingTime(kRuntimeWatchdogMs);
-  status     = lua_pcall(m_state, 0, 0, 0);
-  m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
-  if (status != LUA_OK) {
-    const QString errorMsg = QString::fromUtf8(lua_tostring(m_state, -1));
-    lua_pop(m_state, 1);
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        QObject::tr("Lua Runtime Error"),
-        QObject::tr("The parser code triggered an error:\n\n%1").arg(errorMsg),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[LuaScriptEngine] Source" << sourceId << "runtime error:" << errorMsg;
-    }
+  if (!runLoadedChunk(sourceId, showMessageBoxes))
     return false;
-  }
 
-  // Verify that the global 'parse' function exists
-  lua_getglobal(m_state, "parse");
-  if (!lua_isfunction(m_state, -1)) {
-    lua_pop(m_state, 1);
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        QObject::tr("Missing Parse Function"),
-        QObject::tr("The 'parse' function is not defined in the script.\n\n"
-                    "Please ensure your code includes:\n"
-                    "function parse(frame) ... end"),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[LuaScriptEngine] Source" << sourceId << "missing parse() function";
-    }
+  if (!ensureParseFunction(sourceId, showMessageBoxes))
     return false;
-  }
 
-  lua_pop(m_state, 1);
-
-  // Probe with test inputs for source 0
-  if (sourceId == 0) {
-    bool probeOk         = false;
-    const char* probes[] = {"0", ""};
-    QString lastError;
-
-    for (const char* probe : probes) {
-      lua_getglobal(m_state, "parse");
-      lua_pushstring(m_state, probe);
-
-      m_deadline.setRemainingTime(kRuntimeWatchdogMs);
-      const int probeStatus = lua_pcall(m_state, 1, 1, 0);
-      m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
-
-      if (probeStatus == LUA_OK) {
-        lua_pop(m_state, 1);
-        probeOk = true;
-        break;
-      }
-
-      lastError = QString::fromUtf8(lua_tostring(m_state, -1));
-      lua_pop(m_state, 1);
-    }
-
-    // Try with a byte table probe
-    if (!probeOk) {
-      lua_getglobal(m_state, "parse");
-      lua_newtable(m_state);
-      lua_pushinteger(m_state, 0);
-      lua_rawseti(m_state, -2, 1);
-
-      m_deadline.setRemainingTime(kRuntimeWatchdogMs);
-      const int probeStatus = lua_pcall(m_state, 1, 1, 0);
-      m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
-
-      if (probeStatus == LUA_OK) {
-        lua_pop(m_state, 1);
-        probeOk = true;
-      } else {
-        lastError = QString::fromUtf8(lua_tostring(m_state, -1));
-        lua_pop(m_state, 1);
-      }
-    }
-
-    if (!probeOk) {
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(
-          QObject::tr("Parse Function Runtime Error"),
-          QObject::tr("The parse function contains an error:\n\n%1\n\n"
-                      "Please fix the error in the function body.")
-            .arg(lastError),
-          QMessageBox::Critical);
-      } else {
-        qWarning() << "[LuaScriptEngine] Probe failed:" << lastError;
-      }
-
-      // Reset state but keep it usable for re-editing
-      destroyState();
-      createState();
-      return false;
-    }
-  }
+  if (sourceId == 0 && !probeParseFunction(sourceId, showMessageBoxes))
+    return false;
 
   m_loaded = true;
   return true;
+}
+
+/**
+ * @brief Runs the just-loaded chunk under the watchdog and reports any runtime error.
+ */
+bool DataModel::LuaScriptEngine::runLoadedChunk(int sourceId, bool showMessageBoxes)
+{
+  m_deadline.setRemainingTime(kRuntimeWatchdogMs);
+  const int status = lua_pcall(m_state, 0, 0, 0);
+  m_deadline       = QDeadlineTimer(QDeadlineTimer::Forever);
+  if (status == LUA_OK)
+    return true;
+
+  const QString errorMsg = QString::fromUtf8(lua_tostring(m_state, -1));
+  lua_pop(m_state, 1);
+  if (showMessageBoxes) {
+    Misc::Utilities::showMessageBox(
+      QObject::tr("Lua Runtime Error"),
+      QObject::tr("The parser code triggered an error:\n\n%1").arg(errorMsg),
+      QMessageBox::Critical);
+  } else {
+    qWarning() << "[LuaScriptEngine] Source" << sourceId << "runtime error:" << errorMsg;
+  }
+  return false;
+}
+
+/**
+ * @brief Confirms that a global 'parse' function was declared by the chunk.
+ */
+bool DataModel::LuaScriptEngine::ensureParseFunction(int sourceId, bool showMessageBoxes)
+{
+  lua_getglobal(m_state, "parse");
+  const bool isFn = lua_isfunction(m_state, -1);
+  lua_pop(m_state, 1);
+  if (isFn)
+    return true;
+
+  if (showMessageBoxes) {
+    Misc::Utilities::showMessageBox(
+      QObject::tr("Missing Parse Function"),
+      QObject::tr("The 'parse' function is not defined in the script.\n\n"
+                  "Please ensure your code includes:\n"
+                  "function parse(frame) ... end"),
+      QMessageBox::Critical);
+  } else {
+    qWarning() << "[LuaScriptEngine] Source" << sourceId << "missing parse() function";
+  }
+  return false;
+}
+
+/**
+ * @brief Probes parse() with empty/zero/byte-table inputs to surface dead-on-arrival errors.
+ */
+bool DataModel::LuaScriptEngine::probeParseFunction(int sourceId, bool showMessageBoxes)
+{
+  Q_UNUSED(sourceId);
+
+  bool probeOk         = false;
+  const char* probes[] = {"0", ""};
+  QString lastError;
+
+  for (const char* probe : probes) {
+    lua_getglobal(m_state, "parse");
+    lua_pushstring(m_state, probe);
+
+    m_deadline.setRemainingTime(kRuntimeWatchdogMs);
+    const int probeStatus = lua_pcall(m_state, 1, 1, 0);
+    m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
+
+    if (probeStatus == LUA_OK) {
+      lua_pop(m_state, 1);
+      probeOk = true;
+      break;
+    }
+
+    lastError = QString::fromUtf8(lua_tostring(m_state, -1));
+    lua_pop(m_state, 1);
+  }
+
+  if (!probeOk) {
+    lua_getglobal(m_state, "parse");
+    lua_newtable(m_state);
+    lua_pushinteger(m_state, 0);
+    lua_rawseti(m_state, -2, 1);
+
+    m_deadline.setRemainingTime(kRuntimeWatchdogMs);
+    const int probeStatus = lua_pcall(m_state, 1, 1, 0);
+    m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
+
+    if (probeStatus == LUA_OK) {
+      lua_pop(m_state, 1);
+      probeOk = true;
+    } else {
+      lastError = QString::fromUtf8(lua_tostring(m_state, -1));
+      lua_pop(m_state, 1);
+    }
+  }
+
+  if (probeOk)
+    return true;
+
+  if (showMessageBoxes) {
+    Misc::Utilities::showMessageBox(QObject::tr("Parse Function Runtime Error"),
+                                    QObject::tr("The parse function contains an error:\n\n%1\n\n"
+                                                "Please fix the error in the function body.")
+                                      .arg(lastError),
+                                    QMessageBox::Critical);
+  } else {
+    qWarning() << "[LuaScriptEngine] Probe failed:" << lastError;
+  }
+
+  destroyState();
+  createState();
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -500,7 +521,6 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
 {
   QList<QStringList> results;
 
-  // Scalar return (number or string)
   if (!lua_istable(m_state, -1)) {
     QStringList frame = scalarToStringList();
     lua_pop(m_state, 1);
@@ -510,14 +530,22 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
     return results;
   }
 
-  // Classify table contents
   const int len = static_cast<int>(lua_rawlen(m_state, -1));
   if (len == 0) {
     lua_pop(m_state, 1);
     return results;
   }
 
-  // Scan for sub-tables vs scalars
+  return classifyTable(len);
+}
+
+/**
+ * @brief Dispatches the table at stack top to scalar/2D/mixed conversion paths.
+ */
+QList<QStringList> DataModel::LuaScriptEngine::classifyTable(int len)
+{
+  QList<QStringList> results;
+
   bool hasTable  = false;
   bool hasScalar = false;
   for (int i = 1; i <= qMin(len, kMaxElements); ++i) {
@@ -533,14 +561,12 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
       break;
   }
 
-  // Pure 1D array -- all scalars
   if (!hasTable) {
     results.append(tableToStringList(-1));
     lua_pop(m_state, 1);
     return results;
   }
 
-  // Pure 2D array -- all sub-tables
   if (hasTable && !hasScalar) {
     results.reserve(len);
     for (int i = 1; i <= qMin(len, kMaxElements); ++i) {
@@ -557,7 +583,16 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
     return results;
   }
 
-  // Mixed array -- scalars + sub-tables (same unzip logic as JS engine)
+  return unzipMixedTable(len);
+}
+
+/**
+ * @brief Unzips a mixed scalar/vector table into a list of per-step frames.
+ */
+QList<QStringList> DataModel::LuaScriptEngine::unzipMixedTable(int len)
+{
+  QList<QStringList> results;
+
   QStringList scalars;
   QList<QStringList> vectors;
   qsizetype maxVectorLength = 0;
@@ -570,16 +605,13 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
 
   lua_pop(m_state, 1);
 
-  // No vectors found -- treat as flat frame
   if (vectors.isEmpty()) {
     results.append(scalars);
     return results;
   }
 
-  // Cap vector length to prevent OOM
   maxVectorLength = qMin(maxVectorLength, static_cast<qsizetype>(kMaxVecLen));
 
-  // Extend shorter vectors by repeating their last value
   for (auto& vec : vectors) {
     if (!vec.isEmpty() && vec.size() < maxVectorLength) {
       const QString lastValue = vec.last();
@@ -588,7 +620,6 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
     }
   }
 
-  // Build output frames: scalars repeated, vectors unzipped
   results.reserve(maxVectorLength);
   for (int i = 0; i < maxVectorLength; ++i) {
     QStringList frame;

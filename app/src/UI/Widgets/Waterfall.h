@@ -207,9 +207,18 @@ private:
   void drawXAxis(QPainter* painter, const QRectF& plotRect) const;
   void drawYAxis(QPainter* painter, const QRectF& plotRect) const;
   void drawCursor(QPainter* painter, const QRectF& plotRect) const;
+  void cursorReadoutValues(
+    const QRectF& plotRect, double cx, double cy, double& freqHz, double& yVal) const;
+  void drawCursorTooltip(QPainter* painter,
+                         const QRectF& plotRect,
+                         double cx,
+                         double cy,
+                         const QString& freqText,
+                         const QString& timeText) const;
   [[nodiscard]] QRectF computePlotRect(const QFontMetrics& fm) const;
   [[nodiscard]] QRectF computeSourceRect() const;
   static QRgb sampleColorMap(int map, double t);
+  static QRgb interpolateLut(const double* r, const double* g, const double* b, int n, double t);
   static AxisTicks computeFreqTicks(double maxFreq, int targetCount);
   static AxisTicks computeTimeTicks(double maxSeconds, int targetCount);
   static QString formatFreqTick(double hz);

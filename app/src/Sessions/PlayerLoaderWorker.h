@@ -21,6 +21,8 @@
 #  include <QString>
 #  include <vector>
 
+class QSqlDatabase;
+
 namespace Sessions {
 
 /**
@@ -68,6 +70,18 @@ public:
 
 public slots:
   void openAndLoad(const QString& filePath, int sessionId);
+
+private:
+  [[nodiscard]] bool resolveSessionId(QSqlDatabase& db, int& sessionId, QString& errorOut);
+  void loadProjectJson(QSqlDatabase& db, int sessionId, PlayerSessionPayload& payload);
+  [[nodiscard]] bool loadColumnOrder(QSqlDatabase& db,
+                                     int sessionId,
+                                     PlayerSessionPayload& payload,
+                                     QString& errorOut);
+  [[nodiscard]] bool loadTimestampIndex(QSqlDatabase& db,
+                                        int sessionId,
+                                        PlayerSessionPayload& payload,
+                                        QString& errorOut);
 
 private:
   std::atomic<bool> m_cancelRequested;

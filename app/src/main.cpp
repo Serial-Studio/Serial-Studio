@@ -109,6 +109,9 @@ static void configureCanbusInterface(const QCommandLineParser& parser,
                                      const QString& plugin,
                                      const QStringList& availableInterfaces);
 
+/**
+ * @brief Bundles the seven Modbus-related command-line options.
+ */
 struct ModbusCliOptions {
   const QCommandLineOption& slaveOpt;
   const QCommandLineOption& pollOpt;
@@ -137,6 +140,113 @@ static void setWindowsAppUserModelId(const QString& shortcutPath);
 static void enableWindowsPerformanceMode();
 static void registerWindowsFileAssociation();
 static char** adjustArgumentsForFreeType(int& argc, char** argv);
+#endif
+
+/**
+ * @brief Aggregate of every command-line option the application accepts.
+ */
+struct CliOptions {
+  QCommandLineOption versionOpt{
+    {"v", "version"},
+    "Displays application version"
+  };
+  QCommandLineOption resetOpt{
+    {"r", "reset"},
+    "Resets all application settings"
+  };
+  QCommandLineOption fullscreenOpt{
+    {"f", "fullscreen"},
+    "Launches dashboard in fullscreen mode"
+  };
+  QCommandLineOption headlessOpt{"headless", "Run without GUI (headless/server mode)"};
+  QCommandLineOption apiServerOpt{"api-server", "Enable API server on startup (port 7777)"};
+  QCommandLineOption projectOpt{
+    {"p", "project"},
+    "Loads the specified project file", "file"
+  };
+  QCommandLineOption quickPlotOpt{
+    {"q", "quick-plot"},
+    "Enables quick plot mode (auto-detect CSV data)"
+  };
+  QCommandLineOption fpsOpt{
+    {"t", "fps"},
+    "Sets visualization refresh rate", "Hz"
+  };
+  QCommandLineOption pointsOpt{
+    {"n", "points"},
+    "Sets data points per plot", "count"
+  };
+  QCommandLineOption uartOpt{"uart", "Specifies serial port (e.g., /dev/ttyUSB0, COM3)", "port"};
+  QCommandLineOption baudOpt{"baud", "Sets serial baud rate (default: 9600)", "rate"};
+  QCommandLineOption tcpOpt{
+    "tcp", "Connects to TCP server (e.g., 192.168.1.100:8080)", "host:port"};
+  QCommandLineOption udpOpt{"udp", "Binds to UDP local port (e.g., 8080)", "port"};
+  QCommandLineOption udpRemoteOpt{
+    "udp-remote", "Specifies UDP remote target (e.g., 192.168.1.100:8080)", "host:port"};
+  QCommandLineOption udpMulticastOpt{"udp-multicast", "Enables multicast mode for UDP"};
+#ifdef BUILD_COMMERCIAL
+  QCommandLineOption noToolbarOpt{"no-toolbar", "Hides the main window toolbar at startup (Pro)"};
+  QCommandLineOption runtimeOpt{"runtime",
+                                "Operator runtime mode: hides toolbar, quits on disconnect (Pro)"};
+  QCommandLineOption shortcutPathOpt{
+    "shortcut-path", "Path of the shortcut that launched this process (Pro)", "path"};
+  QCommandLineOption csvExportOpt{"csv-export", "Enable CSV export immediately on startup (Pro)"};
+  QCommandLineOption mdfExportOpt{"mdf-export", "Enable MDF4 export immediately on startup (Pro)"};
+  QCommandLineOption sessionExportOpt{"session-export",
+                                      "Enable session database export on startup (Pro)"};
+  QCommandLineOption consoleExportOpt{"console-export",
+                                      "Enable console log export on startup (Pro)"};
+  QCommandLineOption actionsPanelOpt{"actions-panel",
+                                     "Show the actions panel in operator runtime mode (Pro)"};
+  QCommandLineOption fileTransmissionOpt{
+    "file-transmission",
+    "Allow opening the File Transmission dialog in operator runtime mode (Pro)"};
+  QCommandLineOption taskbarModeOpt{
+    "taskbar-mode",
+    "Operator-mode dashboard taskbar visibility: shown / autohide / hidden (Pro)",
+    "mode"};
+  QCommandLineOption taskbarButtonsOpt{
+    "taskbar-buttons", "Comma-separated taskbar pin IDs for operator mode (Pro)", "ids"};
+  QCommandLineOption activateOpt{
+    "activate", "Activate a license key and exit (for CI/headless setup)", "key"};
+  QCommandLineOption deactivateOpt{
+    "deactivate", "Deactivate the current license instance and exit (for CI cleanup)"};
+  QCommandLineOption modbusRtuOpt{
+    "modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port"};
+  QCommandLineOption modbusTcpOpt{
+    "modbus-tcp", "Connects to ModBus TCP server (e.g., 192.168.1.100:502)", "host:port"};
+  QCommandLineOption modbusSlaveOpt{
+    "modbus-slave", "Sets ModBus slave address (1-247, default: 1)", "address"};
+  QCommandLineOption modbusPollOpt{
+    "modbus-poll", "Sets ModBus poll interval in ms (50-60000, default: 100)", "interval"};
+  QCommandLineOption modbusBaudOpt{
+    "modbus-baud", "Sets ModBus RTU baud rate (default: 9600)", "rate"};
+  QCommandLineOption modbusParityOpt{
+    "modbus-parity", "Sets ModBus RTU parity (none/even/odd/space/mark, default: none)", "type"};
+  QCommandLineOption modbusDataBitsOpt{
+    "modbus-databits", "Sets ModBus RTU data bits (5/6/7/8, default: 8)", "bits"};
+  QCommandLineOption modbusStopBitsOpt{
+    "modbus-stopbits", "Sets ModBus RTU stop bits (1/1.5/2, default: 1)", "bits"};
+  QCommandLineOption modbusRegisterOpt{
+    "modbus-register", "Adds ModBus register group: type:start:count (repeatable)", "spec"};
+  QCommandLineOption canbusOpt{
+    "canbus", "Connects to CAN bus (e.g., socketcan:can0, peakcan:pcan0)", "plugin:interface"};
+  QCommandLineOption canbusBitrateOpt{
+    "canbus-bitrate", "Sets CAN bus bitrate in bps (default: 500000)", "rate"};
+  QCommandLineOption canbusFdOpt{"canbus-fd", "Enables CAN-FD mode"};
+#endif
+};
+
+static void setupQtApplicationMetadata();
+static void registerCliOptions(QCommandLineParser& parser, CliOptions& opts);
+static void applyVisualizationOptions(const QCommandLineParser& parser, const CliOptions& opts);
+static void applyBusConfiguration(const QCommandLineParser& parser, const CliOptions& opts);
+#ifdef BUILD_COMMERCIAL
+static bool verifyShortcutProjectExists(const QCommandLineParser& parser,
+                                        const CliOptions& opts,
+                                        bool runtimeMode);
+static void applyOperatorRuntimeSettings(const QCommandLineParser& parser, const CliOptions& opts);
+static void applyExportToggles(const QCommandLineParser& parser, const CliOptions& opts);
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -175,419 +285,448 @@ protected:
 };
 
 //--------------------------------------------------------------------------------------------------
-// Entry-point function
+// Entry-point helpers and main()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Entry-point function of the application
- *
- * @param argc argument count
- * @param argv argument data
- *
- * @return qApp exit code
+ * @brief Performs platform fixups, fractional scaling, and instantiates QApplication.
  */
-int main(int argc, char** argv)
+static void prepareApplicationEnvironment(int& argc, char**& argv, const QString& earlyShortcutPath)
 {
-  // Configure application metadata
-  QLoggingCategory::setFilterRules("*font*=false");
-
-  // Set application info
-  QApplication::setApplicationName(APP_EXECUTABLE);
-  QApplication::setOrganizationName(APP_DEVELOPER);
-  QApplication::setApplicationVersion(APP_VERSION);
-  QApplication::setApplicationDisplayName(APP_NAME);
-  QApplication::setOrganizationDomain(APP_SUPPORT_URL);
-
-  // Set application attributes
-  QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-  QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
-  QApplication::setAttribute(Qt::AA_DontUseNativeMenuWindows);
-
-  // Handle headless mode and platform-specific initialization
-  const bool headless = argvHasFlag(argc, argv, "--headless");
-  if (headless)
-    argv = injectPlatformArg(argc, argv, "offscreen");
-
-  // Pre-parse --shortcut-path: needed before Qt for taskbar identity and QML settings isolation
-  const QString earlyShortcutPath = argvValueFor(argc, argv, "--shortcut-path");
-
 #if defined(Q_OS_WIN)
-  // Windows-specific fixes, attach to console and allow fonts to look decent on 1x scaling
   attachToConsole();
   setWindowsAppUserModelId(earlyShortcutPath);
   enableWindowsPerformanceMode();
   argv = adjustArgumentsForFreeType(argc, argv);
+#else
+  Q_UNUSED(earlyShortcutPath);
 #endif
 
-  // Allow fractional scaling
   auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
   QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
-
-  // Initialize Web Engine Module & application
   QtWebEngineQuick::initialize();
-  QApplication app(argc, argv);
+}
 
-  // Install event filter for file-open events (macOS Finder, Linux xdg-open)
-  FileOpenEventFilter fileOpenFilter;
-  app.installEventFilter(&fileOpenFilter);
-
-#ifdef Q_OS_WIN
-  // Register .ssproj file association in the Windows registry
-  registerWindowsFileAssociation();
-#endif
-
+/**
+ * @brief Applies the window icon (non-macOS) and Fusion style to the running QApplication.
+ */
+static void configureApplicationStyle(QApplication& app)
+{
 #if !defined(Q_OS_MAC)
-  // Set window icon
   QIcon appIcon(QStringLiteral(":/logo/icon.svg"));
   if (!appIcon.isNull())
     app.setWindowIcon(appIcon);
 #endif
 
-  // Set application style to Fusion
   app.setStyle(QStyleFactory::create("Fusion"));
   QQuickStyle::setStyle("Fusion");
+}
 
-  // Define command-line options
-  // clang-format off
-  typedef QCommandLineOption QCLO;
-  QCLO vOpt({"v", "version"}, "Displays application version");
-  QCLO rOpt({"r", "reset"}, "Resets all application settings");
-  QCLO fOpt({"f", "fullscreen"}, "Launches dashboard in fullscreen mode");
-  QCLO headlessOpt("headless", "Run without GUI (headless/server mode)");
-  QCLO apiServerOpt("api-server", "Enable API server on startup (port 7777)");
-  QCLO pOpt({"p", "project"}, "Loads the specified project file", "file");
-  QCLO qOpt({"q", "quick-plot"}, "Enables quick plot mode (auto-detect CSV data)");
-  QCLO fpsOpt({"t", "fps"}, "Sets visualization refresh rate", "Hz");
-  QCLO pointsOpt({"n", "points"}, "Sets data points per plot", "count");
-  QCLO uartOpt("uart", "Specifies serial port (e.g., /dev/ttyUSB0, COM3)", "port");
-  QCLO baudOpt("baud", "Sets serial baud rate (default: 9600)", "rate");
-  QCLO tcpOpt("tcp", "Connects to TCP server (e.g., 192.168.1.100:8080)", "host:port");
-  QCLO udpOpt("udp", "Binds to UDP local port (e.g., 8080)", "port");
-  QCLO udpRemoteOpt("udp-remote", "Specifies UDP remote target (e.g., 192.168.1.100:8080)", "host:port");
-  QCLO udpMltcstOpt("udp-multicast", "Enables multicast mode for UDP");
+/**
+ * @brief Constructs and initializes the ModuleManager, exposing CLI flags to QML.
+ */
+static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
+                                   bool headless,
+                                   bool fullscreen,
+                                   bool hideToolbar,
+                                   bool runtimeMode,
+                                   const QString& earlyShortcutPath)
+{
+  moduleManager.setHeadless(headless);
+  moduleManager.configureUpdater();
+  moduleManager.registerQmlTypes();
+
+  const QString settingsSuffix = earlyShortcutPath.isEmpty()
+                                 ? QString()
+                                 : QStringLiteral("_") + shortcutIdentityHash(earlyShortcutPath);
+
+  const auto ctx = moduleManager.engine().rootContext();
+  ctx->setContextProperty("CLI_START_FULLSCREEN", fullscreen);
+  ctx->setContextProperty("CLI_HIDE_TOOLBAR", hideToolbar);
+  ctx->setContextProperty("CLI_RUNTIME_MODE", runtimeMode);
+  ctx->setContextProperty("CLI_SETTINGS_SUFFIX", settingsSuffix);
+
+  moduleManager.initializeQmlInterface();
+  return headless || !moduleManager.engine().rootObjects().isEmpty();
+}
+
+/**
+ * @brief Applies CLI project/quick-plot mode and schedules runtime auto-connect.
+ */
+static void applyProjectAndAutoConnect(QApplication& app,
+                                       const QCommandLineParser& parser,
+                                       const CliOptions& opts,
+                                       bool runtimeMode)
+{
+  if (parser.isSet(opts.apiServerOpt))
+    API::Server::instance().setEnabled(true);
+
+  if (parser.isSet(opts.projectOpt)) {
+    QString projectPath = parser.value(opts.projectOpt);
+    AppState::instance().setOperationMode(SerialStudio::ProjectFile);
+    DataModel::ProjectModel::instance().openJsonFile(projectPath);
+  }
+
+  else if (parser.isSet(opts.quickPlotOpt))
+    AppState::instance().setOperationMode(SerialStudio::QuickPlot);
+
+  if (!runtimeMode)
+    return;
+
+  QTimer::singleShot(0, &app, []() {
 #ifdef BUILD_COMMERCIAL
-  QCLO noToolbarOpt("no-toolbar", "Hides the main window toolbar at startup (Pro)");
-  QCLO runtimeOpt("runtime", "Operator runtime mode: hides toolbar, quits on disconnect (Pro)");
-  QCLO shortcutPathOpt("shortcut-path", "Path of the shortcut that launched this process (Pro)", "path");
-  QCLO csvExportOpt("csv-export", "Enable CSV export immediately on startup (Pro)");
-  QCLO mdfExportOpt("mdf-export", "Enable MDF4 export immediately on startup (Pro)");
-  QCLO sessionExportOpt("session-export", "Enable session database export on startup (Pro)");
-  QCLO consoleExportOpt("console-export", "Enable console log export on startup (Pro)");
-  QCLO actionsPanelOpt("actions-panel", "Show the actions panel in operator runtime mode (Pro)");
-  QCLO fileTransmissionOpt("file-transmission", "Allow opening the File Transmission dialog in operator runtime mode (Pro)");
-  QCLO taskbarModeOpt("taskbar-mode", "Operator-mode dashboard taskbar visibility: shown / autohide / hidden (Pro)", "mode");
-  QCLO taskbarButtonsOpt("taskbar-buttons", "Comma-separated taskbar pin IDs for operator mode (Pro)", "ids");
-  QCLO activateOpt("activate", "Activate a license key and exit (for CI/headless setup)", "key");
-  QCLO deactivateOpt("deactivate", "Deactivate the current license instance and exit (for CI cleanup)");
-  QCLO modbusRtuOpt("modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port");
-  QCLO modbusTcpOpt("modbus-tcp", "Connects to ModBus TCP server (e.g., 192.168.1.100:502)", "host:port");
-  QCLO modbusSlaveOpt("modbus-slave", "Sets ModBus slave address (1-247, default: 1)", "address");
-  QCLO modbusPollOpt("modbus-poll", "Sets ModBus poll interval in ms (50-60000, default: 100)", "interval");
-  QCLO modbusBaudOpt("modbus-baud", "Sets ModBus RTU baud rate (default: 9600)", "rate");
-  QCLO modbusParityOpt("modbus-parity", "Sets ModBus RTU parity (none/even/odd/space/mark, default: none)", "type");
-  QCLO modbusDataBitsOpt("modbus-databits", "Sets ModBus RTU data bits (5/6/7/8, default: 8)", "bits");
-  QCLO modbusStopBitsOpt("modbus-stopbits", "Sets ModBus RTU stop bits (1/1.5/2, default: 1)", "bits");
-  QCLO modbusRegisterOpt("modbus-register", "Adds ModBus register group: type:start:count (repeatable)", "spec");
-  QCLO canbusOpt("canbus", "Connects to CAN bus (e.g., socketcan:can0, peakcan:pcan0)", "plugin:interface");
-  QCLO canbusBitrateOpt("canbus-bitrate", "Sets CAN bus bitrate in bps (default: 500000)", "rate");
-  QCLO canbusFdOpt("canbus-fd", "Enables CAN-FD mode");
+    if (!Licensing::LemonSqueezy::instance().isActivated()
+        && !Licensing::Trial::instance().trialEnabled())
+      return;
 #endif
-  // clang-format on
+    auto& cm = IO::ConnectionManager::instance();
+    if (cm.configurationOk() && !cm.isConnected())
+      cm.connectDevice();
+  });
+}
 
-  // Parse command line and handle early-exit flags
+/**
+ * @brief Application entry-point: bootstraps Qt, parses CLI flags, and runs the event loop.
+ */
+int main(int argc, char** argv)
+{
+  setupQtApplicationMetadata();
+
+  const bool headless = argvHasFlag(argc, argv, "--headless");
+  if (headless)
+    argv = injectPlatformArg(argc, argv, "offscreen");
+
+  const QString earlyShortcutPath = argvValueFor(argc, argv, "--shortcut-path");
+  prepareApplicationEnvironment(argc, argv, earlyShortcutPath);
+
+  QApplication app(argc, argv);
+
+  FileOpenEventFilter fileOpenFilter;
+  app.installEventFilter(&fileOpenFilter);
+
+#ifdef Q_OS_WIN
+  registerWindowsFileAssociation();
+#endif
+
+  configureApplicationStyle(app);
+
+  CliOptions opts;
   QCommandLineParser parser;
-  parser.setApplicationDescription(PROJECT_DESCRIPTION_SUMMARY);
-  parser.addHelpOption();
-  parser.addOption(vOpt);
-  parser.addOption(rOpt);
-  parser.addOption(fOpt);
-  parser.addOption(headlessOpt);
-  parser.addOption(apiServerOpt);
-  parser.addOption(pOpt);
-  parser.addOption(qOpt);
-  parser.addOption(fpsOpt);
-  parser.addOption(pointsOpt);
-  parser.addOption(uartOpt);
-  parser.addOption(baudOpt);
-  parser.addOption(tcpOpt);
-  parser.addOption(udpOpt);
-  parser.addOption(udpRemoteOpt);
-  parser.addOption(udpMltcstOpt);
-#ifdef BUILD_COMMERCIAL
-  parser.addOption(noToolbarOpt);
-  parser.addOption(runtimeOpt);
-  parser.addOption(shortcutPathOpt);
-  parser.addOption(csvExportOpt);
-  parser.addOption(mdfExportOpt);
-  parser.addOption(sessionExportOpt);
-  parser.addOption(consoleExportOpt);
-  parser.addOption(actionsPanelOpt);
-  parser.addOption(fileTransmissionOpt);
-  parser.addOption(taskbarModeOpt);
-  parser.addOption(taskbarButtonsOpt);
-  parser.addOption(activateOpt);
-  parser.addOption(deactivateOpt);
-  parser.addOption(modbusRtuOpt);
-  parser.addOption(modbusTcpOpt);
-  parser.addOption(modbusSlaveOpt);
-  parser.addOption(modbusPollOpt);
-  parser.addOption(modbusBaudOpt);
-  parser.addOption(modbusParityOpt);
-  parser.addOption(modbusDataBitsOpt);
-  parser.addOption(modbusStopBitsOpt);
-  parser.addOption(modbusRegisterOpt);
-  parser.addOption(canbusOpt);
-  parser.addOption(canbusBitrateOpt);
-  parser.addOption(canbusFdOpt);
-#endif
-
-  // Process CLI arguments
+  registerCliOptions(parser, opts);
   parser.process(app);
 
-  // Display application version
-  if (parser.isSet(vOpt)) {
+  if (parser.isSet(opts.versionOpt)) {
     cliShowVersion();
     return EXIT_SUCCESS;
   }
 
-  // Reset application settings
-  if (parser.isSet(rOpt)) {
+  if (parser.isSet(opts.resetOpt)) {
     cliResetSettings();
     return EXIT_SUCCESS;
   }
 
 #ifdef BUILD_COMMERCIAL
-  // Activate/deactivate Serial Studio
-  if (parser.isSet(activateOpt))
-    return cliActivateLicense(app, parser.value(activateOpt));
+  if (parser.isSet(opts.activateOpt))
+    return cliActivateLicense(app, parser.value(opts.activateOpt));
 
-  if (parser.isSet(deactivateOpt))
+  if (parser.isSet(opts.deactivateOpt))
     return cliDeactivateLicense(app);
 #endif
 
-  // Initialize resources and module manager
   Q_INIT_RESOURCE(rcc);
   Q_INIT_RESOURCE(translations);
 
-  // Determine runtime / fullscreen / hide-toolbar flags.
 #ifdef BUILD_COMMERCIAL
-  const bool runtimeMode = parser.isSet(runtimeOpt);
-  const bool fullscreen  = parser.isSet(fOpt);
-  const bool hideToolbar = runtimeMode || parser.isSet(noToolbarOpt) || fullscreen;
+  const bool runtimeMode = parser.isSet(opts.runtimeOpt);
+  const bool fullscreen  = parser.isSet(opts.fullscreenOpt);
+  const bool hideToolbar = runtimeMode || parser.isSet(opts.noToolbarOpt) || fullscreen;
 #else
   const bool runtimeMode = false;
-  const bool fullscreen  = parser.isSet(fOpt);
+  const bool fullscreen  = parser.isSet(opts.fullscreenOpt);
   const bool hideToolbar = fullscreen;
 #endif
 
 #ifdef BUILD_COMMERCIAL
-  // Handle missing shortcut project before QML loads, else the runtime window flashes behind it
-  if (runtimeMode && parser.isSet(pOpt)) {
-    const QString projectPath = parser.value(pOpt);
-    if (!QFileInfo::exists(projectPath)) {
-      const QString shortcutPath =
-        parser.isSet(shortcutPathOpt) ? parser.value(shortcutPathOpt) : QString();
-
-      QMessageBox box;
-      box.setIcon(QMessageBox::Warning);
-      box.setWindowTitle(QObject::tr("Project file not found"));
-      box.setText(QObject::tr("The project file referenced by this shortcut "
-                              "could not be found:\n\n%1")
-                    .arg(projectPath));
-      box.setInformativeText(QObject::tr("Would you like to delete this shortcut?"));
-
-      QAbstractButton* deleteBtn = nullptr;
-      if (!shortcutPath.isEmpty())
-        deleteBtn = box.addButton(QObject::tr("Delete Shortcut"), QMessageBox::DestructiveRole);
-
-      box.addButton(QObject::tr("Quit"), QMessageBox::RejectRole);
-      box.exec();
-
-      if (deleteBtn != nullptr && box.clickedButton() == deleteBtn)
-        Misc::ShortcutGenerator::instance().deleteShortcut(shortcutPath);
-
-      return EXIT_SUCCESS;
-    }
-  }
+  if (!verifyShortcutProjectExists(parser, opts, runtimeMode))
+    return EXIT_SUCCESS;
 #endif
 
-  // Initialize application modules
   Misc::ModuleManager moduleManager;
-  moduleManager.setHeadless(headless);
-  moduleManager.configureUpdater();
-  moduleManager.registerQmlTypes();
-
-  // Compute per-shortcut settings suffix so each .lnk has its own QML state
-  const QString settingsSuffix = earlyShortcutPath.isEmpty()
-                                 ? QString()
-                                 : QStringLiteral("_") + shortcutIdentityHash(earlyShortcutPath);
-
-  // Publish CLI flags before main.qml loads (creation-time bindings need them).
-  {
-    const auto ctx = moduleManager.engine().rootContext();
-    ctx->setContextProperty("CLI_START_FULLSCREEN", fullscreen);
-    ctx->setContextProperty("CLI_HIDE_TOOLBAR", hideToolbar);
-    ctx->setContextProperty("CLI_RUNTIME_MODE", runtimeMode);
-    ctx->setContextProperty("CLI_SETTINGS_SUFFIX", settingsSuffix);
-  }
-
-  // Now load main.qml and the rest of the QML interface
-  moduleManager.initializeQmlInterface();
-  if (!headless && moduleManager.engine().rootObjects().isEmpty()) {
+  if (!bootstrapModuleManager(
+        moduleManager, headless, fullscreen, hideToolbar, runtimeMode, earlyShortcutPath)) {
     qCritical() << "Critical QML error";
     return EXIT_FAILURE;
   }
 
-  // Apply CLI operation mode and connection settings
-  if (parser.isSet(apiServerOpt))
-    API::Server::instance().setEnabled(true);
+  applyProjectAndAutoConnect(app, parser, opts, runtimeMode);
 
-  // Load a project from disk
-  if (parser.isSet(pOpt)) {
-    QString projectPath = parser.value(pOpt);
-    AppState::instance().setOperationMode(SerialStudio::ProjectFile);
-    DataModel::ProjectModel::instance().openJsonFile(projectPath);
-  }
-
-  // Enable Quick Plot Mode
-  else if (parser.isSet(qOpt))
-    AppState::instance().setOperationMode(SerialStudio::QuickPlot);
-
-  // Auto-connect runtime-mode launches once the bus type is wired up.
-  if (runtimeMode) {
-    QTimer::singleShot(0, &app, []() {
 #ifdef BUILD_COMMERCIAL
-      if (!Licensing::LemonSqueezy::instance().isActivated()
-          && !Licensing::Trial::instance().trialEnabled())
-        return;
-#endif
-      auto& cm = IO::ConnectionManager::instance();
-      if (cm.configurationOk() && !cm.isConnected())
-        cm.connectDevice();
-    });
-  }
-
-  // CLI export toggles: runtime mode pins each flag non-persistent so shortcuts can't leak settings
-#ifdef BUILD_COMMERCIAL
-  if (runtimeMode) {
-    CSV::Export::instance().setSettingsPersistent(false);
-    MDF4::Export::instance().setSettingsPersistent(false);
-    Sessions::Export::instance().setSettingsPersistent(false);
-    Console::Export::instance().setSettingsPersistent(false);
-    UI::Dashboard::instance().setSettingsPersistent(false);
-    UI::TaskbarSettings::instance().setSettingsPersistent(false);
-
-    CSV::Export::instance().setExportEnabled(parser.isSet(csvExportOpt));
-    MDF4::Export::instance().setExportEnabled(parser.isSet(mdfExportOpt));
-    Sessions::Export::instance().setExportEnabled(parser.isSet(sessionExportOpt));
-    Console::Export::instance().setExportEnabled(parser.isSet(consoleExportOpt));
-
-    UI::Dashboard::instance().setTerminalEnabled(false);
-    UI::Dashboard::instance().setNotificationLogEnabled(false);
-    UI::Dashboard::instance().setShowActionPanel(parser.isSet(actionsPanelOpt));
-    IO::FileTransmission::instance().setRuntimeAccessAllowed(parser.isSet(fileTransmissionOpt));
-
-    // Operator-mode taskbar layout
-    auto& tbs = UI::TaskbarSettings::instance();
-    if (parser.isSet(taskbarModeOpt)) {
-      const QString mode = parser.value(taskbarModeOpt).toLower();
-      tbs.setTaskbarHidden(mode == QStringLiteral("hidden"));
-      tbs.setAutohide(mode == QStringLiteral("autohide"));
-    } else {
-      tbs.setTaskbarHidden(false);
-      tbs.setAutohide(false);
-    }
-    if (parser.isSet(taskbarButtonsOpt)) {
-      const QString raw = parser.value(taskbarButtonsOpt);
-      QStringList ids;
-      const auto parts = raw.split(QLatin1Char(','), Qt::SkipEmptyParts);
-      ids.reserve(parts.size());
-      for (const auto& p : parts)
-        ids.append(p.trimmed());
-
-      tbs.setPinnedButtons(ids);
-    }
-  } else {
-    if (parser.isSet(csvExportOpt))
-      CSV::Export::instance().setExportEnabled(true);
-
-    if (parser.isSet(mdfExportOpt))
-      MDF4::Export::instance().setExportEnabled(true);
-
-    if (parser.isSet(sessionExportOpt))
-      Sessions::Export::instance().setExportEnabled(true);
-
-    if (parser.isSet(consoleExportOpt))
-      Console::Export::instance().setExportEnabled(true);
-  }
+  if (runtimeMode)
+    applyOperatorRuntimeSettings(parser, opts);
+  else
+    applyExportToggles(parser, opts);
 #endif
 
-  // Set dashboard FPS
-  if (parser.isSet(fpsOpt)) {
-    bool ok;
-    auto fps = parser.value(fpsOpt).toUInt(&ok);
-    if (ok)
-      Misc::TimerEvents::instance().setFPS(fps);
-  }
+  applyVisualizationOptions(parser, opts);
+  applyBusConfiguration(parser, opts);
 
-  // Set dashboard point count
-  if (parser.isSet(pointsOpt)) {
-    bool ok;
-    auto points = parser.value(pointsOpt).toUInt(&ok);
-    if (ok)
-      UI::Dashboard::instance().setPoints(points);
-  }
-
-  // Apply CLI bus configuration (UART/TCP/UDP/Modbus/CAN)
-  if (parser.isSet(uartOpt) || parser.isSet(baudOpt))
-    setupUartConnection(parser, uartOpt, baudOpt);
-  else if (parser.isSet(tcpOpt))
-    setupTcpConnection(parser.value(tcpOpt));
-  else if (parser.isSet(udpOpt))
-    setupUdpConnection(parser, udpOpt, udpRemoteOpt, udpMltcstOpt);
-#ifdef BUILD_COMMERCIAL
-  else if (parser.isSet(modbusRtuOpt))
-    setupModbusRtuConnection(parser,
-                             modbusRtuOpt,
-                             {modbusSlaveOpt,
-                              modbusPollOpt,
-                              modbusBaudOpt,
-                              modbusParityOpt,
-                              modbusDataBitsOpt,
-                              modbusStopBitsOpt,
-                              modbusRegisterOpt});
-  else if (parser.isSet(modbusTcpOpt))
-    setupModbusTcpConnection(parser,
-                             modbusTcpOpt,
-                             {modbusSlaveOpt,
-                              modbusPollOpt,
-                              modbusBaudOpt,
-                              modbusParityOpt,
-                              modbusDataBitsOpt,
-                              modbusStopBitsOpt,
-                              modbusRegisterOpt});
-  else if (parser.isSet(canbusOpt))
-    setupCanbusConnection(parser, canbusOpt, canbusBitrateOpt, canbusFdOpt);
-#endif
-
-  // Start the application event loop
   const auto status = app.exec();
 
 #ifdef Q_OS_WIN
-  // Free Windows font-config args
   for (int i = 0; i < argc; ++i)
     free(argv[i]);
 
   free(argv);
 #endif
 
-  // Return exist status to the operating system
   return status;
 }
 
 //--------------------------------------------------------------------------------------------------
 // Implement utility functions
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Configures QApplication name/org/version metadata and global Qt attributes.
+ */
+static void setupQtApplicationMetadata()
+{
+  QLoggingCategory::setFilterRules("*font*=false");
+
+  QApplication::setApplicationName(APP_EXECUTABLE);
+  QApplication::setOrganizationName(APP_DEVELOPER);
+  QApplication::setApplicationVersion(APP_VERSION);
+  QApplication::setApplicationDisplayName(APP_NAME);
+  QApplication::setOrganizationDomain(APP_SUPPORT_URL);
+
+  QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+  QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+  QApplication::setAttribute(Qt::AA_DontUseNativeMenuWindows);
+}
+
+/**
+ * @brief Configures @p parser with the application description and registers every CLI option.
+ */
+static void registerCliOptions(QCommandLineParser& parser, CliOptions& opts)
+{
+  parser.setApplicationDescription(PROJECT_DESCRIPTION_SUMMARY);
+  parser.addHelpOption();
+  parser.addOption(opts.versionOpt);
+  parser.addOption(opts.resetOpt);
+  parser.addOption(opts.fullscreenOpt);
+  parser.addOption(opts.headlessOpt);
+  parser.addOption(opts.apiServerOpt);
+  parser.addOption(opts.projectOpt);
+  parser.addOption(opts.quickPlotOpt);
+  parser.addOption(opts.fpsOpt);
+  parser.addOption(opts.pointsOpt);
+  parser.addOption(opts.uartOpt);
+  parser.addOption(opts.baudOpt);
+  parser.addOption(opts.tcpOpt);
+  parser.addOption(opts.udpOpt);
+  parser.addOption(opts.udpRemoteOpt);
+  parser.addOption(opts.udpMulticastOpt);
+#ifdef BUILD_COMMERCIAL
+  parser.addOption(opts.noToolbarOpt);
+  parser.addOption(opts.runtimeOpt);
+  parser.addOption(opts.shortcutPathOpt);
+  parser.addOption(opts.csvExportOpt);
+  parser.addOption(opts.mdfExportOpt);
+  parser.addOption(opts.sessionExportOpt);
+  parser.addOption(opts.consoleExportOpt);
+  parser.addOption(opts.actionsPanelOpt);
+  parser.addOption(opts.fileTransmissionOpt);
+  parser.addOption(opts.taskbarModeOpt);
+  parser.addOption(opts.taskbarButtonsOpt);
+  parser.addOption(opts.activateOpt);
+  parser.addOption(opts.deactivateOpt);
+  parser.addOption(opts.modbusRtuOpt);
+  parser.addOption(opts.modbusTcpOpt);
+  parser.addOption(opts.modbusSlaveOpt);
+  parser.addOption(opts.modbusPollOpt);
+  parser.addOption(opts.modbusBaudOpt);
+  parser.addOption(opts.modbusParityOpt);
+  parser.addOption(opts.modbusDataBitsOpt);
+  parser.addOption(opts.modbusStopBitsOpt);
+  parser.addOption(opts.modbusRegisterOpt);
+  parser.addOption(opts.canbusOpt);
+  parser.addOption(opts.canbusBitrateOpt);
+  parser.addOption(opts.canbusFdOpt);
+#endif
+}
+
+/**
+ * @brief Applies CLI dashboard FPS and point-count options if set.
+ */
+static void applyVisualizationOptions(const QCommandLineParser& parser, const CliOptions& opts)
+{
+  if (parser.isSet(opts.fpsOpt)) {
+    bool ok;
+    auto fps = parser.value(opts.fpsOpt).toUInt(&ok);
+    if (ok)
+      Misc::TimerEvents::instance().setFPS(fps);
+  }
+
+  if (parser.isSet(opts.pointsOpt)) {
+    bool ok;
+    auto points = parser.value(opts.pointsOpt).toUInt(&ok);
+    if (ok)
+      UI::Dashboard::instance().setPoints(points);
+  }
+}
+
+/**
+ * @brief Dispatches CLI bus configuration to the matching driver setup helper.
+ */
+static void applyBusConfiguration(const QCommandLineParser& parser, const CliOptions& opts)
+{
+  if (parser.isSet(opts.uartOpt) || parser.isSet(opts.baudOpt))
+    setupUartConnection(parser, opts.uartOpt, opts.baudOpt);
+  else if (parser.isSet(opts.tcpOpt))
+    setupTcpConnection(parser.value(opts.tcpOpt));
+  else if (parser.isSet(opts.udpOpt))
+    setupUdpConnection(parser, opts.udpOpt, opts.udpRemoteOpt, opts.udpMulticastOpt);
+#ifdef BUILD_COMMERCIAL
+  else if (parser.isSet(opts.modbusRtuOpt))
+    setupModbusRtuConnection(parser,
+                             opts.modbusRtuOpt,
+                             {opts.modbusSlaveOpt,
+                              opts.modbusPollOpt,
+                              opts.modbusBaudOpt,
+                              opts.modbusParityOpt,
+                              opts.modbusDataBitsOpt,
+                              opts.modbusStopBitsOpt,
+                              opts.modbusRegisterOpt});
+  else if (parser.isSet(opts.modbusTcpOpt))
+    setupModbusTcpConnection(parser,
+                             opts.modbusTcpOpt,
+                             {opts.modbusSlaveOpt,
+                              opts.modbusPollOpt,
+                              opts.modbusBaudOpt,
+                              opts.modbusParityOpt,
+                              opts.modbusDataBitsOpt,
+                              opts.modbusStopBitsOpt,
+                              opts.modbusRegisterOpt});
+  else if (parser.isSet(opts.canbusOpt))
+    setupCanbusConnection(parser, opts.canbusOpt, opts.canbusBitrateOpt, opts.canbusFdOpt);
+#endif
+}
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Confirms the runtime-mode shortcut's project file exists, prompting cleanup if missing.
+ */
+static bool verifyShortcutProjectExists(const QCommandLineParser& parser,
+                                        const CliOptions& opts,
+                                        bool runtimeMode)
+{
+  if (!runtimeMode || !parser.isSet(opts.projectOpt))
+    return true;
+
+  const QString projectPath = parser.value(opts.projectOpt);
+  if (QFileInfo::exists(projectPath))
+    return true;
+
+  const QString shortcutPath =
+    parser.isSet(opts.shortcutPathOpt) ? parser.value(opts.shortcutPathOpt) : QString();
+
+  QMessageBox box;
+  box.setIcon(QMessageBox::Warning);
+  box.setWindowTitle(QObject::tr("Project file not found"));
+  box.setText(QObject::tr("The project file referenced by this shortcut "
+                          "could not be found:\n\n%1")
+                .arg(projectPath));
+  box.setInformativeText(QObject::tr("Would you like to delete this shortcut?"));
+
+  QAbstractButton* deleteBtn = nullptr;
+  if (!shortcutPath.isEmpty())
+    deleteBtn = box.addButton(QObject::tr("Delete Shortcut"), QMessageBox::DestructiveRole);
+
+  box.addButton(QObject::tr("Quit"), QMessageBox::RejectRole);
+  box.exec();
+
+  if (deleteBtn != nullptr && box.clickedButton() == deleteBtn)
+    Misc::ShortcutGenerator::instance().deleteShortcut(shortcutPath);
+
+  return false;
+}
+
+/**
+ * @brief Splits a comma-separated taskbar pin list into a trimmed QStringList.
+ */
+static QStringList splitTaskbarButtonIds(const QString& raw)
+{
+  QStringList ids;
+  const auto parts = raw.split(QLatin1Char(','), Qt::SkipEmptyParts);
+  ids.reserve(parts.size());
+  for (const auto& p : parts)
+    ids.append(p.trimmed());
+
+  return ids;
+}
+
+/**
+ * @brief Applies taskbar visibility/pinning settings for operator runtime mode.
+ */
+static void applyOperatorTaskbarSettings(const QCommandLineParser& parser, const CliOptions& opts)
+{
+  auto& tbs = UI::TaskbarSettings::instance();
+  if (parser.isSet(opts.taskbarModeOpt)) {
+    const QString mode = parser.value(opts.taskbarModeOpt).toLower();
+    tbs.setTaskbarHidden(mode == QStringLiteral("hidden"));
+    tbs.setAutohide(mode == QStringLiteral("autohide"));
+  } else {
+    tbs.setTaskbarHidden(false);
+    tbs.setAutohide(false);
+  }
+
+  if (parser.isSet(opts.taskbarButtonsOpt))
+    tbs.setPinnedButtons(splitTaskbarButtonIds(parser.value(opts.taskbarButtonsOpt)));
+}
+
+/**
+ * @brief Configures runtime/operator-mode export, dashboard, and taskbar overrides.
+ */
+static void applyOperatorRuntimeSettings(const QCommandLineParser& parser, const CliOptions& opts)
+{
+  CSV::Export::instance().setSettingsPersistent(false);
+  MDF4::Export::instance().setSettingsPersistent(false);
+  Sessions::Export::instance().setSettingsPersistent(false);
+  Console::Export::instance().setSettingsPersistent(false);
+  UI::Dashboard::instance().setSettingsPersistent(false);
+  UI::TaskbarSettings::instance().setSettingsPersistent(false);
+
+  CSV::Export::instance().setExportEnabled(parser.isSet(opts.csvExportOpt));
+  MDF4::Export::instance().setExportEnabled(parser.isSet(opts.mdfExportOpt));
+  Sessions::Export::instance().setExportEnabled(parser.isSet(opts.sessionExportOpt));
+  Console::Export::instance().setExportEnabled(parser.isSet(opts.consoleExportOpt));
+
+  UI::Dashboard::instance().setTerminalEnabled(false);
+  UI::Dashboard::instance().setNotificationLogEnabled(false);
+  UI::Dashboard::instance().setShowActionPanel(parser.isSet(opts.actionsPanelOpt));
+  IO::FileTransmission::instance().setRuntimeAccessAllowed(parser.isSet(opts.fileTransmissionOpt));
+
+  applyOperatorTaskbarSettings(parser, opts);
+}
+
+/**
+ * @brief Enables CSV/MDF4/session/console exporters when their CLI flags are set.
+ */
+static void applyExportToggles(const QCommandLineParser& parser, const CliOptions& opts)
+{
+  if (parser.isSet(opts.csvExportOpt))
+    CSV::Export::instance().setExportEnabled(true);
+
+  if (parser.isSet(opts.mdfExportOpt))
+    MDF4::Export::instance().setExportEnabled(true);
+
+  if (parser.isSet(opts.sessionExportOpt))
+    Sessions::Export::instance().setExportEnabled(true);
+
+  if (parser.isSet(opts.consoleExportOpt))
+    Console::Export::instance().setExportEnabled(true);
+}
+#endif
 
 /**
  * @brief Scans raw argv for an exact match of @p flag before Qt parses arguments.

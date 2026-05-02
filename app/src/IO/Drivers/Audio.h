@@ -185,6 +185,11 @@ private:
   void handleCallback(void* output, const void* input, ma_uint32 frameCount);
   static void callback(ma_device* device, void* output, const void* input, ma_uint32 frameCount);
 
+  void applyPlatformAudioConfig();
+  void configureCaptureFormat(QIODevice::OpenMode mode);
+  [[nodiscard]] bool configurePlaybackFormat(QIODevice::OpenMode mode);
+  void startInputWorker();
+
 private:
   bool m_init;
   bool m_isOpen;

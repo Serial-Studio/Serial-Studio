@@ -90,34 +90,16 @@ double Widgets::Gyroscope::pitch() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates gyroscope orientation values.
- *
- * Pulls new absolute-angle data from the Dashboard and drives a per-axis
- * EMA to smooth the displayed orientation. Emits `updated()` when any
- * axis changes. If the source only provides angular rates (deg/s), users
- * should integrate them to absolute angles via a dataset transform.
+ * @brief Reads the three gyro axis inputs into yaw/roll/pitch slots.
  */
-void Widgets::Gyroscope::updateData()
+void Widgets::Gyroscope::readAxisInputs(const DataModel::Group& gyro,
+                                        double& yawInput,
+                                        double& rollInput,
+                                        double& pitchInput,
+                                        bool& hasYaw,
+                                        bool& hasRoll,
+                                        bool& hasPitch) const
 {
-  // Exit early if widget is disabled
-  if (!isEnabled())
-    return;
-
-  // Exit widget if its invalid
-  if (!VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
-    return;
-
-  // Obtain group data from dashboard & validate widget count
-  const auto& gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
-  if (gyro.datasets.size() != 3)
-    return;
-
-  // Store previous orientation values
-  const double previousYaw   = m_yaw;
-  const double previousRoll  = m_roll;
-  const double previousPitch = m_pitch;
-
-  // Axis detection helpers
   auto isYaw = [](const QString& w) {
     return w == QStringLiteral("z") || w == QStringLiteral("yaw");
   };
@@ -127,23 +109,6 @@ void Widgets::Gyroscope::updateData()
   auto isPitch = [](const QString& w) {
     return w == QStringLiteral("x") || w == QStringLiteral("pitch");
   };
-
-  // Normalize angle helper [-180, 180]
-  auto normalizeAngle = [](double angle) -> double {
-    angle = std::fmod(angle + 180.0, 360.0);
-    if (angle < 0)
-      angle += 360.0;
-
-    return angle - 180.0;
-  };
-
-  // Collect current axis values before assignment
-  double yawInput   = 0;
-  double rollInput  = 0;
-  double pitchInput = 0;
-  bool hasYaw       = false;
-  bool hasRoll      = false;
-  bool hasPitch     = false;
 
   for (int i = 0; i < 3; ++i) {
     const auto& d = gyro.datasets[i];
@@ -164,8 +129,14 @@ void Widgets::Gyroscope::updateData()
       hasPitch   = true;
     }
   }
+}
 
-  // EMA filter for smooth display
+/**
+ * @brief Applies first-frame seed or per-axis EMA toward the new inputs.
+ */
+void Widgets::Gyroscope::applyEmaUpdate(
+  double yawInput, double rollInput, double pitchInput, bool hasYaw, bool hasRoll, bool hasPitch)
+{
   constexpr double kAlpha = 0.4;
   if (!m_displayFilterInitialized) {
     if (hasYaw)
@@ -178,28 +149,70 @@ void Widgets::Gyroscope::updateData()
       m_pitch = pitchInput;
 
     m_displayFilterInitialized = true;
-  } else {
-    auto angleEma = [](double input, double& state) {
-      double delta = input - state;
-      if (delta > 180.0)
-        delta -= 360.0;
-      else if (delta < -180.0)
-        delta += 360.0;
-
-      state += kAlpha * delta;
-    };
-
-    if (hasYaw)
-      angleEma(yawInput, m_yaw);
-
-    if (hasRoll)
-      angleEma(rollInput, m_roll);
-
-    if (hasPitch)
-      angleEma(pitchInput, m_pitch);
+    return;
   }
 
-  // Normalize all angles between -180 and 180
+  auto angleEma = [](double input, double& state) {
+    double delta = input - state;
+    if (delta > 180.0)
+      delta -= 360.0;
+    else if (delta < -180.0)
+      delta += 360.0;
+
+    state += kAlpha * delta;
+  };
+
+  if (hasYaw)
+    angleEma(yawInput, m_yaw);
+
+  if (hasRoll)
+    angleEma(rollInput, m_roll);
+
+  if (hasPitch)
+    angleEma(pitchInput, m_pitch);
+}
+
+/**
+ * @brief Updates gyroscope orientation values.
+ */
+void Widgets::Gyroscope::updateData()
+{
+  if (!isEnabled())
+    return;
+
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
+    return;
+
+  // Validate widget count
+  const auto& gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
+  if (gyro.datasets.size() != 3)
+    return;
+
+  // Store previous orientation values
+  const double previousYaw   = m_yaw;
+  const double previousRoll  = m_roll;
+  const double previousPitch = m_pitch;
+
+  // Collect current axis values before assignment
+  double yawInput   = 0;
+  double rollInput  = 0;
+  double pitchInput = 0;
+  bool hasYaw       = false;
+  bool hasRoll      = false;
+  bool hasPitch     = false;
+  readAxisInputs(gyro, yawInput, rollInput, pitchInput, hasYaw, hasRoll, hasPitch);
+
+  // EMA filter for smooth display, then normalize each angle to [-180, 180]
+  applyEmaUpdate(yawInput, rollInput, pitchInput, hasYaw, hasRoll, hasPitch);
+
+  auto normalizeAngle = [](double angle) -> double {
+    angle = std::fmod(angle + 180.0, 360.0);
+    if (angle < 0)
+      angle += 360.0;
+
+    return angle - 180.0;
+  };
+
   m_yaw   = normalizeAngle(m_yaw);
   m_roll  = normalizeAngle(m_roll);
   m_pitch = normalizeAngle(m_pitch);

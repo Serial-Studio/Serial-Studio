@@ -199,35 +199,87 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
 
   close();
 
-  // Abort if no CAN bus plugins are available
   if (!canSupportAvailable()) {
-#if defined(Q_OS_LINUX)
-    Misc::Utilities::showMessageBox(
-      tr("CAN Bus Not Available"),
-      tr(
-        "No CAN bus plugins found on this system.\n\nOn Linux, ensure SocketCAN kernel modules are loaded."),
-      QMessageBox::Critical);
-#elif defined(Q_OS_WIN)
-    Misc::Utilities::showMessageBox(
-      tr("CAN Bus Not Available"),
-      tr(
-        "No CAN bus plugins found on this system.\n\nOn Windows, install CAN hardware drivers (PEAK, Vector, etc.)."),
-      QMessageBox::Critical);
-#elif defined(Q_OS_MAC)
-    Misc::Utilities::showMessageBox(
-      tr("CAN Bus Not Available"),
-      tr(
-        "No CAN bus plugins found on this system.\n\nCAN bus support on macOS is limited and may require third-party hardware drivers."),
-      QMessageBox::Critical);
-#else
-    Misc::Utilities::showMessageBox(tr("CAN Bus Not Available"),
-                                    tr("No CAN bus plugins are available on this platform."),
-                                    QMessageBox::Critical);
-#endif
+    showCanSupportError();
     return false;
   }
 
-  // Validate configuration before connecting
+  if (!validateOpenPreconditions())
+    return false;
+
+  QString plugin    = m_pluginList.at(m_pluginIndex);
+  QString interface = m_interfaceList.at(m_interfaceIndex);
+
+  QString error;
+  m_device = QCanBus::instance()->createDevice(plugin, interface, &error);
+
+  if (!m_device) {
+    Misc::Utilities::showMessageBox(
+      tr("CAN Device Creation Failed"),
+      error.isEmpty() ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
+                      : error,
+      QMessageBox::Critical);
+    return false;
+  }
+
+  m_device->setConfigurationParameter(QCanBusDevice::BitRateKey, m_bitrate);
+  if (m_canFD)
+    m_device->setConfigurationParameter(QCanBusDevice::CanFdKey, true);
+
+  wireCanBusSignals();
+
+  if (!m_device->connectDevice()) {
+    error = m_device->errorString();
+    m_device->deleteLater();
+    m_device = nullptr;
+    Misc::Utilities::showMessageBox(
+      tr("CAN Connection Failed"),
+      error.isEmpty()
+        ? tr("Unable to connect to CAN bus device. Check your hardware connection and settings.")
+        : error,
+      QMessageBox::Critical);
+    return false;
+  }
+
+  Q_EMIT configurationChanged();
+  return true;
+}
+
+/**
+ * @brief Shows a platform-specific dialog when no CAN bus plugins are available.
+ */
+void IO::Drivers::CANBus::showCanSupportError()
+{
+#if defined(Q_OS_LINUX)
+  Misc::Utilities::showMessageBox(
+    tr("CAN Bus Not Available"),
+    tr(
+      "No CAN bus plugins found on this system.\n\nOn Linux, ensure SocketCAN kernel modules are loaded."),
+    QMessageBox::Critical);
+#elif defined(Q_OS_WIN)
+  Misc::Utilities::showMessageBox(
+    tr("CAN Bus Not Available"),
+    tr(
+      "No CAN bus plugins found on this system.\n\nOn Windows, install CAN hardware drivers (PEAK, Vector, etc.)."),
+    QMessageBox::Critical);
+#elif defined(Q_OS_MAC)
+  Misc::Utilities::showMessageBox(
+    tr("CAN Bus Not Available"),
+    tr(
+      "No CAN bus plugins found on this system.\n\nCAN bus support on macOS is limited and may require third-party hardware drivers."),
+    QMessageBox::Critical);
+#else
+  Misc::Utilities::showMessageBox(tr("CAN Bus Not Available"),
+                                  tr("No CAN bus plugins are available on this platform."),
+                                  QMessageBox::Critical);
+#endif
+}
+
+/**
+ * @brief Validates plugin/interface selection state; shows a dialog and returns false on error.
+ */
+bool IO::Drivers::CANBus::validateOpenPreconditions()
+{
   if (!configurationOk()) {
     Misc::Utilities::showMessageBox(
       tr("Invalid CAN Configuration"),
@@ -254,27 +306,14 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  QString plugin    = m_pluginList.at(m_pluginIndex);
-  QString interface = m_interfaceList.at(m_interfaceIndex);
+  return true;
+}
 
-  QString error;
-  m_device = QCanBus::instance()->createDevice(plugin, interface, &error);
-
-  if (!m_device) {
-    Misc::Utilities::showMessageBox(
-      tr("CAN Device Creation Failed"),
-      error.isEmpty() ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
-                      : error,
-      QMessageBox::Critical);
-    return false;
-  }
-
-  // Configure bitrate and CAN FD mode
-  m_device->setConfigurationParameter(QCanBusDevice::BitRateKey, m_bitrate);
-  if (m_canFD)
-    m_device->setConfigurationParameter(QCanBusDevice::CanFdKey, true);
-
-  // Connect state and error signals
+/**
+ * @brief Connects framesReceived/stateChanged/errorOccurred signals to their slots.
+ */
+void IO::Drivers::CANBus::wireCanBusSignals()
+{
   connect(m_device,
           &QCanBusDevice::framesReceived,
           this,
@@ -290,23 +329,6 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
           this,
           &IO::Drivers::CANBus::onErrorOccurred,
           Qt::UniqueConnection);
-
-  // Attempt connection
-  if (!m_device->connectDevice()) {
-    error = m_device->errorString();
-    m_device->deleteLater();
-    m_device = nullptr;
-    Misc::Utilities::showMessageBox(
-      tr("CAN Connection Failed"),
-      error.isEmpty()
-        ? tr("Unable to connect to CAN bus device. Check your hardware connection and settings.")
-        : error,
-      QMessageBox::Critical);
-    return false;
-  }
-
-  Q_EMIT configurationChanged();
-  return true;
 }
 
 //--------------------------------------------------------------------------------------------------

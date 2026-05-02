@@ -388,6 +388,111 @@ QRectF Titlebar::buttonBackgroundRect(Button button) const
 }
 
 /**
+ * @brief Picks the icon tint for a control button based on hover/press/active state.
+ */
+QColor Titlebar::buttonIconColor(Button button, bool hovered, bool pressed) const
+{
+#if defined(Q_OS_WIN)
+  if (button == Button::Close && (hovered || pressed))
+    return Qt::white;
+
+  if (!m_windowActive) {
+    QColor c = foregroundColor();
+    c.setAlpha(128);
+    return c;
+  }
+
+  return foregroundColor();
+#else
+  Q_UNUSED(button)
+  const auto& theme = Misc::ThemeManager::instance();
+
+  if (pressed)
+    return theme.getColor(QStringLiteral("highlight")).darker(120);
+
+  if (hovered)
+    return theme.getColor(QStringLiteral("highlight"));
+
+  if (!m_windowActive) {
+    QColor c = foregroundColor();
+    c.setAlpha(128);
+    return c;
+  }
+
+  return foregroundColor();
+#endif
+}
+
+/**
+ * @brief Paints the hover/pressed background swatch behind a control button on Windows.
+ */
+void Titlebar::drawButtonHoverBackground(QPainter* painter,
+                                         Button button,
+                                         bool hovered,
+                                         bool pressed)
+{
+#if defined(Q_OS_WIN)
+  if (!hovered && !pressed)
+    return;
+
+  const auto bg          = m_backgroundColor;
+  const auto fg          = foregroundColor();
+  const bool isDarkTheme = fg.lightness() > bg.lightness();
+
+  QColor bgColor;
+  if (button == Button::Close)
+    bgColor = pressed ? QColor(0xB4, 0x27, 0x1A) : QColor(0xC4, 0x2B, 0x1C);
+  else if (isDarkTheme)
+    bgColor = QColor(255, 255, 255, pressed ? 11 : 20);
+  else
+    bgColor = QColor(0, 0, 0, pressed ? 6 : 10);
+
+  painter->fillRect(buttonBackgroundRect(button), bgColor);
+#else
+  Q_UNUSED(painter)
+  Q_UNUSED(button)
+  Q_UNUSED(hovered)
+  Q_UNUSED(pressed)
+#endif
+}
+
+/**
+ * @brief Renders an SVG at native DPI and source-in composites it with the requested tint.
+ */
+QPixmap Titlebar::renderColorizedSvg(const QString& svgPath,
+                                     const QSize& pixelSize,
+                                     const QRectF& logicalRect,
+                                     qreal dpr,
+                                     const QColor& iconColor) const
+{
+  QSvgRenderer renderer(svgPath);
+  if (!renderer.isValid())
+    return QPixmap();
+
+  QPixmap pixmap(pixelSize);
+  pixmap.setDevicePixelRatio(dpr);
+  pixmap.fill(Qt::transparent);
+
+  QPainter svgPainter(&pixmap);
+  svgPainter.setRenderHint(QPainter::Antialiasing);
+  svgPainter.setRenderHint(QPainter::SmoothPixmapTransform);
+  renderer.render(&svgPainter, logicalRect);
+  svgPainter.end();
+
+  QPixmap colorized(pixelSize);
+  colorized.setDevicePixelRatio(dpr);
+  colorized.fill(Qt::transparent);
+
+  QPainter colorPainter(&colorized);
+  colorPainter.drawPixmap(0, 0, pixmap);
+  colorPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+  colorPainter.fillRect(logicalRect, iconColor);
+  colorPainter.end();
+
+  return colorized;
+}
+
+/**
  * @brief Draws a window control button with an SVG icon.
  * @param painter Painter to use.
  * @param button  Button type to draw.
@@ -399,53 +504,8 @@ void Titlebar::drawButton(QPainter* painter, Button button, const QString& svgPa
   const bool hovered    = (m_hoveredButton == button);
   const bool pressed    = (m_pressedButton == button);
 
-  // Determine icon color based on hover/press/active state
-  QColor iconColor;
-
-#if defined(Q_OS_WIN)
-  const auto bg          = m_backgroundColor;
-  const auto fg          = foregroundColor();
-  const bool isDarkTheme = fg.lightness() > bg.lightness();
-
-  if (hovered || pressed) {
-    QColor bgColor;
-
-    if (button == Button::Close)
-      bgColor = pressed ? QColor(0xB4, 0x27, 0x1A) : QColor(0xC4, 0x2B, 0x1C);
-    else if (isDarkTheme)
-      bgColor = QColor(255, 255, 255, pressed ? 11 : 20);
-    else
-      bgColor = QColor(0, 0, 0, pressed ? 6 : 10);
-
-    painter->fillRect(buttonBackgroundRect(button), bgColor);
-  }
-
-  if (button == Button::Close && (hovered || pressed))
-    iconColor = Qt::white;
-
-  else if (!m_windowActive) {
-    iconColor = foregroundColor();
-    iconColor.setAlpha(128);
-  }
-
-  else
-    iconColor = foregroundColor();
-#else
-  const auto& theme = Misc::ThemeManager::instance();
-
-  if (pressed)
-    iconColor = theme.getColor(QStringLiteral("highlight")).darker(120);
-  else if (hovered)
-    iconColor = theme.getColor(QStringLiteral("highlight"));
-
-  else if (!m_windowActive) {
-    iconColor = foregroundColor();
-    iconColor.setAlpha(128);
-  }
-
-  else
-    iconColor = foregroundColor();
-#endif
+  drawButtonHoverBackground(painter, button, hovered, pressed);
+  const QColor iconColor = buttonIconColor(button, hovered, pressed);
 
   // Render at native DPI with icon cache
   const qreal dpr = qApp->devicePixelRatio();
@@ -468,30 +528,9 @@ void Titlebar::drawButton(QPainter* painter, Button button, const QString& svgPa
     return;
   }
 
-  // Render SVG and colorize it
-  QSvgRenderer renderer(svgPath);
-  if (!renderer.isValid())
+  const QPixmap colorized = renderColorizedSvg(svgPath, pixelSize, logicalRect, dpr, iconColor);
+  if (colorized.isNull())
     return;
-
-  QPixmap pixmap(pixelSize);
-  pixmap.setDevicePixelRatio(dpr);
-  pixmap.fill(Qt::transparent);
-
-  QPainter svgPainter(&pixmap);
-  svgPainter.setRenderHint(QPainter::Antialiasing);
-  svgPainter.setRenderHint(QPainter::SmoothPixmapTransform);
-  renderer.render(&svgPainter, logicalRect);
-  svgPainter.end();
-
-  QPixmap colorized(pixelSize);
-  colorized.setDevicePixelRatio(dpr);
-  colorized.fill(Qt::transparent);
-
-  QPainter colorPainter(&colorized);
-  colorPainter.drawPixmap(0, 0, pixmap);
-  colorPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-  colorPainter.fillRect(logicalRect, iconColor);
-  colorPainter.end();
 
   m_iconCache.insert(cacheKey, colorized);
   painter->drawPixmap(iconRect.topLeft(), colorized);

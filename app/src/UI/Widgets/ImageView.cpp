@@ -31,6 +31,20 @@
 #include "UI/Widgets/ImageExport.h"
 
 //--------------------------------------------------------------------------------------------------
+// Image format magic bytes
+//--------------------------------------------------------------------------------------------------
+
+namespace {
+const QByteArray kJpegStart("\xFF\xD8\xFF", 3);
+const QByteArray kPngStart("\x89\x50\x4E\x47\x0D\x0A\x1A\x0A", 8);
+const QByteArray kBmpStart("BM", 2);
+const QByteArray kWebpStart("RIFF", 4);
+const QByteArray kJpegEnd("\xFF\xD9", 2);
+const QByteArray kPngEnd("\x49\x45\x4E\x44\xAE\x42\x60\x82", 8);
+constexpr quint32 kMaxImageSize = 64 * 1024 * 1024;
+}  // namespace
+
+//--------------------------------------------------------------------------------------------------
 // ImageFrameReader
 //--------------------------------------------------------------------------------------------------
 
@@ -87,132 +101,30 @@ void Widgets::ImageFrameReader::processAutodetect()
   Q_ASSERT(m_mode == DetectionMode::Autodetect);
   Q_ASSERT(!m_accumulator.isEmpty());
 
-  static const QByteArray kJpegStart("\xFF\xD8\xFF", 3);
-  static const QByteArray kPngStart("\x89\x50\x4E\x47\x0D\x0A\x1A\x0A", 8);
-  static const QByteArray kBmpStart("BM", 2);
-  static const QByteArray kWebpStart("RIFF", 4);
-  static const QByteArray kJpegEnd("\xFF\xD9", 2);
-  static const QByteArray kPngEnd("\x49\x45\x4E\x44\xAE\x42\x60\x82", 8);
-
   constexpr int kMaxIterations = 10000;
   int iterations               = 0;
   while (iterations < kMaxIterations) {
     ++iterations;
-    if (!m_inFrame) {
-      qsizetype jpegPos = m_accumulator.indexOf(kJpegStart);
-      qsizetype pngPos  = m_accumulator.indexOf(kPngStart);
-      qsizetype bmpPos  = m_accumulator.indexOf(kBmpStart);
-      qsizetype webpPos = m_accumulator.indexOf(kWebpStart);
-
-      const bool webpMagicOk =
-        webpPos >= 0 && m_accumulator.size() >= webpPos + 12 && m_accumulator[webpPos + 8] == 'W'
-        && m_accumulator[webpPos + 9] == 'E' && m_accumulator[webpPos + 10] == 'B'
-        && m_accumulator[webpPos + 11] == 'P';
-      if (!webpMagicOk)
-        webpPos = -1;
-
-      qsizetype startPos = -1;
-      auto pickEarliest  = [&](qsizetype a, qsizetype b) {
-        if (a >= 0 && (b < 0 || a <= b))
-          return a;
-
-        return b;
-      };
-
-      startPos = pickEarliest(jpegPos, pngPos);
-      startPos = pickEarliest(startPos, bmpPos);
-      startPos = pickEarliest(startPos, webpPos);
-
-      if (startPos < 0)
-        break;
-
-      m_accumulator.remove(0, startPos);
-      m_inFrame       = true;
-      m_frameStartPos = 0;
-    }
-
-    if (m_accumulator.startsWith(kWebpStart) && m_accumulator.size() >= 12
-        && m_accumulator[8] == 'W' && m_accumulator[9] == 'E' && m_accumulator[10] == 'B'
-        && m_accumulator[11] == 'P') {
-      const auto* raw         = reinterpret_cast<const quint8*>(m_accumulator.constData());
-      const quint32 chunkSize = static_cast<quint32>(raw[4]) | (static_cast<quint32>(raw[5]) << 8)
-                              | (static_cast<quint32>(raw[6]) << 16)
-                              | (static_cast<quint32>(raw[7]) << 24);
-      const qsizetype frameLen = 8 + static_cast<qsizetype>(chunkSize);
-
-      if (chunkSize > 64 * 1024 * 1024) {
-        m_accumulator.remove(0, 4);
-        m_inFrame       = false;
-        m_frameStartPos = -1;
-        continue;
-      }
-
-      if (m_accumulator.size() < frameLen)
-        break;
-
-      QByteArray frame = m_accumulator.left(frameLen);
-      m_accumulator.remove(0, frameLen);
-      m_inFrame       = false;
-      m_frameStartPos = -1;
-
-      Q_EMIT frameReady(frame);
-      continue;
-    }
-
-    if (m_accumulator.startsWith(kBmpStart)) {
-      if (m_accumulator.size() < 6)
-        break;
-
-      const auto* raw  = reinterpret_cast<const quint8*>(m_accumulator.constData());
-      const quint32 sz = static_cast<quint32>(raw[2]) | (static_cast<quint32>(raw[3]) << 8)
-                       | (static_cast<quint32>(raw[4]) << 16)
-                       | (static_cast<quint32>(raw[5]) << 24);
-
-      if (sz < 14 || sz > 64 * 1024 * 1024) {
-        m_accumulator.remove(0, 2);
-        m_inFrame       = false;
-        m_frameStartPos = -1;
-        continue;
-      }
-
-      if (m_accumulator.size() < static_cast<qsizetype>(sz))
-        break;
-
-      QByteArray frame = m_accumulator.left(static_cast<qsizetype>(sz));
-      m_accumulator.remove(0, static_cast<qsizetype>(sz));
-      m_inFrame       = false;
-      m_frameStartPos = -1;
-
-      Q_EMIT frameReady(frame);
-      continue;
-    }
-
-    QByteArray endMarker;
-    qsizetype endMarkerLen = 0;
-    if (m_accumulator.startsWith(kJpegStart)) {
-      endMarker    = kJpegEnd;
-      endMarkerLen = kJpegEnd.size();
-    } else if (m_accumulator.startsWith(kPngStart)) {
-      endMarker    = kPngEnd;
-      endMarkerLen = kPngEnd.size();
-    } else {
-      m_accumulator.clear();
-      m_inFrame       = false;
-      m_frameStartPos = -1;
-      break;
-    }
-
-    qsizetype endPos = m_accumulator.indexOf(endMarker, 1);
-    if (endPos < 0)
+    if (!m_inFrame && !seekToFrameStart())
       break;
 
-    qsizetype frameLen = endPos + endMarkerLen;
-    QByteArray frame   = m_accumulator.left(frameLen);
-    m_accumulator.remove(0, frameLen);
-    m_inFrame       = false;
-    m_frameStartPos = -1;
+    StepResult result = extractWebpFrame();
+    if (result == StepResult::Continue)
+      continue;
 
-    Q_EMIT frameReady(frame);
+    if (result == StepResult::Break)
+      break;
+
+    result = extractBmpFrame();
+    if (result == StepResult::Continue)
+      continue;
+
+    if (result == StepResult::Break)
+      break;
+
+    result = extractMarkerFrame();
+    if (result == StepResult::Break)
+      break;
   }
 
   if (iterations >= kMaxIterations) [[unlikely]]
@@ -225,6 +137,145 @@ void Widgets::ImageFrameReader::processAutodetect()
     m_inFrame       = false;
     m_frameStartPos = -1;
   }
+}
+
+/**
+ * @brief Trims to the earliest image-format magic bytes; returns false if absent.
+ */
+bool Widgets::ImageFrameReader::seekToFrameStart()
+{
+  qsizetype jpegPos = m_accumulator.indexOf(kJpegStart);
+  qsizetype pngPos  = m_accumulator.indexOf(kPngStart);
+  qsizetype bmpPos  = m_accumulator.indexOf(kBmpStart);
+  qsizetype webpPos = m_accumulator.indexOf(kWebpStart);
+
+  const bool webpMagicOk = webpPos >= 0 && m_accumulator.size() >= webpPos + 12
+                        && m_accumulator[webpPos + 8] == 'W' && m_accumulator[webpPos + 9] == 'E'
+                        && m_accumulator[webpPos + 10] == 'B' && m_accumulator[webpPos + 11] == 'P';
+  if (!webpMagicOk)
+    webpPos = -1;
+
+  auto pickEarliest = [](qsizetype a, qsizetype b) {
+    if (a >= 0 && (b < 0 || a <= b))
+      return a;
+
+    return b;
+  };
+
+  qsizetype startPos = pickEarliest(jpegPos, pngPos);
+  startPos           = pickEarliest(startPos, bmpPos);
+  startPos           = pickEarliest(startPos, webpPos);
+
+  if (startPos < 0)
+    return false;
+
+  m_accumulator.remove(0, startPos);
+  m_inFrame       = true;
+  m_frameStartPos = 0;
+  return true;
+}
+
+/**
+ * @brief Extracts a WebP frame from the accumulator front when present.
+ */
+Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractWebpFrame()
+{
+  if (!(m_accumulator.startsWith(kWebpStart) && m_accumulator.size() >= 12
+        && m_accumulator[8] == 'W' && m_accumulator[9] == 'E' && m_accumulator[10] == 'B'
+        && m_accumulator[11] == 'P'))
+    return StepResult::Unhandled;
+
+  const auto* raw         = reinterpret_cast<const quint8*>(m_accumulator.constData());
+  const quint32 chunkSize = static_cast<quint32>(raw[4]) | (static_cast<quint32>(raw[5]) << 8)
+                          | (static_cast<quint32>(raw[6]) << 16)
+                          | (static_cast<quint32>(raw[7]) << 24);
+  const qsizetype frameLen = 8 + static_cast<qsizetype>(chunkSize);
+
+  if (chunkSize > kMaxImageSize) {
+    m_accumulator.remove(0, 4);
+    m_inFrame       = false;
+    m_frameStartPos = -1;
+    return StepResult::Continue;
+  }
+
+  if (m_accumulator.size() < frameLen)
+    return StepResult::Break;
+
+  QByteArray frame = m_accumulator.left(frameLen);
+  m_accumulator.remove(0, frameLen);
+  m_inFrame       = false;
+  m_frameStartPos = -1;
+
+  Q_EMIT frameReady(frame);
+  return StepResult::Continue;
+}
+
+/**
+ * @brief Extracts a BMP frame from the accumulator front when present.
+ */
+Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractBmpFrame()
+{
+  if (!m_accumulator.startsWith(kBmpStart))
+    return StepResult::Unhandled;
+
+  if (m_accumulator.size() < 6)
+    return StepResult::Break;
+
+  const auto* raw  = reinterpret_cast<const quint8*>(m_accumulator.constData());
+  const quint32 sz = static_cast<quint32>(raw[2]) | (static_cast<quint32>(raw[3]) << 8)
+                   | (static_cast<quint32>(raw[4]) << 16) | (static_cast<quint32>(raw[5]) << 24);
+
+  if (sz < 14 || sz > kMaxImageSize) {
+    m_accumulator.remove(0, 2);
+    m_inFrame       = false;
+    m_frameStartPos = -1;
+    return StepResult::Continue;
+  }
+
+  if (m_accumulator.size() < static_cast<qsizetype>(sz))
+    return StepResult::Break;
+
+  QByteArray frame = m_accumulator.left(static_cast<qsizetype>(sz));
+  m_accumulator.remove(0, static_cast<qsizetype>(sz));
+  m_inFrame       = false;
+  m_frameStartPos = -1;
+
+  Q_EMIT frameReady(frame);
+  return StepResult::Continue;
+}
+
+/**
+ * @brief Extracts a JPEG or PNG frame using its end-of-image marker.
+ */
+Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractMarkerFrame()
+{
+  QByteArray endMarker;
+  qsizetype endMarkerLen = 0;
+  if (m_accumulator.startsWith(kJpegStart)) {
+    endMarker    = kJpegEnd;
+    endMarkerLen = kJpegEnd.size();
+  } else if (m_accumulator.startsWith(kPngStart)) {
+    endMarker    = kPngEnd;
+    endMarkerLen = kPngEnd.size();
+  } else {
+    m_accumulator.clear();
+    m_inFrame       = false;
+    m_frameStartPos = -1;
+    return StepResult::Break;
+  }
+
+  qsizetype endPos = m_accumulator.indexOf(endMarker, 1);
+  if (endPos < 0)
+    return StepResult::Break;
+
+  qsizetype frameLen = endPos + endMarkerLen;
+  QByteArray frame   = m_accumulator.left(frameLen);
+  m_accumulator.remove(0, frameLen);
+  m_inFrame       = false;
+  m_frameStartPos = -1;
+
+  Q_EMIT frameReady(frame);
+  return StepResult::Continue;
 }
 
 /**

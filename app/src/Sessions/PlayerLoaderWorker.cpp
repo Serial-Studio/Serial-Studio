@@ -54,6 +54,105 @@ void Sessions::PlayerLoaderWorker::requestCancel()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Resolves the latest session id when the caller asked for -1.
+ */
+bool Sessions::PlayerLoaderWorker::resolveSessionId(QSqlDatabase& db,
+                                                    int& sessionId,
+                                                    QString& errorOut)
+{
+  if (sessionId >= 0)
+    return true;
+
+  QSqlQuery q(db);
+  q.prepare("SELECT session_id FROM sessions ORDER BY started_at DESC LIMIT 1");
+  if (!q.exec() || !q.next()) {
+    errorOut = tr("This file does not contain any recording sessions.");
+    return false;
+  }
+
+  sessionId = q.value(0).toInt();
+  return true;
+}
+
+/**
+ * @brief Loads the embedded project JSON for the session, falling back to the global row.
+ */
+void Sessions::PlayerLoaderWorker::loadProjectJson(QSqlDatabase& db,
+                                                   int sessionId,
+                                                   PlayerSessionPayload& payload)
+{
+  {
+    QSqlQuery q(db);
+    q.prepare("SELECT project_json FROM sessions WHERE session_id = ?");
+    q.bindValue(0, sessionId);
+    if (q.exec() && q.next())
+      payload.projectJson = q.value(0).toString();
+  }
+
+  if (payload.projectJson.isEmpty()) {
+    QSqlQuery q(db);
+    q.prepare("SELECT value FROM project_metadata WHERE key = 'project_json'");
+    if (q.exec() && q.next())
+      payload.projectJson = q.value(0).toString();
+  }
+}
+
+/**
+ * @brief Loads the unique-id column order that the live FrameBuilder must mirror.
+ */
+bool Sessions::PlayerLoaderWorker::loadColumnOrder(QSqlDatabase& db,
+                                                   int sessionId,
+                                                   PlayerSessionPayload& payload,
+                                                   QString& errorOut)
+{
+  QSqlQuery q(db);
+  q.setForwardOnly(true);
+  q.prepare("SELECT unique_id FROM columns WHERE session_id = ? ORDER BY column_id ASC");
+  q.bindValue(0, sessionId);
+  if (!q.exec()) {
+    errorOut = q.lastError().text();
+    return false;
+  }
+
+  while (q.next())
+    payload.columnUniqueIds.push_back(q.value(0).toInt());
+
+  return true;
+}
+
+/**
+ * @brief Loads the distinct frame timestamps for the session, with periodic cancel checks.
+ */
+bool Sessions::PlayerLoaderWorker::loadTimestampIndex(QSqlDatabase& db,
+                                                      int sessionId,
+                                                      PlayerSessionPayload& payload,
+                                                      QString& errorOut)
+{
+  QSqlQuery q(db);
+  q.setForwardOnly(true);
+  q.prepare("SELECT DISTINCT timestamp_ns FROM readings "
+            "WHERE session_id = ? ORDER BY timestamp_ns ASC");
+  q.bindValue(0, sessionId);
+  if (!q.exec()) {
+    errorOut = q.lastError().text();
+    return false;
+  }
+
+  qint64 row = 0;
+  while (q.next()) {
+    if ((row & 0xFFFF) == 0 && m_cancelRequested.load(std::memory_order_acquire)) {
+      errorOut = tr("Cancelled");
+      return false;
+    }
+
+    payload.timestampsNs.push_back(q.value(0).toLongLong());
+    ++row;
+  }
+
+  return true;
+}
+
+/**
  * @brief Opens the file, fetches column order + project JSON + timestamp index, ships it back.
  * @param filePath  Absolute path to the .db file.
  * @param sessionId Session to load, or -1 to pick the most recent.
@@ -73,155 +172,75 @@ void Sessions::PlayerLoaderWorker::openAndLoad(const QString& filePath, int sess
     return;
   }
 
-  // Open with a unique connection name on this worker thread
   const QString connName =
     QStringLiteral("ss_player_loader_%1").arg(QDateTime::currentMSecsSinceEpoch());
 
-  // Scope the connection so we always remove it before returning
-  {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connName);
-    db.setDatabaseName(filePath);
-
-    if (!db.open()) {
-      payload->error = db.lastError().text();
-      db             = QSqlDatabase();
-      QSqlDatabase::removeDatabase(connName);
-      Q_EMIT loaded(payload);
-      return;
-    }
-
-    QSqlQuery pragma(db);
-    pragma.exec("PRAGMA journal_mode=WAL");
-    pragma.exec("PRAGMA busy_timeout=5000");
-
-    // Pick the latest session if the caller did not specify one
-    if (sessionId < 0) {
-      QSqlQuery q(db);
-      q.prepare("SELECT session_id FROM sessions ORDER BY started_at DESC LIMIT 1");
-      if (!q.exec() || !q.next()) {
-        payload->error = tr("This file does not contain any recording sessions.");
-        db.close();
-        db = QSqlDatabase();
-        QSqlDatabase::removeDatabase(connName);
-        Q_EMIT loaded(payload);
-        return;
-      }
-
-      sessionId          = q.value(0).toInt();
-      payload->sessionId = sessionId;
-    }
-
-    if (m_cancelRequested.load(std::memory_order_acquire)) {
+  auto closeAndEmit = [&](QSqlDatabase& db) {
+    if (db.isOpen())
       db.close();
-      db = QSqlDatabase();
-      QSqlDatabase::removeDatabase(connName);
-      payload->error = tr("Cancelled");
-      Q_EMIT loaded(payload);
-      return;
-    }
 
-    // Per-session embedded project, falling back to the global metadata row
-    {
-      QSqlQuery q(db);
-      q.prepare("SELECT project_json FROM sessions WHERE session_id = ?");
-      q.bindValue(0, sessionId);
-      if (q.exec() && q.next())
-        payload->projectJson = q.value(0).toString();
-    }
+    db = QSqlDatabase();
+    QSqlDatabase::removeDatabase(connName);
+    Q_EMIT loaded(payload);
+  };
 
-    if (payload->projectJson.isEmpty()) {
-      QSqlQuery q(db);
-      q.prepare("SELECT value FROM project_metadata WHERE key = 'project_json'");
-      if (q.exec() && q.next())
-        payload->projectJson = q.value(0).toString();
-    }
+  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connName);
+  db.setDatabaseName(filePath);
 
-    // Column order -- must match the live FrameBuilder
-    {
-      QSqlQuery q(db);
-      q.setForwardOnly(true);
-      q.prepare("SELECT unique_id FROM columns WHERE session_id = ? ORDER BY column_id ASC");
-      q.bindValue(0, sessionId);
-      if (!q.exec()) {
-        payload->error = q.lastError().text();
-        db.close();
-        db = QSqlDatabase();
-        QSqlDatabase::removeDatabase(connName);
-        Q_EMIT loaded(payload);
-        return;
-      }
-
-      while (q.next())
-        payload->columnUniqueIds.push_back(q.value(0).toInt());
-    }
-
-    if (payload->columnUniqueIds.empty()) {
-      payload->error = tr("The selected session is missing its column definitions.");
-      db.close();
-      db = QSqlDatabase();
-      QSqlDatabase::removeDatabase(connName);
-      Q_EMIT loaded(payload);
-      return;
-    }
-
-    if (m_cancelRequested.load(std::memory_order_acquire)) {
-      db.close();
-      db = QSqlDatabase();
-      QSqlDatabase::removeDatabase(connName);
-      payload->error = tr("Cancelled");
-      Q_EMIT loaded(payload);
-      return;
-    }
-
-    // Timestamp index -- the heaviest single query on big sessions
-    {
-      QSqlQuery q(db);
-      q.setForwardOnly(true);
-      q.prepare("SELECT DISTINCT timestamp_ns FROM readings "
-                "WHERE session_id = ? ORDER BY timestamp_ns ASC");
-      q.bindValue(0, sessionId);
-      if (!q.exec()) {
-        payload->error = q.lastError().text();
-        db.close();
-        db = QSqlDatabase();
-        QSqlDatabase::removeDatabase(connName);
-        Q_EMIT loaded(payload);
-        return;
-      }
-
-      // Periodic cancel checks for huge result sets
-      qint64 row = 0;
-      while (q.next()) {
-        if ((row & 0xFFFF) == 0 && m_cancelRequested.load(std::memory_order_acquire)) {
-          db.close();
-          db = QSqlDatabase();
-          QSqlDatabase::removeDatabase(connName);
-          payload->error = tr("Cancelled");
-          Q_EMIT loaded(payload);
-          return;
-        }
-
-        payload->timestampsNs.push_back(q.value(0).toLongLong());
-        ++row;
-      }
-    }
-
-    if (payload->timestampsNs.empty()) {
-      payload->error = tr("The selected session does not contain any frames.");
-      db.close();
-      db = QSqlDatabase();
-      QSqlDatabase::removeDatabase(connName);
-      Q_EMIT loaded(payload);
-      return;
-    }
-
-    db.close();
+  if (!db.open()) {
+    payload->error = db.lastError().text();
+    closeAndEmit(db);
+    return;
   }
 
-  QSqlDatabase::removeDatabase(connName);
+  QSqlQuery pragma(db);
+  pragma.exec("PRAGMA journal_mode=WAL");
+  pragma.exec("PRAGMA busy_timeout=5000");
+
+  if (!resolveSessionId(db, sessionId, payload->error)) {
+    closeAndEmit(db);
+    return;
+  }
+  payload->sessionId = sessionId;
+
+  if (m_cancelRequested.load(std::memory_order_acquire)) {
+    payload->error = tr("Cancelled");
+    closeAndEmit(db);
+    return;
+  }
+
+  loadProjectJson(db, sessionId, *payload);
+
+  if (!loadColumnOrder(db, sessionId, *payload, payload->error)) {
+    closeAndEmit(db);
+    return;
+  }
+
+  if (payload->columnUniqueIds.empty()) {
+    payload->error = tr("The selected session is missing its column definitions.");
+    closeAndEmit(db);
+    return;
+  }
+
+  if (m_cancelRequested.load(std::memory_order_acquire)) {
+    payload->error = tr("Cancelled");
+    closeAndEmit(db);
+    return;
+  }
+
+  if (!loadTimestampIndex(db, sessionId, *payload, payload->error)) {
+    closeAndEmit(db);
+    return;
+  }
+
+  if (payload->timestampsNs.empty()) {
+    payload->error = tr("The selected session does not contain any frames.");
+    closeAndEmit(db);
+    return;
+  }
 
   payload->ok = true;
-  Q_EMIT loaded(payload);
+  closeAndEmit(db);
 }
 
 #endif  // BUILD_COMMERCIAL

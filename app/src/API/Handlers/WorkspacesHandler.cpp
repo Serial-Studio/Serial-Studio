@@ -26,6 +26,7 @@
 #include <QJsonObject>
 
 #include "API/CommandRegistry.h"
+#include "API/SchemaBuilder.h"
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
 
@@ -72,192 +73,120 @@ namespace {
  */
 void API::Handlers::WorkspacesHandler::registerCommands()
 {
-  auto& registry = CommandRegistry::instance();
+  registerWorkspaceCrudCommands();
+  registerCustomizeCommands();
+  registerWidgetRefCommands();
+}
 
-  QJsonObject emptySchema;
-  emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
-  emptySchema[QStringLiteral("properties")] = QJsonObject();
+/**
+ * @brief Register list / get / add / delete / rename / autoGenerate commands.
+ */
+void API::Handlers::WorkspacesHandler::registerWorkspaceCrudCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = API::emptySchema();
 
-  // project.workspaces.list
   registry.registerCommand(QStringLiteral("project.workspaces.list"),
                            QStringLiteral("List all workspaces with widget counts"),
-                           emptySchema,
+                           empty,
                            &list);
-
-  // project.workspaces.get -- id required
-  {
-    QJsonObject props;
-    props[QStringLiteral("id")] = QJsonObject{
-      {       QStringLiteral("type"),      QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Workspace id")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("id")};
-    registry.registerCommand(QStringLiteral("project.workspaces.get"),
-                             QStringLiteral("Return widget refs for a workspace (params: id)"),
-                             schema,
-                             &get);
-  }
-
-  // project.workspaces.add
-  {
-    QJsonObject props;
-    props[QStringLiteral("title")] = QJsonObject{
-      {       QStringLiteral("type"),          QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Workspace title")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    registry.registerCommand(
-      QStringLiteral("project.workspaces.add"),
-      QStringLiteral("Create a new workspace (params: title=\"Workspace\"). Returns new id."),
-      schema,
-      &add);
-  }
-
-  // project.workspaces.delete
-  {
-    QJsonObject props;
-    props[QStringLiteral("id")] = QJsonObject{
-      {       QStringLiteral("type"),      QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Workspace id")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("id")};
-    registry.registerCommand(QStringLiteral("project.workspaces.delete"),
-                             QStringLiteral("Delete a workspace (params: id)"),
-                             schema,
-                             &remove);
-  }
-
-  // project.workspaces.rename
-  {
-    QJsonObject props;
-    props[QStringLiteral("id")] = QJsonObject{
-      {       QStringLiteral("type"),      QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Workspace id")}
-    };
-    props[QStringLiteral("title")] = QJsonObject{
-      {       QStringLiteral("type"),              QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("New workspace title")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] = QJsonArray{QStringLiteral("id"), QStringLiteral("title")};
-    registry.registerCommand(QStringLiteral("project.workspaces.rename"),
-                             QStringLiteral("Rename a workspace (params: id, title)"),
-                             schema,
-                             &rename);
-  }
-
-  // project.workspaces.autoGenerate
+  registry.registerCommand(
+    QStringLiteral("project.workspaces.get"),
+    QStringLiteral("Return widget refs for a workspace (params: id)"),
+    API::makeSchema({
+      {QStringLiteral("id"), QStringLiteral("integer"), QStringLiteral("Workspace id")}
+  }),
+    &get);
+  registry.registerCommand(
+    QStringLiteral("project.workspaces.add"),
+    QStringLiteral("Create a new workspace (params: title=\"Workspace\"). Returns new id."),
+    API::makeSchema(
+      {
+  },
+      {{QStringLiteral("title"), QStringLiteral("string"), QStringLiteral("Workspace title")}}),
+    &add);
+  registry.registerCommand(
+    QStringLiteral("project.workspaces.delete"),
+    QStringLiteral("Delete a workspace (params: id)"),
+    API::makeSchema({
+      {QStringLiteral("id"), QStringLiteral("integer"), QStringLiteral("Workspace id")}
+  }),
+    &remove);
+  registry.registerCommand(
+    QStringLiteral("project.workspaces.rename"),
+    QStringLiteral("Rename a workspace (params: id, title)"),
+    API::makeSchema({
+      {   QStringLiteral("id"), QStringLiteral("integer"),        QStringLiteral("Workspace id")},
+      {QStringLiteral("title"),  QStringLiteral("string"), QStringLiteral("New workspace title")}
+  }),
+    &rename);
   registry.registerCommand(
     QStringLiteral("project.workspaces.autoGenerate"),
     QStringLiteral(
       "Materialise synthetic workspaces into the customised set. No-op if already customised."),
-    emptySchema,
+    empty,
     &autoGenerate);
+}
 
-  // project.workspaces.customize.get
+/**
+ * @brief Register customizeWorkspaces flag get/set commands.
+ */
+void API::Handlers::WorkspacesHandler::registerCustomizeCommands()
+{
+  auto& registry = CommandRegistry::instance();
+
   registry.registerCommand(QStringLiteral("project.workspaces.customize.get"),
                            QStringLiteral("Return the customizeWorkspaces flag"),
-                           emptySchema,
+                           API::emptySchema(),
                            &customizeGet);
+  registry.registerCommand(QStringLiteral("project.workspaces.customize.set"),
+                           QStringLiteral("Flip the customizeWorkspaces flag (params: enabled)"),
+                           API::makeSchema({
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Enable (true) or disable (false)")}
+  }),
+                           &customizeSet);
+}
 
-  // project.workspaces.customize.set
-  {
-    QJsonObject props;
-    props[QStringLiteral("enabled")] = QJsonObject{
-      {       QStringLiteral("type"),                          QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Enable (true) or disable (false)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("enabled")};
-    registry.registerCommand(QStringLiteral("project.workspaces.customize.set"),
-                             QStringLiteral("Flip the customizeWorkspaces flag (params: enabled)"),
-                             schema,
-                             &customizeSet);
-  }
+/**
+ * @brief Register widget-ref add/remove commands.
+ */
+void API::Handlers::WorkspacesHandler::registerWidgetRefCommands()
+{
+  auto& registry = CommandRegistry::instance();
 
-  // project.workspaces.widgets.add
-  {
-    QJsonObject props;
-    props[QStringLiteral("workspaceId")] = QJsonObject{
-      {       QStringLiteral("type"),      QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Workspace id")}
-    };
-    props[QStringLiteral("widgetType")] = QJsonObject{
-      {       QStringLiteral("type"),                           QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("SerialStudio.DashboardWidget enum")}
-    };
-    props[QStringLiteral("groupId")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source group id")}
-    };
-    props[QStringLiteral("relativeIndex")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Per-type running widget counter in project order")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{
-      QStringLiteral("workspaceId"),
-      QStringLiteral("widgetType"),
-      QStringLiteral("groupId"),
-      QStringLiteral("relativeIndex"),
-    };
-    registry.registerCommand(
-      QStringLiteral("project.workspaces.widgets.add"),
-      QStringLiteral("Add a widget ref (params: workspaceId, widgetType, groupId, relativeIndex)"),
-      schema,
-      &widgetAdd);
-  }
+  const auto addSchema = API::makeSchema({
+    {  QStringLiteral("workspaceId"),QStringLiteral("integer"),QStringLiteral("Workspace id")                                                                },
+    {   QStringLiteral("widgetType"),
+     QStringLiteral("integer"),
+     QStringLiteral("SerialStudio.DashboardWidget enum")                                                    },
+    {      QStringLiteral("groupId"), QStringLiteral("integer"),           QStringLiteral("Source group id")},
+    {QStringLiteral("relativeIndex"),
+     QStringLiteral("integer"),
+     QStringLiteral("Per-type running widget counter in project order")                                     }
+  });
+  registry.registerCommand(
+    QStringLiteral("project.workspaces.widgets.add"),
+    QStringLiteral("Add a widget ref (params: workspaceId, widgetType, groupId, relativeIndex)"),
+    addSchema,
+    &widgetAdd);
 
-  // project.workspaces.widgets.remove
-  {
-    QJsonObject props;
-    props[QStringLiteral("workspaceId")] = QJsonObject{
-      {       QStringLiteral("type"),      QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Workspace id")}
-    };
-    props[QStringLiteral("widgetType")] = QJsonObject{
-      {       QStringLiteral("type"),                           QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("SerialStudio.DashboardWidget enum")}
-    };
-    props[QStringLiteral("groupId")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source group id")}
-    };
-    props[QStringLiteral("relativeIndex")] = QJsonObject{
-      {       QStringLiteral("type"),               QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Relative widget index")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{
-      QStringLiteral("workspaceId"),
-      QStringLiteral("widgetType"),
-      QStringLiteral("groupId"),
-      QStringLiteral("relativeIndex"),
-    };
-    registry.registerCommand(
-      QStringLiteral("project.workspaces.widgets.remove"),
-      QStringLiteral(
-        "Remove a widget ref (params: workspaceId, widgetType, groupId, relativeIndex)"),
-      schema,
-      &widgetRemove);
-  }
+  const auto removeSchema = API::makeSchema({
+    {  QStringLiteral("workspaceId"),QStringLiteral("integer"),QStringLiteral("Workspace id")                                                                },
+    {   QStringLiteral("widgetType"),
+     QStringLiteral("integer"),
+     QStringLiteral("SerialStudio.DashboardWidget enum")                                          },
+    {      QStringLiteral("groupId"), QStringLiteral("integer"), QStringLiteral("Source group id")},
+    {QStringLiteral("relativeIndex"),
+     QStringLiteral("integer"),
+     QStringLiteral("Relative widget index")                                                      }
+  });
+  registry.registerCommand(
+    QStringLiteral("project.workspaces.widgets.remove"),
+    QStringLiteral("Remove a widget ref (params: workspaceId, widgetType, groupId, relativeIndex)"),
+    removeSchema,
+    &widgetRemove);
 }
 
 //--------------------------------------------------------------------------------------------------

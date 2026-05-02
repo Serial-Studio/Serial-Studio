@@ -14,6 +14,7 @@
 #include <QJsonArray>
 
 #include "API/CommandRegistry.h"
+#include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -27,204 +28,94 @@ void API::Handlers::AudioHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // setInputDevice schema
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Input device index");
-    props.insert("deviceIndex", prop);
-    QJsonObject schema;
-    schema.insert("type", "object");
-    schema.insert("properties", props);
-    QJsonArray req;
-    req.append("deviceIndex");
-    schema.insert("required", req);
-    registry.registerCommand(QStringLiteral("io.driver.audio.setInputDevice"),
-                             QStringLiteral("Set input device (params: deviceIndex)"),
-                             schema,
-                             &setInputDevice);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.audio.setInputDevice"),
+                           QStringLiteral("Set input device (params: deviceIndex)"),
+                           makeSchema({
+                             {QStringLiteral("deviceIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Input device index")}
+  }),
+                           &setInputDevice);
 
-  // setOutputDevice schema
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Output device index");
-    props.insert("deviceIndex", prop);
-    QJsonObject schema;
-    schema.insert("type", "object");
-    schema.insert("properties", props);
-    QJsonArray req;
-    req.append("deviceIndex");
-    schema.insert("required", req);
-    registry.registerCommand(QStringLiteral("io.driver.audio.setOutputDevice"),
-                             QStringLiteral("Set output device (params: deviceIndex)"),
-                             schema,
-                             &setOutputDevice);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.audio.setOutputDevice"),
+                           QStringLiteral("Set output device (params: deviceIndex)"),
+                           makeSchema({
+                             {QStringLiteral("deviceIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Output device index")}
+  }),
+                           &setOutputDevice);
 
-  // setSampleRate schema
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Sample rate index");
-    props.insert("rateIndex", prop);
-    QJsonObject schema;
-    schema.insert("type", "object");
-    schema.insert("properties", props);
-    QJsonArray req;
-    req.append("rateIndex");
-    schema.insert("required", req);
-    registry.registerCommand(QStringLiteral("io.driver.audio.setSampleRate"),
-                             QStringLiteral("Set sample rate (params: rateIndex)"),
-                             schema,
-                             &setSampleRate);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.audio.setSampleRate"),
+                           QStringLiteral("Set sample rate (params: rateIndex)"),
+                           makeSchema({
+                             {QStringLiteral("rateIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Sample rate index")}
+  }),
+                           &setSampleRate);
 
-  // setInputSampleFormat schema
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Input sample format index");
-    props.insert("formatIndex", prop);
-    QJsonObject schema;
-    schema.insert("type", "object");
-    schema.insert("properties", props);
-    QJsonArray req;
-    req.append("formatIndex");
-    schema.insert("required", req);
-    registry.registerCommand(QStringLiteral("io.driver.audio.setInputSampleFormat"),
-                             QStringLiteral("Set input sample format (params: formatIndex)"),
-                             schema,
-                             &setInputSampleFormat);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.audio.setInputSampleFormat"),
+                           QStringLiteral("Set input sample format (params: formatIndex)"),
+                           makeSchema({
+                             {QStringLiteral("formatIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Input sample format index")}
+  }),
+                           &setInputSampleFormat);
 
-  // setInputChannelConfig schema
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Input channel configuration index");
-    props.insert("channelIndex", prop);
-    QJsonObject schema;
-    schema.insert("type", "object");
-    schema.insert("properties", props);
-    QJsonArray req;
-    req.append("channelIndex");
-    schema.insert("required", req);
-    registry.registerCommand(QStringLiteral("io.driver.audio.setInputChannelConfig"),
-                             QStringLiteral("Set input channel config (params: channelIndex)"),
-                             schema,
-                             &setInputChannelConfig);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.audio.setInputChannelConfig"),
+                           QStringLiteral("Set input channel config (params: channelIndex)"),
+                           makeSchema({
+                             {QStringLiteral("channelIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Input channel configuration index")}
+  }),
+                           &setInputChannelConfig);
 
-  // setOutputSampleFormat schema
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Output sample format index");
-    props.insert("formatIndex", prop);
-    QJsonObject schema;
-    schema.insert("type", "object");
-    schema.insert("properties", props);
-    QJsonArray req;
-    req.append("formatIndex");
-    schema.insert("required", req);
-    registry.registerCommand(QStringLiteral("io.driver.audio.setOutputSampleFormat"),
-                             QStringLiteral("Set output sample format (params: formatIndex)"),
-                             schema,
-                             &setOutputSampleFormat);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.audio.setOutputSampleFormat"),
+                           QStringLiteral("Set output sample format (params: formatIndex)"),
+                           makeSchema({
+                             {QStringLiteral("formatIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Output sample format index")}
+  }),
+                           &setOutputSampleFormat);
 
-  // setOutputChannelConfig schema
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Output channel configuration index");
-    props.insert("channelIndex", prop);
-    QJsonObject schema;
-    schema.insert("type", "object");
-    schema.insert("properties", props);
-    QJsonArray req;
-    req.append("channelIndex");
-    schema.insert("required", req);
-    registry.registerCommand(QStringLiteral("io.driver.audio.setOutputChannelConfig"),
-                             QStringLiteral("Set output channel config (params: channelIndex)"),
-                             schema,
-                             &setOutputChannelConfig);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.audio.setOutputChannelConfig"),
+                           QStringLiteral("Set output channel config (params: channelIndex)"),
+                           makeSchema({
+                             {QStringLiteral("channelIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Output channel configuration index")}
+  }),
+                           &setOutputChannelConfig);
 
-  // getInputDevices schema (no params)
-  {
-    QJsonObject emptySchema;
-    emptySchema.insert("type", "object");
-    emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(QStringLiteral("io.driver.audio.getInputDevices"),
-                             QStringLiteral("List input devices"),
-                             emptySchema,
-                             &getInputDevices);
-  }
-
-  // getOutputDevices schema (no params)
-  {
-    QJsonObject emptySchema;
-    emptySchema.insert("type", "object");
-    emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(QStringLiteral("io.driver.audio.getOutputDevices"),
-                             QStringLiteral("List output devices"),
-                             emptySchema,
-                             &getOutputDevices);
-  }
-
-  // getSampleRates schema (no params)
-  {
-    QJsonObject emptySchema;
-    emptySchema.insert("type", "object");
-    emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(QStringLiteral("io.driver.audio.getSampleRates"),
-                             QStringLiteral("List sample rates"),
-                             emptySchema,
-                             &getSampleRates);
-  }
-
-  // getInputFormats schema (no params)
-  {
-    QJsonObject emptySchema;
-    emptySchema.insert("type", "object");
-    emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(QStringLiteral("io.driver.audio.getInputFormats"),
-                             QStringLiteral("List input sample formats"),
-                             emptySchema,
-                             &getInputFormats);
-  }
-
-  // getOutputFormats schema (no params)
-  {
-    QJsonObject emptySchema;
-    emptySchema.insert("type", "object");
-    emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(QStringLiteral("io.driver.audio.getOutputFormats"),
-                             QStringLiteral("List output sample formats"),
-                             emptySchema,
-                             &getOutputFormats);
-  }
-
-  // getConfiguration schema (no params)
-  {
-    QJsonObject emptySchema;
-    emptySchema.insert("type", "object");
-    emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(QStringLiteral("io.driver.audio.getConfiguration"),
-                             QStringLiteral("Get complete audio configuration"),
-                             emptySchema,
-                             &getConfiguration);
-  }
+  const auto empty = emptySchema();
+  registry.registerCommand(QStringLiteral("io.driver.audio.getInputDevices"),
+                           QStringLiteral("List input devices"),
+                           empty,
+                           &getInputDevices);
+  registry.registerCommand(QStringLiteral("io.driver.audio.getOutputDevices"),
+                           QStringLiteral("List output devices"),
+                           empty,
+                           &getOutputDevices);
+  registry.registerCommand(QStringLiteral("io.driver.audio.getSampleRates"),
+                           QStringLiteral("List sample rates"),
+                           empty,
+                           &getSampleRates);
+  registry.registerCommand(QStringLiteral("io.driver.audio.getInputFormats"),
+                           QStringLiteral("List input sample formats"),
+                           empty,
+                           &getInputFormats);
+  registry.registerCommand(QStringLiteral("io.driver.audio.getOutputFormats"),
+                           QStringLiteral("List output sample formats"),
+                           empty,
+                           &getOutputFormats);
+  registry.registerCommand(QStringLiteral("io.driver.audio.getConfiguration"),
+                           QStringLiteral("Get complete audio configuration"),
+                           empty,
+                           &getConfiguration);
 }
 
 //--------------------------------------------------------------------------------------------------

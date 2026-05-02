@@ -298,19 +298,51 @@ void IO::Drivers::HID::onReadError()
  */
 void IO::Drivers::HID::enumerateDevices()
 {
-  // Get fresh device list from hidapi
   hid_free_enumeration(m_deviceInfoList);
   m_deviceInfoList = hid_enumerate(0x0000, 0x0000);
 
-  // Build unique entries keyed by VID:PID:serial
-  struct Entry {
-    QString label;
-    QString path;
-    uint16_t usagePage;
-    uint16_t usage;
-  };
+  QList<DeviceEntry> entries = collectHidDeviceEntries();
+  std::sort(entries.begin(), entries.end(), [](const DeviceEntry& a, const DeviceEntry& b) {
+    return a.label < b.label;
+  });
 
-  QList<Entry> entries;
+  QStringList newLabels;
+  QList<QString> newPaths;
+  QList<uint16_t> newUsagePages;
+  QList<uint16_t> newUsages;
+  composeHidDeviceLists(entries, newLabels, newPaths, newUsagePages, newUsages);
+
+  if (newLabels == m_deviceLabels)
+    return;
+
+  const QString prevPath = (m_deviceIndex > 0 && m_deviceIndex < m_devicePaths.size())
+                           ? m_devicePaths.at(m_deviceIndex)
+                           : QString();
+
+  m_deviceLabels     = newLabels;
+  m_devicePaths      = newPaths;
+  m_deviceUsagePages = newUsagePages;
+  m_deviceUsages     = newUsages;
+
+  const int newIndex = restoreHidSelectionIndex(prevPath);
+  if (newIndex != m_deviceIndex) {
+    m_deviceIndex = newIndex;
+    Q_EMIT deviceIndexChanged();
+  }
+
+  updateHidUsageCache();
+
+  Q_EMIT deviceListChanged();
+  Q_EMIT deviceInfoChanged();
+  Q_EMIT configurationChanged();
+}
+
+/**
+ * @brief Walks the hidapi device-info linked list and merges duplicates by VID:PID:serial.
+ */
+QList<IO::Drivers::HID::DeviceEntry> IO::Drivers::HID::collectHidDeviceEntries() const
+{
+  QList<DeviceEntry> entries;
   QMap<QString, int> seen;
 
   for (hid_device_info* dev = m_deviceInfoList; dev != nullptr; dev = dev->next) {
@@ -326,7 +358,6 @@ void IO::Drivers::HID::enumerateDevices()
                           .arg(dev->product_id, 4, 16, QLatin1Char('0'))
                           .arg(serial);
 
-    // Upgrade usage info if a later interface has non-zero values
     auto it = seen.find(key);
     if (it != seen.end()) {
       auto& existing = entries[it.value()];
@@ -355,40 +386,36 @@ void IO::Drivers::HID::enumerateDevices()
     entries.append({label, QString::fromUtf8(dev->path), dev->usage_page, dev->usage});
   }
 
-  std::sort(entries.begin(), entries.end(), [](const Entry& a, const Entry& b) {
-    return a.label < b.label;
-  });
+  return entries;
+}
 
-  // Build new lists with placeholder at index 0
-  QStringList newLabels;
-  QList<QString> newPaths;
-  QList<uint16_t> newUsagePages;
-  QList<uint16_t> newUsages;
-  newLabels.append(tr("Select Device"));
-  newPaths.append(QString());
-  newUsagePages.append(0);
-  newUsages.append(0);
+/**
+ * @brief Builds the public lists from sorted entries, prepending a "Select Device" placeholder.
+ */
+void IO::Drivers::HID::composeHidDeviceLists(const QList<DeviceEntry>& entries,
+                                             QStringList& labels,
+                                             QList<QString>& paths,
+                                             QList<uint16_t>& usagePages,
+                                             QList<uint16_t>& usages) const
+{
+  labels.append(tr("Select Device"));
+  paths.append(QString());
+  usagePages.append(0);
+  usages.append(0);
 
   for (const auto& e : entries) {
-    newLabels.append(e.label);
-    newPaths.append(e.path);
-    newUsagePages.append(e.usagePage);
-    newUsages.append(e.usage);
+    labels.append(e.label);
+    paths.append(e.path);
+    usagePages.append(e.usagePage);
+    usages.append(e.usage);
   }
+}
 
-  if (newLabels == m_deviceLabels)
-    return;
-
-  // Preserve selection by matching the previously selected path
-  const QString prevPath = (m_deviceIndex > 0 && m_deviceIndex < m_devicePaths.size())
-                           ? m_devicePaths.at(m_deviceIndex)
-                           : QString();
-
-  m_deviceLabels     = newLabels;
-  m_devicePaths      = newPaths;
-  m_deviceUsagePages = newUsagePages;
-  m_deviceUsages     = newUsages;
-
+/**
+ * @brief Picks the new device index after a rescan, preserving the prior selection by path.
+ */
+int IO::Drivers::HID::restoreHidSelectionIndex(const QString& prevPath)
+{
   int newIndex = m_deviceIndex;
 
   if (!prevPath.isEmpty()) {
@@ -404,12 +431,14 @@ void IO::Drivers::HID::enumerateDevices()
     m_settings.setValue("HID/deviceIndex", 0);
   }
 
-  if (newIndex != m_deviceIndex) {
-    m_deviceIndex = newIndex;
-    Q_EMIT deviceIndexChanged();
-  }
+  return newIndex;
+}
 
-  // Update cached usage info for the current selection
+/**
+ * @brief Refreshes the formatted usage-page/usage strings for the current selection.
+ */
+void IO::Drivers::HID::updateHidUsageCache()
+{
   const uint16_t up = m_deviceUsagePages.value(m_deviceIndex, 0);
   const uint16_t u  = m_deviceUsages.value(m_deviceIndex, 0);
   m_usagePage       = up
@@ -417,10 +446,6 @@ void IO::Drivers::HID::enumerateDevices()
                       : QString();
   m_usage = u ? QStringLiteral("0x") + QString::number(u, 16).rightJustified(4, QLatin1Char('0'))
               : QString();
-
-  Q_EMIT deviceListChanged();
-  Q_EMIT deviceInfoChanged();
-  Q_EMIT configurationChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -61,6 +61,7 @@ private:
   [[nodiscard]] bool probeParseFunction(const QJSValue& parseFunction,
                                         int sourceId,
                                         bool showMessageBoxes);
+  [[nodiscard]] bool validateParseSignature(const QString& script, bool showMessageBoxes);
 
 private:
   QJSEngine m_engine;

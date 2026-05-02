@@ -428,17 +428,33 @@ void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLi
  */
 void Widgets::Terminal::paint(QPainter* painter)
 {
-  // Skip rendering when hidden
   if (!isVisible() || !painter)
     return;
 
   // Prepare font and compute visible line range
   painter->setFont(m_font);
-  int lineHeight      = m_cHeight;
-  const int firstLine = m_scrollOffsetY;
-  const int lastVLine = qMin(firstLine + linesPerPage(), lineCount() - 1);
+  const int lineHeight = m_cHeight;
+  const int firstLine  = m_scrollOffsetY;
+  const int lastVLine  = qMin(firstLine + linesPerPage(), lineCount() - 1);
 
-  // Draw selection highlights
+  paintSelectionHighlights(painter, firstLine, lastVLine, lineHeight);
+  paintTextContent(painter, firstLine, lastVLine, lineHeight);
+
+  // Draw cursor if visible and not hidden by escape sequence
+  if (m_cursorVisible && !m_cursorHidden)
+    drawCursor(painter, firstLine, lastVLine, lineHeight);
+
+  paintScrollbar(painter);
+}
+
+/**
+ * @brief Fills the selection-highlight rectangles for the visible line range.
+ */
+void Widgets::Terminal::paintSelectionHighlights(QPainter* painter,
+                                                 int firstLine,
+                                                 int lastVLine,
+                                                 int lineHeight)
+{
   int y = m_borderY;
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i) {
     const QString& line = m_data[i];
@@ -474,9 +490,17 @@ void Widgets::Terminal::paint(QPainter* painter)
       start = lineEnd;
     }
   }
+}
 
-  // Draw text content
-  y                             = m_borderY;
+/**
+ * @brief Renders the text content for the visible line range, ANSI-colored or not.
+ */
+void Widgets::Terminal::paintTextContent(QPainter* painter,
+                                         int firstLine,
+                                         int lastVLine,
+                                         int lineHeight)
+{
+  int y                         = m_borderY;
   const QColor defaultTextColor = m_palette.color(QPalette::Text);
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i) {
     const QString& line = m_data[i];
@@ -505,32 +529,34 @@ void Widgets::Terminal::paint(QPainter* painter)
       start = end;
     }
   }
+}
 
-  // Draw cursor if visible and not hidden by escape sequence
-  if (m_cursorVisible && !m_cursorHidden)
-    drawCursor(painter, firstLine, lastVLine, lineHeight);
+/**
+ * @brief Draws the rounded scrollbar thumb when manual scrolling is active.
+ */
+void Widgets::Terminal::paintScrollbar(QPainter* painter)
+{
+  if (autoscroll() || lineCount() <= linesPerPage())
+    return;
 
-  // Draw scrollbar when manually scrolling
-  if (!autoscroll() && lineCount() > linesPerPage()) {
-    const int availableHeight = height() - 2 * m_borderY;
-    const int scrollbarWidth  = 6;
-    int scrollbarHeight       = qMax(20.0, qPow(availableHeight, 2) / lineCount());
-    if (scrollbarHeight > availableHeight / 2)
-      scrollbarHeight = availableHeight / 2;
+  const int availableHeight = height() - 2 * m_borderY;
+  const int scrollbarWidth  = 6;
+  int scrollbarHeight       = qMax(20.0, qPow(availableHeight, 2) / lineCount());
+  if (scrollbarHeight > availableHeight / 2)
+    scrollbarHeight = availableHeight / 2;
 
-    int x = width() - scrollbarWidth - m_borderX;
-    y     = (m_scrollOffsetY / static_cast<float>(lineCount() - linesPerPage()))
-        * (availableHeight - scrollbarHeight)
-      - m_borderY;
-    y = qMax(m_borderY, y);
+  const int x = width() - scrollbarWidth - m_borderX;
+  int y       = (m_scrollOffsetY / static_cast<float>(lineCount() - linesPerPage()))
+          * (availableHeight - scrollbarHeight)
+        - m_borderY;
+  y = qMax(m_borderY, y);
 
-    QRect scrollbarRect(x, y, scrollbarWidth, scrollbarHeight);
-    QBrush scrollbarBrush(m_palette.color(QPalette::Window));
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setBrush(scrollbarBrush);
-    painter->setPen(Qt::NoPen);
-    painter->drawRoundedRect(scrollbarRect, scrollbarWidth / 2, scrollbarWidth / 2);
-  }
+  QRect scrollbarRect(x, y, scrollbarWidth, scrollbarHeight);
+  QBrush scrollbarBrush(m_palette.color(QPalette::Window));
+  painter->setRenderHint(QPainter::Antialiasing);
+  painter->setBrush(scrollbarBrush);
+  painter->setPen(Qt::NoPen);
+  painter->drawRoundedRect(scrollbarRect, scrollbarWidth / 2, scrollbarWidth / 2);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -754,6 +780,21 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   }
 
   // Translate the key event to a VT-100 byte sequence
+  const QByteArray seq = translateKeyToVt100(event);
+  if (!seq.isEmpty()) {
+    (void)IO::ConnectionManager::instance().writeData(seq);
+    event->accept();
+    return;
+  }
+
+  QuickPaintedItemCompat::keyPressEvent(event);
+}
+
+/**
+ * @brief Maps a Qt key event to its VT-100 byte sequence; empty if unmapped.
+ */
+QByteArray Widgets::Terminal::translateKeyToVt100(const QKeyEvent* event)
+{
   QByteArray seq;
   const Qt::KeyboardModifiers mods = event->modifiers();
   const int key                    = event->key();
@@ -761,37 +802,62 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   // Ctrl+letter -> control code
   if ((mods & Qt::ControlModifier) && key >= Qt::Key_A && key <= Qt::Key_Z) {
     seq.append(char(key - Qt::Key_A + 1));
-    (void)IO::ConnectionManager::instance().writeData(seq);
-    event->accept();
-    return;
+    return seq;
   }
 
   // Ctrl+[ -> ESC
   if ((mods & Qt::ControlModifier) && key == Qt::Key_BracketLeft) {
     seq.append('\x1b');
-    (void)IO::ConnectionManager::instance().writeData(seq);
-    event->accept();
-    return;
+    return seq;
   }
 
-  switch (key) {
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-      switch (Console::Handler::instance().lineEnding()) {
-        case Console::Handler::LineEnding::NoLineEnding:
-          break;
-        case Console::Handler::LineEnding::NewLine:
-          seq.append('\n');
-          break;
-        case Console::Handler::LineEnding::CarriageReturn:
-          seq.append('\r');
-          break;
-        case Console::Handler::LineEnding::BothNewLineAndCarriageReturn:
-          seq.append('\r');
-          seq.append('\n');
-          break;
-      }
+  // Return/Enter respects the configured line-ending preference
+  if (key == Qt::Key_Return || key == Qt::Key_Enter)
+    return translateEnterKey();
+
+  // Editing/navigation/function keys
+  seq = translateSpecialKey(key);
+  if (!seq.isEmpty())
+    return seq;
+
+  // Fall back to raw text input for printable keys
+  if (!event->text().isEmpty())
+    seq = event->text().toUtf8();
+
+  return seq;
+}
+
+/**
+ * @brief Returns the byte sequence for Return/Enter under the active line ending.
+ */
+QByteArray Widgets::Terminal::translateEnterKey()
+{
+  QByteArray seq;
+  switch (Console::Handler::instance().lineEnding()) {
+    case Console::Handler::LineEnding::NoLineEnding:
       break;
+    case Console::Handler::LineEnding::NewLine:
+      seq.append('\n');
+      break;
+    case Console::Handler::LineEnding::CarriageReturn:
+      seq.append('\r');
+      break;
+    case Console::Handler::LineEnding::BothNewLineAndCarriageReturn:
+      seq.append('\r');
+      seq.append('\n');
+      break;
+  }
+
+  return seq;
+}
+
+/**
+ * @brief Maps editing, navigation, and F-keys to their VT-100 byte sequences.
+ */
+QByteArray Widgets::Terminal::translateSpecialKey(int key)
+{
+  QByteArray seq;
+  switch (key) {
     case Qt::Key_Backspace:
       seq.append('\x7f');
       break;
@@ -871,19 +937,10 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
       seq.append("\x1b[24~");
       break;
     default:
-      if (!event->text().isEmpty())
-        seq = event->text().toUtf8();
-
       break;
   }
 
-  if (!seq.isEmpty()) {
-    (void)IO::ConnectionManager::instance().writeData(seq);
-    event->accept();
-    return;
-  }
-
-  QuickPaintedItemCompat::keyPressEvent(event);
+  return seq;
 }
 
 /**

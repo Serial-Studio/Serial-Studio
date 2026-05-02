@@ -24,6 +24,7 @@
 #include <QJsonArray>
 
 #include "API/CommandRegistry.h"
+#include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -35,145 +36,75 @@
  */
 void API::Handlers::NetworkHandler::registerCommands()
 {
-  auto& registry = CommandRegistry::instance();
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
 
   // Mutation commands
-  {
-    QJsonObject props;
-    props[QStringLiteral("address")] = QJsonObject{
-      {       QStringLiteral("type"),                               QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Remote host address (IP or hostname)")},
-      {    QStringLiteral("default"),                            QStringLiteral("localhost")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("address")};
-    registry.registerCommand(QStringLiteral("io.driver.network.setRemoteAddress"),
-                             QStringLiteral("Set remote host address (params: address)"),
-                             schema,
-                             &setRemoteAddress);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.network.setRemoteAddress"),
+                           QStringLiteral("Set remote host address (params: address)"),
+                           makeSchema({
+                             {QStringLiteral("address"),
+                              QStringLiteral("string"),
+                              QStringLiteral("Remote host address (IP or hostname)")}
+  }),
+                           &setRemoteAddress);
 
-  {
-    QJsonObject portProp = QJsonObject{
-      {       QStringLiteral("type"),               QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Port number (1-65535)")},
-      {    QStringLiteral("minimum"),                                       1},
-      {    QStringLiteral("maximum"),                                   65535}
-    };
+  const SchemaProp port_prop = {
+    QStringLiteral("port"), QStringLiteral("integer"), QStringLiteral("Port number (1-65535)")};
 
-    {
-      QJsonObject props;
-      props[QStringLiteral("port")] = portProp;
-      QJsonObject schema;
-      schema[QStringLiteral("type")]       = QStringLiteral("object");
-      schema[QStringLiteral("properties")] = props;
-      schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("port")};
-      registry.registerCommand(QStringLiteral("io.driver.network.setTcpPort"),
-                               QStringLiteral("Set TCP port (params: port)"),
-                               schema,
-                               &setTcpPort);
-    }
+  registry.registerCommand(QStringLiteral("io.driver.network.setTcpPort"),
+                           QStringLiteral("Set TCP port (params: port)"),
+                           makeSchema({port_prop}),
+                           &setTcpPort);
 
-    {
-      QJsonObject props;
-      props[QStringLiteral("port")] = portProp;
-      QJsonObject schema;
-      schema[QStringLiteral("type")]       = QStringLiteral("object");
-      schema[QStringLiteral("properties")] = props;
-      schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("port")};
-      registry.registerCommand(QStringLiteral("io.driver.network.setUdpLocalPort"),
-                               QStringLiteral("Set UDP local port (params: port)"),
-                               schema,
-                               &setUdpLocalPort);
-    }
+  registry.registerCommand(QStringLiteral("io.driver.network.setUdpLocalPort"),
+                           QStringLiteral("Set UDP local port (params: port)"),
+                           makeSchema({port_prop}),
+                           &setUdpLocalPort);
 
-    {
-      QJsonObject props;
-      props[QStringLiteral("port")] = portProp;
-      QJsonObject schema;
-      schema[QStringLiteral("type")]       = QStringLiteral("object");
-      schema[QStringLiteral("properties")] = props;
-      schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("port")};
-      registry.registerCommand(QStringLiteral("io.driver.network.setUdpRemotePort"),
-                               QStringLiteral("Set UDP remote port (params: port)"),
-                               schema,
-                               &setUdpRemotePort);
-    }
-  }
+  registry.registerCommand(QStringLiteral("io.driver.network.setUdpRemotePort"),
+                           QStringLiteral("Set UDP remote port (params: port)"),
+                           makeSchema({port_prop}),
+                           &setUdpRemotePort);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("socketTypeIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                          QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Socket type index (0=TCP, 1=UDP)")},
-      {       QStringLiteral("enum"),                                   QJsonArray{0, 1}},
-      {    QStringLiteral("default"),                                                  0}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("socketTypeIndex")};
-    registry.registerCommand(
-      QStringLiteral("io.driver.network.setSocketType"),
-      QStringLiteral("Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)"),
-      schema,
-      &setSocketType);
-  }
+  registry.registerCommand(
+    QStringLiteral("io.driver.network.setSocketType"),
+    QStringLiteral("Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)"),
+    makeSchema({
+      {QStringLiteral("socketTypeIndex"),
+       QStringLiteral("integer"),
+       QStringLiteral("Socket type index (0=TCP, 1=UDP)")}
+  }),
+    &setSocketType);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("enabled")] = QJsonObject{
-      {       QStringLiteral("type"),                   QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Enable UDP multicast mode")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("enabled")};
-    registry.registerCommand(QStringLiteral("io.driver.network.setUdpMulticast"),
-                             QStringLiteral("Enable/disable UDP multicast (params: enabled)"),
-                             schema,
-                             &setUdpMulticast);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.network.setUdpMulticast"),
+                           QStringLiteral("Enable/disable UDP multicast (params: enabled)"),
+                           makeSchema({
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Enable UDP multicast mode")}
+  }),
+                           &setUdpMulticast);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("host")] = QJsonObject{
-      {       QStringLiteral("type"),                            QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Hostname or IP address to look up")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("host")};
-    registry.registerCommand(QStringLiteral("io.driver.network.lookup"),
-                             QStringLiteral("Perform DNS lookup (params: host)"),
-                             schema,
-                             &lookup);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.network.lookup"),
+                           QStringLiteral("Perform DNS lookup (params: host)"),
+                           makeSchema({
+                             {QStringLiteral("host"),
+                              QStringLiteral("string"),
+                              QStringLiteral("Hostname or IP address to look up")}
+  }),
+                           &lookup);
 
   // Query commands
-  {
-    QJsonObject emptySchema;
-    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
-    emptySchema[QStringLiteral("properties")] = QJsonObject();
-    registry.registerCommand(QStringLiteral("io.driver.network.getConfiguration"),
-                             QStringLiteral("Get current network configuration"),
-                             emptySchema,
-                             &getConfiguration);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.network.getConfiguration"),
+                           QStringLiteral("Get current network configuration"),
+                           empty,
+                           &getConfiguration);
 
-  {
-    QJsonObject emptySchema;
-    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
-    emptySchema[QStringLiteral("properties")] = QJsonObject();
-    registry.registerCommand(QStringLiteral("io.driver.network.getSocketTypes"),
-                             QStringLiteral("Get available socket types"),
-                             emptySchema,
-                             &getSocketTypes);
-  }
+  registry.registerCommand(QStringLiteral("io.driver.network.getSocketTypes"),
+                           QStringLiteral("Get available socket types"),
+                           empty,
+                           &getSocketTypes);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -59,7 +59,30 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   setMinimumSize(640, 520);
   resize(720, 580);
 
-  // Syntax-highlighted code editor
+  buildEditorWidgets();
+
+  auto* toolbarLayout = buildToolbarLayout();
+  auto* testLayout    = buildTestLayout();
+  auto* buttonLayout  = buildButtonLayout();
+
+  auto* mainLayout = new QVBoxLayout(this);
+  mainLayout->addLayout(toolbarLayout);
+  mainLayout->addWidget(m_editor, 1);
+  mainLayout->addLayout(testLayout);
+  mainLayout->addLayout(buttonLayout);
+
+  wireSignals();
+  installShortcuts();
+
+  onThemeChanged();
+  applyLanguage(SerialStudio::Lua);
+}
+
+/**
+ * @brief Allocates the editor + combobox widgets and seeds the template list.
+ */
+void DataModel::DatasetTransformEditor::buildEditorWidgets()
+{
   m_editor = new QCodeEditor(this);
   m_editor->setTabReplace(true);
   m_editor->setTabReplaceSize(2);
@@ -67,23 +90,12 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   m_editor->setFont(Misc::CommonFonts::instance().monoFont());
   m_editor->setMinimumHeight(200);
 
-  // Language selector (Lua first -- it's the project default)
   m_languageCombo = new QComboBox(this);
   m_languageCombo->addItems({tr("Lua"), tr("JavaScript")});
 
-  // Template selector with placeholder entry
   m_templateCombo = new QComboBox(this);
   buildTemplates();
 
-  // Toolbar row
-  auto* toolbarLayout = new QHBoxLayout();
-  toolbarLayout->addWidget(new QLabel(tr("Language:"), this));
-  toolbarLayout->addWidget(m_languageCombo);
-  toolbarLayout->addSpacing(16);
-  toolbarLayout->addWidget(new QLabel(tr("Template:"), this));
-  toolbarLayout->addWidget(m_templateCombo, 1);
-
-  // Test area
   m_testInput = new QLineEdit(this);
   m_testInput->setPlaceholderText(tr("Enter raw value (e.g., 1024)"));
   m_testOutput = new QLineEdit(QStringLiteral("--.--"), this);
@@ -93,6 +105,29 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   m_testButton  = new QPushButton(tr("Test"), this);
   m_clearButton = new QPushButton(tr("Clear"), this);
 
+  m_applyButton  = new QPushButton(tr("Apply"), this);
+  m_cancelButton = new QPushButton(tr("Cancel"), this);
+}
+
+/**
+ * @brief Builds the language + template selector toolbar row.
+ */
+QHBoxLayout* DataModel::DatasetTransformEditor::buildToolbarLayout()
+{
+  auto* toolbarLayout = new QHBoxLayout();
+  toolbarLayout->addWidget(new QLabel(tr("Language:"), this));
+  toolbarLayout->addWidget(m_languageCombo);
+  toolbarLayout->addSpacing(16);
+  toolbarLayout->addWidget(new QLabel(tr("Template:"), this));
+  toolbarLayout->addWidget(m_templateCombo, 1);
+  return toolbarLayout;
+}
+
+/**
+ * @brief Builds the input/output test row used to dry-run a transform.
+ */
+QHBoxLayout* DataModel::DatasetTransformEditor::buildTestLayout()
+{
   auto* testLayout = new QHBoxLayout();
   testLayout->addWidget(new QLabel(tr("Input:"), this));
   testLayout->addWidget(m_testInput, 1);
@@ -100,24 +135,26 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   testLayout->addWidget(new QLabel(tr("Output:"), this));
   testLayout->addWidget(m_testOutput, 1);
   testLayout->addWidget(m_clearButton);
+  return testLayout;
+}
 
-  // Action buttons
-  m_applyButton  = new QPushButton(tr("Apply"), this);
-  m_cancelButton = new QPushButton(tr("Cancel"), this);
-
+/**
+ * @brief Builds the Apply/Cancel button row.
+ */
+QHBoxLayout* DataModel::DatasetTransformEditor::buildButtonLayout()
+{
   auto* buttonLayout = new QHBoxLayout();
   buttonLayout->addStretch();
   buttonLayout->addWidget(m_applyButton);
   buttonLayout->addWidget(m_cancelButton);
+  return buttonLayout;
+}
 
-  // Assemble main layout
-  auto* mainLayout = new QVBoxLayout(this);
-  mainLayout->addLayout(toolbarLayout);
-  mainLayout->addWidget(m_editor, 1);
-  mainLayout->addLayout(testLayout);
-  mainLayout->addLayout(buttonLayout);
-
-  // Wire signals
+/**
+ * @brief Wires every widget signal needed by the dialog.
+ */
+void DataModel::DatasetTransformEditor::wireSignals()
+{
   connect(m_applyButton, &QPushButton::clicked, this, &DatasetTransformEditor::onApply);
   connect(m_cancelButton, &QPushButton::clicked, this, &QDialog::reject);
   connect(m_testButton, &QPushButton::clicked, this, &DatasetTransformEditor::onTest);
@@ -139,8 +176,13 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
           &Misc::Translator::languageChanged,
           this,
           &DatasetTransformEditor::buildTemplates);
+}
 
-  // Format-document shortcut on the editor.
+/**
+ * @brief Installs the format/format-line shortcuts and the custom context menu.
+ */
+void DataModel::DatasetTransformEditor::installShortcuts()
+{
   auto* formatShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), m_editor);
   formatShortcut->setContext(Qt::WidgetShortcut);
   connect(formatShortcut, &QShortcut::activated, this, &DatasetTransformEditor::onFormatLine);
@@ -148,16 +190,11 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   formatAllShortcut->setContext(Qt::WidgetShortcut);
   connect(formatAllShortcut, &QShortcut::activated, this, &DatasetTransformEditor::onFormat);
 
-  // Custom context menu adds Format entries on top of the standard ones.
   m_editor->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(m_editor,
           &QWidget::customContextMenuRequested,
           this,
           &DatasetTransformEditor::showEditorContextMenu);
-
-  // Apply initial theme and Lua highlighting
-  onThemeChanged();
-  applyLanguage(SerialStudio::Lua);
 }
 
 //--------------------------------------------------------------------------------------------------

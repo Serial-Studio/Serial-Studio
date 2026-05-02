@@ -135,6 +135,18 @@ private:
   [[nodiscard]] QString quoteArg(const QString& arg) const;
   [[nodiscard]] bool hasProLicense() const;
   [[nodiscard]] QString extractDefaultIcon() const;
+
+  [[nodiscard]] bool writeBundleLauncher(const QString& execPath,
+                                         const QString& target,
+                                         const QStringList& args,
+                                         QString& errorOut);
+  [[nodiscard]] static bool writeInfoPlist(const QString& plistPath,
+                                           const QString& bundlePath,
+                                           const QString& bundleName,
+                                           const QString& execName,
+                                           const QString& title,
+                                           const QString& iconFileName,
+                                           QString& errorOut);
 };
 
 }  // namespace Misc

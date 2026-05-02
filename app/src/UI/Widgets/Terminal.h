@@ -229,6 +229,14 @@ private:
                          int x,
                          int y);
 
+  void paintSelectionHighlights(QPainter* painter, int firstLine, int lastVLine, int lineHeight);
+  void paintTextContent(QPainter* painter, int firstLine, int lastVLine, int lineHeight);
+  void paintScrollbar(QPainter* painter);
+
+  static QByteArray translateKeyToVt100(const QKeyEvent* event);
+  static QByteArray translateSpecialKey(int key);
+  static QByteArray translateEnterKey();
+
 protected:
   bool shouldEndSelection(const QChar& c);
   void keyPressEvent(QKeyEvent* event) override;

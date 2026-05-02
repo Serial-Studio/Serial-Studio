@@ -89,6 +89,21 @@ static inline int floorPow2Bounded(int value)
 }
 
 /**
+ * @brief Linearly interpolates a color from per-channel LUT arrays of length n.
+ */
+QRgb Widgets::Waterfall::interpolateLut(
+  const double* r, const double* g, const double* b, int n, double t)
+{
+  const double f = t * (n - 1);
+  const int i    = qBound(0, static_cast<int>(f), n - 2);
+  const double s = f - i;
+  const int rr   = static_cast<int>((r[i] + (r[i + 1] - r[i]) * s) * 255.0);
+  const int gg   = static_cast<int>((g[i] + (g[i + 1] - g[i]) * s) * 255.0);
+  const int bb   = static_cast<int>((b[i] + (b[i + 1] - b[i]) * s) * 255.0);
+  return qRgb(qBound(0, rr, 255), qBound(0, gg, 255), qBound(0, bb, 255));
+}
+
+/**
  * @brief Returns the RGB color for a given color map and normalized magnitude.
  */
 QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
@@ -105,14 +120,7 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
         0.005, 0.100, 0.265, 0.371, 0.471, 0.567, 0.659, 0.749, 0.821, 0.873, 0.906};
       static constexpr double b[] = {
         0.329, 0.529, 0.529, 0.553, 0.557, 0.553, 0.518, 0.440, 0.318, 0.150, 0.144};
-      const int n    = 11;
-      const double f = t * (n - 1);
-      const int i    = qBound(0, static_cast<int>(f), n - 2);
-      const double s = f - i;
-      const int rr   = static_cast<int>((r[i] + (r[i + 1] - r[i]) * s) * 255.0);
-      const int gg   = static_cast<int>((g[i] + (g[i + 1] - g[i]) * s) * 255.0);
-      const int bb   = static_cast<int>((b[i] + (b[i + 1] - b[i]) * s) * 255.0);
-      return qRgb(qBound(0, rr, 255), qBound(0, gg, 255), qBound(0, bb, 255));
+      return interpolateLut(r, g, b, 11, t);
     }
 
     // Inferno -- black, red, orange, yellow
@@ -120,14 +128,7 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       static constexpr double r[] = {0.001, 0.099, 0.301, 0.527, 0.733, 0.882, 0.973, 0.988};
       static constexpr double g[] = {0.000, 0.034, 0.064, 0.117, 0.214, 0.388, 0.626, 0.998};
       static constexpr double b[] = {0.014, 0.299, 0.434, 0.395, 0.276, 0.118, 0.034, 0.645};
-      const int n                 = 8;
-      const double f              = t * (n - 1);
-      const int i                 = qBound(0, static_cast<int>(f), n - 2);
-      const double s              = f - i;
-      const int rr                = static_cast<int>((r[i] + (r[i + 1] - r[i]) * s) * 255.0);
-      const int gg                = static_cast<int>((g[i] + (g[i + 1] - g[i]) * s) * 255.0);
-      const int bb                = static_cast<int>((b[i] + (b[i + 1] - b[i]) * s) * 255.0);
-      return qRgb(qBound(0, rr, 255), qBound(0, gg, 255), qBound(0, bb, 255));
+      return interpolateLut(r, g, b, 8, t);
     }
 
     // Magma -- black, purple, pink, cream
@@ -135,14 +136,7 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       static constexpr double r[] = {0.001, 0.146, 0.421, 0.715, 0.928, 0.987, 0.987};
       static constexpr double g[] = {0.000, 0.060, 0.139, 0.215, 0.473, 0.749, 0.991};
       static constexpr double b[] = {0.014, 0.347, 0.516, 0.475, 0.502, 0.622, 0.749};
-      const int n                 = 7;
-      const double f              = t * (n - 1);
-      const int i                 = qBound(0, static_cast<int>(f), n - 2);
-      const double s              = f - i;
-      const int rr                = static_cast<int>((r[i] + (r[i + 1] - r[i]) * s) * 255.0);
-      const int gg                = static_cast<int>((g[i] + (g[i + 1] - g[i]) * s) * 255.0);
-      const int bb                = static_cast<int>((b[i] + (b[i + 1] - b[i]) * s) * 255.0);
-      return qRgb(qBound(0, rr, 255), qBound(0, gg, 255), qBound(0, bb, 255));
+      return interpolateLut(r, g, b, 7, t);
     }
 
     // Plasma -- purple, pink, orange, yellow
@@ -150,14 +144,7 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       static constexpr double r[] = {0.050, 0.286, 0.530, 0.741, 0.892, 0.969, 0.940};
       static constexpr double g[] = {0.030, 0.010, 0.140, 0.347, 0.560, 0.789, 0.975};
       static constexpr double b[] = {0.527, 0.629, 0.586, 0.415, 0.227, 0.105, 0.131};
-      const int n                 = 7;
-      const double f              = t * (n - 1);
-      const int i                 = qBound(0, static_cast<int>(f), n - 2);
-      const double s              = f - i;
-      const int rr                = static_cast<int>((r[i] + (r[i + 1] - r[i]) * s) * 255.0);
-      const int gg                = static_cast<int>((g[i] + (g[i + 1] - g[i]) * s) * 255.0);
-      const int bb                = static_cast<int>((b[i] + (b[i + 1] - b[i]) * s) * 255.0);
-      return qRgb(qBound(0, rr, 255), qBound(0, gg, 255), qBound(0, bb, 255));
+      return interpolateLut(r, g, b, 7, t);
     }
 
     // Turbo -- Google's improved Jet replacement
@@ -165,14 +152,7 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       static constexpr double r[] = {0.190, 0.275, 0.247, 0.085, 0.152, 0.617, 0.964, 0.974, 0.479};
       static constexpr double g[] = {0.072, 0.366, 0.703, 0.916, 0.988, 0.983, 0.787, 0.317, 0.016};
       static constexpr double b[] = {0.232, 0.804, 0.964, 0.757, 0.357, 0.141, 0.180, 0.108, 0.011};
-      const int n                 = 9;
-      const double f              = t * (n - 1);
-      const int i                 = qBound(0, static_cast<int>(f), n - 2);
-      const double s              = f - i;
-      const int rr                = static_cast<int>((r[i] + (r[i + 1] - r[i]) * s) * 255.0);
-      const int gg                = static_cast<int>((g[i] + (g[i + 1] - g[i]) * s) * 255.0);
-      const int bb                = static_cast<int>((b[i] + (b[i + 1] - b[i]) * s) * 255.0);
-      return qRgb(qBound(0, rr, 255), qBound(0, gg, 255), qBound(0, bb, 255));
+      return interpolateLut(r, g, b, 9, t);
     }
 
     // Jet -- classic blue, cyan, green, yellow, red
@@ -1090,36 +1070,10 @@ void Widgets::Waterfall::drawCursor(QPainter* painter, const QRectF& plotRect) c
   painter->drawLine(QPointF(cx, plotRect.top()), QPointF(cx, plotRect.bottom()));
   painter->drawLine(QPointF(plotRect.left(), cy), QPointF(plotRect.right(), cy));
 
-  // Convert cursor position into the visible X (Hz) and Y (seconds or Campbell value) windows
-  const double nyquist = m_samplingRate * 0.5;
-  const double srcWHz  = nyquist / m_xZoom;
-  const double maxPanX = qMax(0.0, (nyquist - srcWHz) * 0.5);
-  const double centerH = nyquist * 0.5 + qBound(-maxPanX, m_xPan * nyquist, maxPanX);
-  const double xMinHz  = centerH - srcWHz * 0.5;
-  const double freqHz  = xMinHz + (cx - plotRect.left()) / plotRect.width() * srcWHz;
-
-  double yMinAxis = 0.0;
-  double yMaxAxis = 1.0;
-  if (m_campbellMode) {
-    yMinAxis = m_yMin;
-    yMaxAxis = m_yMax;
-  } else {
-    static auto& timer = Misc::TimerEvents::instance();
-    const double fps   = timer.fps() > 0 ? timer.fps() : 24.0;
-    yMinAxis           = 0.0;
-    yMaxAxis           = m_historySize / fps;
-  }
-  const double yRange  = yMaxAxis - yMinAxis;
-  const double srcWY   = yRange / m_yZoom;
-  const double maxPanY = qMax(0.0, (yRange - srcWY) * 0.5);
-  const double centerY = (yMinAxis + yMaxAxis) * 0.5 + qBound(-maxPanY, m_yPan * yRange, maxPanY);
-  const double yMinV   = centerY - srcWY * 0.5;
-  const double yMaxV   = centerY + srcWY * 0.5;
-
-  // Time mode is top->bottom; Campbell mode is bottom->top (mirror write direction)
-  const double tY = (cy - plotRect.top()) / plotRect.height();
-  const double yVal =
-    m_campbellMode ? (yMaxV - tY * (yMaxV - yMinV)) : (yMinV + tY * (yMaxV - yMinV));
+  // Compute frequency and time/Campbell readout values
+  double freqHz = 0.0;
+  double yVal   = 0.0;
+  cursorReadoutValues(plotRect, cx, cy, freqHz, yVal);
 
   // Format readout strings
   auto fmtFreq = [](double hz) -> QString {
@@ -1148,7 +1102,57 @@ void Widgets::Waterfall::drawCursor(QPainter* painter, const QRectF& plotRect) c
     m_campbellMode ? QStringLiteral("%1: %2").arg(m_yAxisTitle, QString::number(yVal, 'f', 2))
                    : QObject::tr("Time: −%1").arg(fmtTime(yVal));
 
-  // Tooltip box dimensions
+  drawCursorTooltip(painter, plotRect, cx, cy, freqText, timeText);
+}
+
+/**
+ * @brief Maps cursor pixel position to the visible Hz axis and the Y axis value.
+ */
+void Widgets::Waterfall::cursorReadoutValues(
+  const QRectF& plotRect, double cx, double cy, double& freqHz, double& yVal) const
+{
+  // X axis: convert cursor position into the visible Hz window
+  const double nyquist = m_samplingRate * 0.5;
+  const double srcWHz  = nyquist / m_xZoom;
+  const double maxPanX = qMax(0.0, (nyquist - srcWHz) * 0.5);
+  const double centerH = nyquist * 0.5 + qBound(-maxPanX, m_xPan * nyquist, maxPanX);
+  const double xMinHz  = centerH - srcWHz * 0.5;
+  freqHz               = xMinHz + (cx - plotRect.left()) / plotRect.width() * srcWHz;
+
+  // Y axis: seconds elapsed (time mode) or external dataset value (Campbell mode)
+  double yMinAxis = 0.0;
+  double yMaxAxis = 1.0;
+  if (m_campbellMode) {
+    yMinAxis = m_yMin;
+    yMaxAxis = m_yMax;
+  } else {
+    static auto& timer = Misc::TimerEvents::instance();
+    const double fps   = timer.fps() > 0 ? timer.fps() : 24.0;
+    yMinAxis           = 0.0;
+    yMaxAxis           = m_historySize / fps;
+  }
+  const double yRange  = yMaxAxis - yMinAxis;
+  const double srcWY   = yRange / m_yZoom;
+  const double maxPanY = qMax(0.0, (yRange - srcWY) * 0.5);
+  const double centerY = (yMinAxis + yMaxAxis) * 0.5 + qBound(-maxPanY, m_yPan * yRange, maxPanY);
+  const double yMinV   = centerY - srcWY * 0.5;
+  const double yMaxV   = centerY + srcWY * 0.5;
+
+  // Time mode is top->bottom; Campbell mode is bottom->top (mirror write direction)
+  const double tY = (cy - plotRect.top()) / plotRect.height();
+  yVal = m_campbellMode ? (yMaxV - tY * (yMaxV - yMinV)) : (yMinV + tY * (yMaxV - yMinV));
+}
+
+/**
+ * @brief Renders the two-line crosshair tooltip box, flipping sides as needed.
+ */
+void Widgets::Waterfall::drawCursorTooltip(QPainter* painter,
+                                           const QRectF& plotRect,
+                                           double cx,
+                                           double cy,
+                                           const QString& freqText,
+                                           const QString& timeText) const
+{
   const QFontMetrics fm(painter->font());
   const int padX = 8;
   const int padY = 5;
@@ -1168,13 +1172,12 @@ void Widgets::Waterfall::drawCursor(QPainter* painter, const QRectF& plotRect) c
   tx = qBound(plotRect.left() + 2, tx, plotRect.right() - w - 2);
   ty = qBound(plotRect.top() + 2, ty, plotRect.bottom() - h - 2);
 
-  // Draw the tooltip background
+  // Tooltip background and two-line readout
   const QRectF tipRect(tx, ty, w, h);
   painter->setPen(Qt::NoPen);
   painter->setBrush(QColor(0, 0, 0, 184));
   painter->drawRoundedRect(tipRect, 3, 3);
 
-  // Two-line readout
   painter->setPen(QColor(Qt::white));
   const double textBaseline = ty + padY + fm.ascent();
   painter->drawText(QPointF(tx + padX, textBaseline), freqText);

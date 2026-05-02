@@ -28,6 +28,7 @@
 
 #include "API/CommandRegistry.h"
 #include "API/PathPolicy.h"
+#include "API/SchemaBuilder.h"
 #include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
@@ -45,444 +46,357 @@
  */
 void API::Handlers::ProjectHandler::registerCommands()
 {
-  auto& registry = CommandRegistry::instance();
+  registerFileCommands();
+  registerGroupCommands();
+  registerDatasetCommands();
+  registerActionCommands();
+  registerOutputWidgetCommands();
+  registerParserCommands();
+  registerListCommands();
+}
 
-  // Empty schema for parameterless commands
-  QJsonObject emptySchema;
-  emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
-  emptySchema[QStringLiteral("properties")] = QJsonObject();
-
-  registry.registerCommand(QStringLiteral("project.file.new"),
-                           QStringLiteral("Create new project"),
-                           emptySchema,
-                           &fileNew);
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("title")] = QJsonObject{
-      {       QStringLiteral("type"),        QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Project title")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("title")};
-    registry.registerCommand(QStringLiteral("project.setTitle"),
-                             QStringLiteral("Set project title (params: title)"),
-                             schema,
-                             &setTitle);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("filePath")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Absolute path to project file (.json or .ssproj)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("filePath")};
-    registry.registerCommand(QStringLiteral("project.file.open"),
-                             QStringLiteral("Open project file (params: filePath)"),
-                             schema,
-                             &fileOpen);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("filePath")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Absolute path to save to (headless save-as)")}
-    };
-    props[QStringLiteral("askPath")] = QJsonObject{
-      {       QStringLiteral("type"),                                 QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Show native save dialog (default false)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    registry.registerCommand(QStringLiteral("project.file.save"),
-                             QStringLiteral("Save project (params: askPath=false)"),
-                             schema,
-                             &fileSave);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("config")] = QJsonObject{
-      {       QStringLiteral("type"),                            QStringLiteral("object")},
-      {QStringLiteral("description"), QStringLiteral("Project configuration JSON object")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("config")};
-    registry.registerCommand(QStringLiteral("project.loadFromJSON"),
-                             QStringLiteral("Load project from JSON object (params: config)"),
-                             schema,
-                             &loadFromJSON);
-  }
-
-  registry.registerCommand(QStringLiteral("project.getStatus"),
-                           QStringLiteral("Get project status"),
-                           emptySchema,
-                           &getStatus);
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("title")] = QJsonObject{
-      {       QStringLiteral("type"),      QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Group title")}
-    };
-    props[QStringLiteral("widgetType")] = QJsonObject{
-      {       QStringLiteral("type"),                 QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Widget type index (0-6)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("title"), QStringLiteral("widgetType")};
-    registry.registerCommand(QStringLiteral("project.group.add"),
-                             QStringLiteral("Add group (params: title, widgetType)"),
-                             schema,
-                             &groupAdd);
-  }
-
-  registry.registerCommand(QStringLiteral("project.group.delete"),
-                           QStringLiteral("Delete current group"),
-                           emptySchema,
-                           &groupDelete);
-
-  registry.registerCommand(QStringLiteral("project.group.duplicate"),
-                           QStringLiteral("Duplicate current group"),
-                           emptySchema,
-                           &groupDuplicate);
-
-  // project.group.select -- set the current group for delete/duplicate.
-  {
-    QJsonObject props;
-    props[QStringLiteral("groupId")] = QJsonObject{
-      {       QStringLiteral("type"),            QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Group id to select")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("groupId")};
-    registry.registerCommand(
-      QStringLiteral("project.group.select"),
-      QStringLiteral("Select a group by id so next delete/duplicate targets it"),
-      schema,
-      &groupSelect);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("options")] = QJsonObject{
-      {       QStringLiteral("type"),                         QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Dataset option bit flags (0-63)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("options")};
-    registry.registerCommand(QStringLiteral("project.dataset.add"),
-                             QStringLiteral("Add dataset (params: options)"),
-                             schema,
-                             &datasetAdd);
-  }
-
-  registry.registerCommand(QStringLiteral("project.dataset.delete"),
-                           QStringLiteral("Delete current dataset"),
-                           emptySchema,
-                           &datasetDelete);
-
-  registry.registerCommand(QStringLiteral("project.dataset.duplicate"),
-                           QStringLiteral("Duplicate current dataset"),
-                           emptySchema,
-                           &datasetDuplicate);
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("option")] = QJsonObject{
-      {       QStringLiteral("type"),                       QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Dataset option flag to toggle")}
-    };
-    props[QStringLiteral("enabled")] = QJsonObject{
-      {       QStringLiteral("type"),                                 QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Whether to enable or disable the option")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("option"), QStringLiteral("enabled")};
-    registry.registerCommand(QStringLiteral("project.dataset.setOption"),
-                             QStringLiteral("Toggle dataset option (params: option, enabled)"),
-                             schema,
-                             &datasetSetOption);
-  }
-
-  // project.dataset.setVirtual -- gate the frame-index field
-  {
-    QJsonObject props;
-    props[Keys::GroupId] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Owning group id")}
-    };
-    props[Keys::DatasetId] = QJsonObject{
-      {       QStringLiteral("type"),                     QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Dataset id within the group")}
-    };
-    props[Keys::Virtual] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("boolean")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Mark dataset as virtual (computed by transform)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{
-      QString(Keys::GroupId),
-      QString(Keys::DatasetId),
-      QString(Keys::Virtual),
-    };
-    registry.registerCommand(
-      QStringLiteral("project.dataset.setVirtual"),
-      QStringLiteral("Toggle the virtual flag on a dataset (params: groupId, datasetId, virtual)"),
-      schema,
-      &datasetSetVirtual);
-  }
-
-  // project.dataset.setTransformCode -- set Lua/JS transform source
-  {
-    QJsonObject props;
-    props[Keys::GroupId] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Owning group id")}
-    };
-    props[Keys::DatasetId] = QJsonObject{
-      {       QStringLiteral("type"),                     QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Dataset id within the group")}
-    };
-    props[QStringLiteral("code")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Transform source (Lua or JS matching source language)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{
-      QString(Keys::GroupId),
-      QString(Keys::DatasetId),
-      QStringLiteral("code"),
-    };
-    registry.registerCommand(
-      QStringLiteral("project.dataset.setTransformCode"),
-      QStringLiteral("Set dataset transformCode (params: groupId, datasetId, code). Empty clears."),
-      schema,
-      &datasetSetTransformCode);
-  }
+/**
+ * @brief Register file lifecycle commands (new/open/save/load/getStatus).
+ */
+void API::Handlers::ProjectHandler::registerFileCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
 
   registry.registerCommand(
-    QStringLiteral("project.action.add"), QStringLiteral("Add action"), emptySchema, &actionAdd);
+    QStringLiteral("project.file.new"), QStringLiteral("Create new project"), empty, &fileNew);
 
-  registry.registerCommand(QStringLiteral("project.action.delete"),
-                           QStringLiteral("Delete current action"),
-                           emptySchema,
-                           &actionDelete);
+  registry.registerCommand(
+    QStringLiteral("project.setTitle"),
+    QStringLiteral("Set project title (params: title)"),
+    makeSchema({
+      {QStringLiteral("title"), QStringLiteral("string"), QStringLiteral("Project title")}
+  }),
+    &setTitle);
 
-  registry.registerCommand(QStringLiteral("project.action.duplicate"),
-                           QStringLiteral("Duplicate current action"),
-                           emptySchema,
-                           &actionDuplicate);
+  registry.registerCommand(QStringLiteral("project.file.open"),
+                           QStringLiteral("Open project file (params: filePath)"),
+                           makeSchema({
+                             {QStringLiteral("filePath"),
+                              QStringLiteral("string"),
+                              QStringLiteral("Absolute path to project file (.json or .ssproj)")}
+  }),
+                           &fileOpen);
 
-  // Output widget management
-  {
-    QJsonObject props;
-    props[QStringLiteral("type")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")   },
-      {QStringLiteral("description"),
-       QStringLiteral("OutputWidgetType enum: 0=Button, 1=Slider, 2=Toggle, "
-       "3=TextField, 4=Knob")}
-    };
-    QJsonObject owSchema;
-    owSchema[QStringLiteral("type")]       = QStringLiteral("object");
-    owSchema[QStringLiteral("properties")] = props;
-    owSchema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("type")};
-    registry.registerCommand(QStringLiteral("project.outputWidget.add"),
-                             QStringLiteral("Add output widget of the given type to the "
-                                            "currently selected group"),
-                             owSchema,
-                             &outputWidgetAdd);
-  }
+  registry.registerCommand(QStringLiteral("project.file.save"),
+                           QStringLiteral("Save project (params: askPath=false)"),
+                           makeSchema(
+                             {
+  },
+                             {{QStringLiteral("filePath"),
+                               QStringLiteral("string"),
+                               QStringLiteral("Absolute path to save to (headless save-as)")},
+                              {QStringLiteral("askPath"),
+                               QStringLiteral("boolean"),
+                               QStringLiteral("Show native save dialog (default false)")}}),
+                           &fileSave);
 
-  registry.registerCommand(QStringLiteral("project.outputWidget.delete"),
-                           QStringLiteral("Delete current output widget"),
-                           emptySchema,
-                           &outputWidgetDelete);
+  registry.registerCommand(QStringLiteral("project.loadFromJSON"),
+                           QStringLiteral("Load project from JSON object (params: config)"),
+                           makeSchema({
+                             {QStringLiteral("config"),
+                              QStringLiteral("object"),
+                              QStringLiteral("Project configuration JSON object")}
+  }),
+                           &loadFromJSON);
 
-  registry.registerCommand(QStringLiteral("project.outputWidget.duplicate"),
-                           QStringLiteral("Duplicate current output widget"),
-                           emptySchema,
-                           &outputWidgetDuplicate);
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("code")] = QJsonObject{
-      {       QStringLiteral("type"),                               QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Frame parser script code (JS or Lua)")}
-    };
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),                  QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
-    };
-    props[QStringLiteral("language")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                      },
-      {QStringLiteral("description"),
-       QStringLiteral("Optional: 0 = JavaScript, 1 = Lua. When supplied, the "
-       "source language is flipped before the code is validated "
-       "and script errors are returned as API errors.")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("code")};
-    registry.registerCommand(QStringLiteral("project.parser.setCode"),
-                             QStringLiteral("Set frame parser code (params: code, "
-                                            "optional sourceId, optional language)"),
-                             schema,
-                             &parserSetCode);
-
-    registry.registerCommand(QStringLiteral("project.frameParser.setCode"),
-                             QStringLiteral("Set frame parser code (params: code, "
-                                            "optional sourceId, optional language)"),
-                             schema,
-                             &parserSetCode);
-  }
-
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),                  QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    registry.registerCommand(QStringLiteral("project.parser.getCode"),
-                             QStringLiteral("Get frame parser code"),
-                             schema,
-                             &parserGetCode);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("language")] = QJsonObject{
-      {       QStringLiteral("type"),                                  QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Script language: 0 = JavaScript, 1 = Lua")}
-    };
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),                       QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source identifier (default 0)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("language")};
-    registry.registerCommand(QStringLiteral("project.frameParser.setLanguage"),
-                             QStringLiteral("Set the script language used by the frame parser "
-                                            "for a given source (params: language, sourceId)"),
-                             schema,
-                             &parserSetLanguage);
-  }
-
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),                       QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source identifier (default 0)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    registry.registerCommand(QStringLiteral("project.frameParser.getLanguage"),
-                             QStringLiteral("Get the script language used by the frame parser "
-                                            "for a given source"),
-                             schema,
-                             &parserGetLanguage);
-  }
-
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),                  QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
-    };
-    props[QStringLiteral("startSequence")] = QJsonObject{
-      {       QStringLiteral("type"),                QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Frame start delimiter")}
-    };
-    props[QStringLiteral("endSequence")] = QJsonObject{
-      {       QStringLiteral("type"),              QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Frame end delimiter")}
-    };
-    props[Keys::ChecksumAlgorithm] = QJsonObject{
-      {       QStringLiteral("type"),                  QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Checksum algorithm name")}
-    };
-    props[Keys::FrameDetection] = QJsonObject{
-      {       QStringLiteral("type"),                    QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Frame detection mode (0-3)")}
-    };
-    props[QStringLiteral("operationMode")] = QJsonObject{
-      {       QStringLiteral("type"),              QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Operation mode (0-2)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    registry.registerCommand(
-      QStringLiteral("project.frameParser.configure"),
-      QStringLiteral("Configure frame parser settings (params: startSequence, endSequence, "
-                     "checksumAlgorithm, frameDetection, operationMode)"),
-      schema,
-      &frameParserConfigure);
-  }
-
-  registry.registerCommand(QStringLiteral("project.frameParser.getConfig"),
-                           QStringLiteral("Get frame parser configuration"),
-                           emptySchema,
-                           &frameParserGetConfig);
+  registry.registerCommand(
+    QStringLiteral("project.getStatus"), QStringLiteral("Get project status"), empty, &getStatus);
 
   registry.registerCommand(QStringLiteral("project.exportJson"),
                            QStringLiteral("Export project as JSON"),
-                           emptySchema,
+                           empty,
                            &exportJson);
 
   registry.registerCommand(QStringLiteral("project.loadIntoFrameBuilder"),
                            QStringLiteral("Load current project into FrameBuilder"),
-                           emptySchema,
+                           empty,
                            &loadIntoFrameBuilder);
+}
+
+/**
+ * @brief Register group CRUD commands.
+ */
+void API::Handlers::ProjectHandler::registerGroupCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
+
+  registry.registerCommand(
+    QStringLiteral("project.group.add"),
+    QStringLiteral("Add group (params: title, widgetType)"),
+    makeSchema({
+      {     QStringLiteral("title"),QStringLiteral("string"),QStringLiteral("Group title")                  },
+      {QStringLiteral("widgetType"),
+       QStringLiteral("integer"),
+       QStringLiteral("Widget type index (0-6)")}
+  }),
+    &groupAdd);
+
+  registry.registerCommand(QStringLiteral("project.group.delete"),
+                           QStringLiteral("Delete current group"),
+                           empty,
+                           &groupDelete);
+
+  registry.registerCommand(QStringLiteral("project.group.duplicate"),
+                           QStringLiteral("Duplicate current group"),
+                           empty,
+                           &groupDuplicate);
+
+  registry.registerCommand(
+    QStringLiteral("project.group.select"),
+    QStringLiteral("Select a group by id so next delete/duplicate targets it"),
+    makeSchema({
+      {QStringLiteral("groupId"),
+       QStringLiteral("integer"),
+       QStringLiteral("Group id to select")}
+  }),
+    &groupSelect);
+}
+
+/**
+ * @brief Register dataset CRUD and field-setter commands.
+ */
+void API::Handlers::ProjectHandler::registerDatasetCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
+
+  registry.registerCommand(QStringLiteral("project.dataset.add"),
+                           QStringLiteral("Add dataset (params: options)"),
+                           makeSchema({
+                             {QStringLiteral("options"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Dataset option bit flags (0-63)")}
+  }),
+                           &datasetAdd);
+
+  registry.registerCommand(QStringLiteral("project.dataset.delete"),
+                           QStringLiteral("Delete current dataset"),
+                           empty,
+                           &datasetDelete);
+
+  registry.registerCommand(QStringLiteral("project.dataset.duplicate"),
+                           QStringLiteral("Duplicate current dataset"),
+                           empty,
+                           &datasetDuplicate);
+
+  registry.registerCommand(QStringLiteral("project.dataset.setOption"),
+                           QStringLiteral("Toggle dataset option (params: option, enabled)"),
+                           makeSchema({
+                             { QStringLiteral("option"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Dataset option flag to toggle")          },
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Whether to enable or disable the option")}
+  }),
+                           &datasetSetOption);
+
+  registry.registerCommand(
+    QStringLiteral("project.dataset.setVirtual"),
+    QStringLiteral("Toggle the virtual flag on a dataset (params: groupId, datasetId, virtual)"),
+    makeSchema({
+      {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                           },
+      {QString(Keys::DatasetId),
+       QStringLiteral("integer"),
+       QStringLiteral("Dataset id within the group")                    },
+      {  QString(Keys::Virtual),
+       QStringLiteral("boolean"),
+       QStringLiteral("Mark dataset as virtual (computed by transform)")}
+  }),
+    &datasetSetVirtual);
+
+  registry.registerCommand(
+    QStringLiteral("project.dataset.setTransformCode"),
+    QStringLiteral("Set dataset transformCode (params: groupId, datasetId, code). Empty clears."),
+    makeSchema({
+      {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                           },
+      {QString(Keys::DatasetId),
+       QStringLiteral("integer"),
+       QStringLiteral("Dataset id within the group")                          },
+      {  QStringLiteral("code"),
+       QStringLiteral("string"),
+       QStringLiteral("Transform source (Lua or JS matching source language)")}
+  }),
+    &datasetSetTransformCode);
+}
+
+/**
+ * @brief Register action CRUD commands.
+ */
+void API::Handlers::ProjectHandler::registerActionCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
+
+  registry.registerCommand(
+    QStringLiteral("project.action.add"), QStringLiteral("Add action"), empty, &actionAdd);
+  registry.registerCommand(QStringLiteral("project.action.delete"),
+                           QStringLiteral("Delete current action"),
+                           empty,
+                           &actionDelete);
+  registry.registerCommand(QStringLiteral("project.action.duplicate"),
+                           QStringLiteral("Duplicate current action"),
+                           empty,
+                           &actionDuplicate);
+}
+
+/**
+ * @brief Register output-widget CRUD commands.
+ */
+void API::Handlers::ProjectHandler::registerOutputWidgetCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
+
+  registry.registerCommand(
+    QStringLiteral("project.outputWidget.add"),
+    QStringLiteral("Add output widget of the given type to the currently selected group"),
+    makeSchema({
+      {QStringLiteral("type"),
+       QStringLiteral("integer"),
+       QStringLiteral(
+         "OutputWidgetType enum: 0=Button, 1=Slider, 2=Toggle, 3=TextField, 4=Knob")}
+  }),
+    &outputWidgetAdd);
+
+  registry.registerCommand(QStringLiteral("project.outputWidget.delete"),
+                           QStringLiteral("Delete current output widget"),
+                           empty,
+                           &outputWidgetDelete);
+
+  registry.registerCommand(QStringLiteral("project.outputWidget.duplicate"),
+                           QStringLiteral("Duplicate current output widget"),
+                           empty,
+                           &outputWidgetDuplicate);
+}
+
+/**
+ * @brief Register frame-parser commands (code/language/configuration).
+ */
+void API::Handlers::ProjectHandler::registerParserCommands()
+{
+  auto& registry = CommandRegistry::instance();
+
+  const auto setCodeSchema = makeSchema(
+    {
+      {QStringLiteral("code"),
+       QStringLiteral("string"),
+       QStringLiteral("Frame parser script code (JS or Lua)")}
+  },
+    {{QString(Keys::SourceId),
+      QStringLiteral("integer"),
+      QStringLiteral("Source index (default 0)")},
+     {QStringLiteral("language"),
+      QStringLiteral("integer"),
+      QStringLiteral("Optional: 0 = JavaScript, 1 = Lua. When supplied, the source language "
+                     "is flipped before the code is validated and script errors are returned "
+                     "as API errors.")}});
+
+  registry.registerCommand(QStringLiteral("project.parser.setCode"),
+                           QStringLiteral("Set frame parser code (params: code, "
+                                          "optional sourceId, optional language)"),
+                           setCodeSchema,
+                           &parserSetCode);
+  registry.registerCommand(QStringLiteral("project.frameParser.setCode"),
+                           QStringLiteral("Set frame parser code (params: code, "
+                                          "optional sourceId, optional language)"),
+                           setCodeSchema,
+                           &parserSetCode);
+
+  registry.registerCommand(QStringLiteral("project.parser.getCode"),
+                           QStringLiteral("Get frame parser code"),
+                           makeSchema(
+                             {
+  },
+                             {{QString(Keys::SourceId),
+                               QStringLiteral("integer"),
+                               QStringLiteral("Source index (default 0)")}}),
+                           &parserGetCode);
+
+  registry.registerCommand(QStringLiteral("project.frameParser.setLanguage"),
+                           QStringLiteral("Set the script language used by the frame parser "
+                                          "for a given source (params: language, sourceId)"),
+                           makeSchema(
+                             {
+                               {QStringLiteral("language"),
+                                QStringLiteral("integer"),
+                                QStringLiteral("Script language: 0 = JavaScript, 1 = Lua")}
+  },
+                             {{QString(Keys::SourceId),
+                               QStringLiteral("integer"),
+                               QStringLiteral("Source identifier (default 0)")}}),
+                           &parserSetLanguage);
+
+  registry.registerCommand(
+    QStringLiteral("project.frameParser.getLanguage"),
+    QStringLiteral("Get the script language used by the frame parser for a given source"),
+    makeSchema(
+      {
+  },
+      {{QString(Keys::SourceId),
+        QStringLiteral("integer"),
+        QStringLiteral("Source identifier (default 0)")}}),
+    &parserGetLanguage);
+
+  registry.registerCommand(
+    QStringLiteral("project.frameParser.configure"),
+    QStringLiteral("Configure frame parser settings (params: startSequence, endSequence, "
+                   "checksumAlgorithm, frameDetection, operationMode)"),
+    makeSchema(
+      {
+  },
+      {{QString(Keys::SourceId),
+        QStringLiteral("integer"),
+        QStringLiteral("Source index (default 0)")},
+       {QStringLiteral("startSequence"),
+        QStringLiteral("string"),
+        QStringLiteral("Frame start delimiter")},
+       {QStringLiteral("endSequence"),
+        QStringLiteral("string"),
+        QStringLiteral("Frame end delimiter")},
+       {QString(Keys::ChecksumAlgorithm),
+        QStringLiteral("string"),
+        QStringLiteral("Checksum algorithm name")},
+       {QString(Keys::FrameDetection),
+        QStringLiteral("integer"),
+        QStringLiteral("Frame detection mode (0-3)")},
+       {QStringLiteral("operationMode"),
+        QStringLiteral("integer"),
+        QStringLiteral("Operation mode (0-2)")}}),
+    &frameParserConfigure);
+
+  registry.registerCommand(QStringLiteral("project.frameParser.getConfig"),
+                           QStringLiteral("Get frame parser configuration"),
+                           emptySchema(),
+                           &frameParserGetConfig);
+}
+
+/**
+ * @brief Register list / enumeration commands.
+ */
+void API::Handlers::ProjectHandler::registerListCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
 
   registry.registerCommand(QStringLiteral("project.groups.list"),
                            QStringLiteral("List all groups with dataset counts"),
-                           emptySchema,
+                           empty,
                            &groupsList);
-
   registry.registerCommand(QStringLiteral("project.datasets.list"),
                            QStringLiteral("List all datasets across all groups"),
-                           emptySchema,
+                           empty,
                            &datasetsList);
-
   registry.registerCommand(QStringLiteral("project.actions.list"),
                            QStringLiteral("List all actions"),
-                           emptySchema,
+                           empty,
                            &actionsList);
 }
 

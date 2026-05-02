@@ -348,6 +348,28 @@ QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescr
   QString code;
 
   const auto totalSignals = countTotalSignals(messages);
+  code += frameParserHeader(totalSignals);
+  code += frameParserExtractHelper();
+
+  int datasetIndex = 1;
+  for (const auto& message : messages) {
+    if (message.signalDescriptions().isEmpty())
+      continue;
+
+    code += generateMessageDecoder(message, datasetIndex);
+    code += "\n";
+  }
+
+  code += frameParserDispatchTable(messages);
+  return code;
+}
+
+/**
+ * @brief Returns the auto-generated banner and the values table preamble.
+ */
+QString DataModel::DBCImporter::frameParserHeader(int totalSignals) const
+{
+  QString code;
 
   // clang-format off
   code += "--\n";
@@ -368,7 +390,16 @@ QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescr
   code += QString("local values = {}\nfor i = 1, %1 do values[i] = 0 end\n\n").arg(totalSignals);
   // clang-format on
 
-  // Emit extractSignal helper for bit-level extraction
+  return code;
+}
+
+/**
+ * @brief Returns the extractSignal() Lua helper used by every per-message decoder.
+ */
+QString DataModel::DBCImporter::frameParserExtractHelper() const
+{
+  QString code;
+
   // clang-format off
   code += "local function extractSignal(data, startBit, length, isBigEndian, isSigned)\n";
   code += "  local value = 0\n\n";
@@ -422,17 +453,17 @@ QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescr
   code += "end\n\n";
   // clang-format on
 
-  // Emit per-message decoder functions
-  int datasetIndex = 1;
-  for (const auto& message : messages) {
-    if (message.signalDescriptions().isEmpty())
-      continue;
+  return code;
+}
 
-    code += generateMessageDecoder(message, datasetIndex);
-    code += "\n";
-  }
+/**
+ * @brief Emits the parse() function body that routes each frame to the matching decode_XXXX().
+ */
+QString DataModel::DBCImporter::frameParserDispatchTable(
+  const QList<QCanMessageDescription>& messages) const
+{
+  QString code;
 
-  // Emit main parse function with CAN ID routing
   // clang-format off
   code += "function parse(frame)\n";
   code += "  if #frame < 3 then return values end\n\n";
@@ -590,8 +621,36 @@ QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& 
   if (allBoolean)
     return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
 
-  const auto family = detectSignalFamily(signalDescriptions);
+  const auto family   = detectSignalFamily(signalDescriptions);
+  const auto familyId = resolveSignalFamilyWidget(family, signalCount, signalDescriptions);
+  if (!familyId.isEmpty())
+    return familyId;
 
+  const auto gpsId = detectGpsWidget(signalDescriptions);
+  if (!gpsId.isEmpty())
+    return gpsId;
+
+  const auto motionId = detectMotionWidget(signalDescriptions);
+  if (!motionId.isEmpty())
+    return motionId;
+
+  if (signalCount >= 2 && signalCount <= 8) {
+    const int plottableCount = countPlottable(signalDescriptions);
+    if (plottableCount >= 2)
+      return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
+  }
+
+  return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
+}
+
+/**
+ * @brief Returns a widget id for an explicitly recognised signal family, or empty if unmatched.
+ */
+QString DataModel::DBCImporter::resolveSignalFamilyWidget(
+  SignalFamily family,
+  int signalCount,
+  const QList<QCanSignalDescription>& signalDescriptions) const
+{
   switch (family) {
     case WheelSpeeds:
     case TirePressures:
@@ -623,55 +682,69 @@ QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& 
       break;
   }
 
-  if (signalCount >= 2) {
-    bool hasLat = false;
-    bool hasLon = false;
+  return QString();
+}
 
-    for (const auto& signal : signalDescriptions) {
-      const auto name = signal.name().toLower();
-      if (name.contains("lat"))
-        hasLat = true;
+/**
+ * @brief Returns the GPS widget id when the message carries lat/lon-style signals.
+ */
+QString DataModel::DBCImporter::detectGpsWidget(
+  const QList<QCanSignalDescription>& signalDescriptions) const
+{
+  if (signalDescriptions.size() < 2)
+    return QString();
 
-      if (name.contains("lon") || name.contains("lng"))
-        hasLon = true;
-    }
+  bool hasLat = false;
+  bool hasLon = false;
 
-    if (hasLat && hasLon)
-      return SerialStudio::groupWidgetId(SerialStudio::GPS);
+  for (const auto& signal : signalDescriptions) {
+    const auto name = signal.name().toLower();
+    if (name.contains("lat"))
+      hasLat = true;
+
+    if (name.contains("lon") || name.contains("lng"))
+      hasLon = true;
   }
 
-  if (signalCount == 3) {
-    int accelCount = 0;
-    for (const auto& signal : signalDescriptions) {
-      const auto name = signal.name().toLower();
-      const auto unit = signal.physicalUnit().toLower();
-      if (name.contains("accel") || unit.contains("m/s") || unit.contains("g"))
-        accelCount++;
-    }
+  if (hasLat && hasLon)
+    return SerialStudio::groupWidgetId(SerialStudio::GPS);
 
-    if (accelCount == 3)
-      return SerialStudio::groupWidgetId(SerialStudio::Accelerometer);
+  return QString();
+}
 
-    int gyroCount = 0;
-    for (const auto& signal : signalDescriptions) {
-      const auto name = signal.name().toLower();
-      const auto unit = signal.physicalUnit().toLower();
-      if (name.contains("gyro") || name.contains("roll") || name.contains("pitch")
-          || name.contains("yaw") || unit.contains("deg/s") || unit.contains("rad/s"))
-        gyroCount++;
-    }
+/**
+ * @brief Returns Accelerometer/Gyroscope when the 3-signal message names match an IMU pattern.
+ */
+QString DataModel::DBCImporter::detectMotionWidget(
+  const QList<QCanSignalDescription>& signalDescriptions) const
+{
+  if (signalDescriptions.size() != 3)
+    return QString();
 
-    if (gyroCount == 3)
-      return SerialStudio::groupWidgetId(SerialStudio::Gyroscope);
+  int accelCount = 0;
+  for (const auto& signal : signalDescriptions) {
+    const auto name = signal.name().toLower();
+    const auto unit = signal.physicalUnit().toLower();
+    if (name.contains("accel") || unit.contains("m/s") || unit.contains("g"))
+      accelCount++;
   }
 
-  if (signalCount >= 2 && signalCount <= 8) {
-    const int plottableCount = countPlottable(signalDescriptions);
-    if (plottableCount >= 2)
-      return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
+  if (accelCount == 3)
+    return SerialStudio::groupWidgetId(SerialStudio::Accelerometer);
+
+  int gyroCount = 0;
+  for (const auto& signal : signalDescriptions) {
+    const auto name = signal.name().toLower();
+    const auto unit = signal.physicalUnit().toLower();
+    if (name.contains("gyro") || name.contains("roll") || name.contains("pitch")
+        || name.contains("yaw") || unit.contains("deg/s") || unit.contains("rad/s"))
+      gyroCount++;
   }
 
-  return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
+  if (gyroCount == 3)
+    return SerialStudio::groupWidgetId(SerialStudio::Gyroscope);
+
+  return QString();
 }
 
 //--------------------------------------------------------------------------------------------------

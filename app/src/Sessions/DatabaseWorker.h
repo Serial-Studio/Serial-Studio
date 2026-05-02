@@ -20,11 +20,16 @@
 #  include <QObject>
 #  include <QSqlDatabase>
 #  include <QString>
+#  include <QStringList>
 #  include <QVariantList>
 #  include <QVariantMap>
 #  include <vector>
 
 #  include "Sessions/ReportData.h"
+
+class QFile;
+class QSqlQuery;
+class QTextStream;
 
 namespace Sessions {
 
@@ -109,6 +114,17 @@ private:
 
   [[nodiscard]] QVariantList tagsForSession(int sessionId);
   [[nodiscard]] static QString formatDateForDisplay(const QString& isoDate);
+
+  [[nodiscard]] bool loadCsvColumns(int sessionId,
+                                    std::vector<int>& uniqueIds,
+                                    QStringList& headerCells,
+                                    QString& errorOut);
+  [[nodiscard]] bool streamCsvRows(QSqlQuery& readQ,
+                                   QFile& file,
+                                   QTextStream& out,
+                                   const std::vector<int>& uniqueIds,
+                                   qint64 totalRows,
+                                   const QString& outputPath);
 
 private:
   QSqlDatabase m_db;

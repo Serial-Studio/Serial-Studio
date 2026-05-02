@@ -32,6 +32,11 @@ public:
   static void registerCommands();
 
 private:
+  static void registerStatusCommands();
+  static void registerStateCommands();
+  static void registerLayoutCommands();
+  static void registerWidgetSettingCommands();
+
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
   static CommandResponse getGroups(const QString& id, const QJsonObject& params);
   static CommandResponse setActiveGroup(const QString& id, const QJsonObject& params);

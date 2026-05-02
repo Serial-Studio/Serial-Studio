@@ -982,25 +982,19 @@ void Widgets::GPS::paintMap(QPainter* painter, const QSize& view)
   // Disable antialiasing for tile rendering to prevent seams
   painter->setRenderHint(QPainter::Antialiasing, false);
   painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-  // Fill the painter with a background
   painter->fillRect(painter->viewport(), QColor(0x0C, 0x47, 0x5C));
 
   // Fractional zoom handling for smooth zooming
   const int baseZoom          = qFloor(m_zoom);
   const double fractionalZoom = m_zoom - baseZoom;
   const double scale          = qPow(2.0, fractionalZoom);
-
-  // Tile sizing constants
   const int tileSize          = 256;
   const double scaledTileSize = tileSize * scale;
 
   // Convert m_centerTile from fractional zoom to base zoom for tile fetching
   const QPointF centerTileBase = m_centerTile / scale;
-
-  // Integer tile coordinates of the center tile at base zoom
-  const int centerX = static_cast<int>(centerTileBase.x());
-  const int centerY = static_cast<int>(centerTileBase.y());
+  const int centerX            = static_cast<int>(centerTileBase.x());
+  const int centerY            = static_cast<int>(centerTileBase.y());
 
   // Pixel offset rounded to integer pixels to avoid seams during auto-tracking
   const int offsetX = qRound((centerTileBase.x() - centerX) * scaledTileSize);
@@ -1013,80 +1007,78 @@ void Widgets::GPS::paintMap(QPainter* painter, const QSize& view)
   // Render visible tiles
   for (int dx = -tilesX / 2; dx <= tilesX / 2; ++dx) {
     for (int dy = -tilesY / 2; dy <= tilesY / 2; ++dy) {
-      // Compute absolute tile coordinates relative to map center
-      const int tx = centerX + dx;
-      const int ty = centerY + dy;
-
-      // Wrap X to allow seamless east/west panning around the globe
+      const int tx        = centerX + dx;
+      const int ty        = centerY + dy;
       const int wrappedTx = (tx % (1 << baseZoom) + (1 << baseZoom)) % (1 << baseZoom);
 
       // Skip if tile is outside vertical bounds (no wrapping in Y)
       if (ty < 0 || ty >= (1 << baseZoom))
         continue;
 
-      // Generate tile URL for current zoom level
-      const QString url = tileUrl(wrappedTx, ty, baseZoom);
-
       // Compute pixel position on screen for drawing this tile
-      const int drawX = view.width() / 2 + qRound(dx * scaledTileSize) - offsetX;
-      const int drawY = view.height() / 2 + qRound(dy * scaledTileSize) - offsetY;
-
-      // Target rectangle for scaled tile rendering (rounded to integers)
+      const QString url = tileUrl(wrappedTx, ty, baseZoom);
+      const int drawX   = view.width() / 2 + qRound(dx * scaledTileSize) - offsetX;
+      const int drawY   = view.height() / 2 + qRound(dy * scaledTileSize) - offsetY;
       const QRect targetRect(drawX, drawY, qRound(scaledTileSize), qRound(scaledTileSize));
 
-      // Draw tile if it's already in cache (scaled for fractional zoom)
+      // Draw tile if it's already in cache, otherwise fall back to scaled lower-zoom tiles
       if (s_tileCache.contains(url))
         painter->drawImage(targetRect, *s_tileCache.object(url));
 
-      // Tile not found: fallback to scaled lower-zoom tiles if possible
       else
         renderFallbackTile(painter, tx, ty, baseZoom, targetRect, scaledTileSize);
 
-      // Overlay global cloud image tile
-      if (m_showWeather && !m_cloudOverlay.isNull() && baseZoom <= WEATHER_MAX_ZOOM) {
-        // Cloud image uses equirectangular projection (typically 4096x2048)
-        const int cloudWidth  = m_cloudOverlay.width();
-        const int cloudHeight = m_cloudOverlay.height();
-
-        // Number of tiles at the current zoom level
-        const double n = 1 << baseZoom;
-
-        // Compute geographic longitude bounds of the tile
-        double lon0 = (wrappedTx / n) * 360.0 - 180.0;
-        double lon1 = ((wrappedTx + 1) / n) * 360.0 - 180.0;
-
-        // Convert tile Y to latitude using inverse Web Mercator
-        double lat0 = 180.0 / M_PI * std::atan(std::sinh(M_PI * (1 - 2.0 * ty / n)));
-        double lat1 = 180.0 / M_PI * std::atan(std::sinh(M_PI * (1 - 2.0 * (ty + 1) / n)));
-
-        // Normalize longitude to [0,1] horizontal UV range
-        double u0 = (lon0 + 180.0) / 360.0;
-        double u1 = (lon1 + 180.0) / 360.0;
-
-        // Normalize latitude to [0,1] vertical UV range (top = 0, bottom = 1)
-        double v0 = (90.0 - lat0) / 180.0;
-        double v1 = (90.0 - lat1) / 180.0;
-
-        // Convert UVs to source pixel rectangle in the cloud image
-        QRect sourceRect(int(u0 * cloudWidth),
-                         int(v0 * cloudHeight),
-                         int((u1 - u0) * cloudWidth),
-                         int((v1 - v0) * cloudHeight));
-
-        // Crop and scale the source image tile to the target size
-        const int roundedSize = qRound(scaledTileSize);
-        QImage cropped =
-          m_cloudOverlay.copy(sourceRect)
-            .scaled(roundedSize, roundedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-        painter->drawImage(targetRect, cropped);
-      }
-
-      // Overlay NASA GIBS weather and reference tiles
+      // Overlay global cloud image and NASA GIBS reference layers
+      renderCloudOverlay(painter, wrappedTx, ty, baseZoom, targetRect, scaledTileSize);
       renderWeatherOverlay(painter, wrappedTx, ty, baseZoom, targetRect);
       renderReferenceOverlay(painter, wrappedTx, ty, baseZoom, targetRect);
     }
   }
+}
+
+/**
+ * @brief Overlays the equirectangular cloud image onto the given tile rect.
+ */
+void Widgets::GPS::renderCloudOverlay(QPainter* painter,
+                                      int wrappedTx,
+                                      int ty,
+                                      int baseZoom,
+                                      const QRect& targetRect,
+                                      double scaledTileSize)
+{
+  if (!m_showWeather || m_cloudOverlay.isNull() || baseZoom > WEATHER_MAX_ZOOM)
+    return;
+
+  // Cloud image uses equirectangular projection (typically 4096x2048)
+  const int cloudWidth  = m_cloudOverlay.width();
+  const int cloudHeight = m_cloudOverlay.height();
+  const double n        = 1 << baseZoom;
+
+  // Compute geographic longitude bounds and Web Mercator latitude bounds
+  const double lon0 = (wrappedTx / n) * 360.0 - 180.0;
+  const double lon1 = ((wrappedTx + 1) / n) * 360.0 - 180.0;
+  const double lat0 = 180.0 / M_PI * std::atan(std::sinh(M_PI * (1 - 2.0 * ty / n)));
+  const double lat1 = 180.0 / M_PI * std::atan(std::sinh(M_PI * (1 - 2.0 * (ty + 1) / n)));
+
+  // Normalize lon/lat to [0,1] UV range
+  const double u0 = (lon0 + 180.0) / 360.0;
+  const double u1 = (lon1 + 180.0) / 360.0;
+  const double v0 = (90.0 - lat0) / 180.0;
+  const double v1 = (90.0 - lat1) / 180.0;
+
+  // Convert UVs to source pixel rectangle in the cloud image
+  const QRect sourceRect(int(u0 * cloudWidth),
+                         int(v0 * cloudHeight),
+                         int((u1 - u0) * cloudWidth),
+                         int((v1 - v0) * cloudHeight));
+
+  // Crop and scale the source image tile to the target size
+  const int roundedSize = qRound(scaledTileSize);
+  const QImage cropped =
+    m_cloudOverlay.copy(sourceRect)
+      .scaled(roundedSize, roundedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+  painter->drawImage(targetRect, cropped);
 }
 
 /**
@@ -1108,11 +1100,9 @@ void Widgets::GPS::paintPathData(QPainter* painter, const QSize& view)
     return;
   }
 
-  // No need to update if widget is not enabled
   if (!isEnabled())
     return;
 
-  // No need to update if widget is invalid
   if (!VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
     return;
 
@@ -1124,106 +1114,112 @@ void Widgets::GPS::paintPathData(QPainter* painter, const QSize& view)
   // Enable antialiasing for smooth path and indicator rendering
   painter->setRenderHint(QPainter::Antialiasing, true);
 
-  // Initialize parameters
-  const int baseZoom          = qFloor(m_zoom);
-  const double fractionalZoom = m_zoom - baseZoom;
-  const double scale          = qPow(2.0, fractionalZoom);
-  const int tileSize          = 256;
-
   // Convert center tile to base zoom for consistent calculations
+  const int baseZoom           = qFloor(m_zoom);
+  const double fractionalZoom  = m_zoom - baseZoom;
+  const double scale           = qPow(2.0, fractionalZoom);
   const QPointF centerTileBase = m_centerTile / scale;
 
-  // Plot the trajectory of the tracked device
-  if (m_plotTrajectory) {
-    // Initialize parameters (world size at base zoom)
-    const double world  = qPow(2.0, baseZoom);
-    const QPointF cTile = centerTileBase;
+  // Render trajectory polyline (if enabled) and the wrapped position indicator
+  if (m_plotTrajectory)
+    renderTrajectoryPath(painter, view, baseZoom, scale, centerTileBase);
 
-    // Project lat/lon to on-screen pixel
-    auto project = [&](double lat, double lon) -> QPointF {
-      QPointF tile = latLonToTile(lat, lon, baseZoom);
+  renderPositionIndicator(painter, view, baseZoom, scale, centerTileBase);
+}
 
-      double dx = tile.x() - cTile.x();
-      dx -= std::round(dx / world) * world;
+/**
+ * @brief Renders the historical GPS trajectory polyline with tail-to-head gradient.
+ */
+void Widgets::GPS::renderTrajectoryPath(
+  QPainter* painter, const QSize& view, int baseZoom, double scale, const QPointF& centerTileBase)
+{
+  const auto& series  = UI::Dashboard::instance().gpsSeries(m_index);
+  const int tileSize  = 256;
+  const double world  = qPow(2.0, baseZoom);
+  const QPointF cTile = centerTileBase;
 
-      QPointF delta(dx, tile.y() - cTile.y());
-      return {view.width() * 0.5 + delta.x() * tileSize * scale,
-              view.height() * 0.5 + delta.y() * tileSize * scale};
-    };
+  // Project lat/lon to on-screen pixel
+  auto project = [&](double lat, double lon) -> QPointF {
+    QPointF tile = latLonToTile(lat, lon, baseZoom);
 
-    // Generate a path with historical samples
-    QVector<QPointF> path;
-    auto pushIfValid = [&](double lat, double lon) {
-      if (std::isnan(lat) || std::isnan(lon) || DSP::isZero(lat) || DSP::isZero(lon))
-        return;
+    double dx = tile.x() - cTile.x();
+    dx -= std::round(dx / world) * world;
 
-      path.append(project(lat, lon));
-    };
-    for (size_t i = 0; i < series.latitudes.size(); ++i)
-      pushIfValid(series.latitudes[i], series.longitudes[i]);
+    QPointF delta(dx, tile.y() - cTile.y());
+    return {view.width() * 0.5 + delta.x() * tileSize * scale,
+            view.height() * 0.5 + delta.y() * tileSize * scale};
+  };
 
-    // Append current location to path
-    pushIfValid(m_latitude, m_longitude);
+  // Generate a path with historical samples plus the current location
+  QVector<QPointF> path;
+  auto pushIfValid = [&](double lat, double lon) {
+    if (std::isnan(lat) || std::isnan(lon) || DSP::isZero(lat) || DSP::isZero(lon))
+      return;
 
-    // Skip if nothing on screen
-    const QRectF vp(0, 0, view.width(), view.height());
-    auto v =
-      std::any_of(path.cbegin(), path.cend(), [&](const QPointF& p) { return vp.contains(p); });
+    path.append(project(lat, lon));
+  };
+  for (size_t i = 0; i < series.latitudes.size(); ++i)
+    pushIfValid(series.latitudes[i], series.longitudes[i]);
 
-    // Draw the path
-    if (v && path.size() > 1) {
-      QLinearGradient grad(path.first(), path.last());
-      grad.setColorAt(0.0, m_lineTailColor);
-      grad.setColorAt(1.0, m_lineHeadColor);
+  pushIfValid(m_latitude, m_longitude);
 
-      QPen pen(QBrush(grad), 2);
-      painter->setPen(pen);
+  // Skip if nothing on screen
+  const QRectF vp(0, 0, view.width(), view.height());
+  const bool v =
+    std::any_of(path.cbegin(), path.cend(), [&](const QPointF& p) { return vp.contains(p); });
 
-      for (int i = 1; i < path.size(); ++i) {
-        const QPointF& p1 = path[i - 1];
-        const QPointF& p2 = path[i];
-        painter->drawLine(p1, p2);
-      }
-    }
+  if (!v || path.size() <= 1)
+    return;
+
+  // Draw the path with tail-to-head gradient
+  QLinearGradient grad(path.first(), path.last());
+  grad.setColorAt(0.0, m_lineTailColor);
+  grad.setColorAt(1.0, m_lineHeadColor);
+
+  QPen pen(QBrush(grad), 2);
+  painter->setPen(pen);
+
+  for (int i = 1; i < path.size(); ++i) {
+    const QPointF& p1 = path[i - 1];
+    const QPointF& p2 = path[i];
+    painter->drawLine(p1, p2);
   }
+}
 
-  // Convert current lat/lon to tile-space at base zoom
+/**
+ * @brief Renders the current-position indicator (halo, border, dot), wrapped 3x.
+ */
+void Widgets::GPS::renderPositionIndicator(
+  QPainter* painter, const QSize& view, int baseZoom, double scale, const QPointF& centerTileBase)
+{
+  const int tileSize      = 256;
   const QPointF gpsTile   = latLonToTile(m_latitude, m_longitude, baseZoom);
   const QPointF deltaBase = gpsTile - centerTileBase;
-
-  // World size at base zoom for wrap-around calculation
-  const double world = qPow(2.0, baseZoom);
+  const double world      = qPow(2.0, baseZoom);
 
   // Render the indicator three times: centre plus one wrap left / right
   for (int wrap = -1; wrap <= 1; ++wrap) {
-    // Shift X by +/-world tiles to handle east/west wrap-around
     const QPointF delta = deltaBase + QPointF(wrap * world, 0);
-
-    // Convert tile delta to on-screen pixel position (base zoom tiles * scale)
     const QPoint drawPos(view.width() / 2 + delta.x() * tileSize * scale,
                          view.height() / 2 + delta.y() * tileSize * scale);
 
-    // Set indicator sizes
     constexpr int dotRadius   = 5;
     constexpr int haloRadius  = 14;
     constexpr int outerRadius = 7;
 
-    // Set indicator colors
     auto dotColor    = m_lineHeadColor;
     auto haloColor   = m_lineHeadColor;
     auto borderColor = QColor(0xff, 0xff, 0xff);
     haloColor.setAlpha(0x3f);
 
-    // Draw outer halo
+    // Halo, white border, inner dot
     painter->setPen(Qt::NoPen);
     painter->setBrush(haloColor);
     painter->drawEllipse(drawPos, haloRadius, haloRadius);
 
-    // Draw white border
     painter->setBrush(borderColor);
     painter->drawEllipse(drawPos, outerRadius, outerRadius);
 
-    // Draw inner blue dot
     painter->setBrush(dotColor);
     painter->drawEllipse(drawPos, dotRadius, dotRadius);
   }

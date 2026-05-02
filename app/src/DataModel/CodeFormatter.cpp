@@ -130,6 +130,139 @@ int skipQuotedString(QStringView line, int i)
   return j;
 }
 
+/** @brief Advances past a JS block comment, possibly closing it. */
+void advanceJsBlockComment(QStringView line, int& i, int n, ScanState& state)
+{
+  if (i + 1 < n && line[i] == QLatin1Char('*') && line[i + 1] == QLatin1Char('/')) {
+    state.in = ScanIn::Code;
+    i += 2;
+  } else
+    ++i;
+}
+
+/** @brief Advances past characters inside a JS template literal. */
+void advanceJsTemplate(QStringView line, int& i, ScanState& state)
+{
+  const QChar c = line[i];
+  if (c == QLatin1Char('\\')) {
+    i += 2;
+    return;
+  }
+  if (c == QLatin1Char('`')) {
+    state.in = ScanIn::Code;
+    ++i;
+    return;
+  }
+  ++i;
+}
+
+/** @brief Advances past characters inside a Lua long string or block comment. */
+void advanceLuaLong(QStringView line, int& i, ScanState& state)
+{
+  int consume = 0;
+  if (tryLuaLongClose(line, i, state.luaLevel, consume)) {
+    state.in       = ScanIn::Code;
+    state.luaLevel = 0;
+    i += consume;
+  } else
+    ++i;
+}
+
+/** @brief Returns the open/close keyword sets for Lua block tokens. */
+const QSet<QString>& luaOpenKeywords()
+{
+  static const QSet<QString> kSet = {
+    QStringLiteral("then"),
+    QStringLiteral("do"),
+    QStringLiteral("function"),
+    QStringLiteral("repeat"),
+    QStringLiteral("else"),
+  };
+  return kSet;
+}
+
+/** @brief Returns the close keyword set for Lua block tokens. */
+const QSet<QString>& luaCloseKeywords()
+{
+  static const QSet<QString> kSet = {
+    QStringLiteral("end"),
+    QStringLiteral("until"),
+    QStringLiteral("else"),
+    QStringLiteral("elseif"),
+  };
+  return kSet;
+}
+
+/** @brief Tries to open a JS or Lua line/block comment at line[i]; returns true if scan continues.
+ */
+bool tryEnterComment(QStringView line, int& i, int n, Language lang, ScanState& state, bool& stop)
+{
+  const QChar c = line[i];
+  stop          = false;
+
+  if (lang == Language::JavaScript && c == QLatin1Char('/') && i + 1 < n
+      && line[i + 1] == QLatin1Char('/')) {
+    stop = true;
+    return true;
+  }
+
+  if (lang == Language::Lua && c == QLatin1Char('-') && i + 1 < n
+      && line[i + 1] == QLatin1Char('-')) {
+    int level   = 0;
+    int consume = 0;
+    if (i + 2 < n && tryLuaLongOpen(line, i + 2, level, consume)) {
+      state.in       = ScanIn::LuaBlockComment;
+      state.luaLevel = level;
+      i += 2 + consume;
+      return true;
+    }
+    stop = true;
+    return true;
+  }
+
+  if (lang == Language::JavaScript && c == QLatin1Char('/') && i + 1 < n
+      && line[i + 1] == QLatin1Char('*')) {
+    state.in = ScanIn::JsBlockComment;
+    i += 2;
+    return true;
+  }
+
+  return false;
+}
+
+/** @brief Tries to enter a string/template/long-string at line[i]; returns true if it consumed it.
+ */
+bool tryEnterStringLiteral(
+  QStringView line, int& i, Language lang, ScanState& state, bool& sawOpenerOrCode)
+{
+  const QChar c = line[i];
+
+  if (c == QLatin1Char('"') || c == QLatin1Char('\'')) {
+    i               = skipQuotedString(line, i);
+    sawOpenerOrCode = true;
+    return true;
+  }
+
+  if (lang == Language::JavaScript && c == QLatin1Char('`')) {
+    state.in = ScanIn::JsTemplate;
+    ++i;
+    return true;
+  }
+
+  if (lang == Language::Lua && c == QLatin1Char('[')) {
+    int level   = 0;
+    int consume = 0;
+    if (tryLuaLongOpen(line, i, level, consume)) {
+      state.in       = ScanIn::LuaLongString;
+      state.luaLevel = level;
+      i += consume;
+      return true;
+    }
+  }
+
+  return false;
+}
+
 /** @brief Computes outdent/indent deltas for a single line and updates the carry-over state. */
 LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
 {
@@ -151,115 +284,37 @@ LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
     sawCode = true;
   };
 
-  static const QSet<QString> luaOpens = {
-    QStringLiteral("then"),
-    QStringLiteral("do"),
-    QStringLiteral("function"),
-    QStringLiteral("repeat"),
-    QStringLiteral("else"),
-  };
-  static const QSet<QString> luaCloses = {
-    QStringLiteral("end"),
-    QStringLiteral("until"),
-    QStringLiteral("else"),
-    QStringLiteral("elseif"),
-  };
-
   int i       = 0;
   const int n = line.size();
   while (i < n) {
     if (state.in == ScanIn::JsBlockComment) {
-      if (i + 1 < n && line[i] == QLatin1Char('*') && line[i + 1] == QLatin1Char('/')) {
-        state.in = ScanIn::Code;
-        i += 2;
-      } else
-        ++i;
+      advanceJsBlockComment(line, i, n, state);
       continue;
     }
 
     if (state.in == ScanIn::JsTemplate) {
-      const QChar c = line[i];
-      if (c == QLatin1Char('\\')) {
-        i += 2;
-        continue;
-      }
-      if (c == QLatin1Char('`')) {
-        state.in = ScanIn::Code;
-        ++i;
-        continue;
-      }
-      ++i;
+      advanceJsTemplate(line, i, state);
       continue;
     }
 
     if (state.in == ScanIn::LuaLongString || state.in == ScanIn::LuaBlockComment) {
-      int consume = 0;
-      if (tryLuaLongClose(line, i, state.luaLevel, consume)) {
-        state.in       = ScanIn::Code;
-        state.luaLevel = 0;
-        i += consume;
-      } else
-        ++i;
+      advanceLuaLong(line, i, state);
       continue;
     }
 
-    // state.in == ScanIn::Code
+    bool stop = false;
+    if (tryEnterComment(line, i, n, lang, state, stop)) {
+      if (stop)
+        break;
+
+      continue;
+    }
+
+    if (tryEnterStringLiteral(line, i, lang, state, sawOpenerOrCode))
+      continue;
+
     const QChar c = line[i];
 
-    // JS: line comment // ... ends the line
-    if (lang == Language::JavaScript && c == QLatin1Char('/') && i + 1 < n
-        && line[i + 1] == QLatin1Char('/'))
-      break;
-
-    // Lua: line comment -- ... unless it's --[[ or --[==[
-    if (lang == Language::Lua && c == QLatin1Char('-') && i + 1 < n
-        && line[i + 1] == QLatin1Char('-')) {
-      int level   = 0;
-      int consume = 0;
-      if (i + 2 < n && tryLuaLongOpen(line, i + 2, level, consume)) {
-        state.in       = ScanIn::LuaBlockComment;
-        state.luaLevel = level;
-        i += 2 + consume;
-        continue;
-      }
-      break;
-    }
-
-    // JS: block comment /* ... */
-    if (lang == Language::JavaScript && c == QLatin1Char('/') && i + 1 < n
-        && line[i + 1] == QLatin1Char('*')) {
-      state.in = ScanIn::JsBlockComment;
-      i += 2;
-      continue;
-    }
-
-    // Quoted string literal
-    if (c == QLatin1Char('"') || c == QLatin1Char('\'')) {
-      i               = skipQuotedString(line, i);
-      sawOpenerOrCode = true;
-      continue;
-    }
-
-    // JS template literal
-    if (lang == Language::JavaScript && c == QLatin1Char('`')) {
-      state.in = ScanIn::JsTemplate;
-      ++i;
-      continue;
-    }
-
-    // Lua long string [[ ... ]] or [==[ ... ]==]
-    if (lang == Language::Lua && c == QLatin1Char('[')) {
-      int level   = 0;
-      int consume = 0;
-      if (tryLuaLongOpen(line, i, level, consume)) {
-        state.in       = ScanIn::LuaLongString;
-        state.luaLevel = level;
-        i += consume;
-        continue;
-      }
-    }
-
-    // Brace tokens
     if (c == QLatin1Char('{')) {
       registerOpener(sawOpenerOrCode);
       ++i;
@@ -271,15 +326,14 @@ LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
       continue;
     }
 
-    // Lua keyword tokens
     if (lang == Language::Lua && isLuaIdentChar(c, /*first=*/true)) {
       int j = i;
       while (j < n && isLuaIdentChar(line[j], /*first=*/false))
         ++j;
 
       const QString word = line.mid(i, j - i).toString();
-      const bool isClose = luaCloses.contains(word);
-      const bool isOpen  = luaOpens.contains(word);
+      const bool isClose = luaCloseKeywords().contains(word);
+      const bool isOpen  = luaOpenKeywords().contains(word);
       if (isClose)
         registerCloser(sawOpenerOrCode);
 

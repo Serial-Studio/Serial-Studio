@@ -33,6 +33,14 @@ public:
   static void registerCommands();
 
 private:
+  static void registerFileCommands();
+  static void registerGroupCommands();
+  static void registerDatasetCommands();
+  static void registerActionCommands();
+  static void registerOutputWidgetCommands();
+  static void registerParserCommands();
+  static void registerListCommands();
+
   static CommandResponse fileNew(const QString& id, const QJsonObject& params);
   static CommandResponse fileOpen(const QString& id, const QJsonObject& params);
   static CommandResponse fileSave(const QString& id, const QJsonObject& params);

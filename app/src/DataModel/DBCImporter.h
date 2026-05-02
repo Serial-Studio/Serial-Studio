@@ -95,11 +95,25 @@ private:
   QJsonObject generateProject(const QList<QCanMessageDescription>& messages);
   QString generateFrameParser(const QList<QCanMessageDescription>& messages);
 
+  [[nodiscard]] QString frameParserHeader(int totalSignals) const;
+  [[nodiscard]] QString frameParserExtractHelper() const;
+  [[nodiscard]] QString frameParserDispatchTable(
+    const QList<QCanMessageDescription>& messages) const;
+
   QString sanitizeJavaScriptString(const QString& str);
   QString selectGroupWidget(const QCanMessageDescription& message);
   QString selectWidgetForSignal(const QCanSignalDescription& signal);
   QString generateSignalExtraction(const QCanSignalDescription& signal);
   QString generateMessageDecoder(const QCanMessageDescription& message, int& datasetIndex);
+
+  [[nodiscard]] QString detectGpsWidget(
+    const QList<QCanSignalDescription>& signalDescriptions) const;
+  [[nodiscard]] QString detectMotionWidget(
+    const QList<QCanSignalDescription>& signalDescriptions) const;
+  [[nodiscard]] QString resolveSignalFamilyWidget(
+    SignalFamily family,
+    int signalCount,
+    const QList<QCanSignalDescription>& signalDescriptions) const;
 
   [[nodiscard]] SignalFamily detectSignalFamily(
     const QList<QCanSignalDescription>& signalList) const;

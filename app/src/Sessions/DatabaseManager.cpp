@@ -1290,7 +1290,18 @@ void Sessions::DatabaseManager::onWorkerGlobalProjectJsonReady(const QString& js
  */
 void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
 {
-  // Session header
+  createSchemaSessionTables(q);
+  migrateColumnsTable(q);
+  createSchemaSampleTables(q);
+  createSchemaTagTables(q);
+  createSchemaProjectMetadata(q);
+}
+
+/**
+ * @brief Creates the sessions header and columns metadata tables.
+ */
+void Sessions::DatabaseManager::createSchemaSessionTables(QSqlQuery& q)
+{
   q.exec("CREATE TABLE IF NOT EXISTS sessions ("
          "  session_id    INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  project_title TEXT NOT NULL,"
@@ -1300,7 +1311,6 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          "  notes         TEXT"
          ")");
 
-  // Column definitions exported from ExportSchema at session start
   q.exec("CREATE TABLE IF NOT EXISTS columns ("
          "  column_id    INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id   INTEGER NOT NULL REFERENCES sessions,"
@@ -1313,8 +1323,13 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          "  widget       TEXT,"
          "  is_virtual   INTEGER NOT NULL DEFAULT 0"
          ")");
+}
 
-  // Migration for pre-(source_id, source_title) sessions databases
+/**
+ * @brief Adds source_id / source_title to legacy columns tables in older databases.
+ */
+void Sessions::DatabaseManager::migrateColumnsTable(QSqlQuery& q)
+{
   auto columnExists = [&q](const QString& column) {
     if (!q.exec(QStringLiteral("PRAGMA table_info(\"columns\")"))) {
       qWarning() << "[Sessions] PRAGMA table_info failed:" << q.lastError().text();
@@ -1336,8 +1351,13 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
     if (!q.exec("ALTER TABLE \"columns\" ADD COLUMN source_title TEXT NOT NULL DEFAULT ''"))
       qWarning() << "[Sessions] ALTER add source_title failed:" << q.lastError().text();
   }
+}
 
-  // One row per dataset per frame; surrogate PK allows same-ns frames to coexist
+/**
+ * @brief Creates the per-sample tables (readings, raw_bytes, table_snapshots) and indexes.
+ */
+void Sessions::DatabaseManager::createSchemaSampleTables(QSqlQuery& q)
+{
   q.exec("CREATE TABLE IF NOT EXISTS readings ("
          "  reading_id          INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id          INTEGER NOT NULL,"
@@ -1354,7 +1374,6 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
   q.exec("CREATE INDEX IF NOT EXISTS idx_readings_session_ts "
          "ON readings (session_id, timestamp_ns)");
 
-  // Raw device bytes captured in parallel with the frame stream
   q.exec("CREATE TABLE IF NOT EXISTS raw_bytes ("
          "  raw_id       INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id   INTEGER NOT NULL,"
@@ -1365,7 +1384,6 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
   q.exec("CREATE INDEX IF NOT EXISTS idx_raw_bytes_session_ts "
          "ON raw_bytes (session_id, timestamp_ns)");
 
-  // Per-frame snapshots of user data tables
   q.exec("CREATE TABLE IF NOT EXISTS table_snapshots ("
          "  snapshot_id   INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id    INTEGER NOT NULL,"
@@ -1377,8 +1395,13 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          ")");
   q.exec("CREATE INDEX IF NOT EXISTS idx_snapshots_session_ts "
          "ON table_snapshots (session_id, timestamp_ns, table_name)");
+}
 
-  // Free-form tags and the session -> tag join
+/**
+ * @brief Creates the tags catalog and the session -> tag join table.
+ */
+void Sessions::DatabaseManager::createSchemaTagTables(QSqlQuery& q)
+{
   q.exec("CREATE TABLE IF NOT EXISTS tags ("
          "  tag_id INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  label  TEXT NOT NULL UNIQUE COLLATE NOCASE"
@@ -1389,8 +1412,13 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          "  tag_id     INTEGER NOT NULL,"
          "  PRIMARY KEY (session_id, tag_id)"
          ") WITHOUT ROWID");
+}
 
-  // Key/value store for project-level metadata
+/**
+ * @brief Creates the project_metadata key/value store.
+ */
+void Sessions::DatabaseManager::createSchemaProjectMetadata(QSqlQuery& q)
+{
   q.exec("CREATE TABLE IF NOT EXISTS project_metadata ("
          "  key   TEXT PRIMARY KEY,"
          "  value TEXT NOT NULL"

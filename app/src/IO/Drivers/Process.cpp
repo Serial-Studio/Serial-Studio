@@ -581,6 +581,18 @@ void IO::Drivers::Process::onPipeError()
 void IO::Drivers::Process::pipeReadLoop()
 {
 #ifdef Q_OS_WIN
+  pipeReadLoopWindows();
+#else
+  pipeReadLoopPosix();
+#endif
+}
+
+/**
+ * @brief Windows implementation of the named-pipe read loop.
+ */
+void IO::Drivers::Process::pipeReadLoopWindows()
+{
+#ifdef Q_OS_WIN
   const QString dosPath = QDir::toNativeSeparators(m_pipePath);
   HANDLE hPipe          = CreateNamedPipeW(reinterpret_cast<LPCWSTR>(dosPath.utf16()),
                                   PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED,
@@ -636,7 +648,15 @@ void IO::Drivers::Process::pipeReadLoop()
   }
 
   CloseHandle(hPipe);
-#else
+#endif
+}
+
+/**
+ * @brief POSIX (mkfifo + poll) implementation of the named-pipe read loop.
+ */
+void IO::Drivers::Process::pipeReadLoopPosix()
+{
+#ifndef Q_OS_WIN
   const QByteArray pathBytes = m_pipePath.toLocal8Bit();
   struct stat st{};
   const bool exists = (::stat(pathBytes.constData(), &st) == 0);

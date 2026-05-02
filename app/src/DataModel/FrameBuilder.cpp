@@ -389,92 +389,8 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
   Q_ASSERT(!data->data->isEmpty());
   Q_ASSERT(!m_frame.groups.empty());
 
-  // Decode via JS parser or CSV fallback
   QList<QStringList> multiChannels;
-
-  if (!SerialStudio::isAnyPlayerOpen()) [[likely]] {
-    auto& parser             = DataModel::FrameParser::instance();
-    const auto decoderMethod = DataModel::ProjectModel::instance().decoderMethod();
-
-    switch (decoderMethod) {
-      case SerialStudio::Hexadecimal:
-        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toHex()), 0);
-        break;
-      case SerialStudio::Base64:
-        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toBase64()), 0);
-        break;
-      case SerialStudio::Binary:
-        multiChannels = parser.parseMultiFrame(*data->data, 0);
-        break;
-      case SerialStudio::PlainText:
-      default:
-        multiChannels = parser.parseMultiFrame(QString::fromUtf8(*data->data), 0);
-        break;
-    }
-  } else {
-    auto& channels = m_channelScratch;
-    parseCsvValues(*data->data, channels, 64);
-    multiChannels.append(channels);
-  }
-
-  auto applyChannelData = [this](const QStringList& chs, int srcId) {
-    const auto* channelData = chs.data();
-    const int channelCount  = chs.size();
-
-    // Reset computed registers at the start of each frame
-    if (m_tableStore.isInitialized())
-      m_tableStore.resetComputedRegisters();
-
-    for (auto& group : m_frame.groups) {
-      for (auto& dataset : group.datasets) {
-        if (dataset.virtual_) {
-          // Virtual datasets have no source data; reset before the transform runs.
-          dataset.numericValue = 0.0;
-          dataset.value.clear();
-          dataset.isNumeric = true;
-        } else {
-          const int idx = dataset.index;
-          if (idx <= 0 || idx > channelCount) [[unlikely]]
-            continue;
-
-          dataset.value        = channelData[idx - 1];
-          dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
-        }
-
-        // Snapshot raw values before any transform
-        dataset.rawNumericValue = dataset.numericValue;
-        dataset.rawValue        = dataset.value;
-
-        // Write raw values to the system dataset table
-        if (m_tableStore.isInitialized())
-          m_tableStore.setDatasetRaw(
-            dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
-
-        // Apply transform (skip for CSV/MDF4 playback -- those stores hold transformed values)
-        if (!dataset.transformCode.isEmpty() && !SerialStudio::isFinalValuePlayerOpen())
-          [[unlikely]] {
-          const auto input =
-            dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
-          const auto result =
-            applyTransform(srcId, dataset.transformLanguage, dataset.uniqueId, input);
-
-          if (result.typeId() == QMetaType::Double) {
-            dataset.numericValue = result.toDouble();
-            dataset.value        = QString::number(dataset.numericValue, 'g', 15);
-            dataset.isNumeric    = true;
-          } else {
-            dataset.value     = result.toString();
-            dataset.isNumeric = false;
-          }
-        }
-
-        // Write final values to the system dataset table
-        if (m_tableStore.isInitialized())
-          m_tableStore.setDatasetFinal(
-            dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
-      }
-    }
-  };
+  decodeProjectChannels(0, /*applyPerSourceOverride=*/false, data, multiChannels);
 
   const auto step = capturedFrameStep(data);
   for (int i = 0; i < multiChannels.size(); ++i) {
@@ -482,7 +398,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
     if (channels.isEmpty()) [[unlikely]]
       continue;
 
-    applyChannelData(channels, 0);
+    applyDatasetValues(m_frame, channels, 0);
     hotpathTxFrame(
       std::make_shared<DataModel::TimestampedFrame>(m_frame, data->timestamp + step * i));
   }
@@ -498,117 +414,8 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
   Q_ASSERT(data->data);
   Q_ASSERT(!data->data->isEmpty());
 
-  // Decode via source-specific parser
   QList<QStringList> multiChannels;
-
-  if (!SerialStudio::isAnyPlayerOpen()) [[likely]] {
-    auto& parser = DataModel::FrameParser::instance();
-
-    SerialStudio::DecoderMethod decoderMethod = DataModel::ProjectModel::instance().decoderMethod();
-    const auto& sources                       = DataModel::ProjectModel::instance().sources();
-    for (const auto& src : sources) {
-      if (src.sourceId == sourceId) {
-        decoderMethod = static_cast<SerialStudio::DecoderMethod>(src.decoderMethod);
-        break;
-      }
-    }
-
-    switch (decoderMethod) {
-      case SerialStudio::Hexadecimal:
-        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toHex()), sourceId);
-        break;
-      case SerialStudio::Base64:
-        multiChannels =
-          parser.parseMultiFrame(QString::fromLatin1(data->data->toBase64()), sourceId);
-        break;
-      case SerialStudio::Binary:
-        multiChannels = parser.parseMultiFrame(*data->data, sourceId);
-        break;
-      case SerialStudio::PlainText:
-      default:
-        multiChannels = parser.parseMultiFrame(QString::fromUtf8(*data->data), sourceId);
-        break;
-    }
-  } else {
-    auto& channels = m_channelScratch;
-    parseCsvValues(*data->data, channels, 64);
-    multiChannels.append(channels);
-  }
-
-  auto applyChannelData = [this, sourceId](const QStringList& chs) {
-    const auto* channelData = chs.data();
-    const int channelCount  = chs.size();
-
-    // Create source frame on first encounter (single lookup)
-    auto it = m_sourceFrames.find(sourceId);
-    if (it == m_sourceFrames.end()) [[unlikely]] {
-      DataModel::Frame newFrame;
-      newFrame.sourceId                   = sourceId;
-      newFrame.title                      = m_frame.title;
-      newFrame.actions                    = m_frame.actions;
-      newFrame.containsCommercialFeatures = m_frame.containsCommercialFeatures;
-      for (const auto& g : m_frame.groups)
-        if (g.sourceId == sourceId)
-          newFrame.groups.push_back(g);
-
-      it = m_sourceFrames.insert(sourceId, std::move(newFrame));
-    }
-
-    // Reset computed registers per frame -- shared DataTableStore state across sources.
-    if (m_tableStore.isInitialized())
-      m_tableStore.resetComputedRegisters();
-
-    DataModel::Frame& srcFrame = it.value();
-    for (auto& group : srcFrame.groups) {
-      for (auto& dataset : group.datasets) {
-        if (dataset.virtual_) {
-          // Reset virtual datasets before the transform runs.
-          dataset.numericValue = 0.0;
-          dataset.value.clear();
-          dataset.isNumeric = true;
-        } else {
-          const int idx = dataset.index;
-          if (idx <= 0 || idx > channelCount) [[unlikely]]
-            continue;
-
-          dataset.value        = channelData[idx - 1];
-          dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
-        }
-
-        // Snapshot raw values before any transform
-        dataset.rawNumericValue = dataset.numericValue;
-        dataset.rawValue        = dataset.value;
-
-        // Write raw values to the system dataset table
-        if (m_tableStore.isInitialized())
-          m_tableStore.setDatasetRaw(
-            dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
-
-        // Apply transform (skip for CSV/MDF4 playback -- those stores hold transformed values)
-        if (!dataset.transformCode.isEmpty() && !SerialStudio::isFinalValuePlayerOpen())
-          [[unlikely]] {
-          const auto input =
-            dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
-          const auto result =
-            applyTransform(sourceId, dataset.transformLanguage, dataset.uniqueId, input);
-
-          if (result.typeId() == QMetaType::Double) {
-            dataset.numericValue = result.toDouble();
-            dataset.value        = QString::number(dataset.numericValue, 'g', 15);
-            dataset.isNumeric    = true;
-          } else {
-            dataset.value     = result.toString();
-            dataset.isNumeric = false;
-          }
-        }
-
-        // Write final values to the system dataset table
-        if (m_tableStore.isInitialized())
-          m_tableStore.setDatasetFinal(
-            dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
-      }
-    }
-  };
+  decodeProjectChannels(sourceId, /*applyPerSourceOverride=*/true, data, multiChannels);
 
   const auto step = capturedFrameStep(data);
   for (int i = 0; i < multiChannels.size(); ++i) {
@@ -616,13 +423,151 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
     if (channels.isEmpty()) [[unlikely]]
       continue;
 
-    applyChannelData(channels);
-
-    auto txIt = m_sourceFrames.find(sourceId);
-    if (txIt != m_sourceFrames.end()) [[likely]]
-      hotpathTxFrame(
-        std::make_shared<DataModel::TimestampedFrame>(txIt.value(), data->timestamp + step * i));
+    DataModel::Frame& srcFrame = ensureSourceFrame(sourceId);
+    applyDatasetValues(srcFrame, channels, sourceId);
+    hotpathTxFrame(
+      std::make_shared<DataModel::TimestampedFrame>(srcFrame, data->timestamp + step * i));
   }
+}
+
+/**
+ * @brief Resolves the decoder method, optionally honoring a per-source override.
+ */
+SerialStudio::DecoderMethod DataModel::FrameBuilder::resolveDecoderMethod(
+  int sourceId, bool applyPerSourceOverride) const
+{
+  auto& project = DataModel::ProjectModel::instance();
+  if (!applyPerSourceOverride)
+    return project.decoderMethod();
+
+  for (const auto& src : project.sources())
+    if (src.sourceId == sourceId)
+      return static_cast<SerialStudio::DecoderMethod>(src.decoderMethod);
+
+  return project.decoderMethod();
+}
+
+/**
+ * @brief Decodes raw captured bytes into one or more channel-string frames.
+ */
+void DataModel::FrameBuilder::decodeProjectChannels(int sourceId,
+                                                    bool applyPerSourceOverride,
+                                                    const IO::CapturedDataPtr& data,
+                                                    QList<QStringList>& outChannels)
+{
+  if (SerialStudio::isAnyPlayerOpen()) [[unlikely]] {
+    auto& channels = m_channelScratch;
+    parseCsvValues(*data->data, channels, 64);
+    outChannels.append(channels);
+    return;
+  }
+
+  auto& parser             = DataModel::FrameParser::instance();
+  const auto decoderMethod = resolveDecoderMethod(sourceId, applyPerSourceOverride);
+
+  switch (decoderMethod) {
+    case SerialStudio::Hexadecimal:
+      outChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toHex()), sourceId);
+      break;
+    case SerialStudio::Base64:
+      outChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toBase64()), sourceId);
+      break;
+    case SerialStudio::Binary:
+      outChannels = parser.parseMultiFrame(*data->data, sourceId);
+      break;
+    case SerialStudio::PlainText:
+    default:
+      outChannels = parser.parseMultiFrame(QString::fromUtf8(*data->data), sourceId);
+      break;
+  }
+}
+
+/**
+ * @brief Returns (and lazily creates) the per-source frame seeded from the project template.
+ */
+DataModel::Frame& DataModel::FrameBuilder::ensureSourceFrame(int sourceId)
+{
+  auto it = m_sourceFrames.find(sourceId);
+  if (it != m_sourceFrames.end()) [[likely]]
+    return it.value();
+
+  DataModel::Frame newFrame;
+  newFrame.sourceId                   = sourceId;
+  newFrame.title                      = m_frame.title;
+  newFrame.actions                    = m_frame.actions;
+  newFrame.containsCommercialFeatures = m_frame.containsCommercialFeatures;
+  for (const auto& g : m_frame.groups)
+    if (g.sourceId == sourceId)
+      newFrame.groups.push_back(g);
+
+  it = m_sourceFrames.insert(sourceId, std::move(newFrame));
+  return it.value();
+}
+
+/**
+ * @brief Updates a single dataset from its channel and any registered transform.
+ */
+void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
+                                                const QString* channelData,
+                                                int channelCount,
+                                                int sourceId)
+{
+  if (dataset.virtual_) {
+    dataset.numericValue = 0.0;
+    dataset.value.clear();
+    dataset.isNumeric = true;
+  } else {
+    const int idx = dataset.index;
+    if (idx <= 0 || idx > channelCount) [[unlikely]]
+      return;
+
+    dataset.value        = channelData[idx - 1];
+    dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+  }
+
+  dataset.rawNumericValue = dataset.numericValue;
+  dataset.rawValue        = dataset.value;
+
+  if (m_tableStore.isInitialized())
+    m_tableStore.setDatasetRaw(
+      dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
+
+  if (!dataset.transformCode.isEmpty() && !SerialStudio::isFinalValuePlayerOpen()) [[unlikely]] {
+    const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
+    const auto result =
+      applyTransform(sourceId, dataset.transformLanguage, dataset.uniqueId, input);
+
+    if (result.typeId() == QMetaType::Double) {
+      dataset.numericValue = result.toDouble();
+      dataset.value        = QString::number(dataset.numericValue, 'g', 15);
+      dataset.isNumeric    = true;
+    } else {
+      dataset.value     = result.toString();
+      dataset.isNumeric = false;
+    }
+  }
+
+  if (m_tableStore.isInitialized())
+    m_tableStore.setDatasetFinal(
+      dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
+}
+
+/**
+ * @brief Writes channel values + transforms into every dataset of @p frame.
+ */
+void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
+                                                 const QStringList& channels,
+                                                 int sourceId)
+{
+  const auto* channelData = channels.data();
+  const int channelCount  = channels.size();
+
+  if (m_tableStore.isInitialized())
+    m_tableStore.resetComputedRegisters();
+
+  for (auto& group : frame.groups)
+    for (auto& dataset : group.datasets)
+      applyDatasetValue(dataset, channelData, channelCount, sourceId);
 }
 
 /**
@@ -1158,101 +1103,110 @@ QVariant DataModel::FrameBuilder::applyTransform(int sourceId,
   Q_ASSERT(uniqueId >= 0);
 
   auto engineIt = m_transformEngines.find({sourceId, language});
-
   if (engineIt == m_transformEngines.end())
     return rawValue;
 
   auto& engine = engineIt->second;
+  if (engine.luaState)
+    return applyTransformLua(engine, uniqueId, rawValue);
 
-  // Lua transform path
-  if (engine.luaState) {
-    auto refIt = engine.luaRefs.find(uniqueId);
-    if (refIt == engine.luaRefs.end())
-      return rawValue;
+  if (engine.jsEngine)
+    return applyTransformJs(engine, uniqueId, rawValue);
 
-    // Arm the per-call deadline
-    lua_State* L = engine.luaState;
-    engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
+  return rawValue;
+}
 
-    // Push the function and argument
-    lua_rawgeti(L, LUA_REGISTRYINDEX, refIt->second);
-    if (rawValue.typeId() == QMetaType::Double) {
-      lua_pushnumber(L, rawValue.toDouble());
-    } else {
-      // QByteArray keeps the UTF-8 buffer alive across Lua's copy; pass length explicitly.
-      const auto utf8 = rawValue.toString().toUtf8();
-      lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
-    }
+/**
+ * @brief Calls the cached Lua transform function for @p uniqueId under the per-call deadline.
+ */
+QVariant DataModel::FrameBuilder::applyTransformLua(TransformEngine& engine,
+                                                    int uniqueId,
+                                                    const QVariant& rawValue)
+{
+  auto refIt = engine.luaRefs.find(uniqueId);
+  if (refIt == engine.luaRefs.end())
+    return rawValue;
 
-    const int pcallStatus = lua_pcall(L, 1, 1, 0);
-    engine.luaDeadline    = QDeadlineTimer(QDeadlineTimer::Forever);
+  lua_State* L = engine.luaState;
+  engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
 
-    if (pcallStatus != LUA_OK) [[unlikely]] {
-      qWarning() << "[FrameBuilder] Lua transform call failed for dataset" << uniqueId << ":"
-                 << lua_tostring(L, -1);
-      lua_pop(L, 1);
-      return rawValue;
-    }
+  lua_rawgeti(L, LUA_REGISTRYINDEX, refIt->second);
+  if (rawValue.typeId() == QMetaType::Double) {
+    lua_pushnumber(L, rawValue.toDouble());
+  } else {
+    const auto utf8 = rawValue.toString().toUtf8();
+    lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
+  }
 
-    if (lua_isnumber(L, -1)) {
-      const double result = lua_tonumber(L, -1);
-      lua_pop(L, 1);
-      if (!std::isfinite(result)) [[unlikely]]
-        return rawValue;
+  const int pcallStatus = lua_pcall(L, 1, 1, 0);
+  engine.luaDeadline    = QDeadlineTimer(QDeadlineTimer::Forever);
 
-      return QVariant(result);
-    }
-
-    if (lua_isstring(L, -1)) {
-      const QString result = QString::fromUtf8(lua_tostring(L, -1));
-      lua_pop(L, 1);
-      return QVariant(result);
-    }
-
+  if (pcallStatus != LUA_OK) [[unlikely]] {
+    qWarning() << "[FrameBuilder] Lua transform call failed for dataset" << uniqueId << ":"
+               << lua_tostring(L, -1);
     lua_pop(L, 1);
     return rawValue;
   }
 
-  // JavaScript transform path
-  if (engine.jsEngine) {
-    auto refIt = engine.jsRefs.find(uniqueId);
-    if (refIt == engine.jsRefs.end())
+  if (lua_isnumber(L, -1)) {
+    const double result = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+    if (!std::isfinite(result)) [[unlikely]]
       return rawValue;
 
-    // Arm the watchdog
+    return QVariant(result);
+  }
+
+  if (lua_isstring(L, -1)) {
+    const QString result = QString::fromUtf8(lua_tostring(L, -1));
+    lua_pop(L, 1);
+    return QVariant(result);
+  }
+
+  lua_pop(L, 1);
+  return rawValue;
+}
+
+/**
+ * @brief Calls the cached JS transform function for @p uniqueId under the watchdog timer.
+ */
+QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
+                                                   int uniqueId,
+                                                   const QVariant& rawValue)
+{
+  auto refIt = engine.jsRefs.find(uniqueId);
+  if (refIt == engine.jsRefs.end())
+    return rawValue;
+
+  engine.jsEngine->setInterrupted(false);
+  m_jsTransformWatchdog.start();
+
+  QJSValueList args;
+  if (rawValue.typeId() == QMetaType::Double)
+    args << QJSValue(rawValue.toDouble());
+  else
+    args << QJSValue(rawValue.toString());
+
+  auto result = refIt->second.call(args);
+  m_jsTransformWatchdog.stop();
+
+  if (engine.jsEngine->isInterrupted()) [[unlikely]] {
     engine.jsEngine->setInterrupted(false);
-    m_jsTransformWatchdog.start();
-
-    // Push argument as appropriate type
-    QJSValueList args;
-    if (rawValue.typeId() == QMetaType::Double)
-      args << QJSValue(rawValue.toDouble());
-    else
-      args << QJSValue(rawValue.toString());
-
-    auto result = refIt->second.call(args);
-    m_jsTransformWatchdog.stop();
-
-    if (engine.jsEngine->isInterrupted()) [[unlikely]] {
-      engine.jsEngine->setInterrupted(false);
-      qWarning() << "[FrameBuilder] JS transform for dataset" << uniqueId << "timed out after"
-                 << kTransformWatchdogMs << "ms";
-      return rawValue;
-    }
-
-    if (result.isNumber()) {
-      const double val = result.toNumber();
-      if (!std::isfinite(val)) [[unlikely]]
-        return rawValue;
-
-      return QVariant(val);
-    }
-
-    if (result.isString())
-      return QVariant(result.toString());
-
+    qWarning() << "[FrameBuilder] JS transform for dataset" << uniqueId << "timed out after"
+               << kTransformWatchdogMs << "ms";
     return rawValue;
   }
+
+  if (result.isNumber()) {
+    const double val = result.toNumber();
+    if (!std::isfinite(val)) [[unlikely]]
+      return rawValue;
+
+    return QVariant(val);
+  }
+
+  if (result.isString())
+    return QVariant(result.toString());
 
   return rawValue;
 }

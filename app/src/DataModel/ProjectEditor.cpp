@@ -160,35 +160,10 @@ static QString busTypeIcon(int busType)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the ProjectEditor singleton and wires its ProjectModel signals.
+ * @brief Wires the basic ProjectModel rebuild signals into the tree-rebuild scheduler.
  */
-DataModel::ProjectEditor::ProjectEditor()
-  : m_currentView(ProjectView)
-  , m_groupsRootItem(nullptr)
-  , m_tablesRootItem(nullptr)
-  , m_systemDatasetsItem(nullptr)
-  , m_workspacesRootItem(nullptr)
-  , m_selectedWorkspaceId(-1)
-  , m_treeModel(nullptr)
-  , m_selectionModel(nullptr)
-  , m_groupModel(nullptr)
-  , m_sourceModel(nullptr)
-  , m_actionModel(nullptr)
-  , m_projectModel(nullptr)
-  , m_datasetModel(nullptr)
-  , m_outputWidgetModel(nullptr)
-  , m_transformEditor(nullptr)
-  , m_pendingSelectionKind(PendingSelectionKind::None)
-  , m_pendingSelectionGroupId(-1)
-  , m_pendingSelectionItemId(-1)
+void DataModel::ProjectEditor::wireProjectModelRebuilds()
 {
-  generateComboBoxModels();
-
-  // Coalesce rapid mutation bursts (keystrokes, batch edits) into one rebuild
-  m_rebuildTimer.setSingleShot(true);
-  m_rebuildTimer.setInterval(0);
-  connect(&m_rebuildTimer, &QTimer::timeout, this, &DataModel::ProjectEditor::buildTreeModel);
-
   auto& pm = DataModel::ProjectModel::instance();
 
   connect(&pm,
@@ -238,6 +213,14 @@ DataModel::ProjectEditor::ProjectEditor()
       m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
     }
   });
+}
+
+/**
+ * @brief Wires ProjectModel group add/delete signals into selection bookkeeping.
+ */
+void DataModel::ProjectEditor::wireGroupSignals()
+{
+  auto& pm = DataModel::ProjectModel::instance();
 
   connect(
     &pm,
@@ -280,6 +263,14 @@ DataModel::ProjectEditor::ProjectEditor()
       m_pendingSelectionItemId  = -1;
     },
     Qt::QueuedConnection);
+}
+
+/**
+ * @brief Wires ProjectModel dataset add/delete signals into selection bookkeeping.
+ */
+void DataModel::ProjectEditor::wireDatasetSignals()
+{
+  auto& pm = DataModel::ProjectModel::instance();
 
   connect(
     &pm,
@@ -333,6 +324,14 @@ DataModel::ProjectEditor::ProjectEditor()
       m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
     },
     Qt::QueuedConnection);
+}
+
+/**
+ * @brief Wires ProjectModel action add/delete signals into selection bookkeeping.
+ */
+void DataModel::ProjectEditor::wireActionSignals()
+{
+  auto& pm = DataModel::ProjectModel::instance();
 
   connect(
     &pm,
@@ -363,6 +362,14 @@ DataModel::ProjectEditor::ProjectEditor()
       }
     },
     Qt::QueuedConnection);
+}
+
+/**
+ * @brief Wires ProjectModel output-widget add/delete signals into selection bookkeeping.
+ */
+void DataModel::ProjectEditor::wireOutputWidgetSignals()
+{
+  auto& pm = DataModel::ProjectModel::instance();
 
   connect(
     &pm,
@@ -406,6 +413,14 @@ DataModel::ProjectEditor::ProjectEditor()
       }
     },
     Qt::QueuedConnection);
+}
+
+/**
+ * @brief Wires ProjectModel source add/delete signals into selection bookkeeping.
+ */
+void DataModel::ProjectEditor::wireSourceSignals()
+{
+  auto& pm = DataModel::ProjectModel::instance();
 
   connect(
     &pm,
@@ -440,7 +455,13 @@ DataModel::ProjectEditor::ProjectEditor()
       }
     },
     Qt::QueuedConnection);
+}
 
+/**
+ * @brief Wires editor self-signals that fan out form-model change notifications.
+ */
+void DataModel::ProjectEditor::wireEditorSelfSignals()
+{
   connect(this,
           &DataModel::ProjectEditor::groupModelChanged,
           this,
@@ -453,7 +474,13 @@ DataModel::ProjectEditor::ProjectEditor()
           &DataModel::ProjectEditor::datasetModelChanged,
           this,
           &DataModel::ProjectEditor::datasetOptionsChanged);
+}
 
+/**
+ * @brief Wires translator and connection-manager signals into editor refresh hooks.
+ */
+void DataModel::ProjectEditor::wireExternalSignals()
+{
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged, this, [this] {
     generateComboBoxModels();
     buildTreeModel();
@@ -494,6 +521,46 @@ DataModel::ProjectEditor::ProjectEditor()
 
     buildSourceModel(m_selectedSource);
   });
+}
+
+/**
+ * @brief Constructs the ProjectEditor singleton and wires its ProjectModel signals.
+ */
+DataModel::ProjectEditor::ProjectEditor()
+  : m_currentView(ProjectView)
+  , m_groupsRootItem(nullptr)
+  , m_tablesRootItem(nullptr)
+  , m_systemDatasetsItem(nullptr)
+  , m_workspacesRootItem(nullptr)
+  , m_selectedWorkspaceId(-1)
+  , m_treeModel(nullptr)
+  , m_selectionModel(nullptr)
+  , m_groupModel(nullptr)
+  , m_sourceModel(nullptr)
+  , m_actionModel(nullptr)
+  , m_projectModel(nullptr)
+  , m_datasetModel(nullptr)
+  , m_outputWidgetModel(nullptr)
+  , m_transformEditor(nullptr)
+  , m_pendingSelectionKind(PendingSelectionKind::None)
+  , m_pendingSelectionGroupId(-1)
+  , m_pendingSelectionItemId(-1)
+{
+  generateComboBoxModels();
+
+  // Coalesce rapid mutation bursts (keystrokes, batch edits) into one rebuild
+  m_rebuildTimer.setSingleShot(true);
+  m_rebuildTimer.setInterval(0);
+  connect(&m_rebuildTimer, &QTimer::timeout, this, &DataModel::ProjectEditor::buildTreeModel);
+
+  wireProjectModelRebuilds();
+  wireGroupSignals();
+  wireDatasetSignals();
+  wireActionSignals();
+  wireOutputWidgetSignals();
+  wireSourceSignals();
+  wireEditorSelfSignals();
+  wireExternalSignals();
 
   buildTreeModel();
   buildProjectModel();
@@ -1018,52 +1085,51 @@ QModelIndex DataModel::ProjectEditor::consumePendingSelection()
 }
 
 /**
- * @brief Populates the tree under root with sources, actions, groups, datasets.
+ * @brief Appends source tree items with their frame-parser children. No-op when filtering.
  */
-void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
-                                              QHash<QString, bool>& expandedStates)
+void DataModel::ProjectEditor::appendSourceTreeItems(QStandardItem* root)
+{
+  Q_ASSERT(root != nullptr);
+  if (!m_treeSearchQuery.trimmed().isEmpty())
+    return;
+
+  const auto& sources    = DataModel::ProjectModel::instance().sources();
+  const bool multiSource = sources.size() > 1;
+
+  for (const auto& source : sources) {
+    auto* sourceItem = new QStandardItem(source.title);
+    sourceItem->setData(-1, TreeViewFrameIndex);
+    sourceItem->setData(busTypeIcon(source.busType), TreeViewIcon);
+    sourceItem->setData(source.title, TreeViewText);
+    sourceItem->setData(source.sourceId, TreeViewSourceId);
+    sourceItem->setData(multiSource ? source.title : QString(), TreeViewSourceName);
+    sourceItem->setData(true, TreeViewExpanded);
+
+    auto* parserItem = new QStandardItem(tr("Frame Parser"));
+    parserItem->setData(-1, TreeViewFrameIndex);
+    parserItem->setData("qrc:/icons/project-editor/treeview/code.svg", TreeViewIcon);
+    parserItem->setData(tr("Frame Parser"), TreeViewText);
+    sourceItem->appendRow(parserItem);
+    m_sourceParserItems.insert(parserItem, source);
+
+    root->appendRow(sourceItem);
+    m_sourceItems.insert(sourceItem, source);
+  }
+}
+
+/**
+ * @brief Appends action tree items, filtered by the current search query.
+ */
+void DataModel::ProjectEditor::appendActionTreeItems(QStandardItem* root)
 {
   Q_ASSERT(root != nullptr);
 
-  const auto& pm         = DataModel::ProjectModel::instance();
-  const auto& groups     = pm.groups();
-  const auto& actions    = pm.actions();
-  const auto& sources    = pm.sources();
-  const bool multiSource = sources.size() > 1;
-
-  // Tree search query -- non-empty filters items by title (case-insensitive).
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
-  const auto matches      = [&q](const QString& s) {
-    return s.contains(q, Qt::CaseInsensitive);
-  };
+  const auto& actions     = DataModel::ProjectModel::instance().actions();
 
-  // Add source items with their frame parser children (skipped when filtering).
-  if (!filterActive) {
-    for (const auto& source : sources) {
-      auto* sourceItem = new QStandardItem(source.title);
-      sourceItem->setData(-1, TreeViewFrameIndex);
-      sourceItem->setData(busTypeIcon(source.busType), TreeViewIcon);
-      sourceItem->setData(source.title, TreeViewText);
-      sourceItem->setData(source.sourceId, TreeViewSourceId);
-      sourceItem->setData(multiSource ? source.title : QString(), TreeViewSourceName);
-      sourceItem->setData(true, TreeViewExpanded);
-
-      auto* parserItem = new QStandardItem(tr("Frame Parser"));
-      parserItem->setData(-1, TreeViewFrameIndex);
-      parserItem->setData("qrc:/icons/project-editor/treeview/code.svg", TreeViewIcon);
-      parserItem->setData(tr("Frame Parser"), TreeViewText);
-      sourceItem->appendRow(parserItem);
-      m_sourceParserItems.insert(parserItem, source);
-
-      root->appendRow(sourceItem);
-      m_sourceItems.insert(sourceItem, source);
-    }
-  }
-
-  // Add action items (filtered by title when search is active)
   for (const auto& action : actions) {
-    if (filterActive && !matches(action.title))
+    if (filterActive && !action.title.contains(q, Qt::CaseInsensitive))
       continue;
 
     auto* actionItem = new QStandardItem(action.title);
@@ -1073,6 +1139,99 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     root->appendRow(actionItem);
     m_actionItems.insert(actionItem, action);
   }
+}
+
+/**
+ * @brief Appends dataset children of a group, filtered by the current search query.
+ */
+void DataModel::ProjectEditor::appendDatasetChildren(QStandardItem* groupItem,
+                                                     const DataModel::Group& group)
+{
+  Q_ASSERT(groupItem != nullptr);
+
+  const QString q         = m_treeSearchQuery.trimmed();
+  const bool filterActive = !q.isEmpty();
+  const bool groupMatches = !filterActive || group.title.contains(q, Qt::CaseInsensitive);
+
+  for (const auto& dataset : group.datasets) {
+    if (filterActive && !groupMatches && !dataset.title.contains(q, Qt::CaseInsensitive))
+      continue;
+
+    auto* datasetItem = new QStandardItem(dataset.title);
+    auto widgets      = SerialStudio::getDashboardWidgets(dataset);
+    QString dIcon     = "qrc:/icons/project-editor/treeview/dataset.svg";
+    if (widgets.count() > 0)
+      dIcon = SerialStudio::dashboardWidgetIcon(widgets.first(), false);
+
+    datasetItem->setData(dIcon, TreeViewIcon);
+    datasetItem->setData(dataset.title, TreeViewText);
+    datasetItem->setData(dataset.index, TreeViewFrameIndex);
+    datasetItem->setData(dataset.sourceId, TreeViewSourceId);
+    datasetItem->setData(QString(), TreeViewSourceName);
+    datasetItem->setData(dataset.virtual_, TreeViewVirtual);
+    groupItem->appendRow(datasetItem);
+    m_datasetItems.insert(datasetItem, dataset);
+  }
+}
+
+/**
+ * @brief Appends output-widget children of a group. Skipped entirely when filtering.
+ */
+void DataModel::ProjectEditor::appendOutputWidgetChildren(QStandardItem* groupItem,
+                                                          const DataModel::Group& group)
+{
+  Q_ASSERT(groupItem != nullptr);
+  if (!m_treeSearchQuery.trimmed().isEmpty())
+    return;
+
+  for (const auto& ow : group.outputWidgets) {
+    auto* owItem = new QStandardItem(ow.title);
+
+    QString owIcon;
+    switch (ow.type) {
+      case DataModel::OutputWidgetType::Button:
+        owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-button.svg");
+        break;
+      case DataModel::OutputWidgetType::Slider:
+        owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-slider.svg");
+        break;
+      case DataModel::OutputWidgetType::Toggle:
+        owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-toggle.svg");
+        break;
+      case DataModel::OutputWidgetType::TextField:
+        owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-textfield.svg");
+        break;
+      case DataModel::OutputWidgetType::Knob:
+        owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-knob.svg");
+        break;
+      default:
+        owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-widget.svg");
+        break;
+    }
+
+    owItem->setData(owIcon, TreeViewIcon);
+    owItem->setData(ow.title, TreeViewText);
+    owItem->setData(-2, TreeViewFrameIndex);
+    owItem->setData(ow.sourceId, TreeViewSourceId);
+    owItem->setData(QString(), TreeViewSourceName);
+    groupItem->appendRow(owItem);
+    m_outputWidgetItems.insert(owItem, ow);
+  }
+}
+
+/**
+ * @brief Appends the Groups subtree (groups, datasets, output widgets) into root.
+ */
+void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
+                                                    QHash<QString, bool>& expandedStates)
+{
+  Q_ASSERT(root != nullptr);
+
+  const QString q         = m_treeSearchQuery.trimmed();
+  const bool filterActive = !q.isEmpty();
+  const auto matches      = [&q](const QString& s) {
+    return s.contains(q, Qt::CaseInsensitive);
+  };
 
   // Lazy-built "Groups" parent so empty projects don't leave a dangling node.
   QStandardItem* groupsRoot   = nullptr;
@@ -1099,7 +1258,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     return true;
   };
 
-  // Add group items with their dataset and output widget children
+  const auto& groups = DataModel::ProjectModel::instance().groups();
   for (const auto& group : groups) {
     const bool groupMatches = !filterActive || matches(group.title);
     if (groupFilteredOut(group, groupMatches))
@@ -1118,64 +1277,8 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     if (filterActive)
       groupItem->setData(true, TreeViewExpanded);
 
-    // Show all datasets if the group matched, otherwise only matching datasets.
-    for (const auto& dataset : group.datasets) {
-      if (filterActive && !groupMatches && !matches(dataset.title))
-        continue;
-
-      auto* datasetItem = new QStandardItem(dataset.title);
-      auto widgets      = SerialStudio::getDashboardWidgets(dataset);
-      QString dIcon     = "qrc:/icons/project-editor/treeview/dataset.svg";
-      if (widgets.count() > 0)
-        dIcon = SerialStudio::dashboardWidgetIcon(widgets.first(), false);
-
-      datasetItem->setData(dIcon, TreeViewIcon);
-      datasetItem->setData(dataset.title, TreeViewText);
-      datasetItem->setData(dataset.index, TreeViewFrameIndex);
-      datasetItem->setData(dataset.sourceId, TreeViewSourceId);
-      datasetItem->setData(QString(), TreeViewSourceName);
-      datasetItem->setData(dataset.virtual_, TreeViewVirtual);
-      groupItem->appendRow(datasetItem);
-      m_datasetItems.insert(datasetItem, dataset);
-    }
-
-    // Add output widget children (skipped when filtering).
-    for (const auto& ow : group.outputWidgets) {
-      if (filterActive)
-        break;
-
-      auto* owItem = new QStandardItem(ow.title);
-
-      QString owIcon;
-      switch (ow.type) {
-        case DataModel::OutputWidgetType::Button:
-          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-button.svg");
-          break;
-        case DataModel::OutputWidgetType::Slider:
-          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-slider.svg");
-          break;
-        case DataModel::OutputWidgetType::Toggle:
-          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-toggle.svg");
-          break;
-        case DataModel::OutputWidgetType::TextField:
-          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-textfield.svg");
-          break;
-        case DataModel::OutputWidgetType::Knob:
-          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-knob.svg");
-          break;
-        default:
-          owIcon = QStringLiteral("qrc:/icons/project-editor/treeview/output-widget.svg");
-          break;
-      }
-
-      owItem->setData(owIcon, TreeViewIcon);
-      owItem->setData(ow.title, TreeViewText);
-      owItem->setData(-2, TreeViewFrameIndex);
-      owItem->setData(ow.sourceId, TreeViewSourceId);
-      owItem->setData(QString(), TreeViewSourceName);
-      groupItem->appendRow(owItem);
-      m_outputWidgetItems.insert(owItem, ow);
-    }
+    appendDatasetChildren(groupItem, group);
+    appendOutputWidgetChildren(groupItem, group);
 
     ensureGroupsRoot();
     const QString gPath = root->text() + "/" + tr("Groups") + "/" + group.title;
@@ -1189,10 +1292,24 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     root->appendRow(groupsRoot);
     m_groupsRootItem = groupsRoot;
   }
+}
 
-  // Add "Shared Memory" category root (Pro only); included if root or any child matches.
+/**
+ * @brief Appends the "Shared Memory" subtree (Pro only) with system + user tables.
+ */
+void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
+                                                           QHash<QString, bool>& expandedStates)
+{
+  Q_ASSERT(root != nullptr);
+
 #ifdef BUILD_COMMERCIAL
-  const auto& userTables = pm.tables();
+  const QString q         = m_treeSearchQuery.trimmed();
+  const bool filterActive = !q.isEmpty();
+  const auto matches      = [&q](const QString& s) {
+    return s.contains(q, Qt::CaseInsensitive);
+  };
+
+  const auto& userTables = DataModel::ProjectModel::instance().tables();
   bool includeSharedRoot =
     !filterActive || matches(tr("Shared Memory")) || matches(tr("Dataset Values"));
   if (!includeSharedRoot) {
@@ -1204,42 +1321,60 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     }
   }
 
-  if (includeSharedRoot) {
-    auto* tablesRoot = new QStandardItem(tr("Shared Memory"));
-    tablesRoot->setData(tr("Shared Memory"), TreeViewText);
-    tablesRoot->setData("qrc:/icons/project-editor/treeview/shared-memory.svg", TreeViewIcon);
-    tablesRoot->setData(-1, TreeViewFrameIndex);
-    tablesRoot->setData(true, TreeViewExpanded);
+  if (!includeSharedRoot)
+    return;
 
-    // Add the read-only "Dataset Values" entry (auto-generated from the project)
-    auto* sysDsItem = new QStandardItem(tr("Dataset Values"));
-    sysDsItem->setData(tr("Dataset Values"), TreeViewText);
-    sysDsItem->setData("qrc:/icons/project-editor/treeview/dataset-values.svg", TreeViewIcon);
-    sysDsItem->setData(-1, TreeViewFrameIndex);
-    tablesRoot->appendRow(sysDsItem);
+  auto* tablesRoot = new QStandardItem(tr("Shared Memory"));
+  tablesRoot->setData(tr("Shared Memory"), TreeViewText);
+  tablesRoot->setData("qrc:/icons/project-editor/treeview/shared-memory.svg", TreeViewIcon);
+  tablesRoot->setData(-1, TreeViewFrameIndex);
+  tablesRoot->setData(true, TreeViewExpanded);
 
-    // Add user-defined shared tables as children (filtered by search query)
-    for (const auto& table : userTables) {
-      if (filterActive && !matches(table.name))
-        continue;
+  // Add the read-only "Dataset Values" entry (auto-generated from the project)
+  auto* sysDsItem = new QStandardItem(tr("Dataset Values"));
+  sysDsItem->setData(tr("Dataset Values"), TreeViewText);
+  sysDsItem->setData("qrc:/icons/project-editor/treeview/dataset-values.svg", TreeViewIcon);
+  sysDsItem->setData(-1, TreeViewFrameIndex);
+  tablesRoot->appendRow(sysDsItem);
 
-      auto* tableItem = new QStandardItem(table.name);
-      tableItem->setData(table.name, TreeViewText);
-      tableItem->setData("qrc:/icons/project-editor/treeview/shared-table.svg", TreeViewIcon);
-      tableItem->setData(-1, TreeViewFrameIndex);
-      tablesRoot->appendRow(tableItem);
-      m_userTableItems.insert(tableItem, table.name);
-    }
+  // Add user-defined shared tables as children (filtered by search query)
+  for (const auto& table : userTables) {
+    if (filterActive && !matches(table.name))
+      continue;
 
-    restoreExpandedStateMap(tablesRoot, expandedStates, root->text() + "/" + tablesRoot->text());
-    root->appendRow(tablesRoot);
-    m_tablesRootItem     = tablesRoot;
-    m_systemDatasetsItem = sysDsItem;
+    auto* tableItem = new QStandardItem(table.name);
+    tableItem->setData(table.name, TreeViewText);
+    tableItem->setData("qrc:/icons/project-editor/treeview/shared-table.svg", TreeViewIcon);
+    tableItem->setData(-1, TreeViewFrameIndex);
+    tablesRoot->appendRow(tableItem);
+    m_userTableItems.insert(tableItem, table.name);
   }
-#endif  // BUILD_COMMERCIAL
 
-  // Add "Workspaces" category root; hidden under search unless it or a child matches.
-  const auto& workspaces = pm.editorWorkspaces();
+  restoreExpandedStateMap(tablesRoot, expandedStates, root->text() + "/" + tablesRoot->text());
+  root->appendRow(tablesRoot);
+  m_tablesRootItem     = tablesRoot;
+  m_systemDatasetsItem = sysDsItem;
+#else
+  Q_UNUSED(root);
+  Q_UNUSED(expandedStates);
+#endif
+}
+
+/**
+ * @brief Appends the "Workspaces" subtree, filtered by the current search query.
+ */
+void DataModel::ProjectEditor::appendWorkspaceTreeItems(QStandardItem* root,
+                                                        QHash<QString, bool>& expandedStates)
+{
+  Q_ASSERT(root != nullptr);
+
+  const QString q         = m_treeSearchQuery.trimmed();
+  const bool filterActive = !q.isEmpty();
+  const auto matches      = [&q](const QString& s) {
+    return s.contains(q, Qt::CaseInsensitive);
+  };
+
+  const auto& workspaces = DataModel::ProjectModel::instance().editorWorkspaces();
   bool includeWorkspaces = !filterActive || matches(tr("Workspaces"));
   if (!includeWorkspaces) {
     for (const auto& ws : workspaces) {
@@ -1250,30 +1385,46 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     }
   }
 
-  if (includeWorkspaces) {
-    auto* wsRoot = new QStandardItem(tr("Workspaces"));
-    wsRoot->setData(tr("Workspaces"), TreeViewText);
-    wsRoot->setData("qrc:/icons/project-editor/treeview/datagrid.svg", TreeViewIcon);
-    wsRoot->setData(-1, TreeViewFrameIndex);
-    wsRoot->setData(true, TreeViewExpanded);
+  if (!includeWorkspaces)
+    return;
 
-    for (const auto& ws : workspaces) {
-      if (filterActive && !matches(ws.title))
-        continue;
+  auto* wsRoot = new QStandardItem(tr("Workspaces"));
+  wsRoot->setData(tr("Workspaces"), TreeViewText);
+  wsRoot->setData("qrc:/icons/project-editor/treeview/datagrid.svg", TreeViewIcon);
+  wsRoot->setData(-1, TreeViewFrameIndex);
+  wsRoot->setData(true, TreeViewExpanded);
 
-      auto* wsItem = new QStandardItem(ws.title);
-      wsItem->setData(ws.title, TreeViewText);
-      wsItem->setData(ws.icon.isEmpty() ? "qrc:/icons/project-editor/treeview/group.svg" : ws.icon,
-                      TreeViewIcon);
-      wsItem->setData(-1, TreeViewFrameIndex);
-      wsRoot->appendRow(wsItem);
-      m_workspaceItems.insert(wsItem, ws.workspaceId);
-    }
+  for (const auto& ws : workspaces) {
+    if (filterActive && !matches(ws.title))
+      continue;
 
-    restoreExpandedStateMap(wsRoot, expandedStates, root->text() + "/" + wsRoot->text());
-    root->appendRow(wsRoot);
-    m_workspacesRootItem = wsRoot;
+    auto* wsItem = new QStandardItem(ws.title);
+    wsItem->setData(ws.title, TreeViewText);
+    wsItem->setData(ws.icon.isEmpty() ? "qrc:/icons/project-editor/treeview/group.svg" : ws.icon,
+                    TreeViewIcon);
+    wsItem->setData(-1, TreeViewFrameIndex);
+    wsRoot->appendRow(wsItem);
+    m_workspaceItems.insert(wsItem, ws.workspaceId);
   }
+
+  restoreExpandedStateMap(wsRoot, expandedStates, root->text() + "/" + wsRoot->text());
+  root->appendRow(wsRoot);
+  m_workspacesRootItem = wsRoot;
+}
+
+/**
+ * @brief Populates the tree under root with sources, actions, groups, datasets.
+ */
+void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
+                                              QHash<QString, bool>& expandedStates)
+{
+  Q_ASSERT(root != nullptr);
+
+  appendSourceTreeItems(root);
+  appendActionTreeItems(root);
+  appendGroupTreeItems(root, expandedStates);
+  appendSharedMemoryTreeItems(root, expandedStates);
+  appendWorkspaceTreeItems(root, expandedStates);
 
   // Add spacer item at the end of the tree
   auto* spacer = new QStandardItem(" ");
@@ -1402,19 +1553,10 @@ void DataModel::ProjectEditor::buildProjectModel()
 }
 
 /**
- * @brief Rebuilds the group-settings form model for the given group.
+ * @brief Appends the title field and (when applicable) the input-device selector.
  */
-void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
+void DataModel::ProjectEditor::buildGroupGeneralSection(const DataModel::Group& group)
 {
-  // Dispose of the previous model and create a fresh one
-  if (m_groupModel) {
-    disconnect(m_groupModel);
-    m_groupModel->deleteLater();
-  }
-
-  m_selectedGroup = group;
-  m_groupModel    = new CustomModel(this);
-
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Group Information"), PlaceholderValue);
@@ -1431,36 +1573,115 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
   titleItem->setData(tr("Untitled Group"), PlaceholderValue);
   titleItem->setData(tr("Title or description of this dataset group"), ParameterDescription);
   m_groupModel->appendRow(titleItem);
+}
 
-  const auto& sources    = DataModel::ProjectModel::instance().sources();
-  const bool multiSource = sources.size() > 1;
+/**
+ * @brief Appends the multi-source input-device combo for the given group.
+ */
+void DataModel::ProjectEditor::buildGroupSourceSection(const DataModel::Group& group)
+{
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  if (sources.size() <= 1)
+    return;
 
-  if (multiSource) {
-    QStringList sourceLabels;
-    for (const auto& src : sources)
-      sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
-                                              : src.title);
+  QStringList sourceLabels;
+  for (const auto& src : sources)
+    sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
+                                            : src.title);
 
-    int sourceIndex = 0;
-    for (int i = 0; i < static_cast<int>(sources.size()); ++i) {
-      if (sources[i].sourceId == group.sourceId) {
-        sourceIndex = i;
-        break;
-      }
+  int sourceIndex = 0;
+  for (int i = 0; i < static_cast<int>(sources.size()); ++i) {
+    if (sources[i].sourceId == group.sourceId) {
+      sourceIndex = i;
+      break;
     }
-
-    auto* sourceItem = new QStandardItem();
-    sourceItem->setEditable(true);
-    sourceItem->setData(true, Active);
-    sourceItem->setData(ComboBox, WidgetType);
-    sourceItem->setData(sourceLabels, ComboBoxData);
-    sourceItem->setData(sourceIndex, EditableValue);
-    sourceItem->setData(kGroupView_Source, ParameterType);
-    sourceItem->setData(tr("Input Device"), ParameterName);
-    sourceItem->setData(tr("Select which connected device provides data for this group"),
-                        ParameterDescription);
-    m_groupModel->appendRow(sourceItem);
   }
+
+  auto* sourceItem = new QStandardItem();
+  sourceItem->setEditable(true);
+  sourceItem->setData(true, Active);
+  sourceItem->setData(ComboBox, WidgetType);
+  sourceItem->setData(sourceLabels, ComboBoxData);
+  sourceItem->setData(sourceIndex, EditableValue);
+  sourceItem->setData(kGroupView_Source, ParameterType);
+  sourceItem->setData(tr("Input Device"), ParameterName);
+  sourceItem->setData(tr("Select which connected device provides data for this group"),
+                      ParameterDescription);
+  m_groupModel->appendRow(sourceItem);
+}
+
+/**
+ * @brief Appends the Image-View configuration fields for groups using the image widget.
+ */
+void DataModel::ProjectEditor::buildGroupImageSection(const DataModel::Group& group)
+{
+#ifdef BUILD_COMMERCIAL
+  if (group.widget != QLatin1String("image"))
+    return;
+
+  auto* imgHdr = new QStandardItem();
+  imgHdr->setData(SectionHeader, WidgetType);
+  imgHdr->setData(tr("Image Configuration"), PlaceholderValue);
+  imgHdr->setData("qrc:/icons/project-editor/model/image.svg", ParameterIcon);
+  m_groupModel->appendRow(imgHdr);
+
+  int modeIndex = group.imgDetectionMode == QLatin1String("manual") ? 1 : 0;
+
+  auto* modeItem = new QStandardItem();
+  modeItem->setEditable(true);
+  modeItem->setData(true, Active);
+  modeItem->setData(ComboBox, WidgetType);
+  modeItem->setData(m_imgDetectionModes, ComboBoxData);
+  modeItem->setData(modeIndex, EditableValue);
+  modeItem->setData(kGroupView_ImgMode, ParameterType);
+  modeItem->setData(tr("Detection Mode"), ParameterName);
+  modeItem->setData(
+    tr("Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences"),
+    ParameterDescription);
+  m_groupModel->appendRow(modeItem);
+
+  auto* startItem = new QStandardItem();
+  startItem->setEditable(true);
+  startItem->setData(group.imgDetectionMode == QLatin1String("manual"), Active);
+  startItem->setData(TextField, WidgetType);
+  startItem->setData(group.imgStartSequence, EditableValue);
+  startItem->setData(kGroupView_ImgStart, ParameterType);
+  startItem->setData(tr("Start Sequence (Hex)"), ParameterName);
+  startItem->setData(tr("e.g. FF D8 FF"), PlaceholderValue);
+  startItem->setData(tr("Hex bytes marking the start of an image frame"), ParameterDescription);
+  m_groupModel->appendRow(startItem);
+
+  auto* endItem = new QStandardItem();
+  endItem->setEditable(true);
+  endItem->setData(group.imgDetectionMode == QLatin1String("manual"), Active);
+  endItem->setData(TextField, WidgetType);
+  endItem->setData(group.imgEndSequence, EditableValue);
+  endItem->setData(kGroupView_ImgEnd, ParameterType);
+  endItem->setData(tr("End Sequence (Hex)"), ParameterName);
+  endItem->setData(tr("e.g. FF D9"), PlaceholderValue);
+  endItem->setData(tr("Hex bytes marking the end of an image frame"), ParameterDescription);
+  m_groupModel->appendRow(endItem);
+#else
+  Q_UNUSED(group);
+#endif
+}
+
+/**
+ * @brief Rebuilds the group-settings form model for the given group.
+ */
+void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
+{
+  // Dispose of the previous model and create a fresh one
+  if (m_groupModel) {
+    disconnect(m_groupModel);
+    m_groupModel->deleteLater();
+  }
+
+  m_selectedGroup = group;
+  m_groupModel    = new CustomModel(this);
+
+  buildGroupGeneralSection(group);
+  buildGroupSourceSection(group);
 
   // Composite widget selector (hidden for output groups)
   if (group.groupType != DataModel::GroupType::Output) {
@@ -1489,56 +1710,7 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     m_groupModel->appendRow(widgetItem);
   }
 
-  // Image View configuration fields (pro only, shown when widget == "image")
-#ifdef BUILD_COMMERCIAL
-  if (group.widget == QLatin1String("image")) {
-    auto* imgHdr = new QStandardItem();
-    imgHdr->setData(SectionHeader, WidgetType);
-    imgHdr->setData(tr("Image Configuration"), PlaceholderValue);
-    imgHdr->setData("qrc:/icons/project-editor/model/image.svg", ParameterIcon);
-    m_groupModel->appendRow(imgHdr);
-
-    static const QStringList kImgModeValues = {QStringLiteral("autodetect"),
-                                               QStringLiteral("manual")};
-
-    int modeIndex = group.imgDetectionMode == QLatin1String("manual") ? 1 : 0;
-
-    auto* modeItem = new QStandardItem();
-    modeItem->setEditable(true);
-    modeItem->setData(true, Active);
-    modeItem->setData(ComboBox, WidgetType);
-    modeItem->setData(m_imgDetectionModes, ComboBoxData);
-    modeItem->setData(modeIndex, EditableValue);
-    modeItem->setData(kGroupView_ImgMode, ParameterType);
-    modeItem->setData(tr("Detection Mode"), ParameterName);
-    modeItem->setData(
-      tr("Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences"),
-      ParameterDescription);
-    m_groupModel->appendRow(modeItem);
-
-    auto* startItem = new QStandardItem();
-    startItem->setEditable(true);
-    startItem->setData(group.imgDetectionMode == QLatin1String("manual"), Active);
-    startItem->setData(TextField, WidgetType);
-    startItem->setData(group.imgStartSequence, EditableValue);
-    startItem->setData(kGroupView_ImgStart, ParameterType);
-    startItem->setData(tr("Start Sequence (Hex)"), ParameterName);
-    startItem->setData(tr("e.g. FF D8 FF"), PlaceholderValue);
-    startItem->setData(tr("Hex bytes marking the start of an image frame"), ParameterDescription);
-    m_groupModel->appendRow(startItem);
-
-    auto* endItem = new QStandardItem();
-    endItem->setEditable(true);
-    endItem->setData(group.imgDetectionMode == QLatin1String("manual"), Active);
-    endItem->setData(TextField, WidgetType);
-    endItem->setData(group.imgEndSequence, EditableValue);
-    endItem->setData(kGroupView_ImgEnd, ParameterType);
-    endItem->setData(tr("End Sequence (Hex)"), ParameterName);
-    endItem->setData(tr("e.g. FF D9"), PlaceholderValue);
-    endItem->setData(tr("Hex bytes marking the end of an image frame"), ParameterDescription);
-    m_groupModel->appendRow(endItem);
-  }
-#endif
+  buildGroupImageSection(group);
 
   connect(
     m_groupModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onGroupItemChanged);
@@ -1547,19 +1719,10 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
 }
 
 /**
- * @brief Rebuilds the source-settings form model from the live driver props.
+ * @brief Appends Identity (title) and Input Device (bus type) rows to the source model.
  */
-void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
+void DataModel::ProjectEditor::buildSourceCommonRows(const DataModel::Source& source)
 {
-  // Dispose of the previous model and create a fresh one
-  if (m_sourceModel) {
-    disconnect(m_sourceModel);
-    m_sourceModel->deleteLater();
-  }
-
-  m_selectedSource = source;
-  m_sourceModel    = new CustomModel(this);
-
   auto* identHdr = new QStandardItem();
   identHdr->setData(SectionHeader, WidgetType);
   identHdr->setData(tr("Identity"), PlaceholderValue);
@@ -1600,12 +1763,13 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
 
   busItem->setData(busTypes, ComboBoxData);
   m_sourceModel->appendRow(busItem);
+}
 
-  // BLE connection is configured at runtime via the Setup panel, not the editor
-  if (source.busType != static_cast<int>(SerialStudio::BusType::BluetoothLE))
-    appendDriverPropertyRows(source);
-
-  // Frame Detection section
+/**
+ * @brief Appends Frame Detection rows including delimiter and start/end sequence inputs.
+ */
+void DataModel::ProjectEditor::buildSourceFrameDetectionRows(const DataModel::Source& source)
+{
   auto* fdHdr = new QStandardItem();
   fdHdr->setData(SectionHeader, WidgetType);
   fdHdr->setData(tr("Frame Detection"), PlaceholderValue);
@@ -1671,8 +1835,13 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
     endSeqItem->setData(tr("Sequence that marks the end of a data frame"), ParameterDescription);
     m_sourceModel->appendRow(endSeqItem);
   }
+}
 
-  // Payload Processing section
+/**
+ * @brief Appends Payload Processing & Validation rows (decoder + checksum).
+ */
+void DataModel::ProjectEditor::buildSourceConnectionSection(const DataModel::Source& source)
+{
   auto* ppHdr = new QStandardItem();
   ppHdr->setData(SectionHeader, WidgetType);
   ppHdr->setData(tr("Payload Processing & Validation"), PlaceholderValue);
@@ -1707,6 +1876,30 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   checksumItem->setData(tr("Select the checksum algorithm used to validate frames"),
                         ParameterDescription);
   m_sourceModel->appendRow(checksumItem);
+}
+
+/**
+ * @brief Rebuilds the source-settings form model from the live driver props.
+ */
+void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
+{
+  // Dispose of the previous model and create a fresh one
+  if (m_sourceModel) {
+    disconnect(m_sourceModel);
+    m_sourceModel->deleteLater();
+  }
+
+  m_selectedSource = source;
+  m_sourceModel    = new CustomModel(this);
+
+  buildSourceCommonRows(source);
+
+  // BLE connection is configured at runtime via the Setup panel, not the editor
+  if (source.busType != static_cast<int>(SerialStudio::BusType::BluetoothLE))
+    appendDriverPropertyRows(source);
+
+  buildSourceFrameDetectionRows(source);
+  buildSourceConnectionSection(source);
 
   connect(
     m_sourceModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onSourceItemChanged);
@@ -1781,74 +1974,167 @@ void DataModel::ProjectEditor::appendDriverPropertyRows(const DataModel::Source&
 }
 
 /**
+ * @brief Applies a source-title edit and syncs the tree-item cache.
+ */
+void DataModel::ProjectEditor::handleSourceTitleChange(QStandardItem* item)
+{
+  const QString newTitle = item->data(EditableValue).toString();
+  if (m_selectedSource.title == newTitle)
+    return;
+
+  m_selectedSource.title = newTitle;
+  DataModel::ProjectModel::instance().updateSourceTitle(m_selectedSource.sourceId, newTitle);
+
+  for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
+    if (it.value().sourceId != m_selectedSource.sourceId)
+      continue;
+
+    auto* treeItem = it.key();
+    treeItem->setText(newTitle);
+    treeItem->setData(newTitle, TreeViewText);
+    m_sourceItems[treeItem].title = newTitle;
+    break;
+  }
+
+  Q_EMIT selectedTextChanged();
+}
+
+/**
+ * @brief Applies a bus-type edit and rebuilds the source form once contexts are ready.
+ */
+void DataModel::ProjectEditor::handleSourceBusTypeChange(QStandardItem* item)
+{
+  const int busType = item->data(EditableValue).toInt();
+  DataModel::ProjectModel::instance().updateSourceBusType(m_selectedSource.sourceId, busType);
+  m_selectedSource.busType = busType;
+  auto conn                = std::make_shared<QMetaObject::Connection>();
+  *conn                    = connect(
+    &IO::ConnectionManager::instance(),
+    &IO::ConnectionManager::contextsRebuilt,
+    this,
+    [this, conn] {
+      disconnect(*conn);
+      buildSourceModel(m_selectedSource);
+    },
+    Qt::QueuedConnection);
+}
+
+/**
+ * @brief Applies a live-driver property edit and rebuilds the form on transport mode changes.
+ */
+void DataModel::ProjectEditor::handleSourcePropertyChange(QStandardItem* item)
+{
+  const QString key  = item->data(ParameterKey).toString();
+  const QVariant val = item->data(EditableValue);
+  IO::HAL_Driver* drv =
+    IO::ConnectionManager::instance().driverForEditing(m_selectedSource.sourceId);
+  if (drv)
+    drv->setDriverProperty(key, val);
+
+  DataModel::ProjectModel::instance().captureSourceSettings(m_selectedSource.sourceId);
+
+  // Transport mode change affects which properties are visible, rebuild the form
+  static const QStringList kModeKeys = {
+    QStringLiteral("socketTypeIndex"),
+    QStringLiteral("protocolIndex"),
+  };
+  if (kModeKeys.contains(key))
+    buildSourceModel(m_selectedSource);
+}
+
+/**
+ * @brief Applies frame-detection method or hex-delimiter edits and rebuilds the source form.
+ */
+void DataModel::ProjectEditor::handleSourceFrameDetectionChange(QStandardItem* item,
+                                                                DataModel::Source& updated)
+{
+  const int id  = item->data(ParameterType).toInt();
+  const int sid = m_selectedSource.sourceId;
+
+  if (id == kSourceView_FrameDetection) {
+    const int idx = item->data(EditableValue).toInt();
+    if (idx < 0 || idx >= m_frameDetectionMethodsValues.size())
+      return;
+
+    updated.frameDetection = static_cast<int>(m_frameDetectionMethodsValues.at(idx));
+    DataModel::ProjectModel::instance().updateSource(sid, updated);
+    m_selectedSource = updated;
+    buildSourceModel(m_selectedSource);
+    return;
+  }
+
+  updated.hexadecimalDelimiters = item->data(EditableValue).toBool();
+  DataModel::ProjectModel::instance().updateSource(sid, updated);
+  m_selectedSource = updated;
+  buildSourceModel(m_selectedSource);
+}
+
+/**
+ * @brief Applies frame start/end delimiter edits to the source.
+ */
+void DataModel::ProjectEditor::handleSourceFrameStartEndChange(QStandardItem* item,
+                                                               DataModel::Source& updated)
+{
+  const int id  = item->data(ParameterType).toInt();
+  const int sid = m_selectedSource.sourceId;
+
+  if (id == kSourceView_FrameStartSequence)
+    updated.frameStart = item->data(EditableValue).toString();
+  else
+    updated.frameEnd = item->data(EditableValue).toString();
+
+  DataModel::ProjectModel::instance().updateSource(sid, updated);
+  m_selectedSource = updated;
+}
+
+/**
+ * @brief Applies decoder method or checksum algorithm edits to the source.
+ */
+void DataModel::ProjectEditor::handleSourceDecoderChecksumChange(QStandardItem* item,
+                                                                 DataModel::Source& updated)
+{
+  const int id  = item->data(ParameterType).toInt();
+  const int sid = m_selectedSource.sourceId;
+
+  if (id == kSourceView_FrameDecoder) {
+    updated.decoderMethod = item->data(EditableValue).toInt();
+    DataModel::ProjectModel::instance().updateSource(sid, updated);
+    m_selectedSource = updated;
+    return;
+  }
+
+  const auto checksums = IO::availableChecksums();
+  const int checksumId = item->data(EditableValue).toInt();
+  if (checksumId < 0 || checksumId >= checksums.size())
+    return;
+
+  updated.checksumAlgorithm = checksums.at(checksumId);
+  DataModel::ProjectModel::instance().updateSource(sid, updated);
+  m_selectedSource = updated;
+}
+
+/**
  * @brief Dispatches source form edits to ProjectModel or the live driver.
  */
 void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
 {
-  // Validate item and read the parameter type
   if (!item)
     return;
 
   const int id = item->data(ParameterType).toInt();
 
   if (id == kSourceView_Title) {
-    const QString newTitle = item->data(EditableValue).toString();
-    if (m_selectedSource.title == newTitle)
-      return;
-
-    m_selectedSource.title = newTitle;
-    DataModel::ProjectModel::instance().updateSourceTitle(m_selectedSource.sourceId, newTitle);
-
-    for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
-      if (it.value().sourceId != m_selectedSource.sourceId)
-        continue;
-
-      auto* treeItem = it.key();
-      treeItem->setText(newTitle);
-      treeItem->setData(newTitle, TreeViewText);
-      m_sourceItems[treeItem].title = newTitle;
-      break;
-    }
-
-    Q_EMIT selectedTextChanged();
+    handleSourceTitleChange(item);
     return;
   }
 
   if (id == kSourceView_BusType) {
-    const int busType = item->data(EditableValue).toInt();
-    DataModel::ProjectModel::instance().updateSourceBusType(m_selectedSource.sourceId, busType);
-    m_selectedSource.busType = busType;
-    auto conn                = std::make_shared<QMetaObject::Connection>();
-    *conn                    = connect(
-      &IO::ConnectionManager::instance(),
-      &IO::ConnectionManager::contextsRebuilt,
-      this,
-      [this, conn] {
-        disconnect(*conn);
-        buildSourceModel(m_selectedSource);
-      },
-      Qt::QueuedConnection);
+    handleSourceBusTypeChange(item);
     return;
   }
 
   if (id == kSourceView_Property) {
-    const QString key  = item->data(ParameterKey).toString();
-    const QVariant val = item->data(EditableValue);
-    IO::HAL_Driver* drv =
-      IO::ConnectionManager::instance().driverForEditing(m_selectedSource.sourceId);
-    if (drv)
-      drv->setDriverProperty(key, val);
-
-    DataModel::ProjectModel::instance().captureSourceSettings(m_selectedSource.sourceId);
-
-    // Transport mode change affects which properties are visible, rebuild the form
-    static const QStringList kModeKeys = {
-      QStringLiteral("socketTypeIndex"),
-      QStringLiteral("protocolIndex"),
-    };
-    if (kModeKeys.contains(key))
-      buildSourceModel(m_selectedSource);
-
+    handleSourcePropertyChange(item);
     return;
   }
 
@@ -1861,69 +2147,28 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
   DataModel::Source updated = sources[sid];
 
   switch (static_cast<SourceItem>(id)) {
-    case kSourceView_FrameDetection: {
-      const int idx = item->data(EditableValue).toInt();
-      if (idx < 0 || idx >= m_frameDetectionMethodsValues.size())
-        return;
-
-      updated.frameDetection = static_cast<int>(m_frameDetectionMethodsValues.at(idx));
-      DataModel::ProjectModel::instance().updateSource(sid, updated);
-      m_selectedSource = updated;
-      buildSourceModel(m_selectedSource);
-      break;
-    }
+    case kSourceView_FrameDetection:
     case kSourceView_HexadecimalSequence:
-      updated.hexadecimalDelimiters = item->data(EditableValue).toBool();
-      DataModel::ProjectModel::instance().updateSource(sid, updated);
-      m_selectedSource = updated;
-      buildSourceModel(m_selectedSource);
+      handleSourceFrameDetectionChange(item, updated);
       break;
     case kSourceView_FrameStartSequence:
-      updated.frameStart = item->data(EditableValue).toString();
-      DataModel::ProjectModel::instance().updateSource(sid, updated);
-      m_selectedSource = updated;
-      break;
     case kSourceView_FrameEndSequence:
-      updated.frameEnd = item->data(EditableValue).toString();
-      DataModel::ProjectModel::instance().updateSource(sid, updated);
-      m_selectedSource = updated;
+      handleSourceFrameStartEndChange(item, updated);
       break;
     case kSourceView_FrameDecoder:
-      updated.decoderMethod = item->data(EditableValue).toInt();
-      DataModel::ProjectModel::instance().updateSource(sid, updated);
-      m_selectedSource = updated;
+    case kSourceView_ChecksumFunction:
+      handleSourceDecoderChecksumChange(item, updated);
       break;
-    case kSourceView_ChecksumFunction: {
-      const auto checksums = IO::availableChecksums();
-      const int checksumId = item->data(EditableValue).toInt();
-      if (checksumId < 0 || checksumId >= checksums.size())
-        return;
-
-      updated.checksumAlgorithm = checksums.at(checksumId);
-      DataModel::ProjectModel::instance().updateSource(sid, updated);
-      m_selectedSource = updated;
-      break;
-    }
     default:
       break;
   }
 }
 
 /**
- * @brief Rebuilds the action-settings form model for the given action.
+ * @brief Appends General Information rows (header, title, icon, target device).
  */
-void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
+void DataModel::ProjectEditor::buildActionGeneralRows(const DataModel::Action& action)
 {
-  // Dispose of the previous model and create a fresh one
-  if (m_actionModel) {
-    disconnect(m_actionModel);
-    m_actionModel->deleteLater();
-  }
-
-  m_selectedAction = action;
-  m_actionModel    = new CustomModel(this);
-
-  // General Information
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("General Information"), PlaceholderValue);
@@ -1954,35 +2199,41 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
 
   // Target device (only shown when multiple sources exist)
   const auto& sources = DataModel::ProjectModel::instance().sources();
-  if (sources.size() > 1) {
-    QStringList sourceLabels;
-    for (const auto& src : sources)
-      sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
-                                              : src.title);
+  if (sources.size() <= 1)
+    return;
 
-    int sourceIndex = 0;
-    for (int i = 0; i < static_cast<int>(sources.size()); ++i) {
-      if (sources[i].sourceId == action.sourceId) {
-        sourceIndex = i;
-        break;
-      }
+  QStringList sourceLabels;
+  for (const auto& src : sources)
+    sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
+                                            : src.title);
+
+  int sourceIndex = 0;
+  for (int i = 0; i < static_cast<int>(sources.size()); ++i) {
+    if (sources[i].sourceId == action.sourceId) {
+      sourceIndex = i;
+      break;
     }
-
-    auto* sourceItem = new QStandardItem();
-    sourceItem->setEditable(true);
-    sourceItem->setData(true, Active);
-    sourceItem->setData(ComboBox, WidgetType);
-    sourceItem->setData(sourceLabels, ComboBoxData);
-    sourceItem->setData(sourceIndex, EditableValue);
-    sourceItem->setData(kActionView_SourceId, ParameterType);
-    sourceItem->setData(tr("Target Device"), ParameterName);
-    sourceItem->setData(tr("Select which connected device this action sends data to"),
-                        ParameterDescription);
-    m_actionModel->appendRow(sourceItem);
   }
 
-  // Data Payload
-  hdr = new QStandardItem();
+  auto* sourceItem = new QStandardItem();
+  sourceItem->setEditable(true);
+  sourceItem->setData(true, Active);
+  sourceItem->setData(ComboBox, WidgetType);
+  sourceItem->setData(sourceLabels, ComboBoxData);
+  sourceItem->setData(sourceIndex, EditableValue);
+  sourceItem->setData(kActionView_SourceId, ParameterType);
+  sourceItem->setData(tr("Target Device"), ParameterName);
+  sourceItem->setData(tr("Select which connected device this action sends data to"),
+                      ParameterDescription);
+  m_actionModel->appendRow(sourceItem);
+}
+
+/**
+ * @brief Appends Data Payload rows (binary toggle, payload, encoding, EOL sequence).
+ */
+void DataModel::ProjectEditor::buildActionPayloadRows(const DataModel::Action& action)
+{
+  auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Data Payload"), PlaceholderValue);
   hdr->setData("qrc:/icons/project-editor/model/tx-data.svg", ParameterIcon);
@@ -2061,9 +2312,14 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
   eolItem->setData(tr("EOL characters to append to the message (e.g. \\n, \\r\\n)"),
                    ParameterDescription);
   m_actionModel->appendRow(eolItem);
+}
 
-  // Execution Behavior
-  hdr = new QStandardItem();
+/**
+ * @brief Appends Execution Behavior and Timer Behavior rows for the action form.
+ */
+void DataModel::ProjectEditor::buildActionTimingRows(const DataModel::Action& action)
+{
+  auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Execution Behavior"), PlaceholderValue);
   hdr->setData("qrc:/icons/project-editor/model/action-behavior.svg", ParameterIcon);
@@ -2081,7 +2337,6 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
                     ParameterDescription);
   m_actionModel->appendRow(autoExec);
 
-  // Timer Behavior
   hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Timer Behavior"), PlaceholderValue);
@@ -2123,6 +2378,25 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
   repeatCount->setData(tr("Number of times to send the command on each trigger"),
                        ParameterDescription);
   m_actionModel->appendRow(repeatCount);
+}
+
+/**
+ * @brief Rebuilds the action-settings form model for the given action.
+ */
+void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
+{
+  // Dispose of the previous model and create a fresh one
+  if (m_actionModel) {
+    disconnect(m_actionModel);
+    m_actionModel->deleteLater();
+  }
+
+  m_selectedAction = action;
+  m_actionModel    = new CustomModel(this);
+
+  buildActionGeneralRows(action);
+  buildActionPayloadRows(action);
+  buildActionTimingRows(action);
 
   connect(
     m_actionModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onActionItemChanged);
@@ -2313,14 +2587,11 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
 }
 
 /**
- * @brief Appends the FFT section rows to the dataset form model.
+ * @brief Appends FFT/Waterfall enable rows and the optional Waterfall Y-axis selector.
  */
-void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel::Dataset& dataset)
+void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model,
+                                                   const DataModel::Dataset& dataset)
 {
-  // FFT settings drive both the FFT plot and the Pro waterfall widget
-  const bool fftSettingsEditable = dataset.fft || dataset.waterfall;
-
-  // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Frequency Analysis"), PlaceholderValue);
@@ -2350,22 +2621,32 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
                          ParameterDescription);
   model->appendRow(waterfallItem);
 
-  // Waterfall Y-axis source (0 = time, any dataset index = Campbell diagram)
-  if (dataset.waterfall) {
-    auto* yAxisItem = new QStandardItem();
-    yAxisItem->setEditable(true);
-    yAxisItem->setData(ComboBox, WidgetType);
-    yAxisItem->setData(dataset.waterfallYAxis, EditableValue);
-    yAxisItem->setData(yAxisItem->isEditable(), Active);
-    yAxisItem->setData(DataModel::ProjectModel::instance().yWaterfallSources(), ComboBoxData);
-    yAxisItem->setData(kDatasetView_WaterfallYAxis, ParameterType);
-    yAxisItem->setData(tr("Waterfall Y Axis"), ParameterName);
-    yAxisItem->setData(tr("Choose Time (default) or any dataset whose value drives "
-                          "the Y axis -- produces a Campbell diagram when bound "
-                          "to e.g. RPM"),
-                       ParameterDescription);
-    model->appendRow(yAxisItem);
-  }
+  if (!dataset.waterfall)
+    return;
+
+  auto* yAxisItem = new QStandardItem();
+  yAxisItem->setEditable(true);
+  yAxisItem->setData(ComboBox, WidgetType);
+  yAxisItem->setData(dataset.waterfallYAxis, EditableValue);
+  yAxisItem->setData(yAxisItem->isEditable(), Active);
+  yAxisItem->setData(DataModel::ProjectModel::instance().yWaterfallSources(), ComboBoxData);
+  yAxisItem->setData(kDatasetView_WaterfallYAxis, ParameterType);
+  yAxisItem->setData(tr("Waterfall Y Axis"), ParameterName);
+  yAxisItem->setData(tr("Choose Time (default) or any dataset whose value drives "
+                        "the Y axis -- produces a Campbell diagram when bound "
+                        "to e.g. RPM"),
+                     ParameterDescription);
+  model->appendRow(yAxisItem);
+}
+
+/**
+ * @brief Appends FFT window-size, sampling rate, and min/max range rows.
+ */
+void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model,
+                                                 const DataModel::Dataset& dataset)
+{
+  // FFT settings drive both the FFT plot and the Pro waterfall widget
+  const bool fftSettingsEditable = dataset.fft || dataset.waterfall;
 
   const auto windowSize = QString::number(dataset.fftSamples);
   int windowIndex       = m_fftSamples.indexOf(windowSize);
@@ -2416,6 +2697,15 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
   fftMax->setData(tr("Maximum Value (recommended)"), ParameterName);
   fftMax->setData(tr("Upper bound for data normalization"), ParameterDescription);
   model->appendRow(fftMax);
+}
+
+/**
+ * @brief Appends the FFT section rows to the dataset form model.
+ */
+void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel::Dataset& dataset)
+{
+  buildFftGeneralRows(model, dataset);
+  buildFftRangeRows(model, dataset);
 }
 
 /**
@@ -2966,14 +3256,38 @@ void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
 }
 
 /**
- * @brief Dispatches dataset form edits to ProjectModel, rebuilding only on tree-visible changes.
+ * @brief Applies edits to dataset identity rows (title, index, units, transform code).
  */
-void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
+void DataModel::ProjectEditor::onDatasetCommonItemChanged(QStandardItem* item,
+                                                          DataModel::Dataset& dataset)
 {
-  // Validate item and lazy-initialize key lists
-  if (!item)
-    return;
+  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
+  const auto value = item->data(EditableValue);
 
+  switch (id) {
+    case kDatasetView_Title:
+      dataset.title = value.toString();
+      break;
+    case kDatasetView_Index:
+      dataset.index = value.toInt();
+      break;
+    case kDatasetView_Units:
+      dataset.units = value.toString();
+      break;
+    case kDatasetView_TransformCode:
+      dataset.transformCode = value.toString();
+      break;
+    default:
+      break;
+  }
+}
+
+/**
+ * @brief Applies widget/plot/virtual selector edits and triggers a form rebuild.
+ */
+void DataModel::ProjectEditor::onDatasetWidgetItemChanged(QStandardItem* item,
+                                                          DataModel::Dataset& dataset)
+{
   static QStringList datasetWidgetKeys;
   static QList<QPair<bool, bool>> plotOptionKeys;
 
@@ -2985,139 +3299,196 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     for (auto i = m_plotOptions.begin(); i != m_plotOptions.end(); ++i)
       plotOptionKeys.append(i.key());
 
-  const auto id    = item->data(ParameterType);
+  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
   const auto value = item->data(EditableValue);
 
-  switch (static_cast<DatasetItem>(id.toInt())) {
-    case kDatasetView_Title:
-      m_selectedDataset.title = value.toString();
-      break;
-    case kDatasetView_Index:
-      m_selectedDataset.index = value.toInt();
-      break;
-    case kDatasetView_Units:
-      m_selectedDataset.units = value.toString();
-      break;
-    case kDatasetView_Widget: {
-      const int widgetIdx = value.toInt();
-      if (widgetIdx < 0 || widgetIdx >= datasetWidgetKeys.size())
-        return;
+  if (id == kDatasetView_Widget) {
+    const int widgetIdx = value.toInt();
+    if (widgetIdx < 0 || widgetIdx >= datasetWidgetKeys.size())
+      return;
 
-      m_selectedDataset.widget = datasetWidgetKeys.at(widgetIdx);
-      if (m_selectedDataset.widget == "compass") {
-        m_selectedDataset.wgtMin    = 0;
-        m_selectedDataset.wgtMax    = 360;
-        m_selectedDataset.alarmLow  = 0;
-        m_selectedDataset.alarmHigh = 0;
+    dataset.widget = datasetWidgetKeys.at(widgetIdx);
+    if (dataset.widget == "compass") {
+      dataset.wgtMin    = 0;
+      dataset.wgtMax    = 360;
+      dataset.alarmLow  = 0;
+      dataset.alarmHigh = 0;
+    }
+    buildDatasetModel(dataset);
+    return;
+  }
+
+  if (id == kDatasetView_Plot) {
+    const int plotIdx = value.toInt();
+    if (plotIdx < 0 || plotIdx >= plotOptionKeys.size())
+      return;
+
+    dataset.plt = plotOptionKeys.at(plotIdx).first;
+    dataset.log = plotOptionKeys.at(plotIdx).second;
+    buildDatasetModel(dataset);
+    return;
+  }
+
+  if (id == kDatasetView_Virtual) {
+    dataset.virtual_ = value.toBool();
+
+    for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+      if (it.value().groupId == dataset.groupId && it.value().datasetId == dataset.datasetId) {
+        it.key()->setData(dataset.virtual_, TreeViewVirtual);
+        break;
       }
-      buildDatasetModel(m_selectedDataset);
-      break;
     }
-    case kDatasetView_FFT:
-      m_selectedDataset.fft = value.toBool();
-      buildDatasetModel(m_selectedDataset);
-      break;
-    case kDatasetView_Waterfall:
-      m_selectedDataset.waterfall = value.toBool();
-      buildDatasetModel(m_selectedDataset);
-      break;
-    case kDatasetView_WaterfallYAxis:
-      m_selectedDataset.waterfallYAxis = value.toInt();
-      break;
-    case kDatasetView_LED:
-      m_selectedDataset.led = value.toBool();
-      buildDatasetModel(m_selectedDataset);
-      break;
-    case kDatasetView_LED_High:
-      m_selectedDataset.ledHigh = value.toDouble();
-      break;
-    case kDatasetView_Overview:
-      // Deprecated in v3.3; enum kept to avoid renumbering. Row no longer added.
-      break;
-    case kDatasetView_Plot: {
-      const int plotIdx = value.toInt();
-      if (plotIdx < 0 || plotIdx >= plotOptionKeys.size())
-        return;
 
-      m_selectedDataset.plt = plotOptionKeys.at(plotIdx).first;
-      m_selectedDataset.log = plotOptionKeys.at(plotIdx).second;
-      buildDatasetModel(m_selectedDataset);
-      break;
-    }
+    const int uid = dataset.uniqueId;
+    QTimer::singleShot(0, this, [this, uid] {
+      if (m_selectedDataset.uniqueId == uid)
+        buildDatasetModel(m_selectedDataset);
+    });
+  }
+}
+
+/**
+ * @brief Applies edits to dataset numeric range/limit fields (plot, widget, alarm, x-axis).
+ */
+void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
+                                                         DataModel::Dataset& dataset)
+{
+  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
+  const auto value = item->data(EditableValue);
+
+  switch (id) {
     case kDatasetView_xAxis:
-      m_selectedDataset.xAxisId = value.toInt();
-      break;
-    case kDatasetView_FFTMin:
-      m_selectedDataset.fftMin = value.toDouble();
-      break;
-    case kDatasetView_FFTMax:
-      m_selectedDataset.fftMax = value.toDouble();
+      dataset.xAxisId = value.toInt();
       break;
     case kDatasetView_PltMin:
-      m_selectedDataset.pltMin = value.toDouble();
+      dataset.pltMin = value.toDouble();
       break;
     case kDatasetView_PltMax:
-      m_selectedDataset.pltMax = value.toDouble();
+      dataset.pltMax = value.toDouble();
       break;
     case kDatasetView_WgtMin:
-      m_selectedDataset.wgtMin = value.toDouble();
+      dataset.wgtMin = value.toDouble();
       break;
     case kDatasetView_WgtMax:
-      m_selectedDataset.wgtMax = value.toDouble();
+      dataset.wgtMax = value.toDouble();
       break;
     case kDatasetView_AlarmLow:
-      m_selectedDataset.alarmLow = value.toDouble();
+      dataset.alarmLow = value.toDouble();
       break;
     case kDatasetView_AlarmHigh:
-      m_selectedDataset.alarmHigh = value.toDouble();
+      dataset.alarmHigh = value.toDouble();
       break;
-    case kDatasetView_AlarmEnabled:
-      m_selectedDataset.alarmEnabled = value.toBool();
-      buildDatasetModel(m_selectedDataset);
+    default:
+      break;
+  }
+}
+
+/**
+ * @brief Applies edits to FFT-related dataset fields (samples, sampling rate, min/max, axis).
+ */
+void DataModel::ProjectEditor::onDatasetFftItemChanged(QStandardItem* item,
+                                                       DataModel::Dataset& dataset)
+{
+  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
+  const auto value = item->data(EditableValue);
+
+  switch (id) {
+    case kDatasetView_FFTMin:
+      dataset.fftMin = value.toDouble();
+      break;
+    case kDatasetView_FFTMax:
+      dataset.fftMax = value.toDouble();
+      break;
+    case kDatasetView_WaterfallYAxis:
+      dataset.waterfallYAxis = value.toInt();
       break;
     case kDatasetView_FFT_Samples: {
       const int sampleIdx = value.toInt();
       if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())
         return;
 
-      m_selectedDataset.fftSamples = m_fftSamples.at(sampleIdx).toInt();
+      dataset.fftSamples = m_fftSamples.at(sampleIdx).toInt();
       break;
     }
     case kDatasetView_FFT_SamplingRate:
-      m_selectedDataset.fftSamplingRate = value.toInt();
+      dataset.fftSamplingRate = value.toInt();
       break;
-    case kDatasetView_TransformCode:
-      m_selectedDataset.transformCode = value.toString();
-      break;
-    case kDatasetView_Virtual: {
-      m_selectedDataset.virtual_ = value.toBool();
-
-      // Refresh the tree-item virtual flag so the [A-N]/[VRT] label swaps now.
-      for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
-        if (it.value().groupId == m_selectedDataset.groupId
-            && it.value().datasetId == m_selectedDataset.datasetId) {
-          it.key()->setData(m_selectedDataset.virtual_, TreeViewVirtual);
-          break;
-        }
-      }
-
-      // Defer rebuild past this signal; skip if selection moved before it fires.
-      const int uid = m_selectedDataset.uniqueId;
-      QTimer::singleShot(0, this, [this, uid] {
-        if (m_selectedDataset.uniqueId == uid)
-          buildDatasetModel(m_selectedDataset);
-      });
-
-      break;
-    }
     default:
       break;
   }
+}
+
+/**
+ * @brief Applies dataset boolean flag edits (FFT, waterfall, LED, alarm-enabled, ledHigh).
+ */
+void DataModel::ProjectEditor::onDatasetFlagItemChanged(QStandardItem* item,
+                                                        DataModel::Dataset& dataset)
+{
+  const auto id    = static_cast<DatasetItem>(item->data(ParameterType).toInt());
+  const auto value = item->data(EditableValue);
+
+  switch (id) {
+    case kDatasetView_FFT:
+      dataset.fft = value.toBool();
+      buildDatasetModel(dataset);
+      break;
+    case kDatasetView_Waterfall:
+      dataset.waterfall = value.toBool();
+      buildDatasetModel(dataset);
+      break;
+    case kDatasetView_LED:
+      dataset.led = value.toBool();
+      buildDatasetModel(dataset);
+      break;
+    case kDatasetView_LED_High:
+      dataset.ledHigh = value.toDouble();
+      break;
+    case kDatasetView_AlarmEnabled:
+      dataset.alarmEnabled = value.toBool();
+      buildDatasetModel(dataset);
+      break;
+    default:
+      break;
+  }
+}
+
+/**
+ * @brief Dispatches dataset form edits to ProjectModel, rebuilding only on tree-visible changes.
+ */
+void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
+{
+  if (!item)
+    return;
+
+  const auto idInt = static_cast<DatasetItem>(item->data(ParameterType).toInt());
+  const auto value = item->data(EditableValue);
+
+  // Bounds-checked dispatch: abort silently when index lookups fail
+  if (idInt == kDatasetView_Widget) {
+    const int widgetIdx = value.toInt();
+    if (widgetIdx < 0 || widgetIdx >= m_datasetWidgets.size())
+      return;
+  }
+  if (idInt == kDatasetView_Plot) {
+    const int plotIdx = value.toInt();
+    if (plotIdx < 0 || plotIdx >= m_plotOptions.size())
+      return;
+  }
+  if (idInt == kDatasetView_FFT_Samples) {
+    const int sampleIdx = value.toInt();
+    if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())
+      return;
+  }
+
+  onDatasetCommonItemChanged(item, m_selectedDataset);
+  onDatasetWidgetItemChanged(item, m_selectedDataset);
+  onDatasetRangeItemChanged(item, m_selectedDataset);
+  onDatasetFftItemChanged(item, m_selectedDataset);
+  onDatasetFlagItemChanged(item, m_selectedDataset);
 
   auto& pm             = DataModel::ProjectModel::instance();
   const auto groupId   = m_selectedDataset.groupId;
   const auto datasetId = m_selectedDataset.datasetId;
-  const auto idInt     = static_cast<DatasetItem>(id.toInt());
 
   // Title updates tree item in-place; index changes require a full rebuild
   if (idInt == kDatasetView_Title) {
@@ -3356,6 +3727,124 @@ void DataModel::ProjectEditor::selectOutputWidget(int groupId, int widgetId)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Appends General Information rows (header, label, icon, mono toggle, encoding).
+ */
+void DataModel::ProjectEditor::buildOutputWidgetCommonRows(const DataModel::OutputWidget& widget)
+{
+  auto* hdr = new QStandardItem();
+  hdr->setData(true, Active);
+  hdr->setData(SectionHeader, WidgetType);
+  hdr->setData(tr("General Information"), PlaceholderValue);
+  hdr->setData("qrc:/icons/project-editor/model/output-widget.svg", ParameterIcon);
+  m_outputWidgetModel->appendRow(hdr);
+
+  auto* titleItem = new QStandardItem();
+  titleItem->setEditable(true);
+  titleItem->setData(true, Active);
+  titleItem->setData(TextField, WidgetType);
+  titleItem->setData(widget.title, EditableValue);
+  titleItem->setData(kOutputWidget_Title, ParameterType);
+  titleItem->setData(tr("Label"), ParameterName);
+  titleItem->setData(tr("Display label"), PlaceholderValue);
+  m_outputWidgetModel->appendRow(titleItem);
+
+  if (widget.type == DataModel::OutputWidgetType::Button) {
+    auto* iconItem = new QStandardItem();
+    iconItem->setEditable(true);
+    iconItem->setData(true, Active);
+    iconItem->setData(IconPicker, WidgetType);
+    iconItem->setData(widget.icon, EditableValue);
+    iconItem->setData(kOutputWidget_Icon, ParameterType);
+    iconItem->setData(tr("Button Icon"), ParameterName);
+    m_outputWidgetModel->appendRow(iconItem);
+
+    auto* monoItem = new QStandardItem();
+    monoItem->setEditable(true);
+    monoItem->setData(true, Active);
+    monoItem->setData(CheckBox, WidgetType);
+    monoItem->setData(widget.monoIcon, EditableValue);
+    monoItem->setData(kOutputWidget_MonoIcon, ParameterType);
+    monoItem->setData(tr("Colorize Icon"), ParameterName);
+    monoItem->setData(tr("Tint the icon with the button color"), ParameterDescription);
+    m_outputWidgetModel->appendRow(monoItem);
+  }
+}
+
+/**
+ * @brief Appends initial value (when applicable) and text encoding rows for the output widget.
+ */
+void DataModel::ProjectEditor::buildOutputWidgetTransmitRow(const DataModel::OutputWidget& widget)
+{
+  if (widget.type != DataModel::OutputWidgetType::Button) {
+    auto* initItem = new QStandardItem();
+    initItem->setEditable(true);
+    initItem->setData(true, Active);
+    initItem->setData(FloatField, WidgetType);
+    initItem->setData(widget.initialValue, EditableValue);
+    initItem->setData(kOutputWidget_InitialValue, ParameterType);
+    initItem->setData(tr("Initial Value"), ParameterName);
+    m_outputWidgetModel->appendRow(initItem);
+  }
+
+  auto* encodingItem = new QStandardItem();
+  encodingItem->setEditable(true);
+  encodingItem->setData(true, Active);
+  encodingItem->setData(ComboBox, WidgetType);
+  encodingItem->setData(SerialStudio::textEncodings(), ComboBoxData);
+  encodingItem->setData(widget.txEncoding, EditableValue);
+  encodingItem->setData(kOutputWidget_TxEncoding, ParameterType);
+  encodingItem->setData(tr("Text Encoding"), ParameterName);
+  encodingItem->setData(tr("Character encoding used when transmit() returns a string value"),
+                        ParameterDescription);
+  m_outputWidgetModel->appendRow(encodingItem);
+}
+
+/**
+ * @brief Appends min/max/step rows for slider and knob output widgets.
+ */
+void DataModel::ProjectEditor::buildOutputWidgetValueRows(const DataModel::OutputWidget& widget)
+{
+  const bool isNumeric = widget.type == DataModel::OutputWidgetType::Slider
+                      || widget.type == DataModel::OutputWidgetType::Knob;
+  if (!isNumeric)
+    return;
+
+  auto* rangeHdr = new QStandardItem();
+  rangeHdr->setData(true, Active);
+  rangeHdr->setData(SectionHeader, WidgetType);
+  rangeHdr->setData(tr("Value Range"), PlaceholderValue);
+  rangeHdr->setData("qrc:/icons/project-editor/model/output-range.svg", ParameterIcon);
+  m_outputWidgetModel->appendRow(rangeHdr);
+
+  auto* minItem = new QStandardItem();
+  minItem->setEditable(true);
+  minItem->setData(true, Active);
+  minItem->setData(FloatField, WidgetType);
+  minItem->setData(widget.minValue, EditableValue);
+  minItem->setData(kOutputWidget_MinValue, ParameterType);
+  minItem->setData(tr("Minimum Value"), ParameterName);
+  m_outputWidgetModel->appendRow(minItem);
+
+  auto* maxItem = new QStandardItem();
+  maxItem->setEditable(true);
+  maxItem->setData(true, Active);
+  maxItem->setData(FloatField, WidgetType);
+  maxItem->setData(widget.maxValue, EditableValue);
+  maxItem->setData(kOutputWidget_MaxValue, ParameterType);
+  maxItem->setData(tr("Maximum Value"), ParameterName);
+  m_outputWidgetModel->appendRow(maxItem);
+
+  auto* stepItem = new QStandardItem();
+  stepItem->setEditable(true);
+  stepItem->setData(true, Active);
+  stepItem->setData(FloatField, WidgetType);
+  stepItem->setData(widget.stepSize, EditableValue);
+  stepItem->setData(kOutputWidget_StepSize, ParameterType);
+  stepItem->setData(tr("Step Size"), ParameterName);
+  m_outputWidgetModel->appendRow(stepItem);
+}
+
+/**
  * @brief Builds the form model for editing an output widget's properties.
  */
 void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
@@ -3370,115 +3859,9 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
 
   m_outputWidgetModel = new CustomModel(this);
 
-  // General information section
-  auto* hdr = new QStandardItem();
-  hdr->setData(true, Active);
-  hdr->setData(SectionHeader, WidgetType);
-  hdr->setData(tr("General Information"), PlaceholderValue);
-  hdr->setData("qrc:/icons/project-editor/model/output-widget.svg", ParameterIcon);
-  m_outputWidgetModel->appendRow(hdr);
-
-  // Label
-  auto* titleItem = new QStandardItem();
-  titleItem->setEditable(true);
-  titleItem->setData(true, Active);
-  titleItem->setData(TextField, WidgetType);
-  titleItem->setData(widget.title, EditableValue);
-  titleItem->setData(kOutputWidget_Title, ParameterType);
-  titleItem->setData(tr("Label"), ParameterName);
-  titleItem->setData(tr("Display label"), PlaceholderValue);
-  m_outputWidgetModel->appendRow(titleItem);
-
-  // Icon (for Button type)
-  if (widget.type == DataModel::OutputWidgetType::Button) {
-    auto* iconItem = new QStandardItem();
-    iconItem->setEditable(true);
-    iconItem->setData(true, Active);
-    iconItem->setData(IconPicker, WidgetType);
-    iconItem->setData(widget.icon, EditableValue);
-    iconItem->setData(kOutputWidget_Icon, ParameterType);
-    iconItem->setData(tr("Button Icon"), ParameterName);
-    m_outputWidgetModel->appendRow(iconItem);
-
-    // Mono icon checkbox
-    auto* monoItem = new QStandardItem();
-    monoItem->setEditable(true);
-    monoItem->setData(true, Active);
-    monoItem->setData(CheckBox, WidgetType);
-    monoItem->setData(widget.monoIcon, EditableValue);
-    monoItem->setData(kOutputWidget_MonoIcon, ParameterType);
-    monoItem->setData(tr("Colorize Icon"), ParameterName);
-    monoItem->setData(tr("Tint the icon with the button color"), ParameterDescription);
-    m_outputWidgetModel->appendRow(monoItem);
-  }
-
-  // Initial value (not applicable for buttons)
-  if (widget.type != DataModel::OutputWidgetType::Button) {
-    auto* initItem = new QStandardItem();
-    initItem->setEditable(true);
-    initItem->setData(true, Active);
-    initItem->setData(FloatField, WidgetType);
-    initItem->setData(widget.initialValue, EditableValue);
-    initItem->setData(kOutputWidget_InitialValue, ParameterType);
-    initItem->setData(tr("Initial Value"), ParameterName);
-    m_outputWidgetModel->appendRow(initItem);
-  }
-
-  // Text encoding picker for string results from transmit(value)
-  auto* encodingItem = new QStandardItem();
-  encodingItem->setEditable(true);
-  encodingItem->setData(true, Active);
-  encodingItem->setData(ComboBox, WidgetType);
-  encodingItem->setData(SerialStudio::textEncodings(), ComboBoxData);
-  encodingItem->setData(widget.txEncoding, EditableValue);
-  encodingItem->setData(kOutputWidget_TxEncoding, ParameterType);
-  encodingItem->setData(tr("Text Encoding"), ParameterName);
-  encodingItem->setData(tr("Character encoding used when transmit() returns a string value"),
-                        ParameterDescription);
-  m_outputWidgetModel->appendRow(encodingItem);
-
-  // Value range section (for sliders/knobs)
-  const bool isNumeric = widget.type == DataModel::OutputWidgetType::Slider
-                      || widget.type == DataModel::OutputWidgetType::Knob;
-
-  if (isNumeric) {
-    auto* rangeHdr = new QStandardItem();
-    rangeHdr->setData(true, Active);
-    rangeHdr->setData(SectionHeader, WidgetType);
-    rangeHdr->setData(tr("Value Range"), PlaceholderValue);
-    rangeHdr->setData("qrc:/icons/project-editor/model/output-range.svg", ParameterIcon);
-    m_outputWidgetModel->appendRow(rangeHdr);
-
-    // Min value
-    auto* minItem = new QStandardItem();
-    minItem->setEditable(true);
-    minItem->setData(true, Active);
-    minItem->setData(FloatField, WidgetType);
-    minItem->setData(widget.minValue, EditableValue);
-    minItem->setData(kOutputWidget_MinValue, ParameterType);
-    minItem->setData(tr("Minimum Value"), ParameterName);
-    m_outputWidgetModel->appendRow(minItem);
-
-    // Max value
-    auto* maxItem = new QStandardItem();
-    maxItem->setEditable(true);
-    maxItem->setData(true, Active);
-    maxItem->setData(FloatField, WidgetType);
-    maxItem->setData(widget.maxValue, EditableValue);
-    maxItem->setData(kOutputWidget_MaxValue, ParameterType);
-    maxItem->setData(tr("Maximum Value"), ParameterName);
-    m_outputWidgetModel->appendRow(maxItem);
-
-    // Step size
-    auto* stepItem = new QStandardItem();
-    stepItem->setEditable(true);
-    stepItem->setData(true, Active);
-    stepItem->setData(FloatField, WidgetType);
-    stepItem->setData(widget.stepSize, EditableValue);
-    stepItem->setData(kOutputWidget_StepSize, ParameterType);
-    stepItem->setData(tr("Step Size"), ParameterName);
-    m_outputWidgetModel->appendRow(stepItem);
-  }
+  buildOutputWidgetCommonRows(widget);
+  buildOutputWidgetTransmitRow(widget);
+  buildOutputWidgetValueRows(widget);
 
   connect(m_outputWidgetModel,
           &CustomModel::itemChanged,

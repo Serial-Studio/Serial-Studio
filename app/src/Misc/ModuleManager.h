@@ -27,6 +27,8 @@
 
 #include "Platform/NativeWindow.h"
 
+class QQmlContext;
+
 namespace Misc {
 /**
  * @brief Manages application module lifecycle, QML engine setup, and headless operation.
@@ -59,6 +61,15 @@ public slots:
   void initializeQmlInterface();
   void setHeadless(const bool headless);
   void setAutomaticUpdates(const bool enabled);
+
+private:
+  void setupCrossModuleConnections();
+  void registerCoreContextProperties(QQmlContext* ctx);
+  void registerAppMetadataProperties(QQmlContext* ctx, bool grpcAvailable);
+  void registerImageProvidersAndLoadQml();
+#ifdef BUILD_COMMERCIAL
+  void registerCommercialContextProperties(QQmlContext* ctx);
+#endif
 
 private:
   bool m_headless;

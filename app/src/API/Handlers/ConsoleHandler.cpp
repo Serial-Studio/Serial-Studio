@@ -22,6 +22,7 @@
 #include "API/Handlers/ConsoleHandler.h"
 
 #include "API/CommandRegistry.h"
+#include "API/SchemaBuilder.h"
 #include "Console/Export.h"
 #include "Console/Handler.h"
 
@@ -36,181 +37,101 @@ void API::Handlers::ConsoleHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // Schema for boolean "enabled" parameter
-  QJsonObject enabledSchema;
-  {
-    QJsonObject props;
-    QJsonObject enabledProp;
-    enabledProp.insert("type", "boolean");
-    enabledProp.insert("description", "Whether to enable the feature");
-    props.insert("enabled", enabledProp);
-    enabledSchema.insert("type", "object");
-    enabledSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("enabled");
-    enabledSchema.insert("required", req);
-  }
+  const auto enabledSchema = API::makeSchema({
+    {QStringLiteral("enabled"),
+     QStringLiteral("boolean"),
+     QStringLiteral("Whether to enable the feature")}
+  });
+  const auto empty         = API::emptySchema();
 
-  // Empty schema for parameterless commands
-  QJsonObject emptySchema;
-  emptySchema.insert("type", "object");
-  emptySchema.insert("properties", QJsonObject());
-
+  // Display / data formatting
   registry.registerCommand(QStringLiteral("console.setEcho"),
                            QStringLiteral("Enable/disable echo"),
                            enabledSchema,
                            &setEcho);
-
   registry.registerCommand(QStringLiteral("console.setShowTimestamp"),
                            QStringLiteral("Show/hide timestamps"),
                            enabledSchema,
                            &setShowTimestamp);
-
-  QJsonObject displayModeSchema;
-  {
-    QJsonObject props;
-    QJsonObject modeIndexProp;
-    modeIndexProp.insert("type", "integer");
-    modeIndexProp.insert("description", "Display mode: 0=PlainText, 1=Hex");
-    props.insert("modeIndex", modeIndexProp);
-    displayModeSchema.insert("type", "object");
-    displayModeSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("modeIndex");
-    displayModeSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("console.setDisplayMode"),
                            QStringLiteral("Set display mode"),
-                           displayModeSchema,
+                           API::makeSchema({
+                             {QStringLiteral("modeIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Display mode: 0=PlainText, 1=Hex")}
+  }),
                            &setDisplayMode);
-
-  QJsonObject dataModeSchema;
-  {
-    QJsonObject props;
-    QJsonObject modeIndexProp;
-    modeIndexProp.insert("type", "integer");
-    modeIndexProp.insert("description", "Data mode: 0=UTF8, 1=Hex");
-    props.insert("modeIndex", modeIndexProp);
-    dataModeSchema.insert("type", "object");
-    dataModeSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("modeIndex");
-    dataModeSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("console.setDataMode"),
                            QStringLiteral("Set data mode"),
-                           dataModeSchema,
+                           API::makeSchema({
+                             {QStringLiteral("modeIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Data mode: 0=UTF8, 1=Hex")}
+  }),
                            &setDataMode);
-
-  QJsonObject lineEndingSchema;
-  {
-    QJsonObject props;
-    QJsonObject endingIndexProp;
-    endingIndexProp.insert("type", "integer");
-    endingIndexProp.insert("description", "Line ending: 0=None, 1=LF, 2=CR, 3=CRLF");
-    props.insert("endingIndex", endingIndexProp);
-    lineEndingSchema.insert("type", "object");
-    lineEndingSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("endingIndex");
-    lineEndingSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("console.setLineEnding"),
                            QStringLiteral("Set line ending"),
-                           lineEndingSchema,
+                           API::makeSchema({
+                             {QStringLiteral("endingIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Line ending: 0=None, 1=LF, 2=CR, 3=CRLF")}
+  }),
                            &setLineEnding);
 
-  QJsonObject fontFamilySchema;
-  {
-    QJsonObject props;
-    QJsonObject fontFamilyProp;
-    fontFamilyProp.insert("type", "string");
-    fontFamilyProp.insert("description", "Font family name");
-    props.insert("fontFamily", fontFamilyProp);
-    fontFamilySchema.insert("type", "object");
-    fontFamilySchema.insert("properties", props);
-    QJsonArray req;
-    req.append("fontFamily");
-    fontFamilySchema.insert("required", req);
-  }
+  // Font / checksum
   registry.registerCommand(QStringLiteral("console.setFontFamily"),
                            QStringLiteral("Set font family"),
-                           fontFamilySchema,
+                           API::makeSchema({
+                             {QStringLiteral("fontFamily"),
+                              QStringLiteral("string"),
+                              QStringLiteral("Font family name")}
+  }),
                            &setFontFamily);
-
-  QJsonObject fontSizeSchema;
-  {
-    QJsonObject props;
-    QJsonObject fontSizeProp;
-    fontSizeProp.insert("type", "integer");
-    fontSizeProp.insert("description", "Font size in points");
-    props.insert("fontSize", fontSizeProp);
-    fontSizeSchema.insert("type", "object");
-    fontSizeSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("fontSize");
-    fontSizeSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("console.setFontSize"),
                            QStringLiteral("Set font size"),
-                           fontSizeSchema,
+                           API::makeSchema({
+                             {QStringLiteral("fontSize"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Font size in points")}
+  }),
                            &setFontSize);
-
-  QJsonObject checksumMethodSchema;
-  {
-    QJsonObject props;
-    QJsonObject methodIndexProp;
-    methodIndexProp.insert("type", "integer");
-    methodIndexProp.insert("description", "Checksum method index");
-    props.insert("methodIndex", methodIndexProp);
-    checksumMethodSchema.insert("type", "object");
-    checksumMethodSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("methodIndex");
-    checksumMethodSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("console.setChecksumMethod"),
                            QStringLiteral("Set checksum method"),
-                           checksumMethodSchema,
+                           API::makeSchema({
+                             {QStringLiteral("methodIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("Checksum method index")}
+  }),
                            &setChecksumMethod);
 
+  // Lifecycle / IO
   registry.registerCommand(
-    QStringLiteral("console.clear"), QStringLiteral("Clear console"), emptySchema, &clear);
+    QStringLiteral("console.clear"), QStringLiteral("Clear console"), empty, &clear);
+  registry.registerCommand(QStringLiteral("console.send"),
+                           QStringLiteral("Send data to device"),
+                           API::makeSchema({
+                             {QStringLiteral("data"),
+                              QStringLiteral("string"),
+                              QStringLiteral("Data string to send to device")}
+  }),
+                           &send);
 
-  QJsonObject sendSchema;
-  {
-    QJsonObject props;
-    QJsonObject dataProp;
-    dataProp.insert("type", "string");
-    dataProp.insert("description", "Data string to send to device");
-    props.insert("data", dataProp);
-    sendSchema.insert("type", "object");
-    sendSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("data");
-    sendSchema.insert("required", req);
-  }
-  registry.registerCommand(
-    QStringLiteral("console.send"), QStringLiteral("Send data to device"), sendSchema, &send);
-
+  // Export + queries
   registry.registerCommand(QStringLiteral("console.export.setEnabled"),
                            QStringLiteral("Enable/disable console export"),
                            enabledSchema,
                            &exportSetEnabled);
-
   registry.registerCommand(QStringLiteral("console.export.close"),
                            QStringLiteral("Close console export file"),
-                           emptySchema,
+                           empty,
                            &exportClose);
-
   registry.registerCommand(QStringLiteral("console.export.getStatus"),
                            QStringLiteral("Get console export status"),
-                           emptySchema,
+                           empty,
                            &exportGetStatus);
-
   registry.registerCommand(QStringLiteral("console.getConfiguration"),
                            QStringLiteral("Get all console settings"),
-                           emptySchema,
+                           empty,
                            &getConfiguration);
 }
 

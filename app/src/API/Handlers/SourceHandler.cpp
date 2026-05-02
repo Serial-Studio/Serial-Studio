@@ -25,6 +25,7 @@
 #include <QMetaObject>
 
 #include "API/CommandRegistry.h"
+#include "API/SchemaBuilder.h"
 #include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
@@ -40,163 +41,112 @@
  */
 void API::Handlers::SourceHandler::registerCommands()
 {
-  auto& registry = CommandRegistry::instance();
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
 
+  // Listing / lifecycle
   registry.registerCommand(QStringLiteral("project.source.list"),
                            QStringLiteral("List all project sources"),
-                           QJsonObject{},
+                           empty,
                            &sourceList);
-
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),             QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source ID to delete")},
-      {    QStringLiteral("minimum"),                                     1}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId};
-    registry.registerCommand(QStringLiteral("project.source.delete"),
-                             QStringLiteral("Delete a source (Commercial; sourceId >= 1)"),
-                             schema,
-                             &sourceDelete);
-  }
-
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),             QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source ID to update")},
-      {    QStringLiteral("minimum"),                                     0}
-    };
-    props[QStringLiteral("title")] = QJsonObject{
-      {       QStringLiteral("type"),                   QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("New title for the source")}
-    };
-    props[Keys::BusType] = QJsonObject{
-      {       QStringLiteral("type"),                                 QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Bus type index (0=UART, 1=Network, ...)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId};
-    registry.registerCommand(QStringLiteral("project.source.update"),
-                             QStringLiteral("Update source fields (Commercial)"),
-                             schema,
-                             &sourceUpdate);
-  }
 
   registry.registerCommand(QStringLiteral("project.source.add"),
                            QStringLiteral("Add a new source (Commercial)"),
-                           QJsonObject{},
+                           empty,
                            &sourceAdd);
 
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),   QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source ID")},
-      {    QStringLiteral("minimum"),                           0}
-    };
-    props[QStringLiteral("key")] = QJsonObject{
-      {       QStringLiteral("type"),              QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Driver property key")}
-    };
-    props[QStringLiteral("propertyValue")] = QJsonObject{
-      {QStringLiteral("description"), QStringLiteral("Property value")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{Keys::SourceId, QStringLiteral("key"), QStringLiteral("propertyValue")};
-    registry.registerCommand(
-      QStringLiteral("project.source.setProperty"),
-      QStringLiteral("Set a driver connection property (params: sourceId, key, value)"),
-      schema,
-      &sourceSetProperty);
-  }
+  registry.registerCommand(
+    QStringLiteral("project.source.delete"),
+    QStringLiteral("Delete a source (Commercial; sourceId >= 1)"),
+    makeSchema({
+      {QString(Keys::SourceId), QStringLiteral("integer"), QStringLiteral("Source ID to delete")}
+  }),
+    &sourceDelete);
 
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),   QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source ID")},
-      {    QStringLiteral("minimum"),                           0}
-    };
-    props[QStringLiteral("settings")] = QJsonObject{
-      {       QStringLiteral("type"),                               QStringLiteral("object")},
-      {QStringLiteral("description"), QStringLiteral("Driver properties as key/value pairs")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId, QStringLiteral("settings")};
-    registry.registerCommand(
-      QStringLiteral("project.source.configure"),
-      QStringLiteral("Set multiple driver properties at once (params: sourceId, settings)"),
-      schema,
-      &sourceConfigure);
-  }
+  registry.registerCommand(QStringLiteral("project.source.update"),
+                           QStringLiteral("Update source fields (Commercial)"),
+                           makeSchema(
+                             {
+                               {QString(Keys::SourceId),
+                                QStringLiteral("integer"),
+                                QStringLiteral("Source ID to update")}
+  },
+                             {{QStringLiteral("title"),
+                               QStringLiteral("string"),
+                               QStringLiteral("New title for the source")},
+                              {QString(Keys::BusType),
+                               QStringLiteral("integer"),
+                               QStringLiteral("Bus type index (0=UART, 1=Network, ...)")}}),
+                           &sourceUpdate);
 
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),   QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source ID")},
-      {    QStringLiteral("minimum"),                           0}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId};
-    registry.registerCommand(QStringLiteral("project.source.getConfiguration"),
-                             QStringLiteral("Get full source configuration (params: sourceId)"),
-                             schema,
-                             &sourceGetConfiguration);
-  }
+  registerPropertyCommands();
+  registerFrameParserCommands();
+}
 
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),   QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source ID")},
-      {    QStringLiteral("minimum"),                           0}
-    };
-    props[QStringLiteral("code")] = QJsonObject{
-      {       QStringLiteral("type"),                              QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("JavaScript frame parser source code")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId, QStringLiteral("code")};
-    registry.registerCommand(
-      QStringLiteral("project.source.setFrameParserCode"),
-      QStringLiteral("Set per-source JS frame parser (params: sourceId, code)"),
-      schema,
-      &sourceSetFrameParserCode);
-  }
+/**
+ * @brief Register driver-property and configuration commands.
+ */
+void API::Handlers::SourceHandler::registerPropertyCommands()
+{
+  auto& registry = CommandRegistry::instance();
 
-  {
-    QJsonObject props;
-    props[Keys::SourceId] = QJsonObject{
-      {       QStringLiteral("type"),   QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Source ID")},
-      {    QStringLiteral("minimum"),                           0}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{Keys::SourceId};
-    registry.registerCommand(QStringLiteral("project.source.getFrameParserCode"),
-                             QStringLiteral("Get per-source JS frame parser (params: sourceId)"),
-                             schema,
-                             &sourceGetFrameParserCode);
-  }
+  registry.registerCommand(
+    QStringLiteral("project.source.setProperty"),
+    QStringLiteral("Set a driver connection property (params: sourceId, key, value)"),
+    makeSchema({
+      {        QString(Keys::SourceId),QStringLiteral("integer"),QStringLiteral("Source ID")                                                                  },
+      {          QStringLiteral("key"),  QStringLiteral("string"), QStringLiteral("Driver property key")},
+      {QStringLiteral("propertyValue"),
+       QStringLiteral("string"),
+       QStringLiteral("Property value")                                                                 }
+  }),
+    &sourceSetProperty);
+
+  registry.registerCommand(
+    QStringLiteral("project.source.configure"),
+    QStringLiteral("Set multiple driver properties at once (params: sourceId, settings)"),
+    makeSchema({
+      {   QString(Keys::SourceId),QStringLiteral("integer"),QStringLiteral("Source ID")                           },
+      {QStringLiteral("settings"),
+       QStringLiteral("object"),
+       QStringLiteral("Driver properties as key/value pairs")}
+  }),
+    &sourceConfigure);
+
+  registry.registerCommand(
+    QStringLiteral("project.source.getConfiguration"),
+    QStringLiteral("Get full source configuration (params: sourceId)"),
+    makeSchema({
+      {QString(Keys::SourceId), QStringLiteral("integer"), QStringLiteral("Source ID")}
+  }),
+    &sourceGetConfiguration);
+}
+
+/**
+ * @brief Register per-source JavaScript frame parser commands.
+ */
+void API::Handlers::SourceHandler::registerFrameParserCommands()
+{
+  auto& registry = CommandRegistry::instance();
+
+  registry.registerCommand(
+    QStringLiteral("project.source.setFrameParserCode"),
+    QStringLiteral("Set per-source JS frame parser (params: sourceId, code)"),
+    makeSchema({
+      {QString(Keys::SourceId),QStringLiteral("integer"),QStringLiteral("Source ID")                           },
+      { QStringLiteral("code"),
+       QStringLiteral("string"),
+       QStringLiteral("JavaScript frame parser source code")}
+  }),
+    &sourceSetFrameParserCode);
+
+  registry.registerCommand(
+    QStringLiteral("project.source.getFrameParserCode"),
+    QStringLiteral("Get per-source JS frame parser (params: sourceId)"),
+    makeSchema({
+      {QString(Keys::SourceId), QStringLiteral("integer"), QStringLiteral("Source ID")}
+  }),
+    &sourceGetFrameParserCode);
 }
 
 //--------------------------------------------------------------------------------------------------

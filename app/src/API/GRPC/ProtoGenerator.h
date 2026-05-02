@@ -12,6 +12,9 @@
 #ifdef ENABLE_GRPC
 
 #  include <QString>
+#  include <QStringList>
+
+class QTextStream;
 
 namespace API {
 namespace GRPC {
@@ -27,6 +30,13 @@ public:
 private:
   [[nodiscard]] static QString jsonTypeToProtoType(const QString& jsonType);
   [[nodiscard]] static QString sanitizeName(const QString& name);
+
+  static void writeProtoHeader(QTextStream& out);
+  static void writeSharedMessages(QTextStream& out);
+  static void buildCommandMessages(QStringList& message_defs, QStringList& rpc_lines);
+  static void writeService(QTextStream& out,
+                           const QStringList& message_defs,
+                           const QStringList& rpc_lines);
 };
 
 }  // namespace GRPC

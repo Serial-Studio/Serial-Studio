@@ -53,7 +53,13 @@ private:
   void createState();
   void destroyState();
 
+  [[nodiscard]] bool runLoadedChunk(int sourceId, bool showMessageBoxes);
+  [[nodiscard]] bool ensureParseFunction(int sourceId, bool showMessageBoxes);
+  [[nodiscard]] bool probeParseFunction(int sourceId, bool showMessageBoxes);
+
   [[nodiscard]] QList<QStringList> convertResult();
+  [[nodiscard]] QList<QStringList> classifyTable(int len);
+  [[nodiscard]] QList<QStringList> unzipMixedTable(int len);
   [[nodiscard]] QStringList tableToStringList(int tableIndex);
   [[nodiscard]] QStringList scalarToStringList();
   void appendMixedElement(QStringList& scalars,

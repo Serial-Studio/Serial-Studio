@@ -48,6 +48,180 @@ static qint64 computeDurationMs(const QString& startedIso, const QString& endedI
   return start.msecsTo(end);
 }
 
+/**
+ * @brief Loads the session header row into out, returning false on missing session.
+ */
+static bool loadSessionHeader(QSqlDatabase& db, int sessionId, Sessions::ReportData& out)
+{
+  QSqlQuery q(db);
+  q.prepare(
+    "SELECT s.project_title, s.started_at, s.ended_at, s.notes, "
+    "       (SELECT COUNT(DISTINCT timestamp_ns) FROM readings WHERE session_id = s.session_id) "
+    "FROM sessions s WHERE s.session_id = ?");
+  q.bindValue(0, sessionId);
+  if (!q.exec() || !q.next())
+    return false;
+
+  out.projectTitle = q.value(0).toString();
+  out.startedAt    = q.value(1).toString();
+  out.endedAt      = q.value(2).toString();
+  out.notes        = q.value(3).toString();
+  out.frameCount   = q.value(4).toLongLong();
+  out.durationMs   = computeDurationMs(out.startedAt, out.endedAt);
+  return true;
+}
+
+/**
+ * @brief Reads the dataset column metadata into a default-initialized DatasetStats vector.
+ */
+static bool loadDatasetSkeleton(QSqlDatabase& db,
+                                int sessionId,
+                                std::vector<Sessions::DatasetStats>& datasets)
+{
+  QSqlQuery colQ(db);
+  colQ.prepare("SELECT unique_id, group_title, title, units, source_title "
+               "FROM columns WHERE session_id = ? ORDER BY column_id ASC");
+  colQ.bindValue(0, sessionId);
+  if (!colQ.exec())
+    return false;
+
+  while (colQ.next()) {
+    Sessions::DatasetStats ds;
+    ds.uniqueId       = colQ.value(0).toInt();
+    ds.group          = colQ.value(1).toString();
+    ds.title          = colQ.value(2).toString();
+    ds.units          = colQ.value(3).toString();
+    ds.sourceTitle    = colQ.value(4).toString();
+    ds.numericSamples = 0;
+    ds.stringSamples  = 0;
+    ds.minValue       = 0.0;
+    ds.maxValue       = 0.0;
+    ds.mean           = 0.0;
+    ds.stddev         = 0.0;
+    ds.firstValue     = 0.0;
+    ds.lastValue      = 0.0;
+    datasets.push_back(std::move(ds));
+  }
+
+  return true;
+}
+
+/**
+ * @brief Locates the DatasetStats row matching a unique id, or end() if absent.
+ */
+static std::vector<Sessions::DatasetStats>::iterator findDatasetByUid(
+  std::vector<Sessions::DatasetStats>& datasets, int uid)
+{
+  return std::find_if(datasets.begin(), datasets.end(), [uid](const Sessions::DatasetStats& d) {
+    return d.uniqueId == uid;
+  });
+}
+
+/**
+ * @brief Runs the single-pass numeric aggregate (count, min, max, mean, stddev) per dataset.
+ */
+static bool loadNumericAggregates(QSqlDatabase& db,
+                                  int sessionId,
+                                  std::vector<Sessions::DatasetStats>& datasets)
+{
+  QSqlQuery aggQ(db);
+  aggQ.prepare("SELECT unique_id, COUNT(*), MIN(final_numeric_value), MAX(final_numeric_value), "
+               "       AVG(final_numeric_value), AVG(final_numeric_value*final_numeric_value) "
+               "FROM readings WHERE session_id = ? AND is_numeric = 1 GROUP BY unique_id");
+  aggQ.bindValue(0, sessionId);
+  if (!aggQ.exec())
+    return false;
+
+  while (aggQ.next()) {
+    const int uid = aggQ.value(0).toInt();
+    auto it       = findDatasetByUid(datasets, uid);
+    if (it == datasets.end())
+      continue;
+
+    it->numericSamples  = aggQ.value(1).toLongLong();
+    it->minValue        = aggQ.value(2).toDouble();
+    it->maxValue        = aggQ.value(3).toDouble();
+    it->mean            = aggQ.value(4).toDouble();
+    const double meanSq = aggQ.value(5).toDouble();
+    const double var    = std::max(0.0, meanSq - it->mean * it->mean);
+    it->stddev          = std::sqrt(var);
+  }
+
+  return true;
+}
+
+/**
+ * @brief Counts non-numeric samples per dataset and stores them on each DatasetStats row.
+ */
+static void loadStringSampleCounts(QSqlDatabase& db,
+                                   int sessionId,
+                                   std::vector<Sessions::DatasetStats>& datasets)
+{
+  QSqlQuery strQ(db);
+  strQ.prepare("SELECT unique_id, COUNT(*) FROM readings "
+               "WHERE session_id = ? AND is_numeric = 0 GROUP BY unique_id");
+  strQ.bindValue(0, sessionId);
+  if (!strQ.exec())
+    return;
+
+  while (strQ.next()) {
+    const int uid = strQ.value(0).toInt();
+    auto it       = findDatasetByUid(datasets, uid);
+    if (it != datasets.end())
+      it->stringSamples = strQ.value(1).toLongLong();
+  }
+}
+
+/**
+ * @brief Loads the first or last numeric value per dataset; ties broken by reading_id.
+ */
+static void loadEdgeValues(QSqlDatabase& db,
+                           int sessionId,
+                           std::vector<Sessions::DatasetStats>& datasets,
+                           bool first)
+{
+  const QString aggregator = first ? QStringLiteral("MIN") : QStringLiteral("MAX");
+  QSqlQuery q(db);
+  q.prepare(QStringLiteral("SELECT unique_id, final_numeric_value FROM readings "
+                           "WHERE reading_id IN ("
+                           "  SELECT %1(reading_id) FROM readings "
+                           "  WHERE session_id = ? AND is_numeric = 1 "
+                           "  GROUP BY unique_id)")
+              .arg(aggregator));
+  q.bindValue(0, sessionId);
+  if (!q.exec())
+    return;
+
+  while (q.next()) {
+    const int uid = q.value(0).toInt();
+    auto it       = findDatasetByUid(datasets, uid);
+    if (it == datasets.end())
+      continue;
+
+    if (first)
+      it->firstValue = q.value(1).toDouble();
+    else
+      it->lastValue = q.value(1).toDouble();
+  }
+}
+
+/**
+ * @brief Appends the alphabetically-sorted tag labels for a session into out.tags.
+ */
+static void loadSessionTags(QSqlDatabase& db, int sessionId, Sessions::ReportData& out)
+{
+  QSqlQuery tagQ(db);
+  tagQ.prepare("SELECT t.label FROM tags t "
+               "JOIN session_tags st ON st.tag_id = t.tag_id "
+               "WHERE st.session_id = ? ORDER BY t.label");
+  tagQ.bindValue(0, sessionId);
+  if (!tagQ.exec())
+    return;
+
+  while (tagQ.next())
+    out.tags.append(tagQ.value(0).toString());
+}
+
 //--------------------------------------------------------------------------------------------------
 // ReportData::buildFromSession
 //--------------------------------------------------------------------------------------------------
@@ -70,138 +244,20 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
   if (!db.isOpen() || sessionId < 0)
     return out;
 
-  // Fetch session header row (title, timestamps, notes, frame count)
-  QSqlQuery q(db);
-  q.prepare(
-    "SELECT s.project_title, s.started_at, s.ended_at, s.notes, "
-    "       (SELECT COUNT(DISTINCT timestamp_ns) FROM readings WHERE session_id = s.session_id) "
-    "FROM sessions s WHERE s.session_id = ?");
-  q.bindValue(0, sessionId);
-  if (!q.exec() || !q.next())
-    return out;
-
-  out.projectTitle = q.value(0).toString();
-  out.startedAt    = q.value(1).toString();
-  out.endedAt      = q.value(2).toString();
-  out.notes        = q.value(3).toString();
-  out.frameCount   = q.value(4).toLongLong();
-  out.durationMs   = computeDurationMs(out.startedAt, out.endedAt);
-
-  // Load column metadata (group/title/units/source per unique_id)
-  QSqlQuery colQ(db);
-  colQ.prepare("SELECT unique_id, group_title, title, units, source_title "
-               "FROM columns WHERE session_id = ? ORDER BY column_id ASC");
-  colQ.bindValue(0, sessionId);
-  if (!colQ.exec())
+  if (!loadSessionHeader(db, sessionId, out))
     return out;
 
   std::vector<DatasetStats> datasets;
-  while (colQ.next()) {
-    DatasetStats ds;
-    ds.uniqueId       = colQ.value(0).toInt();
-    ds.group          = colQ.value(1).toString();
-    ds.title          = colQ.value(2).toString();
-    ds.units          = colQ.value(3).toString();
-    ds.sourceTitle    = colQ.value(4).toString();
-    ds.numericSamples = 0;
-    ds.stringSamples  = 0;
-    ds.minValue       = 0.0;
-    ds.maxValue       = 0.0;
-    ds.mean           = 0.0;
-    ds.stddev         = 0.0;
-    ds.firstValue     = 0.0;
-    ds.lastValue      = 0.0;
-    datasets.push_back(std::move(ds));
-  }
-
-  // One-pass aggregate over numeric readings (count, min, max, mean, mean-of-squares)
-  QSqlQuery aggQ(db);
-  aggQ.prepare("SELECT unique_id, COUNT(*), MIN(final_numeric_value), MAX(final_numeric_value), "
-               "       AVG(final_numeric_value), AVG(final_numeric_value*final_numeric_value) "
-               "FROM readings WHERE session_id = ? AND is_numeric = 1 GROUP BY unique_id");
-  aggQ.bindValue(0, sessionId);
-  if (!aggQ.exec())
+  if (!loadDatasetSkeleton(db, sessionId, datasets))
     return out;
 
-  while (aggQ.next()) {
-    const int uid = aggQ.value(0).toInt();
-    auto it       = std::find_if(
-      datasets.begin(), datasets.end(), [uid](const DatasetStats& d) { return d.uniqueId == uid; });
-    if (it == datasets.end())
-      continue;
+  if (!loadNumericAggregates(db, sessionId, datasets))
+    return out;
 
-    it->numericSamples  = aggQ.value(1).toLongLong();
-    it->minValue        = aggQ.value(2).toDouble();
-    it->maxValue        = aggQ.value(3).toDouble();
-    it->mean            = aggQ.value(4).toDouble();
-    const double meanSq = aggQ.value(5).toDouble();
-    const double var    = std::max(0.0, meanSq - it->mean * it->mean);
-    it->stddev          = std::sqrt(var);
-  }
-
-  // Count string samples per dataset (separate query -- keeps the aggregate pass tight)
-  QSqlQuery strQ(db);
-  strQ.prepare("SELECT unique_id, COUNT(*) FROM readings "
-               "WHERE session_id = ? AND is_numeric = 0 GROUP BY unique_id");
-  strQ.bindValue(0, sessionId);
-  if (strQ.exec()) {
-    while (strQ.next()) {
-      const int uid = strQ.value(0).toInt();
-      auto it       = std::find_if(datasets.begin(), datasets.end(), [uid](const DatasetStats& d) {
-        return d.uniqueId == uid;
-      });
-      if (it != datasets.end())
-        it->stringSamples = strQ.value(1).toLongLong();
-    }
-  }
-
-  // First numeric value per dataset (ties broken by reading_id)
-  QSqlQuery firstQ(db);
-  firstQ.prepare("SELECT unique_id, final_numeric_value FROM readings "
-                 "WHERE reading_id IN ("
-                 "  SELECT MIN(reading_id) FROM readings "
-                 "  WHERE session_id = ? AND is_numeric = 1 "
-                 "  GROUP BY unique_id)");
-  firstQ.bindValue(0, sessionId);
-  if (firstQ.exec()) {
-    while (firstQ.next()) {
-      const int uid = firstQ.value(0).toInt();
-      auto it       = std::find_if(datasets.begin(), datasets.end(), [uid](const DatasetStats& d) {
-        return d.uniqueId == uid;
-      });
-      if (it != datasets.end())
-        it->firstValue = firstQ.value(1).toDouble();
-    }
-  }
-
-  // Last numeric value per dataset (ties broken by reading_id)
-  QSqlQuery lastQ(db);
-  lastQ.prepare("SELECT unique_id, final_numeric_value FROM readings "
-                "WHERE reading_id IN ("
-                "  SELECT MAX(reading_id) FROM readings "
-                "  WHERE session_id = ? AND is_numeric = 1 "
-                "  GROUP BY unique_id)");
-  lastQ.bindValue(0, sessionId);
-  if (lastQ.exec()) {
-    while (lastQ.next()) {
-      const int uid = lastQ.value(0).toInt();
-      auto it       = std::find_if(datasets.begin(), datasets.end(), [uid](const DatasetStats& d) {
-        return d.uniqueId == uid;
-      });
-      if (it != datasets.end())
-        it->lastValue = lastQ.value(1).toDouble();
-    }
-  }
-
-  // Collect session tags (sorted alphabetically by the SQL query)
-  QSqlQuery tagQ(db);
-  tagQ.prepare("SELECT t.label FROM tags t "
-               "JOIN session_tags st ON st.tag_id = t.tag_id "
-               "WHERE st.session_id = ? ORDER BY t.label");
-  tagQ.bindValue(0, sessionId);
-  if (tagQ.exec())
-    while (tagQ.next())
-      out.tags.append(tagQ.value(0).toString());
+  loadStringSampleCounts(db, sessionId, datasets);
+  loadEdgeValues(db, sessionId, datasets, true);
+  loadEdgeValues(db, sessionId, datasets, false);
+  loadSessionTags(db, sessionId, out);
 
   out.datasets = std::move(datasets);
   out.valid    = true;

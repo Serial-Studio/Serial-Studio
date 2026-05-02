@@ -76,6 +76,13 @@ private:
   [[nodiscard]] static bool isDefaultPlaceholder(const QString& code, int language);
   [[nodiscard]] static bool definesTransformFunction(const QString& code, int language);
 
+  void buildEditorWidgets();
+  [[nodiscard]] QHBoxLayout* buildToolbarLayout();
+  [[nodiscard]] QHBoxLayout* buildTestLayout();
+  [[nodiscard]] QHBoxLayout* buildButtonLayout();
+  void wireSignals();
+  void installShortcuts();
+
 private:
   int m_language;
   int m_targetGroupId;
