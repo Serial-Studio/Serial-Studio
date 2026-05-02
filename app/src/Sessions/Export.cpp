@@ -135,6 +135,35 @@ void Sessions::ExportWorker::processData()
 }
 
 /**
+ * @brief Inserts every dataset reading from one timestamped frame into m_readingQuery.
+ */
+void Sessions::ExportWorker::writeFrameReadings(const DataModel::TimestampedFramePtr& frame)
+{
+  const qint64 ns = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
+  for (const auto& group : frame->data.groups)
+    for (const auto& dataset : group.datasets)
+      bindAndInsertReading(ns, dataset);
+}
+
+/**
+ * @brief Binds dataset values into the reading insert query and executes it.
+ */
+void Sessions::ExportWorker::bindAndInsertReading(qint64 ns, const DataModel::Dataset& dataset)
+{
+  m_readingQuery.bindValue(0, m_sessionId);
+  m_readingQuery.bindValue(1, ns);
+  m_readingQuery.bindValue(2, dataset.uniqueId);
+  m_readingQuery.bindValue(3, dataset.rawNumericValue);
+  m_readingQuery.bindValue(4, dataset.rawValue);
+  m_readingQuery.bindValue(5, dataset.numericValue);
+  m_readingQuery.bindValue(6, dataset.value);
+  m_readingQuery.bindValue(7, dataset.isNumeric ? 1 : 0);
+
+  if (!m_readingQuery.exec()) [[unlikely]]
+    qWarning() << "[SQLite] Insert reading failed:" << m_readingQuery.lastError().text();
+}
+
+/**
  * @brief Processes a batch of timestamped frames into the SQLite database.
  */
 void Sessions::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
@@ -155,24 +184,8 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::Timestamp
 
   // Batch writes into a single transaction
   m_db.transaction();
-  for (const auto& frame : items) {
-    const qint64 ns = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
-    for (const auto& group : frame->data.groups) {
-      for (const auto& dataset : group.datasets) {
-        m_readingQuery.bindValue(0, m_sessionId);
-        m_readingQuery.bindValue(1, ns);
-        m_readingQuery.bindValue(2, dataset.uniqueId);
-        m_readingQuery.bindValue(3, dataset.rawNumericValue);
-        m_readingQuery.bindValue(4, dataset.rawValue);
-        m_readingQuery.bindValue(5, dataset.numericValue);
-        m_readingQuery.bindValue(6, dataset.value);
-        m_readingQuery.bindValue(7, dataset.isNumeric ? 1 : 0);
-
-        if (!m_readingQuery.exec()) [[unlikely]]
-          qWarning() << "[SQLite] Insert reading failed:" << m_readingQuery.lastError().text();
-      }
-    }
-  }
+  for (const auto& frame : items)
+    writeFrameReadings(frame);
 
   // Roll back on failure
   if (!m_db.commit()) [[unlikely]] {

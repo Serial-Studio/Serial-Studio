@@ -35,6 +35,7 @@ namespace mdf {
 class MdfReader;
 class IChannel;
 class IChannelGroup;
+class IDataGroup;
 }  // namespace mdf
 
 namespace MDF4 {
@@ -107,7 +108,22 @@ private slots:
   void processFrameBatch(int startFrame, int endFrame);
 
 private:
+  void catchUpToTarget(double targetTime);
   void buildFrameIndexFromCache();
+  void scanChannelGroup(mdf::IChannelGroup* cg,
+                        std::vector<mdf::IChannel*>& allChannels,
+                        std::map<mdf::IChannelGroup*, mdf::IChannel*>& groupTimeChannels,
+                        int& masterChannelCount);
+  void collectAllChannels(const std::vector<mdf::IDataGroup*>& dataGroups,
+                          std::vector<mdf::IChannel*>& allChannels,
+                          std::map<mdf::IChannelGroup*, mdf::IChannel*>& groupTimeChannels,
+                          int& masterChannelCount);
+  void readDataGroupWithObservers(
+    mdf::IDataGroup* dg,
+    bool perGroupTime,
+    const std::map<mdf::IChannelGroup*, mdf::IChannel*>& groupTimeChannels);
+  void readLegacyTimestamps(const std::vector<mdf::IDataGroup*>& dataGroups,
+                            uint64_t legacyTimeRecId);
 
   void sendHeaderFrame();
   void buildMultiSourceMapping();

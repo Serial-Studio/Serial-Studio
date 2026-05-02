@@ -78,44 +78,58 @@ void Widgets::Compass::updateData()
   if (!isEnabled())
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index)) {
-    // Read the latest heading value and update display
-    const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
-    const auto value    = dataset.numericValue;
-    if (DSP::notEqual(value, m_value)) {
-      // Clamp and format the compass value
-      m_value = qMin(360.0, qMax(0.0, value));
-      m_text  = FMT_VAL(m_value, dataset);
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
+    return;
 
-      // Pad angle to 3 characters to avoid UI jiggling
-      const int deg = qCeil(m_value);
-      if (deg < 10)
-        m_text.prepend(QStringLiteral("  "));
-      else if (deg < 100)
-        m_text.prepend(QStringLiteral(" "));
+  const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
+  const auto value    = dataset.numericValue;
+  if (!DSP::notEqual(value, m_value))
+    return;
 
-      // Map angle to cardinal/intercardinal direction
-      QString direction;
-      if ((m_value >= 0 && m_value < 22.5) || (m_value >= 337.5 && m_value <= 360))
-        direction = tr("N") + " ";
-      else if (m_value >= 22.5 && m_value < 67.5)
-        direction = tr("NE");
-      else if (m_value >= 67.5 && m_value < 112.5)
-        direction = tr("E") + " ";
-      else if (m_value >= 112.5 && m_value < 157.5)
-        direction = tr("SE");
-      else if (m_value >= 157.5 && m_value < 202.5)
-        direction = tr("S") + " ";
-      else if (m_value >= 202.5 && m_value < 247.5)
-        direction = tr("SW");
-      else if (m_value >= 247.5 && m_value < 292.5)
-        direction = tr("W") + " ";
-      else if (m_value >= 292.5 && m_value < 337.5)
-        direction = tr("NW");
+  // Clamp and format the compass value
+  m_value = qMin(360.0, qMax(0.0, value));
+  m_text  = FMT_VAL(m_value, dataset);
 
-      // Append direction and notify UI
-      m_text += " " + direction;
-      Q_EMIT updated();
-    }
-  }
+  // Pad angle to 3 characters to avoid UI jiggling
+  const int deg = qCeil(m_value);
+  if (deg < 10)
+    m_text.prepend(QStringLiteral("  "));
+  else if (deg < 100)
+    m_text.prepend(QStringLiteral(" "));
+
+  // Append direction and notify UI
+  m_text += QStringLiteral(" ") + cardinalDirection(m_value);
+  Q_EMIT updated();
+}
+
+/**
+ * @brief Maps an angle in degrees to a cardinal/intercardinal label.
+ */
+QString Widgets::Compass::cardinalDirection(double angle) const
+{
+  if ((angle >= 0 && angle < 22.5) || (angle >= 337.5 && angle <= 360))
+    return tr("N") + " ";
+
+  if (angle < 67.5)
+    return tr("NE");
+
+  if (angle < 112.5)
+    return tr("E") + " ";
+
+  if (angle < 157.5)
+    return tr("SE");
+
+  if (angle < 202.5)
+    return tr("S") + " ";
+
+  if (angle < 247.5)
+    return tr("SW");
+
+  if (angle < 292.5)
+    return tr("W") + " ";
+
+  if (angle < 337.5)
+    return tr("NW");
+
+  return QString();
 }

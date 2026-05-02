@@ -717,6 +717,20 @@ void IO::Drivers::USB::enumerateDevices()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns true if the alt-setting exposes at least one endpoint of @p targetType.
+ */
+static bool altSettingHasTransferType(const libusb_interface_descriptor& alt, uint8_t targetType)
+{
+  for (int e = 0; e < alt.bNumEndpoints; ++e) {
+    const uint8_t type = alt.endpoint[e].bmAttributes & LIBUSB_TRANSFER_TYPE_MASK;
+    if (type == targetType)
+      return true;
+  }
+
+  return false;
+}
+
+/**
  * @brief Returns true if the device's active configuration exposes at least one endpoint of @p
  * targetType.
  */
@@ -724,14 +738,9 @@ static bool configHasTransferType(const libusb_config_descriptor* cfg, uint8_t t
 {
   for (int i = 0; i < cfg->bNumInterfaces; ++i) {
     const libusb_interface& iface = cfg->interface[i];
-    for (int a = 0; a < iface.num_altsetting; ++a) {
-      const libusb_interface_descriptor& alt = iface.altsetting[a];
-      for (int e = 0; e < alt.bNumEndpoints; ++e) {
-        const uint8_t type = alt.endpoint[e].bmAttributes & LIBUSB_TRANSFER_TYPE_MASK;
-        if (type == targetType)
-          return true;
-      }
-    }
+    for (int a = 0; a < iface.num_altsetting; ++a)
+      if (altSettingHasTransferType(iface.altsetting[a], targetType))
+        return true;
   }
 
   return false;
@@ -1146,27 +1155,40 @@ bool IO::Drivers::USB::selectByIdentifier(const QJsonObject& id)
       continue;
 
     // Narrow match by serial number when available
-    if (!savedSer.isEmpty() && desc.iSerialNumber) {
-      libusb_device_handle* tmp = nullptr;
-      if (libusb_open(m_devicePtrs.at(i), &tmp) == 0) {
-        unsigned char buf[256] = {};
-        const int rc           = libusb_get_string_descriptor_ascii(
-          tmp, desc.iSerialNumber, buf, static_cast<int>(sizeof(buf)));
-        libusb_close(tmp);
-
-        if (rc > 0) {
-          const auto serial = QString::fromLatin1(reinterpret_cast<const char*>(buf), rc).trimmed();
-          if (serial != savedSer)
-            continue;
-        }
-      }
-    }
+    if (!deviceSerialMatches(m_devicePtrs.at(i), desc, savedSer))
+      continue;
 
     setDeviceIndex(i + 1);
     return true;
   }
 
   return false;
+}
+
+/**
+ * @brief Returns true when the device serial matches savedSer (or savedSer is empty / unreadable).
+ */
+bool IO::Drivers::USB::deviceSerialMatches(libusb_device* device,
+                                           const libusb_device_descriptor& desc,
+                                           const QString& savedSer) const
+{
+  if (savedSer.isEmpty() || !desc.iSerialNumber)
+    return true;
+
+  libusb_device_handle* tmp = nullptr;
+  if (libusb_open(device, &tmp) != 0)
+    return true;
+
+  unsigned char buf[256] = {};
+  const int rc =
+    libusb_get_string_descriptor_ascii(tmp, desc.iSerialNumber, buf, static_cast<int>(sizeof(buf)));
+  libusb_close(tmp);
+
+  if (rc <= 0)
+    return true;
+
+  const auto serial = QString::fromLatin1(reinterpret_cast<const char*>(buf), rc).trimmed();
+  return serial == savedSer;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1229,18 +1251,26 @@ QList<IO::DriverProperty> IO::Drivers::USB::driverProperties() const
  */
 void IO::Drivers::USB::setDriverProperty(const QString& key, const QVariant& value)
 {
-  if (key == QLatin1String("deviceIndex"))
+  if (key == QLatin1String("deviceIndex")) {
     setDeviceIndex(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("transferMode"))
+  if (key == QLatin1String("transferMode")) {
     setTransferMode(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("inEndpointIndex"))
+  if (key == QLatin1String("inEndpointIndex")) {
     setInEndpointIndex(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("outEndpointIndex"))
+  if (key == QLatin1String("outEndpointIndex")) {
     setOutEndpointIndex(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("isoPacketSize"))
+  if (key == QLatin1String("isoPacketSize"))
     setIsoPacketSize(value.toInt());
 }

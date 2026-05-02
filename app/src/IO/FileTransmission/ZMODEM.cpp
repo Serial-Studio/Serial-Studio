@@ -153,13 +153,12 @@ void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
         break;
 
       case ParseState::GotZPAD:
-        if (ch == kZPAD)
+        if (ch == kZPAD) {
           m_parseState = ParseState::GotSecondZPAD;
-        else if (ch == kZDLE)
-          m_parseState = ParseState::GotZDLE;
-        else
-          m_parseState = ParseState::Idle;
+          break;
+        }
 
+        m_parseState = (ch == kZDLE) ? ParseState::GotZDLE : ParseState::Idle;
         break;
 
       case ParseState::GotSecondZPAD:
@@ -171,24 +170,7 @@ void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
         break;
 
       case ParseState::GotZDLE:
-        if (ch == kZHEX) {
-          m_parseState = ParseState::ReadingHexHeader;
-          m_headerBuf.clear();
-          m_headerBytesExpected = 14;
-        } else if (ch == kZBIN32) {
-          m_parseState = ParseState::ReadingBin32Header;
-          m_headerBuf.clear();
-          m_headerBytesExpected = 9;
-          m_zdleEscape          = false;
-        } else if (ch == kZBIN) {
-          m_parseState = ParseState::ReadingBinHeader;
-          m_headerBuf.clear();
-          m_headerBytesExpected = 7;
-          m_zdleEscape          = false;
-        } else {
-          m_parseState = ParseState::Idle;
-        }
-
+        startHeaderForZdleByte(ch);
         break;
 
       case ParseState::ReadingHexHeader:
@@ -204,6 +186,37 @@ void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
         break;
     }
   }
+}
+
+/**
+ * @brief Reacts to the byte that follows ZDLE: routes to hex/bin/bin32 header parsing.
+ */
+void IO::Protocols::ZMODEM::startHeaderForZdleByte(quint8 ch)
+{
+  if (ch == kZHEX) {
+    m_parseState = ParseState::ReadingHexHeader;
+    m_headerBuf.clear();
+    m_headerBytesExpected = 14;
+    return;
+  }
+
+  if (ch == kZBIN32) {
+    m_parseState = ParseState::ReadingBin32Header;
+    m_headerBuf.clear();
+    m_headerBytesExpected = 9;
+    m_zdleEscape          = false;
+    return;
+  }
+
+  if (ch == kZBIN) {
+    m_parseState = ParseState::ReadingBinHeader;
+    m_headerBuf.clear();
+    m_headerBytesExpected = 7;
+    m_zdleEscape          = false;
+    return;
+  }
+
+  m_parseState = ParseState::Idle;
 }
 
 /**
@@ -617,9 +630,11 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
 
       if (m_state == State::SentZRQINIT)
         sendZRQINIT();
-      else if (m_state == State::SentZFILE)
+
+      if (m_state == State::SentZFILE)
         sendZFILE();
-      else if (m_state == State::SentZEOF)
+
+      if (m_state == State::SentZEOF)
         sendDataSubpackets();
 
       break;

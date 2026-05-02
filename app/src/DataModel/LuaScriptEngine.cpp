@@ -443,6 +443,57 @@ QStringList DataModel::LuaScriptEngine::tableToStringList(int tableIndex)
 }
 
 /**
+ * @brief Converts the scalar Lua value at stack top into a single-element list.
+ */
+QStringList DataModel::LuaScriptEngine::scalarToStringList()
+{
+  QStringList frame;
+  if (lua_isinteger(m_state, -1)) {
+    frame.append(QString::number(lua_tointeger(m_state, -1)));
+    return frame;
+  }
+
+  if (lua_isnumber(m_state, -1)) {
+    frame.append(QString::number(lua_tonumber(m_state, -1), 'g', 15));
+    return frame;
+  }
+
+  if (lua_isstring(m_state, -1))
+    frame.append(QString::fromUtf8(lua_tostring(m_state, -1)));
+
+  return frame;
+}
+
+/**
+ * @brief Routes the Lua value at stack top into the scalars or vectors bucket.
+ */
+void DataModel::LuaScriptEngine::appendMixedElement(QStringList& scalars,
+                                                    QList<QStringList>& vectors,
+                                                    qsizetype& maxVectorLength)
+{
+  if (lua_istable(m_state, -1)) {
+    const auto vec = tableToStringList(-1);
+    if (!vec.isEmpty()) {
+      vectors.append(vec);
+      maxVectorLength = std::max(maxVectorLength, vec.size());
+    }
+    return;
+  }
+
+  if (lua_isinteger(m_state, -1)) {
+    scalars.append(QString::number(lua_tointeger(m_state, -1)));
+    return;
+  }
+
+  if (lua_isnumber(m_state, -1)) {
+    scalars.append(QString::number(lua_tonumber(m_state, -1), 'g', 15));
+    return;
+  }
+
+  scalars.append(QString::fromUtf8(lua_tostring(m_state, -1)));
+}
+
+/**
  * @brief Converts the Lua return value at stack top to a frame list.
  */
 QList<QStringList> DataModel::LuaScriptEngine::convertResult()
@@ -451,14 +502,7 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
 
   // Scalar return (number or string)
   if (!lua_istable(m_state, -1)) {
-    QStringList frame;
-    if (lua_isinteger(m_state, -1))
-      frame.append(QString::number(lua_tointeger(m_state, -1)));
-    else if (lua_isnumber(m_state, -1))
-      frame.append(QString::number(lua_tonumber(m_state, -1), 'g', 15));
-    else if (lua_isstring(m_state, -1))
-      frame.append(QString::fromUtf8(lua_tostring(m_state, -1)));
-
+    QStringList frame = scalarToStringList();
     lua_pop(m_state, 1);
     if (!frame.isEmpty())
       results.append(frame);
@@ -520,21 +564,7 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
 
   for (int i = 1; i <= qMin(len, kMaxElements); ++i) {
     lua_rawgeti(m_state, -1, i);
-
-    if (lua_istable(m_state, -1)) {
-      const auto vec = tableToStringList(-1);
-      if (!vec.isEmpty()) {
-        vectors.append(vec);
-        maxVectorLength = std::max(maxVectorLength, vec.size());
-      }
-    } else if (lua_isinteger(m_state, -1)) {
-      scalars.append(QString::number(lua_tointeger(m_state, -1)));
-    } else if (lua_isnumber(m_state, -1)) {
-      scalars.append(QString::number(lua_tonumber(m_state, -1), 'g', 15));
-    } else {
-      scalars.append(QString::fromUtf8(lua_tostring(m_state, -1)));
-    }
-
+    appendMixedElement(scalars, vectors, maxVectorLength);
     lua_pop(m_state, 1);
   }
 

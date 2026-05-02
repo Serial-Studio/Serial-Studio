@@ -246,6 +246,17 @@ void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection m
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Enqueues a validated frame and reports queue overflow without nesting.
+ */
+void IO::FrameReader::enqueueOrWarn(QByteArray&& frame, qsizetype frameEndPos)
+{
+  if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
+    qWarning() << "[FrameReader] Frame queue full -- frame dropped";
+
+  consumeBytes(frameEndPos);
+}
+
+/**
  * @brief Extracts frames terminated by an end delimiter from the buffer.
  */
 void IO::FrameReader::readEndDelimitedFrames()
@@ -280,22 +291,17 @@ void IO::FrameReader::readEndDelimitedFrames()
     auto frame             = m_circularBuffer.peek(endIndex);
     const auto crcPosition = endIndex + delimiter.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
-    if (!frame.isEmpty()) {
-      auto result = checksum(frame, crcPosition);
-      if (result == ValidationStatus::FrameOk) {
-        if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
-          qWarning() << "[FrameReader] Frame queue full - frame dropped";
-
-        consumeBytes(frameEndPos);
-      }
-
-      else if (result == ValidationStatus::ChecksumIncomplete)
-        break;
-
-      else
-        consumeBytes(frameEndPos);
+    if (frame.isEmpty()) {
+      consumeBytes(frameEndPos);
+      continue;
     }
 
+    const auto result = checksum(frame, crcPosition);
+    if (result == ValidationStatus::ChecksumIncomplete)
+      break;
+
+    if (result == ValidationStatus::FrameOk)
+      enqueueOrWarn(std::move(frame), frameEndPos);
     else
       consumeBytes(frameEndPos);
   }
@@ -348,21 +354,17 @@ void IO::FrameReader::readStartDelimitedFrames()
     }
 
     auto frame = m_circularBuffer.peekRange(frameStart, frameLength - m_checksumLength);
-    if (!frame.isEmpty()) {
-      const auto result = checksum(frame, crcPosition);
-      if (result == ValidationStatus::FrameOk) {
-        if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
-          qWarning() << "[FrameReader] Frame queue full -- frame dropped";
-        consumeBytes(frameEndPos);
-      }
-
-      else if (result == ValidationStatus::ChecksumIncomplete)
-        break;
-
-      else
-        consumeBytes(frameEndPos);
+    if (frame.isEmpty()) {
+      consumeBytes(frameEndPos);
+      continue;
     }
 
+    const auto result = checksum(frame, crcPosition);
+    if (result == ValidationStatus::ChecksumIncomplete)
+      break;
+
+    if (result == ValidationStatus::FrameOk)
+      enqueueOrWarn(std::move(frame), frameEndPos);
     else
       consumeBytes(frameEndPos);
   }
@@ -411,21 +413,17 @@ void IO::FrameReader::readStartEndDelimitedFrames()
     const auto crcPosition = finishIndex + finishSeq.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
     auto frame             = m_circularBuffer.peekRange(frameStart, frameLength);
-    if (!frame.isEmpty()) {
-      auto result = checksum(frame, crcPosition);
-      if (result == ValidationStatus::FrameOk) {
-        if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
-          qWarning() << "[FrameReader] Frame queue full -- frame dropped";
-        consumeBytes(frameEndPos);
-      }
-
-      else if (result == ValidationStatus::ChecksumIncomplete)
-        break;
-
-      else
-        consumeBytes(frameEndPos);
+    if (frame.isEmpty()) {
+      consumeBytes(frameEndPos);
+      continue;
     }
 
+    const auto result = checksum(frame, crcPosition);
+    if (result == ValidationStatus::ChecksumIncomplete)
+      break;
+
+    if (result == ValidationStatus::FrameOk)
+      enqueueOrWarn(std::move(frame), frameEndPos);
     else
       consumeBytes(frameEndPos);
   }

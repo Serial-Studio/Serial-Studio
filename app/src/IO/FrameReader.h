@@ -92,6 +92,8 @@ private:
   void readStartDelimitedFrames();
   void readStartEndDelimitedFrames();
 
+  void enqueueOrWarn(QByteArray&& frame, qsizetype frameEndPos);
+
   ValidationStatus checksum(const QByteArray& frame, qsizetype crcPosition);
 
   IO::CapturedData::SteadyTimePoint frameTimestamp(qsizetype endOffsetExclusive);

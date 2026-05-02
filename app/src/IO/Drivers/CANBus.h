@@ -130,6 +130,7 @@ private:
   void doClose();
   void refreshInterfaces();
   [[nodiscard]] bool canSupportAvailable() const;
+  [[nodiscard]] QString noInterfacesHint(const QString& plugin) const;
 
 private:
   QCanBusDevice* m_device;

@@ -146,18 +146,21 @@ void Widgets::Gyroscope::updateData()
   bool hasPitch     = false;
 
   for (int i = 0; i < 3; ++i) {
-    const auto& dataset = gyro.datasets[i];
-    const auto widget   = dataset.widget.trimmed().toLower();
-    const auto value    = dataset.numericValue;
-
-    if (isYaw(widget)) {
-      yawInput = value;
+    const auto& d = gyro.datasets[i];
+    const auto w  = d.widget.trimmed().toLower();
+    const auto v  = d.numericValue;
+    if (isYaw(w)) {
+      yawInput = v;
       hasYaw   = true;
-    } else if (isRoll(widget)) {
-      rollInput = value;
+      continue;
+    }
+    if (isRoll(w)) {
+      rollInput = v;
       hasRoll   = true;
-    } else if (isPitch(widget)) {
-      pitchInput = value;
+      continue;
+    }
+    if (isPitch(w)) {
+      pitchInput = v;
       hasPitch   = true;
     }
   }

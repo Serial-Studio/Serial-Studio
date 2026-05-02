@@ -77,6 +77,57 @@ bool MDF4::ExportWorker::isResourceOpen() const
 }
 
 /**
+ * @brief Writes all dataset values (final + raw) for one channel group.
+ */
+void MDF4::ExportWorker::writeGroupDatasets(const DataModel::Group& group, ChannelGroupInfo& info)
+{
+  for (size_t i = 0; i < group.datasets.size(); ++i) {
+    const auto& dataset = group.datasets.at(i);
+
+    // Write final (post-transform) values
+    auto* channel = info.channels[i];
+    if (info.isNumeric[i])
+      channel->SetChannelValue(dataset.numericValue);
+    else
+      channel->SetChannelValue(dataset.value.toStdString());
+
+    // Skip raw channel when absent
+    if (i >= info.rawChannels.size() || !info.rawChannels[i])
+      continue;
+
+    auto* rawCh = info.rawChannels[i];
+    if (info.isNumeric[i])
+      rawCh->SetChannelValue(dataset.rawNumericValue);
+    else
+      rawCh->SetChannelValue(dataset.rawValue.toStdString());
+  }
+}
+
+/**
+ * @brief Persists one frame's groups to the MDF4 writer at the given timestamp.
+ */
+void MDF4::ExportWorker::writeFrameGroups(const DataModel::Frame& frame,
+                                          qint64 timestamp_ns,
+                                          double timestamp_s)
+{
+  for (const auto& group : frame.groups) {
+    auto it = m_groupMap.find(group.groupId);
+    if (it == m_groupMap.end())
+      continue;
+
+    auto& info = it->second;
+    if (group.datasets.size() != info.channels.size())
+      continue;
+
+    if (info.timeChannel)
+      info.timeChannel->SetChannelValue(timestamp_s);
+
+    writeGroupDatasets(group, info);
+    m_writer->SaveSample(*info.channelGroup, static_cast<uint64_t>(timestamp_ns));
+  }
+}
+
+/**
  * @brief Processes a batch of MDF4 frames
  *
  * Writes frames to MDF4 file using the mdflib writer.
@@ -93,7 +144,7 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
-  if (!isResourceOpen() && !items.empty()) {
+  if (!isResourceOpen()) {
     createFile(items.front()->data);
     m_steadyBaseline = items.front()->timestamp;
     m_systemBaseline = std::chrono::system_clock::now();
@@ -103,54 +154,19 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
   if (!isResourceOpen() || !m_writer)
     return;
 
-  auto writeDatasets = [](const DataModel::Group& group, ChannelGroupInfo& info) {
-    for (size_t i = 0; i < group.datasets.size(); ++i) {
-      const auto& dataset = group.datasets.at(i);
-
-      // Write final (post-transform) values
-      auto* channel = info.channels[i];
-      if (info.isNumeric[i])
-        channel->SetChannelValue(dataset.numericValue);
-      else
-        channel->SetChannelValue(dataset.value.toStdString());
-
-      // Write raw (pre-transform) values to raw channels
-      if (i < info.rawChannels.size() && info.rawChannels[i]) {
-        auto* rawCh = info.rawChannels[i];
-        if (info.isNumeric[i])
-          rawCh->SetChannelValue(dataset.rawNumericValue);
-        else
-          rawCh->SetChannelValue(dataset.rawValue.toStdString());
-      }
-    }
-  };
-
   // Guard mdflib calls against exceptions propagating through Qt's event loop
   try {
+    const auto systemEpochNs =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(m_systemBaseline.time_since_epoch())
+        .count();
+
     for (const auto& frame : items) {
       // Monotonic offset from session start, shifted onto system-clock epoch
-      const qint64 offsetNs = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
-      const auto systemEpochNs =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(m_systemBaseline.time_since_epoch())
-          .count();
+      const qint64 offsetNs     = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
       const qint64 timestamp_ns = systemEpochNs + offsetNs;
       const double timestamp_s  = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
 
-      for (const auto& group : frame->data.groups) {
-        auto it = m_groupMap.find(group.groupId);
-        if (it == m_groupMap.end())
-          continue;
-
-        auto& info = it->second;
-        if (group.datasets.size() != info.channels.size())
-          continue;
-
-        if (info.timeChannel)
-          info.timeChannel->SetChannelValue(timestamp_s);
-
-        writeDatasets(group, info);
-        m_writer->SaveSample(*info.channelGroup, static_cast<uint64_t>(timestamp_ns));
-      }
+      writeFrameGroups(frame->data, timestamp_ns, timestamp_s);
     }
   } catch (const std::exception& e) {
     qWarning() << "[MDF4] Exception in processItems:" << e.what();
@@ -186,6 +202,186 @@ void MDF4::ExportWorker::closeResources()
 }
 
 /**
+ * @brief Sanitizes a frame title for use as a directory name.
+ */
+static QString sanitizeFrameTitle(const QString& title)
+{
+  QString frameName = title;
+  frameName.remove(QChar('/'));
+  frameName.remove(QChar('\\'));
+  frameName.remove(QStringLiteral(".."));
+  if (frameName.isEmpty())
+    frameName = QStringLiteral("SerialStudio");
+
+  return frameName;
+}
+
+/**
+ * @brief Configures an mdflib data channel as either numeric (FloatLe/8) or string (Ascii/256).
+ */
+static void configureChannelType(mdf::IChannel* channel, bool isNum)
+{
+  channel->Type(mdf::ChannelType::FixedLength);
+  if (isNum) {
+    channel->DataType(mdf::ChannelDataType::FloatLe);
+    channel->DataBytes(8);
+    return;
+  }
+
+  channel->DataType(mdf::ChannelDataType::StringAscii);
+  channel->DataBytes(256);
+}
+
+/**
+ * @brief Creates a configured master time channel on the given channel group.
+ */
+static mdf::IChannel* createTimeChannel(mdf::IChannelGroup* channelGroup)
+{
+  auto* timeChannel = channelGroup->CreateChannel();
+  if (!timeChannel)
+    return nullptr;
+
+  timeChannel->Name("Time");
+  timeChannel->Unit("s");
+  timeChannel->Type(mdf::ChannelType::Master);
+  timeChannel->DataType(mdf::ChannelDataType::FloatLe);
+  timeChannel->DataBytes(8);
+  return timeChannel;
+}
+
+/**
+ * @brief Builds a (groupId, datasetId) -> isNumeric lookup from a live frame.
+ */
+static std::map<std::pair<int, int>, bool> buildNumericLookup(const DataModel::Frame& frame)
+{
+  std::map<std::pair<int, int>, bool> numericLookup;
+  for (const auto& g : frame.groups)
+    for (const auto& d : g.datasets)
+      numericLookup[{g.groupId, d.datasetId}] = d.isNumeric;
+
+  return numericLookup;
+}
+
+/**
+ * @brief Appends final + raw channels for one dataset to the supplied info struct.
+ */
+void MDF4::ExportWorker::addDatasetChannels(mdf::IChannelGroup* channelGroup,
+                                            const DataModel::Dataset& dataset,
+                                            bool isNum,
+                                            ChannelGroupInfo& info)
+{
+  // Final (post-transform) channel
+  auto* channel = channelGroup->CreateChannel();
+  if (!channel)
+    return;
+
+  channel->Name(dataset.title.toStdString());
+  channel->Unit(dataset.units.toStdString());
+  configureChannelType(channel, isNum);
+
+  info.channels.push_back(channel);
+  info.isNumeric.push_back(isNum);
+
+  // Raw (pre-transform) channel -- always pushed (null included) to keep indices aligned
+  auto* rawChannel = channelGroup->CreateChannel();
+  if (rawChannel) {
+    rawChannel->Name(dataset.title.toStdString() + " (raw)");
+    rawChannel->Unit(dataset.units.toStdString());
+    configureChannelType(rawChannel, isNum);
+  }
+
+  info.rawChannels.push_back(rawChannel);
+}
+
+/**
+ * @brief Builds and registers the channel group for one project group.
+ */
+void MDF4::ExportWorker::buildChannelGroupForGroup(
+  mdf::IDataGroup* dataGroup,
+  const DataModel::Group& group,
+  const QString& sourceTitle,
+  bool usingTemplate,
+  const std::map<std::pair<int, int>, bool>& numericLookup)
+{
+  auto* channelGroup = dataGroup->CreateChannelGroup();
+  if (!channelGroup)
+    return;
+
+  const auto cgName =
+    sourceTitle.isEmpty() ? group.title : QStringLiteral("%1 / %2").arg(sourceTitle, group.title);
+  channelGroup->Name(cgName.toStdString());
+
+  ChannelGroupInfo info;
+  info.channelGroup = channelGroup;
+  info.timeChannel  = createTimeChannel(channelGroup);
+
+  for (const auto& dataset : group.datasets) {
+    // Resolve data type from live frame when using template
+    bool isNum = dataset.isNumeric;
+    if (usingTemplate) {
+      auto nit = numericLookup.find({group.groupId, dataset.datasetId});
+      isNum    = (nit != numericLookup.end()) ? nit->second : true;
+    }
+
+    addDatasetChannels(channelGroup, dataset, isNum, info);
+  }
+
+  m_groupMap[group.groupId] = info;
+}
+
+/**
+ * @brief Builds the MDF4 channel groups from the project (or live) frame definition.
+ */
+void MDF4::ExportWorker::buildChannelGroups(mdf::IDataGroup* dataGroup,
+                                            const DataModel::Frame& frame)
+{
+  // Prefer cached project frame, fall back to first data frame
+  const bool usingTemplate = !m_templateFrame.groups.empty();
+  const auto& allGroups    = usingTemplate ? m_templateFrame.groups : frame.groups;
+
+  QMap<int, QString> sourceTitles;
+  const auto& srcRefs = usingTemplate ? m_templateFrame.sources : frame.sources;
+  for (const auto& s : srcRefs)
+    sourceTitles.insert(s.sourceId, s.title);
+
+  std::map<std::pair<int, int>, bool> numericLookup;
+  if (usingTemplate)
+    numericLookup = buildNumericLookup(frame);
+
+  // Skip image groups entirely -- they have no telemetry datasets
+  for (const auto& group : allGroups) {
+    if (group.widget == QLatin1String("image"))
+      continue;
+
+    buildChannelGroupForGroup(
+      dataGroup, group, sourceTitles.value(group.sourceId), usingTemplate, numericLookup);
+  }
+}
+
+/**
+ * @brief Initializes the writer + header structures for a new file.
+ */
+bool MDF4::ExportWorker::initWriterAndHeader(const QString& frameName, const QDateTime& dateTime)
+{
+  m_writer = mdf::MdfFactory::CreateMdfWriter(mdf::MdfWriterType::Mdf4Basic);
+  if (!m_writer)
+    return false;
+
+  m_writer->Init(m_filePath.toStdString());
+
+  auto* header = m_writer->Header();
+  if (!header)
+    return false;
+
+  header->Author("Serial Studio");
+  header->Description("Generated by Serial Studio - https://serial-studio.com/");
+  header->Subject(frameName.toStdString());
+  header->Project("Telemetry Data");
+  header->StartTime(dateTime.toMSecsSinceEpoch() * 1000000);
+  return true;
+}
+
+/**
  * @brief Creates a new MDF4 file with hierarchical structure
  */
 void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
@@ -202,14 +398,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
   const auto dateTime = QDateTime::currentDateTime();
   const auto fileName =
     dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss")) + QStringLiteral(".mf4");
-
-  // Sanitize frame title to prevent path traversal
-  QString frameName = frame.title;
-  frameName.remove(QChar('/'));
-  frameName.remove(QChar('\\'));
-  frameName.remove(QStringLiteral(".."));
-  if (frameName.isEmpty())
-    frameName = QStringLiteral("SerialStudio");
+  const QString frameName = sanitizeFrameTitle(frame.title);
 
   QDir dir(Misc::WorkspaceManager::instance().path("MDF4"));
   if (!dir.exists(frameName))
@@ -219,134 +408,22 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
   m_filePath = dir.filePath(fileName);
 
   try {
-    m_writer = mdf::MdfFactory::CreateMdfWriter(mdf::MdfWriterType::Mdf4Basic);
-    if (!m_writer)
+    if (!initWriterAndHeader(frameName, dateTime))
       return;
-
-    m_writer->Init(m_filePath.toStdString());
-
-    auto* header = m_writer->Header();
-    if (!header)
-      return;
-
-    header->Author("Serial Studio");
-    header->Description("Generated by Serial Studio - https://serial-studio.com/");
-    header->Subject(frameName.toStdString());
-    header->Project("Telemetry Data");
-    header->StartTime(dateTime.toMSecsSinceEpoch() * 1000000);
 
     auto* dataGroup = m_writer->CreateDataGroup();
     if (!dataGroup)
       return;
 
     dataGroup->Description("Serial Studio Data");
-
-    // Prefer cached project frame, fall back to first data frame
-    const bool usingTemplate = !m_templateFrame.groups.empty();
-    const auto& allGroups    = usingTemplate ? m_templateFrame.groups : frame.groups;
-
-    // Source-id -> source-title lookup
-    QMap<int, QString> sourceTitles;
-    const auto& srcRefs = usingTemplate ? m_templateFrame.sources : frame.sources;
-    for (const auto& s : srcRefs)
-      sourceTitles.insert(s.sourceId, s.title);
-
-    // Build numeric type lookup from the live frame for template groups
-    std::map<std::pair<int, int>, bool> numericLookup;
-    if (usingTemplate) {
-      for (const auto& g : frame.groups)
-        for (const auto& d : g.datasets)
-          numericLookup[{g.groupId, d.datasetId}] = d.isNumeric;
-    }
-
-    // Skip image groups entirely -- they have no telemetry datasets
-    for (const auto& group : allGroups) {
-      if (group.widget == QLatin1String("image"))
-        continue;
-
-      auto* channelGroup = dataGroup->CreateChannelGroup();
-      if (!channelGroup)
-        continue;
-
-      const auto srcTitle = sourceTitles.value(group.sourceId);
-      const auto cgName =
-        srcTitle.isEmpty() ? group.title : QStringLiteral("%1 / %2").arg(srcTitle, group.title);
-      channelGroup->Name(cgName.toStdString());
-
-      ChannelGroupInfo info;
-      info.channelGroup = channelGroup;
-      info.timeChannel  = nullptr;
-
-      // Add per-group master time channel for multi-source recordings
-      auto* timeChannel = channelGroup->CreateChannel();
-      if (timeChannel) {
-        timeChannel->Name("Time");
-        timeChannel->Unit("s");
-        timeChannel->Type(mdf::ChannelType::Master);
-        timeChannel->DataType(mdf::ChannelDataType::FloatLe);
-        timeChannel->DataBytes(8);
-        info.timeChannel = timeChannel;
-      }
-
-      for (const auto& dataset : group.datasets) {
-        // Resolve data type from live frame when using template
-        bool isNum = dataset.isNumeric;
-        if (usingTemplate) {
-          auto nit = numericLookup.find({group.groupId, dataset.datasetId});
-          isNum    = (nit != numericLookup.end()) ? nit->second : true;
-        }
-
-        // Create final (post-transform) channel
-        auto* channel = channelGroup->CreateChannel();
-        if (!channel)
-          continue;
-
-        channel->Name(dataset.title.toStdString());
-        channel->Unit(dataset.units.toStdString());
-        channel->Type(mdf::ChannelType::FixedLength);
-
-        if (isNum) {
-          channel->DataType(mdf::ChannelDataType::FloatLe);
-          channel->DataBytes(8);
-        } else {
-          channel->DataType(mdf::ChannelDataType::StringAscii);
-          channel->DataBytes(256);
-        }
-
-        info.channels.push_back(channel);
-        info.isNumeric.push_back(isNum);
-
-        // Raw (pre-transform) channel -- always pushed (null included) to keep indices aligned
-        auto* rawChannel = channelGroup->CreateChannel();
-        if (rawChannel) {
-          const auto rawName = dataset.title.toStdString() + " (raw)";
-          rawChannel->Name(rawName);
-          rawChannel->Unit(dataset.units.toStdString());
-          rawChannel->Type(mdf::ChannelType::FixedLength);
-
-          if (isNum) {
-            rawChannel->DataType(mdf::ChannelDataType::FloatLe);
-            rawChannel->DataBytes(8);
-          } else {
-            rawChannel->DataType(mdf::ChannelDataType::StringAscii);
-            rawChannel->DataBytes(256);
-          }
-        }
-
-        info.rawChannels.push_back(rawChannel);
-      }
-
-      m_groupMap[group.groupId] = info;
-    }
+    buildChannelGroups(dataGroup, frame);
 
     m_writer->InitMeasurement();
     m_writer->StartMeasurement(dateTime.toMSecsSinceEpoch() * 1000000);
 
     m_fileOpen = true;
     Q_EMIT resourceOpenChanged();
-  }
-
-  catch (const std::exception& e) {
+  } catch (const std::exception& e) {
     qWarning() << "[MDF4] Failed to create file:" << e.what();
     m_fileOpen = false;
     m_writer.reset();

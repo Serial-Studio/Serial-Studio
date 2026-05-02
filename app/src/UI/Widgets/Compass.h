@@ -51,6 +51,8 @@ private slots:
   void updateData();
 
 private:
+  [[nodiscard]] QString cardinalDirection(double angle) const;
+
   int m_index;
   double m_value;
   QString m_text;

@@ -460,6 +460,36 @@ void API::GRPC::GRPCServer::stopServer()
 }
 
 /**
+ * @brief Writes a RawBatch to every active raw stream, marking unwritable streams cancelled.
+ */
+void API::GRPC::GRPCServer::broadcastRawBatch(const serialstudio::RawBatch& batch)
+{
+  std::lock_guard<std::mutex> lock(m_rawStreamsMutex);
+  for (auto& ctx : m_rawStreams) {
+    if (ctx->cancelled.load() || ctx->context->IsCancelled())
+      continue;
+
+    if (!ctx->writer->Write(batch))
+      ctx->cancelled.store(true);
+  }
+}
+
+/**
+ * @brief Writes a FrameBatch to every active stream, marking unwritable streams cancelled.
+ */
+void API::GRPC::GRPCServer::broadcastFrameBatch(const serialstudio::FrameBatch& batch)
+{
+  std::lock_guard<std::mutex> lock(m_frameStreamsMutex);
+  for (auto& ctx : m_frameStreams) {
+    if (ctx->cancelled.load() || ctx->context->IsCancelled())
+      continue;
+
+    if (!ctx->writer->Write(batch))
+      ctx->cancelled.store(true);
+  }
+}
+
+/**
  * @brief Background thread that drains the frame and raw data queues
  *        and writes to all active gRPC stream clients.
  *
@@ -484,16 +514,8 @@ void API::GRPC::GRPCServer::writerLoop()
             .count());
       }
 
-      if (batch.frames_size() > 0) {
-        std::lock_guard<std::mutex> lock(m_frameStreamsMutex);
-        for (auto& ctx : m_frameStreams) {
-          if (ctx->cancelled.load() || ctx->context->IsCancelled())
-            continue;
-
-          if (!ctx->writer->Write(batch))
-            ctx->cancelled.store(true);
-        }
-      }
+      if (batch.frames_size() > 0)
+        broadcastFrameBatch(batch);
     }
 
     // Drain all queued raw data into a single RawBatch
@@ -509,16 +531,8 @@ void API::GRPC::GRPCServer::writerLoop()
                                .count());
       }
 
-      if (batch.packets_size() > 0) {
-        std::lock_guard<std::mutex> lock(m_rawStreamsMutex);
-        for (auto& ctx : m_rawStreams) {
-          if (ctx->cancelled.load() || ctx->context->IsCancelled())
-            continue;
-
-          if (!ctx->writer->Write(batch))
-            ctx->cancelled.store(true);
-        }
-      }
+      if (batch.packets_size() > 0)
+        broadcastRawBatch(batch);
     }
 
     // Sleep briefly if no work to avoid busy-spinning

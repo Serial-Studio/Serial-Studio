@@ -120,19 +120,18 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   if (msg.isEmpty())
     return;
 
-  // Filter out noisy/unfixable Qt info messages
-  if (type == QtInfoMsg) {
-    if (msg.startsWith("OpenType support missing"))
-      return;
-  }
+  // Filter out noisy/unfixable Qt diagnostic messages
+  if (type == QtInfoMsg && msg.startsWith("OpenType support missing"))
+    return;
 
-  // Filter out noisy/unfixable Qt warning messages
-  else if (type == QtWarningMsg) {
+  if (type == QtWarningMsg) {
     if (msg.startsWith("Qt was built without Direct3D 12 support"))
       return;
-    else if (msg.contains("setGeometry"))
+
+    if (msg.contains("setGeometry"))
       return;
-    else if (msg.contains("The following paths were searched for Qt WebEngine locales"))
+
+    if (msg.contains("The following paths were searched for Qt WebEngine locales"))
       return;
   }
 

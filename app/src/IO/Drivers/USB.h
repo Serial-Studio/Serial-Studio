@@ -180,6 +180,10 @@ private:
   bool claimInterface(int ifaceNum);
   void releaseInterface();
 
+  [[nodiscard]] bool deviceSerialMatches(libusb_device* device,
+                                         const libusb_device_descriptor& desc,
+                                         const QString& savedSer) const;
+
   [[nodiscard]] qint64 sendControlTransfer(uint8_t bmRequestType,
                                            uint8_t bRequest,
                                            uint16_t wValue,

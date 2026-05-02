@@ -628,39 +628,46 @@ void Misc::ThemeManager::loadUserThemes()
     const auto subdirPath = themesDir + "/" + subdir;
     QDir addonDir(subdirPath);
     const auto jsonFiles = addonDir.entryList({"*.json"}, QDir::Files);
-    for (const auto& jsonFile : jsonFiles) {
-      QFile file(subdirPath + "/" + jsonFile);
-      if (!file.open(QFile::ReadOnly))
-        continue;
-
-      QJsonParseError parseError;
-      const auto doc = QJsonDocument::fromJson(file.readAll(), &parseError);
-      if (parseError.error != QJsonParseError::NoError || doc.isNull())
-        continue;
-
-      auto obj         = doc.object();
-      const auto title = obj.value("title").toString();
-      if (title.isEmpty() || !obj.contains("colors"))
-        continue;
-
-      if (m_themes.contains(title))
-        continue;
-
-      auto params          = obj.value("parameters").toObject();
-      const auto editorKey = params.value("code-editor-theme").toString();
-      if (!editorKey.isEmpty()) {
-        const auto xmlPath = subdirPath + "/code-editor/" + editorKey + ".xml";
-        if (QFile::exists(xmlPath))
-          params.insert("code-editor-theme", xmlPath);
-
-        obj.insert("parameters", params);
-      }
-
-      m_themes.insert(title, obj);
-      m_availableThemes.append(title);
-      m_userThemeNames.append(title);
-    }
+    for (const auto& jsonFile : jsonFiles)
+      tryLoadUserThemeFile(subdirPath, jsonFile);
   }
+}
+
+/**
+ * @brief Loads a single user-theme JSON file into the theme registry.
+ */
+void Misc::ThemeManager::tryLoadUserThemeFile(const QString& subdirPath, const QString& jsonFile)
+{
+  QFile file(subdirPath + "/" + jsonFile);
+  if (!file.open(QFile::ReadOnly))
+    return;
+
+  QJsonParseError parseError;
+  const auto doc = QJsonDocument::fromJson(file.readAll(), &parseError);
+  if (parseError.error != QJsonParseError::NoError || doc.isNull())
+    return;
+
+  auto obj         = doc.object();
+  const auto title = obj.value("title").toString();
+  if (title.isEmpty() || !obj.contains("colors"))
+    return;
+
+  if (m_themes.contains(title))
+    return;
+
+  auto params          = obj.value("parameters").toObject();
+  const auto editorKey = params.value("code-editor-theme").toString();
+  if (!editorKey.isEmpty()) {
+    const auto xmlPath = subdirPath + "/code-editor/" + editorKey + ".xml";
+    if (QFile::exists(xmlPath))
+      params.insert("code-editor-theme", xmlPath);
+
+    obj.insert("parameters", params);
+  }
+
+  m_themes.insert(title, obj);
+  m_availableThemes.append(title);
+  m_userThemeNames.append(title);
 }
 
 /**
@@ -681,15 +688,17 @@ void Misc::ThemeManager::onExtensionInstalled(const QString& id)
 
   if (isTheme) {
     for (const auto& name : std::as_const(m_userThemeNames)) {
-      if (!previousUserThemes.contains(name)) {
-        const int idx = m_availableThemes.indexOf(name);
-        if (idx >= 0) {
-          setTheme(idx);
-          updateLocalizedThemeNames();
-          Q_EMIT languageChanged();
-          return;
-        }
-      }
+      if (previousUserThemes.contains(name))
+        continue;
+
+      const int idx = m_availableThemes.indexOf(name);
+      if (idx < 0)
+        continue;
+
+      setTheme(idx);
+      updateLocalizedThemeNames();
+      Q_EMIT languageChanged();
+      return;
     }
   }
 

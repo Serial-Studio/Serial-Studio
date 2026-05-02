@@ -41,6 +41,83 @@
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
 
+namespace {
+
+/**
+ * @brief Maps the UI parity index to the corresponding QSerialPort::Parity enum.
+ */
+[[nodiscard]] QSerialPort::Parity parityFromIndex(quint8 index) noexcept
+{
+  if (index == 1)
+    return QSerialPort::EvenParity;
+
+  if (index == 2)
+    return QSerialPort::OddParity;
+
+  if (index == 3)
+    return QSerialPort::SpaceParity;
+
+  if (index == 4)
+    return QSerialPort::MarkParity;
+
+  return QSerialPort::NoParity;
+}
+
+/**
+ * @brief Maps the UI data-bits index to the corresponding QSerialPort::DataBits enum.
+ */
+[[nodiscard]] QSerialPort::DataBits dataBitsFromIndex(quint8 index) noexcept
+{
+  if (index == 0)
+    return QSerialPort::Data5;
+
+  if (index == 1)
+    return QSerialPort::Data6;
+
+  if (index == 2)
+    return QSerialPort::Data7;
+
+  return QSerialPort::Data8;
+}
+
+/**
+ * @brief Maps the UI stop-bits index to the corresponding QSerialPort::StopBits enum.
+ */
+[[nodiscard]] QSerialPort::StopBits stopBitsFromIndex(quint8 index) noexcept
+{
+  if (index == 1)
+    return QSerialPort::OneAndHalfStop;
+
+  if (index == 2)
+    return QSerialPort::TwoStop;
+
+  return QSerialPort::OneStop;
+}
+
+/**
+ * @brief Returns the user-visible serial ports filtered by the same rules used by the UI list.
+ */
+[[nodiscard]] QVector<QSerialPortInfo> filteredSerialPorts()
+{
+  QVector<QSerialPortInfo> filtered;
+  const auto ports = QSerialPortInfo::availablePorts();
+  for (const auto& info : ports) {
+    if (info.isNull())
+      continue;
+
+#ifdef Q_OS_MACOS
+    if (info.portName().toLower().startsWith("tty."))
+      continue;
+#endif
+
+    filtered.append(info);
+  }
+
+  return filtered;
+}
+
+}  // namespace
+
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -265,88 +342,78 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
 {
   Q_UNUSED(mode)
 
-  // Close any existing connection
   close();
 
   if (!configurationOk())
     return false;
 
   QString connectionTarget;
+  if (m_protocolIndex == 0 && !configureRtuClient(connectionTarget))
+    return false;
 
-  // Configure RTU serial client
-  if (m_protocolIndex == 0) {
-    if (m_serialPortNames.isEmpty())
-      refreshSerialPorts();
+  if (m_protocolIndex == 1 && !configureTcpClient(connectionTarget))
+    return false;
 
-    auto ports  = serialPortList();
-    auto portId = serialPortIndex();
-    if (portId < 1 || portId >= ports.count())
-      return false;
+  return finalizeAndConnect(connectionTarget);
+}
 
-    // Validate the serial port still exists
-    if (portId >= m_serialPortLocations.count()) {
-      Misc::Utilities::showMessageBox(tr("Invalid Serial Port"),
-                                      tr("The selected serial port \"%1\" is no longer available. "
-                                         "Refresh the port list and try again.")
-                                        .arg(ports.value(portId)),
-                                      QMessageBox::Critical);
-      return false;
-    }
+/**
+ * @brief Creates and parametrizes the RTU Modbus client; returns false on validation failure.
+ */
+bool IO::Drivers::Modbus::configureRtuClient(QString& target)
+{
+  if (m_serialPortNames.isEmpty())
+    refreshSerialPorts();
 
-    const auto portName = m_serialPortLocations.at(portId);
+  const auto ports  = serialPortList();
+  const auto portId = serialPortIndex();
+  if (portId < 1 || portId >= ports.count())
+    return false;
 
-    m_device = new QModbusRtuSerialClient(this);
-
-    // Map parity index to Qt enum
-    QSerialPort::Parity parity = QSerialPort::NoParity;
-    if (m_parityIndex == 1)
-      parity = QSerialPort::EvenParity;
-    else if (m_parityIndex == 2)
-      parity = QSerialPort::OddParity;
-    else if (m_parityIndex == 3)
-      parity = QSerialPort::SpaceParity;
-    else if (m_parityIndex == 4)
-      parity = QSerialPort::MarkParity;
-
-    // Map data bits index to Qt enum
-    QSerialPort::DataBits dataBits = QSerialPort::Data8;
-    if (m_dataBitsIndex == 0)
-      dataBits = QSerialPort::Data5;
-    else if (m_dataBitsIndex == 1)
-      dataBits = QSerialPort::Data6;
-    else if (m_dataBitsIndex == 2)
-      dataBits = QSerialPort::Data7;
-    else if (m_dataBitsIndex == 3)
-      dataBits = QSerialPort::Data8;
-
-    // Map stop bits index to Qt enum
-    QSerialPort::StopBits stopBits = QSerialPort::OneStop;
-    if (m_stopBitsIndex == 1)
-      stopBits = QSerialPort::OneAndHalfStop;
-    else if (m_stopBitsIndex == 2)
-      stopBits = QSerialPort::TwoStop;
-
-    // Apply serial parameters to the RTU client
-    m_device->setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
-    m_device->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, m_baudRate);
-    m_device->setConnectionParameter(QModbusDevice::SerialParityParameter, parity);
-    m_device->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, dataBits);
-    m_device->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, stopBits);
-
-    connectionTarget = ports.value(portId);
+  if (portId >= m_serialPortLocations.count()) {
+    Misc::Utilities::showMessageBox(tr("Invalid Serial Port"),
+                                    tr("The selected serial port \"%1\" is no longer available. "
+                                       "Refresh the port list and try again.")
+                                      .arg(ports.value(portId)),
+                                    QMessageBox::Critical);
+    return false;
   }
 
-  // Configure TCP client
-  else if (m_protocolIndex == 1) {
-    auto* tcp_device = new QModbusTcpClient(this);
-    tcp_device->setConnectionParameter(QModbusDevice::NetworkAddressParameter, m_host);
-    tcp_device->setConnectionParameter(QModbusDevice::NetworkPortParameter, m_port);
-    m_device = tcp_device;
+  const auto portName = m_serialPortLocations.at(portId);
+  m_device            = new QModbusRtuSerialClient(this);
 
-    connectionTarget = QStringLiteral("%1:%2").arg(m_host).arg(m_port);
-  }
+  m_device->setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
+  m_device->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, m_baudRate);
+  m_device->setConnectionParameter(QModbusDevice::SerialParityParameter,
+                                   parityFromIndex(m_parityIndex));
+  m_device->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,
+                                   dataBitsFromIndex(m_dataBitsIndex));
+  m_device->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,
+                                   stopBitsFromIndex(m_stopBitsIndex));
 
-  // Abort if device creation failed
+  target = ports.value(portId);
+  return true;
+}
+
+/**
+ * @brief Creates and parametrizes the TCP Modbus client.
+ */
+bool IO::Drivers::Modbus::configureTcpClient(QString& target)
+{
+  auto* tcp_device = new QModbusTcpClient(this);
+  tcp_device->setConnectionParameter(QModbusDevice::NetworkAddressParameter, m_host);
+  tcp_device->setConnectionParameter(QModbusDevice::NetworkPortParameter, m_port);
+  m_device = tcp_device;
+
+  target = QStringLiteral("%1:%2").arg(m_host).arg(m_port);
+  return true;
+}
+
+/**
+ * @brief Wires the Modbus client signals and attempts the connection.
+ */
+bool IO::Drivers::Modbus::finalizeAndConnect(const QString& target)
+{
   if (!m_device) {
     Misc::Utilities::showMessageBox(
       tr("Modbus Initialization Failed"),
@@ -355,11 +422,9 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  // Set timeout and retry parameters
   m_device->setTimeout(1000);
   m_device->setNumberOfRetries(3);
 
-  // Connect state change and error signals
   connect(m_device,
           &QModbusClient::stateChanged,
           this,
@@ -371,7 +436,6 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
           &IO::Drivers::Modbus::onErrorOccurred,
           Qt::UniqueConnection);
 
-  // Attempt connection
   if (!m_device->connectDevice()) {
     QString error = m_device->errorString();
     m_device->deleteLater();
@@ -380,13 +444,12 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
     Misc::Utilities::showMessageBox(
       tr("Modbus Connection Failed"),
       error.isEmpty()
-        ? tr("Unable to connect to \"%1\". Check your connection settings.").arg(connectionTarget)
-        : tr("\"%1\": %2").arg(connectionTarget, error),
+        ? tr("Unable to connect to \"%1\". Check your connection settings.").arg(target)
+        : tr("\"%1\": %2").arg(target, error),
       QMessageBox::Critical);
     return false;
   }
 
-  // Start polling if already connected (synchronous RTU case)
   if (m_device->state() == QModbusDevice::ConnectedState)
     m_pollTimer->start(m_pollInterval);
 
@@ -1150,6 +1213,68 @@ void IO::Drivers::Modbus::pollNextGroup()
 }
 
 /**
+ * @brief Encodes a Modbus reply payload as an RTU-format byte stream for downstream parsing.
+ */
+QByteArray IO::Drivers::Modbus::buildRtuFrame(const QModbusDataUnit& unit) const
+{
+  // Map register type to Modbus function code and choose the encoding mode
+  quint8 functionCode = 0x03;
+  bool isRegisterType = true;
+  switch (unit.registerType()) {
+    case QModbusDataUnit::HoldingRegisters:
+      functionCode = 0x03;
+      break;
+    case QModbusDataUnit::InputRegisters:
+      functionCode = 0x04;
+      break;
+    case QModbusDataUnit::Coils:
+      functionCode   = 0x01;
+      isRegisterType = false;
+      break;
+    case QModbusDataUnit::DiscreteInputs:
+      functionCode   = 0x02;
+      isRegisterType = false;
+      break;
+    default:
+      break;
+  }
+
+  QByteArray data;
+  if (isRegisterType) {
+    data.reserve(3 + unit.valueCount() * 2);
+    data.append(static_cast<char>(m_slaveAddress));
+    data.append(static_cast<char>(functionCode));
+    data.append(static_cast<char>(unit.valueCount() * 2));
+
+    for (int i = 0; i < unit.valueCount(); ++i) {
+      const quint16 value = unit.value(i);
+      data.append(static_cast<char>((value >> 8) & 0xFF));
+      data.append(static_cast<char>(value & 0xFF));
+    }
+
+    return data;
+  }
+
+  // Bit-packed encoding for coils / discrete inputs
+  const int byteCount = (unit.valueCount() + 7) / 8;
+  data.reserve(3 + byteCount);
+  data.append(static_cast<char>(m_slaveAddress));
+  data.append(static_cast<char>(functionCode));
+  data.append(static_cast<char>(byteCount));
+
+  for (int i = 0; i < byteCount; ++i) {
+    quint8 byte = 0;
+    for (int bit = 0; bit < 8 && (i * 8 + bit) < unit.valueCount(); ++bit)
+      if (unit.value(i * 8 + bit))
+        byte |= (1 << bit);
+
+    data.append(static_cast<char>(byte));
+  }
+
+  return data;
+}
+
+/**
  * @brief Handles completed Modbus read operations and publishes the result as RTU-format bytes.
  */
 void IO::Drivers::Modbus::onReadReady()
@@ -1168,13 +1293,11 @@ void IO::Drivers::Modbus::onReadReady()
 
   m_lastReply = nullptr;
 
-  // Abort on Modbus protocol errors
   if (reply->error() != QModbusDevice::NoError) {
     reply->deleteLater();
     return;
   }
 
-  // Validate the data unit
   const QModbusDataUnit unit = reply->result();
   if (!unit.isValid() || unit.valueCount() == 0) {
     reply->deleteLater();
@@ -1182,72 +1305,8 @@ void IO::Drivers::Modbus::onReadReady()
   }
 
   try {
-    // Determine function code and register type
-    const QModbusDataUnit::RegisterType registerType = unit.registerType();
-
-    quint8 functionCode;
-    bool isRegisterType = false;
-
-    switch (registerType) {
-      case QModbusDataUnit::HoldingRegisters:
-        functionCode   = 0x03;
-        isRegisterType = true;
-        break;
-      case QModbusDataUnit::InputRegisters:
-        functionCode   = 0x04;
-        isRegisterType = true;
-        break;
-      case QModbusDataUnit::Coils:
-        functionCode   = 0x01;
-        isRegisterType = false;
-        break;
-      case QModbusDataUnit::DiscreteInputs:
-        functionCode   = 0x02;
-        isRegisterType = false;
-        break;
-      default:
-        functionCode   = 0x03;
-        isRegisterType = true;
-        break;
-    }
-
-    // Build the output byte array in Modbus RTU format
-    QByteArray data;
-    if (isRegisterType) {
-      data.reserve(3 + unit.valueCount() * 2);
-      data.append(static_cast<char>(m_slaveAddress));
-      data.append(static_cast<char>(functionCode));
-      data.append(static_cast<char>(unit.valueCount() * 2));
-
-      for (int i = 0; i < unit.valueCount(); ++i) {
-        quint16 value = unit.value(i);
-        data.append(static_cast<char>((value >> 8) & 0xFF));
-        data.append(static_cast<char>(value & 0xFF));
-      }
-    }
-
-    // Bit-packed format for coils/discrete inputs
-    else {
-      const int byteCount = (unit.valueCount() + 7) / 8;
-      data.reserve(3 + byteCount);
-      data.append(static_cast<char>(m_slaveAddress));
-      data.append(static_cast<char>(functionCode));
-      data.append(static_cast<char>(byteCount));
-
-      for (int i = 0; i < byteCount; ++i) {
-        quint8 byte = 0;
-        for (int bit = 0; bit < 8 && (i * 8 + bit) < unit.valueCount(); ++bit)
-          if (unit.value(i * 8 + bit))
-            byte |= (1 << bit);
-
-        data.append(static_cast<char>(byte));
-      }
-    }
-
-    publishReceivedData(std::move(data));
-  }
-
-  catch (...) {
+    publishReceivedData(buildRtuFrame(unit));
+  } catch (...) {
   }
 
   reply->deleteLater();
@@ -1351,28 +1410,14 @@ void IO::Drivers::Modbus::refreshSerialPorts()
  */
 QJsonObject IO::Drivers::Modbus::deviceIdentifier() const
 {
-  // Only meaningful for RTU mode
   if (m_protocolIndex != 0 || m_serialPortIndex < 1)
     return {};
 
-  // Build a filtered port list matching our display order
-  const auto ports = QSerialPortInfo::availablePorts();
-  QVector<QSerialPortInfo> filtered;
-  for (const auto& info : ports) {
-    if (!info.isNull()) {
-#ifdef Q_OS_MACOS
-      if (info.portName().toLower().startsWith("tty."))
-        continue;
-#endif
-      filtered.append(info);
-    }
-  }
-
-  const int idx = m_serialPortIndex - 1;
+  const auto filtered = filteredSerialPorts();
+  const int idx       = m_serialPortIndex - 1;
   if (idx < 0 || idx >= filtered.count())
     return {};
 
-  // Extract hardware identifiers from the port info
   const auto& info = filtered.at(idx);
   QJsonObject id;
 
@@ -1397,33 +1442,54 @@ QJsonObject IO::Drivers::Modbus::deviceIdentifier() const
   return id;
 }
 
+namespace {
+
+/**
+ * @brief Scores a serial-port candidate against saved identifier fields.
+ */
+[[nodiscard]] int scorePortMatch(const QSerialPortInfo& info,
+                                 const QString& savedVid,
+                                 const QString& savedPid,
+                                 const QString& savedSer,
+                                 const QString& savedName,
+                                 const QString& savedDesc)
+{
+  int score = 0;
+
+  // VID+PID anchors the match at 100; serial bumps it to 150
+  if (!savedVid.isEmpty() && info.hasVendorIdentifier()) {
+    const auto vid = QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper();
+    const auto pid = QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper();
+    if (vid == savedVid && pid == savedPid) {
+      score += 100;
+      if (!savedSer.isEmpty() && info.serialNumber() == savedSer)
+        score += 50;
+    }
+  }
+
+  if (!savedDesc.isEmpty() && info.description() == savedDesc)
+    score += 10;
+
+  if (!savedName.isEmpty() && info.portName() == savedName)
+    score += 5;
+
+  return score;
+}
+
+}  // namespace
+
 /**
  * @brief Tries to find and select a serial port matching a previously saved identifier.
  */
 bool IO::Drivers::Modbus::selectByIdentifier(const QJsonObject& id)
 {
-  // Only meaningful for RTU mode
   if (id.isEmpty() || m_protocolIndex != 0)
     return false;
 
-  // Ensure port list is populated for index clamping
   if (m_serialPortNames.isEmpty())
     refreshSerialPorts();
 
-  // Build a filtered port list matching our display order
-  const auto ports = QSerialPortInfo::availablePorts();
-  QVector<QSerialPortInfo> filtered;
-  for (const auto& info : ports) {
-    if (!info.isNull()) {
-#ifdef Q_OS_MACOS
-      if (info.portName().toLower().startsWith("tty."))
-        continue;
-#endif
-      filtered.append(info);
-    }
-  }
-
-  // Extract saved identifiers
+  const auto filtered  = filteredSerialPorts();
   const auto savedVid  = id.value(QStringLiteral("vid")).toString();
   const auto savedPid  = id.value(QStringLiteral("pid")).toString();
   const auto savedSer  = id.value(QStringLiteral("serial")).toString();
@@ -1433,42 +1499,20 @@ bool IO::Drivers::Modbus::selectByIdentifier(const QJsonObject& id)
   // Score each port: VID+PID 100, serial 50, description 10, name 5
   int bestScore = 0;
   int bestIndex = -1;
-
   for (int i = 0; i < filtered.count(); ++i) {
-    const auto& info = filtered.at(i);
-    int score        = 0;
-
-    if (!savedVid.isEmpty() && info.hasVendorIdentifier()) {
-      const auto vid =
-        QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper();
-      const auto pid =
-        QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper();
-      if (vid == savedVid && pid == savedPid) {
-        score += 100;
-
-        if (!savedSer.isEmpty() && info.serialNumber() == savedSer)
-          score += 50;
-      }
-    }
-
-    if (!savedDesc.isEmpty() && info.description() == savedDesc)
-      score += 10;
-
-    if (!savedName.isEmpty() && info.portName() == savedName)
-      score += 5;
-
+    const int score =
+      scorePortMatch(filtered.at(i), savedVid, savedPid, savedSer, savedName, savedDesc);
     if (score > bestScore) {
       bestScore = score;
       bestIndex = i;
     }
   }
 
-  if (bestIndex >= 0) {
-    setSerialPortIndex(static_cast<quint8>(bestIndex + 1));
-    return true;
-  }
+  if (bestIndex < 0)
+    return false;
 
-  return false;
+  setSerialPortIndex(static_cast<quint8>(bestIndex + 1));
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1508,83 +1552,99 @@ QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
   poll.max   = 60000;
   props.append(poll);
 
-  if (m_protocolIndex == 1) {
-    IO::DriverProperty host;
-    host.key   = QStringLiteral("host");
-    host.label = tr("Host / IP");
-    host.type  = IO::DriverProperty::Text;
-    host.value = m_host;
-    props.append(host);
+  if (m_protocolIndex == 1)
+    appendTcpProperties(props);
+  else
+    appendRtuProperties(props);
 
-    IO::DriverProperty port;
-    port.key   = QStringLiteral("port");
-    port.label = tr("Port");
-    port.type  = IO::DriverProperty::IntField;
-    port.value = m_port;
-    port.min   = 1;
-    port.max   = 65535;
-    props.append(port);
-  } else {
-    IO::DriverProperty serial;
-    serial.key     = QStringLiteral("serialPortIndex");
-    serial.label   = tr("Serial Port");
-    serial.type    = IO::DriverProperty::ComboBox;
-    serial.value   = m_serialPortIndex;
-    serial.options = serialPortList();
-    props.append(serial);
-
-    IO::DriverProperty baud;
-    baud.key   = QStringLiteral("baudRate");
-    baud.label = tr("Baud Rate");
-    baud.type  = IO::DriverProperty::IntField;
-    baud.value = m_baudRate;
-    baud.min   = 1;
-    props.append(baud);
-
-    IO::DriverProperty parity;
-    parity.key     = QStringLiteral("parityIndex");
-    parity.label   = tr("Parity");
-    parity.type    = IO::DriverProperty::ComboBox;
-    parity.value   = m_parityIndex;
-    parity.options = parityList();
-    props.append(parity);
-
-    IO::DriverProperty data;
-    data.key     = QStringLiteral("dataBitsIndex");
-    data.label   = tr("Data Bits");
-    data.type    = IO::DriverProperty::ComboBox;
-    data.value   = m_dataBitsIndex;
-    data.options = dataBitsList();
-    props.append(data);
-
-    IO::DriverProperty stop;
-    stop.key     = QStringLiteral("stopBitsIndex");
-    stop.label   = tr("Stop Bits");
-    stop.type    = IO::DriverProperty::ComboBox;
-    stop.value   = m_stopBitsIndex;
-    stop.options = stopBitsList();
-    props.append(stop);
-  }
+  if (m_registerGroups.isEmpty())
+    return props;
 
   // Serialize register groups for project persistence
-  if (!m_registerGroups.isEmpty()) {
-    QJsonArray groups_array;
-    for (const auto& g : m_registerGroups) {
-      QJsonObject obj;
-      obj[QStringLiteral("type")]  = g.registerType;
-      obj[QStringLiteral("start")] = g.startAddress;
-      obj[QStringLiteral("count")] = g.count;
-      groups_array.append(obj);
-    }
-
-    IO::DriverProperty groups;
-    groups.key   = QStringLiteral("registerGroups");
-    groups.type  = IO::DriverProperty::Text;
-    groups.value = QVariant::fromValue(groups_array);
-    props.append(groups);
+  QJsonArray groups_array;
+  for (const auto& g : m_registerGroups) {
+    QJsonObject obj;
+    obj[QStringLiteral("type")]  = g.registerType;
+    obj[QStringLiteral("start")] = g.startAddress;
+    obj[QStringLiteral("count")] = g.count;
+    groups_array.append(obj);
   }
 
+  IO::DriverProperty groups;
+  groups.key   = QStringLiteral("registerGroups");
+  groups.type  = IO::DriverProperty::Text;
+  groups.value = QVariant::fromValue(groups_array);
+  props.append(groups);
+
   return props;
+}
+
+/**
+ * @brief Appends the TCP-mode-only driver properties (host + port).
+ */
+void IO::Drivers::Modbus::appendTcpProperties(QList<IO::DriverProperty>& props) const
+{
+  IO::DriverProperty host;
+  host.key   = QStringLiteral("host");
+  host.label = tr("Host / IP");
+  host.type  = IO::DriverProperty::Text;
+  host.value = m_host;
+  props.append(host);
+
+  IO::DriverProperty port;
+  port.key   = QStringLiteral("port");
+  port.label = tr("Port");
+  port.type  = IO::DriverProperty::IntField;
+  port.value = m_port;
+  port.min   = 1;
+  port.max   = 65535;
+  props.append(port);
+}
+
+/**
+ * @brief Appends the RTU-mode driver properties (serial port, baud, parity, bits).
+ */
+void IO::Drivers::Modbus::appendRtuProperties(QList<IO::DriverProperty>& props) const
+{
+  IO::DriverProperty serial;
+  serial.key     = QStringLiteral("serialPortIndex");
+  serial.label   = tr("Serial Port");
+  serial.type    = IO::DriverProperty::ComboBox;
+  serial.value   = m_serialPortIndex;
+  serial.options = serialPortList();
+  props.append(serial);
+
+  IO::DriverProperty baud;
+  baud.key   = QStringLiteral("baudRate");
+  baud.label = tr("Baud Rate");
+  baud.type  = IO::DriverProperty::IntField;
+  baud.value = m_baudRate;
+  baud.min   = 1;
+  props.append(baud);
+
+  IO::DriverProperty parity;
+  parity.key     = QStringLiteral("parityIndex");
+  parity.label   = tr("Parity");
+  parity.type    = IO::DriverProperty::ComboBox;
+  parity.value   = m_parityIndex;
+  parity.options = parityList();
+  props.append(parity);
+
+  IO::DriverProperty data;
+  data.key     = QStringLiteral("dataBitsIndex");
+  data.label   = tr("Data Bits");
+  data.type    = IO::DriverProperty::ComboBox;
+  data.value   = m_dataBitsIndex;
+  data.options = dataBitsList();
+  props.append(data);
+
+  IO::DriverProperty stop;
+  stop.key     = QStringLiteral("stopBitsIndex");
+  stop.label   = tr("Stop Bits");
+  stop.type    = IO::DriverProperty::ComboBox;
+  stop.value   = m_stopBitsIndex;
+  stop.options = stopBitsList();
+  props.append(stop);
 }
 
 /**
@@ -1592,62 +1652,86 @@ QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
  */
 void IO::Drivers::Modbus::setDriverProperty(const QString& key, const QVariant& value)
 {
-  if (key == QLatin1String("protocolIndex"))
+  if (key == QLatin1String("protocolIndex")) {
     setProtocolIndex(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("slaveAddress"))
-    setSlaveAddress(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("pollInterval"))
-    setPollInterval(static_cast<quint16>(value.toInt()));
-
-  else if (key == QLatin1String("host"))
-    setHost(value.toString());
-
-  else if (key == QLatin1String("port"))
-    setPort(static_cast<quint16>(value.toInt()));
-
-  else if (key == QLatin1String("serialPortIndex"))
-    setSerialPortIndex(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("parityIndex"))
-    setParityIndex(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("dataBitsIndex"))
-    setDataBitsIndex(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("stopBitsIndex"))
-    setStopBitsIndex(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("baudRate")) {
-    const int v = value.toInt();
-    if (v >= 110)
-      setBaudRate(v);
-    else {
-      const auto list = baudRateList();
-      if (v >= 0 && v < list.size())
-        setBaudRate(list.at(v).toInt());
-    }
+    return;
   }
 
-  else if (key == QLatin1String("registerGroups")) {
-    QJsonArray array;
-    if (value.canConvert<QJsonArray>())
-      array = value.toJsonArray();
-    else if (value.typeId() == QMetaType::QVariantList) {
-      const auto list = value.toList();
-      for (const auto& item : list)
-        array.append(QJsonValue::fromVariant(item));
+  if (key == QLatin1String("slaveAddress")) {
+    setSlaveAddress(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("pollInterval")) {
+    setPollInterval(static_cast<quint16>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("host")) {
+    setHost(value.toString());
+    return;
+  }
+
+  if (key == QLatin1String("port")) {
+    setPort(static_cast<quint16>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("serialPortIndex")) {
+    setSerialPortIndex(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("parityIndex")) {
+    setParityIndex(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("dataBitsIndex")) {
+    setDataBitsIndex(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("stopBitsIndex")) {
+    setStopBitsIndex(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("baudRate")) {
+    const int v = value.toInt();
+    if (v >= 110) {
+      setBaudRate(v);
+      return;
     }
 
-    if (!array.isEmpty()) {
-      clearRegisterGroups();
-      for (const auto& item : array) {
-        const auto obj = item.toObject();
-        addRegisterGroup(static_cast<quint8>(obj.value(QStringLiteral("type")).toInt()),
-                         static_cast<quint16>(obj.value(QStringLiteral("start")).toInt()),
-                         static_cast<quint16>(obj.value(QStringLiteral("count")).toInt()));
-      }
-    }
+    const auto list = baudRateList();
+    if (v >= 0 && v < list.size())
+      setBaudRate(list.at(v).toInt());
+
+    return;
+  }
+
+  if (key != QLatin1String("registerGroups"))
+    return;
+
+  // Coerce variant payload into a QJsonArray
+  QJsonArray array;
+  if (value.canConvert<QJsonArray>())
+    array = value.toJsonArray();
+  else if (value.typeId() == QMetaType::QVariantList) {
+    const auto list = value.toList();
+    for (const auto& item : list)
+      array.append(QJsonValue::fromVariant(item));
+  }
+
+  if (array.isEmpty())
+    return;
+
+  clearRegisterGroups();
+  for (const auto& item : array) {
+    const auto obj = item.toObject();
+    addRegisterGroup(static_cast<quint8>(obj.value(QStringLiteral("type")).toInt()),
+                     static_cast<quint16>(obj.value(QStringLiteral("start")).toInt()),
+                     static_cast<quint16>(obj.value(QStringLiteral("count")).toInt()));
   }
 }

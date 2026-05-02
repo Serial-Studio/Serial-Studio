@@ -196,13 +196,16 @@ void Widgets::Accelerometer::updateData()
   // Read raw axis values
   double rawX = 0, rawY = 0, rawZ = 0;
   for (int i = 0; i < 3; ++i) {
-    const auto& dataset = acc.datasets[i];
-    if (dataset.widget == QStringLiteral("x"))
-      rawX = dataset.numericValue;
-    else if (dataset.widget == QStringLiteral("y"))
-      rawY = dataset.numericValue;
-    else if (dataset.widget == QStringLiteral("z"))
-      rawZ = dataset.numericValue;
+    const auto& d = acc.datasets[i];
+    const auto& w = d.widget;
+    if (w == QStringLiteral("x"))
+      rawX = d.numericValue;
+
+    if (w == QStringLiteral("y"))
+      rawY = d.numericValue;
+
+    if (w == QStringLiteral("z"))
+      rawZ = d.numericValue;
   }
 
   // Convert to G-force

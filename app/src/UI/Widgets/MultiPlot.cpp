@@ -25,6 +25,28 @@
 #include "Misc/ThemeManager.h"
 #include "UI/Dashboard.h"
 
+namespace {
+/**
+ * @brief Returns the shared simplified unit of every dataset in @p group, or
+ *        an empty string when datasets disagree or the first unit is empty.
+ */
+QString sharedDatasetUnit(const DataModel::Group& group)
+{
+  if (group.datasets.empty())
+    return {};
+
+  const auto firstUnit = group.datasets[0].units.simplified();
+  if (firstUnit.isEmpty())
+    return {};
+
+  for (size_t i = 1; i < group.datasets.size(); ++i)
+    if (group.datasets[i].units.simplified() != firstUnit)
+      return {};
+
+  return firstUnit;
+}
+}  // namespace
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
 //--------------------------------------------------------------------------------------------------
@@ -65,21 +87,10 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   }
 
   // Obtain group title, appending the shared unit if all datasets agree
-  m_yLabel = group.title;
-  if (!group.datasets.empty()) {
-    const auto firstUnit = group.datasets[0].units.simplified();
-    if (!firstUnit.isEmpty()) {
-      bool allSame = true;
-      for (size_t i = 1; i < group.datasets.size(); ++i) {
-        allSame &= (group.datasets[i].units.simplified() == firstUnit);
-        if (!allSame)
-          break;
-      }
-
-      if (allSame)
-        m_yLabel += " (" + firstUnit + ")";
-    }
-  }
+  m_yLabel                 = group.title;
+  const QString sharedUnit = sharedDatasetUnit(group);
+  if (!sharedUnit.isEmpty())
+    m_yLabel += " (" + sharedUnit + ")";
 
   // Resize data container to fit curves
   m_data.resize(group.datasets.size());
@@ -358,8 +369,6 @@ void Widgets::MultiPlot::updateRange()
  */
 void Widgets::MultiPlot::calculateAutoScaleRange()
 {
-  // Store previous values
-  bool ok             = true;
   const auto prevMinY = m_minY;
   const auto prevMaxY = m_maxY;
 
@@ -369,107 +378,130 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     m_maxY = 1;
   }
 
-  // Obtain min/max values from datasets
-  else if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
-    const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-
-    m_minY = std::numeric_limits<double>::max();
-    m_maxY = std::numeric_limits<double>::lowest();
-
-    int index = 0;
-    for (const auto& dataset : group.datasets) {
-      ok &= DSP::notEqual(dataset.pltMin, dataset.pltMax);
-      if (ok && index < m_visibleCurves.size() && m_visibleCurves[index]) {
-        m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
-        m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
-      }
-
-      else {
-        ok = false;
-        break;
-      }
-
-      ++index;
-    }
-  }
-
-  // Set the min and max to the lowest and highest values
-  if (!ok) {
-    // Initialize values to ensure that min/max are set
-    m_minY = std::numeric_limits<double>::max();
-    m_maxY = std::numeric_limits<double>::lowest();
-
-    auto accumulate = [this](const QList<QPointF>& curve) {
-      for (auto i = 0; i < curve.count(); ++i) {
-        const double value = curve[i].y();
-        if (!std::isfinite(value))
-          continue;
-
-        m_minY = qMin(m_minY, value);
-        m_maxY = qMax(m_maxY, value);
-      }
-    };
-
-    int index = 0;
-    for (const auto& curve : std::as_const(m_data)) {
-      if (index < m_visibleCurves.size() && m_visibleCurves[index])
-        accumulate(curve);
-
-      ++index;
-    }
-
-    // If no finite values found, use default range
-    if (!std::isfinite(m_minY) || !std::isfinite(m_maxY)) {
-      m_minY = 0;
-      m_maxY = 1;
-    }
-
-    // If the min and max are the same, set the range to 0-1
-    else if (DSP::almostEqual(m_minY, m_maxY)) {
-      if (DSP::isZero(m_minY)) {
-        m_minY = -1;
-        m_maxY = 1;
-      }
-
-      else {
-        double absValue = qAbs(m_minY);
-        m_minY          = m_minY - absValue * 0.1;
-        m_maxY          = m_maxY + absValue * 0.1;
-      }
-    }
-
-    // Expand range symmetrically around midY, with a 10% padding
-    else {
-      // Calculate center and half-range
-      const double midY      = (m_minY + m_maxY) / 2.0;
-      const double halfRange = (m_maxY - m_minY) / 2.0;
-
-      // Expand range symmetrically around midY, with a 10% padding
-      double paddedRange = halfRange * 1.1;
-      if (DSP::isZero(paddedRange))
-        paddedRange = 1;
-
-      m_minY = std::floor(midY - paddedRange);
-      m_maxY = std::ceil(midY + paddedRange);
-
-      // Safety check to avoid zero-range
-      if (DSP::almostEqual(m_minY, m_maxY)) {
-        m_minY -= 1;
-        m_maxY += 1;
-      }
-    }
-
-    // Round to integer numbers
-    m_maxY = std::ceil(m_maxY);
-    m_minY = std::floor(m_minY);
-    if (DSP::almostEqual(m_maxY, m_minY)) {
-      m_minY -= 1;
-      m_maxY += 1;
-    }
+  // Try dataset-declared bounds; fall back to scanning curves on failure
+  else if (!computeRangeFromDatasets()) {
+    scanCurvesForRange();
+    padDerivedRange();
   }
 
   if (DSP::notEqual(prevMinY, m_minY) || DSP::notEqual(prevMaxY, m_maxY))
     Q_EMIT rangeChanged();
+}
+
+/**
+ * @brief Computes Y range from dataset pltMin/pltMax bounds.
+ */
+bool Widgets::MultiPlot::computeRangeFromDatasets()
+{
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
+    return false;
+
+  const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  m_minY            = std::numeric_limits<double>::max();
+  m_maxY            = std::numeric_limits<double>::lowest();
+
+  int index = 0;
+  for (const auto& dataset : group.datasets) {
+    const bool curveOk = DSP::notEqual(dataset.pltMin, dataset.pltMax)
+                      && index < m_visibleCurves.size() && m_visibleCurves[index];
+    if (!curveOk)
+      return false;
+
+    m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
+    m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
+    ++index;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Scans visible curves for finite min/max values.
+ */
+void Widgets::MultiPlot::scanCurvesForRange()
+{
+  m_minY = std::numeric_limits<double>::max();
+  m_maxY = std::numeric_limits<double>::lowest();
+
+  auto accumulate = [this](const QList<QPointF>& curve) {
+    for (auto i = 0; i < curve.count(); ++i) {
+      const double value = curve[i].y();
+      if (!std::isfinite(value))
+        continue;
+
+      m_minY = qMin(m_minY, value);
+      m_maxY = qMax(m_maxY, value);
+    }
+  };
+
+  int index = 0;
+  for (const auto& curve : std::as_const(m_data)) {
+    if (index < m_visibleCurves.size() && m_visibleCurves[index])
+      accumulate(curve);
+
+    ++index;
+  }
+}
+
+/**
+ * @brief Adjusts m_minY/m_maxY when data-derived bounds need padding.
+ */
+void Widgets::MultiPlot::padDerivedRange()
+{
+  applyDerivedYBounds();
+
+  // Round to integer numbers
+  m_maxY = std::ceil(m_maxY);
+  m_minY = std::floor(m_minY);
+  if (DSP::almostEqual(m_maxY, m_minY)) {
+    m_minY -= 1;
+    m_maxY += 1;
+  }
+}
+
+/**
+ * @brief Selects the padding strategy for the current m_minY/m_maxY pair.
+ */
+void Widgets::MultiPlot::applyDerivedYBounds()
+{
+  // If no finite values found, use default range
+  if (!std::isfinite(m_minY) || !std::isfinite(m_maxY)) {
+    m_minY = 0;
+    m_maxY = 1;
+    return;
+  }
+
+  // If the min and max are the same at zero, fall back to [-1, 1]
+  if (DSP::almostEqual(m_minY, m_maxY) && DSP::isZero(m_minY)) {
+    m_minY = -1;
+    m_maxY = 1;
+    return;
+  }
+
+  // If min and max are equal but non-zero, expand by 10% of |min|
+  if (DSP::almostEqual(m_minY, m_maxY)) {
+    const double absValue = qAbs(m_minY);
+    m_minY                = m_minY - absValue * 0.1;
+    m_maxY                = m_maxY + absValue * 0.1;
+    return;
+  }
+
+  // Expand range symmetrically around midY, with a 10% padding
+  const double midY      = (m_minY + m_maxY) / 2.0;
+  const double halfRange = (m_maxY - m_minY) / 2.0;
+
+  double paddedRange = halfRange * 1.1;
+  if (DSP::isZero(paddedRange))
+    paddedRange = 1;
+
+  m_minY = std::floor(midY - paddedRange);
+  m_maxY = std::ceil(midY + paddedRange);
+
+  // Safety check to avoid zero-range
+  if (DSP::almostEqual(m_minY, m_maxY)) {
+    m_minY -= 1;
+    m_maxY += 1;
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

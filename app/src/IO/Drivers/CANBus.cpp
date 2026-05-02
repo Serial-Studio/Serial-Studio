@@ -394,20 +394,26 @@ QString IO::Drivers::CANBus::pluginDisplayName(const QString& plugin) const
 {
   if (plugin == "socketcan")
     return "SocketCAN";
-  else if (plugin == "peakcan")
+
+  if (plugin == "peakcan")
     return "PEAK CAN";
-  else if (plugin == "passthroughcan" || plugin == "passthrucan")
+
+  if (plugin == "passthroughcan" || plugin == "passthrucan")
     return "PassThru CAN";
-  else if (plugin == "virtualcan")
+
+  if (plugin == "virtualcan")
     return "Virtual CAN";
-  else if (plugin == "systeccan")
+
+  if (plugin == "systeccan")
     return "SysTec CAN";
-  else if (plugin == "tinycan")
+
+  if (plugin == "tinycan")
     return "Tiny CAN";
-  else if (plugin == "vectorcan")
+
+  if (plugin == "vectorcan")
     return "Vector CAN";
-  else
-    return plugin;
+
+  return plugin;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -564,6 +570,44 @@ void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns a platform-specific hint when no CAN interfaces are found for a plugin.
+ */
+QString IO::Drivers::CANBus::noInterfacesHint(const QString& plugin) const
+{
+  const QString driverName = pluginDisplayName(plugin);
+
+#if defined(Q_OS_LINUX)
+  if (plugin == "socketcan")
+    return tr("Load SocketCAN kernel modules first");
+
+  if (plugin == "virtualcan")
+    return tr("Set up a virtual CAN interface first");
+
+  return tr("No interfaces found for %1").arg(driverName);
+
+#elif defined(Q_OS_WIN)
+  if (plugin == "peakcan")
+    return tr(
+      "Install <a href='https://www.peak-system.com/Drivers.523.0.html?&L=1'>PEAK CAN drivers</a>");
+
+  if (plugin == "vectorcan")
+    return tr(
+      "Install <a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'>Vector CAN drivers</a>");
+
+  if (plugin == "systeccan")
+    return tr(
+      "Install <a href='https://www.systec-electronic.com/en/company/support/driver'>SysTec CAN drivers</a>");
+
+  return tr("Install %1 drivers").arg(driverName);
+
+#elif defined(Q_OS_MAC)
+  return tr("Install %1 drivers for macOS").arg(driverName);
+#else
+  return tr("No interfaces found for %1").arg(driverName);
+#endif
+}
+
+/**
  * @brief Refreshes the list of available CAN bus interfaces.
  */
 void IO::Drivers::CANBus::refreshInterfaces()
@@ -593,34 +637,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
 
   // Provide a platform-specific hint when no interfaces are found
   if (m_interfaceList.isEmpty() && m_interfaceError.isEmpty()) {
-    const QString driverName = pluginDisplayName(plugin);
-
-#if defined(Q_OS_LINUX)
-    if (plugin == "socketcan")
-      m_interfaceError = tr("Load SocketCAN kernel modules first");
-    else if (plugin == "virtualcan")
-      m_interfaceError = tr("Set up a virtual CAN interface first");
-    else
-      m_interfaceError = tr("No interfaces found for %1").arg(driverName);
-
-#elif defined(Q_OS_WIN)
-    if (plugin == "peakcan") {
-      m_interfaceError = tr(
-        "Install <a href='https://www.peak-system.com/Drivers.523.0.html?&L=1'>PEAK CAN drivers</a>");
-    } else if (plugin == "vectorcan") {
-      m_interfaceError = tr(
-        "Install <a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'>Vector CAN drivers</a>");
-    } else if (plugin == "systeccan") {
-      m_interfaceError = tr(
-        "Install <a href='https://www.systec-electronic.com/en/company/support/driver'>SysTec CAN drivers</a>");
-    } else
-      m_interfaceError = tr("Install %1 drivers").arg(driverName);
-
-#elif defined(Q_OS_MAC)
-    m_interfaceError = tr("Install %1 drivers for macOS").arg(driverName);
-#else
-    m_interfaceError = tr("No interfaces found for %1").arg(driverName);
-#endif
+    m_interfaceError = noInterfacesHint(plugin);
     Q_EMIT interfaceErrorChanged();
   }
 
@@ -719,26 +736,35 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
  */
 void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& value)
 {
-  if (key == QLatin1String("pluginIndex"))
+  if (key == QLatin1String("pluginIndex")) {
     setPluginIndex(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("interfaceIndex"))
-    setInterfaceIndex(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("bitrate")) {
-    const auto v = value.toUInt();
-    if (v >= 10000)
-      setBitrate(static_cast<quint32>(v));
-    else {
-      const auto list = bitrateList();
-      const int idx   = static_cast<int>(v);
-      if (idx >= 0 && idx < list.size())
-        setBitrate(static_cast<quint32>(list.at(idx).toUInt()));
-    }
+    return;
   }
 
-  else if (key == QLatin1String("canFD"))
+  if (key == QLatin1String("interfaceIndex")) {
+    setInterfaceIndex(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("canFD")) {
     setCanFD(value.toBool());
+    return;
+  }
+
+  if (key != QLatin1String("bitrate"))
+    return;
+
+  // Bitrate accepts either a raw rate or an index into bitrateList()
+  const auto v = value.toUInt();
+  if (v >= 10000) {
+    setBitrate(static_cast<quint32>(v));
+    return;
+  }
+
+  const auto list = bitrateList();
+  const int idx   = static_cast<int>(v);
+  if (idx >= 0 && idx < list.size())
+    setBitrate(static_cast<quint32>(list.at(idx).toUInt()));
 }
 
 /**

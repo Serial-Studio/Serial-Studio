@@ -23,6 +23,7 @@
 
 #include <map>
 #include <memory>
+#include <QDateTime>
 #include <QObject>
 #include <QSettings>
 #include <vector>
@@ -35,6 +36,7 @@ namespace mdf {
 class MdfWriter;
 class IChannel;
 class IChannelGroup;
+class IDataGroup;
 }  // namespace mdf
 
 namespace MDF4 {
@@ -56,13 +58,10 @@ public:
   void closeResources() override;
   [[nodiscard]] bool isResourceOpen() const override;
 
-protected:
-  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
-
-private:
-  void createFile(const DataModel::Frame& frame);
-
-private:
+public:
+  /**
+   * @brief Per-channel-group state captured during file creation.
+   */
   struct ChannelGroupInfo {
     mdf::IChannelGroup* channelGroup;
     mdf::IChannel* timeChannel;
@@ -70,6 +69,25 @@ private:
     std::vector<mdf::IChannel*> rawChannels;
     std::vector<bool> isNumeric;
   };
+
+protected:
+  void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
+
+private:
+  void createFile(const DataModel::Frame& frame);
+  void writeGroupDatasets(const DataModel::Group& group, ChannelGroupInfo& info);
+  void writeFrameGroups(const DataModel::Frame& frame, qint64 timestamp_ns, double timestamp_s);
+  void buildChannelGroups(mdf::IDataGroup* dataGroup, const DataModel::Frame& frame);
+  void buildChannelGroupForGroup(mdf::IDataGroup* dataGroup,
+                                 const DataModel::Group& group,
+                                 const QString& sourceTitle,
+                                 bool usingTemplate,
+                                 const std::map<std::pair<int, int>, bool>& numericLookup);
+  void addDatasetChannels(mdf::IChannelGroup* channelGroup,
+                          const DataModel::Dataset& dataset,
+                          bool isNum,
+                          ChannelGroupInfo& info);
+  [[nodiscard]] bool initWriterAndHeader(const QString& frameName, const QDateTime& dateTime);
 
 public:
   DataModel::Frame m_templateFrame;

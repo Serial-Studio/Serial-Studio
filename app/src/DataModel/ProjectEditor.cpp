@@ -987,43 +987,32 @@ QModelIndex DataModel::ProjectEditor::consumePendingSelection()
   m_pendingSelectionGroupId = -1;
   m_pendingSelectionItemId  = -1;
 
-  if (kind == PendingSelectionKind::Source) {
-    for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
-      if (it.value().sourceId != iid)
+  // Resolves the matching tree item via a per-kind predicate, sets selection, returns index.
+  const auto pickFirst = [this](const auto& map, auto&& pred) -> QModelIndex {
+    for (auto it = map.begin(); it != map.end(); ++it) {
+      if (!pred(it.value()))
         continue;
 
       const auto idx = it.key()->index();
       m_selectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
       return idx;
     }
-  } else if (kind == PendingSelectionKind::Group) {
-    for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
-      if (it.value().groupId != gid)
-        continue;
+    return {};
+  };
 
-      const auto idx = it.key()->index();
-      m_selectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
-      return idx;
-    }
-  } else if (kind == PendingSelectionKind::Dataset) {
-    for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
-      if (it.value().groupId != gid || it.value().datasetId != iid)
-        continue;
+  if (kind == PendingSelectionKind::Source)
+    return pickFirst(m_sourceItems, [iid](const auto& v) { return v.sourceId == iid; });
 
-      const auto idx = it.key()->index();
-      m_selectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
-      return idx;
-    }
-  } else if (kind == PendingSelectionKind::OutputWidget) {
-    for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
-      if (it.value().groupId != gid || it.value().widgetId != iid)
-        continue;
+  if (kind == PendingSelectionKind::Group)
+    return pickFirst(m_groupItems, [gid](const auto& v) { return v.groupId == gid; });
 
-      const auto idx = it.key()->index();
-      m_selectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
-      return idx;
-    }
-  }
+  if (kind == PendingSelectionKind::Dataset)
+    return pickFirst(m_datasetItems,
+                     [gid, iid](const auto& v) { return v.groupId == gid && v.datasetId == iid; });
+
+  if (kind == PendingSelectionKind::OutputWidget)
+    return pickFirst(m_outputWidgetItems,
+                     [gid, iid](const auto& v) { return v.groupId == gid && v.widgetId == iid; });
 
   return {};
 }
@@ -1098,22 +1087,23 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     groupsRoot->setData(true, TreeViewExpanded);
   };
 
+  // True when the search filter excludes the group entirely (title and all datasets miss).
+  const auto groupFilteredOut = [&](const DataModel::Group& g, bool groupTitleMatches) {
+    if (!filterActive || groupTitleMatches)
+      return false;
+
+    for (const auto& ds : g.datasets)
+      if (matches(ds.title))
+        return false;
+
+    return true;
+  };
+
   // Add group items with their dataset and output widget children
   for (const auto& group : groups) {
-    // A group is included if its title matches or any dataset matches.
     const bool groupMatches = !filterActive || matches(group.title);
-    bool anyDatasetMatches  = false;
-    if (filterActive && !groupMatches) {
-      for (const auto& ds : group.datasets) {
-        if (matches(ds.title)) {
-          anyDatasetMatches = true;
-          break;
-        }
-      }
-
-      if (!anyDatasetMatches)
-        continue;
-    }
+    if (groupFilteredOut(group, groupMatches))
+      continue;
 
     auto* groupItem = new QStandardItem(group.title);
     auto icon = SerialStudio::dashboardWidgetIcon(SerialStudio::getDashboardWidget(group), false);
@@ -1300,90 +1290,72 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
  */
 void DataModel::ProjectEditor::restoreTreeSelection()
 {
+  const auto findKey = [](const auto& map, auto&& pred) -> QStandardItem* {
+    for (auto it = map.begin(); it != map.end(); ++it)
+      if (pred(it.value()))
+        return it.key();
+
+    return nullptr;
+  };
+
+  // Resolve the selection target for the current view via flat dispatch
   QStandardItem* toSelect = nullptr;
 
-  // Match the current view's selected item against the rebuilt tree
   if (m_currentView == DatasetView) {
     const auto gid = m_selectedDataset.groupId;
     const auto did = m_selectedDataset.datasetId;
-    for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
-      if (it.value().groupId == gid && it.value().datasetId == did) {
-        toSelect = it.key();
-        break;
-      }
-    }
-  } else if (m_currentView == GroupView) {
+    toSelect       = findKey(
+      m_datasetItems, [gid, did](const auto& v) { return v.groupId == gid && v.datasetId == did; });
+  }
+
+  if (!toSelect && m_currentView == GroupView) {
     const auto gid = m_selectedGroup.groupId;
-    for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
-      if (it.value().groupId == gid) {
-        toSelect = it.key();
-        break;
-      }
-    }
-  } else if (m_currentView == ActionView) {
+    toSelect       = findKey(m_groupItems, [gid](const auto& v) { return v.groupId == gid; });
+  }
+
+  if (!toSelect && m_currentView == ActionView) {
     const auto aid = m_selectedAction.actionId;
-    for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
-      if (it.value().actionId == aid) {
-        toSelect = it.key();
-        break;
-      }
-    }
-  } else if (m_currentView == SourceView) {
+    toSelect       = findKey(m_actionItems, [aid](const auto& v) { return v.actionId == aid; });
+  }
+
+  if (!toSelect && m_currentView == SourceView) {
     const auto sid = m_selectedSource.sourceId;
-    for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
-      if (it.value().sourceId == sid) {
-        toSelect = it.key();
-        break;
-      }
-    }
-  } else if (m_currentView == OutputWidgetView) {
+    toSelect       = findKey(m_sourceItems, [sid](const auto& v) { return v.sourceId == sid; });
+  }
+
+  if (!toSelect && m_currentView == OutputWidgetView) {
     const auto gid = m_selectedOutputWidget.groupId;
     const auto wid = m_selectedOutputWidget.widgetId;
-    for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
-      if (it.value().groupId == gid && it.value().widgetId == wid) {
-        toSelect = it.key();
-        break;
-      }
-    }
-  } else if (m_currentView == DataTablesView) {
-    toSelect = m_tablesRootItem;
-  } else if (m_currentView == SystemDatasetsView) {
-    toSelect = m_systemDatasetsItem;
-  } else if (m_currentView == UserTableView) {
-    for (auto it = m_userTableItems.begin(); it != m_userTableItems.end(); ++it) {
-      if (it.value() == m_selectedUserTable) {
-        toSelect = it.key();
-        break;
-      }
-    }
+    toSelect       = findKey(m_outputWidgetItems,
+                       [gid, wid](const auto& v) { return v.groupId == gid && v.widgetId == wid; });
+  }
 
-    // Table was deleted; fall back to its parent category, not the root.
+  if (m_currentView == DataTablesView)
+    toSelect = m_tablesRootItem;
+
+  if (m_currentView == SystemDatasetsView)
+    toSelect = m_systemDatasetsItem;
+
+  if (m_currentView == UserTableView) {
+    const auto name = m_selectedUserTable;
+    toSelect        = findKey(m_userTableItems, [&name](const auto& v) { return v == name; });
     if (!toSelect)
       toSelect = m_tablesRootItem;
-  } else if (m_currentView == WorkspacesView) {
-    toSelect = m_workspacesRootItem;
-  } else if (m_currentView == WorkspaceView) {
-    for (auto it = m_workspaceItems.begin(); it != m_workspaceItems.end(); ++it) {
-      if (it.value() == m_selectedWorkspaceId) {
-        toSelect = it.key();
-        break;
-      }
-    }
+  }
 
-    // Workspace was deleted -- fall back to the Workspaces category.
+  if (m_currentView == WorkspacesView)
+    toSelect = m_workspacesRootItem;
+
+  if (m_currentView == WorkspaceView) {
+    const int wid = m_selectedWorkspaceId;
+    toSelect      = findKey(m_workspaceItems, [wid](const auto& v) { return v == wid; });
     if (!toSelect)
       toSelect = m_workspacesRootItem;
   }
 
   // Fall back to root project item when no match found
-  if (!toSelect) {
-    for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it) {
-      if (it.value() == kRootItem) {
-        toSelect = it.key();
-        break;
-      }
-    }
-  }
+  if (!toSelect)
+    toSelect = findKey(m_rootItems, [](const auto& v) { return v == kRootItem; });
 
   if (toSelect)
     m_selectionModel->setCurrentIndex(toSelect->index(), QItemSelectionModel::ClearAndSelect);
@@ -1630,54 +1602,8 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   m_sourceModel->appendRow(busItem);
 
   // BLE connection is configured at runtime via the Setup panel, not the editor
-  if (source.busType != static_cast<int>(SerialStudio::BusType::BluetoothLE)) {
-    auto* driverHdr = new QStandardItem();
-    driverHdr->setData(SectionHeader, WidgetType);
-    driverHdr->setData(tr("Connection Settings"), PlaceholderValue);
-    driverHdr->setData(busTypeIcon(source.busType), ParameterIcon);
-    m_sourceModel->appendRow(driverHdr);
-
-    IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(source.sourceId);
-    if (driver) {
-      const auto props = driver->driverProperties();
-      for (const auto& prop : props) {
-        auto* item = new QStandardItem();
-        item->setEditable(true);
-        item->setData(true, Active);
-        item->setData(prop.key, ParameterKey);
-        item->setData(kSourceView_Property, ParameterType);
-        item->setData(prop.label, ParameterName);
-
-        if (!prop.description.isEmpty())
-          item->setData(prop.description, ParameterDescription);
-
-        switch (prop.type) {
-          case IO::DriverProperty::Text:
-            item->setData(TextField, WidgetType);
-            break;
-          case IO::DriverProperty::HexText:
-            item->setData(HexTextField, WidgetType);
-            break;
-          case IO::DriverProperty::IntField:
-            item->setData(IntField, WidgetType);
-            break;
-          case IO::DriverProperty::FloatField:
-            item->setData(FloatField, WidgetType);
-            break;
-          case IO::DriverProperty::CheckBox:
-            item->setData(CheckBox, WidgetType);
-            break;
-          case IO::DriverProperty::ComboBox:
-            item->setData(ComboBox, WidgetType);
-            item->setData(prop.options, ComboBoxData);
-            break;
-        }
-
-        item->setData(prop.value, EditableValue);
-        m_sourceModel->appendRow(item);
-      }
-    }
-  }
+  if (source.busType != static_cast<int>(SerialStudio::BusType::BluetoothLE))
+    appendDriverPropertyRows(source);
 
   // Frame Detection section
   auto* fdHdr = new QStandardItem();
@@ -1797,6 +1723,61 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
     Qt::QueuedConnection);
 
   Q_EMIT sourceModelChanged();
+}
+
+/**
+ * @brief Appends the Connection Settings header and one row per live driver property.
+ */
+void DataModel::ProjectEditor::appendDriverPropertyRows(const DataModel::Source& source)
+{
+  auto* driverHdr = new QStandardItem();
+  driverHdr->setData(SectionHeader, WidgetType);
+  driverHdr->setData(tr("Connection Settings"), PlaceholderValue);
+  driverHdr->setData(busTypeIcon(source.busType), ParameterIcon);
+  m_sourceModel->appendRow(driverHdr);
+
+  IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(source.sourceId);
+  if (!driver)
+    return;
+
+  // Resolves the EditorWidget kind for a given driver-property type.
+  const auto widgetForProperty = [](IO::DriverProperty::Type t) -> EditorWidget {
+    switch (t) {
+      case IO::DriverProperty::Text:
+        return TextField;
+      case IO::DriverProperty::HexText:
+        return HexTextField;
+      case IO::DriverProperty::IntField:
+        return IntField;
+      case IO::DriverProperty::FloatField:
+        return FloatField;
+      case IO::DriverProperty::CheckBox:
+        return CheckBox;
+      case IO::DriverProperty::ComboBox:
+        return ComboBox;
+    }
+    return TextField;
+  };
+
+  const auto props = driver->driverProperties();
+  for (const auto& prop : props) {
+    auto* item = new QStandardItem();
+    item->setEditable(true);
+    item->setData(true, Active);
+    item->setData(prop.key, ParameterKey);
+    item->setData(kSourceView_Property, ParameterType);
+    item->setData(prop.label, ParameterName);
+
+    if (!prop.description.isEmpty())
+      item->setData(prop.description, ParameterDescription);
+
+    item->setData(widgetForProperty(prop.type), WidgetType);
+    if (prop.type == IO::DriverProperty::ComboBox)
+      item->setData(prop.options, ComboBoxData);
+
+    item->setData(prop.value, EditableValue);
+    m_sourceModel->appendRow(item);
+  }
 }
 
 /**
@@ -2707,94 +2688,153 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
   const auto groupId = m_selectedGroup.groupId;
 
   if (id == kGroupView_Title) {
-    const auto newTitle = value.toString();
-    if (m_selectedGroup.title == newTitle)
+    if (!applyGroupTitleEdit(value.toString(), groupId))
       return;
 
-    m_selectedGroup.title = newTitle;
-    pm.updateGroup(groupId, m_selectedGroup, false);
+    Q_EMIT editableOptionsChanged();
+    return;
+  }
 
-    for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
-      if (it.value().groupId != groupId)
-        continue;
+  if (id == kGroupView_Source) {
+    applyGroupSourceEdit(value.toInt(), groupId);
+    Q_EMIT editableOptionsChanged();
+    return;
+  }
 
-      auto* treeItem = it.key();
-      treeItem->setText(newTitle);
-      treeItem->setData(newTitle, TreeViewText);
-      m_groupItems[treeItem].title = newTitle;
-      break;
-    }
-
-    Q_EMIT selectedTextChanged();
-  } else if (id == kGroupView_Source) {
-    const auto& sources = DataModel::ProjectModel::instance().sources();
-    const int srcIdx    = value.toInt();
-    if (srcIdx >= 0 && srcIdx < static_cast<int>(sources.size())) {
-      m_selectedGroup.sourceId = sources[srcIdx].sourceId;
-      for (auto& ds : m_selectedGroup.datasets)
-        ds.sourceId = m_selectedGroup.sourceId;
-
-      pm.updateGroup(groupId, m_selectedGroup, true);
-    }
-  } else if (id == kGroupView_Widget) {
-    const auto keys     = m_groupWidgets.keys();
-    const int widgetIdx = value.toInt();
-    if (widgetIdx < 0 || widgetIdx >= keys.size())
+  if (id == kGroupView_Widget) {
+    if (!applyGroupWidgetEdit(value.toInt(), groupId))
       return;
 
-    const auto widgetStr = keys.at(widgetIdx);
+    Q_EMIT editableOptionsChanged();
+    return;
+  }
 
-    static const QMap<QString, SerialStudio::GroupWidget> kWidgetEnumMap = {
-      {"accelerometer", SerialStudio::Accelerometer},
-      {    "multiplot",     SerialStudio::MultiPlot},
-      {         "gyro",     SerialStudio::Gyroscope},
-      {          "map",           SerialStudio::GPS},
-      {     "datagrid",      SerialStudio::DataGrid},
-      {       "plot3d",        SerialStudio::Plot3D},
-      {        "image",     SerialStudio::ImageView},
-      {             "", SerialStudio::NoGroupWidget},
-    };
-
-    const auto widget = kWidgetEnumMap.value(widgetStr, SerialStudio::NoGroupWidget);
-    if (!pm.setGroupWidget(groupId, widget)) {
-      QTimer::singleShot(0, this, [this, groupId] {
-        buildTreeModel();
-        for (auto g = m_groupItems.begin(); g != m_groupItems.end(); ++g) {
-          if (g.value().groupId != groupId)
-            continue;
-
-          if (m_selectionModel)
-            m_selectionModel->setCurrentIndex(g.key()->index(),
-                                              QItemSelectionModel::ClearAndSelect);
-
-          break;
-        }
-      });
-      return;
-    }
-
-    m_selectedGroup.widget = widgetStr;
 #ifdef BUILD_COMMERCIAL
-  } else if (id == kGroupView_ImgMode) {
-    const QStringList kImgModeValues = {QStringLiteral("autodetect"), QStringLiteral("manual")};
-    const int modeIdx                = value.toInt();
-    if (modeIdx >= 0 && modeIdx < kImgModeValues.size()) {
-      m_selectedGroup.imgDetectionMode = kImgModeValues.at(modeIdx);
-      pm.updateGroup(groupId, m_selectedGroup);
-      buildGroupModel(m_selectedGroup);
+  if (id == kGroupView_ImgMode) {
+    if (applyGroupImgModeEdit(value.toInt(), groupId))
       return;
-    }
-  } else if (id == kGroupView_ImgStart) {
+
+    Q_EMIT editableOptionsChanged();
+    return;
+  }
+
+  if (id == kGroupView_ImgStart) {
     m_selectedGroup.imgStartSequence = value.toString();
     pm.updateGroup(groupId, m_selectedGroup);
-  } else if (id == kGroupView_ImgEnd) {
+  }
+
+  if (id == kGroupView_ImgEnd) {
     m_selectedGroup.imgEndSequence = value.toString();
     pm.updateGroup(groupId, m_selectedGroup);
-#endif
   }
+#endif
 
   Q_EMIT editableOptionsChanged();
 }
+
+/**
+ * @brief Applies a group-title edit; returns false when the title is unchanged.
+ */
+bool DataModel::ProjectEditor::applyGroupTitleEdit(const QString& newTitle, int groupId)
+{
+  if (m_selectedGroup.title == newTitle)
+    return false;
+
+  m_selectedGroup.title = newTitle;
+  DataModel::ProjectModel::instance().updateGroup(groupId, m_selectedGroup, false);
+
+  for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
+    if (it.value().groupId != groupId)
+      continue;
+
+    auto* treeItem = it.key();
+    treeItem->setText(newTitle);
+    treeItem->setData(newTitle, TreeViewText);
+    m_groupItems[treeItem].title = newTitle;
+    break;
+  }
+
+  Q_EMIT selectedTextChanged();
+  return true;
+}
+
+/**
+ * @brief Re-routes the group (and its datasets) to the source at the given combobox index.
+ */
+void DataModel::ProjectEditor::applyGroupSourceEdit(int srcIdx, int groupId)
+{
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  if (srcIdx < 0 || srcIdx >= static_cast<int>(sources.size()))
+    return;
+
+  m_selectedGroup.sourceId = sources[srcIdx].sourceId;
+  for (auto& ds : m_selectedGroup.datasets)
+    ds.sourceId = m_selectedGroup.sourceId;
+
+  DataModel::ProjectModel::instance().updateGroup(groupId, m_selectedGroup, true);
+}
+
+/**
+ * @brief Applies a group-widget change; returns false when the change is rejected.
+ */
+bool DataModel::ProjectEditor::applyGroupWidgetEdit(int widgetIdx, int groupId)
+{
+  const auto keys = m_groupWidgets.keys();
+  if (widgetIdx < 0 || widgetIdx >= keys.size())
+    return false;
+
+  const auto widgetStr = keys.at(widgetIdx);
+
+  static const QMap<QString, SerialStudio::GroupWidget> kWidgetEnumMap = {
+    {"accelerometer", SerialStudio::Accelerometer},
+    {    "multiplot",     SerialStudio::MultiPlot},
+    {         "gyro",     SerialStudio::Gyroscope},
+    {          "map",           SerialStudio::GPS},
+    {     "datagrid",      SerialStudio::DataGrid},
+    {       "plot3d",        SerialStudio::Plot3D},
+    {        "image",     SerialStudio::ImageView},
+    {             "", SerialStudio::NoGroupWidget},
+  };
+
+  const auto widget = kWidgetEnumMap.value(widgetStr, SerialStudio::NoGroupWidget);
+  if (DataModel::ProjectModel::instance().setGroupWidget(groupId, widget)) {
+    m_selectedGroup.widget = widgetStr;
+    return true;
+  }
+
+  // Rejected -- rebuild tree and restore selection on the original group.
+  QTimer::singleShot(0, this, [this, groupId] {
+    buildTreeModel();
+    for (auto g = m_groupItems.begin(); g != m_groupItems.end(); ++g) {
+      if (g.value().groupId != groupId)
+        continue;
+
+      if (m_selectionModel)
+        m_selectionModel->setCurrentIndex(g.key()->index(), QItemSelectionModel::ClearAndSelect);
+
+      break;
+    }
+  });
+
+  return false;
+}
+
+#ifdef BUILD_COMMERCIAL
+/**
+ * @brief Applies an image-mode edit; returns true when handled (caller skips Q_EMIT).
+ */
+bool DataModel::ProjectEditor::applyGroupImgModeEdit(int modeIdx, int groupId)
+{
+  const QStringList kImgModeValues = {QStringLiteral("autodetect"), QStringLiteral("manual")};
+  if (modeIdx < 0 || modeIdx >= kImgModeValues.size())
+    return false;
+
+  m_selectedGroup.imgDetectionMode = kImgModeValues.at(modeIdx);
+  DataModel::ProjectModel::instance().updateGroup(groupId, m_selectedGroup);
+  buildGroupModel(m_selectedGroup);
+  return true;
+}
+#endif
 
 /**
  * @brief Handles edits to the action form model.
@@ -3096,23 +3136,32 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     }
 
     Q_EMIT selectedTextChanged();
-  } else {
-    const bool rebuildTree = (idInt == kDatasetView_Index);
-    pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
-
-    // Sync the tree-item cache when rebuildTree=false; otherwise edits get rolled back.
-    if (!rebuildTree) {
-      for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
-        if (it.value().groupId == groupId && it.value().datasetId == datasetId) {
-          m_datasetItems[it.key()] = m_selectedDataset;
-          break;
-        }
-      }
-    }
+    Q_EMIT datasetOptionsChanged();
+    Q_EMIT editableOptionsChanged();
+    return;
   }
+
+  const bool rebuildTree = (idInt == kDatasetView_Index);
+  pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
+  if (!rebuildTree)
+    syncDatasetItemCache(groupId, datasetId);
 
   Q_EMIT datasetOptionsChanged();
   Q_EMIT editableOptionsChanged();
+}
+
+/**
+ * @brief Refreshes the cached dataset record bound to the matching tree item.
+ */
+void DataModel::ProjectEditor::syncDatasetItemCache(int groupId, int datasetId)
+{
+  for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+    if (it.value().groupId != groupId || it.value().datasetId != datasetId)
+      continue;
+
+    m_datasetItems[it.key()] = m_selectedDataset;
+    break;
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3135,61 +3184,80 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
     return;
 
   if (m_sourceParserItems.contains(item)) {
-    const auto source = m_sourceParserItems.value(item);
-    m_selectedSource  = source;
+    m_selectedSource = m_sourceParserItems.value(item);
     setCurrentView(SourceFrameParserView);
     Q_EMIT selectedSourceFrameParserCodeChanged();
     Q_EMIT sourceModelChanged();
-  } else if (m_sourceItems.contains(item)) {
+    return;
+  }
+  if (m_sourceItems.contains(item)) {
     const auto source = m_sourceItems.value(item);
     if (m_currentView == SourceView && source.sourceId == m_selectedSource.sourceId)
       return;
 
     setCurrentView(SourceView);
     buildSourceModel(source);
-  } else if (m_groupItems.contains(item)) {
+    return;
+  }
+  if (m_groupItems.contains(item)) {
     const auto group = m_groupItems.value(item);
     DataModel::ProjectModel::instance().setSelectedGroup(group);
     setCurrentView(GroupView);
     buildGroupModel(group);
-  } else if (m_datasetItems.contains(item)) {
+    return;
+  }
+  if (m_datasetItems.contains(item)) {
     const auto dataset = m_datasetItems.value(item);
     DataModel::ProjectModel::instance().setSelectedDataset(dataset);
     setCurrentView(DatasetView);
     buildDatasetModel(dataset);
-  } else if (m_actionItems.contains(item)) {
+    return;
+  }
+  if (m_actionItems.contains(item)) {
     const auto action = m_actionItems.value(item);
     DataModel::ProjectModel::instance().setSelectedAction(action);
     setCurrentView(ActionView);
     buildActionModel(action);
-  } else if (m_outputWidgetItems.contains(item)) {
+    return;
+  }
+  if (m_outputWidgetItems.contains(item)) {
     const auto ow = m_outputWidgetItems.value(item);
     DataModel::ProjectModel::instance().setSelectedOutputWidget(ow);
     setCurrentView(OutputWidgetView);
     buildOutputWidgetModel(ow);
-  } else if (item == m_tablesRootItem) {
+    return;
+  }
+  if (item == m_tablesRootItem) {
     setCurrentView(DataTablesView);
-  } else if (item == m_systemDatasetsItem) {
+    return;
+  }
+  if (item == m_systemDatasetsItem) {
     setCurrentView(SystemDatasetsView);
-  } else if (m_userTableItems.contains(item)) {
+    return;
+  }
+  if (m_userTableItems.contains(item)) {
     const auto name = m_userTableItems.value(item);
     if (m_selectedUserTable != name) {
       m_selectedUserTable = name;
       Q_EMIT selectedUserTableChanged();
     }
-
     setCurrentView(UserTableView);
-  } else if (item == m_workspacesRootItem) {
+    return;
+  }
+  if (item == m_workspacesRootItem) {
     setCurrentView(WorkspacesView);
-  } else if (m_workspaceItems.contains(item)) {
+    return;
+  }
+  if (m_workspaceItems.contains(item)) {
     const int wid = m_workspaceItems.value(item);
     if (m_selectedWorkspaceId != wid) {
       m_selectedWorkspaceId = wid;
       Q_EMIT selectedWorkspaceIdChanged();
     }
-
     setCurrentView(WorkspaceView);
-  } else if (m_rootItems.contains(item)) {
+    return;
+  }
+  if (m_rootItems.contains(item)) {
     setCurrentView(ProjectView);
     buildProjectModel();
   }
@@ -3756,22 +3824,29 @@ QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) cons
       lookup.insert(makeKey(typeKey, g.groupId, relIdx), entry);
     }
 
-    for (const auto& ds : g.datasets) {
+    // Records one dataset-widget reference into the lookup table.
+    const auto recordDatasetWidget = [&](const DataModel::Dataset& ds,
+                                         SerialStudio::DashboardWidget k) {
+      const int typeKey = static_cast<int>(k);
+      const int relIdx  = datasetRunning.value(typeKey, 0);
+      datasetRunning.insert(typeKey, relIdx + 1);
+
+      ResolvedWidget entry;
+      entry.groupTitle   = g.title;
+      entry.datasetTitle = ds.title;
+      lookup.insert(makeKey(typeKey, g.groupId, relIdx), entry);
+    };
+
+    // Walk dataset widgets through a lambda so the predicate filter resets nesting.
+    const auto walkDatasetWidgets = [&](const DataModel::Dataset& ds) {
       const auto keys = SerialStudio::getDashboardWidgets(ds);
-      for (const auto& k : keys) {
-        if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
-          continue;
+      for (const auto& k : keys)
+        if (SerialStudio::datasetWidgetEligibleForWorkspace(k))
+          recordDatasetWidget(ds, k);
+    };
 
-        const int typeKey = static_cast<int>(k);
-        const int relIdx  = datasetRunning.value(typeKey, 0);
-        datasetRunning.insert(typeKey, relIdx + 1);
-
-        ResolvedWidget entry;
-        entry.groupTitle   = g.title;
-        entry.datasetTitle = ds.title;
-        lookup.insert(makeKey(typeKey, g.groupId, relIdx), entry);
-      }
-    }
+    for (const auto& ds : g.datasets)
+      walkDatasetWidgets(ds);
   }
 
   for (const auto& ref : wsIt->widgetRefs) {
@@ -3834,25 +3909,31 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
       result.append(row);
     }
 
-    // Dataset widgets
-    for (const auto& ds : group.datasets) {
-      const auto keys = SerialStudio::getDashboardWidgets(ds);
-      for (const auto& k : keys) {
-        if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
-          continue;
+    // Records one dataset-widget summary row.
+    const auto recordDatasetWidget = [&](const DataModel::Dataset& ds,
+                                         SerialStudio::DashboardWidget k) {
+      QVariantMap row;
+      row["widgetType"]    = static_cast<int>(k);
+      row["groupId"]       = group.groupId;
+      row["relativeIndex"] = datasetIdx.value(k, 0);
+      row["groupTitle"]    = group.title;
+      row["datasetTitle"]  = ds.title;
+      row["isGroupWidget"] = false;
+      row["widgetLabel"]   = SerialStudio::dashboardWidgetTitle(k);
+      datasetIdx[k]        = row["relativeIndex"].toInt() + 1;
+      result.append(row);
+    };
 
-        QVariantMap row;
-        row["widgetType"]    = static_cast<int>(k);
-        row["groupId"]       = group.groupId;
-        row["relativeIndex"] = datasetIdx.value(k, 0);
-        row["groupTitle"]    = group.title;
-        row["datasetTitle"]  = ds.title;
-        row["isGroupWidget"] = false;
-        row["widgetLabel"]   = SerialStudio::dashboardWidgetTitle(k);
-        datasetIdx[k]        = row["relativeIndex"].toInt() + 1;
-        result.append(row);
-      }
-    }
+    // Walk dataset widgets through a lambda so the predicate filter resets nesting.
+    const auto walkDatasetWidgets = [&](const DataModel::Dataset& ds) {
+      const auto keys = SerialStudio::getDashboardWidgets(ds);
+      for (const auto& k : keys)
+        if (SerialStudio::datasetWidgetEligibleForWorkspace(k))
+          recordDatasetWidget(ds, k);
+    };
+
+    for (const auto& ds : group.datasets)
+      walkDatasetWidgets(ds);
   }
 
   return result;

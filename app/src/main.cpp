@@ -88,6 +88,15 @@ static QString argvValueFor(int argc, char** argv, const char* flag);
 static QString shortcutIdentityHash(const QString& shortcutPath);
 static char** injectPlatformArg(int& argc, char** argv, const char* platform);
 
+static void setupUartConnection(const QCommandLineParser& parser,
+                                const QCommandLineOption& uartOpt,
+                                const QCommandLineOption& baudOpt);
+static void setupTcpConnection(const QString& tcpAddress);
+static void setupUdpConnection(const QCommandLineParser& parser,
+                               const QCommandLineOption& udpOpt,
+                               const QCommandLineOption& udpRemoteOpt,
+                               const QCommandLineOption& udpMltcstOpt);
+
 #ifdef BUILD_COMMERCIAL
 static int cliActivateLicense(QApplication& app, const QString& licenseKey);
 static int cliDeactivateLicense(QApplication& app);
@@ -99,6 +108,27 @@ static void configureCanbusInterface(const QCommandLineParser& parser,
                                      const QString& interfaceName,
                                      const QString& plugin,
                                      const QStringList& availableInterfaces);
+
+struct ModbusCliOptions {
+  const QCommandLineOption& slaveOpt;
+  const QCommandLineOption& pollOpt;
+  const QCommandLineOption& baudOpt;
+  const QCommandLineOption& parityOpt;
+  const QCommandLineOption& dataBitsOpt;
+  const QCommandLineOption& stopBitsOpt;
+  const QCommandLineOption& registerOpt;
+};
+
+static void setupModbusRtuConnection(const QCommandLineParser& parser,
+                                     const QCommandLineOption& portOpt,
+                                     const ModbusCliOptions& opts);
+static void setupModbusTcpConnection(const QCommandLineParser& parser,
+                                     const QCommandLineOption& addrOpt,
+                                     const ModbusCliOptions& opts);
+static void setupCanbusConnection(const QCommandLineParser& parser,
+                                  const QCommandLineOption& canbusOpt,
+                                  const QCommandLineOption& bitrateOpt,
+                                  const QCommandLineOption& fdOpt);
 #endif
 
 #ifdef Q_OS_WINDOWS
@@ -508,315 +538,36 @@ int main(int argc, char** argv)
       UI::Dashboard::instance().setPoints(points);
   }
 
-  // Set IO driver to UART
-  if (parser.isSet(uartOpt) || parser.isSet(baudOpt)) {
-    IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::UART);
-
-    if (parser.isSet(uartOpt)) {
-      QString device = parser.value(uartOpt);
-      IO::ConnectionManager::instance().uart()->registerDevice(device);
-    }
-
-    if (parser.isSet(baudOpt)) {
-      bool ok;
-      qint32 baudRate = parser.value(baudOpt).toInt(&ok);
-      if (ok)
-        IO::ConnectionManager::instance().uart()->setBaudRate(baudRate);
-      else
-        qWarning() << "Invalid baud rate:" << parser.value(baudOpt);
-    }
-
-    IO::ConnectionManager::instance().connectDevice();
-  }
-
-  // Set IO driver to TCP socket
-  else if (parser.isSet(tcpOpt)) {
-    QString tcpAddress = parser.value(tcpOpt);
-    QStringList parts  = tcpAddress.split(':');
-
-    if (parts.size() == 2) {
-      bool ok;
-      quint16 port = parts[1].toUInt(&ok);
-
-      if (ok && port > 0) {
-        IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::Network);
-        IO::ConnectionManager::instance().network()->setTcpSocket();
-        IO::ConnectionManager::instance().network()->setRemoteAddress(parts[0]);
-        IO::ConnectionManager::instance().network()->setTcpPort(port);
-        IO::ConnectionManager::instance().connectDevice();
-      }
-
-      else
-        qWarning() << "Invalid TCP port:" << parts[1];
-    }
-
-    else
-      qWarning() << "Invalid TCP address format. Expected: host:port";
-  }
-
-  // Set IO driver to UDP socket
-  else if (parser.isSet(udpOpt)) {
-    bool ok;
-    quint16 localPort = parser.value(udpOpt).toUInt(&ok);
-
-    if (ok && localPort > 0) {
-      IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::Network);
-      IO::ConnectionManager::instance().network()->setUdpSocket();
-      IO::ConnectionManager::instance().network()->setUdpLocalPort(localPort);
-
-      if (parser.isSet(udpMltcstOpt))
-        IO::ConnectionManager::instance().network()->setUdpMulticast(true);
-
-      auto applyUdpRemote = [](const QString& udpRemote) {
-        QStringList parts = udpRemote.split(':');
-        if (parts.size() != 2) {
-          qWarning() << "Invalid UDP address format. Expected: host:port";
-          return;
-        }
-        bool portOk;
-        quint16 remotePort = parts[1].toUInt(&portOk);
-        if (portOk && remotePort > 0) {
-          IO::ConnectionManager::instance().network()->setRemoteAddress(parts[0]);
-          IO::ConnectionManager::instance().network()->setUdpRemotePort(remotePort);
-        }
-
-        else
-          qWarning() << "Invalid UDP remote port:" << parts[1];
-      };
-
-      if (parser.isSet(udpRemoteOpt))
-        applyUdpRemote(parser.value(udpRemoteOpt));
-
-      IO::ConnectionManager::instance().connectDevice();
-    }
-
-    else
-      qWarning() << "Invalid UDP local port:" << parser.value(udpOpt);
-  }
+  // Apply CLI bus configuration (UART/TCP/UDP/Modbus/CAN)
+  if (parser.isSet(uartOpt) || parser.isSet(baudOpt))
+    setupUartConnection(parser, uartOpt, baudOpt);
+  else if (parser.isSet(tcpOpt))
+    setupTcpConnection(parser.value(tcpOpt));
+  else if (parser.isSet(udpOpt))
+    setupUdpConnection(parser, udpOpt, udpRemoteOpt, udpMltcstOpt);
 #ifdef BUILD_COMMERCIAL
-  // Set IO driver to Modbus RTU
-  else if (parser.isSet(modbusRtuOpt)) {
-    QString portPath = parser.value(modbusRtuOpt);
-    IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::ModBus);
-    IO::ConnectionManager::instance().modbus()->setProtocolIndex(0);
-
-    QStringList ports = IO::ConnectionManager::instance().modbus()->serialPortList();
-    int portIndex     = ports.indexOf(portPath);
-
-    if (portIndex >= 0) {
-      IO::ConnectionManager::instance().modbus()->setSerialPortIndex(portIndex);
-
-      if (parser.isSet(modbusSlaveOpt)) {
-        bool ok;
-        unsigned int slave_val = parser.value(modbusSlaveOpt).toUInt(&ok);
-        if (ok && slave_val >= 1 && slave_val <= 247)
-          IO::ConnectionManager::instance().modbus()->setSlaveAddress(
-            static_cast<quint8>(slave_val));
-        else
-          qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(modbusSlaveOpt);
-      }
-
-      if (parser.isSet(modbusPollOpt)) {
-        bool ok;
-        quint16 interval = parser.value(modbusPollOpt).toUInt(&ok);
-        if (ok && interval >= 50 && interval <= 60000)
-          IO::ConnectionManager::instance().modbus()->setPollInterval(interval);
-        else
-          qWarning() << "Invalid ModBus poll interval (50-60000 ms):"
-                     << parser.value(modbusPollOpt);
-      }
-
-      if (parser.isSet(modbusBaudOpt)) {
-        bool ok;
-        qint32 baudRate = parser.value(modbusBaudOpt).toInt(&ok);
-        if (ok)
-          IO::ConnectionManager::instance().modbus()->setBaudRate(baudRate);
-        else
-          qWarning() << "Invalid ModBus baud rate:" << parser.value(modbusBaudOpt);
-      }
-
-      if (parser.isSet(modbusParityOpt)) {
-        QString parity     = parser.value(modbusParityOpt).toLower();
-        quint8 parityIndex = 0;
-
-        if (parity == "none")
-          parityIndex = 0;
-        else if (parity == "even")
-          parityIndex = 1;
-        else if (parity == "odd")
-          parityIndex = 2;
-        else if (parity == "space")
-          parityIndex = 3;
-        else if (parity == "mark")
-          parityIndex = 4;
-        else {
-          qWarning() << "Invalid ModBus parity (none/even/odd/space/mark):" << parity;
-          parityIndex = 0;
-        }
-
-        IO::ConnectionManager::instance().modbus()->setParityIndex(parityIndex);
-      }
-
-      if (parser.isSet(modbusDataBitsOpt)) {
-        QString dataBits     = parser.value(modbusDataBitsOpt);
-        quint8 dataBitsIndex = 3;
-
-        if (dataBits == "5")
-          dataBitsIndex = 0;
-        else if (dataBits == "6")
-          dataBitsIndex = 1;
-        else if (dataBits == "7")
-          dataBitsIndex = 2;
-        else if (dataBits == "8")
-          dataBitsIndex = 3;
-        else {
-          qWarning() << "Invalid ModBus data bits (5/6/7/8):" << dataBits;
-          dataBitsIndex = 3;
-        }
-
-        IO::ConnectionManager::instance().modbus()->setDataBitsIndex(dataBitsIndex);
-      }
-
-      if (parser.isSet(modbusStopBitsOpt)) {
-        QString stopBits     = parser.value(modbusStopBitsOpt);
-        quint8 stopBitsIndex = 0;
-
-        if (stopBits == "1")
-          stopBitsIndex = 0;
-        else if (stopBits == "1.5")
-          stopBitsIndex = 1;
-        else if (stopBits == "2")
-          stopBitsIndex = 2;
-        else {
-          qWarning() << "Invalid ModBus stop bits (1/1.5/2):" << stopBits;
-          stopBitsIndex = 0;
-        }
-
-        IO::ConnectionManager::instance().modbus()->setStopBitsIndex(stopBitsIndex);
-      }
-
-      IO::ConnectionManager::instance().modbus()->clearRegisterGroups();
-
-      if (parser.isSet(modbusRegisterOpt)) {
-        QStringList registerSpecs = parser.values(modbusRegisterOpt);
-        for (const QString& spec : std::as_const(registerSpecs))
-          applyModbusRegister(spec);
-      }
-
-      else {
-        qWarning()
-          << "Warning: No register groups specified. Use --modbus-register to add registers.";
-      }
-
-      IO::ConnectionManager::instance().connectDevice();
-    }
-
-    else {
-      qWarning() << "ModBus serial port not found:" << portPath;
-      qWarning() << "Available ports:" << ports.join(", ");
-    }
-  }
-
-  // Set IO driver to Modbus TCP
-  else if (parser.isSet(modbusTcpOpt)) {
-    QString tcpAddress = parser.value(modbusTcpOpt);
-    QStringList parts  = tcpAddress.split(':');
-
-    if (parts.size() == 1 || parts.size() == 2) {
-      QString host = parts[0];
-      quint16 port = 502;
-
-      if (parts.size() == 2) {
-        bool ok;
-        port = parts[1].toUInt(&ok);
-        if (!ok || port == 0) {
-          qWarning() << "Invalid ModBus TCP port:" << parts[1];
-          port = 502;
-        }
-      }
-
-      IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::ModBus);
-      IO::ConnectionManager::instance().modbus()->setProtocolIndex(1);
-      IO::ConnectionManager::instance().modbus()->setHost(host);
-      IO::ConnectionManager::instance().modbus()->setPort(port);
-
-      if (parser.isSet(modbusSlaveOpt)) {
-        bool ok;
-        unsigned int slave_val = parser.value(modbusSlaveOpt).toUInt(&ok);
-        if (ok && slave_val >= 1 && slave_val <= 247)
-          IO::ConnectionManager::instance().modbus()->setSlaveAddress(
-            static_cast<quint8>(slave_val));
-        else
-          qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(modbusSlaveOpt);
-      }
-
-      if (parser.isSet(modbusPollOpt)) {
-        bool ok;
-        quint16 interval = parser.value(modbusPollOpt).toUInt(&ok);
-        if (ok && interval >= 50 && interval <= 60000)
-          IO::ConnectionManager::instance().modbus()->setPollInterval(interval);
-        else
-          qWarning() << "Invalid ModBus poll interval (50-60000 ms):"
-                     << parser.value(modbusPollOpt);
-      }
-
-      IO::ConnectionManager::instance().modbus()->clearRegisterGroups();
-      if (parser.isSet(modbusRegisterOpt)) {
-        QStringList registerSpecs = parser.values(modbusRegisterOpt);
-        for (const QString& spec : std::as_const(registerSpecs))
-          applyModbusRegister(spec);
-      }
-
-      else {
-        qWarning() << "No register groups specified. Use --modbus-register to add registers.";
-      }
-
-      IO::ConnectionManager::instance().connectDevice();
-    }
-
-    else
-      qWarning() << "Invalid ModBus TCP address format. Expected: host[:port]";
-  }
-
-  // Set IO driver to CanBus
-  else if (parser.isSet(canbusOpt)) {
-    QString canbusSpec = parser.value(canbusOpt);
-    QStringList parts  = canbusSpec.split(':');
-
-    if (parts.size() == 2) {
-      QString plugin        = parts[0].toLower();
-      QString interfaceName = parts[1];
-
-      IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::CanBus);
-
-      QStringList availablePlugins = IO::ConnectionManager::instance().canBus()->pluginList();
-      int pluginIndex              = availablePlugins.indexOf(plugin);
-
-      if (pluginIndex >= 0) {
-        IO::ConnectionManager::instance().canBus()->setPluginIndex(pluginIndex);
-
-        QStringList availableInterfaces =
-          IO::ConnectionManager::instance().canBus()->interfaceList();
-        int interfaceIndex = availableInterfaces.indexOf(interfaceName);
-
-        configureCanbusInterface(parser,
-                                 canbusBitrateOpt,
-                                 canbusFdOpt,
-                                 interfaceIndex,
-                                 interfaceName,
-                                 plugin,
-                                 availableInterfaces);
-      }
-
-      else {
-        qWarning() << "CAN plugin" << plugin << "not found";
-        qWarning() << "Available plugins:" << availablePlugins.join(", ");
-      }
-    }
-
-    else
-      qWarning() << "Invalid CAN bus format. Expected: plugin:interface";
-  }
+  else if (parser.isSet(modbusRtuOpt))
+    setupModbusRtuConnection(parser,
+                             modbusRtuOpt,
+                             {modbusSlaveOpt,
+                              modbusPollOpt,
+                              modbusBaudOpt,
+                              modbusParityOpt,
+                              modbusDataBitsOpt,
+                              modbusStopBitsOpt,
+                              modbusRegisterOpt});
+  else if (parser.isSet(modbusTcpOpt))
+    setupModbusTcpConnection(parser,
+                             modbusTcpOpt,
+                             {modbusSlaveOpt,
+                              modbusPollOpt,
+                              modbusBaudOpt,
+                              modbusParityOpt,
+                              modbusDataBitsOpt,
+                              modbusStopBitsOpt,
+                              modbusRegisterOpt});
+  else if (parser.isSet(canbusOpt))
+    setupCanbusConnection(parser, canbusOpt, canbusBitrateOpt, canbusFdOpt);
 #endif
 
   // Start the application event loop
@@ -1055,30 +806,31 @@ static void applyModbusRegister(const QString& spec)
     return;
   }
 
-  const QString typeStr = parts[0].toLower();
-  quint8 registerType   = 0;
-
-  if (typeStr == "holding")
-    registerType = 0;
-  else if (typeStr == "input")
-    registerType = 1;
-  else if (typeStr == "coils")
-    registerType = 2;
-  else if (typeStr == "discrete")
-    registerType = 3;
-  else {
+  const QString typeStr                              = parts[0].toLower();
+  static const QHash<QString, quint8> kRegisterTypes = {
+    { QStringLiteral("holding"), 0},
+    {   QStringLiteral("input"), 1},
+    {   QStringLiteral("coils"), 2},
+    {QStringLiteral("discrete"), 3},
+  };
+  const auto it = kRegisterTypes.constFind(typeStr);
+  if (it == kRegisterTypes.cend()) {
     qWarning() << "Invalid register type (holding/input/coils/discrete):" << typeStr;
     return;
   }
 
-  bool startOk, countOk;
-  quint16 start = parts[1].toUInt(&startOk);
-  quint16 count = parts[2].toUInt(&countOk);
+  const quint8 registerType = it.value();
 
-  if (startOk && countOk && count >= 1 && count <= 125)
-    IO::ConnectionManager::instance().modbus()->addRegisterGroup(registerType, start, count);
-  else
+  bool startOk        = false;
+  bool countOk        = false;
+  const quint16 start = parts[1].toUInt(&startOk);
+  const quint16 count = parts[2].toUInt(&countOk);
+  if (!startOk || !countOk || count < 1 || count > 125) {
     qWarning() << "Invalid register specification (start:0-65535, count:1-125):" << spec;
+    return;
+  }
+
+  IO::ConnectionManager::instance().modbus()->addRegisterGroup(registerType, start, count);
 }
 
 /**
@@ -1125,7 +877,367 @@ static void configureCanbusInterface(const QCommandLineParser& parser,
 
   IO::ConnectionManager::instance().connectDevice();
 }
+
+/**
+ * @brief Applies the Modbus parity CLI option to the active Modbus driver.
+ */
+static void applyModbusParity(const QString& parity)
+{
+  static const QHash<QString, quint8> kParity = {
+    { QStringLiteral("none"), 0},
+    { QStringLiteral("even"), 1},
+    {  QStringLiteral("odd"), 2},
+    {QStringLiteral("space"), 3},
+    { QStringLiteral("mark"), 4},
+  };
+
+  const auto it = kParity.constFind(parity);
+  if (it == kParity.cend()) {
+    qWarning() << "Invalid ModBus parity (none/even/odd/space/mark):" << parity;
+    IO::ConnectionManager::instance().modbus()->setParityIndex(0);
+    return;
+  }
+
+  IO::ConnectionManager::instance().modbus()->setParityIndex(it.value());
+}
+
+/**
+ * @brief Applies the Modbus data-bits CLI option to the active Modbus driver.
+ */
+static void applyModbusDataBits(const QString& dataBits)
+{
+  static const QHash<QString, quint8> kDataBits = {
+    {QStringLiteral("5"), 0},
+    {QStringLiteral("6"), 1},
+    {QStringLiteral("7"), 2},
+    {QStringLiteral("8"), 3},
+  };
+
+  const auto it = kDataBits.constFind(dataBits);
+  if (it == kDataBits.cend()) {
+    qWarning() << "Invalid ModBus data bits (5/6/7/8):" << dataBits;
+    IO::ConnectionManager::instance().modbus()->setDataBitsIndex(3);
+    return;
+  }
+
+  IO::ConnectionManager::instance().modbus()->setDataBitsIndex(it.value());
+}
+
+/**
+ * @brief Applies the Modbus stop-bits CLI option to the active Modbus driver.
+ */
+static void applyModbusStopBits(const QString& stopBits)
+{
+  static const QHash<QString, quint8> kStopBits = {
+    {  QStringLiteral("1"), 0},
+    {QStringLiteral("1.5"), 1},
+    {  QStringLiteral("2"), 2},
+  };
+
+  const auto it = kStopBits.constFind(stopBits);
+  if (it == kStopBits.cend()) {
+    qWarning() << "Invalid ModBus stop bits (1/1.5/2):" << stopBits;
+    IO::ConnectionManager::instance().modbus()->setStopBitsIndex(0);
+    return;
+  }
+
+  IO::ConnectionManager::instance().modbus()->setStopBitsIndex(it.value());
+}
+
+/**
+ * @brief Applies the Modbus slave CLI option to the active Modbus driver.
+ */
+static void applyModbusSlave(const QCommandLineParser& parser, const QCommandLineOption& opt)
+{
+  if (!parser.isSet(opt))
+    return;
+
+  bool ok                = false;
+  unsigned int slave_val = parser.value(opt).toUInt(&ok);
+  if (!ok || slave_val < 1 || slave_val > 247) {
+    qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(opt);
+    return;
+  }
+
+  IO::ConnectionManager::instance().modbus()->setSlaveAddress(static_cast<quint8>(slave_val));
+}
+
+/**
+ * @brief Applies the Modbus poll-interval CLI option to the active Modbus driver.
+ */
+static void applyModbusPoll(const QCommandLineParser& parser, const QCommandLineOption& opt)
+{
+  if (!parser.isSet(opt))
+    return;
+
+  bool ok          = false;
+  quint16 interval = parser.value(opt).toUInt(&ok);
+  if (!ok || interval < 50 || interval > 60000) {
+    qWarning() << "Invalid ModBus poll interval (50-60000 ms):" << parser.value(opt);
+    return;
+  }
+
+  IO::ConnectionManager::instance().modbus()->setPollInterval(interval);
+}
+
+/**
+ * @brief Applies the Modbus serial baud-rate CLI option to the active Modbus driver.
+ */
+static void applyModbusBaud(const QCommandLineParser& parser, const QCommandLineOption& opt)
+{
+  if (!parser.isSet(opt))
+    return;
+
+  bool ok         = false;
+  qint32 baudRate = parser.value(opt).toInt(&ok);
+  if (!ok) {
+    qWarning() << "Invalid ModBus baud rate:" << parser.value(opt);
+    return;
+  }
+
+  IO::ConnectionManager::instance().modbus()->setBaudRate(baudRate);
+}
+
+/**
+ * @brief Applies all --modbus-register specs and warns if none are present.
+ */
+static void applyModbusRegisters(const QCommandLineParser& parser, const QCommandLineOption& opt)
+{
+  IO::ConnectionManager::instance().modbus()->clearRegisterGroups();
+  if (!parser.isSet(opt)) {
+    qWarning() << "No register groups specified. Use --modbus-register to add registers.";
+    return;
+  }
+
+  const QStringList registerSpecs = parser.values(opt);
+  for (const QString& spec : std::as_const(registerSpecs))
+    applyModbusRegister(spec);
+}
+
+/**
+ * @brief Configures and connects a Modbus RTU bus from CLI options.
+ */
+static void setupModbusRtuConnection(const QCommandLineParser& parser,
+                                     const QCommandLineOption& portOpt,
+                                     const ModbusCliOptions& opts)
+{
+  const QString portPath = parser.value(portOpt);
+  IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::ModBus);
+  IO::ConnectionManager::instance().modbus()->setProtocolIndex(0);
+
+  const QStringList ports = IO::ConnectionManager::instance().modbus()->serialPortList();
+  const int portIndex     = ports.indexOf(portPath);
+  if (portIndex < 0) {
+    qWarning() << "ModBus serial port not found:" << portPath;
+    qWarning() << "Available ports:" << ports.join(", ");
+    return;
+  }
+
+  IO::ConnectionManager::instance().modbus()->setSerialPortIndex(portIndex);
+  applyModbusSlave(parser, opts.slaveOpt);
+  applyModbusPoll(parser, opts.pollOpt);
+  applyModbusBaud(parser, opts.baudOpt);
+
+  if (parser.isSet(opts.parityOpt))
+    applyModbusParity(parser.value(opts.parityOpt).toLower());
+
+  if (parser.isSet(opts.dataBitsOpt))
+    applyModbusDataBits(parser.value(opts.dataBitsOpt));
+
+  if (parser.isSet(opts.stopBitsOpt))
+    applyModbusStopBits(parser.value(opts.stopBitsOpt));
+
+  applyModbusRegisters(parser, opts.registerOpt);
+  IO::ConnectionManager::instance().connectDevice();
+}
+
+/**
+ * @brief Parses a Modbus TCP @c host[:port] string into host/port components.
+ */
+static bool parseModbusTcpAddress(const QString& tcpAddress, QString& host, quint16& port)
+{
+  const QStringList parts = tcpAddress.split(':');
+  if (parts.size() != 1 && parts.size() != 2)
+    return false;
+
+  host = parts[0];
+  port = 502;
+  if (parts.size() != 2)
+    return true;
+
+  bool ok         = false;
+  const quint16 p = parts[1].toUInt(&ok);
+  if (!ok || p == 0) {
+    qWarning() << "Invalid ModBus TCP port:" << parts[1];
+    return true;
+  }
+
+  port = p;
+  return true;
+}
+
+/**
+ * @brief Configures and connects a Modbus TCP bus from CLI options.
+ */
+static void setupModbusTcpConnection(const QCommandLineParser& parser,
+                                     const QCommandLineOption& addrOpt,
+                                     const ModbusCliOptions& opts)
+{
+  QString host;
+  quint16 port = 502;
+  if (!parseModbusTcpAddress(parser.value(addrOpt), host, port)) {
+    qWarning() << "Invalid ModBus TCP address format. Expected: host[:port]";
+    return;
+  }
+
+  IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::ModBus);
+  IO::ConnectionManager::instance().modbus()->setProtocolIndex(1);
+  IO::ConnectionManager::instance().modbus()->setHost(host);
+  IO::ConnectionManager::instance().modbus()->setPort(port);
+
+  applyModbusSlave(parser, opts.slaveOpt);
+  applyModbusPoll(parser, opts.pollOpt);
+  applyModbusRegisters(parser, opts.registerOpt);
+  IO::ConnectionManager::instance().connectDevice();
+}
+
+/**
+ * @brief Configures and connects a CAN bus from CLI options.
+ */
+static void setupCanbusConnection(const QCommandLineParser& parser,
+                                  const QCommandLineOption& canbusOpt,
+                                  const QCommandLineOption& bitrateOpt,
+                                  const QCommandLineOption& fdOpt)
+{
+  const QStringList parts = parser.value(canbusOpt).split(':');
+  if (parts.size() != 2) {
+    qWarning() << "Invalid CAN bus format. Expected: plugin:interface";
+    return;
+  }
+
+  const QString plugin        = parts[0].toLower();
+  const QString interfaceName = parts[1];
+
+  IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::CanBus);
+
+  const QStringList availablePlugins = IO::ConnectionManager::instance().canBus()->pluginList();
+  const int pluginIndex              = availablePlugins.indexOf(plugin);
+  if (pluginIndex < 0) {
+    qWarning() << "CAN plugin" << plugin << "not found";
+    qWarning() << "Available plugins:" << availablePlugins.join(", ");
+    return;
+  }
+
+  IO::ConnectionManager::instance().canBus()->setPluginIndex(pluginIndex);
+  const QStringList availableInterfaces =
+    IO::ConnectionManager::instance().canBus()->interfaceList();
+  const int interfaceIndex = availableInterfaces.indexOf(interfaceName);
+
+  configureCanbusInterface(
+    parser, bitrateOpt, fdOpt, interfaceIndex, interfaceName, plugin, availableInterfaces);
+}
 #endif
+
+/**
+ * @brief Configures and connects the UART bus from CLI options.
+ */
+static void setupUartConnection(const QCommandLineParser& parser,
+                                const QCommandLineOption& uartOpt,
+                                const QCommandLineOption& baudOpt)
+{
+  IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::UART);
+
+  if (parser.isSet(uartOpt)) {
+    const QString device = parser.value(uartOpt);
+    IO::ConnectionManager::instance().uart()->registerDevice(device);
+  }
+
+  if (parser.isSet(baudOpt)) {
+    bool ok               = false;
+    const qint32 baudRate = parser.value(baudOpt).toInt(&ok);
+    if (!ok)
+      qWarning() << "Invalid baud rate:" << parser.value(baudOpt);
+    else
+      IO::ConnectionManager::instance().uart()->setBaudRate(baudRate);
+  }
+
+  IO::ConnectionManager::instance().connectDevice();
+}
+
+/**
+ * @brief Configures and connects a TCP socket from a CLI host:port string.
+ */
+static void setupTcpConnection(const QString& tcpAddress)
+{
+  const QStringList parts = tcpAddress.split(':');
+  if (parts.size() != 2) {
+    qWarning() << "Invalid TCP address format. Expected: host:port";
+    return;
+  }
+
+  bool ok            = false;
+  const quint16 port = parts[1].toUInt(&ok);
+  if (!ok || port == 0) {
+    qWarning() << "Invalid TCP port:" << parts[1];
+    return;
+  }
+
+  IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::Network);
+  IO::ConnectionManager::instance().network()->setTcpSocket();
+  IO::ConnectionManager::instance().network()->setRemoteAddress(parts[0]);
+  IO::ConnectionManager::instance().network()->setTcpPort(port);
+  IO::ConnectionManager::instance().connectDevice();
+}
+
+/**
+ * @brief Applies the optional UDP --udp-remote spec to the active network driver.
+ */
+static void applyUdpRemote(const QString& udpRemote)
+{
+  const QStringList parts = udpRemote.split(':');
+  if (parts.size() != 2) {
+    qWarning() << "Invalid UDP address format. Expected: host:port";
+    return;
+  }
+
+  bool ok                  = false;
+  const quint16 remotePort = parts[1].toUInt(&ok);
+  if (!ok || remotePort == 0) {
+    qWarning() << "Invalid UDP remote port:" << parts[1];
+    return;
+  }
+
+  IO::ConnectionManager::instance().network()->setRemoteAddress(parts[0]);
+  IO::ConnectionManager::instance().network()->setUdpRemotePort(remotePort);
+}
+
+/**
+ * @brief Configures and connects a UDP socket from CLI options.
+ */
+static void setupUdpConnection(const QCommandLineParser& parser,
+                               const QCommandLineOption& udpOpt,
+                               const QCommandLineOption& udpRemoteOpt,
+                               const QCommandLineOption& udpMltcstOpt)
+{
+  bool ok                 = false;
+  const quint16 localPort = parser.value(udpOpt).toUInt(&ok);
+  if (!ok || localPort == 0) {
+    qWarning() << "Invalid UDP local port:" << parser.value(udpOpt);
+    return;
+  }
+
+  IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::Network);
+  IO::ConnectionManager::instance().network()->setUdpSocket();
+  IO::ConnectionManager::instance().network()->setUdpLocalPort(localPort);
+
+  if (parser.isSet(udpMltcstOpt))
+    IO::ConnectionManager::instance().network()->setUdpMulticast(true);
+
+  if (parser.isSet(udpRemoteOpt))
+    applyUdpRemote(parser.value(udpRemoteOpt));
+
+  IO::ConnectionManager::instance().connectDevice();
+}
 
 //--------------------------------------------------------------------------------------------------
 // Windows-specific initialization code

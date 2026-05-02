@@ -410,13 +410,21 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result, cons
   QString rawStr;
   for (int i = 0; i < result.size(); ++i) {
     unsigned char ch = static_cast<unsigned char>(result.at(i));
-    if (ch == '\r')
-      rawStr += QStringLiteral("\\r");
-    else if (ch == '\n')
-      rawStr += QStringLiteral("\\n");
-    else if (ch == '\t')
-      rawStr += QStringLiteral("\\t");
-    else if (ch < 0x20 || ch >= 0x7F)
+    switch (ch) {
+      case '\r':
+        rawStr += QStringLiteral("\\r");
+        continue;
+      case '\n':
+        rawStr += QStringLiteral("\\n");
+        continue;
+      case '\t':
+        rawStr += QStringLiteral("\\t");
+        continue;
+      default:
+        break;
+    }
+
+    if (ch < 0x20 || ch >= 0x7F)
       rawStr += QStringLiteral("\\x%1").arg(ch, 2, 16, QLatin1Char('0'));
     else
       rawStr += QChar(ch);

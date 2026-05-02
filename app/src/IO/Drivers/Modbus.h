@@ -213,6 +213,12 @@ private:
   void doClose();
   [[nodiscard]] QJsonObject buildProject() const;
   [[nodiscard]] QString buildFrameParser() const;
+  [[nodiscard]] bool configureTcpClient(QString& target);
+  [[nodiscard]] bool configureRtuClient(QString& target);
+  [[nodiscard]] bool finalizeAndConnect(const QString& target);
+  [[nodiscard]] QByteArray buildRtuFrame(const QModbusDataUnit& unit) const;
+  void appendTcpProperties(QList<IO::DriverProperty>& props) const;
+  void appendRtuProperties(QList<IO::DriverProperty>& props) const;
 
   QTimer* m_pollTimer;
   QModbusClient* m_device;

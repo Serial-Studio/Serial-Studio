@@ -104,6 +104,9 @@ protected:
   bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
+  void tryLoadUserThemeFile(const QString& subdirPath, const QString& jsonFile);
+
+private:
   int m_theme;
   QPalette m_palette;
   QString m_themeName;

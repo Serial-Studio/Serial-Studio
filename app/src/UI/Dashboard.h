@@ -200,6 +200,7 @@ private:
   void buildWidgetGroups(const DataModel::Frame& frame, bool pro);
   void registerWidgets();
   void buildDatasetReferences();
+  void relabelGroupAsMultiplotFallback(int groupId, const QString& newTitle);
 
 private:
   /**

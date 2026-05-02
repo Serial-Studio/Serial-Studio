@@ -33,17 +33,25 @@ static QString escapeDesktopValue(const QString& value)
 {
   QString out;
   out.reserve(value.size());
-  for (const QChar ch : value)
-    if (ch == QLatin1Char('\\'))
-      out += QStringLiteral("\\\\");
-    else if (ch == QLatin1Char('\n'))
-      out += QStringLiteral("\\n");
-    else if (ch == QLatin1Char('\r'))
-      out += QStringLiteral("\\r");
-    else if (ch == QLatin1Char('\t'))
-      out += QStringLiteral("\\t");
-    else
-      out += ch;
+  for (const QChar ch : value) {
+    switch (ch.unicode()) {
+      case u'\\':
+        out += QStringLiteral("\\\\");
+        break;
+      case u'\n':
+        out += QStringLiteral("\\n");
+        break;
+      case u'\r':
+        out += QStringLiteral("\\r");
+        break;
+      case u'\t':
+        out += QStringLiteral("\\t");
+        break;
+      default:
+        out += ch;
+        break;
+    }
+  }
 
   return out;
 }

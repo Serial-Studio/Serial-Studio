@@ -1344,6 +1344,27 @@ void Widgets::Terminal::loadWelcomeGuide()
  * @see processText(), processEscape(), processFormat(), processResetFont(),
  * appendString()
  */
+/** @brief Scans a printable-character run starting at @p pos in @p data; returns end offset. */
+int Widgets::Terminal::scanPrintableRun(const QString& data, int pos)
+{
+  const int len = data.size();
+  while (pos < len) {
+    const auto ch = data[pos].unicode();
+
+    // Break on control chars that processText() handles specially
+    if (ch == 0x1b || ch == '\n' || ch == '\r' || ch == '\b' || ch == 0x7F || ch == '\t')
+      break;
+
+    // Non-printable -> replaced with space by replaceData anyway
+    if (ch < 0x20)
+      break;
+
+    ++pos;
+  }
+
+  return pos;
+}
+
 void Widgets::Terminal::append(const QString& data)
 {
   // Process each character through the VT-100 state machine
@@ -1357,21 +1378,7 @@ void Widgets::Terminal::append(const QString& data)
     // Fast path: scan runs of printable chars without per-char state dispatch
     if (m_state == Text) [[likely]] {
       const int runStart = pos;
-      while (pos < len) {
-        const auto ch = data[pos].unicode();
-
-        // Break on control chars that processText() handles specially
-        if (ch == 0x1b || ch == '\n' || ch == '\r' || ch == '\b' || ch == 0x7F || ch == '\t')
-          break;
-
-        // Non-printable -> replaced with space by replaceData anyway
-        if (ch >= 0x20) {
-          ++pos;
-          continue;
-        }
-
-        break;
-      }
+      pos                = scanPrintableRun(data, pos);
 
       // Bulk-append the printable run
       if (pos > runStart)
@@ -1399,16 +1406,10 @@ void Widgets::Terminal::append(const QString& data)
         processResetFont(byte, text);
         break;
       case OSC:
-        if (byte.toLatin1() == 0x07)
-          m_state = Text;
-        else if (byte.toLatin1() == 0x1b)
-          m_state = Escape;
-
+        processOsc(byte);
         break;
       case IgnoreSeq:
-        if ((byte >= 'A' && byte <= 'Z') || (byte >= 'a' && byte <= 'z'))
-          m_state = Text;
-
+        processIgnoreSeq(byte);
         break;
       default:
         break;
@@ -1604,49 +1605,65 @@ void Widgets::Terminal::initBuffer()
  */
 void Widgets::Terminal::processText(const QChar& byte, QString& text)
 {
-  if (byte.toLatin1() == 0x1b && vt100emulation()) {
-    appendString(text);
-    text.clear();
-    m_state = Escape;
-  }
+  const ushort code = byte.unicode();
+  const bool vt     = vt100emulation();
 
-  else if (byte == '\r' && vt100emulation()) {
-    appendString(text);
-    text.clear();
-    setCursorPosition(0, m_cursorPosition.y());
-  }
-
-  else if (byte == '\n') {
+  // LF is always handled regardless of VT-100 mode
+  if (code == '\n') {
     appendString(text);
     text.clear();
     setCursorPosition(0, m_cursorPosition.y() + 1);
+    return;
   }
 
-  else if (byte == '\b' && vt100emulation()) {
-    if (m_cursorPosition.x()) {
+  // Without VT-100 emulation only printable characters are accumulated
+  if (!vt) {
+    if (byte.isPrint())
+      text.append(byte);
+
+    return;
+  }
+
+  // VT-100 control bytes
+  switch (code) {
+    case 0x1b:
+      appendString(text);
+      text.clear();
+      m_state = Escape;
+      return;
+    case '\r':
+      appendString(text);
+      text.clear();
+      setCursorPosition(0, m_cursorPosition.y());
+      return;
+    case '\b':
+      if (m_cursorPosition.x() == 0)
+        return;
+
       appendString(text);
       text.clear();
       setCursorPosition(m_cursorPosition.x() - 1, m_cursorPosition.y());
+      return;
+    case 0x7F:
+      appendString(text);
+      text.clear();
+      removeStringFromCursor(RightDirection, 1);
+      return;
+    case '\t': {
+      appendString(text);
+      text.clear();
+      const int nextTab = (m_cursorPosition.x() / 8 + 1) * 8;
+      const int spaces  = nextTab - m_cursorPosition.x();
+      text.fill(' ', spaces);
+      appendString(text);
+      text.clear();
+      return;
     }
+    default:
+      break;
   }
 
-  else if (byte.toLatin1() == 0x7F && vt100emulation()) {
-    appendString(text);
-    text.clear();
-    removeStringFromCursor(RightDirection, 1);
-  }
-
-  else if (byte == '\t' && vt100emulation()) {
-    appendString(text);
-    text.clear();
-    const int nextTab = (m_cursorPosition.x() / 8 + 1) * 8;
-    const int spaces  = nextTab - m_cursorPosition.x();
-    text.fill(' ', spaces);
-    appendString(text);
-    text.clear();
-  }
-
-  else if (byte.isPrint())
+  if (byte.isPrint())
     text.append(byte);
 }
 
@@ -1676,33 +1693,32 @@ void Widgets::Terminal::processEscape(const QChar& byte, QString& text)
   m_currentFormatValue = 0;
   m_privateMode        = false;
 
-  if (byte == '[')
-    m_state = Format;
-
-  else if (byte == '(')
-    m_state = ResetFont;
-
-  else if (byte == ']')
-    m_state = OSC;
-
-  else if (byte == '7') {
-    m_savedCursorPosition = m_cursorPosition;
-    m_state               = Text;
+  switch (byte.toLatin1()) {
+    case '[':
+      m_state = Format;
+      return;
+    case '(':
+      m_state = ResetFont;
+      return;
+    case ']':
+      m_state = OSC;
+      return;
+    case '7':
+      m_savedCursorPosition = m_cursorPosition;
+      m_state               = Text;
+      return;
+    case '8':
+      setCursorPosition(m_savedCursorPosition);
+      m_state = Text;
+      return;
+    case 'M':
+      setCursorPosition(m_cursorPosition.x(), qMax(0, m_cursorPosition.y() - 1));
+      m_state = Text;
+      return;
+    default:
+      m_state = Text;
+      return;
   }
-
-  else if (byte == '8') {
-    setCursorPosition(m_savedCursorPosition);
-    m_state = Text;
-  }
-
-  else if (byte == 'M') {
-    const int newY = qMax(0, m_cursorPosition.y() - 1);
-    setCursorPosition(m_cursorPosition.x(), newY);
-    m_state = Text;
-  }
-
-  else
-    m_state = Text;
 }
 
 /**
@@ -1734,24 +1750,36 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
   // Obtain format value
   if (byte >= '0' && byte <= '9') {
     m_currentFormatValue = m_currentFormatValue * 10 + (byte.cell() - '0');
+    return;
   }
 
   // DEC private mode prefix -- silently note it, stay in Format state
-  else if (byte == '?' || byte == '>' || byte == '=') {
+  if (byte == '?' || byte == '>' || byte == '=') {
     m_privateMode = true;
+    return;
   }
 
-  // Control sequences
-  else {
-    // Semicolon: store current value and prepare for next
-    if (byte == ';') {
-      m_formatValues.append(m_currentFormatValue);
-      m_currentFormatValue = 0;
-      m_state              = Format;
-    }
+  // Semicolon: store current value and prepare for next
+  if (byte == ';') {
+    m_formatValues.append(m_currentFormatValue);
+    m_currentFormatValue = 0;
+    m_state              = Format;
+    return;
+  }
 
-    // Exit text formatting and apply ANSI color if enabled
-    else if (byte == 'm') {
+  // Final-byte dispatch; unknown finals fall through to the silent-letter rule
+  if (dispatchCsiFinal(byte))
+    return;
+
+  m_state = Text;
+}
+
+/** @brief Dispatches the final byte of a CSI sequence; returns true if handled. */
+bool Widgets::Terminal::dispatchCsiFinal(const QChar& byte)
+{
+  const char final = byte.toLatin1();
+  switch (final) {
+    case 'm':
       if (!m_privateMode) {
         m_formatValues.append(m_currentFormatValue);
         if (ansiColors())
@@ -1759,174 +1787,197 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
       }
 
       m_state = Text;
-    }
+      return true;
 
-    // s -- save cursor position (ANSI)
-    else if (byte == 's') {
+    case 's':
       if (!m_privateMode)
         m_savedCursorPosition = m_cursorPosition;
 
       m_state = Text;
-    }
+      return true;
 
-    // u -- restore cursor position (ANSI)
-    else if (byte == 'u') {
+    case 'u':
       if (!m_privateMode)
         setCursorPosition(m_savedCursorPosition);
 
       m_state = Text;
-    }
+      return true;
 
-    // Cursor movement (A-D) and cursor next/prev line (E/F)
-    else if (byte >= 'A' && byte <= 'F') {
-      if (!m_privateMode) {
-        const int value = m_currentFormatValue ? m_currentFormatValue : 1;
-        switch (byte.toLatin1()) {
-          case 'A':
-            setCursorPosition(m_cursorPosition.x(), qMax(0, m_cursorPosition.y() - value));
-            break;
-          case 'B':
-            setCursorPosition(m_cursorPosition.x(), m_cursorPosition.y() + value);
-            break;
-          case 'C':
-            setCursorPosition(m_cursorPosition.x() + value, m_cursorPosition.y());
-            break;
-          case 'D':
-            setCursorPosition(qMax(0, m_cursorPosition.x() - value), m_cursorPosition.y());
-            break;
-          case 'E':
-            setCursorPosition(0, m_cursorPosition.y() + value);
-            break;
-          case 'F':
-            setCursorPosition(0, qMax(0, m_cursorPosition.y() - value));
-            break;
-          default:
-            break;
-        }
-      }
-
+    case 'A':
+    case 'B':
+    case 'C':
+    case 'D':
+    case 'E':
+    case 'F':
+      handleCsiCursorMove(final);
       m_state = Text;
-    }
+      return true;
 
-    // Move cursor to position -- H (CUP) and f (HVP), 1-based row;col
-    else if (byte == 'H' || byte == 'f') {
-      if (!m_privateMode) {
-        const int row = qMax(0, m_formatValues.value(0, 1) - 1);
-        const int col = qMax(
-          0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : m_formatValues.value(1, 1) - 1);
-        setCursorPosition(col, row);
-      }
-
+    case 'H':
+    case 'f':
+    case 'G':
+    case 'd':
+      handleCsiCursorAbsolute(final);
       m_state = Text;
-    }
+      return true;
 
-    // G -- Cursor Horizontal Absolute (1-based column)
-    else if (byte == 'G') {
-      if (!m_privateMode) {
-        const int col = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
-        setCursorPosition(col, m_cursorPosition.y());
-      }
-
+    case 'J':
+      handleCsiEraseDisplay();
       m_state = Text;
-    }
+      return true;
 
-    // d -- Cursor Vertical Absolute (1-based row)
-    else if (byte == 'd') {
-      if (!m_privateMode) {
-        const int row = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
-        setCursorPosition(m_cursorPosition.x(), row);
-      }
-
+    case 'K':
+      handleCsiEraseLine();
       m_state = Text;
-    }
+      return true;
 
-    // J function -- Erase in display
-    else if (byte == 'J') {
-      if (!m_privateMode) {
-        const int cy = m_cursorPosition.y();
-        switch (m_currentFormatValue) {
-          case 0:
-            // Erase from cursor to end of screen
-            removeStringFromCursor(RightDirection);
-            if (cy + 1 < m_data.size()) {
-              m_data.erase(m_data.begin() + cy + 1, m_data.end());
-              if (ansiColors() && cy + 1 < m_colorData.size())
-                m_colorData.erase(m_colorData.begin() + cy + 1, m_colorData.end());
-            }
-
-            break;
-          case 1:
-            // Erase from start of screen to cursor
-            removeStringFromCursor(LeftDirection);
-            if (cy > 0) {
-              m_data.erase(m_data.begin(), m_data.begin() + cy);
-              if (ansiColors() && cy < m_colorData.size())
-                m_colorData.erase(m_colorData.begin(), m_colorData.begin() + cy);
-            }
-
-            setCursorPosition(m_cursorPosition.x(), 0);
-            break;
-          case 2:
-          case 3:
-            clear();
-            break;
-          default:
-            break;
-        }
-      }
-
-      m_state = Text;
-    }
-
-    // K function -- Erase in line
-    else if (byte == 'K') {
-      if (!m_privateMode) {
-        switch (m_currentFormatValue) {
-          case 0:
-            removeStringFromCursor(RightDirection);
-            break;
-          case 1:
-            removeStringFromCursor(LeftDirection);
-            break;
-          case 2:
-            removeStringFromCursor(RightDirection);
-            removeStringFromCursor(LeftDirection);
-            break;
-          default:
-            break;
-        }
-      }
-
-      m_state = Text;
-    }
-
-    // P function -- Delete characters
-    else if (byte == 'P') {
+    case 'P':
       if (!m_privateMode) {
         removeStringFromCursor(LeftDirection, m_currentFormatValue);
         removeStringFromCursor(RightDirection);
       }
 
       m_state = Text;
-    }
+      return true;
 
-    // h / l -- DEC private mode set/reset (e.g. ?25h show cursor, ?25l hide cursor)
-    else if (byte == 'h' || byte == 'l') {
-      if (m_privateMode && m_currentFormatValue == 25) {
-        m_cursorHidden = (byte == 'l');
-        m_stateChanged = true;
+    case 'h':
+    case 'l':
+      handleCsiDecPrivateMode(byte);
+      m_state = Text;
+      return true;
+
+    default:
+      // Any other uppercase/lowercase letter terminates the sequence silently
+      if ((final >= 'A' && final <= 'Z') || (final >= 'a' && final <= 'z')) {
+        m_state = Text;
+        return true;
       }
 
-      m_state = Text;
-    }
+      return false;
+  }
+}
 
-    // Any other uppercase/lowercase letter terminates the sequence silently
-    else if ((byte >= 'A' && byte <= 'Z') || (byte >= 'a' && byte <= 'z'))
-      m_state = Text;
+/** @brief Handles CSI cursor movement letters A-F (CUU/CUD/CUF/CUB/CNL/CPL). */
+void Widgets::Terminal::handleCsiCursorMove(char final)
+{
+  if (m_privateMode)
+    return;
 
-    // Reset state for anything else
-    else
-      m_state = Text;
+  const int value = m_currentFormatValue ? m_currentFormatValue : 1;
+  const int cx    = m_cursorPosition.x();
+  const int cy    = m_cursorPosition.y();
+  switch (final) {
+    case 'A':
+      setCursorPosition(cx, qMax(0, cy - value));
+      break;
+    case 'B':
+      setCursorPosition(cx, cy + value);
+      break;
+    case 'C':
+      setCursorPosition(cx + value, cy);
+      break;
+    case 'D':
+      setCursorPosition(qMax(0, cx - value), cy);
+      break;
+    case 'E':
+      setCursorPosition(0, cy + value);
+      break;
+    case 'F':
+      setCursorPosition(0, qMax(0, cy - value));
+      break;
+    default:
+      break;
+  }
+}
+
+/** @brief Handles CSI absolute cursor placement (H/f/G/d). */
+void Widgets::Terminal::handleCsiCursorAbsolute(char final)
+{
+  if (m_privateMode)
+    return;
+
+  if (final == 'H' || final == 'f') {
+    const int row = qMax(0, m_formatValues.value(0, 1) - 1);
+    const int arg =
+      m_currentFormatValue > 0 ? m_currentFormatValue - 1 : m_formatValues.value(1, 1) - 1;
+    setCursorPosition(qMax(0, arg), row);
+    return;
+  }
+
+  const int v = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
+  if (final == 'G')
+    setCursorPosition(v, m_cursorPosition.y());
+
+  else if (final == 'd')
+    setCursorPosition(m_cursorPosition.x(), v);
+}
+
+/** @brief Handles CSI Erase-in-Display (J). */
+void Widgets::Terminal::handleCsiEraseDisplay()
+{
+  if (m_privateMode)
+    return;
+
+  const int cy = m_cursorPosition.y();
+  switch (m_currentFormatValue) {
+    case 0:
+      // Erase from cursor to end of screen
+      removeStringFromCursor(RightDirection);
+      if (cy + 1 < m_data.size()) {
+        m_data.erase(m_data.begin() + cy + 1, m_data.end());
+        if (ansiColors() && cy + 1 < m_colorData.size())
+          m_colorData.erase(m_colorData.begin() + cy + 1, m_colorData.end());
+      }
+
+      break;
+    case 1:
+      // Erase from start of screen to cursor
+      removeStringFromCursor(LeftDirection);
+      if (cy > 0) {
+        m_data.erase(m_data.begin(), m_data.begin() + cy);
+        if (ansiColors() && cy < m_colorData.size())
+          m_colorData.erase(m_colorData.begin(), m_colorData.begin() + cy);
+      }
+
+      setCursorPosition(m_cursorPosition.x(), 0);
+      break;
+    case 2:
+    case 3:
+      clear();
+      break;
+    default:
+      break;
+  }
+}
+
+/** @brief Handles CSI Erase-in-Line (K). */
+void Widgets::Terminal::handleCsiEraseLine()
+{
+  if (m_privateMode)
+    return;
+
+  switch (m_currentFormatValue) {
+    case 0:
+      removeStringFromCursor(RightDirection);
+      break;
+    case 1:
+      removeStringFromCursor(LeftDirection);
+      break;
+    case 2:
+      removeStringFromCursor(RightDirection);
+      removeStringFromCursor(LeftDirection);
+      break;
+    default:
+      break;
+  }
+}
+
+/** @brief Handles CSI DEC private mode set/reset for cursor visibility (h/l). */
+void Widgets::Terminal::handleCsiDecPrivateMode(const QChar& byte)
+{
+  if (m_privateMode && m_currentFormatValue == 25) {
+    m_cursorHidden = (byte == 'l');
+    m_stateChanged = true;
   }
 }
 
@@ -1947,6 +1998,24 @@ void Widgets::Terminal::processResetFont(const QChar& byte, QString& text)
   (void)byte;
   (void)text;
   m_state = Text;
+}
+
+/** @brief Consumes one byte while in OSC state (BEL terminator or ESC -> CSI). */
+void Widgets::Terminal::processOsc(const QChar& byte)
+{
+  const char latin = byte.toLatin1();
+  if (latin == 0x07)
+    m_state = Text;
+
+  else if (latin == 0x1b)
+    m_state = Escape;
+}
+
+/** @brief Consumes one byte while ignoring an unknown CSI sequence. */
+void Widgets::Terminal::processIgnoreSeq(const QChar& byte)
+{
+  if ((byte >= 'A' && byte <= 'Z') || (byte >= 'a' && byte <= 'z'))
+    m_state = Text;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2035,71 +2104,76 @@ void Widgets::Terminal::updateAnsiColorPalette()
  */
 void Widgets::Terminal::applyAnsiColor(const QList<int>& codes)
 {
-  for (int i = 0; i < codes.size(); ++i) {
-    const int code = codes[i];
+  for (int i = 0; i < codes.size(); ++i)
+    i += applyAnsiSgrCode(codes, i);
+}
 
-    // Reset to default colors (invalid QColor = use theme default at render)
-    if (code == 0) {
-      m_currentColor   = QColor();
-      m_currentBgColor = QColor();
-    }
+/** @brief Applies one SGR code at @p i in @p codes; returns number of extra params consumed. */
+int Widgets::Terminal::applyAnsiSgrCode(const QList<int>& codes, int i)
+{
+  const int code = codes[i];
 
-    // Bold/bright - make current color lighter
-    else if (code == 1) {
-      if (!m_currentColor.isValid())
-        m_currentColor = m_palette.color(QPalette::Text);
-
-      m_currentColor = m_currentColor.lighter(130);
-    }
-
-    // Standard foreground colors (30-37)
-    else if (code >= 30 && code <= 37)
-      m_currentColor = m_ansiStandardColors[code - 30];
-
-    // Standard background colors (40-47)
-    else if (code >= 40 && code <= 47)
-      m_currentBgColor = m_ansiStandardColors[code - 40];
-
-    // Bright foreground colors (90-97)
-    else if (code >= 90 && code <= 97)
-      m_currentColor = m_ansiBrightColors[code - 90];
-
-    // Bright background colors (100-107)
-    else if (code >= 100 && code <= 107)
-      m_currentBgColor = m_ansiBrightColors[code - 100];
-
-    // 256-color foreground: 38;5;N
-    else if (code == 38 && i + 2 < codes.size() && codes[i + 1] == 5) {
-      const int colorIndex = codes[i + 2];
-      m_currentColor       = getColor256(colorIndex);
-      i += 2;
-    }
-
-    // 256-color background: 48;5;N
-    else if (code == 48 && i + 2 < codes.size() && codes[i + 1] == 5) {
-      const int colorIndex = codes[i + 2];
-      m_currentBgColor     = getColor256(colorIndex);
-      i += 2;
-    }
-
-    // RGB foreground: 38;2;R;G;B
-    else if (code == 38 && i + 4 < codes.size() && codes[i + 1] == 2) {
-      const int r    = codes[i + 2];
-      const int g    = codes[i + 3];
-      const int b    = codes[i + 4];
-      m_currentColor = QColor(r, g, b);
-      i += 4;
-    }
-
-    // RGB background: 48;2;R;G;B
-    else if (code == 48 && i + 4 < codes.size() && codes[i + 1] == 2) {
-      const int r      = codes[i + 2];
-      const int g      = codes[i + 3];
-      const int b      = codes[i + 4];
-      m_currentBgColor = QColor(r, g, b);
-      i += 4;
-    }
+  // Reset to default colors (invalid QColor = use theme default at render)
+  if (code == 0) {
+    m_currentColor   = QColor();
+    m_currentBgColor = QColor();
+    return 0;
   }
+
+  // Bold/bright - make current color lighter
+  if (code == 1) {
+    if (!m_currentColor.isValid())
+      m_currentColor = m_palette.color(QPalette::Text);
+
+    m_currentColor = m_currentColor.lighter(130);
+    return 0;
+  }
+
+  // Standard foreground colors (30-37)
+  if (code >= 30 && code <= 37) {
+    m_currentColor = m_ansiStandardColors[code - 30];
+    return 0;
+  }
+
+  // Standard background colors (40-47)
+  if (code >= 40 && code <= 47) {
+    m_currentBgColor = m_ansiStandardColors[code - 40];
+    return 0;
+  }
+
+  // Bright foreground colors (90-97)
+  if (code >= 90 && code <= 97) {
+    m_currentColor = m_ansiBrightColors[code - 90];
+    return 0;
+  }
+
+  // Bright background colors (100-107)
+  if (code >= 100 && code <= 107) {
+    m_currentBgColor = m_ansiBrightColors[code - 100];
+    return 0;
+  }
+
+  // Extended color codes 38 (foreground) and 48 (background)
+  const bool isFg = (code == 38);
+  const bool isBg = (code == 48);
+  if (!isFg && !isBg)
+    return 0;
+
+  QColor& target = isFg ? m_currentColor : m_currentBgColor;
+
+  // 256-color: 38;5;N or 48;5;N
+  if (i + 2 < codes.size() && codes[i + 1] == 5) {
+    target = getColor256(codes[i + 2]);
+    return 2;
+  }
+
+  // RGB: 38;2;R;G;B or 48;2;R;G;B
+  if (i + 4 < codes.size() && codes[i + 1] == 2) {
+    target = QColor(codes[i + 2], codes[i + 3], codes[i + 4]);
+    return 4;
+  }
+
+  return 0;
 }
 
 /**

@@ -505,6 +505,34 @@ void CSV::Player::updateTimestampDisplay()
 }
 
 /**
+ * @brief Recomputes msUntilNext for the current m_framePos. Pauses and returns false on EOF.
+ */
+bool CSV::Player::recomputeMsUntilNext(qint64& msUntilNext)
+{
+  if (m_useHighPrecisionTimestamps) {
+    if (m_framePos + 1 >= m_timestampCache.size()) {
+      pause();
+      return false;
+    }
+
+    const double target = m_startTimestampSeconds + (m_elapsedTimer.elapsed() / 1000.0);
+    const double next   = m_timestampCache[m_framePos + 1];
+    msUntilNext         = qMax(0LL, static_cast<qint64>((next - target) * 1000.0));
+    return true;
+  }
+
+  const auto target = m_startTimestamp.addMSecs(m_elapsedTimer.elapsed());
+  const auto next   = getDateTime(m_framePos + 1);
+  if (!next.isValid()) {
+    pause();
+    return false;
+  }
+
+  msUntilNext = target.msecsTo(next);
+  return true;
+}
+
+/**
  * @brief Processes current frame and schedules next frame for playback.
  */
 void CSV::Player::updateData()
@@ -559,30 +587,8 @@ void CSV::Player::updateData()
       ++m_framePos;
       injectFrame(getFrame(m_framePos));
       ++processed;
-
-      if (m_useHighPrecisionTimestamps) {
-        if (m_framePos + 1 < m_timestampCache.size()) {
-          const double target = m_startTimestampSeconds + (m_elapsedTimer.elapsed() / 1000.0);
-          const double next   = m_timestampCache[m_framePos + 1];
-          msUntilNext         = qMax(0LL, static_cast<qint64>((next - target) * 1000.0));
-        }
-
-        else {
-          pause();
-          return;
-        }
-      }
-
-      else {
-        auto target = m_startTimestamp.addMSecs(m_elapsedTimer.elapsed());
-        auto next   = getDateTime(m_framePos + 1);
-        if (next.isValid())
-          msUntilNext = target.msecsTo(next);
-        else {
-          pause();
-          return;
-        }
-      }
+      if (!recomputeMsUntilNext(msUntilNext))
+        return;
     }
 
     updateTimestampDisplay();

@@ -39,6 +39,171 @@
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
+// File-local helpers
+//--------------------------------------------------------------------------------------------------
+
+namespace {
+
+/**
+ * @brief CSV header column indices auto-detected from the first row.
+ */
+struct CsvColumnMap {
+  int addr     = -1;
+  int name     = -1;
+  int type     = -1;
+  int dataType = -1;
+  int units    = -1;
+  int min      = -1;
+  int max      = -1;
+  int scale    = -1;
+  int offset   = -1;
+};
+
+/**
+ * @brief Returns true if any of the literals matches the lowercase column name.
+ */
+[[nodiscard]] bool matchAny(const QString& col, std::initializer_list<QLatin1String> options)
+{
+  for (const auto& opt : options)
+    if (col == opt)
+      return true;
+
+  return false;
+}
+
+/**
+ * @brief Maps a single header cell to its column-map slot.
+ */
+void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
+{
+  if (matchAny(col,
+               {QLatin1String("address"),
+                QLatin1String("addr"),
+                QLatin1String("register"),
+                QLatin1String("reg")})) {
+    map.addr = index;
+    return;
+  }
+
+  if (matchAny(col, {QLatin1String("name"), QLatin1String("label"), QLatin1String("tag")})) {
+    map.name = index;
+    return;
+  }
+
+  if (matchAny(col,
+               {QLatin1String("type"),
+                QLatin1String("register_type"),
+                QLatin1String("function"),
+                QLatin1String("fc")})) {
+    map.type = index;
+    return;
+  }
+
+  if (matchAny(col,
+               {QLatin1String("datatype"), QLatin1String("data_type"), QLatin1String("format")})) {
+    map.dataType = index;
+    return;
+  }
+
+  if (matchAny(col, {QLatin1String("units"), QLatin1String("unit"), QLatin1String("eng_units")})) {
+    map.units = index;
+    return;
+  }
+
+  if (matchAny(col, {QLatin1String("min"), QLatin1String("minimum"), QLatin1String("range_min")})) {
+    map.min = index;
+    return;
+  }
+
+  if (matchAny(col, {QLatin1String("max"), QLatin1String("maximum"), QLatin1String("range_max")})) {
+    map.max = index;
+    return;
+  }
+
+  if (matchAny(col,
+               {QLatin1String("scale"), QLatin1String("factor"), QLatin1String("multiplier")})) {
+    map.scale = index;
+    return;
+  }
+
+  if (col == QLatin1String("offset")) {
+    map.offset = index;
+    return;
+  }
+
+  if (matchAny(col,
+               {QLatin1String("description"), QLatin1String("desc"), QLatin1String("comment")})) {
+    if (map.name < 0)
+      map.name = index;
+  }
+}
+
+/**
+ * @brief Builds the CSV column-map by inspecting the header row.
+ */
+[[nodiscard]] CsvColumnMap buildCsvColumnMap(const QStringList& header)
+{
+  CsvColumnMap map;
+  for (int i = 0; i < header.count(); ++i) {
+    const auto col = header[i].trimmed().toLower().remove('"');
+    mapCsvHeaderColumn(col, i, map);
+  }
+
+  return map;
+}
+
+/**
+ * @brief Returns the trimmed/unquoted value at column index, or fallback when out of range.
+ */
+[[nodiscard]] QString csvCell(const QStringList& cols, int colIndex, const QString& fallback)
+{
+  if (colIndex < 0 || colIndex >= cols.count())
+    return fallback;
+
+  return cols[colIndex].trimmed().remove('"');
+}
+
+/**
+ * @brief Returns a numeric cell value, falling back when missing or empty.
+ */
+[[nodiscard]] double csvCellDouble(const QStringList& cols, int colIndex, double fallback)
+{
+  if (colIndex < 0 || colIndex >= cols.count())
+    return fallback;
+
+  const auto text = cols[colIndex].trimmed().remove('"');
+  if (text.isEmpty())
+    return fallback;
+
+  return text.toDouble();
+}
+
+/**
+ * @brief Maps an XML container tag name to a register-type index, or -1 if not a container.
+ */
+[[nodiscard]] int xmlTagToType(const QString& tag)
+{
+  if (tag == QLatin1String("holding-registers") || tag == QLatin1String("holdingregisters")
+      || tag == QLatin1String("holding"))
+    return 0;
+
+  if (tag == QLatin1String("input-registers") || tag == QLatin1String("inputregisters")
+      || tag == QLatin1String("input"))
+    return 1;
+
+  if (tag == QLatin1String("coils"))
+    return 2;
+
+  if (tag == QLatin1String("discrete-inputs") || tag == QLatin1String("discreteinputs")
+      || tag == QLatin1String("discrete"))
+    return 3;
+
+  return -1;
+}
+
+}  // namespace
+
+//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
@@ -236,6 +401,50 @@ void DataModel::ModbusMapImporter::cancelImport()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Parses one CSV data row into a RegisterEntry; returns false to skip the row.
+ */
+static bool parseCsvRow(const QStringList& cols,
+                        const CsvColumnMap& map,
+                        int row,
+                        DataModel::ModbusMapImporter::RegisterEntry& entry)
+{
+  if (cols.count() <= map.addr) {
+    qWarning().nospace() << "[ModbusMapImporter] CSV row " << row
+                         << " skipped: not enough columns (expected address at index " << map.addr
+                         << ", got " << cols.count() << " columns)";
+    return false;
+  }
+
+  // Parse the register address; skip the row if it isn't a valid uint16
+  bool addrOk              = false;
+  const auto addrText      = cols[map.addr].trimmed().remove('"');
+  const quint16 addrParsed = addrText.toUShort(&addrOk);
+  if (!addrOk) {
+    qWarning().nospace() << "[ModbusMapImporter] CSV row " << row
+                         << " skipped: invalid register address '" << addrText << "'";
+    return false;
+  }
+
+  entry.address = addrParsed;
+  entry.name    = csvCell(cols, map.name, QStringLiteral("Register %1").arg(entry.address));
+  entry.registerType =
+    (map.type >= 0 && map.type < cols.count())
+      ? DataModel::ModbusMapImporter::parseRegisterType(cols[map.type].trimmed().remove('"'))
+      : quint8(0);
+  entry.dataType = csvCell(cols, map.dataType, QStringLiteral("uint16")).toLower();
+  entry.units    = csvCell(cols, map.units, QString());
+  entry.min      = csvCellDouble(cols, map.min, 0.0);
+  entry.max      = csvCellDouble(cols, map.max, 65535.0);
+  entry.scale    = csvCellDouble(cols, map.scale, 1.0);
+  entry.offset   = csvCellDouble(cols, map.offset, 0.0);
+
+  if (entry.dataType == QLatin1String("bool") && entry.max == 65535)
+    entry.max = 1;
+
+  return true;
+}
+
+/**
  * @brief Parses a CSV register map with header-based column auto-detection.
  */
 bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
@@ -252,49 +461,8 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
     return false;
 
   // Map header columns to field indices using common aliases
-  const auto header = lines[0].trimmed().split(',');
-  int col_addr = -1, col_name = -1, col_type = -1, col_data_type = -1;
-  int col_units = -1, col_min = -1, col_max = -1, col_scale = -1, col_offset = -1;
-
-  for (int i = 0; i < header.count(); ++i) {
-    const auto col = header[i].trimmed().toLower().remove('"');
-
-    // clang-format off
-    if (col == QLatin1String("address") || col == QLatin1String("addr")
-        || col == QLatin1String("register") || col == QLatin1String("reg"))
-      col_addr = i;
-    else if (col == QLatin1String("name") || col == QLatin1String("label")
-             || col == QLatin1String("tag"))
-      col_name = i;
-    else if (col == QLatin1String("type") || col == QLatin1String("register_type")
-             || col == QLatin1String("function") || col == QLatin1String("fc"))
-      col_type = i;
-    else if (col == QLatin1String("datatype") || col == QLatin1String("data_type")
-             || col == QLatin1String("format"))
-      col_data_type = i;
-    else if (col == QLatin1String("units") || col == QLatin1String("unit")
-             || col == QLatin1String("eng_units"))
-      col_units = i;
-    else if (col == QLatin1String("min") || col == QLatin1String("minimum")
-             || col == QLatin1String("range_min"))
-      col_min = i;
-    else if (col == QLatin1String("max") || col == QLatin1String("maximum")
-             || col == QLatin1String("range_max"))
-      col_max = i;
-    else if (col == QLatin1String("scale") || col == QLatin1String("factor")
-             || col == QLatin1String("multiplier"))
-      col_scale = i;
-    else if (col == QLatin1String("offset"))
-      col_offset = i;
-    else if (col == QLatin1String("description") || col == QLatin1String("desc")
-             || col == QLatin1String("comment")) {
-      if (col_name < 0)
-        col_name = i;
-    }
-    // clang-format on
-  }
-
-  if (col_addr < 0)
+  const auto map = buildCsvColumnMap(lines[0].trimmed().split(','));
+  if (map.addr < 0)
     return false;
 
   // Parse data rows
@@ -303,54 +471,9 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
     if (line.isEmpty() || line.startsWith('#'))
       continue;
 
-    const auto cols = line.split(',');
-    if (cols.count() <= col_addr) {
-      qWarning().nospace() << "[ModbusMapImporter] CSV row " << row
-                           << " skipped: not enough columns (expected address at index " << col_addr
-                           << ", got " << cols.count() << " columns)";
-      continue;
-    }
-
-    // Parse the register address; skip the row if it isn't a valid uint16
-    bool addrOk              = false;
-    const auto addrText      = cols[col_addr].trimmed().remove('"');
-    const quint16 addrParsed = addrText.toUShort(&addrOk);
-    if (!addrOk) {
-      qWarning().nospace() << "[ModbusMapImporter] CSV row " << row
-                           << " skipped: invalid register address '" << addrText << "'";
-      continue;
-    }
-
     RegisterEntry entry;
-    entry.address      = addrParsed;
-    entry.name         = (col_name >= 0 && col_name < cols.count())
-                         ? cols[col_name].trimmed().remove('"')
-                         : QStringLiteral("Register %1").arg(entry.address);
-    entry.registerType = (col_type >= 0 && col_type < cols.count())
-                         ? parseRegisterType(cols[col_type].trimmed().remove('"'))
-                         : 0;
-    entry.dataType     = (col_data_type >= 0 && col_data_type < cols.count())
-                         ? cols[col_data_type].trimmed().remove('"').toLower()
-                         : QStringLiteral("uint16");
-    entry.units        = (col_units >= 0 && col_units < cols.count())
-                         ? cols[col_units].trimmed().remove('"')
-                         : QString();
-    entry.min =
-      (col_min >= 0 && col_min < cols.count()) ? cols[col_min].trimmed().remove('"').toDouble() : 0;
-    entry.max = (col_max >= 0 && col_max < cols.count())
-                ? cols[col_max].trimmed().remove('"').toDouble()
-                : 65535;
-    entry.scale =
-      (col_scale >= 0 && col_scale < cols.count() && !cols[col_scale].trimmed().isEmpty())
-        ? cols[col_scale].trimmed().remove('"').toDouble()
-        : 1.0;
-    entry.offset =
-      (col_offset >= 0 && col_offset < cols.count() && !cols[col_offset].trimmed().isEmpty())
-        ? cols[col_offset].trimmed().remove('"').toDouble()
-        : 0.0;
-
-    if (entry.dataType == QLatin1String("bool") && entry.max == 65535)
-      entry.max = 1;
+    if (!parseCsvRow(line.split(','), map, row, entry))
+      continue;
 
     m_registers.append(entry);
   }
@@ -361,6 +484,55 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
 //--------------------------------------------------------------------------------------------------
 // XML parser
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Parses an XML <register> element, returning false to skip a malformed entry.
+ */
+static bool parseXmlRegisterElement(QXmlStreamReader& xml,
+                                    int currentType,
+                                    DataModel::ModbusMapImporter::RegisterEntry& entry)
+{
+  const auto attrs = xml.attributes();
+
+  // Validate the address attribute -- skip the element if missing or malformed
+  bool addrOk              = false;
+  const auto addrText      = attrs.value("address").toString();
+  const quint16 addrParsed = addrText.toUShort(&addrOk);
+  if (!addrOk) {
+    qWarning().nospace() << "[ModbusMapImporter] XML <register> at line " << xml.lineNumber()
+                         << " skipped: invalid or missing 'address' attribute ('" << addrText
+                         << "')";
+    return false;
+  }
+
+  entry.address  = addrParsed;
+  entry.name     = attrs.value("name").toString();
+  entry.dataType = attrs.value("dataType").toString().toLower();
+  entry.units    = attrs.value("units").toString();
+  entry.min      = attrs.value("min").toDouble();
+  entry.max      = attrs.value("max").isEmpty() ? 65535 : attrs.value("max").toDouble();
+  entry.scale    = attrs.value("scale").isEmpty() ? 1.0 : attrs.value("scale").toDouble();
+  entry.offset   = attrs.value("offset").toDouble();
+
+  if (attrs.hasAttribute("type"))
+    entry.registerType =
+      DataModel::ModbusMapImporter::parseRegisterType(attrs.value("type").toString());
+  else if (currentType >= 0)
+    entry.registerType = static_cast<quint8>(currentType);
+  else
+    entry.registerType = 0;
+
+  if (entry.dataType.isEmpty())
+    entry.dataType = (entry.registerType >= 2) ? QStringLiteral("bool") : QStringLiteral("uint16");
+
+  if (entry.name.isEmpty())
+    entry.name = QStringLiteral("Register %1").arg(entry.address);
+
+  if (entry.dataType == QLatin1String("bool") && entry.max == 65535)
+    entry.max = 1;
+
+  return true;
+}
 
 /**
  * @brief Parses an XML register map (flat or nested by register type).
@@ -381,66 +553,19 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
 
     const auto tag_name = xml.name().toString().toLower();
 
-    // clang-format off
-    if (tag_name == QLatin1String("holding-registers")
-        || tag_name == QLatin1String("holdingregisters")
-        || tag_name == QLatin1String("holding"))
-      current_type = 0;
-    else if (tag_name == QLatin1String("input-registers")
-             || tag_name == QLatin1String("inputregisters")
-             || tag_name == QLatin1String("input"))
-      current_type = 1;
-    else if (tag_name == QLatin1String("coils"))
-      current_type = 2;
-    else if (tag_name == QLatin1String("discrete-inputs")
-             || tag_name == QLatin1String("discreteinputs")
-             || tag_name == QLatin1String("discrete"))
-      current_type = 3;
-    // clang-format on
-
-    else if (tag_name == QLatin1String("register")) {
-      const auto attrs = xml.attributes();
-
-      // Validate the address attribute -- skip the element if missing or malformed
-      bool addrOk              = false;
-      const auto addrText      = attrs.value("address").toString();
-      const quint16 addrParsed = addrText.toUShort(&addrOk);
-      if (!addrOk) {
-        qWarning().nospace() << "[ModbusMapImporter] XML <register> at line " << xml.lineNumber()
-                             << " skipped: invalid or missing 'address' attribute ('" << addrText
-                             << "')";
-        continue;
-      }
-
-      RegisterEntry entry;
-      entry.address  = addrParsed;
-      entry.name     = attrs.value("name").toString();
-      entry.dataType = attrs.value("dataType").toString().toLower();
-      entry.units    = attrs.value("units").toString();
-      entry.min      = attrs.value("min").toDouble();
-      entry.max      = attrs.value("max").isEmpty() ? 65535 : attrs.value("max").toDouble();
-      entry.scale    = attrs.value("scale").isEmpty() ? 1.0 : attrs.value("scale").toDouble();
-      entry.offset   = attrs.value("offset").toDouble();
-
-      if (attrs.hasAttribute("type"))
-        entry.registerType = parseRegisterType(attrs.value("type").toString());
-      else if (current_type >= 0)
-        entry.registerType = static_cast<quint8>(current_type);
-      else
-        entry.registerType = 0;
-
-      if (entry.dataType.isEmpty())
-        entry.dataType =
-          (entry.registerType >= 2) ? QStringLiteral("bool") : QStringLiteral("uint16");
-
-      if (entry.name.isEmpty())
-        entry.name = QStringLiteral("Register %1").arg(entry.address);
-
-      if (entry.dataType == QLatin1String("bool") && entry.max == 65535)
-        entry.max = 1;
-
-      m_registers.append(entry);
+    // Container tag updates the current type and falls through
+    const int container_type = xmlTagToType(tag_name);
+    if (container_type >= 0) {
+      current_type = container_type;
+      continue;
     }
+
+    if (tag_name != QLatin1String("register"))
+      continue;
+
+    RegisterEntry entry;
+    if (parseXmlRegisterElement(xml, current_type, entry))
+      m_registers.append(entry);
   }
 
   file.close();
@@ -626,19 +751,8 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
         dataset.wgtMax = entry.max;
         dataset.pltMin = entry.min;
         dataset.pltMax = entry.max;
-
-        // Select widget based on units and range
-        const auto u = entry.units.toLower();
-        // code-verify off
-        if (u == QLatin1String("%") || (entry.min == 0 && entry.max == 100))
-          dataset.widget = QStringLiteral("bar");
-        else if (u.contains(QLatin1String("°")) || u == QLatin1String("rpm")
-                 || u == QLatin1String("psi") || u == QLatin1String("bar")
-                 || u == QLatin1String("kpa") || u == QLatin1String("v") || u == QLatin1String("a"))
-          dataset.widget = QStringLiteral("gauge");
-        // code-verify on
-
-        dataset.plt = dataset.widget.isEmpty();
+        dataset.widget = selectDatasetWidget(entry);
+        dataset.plt    = dataset.widget.isEmpty();
       }
 
       group.datasets.push_back(dataset);
@@ -707,7 +821,6 @@ QString DataModel::ModbusMapImporter::buildFrameParser(const QVector<RegisterBlo
   int ds_offset = 0;
   for (int g = 0; g < group_count; ++g) {
     const auto& block = blocks[g];
-    const bool is_bit = (block.registerType >= 2);
 
     code += QStringLiteral("  -- %1 @ %2\n")
               .arg(registerTypeName(block.registerType))
@@ -718,71 +831,10 @@ QString DataModel::ModbusMapImporter::buildFrameParser(const QVector<RegisterBlo
       code += QStringLiteral("  elseif currentGroup == %1 then\n").arg(g);
 
     for (int e = 0; e < block.entries.count(); ++e) {
-      const auto& entry = block.entries[e];
-      const int reg_off = entry.address - block.startAddress;
-      const int idx     = ds_offset + e + 1;
-
       if (e > 0)
         code += QStringLiteral("\n");
 
-      code += QStringLiteral("    -- %1\n").arg(entry.name);
-
-      if (is_bit) {
-        const int byte_idx = reg_off / 8 + 1;
-        const int bit_idx  = reg_off % 8;
-        code += QStringLiteral("    values[%1] = (data[%2] >> %3) & 1\n")
-                  .arg(idx)
-                  .arg(byte_idx)
-                  .arg(bit_idx);
-      } else if (entry.dataType == QLatin1String("float32")) {
-        const int byte_off = reg_off * 2 + 1;
-        if (entry.scale != 1.0 || entry.offset != 0.0)
-          code += QStringLiteral("    values[%1] = toFloat32(data[%2], data[%3], data[%4], "
-                                 "data[%5]) * %6 + %7\n")
-                    .arg(idx)
-                    .arg(byte_off)
-                    .arg(byte_off + 1)
-                    .arg(byte_off + 2)
-                    .arg(byte_off + 3)
-                    .arg(entry.scale)
-                    .arg(entry.offset);
-        else
-          code +=
-            QStringLiteral("    values[%1] = toFloat32(data[%2], data[%3], data[%4], data[%5])\n")
-              .arg(idx)
-              .arg(byte_off)
-              .arg(byte_off + 1)
-              .arg(byte_off + 2)
-              .arg(byte_off + 3);
-      } else if (entry.dataType == QLatin1String("int16")) {
-        const int byte_off = reg_off * 2 + 1;
-        code += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
-                  .arg(idx)
-                  .arg(byte_off)
-                  .arg(byte_off + 1);
-        code +=
-          QStringLiteral("    if values[%1] > 32767 then values[%1] = values[%1] - 65536 end\n")
-            .arg(idx);
-        if (entry.scale != 1.0 || entry.offset != 0.0)
-          code += QStringLiteral("    values[%1] = values[%1] * %2 + %3\n")
-                    .arg(idx)
-                    .arg(entry.scale)
-                    .arg(entry.offset);
-      } else {
-        const int byte_off = reg_off * 2 + 1;
-        if (entry.scale != 1.0 || entry.offset != 0.0)
-          code += QStringLiteral("    values[%1] = ((data[%2] << 8) | data[%3]) * %4 + %5\n")
-                    .arg(idx)
-                    .arg(byte_off)
-                    .arg(byte_off + 1)
-                    .arg(entry.scale)
-                    .arg(entry.offset);
-        else
-          code += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
-                    .arg(idx)
-                    .arg(byte_off)
-                    .arg(byte_off + 1);
-      }
+      code += emitParserEntry(block.entries[e], block, ds_offset + e + 1);
     }
 
     ds_offset += block.entries.count();
@@ -916,4 +968,102 @@ QString DataModel::ModbusMapImporter::registerTypeName(quint8 type)
     default:
       return QStringLiteral("Unknown");
   }
+}
+
+/**
+ * @brief Selects the dashboard widget kind for a numeric register based on units and range.
+ */
+QString DataModel::ModbusMapImporter::selectDatasetWidget(const RegisterEntry& entry)
+{
+  const auto u = entry.units.toLower();
+
+  // Bar widget for percentage-style ranges
+  if (u == QLatin1String("%") || (entry.min == 0 && entry.max == 100))
+    return QStringLiteral("bar");
+
+  // Gauge widget for typical engineering units (degree symbol matches original UTF-8 bytes)
+  if (u.contains(QLatin1String("\xc2\xb0")) || u == QLatin1String("rpm")
+      || u == QLatin1String("psi") || u == QLatin1String("bar") || u == QLatin1String("kpa")
+      || u == QLatin1String("v") || u == QLatin1String("a"))
+    return QStringLiteral("gauge");
+
+  return QString();
+}
+
+/**
+ * @brief Emits the Lua extraction snippet for a single register entry.
+ */
+QString DataModel::ModbusMapImporter::emitParserEntry(const RegisterEntry& entry,
+                                                      const RegisterBlock& block,
+                                                      int datasetIndex)
+{
+  const bool is_bit  = (block.registerType >= 2);
+  const int reg_off  = entry.address - block.startAddress;
+  const int idx      = datasetIndex;
+  const int byte_off = reg_off * 2 + 1;
+  const bool scaled  = (entry.scale != 1.0 || entry.offset != 0.0);
+
+  QString out;
+  out += QStringLiteral("    -- %1\n").arg(entry.name);
+
+  if (is_bit) {
+    const int byte_idx = reg_off / 8 + 1;
+    const int bit_idx  = reg_off % 8;
+    out +=
+      QStringLiteral("    values[%1] = (data[%2] >> %3) & 1\n").arg(idx).arg(byte_idx).arg(bit_idx);
+    return out;
+  }
+
+  if (entry.dataType == QLatin1String("float32")) {
+    if (scaled)
+      out += QStringLiteral("    values[%1] = toFloat32(data[%2], data[%3], data[%4], "
+                            "data[%5]) * %6 + %7\n")
+               .arg(idx)
+               .arg(byte_off)
+               .arg(byte_off + 1)
+               .arg(byte_off + 2)
+               .arg(byte_off + 3)
+               .arg(entry.scale)
+               .arg(entry.offset);
+    else
+      out += QStringLiteral("    values[%1] = toFloat32(data[%2], data[%3], data[%4], data[%5])\n")
+               .arg(idx)
+               .arg(byte_off)
+               .arg(byte_off + 1)
+               .arg(byte_off + 2)
+               .arg(byte_off + 3);
+
+    return out;
+  }
+
+  if (entry.dataType == QLatin1String("int16")) {
+    out += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
+             .arg(idx)
+             .arg(byte_off)
+             .arg(byte_off + 1);
+    out += QStringLiteral("    if values[%1] > 32767 then values[%1] = values[%1] - 65536 end\n")
+             .arg(idx);
+    if (scaled)
+      out += QStringLiteral("    values[%1] = values[%1] * %2 + %3\n")
+               .arg(idx)
+               .arg(entry.scale)
+               .arg(entry.offset);
+
+    return out;
+  }
+
+  if (scaled)
+    out += QStringLiteral("    values[%1] = ((data[%2] << 8) | data[%3]) * %4 + %5\n")
+             .arg(idx)
+             .arg(byte_off)
+             .arg(byte_off + 1)
+             .arg(entry.scale)
+             .arg(entry.offset);
+  else
+    out += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
+             .arg(idx)
+             .arg(byte_off)
+             .arg(byte_off + 1);
+
+  return out;
 }

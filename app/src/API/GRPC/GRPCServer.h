@@ -103,6 +103,8 @@ private:
   void startServer();
   void stopServer();
   void writerLoop();
+  void broadcastFrameBatch(const serialstudio::FrameBatch& batch);
+  void broadcastRawBatch(const serialstudio::RawBatch& batch);
 
 private:
   bool m_enabled;

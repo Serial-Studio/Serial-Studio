@@ -100,6 +100,7 @@ private:
   void processFrameBatch(int startFrame, int endFrame);
   void parseCsvRows(QTextStream& stream);
   void initializeTimestamps();
+  bool recomputeMsUntilNext(qint64& msUntilNext);
 
 private:
   bool promptUserForDateTimeOrInterval();

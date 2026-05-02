@@ -55,6 +55,10 @@ private:
 
   [[nodiscard]] QList<QStringList> convertResult();
   [[nodiscard]] QStringList tableToStringList(int tableIndex);
+  [[nodiscard]] QStringList scalarToStringList();
+  void appendMixedElement(QStringList& scalars,
+                          QList<QStringList>& vectors,
+                          qsizetype& maxVectorLength);
 
   static void watchdogHook(lua_State* L, lua_Debug* ar);
 

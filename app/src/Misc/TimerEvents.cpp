@@ -94,17 +94,24 @@ void Misc::TimerEvents::stopTimers()
  */
 void Misc::TimerEvents::timerEvent(QTimerEvent* event)
 {
-  // Dispatch the event to the matching timer signal
-  if (event->timerId() == m_timer1Hz.timerId())
+  const int id = event->timerId();
+
+  if (id == m_timer1Hz.timerId()) {
     Q_EMIT timeout1Hz();
+    return;
+  }
 
-  else if (event->timerId() == m_timer10Hz.timerId())
+  if (id == m_timer10Hz.timerId()) {
     Q_EMIT timeout10Hz();
+    return;
+  }
 
-  else if (event->timerId() == m_timer20Hz.timerId())
+  if (id == m_timer20Hz.timerId()) {
     Q_EMIT timeout20Hz();
+    return;
+  }
 
-  else if (event->timerId() == m_uiTimer.timerId())
+  if (id == m_uiTimer.timerId())
     Q_EMIT uiTimeout();
 }
 

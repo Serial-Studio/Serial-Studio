@@ -764,26 +764,14 @@ void IO::Drivers::UART::refreshSerialDevices()
     m_deviceLocations = locations;
 
     // Re-find the currently open port in the new list
-    bool indexChanged = false;
-    if (port()) {
-      auto name = port()->portName();
-      for (int i = 0; i < validPortList.count(); ++i) {
-        auto info = validPortList.at(i);
-        if (info.portName() == name) {
-          indexChanged = true;
-          m_portIndex  = i + 1;
-          break;
-        }
-      }
-    }
+    const bool indexChanged = relocateOpenPortIndex(validPortList);
 
     // Attempt auto-reconnect if enabled
-    if (ConnectionManager::instance().busType() == SerialStudio::BusType::UART) {
-      if (autoReconnect() && m_lastSerialDeviceIndex > 0
-          && m_lastSerialDeviceIndex < portList().count()) {
-        setPortIndex(m_lastSerialDeviceIndex);
-        ConnectionManager::instance().connectDevice();
-      }
+    const bool uart_active = ConnectionManager::instance().busType() == SerialStudio::BusType::UART;
+    if (uart_active && autoReconnect() && m_lastSerialDeviceIndex > 0
+        && m_lastSerialDeviceIndex < portList().count()) {
+      setPortIndex(m_lastSerialDeviceIndex);
+      ConnectionManager::instance().connectDevice();
     }
 
     Q_EMIT availablePortsChanged();
@@ -887,6 +875,26 @@ QVector<QSerialPortInfo> IO::Drivers::UART::validPorts() const
   return ports;
 }
 
+/**
+ * @brief Re-locates the open port in the new device list, updating m_portIndex if matched.
+ */
+bool IO::Drivers::UART::relocateOpenPortIndex(const QVector<QSerialPortInfo>& ports)
+{
+  if (!port())
+    return false;
+
+  const auto name = port()->portName();
+  for (int i = 0; i < ports.count(); ++i) {
+    if (ports.at(i).portName() != name)
+      continue;
+
+    m_portIndex = i + 1;
+    return true;
+  }
+
+  return false;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Stable device identification
 //--------------------------------------------------------------------------------------------------
@@ -941,55 +949,61 @@ bool IO::Drivers::UART::selectByIdentifier(const QJsonObject& id)
   if (m_deviceNames.isEmpty())
     refreshSerialDevices();
 
-  const auto ports     = validPorts();
-  const auto savedVid  = id.value(QStringLiteral("vid")).toString();
-  const auto savedPid  = id.value(QStringLiteral("pid")).toString();
-  const auto savedSer  = id.value(QStringLiteral("serial")).toString();
-  const auto savedName = id.value(QStringLiteral("portName")).toString();
-  const auto savedDesc = id.value(QStringLiteral("description")).toString();
+  const auto ports = validPorts();
 
   int bestScore = 0;
   int bestIndex = -1;
 
   for (int i = 0; i < ports.count(); ++i) {
-    const auto& info = ports.at(i);
-    int score        = 0;
-
-    // VID + PID match
-    if (!savedVid.isEmpty() && info.hasVendorIdentifier()) {
-      const auto vid =
-        QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper();
-      const auto pid =
-        QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper();
-      if (vid == savedVid && pid == savedPid) {
-        score += 100;
-
-        // Serial number match on top of VID+PID
-        if (!savedSer.isEmpty() && info.serialNumber() == savedSer)
-          score += 50;
-      }
-    }
-
-    // Description match (cross-platform fallback for non-USB serial ports)
-    if (!savedDesc.isEmpty() && info.description() == savedDesc)
-      score += 10;
-
-    // Port name match (weakest -- differs per OS)
-    if (!savedName.isEmpty() && info.portName() == savedName)
-      score += 5;
-
+    const int score = scorePortIdentifierMatch(ports.at(i), id);
     if (score > bestScore) {
       bestScore = score;
       bestIndex = i;
     }
   }
 
-  if (bestIndex >= 0) {
-    setPortIndex(static_cast<quint8>(bestIndex + 1));
-    return true;
+  if (bestIndex < 0)
+    return false;
+
+  setPortIndex(static_cast<quint8>(bestIndex + 1));
+  return true;
+}
+
+/**
+ * @brief Scores how strongly a port matches a saved identifier (VID/PID/serial/name/desc).
+ */
+int IO::Drivers::UART::scorePortIdentifierMatch(const QSerialPortInfo& info,
+                                                const QJsonObject& id) const
+{
+  const auto savedVid  = id.value(QStringLiteral("vid")).toString();
+  const auto savedPid  = id.value(QStringLiteral("pid")).toString();
+  const auto savedSer  = id.value(QStringLiteral("serial")).toString();
+  const auto savedName = id.value(QStringLiteral("portName")).toString();
+  const auto savedDesc = id.value(QStringLiteral("description")).toString();
+
+  int score = 0;
+
+  // VID + PID match (with optional serial-number bonus)
+  const bool vid_pid_checkable = !savedVid.isEmpty() && info.hasVendorIdentifier();
+  if (vid_pid_checkable) {
+    const auto vid = QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper();
+    const auto pid = QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper();
+    if (vid == savedVid && pid == savedPid) {
+      score += 100;
+      if (!savedSer.isEmpty() && info.serialNumber() == savedSer)
+        score += 50;
+    }
   }
 
-  return false;
+  // Description match (cross-platform fallback for non-USB serial ports)
+  if (!savedDesc.isEmpty() && info.description() == savedDesc)
+    score += 10;
+
+  // Port name match (weakest -- differs per OS)
+  if (!savedName.isEmpty() && info.portName() == savedName)
+    score += 5;
+
+  return score;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1073,49 +1087,81 @@ QList<IO::DriverProperty> IO::Drivers::UART::driverProperties() const
  */
 void IO::Drivers::UART::setDriverProperty(const QString& key, const QVariant& value)
 {
-  if (key == QLatin1String("portIndex"))
+  if (key == QLatin1String("portIndex")) {
     setPortIndex(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("baudRate")) {
-    const int v = value.toInt();
-    if (v >= 110)
-      setBaudRate(v);
-    else {
-      const auto list = baudRateList();
-      if (v >= 0 && v < list.size())
-        setBaudRate(list.at(v).toInt());
-    }
+    return;
   }
 
-  else if (key == QLatin1String("parityIndex"))
+  if (key == QLatin1String("parityIndex")) {
     setParity(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("dataBitsIndex"))
-    setDataBits(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("stopBitsIndex"))
-    setStopBits(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("flowControlIndex"))
-    setFlowControl(static_cast<quint8>(value.toInt()));
-
-  else if (key == QLatin1String("dtr"))
-    setDtrEnabled(value.toBool());
-
-  else if (key == QLatin1String("autoReconnect"))
-    setAutoReconnect(value.toBool());
-
-  else if (key == QLatin1String("device")) {
-    const auto path = value.toString().simplified();
-    if (!path.isEmpty()) {
-      if (m_deviceNames.isEmpty())
-        refreshSerialDevices();
-
-      registerDevice(path);
-      const auto ports = portList();
-      const int idx    = ports.indexOf(path);
-      if (idx >= 1)
-        setPortIndex(static_cast<quint8>(idx));
-    }
+    return;
   }
+
+  if (key == QLatin1String("dataBitsIndex")) {
+    setDataBits(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("stopBitsIndex")) {
+    setStopBits(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("flowControlIndex")) {
+    setFlowControl(static_cast<quint8>(value.toInt()));
+    return;
+  }
+
+  if (key == QLatin1String("dtr")) {
+    setDtrEnabled(value.toBool());
+    return;
+  }
+
+  if (key == QLatin1String("autoReconnect")) {
+    setAutoReconnect(value.toBool());
+    return;
+  }
+
+  if (key == QLatin1String("baudRate")) {
+    applyBaudRateProperty(value);
+    return;
+  }
+
+  if (key == QLatin1String("device"))
+    applyDeviceProperty(value);
+}
+
+/**
+ * @brief Applies the "baudRate" property by raw rate or by index into baudRateList().
+ */
+void IO::Drivers::UART::applyBaudRateProperty(const QVariant& value)
+{
+  const int v = value.toInt();
+  if (v >= 110) {
+    setBaudRate(v);
+    return;
+  }
+
+  const auto list = baudRateList();
+  if (v >= 0 && v < list.size())
+    setBaudRate(list.at(v).toInt());
+}
+
+/**
+ * @brief Applies the "device" property by registering a custom path and selecting it.
+ */
+void IO::Drivers::UART::applyDeviceProperty(const QVariant& value)
+{
+  const auto path = value.toString().simplified();
+  if (path.isEmpty())
+    return;
+
+  if (m_deviceNames.isEmpty())
+    refreshSerialDevices();
+
+  registerDevice(path);
+  const auto ports = portList();
+  const int idx    = ports.indexOf(path);
+  if (idx >= 1)
+    setPortIndex(static_cast<quint8>(idx));
 }

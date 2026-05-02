@@ -97,6 +97,7 @@ private:
   void buildQuickPlotAudioFrame(const QStringList& channels);
 
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
+  void publishSourceTemplateFrame(const DataModel::Source& src);
 
   struct TransformEngine {
     lua_State* luaState = nullptr;

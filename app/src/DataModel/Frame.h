@@ -1334,61 +1334,62 @@ void read_io_settings(QByteArray& frameStart,
   const bool isImageGroup  = (widget == QLatin1String("image"));
   const bool isOutputGroup = (groupType == GroupType::Output);
 
-  if (!title.isEmpty() && (!array.isEmpty() || isImageGroup || isOutputGroup)) {
-    g.title     = title;
-    g.widget    = widget;
-    g.groupType = groupType;
-    g.columns   = qBound(1, ss_jsr(obj, Keys::OutputColumns, 2).toInt(), 10);
-    g.sourceId  = ss_jsr(obj, Keys::SourceId, 0).toInt();
+  if (title.isEmpty())
+    return false;
 
-    if (isImageGroup) {
-      g.imgDetectionMode = ss_jsr(obj, Keys::ImgMode, "autodetect").toString();
-      g.imgStartSequence = ss_jsr(obj, Keys::ImgStart, "").toString();
-      g.imgEndSequence   = ss_jsr(obj, Keys::ImgEnd, "").toString();
-      return true;
-    }
+  if (array.isEmpty() && !isImageGroup && !isOutputGroup)
+    return false;
 
-    g.datasets.clear();
-    g.datasets.reserve(array.count());
+  g.title     = title;
+  g.widget    = widget;
+  g.groupType = groupType;
+  g.columns   = qBound(1, ss_jsr(obj, Keys::OutputColumns, 2).toInt(), 10);
+  g.sourceId  = ss_jsr(obj, Keys::SourceId, 0).toInt();
 
-    bool ok = true;
-    for (qsizetype i = 0; i < array.count(); ++i) {
-      const auto dObj = array[i].toObject();
-      if (!dObj.isEmpty()) {
-        Dataset dataset;
-        ok &= read(dataset, dObj);
-
-        if (ok) {
-          dataset.datasetId = i;
-          dataset.groupId   = g.groupId;
-          dataset.sourceId  = g.sourceId;
-          g.datasets.push_back(dataset);
-        }
-
-        else
-          break;
-      }
-    }
-
-    const auto owArray = obj.value(Keys::OutputWidgets).toArray();
-    if (!owArray.isEmpty()) {
-      g.outputWidgets.clear();
-      g.outputWidgets.reserve(owArray.count());
-
-      for (qsizetype i = 0; i < owArray.count(); ++i) {
-        OutputWidget ow;
-        if (read(ow, owArray[i].toObject())) {
-          ow.widgetId = static_cast<int>(i);
-          ow.groupId  = g.groupId;
-          g.outputWidgets.push_back(ow);
-        }
-      }
-    }
-
-    return ok;
+  if (isImageGroup) {
+    g.imgDetectionMode = ss_jsr(obj, Keys::ImgMode, "autodetect").toString();
+    g.imgStartSequence = ss_jsr(obj, Keys::ImgStart, "").toString();
+    g.imgEndSequence   = ss_jsr(obj, Keys::ImgEnd, "").toString();
+    return true;
   }
 
-  return false;
+  g.datasets.clear();
+  g.datasets.reserve(array.count());
+
+  bool ok = true;
+  for (qsizetype i = 0; i < array.count(); ++i) {
+    const auto dObj = array[i].toObject();
+    if (dObj.isEmpty())
+      continue;
+
+    Dataset dataset;
+    ok &= read(dataset, dObj);
+    if (!ok)
+      break;
+
+    dataset.datasetId = i;
+    dataset.groupId   = g.groupId;
+    dataset.sourceId  = g.sourceId;
+    g.datasets.push_back(dataset);
+  }
+
+  const auto owArray = obj.value(Keys::OutputWidgets).toArray();
+  if (!owArray.isEmpty()) {
+    g.outputWidgets.clear();
+    g.outputWidgets.reserve(owArray.count());
+
+    for (qsizetype i = 0; i < owArray.count(); ++i) {
+      OutputWidget ow;
+      if (!read(ow, owArray[i].toObject()))
+        continue;
+
+      ow.widgetId = static_cast<int>(i);
+      ow.groupId  = g.groupId;
+      g.outputWidgets.push_back(ow);
+    }
+  }
+
+  return ok;
 }
 
 /**
@@ -1416,59 +1417,58 @@ void read_io_settings(QByteArray& frameStart,
   const auto actions = obj.value(Keys::Actions).toArray();
   const auto title   = ss_jsr(obj, Keys::Title, "").toString().simplified();
 
-  if (!title.isEmpty() && !groups.isEmpty()) {
-    f.title = title;
-    f.groups.clear();
-    f.actions.clear();
-    f.groups.reserve(groups.count());
-    f.actions.reserve(actions.count());
+  if (title.isEmpty() || groups.isEmpty())
+    return false;
 
-    // Read project-version metadata; pre-stamp files default to 0 / empty.
-    f.schemaVersion           = ss_jsr(obj, Keys::SchemaVersion, 0).toInt();
-    f.writerVersion           = ss_jsr(obj, Keys::WriterVersion, "").toString();
-    f.writerVersionAtCreation = ss_jsr(obj, Keys::WriterVersionAtCreation, "").toString();
+  f.title = title;
+  f.groups.clear();
+  f.actions.clear();
+  f.groups.reserve(groups.count());
+  f.actions.reserve(actions.count());
 
-    bool ok = true;
-    for (qsizetype i = 0; i < groups.count(); ++i) {
-      Group group;
-      group.groupId = i;
-      ok &= read(group, groups[i].toObject());
-      if (ok)
-        f.groups.push_back(group);
-      else
-        break;
-    }
+  // Read project-version metadata; pre-stamp files default to 0 / empty.
+  f.schemaVersion           = ss_jsr(obj, Keys::SchemaVersion, 0).toInt();
+  f.writerVersion           = ss_jsr(obj, Keys::WriterVersion, "").toString();
+  f.writerVersionAtCreation = ss_jsr(obj, Keys::WriterVersionAtCreation, "").toString();
 
-    if (ok) {
-      for (qsizetype i = 0; i < actions.count(); ++i) {
-        Action action;
-        ok &= read(action, actions[i].toObject());
-        if (ok)
-          f.actions.push_back(action);
-        else
-          break;
-      }
-    }
+  bool ok = true;
+  for (qsizetype i = 0; i < groups.count(); ++i) {
+    Group group;
+    group.groupId = i;
+    ok &= read(group, groups[i].toObject());
+    if (!ok)
+      break;
 
-    // Sources are optional
-    if (ok) {
-      const auto sources = obj.value(Keys::Sources).toArray();
-      f.sources.clear();
-      f.sources.reserve(sources.count());
-      for (qsizetype i = 0; i < sources.count(); ++i) {
-        Source src;
-        if (read(src, sources[i].toObject()))
-          f.sources.push_back(src);
-      }
-    }
-
-    if (ok)
-      finalize_frame(f);
-
-    return ok;
+    f.groups.push_back(group);
   }
 
-  return false;
+  if (ok) {
+    for (qsizetype i = 0; i < actions.count(); ++i) {
+      Action action;
+      ok &= read(action, actions[i].toObject());
+      if (!ok)
+        break;
+
+      f.actions.push_back(action);
+    }
+  }
+
+  // Sources are optional
+  if (ok) {
+    const auto sources = obj.value(Keys::Sources).toArray();
+    f.sources.clear();
+    f.sources.reserve(sources.count());
+    for (qsizetype i = 0; i < sources.count(); ++i) {
+      Source src;
+      if (read(src, sources[i].toObject()))
+        f.sources.push_back(src);
+    }
+  }
+
+  if (ok)
+    finalize_frame(f);
+
+  return ok;
 }
 
 /**

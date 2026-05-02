@@ -316,27 +316,42 @@ QString Sessions::HtmlReport::buildHtml() const
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Loads the cover logo as inline SVG or a base64 data URI img tag.
+ */
+QString Sessions::HtmlReport::buildCoverLogoMarkup() const
+{
+  if (m_opts.logoPath.isEmpty() || !QFileInfo::exists(m_opts.logoPath))
+    return QString();
+
+  const QFileInfo fi(m_opts.logoPath);
+  const bool isSvg = fi.suffix().compare("svg", Qt::CaseInsensitive) == 0;
+  if (!isSvg) {
+    const QString dataUri = encodeLogoAsDataUri(m_opts.logoPath);
+    if (dataUri.isEmpty())
+      return QString();
+
+    return QStringLiteral("<img src=\"%1\" alt=\"\">").arg(dataUri);
+  }
+
+  // Inline SVG: prefer Qt resource, fall back to filesystem read
+  QString markup = readResource(m_opts.logoPath);
+  if (!markup.isEmpty())
+    return markup;
+
+  QFile f(m_opts.logoPath);
+  if (f.open(QIODevice::ReadOnly))
+    markup = QString::fromUtf8(f.readAll());
+
+  return markup;
+}
+
+/**
  * @brief Builds the first-page cover fragment: logo, company, title, subtitle.
  */
 QString Sessions::HtmlReport::buildCoverSection() const
 {
   // Logo markup: raster files become base64 data URIs, SVGs are inlined verbatim
-  QString logoMarkup;
-  if (!m_opts.logoPath.isEmpty() && QFileInfo::exists(m_opts.logoPath)) {
-    const QFileInfo fi(m_opts.logoPath);
-    if (fi.suffix().compare("svg", Qt::CaseInsensitive) == 0) {
-      logoMarkup = readResource(m_opts.logoPath);
-      if (logoMarkup.isEmpty()) {
-        QFile f(m_opts.logoPath);
-        if (f.open(QIODevice::ReadOnly))
-          logoMarkup = QString::fromUtf8(f.readAll());
-      }
-    } else {
-      const QString dataUri = encodeLogoAsDataUri(m_opts.logoPath);
-      if (!dataUri.isEmpty())
-        logoMarkup = QStringLiteral("<img src=\"%1\" alt=\"\">").arg(dataUri);
-    }
-  }
+  const QString logoMarkup = buildCoverLogoMarkup();
 
   const QString title =
     escapeHtml(m_opts.documentTitle.isEmpty() ? tr("Session Report") : m_opts.documentTitle);

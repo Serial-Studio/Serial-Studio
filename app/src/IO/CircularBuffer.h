@@ -483,22 +483,22 @@ typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer
   const qsizetype cap     = m_capacity;
   const qsizetype scanEnd = bufSize - minLen + 1;
 
+  auto matchesAt = [&](qsizetype i, int p) -> bool {
+    const auto pLen   = info[p].len;
+    const auto* pData = info[p].data;
+    for (qsizetype j = 0; j < pLen; ++j)
+      if (m_buffer[(head + i + j) % cap] != pData[j])
+        return false;
+
+    return true;
+  };
+
   for (qsizetype i = 0; i < scanEnd; ++i) {
     for (int p = 0; p < patCount; ++p) {
-      const auto pLen = info[p].len;
-      if (i + pLen > bufSize)
+      if (i + info[p].len > bufSize)
         continue;
 
-      const auto* pData = info[p].data;
-      bool match        = true;
-      for (qsizetype j = 0; j < pLen; ++j) {
-        if (m_buffer[(head + i + j) % cap] != pData[j]) {
-          match = false;
-          break;
-        }
-      }
-
-      if (match)
+      if (matchesAt(i, p))
         return {static_cast<int>(i), p};
     }
   }

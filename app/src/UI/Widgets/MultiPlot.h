@@ -124,6 +124,27 @@ private slots:
   void onThemeChanged();
 
 private:
+  /**
+   * @brief Computes Y range from dataset pltMin/pltMax bounds.
+   */
+  [[nodiscard]] bool computeRangeFromDatasets();
+
+  /**
+   * @brief Scans visible curves for finite min/max values.
+   */
+  void scanCurvesForRange();
+
+  /**
+   * @brief Adjusts m_minY/m_maxY when data-derived bounds need padding.
+   */
+  void padDerivedRange();
+
+  /**
+   * @brief Selects the padding strategy for the current m_minY/m_maxY pair.
+   */
+  void applyDerivedYBounds();
+
+private:
   int m_index;
   int m_dataW;
   int m_dataH;

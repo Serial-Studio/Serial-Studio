@@ -72,6 +72,8 @@ private:
   void storeProjectMetadata(const DataModel::Frame& frame);
   void prepareHotpathQueries();
   void writeRawBytes();
+  void writeFrameReadings(const DataModel::TimestampedFramePtr& frame);
+  void bindAndInsertReading(qint64 ns, const DataModel::Dataset& dataset);
   void finalizeSession();
 
   [[nodiscard]] QJsonObject buildReplayProjectJson(const DataModel::Frame& frame) const;

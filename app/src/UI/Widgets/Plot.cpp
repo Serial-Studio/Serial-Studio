@@ -262,46 +262,44 @@ void Widgets::Plot::updateData()
     return;
 
   // Only obtain data if widget data is still valid
-  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
-    // Obtain plot data
-    const auto& plotData = UI::Dashboard::instance().plotData(m_index);
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
+    return;
 
-    // Downsample data that only has one Y point per X point
-    if (m_monotonicData)
-      (void)DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
+  // Obtain plot data
+  const auto& plotData = UI::Dashboard::instance().plotData(m_index);
 
-    // Draw directly on complex plots (such as Lorenz Attractor)
-    else {
-      // Get X/Y axis
-      const auto& X = *plotData.x;
-      const auto& Y = *plotData.y;
+  // Downsample data that only has one Y point per X point
+  if (m_monotonicData) {
+    (void)DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
+    return;
+  }
 
-      // Resize series array if needed
-      const qsizetype count = std::min(X.size(), Y.size());
-      if (m_data.size() != count)
-        m_data.resize(count);
+  // Draw directly on complex plots (such as Lorenz Attractor)
+  const auto& X = *plotData.x;
+  const auto& Y = *plotData.y;
 
-      // Obtain raw pointers
-      QPointF* out      = m_data.data();
-      const auto* xData = X.raw();
-      const auto* yData = Y.raw();
+  // Resize series array if needed
+  const qsizetype count = std::min(X.size(), Y.size());
+  if (m_data.size() != count)
+    m_data.resize(count);
 
-      // Get queue states for faster iteration
-      std::size_t xIdx = X.frontIndex();
-      std::size_t yIdx = Y.frontIndex();
+  // Update plot data points, avoid queue operations overhead
+  const auto xCapacity = X.capacity();
+  const auto yCapacity = Y.capacity();
+  if (xCapacity == 0 || yCapacity == 0)
+    return;
 
-      // Update plot data points, avoid queue operations overhead
-      const auto xCapacity = X.capacity();
-      const auto yCapacity = Y.capacity();
-      if (xCapacity > 0 && yCapacity > 0) {
-        for (qsizetype i = 0; i < count; ++i) {
-          out[i].setX(xData[xIdx]);
-          out[i].setY(yData[yIdx]);
-          xIdx = (xIdx + 1) % xCapacity;
-          yIdx = (yIdx + 1) % yCapacity;
-        }
-      }
-    }
+  // Obtain raw pointers and queue states for faster iteration
+  QPointF* out      = m_data.data();
+  const auto* xData = X.raw();
+  const auto* yData = Y.raw();
+  std::size_t xIdx  = X.frontIndex();
+  std::size_t yIdx  = Y.frontIndex();
+  for (qsizetype i = 0; i < count; ++i) {
+    out[i].setX(xData[xIdx]);
+    out[i].setY(yData[yIdx]);
+    xIdx = (xIdx + 1) % xCapacity;
+    yIdx = (yIdx + 1) % yCapacity;
   }
 }
 
@@ -451,41 +449,59 @@ bool Widgets::Plot::computeMinMaxValues(double& min,
       }
     }
 
-    // If no finite values found, use default range
-    if (!std::isfinite(min) || !std::isfinite(max)) {
-      min = 0;
-      max = 1;
-    }
-
-    // If min and max are the same, adjust the range
-    else if (DSP::almostEqual(min, max)) {
-      if (DSP::isZero(min)) {
-        min = -1;
-        max = 1;
-      }
-
-      else {
-        double absValue = qAbs(min);
-        min             = min - absValue * 0.1;
-        max             = max + absValue * 0.1;
-      }
-    }
-
-    // If the min and max are not the same, set the range to 10% more
-    else if (addPadding) {
-      double range = max - min;
-      min -= range * 0.1;
-      max += range * 0.1;
-    }
-
-    // Round to integer numbers
-    max = std::ceil(max);
-    min = std::floor(min);
-    if (DSP::almostEqual(max, min) && addPadding) {
-      min -= 1;
-      max += 1;
-    }
+    padDerivedRange(min, max, addPadding);
   }
 
   return DSP::notEqual(prevMinY, min) || DSP::notEqual(prevMaxY, max);
+}
+
+/**
+ * @brief Pads a data-derived [min, max] range and rounds to integer bounds.
+ */
+void Widgets::Plot::padDerivedRange(double& min, double& max, const bool addPadding)
+{
+  applyAxisPadding(min, max, addPadding);
+
+  // Round to integer numbers
+  max = std::ceil(max);
+  min = std::floor(min);
+  if (DSP::almostEqual(max, min) && addPadding) {
+    min -= 1;
+    max += 1;
+  }
+}
+
+/**
+ * @brief Selects the padding strategy for a [min, max] pair before rounding.
+ */
+void Widgets::Plot::applyAxisPadding(double& min, double& max, const bool addPadding)
+{
+  // If no finite values found, use default range
+  if (!std::isfinite(min) || !std::isfinite(max)) {
+    min = 0;
+    max = 1;
+    return;
+  }
+
+  // If min and max are equal at zero, fall back to [-1, 1]
+  if (DSP::almostEqual(min, max) && DSP::isZero(min)) {
+    min = -1;
+    max = 1;
+    return;
+  }
+
+  // If min and max are equal but non-zero, expand by 10% of |min|
+  if (DSP::almostEqual(min, max)) {
+    const double absValue = qAbs(min);
+    min                   = min - absValue * 0.1;
+    max                   = max + absValue * 0.1;
+    return;
+  }
+
+  // If the min and max are not the same, set the range to 10% more
+  if (addPadding) {
+    double range = max - min;
+    min -= range * 0.1;
+    max += range * 0.1;
+  }
 }

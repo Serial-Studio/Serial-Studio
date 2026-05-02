@@ -35,6 +35,10 @@
 #include "IO/HAL_Driver.h"
 #include "SerialStudio.h"
 
+namespace DataModel {
+struct Source;
+}
+
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
@@ -191,6 +195,7 @@ private slots:
 
 private:
   void wireUiDriver(IO::HAL_Driver* driver);
+  void buildDeviceForSource(const DataModel::Source& src, bool willRebuildDevice0);
 
   [[nodiscard]] bool projectConfigurationOk() const;
   [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;

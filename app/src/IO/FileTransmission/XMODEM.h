@@ -78,6 +78,8 @@ protected:
 
   void resetState();
   void handleTimeout();
+  bool handleAckByte(quint8 ch);
+  void handleEotAckByte(quint8 ch);
   [[nodiscard]] QByteArray buildBlock(const QByteArray& data, quint8 blockNum);
 
   State m_state;

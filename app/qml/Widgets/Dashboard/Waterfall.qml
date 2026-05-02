@@ -287,7 +287,6 @@ Item {
   Item {
     id: contentArea
 
-    readonly property int outerMargin: axesOn || colorbarOn ? 8 : 0
     readonly property bool axesOn: root.model && root.model.axisVisible
     readonly property bool colorbarOn: root.model && root.model.colorbarVisible
 
@@ -296,10 +295,7 @@ Item {
       right: parent.right
       top: toolbar.bottom
       bottom: parent.bottom
-      topMargin: contentArea.outerMargin
-      leftMargin: contentArea.outerMargin
-      bottomMargin: contentArea.outerMargin
-      rightMargin: contentArea.colorbarOn ? 8 : 0
+      margins: contentArea.axesOn || contentArea.colorbarOn ? 8 : -1
     }
 
     //
@@ -312,7 +308,6 @@ Item {
         top: parent.top
         left: parent.left
         bottom: parent.bottom
-        rightMargin: contentArea.colorbarOn ? 8 : 0
         right: contentArea.colorbarOn ? colorbarColumn.left : parent.right
       }
     }

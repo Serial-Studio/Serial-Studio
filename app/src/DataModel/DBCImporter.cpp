@@ -262,6 +262,55 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
 }
 
 /**
+ * @brief Builds a Dataset for a CAN signal, choosing widget and ranges sensibly.
+ */
+DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
+  const QCanSignalDescription& signal, const QString& groupWidget, int datasetIndex)
+{
+  DataModel::Dataset dataset;
+  dataset.index = datasetIndex;
+  dataset.title = signal.name();
+  dataset.units = signal.physicalUnit();
+
+  double minVal = signal.minimum();
+  double maxVal = signal.maximum();
+  if (std::isnan(minVal) || std::isnan(maxVal) || minVal >= maxVal) {
+    minVal = 0.0;
+    maxVal = 100.0;
+  }
+
+  dataset.wgtMin = minVal;
+  dataset.wgtMax = maxVal;
+  dataset.pltMin = minVal;
+  dataset.pltMax = maxVal;
+  dataset.fftMin = minVal;
+  dataset.fftMax = maxVal;
+
+  const auto isSingleBit = (signal.bitLength() == 1);
+  if (isSingleBit) {
+    dataset.widget  = QString("");
+    dataset.plt     = false;
+    dataset.fft     = false;
+    dataset.led     = true;
+    dataset.ledHigh = 1;
+    dataset.log     = true;
+    return dataset;
+  }
+
+  if (shouldAssignIndividualWidget(groupWidget, signal, isSingleBit))
+    dataset.widget = selectWidgetForSignal(signal);
+  else
+    dataset.widget = QString("");
+
+  dataset.plt     = false;
+  dataset.fft     = false;
+  dataset.led     = false;
+  dataset.ledHigh = 0;
+  dataset.log     = true;
+  return dataset;
+}
+
+/**
  * @brief Builds Group/Dataset structures from the DBC messages.
  */
 std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
@@ -281,51 +330,8 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
     group.title   = message.name();
     group.widget  = selectGroupWidget(message);
 
-    for (const auto& signal : signalList) {
-      DataModel::Dataset dataset;
-      dataset.index = datasetIndex++;
-      dataset.title = signal.name();
-      dataset.units = signal.physicalUnit();
-
-      double minVal = signal.minimum();
-      double maxVal = signal.maximum();
-
-      if (std::isnan(minVal) || std::isnan(maxVal) || minVal >= maxVal) {
-        minVal = 0.0;
-        maxVal = 100.0;
-      }
-
-      dataset.wgtMin = minVal;
-      dataset.wgtMax = maxVal;
-      dataset.pltMin = minVal;
-      dataset.pltMax = maxVal;
-      dataset.fftMin = minVal;
-      dataset.fftMax = maxVal;
-
-      const auto isSingleBit = (signal.bitLength() == 1);
-
-      if (isSingleBit) {
-        dataset.widget  = QString("");
-        dataset.plt     = false;
-        dataset.fft     = false;
-        dataset.led     = true;
-        dataset.ledHigh = 1;
-      } else {
-        if (shouldAssignIndividualWidget(group.widget, signal, isSingleBit))
-          dataset.widget = selectWidgetForSignal(signal);
-        else
-          dataset.widget = QString("");
-
-        dataset.plt     = false;
-        dataset.fft     = false;
-        dataset.led     = false;
-        dataset.ledHigh = 0;
-      }
-
-      dataset.log = true;
-
-      group.datasets.push_back(dataset);
-    }
+    for (const auto& signal : signalList)
+      group.datasets.push_back(buildDatasetFromSignal(signal, group.widget, datasetIndex++));
 
     groups.push_back(group);
     ++groupId;

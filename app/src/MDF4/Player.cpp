@@ -624,17 +624,40 @@ void MDF4::Player::setProgress(const double progress)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates current frame data and manages playback timing
- *
- * Called during playback to:
- * - Update timestamp display
- * - Send current frame to dashboard
- * - Calculate timing for next frame
- * - Schedule next update using QTimer
- *
- * Implements real-time playback by synchronizing with actual timestamps
- * from the MDF4 file. Processes multiple frames in a batch if falling
- * behind to maintain synchronization.
+ * @brief Plays back as many frames as needed to catch up with the target timestamp.
+ */
+void MDF4::Player::catchUpToTarget(double targetTime)
+{
+  constexpr int kMaxBatchSize = 100;
+  int processed               = 0;
+
+  while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize) {
+    if (!isOpen() || !isPlaying())
+      break;
+
+    ++m_framePos;
+    sendFrame(m_framePos);
+    ++processed;
+
+    if (m_framePos >= frameCount() - 1)
+      break;
+
+    const double nextFrameTime = m_frameIndex[m_framePos + 1].timestamp;
+    if (nextFrameTime > targetTime)
+      break;
+  }
+
+  if (isOpen() && static_cast<size_t>(m_framePos) < m_frameIndex.size()) {
+    m_timestamp = formatTimestamp(m_frameIndex[m_framePos].timestamp);
+    Q_EMIT timestampChanged();
+  }
+
+  if (isPlaying())
+    QTimer::singleShot(1, Qt::PreciseTimer, this, &MDF4::Player::updateData);
+}
+
+/**
+ * @brief Updates current frame data and manages playback timing.
  */
 void MDF4::Player::updateData()
 {
@@ -646,59 +669,33 @@ void MDF4::Player::updateData()
     Q_EMIT timestampChanged();
   }
 
-  if (isPlaying()) {
-    if (framePosition() >= frameCount() - 1) {
-      pause();
-      return;
-    }
+  if (!isPlaying())
+    return;
 
-    sendFrame(m_framePos);
-
-    const qint64 elapsedMs  = m_elapsedTimer.elapsed();
-    const double targetTime = m_startTimestamp + (elapsedMs / 1000.0);
-
-    const double nextTime = m_frameIndex[framePosition() + 1].timestamp;
-
-    if (nextTime <= targetTime) {
-      constexpr int kMaxBatchSize = 100;
-      int processed               = 0;
-
-      while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize) {
-        if (!isOpen() || !isPlaying())
-          break;
-
-        ++m_framePos;
-        sendFrame(m_framePos);
-        ++processed;
-
-        if (m_framePos >= frameCount() - 1)
-          break;
-
-        const double nextFrameTime = m_frameIndex[m_framePos + 1].timestamp;
-        if (nextFrameTime > targetTime)
-          break;
-      }
-
-      if (isOpen() && static_cast<size_t>(m_framePos) < m_frameIndex.size()) {
-        m_timestamp = formatTimestamp(m_frameIndex[m_framePos].timestamp);
-        Q_EMIT timestampChanged();
-      }
-
-      if (isPlaying())
-        QTimer::singleShot(1, Qt::PreciseTimer, this, &MDF4::Player::updateData);
-    }
-
-    else {
-      qint64 delayMs = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
-
-      QTimer::singleShot(delayMs, Qt::PreciseTimer, this, [this]() {
-        if (isOpen() && isPlaying()) {
-          ++m_framePos;
-          updateData();
-        }
-      });
-    }
+  if (framePosition() >= frameCount() - 1) {
+    pause();
+    return;
   }
+
+  sendFrame(m_framePos);
+
+  const qint64 elapsedMs  = m_elapsedTimer.elapsed();
+  const double targetTime = m_startTimestamp + (elapsedMs / 1000.0);
+  const double nextTime   = m_frameIndex[framePosition() + 1].timestamp;
+
+  if (nextTime <= targetTime) {
+    catchUpToTarget(targetTime);
+    return;
+  }
+
+  // Schedule the next frame at its real-time offset
+  const qint64 delayMs = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
+  QTimer::singleShot(delayMs, Qt::PreciseTimer, this, [this]() {
+    if (isOpen() && isPlaying()) {
+      ++m_framePos;
+      updateData();
+    }
+  });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -706,22 +703,176 @@ void MDF4::Player::updateData()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds a sparse frame index for efficient streaming playback
- *
- * Iterates through all data groups and channel groups in the MDF4 file,
- * creating a lightweight index by sampling every Nth record. This allows
- * handling large (multi-GB) files without loading all data into memory.
- *
- * The index stores:
- * - Timestamp (derived from sample index)
- * - Record index within the channel group
- * - Pointer to the channel group for data access
- *
- * After building the index, ReadData() is called on each data group to
- * load the actual measurement data that can be accessed during playback.
- *
- * @note Sample interval (kSampleInterval) controls index granularity.
- *       Higher values = less memory, coarser seek resolution.
+ * @brief Returns true when the channel name ends with the " (raw)" suffix.
+ */
+static bool hasRawSuffix(const std::string& chName)
+{
+  static constexpr const char* kRawSuffix = " (raw)";
+  return chName.size() >= 6 && chName.compare(chName.size() - 6, 6, kRawSuffix) == 0;
+}
+
+/**
+ * @brief Per-CG state assembled before observers are attached for a data group.
+ */
+struct CgInfo {
+  mdf::IChannelGroup* cg;
+  mdf::IChannel* timeCh;
+  std::vector<mdf::IChannel*> dataChs;
+};
+
+/**
+ * @brief Scans a single channel group, collecting its master and non-raw data channels.
+ */
+void MDF4::Player::scanChannelGroup(
+  mdf::IChannelGroup* cg,
+  std::vector<mdf::IChannel*>& allChannels,
+  std::map<mdf::IChannelGroup*, mdf::IChannel*>& groupTimeChannels,
+  int& masterChannelCount)
+{
+  mdf::IChannel* groupMaster = nullptr;
+  for (auto* ch : cg->Channels()) {
+    if (!ch)
+      continue;
+
+    if (m_isSerialStudioFile && ch->Type() == mdf::ChannelType::Master) {
+      groupMaster = ch;
+      ++masterChannelCount;
+      continue;
+    }
+
+    if (hasRawSuffix(ch->Name())) [[unlikely]]
+      continue;
+
+    if (std::find(allChannels.begin(), allChannels.end(), ch) == allChannels.end())
+      allChannels.push_back(ch);
+  }
+
+  if (groupMaster)
+    groupTimeChannels[cg] = groupMaster;
+}
+
+/**
+ * @brief Walks all data groups and channel groups, collecting all data + master channels.
+ */
+void MDF4::Player::collectAllChannels(
+  const std::vector<mdf::IDataGroup*>& dataGroups,
+  std::vector<mdf::IChannel*>& allChannels,
+  std::map<mdf::IChannelGroup*, mdf::IChannel*>& groupTimeChannels,
+  int& masterChannelCount)
+{
+  for (auto* dg : dataGroups) {
+    if (!dg)
+      continue;
+
+    for (auto* cg : dg->ChannelGroups()) {
+      if (!cg)
+        continue;
+
+      scanChannelGroup(cg, allChannels, groupTimeChannels, masterChannelCount);
+    }
+  }
+}
+
+/**
+ * @brief Builds per-CG data-channel + time-channel descriptors for a single data group.
+ */
+static std::vector<CgInfo> buildCgInfos(
+  mdf::IDataGroup* dg,
+  bool perGroupTime,
+  const std::map<mdf::IChannelGroup*, mdf::IChannel*>& groupTimeChannels)
+{
+  std::vector<CgInfo> cgInfos;
+  for (auto* cg : dg->ChannelGroups()) {
+    if (!cg)
+      continue;
+
+    auto cgChannels      = cg->Channels();
+    uint64_t recordCount = cg->NofSamples();
+    if (cgChannels.empty() || recordCount == 0)
+      continue;
+
+    CgInfo ci;
+    ci.cg     = cg;
+    ci.timeCh = nullptr;
+
+    if (perGroupTime) {
+      auto tit = groupTimeChannels.find(cg);
+      if (tit != groupTimeChannels.end())
+        ci.timeCh = tit->second;
+    }
+
+    // Skip master (time) channels and raw pre-transform channels
+    for (auto* ch : cgChannels) {
+      if (!ch || ch->Type() == mdf::ChannelType::Master)
+        continue;
+
+      if (hasRawSuffix(ch->Name())) [[unlikely]]
+        continue;
+
+      ci.dataChs.push_back(ch);
+    }
+
+    cgInfos.push_back(std::move(ci));
+  }
+
+  return cgInfos;
+}
+
+/**
+ * @brief Reads sample data from one DG, attaching one SampleCacheObserver per CG.
+ */
+void MDF4::Player::readDataGroupWithObservers(
+  mdf::IDataGroup* dg,
+  bool perGroupTime,
+  const std::map<mdf::IChannelGroup*, mdf::IChannel*>& groupTimeChannels)
+{
+  auto channelGroups = dg->ChannelGroups();
+  if (channelGroups.empty())
+    return;
+
+  auto cgInfos = buildCgInfos(dg, perGroupTime, groupTimeChannels);
+
+  std::vector<std::unique_ptr<SampleCacheObserver>> observers;
+  observers.reserve(cgInfos.size());
+  for (auto& ci : cgInfos) {
+    auto obs = std::make_unique<SampleCacheObserver>(*dg,
+                                                     m_sampleCache,
+                                                     m_timestampCache,
+                                                     m_activeChannels,
+                                                     m_channels,
+                                                     ci.dataChs,
+                                                     ci.timeCh,
+                                                     ci.cg->RecordId());
+    obs->AttachObserver();
+    observers.push_back(std::move(obs));
+  }
+
+  m_reader->ReadData(*dg);
+
+  for (auto& obs : observers)
+    obs->DetachObserver();
+}
+
+/**
+ * @brief Reads timestamps from a single legacy master-time channel into the timestamp cache.
+ */
+void MDF4::Player::readLegacyTimestamps(const std::vector<mdf::IDataGroup*>& dataGroups,
+                                        uint64_t legacyTimeRecId)
+{
+  for (auto* dg : dataGroups) {
+    if (!dg)
+      continue;
+
+    LegacyTimestampObserver tsObs(*dg, m_timestampCache, m_masterTimeChannel, legacyTimeRecId);
+    tsObs.AttachObserver();
+    m_reader->ReadData(*dg);
+    tsObs.DetachObserver();
+    break;
+  }
+}
+
+/**
+ * @brief Builds a sparse frame index for efficient streaming playback.
  */
 void MDF4::Player::buildFrameIndex()
 {
@@ -746,46 +897,11 @@ void MDF4::Player::buildFrameIndex()
   if (dataGroups.empty())
     return;
 
+  // First pass: collect data channels + per-group master time channels
   std::vector<mdf::IChannel*> allChannels;
-
-  // Collect per-group time channels (new files: per-CG master; old: single master)
   std::map<mdf::IChannelGroup*, mdf::IChannel*> groupTimeChannels;
   int masterChannelCount = 0;
-
-  for (auto* dg : dataGroups) {
-    if (!dg)
-      continue;
-
-    for (auto* cg : dg->ChannelGroups()) {
-      if (!cg)
-        continue;
-
-      mdf::IChannel* groupMaster = nullptr;
-      for (auto* ch : cg->Channels()) {
-        if (!ch)
-          continue;
-
-        if (m_isSerialStudioFile && ch->Type() == mdf::ChannelType::Master) {
-          groupMaster = ch;
-          ++masterChannelCount;
-          continue;
-        }
-
-        // Skip raw pre-transform channels -- playback injects only final values
-        const std::string& chName               = ch->Name();
-        static constexpr const char* kRawSuffix = " (raw)";
-        if (chName.size() >= 6 && chName.compare(chName.size() - 6, 6, kRawSuffix) == 0)
-          [[unlikely]]
-          continue;
-
-        if (std::find(allChannels.begin(), allChannels.end(), ch) == allChannels.end())
-          allChannels.push_back(ch);
-      }
-
-      if (groupMaster)
-        groupTimeChannels[cg] = groupMaster;
-    }
-  }
+  collectAllChannels(dataGroups, allChannels, groupTimeChannels, masterChannelCount);
 
   // Fall back to legacy single-master path for old MDF4 files
   const bool perGroupTime  = (masterChannelCount > 1);
@@ -799,95 +915,17 @@ void MDF4::Player::buildFrameIndex()
 
   m_channels = allChannels;
 
-  // Attach one observer per CG and read once per DG to avoid duplicate records
+  // Second pass: attach observers and read sample data per data group
   for (auto* dg : dataGroups) {
     if (!dg)
       continue;
 
-    auto channelGroups = dg->ChannelGroups();
-    if (channelGroups.empty())
-      continue;
-
-    // Build per-CG data-channel lists and time-channel pointers
-    struct CgInfo {
-      mdf::IChannelGroup* cg;
-      mdf::IChannel* timeCh;
-      std::vector<mdf::IChannel*> dataChs;
-    };
-
-    std::vector<CgInfo> cgInfos;
-    for (auto* cg : channelGroups) {
-      if (!cg)
-        continue;
-
-      auto cgChannels      = cg->Channels();
-      uint64_t recordCount = cg->NofSamples();
-      if (cgChannels.empty() || recordCount == 0)
-        continue;
-
-      CgInfo ci;
-      ci.cg     = cg;
-      ci.timeCh = nullptr;
-
-      if (perGroupTime) {
-        auto tit = groupTimeChannels.find(cg);
-        if (tit != groupTimeChannels.end())
-          ci.timeCh = tit->second;
-      }
-
-      // Skip master (time) channels and raw pre-transform channels
-      for (auto* ch : cgChannels) {
-        if (!ch || ch->Type() == mdf::ChannelType::Master)
-          continue;
-
-        const std::string& chName               = ch->Name();
-        static constexpr const char* kRawSuffix = " (raw)";
-        if (chName.size() >= 6 && chName.compare(chName.size() - 6, 6, kRawSuffix) == 0)
-          [[unlikely]]
-          continue;
-
-        ci.dataChs.push_back(ch);
-      }
-
-      cgInfos.push_back(std::move(ci));
-    }
-
-    // Create and attach all observers before reading
-    std::vector<std::unique_ptr<SampleCacheObserver>> observers;
-    observers.reserve(cgInfos.size());
-    for (auto& ci : cgInfos) {
-      auto obs = std::make_unique<SampleCacheObserver>(*dg,
-                                                       m_sampleCache,
-                                                       m_timestampCache,
-                                                       m_activeChannels,
-                                                       m_channels,
-                                                       ci.dataChs,
-                                                       ci.timeCh,
-                                                       ci.cg->RecordId());
-      obs->AttachObserver();
-      observers.push_back(std::move(obs));
-    }
-
-    m_reader->ReadData(*dg);
-
-    // Detach all observers
-    for (auto& obs : observers)
-      obs->DetachObserver();
+    readDataGroupWithObservers(dg, perGroupTime, groupTimeChannels);
   }
 
   // Legacy path: read timestamps keyed by sample index for wall-clock lookup
-  if (m_isSerialStudioFile && !perGroupTime && m_masterTimeChannel) {
-    for (auto* dg : dataGroups) {
-      if (!dg)
-        continue;
-
-      LegacyTimestampObserver tsObs(*dg, m_timestampCache, m_masterTimeChannel, legacyTimeRecId);
-      tsObs.AttachObserver();
-      m_reader->ReadData(*dg);
-      tsObs.DetachObserver();
-      break;
-    }
-  }
+  if (m_isSerialStudioFile && !perGroupTime && m_masterTimeChannel)
+    readLegacyTimestamps(dataGroups, legacyTimeRecId);
 
   // Build the frame index from the populated sample cache
   buildFrameIndexFromCache();

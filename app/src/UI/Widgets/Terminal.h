@@ -172,10 +172,40 @@ private:
   void processFormat(const QChar& byte, QString& text);
   void processResetFont(const QChar& byte, QString& text);
 
+  /** @brief Dispatches the final byte of a CSI sequence; returns true if handled. */
+  bool dispatchCsiFinal(const QChar& byte);
+
+  /** @brief Consumes one byte while in OSC state (BEL terminator or ESC -> CSI). */
+  void processOsc(const QChar& byte);
+
+  /** @brief Consumes one byte while ignoring an unknown CSI sequence. */
+  void processIgnoreSeq(const QChar& byte);
+
+  /** @brief Scans a printable-character run starting at @p pos in @p data; returns end offset. */
+  static int scanPrintableRun(const QString& data, int pos);
+
+  /** @brief Handles CSI cursor movement letters A-F (CUU/CUD/CUF/CUB/CNL/CPL). */
+  void handleCsiCursorMove(char final);
+
+  /** @brief Handles CSI absolute cursor placement (H/f/G/d). */
+  void handleCsiCursorAbsolute(char final);
+
+  /** @brief Handles CSI Erase-in-Display (J). */
+  void handleCsiEraseDisplay();
+
+  /** @brief Handles CSI Erase-in-Line (K). */
+  void handleCsiEraseLine();
+
+  /** @brief Handles CSI DEC private mode set/reset for cursor visibility (h/l). */
+  void handleCsiDecPrivateMode(const QChar& byte);
+
   void setCursorPosition(const QPoint& position);
   void setCursorPosition(const int x, const int y);
   void replaceData(int x, int y, const QChar& byte);
   void applyAnsiColor(const QList<int>& codes);
+
+  /** @brief Applies one SGR code at @p i in @p codes; returns number of extra params consumed. */
+  int applyAnsiSgrCode(const QList<int>& codes, int i);
   void updateAnsiColorPalette();
   [[nodiscard]] QColor getColor256(int index) const;
   static QColor getColor256Static(int index);

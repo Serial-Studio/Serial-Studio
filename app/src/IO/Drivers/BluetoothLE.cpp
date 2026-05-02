@@ -776,13 +776,9 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& de
       const auto savedAddr = inst->m_pendingIdentifier.value(QStringLiteral("address")).toString();
       const auto savedName = inst->m_pendingIdentifier.value(QStringLiteral("name")).toString();
 
-      bool match = false;
-      if (!savedAddr.isEmpty() && device.address().toString() == savedAddr)
-        match = true;
-      else if (!savedName.isEmpty() && device.name() == savedName)
-        match = true;
-
-      if (match) {
+      const bool addrMatch = !savedAddr.isEmpty() && device.address().toString() == savedAddr;
+      const bool nameMatch = !savedName.isEmpty() && device.name() == savedName;
+      if (addrMatch || nameMatch) {
         inst->selectDevice(s_devices.count());
         inst->m_pendingIdentifier = {};
       }

@@ -23,6 +23,7 @@
 
 #include <QHash>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QVariantList>
@@ -111,6 +112,9 @@ private slots:
   void applyFilter();
   void fetchPage(int index);
   void preloadAllPages();
+
+private:
+  [[nodiscard]] bool pageMatchesFilter(const QJsonObject& obj) const;
 
 private:
   bool m_loading;

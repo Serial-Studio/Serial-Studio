@@ -178,6 +178,87 @@ static bool checkAndUpdateDeviceList(ma_context* context,
   return false;
 }
 
+/**
+ * @brief Packs a single CSV sample into native bytes for the given ma_format.
+ */
+static bool packCsvSample(ma_format format, const QByteArray& token, QVector<quint8>& out)
+{
+  bool ok = false;
+
+  if (format == ma_format_u8) {
+    int value = token.toInt(&ok);
+    if (!ok) {
+      qWarning() << "Invalid Unsigned 8-bit number:" << token;
+      return false;
+    }
+
+    out.append(static_cast<quint8>(qBound(0, value, 255)));
+    return true;
+  }
+
+  if (format == ma_format_s16) {
+    int value = token.toInt(&ok);
+    if (!ok) {
+      qWarning() << "Invalid Signed 16-bit number:" << token;
+      return false;
+    }
+
+    const qint16 sample = static_cast<qint16>(qBound(-32768, value, 32767));
+    const quint8* bytes = reinterpret_cast<const quint8*>(&sample);
+    out.append(bytes[0]);
+    out.append(bytes[1]);
+    return true;
+  }
+
+  if (format == ma_format_s24) {
+    int value = token.toInt(&ok);
+    if (!ok) {
+      qWarning() << "Invalid Signed 24-bit number:" << token;
+      return false;
+    }
+
+    value = qBound(-8388608, value, 8388607);
+    out.append(static_cast<quint8>(value & 0xFF));
+    out.append(static_cast<quint8>((value >> 8) & 0xFF));
+    out.append(static_cast<quint8>((value >> 16) & 0xFF));
+    return true;
+  }
+
+  if (format == ma_format_s32) {
+    qint32 value = token.toInt(&ok);
+    if (!ok) {
+      qWarning() << "Invalid Signed 32-bit number:" << token;
+      return false;
+    }
+
+    value               = qBound(-2147483647, value, 2147483647);
+    const quint8* bytes = reinterpret_cast<const quint8*>(&value);
+    out.append(bytes[0]);
+    out.append(bytes[1]);
+    out.append(bytes[2]);
+    out.append(bytes[3]);
+    return true;
+  }
+
+  if (format == ma_format_f32) {
+    float value = token.toFloat(&ok);
+    if (!ok) {
+      qWarning() << "Invalid 32-bit Float number:" << token;
+      return false;
+    }
+
+    value               = qBound(-1.0f, value, 1.0f);
+    const quint8* bytes = reinterpret_cast<const quint8*>(&value);
+    for (size_t b = 0; b < sizeof(float); ++b)
+      out.append(bytes[b]);
+
+    return true;
+  }
+
+  qWarning() << "Unsupported format:" << static_cast<int>(format);
+  return false;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -385,78 +466,9 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
 
   // Pack each channel value into native sample bytes
   QVector<quint8> frame;
-  for (int i = 0; i < channels; ++i) {
-    bool ok = false;
-
-    if (format == ma_format_u8) {
-      int value = parts[i].toInt(&ok);
-      if (!ok) {
-        qWarning() << "Invalid Unigned 8-bit number:" << parts[i];
-        return 0;
-      }
-
-      frame.append(static_cast<quint8>(qBound(0, value, 255)));
-    }
-
-    else if (format == ma_format_s16) {
-      int value = parts[i].toInt(&ok);
-      if (!ok) {
-        qWarning() << "Invalid Signed 16-bit number:" << parts[i];
-        return 0;
-      }
-
-      const qint16 sample = static_cast<qint16>(qBound(-32768, value, 32767));
-      const quint8* bytes = reinterpret_cast<const quint8*>(&sample);
-      frame.append(bytes[0]);
-      frame.append(bytes[1]);
-    }
-
-    else if (format == ma_format_s24) {
-      int value = parts[i].toInt(&ok);
-      if (!ok) {
-        qWarning() << "Invalid Signed 24-bit number:" << parts[i];
-        return 0;
-      }
-
-      value = qBound(-8388608, value, 8388607);
-      frame.append(static_cast<quint8>(value & 0xFF));
-      frame.append(static_cast<quint8>((value >> 8) & 0xFF));
-      frame.append(static_cast<quint8>((value >> 16) & 0xFF));
-    }
-
-    else if (format == ma_format_s32) {
-      qint32 value = parts[i].toInt(&ok);
-      if (!ok) {
-        qWarning() << "Invalid Signed 32-bit number:" << parts[i];
-        return 0;
-      }
-
-      value               = qBound(-2147483647, value, 2147483647);
-      const quint8* bytes = reinterpret_cast<const quint8*>(&value);
-      frame.append(bytes[0]);
-      frame.append(bytes[1]);
-      frame.append(bytes[2]);
-      frame.append(bytes[3]);
-    }
-
-    else if (format == ma_format_f32) {
-      float value = parts[i].toFloat(&ok);
-      if (!ok) {
-        qWarning() << "Invalid 32-bit Float number:" << parts[i];
-        return 0;
-      }
-
-      value               = qBound(-1.0f, value, 1.0f);
-      const quint8* bytes = reinterpret_cast<const quint8*>(&value);
-      for (size_t b = 0; b < sizeof(float); ++b)
-        frame.append(bytes[b]);
-    }
-
-    else {
-      qWarning() << "Unsupported format:" << static_cast<int>(format);
+  for (int i = 0; i < channels; ++i)
+    if (!packCsvSample(format, parts[i], frame))
       return 0;
-    }
-  }
 
   // Enqueue frame for playback
   QMutexLocker locker(&m_outputBufferLock);
@@ -1365,16 +1377,22 @@ QList<IO::DriverProperty> IO::Drivers::Audio::driverProperties() const
  */
 void IO::Drivers::Audio::setDriverProperty(const QString& key, const QVariant& value)
 {
-  if (key == QLatin1String("inputDevice"))
+  if (key == QLatin1String("inputDevice")) {
     setSelectedInputDevice(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("sampleRate"))
+  if (key == QLatin1String("sampleRate")) {
     setSelectedSampleRate(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("inputFormat"))
+  if (key == QLatin1String("inputFormat")) {
     setSelectedInputSampleFormat(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("inputChannels"))
+  if (key == QLatin1String("inputChannels"))
     setSelectedInputChannelConfiguration(value.toInt());
 }
 

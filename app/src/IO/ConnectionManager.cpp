@@ -1120,6 +1120,45 @@ void IO::ConnectionManager::onUiDriverConfigurationChanged()
 }
 
 /**
+ * @brief Constructs a DeviceManager for one project source and stores it in m_devices.
+ */
+void IO::ConnectionManager::buildDeviceForSource(const DataModel::Source& src,
+                                                 bool willRebuildDevice0)
+{
+  if (src.sourceId == 0 && !willRebuildDevice0)
+    return;
+
+  auto driver = createDriver(static_cast<SerialStudio::BusType>(src.busType));
+  if (!driver)
+    return;
+
+  // Apply saved connection settings (port, baud, device index, etc.)
+  if (!src.connectionSettings.isEmpty()) {
+    for (auto it = src.connectionSettings.constBegin(); it != src.connectionSettings.constEnd();
+         ++it)
+      driver->setDriverProperty(it.key(), it.value().toVariant());
+
+    const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("deviceId"));
+    if (deviceIdVal.isObject())
+      driver->selectByIdentifier(deviceIdVal.toObject());
+  }
+
+  // Wrap driver in a DeviceManager (owns driver + thread + FrameReader)
+  auto* rawDriver = driver.get();
+  auto dm         = std::make_unique<DeviceManager>(
+    src.sourceId, std::move(driver), buildFrameConfig(src.sourceId), this);
+
+  connect(rawDriver,
+          &IO::HAL_Driver::configurationChanged,
+          this,
+          &IO::ConnectionManager::configurationChanged,
+          Qt::UniqueConnection);
+
+  wireDevice(dm.get());
+  m_devices[src.sourceId] = std::move(dm);
+}
+
+/**
  * @brief Rebuilds DeviceManagers for all sources when the project source list changes.
  */
 void IO::ConnectionManager::rebuildDevices()
@@ -1133,10 +1172,11 @@ void IO::ConnectionManager::rebuildDevices()
   if (opMode == SerialStudio::ProjectFile) {
     const auto& srcs = DataModel::ProjectModel::instance().sources();
     for (const auto& src : srcs) {
-      if (src.sourceId == 0 && !src.connectionSettings.isEmpty()) {
-        willRebuildDevice0 = true;
-        break;
-      }
+      if (src.sourceId != 0 || src.connectionSettings.isEmpty())
+        continue;
+
+      willRebuildDevice0 = true;
+      break;
     }
   }
 
@@ -1159,40 +1199,8 @@ void IO::ConnectionManager::rebuildDevices()
   // Create DeviceManagers from project sources
   if (opMode == SerialStudio::ProjectFile) {
     const auto& sources = DataModel::ProjectModel::instance().sources();
-    for (const auto& src : sources) {
-      if (src.sourceId == 0 && !willRebuildDevice0)
-        continue;
-
-      auto driver = createDriver(static_cast<SerialStudio::BusType>(src.busType));
-      if (!driver)
-        continue;
-
-      // Apply saved connection settings (port, baud, device index, etc.)
-      if (!src.connectionSettings.isEmpty()) {
-        for (auto it = src.connectionSettings.constBegin(); it != src.connectionSettings.constEnd();
-             ++it)
-          driver->setDriverProperty(it.key(), it.value().toVariant());
-
-        // Match saved hardware identifiers to available devices
-        const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("deviceId"));
-        if (deviceIdVal.isObject())
-          driver->selectByIdentifier(deviceIdVal.toObject());
-      }
-
-      // Wrap driver in a DeviceManager (owns driver + thread + FrameReader)
-      auto* rawDriver = driver.get();
-      auto dm         = std::make_unique<DeviceManager>(
-        src.sourceId, std::move(driver), buildFrameConfig(src.sourceId), this);
-
-      connect(rawDriver,
-              &IO::HAL_Driver::configurationChanged,
-              this,
-              &IO::ConnectionManager::configurationChanged,
-              Qt::UniqueConnection);
-
-      wireDevice(dm.get());
-      m_devices[src.sourceId] = std::move(dm);
-    }
+    for (const auto& src : sources)
+      buildDeviceForSource(src, willRebuildDevice0);
   }
 
   // Notify QML and dependent systems that the device topology changed

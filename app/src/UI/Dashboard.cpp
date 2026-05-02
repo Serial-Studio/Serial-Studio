@@ -46,6 +46,82 @@
 constexpr int kDefaultPlotPoints = 100;
 
 //--------------------------------------------------------------------------------------------------
+// File-local helpers
+//--------------------------------------------------------------------------------------------------
+
+namespace {
+
+/** @brief Decrements a RepeatNTimes counter and stops the timer when it hits zero. */
+void tickRepeatTimer(int index, QMap<int, QTimer*>& timers, QMap<int, int>& counters)
+{
+  const auto it = counters.find(index);
+  if (it == counters.end())
+    return;
+
+  if (--it.value() > 0)
+    return;
+
+  const auto timerIt = timers.find(index);
+  if (timerIt != timers.end() && timerIt.value())
+    timerIt.value()->stop();
+
+  counters.erase(it);
+}
+
+#ifdef BUILD_COMMERCIAL
+/** @brief Routes a 3D-plot dataset value into the matching X/Y/Z component of point. */
+inline void readPlot3DAxis(const DataModel::Dataset& dataset, QVector3D& point)
+{
+  const QString& id = dataset.widget;
+  if (id == "x" || id == "X")
+    point.setX(dataset.numericValue);
+  else if (id == "y" || id == "Y")
+    point.setY(dataset.numericValue);
+  else if (id == "z" || id == "Z")
+    point.setZ(dataset.numericValue);
+}
+#endif
+
+/** @brief Routes a numeric GPS dataset value into the lat/lon/alt accumulator. */
+inline void readGpsField(const DataModel::Dataset& dataset, double& lat, double& lon, double& alt)
+{
+  if (!dataset.isNumeric)
+    return;
+
+  const QString& id = dataset.widget;
+  if (id == "lat")
+    lat = dataset.numericValue;
+  else if (id == "lon")
+    lon = dataset.numericValue;
+  else if (id == "alt")
+    alt = dataset.numericValue;
+}
+
+/** @brief Applies a non-RepeatNTimes timer mode to an action's QTimer. */
+void applyTimerMode(QTimer* timer,
+                    DataModel::TimerMode mode,
+                    bool guiTrigger,
+                    const QString& actionTitle)
+{
+  if (!timer) {
+    qWarning() << "Invalid timer pointer for action" << actionTitle;
+    return;
+  }
+
+  if (mode == DataModel::TimerMode::StartOnTrigger && !timer->isActive())
+    timer->start();
+
+  else if (mode == DataModel::TimerMode::ToggleOnTrigger && guiTrigger) {
+    if (timer->isActive())
+      timer->stop();
+    else
+      timer->start();
+  }
+}
+
+}  // namespace
+
+//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
@@ -1032,39 +1108,16 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
     if (!IO::ConnectionManager::instance().paused())
       (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
-    // Decrement counter, stop when done
-    if (m_repeatCounters.contains(index)) {
-      m_repeatCounters[index]--;
-      if (m_repeatCounters[index] <= 0) {
-        if (m_timers.contains(index) && m_timers[index])
-          m_timers[index]->stop();
-
-        m_repeatCounters.remove(index);
-      }
-    }
+    tickRepeatTimer(index, m_timers, m_repeatCounters);
 
     Q_EMIT actionStatusChanged();
     return;
   }
 
   // Handle other timer behaviors
-  if (m_timers.contains(index)) {
-    auto* timer = m_timers[index];
-    if (!timer)
-      qWarning() << "Invalid timer pointer for action" << action.title;
-
-    else if (action.timerMode == DataModel::TimerMode::StartOnTrigger) {
-      if (!timer->isActive())
-        timer->start();
-    }
-
-    else if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger && guiTrigger) {
-      if (timer->isActive())
-        timer->stop();
-      else
-        timer->start();
-    }
-  }
+  const auto timerIt = m_timers.find(index);
+  if (timerIt != m_timers.end())
+    applyTimerMode(timerIt.value(), action.timerMode, guiTrigger, action.title);
 
   // Send data payload
   if (!IO::ConnectionManager::instance().paused())
@@ -1195,17 +1248,32 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
   if (m_updateRetryInProgress) {
     qWarning() << "Failed to build dashboard widget model";
 
-    if (IO::ConnectionManager::instance().isConnected())
-      IO::ConnectionManager::instance().disconnectDevice();
-    else if (CSV::Player::instance().isOpen())
+    auto& connMgr = IO::ConnectionManager::instance();
+    if (connMgr.isConnected()) {
+      connMgr.disconnectDevice();
+      return;
+    }
+
+    if (CSV::Player::instance().isOpen()) {
       CSV::Player::instance().closeFile();
-    else if (MDF4::Player::instance().isOpen())
+      return;
+    }
+
+    if (MDF4::Player::instance().isOpen()) {
       MDF4::Player::instance().closeFile();
+      return;
+    }
+
 #ifdef BUILD_COMMERCIAL
-    else if (MQTT::Client::instance().isConnected())
+    if (MQTT::Client::instance().isConnected()) {
       MQTT::Client::instance().closeConnection();
-    else if (Sessions::Player::instance().isOpen())
+      return;
+    }
+
+    if (Sessions::Player::instance().isOpen()) {
       Sessions::Player::instance().closeFile();
+      return;
+    }
 #endif
     return;
   }
@@ -1376,14 +1444,7 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
       auto copy  = group;
       copy.title = tr("%1 (Fallback)").arg(group.title);
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(copy);
-      for (size_t i = 0; i < m_lastFrame.groups.size(); ++i) {
-        if (m_lastFrame.groups[i].groupId != group.groupId)
-          continue;
-
-        m_lastFrame.groups[i].title  = copy.title;
-        m_lastFrame.groups[i].widget = "multiplot";
-        break;
-      }
+      relabelGroupAsMultiplotFallback(group.groupId, copy.title);
     }
 
     // Append multiplot & 3D plot to accelerometer widget
@@ -1409,6 +1470,21 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
       ledPanel.title   = tr("LED Panel (%1)").arg(group.title);
       m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
     }
+  }
+}
+
+/**
+ * @brief Rewrites the matching group entry in m_lastFrame as a multiplot fallback.
+ */
+void UI::Dashboard::relabelGroupAsMultiplotFallback(int groupId, const QString& newTitle)
+{
+  for (size_t i = 0; i < m_lastFrame.groups.size(); ++i) {
+    if (m_lastFrame.groups[i].groupId != groupId)
+      continue;
+
+    m_lastFrame.groups[i].title  = newTitle;
+    m_lastFrame.groups[i].widget = "multiplot";
+    return;
   }
 }
 
@@ -1610,18 +1686,8 @@ void UI::Dashboard::updateGpsSeries(int sourceId)
 
     // Extract lat/lon/alt from the group's datasets
     double lat = std::nan(""), lon = std::nan(""), alt = std::nan("");
-    for (const auto& dataset : group.datasets) {
-      if (!dataset.isNumeric)
-        continue;
-
-      const QString& id = dataset.widget;
-      if (id == "lat")
-        lat = dataset.numericValue;
-      else if (id == "lon")
-        lon = dataset.numericValue;
-      else if (id == "alt")
-        alt = dataset.numericValue;
-    }
+    for (const auto& dataset : group.datasets)
+      readGpsField(dataset, lat, lon, alt);
 
     // Append coordinates to the trajectory ring buffers
     series.latitudes.push(lat);
@@ -1650,15 +1716,8 @@ void UI::Dashboard::updatePlot3DSeries(int sourceId)
 
     // Extract X/Y/Z components
     QVector3D point;
-    for (const auto& dataset : group.datasets) {
-      const QString& id = dataset.widget;
-      if (id == "x" || id == "X")
-        point.setX(dataset.numericValue);
-      else if (id == "y" || id == "Y")
-        point.setY(dataset.numericValue);
-      else if (id == "z" || id == "Z")
-        point.setZ(dataset.numericValue);
-    }
+    for (const auto& dataset : group.datasets)
+      readPlot3DAxis(dataset, point);
 
     // Pre-reserve to keep the 10kHz+ hotpath alloc-free
     const size_t maxPoints = static_cast<size_t>(points());
@@ -2031,38 +2090,41 @@ void UI::Dashboard::configureActions(const DataModel::Frame& frame)
     m_actions.append(action);
 
   // Configure timers
-  if (IO::ConnectionManager::instance().isConnected()) {
-    for (int i = 0; i < m_actions.count(); ++i) {
-      const auto& action = m_actions[i];
-      if (action.timerMode == DataModel::TimerMode::Off)
-        continue;
+  if (!IO::ConnectionManager::instance().isConnected()) {
+    Q_EMIT actionStatusChanged();
+    return;
+  }
 
-      const auto interval = action.timerIntervalMs;
-      if (interval <= 0) {
-        qWarning() << "Interval for action" << action.title << "must be greater than 0!";
-        continue;
-      }
+  for (int i = 0; i < m_actions.count(); ++i) {
+    const auto& action = m_actions[i];
+    if (action.timerMode == DataModel::TimerMode::Off)
+      continue;
 
-      auto* timer = new QTimer(this);
-      timer->setInterval(interval);
-      timer->setTimerType(Qt::PreciseTimer);
-      connect(timer, &QTimer::timeout, this, [this, i]() { activateAction(i, false); });
-
-      // Auto-start for RepeatNTimes: init counter and start
-      if (action.timerMode == DataModel::TimerMode::RepeatNTimes) {
-        if (action.autoExecuteOnConnect) {
-          m_repeatCounters[i] = qMax(1, action.repeatCount);
-          timer->start();
-        }
-      }
-
-      // Auto-start for other timer modes
-      else if (action.timerMode == DataModel::TimerMode::AutoStart || action.autoExecuteOnConnect) {
-        timer->start();
-      }
-
-      m_timers.insert(i, timer);
+    const auto interval = action.timerIntervalMs;
+    if (interval <= 0) {
+      qWarning() << "Interval for action" << action.title << "must be greater than 0!";
+      continue;
     }
+
+    auto* timer = new QTimer(this);
+    timer->setInterval(interval);
+    timer->setTimerType(Qt::PreciseTimer);
+    connect(timer, &QTimer::timeout, this, [this, i]() { activateAction(i, false); });
+
+    // Auto-start for RepeatNTimes: init counter and start
+    const bool isRepeat = action.timerMode == DataModel::TimerMode::RepeatNTimes;
+    if (isRepeat && action.autoExecuteOnConnect) {
+      m_repeatCounters[i] = qMax(1, action.repeatCount);
+      timer->start();
+    }
+
+    // Auto-start for other timer modes
+    else if (!isRepeat
+             && (action.timerMode == DataModel::TimerMode::AutoStart
+                 || action.autoExecuteOnConnect))
+      timer->start();
+
+    m_timers.insert(i, timer);
   }
 
   // Notify UI about the new action set

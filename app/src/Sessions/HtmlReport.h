@@ -80,6 +80,7 @@ public:
 private:
   [[nodiscard]] QString buildHtml() const;
   [[nodiscard]] QString buildCoverSection() const;
+  [[nodiscard]] QString buildCoverLogoMarkup() const;
   [[nodiscard]] QString buildMetadataSection() const;
   [[nodiscard]] QString buildSummarySection() const;
   [[nodiscard]] QString buildChartsSection() const;

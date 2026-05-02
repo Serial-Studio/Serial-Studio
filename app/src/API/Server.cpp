@@ -95,10 +95,12 @@ bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
       ++depth;
       if (depth > maxDepth)
         return true;
-    } else if (ch == '}' || ch == ']') {
-      if (depth > 0)
-        --depth;
+
+      continue;
     }
+
+    if ((ch == '}' || ch == ']') && depth > 0)
+      --depth;
   }
 
   return false;

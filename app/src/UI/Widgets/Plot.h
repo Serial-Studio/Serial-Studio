@@ -109,6 +109,16 @@ private:
                            const bool addPadding,
                            Extractor extractor);
 
+  /**
+   * @brief Pads a data-derived [min, max] range and rounds to integer bounds.
+   */
+  static void padDerivedRange(double& min, double& max, const bool addPadding);
+
+  /**
+   * @brief Selects the padding strategy for a [min, max] pair before rounding.
+   */
+  static void applyAxisPadding(double& min, double& max, const bool addPadding);
+
 private:
   int m_index;
   int m_dataW;

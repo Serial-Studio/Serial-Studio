@@ -322,6 +322,23 @@ private:
   void clearTransientState();
   void autoSave();
 
+  bool confirmGroupWidgetChange(DataModel::Group& grp, SerialStudio::GroupWidget widget);
+  bool applyGroupWidget(DataModel::Group& grp, SerialStudio::GroupWidget widget);
+  bool populateFixedLayoutGroup(DataModel::Group& grp, SerialStudio::GroupWidget widget);
+
+  void loadProjectRootScalars(const QJsonObject& json);
+  void loadProjectArrays(const QJsonObject& json, const QString& legacyParserCode);
+  void seedDefaultSourceFromUi(const QString& legacyParserCode);
+  void enforceGplSingleSource();
+  void resolveDatasetTransformLanguages();
+  void loadWidgetSettingsAndWorkspaces(const QJsonObject& json);
+  void loadPointCount(const QJsonObject& json);
+  void migrateLegacyLayoutKeys();
+  void migrateLegacyDashboardLayout(const QJsonObject& json);
+  bool migrateLegacySeparator(const QJsonObject& json);
+  void emitProjectLoadedSignals();
+  void persistLegacyMigration();
+
   [[nodiscard]] std::vector<Workspace> buildAutoWorkspaces() const;
 
   void regenerateAutoWorkspaces();

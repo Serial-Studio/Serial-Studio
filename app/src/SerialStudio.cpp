@@ -423,29 +423,29 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
   if (widget == "accelerometer")
     return DashboardAccelerometer;
 
-  else if (widget == "datagrid")
+  if (widget == "datagrid")
     return DashboardDataGrid;
 
-  else if (widget == "gyro" || widget == "gyroscope")
+  if (widget == "gyro" || widget == "gyroscope")
     return DashboardGyroscope;
 
-  else if (widget == "gps" || widget == "map")
+  if (widget == "gps" || widget == "map")
     return DashboardGPS;
 
-  else if (widget == "multiplot")
+  if (widget == "multiplot")
     return DashboardMultiPlot;
 
-  else if (widget == "plot3d")
+  if (widget == "plot3d")
     return DashboardPlot3D;
 
-  else if (widget == "terminal")
+  if (widget == "terminal")
     return DashboardTerminal;
 
 #ifdef BUILD_COMMERCIAL
-  else if (widget == "image")
+  if (widget == "image")
     return DashboardImageView;
 
-  else if (widget == "notification-log")
+  if (widget == "notification-log")
     return DashboardNotificationLog;
 #endif
 
@@ -545,23 +545,23 @@ SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString& id)
   if (id == "datagrid")
     return DataGrid;
 
-  else if (id == "accelerometer")
+  if (id == "accelerometer")
     return Accelerometer;
 
-  else if (id == "gyro" || id == "gyroscope")
+  if (id == "gyro" || id == "gyroscope")
     return Gyroscope;
 
-  else if (id == "gps" || id == "map")
+  if (id == "gps" || id == "map")
     return GPS;
 
-  else if (id == "multiplot")
+  if (id == "multiplot")
     return MultiPlot;
 
-  else if (id == "plot3d")
+  if (id == "plot3d")
     return Plot3D;
 
 #ifdef BUILD_COMMERCIAL
-  else if (id == "image")
+  if (id == "image")
     return ImageView;
 #endif
 

@@ -282,6 +282,14 @@ private:
 
   void buildTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
   void restoreTreeSelection();
+  void syncDatasetItemCache(int groupId, int datasetId);
+  void appendDriverPropertyRows(const DataModel::Source& source);
+  void applyGroupSourceEdit(int srcIdx, int groupId);
+  bool applyGroupTitleEdit(const QString& newTitle, int groupId);
+  bool applyGroupWidgetEdit(int widgetIdx, int groupId);
+#ifdef BUILD_COMMERCIAL
+  bool applyGroupImgModeEdit(int modeIdx, int groupId);
+#endif
   QModelIndex consumePendingSelection();
 
   void saveExpandedStateMap(QStandardItem* item, QHash<QString, bool>& map, const QString& title);

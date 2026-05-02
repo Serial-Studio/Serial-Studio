@@ -354,30 +354,32 @@ void Misc::HelpCenter::applyFilter()
 
   for (const auto& entry : std::as_const(m_allPages)) {
     const auto obj = entry.toObject();
-    if (!m_searchFilter.isEmpty()) {
-      const auto id      = obj.value("id").toString();
-      const auto title   = obj.value("title").toString();
-      const auto section = obj.value("section").toString();
-
-      // Search in title and section
-      bool matches = title.contains(m_searchFilter, Qt::CaseInsensitive)
-                  || section.contains(m_searchFilter, Qt::CaseInsensitive);
-
-      // Search in preloaded content
-      if (!matches) {
-        const auto it = m_pageContents.constFind(id);
-        if (it != m_pageContents.constEnd())
-          matches = it->contains(m_searchFilter, Qt::CaseInsensitive);
-      }
-
-      if (!matches)
-        continue;
-    }
+    if (!m_searchFilter.isEmpty() && !pageMatchesFilter(obj))
+      continue;
 
     m_filteredPages.append(obj.toVariantMap());
   }
 
   Q_EMIT pagesChanged();
+}
+
+/**
+ * @brief Returns true when a page entry matches the active search filter.
+ */
+bool Misc::HelpCenter::pageMatchesFilter(const QJsonObject& obj) const
+{
+  const auto title   = obj.value("title").toString();
+  const auto section = obj.value("section").toString();
+  if (title.contains(m_searchFilter, Qt::CaseInsensitive)
+      || section.contains(m_searchFilter, Qt::CaseInsensitive))
+    return true;
+
+  const auto id = obj.value("id").toString();
+  const auto it = m_pageContents.constFind(id);
+  if (it == m_pageContents.constEnd())
+    return false;
+
+  return it->contains(m_searchFilter, Qt::CaseInsensitive);
 }
 
 /**

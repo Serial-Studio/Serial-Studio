@@ -799,18 +799,26 @@ QList<IO::DriverProperty> IO::Drivers::Process::driverProperties() const
  */
 void IO::Drivers::Process::setDriverProperty(const QString& key, const QVariant& value)
 {
-  if (key == QLatin1String("mode"))
+  if (key == QLatin1String("mode")) {
     setMode(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("executable"))
+  if (key == QLatin1String("executable")) {
     setExecutable(value.toString());
+    return;
+  }
 
-  else if (key == QLatin1String("arguments"))
+  if (key == QLatin1String("arguments")) {
     setArguments(value.toString());
+    return;
+  }
 
-  else if (key == QLatin1String("workingDir"))
+  if (key == QLatin1String("workingDir")) {
     setWorkingDir(value.toString());
+    return;
+  }
 
-  else if (key == QLatin1String("pipePath"))
+  if (key == QLatin1String("pipePath"))
     setPipePath(value.toString());
 }

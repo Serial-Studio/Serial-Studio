@@ -72,7 +72,10 @@ public slots:
   void confirmImport();
   void cancelImport();
 
-private:
+public:
+  /**
+   * @brief One Modbus register parsed from a CSV/XML/JSON map.
+   */
   struct RegisterEntry {
     quint16 address;
     QString name;
@@ -85,6 +88,9 @@ private:
     double offset;
   };
 
+  /**
+   * @brief Contiguous run of registers of the same type, used by the project generator.
+   */
   struct RegisterBlock {
     quint8 registerType;
     quint16 startAddress;
@@ -92,22 +98,30 @@ private:
     QVector<RegisterEntry> entries;
   };
 
+  [[nodiscard]] static quint8 parseRegisterType(const QString& str);
+
+private:
+  void showPreview(const QString& filePath);
+  void loadRegisterGroups(const QVector<RegisterBlock>& blocks) const;
+
   [[nodiscard]] bool parseCSV(const QString& path);
   [[nodiscard]] bool parseXML(const QString& path);
   [[nodiscard]] bool parseJSON(const QString& path);
-  void showPreview(const QString& filePath);
-  void loadRegisterGroups(const QVector<RegisterBlock>& blocks) const;
 
   [[nodiscard]] QVector<RegisterBlock> computeBlocks() const;
   [[nodiscard]] QJsonObject buildProject() const;
   [[nodiscard]] QString buildFrameParser(const QVector<RegisterBlock>& blocks) const;
 
-  [[nodiscard]] static quint8 parseRegisterType(const QString& str);
   [[nodiscard]] static int registersForDataType(const QString& dataType);
   [[nodiscard]] static QString registerTypeName(quint8 type);
   [[nodiscard]] static bool parseRegisterEntry(const QJsonObject& obj,
                                                RegisterEntry& entry,
                                                int defaultType = -1);
+
+  [[nodiscard]] static QString selectDatasetWidget(const RegisterEntry& entry);
+  [[nodiscard]] static QString emitParserEntry(const RegisterEntry& entry,
+                                               const RegisterBlock& block,
+                                               int datasetIndex);
 
   QString m_filePath;
   QVector<RegisterEntry> m_registers;

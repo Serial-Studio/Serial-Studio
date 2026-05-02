@@ -104,13 +104,12 @@ void Widgets::ImageFrameReader::processAutodetect()
       qsizetype bmpPos  = m_accumulator.indexOf(kBmpStart);
       qsizetype webpPos = m_accumulator.indexOf(kWebpStart);
 
-      if (webpPos >= 0 && m_accumulator.size() >= webpPos + 12) {
-        if (m_accumulator[webpPos + 8] != 'W' || m_accumulator[webpPos + 9] != 'E'
-            || m_accumulator[webpPos + 10] != 'B' || m_accumulator[webpPos + 11] != 'P')
-          webpPos = -1;
-      } else {
+      const bool webpMagicOk =
+        webpPos >= 0 && m_accumulator.size() >= webpPos + 12 && m_accumulator[webpPos + 8] == 'W'
+        && m_accumulator[webpPos + 9] == 'E' && m_accumulator[webpPos + 10] == 'B'
+        && m_accumulator[webpPos + 11] == 'P';
+      if (!webpMagicOk)
         webpPos = -1;
-      }
 
       qsizetype startPos = -1;
       auto pickEarliest  = [&](qsizetype a, qsizetype b) {

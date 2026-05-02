@@ -116,6 +116,82 @@ void IO::Protocols::XMODEM::cancelTransfer()
 }
 
 /**
+ * @brief Reacts to a byte received while waiting for ACK/NAK after a data block.
+ *        Returns false when processing must stop because the transfer ended.
+ */
+bool IO::Protocols::XMODEM::handleAckByte(quint8 ch)
+{
+  if (ch == kACK) {
+    m_timeoutTimer.stop();
+    m_retryCount  = 0;
+    m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
+    m_state       = State::SendingBlocks;
+
+    if (m_file.atEnd())
+      sendEOT();
+    else
+      sendBlock();
+
+    return true;
+  }
+
+  if (ch == kNAK) {
+    m_timeoutTimer.stop();
+    ++m_retryCount;
+    if (m_retryCount >= m_maxRetries) {
+      sendCancel();
+      resetState();
+      Q_EMIT statusMessage(tr("Too many retries, transfer aborted"));
+      Q_EMIT finished(false, tr("Maximum retries exceeded"));
+      return false;
+    }
+
+    Q_EMIT statusMessage(tr("NAK received, retrying block %1 (%2/%3)")
+                           .arg(m_blockNumber)
+                           .arg(m_retryCount)
+                           .arg(m_maxRetries));
+
+    // Rewind by actual bytes read -- fixed blockSize over-rewinds the final partial block.
+    m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
+    if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
+      m_file.close();
+      Q_EMIT finished(false, tr("Failed to seek in file"));
+      return false;
+    }
+    sendBlock();
+    return true;
+  }
+
+  if (ch == kCAN) {
+    m_timeoutTimer.stop();
+    resetState();
+    Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
+    Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
+  }
+
+  return true;
+}
+
+/**
+ * @brief Reacts to a byte received while waiting for ACK after EOT.
+ */
+void IO::Protocols::XMODEM::handleEotAckByte(quint8 ch)
+{
+  if (ch == kACK) {
+    m_timeoutTimer.stop();
+    resetState();
+    Q_EMIT statusMessage(tr("Transfer complete"));
+    Q_EMIT finished(true, QString());
+    return;
+  }
+
+  if (ch == kNAK) {
+    m_timeoutTimer.stop();
+    sendEOT();
+  }
+}
+
+/**
  * @brief Processes bytes received from the remote device.
  */
 void IO::Protocols::XMODEM::processInput(const QByteArray& data)
@@ -139,59 +215,14 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
 
       // Waiting for ACK/NAK after a data block
       case State::WaitingForAck:
-        if (ch == kACK) {
-          m_timeoutTimer.stop();
-          m_retryCount  = 0;
-          m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
-          m_state       = State::SendingBlocks;
+        if (!handleAckByte(ch))
+          return;
 
-          if (m_file.atEnd())
-            sendEOT();
-          else
-            sendBlock();
-        } else if (ch == kNAK) {
-          m_timeoutTimer.stop();
-          ++m_retryCount;
-          if (m_retryCount >= m_maxRetries) {
-            sendCancel();
-            resetState();
-            Q_EMIT statusMessage(tr("Too many retries, transfer aborted"));
-            Q_EMIT finished(false, tr("Maximum retries exceeded"));
-            return;
-          }
-
-          Q_EMIT statusMessage(tr("NAK received, retrying block %1 (%2/%3)")
-                                 .arg(m_blockNumber)
-                                 .arg(m_retryCount)
-                                 .arg(m_maxRetries));
-
-          // Rewind by actual bytes read -- fixed blockSize over-rewinds the final partial block.
-          m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
-          if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
-            m_file.close();
-            Q_EMIT finished(false, tr("Failed to seek in file"));
-            return;
-          }
-          sendBlock();
-        } else if (ch == kCAN) {
-          m_timeoutTimer.stop();
-          resetState();
-          Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
-          Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
-        }
         break;
 
       // Waiting for ACK after EOT
       case State::WaitingForEOTAck:
-        if (ch == kACK) {
-          m_timeoutTimer.stop();
-          resetState();
-          Q_EMIT statusMessage(tr("Transfer complete"));
-          Q_EMIT finished(true, QString());
-        } else if (ch == kNAK) {
-          m_timeoutTimer.stop();
-          sendEOT();
-        }
+        handleEotAckByte(ch);
         break;
 
       default:

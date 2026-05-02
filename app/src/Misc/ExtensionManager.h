@@ -173,6 +173,9 @@ private slots:
   void writeExtensionFile(QNetworkReply* reply);
 
 private:
+  void parseManifest(QNetworkReply* reply);
+  [[nodiscard]] QVariantMap loadPluginMetadata(const QString& iid);
+
   [[nodiscard]] QString extensionsPath() const;
   [[nodiscard]] QString themesPath() const;
   [[nodiscard]] QString installedManifestPath() const;

@@ -89,6 +89,9 @@ private:
   };
 
   std::vector<Group> generateGroups(const QList<QCanMessageDescription>& messages);
+  Dataset buildDatasetFromSignal(const QCanSignalDescription& signal,
+                                 const QString& groupWidget,
+                                 int datasetIndex);
   QJsonObject generateProject(const QList<QCanMessageDescription>& messages);
   QString generateFrameParser(const QList<QCanMessageDescription>& messages);
 

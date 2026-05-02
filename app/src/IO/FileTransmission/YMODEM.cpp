@@ -80,6 +80,107 @@ void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
 }
 
 /**
+ * @brief Reacts to a byte received while waiting for ACK of block 0.
+ */
+void IO::Protocols::YMODEM::handleBlock0AckByte(quint8 ch)
+{
+  if (ch == kACK) {
+    m_timeoutTimer.stop();
+    m_yState = YState::WaitingForDataC;
+    m_timeoutTimer.start(m_timeoutMs);
+    return;
+  }
+
+  if (ch == kCAN) {
+    m_timeoutTimer.stop();
+    resetState();
+    m_yState = YState::Idle;
+    Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
+    Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
+  }
+}
+
+/**
+ * @brief Reacts to a byte received while waiting for ACK of the second EOT.
+ */
+void IO::Protocols::YMODEM::handleSecondEotAckByte(quint8 ch)
+{
+  if (ch == kACK) {
+    m_timeoutTimer.stop();
+    m_yState = YState::WaitingForEndBatchC;
+    m_timeoutTimer.start(m_timeoutMs);
+    return;
+  }
+
+  if (ch == kCRC) {
+    m_timeoutTimer.stop();
+    sendEndOfBatch();
+  }
+}
+
+/**
+ * @brief Reacts to a byte received while waiting for ACK/NAK of a data block.
+ *        Returns false when processing must stop because the transfer ended.
+ */
+bool IO::Protocols::YMODEM::handleDataAckByte(quint8 ch)
+{
+  if (ch == kACK) {
+    m_timeoutTimer.stop();
+    m_retryCount  = 0;
+    m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
+
+    if (m_file.atEnd()) {
+      m_yState = YState::WaitingForFirstEOTResponse;
+      Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
+      Q_EMIT statusMessage(tr("Sending first EOT…"));
+      m_timeoutTimer.start(m_timeoutMs);
+      return true;
+    }
+
+    m_yState = YState::SendingData;
+    sendDataBlock();
+    return true;
+  }
+
+  if (ch == kNAK) {
+    m_timeoutTimer.stop();
+    ++m_retryCount;
+    if (m_retryCount >= m_maxRetries) {
+      QByteArray cancel(5, static_cast<char>(kCAN));
+      Q_EMIT writeRequested(cancel);
+      resetState();
+      m_yState = YState::Idle;
+      Q_EMIT statusMessage(tr("Too many retries, transfer aborted"));
+      Q_EMIT finished(false, tr("Maximum retries exceeded"));
+      return false;
+    }
+
+    Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
+
+    // Rewind by actual bytes read -- fixed 1024 over-rewinds the final partial block.
+    m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
+    if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
+      m_file.close();
+      Q_EMIT finished(false, tr("Failed to seek in file"));
+      return false;
+    }
+    m_yState = YState::SendingData;
+    sendDataBlock();
+    return true;
+  }
+
+  if (ch == kCAN) {
+    m_timeoutTimer.stop();
+    resetState();
+    m_yState = YState::Idle;
+    Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
+    Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
+  }
+
+  return true;
+}
+
+/**
  * @brief Processes bytes received from the remote device (YMODEM state machine).
  */
 void IO::Protocols::YMODEM::processInput(const QByteArray& data)
@@ -98,17 +199,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
 
       // Waiting for ACK of block 0
       case YState::WaitingForBlock0Ack:
-        if (ch == kACK) {
-          m_timeoutTimer.stop();
-          m_yState = YState::WaitingForDataC;
-          m_timeoutTimer.start(m_timeoutMs);
-        } else if (ch == kCAN) {
-          m_timeoutTimer.stop();
-          resetState();
-          m_yState = YState::Idle;
-          Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
-          Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
-        }
+        handleBlock0AckByte(ch);
         break;
 
       // Receiver sends 'C' after ACK of block 0 -- start data blocks
@@ -123,51 +214,9 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
 
       // Waiting for ACK/NAK of a data block
       case YState::WaitingForDataAck:
-        if (ch == kACK) {
-          m_timeoutTimer.stop();
-          m_retryCount  = 0;
-          m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
+        if (!handleDataAckByte(ch))
+          return;
 
-          if (m_file.atEnd()) {
-            m_yState = YState::WaitingForFirstEOTResponse;
-            Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
-            Q_EMIT statusMessage(tr("Sending first EOT…"));
-            m_timeoutTimer.start(m_timeoutMs);
-          } else {
-            m_yState = YState::SendingData;
-            sendDataBlock();
-          }
-        } else if (ch == kNAK) {
-          m_timeoutTimer.stop();
-          ++m_retryCount;
-          if (m_retryCount >= m_maxRetries) {
-            QByteArray cancel(5, static_cast<char>(kCAN));
-            Q_EMIT writeRequested(cancel);
-            resetState();
-            m_yState = YState::Idle;
-            Q_EMIT statusMessage(tr("Too many retries, transfer aborted"));
-            Q_EMIT finished(false, tr("Maximum retries exceeded"));
-            return;
-          }
-
-          Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
-
-          // Rewind by actual bytes read -- fixed 1024 over-rewinds the final partial block.
-          m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
-          if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
-            m_file.close();
-            Q_EMIT finished(false, tr("Failed to seek in file"));
-            return;
-          }
-          m_yState = YState::SendingData;
-          sendDataBlock();
-        } else if (ch == kCAN) {
-          m_timeoutTimer.stop();
-          resetState();
-          m_yState = YState::Idle;
-          Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
-          Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
-        }
         break;
 
       // YMODEM requires two EOTs: first one gets NAK, second gets ACK
@@ -182,14 +231,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
         break;
 
       case YState::WaitingForSecondEOTAck:
-        if (ch == kACK) {
-          m_timeoutTimer.stop();
-          m_yState = YState::WaitingForEndBatchC;
-          m_timeoutTimer.start(m_timeoutMs);
-        } else if (ch == kCRC) {
-          m_timeoutTimer.stop();
-          sendEndOfBatch();
-        }
+        handleSecondEotAckByte(ch);
         break;
 
       // Receiver sends 'C' after final EOT -- send empty block 0

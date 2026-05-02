@@ -386,31 +386,28 @@ API::CommandResponse API::Handlers::WindowHandler::getWindowStates(const QString
   auto* model = taskbar->fullModel();
   QJsonArray states;
 
+  auto entryFor = [](const QStandardItem* item) {
+    QJsonObject entry;
+    entry[QStringLiteral("id")]    = item->data(UI::TaskbarModel::WindowIdRole).toInt();
+    entry[QStringLiteral("state")] = item->data(UI::TaskbarModel::WindowStateRole).toInt();
+    entry[QStringLiteral("name")]  = item->data(UI::TaskbarModel::WidgetNameRole).toString();
+    return entry;
+  };
+
   for (int i = 0; i < model->rowCount(); ++i) {
     const auto* top = model->item(i);
     if (!top)
       continue;
 
-    const bool is_group = top->data(UI::TaskbarModel::IsGroupRole).toBool();
+    if (!top->data(UI::TaskbarModel::IsGroupRole).toBool()) {
+      states.append(entryFor(top));
+      continue;
+    }
 
-    if (is_group) {
-      for (int j = 0; j < top->rowCount(); ++j) {
-        const auto* child = top->child(j);
-        if (!child)
-          continue;
-
-        QJsonObject entry;
-        entry[QStringLiteral("id")]    = child->data(UI::TaskbarModel::WindowIdRole).toInt();
-        entry[QStringLiteral("state")] = child->data(UI::TaskbarModel::WindowStateRole).toInt();
-        entry[QStringLiteral("name")]  = child->data(UI::TaskbarModel::WidgetNameRole).toString();
-        states.append(entry);
-      }
-    } else {
-      QJsonObject entry;
-      entry[QStringLiteral("id")]    = top->data(UI::TaskbarModel::WindowIdRole).toInt();
-      entry[QStringLiteral("state")] = top->data(UI::TaskbarModel::WindowStateRole).toInt();
-      entry[QStringLiteral("name")]  = top->data(UI::TaskbarModel::WidgetNameRole).toString();
-      states.append(entry);
+    for (int j = 0; j < top->rowCount(); ++j) {
+      const auto* child = top->child(j);
+      if (child)
+        states.append(entryFor(child));
     }
   }
 

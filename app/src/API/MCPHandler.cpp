@@ -553,6 +553,98 @@ void API::MCPHandler::tagIoSubmodule(MCP::Tool& tool,
 }
 
 /**
+ * @brief Assigns category and tags to an MCP tool based on its dotted command name.
+ */
+void API::MCPHandler::tagToolFromCommandName(MCP::Tool& tool, const QStringList& parts) const
+{
+  const auto& module    = parts[0];
+  const auto& submodule = parts.size() >= 3 ? parts[1] : QString();
+  const auto& command   = parts.last();
+
+  tagToolModule(tool, module, submodule, parts);
+  tagToolCommand(tool, command);
+}
+
+/**
+ * @brief Assigns category and module-level tags based on the leading dotted part.
+ */
+void API::MCPHandler::tagToolModule(MCP::Tool& tool,
+                                    const QString& module,
+                                    const QString& submodule,
+                                    const QStringList& parts) const
+{
+  if (module == QStringLiteral("io")) {
+    tool.category = QStringLiteral("io");
+    tagIoSubmodule(tool, submodule, parts);
+    return;
+  }
+
+  if (module == QStringLiteral("project")) {
+    tool.category = QStringLiteral("project");
+    tool.tags << QStringLiteral("project") << QStringLiteral("configuration");
+    return;
+  }
+
+  if (module == QStringLiteral("csv")) {
+    tool.category = QStringLiteral("export.csv");
+    tool.tags << QStringLiteral("export") << QStringLiteral("csv") << QStringLiteral("data");
+    return;
+  }
+
+  if (module == QStringLiteral("mdf4")) {
+    tool.category = QStringLiteral("export.mdf4");
+    tool.tags << QStringLiteral("export") << QStringLiteral("mdf4") << QStringLiteral("automotive");
+    return;
+  }
+
+  if (module == QStringLiteral("dashboard")) {
+    tool.category = QStringLiteral("dashboard");
+    tool.tags << QStringLiteral("visualization") << QStringLiteral("dashboard");
+    return;
+  }
+
+  if (module == QStringLiteral("console")) {
+    tool.category = QStringLiteral("console");
+    tool.tags << QStringLiteral("console") << QStringLiteral("debug");
+    return;
+  }
+
+  if (module == QStringLiteral("api")) {
+    tool.category = QStringLiteral("api");
+    tool.tags << QStringLiteral("api") << QStringLiteral("meta");
+  }
+}
+
+/**
+ * @brief Adds an action-tag derived from the trailing command part (get/set/start/...).
+ */
+void API::MCPHandler::tagToolCommand(MCP::Tool& tool, const QString& command) const
+{
+  if (command.startsWith(QStringLiteral("get"))) {
+    tool.tags << QStringLiteral("query");
+    return;
+  }
+
+  if (command.startsWith(QStringLiteral("set"))) {
+    tool.tags << QStringLiteral("configuration");
+    return;
+  }
+
+  if (command.contains(QStringLiteral("start"))) {
+    tool.tags << QStringLiteral("start");
+    return;
+  }
+
+  if (command.contains(QStringLiteral("stop"))) {
+    tool.tags << QStringLiteral("stop");
+    return;
+  }
+
+  if (command.contains(QStringLiteral("connect")))
+    tool.tags << QStringLiteral("connection");
+}
+
+/**
  * @brief Generate MCP tools from CommandRegistry
  *
  * Automatically categorizes and tags tools based on their command names
@@ -573,46 +665,8 @@ QVector<API::MCP::Tool> API::MCPHandler::generateToolsFromRegistry() const
                          : it.value().inputSchema;
 
     const auto parts = name.split(QLatin1Char('.'));
-    if (parts.size() >= 2) {
-      const auto& module    = parts[0];
-      const auto& submodule = parts.size() >= 3 ? parts[1] : QString();
-      const auto& command   = parts.last();
-
-      if (module == QStringLiteral("io")) {
-        tool.category = QStringLiteral("io");
-        tagIoSubmodule(tool, submodule, parts);
-      } else if (module == QStringLiteral("project")) {
-        tool.category = QStringLiteral("project");
-        tool.tags << QStringLiteral("project") << QStringLiteral("configuration");
-      } else if (module == QStringLiteral("csv")) {
-        tool.category = QStringLiteral("export.csv");
-        tool.tags << QStringLiteral("export") << QStringLiteral("csv") << QStringLiteral("data");
-      } else if (module == QStringLiteral("mdf4")) {
-        tool.category = QStringLiteral("export.mdf4");
-        tool.tags << QStringLiteral("export") << QStringLiteral("mdf4")
-                  << QStringLiteral("automotive");
-      } else if (module == QStringLiteral("dashboard")) {
-        tool.category = QStringLiteral("dashboard");
-        tool.tags << QStringLiteral("visualization") << QStringLiteral("dashboard");
-      } else if (module == QStringLiteral("console")) {
-        tool.category = QStringLiteral("console");
-        tool.tags << QStringLiteral("console") << QStringLiteral("debug");
-      } else if (module == QStringLiteral("api")) {
-        tool.category = QStringLiteral("api");
-        tool.tags << QStringLiteral("api") << QStringLiteral("meta");
-      }
-
-      if (command.startsWith(QStringLiteral("get")))
-        tool.tags << QStringLiteral("query");
-      else if (command.startsWith(QStringLiteral("set")))
-        tool.tags << QStringLiteral("configuration");
-      else if (command.contains(QStringLiteral("start")))
-        tool.tags << QStringLiteral("start");
-      else if (command.contains(QStringLiteral("stop")))
-        tool.tags << QStringLiteral("stop");
-      else if (command.contains(QStringLiteral("connect")))
-        tool.tags << QStringLiteral("connection");
-    }
+    if (parts.size() >= 2)
+      tagToolFromCommandName(tool, parts);
 
     tools.append(tool);
   }

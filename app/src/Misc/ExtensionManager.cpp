@@ -46,6 +46,30 @@
 static const QString kDefaultRepoUrl =
   QStringLiteral("https://raw.githubusercontent.com/serial-studio/extensions/main/manifest.json");
 
+namespace {
+/**
+ * @brief Picks the best matching platform override map for the given platform key.
+ */
+QVariantMap selectPlatformOverride(const QVariantMap& platforms, const QString& platformKey)
+{
+  if (platforms.isEmpty())
+    return {};
+
+  if (platforms.contains(platformKey))
+    return platforms.value(platformKey).toMap();
+
+  const auto os       = platformKey.left(platformKey.indexOf('/'));
+  const auto wildcard = os + QStringLiteral("/*");
+  if (platforms.contains(wildcard))
+    return platforms.value(wildcard).toMap();
+
+  if (platforms.contains(QStringLiteral("*")))
+    return platforms.value(QStringLiteral("*")).toMap();
+
+  return {};
+}
+}  // namespace
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -553,22 +577,11 @@ void Misc::ExtensionManager::installExtension()
   // Collect base files + platform-specific files
   auto files           = addon.value("files").toList();
   const auto platforms = addon.value("platforms").toMap();
-  if (!platforms.isEmpty()) {
-    const auto key = currentPlatformKey();
-    const auto os  = key.left(key.indexOf('/'));
-    QVariantMap override;
-    if (platforms.contains(key))
-      override = platforms.value(key).toMap();
-    else if (platforms.contains(os + "/*"))
-      override = platforms.value(os + "/*").toMap();
-    else if (platforms.contains("*"))
-      override = platforms.value("*").toMap();
-
-    const auto platFiles = override.value("files").toList();
-    for (const auto& f : platFiles)
-      if (!files.contains(f))
-        files.append(f);
-  }
+  const auto override  = selectPlatformOverride(platforms, currentPlatformKey());
+  const auto platFiles = override.value("files").toList();
+  for (const auto& f : platFiles)
+    if (!files.contains(f))
+      files.append(f);
 
   if (id.isEmpty() || files.isEmpty())
     return;
@@ -736,6 +749,41 @@ void Misc::ExtensionManager::autoUpdateExtensions()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Parses a successful manifest.json reply and queues each addon for metadata fetch.
+ */
+void Misc::ExtensionManager::parseManifest(QNetworkReply* reply)
+{
+  const auto doc     = QJsonDocument::fromJson(reply->readAll());
+  const auto root    = doc.object();
+  const auto addons  = root.value("extensions").toArray();
+  const auto repoUrl = reply->property("repoUrl").toString();
+  const auto baseUrl = repoUrl.left(repoUrl.lastIndexOf('/') + 1);
+
+  for (const auto& entry : addons) {
+    // String paths fetch each addon's info.json asynchronously
+    if (entry.isString()) {
+      const auto metaPath  = entry.toString();
+      const auto metaUrl   = baseUrl + metaPath;
+      const auto addonBase = metaUrl.left(metaUrl.lastIndexOf('/') + 1);
+
+      ++m_pendingExtensionMetas;
+      auto* metaReply = m_nam.get(QNetworkRequest(QUrl(metaUrl)));
+      metaReply->setProperty("addonBase", addonBase);
+      m_activeReplies.insert(metaReply);
+      connect(metaReply, &QNetworkReply::finished, this, &ExtensionManager::onExtensionMetaReply);
+      continue;
+    }
+
+    // Inline objects (legacy) are appended directly
+    if (entry.isObject()) {
+      auto obj = entry.toObject();
+      obj.insert("_repoBase", baseUrl);
+      m_allExtensions.append(obj);
+    }
+  }
+}
+
+/**
  * @brief Handles a manifest.json fetch response from a repository.
  */
 void Misc::ExtensionManager::onManifestReply()
@@ -748,34 +796,8 @@ void Misc::ExtensionManager::onManifestReply()
   reply->deleteLater();
 
   // Parse the manifest and fetch each addon's metadata
-  if (reply->error() == QNetworkReply::NoError) {
-    const auto doc     = QJsonDocument::fromJson(reply->readAll());
-    const auto root    = doc.object();
-    const auto addons  = root.value("extensions").toArray();
-    const auto repoUrl = reply->property("repoUrl").toString();
-    const auto baseUrl = repoUrl.left(repoUrl.lastIndexOf('/') + 1);
-
-    for (const auto& entry : addons) {
-      // Support both string paths (new) and inline objects (legacy)
-      if (entry.isString()) {
-        const auto metaPath  = entry.toString();
-        const auto metaUrl   = baseUrl + metaPath;
-        const auto addonBase = metaUrl.left(metaUrl.lastIndexOf('/') + 1);
-
-        ++m_pendingExtensionMetas;
-        auto* metaReply = m_nam.get(QNetworkRequest(QUrl(metaUrl)));
-        metaReply->setProperty("addonBase", addonBase);
-        m_activeReplies.insert(metaReply);
-        connect(metaReply, &QNetworkReply::finished, this, &ExtensionManager::onExtensionMetaReply);
-      }
-
-      else if (entry.isObject()) {
-        auto obj = entry.toObject();
-        obj.insert("_repoBase", baseUrl);
-        m_allExtensions.append(obj);
-      }
-    }
-  }
+  if (reply->error() == QNetworkReply::NoError)
+    parseManifest(reply);
 
   --m_pendingManifests;
   if (m_pendingManifests <= 0 && m_pendingExtensionMetas <= 0) {
@@ -1064,6 +1086,39 @@ void Misc::ExtensionManager::applyFilter()
 }
 
 /**
+ * @brief Loads (and caches) the title/icon metadata for an installed plugin.
+ */
+QVariantMap Misc::ExtensionManager::loadPluginMetadata(const QString& iid)
+{
+  // Cached entries return immediately
+  auto cacheIt = m_pluginMetadataCache.find(iid);
+  if (cacheIt != m_pluginMetadataCache.end())
+    return cacheIt.value();
+
+  // Read info.json from disk and populate the cache
+  const auto pluginDir = extensionsPath() + "/plugin/" + iid;
+  QVariantMap cached;
+
+  QFile metaFile(pluginDir + "/info.json");
+  if (!metaFile.open(QIODevice::ReadOnly)) {
+    cached.insert("title", iid);
+    m_pluginMetadataCache.insert(iid, cached);
+    return cached;
+  }
+
+  const auto meta  = QJsonDocument::fromJson(metaFile.readAll()).object();
+  const auto title = meta.value("title").toString(iid);
+  cached.insert("title", title);
+
+  const auto icon = meta.value("icon").toString();
+  if (!icon.isEmpty())
+    cached.insert("icon", QStringLiteral("file://") + pluginDir + "/" + icon);
+
+  m_pluginMetadataCache.insert(iid, cached);
+  return cached;
+}
+
+/**
  * @brief Rebuilds the installed plugins list for the start menu / toolbar.
  *
  * Uses a metadata cache to avoid re-reading info.json from disk on every call.
@@ -1079,45 +1134,17 @@ void Misc::ExtensionManager::rebuildInstalledPlugins()
     if (info.value("type").toString() != QStringLiteral("plugin"))
       continue;
 
-    // Check metadata cache before reading from disk
+    // Build the entry from cached or freshly loaded metadata
     QVariantMap entry;
     entry.insert("id", iid);
     entry.insert("running", isPluginRunning(iid));
 
-    auto cacheIt = m_pluginMetadataCache.find(iid);
-    if (cacheIt != m_pluginMetadataCache.end()) {
-      entry.insert("title", cacheIt->value("title"));
-      const auto icon = cacheIt->value("icon").toString();
-      if (!icon.isEmpty())
-        entry.insert("icon", icon);
-    }
+    const auto meta = loadPluginMetadata(iid);
+    entry.insert("title", meta.value("title"));
 
-    else {
-      const auto pluginDir = extensionsPath() + "/plugin/" + iid;
-      QVariantMap cached;
-
-      QFile metaFile(pluginDir + "/info.json");
-      if (metaFile.open(QIODevice::ReadOnly)) {
-        const auto meta  = QJsonDocument::fromJson(metaFile.readAll()).object();
-        const auto title = meta.value("title").toString(iid);
-        entry.insert("title", title);
-        cached.insert("title", title);
-
-        const auto icon = meta.value("icon").toString();
-        if (!icon.isEmpty()) {
-          const auto iconUrl = QStringLiteral("file://") + pluginDir + "/" + icon;
-          entry.insert("icon", iconUrl);
-          cached.insert("icon", iconUrl);
-        }
-      }
-
-      else {
-        entry.insert("title", iid);
-        cached.insert("title", iid);
-      }
-
-      m_pluginMetadataCache.insert(iid, cached);
-    }
+    const auto icon = meta.value("icon").toString();
+    if (!icon.isEmpty())
+      entry.insert("icon", icon);
 
     plugins.append(entry);
   }

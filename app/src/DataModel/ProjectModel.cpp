@@ -54,6 +54,160 @@
 #  include "MQTT/Client.h"
 #endif
 
+namespace {
+
+/**
+ * @brief Increments the per-type counter for every eligible dataset widget.
+ */
+void tallyDatasetWidgetTypes(const DataModel::Dataset& ds, QMap<int, int>& counts)
+{
+  const auto keys = SerialStudio::getDashboardWidgets(ds);
+  for (const auto& k : keys)
+    if (SerialStudio::datasetWidgetEligibleForWorkspace(k))
+      counts[static_cast<int>(k)] += 1;
+}
+
+/**
+ * @brief Appends a dataset widget ref unless the widget type is the LED aggregator.
+ */
+bool appendDatasetRef(SerialStudio::DashboardWidget k,
+                      int groupId,
+                      QMap<SerialStudio::DashboardWidget, int>& datasetIdx,
+                      std::vector<DataModel::WidgetRef>& groupRefs,
+                      std::vector<DataModel::WidgetRef>& allRefs)
+{
+  if (k == SerialStudio::DashboardLED)
+    return true;
+
+  if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
+    return false;
+
+  DataModel::WidgetRef r;
+  r.widgetType    = static_cast<int>(k);
+  r.groupId       = groupId;
+  r.relativeIndex = datasetIdx.value(k, 0);
+  datasetIdx[k]   = r.relativeIndex + 1;
+
+  groupRefs.push_back(r);
+  allRefs.push_back(r);
+  return false;
+}
+
+/**
+ * @brief Collects per-dataset widget refs for a group, returning whether any LED is present.
+ */
+bool collectGroupDatasetRefs(const DataModel::Group& group,
+                             QMap<SerialStudio::DashboardWidget, int>& datasetIdx,
+                             std::vector<DataModel::WidgetRef>& groupRefs,
+                             std::vector<DataModel::WidgetRef>& allRefs)
+{
+  bool groupHasLed = false;
+  for (const auto& ds : group.datasets) {
+    const auto keys = SerialStudio::getDashboardWidgets(ds);
+    for (const auto& k : keys)
+      if (appendDatasetRef(k, group.groupId, datasetIdx, groupRefs, allRefs))
+        groupHasLed = true;
+  }
+  return groupHasLed;
+}
+
+/**
+ * @brief Pushes a tracked widget ref into the supplied output vectors.
+ */
+void pushTrackedRef(SerialStudio::DashboardWidget key,
+                    int groupId,
+                    QMap<SerialStudio::DashboardWidget, int>& runningIdx,
+                    std::vector<DataModel::WidgetRef>& groupRefs,
+                    std::vector<DataModel::WidgetRef>& allRefs,
+                    std::vector<DataModel::WidgetRef>& overviewRefs)
+{
+  DataModel::WidgetRef r;
+  r.widgetType    = static_cast<int>(key);
+  r.groupId       = groupId;
+  r.relativeIndex = runningIdx.value(key, 0);
+  runningIdx[key] = r.relativeIndex + 1;
+
+  groupRefs.push_back(r);
+  allRefs.push_back(r);
+  overviewRefs.push_back(r);
+}
+
+/**
+ * @brief Layout config for fixed three-axis group widgets (Accel/Gyro/GPS/Plot3D).
+ */
+struct ThreeAxisLayout {
+  const char* widgetTag;
+  const char* axisWidgets[3];
+  QString units[3];
+  QString titles[3];
+  double wgtMin[3];
+  double wgtMax[3];
+  bool plt;
+};
+
+/**
+ * @brief Populates a group with three canonical axis datasets per supplied layout.
+ */
+void populateThreeAxisDatasets(DataModel::Group& grp, int baseIndex, const ThreeAxisLayout& layout)
+{
+  grp.widget = QString::fromUtf8(layout.widgetTag);
+
+  DataModel::Dataset axes[3];
+  for (int i = 0; i < 3; ++i) {
+    axes[i].datasetId = i;
+    axes[i].groupId   = grp.groupId;
+    axes[i].index     = baseIndex + i;
+    axes[i].units     = layout.units[i];
+    axes[i].widget    = QString::fromUtf8(layout.axisWidgets[i]);
+    axes[i].title     = layout.titles[i];
+    axes[i].wgtMin    = layout.wgtMin[i];
+    axes[i].wgtMax    = layout.wgtMax[i];
+    axes[i].plt       = layout.plt;
+    axes[i].alarmLow  = 0;
+    axes[i].alarmHigh = 0;
+
+    grp.datasets.push_back(axes[i]);
+  }
+}
+
+/**
+ * @brief Builds widget refs for one group during auto-workspace synthesis.
+ */
+std::vector<DataModel::WidgetRef> buildAutoRefsForGroup(
+  const DataModel::Group& group,
+  bool pro,
+  QMap<SerialStudio::DashboardWidget, int>& groupIdx,
+  QMap<SerialStudio::DashboardWidget, int>& datasetIdx,
+  std::vector<DataModel::WidgetRef>& allRefs,
+  std::vector<DataModel::WidgetRef>& overviewRefs)
+{
+  std::vector<DataModel::WidgetRef> groupRefs;
+
+  // Plot3D -> MultiPlot fallback on non-Pro to match Dashboard registration
+  auto groupKey = SerialStudio::getDashboardWidget(group);
+  if (groupKey == SerialStudio::DashboardPlot3D && !pro)
+    groupKey = SerialStudio::DashboardMultiPlot;
+
+  // Skip empty output panels -- nothing to render on the dashboard.
+  const bool isEmptyOutputPanel =
+    group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
+
+  if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
+    pushTrackedRef(groupKey, group.groupId, groupIdx, groupRefs, allRefs, overviewRefs);
+
+  // LED datasets aggregate into a single per-group panel ref, emitted below
+  const bool groupHasLed = collectGroupDatasetRefs(group, datasetIdx, groupRefs, allRefs);
+
+  // Synthetic LED-panel ref shares groupIdx with group widgets to match Dashboard order
+  if (groupHasLed)
+    pushTrackedRef(
+      SerialStudio::DashboardLED, group.groupId, groupIdx, groupRefs, allRefs, overviewRefs);
+
+  return groupRefs;
+}
+
+}  // namespace
+
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton instance access
 //--------------------------------------------------------------------------------------------------
@@ -1476,12 +1630,49 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   // Record the source path (empty = in-memory load, no file association)
   m_filePath = sourcePath;
 
-  auto json                      = document.object();
-  m_title                        = json.value(Keys::Title).toString();
-  m_frameEndSequence             = json.value(Keys::FrameEnd).toString();
-  m_frameStartSequence           = json.value(Keys::FrameStart).toString();
+  const auto json                = document.object();
   const QString legacyParserCode = json.value(QLatin1StringView("frameParser")).toString();
-  m_hexadecimalDelimiters        = json.value(Keys::HexadecimalDelimiters).toBool();
+  const bool legacyFormat        = !json.contains(Keys::Sources);
+
+  loadProjectRootScalars(json);
+  loadProjectArrays(json, legacyParserCode);
+  enforceGplSingleSource();
+  resolveDatasetTransformLanguages();
+  loadWidgetSettingsAndWorkspaces(json);
+  loadPointCount(json);
+  migrateLegacyLayoutKeys();
+  migrateLegacyDashboardLayout(json);
+
+  // m_workspaces is regenerated by the groupsChanged handler when not customised
+  setModified(false);
+
+  // Migrate legacy separator -> frame parser; if migrated, exit early after saving
+  if (migrateLegacySeparator(json))
+    return true;
+
+  m_autoSnapshot = buildAutoWorkspaces();
+
+  emitProjectLoadedSignals();
+
+  // Auto-save legacy -> multi-source migration; skip in-memory loads
+  if (legacyFormat && !m_filePath.isEmpty())
+    persistLegacyMigration();
+
+  // Resume autosave
+  m_autoSaveSuspended = false;
+
+  return true;
+}
+
+/**
+ * @brief Reads project-wide scalar fields (title, delimiters, decoder, lock state) from JSON.
+ */
+void DataModel::ProjectModel::loadProjectRootScalars(const QJsonObject& json)
+{
+  m_title                 = json.value(Keys::Title).toString();
+  m_frameEndSequence      = json.value(Keys::FrameEnd).toString();
+  m_frameStartSequence    = json.value(Keys::FrameStart).toString();
+  m_hexadecimalDelimiters = json.value(Keys::HexadecimalDelimiters).toBool();
   m_frameDetection =
     static_cast<SerialStudio::FrameDetection>(json.value(Keys::FrameDetection).toInt());
 
@@ -1509,7 +1700,14 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   if (!json.contains(Keys::FrameDetection))
     m_frameDetection = SerialStudio::StartAndEndDelimiter;
+}
 
+/**
+ * @brief Deserializes groups, actions and sources arrays into m_groups/m_actions/m_sources.
+ */
+void DataModel::ProjectModel::loadProjectArrays(const QJsonObject& json,
+                                                const QString& legacyParserCode)
+{
   // Deserialize groups
   auto groups = json.value(Keys::Groups).toArray();
   for (int g = 0; g < groups.count(); ++g) {
@@ -1539,81 +1737,102 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
     }
   }
 
-  const bool legacyFormat = !json.contains(Keys::Sources);
-
   if (m_sources.empty()) {
-    DataModel::Source defaultSource;
-    defaultSource.sourceId              = 0;
-    defaultSource.title                 = tr("Device A");
-    auto& cm                            = IO::ConnectionManager::instance();
-    defaultSource.busType               = static_cast<int>(cm.busType());
-    defaultSource.frameStart            = m_frameStartSequence;
-    defaultSource.frameEnd              = m_frameEndSequence;
-    defaultSource.checksumAlgorithm     = m_checksumAlgorithm;
-    defaultSource.frameDetection        = static_cast<int>(m_frameDetection);
-    defaultSource.decoderMethod         = static_cast<int>(m_frameDecoder);
-    defaultSource.hexadecimalDelimiters = m_hexadecimalDelimiters;
-    defaultSource.frameParserCode =
-      legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
+    seedDefaultSourceFromUi(legacyParserCode);
+    return;
+  }
 
-    // Snapshot UI driver settings so the migrated source matches the setup panel
-    IO::HAL_Driver* uiDriver = cm.uiDriverForBusType(cm.busType());
-    if (uiDriver) {
-      QJsonObject settings;
-      for (const auto& prop : uiDriver->driverProperties())
-        settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
-
-      const auto deviceId = uiDriver->deviceIdentifier();
-      if (!deviceId.isEmpty())
-        settings.insert(QStringLiteral("deviceId"), deviceId);
-
-      defaultSource.connectionSettings = settings;
-    }
-
-    m_sources.push_back(defaultSource);
-  } else if (!m_sources.empty() && m_sources[0].frameParserCode.isEmpty()) {
+  if (m_sources[0].frameParserCode.isEmpty())
     m_sources[0].frameParserCode =
       legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
+}
+
+/**
+ * @brief Builds a default Source[0] from the UI driver state when JSON has no sources array.
+ */
+void DataModel::ProjectModel::seedDefaultSourceFromUi(const QString& legacyParserCode)
+{
+  DataModel::Source defaultSource;
+  defaultSource.sourceId              = 0;
+  defaultSource.title                 = tr("Device A");
+  auto& cm                            = IO::ConnectionManager::instance();
+  defaultSource.busType               = static_cast<int>(cm.busType());
+  defaultSource.frameStart            = m_frameStartSequence;
+  defaultSource.frameEnd              = m_frameEndSequence;
+  defaultSource.checksumAlgorithm     = m_checksumAlgorithm;
+  defaultSource.frameDetection        = static_cast<int>(m_frameDetection);
+  defaultSource.decoderMethod         = static_cast<int>(m_frameDecoder);
+  defaultSource.hexadecimalDelimiters = m_hexadecimalDelimiters;
+  defaultSource.frameParserCode =
+    legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
+
+  // Snapshot UI driver settings so the migrated source matches the setup panel
+  IO::HAL_Driver* uiDriver = cm.uiDriverForBusType(cm.busType());
+  if (uiDriver) {
+    QJsonObject settings;
+    for (const auto& prop : uiDriver->driverProperties())
+      settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
+
+    const auto deviceId = uiDriver->deviceIdentifier();
+    if (!deviceId.isEmpty())
+      settings.insert(QStringLiteral("deviceId"), deviceId);
+
+    defaultSource.connectionSettings = settings;
   }
 
-  // Truncate to single source in GPL builds
+  m_sources.push_back(defaultSource);
+}
+
+/**
+ * @brief Truncates multi-source projects to one source on GPL builds with a user warning.
+ */
+void DataModel::ProjectModel::enforceGplSingleSource()
+{
 #ifndef BUILD_COMMERCIAL
-  if (m_sources.size() > 1) {
-    m_sources.resize(1);
-    for (auto& g : m_groups)
-      if (g.sourceId > 0)
-        g.sourceId = 0;
+  if (m_sources.size() <= 1)
+    return;
 
-    if (!m_suppressMessageBoxes)
-      Misc::Utilities::showMessageBox(
-        tr("Multi-source projects require a Pro license"),
-        tr("This project contains multiple data sources. Only the first source "
-           "has been loaded. A Serial Studio Pro license is required to use "
-           "multi-source projects."),
-        QMessageBox::Information);
-    else
-      qWarning() << "[ProjectModel] Multi-source project truncated to 1 source (GPL build)";
-  }
+  m_sources.resize(1);
+  for (auto& g : m_groups)
+    if (g.sourceId > 0)
+      g.sourceId = 0;
+
+  if (!m_suppressMessageBoxes)
+    Misc::Utilities::showMessageBox(
+      tr("Multi-source projects require a Pro license"),
+      tr("This project contains multiple data sources. Only the first source "
+         "has been loaded. A Serial Studio Pro license is required to use "
+         "multi-source projects."),
+      QMessageBox::Information);
+  else
+    qWarning() << "[ProjectModel] Multi-source project truncated to 1 source (GPL build)";
 #endif
+}
 
-  // Resolve unset transformLanguage (-1) so FrameBuilder hotpath never sees it
-  for (auto& group : m_groups) {
-    for (auto& dataset : group.datasets) {
-      if (dataset.transformLanguage >= 0 || dataset.transformCode.isEmpty())
-        continue;
+/**
+ * @brief Resolves any unset dataset transformLanguage values from their owning source.
+ */
+void DataModel::ProjectModel::resolveDatasetTransformLanguages()
+{
+  const auto languageForSource = [&](int sourceId) {
+    for (const auto& src : m_sources)
+      if (src.sourceId == sourceId)
+        return src.frameParserLanguage;
 
-      int resolved = 0;
-      for (const auto& src : m_sources)
-        if (src.sourceId == dataset.sourceId) {
-          resolved = src.frameParserLanguage;
-          break;
-        }
+    return 0;
+  };
 
-      dataset.transformLanguage = resolved;
-    }
-  }
+  for (auto& group : m_groups)
+    for (auto& dataset : group.datasets)
+      if (dataset.transformLanguage < 0 && !dataset.transformCode.isEmpty())
+        dataset.transformLanguage = languageForSource(dataset.sourceId);
+}
 
-  // Load widget settings
+/**
+ * @brief Reads widgetSettings, customised workspaces, hidden group ids, and tables from JSON.
+ */
+void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject& json)
+{
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
 
   // Customised workspaces load verbatim; auto list is regenerated after groups parse
@@ -1652,8 +1871,13 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
         m_tables.push_back(table);
     }
   }
+}
 
-  // Read point count from root level or legacy widgetSettings key
+/**
+ * @brief Resolves the project point-count from JSON or legacy widgetSettings, syncing dashboard.
+ */
+void DataModel::ProjectModel::loadPointCount(const QJsonObject& json)
+{
   m_pointCount = UI::Dashboard::instance().points();
   if (json.contains(Keys::PointCount)) {
     const int pts = json.value(Keys::PointCount).toInt();
@@ -1669,12 +1893,17 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
     UI::Dashboard::instance().setPoints(m_pointCount);
+}
 
-  // Migrate legacy layout keys to canonical "layout:N" format
+/**
+ * @brief Rewrites legacy "__layout__:N__" widgetSettings keys into canonical "layout:N" form.
+ */
+void DataModel::ProjectModel::migrateLegacyLayoutKeys()
+{
   const auto keys = m_widgetSettings.keys();
   for (const auto& key : keys) {
-    bool isOldFormat = key.startsWith(QStringLiteral("__layout__:"));
-    bool isNewFormat = key.startsWith(QStringLiteral("layout:"));
+    const bool isOldFormat = key.startsWith(QStringLiteral("__layout__:"));
+    const bool isNewFormat = key.startsWith(QStringLiteral("layout:"));
     if (!isOldFormat && !isNewFormat)
       continue;
 
@@ -1685,67 +1914,82 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
     QJsonObject cleaned;
     cleaned[QStringLiteral("data")] = entry[QStringLiteral("data")];
 
-    if (isOldFormat) {
-      m_widgetSettings.remove(key);
-      auto id = key.mid(11);
-      id.chop(2);
-      m_widgetSettings.insert(QStringLiteral("layout:") + id, cleaned);
-    } else
+    if (!isOldFormat) {
       m_widgetSettings.insert(key, cleaned);
-  }
-
-  // Migrate legacy dashboardLayout/activeGroupId into widgetSettings
-  if (json.contains(QStringLiteral("dashboardLayout"))) {
-    const int legacy_group_id = json.value(QStringLiteral("activeGroupId")).toInt(-1);
-    const auto layout         = json.value(QStringLiteral("dashboardLayout")).toObject();
-    if (legacy_group_id >= 0 && !layout.isEmpty())
-      m_widgetSettings.insert(Keys::layoutKey(legacy_group_id), layout);
-
-    if (legacy_group_id >= 0)
-      m_widgetSettings.insert(Keys::kActiveGroupSubKey, legacy_group_id);
-  }
-
-  // m_workspaces is regenerated by the groupsChanged handler when not customised
-  setModified(false);
-
-  // Migrate legacy "separator" field into the frame parser function
-  if (json.contains("separator")) {
-    const auto separator = json.value("separator").toString();
-    static QRegularExpression legacyRegex(
-      R"(function\s+parse\s*\(\s*frame\s*,\s*separator\s*\)\s*\{\s*return\s+frame\.split\(separator\);\s*\})");
-
-    if (!m_sources.empty() && legacyRegex.match(m_sources[0].frameParserCode).hasMatch()) {
-      if (separator.length() > 1)
-        m_sources[0].frameParserCode =
-          QStringLiteral("/**\n * Automatically migrated frame parser function.\n"
-                         " */\nfunction parse(frame) {\n    return frame.split(\"%1\");\n}")
-            .arg(separator);
-      else
-        m_sources[0].frameParserCode =
-          QStringLiteral("/**\n * Automatically migrated frame parser function.\n"
-                         " */\nfunction parse(frame) {\n    return frame.split(\'%1\');\n}")
-            .arg(separator);
-
-      if (!m_suppressMessageBoxes)
-        Misc::Utilities::showMessageBox(
-          tr("Legacy frame parser function updated"),
-          tr("Your project used a legacy frame parser function with a 'separator' argument. "
-             "It has been automatically migrated to the new format."),
-          QMessageBox::Information);
-      else
-        qWarning() << "[ProjectModel] Legacy frame parser function automatically migrated";
-
-      // Persist only for on-disk loads; in-memory replays have no destination
-      if (!m_filePath.isEmpty())
-        (void)saveJsonFile(false);
-
-      return true;
+      continue;
     }
+
+    m_widgetSettings.remove(key);
+    auto id = key.mid(11);
+    id.chop(2);
+    m_widgetSettings.insert(QStringLiteral("layout:") + id, cleaned);
   }
+}
 
-  m_autoSnapshot = buildAutoWorkspaces();
+/**
+ * @brief Migrates legacy dashboardLayout/activeGroupId fields into the widgetSettings store.
+ */
+void DataModel::ProjectModel::migrateLegacyDashboardLayout(const QJsonObject& json)
+{
+  if (!json.contains(QStringLiteral("dashboardLayout")))
+    return;
 
-  // Notify all listeners that the project has been fully loaded
+  const int legacy_group_id = json.value(QStringLiteral("activeGroupId")).toInt(-1);
+  const auto layout         = json.value(QStringLiteral("dashboardLayout")).toObject();
+  if (legacy_group_id >= 0 && !layout.isEmpty())
+    m_widgetSettings.insert(Keys::layoutKey(legacy_group_id), layout);
+
+  if (legacy_group_id >= 0)
+    m_widgetSettings.insert(Keys::kActiveGroupSubKey, legacy_group_id);
+}
+
+/**
+ * @brief Rewrites a legacy parse(frame, separator) function into the modern split-by-string form.
+ */
+bool DataModel::ProjectModel::migrateLegacySeparator(const QJsonObject& json)
+{
+  if (!json.contains("separator"))
+    return false;
+
+  const auto separator = json.value("separator").toString();
+  static QRegularExpression legacyRegex(
+    R"(function\s+parse\s*\(\s*frame\s*,\s*separator\s*\)\s*\{\s*return\s+frame\.split\(separator\);\s*\})");
+
+  if (m_sources.empty() || !legacyRegex.match(m_sources[0].frameParserCode).hasMatch())
+    return false;
+
+  if (separator.length() > 1)
+    m_sources[0].frameParserCode =
+      QStringLiteral("/**\n * Automatically migrated frame parser function.\n"
+                     " */\nfunction parse(frame) {\n    return frame.split(\"%1\");\n}")
+        .arg(separator);
+  else
+    m_sources[0].frameParserCode =
+      QStringLiteral("/**\n * Automatically migrated frame parser function.\n"
+                     " */\nfunction parse(frame) {\n    return frame.split(\'%1\');\n}")
+        .arg(separator);
+
+  if (!m_suppressMessageBoxes)
+    Misc::Utilities::showMessageBox(
+      tr("Legacy frame parser function updated"),
+      tr("Your project used a legacy frame parser function with a 'separator' argument. "
+         "It has been automatically migrated to the new format."),
+      QMessageBox::Information);
+  else
+    qWarning() << "[ProjectModel] Legacy frame parser function automatically migrated";
+
+  // Persist only for on-disk loads; in-memory replays have no destination
+  if (!m_filePath.isEmpty())
+    (void)saveJsonFile(false);
+
+  return true;
+}
+
+/**
+ * @brief Emits the standard burst of "project loaded" signals for downstream views.
+ */
+void DataModel::ProjectModel::emitProjectLoadedSignals()
+{
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
   Q_EMIT sourcesChanged();
@@ -1766,21 +2010,20 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   if (!m_widgetSettings.isEmpty())
     Q_EMIT widgetSettingsChanged();
+}
 
-  // Auto-save legacy -> multi-source migration; skip in-memory loads
-  if (legacyFormat && !m_filePath.isEmpty()) {
-    qInfo() << "[ProjectModel] Migrating legacy project to multi-source format, saving...";
-    QFile f(m_filePath);
-    if (f.open(QFile::WriteOnly)) {
-      f.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
-      f.close();
-    }
-  }
+/**
+ * @brief Re-saves the project file after a legacy -> multi-source migration.
+ */
+void DataModel::ProjectModel::persistLegacyMigration()
+{
+  qInfo() << "[ProjectModel] Migrating legacy project to multi-source format, saving...";
+  QFile f(m_filePath);
+  if (!f.open(QFile::WriteOnly))
+    return;
 
-  // Resume autosave
-  m_autoSaveSuspended = false;
-
-  return true;
+  f.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
+  f.close();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2682,234 +2925,155 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
   if (group < 0 || group >= static_cast<int>(m_groups.size())) [[unlikely]]
     return false;
 
-  auto& grp          = m_groups[group];
-  const auto groupId = grp.groupId;
+  auto& grp = m_groups[group];
 
-  // Handle existing datasets: compatible types keep them, others require confirmation
-  if (!grp.datasets.empty()) {
-    if ((widget == SerialStudio::DataGrid || widget == SerialStudio::MultiPlot
-         || widget == SerialStudio::NoGroupWidget)
-        && (grp.widget == "multiplot" || grp.widget == "datagrid" || grp.widget == "")) {
-      grp.widget = "";
-    } else {
-      auto ret =
-        Misc::Utilities::showMessageBox(tr("Are you sure you want to change the group-level "
-                                           "widget?"),
-                                        tr("Existing datasets for this group are deleted"),
-                                        QMessageBox::Question,
-                                        APP_NAME,
-                                        QMessageBox::Yes | QMessageBox::No);
+  if (!confirmGroupWidgetChange(grp, widget))
+    return false;
 
-      if (ret == QMessageBox::No)
-        return false;
-
-      grp.datasets.clear();
-    }
-  }
-
-  // Assign the widget string and populate canonical datasets for fixed-layout types
-  if (widget == SerialStudio::NoGroupWidget)
-    grp.widget = "";
-
-  if (widget == SerialStudio::DataGrid)
-    grp.widget = "datagrid";
-
-  else if (widget == SerialStudio::MultiPlot)
-    grp.widget = "multiplot";
-
-  else if (widget == SerialStudio::Accelerometer) {
-    grp.widget = "accelerometer";
-
-    DataModel::Dataset x, y, z;
-
-    x.datasetId = 0;
-    y.datasetId = 1;
-    z.datasetId = 2;
-
-    x.groupId = groupId;
-    y.groupId = groupId;
-    z.groupId = groupId;
-
-    x.index = nextDatasetIndex();
-    y.index = nextDatasetIndex() + 1;
-    z.index = nextDatasetIndex() + 2;
-
-    // code-verify off
-    x.units = "m/s²";
-    y.units = "m/s²";
-    z.units = "m/s²";
-    // code-verify on
-
-    x.wgtMin    = 0;
-    x.wgtMax    = 0;
-    y.wgtMin    = 0;
-    y.wgtMax    = 0;
-    z.wgtMin    = 0;
-    z.wgtMax    = 0;
-    x.plt       = true;
-    y.plt       = true;
-    z.plt       = true;
-    x.widget    = "x";
-    y.widget    = "y";
-    z.widget    = "z";
-    x.alarmLow  = 0;
-    y.alarmLow  = 0;
-    z.alarmLow  = 0;
-    x.alarmHigh = 0;
-    y.alarmHigh = 0;
-    z.alarmHigh = 0;
-    x.title     = tr("Accelerometer %1").arg("X");
-    y.title     = tr("Accelerometer %1").arg("Y");
-    z.title     = tr("Accelerometer %1").arg("Z");
-
-    grp.datasets.push_back(x);
-    grp.datasets.push_back(y);
-    grp.datasets.push_back(z);
-  }
-
-  else if (widget == SerialStudio::Gyroscope) {
-    grp.widget = "gyro";
-
-    DataModel::Dataset x, y, z;
-
-    x.datasetId = 0;
-    y.datasetId = 1;
-    z.datasetId = 2;
-
-    x.groupId = groupId;
-    y.groupId = groupId;
-    z.groupId = groupId;
-
-    x.index = nextDatasetIndex();
-    y.index = nextDatasetIndex() + 1;
-    z.index = nextDatasetIndex() + 2;
-
-    x.units = "deg/s";
-    y.units = "deg/s";
-    z.units = "deg/s";
-
-    x.wgtMin    = 0;
-    x.wgtMax    = 0;
-    y.wgtMin    = 0;
-    y.wgtMax    = 0;
-    z.wgtMin    = 0;
-    z.wgtMax    = 0;
-    x.plt       = true;
-    y.plt       = true;
-    z.plt       = true;
-    x.widget    = "x";
-    y.widget    = "y";
-    z.widget    = "z";
-    x.alarmLow  = 0;
-    y.alarmLow  = 0;
-    z.alarmLow  = 0;
-    x.alarmHigh = 0;
-    y.alarmHigh = 0;
-    z.alarmHigh = 0;
-    x.title     = tr("Gyro %1").arg("X");
-    y.title     = tr("Gyro %1").arg("Y");
-    z.title     = tr("Gyro %1").arg("Z");
-
-    grp.datasets.push_back(x);
-    grp.datasets.push_back(y);
-    grp.datasets.push_back(z);
-  }
-
-  else if (widget == SerialStudio::GPS) {
-    grp.widget = "map";
-
-    DataModel::Dataset lat, lon, alt;
-
-    lat.datasetId = 0;
-    lon.datasetId = 1;
-    alt.datasetId = 2;
-
-    lat.groupId = groupId;
-    lon.groupId = groupId;
-    alt.groupId = groupId;
-
-    lat.index = nextDatasetIndex();
-    lon.index = nextDatasetIndex() + 1;
-    alt.index = nextDatasetIndex() + 2;
-
-    // code-verify off
-    lat.units = "°";
-    lon.units = "°";
-    // code-verify on
-    alt.units = "m";
-
-    lat.widget    = "lat";
-    lon.widget    = "lon";
-    alt.widget    = "alt";
-    lat.alarmLow  = 0;
-    lon.alarmLow  = 0;
-    alt.alarmLow  = 0;
-    lat.alarmHigh = 0;
-    lon.alarmHigh = 0;
-    alt.alarmHigh = 0;
-    lat.wgtMax    = 90.0;
-    lat.wgtMin    = -90.0;
-    lon.wgtMax    = 180.0;
-    lon.wgtMin    = -180.0;
-    alt.wgtMin    = -500.0;
-    alt.wgtMax    = 1000000.0;
-    lat.title     = tr("Latitude");
-    lon.title     = tr("Longitude");
-    alt.title     = tr("Altitude");
-
-    grp.datasets.push_back(lat);
-    grp.datasets.push_back(lon);
-    grp.datasets.push_back(alt);
-  }
-
-  else if (widget == SerialStudio::Plot3D) {
-    grp.widget = "plot3d";
-
-    DataModel::Dataset x, y, z;
-
-    x.datasetId = 0;
-    y.datasetId = 1;
-    z.datasetId = 2;
-
-    x.groupId = groupId;
-    y.groupId = groupId;
-    z.groupId = groupId;
-
-    x.index = nextDatasetIndex();
-    y.index = nextDatasetIndex() + 1;
-    z.index = nextDatasetIndex() + 2;
-
-    x.wgtMin    = 0;
-    x.wgtMax    = 0;
-    y.wgtMin    = 0;
-    y.wgtMax    = 0;
-    z.wgtMin    = 0;
-    z.wgtMax    = 0;
-    x.widget    = "x";
-    y.widget    = "y";
-    z.widget    = "z";
-    x.alarmLow  = 0;
-    y.alarmLow  = 0;
-    z.alarmLow  = 0;
-    x.alarmHigh = 0;
-    y.alarmHigh = 0;
-    z.alarmHigh = 0;
-    x.title     = tr("X");
-    y.title     = tr("Y");
-    z.title     = tr("Z");
-
-    grp.datasets.push_back(x);
-    grp.datasets.push_back(y);
-    grp.datasets.push_back(z);
-  }
-
-  else if (widget == SerialStudio::ImageView)
-    grp.widget = "image";
+  if (!applyGroupWidget(grp, widget))
+    return false;
 
   m_groups[group] = grp;
 
   Q_EMIT groupsChanged();
   setModified(true);
+  return true;
+}
+
+/**
+ * @brief Confirms a destructive group widget change and clears existing datasets if needed.
+ */
+bool DataModel::ProjectModel::confirmGroupWidgetChange(DataModel::Group& grp,
+                                                       SerialStudio::GroupWidget widget)
+{
+  if (grp.datasets.empty())
+    return true;
+
+  // Compatible widget swap: keep datasets, reset to plain group
+  const bool compatibleTarget =
+    (widget == SerialStudio::DataGrid || widget == SerialStudio::MultiPlot
+     || widget == SerialStudio::NoGroupWidget);
+  const bool compatibleSource =
+    (grp.widget == "multiplot" || grp.widget == "datagrid" || grp.widget == "");
+  if (compatibleTarget && compatibleSource) {
+    grp.widget = "";
+    return true;
+  }
+
+  auto ret = Misc::Utilities::showMessageBox(tr("Are you sure you want to change the group-level "
+                                                "widget?"),
+                                             tr("Existing datasets for this group are deleted"),
+                                             QMessageBox::Question,
+                                             APP_NAME,
+                                             QMessageBox::Yes | QMessageBox::No);
+
+  if (ret == QMessageBox::No)
+    return false;
+
+  grp.datasets.clear();
+  return true;
+}
+
+/**
+ * @brief Assigns a group widget tag and any canonical datasets for fixed-layout types.
+ */
+bool DataModel::ProjectModel::applyGroupWidget(DataModel::Group& grp,
+                                               SerialStudio::GroupWidget widget)
+{
+  // Plain string widgets: no canonical datasets
+  if (widget == SerialStudio::NoGroupWidget) {
+    grp.widget = "";
+    return true;
+  }
+
+  if (widget == SerialStudio::DataGrid) {
+    grp.widget = "datagrid";
+    return true;
+  }
+
+  if (widget == SerialStudio::MultiPlot) {
+    grp.widget = "multiplot";
+    return true;
+  }
+
+  if (widget == SerialStudio::ImageView) {
+    grp.widget = "image";
+    return true;
+  }
+
+  return populateFixedLayoutGroup(grp, widget);
+}
+
+/**
+ * @brief Fills a group with the three-axis canonical datasets for sensor-style widgets.
+ */
+bool DataModel::ProjectModel::populateFixedLayoutGroup(DataModel::Group& grp,
+                                                       SerialStudio::GroupWidget widget)
+{
+  const int baseIndex = nextDatasetIndex();
+
+  if (widget == SerialStudio::Accelerometer) {
+    // code-verify off
+    ThreeAxisLayout layout{
+      "accelerometer",
+      {                            "x","y",                    "z"                                                },
+      {                         "m/s²", "m/s²",                         "m/s²"},
+      {tr("Accelerometer %1").arg("X"),
+        tr("Accelerometer %1").arg("Y"),
+        tr("Accelerometer %1").arg("Z")                                        },
+      {                              0,      0,                              0},
+      {                              0,      0,                              0},
+      true
+    };
+    // code-verify on
+    populateThreeAxisDatasets(grp, baseIndex, layout);
+    return true;
+  }
+
+  if (widget == SerialStudio::Gyroscope) {
+    ThreeAxisLayout layout{
+      "gyro",
+      {                   "x",                    "y",                    "z"},
+      {               "deg/s",                "deg/s",                "deg/s"},
+      {tr("Gyro %1").arg("X"), tr("Gyro %1").arg("Y"), tr("Gyro %1").arg("Z")},
+      {                     0,                      0,                      0},
+      {                     0,                      0,                      0},
+      true
+    };
+    populateThreeAxisDatasets(grp, baseIndex, layout);
+    return true;
+  }
+
+  if (widget == SerialStudio::GPS) {
+    // code-verify off
+    ThreeAxisLayout layout{
+      "map",
+      {         "lat",           "lon",          "alt"},
+      {           "°",             "°",            "m"},
+      {tr("Latitude"), tr("Longitude"), tr("Altitude")},
+      {         -90.0,          -180.0,         -500.0},
+      {          90.0,           180.0,      1000000.0},
+      false
+    };
+    // code-verify on
+    populateThreeAxisDatasets(grp, baseIndex, layout);
+    return true;
+  }
+
+  if (widget == SerialStudio::Plot3D) {
+    ThreeAxisLayout layout{
+      "plot3d",
+      {    "x",     "y",     "z"},
+      {     "",      "",      ""},
+      {tr("X"), tr("Y"), tr("Z")},
+      {      0,       0,       0},
+      {      0,       0,       0},
+      false
+    };
+    populateThreeAxisDatasets(grp, baseIndex, layout);
+    return true;
+  }
+
   return true;
 }
 
@@ -3874,65 +4038,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     if (!SerialStudio::groupEligibleForWorkspace(group))
       continue;
 
-    std::vector<DataModel::WidgetRef> groupRefs;
-
-    // Plot3D -> MultiPlot fallback on non-Pro to match Dashboard registration
-    auto groupKey = SerialStudio::getDashboardWidget(group);
-    if (groupKey == SerialStudio::DashboardPlot3D && !pro)
-      groupKey = SerialStudio::DashboardMultiPlot;
-
-    // Skip empty output panels -- nothing to render on the dashboard.
-    const bool isEmptyOutputPanel =
-      group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
-
-    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel) {
-      DataModel::WidgetRef r;
-      r.widgetType       = static_cast<int>(groupKey);
-      r.groupId          = group.groupId;
-      r.relativeIndex    = groupIdx.value(groupKey, 0);
-      groupIdx[groupKey] = r.relativeIndex + 1;
-
-      groupRefs.push_back(r);
-      allRefs.push_back(r);
-      overviewRefs.push_back(r);
-    }
-
-    // LED datasets aggregate into a single per-group panel ref, emitted below
-    bool groupHasLed = false;
-    for (const auto& ds : group.datasets) {
-      const auto keys = SerialStudio::getDashboardWidgets(ds);
-      for (const auto& k : keys) {
-        if (k == SerialStudio::DashboardLED) {
-          groupHasLed = true;
-          continue;
-        }
-        if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
-          continue;
-
-        DataModel::WidgetRef r;
-        r.widgetType    = static_cast<int>(k);
-        r.groupId       = group.groupId;
-        r.relativeIndex = datasetIdx.value(k, 0);
-        datasetIdx[k]   = r.relativeIndex + 1;
-
-        groupRefs.push_back(r);
-        allRefs.push_back(r);
-      }
-    }
-
-    // Synthetic LED-panel ref shares groupIdx with group widgets to match Dashboard order
-    if (groupHasLed) {
-      DataModel::WidgetRef r;
-      r.widgetType                         = static_cast<int>(SerialStudio::DashboardLED);
-      r.groupId                            = group.groupId;
-      r.relativeIndex                      = groupIdx.value(SerialStudio::DashboardLED, 0);
-      groupIdx[SerialStudio::DashboardLED] = r.relativeIndex + 1;
-
-      groupRefs.push_back(r);
-      allRefs.push_back(r);
-      overviewRefs.push_back(r);
-    }
-
+    auto groupRefs = buildAutoRefsForGroup(group, pro, groupIdx, datasetIdx, allRefs, overviewRefs);
     if (groupRefs.empty())
       continue;
 
@@ -4234,12 +4340,8 @@ void DataModel::ProjectModel::shiftWorkspaceRefsAfterDatasetDelete(
     if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
       runningAtGroup[static_cast<int>(groupKey)] += 1;
 
-    for (const auto& ds : g.datasets) {
-      const auto keys = SerialStudio::getDashboardWidgets(ds);
-      for (const auto& k : keys)
-        if (SerialStudio::datasetWidgetEligibleForWorkspace(k))
-          runningAtGroup[static_cast<int>(k)] += 1;
-    }
+    for (const auto& ds : g.datasets)
+      tallyDatasetWidgetTypes(ds, runningAtGroup);
   }
 
   for (auto& ws : m_workspaces) {
@@ -4264,10 +4366,11 @@ void DataModel::ProjectModel::shiftWorkspaceRefsAfterDatasetDelete(
         continue;
 
       const int base = runningAtGroup.value(r.widgetType, 0);
-      if (r.relativeIndex >= base + lost) {
-        r.relativeIndex -= lost;
-        Q_ASSERT(r.relativeIndex >= 0);
-      }
+      if (r.relativeIndex < base + lost)
+        continue;
+
+      r.relativeIndex -= lost;
+      Q_ASSERT(r.relativeIndex >= 0);
     }
   }
 }

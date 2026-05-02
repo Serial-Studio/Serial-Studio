@@ -1153,20 +1153,17 @@ void Widgets::GPS::paintPathData(QPainter* painter, const QSize& view)
 
     // Generate a path with historical samples
     QVector<QPointF> path;
-    for (size_t i = 0; i < series.latitudes.size(); ++i) {
-      const double lat = series.latitudes[i];
-      const double lon = series.longitudes[i];
-      if (!std::isnan(lat) && !std::isnan(lon)) {
-        if (!DSP::isZero(lat) && !DSP::isZero(lon))
-          path.append(project(lat, lon));
-      }
-    }
+    auto pushIfValid = [&](double lat, double lon) {
+      if (std::isnan(lat) || std::isnan(lon) || DSP::isZero(lat) || DSP::isZero(lon))
+        return;
+
+      path.append(project(lat, lon));
+    };
+    for (size_t i = 0; i < series.latitudes.size(); ++i)
+      pushIfValid(series.latitudes[i], series.longitudes[i]);
 
     // Append current location to path
-    if (!std::isnan(m_latitude) && !std::isnan(m_longitude)) {
-      if (!DSP::isZero(m_latitude) && !DSP::isZero(m_longitude))
-        path.append(project(m_latitude, m_longitude));
-    }
+    pushIfValid(m_latitude, m_longitude);
 
     // Skip if nothing on screen
     const QRectF vp(0, 0, view.width(), view.height());

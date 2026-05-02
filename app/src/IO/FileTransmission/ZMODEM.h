@@ -126,6 +126,7 @@ private:
   [[nodiscard]] static bool needsEscape(quint8 ch);
 
   void parseReceivedHeader(quint8 type, quint32 arg);
+  void startHeaderForZdleByte(quint8 ch);
   void processHexByte(quint8 ch);
   void processBin32Byte(quint8 ch);
   void processBinByte(quint8 ch);

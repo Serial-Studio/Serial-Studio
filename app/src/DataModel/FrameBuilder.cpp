@@ -299,6 +299,27 @@ void DataModel::FrameBuilder::onSourceRemoved()
   destroyTransformEngines();
 }
 
+/**
+ * @brief Builds and publishes a per-source template frame for dashboard configuration.
+ */
+void DataModel::FrameBuilder::publishSourceTemplateFrame(const DataModel::Source& src)
+{
+  DataModel::Frame srcFrame;
+  srcFrame.sourceId                   = src.sourceId;
+  srcFrame.title                      = m_frame.title;
+  srcFrame.actions                    = m_frame.actions;
+  srcFrame.containsCommercialFeatures = m_frame.containsCommercialFeatures;
+  for (const auto& g : m_frame.groups)
+    if (g.sourceId == src.sourceId)
+      srcFrame.groups.push_back(g);
+
+  if (srcFrame.groups.empty())
+    return;
+
+  m_sourceFrames.insert(src.sourceId, srcFrame);
+  hotpathTxFrame(std::make_shared<DataModel::TimestampedFrame>(srcFrame));
+}
+
 /** @brief Handles connect/disconnect transitions: recompiles transforms, reloads parser, fires
  * auto-actions. */
 void DataModel::FrameBuilder::onConnectedChanged()
@@ -337,21 +358,8 @@ void DataModel::FrameBuilder::onConnectedChanged()
   // Pre-build per-source frames so the dashboard configures immediately
   const auto& sources = DataModel::ProjectModel::instance().sources();
   if (sources.size() > 1) {
-    for (const auto& src : sources) {
-      DataModel::Frame srcFrame;
-      srcFrame.sourceId                   = src.sourceId;
-      srcFrame.title                      = m_frame.title;
-      srcFrame.actions                    = m_frame.actions;
-      srcFrame.containsCommercialFeatures = m_frame.containsCommercialFeatures;
-      for (const auto& g : m_frame.groups)
-        if (g.sourceId == src.sourceId)
-          srcFrame.groups.push_back(g);
-
-      if (!srcFrame.groups.empty()) {
-        m_sourceFrames.insert(src.sourceId, srcFrame);
-        hotpathTxFrame(std::make_shared<DataModel::TimestampedFrame>(srcFrame));
-      }
-    }
+    for (const auto& src : sources)
+      publishSourceTemplateFrame(src);
 
     return;
   }

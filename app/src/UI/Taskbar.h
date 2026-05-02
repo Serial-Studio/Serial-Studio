@@ -182,6 +182,30 @@ private:
   void rebuildModel();
   void connectToRegistry();
   void mapWidgetToWindow(UI::WidgetID wid, int windowId);
+  void cloneSpecialOverviewRow(int widgetType);
+  void populateTaskbarFromWorkspace(int groupId);
+  void populateTaskbarFromGroup(int groupId);
+  void removeWorkspaceTaskbarRow(int windowId);
+  void removeOverviewByType(int widgetType);
+  void selectGroupAfterRebuild();
+  void appendGroupChildItem(QStandardItem* groupItem,
+                            int groupId,
+                            const QString& groupName,
+                            int windowId,
+                            SerialStudio::DashboardWidget widgetType,
+                            int relativeIndex);
+  void attachGroupItemToFullModel(QStandardItem* groupItem, int groupId, bool alreadyRegistered);
+  void collectGroupWidgetIds(int groupId,
+                             QList<int>& windowIds,
+                             QList<int>& relativeIds,
+                             QList<SerialStudio::DashboardWidget>& widgetTypes) const;
+  void mapMainGroupWidgetId(SerialStudio::DashboardWidget groupType, int groupId, int mainWindowId);
+  void buildOverviewGroupItem(QStandardItem* groupItem,
+                              int groupId,
+                              const QString& groupName,
+                              SerialStudio::DashboardWidget groupType,
+                              int mainWindowId,
+                              bool alreadyRegistered);
   [[nodiscard]] QStandardItem* findItemByWindowId(int windowId,
                                                   QStandardItem* parentItem = nullptr,
                                                   int depth                 = 0) const;
@@ -189,6 +213,8 @@ private:
                                                   QStandardItem* parentItem = nullptr) const;
   [[nodiscard]] QStandardItem* findGroupItemByGroupId(int groupId) const;
   [[nodiscard]] QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
+  [[nodiscard]] int findWindowIdByGroupAndIndex(int widgetType, int relativeIndex) const;
+  [[nodiscard]] int relativeIndexForWindow(int windowId) const;
 
   int m_activeGroupId;
   bool m_rebuildInProgress;

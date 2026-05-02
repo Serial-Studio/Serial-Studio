@@ -116,6 +116,11 @@ private:
   [[nodiscard]] ResizeEdge detectResizeEdge(QQuickItem* target) const;
   QQuickItem* getWindow(const int x, const int y) const;
 
+  void handleDragMove(QMouseEvent* event, const QPoint& currentPos, const QPoint& delta);
+  void handleResizeMove(QMouseEvent* event, const QPoint& delta);
+  void updateManualSnapIndicator(int newX, int newY, int w, int h, int canvasW, int canvasH);
+  [[nodiscard]] QRect computeResizedGeometry(const QPoint& delta) const;
+
 protected:
   void mouseMoveEvent(QMouseEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;

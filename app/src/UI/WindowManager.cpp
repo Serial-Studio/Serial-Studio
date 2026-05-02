@@ -21,6 +21,7 @@
 
 #include "WindowManager.h"
 
+#include <optional>
 #include <QFile>
 #include <QFileDialog>
 #include <QStandardPaths>
@@ -29,6 +30,289 @@
 
 #include "UI/Taskbar.h"
 #include "UI/UISessionRegistry.h"
+
+namespace {
+/**
+ * @brief Tiling environment shared by every per-count auto-layout helper.
+ */
+struct TileEnv {
+  int margin;
+  int spacing;
+  int availW;
+  int availH;
+  bool isLandscape;
+};
+
+/**
+ * @brief Returns the manual-mode snap rectangle for the dragged window's edges.
+ */
+std::optional<QRect> computeSnapRect(int left, int top, int right, int bottom, int cw, int ch)
+{
+  if (left <= 0 && top <= 0)
+    return QRect(0, 0, cw / 2, ch / 2);
+
+  if (right >= cw && top <= 0)
+    return QRect(cw / 2, 0, cw / 2, ch / 2);
+
+  if (left <= 0 && bottom >= ch)
+    return QRect(0, ch / 2, cw / 2, ch / 2);
+
+  if (right >= cw && bottom >= ch)
+    return QRect(cw / 2, ch / 2, cw / 2, ch / 2);
+
+  if (top <= 0)
+    return QRect(0, 0, cw, ch);
+
+  if (left <= 0)
+    return QRect(0, 0, cw / 2, ch);
+
+  if (right >= cw)
+    return QRect(cw / 2, 0, cw / 2, ch);
+
+  return std::nullopt;
+}
+
+/**
+ * @brief Sets a window's geometry to the given rectangle.
+ */
+void placeWindow(QQuickItem* win, int x, int y, int w, int h)
+{
+  win->setX(x);
+  win->setY(y);
+  win->setWidth(w);
+  win->setHeight(h);
+}
+
+/**
+ * @brief One window fills the available canvas area.
+ */
+void tileOne(const QList<QQuickItem*>& wins, const TileEnv& env)
+{
+  placeWindow(wins[0], env.margin, env.margin, env.availW, env.availH);
+}
+
+/**
+ * @brief Two windows split side-by-side or stacked depending on orientation.
+ */
+void tileTwo(const QList<QQuickItem*>& wins, const TileEnv& env)
+{
+  if (env.isLandscape) {
+    const int w = (env.availW - env.spacing) / 2;
+    placeWindow(wins[0], env.margin, env.margin, w, env.availH);
+    placeWindow(wins[1], env.margin + w + env.spacing, env.margin, w, env.availH);
+    return;
+  }
+
+  const int h = (env.availH - env.spacing) / 2;
+  placeWindow(wins[0], env.margin, env.margin, env.availW, h);
+  placeWindow(wins[1], env.margin, env.margin + h + env.spacing, env.availW, h);
+}
+
+/**
+ * @brief Three windows in a master + 2-stack arrangement.
+ */
+void tileThree(const QList<QQuickItem*>& wins, const TileEnv& env)
+{
+  if (env.isLandscape) {
+    const int masterW = env.availW / 2;
+    const int stackW  = env.availW - masterW - env.spacing;
+    const int stackH  = (env.availH - env.spacing) / 2;
+    placeWindow(wins[0], env.margin, env.margin, masterW, env.availH);
+    placeWindow(wins[1], env.margin + masterW + env.spacing, env.margin, stackW, stackH);
+    placeWindow(wins[2],
+                env.margin + masterW + env.spacing,
+                env.margin + stackH + env.spacing,
+                stackW,
+                stackH);
+    return;
+  }
+
+  const int masterH = env.availH / 2;
+  const int stackH  = env.availH - masterH - env.spacing;
+  const int stackW  = (env.availW - env.spacing) / 2;
+  placeWindow(wins[0], env.margin, env.margin, env.availW, masterH);
+  placeWindow(wins[1], env.margin, env.margin + masterH + env.spacing, stackW, stackH);
+  placeWindow(
+    wins[2], env.margin + stackW + env.spacing, env.margin + masterH + env.spacing, stackW, stackH);
+}
+
+/**
+ * @brief Four windows in a 2x2 grid.
+ */
+void tileFour(const QList<QQuickItem*>& wins, const TileEnv& env)
+{
+  const int w = (env.availW - env.spacing) / 2;
+  const int h = (env.availH - env.spacing) / 2;
+  placeWindow(wins[0], env.margin, env.margin, w, h);
+  placeWindow(wins[1], env.margin + w + env.spacing, env.margin, w, h);
+  placeWindow(wins[2], env.margin, env.margin + h + env.spacing, w, h);
+  placeWindow(wins[3], env.margin + w + env.spacing, env.margin + h + env.spacing, w, h);
+}
+
+/**
+ * @brief Five windows in an asymmetric 2+3 arrangement.
+ */
+void tileFive(const QList<QQuickItem*>& wins, const TileEnv& env)
+{
+  if (env.isLandscape) {
+    const int topW = (env.availW - env.spacing) / 2;
+    const int botW = (env.availW - 2 * env.spacing) / 3;
+    const int h    = (env.availH - env.spacing) / 2;
+    placeWindow(wins[0], env.margin, env.margin, topW, h);
+    placeWindow(wins[1], env.margin + topW + env.spacing, env.margin, topW, h);
+    placeWindow(wins[2], env.margin, env.margin + h + env.spacing, botW, h);
+    placeWindow(wins[3], env.margin + botW + env.spacing, env.margin + h + env.spacing, botW, h);
+    placeWindow(
+      wins[4], env.margin + 2 * (botW + env.spacing), env.margin + h + env.spacing, botW, h);
+    return;
+  }
+
+  const int leftH  = (env.availH - env.spacing) / 2;
+  const int rightH = (env.availH - 2 * env.spacing) / 3;
+  const int w      = (env.availW - env.spacing) / 2;
+  placeWindow(wins[0], env.margin, env.margin, w, leftH);
+  placeWindow(wins[1], env.margin, env.margin + leftH + env.spacing, w, leftH);
+  placeWindow(wins[2], env.margin + w + env.spacing, env.margin, w, rightH);
+  placeWindow(wins[3], env.margin + w + env.spacing, env.margin + rightH + env.spacing, w, rightH);
+  placeWindow(
+    wins[4], env.margin + w + env.spacing, env.margin + 2 * (rightH + env.spacing), w, rightH);
+}
+
+/**
+ * @brief Six windows in a 3x2 or 2x3 grid based on canvas orientation.
+ */
+void tileSix(const QList<QQuickItem*>& wins, const TileEnv& env)
+{
+  const int cols = env.isLandscape ? 3 : 2;
+  const int rows = env.isLandscape ? 2 : 3;
+  const int w    = (env.availW - (cols - 1) * env.spacing) / cols;
+  const int h    = (env.availH - (rows - 1) * env.spacing) / rows;
+
+  for (int i = 0; i < 6; ++i) {
+    const int col = i % cols;
+    const int row = i / cols;
+    placeWindow(
+      wins[i], env.margin + col * (w + env.spacing), env.margin + row * (h + env.spacing), w, h);
+  }
+}
+
+/**
+ * @brief Seven or more windows distributed in an aspect-aware optimal grid.
+ */
+void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
+{
+  // Compute grid dimensions based on aspect ratio
+  const int n = wins.size();
+  int cols, rows;
+  if (env.isLandscape) {
+    cols = qCeil(qSqrt(static_cast<double>(n) * env.availW / env.availH));
+    rows = qCeil(static_cast<double>(n) / cols);
+  } else {
+    rows = qCeil(qSqrt(static_cast<double>(n) * env.availH / env.availW));
+    cols = qCeil(static_cast<double>(n) / rows);
+  }
+
+  // Ensure enough cells for all windows
+  while (cols * rows < n)
+    if (env.isLandscape)
+      cols++;
+    else
+      rows++;
+
+  // Distribute available space evenly across cells
+  const int spacingForSizing = qMax(env.spacing, 0);
+  const int totalSpacingW    = (cols - 1) * spacingForSizing;
+  const int totalSpacingH    = (rows - 1) * spacingForSizing;
+  const int totalCellsW      = qMax(1, env.availW - totalSpacingW);
+  const int totalCellsH      = qMax(1, env.availH - totalSpacingH);
+
+  const int baseCellW = totalCellsW / cols;
+  const int baseCellH = totalCellsH / rows;
+  const int extraW    = totalCellsW % cols;
+  const int extraH    = totalCellsH % rows;
+
+  // Build column and row position tables
+  QVector<int> colWidths(cols), colXs(cols);
+  QVector<int> rowHeights(rows), rowYs(rows);
+
+  int runningX = env.margin;
+  for (int c = 0; c < cols; ++c) {
+    colWidths[c] = baseCellW + (c < extraW ? 1 : 0);
+    colXs[c]     = runningX;
+    runningX += colWidths[c] + env.spacing;
+  }
+
+  int runningY = env.margin;
+  for (int r = 0; r < rows; ++r) {
+    rowHeights[r] = baseCellH + (r < extraH ? 1 : 0);
+    rowYs[r]      = runningY;
+    runningY += rowHeights[r] + env.spacing;
+  }
+
+  // Stretch partial last row to fill full width
+  const int windowsInLastRow   = n - (rows - 1) * cols;
+  const bool hasPartialLastRow = windowsInLastRow > 0 && windowsInLastRow < cols;
+  QVector<int> lastRowWidths, lastRowXs;
+
+  if (hasPartialLastRow) {
+    const int totalSpacingLast = (windowsInLastRow - 1) * spacingForSizing;
+    const int totalCellsLast   = qMax(1, env.availW - totalSpacingLast);
+    const int baseLastW        = totalCellsLast / windowsInLastRow;
+    const int extraLastW       = totalCellsLast % windowsInLastRow;
+
+    lastRowWidths.resize(windowsInLastRow);
+    lastRowXs.resize(windowsInLastRow);
+
+    int runningLastX = env.margin;
+    for (int c = 0; c < windowsInLastRow; ++c) {
+      lastRowWidths[c] = baseLastW + (c < extraLastW ? 1 : 0);
+      lastRowXs[c]     = runningLastX;
+      runningLastX += lastRowWidths[c] + env.spacing;
+    }
+  }
+
+  // Place each window in its grid cell
+  for (int i = 0; i < n; ++i) {
+    const int row = i / cols;
+    const int col = i % cols;
+
+    if (hasPartialLastRow && row == rows - 1)
+      placeWindow(wins[i], lastRowXs[col], rowYs[row], lastRowWidths[col], rowHeights[row]);
+    else
+      placeWindow(wins[i], colXs[col], rowYs[row], colWidths[col], rowHeights[row]);
+  }
+}
+
+/**
+ * @brief Dispatches to the appropriate tiling helper based on window count.
+ */
+void dispatchTile(const QList<QQuickItem*>& wins, const TileEnv& env)
+{
+  switch (wins.size()) {
+    case 1:
+      tileOne(wins, env);
+      return;
+    case 2:
+      tileTwo(wins, env);
+      return;
+    case 3:
+      tileThree(wins, env);
+      return;
+    case 4:
+      tileFour(wins, env);
+      return;
+    case 5:
+      tileFive(wins, env);
+      return;
+    case 6:
+      tileSix(wins, env);
+      return;
+    default:
+      tileGrid(wins, env);
+      return;
+  }
+}
+}  // namespace
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
@@ -354,13 +638,9 @@ void UI::WindowManager::loadLayout()
  */
 void UI::WindowManager::autoLayout()
 {
-  // Define margins and spacing for the tiling grid
-  const int margin  = 4;
-  const int spacing = -1;
-
+  // Validate canvas dimensions before tiling
   const int canvasW = static_cast<int>(width());
   const int canvasH = static_cast<int>(height());
-
   if (canvasW <= 0 || canvasH <= 0)
     return;
 
@@ -375,208 +655,19 @@ void UI::WindowManager::autoLayout()
   if (windows.isEmpty())
     return;
 
-  // Compute available space and orientation
-  const int n            = windows.size();
-  const int availW       = canvasW - 2 * margin;
-  const int availH       = canvasH - 2 * margin;
-  const bool isLandscape = availW >= availH;
-
-  auto placeWindow = [](QQuickItem* win, int x, int y, int w, int h) {
-    win->setX(x);
-    win->setY(y);
-    win->setWidth(w);
-    win->setHeight(h);
-  };
-
-  // Single window fills the canvas
-  if (n == 1)
-    placeWindow(windows[0], margin, margin, availW, availH);
-
-  // Two windows side-by-side or stacked
-  else if (n == 2) {
-    if (isLandscape) {
-      int w = (availW - spacing) / 2;
-      placeWindow(windows[0], margin, margin, w, availH);
-      placeWindow(windows[1], margin + w + spacing, margin, w, availH);
-    } else {
-      int h = (availH - spacing) / 2;
-      placeWindow(windows[0], margin, margin, availW, h);
-      placeWindow(windows[1], margin, margin + h + spacing, availW, h);
-    }
-  }
-
-  // Three windows in master-stack layout
-  else if (n == 3) {
-    if (isLandscape) {
-      int masterW = availW / 2;
-      int stackW  = availW - masterW - spacing;
-      int stackH  = (availH - spacing) / 2;
-
-      placeWindow(windows[0], margin, margin, masterW, availH);
-      placeWindow(windows[1], margin + masterW + spacing, margin, stackW, stackH);
-      placeWindow(
-        windows[2], margin + masterW + spacing, margin + stackH + spacing, stackW, stackH);
-    } else {
-      int masterH = availH / 2;
-      int stackH  = availH - masterH - spacing;
-      int stackW  = (availW - spacing) / 2;
-
-      placeWindow(windows[0], margin, margin, availW, masterH);
-      placeWindow(windows[1], margin, margin + masterH + spacing, stackW, stackH);
-      placeWindow(
-        windows[2], margin + stackW + spacing, margin + masterH + spacing, stackW, stackH);
-    }
-  }
-
-  // Four windows in 2x2 grid
-  else if (n == 4) {
-    int w = (availW - spacing) / 2;
-    int h = (availH - spacing) / 2;
-
-    placeWindow(windows[0], margin, margin, w, h);
-    placeWindow(windows[1], margin + w + spacing, margin, w, h);
-    placeWindow(windows[2], margin, margin + h + spacing, w, h);
-    placeWindow(windows[3], margin + w + spacing, margin + h + spacing, w, h);
-  }
-
-  // Five windows in asymmetric 2+3 layout
-  else if (n == 5) {
-    if (isLandscape) {
-      int topW = (availW - spacing) / 2;
-      int botW = (availW - 2 * spacing) / 3;
-      int h    = (availH - spacing) / 2;
-
-      placeWindow(windows[0], margin, margin, topW, h);
-      placeWindow(windows[1], margin + topW + spacing, margin, topW, h);
-      placeWindow(windows[2], margin, margin + h + spacing, botW, h);
-      placeWindow(windows[3], margin + botW + spacing, margin + h + spacing, botW, h);
-      placeWindow(windows[4], margin + 2 * (botW + spacing), margin + h + spacing, botW, h);
-    } else {
-      int leftH  = (availH - spacing) / 2;
-      int rightH = (availH - 2 * spacing) / 3;
-      int w      = (availW - spacing) / 2;
-
-      placeWindow(windows[0], margin, margin, w, leftH);
-      placeWindow(windows[1], margin, margin + leftH + spacing, w, leftH);
-      placeWindow(windows[2], margin + w + spacing, margin, w, rightH);
-      placeWindow(windows[3], margin + w + spacing, margin + rightH + spacing, w, rightH);
-      placeWindow(windows[4], margin + w + spacing, margin + 2 * (rightH + spacing), w, rightH);
-    }
-  }
-
-  // Six windows in 3x2 or 2x3 grid
-  else if (n == 6) {
-    if (isLandscape) {
-      int w = (availW - 2 * spacing) / 3;
-      int h = (availH - spacing) / 2;
-
-      for (int i = 0; i < 6; ++i) {
-        int col = i % 3;
-        int row = i / 3;
-        placeWindow(windows[i], margin + col * (w + spacing), margin + row * (h + spacing), w, h);
-      }
-    } else {
-      int w = (availW - spacing) / 2;
-      int h = (availH - 2 * spacing) / 3;
-
-      for (int i = 0; i < 6; ++i) {
-        int col = i % 2;
-        int row = i / 2;
-        placeWindow(windows[i], margin + col * (w + spacing), margin + row * (h + spacing), w, h);
-      }
-    }
-  }
-
-  // Seven or more windows in optimal grid
-  else {
-    // Compute grid dimensions based on aspect ratio
-    int cols, rows;
-    if (isLandscape) {
-      cols = qCeil(qSqrt(static_cast<double>(n) * availW / availH));
-      rows = qCeil(static_cast<double>(n) / cols);
-    } else {
-      rows = qCeil(qSqrt(static_cast<double>(n) * availH / availW));
-      cols = qCeil(static_cast<double>(n) / rows);
-    }
-
-    // Ensure enough cells for all windows
-    while (cols * rows < n)
-      if (isLandscape)
-        cols++;
-      else
-        rows++;
-
-    // Distribute available space evenly across cells
-    const int spacingForSizing = qMax(spacing, 0);
-    const int totalSpacingW    = (cols - 1) * spacingForSizing;
-    const int totalSpacingH    = (rows - 1) * spacingForSizing;
-    const int totalCellsW      = qMax(1, availW - totalSpacingW);
-    const int totalCellsH      = qMax(1, availH - totalSpacingH);
-
-    const int baseCellW = totalCellsW / cols;
-    const int baseCellH = totalCellsH / rows;
-    const int extraW    = totalCellsW % cols;
-    const int extraH    = totalCellsH % rows;
-
-    // Build column and row position tables
-    QVector<int> colWidths(cols), colXs(cols);
-    QVector<int> rowHeights(rows), rowYs(rows);
-
-    int runningX = margin;
-    for (int c = 0; c < cols; ++c) {
-      colWidths[c] = baseCellW + (c < extraW ? 1 : 0);
-      colXs[c]     = runningX;
-      runningX += colWidths[c] + spacing;
-    }
-
-    int runningY = margin;
-    for (int r = 0; r < rows; ++r) {
-      rowHeights[r] = baseCellH + (r < extraH ? 1 : 0);
-      rowYs[r]      = runningY;
-      runningY += rowHeights[r] + spacing;
-    }
-
-    // Stretch partial last row to fill full width
-    const int windowsInLastRow   = n - (rows - 1) * cols;
-    const bool hasPartialLastRow = windowsInLastRow > 0 && windowsInLastRow < cols;
-    QVector<int> lastRowWidths, lastRowXs;
-
-    if (hasPartialLastRow) {
-      const int totalSpacingLast = (windowsInLastRow - 1) * spacingForSizing;
-      const int totalCellsLast   = qMax(1, availW - totalSpacingLast);
-      const int baseLastW        = totalCellsLast / windowsInLastRow;
-      const int extraLastW       = totalCellsLast % windowsInLastRow;
-
-      lastRowWidths.resize(windowsInLastRow);
-      lastRowXs.resize(windowsInLastRow);
-
-      int runningLastX = margin;
-      for (int c = 0; c < windowsInLastRow; ++c) {
-        lastRowWidths[c] = baseLastW + (c < extraLastW ? 1 : 0);
-        lastRowXs[c]     = runningLastX;
-        runningLastX += lastRowWidths[c] + spacing;
-      }
-    }
-
-    // Place each window in its grid cell
-    for (int i = 0; i < n; ++i) {
-      int row = i / cols;
-      int col = i % cols;
-
-      if (hasPartialLastRow && row == rows - 1)
-        placeWindow(windows[i], lastRowXs[col], rowYs[row], lastRowWidths[col], rowHeights[row]);
-      else
-        placeWindow(windows[i], colXs[col], rowYs[row], colWidths[col], rowHeights[row]);
-    }
-  }
+  // Build the tiling environment and dispatch to the per-count helper
+  TileEnv env;
+  env.margin      = 4;
+  env.spacing     = -1;
+  env.availW      = canvasW - 2 * env.margin;
+  env.availH      = canvasH - 2 * env.margin;
+  env.isLandscape = env.availW >= env.availH;
+  dispatchTile(windows, env);
 
   // Ensure all windows are visible after tiling
-  for (auto* win : std::as_const(m_windows)) {
-    if (win && !win->isVisible()) {
-      if (win->state() == "normal" || win->state() == "maximized")
-        win->setVisible(true);
-    }
-  }
+  for (auto* win : std::as_const(m_windows))
+    if (win && !win->isVisible() && (win->state() == "normal" || win->state() == "maximized"))
+      win->setVisible(true);
 
   Q_EMIT geometryChanged(nullptr);
 }
@@ -1060,39 +1151,48 @@ QRect UI::WindowManager::extractGeometry(QQuickItem* item) const
  */
 UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* target) const
 {
+  // Only normal-state windows can be resized
+  if (target->state() != "normal")
+    return ResizeEdge::None;
+
   // Map mouse position to window-local coordinates
-  if (target->state() == "normal") {
-    const int kResizeMargin = 8;
-    QPointF localPos        = target->mapFromItem(this, m_initialMousePos);
-    const int x             = static_cast<int>(localPos.x());
-    const int y             = static_cast<int>(localPos.y());
-    const int w             = static_cast<int>(target->width());
-    const int h             = static_cast<int>(target->height());
+  const int kResizeMargin = 8;
+  QPointF localPos        = target->mapFromItem(this, m_initialMousePos);
+  const int x             = static_cast<int>(localPos.x());
+  const int y             = static_cast<int>(localPos.y());
+  const int w             = static_cast<int>(target->width());
+  const int h             = static_cast<int>(target->height());
 
-    // Check proximity to each edge
-    const bool nearLeft   = x <= kResizeMargin;
-    const bool nearRight  = x >= w - kResizeMargin;
-    const bool nearTop    = y <= kResizeMargin;
-    const bool nearBottom = y >= h - kResizeMargin;
+  // Check proximity to each edge
+  const bool nearLeft   = x <= kResizeMargin;
+  const bool nearRight  = x >= w - kResizeMargin;
+  const bool nearTop    = y <= kResizeMargin;
+  const bool nearBottom = y >= h - kResizeMargin;
 
-    // Return corner or edge closest to cursor
-    if (nearLeft && nearTop)
-      return ResizeEdge::TopLeft;
-    else if (nearRight && nearTop)
-      return ResizeEdge::TopRight;
-    else if (nearLeft && nearBottom)
-      return ResizeEdge::BottomLeft;
-    else if (nearRight && nearBottom)
-      return ResizeEdge::BottomRight;
-    else if (nearLeft)
-      return ResizeEdge::Left;
-    else if (nearRight)
-      return ResizeEdge::Right;
-    else if (nearTop)
-      return ResizeEdge::Top;
-    else if (nearBottom)
-      return ResizeEdge::Bottom;
-  }
+  // Return corner or edge closest to cursor
+  if (nearLeft && nearTop)
+    return ResizeEdge::TopLeft;
+
+  if (nearRight && nearTop)
+    return ResizeEdge::TopRight;
+
+  if (nearLeft && nearBottom)
+    return ResizeEdge::BottomLeft;
+
+  if (nearRight && nearBottom)
+    return ResizeEdge::BottomRight;
+
+  if (nearLeft)
+    return ResizeEdge::Left;
+
+  if (nearRight)
+    return ResizeEdge::Right;
+
+  if (nearTop)
+    return ResizeEdge::Top;
+
+  if (nearBottom)
+    return ResizeEdge::Bottom;
 
   return ResizeEdge::None;
 }
@@ -1150,212 +1250,201 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
   // Compute movement delta from the initial press position
   const QPoint currentPos = event->pos();
   const QPoint delta      = currentPos - m_initialMousePos;
-  int dragDistance        = delta.manhattanLength();
+  const int dragDistance  = delta.manhattanLength();
 
-  // No focused window, pass through
-  if (!m_focusedWindow) {
-    QQuickItem::mouseMoveEvent(event);
-    return;
-  }
-
-  // Skip geometry changes for non-normal windows
-  if (m_focusedWindow->state() != "normal") {
+  // No focused window or non-normal state, pass through
+  if (!m_focusedWindow || m_focusedWindow->state() != "normal") {
     QQuickItem::mouseMoveEvent(event);
     return;
   }
 
   // Drag window to new position
   if (m_dragWindow && dragDistance >= 20) {
-    int newX          = m_initialGeometry.x() + delta.x();
-    int newY          = m_initialGeometry.y() + delta.y();
-    int w             = static_cast<int>(m_dragWindow->width());
-    int h             = static_cast<int>(m_dragWindow->height());
-    const int canvasW = static_cast<int>(width());
-    const int canvasH = static_cast<int>(height());
-
-    // Shrink near-fullscreen window back to implicit size
-    if ((w >= canvasW - 20 || h >= canvasH - 20) && !autoLayoutEnabled()) {
-      w = static_cast<int>(m_dragWindow->implicitWidth());
-      h = static_cast<int>(m_dragWindow->implicitHeight());
-      m_dragWindow->setWidth(w);
-      m_dragWindow->setHeight(h);
-    }
-
-    // Clamp and apply position
-    newX = qBound(0, newX, canvasW - w);
-    newY = qBound(0, newY, canvasH - h);
-    m_dragWindow->setX(newX);
-    m_dragWindow->setY(newY);
-
-    // Show snap indicator for auto-layout reorder feedback
-    if (autoLayoutEnabled()) {
-      int targetIndex = determineNewIndexFromMousePos(currentPos);
-      if (targetIndex >= 0 && targetIndex < m_windowOrder.size())
-        m_targetWindow = m_windows.value(m_windowOrder[targetIndex]);
-
-      // Snap to target window if hovering over a different one
-      if (m_targetWindow && m_targetWindow != m_dragWindow) {
-        m_dragWindow->setWidth(qMin(w, static_cast<int>(m_targetWindow->width())));
-        m_dragWindow->setHeight(qMin(h, static_cast<int>(m_targetWindow->height())));
-        m_snapIndicator        = extractGeometry(m_targetWindow);
-        m_snapIndicatorVisible = true;
-        Q_EMIT snapIndicatorChanged();
-        event->accept();
-        return;
-      }
-
-      // No valid target, hide snap indicator
-      if (m_snapIndicatorVisible) {
-        m_snapIndicatorVisible = false;
-        Q_EMIT snapIndicatorChanged();
-      }
-    }
-
-    // Manual layout: edge snap indicators
-    else {
-      const int top    = newY;
-      const int left   = newX;
-      const int right  = newX + w;
-      const int bottom = newY + h;
-      bool snapped     = false;
-
-      // Top-left corner
-      if (left <= 0 && top <= 0) {
-        m_snapIndicator = QRect(0, 0, canvasW / 2, canvasH / 2);
-        snapped         = true;
-      }
-
-      // Top-right corner
-      else if (right >= canvasW && top <= 0) {
-        m_snapIndicator = QRect(canvasW / 2, 0, canvasW / 2, canvasH / 2);
-        snapped         = true;
-      }
-
-      // Bottom-left corner
-      else if (left <= 0 && bottom >= canvasH) {
-        m_snapIndicator = QRect(0, canvasH / 2, canvasW / 2, canvasH / 2);
-        snapped         = true;
-      }
-
-      // Bottom-right corner
-      else if (right >= canvasW && bottom >= canvasH) {
-        m_snapIndicator = QRect(canvasW / 2, canvasH / 2, canvasW / 2, canvasH / 2);
-        snapped         = true;
-      }
-
-      // Top edge = maximize
-      else if (top <= 0) {
-        m_snapIndicator = QRect(0, 0, canvasW, canvasH);
-        snapped         = true;
-      }
-
-      // Left edge = left half
-      else if (left <= 0) {
-        m_snapIndicator = QRect(0, 0, canvasW / 2, canvasH);
-        snapped         = true;
-      }
-
-      // Right edge = right half
-      else if (right >= canvasW) {
-        m_snapIndicator = QRect(canvasW / 2, 0, canvasW / 2, canvasH);
-        snapped         = true;
-      }
-
-      if (snapped) {
-        m_snapIndicatorVisible = true;
-        Q_EMIT snapIndicatorChanged();
-      }
-
-      else if (m_snapIndicatorVisible) {
-        m_snapIndicatorVisible = false;
-        Q_EMIT snapIndicatorChanged();
-      }
-    }
-
-    event->accept();
+    handleDragMove(event, currentPos, delta);
     return;
   }
 
   // Resize window along the active edge
   if (m_resizeWindow) {
-    QRect geometry = m_initialGeometry;
-    const int minW = m_resizeWindow->implicitWidth();
-    const int minH = m_resizeWindow->implicitHeight();
-    switch (m_resizeEdge) {
-      case ResizeEdge::Right:
-        geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
-        break;
-      case ResizeEdge::Bottom:
-        geometry.setHeight(qMax(minH, m_initialGeometry.height() + delta.y()));
-        break;
-      case ResizeEdge::Left: {
-        const int w = qMax(minW, m_initialGeometry.width() - delta.x());
-        geometry.setX(m_initialGeometry.right() - w);
-        geometry.setWidth(w);
-        break;
-      }
-      case ResizeEdge::Top: {
-        const int h = qMax(minH, m_initialGeometry.height() - delta.y());
-        geometry.setY(m_initialGeometry.bottom() - h);
-        geometry.setHeight(h);
-        break;
-      }
-      case ResizeEdge::TopLeft: {
-        const int w = qMax(minW, m_initialGeometry.width() - delta.x());
-        const int h = qMax(minH, m_initialGeometry.height() - delta.y());
-        geometry.setX(m_initialGeometry.right() - w);
-        geometry.setWidth(w);
-        geometry.setY(m_initialGeometry.bottom() - h);
-        geometry.setHeight(h);
-        break;
-      }
-      case ResizeEdge::TopRight: {
-        const int w = qMax(minW, m_initialGeometry.width() + delta.x());
-        const int h = qMax(minH, m_initialGeometry.height() - delta.y());
-        geometry.setY(m_initialGeometry.bottom() - h);
-        geometry.setHeight(h);
-        geometry.setWidth(w);
-        break;
-      }
-      case ResizeEdge::BottomLeft: {
-        const int w = qMax(minW, m_initialGeometry.width() - delta.x());
-        const int h = qMax(minH, m_initialGeometry.height() + delta.y());
-        geometry.setX(m_initialGeometry.right() - w);
-        geometry.setWidth(w);
-        geometry.setHeight(h);
-        break;
-      }
-      case ResizeEdge::BottomRight:
-        geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
-        geometry.setHeight(qMax(minH, m_initialGeometry.height() + delta.y()));
-        break;
-      case ResizeEdge::None:
-        break;
-    }
-
-    // Clamp geometry to canvas bounds
-    const QRect unclamped = geometry;
-    geometry.setX(qMax(0, geometry.x()));
-    geometry.setY(qMax(0, geometry.y()));
-    if (geometry.right() > int(width()) - 1)
-      geometry.setWidth(int(width()) - geometry.x());
-
-    if (geometry.bottom() > int(height()) - 1)
-      geometry.setHeight(int(height()) - geometry.y());
-
-    // Only apply if clamping did not alter the result
-    if (geometry == unclamped) {
-      m_resizeWindow->setX(geometry.x());
-      m_resizeWindow->setY(geometry.y());
-      m_resizeWindow->setWidth(geometry.width());
-      m_resizeWindow->setHeight(geometry.height());
-      event->accept();
-    }
-
+    handleResizeMove(event, delta);
     return;
   }
 
   QQuickItem::mouseMoveEvent(event);
+}
+
+/**
+ * @brief Updates the manual-mode edge snap indicator based on the dragged window position.
+ */
+void UI::WindowManager::updateManualSnapIndicator(
+  int newX, int newY, int w, int h, int canvasW, int canvasH)
+{
+  // Detect snap region from the closest edge or corner
+  const auto snap = computeSnapRect(newX, newY, newX + w, newY + h, canvasW, canvasH);
+  if (snap.has_value()) {
+    m_snapIndicator        = *snap;
+    m_snapIndicatorVisible = true;
+    Q_EMIT snapIndicatorChanged();
+    return;
+  }
+
+  // No snap region: hide the indicator if it was visible
+  if (m_snapIndicatorVisible) {
+    m_snapIndicatorVisible = false;
+    Q_EMIT snapIndicatorChanged();
+  }
+}
+
+/**
+ * @brief Applies a drag delta to the focused window and updates snap indicators.
+ */
+void UI::WindowManager::handleDragMove(QMouseEvent* event,
+                                       const QPoint& currentPos,
+                                       const QPoint& delta)
+{
+  int newX          = m_initialGeometry.x() + delta.x();
+  int newY          = m_initialGeometry.y() + delta.y();
+  int w             = static_cast<int>(m_dragWindow->width());
+  int h             = static_cast<int>(m_dragWindow->height());
+  const int canvasW = static_cast<int>(width());
+  const int canvasH = static_cast<int>(height());
+
+  // Shrink near-fullscreen window back to implicit size
+  if ((w >= canvasW - 20 || h >= canvasH - 20) && !autoLayoutEnabled()) {
+    w = static_cast<int>(m_dragWindow->implicitWidth());
+    h = static_cast<int>(m_dragWindow->implicitHeight());
+    m_dragWindow->setWidth(w);
+    m_dragWindow->setHeight(h);
+  }
+
+  // Clamp and apply position
+  newX = qBound(0, newX, canvasW - w);
+  newY = qBound(0, newY, canvasH - h);
+  m_dragWindow->setX(newX);
+  m_dragWindow->setY(newY);
+
+  // Manual layout uses edge-based snap indicators
+  if (!autoLayoutEnabled()) {
+    updateManualSnapIndicator(newX, newY, w, h, canvasW, canvasH);
+    event->accept();
+    return;
+  }
+
+  // Auto-layout: pick a target window for reorder feedback
+  const int targetIndex = determineNewIndexFromMousePos(currentPos);
+  if (targetIndex >= 0 && targetIndex < m_windowOrder.size())
+    m_targetWindow = m_windows.value(m_windowOrder[targetIndex]);
+
+  // Snap to target window if hovering over a different one
+  if (m_targetWindow && m_targetWindow != m_dragWindow) {
+    m_dragWindow->setWidth(qMin(w, static_cast<int>(m_targetWindow->width())));
+    m_dragWindow->setHeight(qMin(h, static_cast<int>(m_targetWindow->height())));
+    m_snapIndicator        = extractGeometry(m_targetWindow);
+    m_snapIndicatorVisible = true;
+    Q_EMIT snapIndicatorChanged();
+    event->accept();
+    return;
+  }
+
+  // No valid target, hide snap indicator
+  if (m_snapIndicatorVisible) {
+    m_snapIndicatorVisible = false;
+    Q_EMIT snapIndicatorChanged();
+  }
+
+  event->accept();
+}
+
+/**
+ * @brief Computes the new geometry for the active resize window from the mouse delta.
+ */
+QRect UI::WindowManager::computeResizedGeometry(const QPoint& delta) const
+{
+  QRect geometry = m_initialGeometry;
+  const int minW = m_resizeWindow->implicitWidth();
+  const int minH = m_resizeWindow->implicitHeight();
+
+  switch (m_resizeEdge) {
+    case ResizeEdge::Right:
+      geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
+      return geometry;
+    case ResizeEdge::Bottom:
+      geometry.setHeight(qMax(minH, m_initialGeometry.height() + delta.y()));
+      return geometry;
+    case ResizeEdge::Left: {
+      const int w = qMax(minW, m_initialGeometry.width() - delta.x());
+      geometry.setX(m_initialGeometry.right() - w);
+      geometry.setWidth(w);
+      return geometry;
+    }
+    case ResizeEdge::Top: {
+      const int h = qMax(minH, m_initialGeometry.height() - delta.y());
+      geometry.setY(m_initialGeometry.bottom() - h);
+      geometry.setHeight(h);
+      return geometry;
+    }
+    case ResizeEdge::TopLeft: {
+      const int w = qMax(minW, m_initialGeometry.width() - delta.x());
+      const int h = qMax(minH, m_initialGeometry.height() - delta.y());
+      geometry.setX(m_initialGeometry.right() - w);
+      geometry.setWidth(w);
+      geometry.setY(m_initialGeometry.bottom() - h);
+      geometry.setHeight(h);
+      return geometry;
+    }
+    case ResizeEdge::TopRight: {
+      const int w = qMax(minW, m_initialGeometry.width() + delta.x());
+      const int h = qMax(minH, m_initialGeometry.height() - delta.y());
+      geometry.setY(m_initialGeometry.bottom() - h);
+      geometry.setHeight(h);
+      geometry.setWidth(w);
+      return geometry;
+    }
+    case ResizeEdge::BottomLeft: {
+      const int w = qMax(minW, m_initialGeometry.width() - delta.x());
+      const int h = qMax(minH, m_initialGeometry.height() + delta.y());
+      geometry.setX(m_initialGeometry.right() - w);
+      geometry.setWidth(w);
+      geometry.setHeight(h);
+      return geometry;
+    }
+    case ResizeEdge::BottomRight:
+      geometry.setWidth(qMax(minW, m_initialGeometry.width() + delta.x()));
+      geometry.setHeight(qMax(minH, m_initialGeometry.height() + delta.y()));
+      return geometry;
+    case ResizeEdge::None:
+      return geometry;
+  }
+
+  return geometry;
+}
+
+/**
+ * @brief Applies a resize delta to the focused window, clamped to canvas bounds.
+ */
+void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta)
+{
+  // Compute target geometry from the active edge and the mouse delta
+  QRect geometry = computeResizedGeometry(delta);
+
+  // Clamp geometry to canvas bounds
+  const QRect unclamped = geometry;
+  geometry.setX(qMax(0, geometry.x()));
+  geometry.setY(qMax(0, geometry.y()));
+  if (geometry.right() > int(width()) - 1)
+    geometry.setWidth(int(width()) - geometry.x());
+
+  if (geometry.bottom() > int(height()) - 1)
+    geometry.setHeight(int(height()) - geometry.y());
+
+  // Only apply if clamping did not alter the result
+  if (geometry == unclamped) {
+    m_resizeWindow->setX(geometry.x());
+    m_resizeWindow->setY(geometry.y());
+    m_resizeWindow->setWidth(geometry.width());
+    m_resizeWindow->setHeight(geometry.height());
+    event->accept();
+  }
 }
 
 /**

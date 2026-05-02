@@ -566,21 +566,31 @@ QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
  */
 void IO::Drivers::Network::setDriverProperty(const QString& key, const QVariant& value)
 {
-  if (key == QLatin1String("socketTypeIndex"))
+  if (key == QLatin1String("socketTypeIndex")) {
     setSocketTypeIndex(value.toInt());
+    return;
+  }
 
-  else if (key == QLatin1String("address"))
+  if (key == QLatin1String("address")) {
     setRemoteAddress(value.toString());
+    return;
+  }
 
-  else if (key == QLatin1String("tcpPort"))
+  if (key == QLatin1String("tcpPort")) {
     setTcpPort(static_cast<quint16>(value.toInt()));
+    return;
+  }
 
-  else if (key == QLatin1String("udpLocalPort"))
+  if (key == QLatin1String("udpLocalPort")) {
     setUdpLocalPort(static_cast<quint16>(value.toInt()));
+    return;
+  }
 
-  else if (key == QLatin1String("udpRemotePort"))
+  if (key == QLatin1String("udpRemotePort")) {
     setUdpRemotePort(static_cast<quint16>(value.toInt()));
+    return;
+  }
 
-  else if (key == QLatin1String("udpMulticast"))
+  if (key == QLatin1String("udpMulticast"))
     setUdpMulticast(value.toBool());
 }
