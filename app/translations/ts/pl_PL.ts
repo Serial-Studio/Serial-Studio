@@ -9148,12 +9148,12 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Ostrzeżenie</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="635"/>
+        <location filename="../../src/Misc/CLI.cpp" line="451"/>
         <source>Project file not found</source>
         <translation>Nie znaleziono pliku projektu</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="636"/>
+        <location filename="../../src/Misc/CLI.cpp" line="452"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -9162,17 +9162,17 @@ Parametr separatora nie jest już potrzebny.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="639"/>
+        <location filename="../../src/Misc/CLI.cpp" line="455"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Usunąć ten skrót?</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="643"/>
+        <location filename="../../src/Misc/CLI.cpp" line="459"/>
         <source>Delete Shortcut</source>
         <translation>Usuń Skrót</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="645"/>
+        <location filename="../../src/Misc/CLI.cpp" line="461"/>
         <source>Quit</source>
         <translation>Zakończ</translation>
     </message>

@@ -214,6 +214,8 @@ set(SOURCES
   src/Misc/Examples.cpp
   src/Misc/HelpCenter.cpp
   src/Misc/IconEngine.cpp
+  src/Misc/CLI.cpp
+  src/Platform/AppPlatform.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Taskbar.cpp
@@ -353,6 +355,8 @@ set(HEADERS
   src/API/Handlers/SourceHandler.h
   src/API/Handlers/WorkspacesHandler.h
   src/UI/UISessionRegistry.h
+  src/Misc/CLI.h
+  src/Platform/AppPlatform.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
   src/Console/Export.h

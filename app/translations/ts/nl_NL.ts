@@ -9148,12 +9148,12 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="635"/>
+        <location filename="../../src/Misc/CLI.cpp" line="451"/>
         <source>Project file not found</source>
         <translation>Projectbestand niet gevonden</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="636"/>
+        <location filename="../../src/Misc/CLI.cpp" line="452"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -9162,17 +9162,17 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="639"/>
+        <location filename="../../src/Misc/CLI.cpp" line="455"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Wilt u deze snelkoppeling verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="643"/>
+        <location filename="../../src/Misc/CLI.cpp" line="459"/>
         <source>Delete Shortcut</source>
         <translation>Snelkoppeling Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="645"/>
+        <location filename="../../src/Misc/CLI.cpp" line="461"/>
         <source>Quit</source>
         <translation>Afsluiten</translation>
     </message>

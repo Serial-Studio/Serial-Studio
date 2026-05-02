@@ -9148,12 +9148,12 @@ O parâmetro separador não é mais necessário.</translation>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="635"/>
+        <location filename="../../src/Misc/CLI.cpp" line="451"/>
         <source>Project file not found</source>
         <translation>Arquivo de projeto não encontrado</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="636"/>
+        <location filename="../../src/Misc/CLI.cpp" line="452"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -9162,17 +9162,17 @@ O parâmetro separador não é mais necessário.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="639"/>
+        <location filename="../../src/Misc/CLI.cpp" line="455"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Excluir este atalho?</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="643"/>
+        <location filename="../../src/Misc/CLI.cpp" line="459"/>
         <source>Delete Shortcut</source>
         <translation>Excluir Atalho</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="645"/>
+        <location filename="../../src/Misc/CLI.cpp" line="461"/>
         <source>Quit</source>
         <translation>Sair</translation>
     </message>

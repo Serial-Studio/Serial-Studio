@@ -38,11 +38,9 @@
 
 #include "DataModel/FrameConsumer.h"
 
-QT_BEGIN_NAMESPACE
 class QMediaCaptureSession;
 class QMediaRecorder;
 class QVideoFrameInput;
-QT_END_NAMESPACE
 
 namespace Widgets {
 

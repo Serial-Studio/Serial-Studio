@@ -9148,12 +9148,12 @@ function parse(%1) { ... }
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="635"/>
+        <location filename="../../src/Misc/CLI.cpp" line="451"/>
         <source>Project file not found</source>
         <translation>프로젝트 파일을 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="636"/>
+        <location filename="../../src/Misc/CLI.cpp" line="452"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -9162,17 +9162,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="639"/>
+        <location filename="../../src/Misc/CLI.cpp" line="455"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>이 바로 가기를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="643"/>
+        <location filename="../../src/Misc/CLI.cpp" line="459"/>
         <source>Delete Shortcut</source>
         <translation>바로 가기 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="645"/>
+        <location filename="../../src/Misc/CLI.cpp" line="461"/>
         <source>Quit</source>
         <translation>종료</translation>
     </message>
