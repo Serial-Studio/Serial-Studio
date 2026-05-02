@@ -18,6 +18,7 @@
 #  include <QDir>
 #  include <QFile>
 #  include <QFileInfo>
+#  include <QProcess>
 #  include <QRegularExpression>
 #  include <QTextStream>
 #  include <QUrl>
@@ -87,6 +88,15 @@ static QString copyIconIntoBundle(const QString& iconSource, const QString& reso
     return candidate;
 
   return QString();
+}
+
+/**
+ * @brief Removes the com.apple.quarantine xattr so Gatekeeper does not block the launcher.
+ */
+static void stripQuarantine(const QString& bundlePath)
+{
+  QProcess::execute(QStringLiteral("/usr/bin/xattr"),
+                    {QStringLiteral("-dr"), QStringLiteral("com.apple.quarantine"), bundlePath});
 }
 
 /**
@@ -237,6 +247,10 @@ bool Misc::ShortcutGenerator::writeMacCommand(const QString& outputPath,
     return false;
 
   writePkgInfo(contentsDir);
+
+  // Strip quarantine so Gatekeeper does not block the launcher
+  stripQuarantine(bundlePath);
+
   return true;
 }
 
