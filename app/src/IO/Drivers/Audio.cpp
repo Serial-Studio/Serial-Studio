@@ -1307,21 +1307,21 @@ void IO::Drivers::Audio::handleCallback(void* output, const void* input, ma_uint
     // clang-format on
 
     // Write one queued frame per output slot
-    for (ma_uint32 i = 0; i < frameCount; ++i) {
-      if (!m_outputQueue.isEmpty()) {
-        // clang-format off
-        const QVector<quint8> &frame = m_outputQueue.front();
-        const int bytesToCopy = qMin(outBytesPerFrame, static_cast<ma_uint32>(frame.size()));
-        std::memcpy(out, frame.constData(), bytesToCopy);
-        out += outBytesPerFrame;
-        m_outputQueue.pop_front();
-        // clang-format on
+    for (ma_uint32 i = 0; i < frameCount; ++i, out += outBytesPerFrame) {
+      if (m_outputQueue.isEmpty()) [[unlikely]] {
+        std::memset(out, 0, outBytesPerFrame);
+        continue;
       }
 
-      else {
-        std::memset(out, 0, outBytesPerFrame);
-        out += outBytesPerFrame;
-      }
+      // clang-format off
+      const QVector<quint8> &frame = m_outputQueue.front();
+      const ma_uint32 bytesToCopy = qMin(outBytesPerFrame, static_cast<ma_uint32>(frame.size()));
+      std::memcpy(out, frame.constData(), bytesToCopy);
+      if (bytesToCopy < outBytesPerFrame) [[unlikely]]
+        std::memset(out + bytesToCopy, 0, outBytesPerFrame - bytesToCopy);
+        
+      m_outputQueue.pop_front();
+      // clang-format on
     }
   }
 }
