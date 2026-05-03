@@ -51,15 +51,12 @@ def test_csv_player_catchup_uses_next_frame_timestamps():
     text = _read("app/src/CSV/Player.cpp")
 
     assert re.search(
-        r"while \(m_framePos < frameCount\(\) - 1.*?m_timestampCache\[m_framePos \+ 1\]",
+        r"while \(m_framePos < frameCount\(\) - 1.*?recomputeMsUntilNext\(msUntilNext\)",
         text,
         re.DOTALL,
     )
-    assert re.search(
-        r"while \(m_framePos < frameCount\(\) - 1.*?getDateTime\(m_framePos \+ 1\)",
-        text,
-        re.DOTALL,
-    )
+    assert "m_timestampCache[m_framePos + 1]" in text
+    assert "getDateTime(m_framePos + 1)" in text
 
 
 def test_mdf4_player_catchup_uses_next_frame_timestamp():

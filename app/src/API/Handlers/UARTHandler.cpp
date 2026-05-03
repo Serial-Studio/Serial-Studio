@@ -48,59 +48,74 @@ void API::Handlers::UARTHandler::registerCommands()
                               QStringLiteral("Device path (e.g. COM3, /dev/ttyUSB0)")}
   }),
                            &setDevice);
-  registry.registerCommand(QStringLiteral("io.driver.uart.setPortIndex"),
-                           QStringLiteral("Set serial port by index (params: portIndex)"),
-                           API::makeSchema({
-                             {QStringLiteral("portIndex"),
-                              QStringLiteral("integer"),
-                              QStringLiteral("Serial port index (0-based)")}
-  }),
-                           &setPortIndex);
+
+  registry.registerCommand(
+    QStringLiteral("io.driver.uart.setPortIndex"),
+    QStringLiteral("Set serial port by index (params: portIndex)"),
+    API::makeSchema({API::rangeProp(QStringLiteral("portIndex"),
+                                    QStringLiteral("Serial port index (0-based)"),
+                                    0,
+                                    QJsonValue())}),
+    &setPortIndex);
 
   // Line settings
-  registry.registerCommand(QStringLiteral("io.driver.uart.setBaudRate"),
-                           QStringLiteral("Set baud rate (params: baudRate)"),
-                           API::makeSchema({
-                             {QStringLiteral("baudRate"),
-                              QStringLiteral("integer"),
-                              QStringLiteral("Baud rate in bits per second")}
-  }),
-                           &setBaudRate);
+  const QJsonArray kBaudRates = {110,
+                                 150,
+                                 300,
+                                 1200,
+                                 2400,
+                                 4800,
+                                 9600,
+                                 19200,
+                                 38400,
+                                 57600,
+                                 115200,
+                                 230400,
+                                 256000,
+                                 460800,
+                                 576000,
+                                 921600};
+  registry.registerCommand(
+    QStringLiteral("io.driver.uart.setBaudRate"),
+    QStringLiteral("Set baud rate (params: baudRate)"),
+    API::makeSchema({API::enumProp(QStringLiteral("baudRate"),
+                                   QStringLiteral("Baud rate in bits per second"),
+                                   kBaudRates,
+                                   9600)}),
+    &setBaudRate);
   registry.registerCommand(
     QStringLiteral("io.driver.uart.setParity"),
     QStringLiteral("Set parity (params: parityIndex - 0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)"),
-    API::makeSchema({
-      {QStringLiteral("parityIndex"),
-       QStringLiteral("integer"),
-       QStringLiteral("Parity index (0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)")}
-  }),
+    API::makeSchema(
+      {API::enumProp(QStringLiteral("parityIndex"),
+                     QStringLiteral("Parity index (0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)"),
+                     QJsonArray{0, 1, 2, 3, 4},
+                     0)}),
     &setParity);
   registry.registerCommand(
     QStringLiteral("io.driver.uart.setDataBits"),
     QStringLiteral("Set data bits (params: dataBitsIndex - 0=5, 1=6, 2=7, 3=8)"),
-    API::makeSchema({
-      {QStringLiteral("dataBitsIndex"),
-       QStringLiteral("integer"),
-       QStringLiteral("Data bits index (0=5, 1=6, 2=7, 3=8)")}
-  }),
+    API::makeSchema({API::enumProp(QStringLiteral("dataBitsIndex"),
+                                   QStringLiteral("Data bits index (0=5, 1=6, 2=7, 3=8)"),
+                                   QJsonArray{0, 1, 2, 3},
+                                   3)}),
     &setDataBits);
   registry.registerCommand(
     QStringLiteral("io.driver.uart.setStopBits"),
     QStringLiteral("Set stop bits (params: stopBitsIndex - 0=1, 1=1.5, 2=2)"),
-    API::makeSchema({
-      {QStringLiteral("stopBitsIndex"),
-       QStringLiteral("integer"),
-       QStringLiteral("Stop bits index (0=1, 1=1.5, 2=2)")}
-  }),
+    API::makeSchema({API::enumProp(QStringLiteral("stopBitsIndex"),
+                                   QStringLiteral("Stop bits index (0=1, 1=1.5, 2=2)"),
+                                   QJsonArray{0, 1, 2},
+                                   0)}),
     &setStopBits);
   registry.registerCommand(
     QStringLiteral("io.driver.uart.setFlowControl"),
     QStringLiteral("Set flow control (params: flowControlIndex - 0=None, 1=Hardware, 2=Software)"),
-    API::makeSchema({
-      {QStringLiteral("flowControlIndex"),
-       QStringLiteral("integer"),
-       QStringLiteral("Flow control index (0=None, 1=Hardware, 2=Software)")}
-  }),
+    API::makeSchema(
+      {API::enumProp(QStringLiteral("flowControlIndex"),
+                     QStringLiteral("Flow control index (0=None, 1=Hardware, 2=Software)"),
+                     QJsonArray{0, 1, 2},
+                     0)}),
     &setFlowControl);
 
   // Signals + reconnect

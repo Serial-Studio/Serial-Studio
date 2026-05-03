@@ -40,17 +40,18 @@ void API::Handlers::NetworkHandler::registerCommands()
   const auto empty = emptySchema();
 
   // Mutation commands
+  SchemaProp address_prop;
+  address_prop.name         = QStringLiteral("address");
+  address_prop.type         = QStringLiteral("string");
+  address_prop.description  = QStringLiteral("Remote host address (IP or hostname)");
+  address_prop.defaultValue = QStringLiteral("localhost");
   registry.registerCommand(QStringLiteral("io.driver.network.setRemoteAddress"),
                            QStringLiteral("Set remote host address (params: address)"),
-                           makeSchema({
-                             {QStringLiteral("address"),
-                              QStringLiteral("string"),
-                              QStringLiteral("Remote host address (IP or hostname)")}
-  }),
+                           makeSchema({address_prop}),
                            &setRemoteAddress);
 
-  const SchemaProp port_prop = {
-    QStringLiteral("port"), QStringLiteral("integer"), QStringLiteral("Port number (1-65535)")};
+  const SchemaProp port_prop =
+    rangeProp(QStringLiteral("port"), QStringLiteral("Port number (1-65535)"), 1, 65535);
 
   registry.registerCommand(QStringLiteral("io.driver.network.setTcpPort"),
                            QStringLiteral("Set TCP port (params: port)"),
@@ -70,11 +71,10 @@ void API::Handlers::NetworkHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("io.driver.network.setSocketType"),
     QStringLiteral("Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)"),
-    makeSchema({
-      {QStringLiteral("socketTypeIndex"),
-       QStringLiteral("integer"),
-       QStringLiteral("Socket type index (0=TCP, 1=UDP)")}
-  }),
+    makeSchema({enumProp(QStringLiteral("socketTypeIndex"),
+                         QStringLiteral("Socket type index (0=TCP, 1=UDP)"),
+                         QJsonArray{0, 1},
+                         0)}),
     &setSocketType);
 
   registry.registerCommand(QStringLiteral("io.driver.network.setUdpMulticast"),
