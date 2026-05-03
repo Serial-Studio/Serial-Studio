@@ -143,11 +143,7 @@ Item {
           }
         }
 
-        Component.onCompleted: {
-          root.taskBar.registerWindow(widgetIndex, this)
-          if (widgetIndex === 0)
-            root.taskBar.activeWindow = this
-        }
+        Component.onCompleted: root.taskBar.registerWindow(widgetIndex, this)
       }
     }
 

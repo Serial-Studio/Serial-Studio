@@ -1061,17 +1061,17 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Aktivní jsou záložní widgety. Zakupte licenci pro plnou funkčnost.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="192"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="188"/>
         <source>Empty Workspace</source>
         <translation>Prázdný Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="202"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Použijte vyhledávací lištu k nalezení a přidání widgetů, nebo klikněte pravým tlačítkem na widget v jiném pracovním prostoru a přidejte jej sem.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="216"/>
         <source>Search Widgets</source>
         <translation>Hledat Widgety</translation>
     </message>
@@ -7375,38 +7375,38 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Nepodařilo se zapsat soubor zástupce.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="211"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="221"/>
         <source>Could not replace the existing shortcut at %1.</source>
         <translation>Nelze nahradit existující zástupce na %1.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="221"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="231"/>
         <source>Could not create the .app bundle directory layout.</source>
         <translation>Nelze vytvořit adresářovou strukturu balíčku .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="114"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="124"/>
         <source>Could not write the bundle launcher: %1</source>
         <translation>Nelze zapsat spouštěč balíčku: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="133"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="143"/>
         <source>Could not mark the bundle launcher as executable.</source>
         <translation>Nelze označit spouštěč balíčku jako spustitelný.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="153"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="163"/>
         <source>Could not write Info.plist: %1</source>
         <translation>Nelze zapsat Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="257"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců Windows není na této platformě dostupný.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="285"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="203"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců Linux není na této platformě dostupný.</translation>

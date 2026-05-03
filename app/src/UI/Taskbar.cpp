@@ -819,6 +819,14 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
 
   // Restore saved layout once all windows are registered
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager) {
+    // Anchor the snap indicator on first drag by focusing the first window
+    if (!m_activeWindow && m_taskbarButtons->rowCount() > 0) {
+      auto firstItem     = m_taskbarButtons->item(0);
+      const int windowId = firstItem ? firstItem->data(TaskbarModel::WindowIdRole).toInt() : -1;
+      if (auto* firstWindow = windowData(windowId))
+        setActiveWindow(firstWindow);
+    }
+
     m_restoringLayout = true;
     const auto opMode = AppState::instance().operationMode();
     if (opMode == SerialStudio::ProjectFile) {

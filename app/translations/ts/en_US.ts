@@ -1061,17 +1061,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Fallback widgets are active. Purchase a license for full functionality.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="192"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="188"/>
         <source>Empty Workspace</source>
         <translation>Empty Workspace</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="202"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="216"/>
         <source>Search Widgets</source>
         <translation>Search Widgets</translation>
     </message>
@@ -7375,38 +7375,38 @@ Would you like to open the download page?</translation>
         <translation>Failed to write shortcut file.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="211"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="221"/>
         <source>Could not replace the existing shortcut at %1.</source>
         <translation>Could not replace the existing shortcut at %1.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="221"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="231"/>
         <source>Could not create the .app bundle directory layout.</source>
         <translation>Could not create the .app bundle directory layout.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="114"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="124"/>
         <source>Could not write the bundle launcher: %1</source>
         <translation>Could not write the bundle launcher: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="133"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="143"/>
         <source>Could not mark the bundle launcher as executable.</source>
         <translation>Could not mark the bundle launcher as executable.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="153"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="163"/>
         <source>Could not write Info.plist: %1</source>
         <translation>Could not write Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="257"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows shortcut writer is not available on this platform.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="285"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="203"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Linux shortcut writer is not available on this platform.</translation>

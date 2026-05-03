@@ -1061,17 +1061,17 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Yedek widget'lar etkin. Tam işlevsellik için lisans satın alın.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="192"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="188"/>
         <source>Empty Workspace</source>
         <translation>Boş Çalışma Alanı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="202"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Widget bulmak ve eklemek için arama çubuğunu kullanın veya başka bir çalışma alanındaki widget'a sağ tıklayarak buraya ekleyin.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="216"/>
         <source>Search Widgets</source>
         <translation>Widget'ları Ara</translation>
     </message>
@@ -7375,38 +7375,38 @@ Would you like to open the download page?</source>
         <translation>Kısayol dosyası yazılamadı.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="211"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="221"/>
         <source>Could not replace the existing shortcut at %1.</source>
         <translation>%1 konumundaki mevcut kısayol değiştirilemedi.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="221"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="231"/>
         <source>Could not create the .app bundle directory layout.</source>
         <translation>.app paket dizin yapısı oluşturulamadı.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="114"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="124"/>
         <source>Could not write the bundle launcher: %1</source>
         <translation>Paket başlatıcısı yazılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="133"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="143"/>
         <source>Could not mark the bundle launcher as executable.</source>
         <translation>Paket başlatıcısı çalıştırılabilir olarak işaretlenemedi.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="153"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="163"/>
         <source>Could not write Info.plist: %1</source>
         <translation>Info.plist yazılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="257"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows kısayol yazıcısı bu platformda kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="285"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="203"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Linux kısayol yazıcısı bu platformda kullanılamıyor.</translation>

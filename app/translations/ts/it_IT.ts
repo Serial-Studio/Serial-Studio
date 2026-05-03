@@ -1061,17 +1061,17 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <translation>Widget di fallback attivi. Acquista una licenza per la funzionalità completa.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="192"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="188"/>
         <source>Empty Workspace</source>
         <translation>Area di Lavoro Vuota</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="202"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Usa la barra di ricerca per trovare e aggiungere widget, oppure fai clic destro su un widget in un'altra area di lavoro per aggiungerlo qui.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="216"/>
         <source>Search Widgets</source>
         <translation>Cerca Widget</translation>
     </message>
@@ -7375,38 +7375,38 @@ Aprire la pagina di download?</translation>
         <translation>Impossibile scrivere il file di collegamento.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="211"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="221"/>
         <source>Could not replace the existing shortcut at %1.</source>
         <translation>Impossibile sostituire il collegamento esistente in %1.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="221"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="231"/>
         <source>Could not create the .app bundle directory layout.</source>
         <translation>Impossibile creare la struttura di directory del bundle .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="114"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="124"/>
         <source>Could not write the bundle launcher: %1</source>
         <translation>Impossibile scrivere il launcher del bundle: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="133"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="143"/>
         <source>Could not mark the bundle launcher as executable.</source>
         <translation>Impossibile contrassegnare il launcher del bundle come eseguibile.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="153"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="163"/>
         <source>Could not write Info.plist: %1</source>
         <translation>Impossibile scrivere Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="257"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Il writer di scorciatoie Windows non è disponibile su questa piattaforma.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="285"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="203"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Il writer di scorciatoie Linux non è disponibile su questa piattaforma.</translation>

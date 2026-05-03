@@ -1333,9 +1333,7 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
     return;
   }
 
-  // Auto-layout: pick the tile with the largest overlap so the indicator
-  // tracks the dragged window's body rather than the cursor (which sits on
-  // the dragged caption and would always be skipped by getWindow)
+  // Auto-layout: pick the tile with the largest overlap with the drag rect
   const QRect dragRect(newX, newY, w, h);
   m_targetWindow = findOverlapTarget(dragRect);
 
