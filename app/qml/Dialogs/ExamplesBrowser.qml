@@ -81,43 +81,15 @@ SmartDialog {
     //
     // Search bar (grid page only)
     //
-    Rectangle {
-      radius: 2
-      border.width: 1
+    SearchField {
+      id: searchField
+
       Layout.fillWidth: true
       Layout.minimumWidth: 860
       Layout.maximumWidth: 860
-      implicitHeight: root.toolbarHeight
+      placeholderText: qsTr("Search in Examples…")
       visible: !root.showDetail && !root.fetchingData
-      color: Cpp_ThemeManager.colors["groupbox_background"]
-      border.color: searchField.activeFocus ? Cpp_ThemeManager.colors["highlight"] :
-                                              Cpp_ThemeManager.colors["groupbox_border"]
-
-      TextField {
-        id: searchField
-
-        background: Item {}
-        anchors.fill: parent
-        anchors.leftMargin: 4
-        font: Cpp_Misc_CommonFonts.uiFont
-        rightPadding: searchIcon.width + 16
-        placeholderText: qsTr("Search in Examples…")
-        onTextChanged: Cpp_Examples.searchFilter = text
-
-        Button {
-          id: searchIcon
-
-          opacity: 0.8
-          icon.width: 12
-          icon.height: 12
-          background: Item {}
-          anchors.rightMargin: 4
-          anchors.right: parent.right
-          anchors.verticalCenter: parent.verticalCenter
-          icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/icons/buttons/search.svg"
-        }
-      }
+      onTextChanged: Cpp_Examples.searchFilter = text
     }
 
     //
@@ -489,6 +461,8 @@ SmartDialog {
                   text: modelData.title
                   elide: Text.ElideRight
                   Layout.fillWidth: true
+                  LayoutMirroring.enabled: false
+                  horizontalAlignment: Cpp_Misc_Translator.rtl ? Text.AlignRight : Text.AlignLeft
                   font: Cpp_Misc_CommonFonts.boldUiFont
                   color: cardMouse.containsMouse
                          ? Cpp_ThemeManager.colors["highlighted_text"]

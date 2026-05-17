@@ -142,6 +142,8 @@ Item {
     spacing: 4
     visible: root.hasToolbar
     height: root.hasToolbar ? 48 : 0
+    LayoutMirroring.childrenInherit: true
+    LayoutMirroring.enabled: Cpp_Misc_Translator.rtl
 
     anchors {
       leftMargin: 8

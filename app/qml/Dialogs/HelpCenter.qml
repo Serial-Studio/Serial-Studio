@@ -159,8 +159,12 @@ SmartDialog {
 
                 y: 8
                 anchors.left: parent.left
+                anchors.right: parent.right
                 anchors.leftMargin: 4
+                anchors.rightMargin: 4
                 text: section
+                LayoutMirroring.enabled: false
+                horizontalAlignment: Cpp_Misc_Translator.rtl ? Text.AlignRight : Text.AlignLeft
                 font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
                 color: Cpp_ThemeManager.colors["pane_section_label"]
                 Component.onCompleted: font.capitalization = Font.AllUppercase
@@ -189,6 +193,8 @@ SmartDialog {
                 anchors.verticalCenter: parent.verticalCenter
                 text: modelData.title
                 elide: Text.ElideRight
+                LayoutMirroring.enabled: false
+                horizontalAlignment: Cpp_Misc_Translator.rtl ? Text.AlignRight : Text.AlignLeft
                 font: Cpp_Misc_CommonFonts.uiFont
                 color: index === Cpp_HelpCenter.currentIndex
                          ? Cpp_ThemeManager.colors["highlighted_text"]

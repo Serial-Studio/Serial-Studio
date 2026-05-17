@@ -4,6 +4,7 @@
 #include <QCodeEditor>
 
 // Qt
+#include <QEvent>
 #include <QTextEdit>
 #include <QPainter>
 #include <QPaintEvent>
@@ -16,6 +17,14 @@ QLineNumberArea::QLineNumberArea(QCodeEditor *parent)
   , m_syntaxStyle(nullptr)
   , m_codeEditParent(parent)
 {
+  setLayoutDirection(Qt::LeftToRight);
+}
+
+void QLineNumberArea::changeEvent(QEvent *event)
+{
+  QWidget::changeEvent(event);
+  if (event && event->type() == QEvent::LayoutDirectionChange)
+    setLayoutDirection(Qt::LeftToRight);
 }
 
 QSize QLineNumberArea::sizeHint() const
@@ -60,6 +69,7 @@ QSyntaxStyle *QLineNumberArea::syntaxStyle() const
 void QLineNumberArea::paintEvent(QPaintEvent *event)
 {
   QPainter painter(this);
+  painter.setLayoutDirection(Qt::LeftToRight);
 
   // Clearing rect to update
   painter.fillRect(event->rect(),

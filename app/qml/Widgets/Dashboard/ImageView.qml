@@ -163,6 +163,8 @@ Item {
       Layout.leftMargin: 8
       Layout.fillWidth: true
       Layout.preferredHeight: 48
+      LayoutMirroring.childrenInherit: true
+      LayoutMirroring.enabled: Cpp_Misc_Translator.rtl
       visible: root.hasToolbar && model && model.frameCount > 0
 
       DashboardToolButton {

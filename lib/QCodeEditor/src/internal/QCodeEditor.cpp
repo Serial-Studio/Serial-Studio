@@ -18,6 +18,8 @@
 #include <QAbstractItemView>
 #include <QShortcut>
 #include <QMimeData>
+#include <QEvent>
+#include <QTextOption>
 
 static QVector<QPair<QString, QString>> parentheses
     = {{"(", ")"}, {"{", "}"}, {"[", "]"}, {"\"", "\""}, {"'", "'"}};
@@ -37,8 +39,30 @@ QCodeEditor::QCodeEditor(QWidget *widget)
   initDocumentLayoutHandlers();
   initFont();
   performConnections();
+  enforceLeftToRight();
 
   setSyntaxStyle(QSyntaxStyle::defaultStyle());
+}
+
+void QCodeEditor::enforceLeftToRight()
+{
+  setLayoutDirection(Qt::LeftToRight);
+  if (auto *doc = document())
+  {
+    QTextOption opt = doc->defaultTextOption();
+    if (opt.textDirection() != Qt::LeftToRight)
+    {
+      opt.setTextDirection(Qt::LeftToRight);
+      doc->setDefaultTextOption(opt);
+    }
+  }
+}
+
+void QCodeEditor::changeEvent(QEvent *e)
+{
+  QTextEdit::changeEvent(e);
+  if (e && e->type() == QEvent::LayoutDirectionChange)
+    enforceLeftToRight();
 }
 
 void QCodeEditor::initDocumentLayoutHandlers()

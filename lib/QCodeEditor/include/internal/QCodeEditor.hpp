@@ -191,7 +191,23 @@ protected:
    */
   void focusInEvent(QFocusEvent *e) override;
 
+  /**
+   * @brief Intercepts LayoutDirectionChange events to keep the editor
+   * pinned to left-to-right regardless of the host application's locale.
+   * Source code reads left-to-right, so RTL inheritance from a parent
+   * window must not flip the editor's layout or its text flow.
+   */
+  void changeEvent(QEvent *e) override;
+
 private:
+  /**
+   * @brief Forces the widget layout direction and the document's default
+   * text option to left-to-right. Called from the constructor and after
+   * any inherited LayoutDirectionChange event.
+   */
+  void enforceLeftToRight();
+
+
   /**
    * @brief Method for initializing document
    * layout handlers.

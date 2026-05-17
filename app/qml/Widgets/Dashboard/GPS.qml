@@ -78,6 +78,8 @@ Item {
 
     spacing: 4
     height: 48
+    LayoutMirroring.childrenInherit: true
+    LayoutMirroring.enabled: Cpp_Misc_Translator.rtl
 
     anchors {
       leftMargin: 8

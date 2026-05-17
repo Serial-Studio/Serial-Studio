@@ -45,6 +45,14 @@ public:
 protected:
   void paintEvent(QPaintEvent *event) override;
 
+  /**
+   * @brief Intercepts LayoutDirectionChange events to keep the gutter
+   * pinned to left-to-right regardless of the host application's locale.
+   * Line numbers and the gutter geometry are always rendered LTR so they
+   * stay aligned with the editor's LTR text flow.
+   */
+  void changeEvent(QEvent *event) override;
+
 private:
   QSyntaxStyle *m_syntaxStyle;
 

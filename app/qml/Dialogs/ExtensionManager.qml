@@ -63,121 +63,80 @@ SmartDialog {
     //
     // Search bar (grid page only)
     //
-    Rectangle {
-      radius: 2
-      border.width: 1
+    RowLayout {
+      spacing: 8
       Layout.fillWidth: true
       Layout.minimumWidth: 860
       Layout.maximumWidth: 860
-      implicitHeight: root.toolbarHeight
       visible: !root.showDetail && !root.showRepos
-      color: Cpp_ThemeManager.colors["groupbox_background"]
-      border.color: searchField.activeFocus ? Cpp_ThemeManager.colors["highlight"]
-                                            : Cpp_ThemeManager.colors["groupbox_border"]
 
-      RowLayout {
-        spacing: 4
-        anchors.fill: parent
-        anchors.leftMargin: 4
-        anchors.rightMargin: 4
+      SearchField {
+        id: searchField
 
-        Button {
-          id: searchIcon
+        Layout.fillWidth: true
+        placeholderText: qsTr("Search extensions…")
+        onTextChanged: Cpp_ExtensionManager.setSearchFilter(text)
+      }
 
-          opacity: 0.8
-          icon.width: 12
-          icon.height: 12
-          background: Item {}
-          icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/icons/buttons/search.svg"
-        }
+      ComboBox {
+        id: typeFilter
 
-        TextField {
-          id: searchField
+        implicitWidth: 160
+        font: Cpp_Misc_CommonFonts.uiFont
+        model: Cpp_ExtensionManager.extensionTypes()
+        displayText: Cpp_ExtensionManager.friendlyTypeName(currentText)
+        onCurrentTextChanged: Cpp_ExtensionManager.setFilterType(currentText)
 
-          background: Item {}
-          Layout.fillWidth: true
-          font: Cpp_Misc_CommonFonts.uiFont
-          placeholderText: qsTr("Search extensions…")
-          onTextChanged: Cpp_ExtensionManager.setSearchFilter(text)
-        }
-
-        Rectangle {
-          implicitWidth: 1
-          Layout.topMargin: 8
-          Layout.bottomMargin: 8
-          Layout.fillHeight: true
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        ComboBox {
-          id: typeFilter
-
-          implicitWidth: 160
-          font: Cpp_Misc_CommonFonts.uiFont
-          model: Cpp_ExtensionManager.extensionTypes()
-          displayText: Cpp_ExtensionManager.friendlyTypeName(currentText)
-          onCurrentTextChanged: Cpp_ExtensionManager.setFilterType(currentText)
-
-          Connections {
-            target: Cpp_ExtensionManager
-            function onFilterTypeChanged() {
-              var ft = Cpp_ExtensionManager.filterType
-              var types = Cpp_ExtensionManager.extensionTypes()
-              for (var i = 0; i < types.length; ++i) {
-                if (types[i] === ft || (ft === "" && types[i] === "All")) {
-                  typeFilter.currentIndex = i
-                  return
-                }
+        Connections {
+          target: Cpp_ExtensionManager
+          function onFilterTypeChanged() {
+            var ft = Cpp_ExtensionManager.filterType
+            var types = Cpp_ExtensionManager.extensionTypes()
+            for (var i = 0; i < types.length; ++i) {
+              if (types[i] === ft || (ft === "" && types[i] === "All")) {
+                typeFilter.currentIndex = i
+                return
               }
-
-              typeFilter.currentIndex = 0
             }
-          }
 
-          delegate: ItemDelegate {
-            width: typeFilter.width
-            font: Cpp_Misc_CommonFonts.uiFont
-            highlighted: typeFilter.highlightedIndex === index
-            text: Cpp_ExtensionManager.friendlyTypeName(modelData)
+            typeFilter.currentIndex = 0
           }
         }
 
-        Rectangle {
-          implicitWidth: 1
-          Layout.topMargin: 8
-          Layout.bottomMargin: 8
-          Layout.fillHeight: true
-          color: Cpp_ThemeManager.colors["groupbox_border"]
+        delegate: ItemDelegate {
+          width: typeFilter.width
+          font: Cpp_Misc_CommonFonts.uiFont
+          highlighted: typeFilter.highlightedIndex === index
+          text: Cpp_ExtensionManager.friendlyTypeName(modelData)
         }
+      }
 
-        ToolButton {
-          icon.width: 18
-          icon.height: 18
-          background: Item {}
-          text: qsTr("Refresh")
-          icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/icons/buttons/refresh.svg"
-          onClicked: Cpp_ExtensionManager.refreshRepositories()
+      ToolButton {
+        icon.width: 18
+        icon.height: 18
+        background: Item {}
+        text: qsTr("Refresh")
+        icon.color: Cpp_ThemeManager.colors["text"]
+        icon.source: "qrc:/icons/buttons/refresh.svg"
+        onClicked: Cpp_ExtensionManager.refreshRepositories()
 
-          HoverHandler {
-            cursorShape: Qt.PointingHandCursor
-          }
+        HoverHandler {
+          cursorShape: Qt.PointingHandCursor
         }
+      }
 
-        ToolButton {
-          icon.width: 18
-          icon.height: 18
-          background: Item {}
-          text: qsTr("Repos")
-          visible: Cpp_CommercialBuild
-          icon.color: Cpp_ThemeManager.colors["text"]
-          icon.source: "qrc:/icons/toolbar/settings.svg"
-          onClicked: root.showRepos = true
+      ToolButton {
+        icon.width: 18
+        icon.height: 18
+        background: Item {}
+        text: qsTr("Repos")
+        visible: Cpp_CommercialBuild
+        icon.color: Cpp_ThemeManager.colors["text"]
+        icon.source: "qrc:/icons/toolbar/settings.svg"
+        onClicked: root.showRepos = true
 
-          HoverHandler {
-            cursorShape: Qt.PointingHandCursor
-          }
+        HoverHandler {
+          cursorShape: Qt.PointingHandCursor
         }
       }
     }
