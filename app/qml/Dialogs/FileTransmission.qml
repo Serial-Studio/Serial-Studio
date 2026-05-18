@@ -113,9 +113,9 @@ SmartDialog {
             Layout.fillWidth: true
             model: Cpp_IO_FileTransmission.transferModes
             currentIndex: Cpp_IO_FileTransmission.transferMode
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_IO_FileTransmission.transferMode)
-                Cpp_IO_FileTransmission.transferMode = currentIndex
+            onActivated: (index) => {
+              if (Cpp_IO_FileTransmission.transferMode !== index)
+                Cpp_IO_FileTransmission.transferMode = index
             }
           }
         }

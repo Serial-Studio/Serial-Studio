@@ -32,29 +32,6 @@ Item {
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
-  property bool _updatingModels: false
-
-  //
-  // Update listbox models when translation is changed
-  //
-  Connections {
-    target: Cpp_Misc_Translator
-    function onLanguageChanged() {
-      _updatingModels = true
-
-      var oldParityIndex = _parityCombo.currentIndex
-      var oldFlowControlIndex = _flowCombo.currentIndex
-
-      _parityCombo.model = Cpp_IO_Serial.parityList
-      _flowCombo.model = Cpp_IO_Serial.flowControlList
-
-      _parityCombo.currentIndex = oldParityIndex
-      _flowCombo.currentIndex = oldFlowControlIndex
-
-      _updatingModels = false
-    }
-  }
-
   //
   // Controls
   //
@@ -205,9 +182,9 @@ Item {
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.dataBitsList
       currentIndex: Cpp_IO_Serial.dataBitsIndex
-      onCurrentIndexChanged: {
-        if (Cpp_IO_Serial.dataBitsIndex !== currentIndex)
-          Cpp_IO_Serial.dataBitsIndex = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Serial.dataBitsIndex !== index)
+          Cpp_IO_Serial.dataBitsIndex = index
       }
     }
 
@@ -226,9 +203,9 @@ Item {
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.parityList
       currentIndex: Cpp_IO_Serial.parityIndex
-      onCurrentIndexChanged: {
-        if (!_updatingModels && Cpp_IO_Serial.parityIndex !== currentIndex)
-          Cpp_IO_Serial.parityIndex = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Serial.parityIndex !== index)
+          Cpp_IO_Serial.parityIndex = index
       }
     }
 
@@ -247,9 +224,9 @@ Item {
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.stopBitsList
       currentIndex: Cpp_IO_Serial.stopBitsIndex
-      onCurrentIndexChanged: {
-        if (Cpp_IO_Serial.stopBitsIndex !== currentIndex)
-          Cpp_IO_Serial.stopBitsIndex = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Serial.stopBitsIndex !== index)
+          Cpp_IO_Serial.stopBitsIndex = index
       }
     }
 
@@ -268,9 +245,9 @@ Item {
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.flowControlList
       currentIndex: Cpp_IO_Serial.flowControlIndex
-      onCurrentIndexChanged: {
-        if (!_updatingModels && Cpp_IO_Serial.flowControlIndex !== currentIndex)
-          Cpp_IO_Serial.flowControlIndex = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Serial.flowControlIndex !== index)
+          Cpp_IO_Serial.flowControlIndex = index
       }
     }
 

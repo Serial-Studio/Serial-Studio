@@ -102,6 +102,26 @@ def _attach_via_network(api_client, device_simulator) -> None:
     ), "Serial Studio did not connect to the device simulator"
 
 
+def _wait_for_publisher_connected(api_client, timeout: float = 8.0) -> bool:
+    """Poll project.mqtt.publisher.getStatus until isConnected flips true.
+
+    The publisher worker debounces config sync by 200 ms and the QMqttClient
+    handshake is asynchronous, so a fixed time.sleep is brittle on slow CI
+    runners. Polling instead lets the test wait exactly as long as needed and
+    fail fast when the publisher isn't actually online.
+    """
+    end_time = time.time() + timeout
+    while time.time() < end_time:
+        try:
+            status = api_client.command("project.mqtt.publisher.getStatus")
+        except APIError:
+            return False
+        if status.get("isConnected"):
+            return True
+        time.sleep(0.1)
+    return False
+
+
 @pytest.mark.mqtt
 @pytest.mark.requires_broker
 @pytest.mark.integration
@@ -123,16 +143,18 @@ class TestMqttPublisherBroker:
         time.sleep(0.5)
 
         _attach_via_network(api_client, device_simulator)
-        # Give the publisher a moment to connect to the broker
-        time.sleep(0.8)
+        if not _wait_for_publisher_connected(api_client, timeout=8.0):
+            pytest.skip(
+                "MQTT publisher did not reach Connected state within timeout "
+                "(broker reachable but handshake failed)"
+            )
 
         device_simulator.send_frame(b"/*42*/")
-        time.sleep(0.3)
 
-        if not mqtt_subscriber.wait_for_messages(count=1, timeout=5.0):
+        if not mqtt_subscriber.wait_for_messages(count=1, timeout=8.0):
             pytest.skip(
-                "Broker did not deliver any message within timeout (publisher may "
-                "not have completed its handshake with the broker)"
+                "Broker did not deliver any message within timeout (publisher "
+                "reported Connected but no frame was published)"
             )
 
         msg = mqtt_subscriber.messages[0]

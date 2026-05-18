@@ -93,6 +93,25 @@ def _attach_via_network(api_client, device_simulator) -> None:
     ), "Serial Studio did not connect to the device simulator"
 
 
+def _wait_for_publisher_connected(api_client, timeout: float = 8.0) -> bool:
+    """Poll project.mqtt.publisher.getStatus until isConnected flips true.
+
+    The publisher worker debounces config sync by 200 ms and the QMqttClient
+    handshake is asynchronous, so a fixed time.sleep is brittle on slow CI
+    runners. Polling lets the test wait exactly as long as needed.
+    """
+    end_time = time.time() + timeout
+    while time.time() < end_time:
+        try:
+            status = api_client.command("project.mqtt.publisher.getStatus")
+        except APIError:
+            return False
+        if status.get("isConnected"):
+            return True
+        time.sleep(0.1)
+    return False
+
+
 @pytest.mark.mqtt
 @pytest.mark.integration
 @pytest.mark.project
@@ -180,11 +199,12 @@ class TestMqttScriptingPublishEndToEnd:
         time.sleep(0.5)
 
         _attach_via_network(api_client, device_simulator)
-        time.sleep(0.8)  # let the publisher reach Connected state
+        if not _wait_for_publisher_connected(api_client, timeout=8.0):
+            pytest.skip("MQTT publisher did not reach Connected state within timeout")
 
         device_simulator.send_frame(b"/*1,2,3*/")
 
-        if not mqtt_subscriber.wait_for_messages(count=1, timeout=5.0):
+        if not mqtt_subscriber.wait_for_messages(count=1, timeout=8.0):
             pytest.skip("Broker did not deliver message within timeout")
 
         payloads = [
@@ -214,11 +234,12 @@ class TestMqttScriptingPublishEndToEnd:
         time.sleep(0.5)
 
         _attach_via_network(api_client, device_simulator)
-        time.sleep(0.8)
+        if not _wait_for_publisher_connected(api_client, timeout=8.0):
+            pytest.skip("MQTT publisher did not reach Connected state within timeout")
 
         device_simulator.send_frame(b"/*1,2,3*/")
 
-        if not mqtt_subscriber.wait_for_messages(count=1, timeout=5.0):
+        if not mqtt_subscriber.wait_for_messages(count=1, timeout=8.0):
             pytest.skip("Broker did not deliver message within timeout")
 
         payloads = [

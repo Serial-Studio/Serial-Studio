@@ -92,9 +92,9 @@ Item {
       ]
       currentIndex: Cpp_IO_USB.transferMode
 
-      onCurrentIndexChanged: {
-        if (enabled && currentIndex !== Cpp_IO_USB.transferMode)
-          Cpp_IO_USB.transferMode = currentIndex
+      onActivated: (index) => {
+        if (enabled && Cpp_IO_USB.transferMode !== index)
+          Cpp_IO_USB.transferMode = index
       }
 
       Connections {

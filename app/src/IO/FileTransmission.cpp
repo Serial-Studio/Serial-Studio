@@ -482,12 +482,12 @@ void IO::FileTransmission::setupExternalConnections()
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
-          &IO::FileTransmission::fileChanged);
+          &IO::FileTransmission::languageChanged);
 
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
-          &IO::FileTransmission::transferModeChanged);
+          &IO::FileTransmission::fileChanged);
 }
 
 //--------------------------------------------------------------------------------------------------

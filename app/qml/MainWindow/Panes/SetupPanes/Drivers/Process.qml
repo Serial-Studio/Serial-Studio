@@ -77,9 +77,9 @@ Item {
       model: [qsTr("Launch Process"), qsTr("Named Pipe")]
       currentIndex: Cpp_IO_Process.mode
 
-      onCurrentIndexChanged: {
-        if (enabled && currentIndex !== Cpp_IO_Process.mode)
-          Cpp_IO_Process.mode = currentIndex
+      onActivated: (index) => {
+        if (enabled && Cpp_IO_Process.mode !== index)
+          Cpp_IO_Process.mode = index
       }
 
       Connections {

@@ -128,15 +128,9 @@ Item {
       Layout.fillWidth: true
       model: Cpp_IO_Audio.inputDeviceList
       currentIndex: Cpp_IO_Audio.selectedInputDevice
-      onCurrentIndexChanged: {
-        if (count <= 0)
-          return
-
-        if (currentIndex < 0 || count <= currentIndex)
-          currentIndex = 0
-
-        if (Cpp_IO_Audio.selectedInputDevice !== currentIndex)
-          Cpp_IO_Audio.selectedInputDevice = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedInputDevice !== index)
+          Cpp_IO_Audio.selectedInputDevice = index
       }
     }
 
@@ -153,15 +147,9 @@ Item {
       model: Cpp_IO_Audio.sampleRates
       visible: count > 0 && _inDev.visible
       currentIndex: Cpp_IO_Audio.selectedSampleRate
-      onCurrentIndexChanged: {
-        if (count <= 0)
-          return
-
-        if (currentIndex < 0 || count <= currentIndex)
-          currentIndex = 0
-
-        if (Cpp_IO_Audio.selectedSampleRate !== currentIndex)
-          Cpp_IO_Audio.selectedSampleRate = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedSampleRate !== index)
+          Cpp_IO_Audio.selectedSampleRate = index
       }
     }
 
@@ -178,15 +166,9 @@ Item {
       visible: count > 0 && _inDev.visible
       model: Cpp_IO_Audio.inputSampleFormats
       currentIndex: Cpp_IO_Audio.selectedInputSampleFormat
-      onCurrentIndexChanged: {
-        if (count <= 0)
-          return
-
-        if (currentIndex < 0 || count <= currentIndex)
-          currentIndex = 0
-
-        if (Cpp_IO_Audio.selectedInputSampleFormat !== currentIndex)
-          Cpp_IO_Audio.selectedInputSampleFormat = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedInputSampleFormat !== index)
+          Cpp_IO_Audio.selectedInputSampleFormat = index
       }
     }
 
@@ -203,15 +185,9 @@ Item {
       visible: count > 0 && _inDev.visible
       model: Cpp_IO_Audio.inputChannelConfigurations
       currentIndex: Cpp_IO_Audio.selectedInputChannelConfiguration
-      onCurrentIndexChanged: {
-        if (count <= 0)
-          return
-
-        if (currentIndex < 0 || count <= currentIndex)
-          currentIndex = 0
-
-        if (Cpp_IO_Audio.selectedInputChannelConfiguration !== currentIndex)
-          Cpp_IO_Audio.selectedInputChannelConfiguration = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedInputChannelConfiguration !== index)
+          Cpp_IO_Audio.selectedInputChannelConfiguration = index
       }
     }
 
@@ -240,15 +216,9 @@ Item {
       Layout.fillWidth: true
       model: Cpp_IO_Audio.outputDeviceList
       currentIndex: Cpp_IO_Audio.selectedOutputDevice
-      onCurrentIndexChanged: {
-        if (count <= 0)
-          return
-
-        if (currentIndex < 0 || count <= currentIndex)
-          currentIndex = 0
-
-        if (Cpp_IO_Audio.selectedOutputDevice !== currentIndex)
-          Cpp_IO_Audio.selectedOutputDevice = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedOutputDevice !== index)
+          Cpp_IO_Audio.selectedOutputDevice = index
       }
     }
 
@@ -265,15 +235,9 @@ Item {
       visible: count > 0 && _outDev.visible
       model: Cpp_IO_Audio.outputSampleFormats
       currentIndex: Cpp_IO_Audio.selectedOutputSampleFormat
-      onCurrentIndexChanged: {
-        if (count <= 0)
-          return
-
-        if (currentIndex < 0 || count <= currentIndex)
-          currentIndex = 0
-
-        if (Cpp_IO_Audio.selectedOutputSampleFormat !== currentIndex)
-          Cpp_IO_Audio.selectedOutputSampleFormat = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedOutputSampleFormat !== index)
+          Cpp_IO_Audio.selectedOutputSampleFormat = index
       }
     }
 
@@ -290,15 +254,9 @@ Item {
       visible: count > 0 && _outDev.visible
       model: Cpp_IO_Audio.outputChannelConfigurations
       currentIndex: Cpp_IO_Audio.selectedOutputChannelConfiguration
-      onCurrentIndexChanged: {
-        if (count <= 0)
-          return
-
-        if (currentIndex < 0 || count <= currentIndex)
-          currentIndex = 0
-
-        if (Cpp_IO_Audio.selectedOutputChannelConfiguration !== currentIndex)
-          Cpp_IO_Audio.selectedOutputChannelConfiguration = currentIndex
+      onActivated: (index) => {
+        if (Cpp_IO_Audio.selectedOutputChannelConfiguration !== index)
+          Cpp_IO_Audio.selectedOutputChannelConfiguration = index
       }
     }
 

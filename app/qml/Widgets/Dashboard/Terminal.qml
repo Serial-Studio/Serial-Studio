@@ -372,9 +372,9 @@ Item {
       Widgets.Combo {
         id: lineEndingCombo
 
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_Console_Handler.lineEnding)
-            Cpp_Console_Handler.lineEnding = currentIndex
+        onActivated: (index) => {
+          if (Cpp_Console_Handler.lineEnding !== index)
+            Cpp_Console_Handler.lineEnding = index
         }
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
@@ -386,9 +386,9 @@ Item {
       Widgets.Combo {
         id: checkumCombo
 
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_Console_Handler.checksumMethod)
-            Cpp_Console_Handler.checksumMethod = currentIndex
+        onActivated: (index) => {
+          if (Cpp_Console_Handler.checksumMethod !== index)
+            Cpp_Console_Handler.checksumMethod = index
         }
         Layout.minimumWidth: 128
         opacity: enabled ? 1 : 0.5
@@ -485,9 +485,9 @@ Item {
         currentIndex: Cpp_Console_Handler.displayMode
         displayText: qsTr("Display: %1").arg(currentText)
 
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_Console_Handler.displayMode)
-            Cpp_Console_Handler.displayMode = currentIndex
+        onActivated: (index) => {
+          if (Cpp_Console_Handler.displayMode !== index)
+            Cpp_Console_Handler.displayMode = index
         }
       }
 

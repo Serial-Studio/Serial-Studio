@@ -93,7 +93,7 @@ class FileTransmission : public QObject {
              NOTIFY maxRetriesChanged)
   Q_PROPERTY(QStringList transferModes
              READ transferModes
-             CONSTANT)
+             NOTIFY languageChanged)
   Q_PROPERTY(QStringList logEntries
              READ logEntries
              NOTIFY logChanged)
@@ -109,6 +109,7 @@ signals:
   void activeChanged();
   void progressChanged();
   void blockSizeChanged();
+  void languageChanged();
   void maxRetriesChanged();
   void statusTextChanged();
   void errorCountChanged();

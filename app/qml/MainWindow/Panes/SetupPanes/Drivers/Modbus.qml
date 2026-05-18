@@ -209,11 +209,9 @@ Item {
       model: Cpp_IO_Modbus.parityList
       currentIndex: Cpp_IO_Modbus.parityIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
-      onCurrentIndexChanged: {
-        if (enabled) {
-          if (currentIndex !== Cpp_IO_Modbus.parityIndex)
-            Cpp_IO_Modbus.parityIndex = currentIndex
-        }
+      onActivated: (index) => {
+        if (enabled && Cpp_IO_Modbus.parityIndex !== index)
+          Cpp_IO_Modbus.parityIndex = index
       }
     }
 

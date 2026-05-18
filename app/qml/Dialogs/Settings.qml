@@ -926,9 +926,9 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.displayModes
             currentIndex: Cpp_Console_Handler.displayMode
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_Console_Handler.displayMode)
-                Cpp_Console_Handler.displayMode = currentIndex
+            onActivated: (index) => {
+              if (Cpp_Console_Handler.displayMode !== index)
+                Cpp_Console_Handler.displayMode = index
             }
           }
 
@@ -1005,9 +1005,9 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.lineEndings
             currentIndex: Cpp_Console_Handler.lineEnding
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_Console_Handler.lineEnding)
-                Cpp_Console_Handler.lineEnding = currentIndex
+            onActivated: (index) => {
+              if (Cpp_Console_Handler.lineEnding !== index)
+                Cpp_Console_Handler.lineEnding = index
             }
           }
 
@@ -1018,9 +1018,9 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.dataModes
             currentIndex: Cpp_Console_Handler.dataMode
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_Console_Handler.dataMode)
-                Cpp_Console_Handler.dataMode = currentIndex
+            onActivated: (index) => {
+              if (Cpp_Console_Handler.dataMode !== index)
+                Cpp_Console_Handler.dataMode = index
             }
           }
 
@@ -1031,9 +1031,9 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.textEncodings
             currentIndex: Cpp_Console_Handler.encoding
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_Console_Handler.encoding)
-                Cpp_Console_Handler.encoding = currentIndex
+            onActivated: (index) => {
+              if (Cpp_Console_Handler.encoding !== index)
+                Cpp_Console_Handler.encoding = index
             }
           }
 
@@ -1044,9 +1044,9 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.checksumMethods
             currentIndex: Cpp_Console_Handler.checksumMethod
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_Console_Handler.checksumMethod)
-                Cpp_Console_Handler.checksumMethod = currentIndex
+            onActivated: (index) => {
+              if (Cpp_Console_Handler.checksumMethod !== index)
+                Cpp_Console_Handler.checksumMethod = index
             }
           }
 

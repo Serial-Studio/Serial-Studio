@@ -109,9 +109,25 @@ def _make_project_with_dedicated_output_group(output_widgets):
     Output widgets render as a DashboardOutputPanel only when they live in a
     group whose ``groupType`` is Output (1). The datagrid carries the dataset
     so totalWidgetCount sees both buckets.
+
+    The project is also wired with a CSV frame parser and a TCP source so a
+    frame injected through the device simulator reaches FrameBuilder and
+    triggers Dashboard::reconfigureDashboard — without that, the dashboard
+    never builds m_widgetGroups and widgetCount stays 0.
     """
     return {
         "title": "Output Widget Dashboard Test",
+        "frameStart": "/*",
+        "frameEnd": "*/",
+        "decoder": 0,
+        "decoderMethod": 0,
+        "checksum": "",
+        "checksumAlgorithm": "",
+        "frameDetection": 1,
+        "frameParserCode": (
+            "function parse(frame) {\n  return frame.split(',');\n}\n"
+        ),
+        "frameParserLanguage": 0,
         "groups": [
             {
                 "title": "Controls",
@@ -119,7 +135,7 @@ def _make_project_with_dedicated_output_group(output_widgets):
                 "datasets": [
                     {
                         "title": "Sensor1",
-                        "value": "0",
+                        "value": "%1",
                         "index": 1,
                         "widget": "",
                     }
@@ -303,8 +319,18 @@ def test_output_widget_survives_round_trip(api_client, clean_state):
 
 
 @pytest.mark.integration
-def test_output_widgets_visible_in_dashboard_with_pro(api_client, clean_state):
-    """Output widgets should appear in dashboard when Pro license is active."""
+def test_output_widgets_visible_in_dashboard_with_pro(
+    api_client, clean_state, device_simulator
+):
+    """Output widgets should appear in dashboard when Pro license is active.
+
+    The Dashboard only registers widget buckets after FrameBuilder publishes a
+    frame (see Dashboard::processFrame → reconfigureDashboard). Loading a
+    project alone leaves m_widgetGroups empty and widgetCount at 0, so this
+    test wires up a TCP source, opens the connection, sends a single CSV frame
+    and then polls widgetCount until both the datagrid and the output panel
+    register.
+    """
     if not _is_pro_tier(api_client):
         pytest.skip("Pro license required for output widget dashboard tests")
 
@@ -314,14 +340,35 @@ def test_output_widgets_visible_in_dashboard_with_pro(api_client, clean_state):
     api_client.load_project_from_json(project)
     time.sleep(0.3)
 
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
     api_client.set_operation_mode("project")
-    api_client.command("project.activate")
-    time.sleep(0.3)
+    api_client.configure_frame_parser(
+        start_sequence="/*",
+        end_sequence="*/",
+        operation_mode=0,
+        frame_detection=1,
+    )
+    try:
+        api_client.command("project.activate")
+    except APIError:
+        pass
+    time.sleep(0.2)
 
-    dashboard = api_client.get_dashboard_status()
-    # dashboard.getStatus exposes the count under "widgetCount"; the legacy
-    # "totalWidgetCount" name was never on the wire.
-    total_widgets = dashboard.get("widgetCount", 0)
+    api_client.connect_device()
+    assert device_simulator.wait_for_connection(
+        timeout=5.0
+    ), "Serial Studio did not connect to the device simulator"
+
+    device_simulator.send_frame(b"/*42*/\n")
+
+    end_time = time.time() + 5.0
+    total_widgets = 0
+    while time.time() < end_time:
+        dashboard = api_client.get_dashboard_status()
+        total_widgets = dashboard.get("widgetCount", 0)
+        if total_widgets >= 2:
+            break
+        time.sleep(0.1)
 
     # Should have at least the data grid + the output panel widget
     assert (
