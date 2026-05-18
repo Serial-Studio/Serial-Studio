@@ -33,6 +33,8 @@ Widgets.Pane {
   title: qsTr("Workspaces")
   icon: "qrc:/icons/project-editor/treeview/datagrid.svg"
 
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
+
   property var summary: []
   property int unresolvedCount: 0
 
@@ -229,6 +231,8 @@ Widgets.Pane {
           RowLayout {
             spacing: 0
             anchors.fill: parent
+            LayoutMirroring.enabled: root.rtl
+            LayoutMirroring.childrenInherit: true
 
             Label {
               leftPadding: 8

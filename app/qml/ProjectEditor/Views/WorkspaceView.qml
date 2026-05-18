@@ -32,6 +32,8 @@ Widgets.Pane {
   implicitHeight: 0
   icon: "qrc:/icons/project-editor/treeview/group.svg"
 
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
+
   property int workspaceId: Cpp_JSON_ProjectEditor.selectedWorkspaceId
   property string workspaceName: Cpp_JSON_ProjectModel.workspaceTitle(workspaceId)
   property var widgets: []
@@ -214,6 +216,8 @@ Widgets.Pane {
           RowLayout {
             spacing: 0
             anchors.fill: parent
+            LayoutMirroring.enabled: root.rtl
+            LayoutMirroring.childrenInherit: true
 
             Label {
               Layout.preferredWidth: 220
@@ -253,10 +257,11 @@ Widgets.Pane {
 
             Label {
               opacity: 0.7
-              leftPadding: 8
               elide: Text.ElideRight
               Layout.preferredWidth: 100
               color: refRow.rowTextColor
+              leftPadding: root.rtl ? 0 : 8
+              rightPadding: root.rtl ? 8 : 0
               Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.uiFont
               text: modelData.widgetTypeName || qsTr("(unknown)")

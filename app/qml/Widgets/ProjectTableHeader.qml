@@ -30,6 +30,8 @@ Rectangle {
   property var columns: []
   property int rowHeight: 30
 
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
+
   implicitHeight: rowHeight
 
   gradient: Gradient {
@@ -53,6 +55,8 @@ Rectangle {
   RowLayout {
     spacing: 0
     anchors.fill: parent
+    LayoutMirroring.enabled: header.rtl
+    LayoutMirroring.childrenInherit: true
 
     Repeater {
       model: header.columns.length * 2 - 1

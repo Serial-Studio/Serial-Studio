@@ -17,7 +17,7 @@ Button {
 
   padding: 4
   property int iconSize: 16
-  property bool mirrorIconInRtl: true
+  property bool mirrorIconInRtl: icon.source !== "rcc:/icons/buttons/apply.svg"
 
   icon.width: iconSize
   icon.height: iconSize

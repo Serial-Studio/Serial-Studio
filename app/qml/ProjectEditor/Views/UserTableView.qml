@@ -37,6 +37,7 @@ Widgets.Pane {
   readonly property int colTypeWidth: 140
   readonly property int colNameWidth: 220
   readonly property int colActionWidth: 80
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
 
   property string tableName: Cpp_JSON_ProjectEditor.selectedUserTable
 
@@ -309,6 +310,8 @@ Widgets.Pane {
           RowLayout {
             spacing: 0
             anchors.fill: parent
+            LayoutMirroring.enabled: root.rtl
+            LayoutMirroring.childrenInherit: true
 
             Item { width: 8 }
 

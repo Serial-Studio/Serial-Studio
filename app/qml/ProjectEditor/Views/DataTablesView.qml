@@ -33,6 +33,8 @@ Widgets.Pane {
   title: qsTr("Shared Memory")
   icon: "qrc:/icons/project-editor/treeview/shared-memory.svg"
 
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
+
   //
   // Holds the current table summary rows. Refreshed each time the view becomes
   // visible so user-defined tables and system dataset counts stay in sync.
@@ -208,6 +210,8 @@ Widgets.Pane {
             RowLayout {
               spacing: 0
               anchors.fill: parent
+              LayoutMirroring.enabled: root.rtl
+              LayoutMirroring.childrenInherit: true
 
               Label {
                 leftPadding: 8
