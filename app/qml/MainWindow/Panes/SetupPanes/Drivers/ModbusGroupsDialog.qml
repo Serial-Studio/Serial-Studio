@@ -210,7 +210,7 @@ Window {
             text: qsTr("Start Address:")
           }
 
-          TextField {
+          Widgets.LineField {
             id: _startField
 
             Layout.fillWidth: true
@@ -227,7 +227,7 @@ Window {
             spacing: 8
             Layout.fillWidth: true
 
-            TextField {
+            Widgets.LineField {
               id: _countField
 
               Layout.fillWidth: true

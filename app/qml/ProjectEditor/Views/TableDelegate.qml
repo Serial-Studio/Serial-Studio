@@ -668,7 +668,7 @@ ColumnLayout {
           property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
 
-          sourceComponent: Widgets.Combo {
+          sourceComponent: ComboBox {
             id: _comboBox
 
             flat: true
@@ -694,7 +694,7 @@ ColumnLayout {
               color: Cpp_ThemeManager.colors["table_text"]
               leftPadding: root.rtl ? _comboBox.indicator.width : 6
               rightPadding: root.rtl ? 6 : _comboBox.indicator.width
-              horizontalAlignment: _comboBox._hAlign
+              horizontalAlignment: Text.AlignLeft
             }
           }
         }
@@ -715,7 +715,7 @@ ColumnLayout {
           property var modelActive: model.active
           property var editableValue: model.editableValue
 
-          sourceComponent: Widgets.Combo {
+          sourceComponent: ComboBox {
             id: _checkBox
 
             flat: true
@@ -739,7 +739,7 @@ ColumnLayout {
               color: Cpp_ThemeManager.colors["table_text"]
               leftPadding: root.rtl ? _checkBox.indicator.width : 6
               rightPadding: root.rtl ? 6 : _checkBox.indicator.width
-              horizontalAlignment: _checkBox._hAlign
+              horizontalAlignment: Text.AlignLeft
             }
           }
         }

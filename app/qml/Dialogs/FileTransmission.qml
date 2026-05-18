@@ -140,7 +140,7 @@ SmartDialog {
           opacity: enabled ? 1 : 0.5
           enabled: !Cpp_IO_FileTransmission.active
 
-          TextField {
+          Widgets.LineField {
             enabled: false
             Layout.fillWidth: true
             Layout.minimumWidth: 256

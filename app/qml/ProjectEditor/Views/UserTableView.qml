@@ -366,7 +366,7 @@ Widgets.Pane {
 
             Item { width: 8 }
 
-            TextField {
+            Widgets.LineField {
               id: nameField
 
               topPadding: 0
@@ -401,7 +401,7 @@ Widgets.Pane {
 
             Item { width: 8 }
 
-            TextField {
+            Widgets.LineField {
               id: valueField
 
               topPadding: 0

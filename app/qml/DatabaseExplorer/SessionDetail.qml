@@ -278,7 +278,7 @@ Widgets.Pane {
           Layout.fillWidth: true
           visible: root.editsAllowed
 
-          TextField {
+          Widgets.LineField {
             id: tagField
 
             Layout.fillWidth: true

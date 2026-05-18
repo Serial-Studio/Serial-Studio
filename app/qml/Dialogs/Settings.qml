@@ -230,7 +230,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
             enabled: !Cpp_IO_Manager.isConnected
 
-            TextField {
+            Widgets.LineField {
               readOnly: true
               Layout.fillWidth: true
               Layout.alignment: Qt.AlignVCenter

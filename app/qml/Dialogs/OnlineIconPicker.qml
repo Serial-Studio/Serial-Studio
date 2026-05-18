@@ -89,7 +89,7 @@ SmartDialog {
       spacing: 4
       Layout.fillWidth: true
 
-      TextField {
+      Widgets.LineField {
         id: searchField
 
         Layout.fillWidth: true

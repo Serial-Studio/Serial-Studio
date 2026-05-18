@@ -195,7 +195,7 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             visible: Cpp_AI_Assistant.requiresApiKey(root.providerIdx)
 
-            TextField {
+            Widgets.LineField {
               id: keyField
 
               Layout.fillWidth: true
@@ -270,7 +270,7 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             visible: !Cpp_AI_Assistant.requiresApiKey(root.providerIdx)
 
-            TextField {
+            Widgets.LineField {
               id: urlField
 
               Layout.fillWidth: true

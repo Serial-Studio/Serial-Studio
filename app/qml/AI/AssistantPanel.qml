@@ -432,7 +432,7 @@ Widgets.SmartDialog {
           anchors.leftMargin: 16
           anchors.rightMargin: 6
 
-          TextField {
+          Widgets.LineField {
             id: composer
 
             Layout.fillWidth: true

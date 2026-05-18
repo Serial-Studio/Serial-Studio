@@ -243,6 +243,12 @@ void DataModel::ProjectEditor::wireProjectModelRebuilds()
       buildProjectModel();
   });
   connect(&pm, &DataModel::ProjectModel::jsonFileChanged, this, [this] {
+    // Same path means it was a re-save (autosave), not a project switch -- preserve selection
+    const auto& path = DataModel::ProjectModel::instance().jsonFilePath();
+    if (path == m_lastJsonFilePath)
+      return;
+
+    m_lastJsonFilePath = path;
     if (m_selectionModel) {
       auto index = m_treeModel->index(0, 0);
       m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);

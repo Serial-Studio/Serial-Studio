@@ -11,6 +11,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
+import "../.." as Widgets
 
 Item {
   id: root
@@ -38,7 +39,7 @@ Item {
       spacing: 8
       Layout.fillWidth: true
 
-      TextField {
+      Widgets.LineField {
         id: input
 
         Layout.fillWidth: true

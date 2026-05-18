@@ -216,7 +216,7 @@ Item {
         searchField.focus = false
       }
 
-      TextField {
+      Widgets.LineField {
         id: searchField
 
         readonly property bool rtl: Cpp_Misc_Translator.rtl

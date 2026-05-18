@@ -1218,7 +1218,7 @@ SmartDialog {
               anchors.leftMargin: 4
               anchors.rightMargin: 4
 
-              TextField {
+              Widgets.LineField {
                 id: newRepoField
 
                 background: Item {}

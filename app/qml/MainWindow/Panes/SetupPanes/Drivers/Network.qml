@@ -99,7 +99,7 @@ Item {
         text: qsTr("Local Port") + ":"
         enabled: app.ioEnabled
         visible: Cpp_IO_Network.socketTypeIndex === 1
-      } TextField {
+      } Widgets.LineField {
         id: _udpLocalPort
 
         Layout.fillWidth: true
@@ -130,7 +130,7 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
         text: qsTr("Remote Address") + ":"
-      } TextField {
+      } Widgets.LineField {
         id: _address
 
         Layout.fillWidth: true
@@ -155,7 +155,7 @@ Item {
         enabled: app.ioEnabled
         text: qsTr("Remote Port") + ":"
         visible: Cpp_IO_Network.socketTypeIndex === 0
-      } TextField {
+      } Widgets.LineField {
         id: _tcpPort
 
         Layout.fillWidth: true
@@ -188,7 +188,7 @@ Item {
         enabled: app.ioEnabled
         text: qsTr("Remote Port") + ":"
         visible: Cpp_IO_Network.socketTypeIndex === 1 && !_udpMulticast.checked
-      } TextField {
+      } Widgets.LineField {
         id: _udpRemotePort
 
         Layout.fillWidth: true

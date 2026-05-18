@@ -219,7 +219,7 @@ Window {
         spacing: 8
         Layout.fillWidth: true
 
-        TextField {
+        Widgets.LineField {
           id: filterField
 
           Layout.fillWidth: true

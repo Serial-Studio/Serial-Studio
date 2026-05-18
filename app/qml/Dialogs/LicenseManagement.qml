@@ -142,7 +142,7 @@ SmartDialog {
               spacing: 4
               Layout.fillWidth: true
 
-              TextField {
+              Widgets.LineField {
                 id: _key
 
                 Layout.fillWidth: true
@@ -307,7 +307,7 @@ SmartDialog {
             font: Cpp_Misc_CommonFonts.boldUiFont
           }
 
-          TextField {
+          Widgets.LineField {
             id: _uid
 
             readOnly: true
@@ -355,7 +355,7 @@ SmartDialog {
             visible: Cpp_Licensing_LemonSqueezy.variantName.indexOf("Pro") !== -1
           }
 
-          TextField {
+          Widgets.LineField {
             id: _lic
 
             readOnly: true

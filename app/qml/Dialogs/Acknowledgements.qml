@@ -63,7 +63,7 @@ SmartDialog {
           text: Cpp_Misc_Translator.acknowledgementsText
           wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
 
-          background: TextField {
+          background: Widgets.LineField {
             enabled: false
           }
         }

@@ -119,7 +119,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
           }
 
-          TextField {
+          Widgets.LineField {
             id: titleField
 
             Layout.fillWidth: true

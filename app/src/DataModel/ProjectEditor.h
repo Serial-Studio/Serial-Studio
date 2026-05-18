@@ -459,6 +459,7 @@ private:
   QStandardItem* m_mqttPublisherItem;
 
   QString m_treeSearchQuery;
+  QString m_lastJsonFilePath;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;

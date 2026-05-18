@@ -240,7 +240,7 @@ Item {
         }
       }
 
-      TextField {
+      Widgets.LineField {
         id: send
 
         implicitWidth: 128

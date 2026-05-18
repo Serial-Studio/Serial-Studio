@@ -158,7 +158,7 @@ Widgets.SmartDialog {
         font: Cpp_Misc_CommonFonts.boldUiFont
       }
 
-      TextField {
+      Widgets.LineField {
         id: _nameField
 
         Layout.fillWidth: true

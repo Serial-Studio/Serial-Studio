@@ -14,6 +14,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
+import ".." as Widgets
 
 Item {
   id: root
@@ -152,7 +153,7 @@ Item {
       spacing: 6
       Layout.fillWidth: true
 
-      TextField {
+      Widgets.LineField {
         id: filterField
 
         selectByMouse: true

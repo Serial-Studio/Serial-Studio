@@ -260,7 +260,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Company")
             color: Cpp_ThemeManager.colors["text"]
-          } TextField {
+          } Widgets.LineField {
             id: _companyField
 
             Layout.fillWidth: true
@@ -271,7 +271,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Document title")
             color: Cpp_ThemeManager.colors["text"]
-          } TextField {
+          } Widgets.LineField {
             id: _titleField
 
             Layout.fillWidth: true
@@ -282,7 +282,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Author")
             color: Cpp_ThemeManager.colors["text"]
-          } TextField {
+          } Widgets.LineField {
             id: _authorField
 
             Layout.fillWidth: true
@@ -315,7 +315,7 @@ Widgets.SmartDialog {
             spacing: 6
             Layout.fillWidth: true
 
-            TextField {
+            Widgets.LineField {
               id: _logoField
 
               Layout.fillWidth: true

@@ -271,7 +271,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
-    } TextField {
+    } Widgets.LineField {
       id: _hostField
 
       Layout.fillWidth: true
@@ -295,7 +295,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
-    } TextField {
+    } Widgets.LineField {
       id: _portField
 
       Layout.fillWidth: true
@@ -329,7 +329,7 @@ Item {
     //
     Label {
       text: qsTr("Slave Address") + ":"
-    } TextField {
+    } Widgets.LineField {
       id: _slaveField
 
       Layout.fillWidth: true
@@ -349,7 +349,7 @@ Item {
     //
     Label {
       text: qsTr("Poll Interval (ms)") + ":"
-    } TextField {
+    } Widgets.LineField {
       id: _intervalField
 
       Layout.fillWidth: true

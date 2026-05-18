@@ -281,7 +281,7 @@ Widgets.SmartDialog {
                 color: Cpp_ThemeManager.colors["text"]
               }
 
-              TextField {
+              Widgets.LineField {
                 id: titleField
 
                 Layout.fillWidth: true
@@ -335,7 +335,7 @@ Widgets.SmartDialog {
           } RowLayout {
             spacing: 2
 
-            TextField {
+            Widgets.LineField {
               readOnly: true
               Layout.fillWidth: true
               Layout.alignment: Qt.AlignVCenter

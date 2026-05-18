@@ -255,7 +255,7 @@ Item {
             spacing: 4
             Layout.fillWidth: true
 
-            TextField {
+            Widgets.LineField {
               id: textInput
 
               Layout.fillWidth: true

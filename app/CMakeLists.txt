@@ -503,6 +503,7 @@ set(QML_SOURCES
   qml/Widgets/Combo.qml
   qml/Widgets/InfoBullet.qml
   qml/Widgets/LedIndicator.qml
+  qml/Widgets/LineField.qml
   qml/Widgets/FileDropArea.qml
   qml/Widgets/IconButton.qml
   qml/Widgets/MarkdownTextView.qml

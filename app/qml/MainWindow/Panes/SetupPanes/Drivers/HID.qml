@@ -79,7 +79,7 @@ Item {
       opacity: 0.5
       text: qsTr("Usage Page") + ":"
       visible: Cpp_IO_Manager.isConnected
-    } TextField {
+    } Widgets.LineField {
       opacity: 0.8
       readOnly: true
       Layout.fillWidth: true
@@ -95,7 +95,7 @@ Item {
       opacity: 0.5
       text: qsTr("Usage") + ":"
       visible: Cpp_IO_Manager.isConnected
-    } TextField {
+    } Widgets.LineField {
       opacity: 0.8
       readOnly: true
       Layout.fillWidth: true

@@ -131,7 +131,7 @@ Widgets.SmartDialog {
           color: Cpp_ThemeManager.colors["text"]
         }
 
-        TextField {
+        Widgets.LineField {
           id: maxGField
 
           selectByMouse: true

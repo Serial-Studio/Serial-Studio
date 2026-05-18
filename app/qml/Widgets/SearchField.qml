@@ -41,7 +41,7 @@ Rectangle {
 
   readonly property bool rtl: Cpp_Misc_Translator.rtl
 
-  TextField {
+  LineField {
     id: textField
 
     background: Item {}
@@ -52,7 +52,6 @@ Rectangle {
 
     leftPadding: root.rtl ? actionButton.width + 12 : 0
     rightPadding: root.rtl ? 0 : actionButton.width + 12
-    horizontalAlignment: root.rtl ? TextInput.AlignRight : TextInput.AlignLeft
 
     IconButton {
       id: actionButton

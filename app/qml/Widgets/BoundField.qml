@@ -1,7 +1,7 @@
 /*
  * Serial Studio - https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ * Copyright (C) 2020-2026 Alex Spataru <https://aspatru.com>
  *
  * This file is dual-licensed:
  *
@@ -21,7 +21,7 @@
 import QtQuick
 import QtQuick.Controls
 
-TextField {
+LineField {
   id: root
 
   property var externalValue

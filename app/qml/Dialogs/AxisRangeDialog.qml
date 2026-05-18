@@ -184,7 +184,7 @@ Widgets.SmartDialog {
           color: Cpp_ThemeManager.colors["text"]
         }
 
-        TextField {
+        Widgets.LineField {
           id: xMinField
 
           selectByMouse: true
@@ -205,7 +205,7 @@ Widgets.SmartDialog {
           color: Cpp_ThemeManager.colors["text"]
         }
 
-        TextField {
+        Widgets.LineField {
           id: xMaxField
 
           selectByMouse: true
@@ -255,7 +255,7 @@ Widgets.SmartDialog {
           color: Cpp_ThemeManager.colors["text"]
         }
 
-        TextField {
+        Widgets.LineField {
           id: yMinField
 
           selectByMouse: true
@@ -276,7 +276,7 @@ Widgets.SmartDialog {
           color: Cpp_ThemeManager.colors["text"]
         }
 
-        TextField {
+        Widgets.LineField {
           id: yMaxField
 
           selectByMouse: true

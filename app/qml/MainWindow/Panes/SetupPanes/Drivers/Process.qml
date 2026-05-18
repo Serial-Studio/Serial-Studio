@@ -106,7 +106,7 @@ Item {
       Layout.fillWidth: true
       visible: modeCombo.currentIndex === 0
 
-      TextField {
+      Widgets.LineField {
         id: execField
 
         Layout.fillWidth: true
@@ -145,7 +145,7 @@ Item {
       text: qsTr("Arguments") + ":"
       visible: modeCombo.currentIndex === 0
       enabled: app.ioEnabled
-    } TextField {
+    } Widgets.LineField {
       id: argsField
 
       Layout.fillWidth: true
@@ -182,7 +182,7 @@ Item {
       Layout.fillWidth: true
       visible: modeCombo.currentIndex === 0
 
-      TextField {
+      Widgets.LineField {
         id: workDirField
 
         Layout.fillWidth: true
@@ -228,7 +228,7 @@ Item {
       Layout.fillWidth: true
       visible: modeCombo.currentIndex === 1
 
-      TextField {
+      Widgets.LineField {
         id: pipeField
 
         Layout.fillWidth: true
