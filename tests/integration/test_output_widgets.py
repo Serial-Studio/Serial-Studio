@@ -124,9 +124,7 @@ def _make_project_with_dedicated_output_group(output_widgets):
         "checksum": "",
         "checksumAlgorithm": "",
         "frameDetection": 1,
-        "frameParserCode": (
-            "function parse(frame) {\n  return frame.split(',');\n}\n"
-        ),
+        "frameParserCode": ("function parse(frame) {\n  return frame.split(',');\n}\n"),
         "frameParserLanguage": 0,
         "groups": [
             {
