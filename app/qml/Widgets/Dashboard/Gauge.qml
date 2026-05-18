@@ -188,6 +188,8 @@ Item {
 
           Item {
             visible: root.model.alarmsDefined
+                     && root.model.alarmLow > root.model.minValue
+                     && root.model.alarmLow < root.model.maxValue
             readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
             readonly property real angleDeg: startAngleDeg + alarmLowFrac * angleRangeDeg
             readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
@@ -208,6 +210,8 @@ Item {
 
           Item {
             visible: root.model.alarmsDefined
+                     && root.model.alarmHigh > root.model.minValue
+                     && root.model.alarmHigh < root.model.maxValue
             readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
             readonly property real angleDeg: startAngleDeg + alarmHighFrac * angleRangeDeg
             readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2

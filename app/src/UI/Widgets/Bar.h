@@ -106,7 +106,10 @@ private:
   }
 
 protected:
+  void notifyOnAlarmEdge();
+
   int m_index;
+  QString m_title;
   QString m_units;
 
   double m_value;
@@ -116,5 +119,6 @@ protected:
   double m_alarmHigh;
 
   bool m_alarmsDefined;
+  bool m_alarmActive;
 };
 }  // namespace Widgets

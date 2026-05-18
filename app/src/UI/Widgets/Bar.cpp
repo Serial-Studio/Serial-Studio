@@ -21,6 +21,7 @@
 
 #include "UI/Widgets/Bar.h"
 
+#include "DataModel/NotificationCenter.h"
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
@@ -40,10 +41,12 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   , m_alarmLow(std::nan(""))
   , m_alarmHigh(std::nan(""))
   , m_alarmsDefined(false)
+  , m_alarmActive(false)
 {
   if (autoInitFromBarDataset && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
 
+    m_title     = dataset.title;
     m_units     = dataset.units;
     m_minValue  = qMin(dataset.wgtMin, dataset.wgtMax);
     m_maxValue  = qMax(dataset.wgtMin, dataset.wgtMax);
@@ -194,7 +197,38 @@ void Widgets::Bar::updateData()
     auto value          = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
+      notifyOnAlarmEdge();
       Q_EMIT updated();
     }
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Alarm notification routing
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Posts a Critical notification on the rising edge of alarmTriggered().
+ */
+void Widgets::Bar::notifyOnAlarmEdge()
+{
+  const bool nowActive = alarmTriggered();
+  if (nowActive == m_alarmActive)
+    return;
+
+  m_alarmActive = nowActive;
+  if (!nowActive)
+    return;
+
+  const QString unit = m_units.isEmpty() ? QString() : QStringLiteral(" ") + m_units;
+  const QString name = m_title.isEmpty() ? tr("Alarm") : m_title;
+
+  QString subtitle;
+  if (!std::isnan(m_alarmHigh) && m_alarmHigh < m_maxValue && m_value >= m_alarmHigh)
+    subtitle = tr("Value %1%2 reached the high alarm %3%2").arg(m_value).arg(unit).arg(m_alarmHigh);
+  else if (!std::isnan(m_alarmLow) && m_alarmLow > m_minValue && m_value <= m_alarmLow)
+    subtitle = tr("Value %1%2 reached the low alarm %3%2").arg(m_value).arg(unit).arg(m_alarmLow);
+
+  DataModel::NotificationCenter::instance().post(
+    DataModel::NotificationCenter::Critical, tr("Alarms"), name, subtitle);
 }

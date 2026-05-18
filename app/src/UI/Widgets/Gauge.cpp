@@ -36,6 +36,7 @@ Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, 
   if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
 
+    m_title     = dataset.title;
     m_units     = dataset.units;
     m_minValue  = qMin(dataset.wgtMin, dataset.wgtMax);
     m_maxValue  = qMax(dataset.wgtMin, dataset.wgtMax);
@@ -73,6 +74,7 @@ void Widgets::Gauge::updateData()
     auto value          = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
+      notifyOnAlarmEdge();
       Q_EMIT updated();
     }
   }
