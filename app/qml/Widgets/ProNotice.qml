@@ -114,24 +114,20 @@ Rectangle {
       RowLayout {
         Layout.fillWidth: true
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        IconButton {
+          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Visit Website")
           visible: !Cpp_CommercialBuild
           icon.source: "qrc:/icons/buttons/website.svg"
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: Qt.openUrlExternally("https://serial-studio.com/")
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        IconButton {
+          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Buy License")
           icon.source: "qrc:/icons/buttons/buy.svg"
-          icon.color: Cpp_ThemeManager.colors["button_text"]
 
           onClicked: {
             if (Cpp_CommercialBuild)
@@ -141,15 +137,13 @@ Rectangle {
           }
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        IconButton {
+          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Activate")
           visible: Cpp_CommercialBuild
           onClicked: app.showLicenseDialog()
           icon.source: "qrc:/icons/buttons/activate.svg"
-          icon.color: Cpp_ThemeManager.colors["button_text"]
         }
 
         Item {
@@ -161,16 +155,14 @@ Rectangle {
     //
     // Close button
     //
-    Button {
+    IconButton {
+      iconSize: 32
       opacity: 0.8
-      icon.width: 32
-      icon.height: 32
       background: Item {}
       onClicked: root.hidden = true
       visible: root.closeButtonEnabled
-      Layout.alignment: Qt.AlignRight | Qt.AlignTop
       icon.source: "qrc:/icons/buttons/cancel.svg"
-      icon.color: Cpp_ThemeManager.colors["button_text"]
+      Layout.alignment: Qt.AlignRight | Qt.AlignTop
     }
   }
 }

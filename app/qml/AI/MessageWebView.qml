@@ -45,6 +45,15 @@ Item {
     pushMessages()
   }
 
+  function pushDirection() {
+    if (!ready)
+      return
+
+    view.runJavaScript(
+      "setDirection(" + (Cpp_Misc_Translator.rtl ? "true" : "false") + ");")
+    pushMessages()
+  }
+
   function pushL10N() {
     if (!ready)
       return
@@ -102,6 +111,14 @@ Item {
     function onThemeColorsChanged() { root.pushTheme() }
   }
 
+  Connections {
+    target: Cpp_Misc_Translator
+    function onLanguageChanged() {
+      root.pushDirection()
+      root.pushL10N()
+    }
+  }
+
   WebEngineView {
     id: view
 
@@ -114,6 +131,7 @@ Item {
       if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
         root.ready = true
         root.pushTheme()
+        root.pushDirection()
         root.pushL10N()
         root.pushMessages()
       }

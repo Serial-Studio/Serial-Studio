@@ -297,19 +297,17 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
+      Widgets.IconButton {
+        iconSize: 18
         leftPadding: 8
-        icon.width: 18
-        icon.height: 18
         text: qsTr("Cancel")
         onClicked: root.close()
         icon.source: "qrc:/icons/buttons/close.svg"
       }
 
-      Button {
+      Widgets.IconButton {
+        iconSize: 18
         leftPadding: 8
-        icon.width: 18
-        icon.height: 18
         text: qsTr("OK")
         onClicked: root.apply()
         opacity: enabled ? 1 : 0.5

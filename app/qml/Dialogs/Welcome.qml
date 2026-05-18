@@ -446,41 +446,35 @@ Window {
             verticalCenter: parent.verticalCenter
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             horizontalPadding: 8
             text: qsTr("Upgrade Now")
             Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/icons/buttons/buy.svg"
             onClicked: Cpp_Licensing_LemonSqueezy.buy()
             highlighted: Cpp_Licensing_Trial.trialExpired
-            icon.source: "qrc:/icons/buttons/buy.svg"
-            icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             horizontalPadding: 8
             text: qsTr("Activate")
             Layout.alignment: Qt.AlignVCenter
             onClicked: app.showLicenseDialog()
             icon.source: "qrc:/icons/buttons/activate.svg"
-            icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
           Item {
             Layout.fillWidth: true
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             horizontalPadding: 8
             Layout.alignment: Qt.AlignVCenter
-            highlighted: !Cpp_Licensing_Trial.trialExpired
             icon.source: "qrc:/icons/buttons/apply.svg"
-            icon.color: Cpp_ThemeManager.colors["button_text"]
+            highlighted: !Cpp_Licensing_Trial.trialExpired
             text: Cpp_Licensing_Trial.trialExpired ? qsTr("Open in Limited Mode") : (Cpp_Licensing_Trial.trialEnabled ? qsTr("Continue") : qsTr("Start Trial"))
             onClicked: {
               if (Cpp_Licensing_Trial.trialExpired) {

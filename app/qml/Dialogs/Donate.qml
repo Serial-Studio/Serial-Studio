@@ -25,6 +25,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -119,13 +120,11 @@ SmartDialog {
         spacing: 4
         Layout.fillWidth: true
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           text: qsTr("Close")
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/close.svg"
         }
 
@@ -133,12 +132,10 @@ SmartDialog {
           Layout.fillWidth: true
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           text: qsTr("Donate")
           Layout.alignment: Qt.AlignVCenter
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/paypal.svg"
           onClicked: {
             root.close()
@@ -146,16 +143,14 @@ SmartDialog {
           }
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           highlighted: true
           horizontalPadding: 8
           Keys.onEnterPressed: clicked()
           Keys.onReturnPressed: clicked()
           Layout.alignment: Qt.AlignVCenter
           text: qsTr("Get Serial Studio Pro")
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/buy.svg"
           Component.onCompleted: Qt.callLater(forceActiveFocus)
           onClicked: {

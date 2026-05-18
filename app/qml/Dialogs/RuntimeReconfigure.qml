@@ -116,38 +116,32 @@ Widgets.SmartDialog {
             spacing: 12
             Layout.fillWidth: true
 
-            Button {
-              icon.width: 18
-              icon.height: 18
+            Widgets.IconButton {
+              iconSize: 18
               text: qsTr("Quit")
               font: Cpp_Misc_CommonFonts.uiFont
               onClicked: app.quitApplication()
-              icon.color: Cpp_ThemeManager.colors["button_text"]
               icon.source: "qrc:/icons/buttons/close.svg"
             }
 
             Item { Layout.fillWidth: true }
 
-            Button {
-              icon.width: 18
-              icon.height: 18
+            Widgets.IconButton {
+              iconSize: 18
               font: Cpp_Misc_CommonFonts.uiFont
               text: qsTr("Pick Different Device")
               onClicked: root.pageIndex = 1
-              icon.color: Cpp_ThemeManager.colors["button_text"]
               icon.source: "qrc:/icons/buttons/wrench.svg"
             }
 
-            Button {
+            Widgets.IconButton {
+              iconSize: 18
               highlighted: true
-              icon.width: 18
-              icon.height: 18
               font: Cpp_Misc_CommonFonts.uiFont
-              text: root.isLost ? qsTr("Reconnect") : qsTr("Try Again")
               enabled: !Cpp_IO_Manager.isConnected
-              icon.color: Cpp_ThemeManager.colors["button_text"]
-              icon.source: "qrc:/icons/buttons/refresh.svg"
               onClicked: Cpp_IO_Manager.connectDevice()
+              icon.source: "qrc:/icons/buttons/refresh.svg"
+              text: root.isLost ? qsTr("Reconnect") : qsTr("Try Again")
             }
           }
         }
@@ -194,28 +188,24 @@ Widgets.SmartDialog {
           spacing: 12
           Layout.fillWidth: true
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             text: qsTr("Quit")
             font: Cpp_Misc_CommonFonts.uiFont
             onClicked: app.quitApplication()
-            icon.color: Cpp_ThemeManager.colors["button_text"]
             icon.source: "qrc:/icons/buttons/close.svg"
           }
 
           Item { Layout.fillWidth: true }
 
-          Button {
+          Widgets.IconButton {
+            iconSize: 18
             highlighted: true
-            icon.width: 18
-            icon.height: 18
             text: qsTr("Connect")
             font: Cpp_Misc_CommonFonts.uiFont
-            enabled: Cpp_IO_Manager.configurationOk && !Cpp_IO_Manager.isConnected
-            icon.color: Cpp_ThemeManager.colors["button_text"]
-            icon.source: "qrc:/icons/buttons/connected.svg"
             onClicked: Cpp_IO_Manager.connectDevice()
+            icon.source: "qrc:/icons/buttons/connected.svg"
+            enabled: Cpp_IO_Manager.configurationOk && !Cpp_IO_Manager.isConnected
           }
         }
       }

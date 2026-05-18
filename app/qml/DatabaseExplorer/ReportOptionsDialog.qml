@@ -527,13 +527,10 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
-        icon.width: 16
-        icon.height: 16
+      Widgets.IconButton {
         text: qsTr("Cancel")
         onClicked: root.close()
         icon.source: "qrc:/icons/buttons/close.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
 
       /*Button {
@@ -553,14 +550,11 @@ Widgets.SmartDialog {
         }
       }*/
 
-      Button {
-        icon.width: 16
-        icon.height: 16
+      Widgets.IconButton {
         highlighted: true
         text: Cpp_HasWebEngine ? qsTr("Export PDF") : qsTr("Export HTML")
         icon.source: Cpp_HasWebEngine ? "qrc:/icons/buttons/pdf.svg"
                                       : "qrc:/icons/buttons/html.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: _coverCheck.checked
                  || _metadataCheck.checked
                  || _statsCheck.checked

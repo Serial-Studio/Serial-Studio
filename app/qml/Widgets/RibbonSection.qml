@@ -103,10 +103,9 @@ RowLayout {
           Layout.alignment: Qt.AlignVCenter
         }
 
-        Button {
+        IconButton {
           enabled: false
-          icon.width: 12
-          icon.height: 12
+          iconSize: 12
           background: Item {}
           icon.source: "qrc:/icons/buttons/dropdown.svg"
           icon.color: Cpp_ThemeManager.colors["toolbar_text"]
@@ -133,7 +132,9 @@ RowLayout {
     padding: 8
     modal: false
     y: root.height
-    x: collapsedBtn.x
+    x: Cpp_Misc_Translator.rtl
+       ? collapsedBtn.x + collapsedBtn.width - width
+       : collapsedBtn.x
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     background: Item {
@@ -163,8 +164,12 @@ RowLayout {
         width: 16
         height: 8
         opacity: 0.95
-        x: Math.max(4, Math.min(collapsedBtn.width / 2 - 8,
-                                parent.width - 20))
+        x: {
+          var center = Cpp_Misc_Translator.rtl
+                       ? parent.width - collapsedBtn.width / 2 - 8
+                       : collapsedBtn.width / 2 - 8
+          return Math.max(4, Math.min(center, parent.width - 20))
+        }
         y: -7
 
         Connections {
@@ -204,6 +209,8 @@ RowLayout {
       id: popupContent
 
       spacing: 4
+      LayoutMirroring.childrenInherit: true
+      LayoutMirroring.enabled: Cpp_Misc_Translator.rtl
     }
 
     function connectClicks(item) {

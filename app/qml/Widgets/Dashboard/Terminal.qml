@@ -24,6 +24,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
+import ".." as Widgets
 
 Item {
   id: root
@@ -213,11 +214,10 @@ Item {
       Layout.fillWidth: true
       visible: root.width > implicitWidth
 
-      Button {
+      Widgets.IconButton {
         id: ftButton
 
-        icon.width: 18
-        icon.height: 18
+        iconSize: 18
         implicitHeight: 24
         Layout.maximumWidth: 24
         visible: !app.runtimeMode
@@ -226,7 +226,6 @@ Item {
         Layout.alignment: Qt.AlignVCenter
         onClicked: app.showFileTransmission()
         icon.source: "qrc:/icons/buttons/attach.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
 
       ComboBox {
@@ -399,17 +398,15 @@ Item {
         currentIndex: Cpp_Console_Handler.checksumMethod
       }
 
-      Button {
+      Widgets.IconButton {
         id: sendBt
 
-        icon.width: 18
-        icon.height: 18
+        iconSize: 18
         implicitHeight: 24
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
         onClicked: root.sendData()
         icon.source: "qrc:/icons/buttons/send.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: Cpp_IO_Manager.readWrite && (send.length > 0 || Cpp_Console_Handler.lineEnding != 0)
       }
     }
@@ -494,15 +491,13 @@ Item {
         }
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         implicitHeight: 24
         onClicked: root.clear()
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
         icon.source: "qrc:/icons/buttons/clear.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }
   }

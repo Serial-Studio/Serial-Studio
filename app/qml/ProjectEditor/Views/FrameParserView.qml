@@ -414,40 +414,34 @@ Widgets.Pane {
             verticalCenter: parent.verticalCenter
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             horizontalPadding: 12
             text: qsTr("Select Template…")
             Layout.alignment: Qt.AlignVCenter
             onClicked: frameParser.selectTemplate()
             icon.source: "qrc:/icons/buttons/code.svg"
-            icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
           Item {
             Layout.fillWidth: true
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             horizontalPadding: 12
             Layout.alignment: Qt.AlignVCenter
             text: qsTr("Test With Sample Data")
             onClicked: frameParser.testWithSampleData()
             icon.source: "qrc:/icons/buttons/test.svg"
-            icon.color: Cpp_ThemeManager.colors["button_text"]
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             horizontalPadding: 12
             text: qsTr("Evaluate")
             onClicked: frameParser.evaluate()
             Layout.alignment: Qt.AlignVCenter
-            icon.color: Cpp_ThemeManager.colors["button_text"]
             icon.source: "qrc:/icons/buttons/media-play.svg"
           }
         }

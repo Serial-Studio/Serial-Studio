@@ -219,14 +219,17 @@ Item {
       TextField {
         id: searchField
 
-        rightPadding: 4
-        leftPadding: 26
+        readonly property bool rtl: Cpp_Misc_Translator.rtl
+
         anchors.fill: parent
+        leftPadding: rtl ? 4 : 26
+        rightPadding: rtl ? 26 : 4
         font: Cpp_Misc_CommonFonts.uiFont
         color: Cpp_ThemeManager.colors["text"]
         verticalAlignment: Text.AlignVCenter
         placeholderText: qsTr("Search…")
         selectionColor: Cpp_ThemeManager.colors["highlight"]
+        horizontalAlignment: rtl ? Text.AlignRight : Text.AlignLeft
         selectedTextColor: Cpp_ThemeManager.colors["highlighted_text"]
         placeholderTextColor: Cpp_ThemeManager.colors["placeholder_text"]
 
@@ -298,15 +301,13 @@ Item {
           root.triggerSearchEntry(entry)
         }
 
-        Button {
-          x: 2
+        Widgets.IconButton {
           enabled: false
-          icon.width: 14
-          icon.height: 14
+          iconSize: 14
           background: Item {}
+          x: searchField.rtl ? searchField.width - width - 2 : 2
           icon.source: "qrc:/icons/buttons/search.svg"
           anchors.verticalCenter: parent.verticalCenter
-          icon.color: Cpp_ThemeManager.colors["button_text"]
         }
       }
 
@@ -600,10 +601,10 @@ Item {
         spacing: 4
         anchors.fill: parent
 
-        Button {
-          icon.width: 24
-          icon.height: 24
+        Widgets.IconButton {
+          iconSize: 24
           background: Item{}
+          mirrorIconInRtl: true
           Layout.preferredWidth: 24
           Layout.preferredHeight: 24
           visible: buttonsContainer.showNavButtons
@@ -679,10 +680,10 @@ Item {
           }
         }
 
-        Button {
-          icon.width: 24
-          icon.height: 24
+        Widgets.IconButton {
+          iconSize: 24
           background: Item{}
+          mirrorIconInRtl: true
           Layout.preferredWidth: 24
           Layout.preferredHeight: 24
           Layout.alignment: Qt.AlignVCenter
@@ -850,9 +851,7 @@ Item {
     //
     // Auto-layout button
     //
-    Button {
-      icon.width: 24
-      icon.height: 24
+    Widgets.IconButton {
       background: Item{}
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
@@ -870,9 +869,7 @@ Item {
     //
     // Edit workspace button (only for user workspaces)
     //
-    Button {
-      icon.width: 16
-      icon.height: 16
+    Widgets.IconButton {
       background: Item{}
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
@@ -896,9 +893,7 @@ Item {
     //
     // New workspace button (hidden in operator runtime mode)
     //
-    Button {
-      icon.width: 16
-      icon.height: 16
+    Widgets.IconButton {
       background: Item{}
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
@@ -912,11 +907,10 @@ Item {
     //
     // MQTT status indicator (visible only when publisher enabled on a Pro build)
     //
-    Button {
+    Widgets.IconButton {
       id: mqttIndicator
 
-      icon.width: 18
-      icon.height: 18
+      iconSize: 18
       background: Item{}
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24

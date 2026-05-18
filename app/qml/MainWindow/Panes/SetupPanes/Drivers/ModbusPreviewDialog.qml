@@ -363,12 +363,10 @@ Window {
             .arg(Cpp_JSON_ModbusMapImporter.groupCount)
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           text: qsTr("Cancel")
           horizontalPadding: 8
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/close.svg"
           onClicked: {
             Cpp_JSON_ModbusMapImporter.cancelImport()
@@ -376,13 +374,11 @@ Window {
           }
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           highlighted: true
           horizontalPadding: 8
           text: qsTr("Create Project")
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/apply.svg"
           enabled: Cpp_JSON_ModbusMapImporter.registerCount > 0
           onClicked: {

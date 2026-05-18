@@ -24,6 +24,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -112,13 +113,11 @@ SmartDialog {
       spacing: 4
       Layout.fillWidth: true
 
-      Button {
-        icon.width: 14
-        icon.height: 14
+      Widgets.IconButton {
+        iconSize: 14
         horizontalPadding: 8
         text: qsTr("Search Online…")
         icon.source: "qrc:/icons/buttons/search.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: {
           onlineIconPicker.showNormal()
           root.close()
@@ -129,27 +128,23 @@ SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
+        text: qsTr("OK")
         highlighted: true
         horizontalPadding: 8
-        text: qsTr("OK")
         icon.source: "qrc:/icons/buttons/apply.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: {
           root.iconSelected(root.selectedIcon)
           root.close()
         }
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         horizontalPadding: 8
         text: qsTr("Cancel")
         icon.source: "qrc:/icons/buttons/cancel.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: root.close()
       }
     }

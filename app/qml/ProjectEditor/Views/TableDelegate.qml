@@ -25,6 +25,7 @@ import QtQuick.Effects
 import QtQuick.Controls
 
 import SerialStudio
+import "../../Widgets" as Widgets
 
 ColumnLayout {
   id: root
@@ -44,6 +45,7 @@ ColumnLayout {
   //
   readonly property real rowHeight: 30
   readonly property real iconWidth: 30
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
   property real parameterWidth: Math.min((root.width - root.iconWidth - 16) / 2, 420)
 
   //
@@ -81,6 +83,8 @@ ColumnLayout {
     RowLayout {
       spacing: 0
       anchors.fill: parent
+      LayoutMirroring.enabled: root.rtl
+      LayoutMirroring.childrenInherit: true
 
       Item {
         implicitWidth: root.iconWidth
@@ -119,18 +123,18 @@ ColumnLayout {
       }
 
       Item {
-        implicitWidth: 8
+        implicitWidth: 6
       }
 
       Label {
         text: qsTr("Parameter")
         elide: Label.ElideRight
         Layout.alignment: Qt.AlignVCenter
-        horizontalAlignment: Label.AlignLeft
         font: Cpp_Misc_CommonFonts.boldUiFont
         Layout.minimumWidth: root.parameterWidth
         Layout.maximumWidth: root.parameterWidth
         color: Cpp_ThemeManager.colors["table_fg_header"]
+        horizontalAlignment: Label.AlignLeft
       }
 
       Rectangle {
@@ -140,7 +144,7 @@ ColumnLayout {
       }
 
       Item {
-        width: 8
+        width: 6
       }
 
       Label {
@@ -148,9 +152,9 @@ ColumnLayout {
         elide: Label.ElideRight
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
-        horizontalAlignment: Label.AlignLeft
         font: Cpp_Misc_CommonFonts.boldUiFont
         color: Cpp_ThemeManager.colors["table_fg_header"]
+        horizontalAlignment: Label.AlignLeft
       }
     }
   }
@@ -208,6 +212,8 @@ ColumnLayout {
       RowLayout {
         spacing: 0
         anchors.fill: parent
+        LayoutMirroring.enabled: root.rtl
+        LayoutMirroring.childrenInherit: true
 
         //
         // Section item
@@ -265,10 +271,10 @@ ColumnLayout {
                 text: model.placeholderValue
                 elide: Label.ElideRight
                 Layout.alignment: Qt.AlignVCenter
-                horizontalAlignment: Label.AlignLeft
                 font: Cpp_Misc_CommonFonts.boldUiFont
                 Layout.fillWidth: true
                 color: Cpp_ThemeManager.colors["table_fg_header"]
+                horizontalAlignment: Label.AlignLeft
               }
 
               Item {
@@ -343,7 +349,9 @@ ColumnLayout {
                    model.widgetType !== ProjectEditor.SectionHeader
           color: Cpp_ThemeManager.colors["table_separator"]
         } Item {
-          implicitWidth: 8
+          implicitWidth: 6
+          visible: model.parameterIcon !== undefined &&
+                   model.widgetType !== ProjectEditor.SectionHeader
         }
 
         //
@@ -352,11 +360,14 @@ ColumnLayout {
         Label {
           text: model.parameterName ?? ""
           elide: Label.ElideRight
+          leftPadding: root.rtl ? 0 : 6
+          rightPadding: root.rtl ? 6 : 0
           opacity: model.active ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           Layout.minimumWidth: root.parameterWidth
           Layout.maximumWidth: root.parameterWidth
           color: Cpp_ThemeManager.colors["table_text"]
+          horizontalAlignment: Label.AlignLeft
 
           ToolTip.delay: 700
           visible: model.widgetType !== ProjectEditor.SectionHeader
@@ -382,7 +393,7 @@ ColumnLayout {
           color: Cpp_ThemeManager.colors["table_separator"]
           visible: model.widgetType !== ProjectEditor.SectionHeader
         } Item {
-          width: 8
+          width: 6
           visible: model.widgetType !== ProjectEditor.SectionHeader
         }
 
@@ -417,6 +428,7 @@ ColumnLayout {
             }
             font: Cpp_Misc_CommonFonts.monoFont
             color: Cpp_ThemeManager.colors["table_text"]
+            horizontalAlignment: TextInput.AlignLeft
 
             background: Item {}
           }
@@ -454,6 +466,7 @@ ColumnLayout {
             }
             font: Cpp_Misc_CommonFonts.monoFont
             color: Cpp_ThemeManager.colors["table_text"]
+            horizontalAlignment: TextInput.AlignLeft
 
             background: Item {}
           }
@@ -509,13 +522,14 @@ ColumnLayout {
               Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.monoFont
               color: Cpp_ThemeManager.colors["table_text"]
+              horizontalAlignment: TextInput.AlignLeft
             }
 
             Item {
               width: 2
             }
 
-            Button {
+            Widgets.IconButton {
               enabled: iconPickerLoader.modelActive
               opacity: iconPickerLoader.modelActive ? 1 : 0.5
 
@@ -524,8 +538,6 @@ ColumnLayout {
                   iconPickerLoader.editableValue) ? "" : iconPickerLoader.editableValue
                 actionIconPicker.showNormal()
               }
-              icon.width: 16
-              icon.height: 16
               Layout.maximumWidth: 32
               Layout.alignment: Qt.AlignVCenter
               icon.color: Cpp_ThemeManager.colors["table_text"]
@@ -567,6 +579,7 @@ ColumnLayout {
 
             font: Cpp_Misc_CommonFonts.monoFont
             color: Cpp_ThemeManager.colors["table_text"]
+            horizontalAlignment: TextInput.AlignLeft
 
             onTextEdited: {
               const num = parseInt(text, 10);
@@ -614,6 +627,7 @@ ColumnLayout {
 
             font: Cpp_Misc_CommonFonts.monoFont
             color: Cpp_ThemeManager.colors["table_text"]
+            horizontalAlignment: TextInput.AlignLeft
 
             onTextEdited: {
               if (text === "-" || text === "." || text === "-.")
@@ -655,6 +669,8 @@ ColumnLayout {
           property var editableValue: model.editableValue
 
           sourceComponent: ComboBox {
+            id: _comboBox
+
             flat: true
             model: comboBoxLoader.comboBoxData
             enabled: comboBoxLoader.modelActive
@@ -669,6 +685,17 @@ ColumnLayout {
             font: Cpp_Misc_CommonFonts.monoFont
             currentIndex: comboBoxLoader.editableValue
             opacity: comboBoxLoader.modelActive ? 1 : 0.5
+
+            contentItem: Text {
+              font: _comboBox.font
+              elide: Text.ElideRight
+              text: _comboBox.displayText
+              verticalAlignment: Text.AlignVCenter
+              color: Cpp_ThemeManager.colors["table_text"]
+              leftPadding: root.rtl ? _comboBox.indicator.width : 6
+              rightPadding: root.rtl ? 6 : _comboBox.indicator.width
+              horizontalAlignment: Text.AlignLeft
+            }
           }
         }
 
@@ -689,6 +716,8 @@ ColumnLayout {
           property var editableValue: model.editableValue
 
           sourceComponent: ComboBox {
+            id: _checkBox
+
             flat: true
             enabled: checkBoxLoader.modelActive
             onCurrentIndexChanged: {
@@ -701,6 +730,17 @@ ColumnLayout {
             model: [qsTr("No"), qsTr("Yes")]
             currentIndex: checkBoxLoader.editableValue ? 1 : 0
             font: Cpp_Misc_CommonFonts.monoFont
+
+            contentItem: Text {
+              font: _checkBox.font
+              elide: Text.ElideRight
+              text: _checkBox.displayText
+              verticalAlignment: Text.AlignVCenter
+              color: Cpp_ThemeManager.colors["table_text"]
+              leftPadding: root.rtl ? _checkBox.indicator.width : 6
+              rightPadding: root.rtl ? 6 : _checkBox.indicator.width
+              horizontalAlignment: Text.AlignLeft
+            }
           }
         }
 
@@ -731,6 +771,7 @@ ColumnLayout {
 
               font: Cpp_Misc_CommonFonts.monoFont
               color: Cpp_ThemeManager.colors["table_text"]
+              horizontalAlignment: TextInput.AlignLeft
 
               //
               // Add space automatically in hex view
@@ -798,7 +839,7 @@ ColumnLayout {
         // Separator
         //
         Item {
-          implicitWidth: 8
+          implicitWidth: 6
           visible: model.widgetType !== ProjectEditor.SectionHeader
         }
       }

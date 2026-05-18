@@ -365,12 +365,10 @@ Window {
             .arg(Cpp_JSON_ProtoImporter.fieldCount)
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Cancel")
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/close.svg"
           onClicked: {
             Cpp_JSON_ProtoImporter.cancelImport()
@@ -378,15 +376,13 @@ Window {
           }
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           highlighted: true
           horizontalPadding: 8
           text: qsTr("Create Project")
-          icon.color: Cpp_ThemeManager.colors["button_text"]
-          enabled: Cpp_JSON_ProtoImporter.messageCount > 0
           icon.source: "qrc:/icons/buttons/apply.svg"
+          enabled: Cpp_JSON_ProtoImporter.messageCount > 0
           onClicked: {
             Cpp_JSON_ProtoImporter.confirmImport()
             root.close()

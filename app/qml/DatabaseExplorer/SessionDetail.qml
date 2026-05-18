@@ -326,9 +326,8 @@ Widgets.Pane {
           spacing: 8
           Layout.fillWidth: true
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             text: qsTr("Replay")
             visible: !root.operatorMode
             icon.source: "qrc:/icons/buttons/play.svg"
@@ -336,18 +335,16 @@ Widgets.Pane {
             onClicked: Cpp_Sessions_Manager.replaySelectedSession()
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             text: qsTr("Export CSV")
             icon.source: "qrc:/icons/buttons/export-csv.svg"
             onClicked: Cpp_Sessions_Manager.exportSessionToCsv(root.sessionId)
             enabled: (root.metadata.frame_count || 0) > 0 && !Cpp_Sessions_Manager.csvExportBusy
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             text: qsTr("Generate Report")
             icon.source: "qrc:/icons/buttons/report.svg"
             onClicked: _reportDialog.openFor(root.sessionId)
@@ -358,9 +355,8 @@ Widgets.Pane {
             Layout.fillWidth: true
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
+          Widgets.IconButton {
+            iconSize: 18
             text: qsTr("Delete")
             opacity: enabled ? 1 : 0.5
             visible: !root.operatorMode

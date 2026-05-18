@@ -400,9 +400,8 @@ Window {
                 : qsTr("%1 of %2 widgets").arg(root.filteredWidgets.length).arg(root.allWidgets.length)
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           text: qsTr("Close")
           horizontalPadding: 8
           icon.source: "qrc:/icons/buttons/close.svg"

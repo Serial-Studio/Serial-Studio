@@ -24,6 +24,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -71,13 +72,11 @@ SmartDialog {
       RowLayout {
         Layout.fillWidth: true
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           text: qsTr("Close")
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/close.svg"
         }
 
@@ -85,12 +84,10 @@ SmartDialog {
           Layout.fillWidth: true
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           text: qsTr("About Qt…")
           onClicked: Cpp_Misc_Utilities.aboutQt()
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/info.svg"
         }
       }

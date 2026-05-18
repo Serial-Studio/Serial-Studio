@@ -343,15 +343,13 @@ Widgets.SmartDialog {
               placeholderText: qsTr("Choose a project file to begin")
             }
 
-            Button {
-              icon.width: 18
-              icon.height: 18
+            Widgets.IconButton {
+              iconSize: 18
               Layout.fillWidth: false
               Layout.maximumWidth: 24
               Layout.maximumHeight: 24
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectModel.openJsonFile()
-              icon.color: Cpp_ThemeManager.colors["button_text"]
               icon.source: "qrc:/icons/buttons/open.svg"
             }
           }
@@ -743,26 +741,22 @@ Widgets.SmartDialog {
 
       Item { Layout.fillWidth: true }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         text: qsTr("Cancel")
         horizontalPadding: 8
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/icons/buttons/close.svg"
       }
 
-      Button {
+      Widgets.IconButton {
+        iconSize: 18
         highlighted: true
-        icon.width: 18
-        icon.height: 18
         text: qsTr("Save")
         horizontalPadding: 8
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/icons/buttons/apply.svg"
         enabled: app.proVersion
                  && root.projectPath.length > 0

@@ -237,15 +237,13 @@ Widgets.SmartDialog {
               text: Cpp_Misc_WorkspaceManager.shortPath
             }
 
-            Button {
-              icon.width: 18
-              icon.height: 18
+            Widgets.IconButton {
+              iconSize: 18
               Layout.fillWidth: false
               Layout.maximumWidth: 24
               Layout.maximumHeight: 24
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_Misc_WorkspaceManager.selectPath()
-              icon.color: Cpp_ThemeManager.colors["button_text"]
               icon.source: "qrc:/icons/buttons/open.svg"
             }
           }
@@ -1264,14 +1262,12 @@ Widgets.SmartDialog {
       spacing: 4
       Layout.fillWidth: true
 
-      Button {
-        icon.width: 18
-        icon.height: 18
-        horizontalPadding: 8
+      Widgets.IconButton {
+        iconSize: 18
         text: qsTr("Reset")
+        horizontalPadding: 8
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/icons/buttons/refresh.svg"
         onClicked: {
           Cpp_ThemeManager.theme = 0
@@ -1302,25 +1298,21 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         text: qsTr("Close")
         horizontalPadding: 8
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/icons/buttons/close.svg"
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         text: qsTr("Apply")
         horizontalPadding: 8
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/icons/buttons/apply.svg"
       }
     }

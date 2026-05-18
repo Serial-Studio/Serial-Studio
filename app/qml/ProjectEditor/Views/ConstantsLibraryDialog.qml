@@ -379,9 +379,8 @@ Window {
                 : qsTr("%1 of %2 constants").arg(root.filteredConstants.length).arg(root.constants.length)
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           text: qsTr("Close")
           horizontalPadding: 8
           icon.source: "qrc:/icons/buttons/close.svg"

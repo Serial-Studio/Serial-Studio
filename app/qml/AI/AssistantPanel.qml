@@ -231,17 +231,14 @@ Widgets.SmartDialog {
               Layout.alignment: Qt.AlignHCenter
               visible: !welcomeCard.hasActiveKey
 
-              Button {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.preferredHeight: 36
+              Widgets.IconButton {
+                spacing: 8
                 leftPadding: 16
                 rightPadding: 16
-                spacing: 8
-                icon.width: 16
-                icon.height: 16
+                Layout.preferredHeight: 36
                 text: qsTr("Open API Key Setup")
                 font: Cpp_Misc_CommonFonts.uiFont
-                icon.color: Cpp_ThemeManager.colors["button_text"]
+                Layout.alignment: Qt.AlignHCenter
                 icon.source: "qrc:/icons/buttons/wrench.svg"
                 onClicked: Cpp_AI_Assistant.openKeyManager()
               }
@@ -484,10 +481,11 @@ Widgets.SmartDialog {
           //
           // Send / Cancel button
           //
-          ToolButton {
+          Widgets.IconButton {
             id: sendButton
 
             padding: 0
+            iconSize: 14
             Layout.preferredWidth: 32
             Layout.preferredHeight: 32
             display: AbstractButton.IconOnly
@@ -500,8 +498,6 @@ Widgets.SmartDialog {
             hoverEnabled: true
             enabled: canActivate
 
-            icon.width: 14
-            icon.height: 14
             icon.source: Cpp_AI_Assistant.busy
                          ? "qrc:/icons/buttons/cancel.svg"
                          : "qrc:/icons/buttons/send.svg"

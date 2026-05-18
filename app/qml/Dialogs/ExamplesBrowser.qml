@@ -26,6 +26,7 @@ import QtQuick.Controls
 import QtQuick.Effects
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -858,15 +859,13 @@ SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         text: qsTr("Close")
         horizontalPadding: 8
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
         icon.source: "qrc:/icons/buttons/close.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }
   }

@@ -22,7 +22,10 @@
     "hi_IN":"डिफ़ॉल्ट",
     "nl_NL":"Standaard",
     "ro_RO":"Implicit",
-    "sv_SE":"Standard"
+    "sv_SE":"Standard",
+    "ar_SA":"افتراضي",
+    "he_IL":"ברירת מחדל",
+    "vi_VN":"Mặc định"
   },
   "colors":{
     "groupbox_border": "#c2c2c2",

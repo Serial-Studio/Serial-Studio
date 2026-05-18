@@ -16,6 +16,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -121,23 +122,19 @@ SmartDialog {
       Layout.alignment: Qt.AlignHCenter
       visible: Cpp_Sessions_Player.isOpen
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_Sessions_Player.previousFrame()
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/icons/buttons/media-prev.svg"
         enabled: Cpp_Sessions_Player.framePosition > 0 && !Cpp_Sessions_Player.isPlaying
       }
 
-      Button {
-        icon.width: 32
-        icon.height: 32
+      Widgets.IconButton {
+        iconSize: 32
         onClicked: Cpp_Sessions_Player.toggle()
         Layout.alignment: Qt.AlignVCenter
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: (Cpp_Sessions_Player.framePosition >= Cpp_Sessions_Player.frameCount - 1)
                      ? "qrc:/icons/buttons/media-stop.svg"
                      : (Cpp_Sessions_Player.isPlaying
@@ -145,13 +142,11 @@ SmartDialog {
                         : "qrc:/icons/buttons/media-play.svg")
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_Sessions_Player.nextFrame()
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/icons/buttons/media-next.svg"
         enabled: (Cpp_Sessions_Player.framePosition < Cpp_Sessions_Player.frameCount - 1)
                  && !Cpp_Sessions_Player.isPlaying

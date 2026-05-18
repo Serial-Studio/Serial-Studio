@@ -217,7 +217,7 @@ Item {
           implicitHeight: 4
         }
 
-        Button {
+        Widgets.IconButton {
           topPadding: 8
           leftPadding: 16
           bottomPadding: 8

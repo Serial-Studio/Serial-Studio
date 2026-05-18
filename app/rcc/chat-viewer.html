@@ -181,7 +181,7 @@
 
     .bubble.assistant ul,
     .bubble.assistant ol {
-      padding-left: 1.6em;
+      padding-inline-start: 1.6em;
       margin: 0 0 8px;
     }
 
@@ -209,13 +209,15 @@
       margin: 0 0 8px;
       padding: 0 1em;
       opacity: 0.75;
-      border-left: 0.25em solid var(--accent);
+      border-inline-start: 0.25em solid var(--accent);
     }
 
     .bubble.assistant code {
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
                    Courier, monospace;
       font-size: 0.9em;
+      direction: ltr;
+      unicode-bidi: isolate;
     }
 
     .bubble.assistant p code,
@@ -236,6 +238,8 @@
       overflow-x: auto;
       margin: 0 0 8px;
       line-height: 1.45;
+      direction: ltr;
+      text-align: left;
     }
 
     .bubble.assistant pre code {
@@ -253,7 +257,7 @@
     .bubble.assistant pre .copy-btn {
       position: absolute;
       top: 4px;
-      right: 4px;
+      inset-inline-end: 4px;
       padding: 2px 6px;
       font-size: 11px;
       font-family: inherit;
@@ -866,6 +870,11 @@
         if (Object.prototype.hasOwnProperty.call(src, key))
           L10N[key] = src[key];
       }
+      lastSerialized = "";
+    }
+
+    function setDirection(rtl) {
+      document.documentElement.dir = rtl ? "rtl" : "ltr";
       lastSerialized = "";
     }
 

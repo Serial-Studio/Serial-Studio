@@ -499,14 +499,12 @@ Widgets.Pane {
                   implicitHeight: 12
                 }
 
-                Button {
-                  icon.width: 18
-                  icon.height: 18
+                Widgets.IconButton {
+                  iconSize: 18
                   Layout.alignment: Qt.AlignHCenter
                   text: qsTr("Open Project Editor")
                   onClicked: app.showProjectEditor()
                   icon.source: "qrc:/icons/buttons/wrench.svg"
-                  icon.color: Cpp_ThemeManager.colors["button_text"]
                 }
               }
             }

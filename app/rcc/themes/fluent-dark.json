@@ -22,7 +22,10 @@
     "hi_IN":"फ्लुएंट डार्क",
     "nl_NL":"Fluent Donker",
     "ro_RO":"Fluent Întunecat",
-    "sv_SE":"Fluent Mörkt"
+    "sv_SE":"Fluent Mörkt",
+    "ar_SA":"فلوينت داكن",
+    "he_IL":"פלואנט כהה",
+    "vi_VN":"Fluent Tối"
   },
   "colors": {
  "groupbox_border": "#3D3D3D",

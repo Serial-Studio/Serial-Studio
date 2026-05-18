@@ -23,6 +23,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../../../../Widgets" as Widgets
+
 Item {
   id: root
 
@@ -79,16 +81,13 @@ Item {
         }
       }
 
-      Button {
-        icon.width: 16
-        icon.height: 16
+      Widgets.IconButton {
         implicitWidth: 24
         implicitHeight: 24
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Bluetooth_LE.startDiscovery()
         icon.source: "qrc:/icons/buttons/refresh.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }
 

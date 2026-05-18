@@ -46,25 +46,25 @@ Rectangle {
 
     background: Item {}
     anchors.fill: parent
+    anchors.leftMargin: 4
+    anchors.rightMargin: 4
     font: Cpp_Misc_CommonFonts.uiFont
 
-    anchors.rightMargin: 4
-    leftPadding: root.rtl ? 0 : 0
-    anchors.leftMargin: root.rtl ? 4 : 4
-    rightPadding: actionButton.width + 16
+    leftPadding: root.rtl ? actionButton.width + 12 : 0
+    rightPadding: root.rtl ? 0 : actionButton.width + 12
     horizontalAlignment: root.rtl ? TextInput.AlignRight : TextInput.AlignLeft
 
-    Button {
+    IconButton {
       id: actionButton
 
       opacity: 0.8
-      icon.width: 12
-      icon.height: 12
+      iconSize: 12
       background: Item {}
-      anchors.rightMargin: 4
-      anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
-      icon.color: Cpp_ThemeManager.colors["button_text"]
+      anchors.left: root.rtl ? parent.left : undefined
+      anchors.right: root.rtl ? undefined : parent.right
+      anchors.leftMargin: root.rtl ? 4 : 0
+      anchors.rightMargin: root.rtl ? 0 : 4
       icon.source: textField.text.length > 0
                      ? "qrc:/icons/buttons/close.svg"
                      : "qrc:/icons/buttons/search.svg"

@@ -24,6 +24,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -345,14 +346,12 @@ SmartDialog {
       Layout.fillWidth: true
       visible: !root.fetchingData
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         horizontalPadding: 8
         text: qsTr("View Online")
         Layout.alignment: Qt.AlignVCenter
         icon.source: "qrc:/icons/buttons/website.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: {
           var url = "https://serial-studio.com/help"
           var pageId = Cpp_HelpCenter.pageId
@@ -377,15 +376,13 @@ SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         text: qsTr("Close")
         horizontalPadding: 8
         onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
         icon.source: "qrc:/icons/buttons/close.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }
   }

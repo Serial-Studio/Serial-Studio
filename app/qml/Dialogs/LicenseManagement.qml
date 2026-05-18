@@ -26,6 +26,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -186,7 +187,7 @@ SmartDialog {
                 }
               }
 
-              Button {
+              Widgets.IconButton {
                 checkable: true
                 icon.color: palette.text
                 Layout.maximumWidth: height
@@ -402,12 +403,10 @@ SmartDialog {
         Layout.fillWidth: true
         Layout.minimumWidth: 480
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Customer Portal")
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/lemonsqueezy.svg"
           onClicked: Cpp_Licensing_LemonSqueezy.openCustomerPortal()
         }
@@ -416,39 +415,33 @@ SmartDialog {
           Layout.fillWidth: true
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Buy License")
           onClicked: Cpp_Licensing_LemonSqueezy.buy()
           icon.source: "qrc:/icons/buttons/buy.svg"
-          icon.color: Cpp_ThemeManager.colors["button_text"]
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Activate")
           opacity: enabled ? 1 : 0.5
           visible: !Cpp_Licensing_LemonSqueezy.isActivated
           onClicked: Cpp_Licensing_LemonSqueezy.activate()
           icon.source: "qrc:/icons/buttons/activate.svg"
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           enabled: Cpp_Licensing_LemonSqueezy.canActivate && !Cpp_Licensing_LemonSqueezy.busy
         }
 
-        Button {
-          icon.width: 18
-          icon.height: 18
+        Widgets.IconButton {
+          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Deactivate")
           opacity: enabled ? 1 : 0.5
           enabled: !Cpp_Licensing_LemonSqueezy.busy
           visible: Cpp_Licensing_LemonSqueezy.isActivated
           onClicked: Cpp_Licensing_LemonSqueezy.deactivate()
-          icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/icons/buttons/deactivate.svg"
         }
       }

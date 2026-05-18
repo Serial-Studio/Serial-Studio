@@ -24,6 +24,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -102,16 +103,14 @@ SmartDialog {
         Keys.onReturnPressed: Cpp_Misc_IconEngine.searchIcons(text)
       }
 
-      Button {
-        icon.width: 14
-        icon.height: 14
+      Widgets.IconButton {
+        iconSize: 14
         highlighted: true
-        horizontalPadding: 8
         text: qsTr("Search")
+        horizontalPadding: 8
         icon.source: "qrc:/icons/buttons/search.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
-        enabled: !Cpp_Misc_IconEngine.busy && searchField.text.length > 0
         onClicked: Cpp_Misc_IconEngine.searchIcons(searchField.text)
+        enabled: !Cpp_Misc_IconEngine.busy && searchField.text.length > 0
       }
     }
 
@@ -246,25 +245,21 @@ SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         text: qsTr("OK")
         highlighted: true
         horizontalPadding: 8
         icon.source: "qrc:/icons/buttons/apply.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: root.selectedIndex >= 0 && !Cpp_Misc_IconEngine.busy
         onClicked: Cpp_Misc_IconEngine.downloadIcon(root.selectedIndex)
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         horizontalPadding: 8
         text: qsTr("Cancel")
         icon.source: "qrc:/icons/buttons/cancel.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: root.close()
       }
     }

@@ -214,12 +214,10 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
+      Widgets.IconButton {
+        iconSize: 18
         text: qsTr("Close")
         onClicked: root.close()
-        icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/icons/buttons/close.svg"
       }
     }

@@ -22,7 +22,10 @@
     "hi_IN":"फ्लुएंट लाइट",
     "nl_NL":"Fluent Licht",
     "ro_RO":"Fluent Luminos",
-    "sv_SE":"Fluent Ljust"
+    "sv_SE":"Fluent Ljust",
+    "ar_SA":"فلوينت فاتح",
+    "he_IL":"פלואנט בהיר",
+    "vi_VN":"Fluent Sáng"
   },
   "colors":{
     "groupbox_border": "#D1D1D1",

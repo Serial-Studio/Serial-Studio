@@ -309,15 +309,14 @@ Widgets.SmartWindow {
           spacing: 8
           Layout.alignment: Qt.AlignHCenter
 
-          Button {
+          Widgets.IconButton {
+            iconSize: 18
             highlighted: true
-            icon.width: 18
-            icon.height: 18
-            icon.color: palette.buttonText
             topPadding: 8
             bottomPadding: 8
             leftPadding: 16
             rightPadding: 12
+            icon.color: palette.buttonText
             icon.source: editorOverlay.lockMode
                          ? "qrc:/icons/buttons/unlock.svg"
                          : "qrc:/icons/buttons/switch.svg"
@@ -332,14 +331,13 @@ Widgets.SmartWindow {
             }
           }
 
-          Button {
-            icon.width: 18
-            icon.height: 18
-            icon.color: palette.buttonText
+          Widgets.IconButton {
+            iconSize: 18
             topPadding: 8
             bottomPadding: 8
             leftPadding: 16
             rightPadding: 16
+            icon.color: palette.buttonText
             icon.source: editorOverlay.lockMode
                          ? "qrc:/icons/buttons/open.svg"
                          : "qrc:/icons/buttons/close.svg"
@@ -354,10 +352,9 @@ Widgets.SmartWindow {
             }
           }
 
-          Button {
+          Widgets.IconButton {
+            iconSize: 18
             topPadding: 8
-            icon.width: 18
-            icon.height: 18
             leftPadding: 16
             bottomPadding: 8
             rightPadding: 16

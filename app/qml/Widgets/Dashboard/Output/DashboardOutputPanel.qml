@@ -11,6 +11,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
+import "../.." as Widgets
 
 Item {
   id: root
@@ -117,7 +118,7 @@ Item {
 
           Item { Layout.fillHeight: true }
 
-          Button {
+          Widgets.IconButton {
             text: cell.owTitle.length > 0 ? cell.owTitle : qsTr("Send")
             icon.source: cell.owIcon.length > 0
                          ? cell.owIcon
@@ -266,7 +267,7 @@ Item {
               onAccepted: textSendBtn.clicked()
             }
 
-            Button {
+            Widgets.IconButton {
               id: textSendBtn
 
               text: qsTr("Send")
