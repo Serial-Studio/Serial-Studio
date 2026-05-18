@@ -500,6 +500,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/BigButton.qml
   qml/Widgets/BoundField.qml
+  qml/Widgets/Combo.qml
   qml/Widgets/InfoBullet.qml
   qml/Widgets/LedIndicator.qml
   qml/Widgets/FileDropArea.qml

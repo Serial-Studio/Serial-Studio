@@ -26,6 +26,7 @@ import QtQuick.Controls
 import QtCore as Core
 
 import "../Widgets"
+import "../Widgets" as Widgets
 
 SmartDialog {
   id: root
@@ -106,7 +107,7 @@ SmartDialog {
           opacity: enabled ? 1 : 0.5
           enabled: !Cpp_IO_FileTransmission.active
 
-          ComboBox {
+          Widgets.Combo {
             id: _modeCombo
 
             Layout.fillWidth: true

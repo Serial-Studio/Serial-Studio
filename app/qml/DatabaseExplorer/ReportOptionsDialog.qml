@@ -380,7 +380,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Page size")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             id: _pageSizeCombo
             Layout.fillWidth: true
             model: root.pageSizes.map(p => p.label)
@@ -441,7 +441,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Line style")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             id: _lineStyleCombo
             Layout.fillWidth: true
             model: root.lineStyles.map(s => s.label)

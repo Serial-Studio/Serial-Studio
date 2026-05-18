@@ -25,6 +25,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../../../../Widgets" as Widgets
+
 Item {
   id: root
 
@@ -47,7 +49,7 @@ Item {
       text: qsTr("Protocol") + ":"
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: _protocolCombo
 
       Layout.fillWidth: true
@@ -71,7 +73,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
-    } ComboBox {
+    } Widgets.Combo {
       id: _serialPortCombo
 
       Layout.fillWidth: true
@@ -96,7 +98,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
-    } ComboBox {
+    } Widgets.Combo {
       id: _baudRateCombo
 
       editable: true
@@ -200,7 +202,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
-    } ComboBox {
+    } Widgets.Combo {
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -223,7 +225,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
-    } ComboBox {
+    } Widgets.Combo {
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -246,7 +248,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
-    } ComboBox {
+    } Widgets.Combo {
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5

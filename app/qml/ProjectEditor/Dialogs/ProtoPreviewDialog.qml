@@ -186,7 +186,7 @@ Window {
         Component.onCompleted: font.capitalization = Font.AllUppercase
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: _picker
 
         Layout.fillWidth: true

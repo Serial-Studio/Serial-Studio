@@ -25,6 +25,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../../../../Widgets" as Widgets
+
 Item {
   id: root
 
@@ -47,7 +49,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("HID Device") + ":"
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: deviceCombo
 
       Layout.fillWidth: true

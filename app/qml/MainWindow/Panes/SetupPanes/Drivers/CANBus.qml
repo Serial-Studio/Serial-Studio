@@ -25,6 +25,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../../../../Widgets" as Widgets
+
 Item {
   id: root
 
@@ -93,7 +95,7 @@ Item {
       //
       Label {
         text: qsTr("CAN Driver") + ":"
-      } ComboBox {
+      } Widgets.Combo {
         id: _pluginCombo
 
         textRole: "display"
@@ -139,7 +141,7 @@ Item {
       Label {
         text: qsTr("Interface") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-      } ComboBox {
+      } Widgets.Combo {
         id: _interfaceCombo
 
         Layout.fillWidth: true
@@ -171,7 +173,7 @@ Item {
       Label {
         text: qsTr("Bitrate") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-      } ComboBox {
+      } Widgets.Combo {
         id: _bitrateCombo
 
         editable: true

@@ -542,7 +542,7 @@ Widgets.SmartDialog {
         spacing: 6
         Layout.fillWidth: true
 
-        ComboBox {
+        Widgets.Combo {
           id: providerCombo
 
           flat: true
@@ -571,7 +571,7 @@ Widgets.SmartDialog {
           }
         }
 
-        ComboBox {
+        Widgets.Combo {
           id: modelCombo
 
           property var modelIds: []

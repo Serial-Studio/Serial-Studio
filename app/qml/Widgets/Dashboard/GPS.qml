@@ -26,6 +26,7 @@ import QtQuick.Controls
 import SerialStudio
 
 import "../"
+import "../" as Widgets
 
 Item {
   id: root
@@ -205,7 +206,7 @@ Item {
       icon.source: "qrc:/icons/dashboard-buttons/map.svg"
     }
 
-    ComboBox {
+    Widgets.Combo {
       id: _mapType
 
       Layout.fillWidth: true

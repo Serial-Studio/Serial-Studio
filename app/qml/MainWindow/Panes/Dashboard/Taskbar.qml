@@ -701,7 +701,7 @@ Item {
     //
     // Workspace switcher
     //
-    ComboBox {
+    Widgets.Combo {
       id: _switcher
 
       textRole: "text"

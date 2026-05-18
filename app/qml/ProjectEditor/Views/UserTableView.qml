@@ -312,7 +312,7 @@ Widgets.Pane {
 
             Item { width: 8 }
 
-            ComboBox {
+            Widgets.Combo {
               id: typeCombo
 
               Layout.preferredWidth: root.colTypeWidth - 8

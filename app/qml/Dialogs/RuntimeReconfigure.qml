@@ -160,7 +160,7 @@ Widgets.SmartDialog {
           text: qsTr("Pick the correct device, then press Connect.")
         }
 
-        ComboBox {
+        Widgets.Combo {
           Layout.fillWidth: true
           opacity: enabled ? 1 : 0.5
           enabled: !Cpp_IO_Manager.isConnected

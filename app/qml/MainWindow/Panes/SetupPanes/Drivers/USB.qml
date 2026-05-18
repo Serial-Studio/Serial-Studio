@@ -25,6 +25,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../../../../Widgets" as Widgets
+
 Item {
   id: root
 
@@ -47,7 +49,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("USB Device") + ":"
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: deviceCombo
 
       Layout.fillWidth: true
@@ -77,7 +79,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Transfer Mode") + ":"
       enabled: deviceCombo.currentIndex > 0 && app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: modeCombo
 
       Layout.fillWidth: true
@@ -167,7 +169,7 @@ Item {
       text: qsTr("IN Endpoint") + ":"
       visible: Cpp_IO_Manager.isConnected
       enabled: Cpp_IO_Manager.isConnected
-    } ComboBox {
+    } Widgets.Combo {
       id: inEndpointCombo
 
       Layout.fillWidth: true
@@ -203,7 +205,7 @@ Item {
       text: qsTr("OUT Endpoint") + ":"
       visible: Cpp_IO_Manager.isConnected
       enabled: Cpp_IO_Manager.isConnected
-    } ComboBox {
+    } Widgets.Combo {
       id: outEndpointCombo
 
       Layout.fillWidth: true

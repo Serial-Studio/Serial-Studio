@@ -161,7 +161,7 @@ Item {
         text: qsTr("Version") + ":"
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
-      } ComboBox {
+      } Widgets.Combo {
         id: _version
 
         Layout.fillWidth: true
@@ -259,7 +259,7 @@ Item {
         visible: Cpp_IO_Mqtt.sslEnabled
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
         opacity: enabled ? 1 : 0.5
-      } ComboBox {
+      } Widgets.Combo {
         id: _sslProtocol
 
         Layout.fillWidth: true
@@ -290,7 +290,7 @@ Item {
         visible: Cpp_IO_Mqtt.sslEnabled
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
         opacity: enabled ? 1 : 0.5
-      } ComboBox {
+      } Widgets.Combo {
         id: _peerVerifyMode
 
         Layout.fillWidth: true

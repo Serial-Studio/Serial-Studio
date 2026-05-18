@@ -381,7 +381,7 @@ Widgets.Pane {
             Component.onCompleted: font.capitalization = Font.AllUppercase
           }
 
-          ComboBox {
+          Widgets.Combo {
             Layout.fillWidth: true
             enabled: app.ioEnabled
             opacity: enabled ? 1 : 0.5

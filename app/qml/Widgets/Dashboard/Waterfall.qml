@@ -27,6 +27,7 @@ import QtQuick.Controls
 import SerialStudio
 
 import "../"
+import "../" as Widgets
 
 Item {
   id: root
@@ -109,7 +110,7 @@ Item {
       right: parent.right
     }
 
-    ComboBox {
+    Widgets.Combo {
       id: colorMapCombo
 
       implicitWidth: 80

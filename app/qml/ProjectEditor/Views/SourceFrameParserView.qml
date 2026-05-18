@@ -354,7 +354,7 @@ Widgets.Pane {
             font: Cpp_Misc_CommonFonts.uiFont
           }
 
-          ComboBox {
+          Widgets.Combo {
             id: languageSelector
 
             model: ["JavaScript", "Lua"]

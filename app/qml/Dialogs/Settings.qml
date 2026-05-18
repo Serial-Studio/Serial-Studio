@@ -175,7 +175,7 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
             enabled: !Cpp_IO_Manager.isConnected
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             Layout.fillWidth: true
             opacity: enabled ? 1 : 0.5
             enabled: !Cpp_IO_Manager.isConnected
@@ -189,7 +189,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Theme")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             id: _themeCombo
 
             Layout.fillWidth: true
@@ -464,7 +464,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Font Family")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             id: _widgetFontFamily
 
             Layout.fillWidth: true
@@ -483,7 +483,7 @@ Widgets.SmartDialog {
             spacing: 4
             Layout.fillWidth: true
 
-            ComboBox {
+            Widgets.Combo {
               id: _widgetSizePreset
 
               Layout.fillWidth: true
@@ -922,7 +922,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Display Mode")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.displayModes
             currentIndex: Cpp_Console_Handler.displayMode
@@ -935,7 +935,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Font Family")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             id: _consoleFontFamily
 
             Layout.fillWidth: true
@@ -1001,7 +1001,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Line Ending")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.lineEndings
             currentIndex: Cpp_Console_Handler.lineEnding
@@ -1014,7 +1014,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Input Mode")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.dataModes
             currentIndex: Cpp_Console_Handler.dataMode
@@ -1027,7 +1027,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Text Encoding")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.textEncodings
             currentIndex: Cpp_Console_Handler.encoding
@@ -1040,7 +1040,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Checksum")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             Layout.fillWidth: true
             model: Cpp_Console_Handler.checksumMethods
             currentIndex: Cpp_Console_Handler.checksumMethod

@@ -380,7 +380,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Theme")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             id: themeCombo
 
             currentIndex: 0
@@ -500,7 +500,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Mode")
             color: Cpp_ThemeManager.colors["text"]
-          } ComboBox {
+          } Widgets.Combo {
             id: taskbarModeCombo
 
             Layout.fillWidth: false

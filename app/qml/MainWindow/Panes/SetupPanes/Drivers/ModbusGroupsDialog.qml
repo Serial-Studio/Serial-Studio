@@ -198,7 +198,7 @@ Window {
             text: qsTr("Register Type:")
           }
 
-          ComboBox {
+          Widgets.Combo {
             id: _typeCombo
 
             Layout.fillWidth: true

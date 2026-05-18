@@ -228,7 +228,7 @@ Item {
         icon.source: "qrc:/icons/buttons/attach.svg"
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: deviceCombo
 
         Layout.alignment: Qt.AlignVCenter
@@ -369,7 +369,7 @@ Item {
         checked: Cpp_Console_Handler.dataMode === 1
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: lineEndingCombo
 
         onCurrentIndexChanged: {
@@ -383,7 +383,7 @@ Item {
         currentIndex: Cpp_Console_Handler.lineEnding
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: checkumCombo
 
         onCurrentIndexChanged: {
@@ -474,7 +474,7 @@ Item {
         Layout.fillWidth: true
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: displayModeCombo
 
         implicitHeight: 24

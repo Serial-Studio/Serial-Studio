@@ -59,7 +59,7 @@ Item {
                                       charLabel.implicitWidth)
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: _deviceCombo
 
         Layout.fillWidth: true
@@ -108,7 +108,7 @@ Item {
                                       charLabel.implicitWidth)
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: serviceNames
 
         Layout.fillWidth: true
@@ -144,7 +144,7 @@ Item {
                                       charLabel.implicitWidth)
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: characteristicNames
 
         Layout.fillWidth: true

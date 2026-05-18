@@ -79,7 +79,7 @@ SmartDialog {
         onTextChanged: Cpp_ExtensionManager.setSearchFilter(text)
       }
 
-      ComboBox {
+      Widgets.Combo {
         id: typeFilter
 
         implicitWidth: 160

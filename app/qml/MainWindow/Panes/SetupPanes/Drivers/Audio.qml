@@ -25,6 +25,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../../../../Widgets" as Widgets
+
 Item {
   id: root
 
@@ -119,7 +121,7 @@ Item {
     Label {
       visible: _inDev.visible
       text: qsTr("Input Device") + ":"
-    } ComboBox {
+    } Widgets.Combo {
       id: _inDev
 
       visible: count > 0
@@ -144,7 +146,7 @@ Item {
     Label {
       visible: _rate.visible
       text: qsTr("Sample Rate") + ":"
-    } ComboBox {
+    } Widgets.Combo {
       id: _rate
 
       Layout.fillWidth: true
@@ -169,7 +171,7 @@ Item {
     Label {
       visible: _inFmt.visible
       text: qsTr("Sample Format") + ":"
-    } ComboBox {
+    } Widgets.Combo {
       id: _inFmt
 
       Layout.fillWidth: true
@@ -194,7 +196,7 @@ Item {
     Label {
       visible: _inChan.visible
       text: qsTr("Channels") + ":"
-    } ComboBox {
+    } Widgets.Combo {
       id: _inChan
 
       Layout.fillWidth: true
@@ -231,7 +233,7 @@ Item {
     Label {
       visible: _outDev.visible
       text: qsTr("Output Device") + ":"
-    } ComboBox {
+    } Widgets.Combo {
       id: _outDev
 
       visible: count > 0
@@ -256,7 +258,7 @@ Item {
     Label {
       visible: _outFmt.visible
       text: qsTr("Sample Format") + ":"
-    } ComboBox {
+    } Widgets.Combo {
       id: _outFmt
 
       Layout.fillWidth: true
@@ -281,7 +283,7 @@ Item {
     Label {
       visible: _outChan.visible
       text: qsTr("Channels") + ":"
-    } ComboBox {
+    } Widgets.Combo {
       id: _outChan
 
       Layout.fillWidth: true

@@ -24,6 +24,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../../../../Widgets" as Widgets
+
 Item {
   id: root
 
@@ -72,7 +74,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("COM Port") + ":"
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: _portCombo
 
       Layout.fillWidth: true
@@ -101,7 +103,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Baud Rate") + ":"
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: _baudCombo
 
       editable: true
@@ -195,7 +197,7 @@ Item {
       text: qsTr("Data Bits") + ":"
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: _dataCombo
 
       Layout.fillWidth: true
@@ -216,7 +218,7 @@ Item {
       text: qsTr("Parity") + ":"
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: _parityCombo
 
       Layout.fillWidth: true
@@ -237,7 +239,7 @@ Item {
       text: qsTr("Stop Bits") + ":"
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: _stopBitsCombo
 
       Layout.fillWidth: true
@@ -258,7 +260,7 @@ Item {
       text: qsTr("Flow Control") + ":"
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
-    } ComboBox {
+    } Widgets.Combo {
       id: _flowCombo
 
       Layout.fillWidth: true
