@@ -651,7 +651,8 @@ jobs:
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
       with:
-        useLocalCache: true
+        useLocalCache: false
+        useCloudCache: false
 
     - name: '🛠 Setup MSVC Development Environment'
       uses: TheMrMilchmann/setup-msvc-dev@v4
