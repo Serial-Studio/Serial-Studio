@@ -173,7 +173,7 @@ Item {
       Label {
         text: qsTr("Bitrate") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-      } Widgets.Combo {
+      } ComboBox {
         id: _bitrateCombo
 
         editable: true

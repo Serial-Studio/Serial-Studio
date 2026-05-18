@@ -74,7 +74,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("COM Port") + ":"
       enabled: app.ioEnabled
-    } Widgets.Combo {
+    } ComboBox {
       id: _portCombo
 
       Layout.fillWidth: true
@@ -103,7 +103,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Baud Rate") + ":"
       enabled: app.ioEnabled
-    } Widgets.Combo {
+    } ComboBox {
       id: _baudCombo
 
       editable: true

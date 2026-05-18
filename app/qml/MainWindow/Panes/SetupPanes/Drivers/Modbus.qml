@@ -98,7 +98,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
-    } Widgets.Combo {
+    } ComboBox {
       id: _baudRateCombo
 
       editable: true

@@ -13,15 +13,19 @@ import QtQuick.Controls
 ComboBox {
   id: control
 
-  readonly property bool _rtl: Cpp_Misc_Translator.rtl
-  readonly property int _hAlign: _rtl ? Text.AlignRight : Text.AlignLeft
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
 
-  Binding {
-    target: control.contentItem
-    property: "horizontalAlignment"
-    value: control._hAlign
-    restoreMode: Binding.RestoreNone
-    when: control.contentItem !== null
-          && control.contentItem.hasOwnProperty("horizontalAlignment")
+  LayoutMirroring.enabled: false
+  LayoutMirroring.childrenInherit: true
+
+  contentItem: Text {
+    font: control.font
+    elide: Text.ElideRight
+    text: control.displayText
+    color: control.palette.buttonText
+    verticalAlignment: Text.AlignVCenter
+    leftPadding: control.rtl ? control.indicator.width + 4 : 6
+    rightPadding: control.rtl ? 6 : control.indicator.width + 4
+    horizontalAlignment: control.rtl ? Text.AlignRight : Text.AlignLeft
   }
 }
