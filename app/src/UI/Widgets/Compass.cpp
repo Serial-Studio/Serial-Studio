@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2026 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -21,6 +21,8 @@
 
 #include "UI/Widgets/Compass.h"
 
+#include <cmath>
+
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
@@ -32,18 +34,46 @@
  * @brief Constructs a Compass widget.
  */
 Widgets::Compass::Compass(const int index, QQuickItem* parent)
-  : QQuickItem(parent), m_index(index), m_value(0)
+  : QQuickItem(parent), m_index(index), m_value(0.0)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
+  m_cardinal = cardinalDirection(0.0);
+
+  if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index)) {
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
+    m_title             = dataset.title;
+    m_units             = dataset.units;
+    m_displayFormat     = dataset.displayFormat;
+
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Compass::updateData);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
-// Getters
+// State queries
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the current value of the compass.
+ * @brief Compass has no alarm semantics; reported for QML symmetry with Gauge.
+ */
+bool Widgets::Compass::alarmsDefined() const noexcept
+{
+  return false;
+}
+
+/**
+ * @brief Compass has no alarm semantics; reported for QML symmetry with Gauge.
+ */
+bool Widgets::Compass::alarmTriggered() const noexcept
+{
+  return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Value getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the current heading in degrees (0-360, wrap-clamped).
  */
 double Widgets::Compass::value() const noexcept
 {
@@ -51,11 +81,35 @@ double Widgets::Compass::value() const noexcept
 }
 
 /**
- * @brief Returns the text representation of the compass value.
+ * @brief Returns the cardinal/intercardinal label for the current heading.
  */
-QString Widgets::Compass::text() const noexcept
+const QString& Widgets::Compass::cardinal() const noexcept
 {
-  return m_text;
+  return m_cardinal;
+}
+
+/**
+ * @brief Returns the dataset title associated with the widget.
+ */
+const QString& Widgets::Compass::title() const noexcept
+{
+  return m_title;
+}
+
+/**
+ * @brief Returns the measurement units associated with the dataset (empty = no suffix).
+ */
+const QString& Widgets::Compass::units() const noexcept
+{
+  return m_units;
+}
+
+/**
+ * @brief Returns the value display format ("" = auto; "%.<n>f" or preset slugs accepted).
+ */
+const QString& Widgets::Compass::displayFormat() const noexcept
+{
+  return m_displayFormat;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -63,7 +117,7 @@ QString Widgets::Compass::text() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the compass data from the Dashboard.
+ * @brief Updates the compass heading from the dashboard source.
  */
 void Widgets::Compass::updateData()
 {
@@ -74,51 +128,55 @@ void Widgets::Compass::updateData()
     return;
 
   const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
-  const auto value    = dataset.numericValue;
-  if (!DSP::notEqual(value, m_value))
+  if (!std::isfinite(dataset.numericValue))
     return;
 
-  m_value = qMin(360.0, qMax(0.0, value));
-  m_text  = FMT_VAL(m_value, dataset);
+  // Wrap-clamp to [0, 360); fold negatives and values > 360 back into the rose
+  double v = std::fmod(dataset.numericValue, 360.0);
+  if (v < 0.0)
+    v += 360.0;
 
-  const int deg = qCeil(m_value);
-  if (deg < 10)
-    m_text.prepend(QStringLiteral("  "));
-  else if (deg < 100)
-    m_text.prepend(QStringLiteral(" "));
+  const auto card = cardinalDirection(v);
+  if (!DSP::notEqual(v, m_value) && card == m_cardinal)
+    return;
 
-  m_text += QStringLiteral(" ") + cardinalDirection(m_value);
+  m_value    = v;
+  m_cardinal = card;
   Q_EMIT updated();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Cardinal resolver
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Maps an angle in degrees to a cardinal/intercardinal label.
+ * @brief Maps an angle in degrees to a 16-wind cardinal/intercardinal label.
  */
 QString Widgets::Compass::cardinalDirection(double angle) const
 {
   if ((angle >= 0 && angle < 22.5) || (angle >= 337.5 && angle <= 360))
-    return tr("N") + " ";
+    return tr("N");
 
   if (angle < 67.5)
     return tr("NE");
 
   if (angle < 112.5)
-    return tr("E") + " ";
+    return tr("E");
 
   if (angle < 157.5)
     return tr("SE");
 
   if (angle < 202.5)
-    return tr("S") + " ";
+    return tr("S");
 
   if (angle < 247.5)
     return tr("SW");
 
   if (angle < 292.5)
-    return tr("W") + " ";
+    return tr("W");
 
   if (angle < 337.5)
     return tr("NW");
 
-  return QString();
+  return tr("N");
 }

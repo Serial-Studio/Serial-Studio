@@ -19,7 +19,7 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Connect to a device.** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, audio input, raw USB (libusb), HID (hidapi), and Process I/O are Pro. Multiple devices in one project is also Pro.
 
-**Visualize data.** 15+ widgets in the GPL build: line plots, gauges, bar charts, meters, thermometers, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), and the Painter widget. Painter is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
+**Visualize data.** 15+ widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, and Meter each render as a two-page swipe view — page 0 is the analog face, page 1 is a large digital readout — so a single tile gives you both the trend at a glance and the exact value. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), and the Painter widget. Painter is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
 
 **Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Or skip the project file: print CSV from your device and Quick Plot draws it. Workspaces split big projects into tabs with a searchable taskbar.
 
@@ -95,7 +95,7 @@ An ARM64 AppImage is available for Raspberry Pi and similar boards. Performance 
 ### At a glance
 
 - **Protocols:** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, Audio, raw USB (libusb), HID (hidapi), and Process I/O are Pro.
-- **Visualization:** 15+ widgets — line plots, gauges, bar charts, meters, thermometers, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed (some Pro).
+- **Visualization:** 15+ widgets — line plots, gauges, bar charts, meters, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, live camera feed, plus Clock and Stopwatch utility widgets (some Pro). Bar, Gauge, and Meter each include a swipeable digital readout page alongside the analog face.
 - **Painter widget (Pro):** scriptable Canvas2D-style canvas driven by a JS `paint(ctx, w, h)` callback. Watchdog-protected QJSEngine, persistent script state across frames, ~17 ready-to-use templates (oscilloscope, polar plot, artificial horizon, audio VU meter, dial gauge, heatmap, LED matrix, sparklines, vector field, XY scope, and more).
 - **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
 - **Custom parsing:** JavaScript or Lua 5.4 frame parsers, plus 20+ templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, …).

@@ -18,7 +18,10 @@ flowchart TD
     Group --> G2["GPS Map · LED Panel<br/>3D Plot · Image View"]
     Group --> G3["Painter (user-scripted)"]
 
-    Dataset --> D1["Plot · FFT Plot · Waterfall<br/>Bar · Gauge · Compass<br/>Meter · Thermometer"]
+    Dataset --> D1["Plot · FFT Plot · Waterfall<br/>Bar · Gauge · Compass · Meter"]
+
+    Root --> Utility["Utility Widgets"]
+    Utility --> U1["Clock · Stopwatch"]
 ```
 
 ## Group widgets
@@ -168,6 +171,7 @@ flowchart TD
 - Best for: level indicators, resource usage, bounded values.
 - Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmLow` (default 20), `alarmHigh` (default 80).
 - Alarms have to be enabled with `alarmEnabled: true`.
+- **Two-page swipe view.** Page 0 is the analog bar; page 1 is a large monospace digital readout. Swipe horizontally (or use the page indicator dots at the bottom) to flip. The active page is saved per-widget in the project file, so each Bar tile remembers its own preference.
 
 ### Gauge
 
@@ -176,6 +180,7 @@ flowchart TD
 - Same configuration as Bar (min/max, alarms).
 - Best for: speedometers, RPM, pressure, temperature.
 - Configuration fields: `wgtMin`, `wgtMax`, `alarmLow`, `alarmHigh`.
+- **Two-page swipe view.** Page 0 is the analog dial; page 1 is a large digital readout. The active page is persisted per widget.
 
 ### Compass
 
@@ -192,15 +197,26 @@ flowchart TD
 - Best for: VU-style readouts, signal strength, pressure, voltage.
 - Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmLow`, `alarmHigh`.
 - Alarms have to be enabled with `alarmEnabled: true`.
+- **Two-page swipe view.** Page 0 is the analog half-arc meter; page 1 is a large digital readout. The active page is persisted per widget.
 
-### Thermometer
+## Utility widgets
 
-- Dataset widget key: `"thermometer"`.
-- Vertical thermometer-style fill with a scale and value readout.
-- Same min/max model as Bar and Gauge.
-- Best for: temperature, level indicators, tank contents.
-- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmLow`, `alarmHigh`.
-- Alarms have to be enabled with `alarmEnabled: true`.
+Clock and Stopwatch are dashboard-level utility widgets. They are not attached to any group or dataset — toggle them from the **Start menu** (Dashboard pane) and they appear as overview entries in the taskbar alongside Terminal and Notifications. Enabled state persists in `QSettings` under `Dashboard/ClockEnabled` and `Dashboard/StopwatchEnabled`.
+
+### Clock
+
+- Toggle from the Dashboard Start menu.
+- **Two-page swipe view.** Page 0 is an analog clock face (silver-bezel gauge style, hour/minute/second hands, 12-hour numerals); page 1 is a large monospace digital readout (12-hour time + full date).
+- Driven by the system clock, ticks once per second.
+- Active page is persisted in application `QSettings` (`ClockWidget/clockPageIndex`).
+- Best for: visible session timestamps in screen recordings, lab/operator dashboards.
+
+### Stopwatch
+
+- Toggle from the Dashboard Start menu.
+- Single-page widget: large `HH:MM:SS.mmm` readout, **Start/Stop**, **Lap**, **Reset** buttons, and a scrollable lap table.
+- Local-only timing; data is not persisted to the project, transmitted, or sent to the device.
+- Best for: bench testing, run/test timing during a session.
 
 ## Widget configuration summary
 
@@ -218,11 +234,12 @@ flowchart TD
 | Plot          | Dataset | auto           | —            | `graph: true`, `pltMin`/`pltMax`             |
 | FFT Plot      | Dataset | auto           | —            | `fft: true`, `fftSamples`, `fftSamplingRate` |
 | Waterfall     | Dataset | auto           | —            | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
-| Bar           | Dataset | `bar`          | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
-| Gauge         | Dataset | `gauge`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
+| Bar           | Dataset | `bar`          | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`, swipe to digital page |
+| Gauge         | Dataset | `gauge`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`, swipe to digital page |
 | Compass       | Dataset | `compass`      | —            | value 0-360                                  |
-| Meter         | Dataset | `meter`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
-| Thermometer   | Dataset | `thermometer`  | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
+| Meter         | Dataset | `meter`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`, swipe to digital page |
+| Clock         | Utility | (toggle)       | 0            | system-clock driven; swipe between analog face / digital readout |
+| Stopwatch     | Utility | (toggle)       | 0            | local Start/Stop/Lap/Reset with lap table    |
 
 ## Dataset fields reference
 
@@ -233,7 +250,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `index`            | int    | 0       | Frame offset index (column position in CSV data). |
 | `title`            | string | (none)  | Human-readable display name. |
 | `units`            | string | (none)  | Measurement units (for example "m/s", "degC"). |
-| `widget`           | string | `""`    | Dataset widget type: `"bar"`, `"gauge"`, `"compass"`, `"meter"`, or `"thermometer"`. |
+| `widget`           | string | `""`    | Dataset widget type: `"bar"`, `"gauge"`, `"compass"`, or `"meter"`. |
 | `plt` (graph)      | bool   | false   | Enable time-series plot. |
 | `fft`              | bool   | false   | Enable FFT spectrum plot. |
 | `waterfall`        | bool   | false   | Enable waterfall (spectrogram) plot. Pro. |
@@ -243,10 +260,10 @@ Every dataset in a project file supports these visualization-related fields:
 | `overviewDisplay`  | bool   | false   | Show in the overview/status bar. |
 | `pltMin`           | double | 0       | Plot Y-axis minimum (0 = auto-scale). |
 | `pltMax`           | double | 0       | Plot Y-axis maximum (0 = auto-scale). |
-| `wgtMin`           | double | 0       | Widget (bar/gauge/meter/thermometer) minimum. |
-| `wgtMax`           | double | 100     | Widget (bar/gauge/meter/thermometer) maximum. |
+| `wgtMin`           | double | 0       | Widget (bar/gauge/meter) minimum. |
+| `wgtMax`           | double | 100     | Widget (bar/gauge/meter) maximum. |
 | `ledHigh`          | double | 80      | LED activation threshold. |
-| `alarmEnabled`     | bool   | false   | Enable alarm thresholds on bar/gauge/meter/thermometer. |
+| `alarmEnabled`     | bool   | false   | Enable alarm thresholds on bar/gauge/meter. |
 | `alarmLow`         | double | 20      | Low alarm threshold. |
 | `alarmHigh`        | double | 80      | High alarm threshold. |
 | `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 16384). |
@@ -265,13 +282,13 @@ Every dataset in a project file supports these visualization-related fields:
 - Right-click the canvas for a context menu: tile windows, set wallpaper.
 - Widget positions and sizes are saved per project via `widgetSettings` and persist between sessions.
 - The Actions panel (if the project defines actions) shows up as a horizontal bar above the widgets.
-- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Thermometer, ImageView, OutputPanel, NotificationLog, Waterfall, Painter.
+- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Clock, Stopwatch, ImageView, OutputPanel, NotificationLog, Waterfall, Painter.
 
 ## Picking the right widget
 
 | Data type                        | Recommended widget                  |
 |----------------------------------|-------------------------------------|
-| Temperature                      | Thermometer, Plot, or Gauge         |
+| Temperature                      | Gauge, Plot, or Bar                 |
 | Pressure, voltage, signal level  | Plot, Gauge, Meter, or Bar          |
 | GPS coordinates                  | GPS Map (group)                     |
 | Acceleration (X, Y, Z)           | Accelerometer (group)               |
@@ -283,6 +300,8 @@ Every dataset in a project file supports these visualization-related fields:
 | Mixed numeric and text values    | Data Grid (group)           |
 | 3D trajectory or position        | 3D Plot (group, Pro)        |
 | Live camera or image stream      | Image View (group, Pro)     |
+| Wall-clock time / session timestamp | Clock (utility)          |
+| Manual elapsed-time / lap timing | Stopwatch (utility)         |
 
 ## See also
 

@@ -27,17 +27,43 @@ existing scripts and clients that haven't migrated.
 | `"fft"`             | 7            |                                                |
 | `"led"`             | 8            |                                                |
 | `"plot"`            | 9            |                                                |
-| `"bar"`             | 10           |                                                |
-| `"gauge"`           | 11           |                                                |
+| `"bar"`             | 10           | Two-page swipe (analog bar / digital readout)  |
+| `"gauge"`           | 11           | Two-page swipe (analog dial / digital readout) |
 | `"compass"`         | 12           |                                                |
-| `"meter"`           | 13           | Analog half-arc meter; bounded scalar          |
-| `"thermometer"`     | 14           | Vertical thermometer; bounded scalar           |
-| `"none"`            | 15           | Sentinel; never pin                            |
-| `"imageview"`       | 16           | Pro                                            |
-| `"output-panel"`    | 17           | Pro; ALL output widgets in a group on one tile |
-| `"notification-log"`| 18           | Pro                                            |
-| `"waterfall"`       | 19           | Pro                                            |
-| `"painter"`         | 20           | Pro                                            |
+| `"meter"`           | 13           | Analog half-arc; two-page swipe with digital   |
+| `"clock"`           | 14           | Utility — toggled from Start menu, NOT pinned via addWidget |
+| `"stopwatch"`       | 15           | Utility — toggled from Start menu, NOT pinned via addWidget |
+| `"none"`            | 16           | Sentinel; never pin                            |
+| `"imageview"`       | 17           | Pro                                            |
+| `"output-panel"`    | 18           | Pro; ALL output widgets in a group on one tile |
+| `"notification-log"`| 19           | Pro                                            |
+| `"waterfall"`       | 20           | Pro                                            |
+| `"painter"`         | 21           | Pro                                            |
+
+**Clock and Stopwatch are utility widgets, not tiles.** They have
+`DashboardWidget` slots (14, 15) so they can render and live in the
+taskbar's overview row, but `addWidget` rejects them: there is no group
+or dataset to attach to. They are toggled by writing
+`Cpp_UI_Dashboard.clockEnabled` / `stopwatchEnabled` (the QML Start menu
+does this from the Dashboard pane). State persists in QSettings under
+`Dashboard/ClockEnabled` and `Dashboard/StopwatchEnabled`. When enabled,
+Dashboard injects a synthetic group with `widget: "clock"` /
+`"stopwatch"` and the taskbar gets an overview row. Workspace-eligible:
+no. Project-file-addressable: no — they're a dashboard preference, not
+project state.
+
+**Bar / Gauge / Meter render as a two-page swipe view.** Page 0 is the
+analog face (bar fill / dial / half-arc with needle); page 1 is a large
+monospace digital readout that uses the dataset's `widgetMin` /
+`widgetMax` to size the value box for a stable layout. The user swipes
+horizontally or taps the page-indicator dots. The active page is
+persisted **per widget instance** via
+`Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "page", N)`, so two
+Gauge tiles on the same dataset can show different pages. Compass is
+single-page (no digital twin makes sense). `addWidget` does not change —
+you still pass `widgetType: "bar"` / `"gauge"` / `"meter"` — but if a
+user reports "it shows a number not a dial," it's the page state, not a
+config bug.
 
 Each group/dataset is "compatible" with a subset of these. Use
 `project.group.list` and read each group's `compatibleWidgetTypes`
@@ -63,7 +89,6 @@ APIs, which is why slugs exist.)
 | LED           | `"led"`         | `led: true`            | `32`             | `8`              |
 | Waterfall     | `"waterfall"`   | `waterfall: true`      | `64`             | `19` (Pro)       |
 | Meter         | `"meter"`       | `widget: "meter"`      | `128`            | `13`             |
-| Thermometer   | `"thermometer"` | `widget: "thermometer"`| `256`            | `14`             |
 
 Slug usage:
 - `setOptions` accepts **either** `options: ["plot","fft","waterfall"]`
@@ -77,10 +102,10 @@ Slug usage:
   `compatibleWidgetTypeSlugs`, `widgetTypeSlug`).
 
 Notes:
-- Bar / Gauge / Compass / Meter / Thermometer are **mutually
-  exclusive** -- a dataset's `widget` string holds at most one of them.
-  `setOptions` enforces this: if more than one of those bits is set,
-  the highest bit wins.
+- Bar / Gauge / Compass / Meter are **mutually exclusive** -- a
+  dataset's `widget` string holds at most one of them. `setOptions`
+  enforces this: if more than one of those bits is set, the highest bit
+  wins.
 - Plot / FFT / LED / Waterfall are **independent** -- a dataset can
   have Plot + FFT + Waterfall all on at once, and the group's
   `compatibleWidgetTypes` will list all three.
@@ -103,7 +128,7 @@ freshly-pinned Gauge / Bar / FFT looks empty or maxed out.
 | Pair (file/response key)         | API write-param name           | Drives                                                                              |
 |----------------------------------|--------------------------------|-------------------------------------------------------------------------------------|
 | `plotMin` / `plotMax`            | `pltMin` / `pltMax`            | Plot, MultiPlot Y-axis                                                              |
-| `widgetMin` / `widgetMax`        | `wgtMin` / `wgtMax`            | Gauge dial, Bar fill, Compass dial, Meter arc, Thermometer column                   |
+| `widgetMin` / `widgetMax`        | `wgtMin` / `wgtMax`            | Gauge dial, Bar fill, Compass dial, Meter arc                                       |
 | `fftMin` / `fftMax`              | `fftMin` / `fftMax`            | Expected raw input range — used to normalize the time-domain signal to [-1, +1] before windowing + FFT (FFT and Waterfall). The dB Y-axis itself is hardcoded. |
 
 **The naming asymmetry is real and silent.** `project.dataset.getByPath`,
@@ -123,8 +148,7 @@ verifying.** `fftMin`/`fftMax` happen to be the same in both directions.
 | `"gauge"`            | `wgtMin` / `wgtMax`                        | Dial is unusable without bounds.                  |
 | `"bar"`              | `wgtMin` / `wgtMax`                        | Fill is unusable without bounds.                  |
 | `"compass"`          | (none — fixed 0–360)                       | `wgtMin`/`wgtMax` ignored.                        |
-| `"meter"`            | `wgtMin` / `wgtMax`                        | Half-arc analog meter; needs bounds to draw scale.|
-| `"thermometer"`      | `wgtMin` / `wgtMax`                        | Vertical fill; needs bounds to draw scale.        |
+| `"meter"`            | `wgtMin` / `wgtMax`                        | Half-arc analog meter; needs bounds to draw scale and to size the digital-page value box. |
 | `"fft"`              | `fftMin` / `fftMax`                        | Expected raw signal range for input normalization (NOT a dB axis). Also tune `fftSamples` + `fftSamplingRate`. |
 | `"waterfall"` (Pro)  | `fftMin` / `fftMax`                        | Reuses the dataset's FFT settings, including the input-normalization range. |
 | `"led"`              | (none — uses `ledHigh` threshold)          | `ledHigh` is on/off boundary.                     |
@@ -383,11 +407,10 @@ When the user asks for "an overview" or "executive dashboard":
    - Compass (12) for headings — no min/max (fixed 0–360)
    - Bar (10) for bounded levels — needs `wgtMin`/`wgtMax`
    - Meter (13) for analog half-arc readouts — needs `wgtMin`/`wgtMax`
-   - Thermometer (14) for temperature-style vertical fills — needs `wgtMin`/`wgtMax`
    - LED (8) for booleans/alarms — uses `ledHigh` threshold
    - Plot (9) for single time-series — needs `pltMin`/`pltMax`
    - FFT (7) for spectra of audio / vibration / signals — needs `fftMin`/`fftMax` (expected raw input range, used for normalization)
-   - Waterfall (19, Pro) for spectrograms — needs `fftMin`/`fftMax` (same input-normalization range)
+   - Waterfall (20, Pro) for spectrograms — needs `fftMin`/`fftMax` (same input-normalization range)
 4. NEVER widgetType=0 (Terminal).
 5. Show the user the curated list in chat BEFORE pushing. **Include the
    min/max ranges you plan to set per dataset** so they can correct the

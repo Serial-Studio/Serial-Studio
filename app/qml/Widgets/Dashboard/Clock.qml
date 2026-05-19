@@ -560,6 +560,18 @@ Item {
     anchors.bottom: parent.bottom
     currentIndex: swipeView.currentIndex
     anchors.horizontalCenter: parent.horizontalCenter
+
+    delegate: Rectangle {
+      required property int index
+      implicitWidth: 8
+      implicitHeight: 8
+      radius: width / 2
+      antialiasing: true
+      color: Cpp_ThemeManager.colors["widget_text"]
+      opacity: index === pageIndicator.currentIndex ? 0.95 : 0.40
+      Behavior on opacity { NumberAnimation { duration: 120 } }
+    }
+
     onCurrentIndexChanged: {
       if (swipeView.currentIndex !== currentIndex)
         swipeView.currentIndex = currentIndex

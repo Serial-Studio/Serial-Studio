@@ -158,6 +158,19 @@ Item {
   }
 
   //
+  // Range-driven precision, left-padded for stable digital-box width (matches VisualRange).
+  //
+  function getPaddedText(val) {
+    const a = Cpp_UI_Dashboard.formatValue(model.minValue, model.minValue, model.maxValue)
+    const b = Cpp_UI_Dashboard.formatValue(model.maxValue, model.minValue, model.maxValue)
+    const v = Cpp_UI_Dashboard.formatValue(val,            model.minValue, model.maxValue)
+    const refLen = Math.max(a.length, b.length, v.length)
+    const pad = " ".repeat(Math.max(0, refLen - v.length))
+    const units = model.units.length > 0 ? " " + model.units : ""
+    return pad + v + units
+  }
+
+  //
   // SwipeView -- page 0 = analog dial, page 1 = digital readout.
   // Active page is persisted per-widget via Cpp_JSON_ProjectModel.
   //
@@ -594,8 +607,8 @@ Item {
         font.pixelSize: 100
         font.family: Cpp_Misc_CommonFonts.monoFont.family
         text: {
-          const a = formatValue(root.model.minValue)
-          const b = formatValue(root.model.maxValue)
+          const a = Cpp_UI_Dashboard.formatValue(root.model.minValue, root.model.minValue, root.model.maxValue)
+          const b = Cpp_UI_Dashboard.formatValue(root.model.maxValue, root.model.minValue, root.model.maxValue)
           const longer = a.length >= b.length ? a : b
           return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
         }
@@ -648,8 +661,7 @@ Item {
             id: bigValueText
 
             anchors.horizontalCenter: parent.horizontalCenter
-            text: formatValue(root.model.value)
-                  + (root.model.units.length > 0 ? " " + root.model.units : "")
+            text: getPaddedText(root.model.value)
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.bold: true
             font.pixelSize: digitalPage.bigValueFontPx
@@ -666,11 +678,12 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             text: root.model.title
             visible: root.model.title.length > 0
-            color: root.model.alarmTriggered && digitalBox.alarmFlashOn
-                   ? "#ffffff"
-                   : root.color
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.pixelSize: bigValueText.font.pixelSize * 0.30
+            color: root.model.alarmTriggered
+                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.colors["alarm"])
+                   : root.color
+            Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
           }
         }
       }
@@ -689,6 +702,18 @@ Item {
     anchors.bottom: parent.bottom
     currentIndex: swipeView.currentIndex
     anchors.horizontalCenter: parent.horizontalCenter
+
+    delegate: Rectangle {
+      required property int index
+      implicitWidth: 8
+      implicitHeight: 8
+      radius: width / 2
+      antialiasing: true
+      color: Cpp_ThemeManager.colors["widget_text"]
+      opacity: index === pageIndicator.currentIndex ? 0.95 : 0.40
+      Behavior on opacity { NumberAnimation { duration: 120 } }
+    }
+
     onCurrentIndexChanged: {
       if (swipeView.currentIndex !== currentIndex)
         swipeView.currentIndex = currentIndex

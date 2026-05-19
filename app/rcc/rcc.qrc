@@ -517,9 +517,6 @@
         <file>instruments/attitude_crosshair.svg</file>
         <file>instruments/attitude_dial.svg</file>
         <file>instruments/attitude_pointer.svg</file>
-        <file>instruments/compass_background.svg</file>
-        <file>instruments/compass_case.svg</file>
-        <file>instruments/compass_needle.svg</file>
         <file>logo/desktop-icon.png</file>
         <file>logo/icon-macOS.png</file>
         <file>logo/icon-macOS@2x.png</file>

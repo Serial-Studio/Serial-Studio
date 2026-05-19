@@ -153,7 +153,7 @@ Datasets map to individual data fields in your device's output.
 - **Title.** Display label (for example "Temperature").
 - **Units.** Measurement suffix (for example "deg C", "hPa", "%").
 - **Frame Index.** 1-based position in the parsed data array. If your device sends `23.5,1013,45.2`, then Temperature = 1, Pressure = 2, Humidity = 3.
-- **Widget.** Per-dataset visualization: Bar, Gauge, Compass, Meter, Thermometer, or None.
+- **Widget.** Per-dataset visualization: Bar, Gauge, Compass, Meter, or None. Bar, Gauge, and Meter each render on the dashboard as a two-page swipe view — page 0 is the analog visualization and page 1 is a large monospace digital readout. The active page is saved per widget in the project file.
 
 **Plotting**
 
@@ -184,7 +184,7 @@ Datasets map to individual data fields in your device's output.
 
 **Widget range**
 
-- **Widget Min / Widget Max.** Range for Bar, Gauge, Meter, and Thermometer displays. Defaults to 0 to 100.
+- **Widget Min / Widget Max.** Range for Bar, Gauge, and Meter displays. Defaults to 0 to 100.
 
 ### Step 5: add actions (optional)
 
@@ -351,7 +351,7 @@ When a project has multiple sources, each source represents a separate physical 
 
 **Fix:**
 
-- Gauge, Bar, Meter, and Thermometer need bounded numeric values. Set Widget Min/Max.
+- Gauge, Bar, and Meter need bounded numeric values. Set Widget Min/Max.
 - Accelerometer and Gyroscope groups need exactly 3 datasets.
 - GPS Map needs 2 or 3 datasets (latitude, longitude, optional altitude).
 - Compass expects a value in the 0 to 360 range.
@@ -369,7 +369,7 @@ When a project has multiple sources, each source represents a separate physical 
 - Test your configuration with the Console view before switching to the Dashboard.
 - Record a session to CSV, then use the CSV Player to iterate on your dashboard layout without hardware connected.
 - Use clear dataset titles and units. They show up directly on dashboard widgets.
-- Set appropriate Widget Min/Max for gauges, bars, meters, and thermometers instead of relying on auto-scale.
+- Set appropriate Widget Min/Max for gauges, bars, and meters instead of relying on auto-scale.
 
 ## See also
 

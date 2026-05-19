@@ -201,7 +201,7 @@ API parameter names you write are NOT the keys you read back:
 | Read (responses, `.ssproj`)    | Write (`project.dataset.update`) | Drives                                                                              |
 |--------------------------------|----------------------------------|-------------------------------------------------------------------------------------|
 | `plotMin` / `plotMax`          | `pltMin` / `pltMax`              | Plot, MultiPlot Y-axis                                                              |
-| `widgetMin` / `widgetMax`      | `wgtMin` / `wgtMax`              | Gauge dial, Bar fill, Meter arc, Thermometer column                                 |
+| `widgetMin` / `widgetMax`      | `wgtMin` / `wgtMax`              | Gauge dial, Bar fill, Meter arc                                                     |
 | `fftMin` / `fftMax`            | `fftMin` / `fftMax`              | Expected raw input range used to normalize the FFT/Waterfall input to [-1, +1]. NOT a dB axis. |
 
 Writing `{"plotMin": 100}` to `dataset.update` returns `success: true`

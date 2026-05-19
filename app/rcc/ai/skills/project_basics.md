@@ -14,8 +14,7 @@ needs to interpret data from one or more devices.
   group → one tile-shape on the dashboard.
 - **Dataset**: one channel of incoming numeric (or string) data. Maps
   one position in the parser's output array. Has visualization options
-  (plot, FFT, bar, gauge, LED, compass, waterfall, meter, thermometer)
-  as bit flags.
+  (plot, FFT, bar, gauge, LED, compass, waterfall, meter) as bit flags.
 - **Action**: a button on the toolbar that transmits a fixed payload.
   Optional repeat-on-timer.
 
@@ -201,8 +200,7 @@ Returns:
 }
 ```
 `options` accepts the bitfield (1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass,
-32=LED, 64=Waterfall, 128=Meter, 256=Thermometer) or an array of slugs
-(`["plot","fft"]`).
+32=LED, 64=Waterfall, 128=Meter) or an array of slugs (`["plot","fft"]`).
 `titlePattern` substitutes `{n}` with `startNumber + i` and `{i}` with
 the 0-based loop counter. Returns `{count, created: [{groupId,
 datasetId, title, index, uniqueId}, ...]}` — capture those `datasetId`s
@@ -277,7 +275,7 @@ a default 0/0 range and looks empty / collapsed / max'd out.
 | Range pair (file/response key) | API write-form (`dataset.update`) | Drives                                                                                                          |
 |--------------------------------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|
 | `plotMin` / `plotMax`          | `pltMin` / `pltMax`               | Y-axis on Plot / MultiPlot                                                                                      |
-| `widgetMin` / `widgetMax`      | `wgtMin` / `wgtMax`               | Gauge dial, Bar fill, Compass dial, Meter arc, Thermometer column (Compass is fixed 0–360 and ignores these)    |
+| `widgetMin` / `widgetMax`      | `wgtMin` / `wgtMax`               | Gauge dial, Bar fill, Compass dial, Meter arc (Compass is fixed 0–360 and ignores these). Bar/Gauge/Meter also use these to size the digital-page value box on the two-page swipe view. |
 | `fftMin` / `fftMax`            | `fftMin` / `fftMax`               | Expected raw input range, used to normalize the time-domain signal to [-1, +1] before windowing + FFT. NOT a dB axis (the dB Y-axis on FFT/Waterfall widgets is fixed). |
 
 **Naming asymmetry — almost-silent footgun.** Project files (`.ssproj`)
