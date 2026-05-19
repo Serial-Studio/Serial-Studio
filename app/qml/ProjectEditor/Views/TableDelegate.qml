@@ -573,6 +573,8 @@ ColumnLayout {
 
           sourceComponent: TextField {
             text: intFieldLoader.editableValue
+            leftPadding: 6
+            rightPadding: 6
             enabled: intFieldLoader.modelActive
             opacity: intFieldLoader.modelActive ? 1 : 0.5
             placeholderText: intFieldLoader.modelPlaceholder ?? ""
@@ -654,6 +656,8 @@ ColumnLayout {
             }
 
             contentItem: TextInput {
+              leftPadding: 6
+              rightPadding: 6
               text: _autoIntSpin.displayText
               font: _autoIntSpin.font
               color: Cpp_ThemeManager.colors["table_text"]
@@ -689,6 +693,8 @@ ColumnLayout {
 
           sourceComponent: TextField {
             text: floatFieldLoader.editableValue
+            leftPadding: 6
+            rightPadding: 6
             enabled: floatFieldLoader.modelActive
             opacity: floatFieldLoader.modelActive ? 1 : 0.5
             placeholderText: floatFieldLoader.modelPlaceholder ?? ""

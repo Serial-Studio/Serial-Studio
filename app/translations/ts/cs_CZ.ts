@@ -9713,8 +9713,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Nelze zapsat Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců Windows není na této platformě dostupný.</translation>
     </message>
@@ -9745,8 +9745,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Uložení souboru .lnk selhalo (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců macOS není na této platformě dostupný.</translation>
     </message>
@@ -11748,8 +11748,8 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Obecná chyba I/O</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="247"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
         <source>Frame Parser Disabled</source>
         <translation>Analyzátor Rámců Zakázán</translation>
     </message>
@@ -11791,8 +11791,8 @@ Nejpravděpodobnější příčina: nekonečná smyčka nebo extrémně pomalá 
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="450"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <source>Missing Parse Function</source>
         <translation>Chybějící Funkce Parse</translation>
     </message>
@@ -11808,8 +11808,8 @@ Ujistěte se, že váš kód obsahuje:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="432"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="504"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="432"/>
         <source>Parse Function Runtime Error</source>
         <translation>Chyba Běhu Funkce Parse</translation>
     </message>
@@ -14506,18 +14506,18 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>(Vlastní Ikona)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="635"/>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="641"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="637"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="643"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>

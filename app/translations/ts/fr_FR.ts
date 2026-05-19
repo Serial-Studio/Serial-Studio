@@ -9713,8 +9713,8 @@ Souhaitez-vous ouvrir la page de téléchargement ?</translation>
         <translation>Impossible d'écrire Info.plist : %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Le générateur de raccourcis Windows n'est pas disponible sur cette plateforme.</translation>
     </message>
@@ -9745,8 +9745,8 @@ Souhaitez-vous ouvrir la page de téléchargement ?</translation>
         <translation>L'enregistrement du fichier .lnk a échoué (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Le générateur de raccourcis macOS n'est pas disponible sur cette plateforme.</translation>
     </message>
@@ -11748,8 +11748,8 @@ Cliquez sur Actualiser pour mettre à jour la liste.</translation>
         <translation>Erreur d'E/S générale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="247"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
         <source>Frame Parser Disabled</source>
         <translation>Analyseur de Trames Désactivé</translation>
     </message>
@@ -11791,8 +11791,8 @@ Cause la plus probable : une boucle infinie ou une opération extrêmement lente
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="450"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <source>Missing Parse Function</source>
         <translation>Fonction Parse Manquante</translation>
     </message>
@@ -11808,8 +11808,8 @@ Assurez-vous que votre code inclut :
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="432"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="504"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="432"/>
         <source>Parse Function Runtime Error</source>
         <translation>Erreur D'exécution de la Fonction D'analyse</translation>
     </message>
@@ -14506,18 +14506,18 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
         <translation>(Icône Personnalisée)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="635"/>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="641"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="637"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="643"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>

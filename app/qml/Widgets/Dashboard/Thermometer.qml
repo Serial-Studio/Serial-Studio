@@ -189,31 +189,62 @@ Item {
       }
 
       //
-      // Mercury column -- capsule that grows from the bottom of the tube
+      // Hidden capsule that matches the tube's interior -- used as an
+      // alpha mask for the mercury column so the fill is always clipped
+      // to the tube outline, regardless of level
       //
       Rectangle {
-        id: mercuryFill
+        id: mercuryMask
 
+        visible: false
+        color: "white"
+        radius: width / 2
+        layer.smooth: true
         antialiasing: true
+        layer.enabled: true
         x: tube.x + tube.border.width
+        y: tube.y + tube.border.width
         width: tube.width - tube.border.width * 2
-        height: Math.max(0, mercuryFill.frac * mercuryFill.innerH)
-        y: tube.y + tube.border.width + (1 - mercuryFill.frac) * mercuryFill.innerH
+        height: tube.height - tube.border.width * 2
+      }
 
-        readonly property real corner: width / 2
+      //
+      // Mercury column -- flat-topped rectangle clipped to the capsule
+      // mask. The meniscus stays horizontal at every level and the
+      // bottom hugs the tube's inner curve without leaking out the
+      // corners at small fills.
+      //
+      Item {
+        id: mercuryClip
+
+        layer.smooth: true
+        layer.enabled: true
+        x: tube.x + tube.border.width
+        y: tube.y + tube.border.width
+        width: tube.width - tube.border.width * 2
+        height: tube.height - tube.border.width * 2
+
         readonly property real frac: root.normalizedValue
-        readonly property real innerH: tube.height - tube.border.width * 2
 
-        bottomLeftRadius: mercuryFill.corner
-        bottomRightRadius: mercuryFill.corner
-        topLeftRadius: mercuryFill.frac > 0.93 ? mercuryFill.corner : 0
-        topRightRadius: mercuryFill.frac > 0.93 ? mercuryFill.corner : 0
+        layer.effect: MultiEffect {
+          maskEnabled: true
+          maskSource: mercuryMask
+        }
 
-        gradient: Gradient {
-          orientation: Gradient.Horizontal
-          GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.30) }
-          GradientStop { position: 0.5; color: fillColor }
-          GradientStop { position: 1.0; color: Qt.darker(fillColor, 1.15) }
+        Rectangle {
+          id: mercuryFill
+
+          antialiasing: true
+          width: parent.width
+          height: Math.max(0, mercuryClip.frac * parent.height)
+          y: parent.height - height
+
+          gradient: Gradient {
+            orientation: Gradient.Horizontal
+            GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.30) }
+            GradientStop { position: 0.5; color: fillColor }
+            GradientStop { position: 1.0; color: Qt.darker(fillColor, 1.15) }
+          }
         }
       }
 

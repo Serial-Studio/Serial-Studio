@@ -9215,8 +9215,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Không thể tạo cấu trúc thư mục bundle .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Trình ghi lối tắt Windows không khả dụng trên nền tảng này.</translation>
     </message>
@@ -9247,8 +9247,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Lưu tệp .lnk thất bại (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Trình tạo lối tắt macOS không khả dụng trên nền tảng này.</translation>
     </message>
@@ -11316,8 +11316,8 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Serial Studio đang loại bỏ các frame để giữ ứng dụng phản hồi. Vui lòng đơn giản hóa hoặc tối ưu hóa script bộ phân tích frame để giảm khối lượng công việc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="247"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
         <source>Frame Parser Disabled</source>
         <translation>Bộ Phân Tích Frame Đã Tắt</translation>
     </message>
@@ -11359,8 +11359,8 @@ Nguyên nhân có thể: vòng lặp vô hạn hoặc thao tác cực kỳ chậ
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="450"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <source>Missing Parse Function</source>
         <translation>Thiếu Hàm Parse</translation>
     </message>
@@ -11376,8 +11376,8 @@ Vui lòng đảm bảo mã của bạn bao gồm:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="432"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="504"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="432"/>
         <source>Parse Function Runtime Error</source>
         <translation>Lỗi Runtime Hàm Parse</translation>
     </message>
@@ -13858,18 +13858,18 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>(Biểu Tượng Tùy Chỉnh)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="635"/>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="641"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="637"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="643"/>
         <source>Auto</source>
         <translation>Tự Động</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
         <source>No</source>
         <translation>Không</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
         <source>Yes</source>
         <translation>Có</translation>
     </message>

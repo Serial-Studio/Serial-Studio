@@ -9713,8 +9713,8 @@ Deseja abrir a página de download?</translation>
         <translation>Não foi possível gravar Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>O gravador de atalhos do Windows não está disponível nesta plataforma.</translation>
     </message>
@@ -9745,8 +9745,8 @@ Deseja abrir a página de download?</translation>
         <translation>Falha ao salvar o arquivo .lnk (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>O gravador de atalhos do macOS não está disponível nesta plataforma.</translation>
     </message>
@@ -11748,8 +11748,8 @@ Clique em Atualizar para atualizar a lista.</translation>
         <translation>Erro geral de E/S</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="247"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="264"/>
         <source>Frame Parser Disabled</source>
         <translation>Analisador de Frames Desabilitado</translation>
     </message>
@@ -11791,8 +11791,8 @@ Causa mais provável: um loop infinito ou operação extremamente lenta no corpo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="450"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <source>Missing Parse Function</source>
         <translation>Função Parse Ausente</translation>
     </message>
@@ -11808,8 +11808,8 @@ Certifique-se de que seu código inclui:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="432"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="504"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="432"/>
         <source>Parse Function Runtime Error</source>
         <translation>Erro de Execução da Função de Análise</translation>
     </message>
@@ -14506,18 +14506,18 @@ Ative Incorporar Projeto para incluir o projeto no atalho, para que continue fun
         <translation>(Ícone Personalizado)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="635"/>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="641"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="637"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="643"/>
         <source>Auto</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
         <source>No</source>
         <translation>Não</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
         <source>Yes</source>
         <translation>Sim</translation>
     </message>

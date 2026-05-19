@@ -2263,6 +2263,14 @@ def _write_report(report_path: Path, flag_only: list[Violation]) -> None:
 
 
 def main(argv: list[str]) -> int:
+    # Windows defaults stdout/stderr to cp1252; violation messages can carry
+    # non-ASCII (em-dashes, smart quotes, U+2713) lifted from user source and
+    # crash with UnicodeEncodeError before any report is written.
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8", errors="replace")
+
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0],
         epilog="With no arguments, runs --fix on the repo's default trees.",
