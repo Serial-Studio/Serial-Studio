@@ -65,6 +65,15 @@ class Bar : public QQuickItem {
   Q_PROPERTY(QString units
              READ units
              CONSTANT)
+  Q_PROPERTY(int displayTickCount
+             READ displayTickCount
+             CONSTANT)
+  Q_PROPERTY(QString displayFormat
+             READ displayFormat
+             CONSTANT)
+  Q_PROPERTY(bool showValueDisplay
+             READ showValueDisplay
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -77,7 +86,10 @@ public:
 
   [[nodiscard]] bool alarmsDefined() const noexcept;
   [[nodiscard]] bool alarmTriggered() const noexcept;
+  [[nodiscard]] int displayTickCount() const noexcept;
+  [[nodiscard]] bool showValueDisplay() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
+  [[nodiscard]] const QString& displayFormat() const noexcept;
 
   [[nodiscard]] double value() const noexcept;
   [[nodiscard]] double minValue() const noexcept;
@@ -109,8 +121,11 @@ protected:
   void notifyOnAlarmEdge();
 
   int m_index;
+  int m_displayTickCount;
+  bool m_showValueDisplay;
   QString m_title;
   QString m_units;
+  QString m_displayFormat;
 
   double m_value;
   double m_minValue;

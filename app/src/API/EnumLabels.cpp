@@ -309,6 +309,10 @@ QString API::EnumLabels::datasetWidgetSlug(int value)
       return QStringLiteral("gauge");
     case SerialStudio::Compass:
       return QStringLiteral("compass");
+    case SerialStudio::Meter:
+      return QStringLiteral("meter");
+    case SerialStudio::Thermometer:
+      return QStringLiteral("thermometer");
     case SerialStudio::NoDatasetWidget:
       return QStringLiteral("none");
   }
@@ -327,6 +331,10 @@ QString API::EnumLabels::datasetWidgetLabel(int value)
       return QStringLiteral("Gauge (analog dial)");
     case SerialStudio::Compass:
       return QStringLiteral("Compass");
+    case SerialStudio::Meter:
+      return QStringLiteral("Meter (analog half-arc)");
+    case SerialStudio::Thermometer:
+      return QStringLiteral("Thermometer");
     case SerialStudio::NoDatasetWidget:
       return QStringLiteral("No dataset widget");
   }
@@ -363,6 +371,12 @@ QString API::EnumLabels::datasetOptionsLabel(int value)
 
   if (value & SerialStudio::DatasetWaterfall)
     parts.append(QStringLiteral("waterfall"));
+
+  if (value & SerialStudio::DatasetMeter)
+    parts.append(QStringLiteral("meter"));
+
+  if (value & SerialStudio::DatasetThermometer)
+    parts.append(QStringLiteral("thermometer"));
 
   if (parts.isEmpty())
     return QStringLiteral("generic");
@@ -406,6 +420,10 @@ QString API::EnumLabels::dashboardWidgetSlug(int value)
       return QStringLiteral("gauge");
     case SerialStudio::DashboardCompass:
       return QStringLiteral("compass");
+    case SerialStudio::DashboardMeter:
+      return QStringLiteral("meter");
+    case SerialStudio::DashboardThermometer:
+      return QStringLiteral("thermometer");
     case SerialStudio::DashboardNoWidget:
       return QStringLiteral("none");
 #ifdef BUILD_COMMERCIAL
@@ -468,6 +486,12 @@ int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
 
   if (s == QLatin1String("compass"))
     return SerialStudio::DashboardCompass;
+
+  if (s == QLatin1String("meter"))
+    return SerialStudio::DashboardMeter;
+
+  if (s == QLatin1String("thermometer"))
+    return SerialStudio::DashboardThermometer;
 
   if (s == QLatin1String("none"))
     return SerialStudio::DashboardNoWidget;
@@ -545,6 +569,12 @@ int API::EnumLabels::datasetOptionFromSlug(const QString& slug)
   if (s == QLatin1String("waterfall"))
     return SerialStudio::DatasetWaterfall;
 
+  if (s == QLatin1String("meter"))
+    return SerialStudio::DatasetMeter;
+
+  if (s == QLatin1String("thermometer"))
+    return SerialStudio::DatasetThermometer;
+
   return 0;
 }
 
@@ -574,6 +604,12 @@ QStringList API::EnumLabels::datasetOptionsBitsToSlugs(int value)
 
   if (value & SerialStudio::DatasetWaterfall)
     out.append(QStringLiteral("waterfall"));
+
+  if (value & SerialStudio::DatasetMeter)
+    out.append(QStringLiteral("meter"));
+
+  if (value & SerialStudio::DatasetThermometer)
+    out.append(QStringLiteral("thermometer"));
 
   return out;
 }

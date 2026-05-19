@@ -21,6 +21,7 @@
 
 #include "SerialStudio.h"
 
+#include <QHash>
 #include <QStringConverter>
 #include <QtCore5Compat/QTextCodec>
 
@@ -186,6 +187,8 @@ bool SerialStudio::isDatasetWidget(const DashboardWidget widget)
     case DashboardBar:
     case DashboardGauge:
     case DashboardCompass:
+    case DashboardMeter:
+    case DashboardThermometer:
 #ifdef BUILD_COMMERCIAL
     case DashboardWaterfall:
 #endif
@@ -236,6 +239,12 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
       break;
     case DashboardCompass:
       return iconPath + "compass.svg";
+      break;
+    case DashboardMeter:
+      return iconPath + "meter.svg";
+      break;
+    case DashboardThermometer:
+      return iconPath + "thermometer.svg";
       break;
     case DashboardTerminal:
       return iconPath + "terminal.svg";
@@ -353,6 +362,12 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
     case DashboardCompass:
       return tr("Compasses");
       break;
+    case DashboardMeter:
+      return tr("Meters");
+      break;
+    case DashboardThermometer:
+      return tr("Thermometers");
+      break;
     case DashboardPlot3D:
       return tr("3D Plots");
       break;
@@ -443,16 +458,17 @@ QList<SerialStudio::DashboardWidget> SerialStudio::getDashboardWidgets(
   const DataModel::Dataset& dataset)
 {
   QList<DashboardWidget> list;
-  const auto& widget = dataset.widget;
 
-  if (widget == "compass")
-    list.append(DashboardCompass);
-
-  else if (widget == "bar")
-    list.append(DashboardBar);
-
-  else if (widget == "gauge")
-    list.append(DashboardGauge);
+  static const QHash<QString, DashboardWidget> kDatasetWidgetMap = {
+    {QStringLiteral("compass"), DashboardCompass},
+    {QStringLiteral("bar"), DashboardBar},
+    {QStringLiteral("gauge"), DashboardGauge},
+    {QStringLiteral("meter"), DashboardMeter},
+    {QStringLiteral("thermometer"), DashboardThermometer},
+  };
+  const auto it = kDatasetWidgetMap.constFind(dataset.widget);
+  if (it != kDatasetWidgetMap.constEnd())
+    list.append(it.value());
 
   if (dataset.plt)
     list.append(DashboardPlot);
@@ -565,6 +581,12 @@ QString SerialStudio::datasetWidgetId(const DatasetWidget widget)
     case Compass:
       return "compass";
       break;
+    case Meter:
+      return "meter";
+      break;
+    case Thermometer:
+      return "thermometer";
+      break;
     case NoDatasetWidget:
       return "";
       break;
@@ -579,16 +601,14 @@ QString SerialStudio::datasetWidgetId(const DatasetWidget widget)
  */
 SerialStudio::DatasetWidget SerialStudio::datasetWidgetFromId(const QString& id)
 {
-  if (id == "bar")
-    return Bar;
-
-  else if (id == "gauge")
-    return Gauge;
-
-  else if (id == "compass")
-    return Compass;
-
-  return NoDatasetWidget;
+  static const QHash<QString, DatasetWidget> kIdMap = {
+    {QStringLiteral("bar"), Bar},
+    {QStringLiteral("gauge"), Gauge},
+    {QStringLiteral("compass"), Compass},
+    {QStringLiteral("meter"), Meter},
+    {QStringLiteral("thermometer"), Thermometer},
+  };
+  return kIdMap.value(id, NoDatasetWidget);
 }
 
 //--------------------------------------------------------------------------------------------------

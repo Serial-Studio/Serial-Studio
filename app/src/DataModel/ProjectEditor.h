@@ -87,7 +87,7 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(QString selectedIcon
              READ selectedIcon
              NOTIFY currentViewChanged)
-  Q_PROPERTY(quint8 datasetOptions
+  Q_PROPERTY(quint16 datasetOptions
              READ datasetOptions
              NOTIFY datasetOptionsChanged)
   Q_PROPERTY(bool currentGroupIsEditable
@@ -192,6 +192,7 @@ public:
     IconPicker,
     SectionHeader,
     PasswordField,
+    AutoIntField,
   };
   Q_ENUM(EditorWidget)
 
@@ -247,7 +248,7 @@ public:
   [[nodiscard]] bool currentDatasetIsEditable() const;
   [[nodiscard]] bool currentGroupIsOutputPanel() const;
   [[nodiscard]] int outputWidgetType() const noexcept;
-  [[nodiscard]] quint8 datasetOptions() const;
+  [[nodiscard]] quint16 datasetOptions() const;
 
   [[nodiscard]] int selectedSourceId() const noexcept;
   [[nodiscard]] int selectedSourceBusType() const noexcept;
@@ -423,6 +424,13 @@ private:
   void buildFftGeneralRows(CustomModel* model, const DataModel::Dataset& dataset);
   void buildFftRangeRows(CustomModel* model, const DataModel::Dataset& dataset);
 
+  void buildWidgetRangeRows(CustomModel* model,
+                            const DataModel::Dataset& dataset,
+                            bool rangeEnabled);
+  void buildWidgetFormatRows(CustomModel* model,
+                             const DataModel::Dataset& dataset,
+                             bool rangeEnabled);
+
   void onDatasetCommonItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
   void onDatasetWidgetItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
   void onDatasetRangeItemChanged(QStandardItem* item, DataModel::Dataset& dataset);
@@ -513,6 +521,7 @@ private:
   QMap<QString, QString> m_eolSequences;
   QMap<QString, QString> m_groupWidgets;
   QMap<QString, QString> m_datasetWidgets;
+  QMap<QString, QString> m_displayFormats;
   QMap<QPair<bool, bool>, QString> m_plotOptions;
 };
 

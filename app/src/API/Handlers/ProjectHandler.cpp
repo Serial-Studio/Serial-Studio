@@ -25,6 +25,7 @@
 #include <map>
 #include <memory>
 #include <QFile>
+#include <QHash>
 #include <QJSEngine>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -305,12 +306,14 @@ static int datasetOptionsBitflag(const DataModel::Dataset& ds)
   if (ds.waterfall)
     flags |= SerialStudio::DatasetWaterfall;
 
-  if (ds.widget == QStringLiteral("bar"))
-    flags |= SerialStudio::DatasetBar;
-  else if (ds.widget == QStringLiteral("gauge"))
-    flags |= SerialStudio::DatasetGauge;
-  else if (ds.widget == QStringLiteral("compass"))
-    flags |= SerialStudio::DatasetCompass;
+  static const QHash<QString, int> kWidgetFlags = {
+    {QStringLiteral("bar"), SerialStudio::DatasetBar},
+    {QStringLiteral("gauge"), SerialStudio::DatasetGauge},
+    {QStringLiteral("compass"), SerialStudio::DatasetCompass},
+    {QStringLiteral("meter"), SerialStudio::DatasetMeter},
+    {QStringLiteral("thermometer"), SerialStudio::DatasetThermometer},
+  };
+  flags |= kWidgetFlags.value(ds.widget, 0);
 
   return flags;
 }
@@ -1369,12 +1372,18 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDuplicate(const QString
 }
 
 /**
- * @brief Returns the widget string matching a one-of DatasetOption bit (compass > gauge > bar).
+ * @brief Returns the widget string matching a one-of DatasetOption bit.
  */
 QString API::Handlers::ProjectHandler::widgetForDatasetOptions(int options)
 {
   if (options & SerialStudio::DatasetCompass)
     return QStringLiteral("compass");
+
+  if (options & SerialStudio::DatasetThermometer)
+    return QStringLiteral("thermometer");
+
+  if (options & SerialStudio::DatasetMeter)
+    return QStringLiteral("meter");
 
   if (options & SerialStudio::DatasetGauge)
     return QStringLiteral("gauge");
@@ -1424,9 +1433,9 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id
 
   const int groupId = params.value(QStringLiteral("groupId")).toInt();
   const int options = params.value(QStringLiteral("options")).toInt();
-  if (options < 0 || options > 0b01111111)
+  if (options < 0 || options > 0b111111111)
     return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Invalid options: must be 0-127 (bit flags)"));
+      id, ErrorCode::InvalidParam, QStringLiteral("Invalid options: must be 0-511 (bit flags)"));
 
   auto& project      = DataModel::ProjectModel::instance();
   const auto& groups = project.groups();
@@ -1442,7 +1451,9 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id
                           SerialStudio::DatasetGauge,
                           SerialStudio::DatasetCompass,
                           SerialStudio::DatasetLED,
-                          SerialStudio::DatasetWaterfall}) {
+                          SerialStudio::DatasetWaterfall,
+                          SerialStudio::DatasetMeter,
+                          SerialStudio::DatasetThermometer}) {
     if (options & cand) {
       headline = cand;
       break;
@@ -1482,7 +1493,9 @@ static SerialStudio::DatasetOption pickHeadlineDatasetOption(int options)
                           SerialStudio::DatasetGauge,
                           SerialStudio::DatasetCompass,
                           SerialStudio::DatasetLED,
-                          SerialStudio::DatasetWaterfall}) {
+                          SerialStudio::DatasetWaterfall,
+                          SerialStudio::DatasetMeter,
+                          SerialStudio::DatasetThermometer}) {
     if (options & cand)
       return cand;
   }
@@ -1515,9 +1528,9 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAddMany(const QString
       QStringLiteral("Invalid count: must be 1..%1 (got %2)")
         .arg(QString::number(kMaxAddManyCount), QString::number(count)));
 
-  if (options < 0 || options > 0b01111111)
+  if (options < 0 || options > 0b111111111)
     return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Invalid options: must be 0-127 (bit flags)"));
+      id, ErrorCode::InvalidParam, QStringLiteral("Invalid options: must be 0-511 (bit flags)"));
 
   auto& project      = DataModel::ProjectModel::instance();
   const auto& groups = project.groups();
@@ -3351,6 +3364,7 @@ void API::Handlers::ProjectHandler::registerEntityUpdateCommands()
                    "log, alarmEnabled, overviewDisplay, hideOnDashboard, xAxisId, "
                    "waterfallYAxis, fftSamples, fftSamplingRate, fftMin, fftMax, "
                    "pltMin, pltMax, wgtMin, wgtMax, alarmLow, alarmHigh, ledHigh, "
+                   "displayTickCount, displayFormat, showValueDisplay, "
                    "transformCode, transformLanguage, virtual). The boolean fields "
                    "graph/fft/led/waterfall toggle the same flags as "
                    "project.dataset.setOption -- use them here when patching multiple "
@@ -3800,6 +3814,15 @@ static QString applyDatasetNumericFields(DataModel::Dataset& d,
 
   if (takeParam(params, consumed, QStringLiteral("alarmHigh")))
     d.alarmHigh = params.value(QStringLiteral("alarmHigh")).toDouble();
+
+  if (takeParam(params, consumed, Keys::DisplayTickCount))
+    d.displayTickCount = qMax(0, params.value(Keys::DisplayTickCount).toInt());
+
+  if (takeParam(params, consumed, Keys::DisplayFormat))
+    d.displayFormat = params.value(Keys::DisplayFormat).toString();
+
+  if (takeParam(params, consumed, Keys::ShowValueDisplay))
+    d.showValueDisplay = params.value(Keys::ShowValueDisplay).toBool();
 
   if (takeParam(params, consumed, QStringLiteral("alarmEnabled")))
     d.alarmEnabled = params.value(QStringLiteral("alarmEnabled")).toBool();

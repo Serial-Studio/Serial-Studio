@@ -232,6 +232,8 @@ set(SOURCES
   src/UI/Widgets/Plot.cpp
   src/UI/Widgets/Compass.cpp
   src/UI/Widgets/Bar.cpp
+  src/UI/Widgets/Meter.cpp
+  src/UI/Widgets/Thermometer.cpp
   src/UI/Widgets/FFTPlot.cpp
   src/UI/Widgets/Accelerometer.cpp
   src/UI/Widgets/DataGrid.cpp
@@ -335,6 +337,8 @@ set(HEADERS
   src/UI/Widgets/FFTPlot.h
   src/UI/Widgets/Gyroscope.h
   src/UI/Widgets/Bar.h
+  src/UI/Widgets/Meter.h
+  src/UI/Widgets/Thermometer.h
   src/UI/Widgets/Accelerometer.h
   src/UI/Widgets/LEDPanel.h
   src/UI/Widgets/Compass.h
@@ -491,6 +495,8 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/DataGrid.qml
   qml/Widgets/Dashboard/FFTPlot.qml
   qml/Widgets/Dashboard/Gauge.qml
+  qml/Widgets/Dashboard/Meter.qml
+  qml/Widgets/Dashboard/Thermometer.qml
   qml/Widgets/Dashboard/GPS.qml
   qml/Widgets/Dashboard/Gyroscope.qml
   qml/Widgets/Dashboard/LEDPanel.qml

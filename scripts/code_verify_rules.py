@@ -2547,6 +2547,8 @@ _FONT_PIXEL_OK_FILES = frozenset(
         "MultiPlot.qml",
         "Bar.qml",
         "Gauge.qml",
+        "Meter.qml",
+        "Thermometer.qml",
         "Compass.qml",
         "DataGrid.qml",
         "Accelerometer.qml",

@@ -601,6 +601,74 @@ ColumnLayout {
         }
 
         //
+        // Int field with 0 = "Auto" placeholder, rendered as SpinBox
+        //
+        Loader {
+          id: autoIntFieldLoader
+
+          Layout.fillWidth: true
+          Layout.alignment: Qt.AlignVCenter
+          active: model.widgetType === ProjectEditor.AutoIntField
+          visible: model.widgetType === ProjectEditor.AutoIntField
+
+          property int modelRow: row
+          property int modelColumn: column
+          property var modelActive: model.active
+          property int modelMin: model.minValue ?? 0
+          property int modelMax: model.maxValue ?? 99
+          property var editableValue: model.editableValue
+          property var modelPlaceholder: model.placeholderValue
+
+          sourceComponent: SpinBox {
+            id: _autoIntSpin
+
+            editable: true
+            to: autoIntFieldLoader.modelMax
+            from: autoIntFieldLoader.modelMin
+            font: Cpp_Misc_CommonFonts.monoFont
+            enabled: autoIntFieldLoader.modelActive
+            value: autoIntFieldLoader.editableValue ?? 0
+            opacity: autoIntFieldLoader.modelActive ? 1 : 0.5
+
+            textFromValue: function(value, locale) {
+              if (value === 0)
+                return autoIntFieldLoader.modelPlaceholder ?? qsTr("Auto")
+
+              return Number(value).toLocaleString(locale, 'f', 0)
+            }
+
+            valueFromText: function(text, locale) {
+              const auto = autoIntFieldLoader.modelPlaceholder ?? qsTr("Auto")
+              if (text === auto || text === "" || text.toLowerCase() === "auto")
+                return 0
+
+              const n = parseInt(text, 10)
+              return isNaN(n) ? 0 : n
+            }
+
+            onValueModified: {
+              root.modelPointer.setData(
+                    view.index(autoIntFieldLoader.modelRow, autoIntFieldLoader.modelColumn),
+                    value,
+                    ProjectEditor.EditableValue)
+            }
+
+            contentItem: TextInput {
+              text: _autoIntSpin.displayText
+              font: _autoIntSpin.font
+              color: Cpp_ThemeManager.colors["table_text"]
+              selectionColor: Cpp_ThemeManager.colors["highlight"]
+              selectedTextColor: Cpp_ThemeManager.colors["highlighted_text"]
+              horizontalAlignment: Qt.AlignLeft
+              verticalAlignment: Qt.AlignVCenter
+              readOnly: !_autoIntSpin.editable
+            }
+
+            background: Item {}
+          }
+        }
+
+        //
         // Double number field value editor
         //
         Loader {

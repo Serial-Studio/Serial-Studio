@@ -130,12 +130,33 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
   const auto dt       = QDateTime::currentDateTime();
   const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
 
-  // Sanitize frame title to prevent path traversal
+  // Sanitize frame title to prevent path traversal and Windows-invalid names
   const auto subdir = Misc::WorkspaceManager::instance().path("CSV");
   QString safeTitle = frame.title;
   safeTitle.remove(QChar('/'));
   safeTitle.remove(QChar('\\'));
+  safeTitle.remove(QChar(':'));
+  safeTitle.remove(QChar('*'));
+  safeTitle.remove(QChar('?'));
+  safeTitle.remove(QChar('"'));
+  safeTitle.remove(QChar('<'));
+  safeTitle.remove(QChar('>'));
+  safeTitle.remove(QChar('|'));
+  safeTitle.remove(QChar('\0'));
   safeTitle.remove(QStringLiteral(".."));
+  safeTitle = safeTitle.simplified();
+
+  // Strip trailing dots and spaces (invalid as file/dir names on Windows)
+  int keepCsv = 0;
+  for (int i = safeTitle.size(); i > 0; --i) {
+    const QChar c = safeTitle.at(i - 1);
+    if (c != QChar('.') && c != QChar(' ')) {
+      keepCsv = i;
+      break;
+    }
+  }
+  safeTitle.truncate(keepCsv);
+
   if (safeTitle.isEmpty())
     safeTitle = QStringLiteral("Untitled");
 

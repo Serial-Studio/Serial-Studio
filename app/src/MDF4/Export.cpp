@@ -203,7 +203,28 @@ static QString sanitizeFrameTitle(const QString& title)
   QString frameName = title;
   frameName.remove(QChar('/'));
   frameName.remove(QChar('\\'));
+  frameName.remove(QChar(':'));
+  frameName.remove(QChar('*'));
+  frameName.remove(QChar('?'));
+  frameName.remove(QChar('"'));
+  frameName.remove(QChar('<'));
+  frameName.remove(QChar('>'));
+  frameName.remove(QChar('|'));
+  frameName.remove(QChar('\0'));
   frameName.remove(QStringLiteral(".."));
+  frameName = frameName.simplified();
+
+  // Strip trailing dots and spaces (invalid as file/dir names on Windows)
+  int keep = 0;
+  for (int i = frameName.size(); i > 0; --i) {
+    const QChar c = frameName.at(i - 1);
+    if (c != QChar('.') && c != QChar(' ')) {
+      keep = i;
+      break;
+    }
+  }
+  frameName.truncate(keep);
+
   if (frameName.isEmpty())
     frameName = QStringLiteral("SerialStudio");
 

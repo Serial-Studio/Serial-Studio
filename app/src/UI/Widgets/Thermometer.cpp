@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "UI/Widgets/Gauge.h"
+#include "UI/Widgets/Thermometer.h"
 
 #include "DSP.h"
 #include "UI/Dashboard.h"
@@ -29,12 +29,12 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs a Gauge widget.
+ * @brief Constructs a Thermometer widget.
  */
-Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, false)
+Widgets::Thermometer::Thermometer(const int index, QQuickItem* parent) : Bar(index, parent, false)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index)) {
-    const auto& dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardThermometer, m_index)) {
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardThermometer, m_index);
 
     m_title            = dataset.title;
     m_units            = dataset.units;
@@ -56,7 +56,7 @@ Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, 
                      || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
     }
 
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Gauge::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Thermometer::updateData);
   }
 }
 
@@ -65,15 +65,15 @@ Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the gauge value from the dashboard source.
+ * @brief Updates the thermometer value from the dashboard source.
  */
-void Widgets::Gauge::updateData()
+void Widgets::Thermometer::updateData()
 {
   if (!isEnabled())
     return;
 
-  if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index)) {
-    const auto& dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardThermometer, m_index)) {
+    const auto& dataset = GET_DATASET(SerialStudio::DashboardThermometer, m_index);
     if (!std::isfinite(dataset.numericValue))
       return;
 

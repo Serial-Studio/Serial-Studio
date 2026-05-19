@@ -219,6 +219,7 @@
         <file>icons/dashboard-large/gyroscope.svg</file>
         <file>icons/dashboard-large/image.svg</file>
         <file>icons/dashboard-large/led.svg</file>
+        <file>icons/dashboard-large/meter.svg</file>
         <file>icons/dashboard-large/multiplot.svg</file>
         <file>icons/dashboard-large/notification-log.svg</file>
         <file>icons/dashboard-large/output-panel.svg</file>
@@ -226,6 +227,7 @@
         <file>icons/dashboard-large/plot.svg</file>
         <file>icons/dashboard-large/plot3d.svg</file>
         <file>icons/dashboard-large/terminal.svg</file>
+        <file>icons/dashboard-large/thermometer.svg</file>
         <file>icons/dashboard-large/waterfall.svg</file>
         <file>icons/dashboard-small/accelerometer.svg</file>
         <file>icons/dashboard-small/bar.svg</file>
@@ -238,6 +240,7 @@
         <file>icons/dashboard-small/gyroscope.svg</file>
         <file>icons/dashboard-small/image.svg</file>
         <file>icons/dashboard-small/led.svg</file>
+        <file>icons/dashboard-small/meter.svg</file>
         <file>icons/dashboard-small/multiplot.svg</file>
         <file>icons/dashboard-small/notification-log.svg</file>
         <file>icons/dashboard-small/output-panel.svg</file>
@@ -245,6 +248,7 @@
         <file>icons/dashboard-small/plot.svg</file>
         <file>icons/dashboard-small/plot3d.svg</file>
         <file>icons/dashboard-small/terminal.svg</file>
+        <file>icons/dashboard-small/thermometer.svg</file>
         <file>icons/dashboard-small/waterfall.svg</file>
         <file>icons/database/close.svg</file>
         <file>icons/database/delete.svg</file>
@@ -294,6 +298,8 @@
         <file>icons/project-editor/actions/add-fft.svg</file>
         <file>icons/project-editor/actions/add-gauge.svg</file>
         <file>icons/project-editor/actions/add-led.svg</file>
+        <file>icons/project-editor/actions/add-meter.svg</file>
+        <file>icons/project-editor/actions/add-thermometer.svg</file>
         <file>icons/project-editor/actions/add-output-button.svg</file>
         <file>icons/project-editor/actions/add-output-knob.svg</file>
         <file>icons/project-editor/actions/add-output-slider.svg</file>
@@ -319,6 +325,8 @@
         <file>icons/project-editor/actions/import-table.svg</file>
         <file>icons/project-editor/actions/insert-constant.svg</file>
         <file>icons/project-editor/actions/led.svg</file>
+        <file>icons/project-editor/actions/meter.svg</file>
+        <file>icons/project-editor/actions/thermometer.svg</file>
         <file>icons/project-editor/actions/load-ca-certs.svg</file>
         <file>icons/project-editor/actions/move-down.svg</file>
         <file>icons/project-editor/actions/move-up.svg</file>
@@ -376,6 +384,8 @@
         <file>icons/project-editor/toolbar/add-gauge.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
         <file>icons/project-editor/toolbar/add-group.svg</file>
+        <file>icons/project-editor/toolbar/add-meter.svg</file>
+        <file>icons/project-editor/toolbar/add-thermometer.svg</file>
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
         <file>icons/project-editor/toolbar/add-led.svg</file>
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>

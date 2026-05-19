@@ -72,9 +72,11 @@
 #include "UI/Widgets/GPS.h"
 #include "UI/Widgets/Gyroscope.h"
 #include "UI/Widgets/LEDPanel.h"
+#include "UI/Widgets/Meter.h"
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Plot.h"
 #include "UI/Widgets/Terminal.h"
+#include "UI/Widgets/Thermometer.h"
 #include "UI/WindowManager.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -327,6 +329,8 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::MultiPlot>("SerialStudio", 1, 0, "MultiPlotModel");
   qmlRegisterType<Widgets::Gyroscope>("SerialStudio", 1, 0, "GyroscopeModel");
   qmlRegisterType<Widgets::Accelerometer>("SerialStudio", 1, 0, "AccelerometerModel");
+  qmlRegisterType<Widgets::Meter>("SerialStudio", 1, 0, "MeterModel");
+  qmlRegisterType<Widgets::Thermometer>("SerialStudio", 1, 0, "ThermometerModel");
 
 #ifdef BUILD_COMMERCIAL
   qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DWidget");

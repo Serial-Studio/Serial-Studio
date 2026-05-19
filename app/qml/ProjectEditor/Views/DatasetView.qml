@@ -247,6 +247,44 @@ Widgets.Pane {
           }
 
           //
+          // Add meter
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            onClicked: {
+              const option = SerialStudio.DatasetMeter
+              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
+            text: qsTr("Meter")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+            icon.source: "qrc:/icons/project-editor/actions/meter.svg"
+            ToolTip.text: qsTr("Toggle analog meter (half-arc) widget")
+            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter
+          }
+
+          //
+          // Add thermometer
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            onClicked: {
+              const option = SerialStudio.DatasetThermometer
+              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            }
+            toolbarButton: false
+            text: qsTr("Thermometer")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+            icon.source: "qrc:/icons/project-editor/actions/thermometer.svg"
+            ToolTip.text: qsTr("Toggle thermometer widget for temperature data")
+            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetThermometer
+          }
+
+          //
           // Add LED
           //
           Widgets.ToolbarButton {

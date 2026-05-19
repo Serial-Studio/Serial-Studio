@@ -86,6 +86,8 @@ public slots:
   void setWidgetIndex(const int index);
 
 private:
+  void buildWidgetForType();
+
   int m_index;
   int m_relativeIndex;
   SerialStudio::DashboardWidget m_widgetType;

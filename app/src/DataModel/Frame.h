@@ -98,6 +98,9 @@ inline constexpr KeyView WgtMin("widgetMin");
 inline constexpr KeyView WgtMax("widgetMax");
 inline constexpr KeyView AlarmLow("alarmLow");
 inline constexpr KeyView AlarmHigh("alarmHigh");
+inline constexpr KeyView DisplayTickCount("displayTickCount");
+inline constexpr KeyView DisplayFormat("displayFormat");
+inline constexpr KeyView ShowValueDisplay("showValueDisplay");
 inline constexpr KeyView FFTSamples("fftSamples");
 inline constexpr KeyView Overview("overviewDisplay");
 inline constexpr KeyView AlarmEnabled("alarmEnabled");
@@ -373,12 +376,15 @@ struct alignas(8) Dataset {
   double alarmHigh      = 80;     ///< High alarm threshold
   double numericValue   = 0;      ///< Parsed numeric value after transforms
   double rawNumericValue = 0;     ///< Parsed numeric value before transforms
-  QString value;                  ///< Raw string value after transforms
-  QString rawValue;               ///< Raw string value before transforms
-  QString title;                  ///< Human-readable title
-  QString units;                  ///< Measurement units (e.g., degC)
-  QString widget;                 ///< Widget type (bar, gauge, etc.)
-  QString transformCode;          ///< Optional per-dataset transform script
+  int displayTickCount   = 5;     ///< Preferred major-tick count on analog widgets (0 = auto)
+  bool showValueDisplay = true;  ///< Show the boxed numeric value indicator below/beside the widget
+  QString value;                 ///< Raw string value after transforms
+  QString rawValue;              ///< Raw string value before transforms
+  QString title;                 ///< Human-readable title
+  QString units;                 ///< Measurement units (e.g., degC)
+  QString widget;                ///< Widget type (bar, gauge, etc.)
+  QString transformCode;         ///< Optional per-dataset transform script
+  QString displayFormat;         ///< Tick/value label format on analog widgets (empty = auto)
 };
 
 static_assert(sizeof(Dataset) % alignof(Dataset) == 0, "Unaligned Dataset struct");
@@ -850,6 +856,14 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::FFTSamplingRate, d.fftSamplingRate);
   obj.insert(Keys::AlarmLow, qMin(d.alarmLow, d.alarmHigh));
   obj.insert(Keys::AlarmHigh, qMax(d.alarmLow, d.alarmHigh));
+  if (d.displayTickCount > 0)
+    obj.insert(Keys::DisplayTickCount, d.displayTickCount);
+
+  if (!d.displayFormat.isEmpty())
+    obj.insert(Keys::DisplayFormat, d.displayFormat);
+
+  if (!d.showValueDisplay)
+    obj.insert(Keys::ShowValueDisplay, d.showValueDisplay);
 
   obj.insert(Keys::GroupId, d.groupId);
   obj.insert(Keys::DatasetId, d.datasetId);
@@ -1042,6 +1056,9 @@ void read_io_settings(QByteArray& frameStart,
   d.alarmLow          = ss_jsr(obj, Keys::AlarmLow, 0).toDouble();
   d.fftSamplingRate   = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
   d.alarmHigh         = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
+  d.displayTickCount  = ss_jsr(obj, Keys::DisplayTickCount, 5).toInt();
+  d.displayFormat     = ss_jsr(obj, Keys::DisplayFormat, "").toString();
+  d.showValueDisplay  = ss_jsr(obj, Keys::ShowValueDisplay, true).toBool();
   d.sourceId          = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
   d.transformCode     = obj.value(Keys::TransformCode).toString();
   d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();

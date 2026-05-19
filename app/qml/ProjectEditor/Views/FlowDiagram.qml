@@ -1356,6 +1356,32 @@ Item {
       })
     }
     Action {
+      id: actAddDsMeter
+
+      icon.width: 16
+      icon.height: 16
+      text: qsTr("Meter")
+      icon.source: "qrc:/icons/project-editor/toolbar/add-meter.svg"
+      onTriggered: menuController.locked(() => {
+        menuController.selectTargetGroup()
+        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetMeter,
+                                         menuController.targetSourceId())
+      })
+    }
+    Action {
+      id: actAddDsThermometer
+
+      icon.width: 16
+      icon.height: 16
+      text: qsTr("Thermometer")
+      icon.source: "qrc:/icons/project-editor/toolbar/add-thermometer.svg"
+      onTriggered: menuController.locked(() => {
+        menuController.selectTargetGroup()
+        Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetThermometer,
+                                         menuController.targetSourceId())
+      })
+    }
+    Action {
       id: actAddDsLED
 
       icon.width: 16
@@ -1488,6 +1514,8 @@ Item {
       MenuItem { action: actAddDsGauge }
       MenuItem { action: actAddDsBar }
       MenuItem { action: actAddDsCompass }
+      MenuItem { action: actAddDsMeter }
+      MenuItem { action: actAddDsThermometer }
       MenuItem { action: actAddDsLED }
     }
     Menu {
@@ -1562,6 +1590,8 @@ Item {
       MenuItem { action: actAddDsGauge }
       MenuItem { action: actAddDsBar }
       MenuItem { action: actAddDsCompass }
+      MenuItem { action: actAddDsMeter }
+      MenuItem { action: actAddDsThermometer }
       MenuItem { action: actAddDsLED }
     }
     Menu {
@@ -1648,6 +1678,8 @@ Item {
       MenuItem { action: actAddDsGauge }
       MenuItem { action: actAddDsBar }
       MenuItem { action: actAddDsCompass }
+      MenuItem { action: actAddDsMeter }
+      MenuItem { action: actAddDsThermometer }
       MenuItem { action: actAddDsLED }
     }
     Menu {
@@ -1692,6 +1724,8 @@ Item {
       MenuItem { action: actAddDsGauge }
       MenuItem { action: actAddDsBar }
       MenuItem { action: actAddDsCompass }
+      MenuItem { action: actAddDsMeter }
+      MenuItem { action: actAddDsThermometer }
       MenuItem { action: actAddDsLED }
     }
     Menu {

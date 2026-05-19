@@ -36,7 +36,6 @@
  */
 AppState::AppState() : m_operationMode(SerialStudio::QuickPlot)
 {
-  // Clamp persisted int -- out-of-range trips FrameReader's mode assertion.
   const int saved   = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
   const int clamped = (saved >= SerialStudio::ProjectFile && saved <= SerialStudio::QuickPlot)
                       ? saved
@@ -114,8 +113,6 @@ void AppState::restoreLastProject()
 {
   auto& pm                 = DataModel::ProjectModel::instance();
   const QString saved_path = m_settings.value("project_file_path", "").toString();
-
-  // openJsonFile forces ProjectFile mode; snapshot the persisted mode and restore it after
   const auto persistedMode = m_operationMode;
 
   if (!saved_path.isEmpty() && QFileInfo::exists(saved_path))
@@ -137,9 +134,8 @@ void AppState::setOperationMode(SerialStudio::OperationMode mode)
 
   m_operationMode = mode;
   m_settings.setValue("operation_mode", static_cast<int>(mode));
-
-  // Derive config before emitting signals so listeners see consistent state
   m_frameConfig = deriveFrameConfig();
+
   Q_EMIT operationModeChanged();
   Q_EMIT frameConfigChanged(m_frameConfig);
 }

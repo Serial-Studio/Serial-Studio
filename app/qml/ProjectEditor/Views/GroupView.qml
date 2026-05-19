@@ -226,6 +226,30 @@ Widgets.Pane {
 
           Widgets.ToolbarButton {
             iconSize: 24
+            text: qsTr("Meter")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
+            ToolTip.text: qsTr("Add an analog meter (half-arc) widget")
+            icon.source: "qrc:/icons/project-editor/actions/add-meter.svg"
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetMeter)
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Thermometer")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
+            ToolTip.text: qsTr("Add a thermometer widget for temperature data")
+            icon.source: "qrc:/icons/project-editor/actions/add-thermometer.svg"
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetThermometer)
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
             text: qsTr("LED")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter

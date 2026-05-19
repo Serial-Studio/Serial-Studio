@@ -33,8 +33,10 @@
 #include "UI/Widgets/GPS.h"
 #include "UI/Widgets/Gyroscope.h"
 #include "UI/Widgets/LEDPanel.h"
+#include "UI/Widgets/Meter.h"
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Plot.h"
+#include "UI/Widgets/Thermometer.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "UI/Widgets/ImageView.h"
@@ -210,101 +212,117 @@ QQuickItem* UI::DashboardWidget::widgetModel() const
  */
 void UI::DashboardWidget::setWidgetIndex(const int index)
 {
-  if (index < UI::Dashboard::instance().totalWidgetCount() && index >= 0) {
-    m_index         = index;
-    m_widgetType    = UI::Dashboard::instance().widgetType(index);
-    m_relativeIndex = UI::Dashboard::instance().relativeIndex(index);
+  if (index < 0 || index >= UI::Dashboard::instance().totalWidgetCount())
+    return;
 
-    // Delete previous widget before constructing replacement
-    if (m_dbWidget) {
-      m_dbWidget->deleteLater();
+  m_index         = index;
+  m_widgetType    = UI::Dashboard::instance().widgetType(index);
+  m_relativeIndex = UI::Dashboard::instance().relativeIndex(index);
+
+  if (m_dbWidget) {
+    m_dbWidget->deleteLater();
+    m_dbWidget = nullptr;
+  }
+
+  buildWidgetForType();
+
+  if (m_dbWidget)
+    m_dbWidget->setParentItem(this);
+
+  Q_EMIT widgetIndexChanged();
+}
+
+/**
+ * @brief Constructs the QQuickItem and selects the QML path for the current widget type.
+ */
+void UI::DashboardWidget::buildWidgetForType()
+{
+  switch (widgetType()) {
+    case SerialStudio::DashboardDataGrid:
+      m_dbWidget = new Widgets::DataGrid(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/DataGrid.qml";
+      break;
+    case SerialStudio::DashboardMultiPlot:
+      m_dbWidget = new Widgets::MultiPlot(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/MultiPlot.qml";
+      break;
+    case SerialStudio::DashboardFFT:
+      m_dbWidget = new Widgets::FFTPlot(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/FFTPlot.qml";
+      break;
+    case SerialStudio::DashboardPlot:
+      m_dbWidget = new Widgets::Plot(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot.qml";
+      break;
+    case SerialStudio::DashboardBar:
+      m_dbWidget = new Widgets::Bar(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Bar.qml";
+      break;
+    case SerialStudio::DashboardGauge:
+      m_dbWidget = new Widgets::Gauge(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Gauge.qml";
+      break;
+    case SerialStudio::DashboardMeter:
+      m_dbWidget = new Widgets::Meter(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Meter.qml";
+      break;
+    case SerialStudio::DashboardThermometer:
+      m_dbWidget = new Widgets::Thermometer(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Thermometer.qml";
+      break;
+    case SerialStudio::DashboardCompass:
+      m_dbWidget = new Widgets::Compass(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Compass.qml";
+      break;
+    case SerialStudio::DashboardGyroscope:
+      m_dbWidget = new Widgets::Gyroscope(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Gyroscope.qml";
+      break;
+    case SerialStudio::DashboardAccelerometer:
+      m_dbWidget = new Widgets::Accelerometer(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Accelerometer.qml";
+      break;
+    case SerialStudio::DashboardTerminal:
       m_dbWidget = nullptr;
-    }
-
-    switch (widgetType()) {
-      case SerialStudio::DashboardDataGrid:
-        m_dbWidget = new Widgets::DataGrid(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/DataGrid.qml";
-        break;
-      case SerialStudio::DashboardMultiPlot:
-        m_dbWidget = new Widgets::MultiPlot(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/MultiPlot.qml";
-        break;
-      case SerialStudio::DashboardFFT:
-        m_dbWidget = new Widgets::FFTPlot(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/FFTPlot.qml";
-        break;
-      case SerialStudio::DashboardPlot:
-        m_dbWidget = new Widgets::Plot(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot.qml";
-        break;
-      case SerialStudio::DashboardBar:
-        m_dbWidget = new Widgets::Bar(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Bar.qml";
-        break;
-      case SerialStudio::DashboardGauge:
-        m_dbWidget = new Widgets::Gauge(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Gauge.qml";
-        break;
-      case SerialStudio::DashboardCompass:
-        m_dbWidget = new Widgets::Compass(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Compass.qml";
-        break;
-      case SerialStudio::DashboardGyroscope:
-        m_dbWidget = new Widgets::Gyroscope(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Gyroscope.qml";
-        break;
-      case SerialStudio::DashboardAccelerometer:
-        m_dbWidget = new Widgets::Accelerometer(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Accelerometer.qml";
-        break;
-      case SerialStudio::DashboardTerminal:
-        m_dbWidget = nullptr;
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Terminal.qml";
-        break;
-      case SerialStudio::DashboardGPS:
-        m_dbWidget = new Widgets::GPS(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/GPS.qml";
-        break;
-      case SerialStudio::DashboardLED:
-        m_dbWidget = new Widgets::LEDPanel(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/LEDPanel.qml";
-        break;
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Terminal.qml";
+      break;
+    case SerialStudio::DashboardGPS:
+      m_dbWidget = new Widgets::GPS(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/GPS.qml";
+      break;
+    case SerialStudio::DashboardLED:
+      m_dbWidget = new Widgets::LEDPanel(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/LEDPanel.qml";
+      break;
 #ifdef BUILD_COMMERCIAL
-      case SerialStudio::DashboardPlot3D:
-        m_dbWidget = new Widgets::Plot3D(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot3D.qml";
-        break;
-      case SerialStudio::DashboardImageView:
-        m_dbWidget = new Widgets::ImageView(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ImageView.qml";
-        break;
-      case SerialStudio::DashboardOutputPanel:
-        m_dbWidget = new Widgets::Output::Panel(relativeIndex(), this);
-        m_qmlPath =
-          "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml";
-        break;
-      case SerialStudio::DashboardNotificationLog:
-        m_dbWidget = nullptr;
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/NotificationLog.qml";
-        break;
-      case SerialStudio::DashboardWaterfall:
-        m_dbWidget = new Widgets::Waterfall(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Waterfall.qml";
-        break;
-      case SerialStudio::DashboardPainter:
-        m_dbWidget = makePainterWidget(relativeIndex(), this);
-        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Painter.qml";
-        break;
+    case SerialStudio::DashboardPlot3D:
+      m_dbWidget = new Widgets::Plot3D(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Plot3D.qml";
+      break;
+    case SerialStudio::DashboardImageView:
+      m_dbWidget = new Widgets::ImageView(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ImageView.qml";
+      break;
+    case SerialStudio::DashboardOutputPanel:
+      m_dbWidget = new Widgets::Output::Panel(relativeIndex(), this);
+      m_qmlPath =
+        "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml";
+      break;
+    case SerialStudio::DashboardNotificationLog:
+      m_dbWidget = nullptr;
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/NotificationLog.qml";
+      break;
+    case SerialStudio::DashboardWaterfall:
+      m_dbWidget = new Widgets::Waterfall(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Waterfall.qml";
+      break;
+    case SerialStudio::DashboardPainter:
+      m_dbWidget = makePainterWidget(relativeIndex(), this);
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Painter.qml";
+      break;
 #endif
 
-      default:
-        break;
-    }
-
-    if (m_dbWidget)
-      m_dbWidget->setParentItem(this);
-
-    Q_EMIT widgetIndexChanged();
+    default:
+      break;
   }
 }

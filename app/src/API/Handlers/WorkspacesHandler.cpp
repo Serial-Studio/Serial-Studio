@@ -177,6 +177,18 @@ struct ParsedWidgetId {
                             "datasetId:<n>, options:<bitfield with bit 16>} "
                             "(clears Bar/Gauge).")
         .arg(gid);
+    case SerialStudio::DashboardMeter:
+      return QStringLiteral(" To enable widgetType=13 (Meter), set DatasetOption "
+                            "bit 128 via project.dataset.setOptions{groupId:%1, "
+                            "datasetId:<n>, options:<bitfield with bit 128>} "
+                            "(clears Bar/Gauge/Compass/Thermometer).")
+        .arg(gid);
+    case SerialStudio::DashboardThermometer:
+      return QStringLiteral(" To enable widgetType=14 (Thermometer), set DatasetOption "
+                            "bit 256 via project.dataset.setOptions{groupId:%1, "
+                            "datasetId:<n>, options:<bitfield with bit 256>} "
+                            "(clears Bar/Gauge/Compass/Meter).")
+        .arg(gid);
     case SerialStudio::DashboardLED:
       return QStringLiteral(" To enable widgetType=8 (LED), set DatasetOption "
                             "bit 32 via project.dataset.setOptions{groupId:%1, "

@@ -291,17 +291,21 @@
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
-                "autoKeepAlive": true,
-                "cleanSession": true,
-                "clientId": "ao3n36mmkum41ljs",
-                "hostname": "mqtt.hsl.fi",
-                "keepAlive": 60,
-                "mqttVersion": 2,
-                "password": "",
-                "port": 1883,
-                "sslEnabled": false,
-                "topicFilter": "/hfp/v2/journey/ongoing/vp/#",
-                "username": ""
+                "autoReconnect": false,
+                "baudRate": 115200,
+                "dataBitsIndex": 3,
+                "deviceId": {
+                    "description": "XDS110 (03.00.00.32) Embed with CMSIS-DAP",
+                    "pid": "BEF3",
+                    "portName": "COM5",
+                    "serial": "NOSERIAL",
+                    "vid": "0451"
+                },
+                "dtr": false,
+                "flowControlIndex": 0,
+                "parityIndex": 0,
+                "portIndex": 3,
+                "stopBitsIndex": 0
             },
             "decoder": 0,
             "decoderMethod": 0,
@@ -317,7 +321,7 @@
     "title": "HSL Helsinki Public Transit",
     "widgetSettings": {
         "5:0:-1": {
-            "autoCenter": true,
+            "autoCenter": false,
             "mapType": 0
         },
         "activeGroup": 1001,

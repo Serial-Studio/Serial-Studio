@@ -65,6 +65,18 @@ static QString sanitiseTitleForPath(const QString& title)
   safe.remove(QChar('\0'));
   safe.remove(QStringLiteral(".."));
   safe = safe.simplified();
+
+  // Strip trailing dots and spaces (invalid as file/dir names on Windows)
+  int keep = 0;
+  for (int i = safe.size(); i > 0; --i) {
+    const QChar c = safe.at(i - 1);
+    if (c != QChar('.') && c != QChar(' ')) {
+      keep = i;
+      break;
+    }
+  }
+  safe.truncate(keep);
+
   if (safe.isEmpty())
     safe = QStringLiteral("Untitled");
 

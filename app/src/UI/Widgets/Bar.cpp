@@ -35,9 +35,11 @@
 Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDataset)
   : QQuickItem(parent)
   , m_index(index)
-  , m_value(std::nan(""))
-  , m_minValue(std::nan(""))
-  , m_maxValue(std::nan(""))
+  , m_displayTickCount(5)
+  , m_showValueDisplay(true)
+  , m_value(0.0)
+  , m_minValue(0.0)
+  , m_maxValue(0.0)
   , m_alarmLow(std::nan(""))
   , m_alarmHigh(std::nan(""))
   , m_alarmsDefined(false)
@@ -46,14 +48,17 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   if (autoInitFromBarDataset && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
 
-    m_title     = dataset.title;
-    m_units     = dataset.units;
-    m_minValue  = qMin(dataset.wgtMin, dataset.wgtMax);
-    m_maxValue  = qMax(dataset.wgtMin, dataset.wgtMax);
-    m_alarmLow  = qMin(dataset.alarmLow, dataset.alarmHigh);
-    m_alarmHigh = qMax(dataset.alarmLow, dataset.alarmHigh);
-    m_alarmLow  = qBound(m_minValue, m_alarmLow, m_maxValue);
-    m_alarmHigh = qBound(m_minValue, m_alarmHigh, m_maxValue);
+    m_title            = dataset.title;
+    m_units            = dataset.units;
+    m_displayFormat    = dataset.displayFormat;
+    m_displayTickCount = dataset.displayTickCount;
+    m_showValueDisplay = dataset.showValueDisplay;
+    m_minValue         = qMin(dataset.wgtMin, dataset.wgtMax);
+    m_maxValue         = qMax(dataset.wgtMin, dataset.wgtMax);
+    m_alarmLow         = qMin(dataset.alarmLow, dataset.alarmHigh);
+    m_alarmHigh        = qMax(dataset.alarmLow, dataset.alarmHigh);
+    m_alarmLow         = qBound(m_minValue, m_alarmLow, m_maxValue);
+    m_alarmHigh        = qBound(m_minValue, m_alarmHigh, m_maxValue);
 
     if (dataset.alarmEnabled) {
       if (m_alarmHigh == m_alarmLow)
@@ -110,6 +115,30 @@ bool Widgets::Bar::alarmTriggered() const noexcept
 const QString& Widgets::Bar::units() const noexcept
 {
   return m_units;
+}
+
+/**
+ * @brief Returns the preferred major-tick count (0 = use widget's adaptive heuristic).
+ */
+int Widgets::Bar::displayTickCount() const noexcept
+{
+  return m_displayTickCount;
+}
+
+/**
+ * @brief Returns the tick/value display format ("" = auto; "%.<n>f" or preset slugs accepted).
+ */
+const QString& Widgets::Bar::displayFormat() const noexcept
+{
+  return m_displayFormat;
+}
+
+/**
+ * @brief Returns whether the numeric value indicator should be visible.
+ */
+bool Widgets::Bar::showValueDisplay() const noexcept
+{
+  return m_showValueDisplay;
 }
 
 /**
@@ -194,7 +223,10 @@ void Widgets::Bar::updateData()
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
-    auto value          = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
+    if (!std::isfinite(dataset.numericValue))
+      return;
+
+    auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
       notifyOnAlarmEdge();
@@ -225,9 +257,11 @@ void Widgets::Bar::notifyOnAlarmEdge()
 
   QString subtitle;
   if (!std::isnan(m_alarmHigh) && m_alarmHigh < m_maxValue && m_value >= m_alarmHigh)
-    subtitle = tr("Value %1%2 reached the high alarm %3%2").arg(m_value).arg(unit).arg(m_alarmHigh);
+    subtitle = tr("Value %1%2 reached the high alarm %3%2")
+                 .arg(QString::number(m_value), unit, QString::number(m_alarmHigh));
   else if (!std::isnan(m_alarmLow) && m_alarmLow > m_minValue && m_value <= m_alarmLow)
-    subtitle = tr("Value %1%2 reached the low alarm %3%2").arg(m_value).arg(unit).arg(m_alarmLow);
+    subtitle = tr("Value %1%2 reached the low alarm %3%2")
+                 .arg(QString::number(m_value), unit, QString::number(m_alarmLow));
 
   DataModel::NotificationCenter::instance().post(
     DataModel::NotificationCenter::Critical, tr("Alarms"), name, subtitle);

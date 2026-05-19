@@ -20,6 +20,7 @@
  */
 
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -38,39 +39,51 @@ Item {
   required property BarModel model
   required property string widgetId
 
-  property real value: 0
-  Behavior on value {NumberAnimation{duration: 100}}
-
-  //
-  // Repaint widget when needed
-  //
-  Connections {
-    target: root.model
-    function onUpdated() {
-      root.value = model.value
-    }
-  }
+  property real normalizedValue: model.normalizedValue
+  Behavior on normalizedValue {NumberAnimation{duration: 120; easing.type: Easing.OutCubic}}
 
   //
   // Helper properties
   //
   readonly property bool isHorizontal: root.width > 1.5 * root.height
+  readonly property bool showLabels: isHorizontal ? root.width >= 200 : root.height >= 160
   readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.colors["alarm"] : root.color
-  readonly property real fontSize: Math.max(8, Math.min(11, Math.min(root.width, root.height) / 30))
+  readonly property real fontSize: Math.max(10, Math.min(14, Math.min(root.width, root.height) / 22))
                                    * Cpp_Misc_CommonFonts.widgetFontScale
   readonly property int tickCount: {
+    if (model.displayTickCount > 0) return model.displayTickCount
     if (isHorizontal) {
-      const availableWidth = root.width - 100
-      const labelWidth = labelMetrics.width
-      return Math.max(3, Math.min(7, Math.floor(availableWidth / (labelWidth * 2))))
+      const availableWidth = Math.max(20, root.width - labelMetrics.width * 4)
+      return Math.max(3, Math.min(9, Math.floor(availableWidth / (labelMetrics.width * 2))))
     } else {
-      const availableHeight = root.height - 100
-      const labelHeight = labelMetrics.height
-      return Math.max(3, Math.min(7, Math.floor(availableHeight / (labelHeight * 3))))
+      const availableHeight = Math.max(20, root.height - labelMetrics.height * 6)
+      return Math.max(3, Math.min(9, Math.floor(availableHeight / (labelMetrics.height * 3))))
     }
+  }
+  readonly property bool labelsFit: {
+    if (tickCount < 2) return true
+    if (isHorizontal) {
+      const perTick = (root.width - 16) / (tickCount - 1)
+      return perTick > labelMetrics.width + 8
+    }
+    const perTick = (root.height - 16) / (tickCount - 1)
+    return perTick > labelMetrics.height + 4
   }
 
   function formatValue(val) {
+    const fmt = model.displayFormat
+    if (!fmt || fmt === "" || fmt === "auto")
+      return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
+
+    if (fmt === "0d") return Math.round(val).toString()
+    if (fmt === "1d") return val.toFixed(1)
+    if (fmt === "2d") return val.toFixed(2)
+    if (fmt === "3d") return val.toFixed(3)
+    if (fmt === "sci") return val.toExponential(2)
+    const fm = fmt.match(/^%[\d\.]*\.(\d+)f$/)
+    if (fm) return val.toFixed(parseInt(fm[1]))
+    const fe = fmt.match(/^%[\d\.]*\.(\d+)e$/)
+    if (fe) return val.toExponential(parseInt(fe[1]))
     return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
   }
 
@@ -89,15 +102,14 @@ Item {
   //
   // Main layout
   //
-  ColumnLayout {
-    spacing: 4
+  GridLayout {
+    id: barLayout
+
+    rows: 2
+    columns: 1
+    rowSpacing: 4
     anchors.margins: 8
     anchors.fill: parent
-
-    Item {
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-    }
 
     //
     // Bar widget
@@ -105,76 +117,136 @@ Item {
     Item {
       id: barContainer
 
+      Layout.row: 0
+      Layout.column: 0
       Layout.fillWidth: true
       Layout.fillHeight: true
       Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-      Layout.preferredWidth: !isHorizontal ? Math.min(root.width * 0.6, 300) : 30
-      Layout.preferredHeight: isHorizontal ? Math.min(80, root.height * 0.5) : root.height * 0.7
 
-      ProgressBar {
+      //
+      // Hidden source for the soft drop shadow (single MultiEffect pass)
+      //
+      Rectangle {
+        id: progressBarShadowSrc
+
+        visible: false
+        anchors.centerIn: progressBar
+        width: progressBar.width
+        height: progressBar.height
+        radius: 4
+        color: Cpp_ThemeManager.colors["widget_base"]
+      }
+      MultiEffect {
+        shadowBlur: 0.45
+        shadowEnabled: true
+        shadowOpacity: 0.25
+        shadowColor: "#000000"
+        shadowVerticalOffset: 2
+        source: progressBarShadowSrc
+        anchors.fill: progressBarShadowSrc
+      }
+
+      Item {
         id: progressBar
 
-        value: root.value
-        to: model.maxValue
-        from: model.minValue
-
         anchors.centerIn: parent
-        width: isHorizontal ? Math.max(100, parent.width - labelMetrics.width) : Math.min(80, parent.width * 0.5)
-        height: isHorizontal ? Math.min(50, parent.height * 0.7) : Math.max(100, parent.height - labelMetrics.height * 2)
+        width: isHorizontal
+               ? Math.max(40, parent.width - (showLabels ? labelMetrics.width + 12 : 8))
+               : Math.max(28, Math.min(parent.width * 0.55, 220))
+        height: isHorizontal
+               ? Math.max(28, Math.min(parent.height * 0.65, 220))
+               : Math.max(40, parent.height - (showLabels ? labelMetrics.height * 2 + 8 : 8))
 
-        background: Rectangle {
-          radius: 3
+        readonly property real fillFrac: root.normalizedValue
+
+        //
+        // Bezel frame: light at top edge, darker at bottom
+        //
+        Rectangle {
+          id: bezel
+
+          radius: 4
           border.width: 2
-          implicitWidth: 200
-          implicitHeight: 30
-          border.color: Cpp_ThemeManager.colors["widget_border"]
-
+          anchors.fill: parent
+          antialiasing: true
+          border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.2)
           gradient: Gradient {
-            orientation: isHorizontal ? Gradient.Horizontal : Gradient.Vertical
-            GradientStop { position: 0.0; color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.05) }
+            orientation: isHorizontal ? Gradient.Vertical : Gradient.Horizontal
+            GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.15) }
             GradientStop { position: 0.5; color: Cpp_ThemeManager.colors["widget_base"] }
-            GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.05) }
-          }
-
-          Rectangle {
-            border.width: 1
-            anchors.margins: 1
-            anchors.fill: parent
-            color: "transparent"
-            radius: parent.radius - 1
-            border.color: Qt.rgba(0, 0, 0, 0.1)
+            GradientStop { position: 1.0; color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10) }
           }
         }
 
-        contentItem: Item {
-          clip: true
-          implicitWidth: 200
-          implicitHeight: 30
+        //
+        // Inner well (cream/lighter interior, sits inside the frame)
+        //
+        Rectangle {
+          id: innerWell
 
+          radius: 3
+          clip: true
+          border.width: 1
+          anchors.margins: 3
+          antialiasing: true
+          anchors.fill: parent
+          border.color: Qt.rgba(0, 0, 0, 0.18)
+          gradient: Gradient {
+            orientation: isHorizontal ? Gradient.Vertical : Gradient.Horizontal
+            GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.20) }
+            GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.06) }
+          }
+
+          //
+          // Coloured fill -- grows from low end of the range
+          //
           Rectangle {
-            x: 2
-            radius: 1
-            y: isHorizontal ? 2 : (1 - progressBar.visualPosition) * (parent.height - 4) + 2
-            width: isHorizontal ? Math.max(0, progressBar.visualPosition * (parent.width - 4)) : parent.width - 4
-            height: isHorizontal ? parent.height - 4 : Math.max(0, progressBar.visualPosition * (parent.height - 4))
+            id: fillRect
+
+            radius: 2
+            antialiasing: true
+            readonly property real innerW: innerWell.width - innerWell.border.width * 2
+            readonly property real innerH: innerWell.height - innerWell.border.width * 2
+            x: innerWell.border.width
+            y: isHorizontal
+               ? innerWell.border.width
+               : innerWell.border.width + (1 - progressBar.fillFrac) * fillRect.innerH
+            width: isHorizontal
+                   ? Math.max(0, progressBar.fillFrac * fillRect.innerW)
+                   : fillRect.innerW
+            height: isHorizontal
+                    ? fillRect.innerH
+                    : Math.max(0, progressBar.fillFrac * fillRect.innerH)
 
             gradient: Gradient {
               orientation: isHorizontal ? Gradient.Horizontal : Gradient.Vertical
-              GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.2) }
-              GradientStop { position: 0.5; color: fillColor }
-              GradientStop { position: 1.0; color: Qt.darker(fillColor, 1.1) }
+              GradientStop { position: 0.0; color: Qt.lighter(root.fillColor, 1.20) }
+              GradientStop { position: 0.5; color: root.fillColor }
+              GradientStop { position: 1.0; color: Qt.darker(root.fillColor, 1.10) }
             }
 
             Rectangle {
+              x: 0
               width: 1
+              visible: !isHorizontal
               anchors.top: parent.top
-              anchors.left: parent.left
-              color: Qt.rgba(1, 1, 1, 0.3)
               anchors.bottom: parent.bottom
+              color: Qt.rgba(1, 1, 1, 0.30)
+            }
+            Rectangle {
+              y: 0
+              height: 1
+              visible: isHorizontal
+              anchors.left: parent.left
+              anchors.right: parent.right
+              color: Qt.rgba(1, 1, 1, 0.30)
             }
           }
         }
 
+        //
+        // Major ticks + labels
+        //
         Repeater {
           model: tickCount
           delegate: Item {
@@ -183,41 +255,51 @@ Item {
             readonly property real tickValue: root.model.minValue + frac * (root.model.maxValue - root.model.minValue)
 
             Rectangle {
-              width: isHorizontal ? 2 : 8
-              height: isHorizontal ? 8 : 2
+              width: isHorizontal ? 1.5 : 8
+              height: isHorizontal ? 8 : 1.5
+              radius: 0.75
               color: Cpp_ThemeManager.colors["widget_border"]
-              x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width
-              y: isHorizontal ? progressBar.height : ((1 - frac) * progressBar.height - height / 2)
+              x: isHorizontal ? (parent.frac * progressBar.width - width / 2) : progressBar.width
+              y: isHorizontal ? progressBar.height : ((1 - parent.frac) * progressBar.height - height / 2)
             }
 
             Text {
+              visible: showLabels && root.labelsFit
               font.pixelSize: fontSize
               text: formatValue(parent.tickValue)
               color: Cpp_ThemeManager.colors["widget_text"]
               font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-              x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width + 10
-              y: isHorizontal ? progressBar.height + 10 : ((1 - frac) * progressBar.height - height / 2)
+              x: isHorizontal ? (parent.frac * progressBar.width - width / 2) : progressBar.width + 10
+              y: isHorizontal ? progressBar.height + 10 : ((1 - parent.frac) * progressBar.height - height / 2)
             }
           }
         }
 
+        //
+        // Minor ticks between majors (4 between each pair)
+        //
+        Repeater {
+          model: (tickCount - 1) * 4
+          delegate: Rectangle {
+            required property int index
+            readonly property int subIndex: (index % 4) + 1
+            readonly property int majorIndex: Math.floor(index / 4)
+            readonly property real frac: (majorIndex + subIndex / 5) / (tickCount - 1)
+
+            width: isHorizontal ? 1 : 4
+            height: isHorizontal ? 4 : 1
+            opacity: 0.65
+            color: Cpp_ThemeManager.colors["widget_border"]
+            x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width
+            y: isHorizontal ? progressBar.height : ((1 - frac) * progressBar.height - height / 2)
+          }
+        }
+
         Rectangle {
-          x: {
-            if (isHorizontal) {
-              const alarmFrac = (root.model.alarmLow - root.model.minValue) / (root.model.maxValue - root.model.minValue)
-              return alarmFrac * progressBar.width - width / 2
-            } else {
-              return progressBar.width
-            }
-          }
-          y: {
-            if (isHorizontal) {
-              return progressBar.height
-            } else {
-              const alarmFrac = (root.model.alarmLow - root.model.minValue) / (root.model.maxValue - root.model.minValue)
-              return (1 - alarmFrac) * progressBar.height - height / 2
-            }
-          }
+          x: isHorizontal ? root.model.normalizedAlarmLow * progressBar.width - width / 2
+                          : progressBar.width
+          y: isHorizontal ? progressBar.height
+                          : (1 - root.model.normalizedAlarmLow) * progressBar.height - height / 2
           radius: 1
           width: isHorizontal ? 3 : 12
           height: isHorizontal ? 12 : 3
@@ -228,22 +310,10 @@ Item {
         }
 
         Rectangle {
-          x: {
-            if (isHorizontal) {
-              const alarmFrac = (root.model.alarmHigh - root.model.minValue) / (root.model.maxValue - root.model.minValue)
-              return alarmFrac * progressBar.width - width / 2
-            } else {
-              return progressBar.width
-            }
-          }
-          y: {
-            if (isHorizontal) {
-              return progressBar.height
-            } else {
-              const alarmFrac = (root.model.alarmHigh - root.model.minValue) / (root.model.maxValue - root.model.minValue)
-              return (1 - alarmFrac) * progressBar.height - height / 2
-            }
-          }
+          x: isHorizontal ? root.model.normalizedAlarmHigh * progressBar.width - width / 2
+                          : progressBar.width
+          y: isHorizontal ? progressBar.height
+                          : (1 - root.model.normalizedAlarmHigh) * progressBar.height - height / 2
           radius: 1
           width: isHorizontal ? 3 : 12
           height: isHorizontal ? 12 : 3
@@ -360,17 +430,14 @@ Item {
       }
     }
 
-    Item {
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-    }
-
     //
     // Range/scale + current value display
     //
     VisualRange {
       id: range
 
+      Layout.row: 1
+      Layout.column: 0
       value: model.value
       units: model.units
       rangeVisible: false
@@ -379,7 +446,9 @@ Item {
       alarm: model.alarmTriggered
       Layout.alignment: Qt.AlignHCenter
       Layout.minimumWidth: implicitWidth
-      maximumWidth: Math.min(root.width * 0.8, 200)
+      maximumWidth: Math.min(root.width * 0.85, 320)
+      Layout.preferredHeight: visible ? implicitHeight : 0
+      visible: model.showValueDisplay && root.height >= 110
     }
 
     Item {
