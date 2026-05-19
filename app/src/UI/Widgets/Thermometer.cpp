@@ -69,9 +69,6 @@ Widgets::Thermometer::Thermometer(const int index, QQuickItem* parent) : Bar(ind
  */
 void Widgets::Thermometer::updateData()
 {
-  if (!isEnabled())
-    return;
-
   if (VALIDATE_WIDGET(SerialStudio::DashboardThermometer, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardThermometer, m_index);
     if (!std::isfinite(dataset.numericValue))
@@ -81,7 +78,8 @@ void Widgets::Thermometer::updateData()
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
       notifyOnAlarmEdge();
-      Q_EMIT updated();
+      if (isEnabled())
+        Q_EMIT updated();
     }
   }
 }

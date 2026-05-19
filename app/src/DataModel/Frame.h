@@ -384,7 +384,8 @@ struct alignas(8) Dataset {
   QString units;                 ///< Measurement units (e.g., degC)
   QString widget;                ///< Widget type (bar, gauge, etc.)
   QString transformCode;         ///< Optional per-dataset transform script
-  QString displayFormat;         ///< Tick/value label format on analog widgets (empty = auto)
+  QString displayFormat =
+    QStringLiteral("0d");  ///< Tick/value label format on analog widgets ("0d" = integer)
 };
 
 static_assert(sizeof(Dataset) % alignof(Dataset) == 0, "Unaligned Dataset struct");
@@ -1057,7 +1058,7 @@ void read_io_settings(QByteArray& frameStart,
   d.fftSamplingRate   = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
   d.alarmHigh         = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
   d.displayTickCount  = ss_jsr(obj, Keys::DisplayTickCount, 5).toInt();
-  d.displayFormat     = ss_jsr(obj, Keys::DisplayFormat, "").toString();
+  d.displayFormat     = ss_jsr(obj, Keys::DisplayFormat, "0d").toString();
   d.showValueDisplay  = ss_jsr(obj, Keys::ShowValueDisplay, true).toBool();
   d.sourceId          = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
   d.transformCode     = obj.value(Keys::TransformCode).toString();

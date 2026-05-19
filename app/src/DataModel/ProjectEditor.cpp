@@ -3466,12 +3466,17 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
                       ParameterDescription);
   model->appendRow(formatItem);
 
+  // Gauge and Meter always render the in-face value box
+  const bool valueIndicatorBuiltIn = (dataset.widget == "gauge" || dataset.widget == "meter");
+  const bool showValueEditable     = rangeEnabled && !valueIndicatorBuiltIn;
+  const bool showValueEffective    = valueIndicatorBuiltIn ? true : dataset.showValueDisplay;
+
   auto* showValueItem = new QStandardItem();
-  showValueItem->setEditable(rangeEnabled);
+  showValueItem->setEditable(showValueEditable);
   showValueItem->setData(0, PlaceholderValue);
   showValueItem->setData(CheckBox, WidgetType);
-  showValueItem->setData(showValueItem->isEditable(), Active);
-  showValueItem->setData(dataset.showValueDisplay, EditableValue);
+  showValueItem->setData(showValueEditable, Active);
+  showValueItem->setData(showValueEffective, EditableValue);
   showValueItem->setData(kDatasetView_ShowValueDisplay, ParameterType);
   showValueItem->setData(tr("Show Value Indicator"), ParameterName);
   showValueItem->setData(

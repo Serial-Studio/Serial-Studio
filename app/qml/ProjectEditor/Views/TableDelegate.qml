@@ -572,9 +572,9 @@ ColumnLayout {
           property var modelPlaceholder: model.placeholderValue
 
           sourceComponent: TextField {
-            text: intFieldLoader.editableValue
             leftPadding: 6
             rightPadding: 6
+            text: intFieldLoader.editableValue
             enabled: intFieldLoader.modelActive
             opacity: intFieldLoader.modelActive ? 1 : 0.5
             placeholderText: intFieldLoader.modelPlaceholder ?? ""
@@ -656,7 +656,7 @@ ColumnLayout {
             }
 
             contentItem: TextInput {
-              leftPadding: 6
+              leftPadding: 2
               rightPadding: 6
               text: _autoIntSpin.displayText
               font: _autoIntSpin.font
@@ -692,9 +692,9 @@ ColumnLayout {
           property var modelPlaceholder: model.placeholderValue
 
           sourceComponent: TextField {
-            text: floatFieldLoader.editableValue
             leftPadding: 6
             rightPadding: 6
+            text: floatFieldLoader.editableValue
             enabled: floatFieldLoader.modelActive
             opacity: floatFieldLoader.modelActive ? 1 : 0.5
             placeholderText: floatFieldLoader.modelPlaceholder ?? ""

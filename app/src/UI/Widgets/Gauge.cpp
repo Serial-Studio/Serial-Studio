@@ -69,9 +69,6 @@ Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, 
  */
 void Widgets::Gauge::updateData()
 {
-  if (!isEnabled())
-    return;
-
   if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
     if (!std::isfinite(dataset.numericValue))
@@ -81,7 +78,8 @@ void Widgets::Gauge::updateData()
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
       notifyOnAlarmEdge();
-      Q_EMIT updated();
+      if (isEnabled())
+        Q_EMIT updated();
     }
   }
 }

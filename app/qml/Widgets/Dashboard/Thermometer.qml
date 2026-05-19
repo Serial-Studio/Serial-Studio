@@ -188,9 +188,7 @@ Item {
       }
 
       //
-      // Hidden capsule that matches the tube's interior -- used as an
-      // alpha mask for the mercury column so the fill is always clipped
-      // to the tube outline, regardless of level
+      // Mercury alpha mask
       //
       Rectangle {
         id: mercuryMask
@@ -208,10 +206,7 @@ Item {
       }
 
       //
-      // Mercury column -- flat-topped rectangle clipped to the capsule
-      // mask. The meniscus stays horizontal at every level and the
-      // bottom hugs the tube's inner curve without leaking out the
-      // corners at small fills.
+      // Mercury column
       //
       Item {
         id: mercuryClip
@@ -235,8 +230,8 @@ Item {
 
           antialiasing: true
           width: parent.width
-          height: Math.max(0, mercuryClip.frac * parent.height)
           y: parent.height - height
+          height: Math.max(0, mercuryClip.frac * parent.height)
 
           gradient: Gradient {
             orientation: Gradient.Horizontal

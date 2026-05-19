@@ -58,6 +58,8 @@ Item {
   readonly property int subTicksPerMajor: 4
   readonly property real fontSize: Math.max(10, Math.min(14, Math.min(width, height) / 22))
                                    * Cpp_Misc_CommonFonts.widgetFontScale
+  readonly property real digitalFontSize: Math.max(11, Math.min(18, Math.min(width, height) / 16))
+                                          * Cpp_Misc_CommonFonts.widgetFontScale
 
   function evenTickValues(minV, maxV, n) {
     if (n < 2 || minV >= maxV) return [minV, maxV]
@@ -120,35 +122,36 @@ Item {
     }
   }
 
-  ColumnLayout {
-    spacing: 4
+  Item {
+    id: meterArea
+
     anchors.margins: 8
     anchors.fill: parent
 
-    Item {
-      id: meterArea
-
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-
-      readonly property real topMargin: 2
+    readonly property real topMargin: 2
+      readonly property real bottomMargin: 4
       readonly property bool showLabels: width >= 130 && height >= 90
       readonly property bool showFaceLabels: width >= 140 && height >= 150
-      readonly property real labelBaseHeight: meterArea.showFaceLabels
-                                              ? Math.round(fontSize * 1.8 + 14) : 0
-      readonly property real labelBaseGap: meterArea.showFaceLabels ? 6 : 0
-      readonly property real bottomMargin: 4 + meterArea.labelBaseGap + meterArea.labelBaseHeight
+      readonly property real labelBaseRowHeight: meterArea.showFaceLabels
+                                                 ? Math.round(digitalFontSize * 2.0 + 12) : 0
       readonly property real chromeW: Math.max(3, Math.min(8, Math.min(width, height) * 0.025))
-      readonly property real faceR: Math.max(16, Math.min(
-                                               width / 2 - meterArea.chromeW - 2,
-                                               (height - meterArea.topMargin - meterArea.bottomMargin) / 1.16
-                                               ))
+      readonly property real faceR: meterArea.showFaceLabels
+        ? Math.max(16, Math.min(
+                     width / 2 - meterArea.chromeW - 2,
+                     (height - meterArea.topMargin - meterArea.bottomMargin
+                      - meterArea.labelBaseRowHeight - meterArea.chromeW - 2) / 1.13))
+        : Math.max(16, Math.min(
+                     width / 2 - meterArea.chromeW - 2,
+                     (height - meterArea.topMargin - meterArea.bottomMargin) / 1.16))
       readonly property real tailExtension: Math.max(meterArea.chromeW, meterArea.faceR * 0.13 + 2)
+      readonly property real labelBaseHeight: meterArea.showFaceLabels
+                                              ? meterArea.tailExtension + meterArea.labelBaseRowHeight + meterArea.chromeW
+                                              : 0
       readonly property real visualHeight: meterArea.faceR + meterArea.tailExtension
       readonly property real faceCx: width / 2
       readonly property real faceCy: Math.max(meterArea.faceR + meterArea.topMargin,
-                                              (meterArea.height - meterArea.labelBaseHeight - meterArea.labelBaseGap
-                                               - meterArea.visualHeight) / 2 + meterArea.faceR)
+                                              (meterArea.height - meterArea.labelBaseHeight
+                                               - meterArea.faceR) / 2 + meterArea.faceR)
       readonly property real arcBand: Math.max(3, meterArea.faceR * 0.11)
       readonly property int autoTargetTickCount: {
         const arcLen = (angleRangeDeg * Math.PI / 180) * meterArea.faceR
@@ -163,11 +166,13 @@ Item {
                                         : root.niceTickValues(root.model.minValue, root.model.maxValue, meterArea.autoTargetTickCount)
       readonly property int tickCount: meterArea.tickValues.length
 
-      readonly property bool labelsFit: {
-        if (meterArea.tickCount < 2) return true
-        const arcStep = (angleRangeDeg * Math.PI / 180) * meterArea.faceR * 0.7 / (meterArea.tickCount - 1)
-        return arcStep > tickLabelMetrics.width + 4
-      }
+      readonly property real labelsArcStep: meterArea.tickCount < 2
+        ? 0
+        : (angleRangeDeg * Math.PI / 180) * meterArea.faceR * 0.7 / (meterArea.tickCount - 1)
+      readonly property bool labelsFitAll: meterArea.tickCount < 2
+                                           || meterArea.labelsArcStep > tickLabelMetrics.width + 4
+      readonly property bool labelsFitAlternate: meterArea.tickCount < 2
+                                                 || meterArea.labelsArcStep * 2 > tickLabelMetrics.width + 4
 
       //
       // Outer chrome ring -- hidden source for MultiEffect drop shadow
@@ -181,14 +186,17 @@ Item {
         layer.enabled: true
         anchors.fill: parent
 
+        readonly property real bottomExtension: meterArea.labelBaseHeight
         readonly property real rOuter: meterArea.faceR + meterArea.chromeW
 
         ShapePath {
           strokeColor: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.40)
           strokeWidth: 1
           fillGradient: LinearGradient {
-            x2: meterArea.faceCx; y2: meterArea.faceCy
-            x1: meterArea.faceCx; y1: meterArea.faceCy - chromeShape.rOuter
+            x1: meterArea.faceCx
+            x2: meterArea.faceCx
+            y1: meterArea.faceCy - chromeShape.rOuter
+            y2: meterArea.faceCy + chromeShape.bottomExtension
             GradientStop { position: 0.0; color: root.chromeTop }
             GradientStop { position: 0.5; color: root.chromeMid }
             GradientStop { position: 1.0; color: root.chromeBot }
@@ -202,6 +210,14 @@ Item {
             radiusY: chromeShape.rOuter
             direction: PathArc.Clockwise
             x: meterArea.faceCx + chromeShape.rOuter
+          }
+          PathLine {
+            x: meterArea.faceCx + chromeShape.rOuter
+            y: meterArea.faceCy + chromeShape.bottomExtension
+          }
+          PathLine {
+            x: meterArea.faceCx - chromeShape.rOuter
+            y: meterArea.faceCy + chromeShape.bottomExtension
           }
           PathLine {
             y: meterArea.faceCy
@@ -227,14 +243,18 @@ Item {
         layer.enabled: true
         anchors.fill: parent
 
+        readonly property real bottomExtension: Math.max(0, meterArea.labelBaseHeight - meterArea.chromeW)
+
         ShapePath {
           strokeColor: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.25)
           strokeWidth: 1.5
           capStyle: ShapePath.FlatCap
           joinStyle: ShapePath.RoundJoin
           fillGradient: LinearGradient {
-            x2: meterArea.faceCx; y2: meterArea.faceCy
-            x1: meterArea.faceCx; y1: meterArea.faceCy - meterArea.faceR
+            x1: meterArea.faceCx
+            x2: meterArea.faceCx
+            y1: meterArea.faceCy - meterArea.faceR
+            y2: meterArea.faceCy + faceShape.bottomExtension
             GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.28) }
             GradientStop { position: 0.5; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.20) }
             GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.10) }
@@ -250,54 +270,16 @@ Item {
             x: meterArea.faceCx + meterArea.faceR
           }
           PathLine {
+            x: meterArea.faceCx + meterArea.faceR
+            y: meterArea.faceCy + faceShape.bottomExtension
+          }
+          PathLine {
+            x: meterArea.faceCx - meterArea.faceR
+            y: meterArea.faceCy + faceShape.bottomExtension
+          }
+          PathLine {
             y: meterArea.faceCy
             x: meterArea.faceCx - meterArea.faceR
-          }
-        }
-      }
-
-      Shape {
-        id: arcFillShape
-
-        layer.samples: 8
-        antialiasing: true
-        layer.enabled: true
-        anchors.fill: parent
-        visible: root.normalizedValue > 0.001
-
-        readonly property real rOut: meterArea.faceR - 4
-        readonly property real startA: startAngleDeg * Math.PI / 180
-        readonly property real rIn: arcFillShape.rOut - meterArea.arcBand
-        readonly property real endA: (startAngleDeg + root.normalizedValue * angleRangeDeg) * Math.PI / 180
-
-        ShapePath {
-          strokeWidth: -1
-          fillColor: fillColor
-
-          startX: meterArea.faceCx + arcFillShape.rOut * Math.sin(arcFillShape.startA)
-          startY: meterArea.faceCy - arcFillShape.rOut * Math.cos(arcFillShape.startA)
-
-          PathArc {
-            radiusX: arcFillShape.rOut
-            radiusY: arcFillShape.rOut
-            direction: PathArc.Clockwise
-            x: meterArea.faceCx + arcFillShape.rOut * Math.sin(arcFillShape.endA)
-            y: meterArea.faceCy - arcFillShape.rOut * Math.cos(arcFillShape.endA)
-          }
-          PathLine {
-            x: meterArea.faceCx + arcFillShape.rIn * Math.sin(arcFillShape.endA)
-            y: meterArea.faceCy - arcFillShape.rIn * Math.cos(arcFillShape.endA)
-          }
-          PathArc {
-            radiusX: arcFillShape.rIn
-            radiusY: arcFillShape.rIn
-            direction: PathArc.Counterclockwise
-            x: meterArea.faceCx + arcFillShape.rIn * Math.sin(arcFillShape.startA)
-            y: meterArea.faceCy - arcFillShape.rIn * Math.cos(arcFillShape.startA)
-          }
-          PathLine {
-            x: meterArea.faceCx + arcFillShape.rOut * Math.sin(arcFillShape.startA)
-            y: meterArea.faceCy - arcFillShape.rOut * Math.cos(arcFillShape.startA)
           }
         }
       }
@@ -305,6 +287,7 @@ Item {
       Repeater {
         model: meterArea.tickValues
         delegate: Item {
+          z: 1
           required property int index
           required property var modelData
           readonly property real tickValue: modelData
@@ -330,7 +313,10 @@ Item {
           }
 
           Text {
-            visible: meterArea.showLabels && meterArea.labelsFit
+            visible: meterArea.showLabels && (meterArea.labelsFitAll
+                                              || (meterArea.labelsFitAlternate
+                                                  && (parent.index % 2 === 0
+                                                      || parent.index === meterArea.tickCount - 1)))
             font.pixelSize: fontSize
             text: formatValue(parent.tickValue)
             color: Cpp_ThemeManager.colors["widget_text"]
@@ -344,6 +330,7 @@ Item {
       Repeater {
         model: Math.max(0, meterArea.tickValues.length - 1) * subTicksPerMajor
         delegate: Item {
+          z: 1
           required property int index
           readonly property int subIndex: (index % subTicksPerMajor) + 1
           readonly property int majorIndex: Math.floor(index / subTicksPerMajor)
@@ -383,6 +370,7 @@ Item {
         delegate: Shape {
           id: alarmZoneShape
 
+          opacity: 0.60
           required property var modelData
           antialiasing: true
           anchors.fill: parent
@@ -430,73 +418,125 @@ Item {
       }
 
       //
-      // Label base -- rectangular panel below the half-arc face,
-      // styled to match the meter's inner face (cream gradient, dark
-      // thin border). Holds the digital value readout on the left and
-      // the dataset title on the right, so the user can always read
-      // the value regardless of needle position.
+      // Display panel fill
       //
       Rectangle {
-        id: labelBase
-
-        radius: 4
-        border.width: 1.5
         antialiasing: true
         visible: meterArea.showFaceLabels
-        height: meterArea.labelBaseHeight
-        width: meterArea.faceR * 2
-        x: meterArea.faceCx - meterArea.faceR
-        y: meterArea.faceCy + meterArea.tailExtension + meterArea.labelBaseGap
-        border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.25)
-        gradient: Gradient {
-          GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.28) }
-          GradientStop { position: 0.5; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.20) }
-          GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.10) }
-        }
+        y: meterArea.faceCy + 1.5
+        x: meterArea.faceCx - meterArea.faceR + 0.75
+        width: meterArea.faceR * 2 - 1.5
+        height: meterArea.labelBaseHeight - meterArea.chromeW - 1.5
+        color: Cpp_ThemeManager.colors["widget_base"]
+      }
+
+      //
+      // Display panel top border
+      //
+      Rectangle {
+        height: 1.5
+        antialiasing: true
+        visible: meterArea.showFaceLabels
+        y: meterArea.faceCy
+        x: meterArea.faceCx - meterArea.faceR + 0.75
+        width: meterArea.faceR * 2 - 1.5
+        color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.25)
+      }
+
+      //
+      // Label row
+      //
+      Item {
+        id: labelBase
+
+        y: meterArea.faceCy + 2
+        width: meterArea.faceR * 2 - 2
+        visible: meterArea.showFaceLabels
+        x: meterArea.faceCx - meterArea.faceR + 1
+        height: meterArea.labelBaseHeight - meterArea.chromeW - 4
 
         RowLayout {
-          spacing: 8
+          spacing: 4
           anchors.fill: parent
-          anchors.margins: 6
+          anchors.leftMargin: 6
+          anchors.rightMargin: 6
 
-          Rectangle {
-            id: valueBox
-
-            radius: 3
-            border.width: 1
-            antialiasing: true
-            Layout.alignment: Qt.AlignVCenter
-            height: valueText.implicitHeight + 6
-            width: valueText.implicitWidth + 14
-            color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10)
-            border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.10)
+          Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
             Text {
-              id: valueText
+              id: titleText
 
               font.bold: true
-              color: root.fillColor
-              anchors.centerIn: parent
-              font.pixelSize: fontSize * 1.05
+              elide: Text.ElideRight
+              anchors.fill: parent
+              anchors.leftMargin: 4
+              anchors.rightMargin: 4
+              text: root.model.title
+              font.pixelSize: digitalFontSize
+              verticalAlignment: Text.AlignVCenter
+              horizontalAlignment: Text.AlignHCenter
+              visible: root.model.title.length > 0
+              color: Cpp_ThemeManager.colors["widget_text"]
               font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-              text: formatValue(root.model.value)
-                    + (root.model.units.length > 0 ? " " + root.model.units : "")
             }
           }
 
-          Text {
-            id: titleText
-
-            font.bold: true
-            elide: Text.ElideRight
+          //
+          // Value readout
+          //
+          Item {
             Layout.fillWidth: true
-            text: root.model.title
-            Layout.alignment: Qt.AlignVCenter
-            font.pixelSize: fontSize * 1.05
-            horizontalAlignment: Text.AlignRight
-            visible: root.model.title.length > 0
-            color: Cpp_ThemeManager.colors["widget_text"]
-            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+            Layout.fillHeight: true
+
+            Rectangle {
+              id: valueBox
+
+              radius: 3
+              border.width: 1
+              antialiasing: true
+              anchors.centerIn: parent
+              height: valueText.implicitHeight + 8
+              width: Math.min(parent.width, valueText.implicitWidth + 18)
+              border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.35)
+              color: model.alarmTriggered
+                     ? (valueBox.alarmFlashOn
+                        ? Cpp_ThemeManager.colors["alarm"]
+                        : Cpp_ThemeManager.colors["console_base"])
+                     : Cpp_ThemeManager.colors["console_base"]
+
+              Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
+
+              property bool alarmFlashOn: false
+
+              SequentialAnimation {
+                loops: Animation.Infinite
+                running: model.alarmTriggered
+                PropertyAction { target: valueBox; property: "alarmFlashOn"; value: true }
+                PauseAnimation { duration: 450 }
+                PropertyAction { target: valueBox; property: "alarmFlashOn"; value: false }
+                PauseAnimation { duration: 450 }
+              }
+
+              Text {
+                id: valueText
+
+                font.bold: true
+                anchors.centerIn: parent
+                font.pixelSize: digitalFontSize * 1.05
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                color: model.alarmTriggered
+                       ? (valueBox.alarmFlashOn
+                          ? "#ffffff"
+                          : Cpp_ThemeManager.colors["alarm"])
+                       : Cpp_ThemeManager.colors["console_text"]
+                text: formatValue(root.model.value)
+                      + (root.model.units.length > 0 ? " " + root.model.units : "")
+
+                Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
+              }
+            }
           }
         }
       }
@@ -537,9 +577,9 @@ Item {
               y2: needleShape.cy
               x1: needleShape.cx - needleShape.baseW / 2
               x2: needleShape.cx + needleShape.baseW / 2
-              GradientStop { position: 0.0; color: Qt.lighter(root.fillColor, 1.06) }
+              GradientStop { position: 0.0; color: Qt.darker(root.fillColor, 1.10) }
               GradientStop { position: 0.5; color: root.fillColor }
-              GradientStop { position: 1.0; color: Qt.darker(root.fillColor, 1.10) }
+              GradientStop { position: 1.0; color: Qt.lighter(root.fillColor, 1.06) }
             }
 
             startY: needleShape.cy
@@ -581,22 +621,5 @@ Item {
           color: Qt.rgba(0, 0, 0, 0.45)
         }
       }
-    }
-
-    VisualRange {
-      id: range
-
-      value: model.value
-      units: model.units
-      rangeVisible: false
-      maxValue: model.maxValue
-      minValue: model.minValue
-      alarm: model.alarmTriggered
-      Layout.alignment: Qt.AlignHCenter
-      Layout.minimumWidth: implicitWidth
-      maximumWidth: Math.min(root.width * 0.85, 320)
-      Layout.preferredHeight: visible ? implicitHeight : 0
-      visible: model.showValueDisplay && root.height >= 110
-    }
   }
 }

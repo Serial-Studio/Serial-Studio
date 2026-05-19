@@ -22,7 +22,6 @@
 import QtQuick
 import QtQuick.Shapes
 import QtQuick.Effects
-import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
@@ -87,12 +86,15 @@ Item {
     : niceTickValues(model.minValue, model.maxValue, autoTargetTickCount)
   readonly property int tickCount: tickValues.length
 
-  readonly property bool labelsFit: {
-    if (tickCount < 2) return true
+  readonly property real labelsArcStep: {
+    if (tickCount < 2) return 0
     const approxR = Math.min(width, height) * 0.32
-    const arcStep = (angleRangeDeg * Math.PI / 180) * approxR / (tickCount - 1)
-    return arcStep > tickLabelMetrics.width + 6
+    return (angleRangeDeg * Math.PI / 180) * approxR / (tickCount - 1)
   }
+  readonly property bool labelsFitAll: tickCount < 2
+                                       || labelsArcStep > tickLabelMetrics.width + 6
+  readonly property bool labelsFitAlternate: tickCount < 2
+                                             || labelsArcStep * 2 > tickLabelMetrics.width + 6
 
   TextMetrics {
     id: tickLabelMetrics
@@ -156,46 +158,29 @@ Item {
   }
 
   //
-  // Widget layout -- vertical (stacked) when tall, horizontal (side-by-side) when wide
+  // Gauge control -- fills the widget; the in-face title + value box
+  // replace the external VisualRange.
   //
-  GridLayout {
-    id: gaugeLayout
+  Dial {
+    id: control
 
-    rowSpacing: 4
-    columnSpacing: 8
+    enabled: false
     anchors.margins: 8
     anchors.fill: parent
 
-    rows: gaugeLayout.wide ? 1 : 2
-    columns: gaugeLayout.wide ? 2 : 1
-    readonly property bool wide: root.width > root.height * 1.4
+    value: model.value
+    to: model.maxValue
+    from: model.minValue
+    endAngle: endAngleDeg
+    snapMode: Dial.NoSnap
+    inputMode: Dial.Vertical
+    startAngle: startAngleDeg
 
-    //
-    // Gauge control
-    //
-    Dial {
-      id: control
+    background: Item {
+      implicitWidth: 200
+      implicitHeight: 200
 
-      enabled: false
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      Layout.row: gaugeLayout.wide ? 0 : 0
-      Layout.column: gaugeLayout.wide ? 1 : 0
-      Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-      value: model.value
-      to: model.maxValue
-      from: model.minValue
-      endAngle: endAngleDeg
-      snapMode: Dial.NoSnap
-      inputMode: Dial.Vertical
-      startAngle: startAngleDeg
-
-      background: Item {
-        implicitWidth: 200
-        implicitHeight: 200
-
-        readonly property real gaugeSize: Math.min(control.width, control.height) * (range.visible ? 0.88 : 0.95)
+      readonly property real gaugeSize: Math.min(control.width, control.height) * 0.95
 
         //
         // Outer chrome ring -- silver gradient rendered via MultiEffect with shadow
@@ -289,6 +274,7 @@ Item {
           Repeater {
             model: root.tickValues
             delegate: Item {
+              z: 1
               required property int index
               required property var modelData
               readonly property real tickValue: modelData
@@ -314,7 +300,10 @@ Item {
               }
 
               Text {
-                visible: root.showLabels && root.labelsFit
+                visible: root.showLabels && (root.labelsFitAll
+                                             || (root.labelsFitAlternate
+                                                 && (parent.index % 2 === 0
+                                                     || parent.index === root.tickCount - 1)))
                 style: Text.Raised
                 font.pixelSize: fontSize
                 styleColor: Qt.rgba(0, 0, 0, 0.3)
@@ -340,6 +329,7 @@ Item {
             delegate: Shape {
               id: alarmZoneShape
 
+              opacity: 0.60
               required property var modelData
               antialiasing: true
               anchors.fill: parent
@@ -389,6 +379,7 @@ Item {
           Repeater {
             model: Math.max(0, root.tickValues.length - 1) * subTicksPerMajor
             delegate: Item {
+              z: 1
               required property int index
               readonly property int subIndex: (index % subTicksPerMajor) + 1
               readonly property int majorIndex: Math.floor(index / subTicksPerMajor)
@@ -418,17 +409,15 @@ Item {
           }
 
           //
-          // Face labels -- dataset title (bold), units, and a small
-          // value readout sit in the bottom wedge of the dial, below
-          // the needle's reach
+          // Face labels
           //
           Column {
             id: faceLabels
 
             spacing: 2
             visible: gaugeFace.width >= 120
-            anchors.bottomMargin: gaugeFace.border.width + 10
             anchors.bottom: gaugeFace.bottom
+            anchors.bottomMargin: gaugeFace.border.width + 16
             anchors.horizontalCenter: gaugeFace.horizontalCenter
             width: Math.min(gaugeFace.width * 0.55, gaugeFace.width - 16)
 
@@ -454,22 +443,45 @@ Item {
               radius: 3
               border.width: 1
               antialiasing: true
-              height: valueText.implicitHeight + 6
+              height: valueText.implicitHeight + 8
               anchors.horizontalCenter: parent.horizontalCenter
-              width: Math.min(parent.width, valueText.implicitWidth + 16)
-              color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10)
-              border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.10)
+              width: Math.min(parent.width, valueText.implicitWidth + 18)
+              border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.35)
+              color: model.alarmTriggered
+                     ? (valueBox.alarmFlashOn
+                        ? Cpp_ThemeManager.colors["alarm"]
+                        : Cpp_ThemeManager.colors["console_base"])
+                     : Cpp_ThemeManager.colors["console_base"]
+
+              Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
+
+              property bool alarmFlashOn: false
+
+              SequentialAnimation {
+                loops: Animation.Infinite
+                running: model.alarmTriggered
+                PropertyAction { target: valueBox; property: "alarmFlashOn"; value: true }
+                PauseAnimation { duration: 450 }
+                PropertyAction { target: valueBox; property: "alarmFlashOn"; value: false }
+                PauseAnimation { duration: 450 }
+              }
 
               Text {
                 id: valueText
 
                 font.bold: true
-                color: root.fillColor
                 anchors.centerIn: parent
                 font.pixelSize: fontSize * 1.05
                 font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                color: model.alarmTriggered
+                       ? (valueBox.alarmFlashOn
+                          ? "#ffffff"
+                          : Cpp_ThemeManager.colors["alarm"])
+                       : Cpp_ThemeManager.colors["console_text"]
                 text: formatValue(model.value)
                       + (model.units.length > 0 ? " " + model.units : "")
+
+                Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
               }
             }
           }
@@ -511,9 +523,9 @@ Item {
               y2: needleShape.cy
               x1: needleShape.cx - needleShape.baseW / 2
               x2: needleShape.cx + needleShape.baseW / 2
-              GradientStop { position: 0.0; color: Qt.lighter(root.fillColor, 1.06) }
+              GradientStop { position: 0.0; color: Qt.darker(root.fillColor, 1.10) }
               GradientStop { position: 0.5; color: root.fillColor }
-              GradientStop { position: 1.0; color: Qt.darker(root.fillColor, 1.10) }
+              GradientStop { position: 1.0; color: Qt.lighter(root.fillColor, 1.06) }
             }
 
             startY: needleShape.cy
@@ -554,32 +566,5 @@ Item {
           }
         }
       }
-
-    }
-
-    //
-    // Range/scale + current value display
-    //
-    VisualRange {
-      id: range
-
-      visible: model.showValueDisplay
-               && (gaugeLayout.wide ? root.width >= 220 : root.height >= 130)
-      value: model.value
-      units: model.units
-      rangeVisible: false
-      maxValue: model.maxValue
-      minValue: model.minValue
-      alarm: model.alarmTriggered
-      Layout.row: gaugeLayout.wide ? 0 : 1
-      Layout.column: gaugeLayout.wide ? 0 : 0
-      Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-      Layout.minimumWidth: implicitWidth
-      Layout.preferredWidth: gaugeLayout.wide ? Math.min(root.width * 0.32, 280) : implicitWidth
-      Layout.preferredHeight: visible ? implicitHeight : 0
-      Layout.leftMargin: gaugeLayout.wide ? 12 : 0
-      maximumWidth: gaugeLayout.wide ? Math.min(root.width * 0.32 - 12, 268)
-                                     : Math.min(root.width * 0.85, 320)
-    }
   }
 }

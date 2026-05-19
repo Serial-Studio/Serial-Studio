@@ -138,6 +138,7 @@ protected:
   double m_alarmHigh;
 
   bool m_alarmsDefined;
+  bool m_alarmInitialized;
   bool m_alarmActive;
 };
 }  // namespace Widgets

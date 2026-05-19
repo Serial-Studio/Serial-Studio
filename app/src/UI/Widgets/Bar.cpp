@@ -43,6 +43,7 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   , m_alarmLow(std::nan(""))
   , m_alarmHigh(std::nan(""))
   , m_alarmsDefined(false)
+  , m_alarmInitialized(false)
   , m_alarmActive(false)
 {
   if (autoInitFromBarDataset && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
@@ -226,9 +227,6 @@ double Widgets::Bar::normalizedAlarmHigh() const noexcept
  */
 void Widgets::Bar::updateData()
 {
-  if (!isEnabled())
-    return;
-
   if (VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
     if (!std::isfinite(dataset.numericValue))
@@ -238,7 +236,8 @@ void Widgets::Bar::updateData()
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
       notifyOnAlarmEdge();
-      Q_EMIT updated();
+      if (isEnabled())
+        Q_EMIT updated();
     }
   }
 }
@@ -253,6 +252,14 @@ void Widgets::Bar::updateData()
 void Widgets::Bar::notifyOnAlarmEdge()
 {
   const bool nowActive = alarmTriggered();
+
+  // Suppress the first edge so an already-out-of-range value at connect doesn't fire
+  if (!m_alarmInitialized) {
+    m_alarmInitialized = true;
+    m_alarmActive      = nowActive;
+    return;
+  }
+
   if (nowActive == m_alarmActive)
     return;
 

@@ -10,6 +10,7 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "datasetId": 0,
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -37,6 +38,7 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "datasetId": 1,
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -64,6 +66,7 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "datasetId": 2,
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -97,6 +100,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -124,6 +128,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -151,6 +156,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 2,
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -178,6 +184,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 3,
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -201,10 +208,12 @@
                     "xAxis": -1
                 },
                 {
-                    "alarmEnabled": false,
+                    "alarmEnabled": true,
                     "alarmHigh": 80,
-                    "alarmLow": 20,
+                    "alarmLow": 0,
                     "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 11,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -224,7 +233,7 @@
                     "transformLanguage": 0,
                     "units": "km/h",
                     "value": "",
-                    "widget": "gauge",
+                    "widget": "meter",
                     "widgetMax": 100,
                     "widgetMin": 0,
                     "xAxis": -1
@@ -234,6 +243,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 5,
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -321,7 +331,7 @@
     "title": "HSL Helsinki Public Transit",
     "widgetSettings": {
         "5:0:-1": {
-            "autoCenter": false,
+            "autoCenter": true,
             "mapType": 0
         },
         "activeGroup": 1001,
@@ -584,12 +594,12 @@
                 {
                     "groupId": 1,
                     "relativeIndex": 0,
-                    "widgetType": 11
+                    "widgetType": 1
                 },
                 {
                     "groupId": 1,
                     "relativeIndex": 0,
-                    "widgetType": 1
+                    "widgetType": 13
                 }
             ],
             "workspaceId": 5000
