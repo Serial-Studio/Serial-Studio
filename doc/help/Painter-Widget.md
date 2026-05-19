@@ -99,7 +99,7 @@ An array-like view of the group's datasets. `datasets.length` returns the count,
 | `uniqueId`   | number  | Stable unique ID across project edits. |
 | `title`      | string  | Display name. |
 | `units`      | string  | Measurement units (`"degC"`, `"rpm"`, ...). |
-| `widget`     | string  | Dataset widget type, if any (`"bar"`, `"gauge"`, `"compass"`). |
+| `widget`     | string  | Dataset widget type, if any (`"bar"`, `"gauge"`, `"compass"`, `"meter"`, `"thermometer"`). |
 | `value`      | number  | Post-transform numeric value. `NaN` if the dataset is invalid. |
 | `rawValue`   | number  | Pre-transform numeric value. |
 | `text`       | string  | Post-transform string value. |

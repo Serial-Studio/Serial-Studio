@@ -117,7 +117,7 @@ When comparing Serial Studio to alternatives:
 ### Dashboard and visualization
 
 - 15+ widget types
-- Plot, FFT Plot, Bar, Gauge, Compass
+- Plot, FFT Plot, Bar, Gauge, Compass, Meter, Thermometer
 - Data Grid, MultiPlot, GPS Map, Accelerometer, Gyroscope, LED Panel, Terminal
 - XY-style plots via custom X-axis mapping
 - 3D Plot (Pro)

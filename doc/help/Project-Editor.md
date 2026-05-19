@@ -153,7 +153,7 @@ Datasets map to individual data fields in your device's output.
 - **Title.** Display label (for example "Temperature").
 - **Units.** Measurement suffix (for example "deg C", "hPa", "%").
 - **Frame Index.** 1-based position in the parsed data array. If your device sends `23.5,1013,45.2`, then Temperature = 1, Pressure = 2, Humidity = 3.
-- **Widget.** Per-dataset visualization: Bar, Gauge, Compass, or None.
+- **Widget.** Per-dataset visualization: Bar, Gauge, Compass, Meter, Thermometer, or None.
 
 **Plotting**
 
@@ -184,7 +184,7 @@ Datasets map to individual data fields in your device's output.
 
 **Widget range**
 
-- **Widget Min / Widget Max.** Range for Bar and Gauge displays. Defaults to 0 to 100.
+- **Widget Min / Widget Max.** Range for Bar, Gauge, Meter, and Thermometer displays. Defaults to 0 to 100.
 
 ### Step 5: add actions (optional)
 
@@ -351,7 +351,7 @@ When a project has multiple sources, each source represents a separate physical 
 
 **Fix:**
 
-- Gauge and Bar need bounded numeric values. Set Widget Min/Max.
+- Gauge, Bar, Meter, and Thermometer need bounded numeric values. Set Widget Min/Max.
 - Accelerometer and Gyroscope groups need exactly 3 datasets.
 - GPS Map needs 2 or 3 datasets (latitude, longitude, optional altitude).
 - Compass expects a value in the 0 to 360 range.
@@ -369,7 +369,7 @@ When a project has multiple sources, each source represents a separate physical 
 - Test your configuration with the Console view before switching to the Dashboard.
 - Record a session to CSV, then use the CSV Player to iterate on your dashboard layout without hardware connected.
 - Use clear dataset titles and units. They show up directly on dashboard widgets.
-- Set appropriate Widget Min/Max for gauges and bars instead of relying on auto-scale.
+- Set appropriate Widget Min/Max for gauges, bars, meters, and thermometers instead of relying on auto-scale.
 
 ## See also
 

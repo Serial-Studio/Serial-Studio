@@ -30,12 +30,14 @@ existing scripts and clients that haven't migrated.
 | `"bar"`             | 10           |                                                |
 | `"gauge"`           | 11           |                                                |
 | `"compass"`         | 12           |                                                |
-| `"none"`            | 13           | Sentinel; never pin                            |
-| `"imageview"`       | 14           | Pro                                            |
-| `"output-panel"`    | 15           | Pro; ALL output widgets in a group on one tile |
-| `"notification-log"`| 16           | Pro                                            |
-| `"waterfall"`       | 17           | Pro                                            |
-| `"painter"`         | 18           | Pro                                            |
+| `"meter"`           | 13           | Analog half-arc meter; bounded scalar          |
+| `"thermometer"`     | 14           | Vertical thermometer; bounded scalar           |
+| `"none"`            | 15           | Sentinel; never pin                            |
+| `"imageview"`       | 16           | Pro                                            |
+| `"output-panel"`    | 17           | Pro; ALL output widgets in a group on one tile |
+| `"notification-log"`| 18           | Pro                                            |
+| `"waterfall"`       | 19           | Pro                                            |
+| `"painter"`         | 20           | Pro                                            |
 
 Each group/dataset is "compatible" with a subset of these. Use
 `project.group.list` and read each group's `compatibleWidgetTypes`
@@ -51,15 +53,17 @@ are the same name in both places. (Integer bitflags / enums are still
 accepted for back-compat. Their numbers do NOT line up between the two
 APIs, which is why slugs exist.)
 
-| Visualization | Slug          | JSON key (`.ssproj`) | `setOptions` bit | `addWidget` enum |
-|---------------|---------------|----------------------|------------------|------------------|
-| Plot          | `"plot"`      | `graph: true`        | `1`              | `9`              |
-| FFT           | `"fft"`       | `fft: true`          | `2`              | `7`              |
-| Bar           | `"bar"`       | `widget: "bar"`      | `4`              | `10`             |
-| Gauge         | `"gauge"`     | `widget: "gauge"`    | `8`              | `11`             |
-| Compass       | `"compass"`   | `widget: "compass"`  | `16`             | `12`             |
-| LED           | `"led"`       | `led: true`          | `32`             | `8`              |
-| Waterfall     | `"waterfall"` | `waterfall: true`    | `64`             | `17` (Pro)       |
+| Visualization | Slug            | JSON key (`.ssproj`)   | `setOptions` bit | `addWidget` enum |
+|---------------|-----------------|------------------------|------------------|------------------|
+| Plot          | `"plot"`        | `graph: true`          | `1`              | `9`              |
+| FFT           | `"fft"`         | `fft: true`            | `2`              | `7`              |
+| Bar           | `"bar"`         | `widget: "bar"`        | `4`              | `10`             |
+| Gauge         | `"gauge"`       | `widget: "gauge"`      | `8`              | `11`             |
+| Compass       | `"compass"`     | `widget: "compass"`    | `16`             | `12`             |
+| LED           | `"led"`         | `led: true`            | `32`             | `8`              |
+| Waterfall     | `"waterfall"`   | `waterfall: true`      | `64`             | `19` (Pro)       |
+| Meter         | `"meter"`       | `widget: "meter"`      | `128`            | `13`             |
+| Thermometer   | `"thermometer"` | `widget: "thermometer"`| `256`            | `14`             |
 
 Slug usage:
 - `setOptions` accepts **either** `options: ["plot","fft","waterfall"]`
@@ -73,9 +77,10 @@ Slug usage:
   `compatibleWidgetTypeSlugs`, `widgetTypeSlug`).
 
 Notes:
-- Bar / Gauge / Compass are **mutually exclusive** -- a dataset's
-  `widget` string holds at most one of them. `setOptions` enforces
-  this: if more than one of those bits is set, the highest bit wins.
+- Bar / Gauge / Compass / Meter / Thermometer are **mutually
+  exclusive** -- a dataset's `widget` string holds at most one of them.
+  `setOptions` enforces this: if more than one of those bits is set,
+  the highest bit wins.
 - Plot / FFT / LED / Waterfall are **independent** -- a dataset can
   have Plot + FFT + Waterfall all on at once, and the group's
   `compatibleWidgetTypes` will list all three.
@@ -98,7 +103,7 @@ freshly-pinned Gauge / Bar / FFT looks empty or maxed out.
 | Pair (file/response key)         | API write-param name           | Drives                                                                              |
 |----------------------------------|--------------------------------|-------------------------------------------------------------------------------------|
 | `plotMin` / `plotMax`            | `pltMin` / `pltMax`            | Plot, MultiPlot Y-axis                                                              |
-| `widgetMin` / `widgetMax`        | `wgtMin` / `wgtMax`            | Gauge dial, Bar fill, Compass dial                                                  |
+| `widgetMin` / `widgetMax`        | `wgtMin` / `wgtMax`            | Gauge dial, Bar fill, Compass dial, Meter arc, Thermometer column                   |
 | `fftMin` / `fftMax`              | `fftMin` / `fftMax`            | Expected raw input range — used to normalize the time-domain signal to [-1, +1] before windowing + FFT (FFT and Waterfall). The dB Y-axis itself is hardcoded. |
 
 **The naming asymmetry is real and silent.** `project.dataset.getByPath`,
@@ -118,6 +123,8 @@ verifying.** `fftMin`/`fftMax` happen to be the same in both directions.
 | `"gauge"`            | `wgtMin` / `wgtMax`                        | Dial is unusable without bounds.                  |
 | `"bar"`              | `wgtMin` / `wgtMax`                        | Fill is unusable without bounds.                  |
 | `"compass"`          | (none — fixed 0–360)                       | `wgtMin`/`wgtMax` ignored.                        |
+| `"meter"`            | `wgtMin` / `wgtMax`                        | Half-arc analog meter; needs bounds to draw scale.|
+| `"thermometer"`      | `wgtMin` / `wgtMax`                        | Vertical fill; needs bounds to draw scale.        |
 | `"fft"`              | `fftMin` / `fftMax`                        | Expected raw signal range for input normalization (NOT a dB axis). Also tune `fftSamples` + `fftSamplingRate`. |
 | `"waterfall"` (Pro)  | `fftMin` / `fftMax`                        | Reuses the dataset's FFT settings, including the input-normalization range. |
 | `"led"`              | (none — uses `ledHigh` threshold)          | `ledHigh` is on/off boundary.                     |
@@ -187,8 +194,8 @@ DIFFERENT enum: `GroupWidget`.
 | `4`             | MultiPlot      | `2`  (DashboardMultiPlot)        |
 | `5`             | NoGroupWidget  | (none — group has no native tile)|
 | `6`             | Plot3D (Pro)   | `6`  (DashboardPlot3D)           |
-| `7`             | ImageView (Pro)| `14` (DashboardImageView)        |
-| `8`             | Painter (Pro)  | `18` (DashboardPainter)          |
+| `7`             | ImageView (Pro)| `16` (DashboardImageView)        |
+| `8`             | Painter (Pro)  | `20` (DashboardPainter)          |
 
 Reading the API:
 - `project.group.add{widgetType: <int>}` — REQUIRED at creation; this
@@ -375,10 +382,12 @@ When the user asks for "an overview" or "executive dashboard":
    - DataGrid (1) for tabular reads — no min/max needed
    - Compass (12) for headings — no min/max (fixed 0–360)
    - Bar (10) for bounded levels — needs `wgtMin`/`wgtMax`
+   - Meter (13) for analog half-arc readouts — needs `wgtMin`/`wgtMax`
+   - Thermometer (14) for temperature-style vertical fills — needs `wgtMin`/`wgtMax`
    - LED (8) for booleans/alarms — uses `ledHigh` threshold
    - Plot (9) for single time-series — needs `pltMin`/`pltMax`
    - FFT (7) for spectra of audio / vibration / signals — needs `fftMin`/`fftMax` (expected raw input range, used for normalization)
-   - Waterfall (17, Pro) for spectrograms — needs `fftMin`/`fftMax` (same input-normalization range)
+   - Waterfall (19, Pro) for spectrograms — needs `fftMin`/`fftMax` (same input-normalization range)
 4. NEVER widgetType=0 (Terminal).
 5. Show the user the curated list in chat BEFORE pushing. **Include the
    min/max ranges you plan to set per dataset** so they can correct the

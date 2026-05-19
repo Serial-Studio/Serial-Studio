@@ -18,7 +18,7 @@ flowchart TD
     Group --> G2["GPS Map · LED Panel<br/>3D Plot · Image View"]
     Group --> G3["Painter (user-scripted)"]
 
-    Dataset --> D1["Plot · FFT Plot · Waterfall<br/>Bar · Gauge · Compass"]
+    Dataset --> D1["Plot · FFT Plot · Waterfall<br/>Bar · Gauge · Compass<br/>Meter · Thermometer"]
 ```
 
 ## Group widgets
@@ -184,6 +184,24 @@ flowchart TD
 - Auto-converts a numeric heading to a cardinal direction (N, NE, E, SE, S, SW, W, NW).
 - Best for: heading and bearing, wind direction, orientation.
 
+### Meter
+
+- Dataset widget key: `"meter"`.
+- Analog half-arc meter with a sweeping needle, tick marks, and value readout.
+- Same min/max model as Bar and Gauge.
+- Best for: VU-style readouts, signal strength, pressure, voltage.
+- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmLow`, `alarmHigh`.
+- Alarms have to be enabled with `alarmEnabled: true`.
+
+### Thermometer
+
+- Dataset widget key: `"thermometer"`.
+- Vertical thermometer-style fill with a scale and value readout.
+- Same min/max model as Bar and Gauge.
+- Best for: temperature, level indicators, tank contents.
+- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmLow`, `alarmHigh`.
+- Alarms have to be enabled with `alarmEnabled: true`.
+
 ## Widget configuration summary
 
 | Widget        | Type    | Key            | Min datasets | Key settings                                 |
@@ -203,6 +221,8 @@ flowchart TD
 | Bar           | Dataset | `bar`          | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
 | Gauge         | Dataset | `gauge`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
 | Compass       | Dataset | `compass`      | —            | value 0-360                                  |
+| Meter         | Dataset | `meter`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
+| Thermometer   | Dataset | `thermometer`  | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`    |
 
 ## Dataset fields reference
 
@@ -213,7 +233,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `index`            | int    | 0       | Frame offset index (column position in CSV data). |
 | `title`            | string | (none)  | Human-readable display name. |
 | `units`            | string | (none)  | Measurement units (for example "m/s", "degC"). |
-| `widget`           | string | `""`    | Dataset widget type: `"bar"`, `"gauge"`, or `"compass"`. |
+| `widget`           | string | `""`    | Dataset widget type: `"bar"`, `"gauge"`, `"compass"`, `"meter"`, or `"thermometer"`. |
 | `plt` (graph)      | bool   | false   | Enable time-series plot. |
 | `fft`              | bool   | false   | Enable FFT spectrum plot. |
 | `waterfall`        | bool   | false   | Enable waterfall (spectrogram) plot. Pro. |
@@ -223,10 +243,10 @@ Every dataset in a project file supports these visualization-related fields:
 | `overviewDisplay`  | bool   | false   | Show in the overview/status bar. |
 | `pltMin`           | double | 0       | Plot Y-axis minimum (0 = auto-scale). |
 | `pltMax`           | double | 0       | Plot Y-axis maximum (0 = auto-scale). |
-| `wgtMin`           | double | 0       | Widget (bar/gauge) minimum. |
-| `wgtMax`           | double | 100     | Widget (bar/gauge) maximum. |
+| `wgtMin`           | double | 0       | Widget (bar/gauge/meter/thermometer) minimum. |
+| `wgtMax`           | double | 100     | Widget (bar/gauge/meter/thermometer) maximum. |
 | `ledHigh`          | double | 80      | LED activation threshold. |
-| `alarmEnabled`     | bool   | false   | Enable alarm thresholds on bar/gauge. |
+| `alarmEnabled`     | bool   | false   | Enable alarm thresholds on bar/gauge/meter/thermometer. |
 | `alarmLow`         | double | 20      | Low alarm threshold. |
 | `alarmHigh`        | double | 80      | High alarm threshold. |
 | `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 16384). |
@@ -245,17 +265,18 @@ Every dataset in a project file supports these visualization-related fields:
 - Right-click the canvas for a context menu: tile windows, set wallpaper.
 - Widget positions and sizes are saved per project via `widgetSettings` and persist between sessions.
 - The Actions panel (if the project defines actions) shows up as a horizontal bar above the widgets.
-- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, ImageView, OutputPanel, NotificationLog, Waterfall.
+- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Thermometer, ImageView, OutputPanel, NotificationLog, Waterfall, Painter.
 
 ## Picking the right widget
 
-| Data type                        | Recommended widget          |
-|----------------------------------|-----------------------------|
-| Temperature, pressure, voltage   | Plot, Gauge, or Bar         |
-| GPS coordinates                  | GPS Map (group)             |
-| Acceleration (X, Y, Z)           | Accelerometer (group)       |
-| Rotation (X, Y, Z)               | Gyroscope (group)           |
-| Heading or bearing               | Compass                     |
+| Data type                        | Recommended widget                  |
+|----------------------------------|-------------------------------------|
+| Temperature                      | Thermometer, Plot, or Gauge         |
+| Pressure, voltage, signal level  | Plot, Gauge, Meter, or Bar          |
+| GPS coordinates                  | GPS Map (group)                     |
+| Acceleration (X, Y, Z)           | Accelerometer (group)               |
+| Rotation (X, Y, Z)               | Gyroscope (group)                   |
+| Heading or bearing               | Compass                             |
 | Audio or vibration frequency     | FFT Plot                    |
 | Time-frequency / spectrogram     | Waterfall (Pro)             |
 | Boolean status flags             | LED Panel (group)           |
