@@ -333,6 +333,7 @@ Item {
               delegate: Shape {
                 id: alarmZoneShape
 
+                smooth: true
                 opacity: 0.60
                 required property var modelData
                 antialiasing: true
@@ -505,6 +506,7 @@ Item {
           Shape {
             id: needleShape
 
+            smooth: true
             antialiasing: true
             anchors.fill: parent
             rotation: control.angle
@@ -523,13 +525,13 @@ Item {
               joinStyle: ShapePath.MiterJoin
               strokeColor: Qt.darker(root.fillColor, 1.35)
               fillGradient: LinearGradient {
+                x1: needleShape.cx
+                x2: needleShape.cx
                 y1: needleShape.cy
-                y2: needleShape.cy
-                x1: needleShape.cx - needleShape.baseW / 2
-                x2: needleShape.cx + needleShape.baseW / 2
+                y2: needleShape.cy - needleShape.tipLen
                 GradientStop { position: 0.0; color: Qt.darker(root.fillColor, 1.10) }
                 GradientStop { position: 0.5; color: root.fillColor }
-                GradientStop { position: 1.0; color: Qt.lighter(root.fillColor, 1.06) }
+                GradientStop { position: 1.0; color: Qt.lighter(root.fillColor, 1.18) }
               }
 
               startY: needleShape.cy
@@ -564,9 +566,11 @@ Item {
             Rectangle {
               height: width
               radius: width / 2
-              anchors.centerIn: parent
-              width: parent.width * 0.40
+              antialiasing: true
               color: Qt.rgba(0, 0, 0, 0.45)
+              x: (parent.width  - width)  / 2
+              y: (parent.height - height) / 2
+              width: Math.round(parent.width * 0.40)
             }
           }
         }

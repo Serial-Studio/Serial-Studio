@@ -259,6 +259,7 @@ Item {
           Shape {
             id: needleShape
 
+            smooth: true
             antialiasing: true
             width: gaugeFace.width
             anchors.centerIn: parent
@@ -345,9 +346,11 @@ Item {
             Rectangle {
               height: width
               radius: width / 2
-              anchors.centerIn: parent
-              width: parent.width * 0.40
+              antialiasing: true
               color: Qt.rgba(0, 0, 0, 0.45)
+              x: (parent.width  - width)  / 2
+              y: (parent.height - height) / 2
+              width: Math.round(parent.width * 0.40)
             }
           }
 

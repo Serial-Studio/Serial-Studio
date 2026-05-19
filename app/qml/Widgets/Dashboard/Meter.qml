@@ -155,11 +155,12 @@ Item {
       Item {
         id: meterArea
 
-        anchors.margins: 8
+        anchors.margins: 14
         anchors.fill: parent
 
-        readonly property real topMargin: 2
-        readonly property real bottomMargin: 4
+        readonly property real topMargin: 6
+        readonly property real bottomMargin: 8
+        readonly property real sideMargin: 6
         readonly property bool showLabels: width >= 130 && height >= 90
         readonly property bool showFaceLabels: width >= 140 && height >= 150
         readonly property real labelBaseRowHeight: meterArea.showFaceLabels
@@ -167,11 +168,11 @@ Item {
         readonly property real chromeW: Math.max(4, Math.min(14, Math.min(width, height) * 0.045))
         readonly property real faceR: meterArea.showFaceLabels
                                       ? Math.max(16, Math.min(
-                                                   width / 2 - meterArea.chromeW - 2,
+                                                   width / 2 - meterArea.chromeW - meterArea.sideMargin,
                                                    (height - meterArea.topMargin - meterArea.bottomMargin
                                                     - meterArea.labelBaseRowHeight - meterArea.chromeW - 2) / 1.13))
                                       : Math.max(16, Math.min(
-                                                   width / 2 - meterArea.chromeW - 2,
+                                                   width / 2 - meterArea.chromeW - meterArea.sideMargin,
                                                    (height - meterArea.topMargin - meterArea.bottomMargin) / 1.16))
         readonly property real tailExtension: Math.max(meterArea.chromeW, meterArea.faceR * 0.13 + 2)
         readonly property real labelBaseHeight: meterArea.showFaceLabels
@@ -210,6 +211,7 @@ Item {
         Shape {
           id: chromeShape
 
+          smooth: true
           visible: false
           layer.samples: 8
           antialiasing: true
@@ -268,6 +270,7 @@ Item {
         Shape {
           id: faceShape
 
+          smooth: true
           layer.samples: 8
           antialiasing: true
           layer.enabled: true
@@ -400,6 +403,7 @@ Item {
           delegate: Shape {
             id: alarmZoneShape
 
+            smooth: true
             opacity: 0.60
             required property var modelData
             antialiasing: true
@@ -587,6 +591,7 @@ Item {
           Shape {
             id: needleShape
 
+            smooth: true
             antialiasing: true
             anchors.fill: parent
             preferredRendererType: Shape.CurveRenderer
@@ -603,13 +608,13 @@ Item {
               joinStyle: ShapePath.MiterJoin
               strokeColor: Qt.darker(root.fillColor, 1.35)
               fillGradient: LinearGradient {
+                x1: needleShape.cx
+                x2: needleShape.cx
                 y1: needleShape.cy
-                y2: needleShape.cy
-                x1: needleShape.cx - needleShape.baseW / 2
-                x2: needleShape.cx + needleShape.baseW / 2
+                y2: needleShape.cy - needleShape.tipLen
                 GradientStop { position: 0.0; color: Qt.darker(root.fillColor, 1.10) }
                 GradientStop { position: 0.5; color: root.fillColor }
-                GradientStop { position: 1.0; color: Qt.lighter(root.fillColor, 1.06) }
+                GradientStop { position: 1.0; color: Qt.lighter(root.fillColor, 1.18) }
               }
 
               startY: needleShape.cy
@@ -646,9 +651,11 @@ Item {
           Rectangle {
             height: width
             radius: width / 2
-            anchors.centerIn: parent
-            width: parent.width * 0.40
+            antialiasing: true
             color: Qt.rgba(0, 0, 0, 0.45)
+            x: (parent.width  - width)  / 2
+            y: (parent.height - height) / 2
+            width: Math.round(parent.width * 0.40)
           }
         }
       }

@@ -295,6 +295,7 @@ Item {
             Shape {
               id: hourShape
 
+              smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.hourAngle
@@ -317,9 +318,9 @@ Item {
                   x2: needleLayer.cx
                   y1: needleLayer.cy
                   y2: needleLayer.cy - hourShape.tipLen
-                  GradientStop { position: 0.0; color: Qt.darker(needleLayer.handBase, 1.10) }
+                  GradientStop { position: 0.0; color: Qt.lighter(needleLayer.handBase, 1.15) }
                   GradientStop { position: 0.5; color: needleLayer.handBase }
-                  GradientStop { position: 1.0; color: Qt.lighter(needleLayer.handBase, 1.06) }
+                  GradientStop { position: 1.0; color: Qt.darker(needleLayer.handBase, 1.18) }
                 }
 
                 startY: needleLayer.cy
@@ -353,6 +354,7 @@ Item {
             Shape {
               id: minuteShape
 
+              smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.minuteAngle
@@ -375,9 +377,9 @@ Item {
                   x2: needleLayer.cx
                   y1: needleLayer.cy
                   y2: needleLayer.cy - minuteShape.tipLen
-                  GradientStop { position: 0.0; color: Qt.darker(needleLayer.handBase, 1.10) }
+                  GradientStop { position: 0.0; color: Qt.lighter(needleLayer.handBase, 1.15) }
                   GradientStop { position: 0.5; color: needleLayer.handBase }
-                  GradientStop { position: 1.0; color: Qt.lighter(needleLayer.handBase, 1.06) }
+                  GradientStop { position: 1.0; color: Qt.darker(needleLayer.handBase, 1.18) }
                 }
 
                 startY: needleLayer.cy
@@ -412,6 +414,7 @@ Item {
             Shape {
               id: secondShape
 
+              smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.secondAngle
@@ -426,9 +429,17 @@ Item {
 
               ShapePath {
                 strokeWidth: 0.4
-                fillColor: secondShape.tint
                 joinStyle: ShapePath.MiterJoin
-                strokeColor: Qt.darker(secondShape.tint, 1.25)
+                strokeColor: Qt.darker(secondShape.tint, 1.35)
+                fillGradient: LinearGradient {
+                  x1: needleLayer.cx
+                  x2: needleLayer.cx
+                  y1: needleLayer.cy
+                  y2: needleLayer.cy - secondShape.tipLen
+                  GradientStop { position: 0.0; color: Qt.darker(secondShape.tint, 1.10) }
+                  GradientStop { position: 0.5; color: secondShape.tint }
+                  GradientStop { position: 1.0; color: Qt.lighter(secondShape.tint, 1.18) }
+                }
 
                 startY: needleLayer.cy
                 startX: needleLayer.cx - secondShape.baseW / 2
@@ -463,9 +474,11 @@ Item {
               Rectangle {
                 height: width
                 radius: width / 2
-                anchors.centerIn: parent
-                width: parent.width * 0.40
+                antialiasing: true
                 color: Qt.rgba(0, 0, 0, 0.45)
+                x: (parent.width  - width)  / 2
+                y: (parent.height - height) / 2
+                width: Math.round(parent.width * 0.40)
               }
             }
           }
