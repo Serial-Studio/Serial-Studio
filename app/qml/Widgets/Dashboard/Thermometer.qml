@@ -22,7 +22,6 @@
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Layouts
-import QtQuick.Controls
 
 import SerialStudio
 
@@ -324,59 +323,6 @@ Item {
         }
       }
 
-      //
-      // Cursor tooltip over the tube
-      //
-      MouseArea {
-        id: cursorTracker
-
-        x: tube.x
-        y: tube.y
-        width: tube.width
-        hoverEnabled: true
-        height: tube.height
-        acceptedButtons: Qt.NoButton
-        propagateComposedEvents: true
-
-        property real cursorValue: model.minValue
-
-        onPositionChanged: (mouse) => {
-          const f = 1.0 - (mouse.y / height)
-          cursorTracker.cursorValue = model.minValue + f * (model.maxValue - model.minValue)
-        }
-
-        Rectangle {
-          radius: 1
-          antialiasing: true
-          width: cursorTracker.width
-          height: 1.4
-          y: cursorTracker.mouseY - height / 2
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-        }
-
-        Rectangle {
-          radius: 3
-          border.width: 1
-          width: tooltipLabel.width + 8
-          height: tooltipLabel.height + 4
-          visible: cursorTracker.containsMouse
-          color: Cpp_ThemeManager.colors["tooltip_base"]
-          border.color: Cpp_ThemeManager.colors["tooltip_text"]
-          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
-          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
-
-          Label {
-            id: tooltipLabel
-
-            elide: Text.ElideRight
-            anchors.centerIn: parent
-            color: Cpp_ThemeManager.colors["tooltip_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
-            text: formatValue(cursorTracker.cursorValue) + (model.units.length > 0 ? " " + model.units : "")
-          }
-        }
-      }
     }
 
     VisualRange {

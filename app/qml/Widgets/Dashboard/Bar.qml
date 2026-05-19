@@ -22,7 +22,6 @@
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Layouts
-import QtQuick.Controls
 
 import SerialStudio
 
@@ -324,110 +323,6 @@ Item {
         }
       }
 
-      //
-      // Mouse area for cursor tooltip
-      //
-      MouseArea {
-        id: cursorTracker
-
-        hoverEnabled: true
-        anchors.fill: progressBar
-        acceptedButtons: Qt.NoButton
-        propagateComposedEvents: true
-
-        property real cursorValue: model.minValue
-
-        onPositionChanged: (mouse) => {
-          if (isHorizontal) {
-            var fraction = mouse.x / width
-            cursorValue = model.minValue + fraction * (model.maxValue - model.minValue)
-          } else {
-            var fraction = 1.0 - (mouse.y / height)
-            cursorValue = model.minValue + fraction * (model.maxValue - model.minValue)
-          }
-        }
-
-        //
-        // Measurement line (full height when horizontal, full width when vertical)
-        //
-        Rectangle {
-          radius: 1
-          antialiasing: true
-          width: isHorizontal ? 2 : cursorTracker.width
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
-          x: isHorizontal ? cursorTracker.mouseX - 1 : 0
-          y: isHorizontal ? 0 : cursorTracker.mouseY - 1
-          height: isHorizontal ? cursorTracker.height : 2
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-        }
-
-        //
-        // Cursor crosshair (vertical arms)
-        //
-        Rectangle {
-          width: 1
-          height: 12
-          x: cursorTracker.mouseX - width / 2
-          y: cursorTracker.mouseY - height - 4
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-        }
-
-        Rectangle {
-          width: 1
-          height: 12
-          y: cursorTracker.mouseY + 4
-          x: cursorTracker.mouseX - width / 2
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-        }
-
-        //
-        // Cursor crosshair (horizontal arms)
-        //
-        Rectangle {
-          width: 12
-          height: 1
-          x: cursorTracker.mouseX - width - 4
-          y: cursorTracker.mouseY - height / 2
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-        }
-
-        Rectangle {
-          width: 12
-          height: 1
-          x: cursorTracker.mouseX + 4
-          y: cursorTracker.mouseY - height / 2
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-        }
-
-        //
-        // Cursor value label (tooltip style)
-        //
-        Rectangle {
-          radius: 3
-          border.width: 1
-          width: tooltipLabel.width + 8
-          height: tooltipLabel.height + 4
-          visible: cursorTracker.containsMouse
-          color: Cpp_ThemeManager.colors["tooltip_base"]
-          border.color: Cpp_ThemeManager.colors["tooltip_text"]
-          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
-          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
-
-          Label {
-            id: tooltipLabel
-
-            elide: Text.ElideRight
-            anchors.centerIn: parent
-            color: Cpp_ThemeManager.colors["tooltip_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
-            text: formatValue(cursorTracker.cursorValue) + " " + model.units
-          }
-        }
-      }
     }
 
     //

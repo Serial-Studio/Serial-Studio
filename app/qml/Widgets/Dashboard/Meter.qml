@@ -23,7 +23,6 @@ import QtQuick
 import QtQuick.Shapes
 import QtQuick.Effects
 import QtQuick.Layouts
-import QtQuick.Controls
 
 import SerialStudio
 
@@ -505,70 +504,6 @@ Shape {
         }
       }
 
-      MouseArea {
-        id: cursorTracker
-
-        hoverEnabled: true
-        height: meterArea.faceR
-        width: meterArea.faceR * 2
-        acceptedButtons: Qt.NoButton
-        propagateComposedEvents: true
-        x: meterArea.faceCx - meterArea.faceR
-        y: meterArea.faceCy - meterArea.faceR
-
-        property bool isValidAngle: false
-        property real cursorValue: model.minValue
-        property real cursorAngleDeg: startAngleDeg
-
-        onPositionChanged: (mouse) => {
-          const dx = mouse.x - width / 2
-          const dy = mouse.y - height
-          let logicalDeg = Math.atan2(dx, -dy) * 180 / Math.PI
-          if (logicalDeg >= startAngleDeg && logicalDeg <= endAngleDeg) {
-            cursorTracker.cursorAngleDeg = logicalDeg
-            const frac = (logicalDeg - startAngleDeg) / angleRangeDeg
-            cursorTracker.cursorValue = model.minValue + frac * (model.maxValue - model.minValue)
-            cursorTracker.isValidAngle = true
-          } else {
-            cursorTracker.isValidAngle = false
-          }
-        }
-
-        Rectangle {
-          width: 2
-          radius: 1
-          antialiasing: true
-          height: meterArea.faceR - 4
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse && cursorTracker.isValidAngle ? 0.6 : 0
-          x: cursorTracker.width / 2 - width / 2
-          y: cursorTracker.height - height
-          transformOrigin: Item.Bottom
-          rotation: cursorTracker.cursorAngleDeg
-        }
-
-        Rectangle {
-          radius: 3
-          border.width: 1
-          width: tooltipLabel.width + 8
-          height: tooltipLabel.height + 4
-          visible: cursorTracker.containsMouse && cursorTracker.isValidAngle
-          color: Cpp_ThemeManager.colors["tooltip_base"]
-          border.color: Cpp_ThemeManager.colors["tooltip_text"]
-          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
-          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
-
-          Label {
-            id: tooltipLabel
-
-            elide: Text.ElideRight
-            anchors.centerIn: parent
-            color: Cpp_ThemeManager.colors["tooltip_text"]
-            text: formatValue(cursorTracker.cursorValue) + (model.units.length > 0 ? " " + model.units : "")
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
-          }
-        }
-      }
     }
 
     VisualRange {
