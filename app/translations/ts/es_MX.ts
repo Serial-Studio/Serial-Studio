@@ -757,24 +757,24 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Dispositivo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="148"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="142"/>
         <source>Sample Rate</source>
         <translation>Frecuencia de Muestreo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="173"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="230"/>
         <source>Sample Format</source>
         <translation>Formato de Muestra</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="198"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="285"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="180"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="249"/>
         <source>Channels</source>
         <translation>Canales</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="211"/>
         <source>Output Device</source>
         <translation>Dispositivo de Salida</translation>
     </message>
@@ -2263,487 +2263,487 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2154"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2160"/>
         <source>Project Information</source>
         <translation>Información del Proyecto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2164"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2170"/>
         <source>Project Title</source>
         <translation>Título del Proyecto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2165"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2171"/>
         <source>Untitled Project</source>
         <translation>Proyecto sin Título</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2166"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2172"/>
         <source>Name or description of the project</source>
         <translation>Nombre o descripción del proyecto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2391"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2397"/>
         <source>Frame Detection</source>
         <translation>Detección de Tramas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2407"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2413"/>
         <source>Frame Detection Method</source>
         <translation>Método de Detección de Tramas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2408"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2414"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Seleccionar cómo se identifican las tramas de datos entrantes</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2418"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2424"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Delimitadores Hexadecimales</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2419"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2425"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>Ingresar secuencias de inicio/fin de trama como valores hexadecimales</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2435"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2441"/>
         <source>Frame Start Delimiter</source>
         <translation>Delimitador de Inicio de Trama</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2436"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2442"/>
         <source>e.g. /*</source>
         <translation>p. ej. /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2437"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2443"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>Secuencia que marca el inicio de una trama de datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2449"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2455"/>
         <source>Frame End Delimiter</source>
         <translation>Delimitador de Fin de Trama</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2456"/>
         <source>e.g. */</source>
         <translation>p. ej. */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2451"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2457"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>Secuencia que marca el final de una trama de datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2463"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2469"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Procesamiento y Validación de Carga Útil</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2474"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2480"/>
         <source>Data Conversion Method</source>
         <translation>Método de Conversión de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2475"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2481"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>Seleccionar cómo se decodifican los datos binarios entrantes antes del análisis</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2491"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2497"/>
         <source>Checksum Algorithm</source>
         <translation>Algoritmo de Suma de Verificación</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2492"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>Seleccionar el algoritmo de suma de verificación utilizado para validar tramas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2184"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2190"/>
         <source>Group Information</source>
         <translation>Información del Grupo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2194"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2200"/>
         <source>Group Title</source>
         <translation>Título del Grupo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2195"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2201"/>
         <source>Untitled Group</source>
         <translation>Grupo sin Título</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2196"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2202"/>
         <source>Title or description of this dataset group</source>
         <translation>Título o descripción de este grupo de conjuntos de datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2329"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2335"/>
         <source>Composite Widget</source>
         <translation>Widget Compuesto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2330"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2336"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Seleccionar cómo debe visualizarse este grupo de conjuntos de datos (opcional)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2246"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2252"/>
         <source>Image Configuration</source>
         <translation>Configuración de Imagen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3091"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3097"/>
         <source>Virtual Dataset</source>
         <translation>Conjunto de Datos Virtual</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3092"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3098"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>Los conjuntos de datos virtuales calculan su valor a partir de transformaciones y tablas de datos, no requieren un índice de trama</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3544"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
         <source>Auto-detect</source>
         <translation>Detección Automática</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3544"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
         <source>Manual Delimiters</source>
         <translation>Delimitadores Manuales</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2259"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2265"/>
         <source>Detection Mode</source>
         <translation>Modo de Detección</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1287"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1290"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1293"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1296"/>
         <source>Frame Parser</source>
         <translation>Analizador de Tramas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1430"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1431"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1475"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1436"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1437"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1481"/>
         <source>Groups</source>
         <translation>Grupos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1505"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1518"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1519"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1511"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1524"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1525"/>
         <source>Shared Memory</source>
         <translation>Memoria Compartida</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1505"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1525"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1526"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4822"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1511"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1531"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1532"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4926"/>
         <source>Dataset Values</source>
         <translation>Valores de Conjunto de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1569"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1582"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1583"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1575"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1588"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1589"/>
         <source>Workspaces</source>
         <translation>Espacios de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1621"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1624"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1625"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1627"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1630"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1631"/>
         <source>MQTT Publisher</source>
         <translation>Publicador MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1674"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1680"/>
         <source>Publishing</source>
         <translation>Publicación</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1685"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1691"/>
         <source>Enable Publishing</source>
         <translation>Habilitar Publicación</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1686"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1692"/>
         <source>Broadcast frames, raw bytes and notifications to the broker</source>
         <translation>Transmitir tramas, bytes sin procesar y notificaciones al broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1697"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1703"/>
         <source>Payload</source>
         <translation>Carga Útil</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1698"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1704"/>
         <source>Selects what gets published: parsed dashboard data or raw RX bytes</source>
         <translation>Selecciona qué se publica: datos del tablero procesados o bytes RX sin procesar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1708"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1714"/>
         <source>Publish Rate (Hz)</source>
         <translation>Tasa de Publicación (Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1709"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1715"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
         <translation>Cuántas veces por segundo se publica (1-30 Hz). Tasas más altas aumentan la carga del broker; los datos del tablero tienen límite de tasa para que un broker lento nunca bloquee el análisis de tramas.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1721"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1727"/>
         <source>Topic Base</source>
         <translation>Base del Tema</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1722"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1728"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/device</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1723"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1729"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>Tema base utilizado para la publicación de tramas y bytes sin procesar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1734"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1740"/>
         <source>Script Topic</source>
         <translation>Tema de Script</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1735"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1759"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1741"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1765"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>Por defecto usa el Tema Base cuando está vacío</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1736"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1742"/>
         <source>Topic the user script publishes to</source>
         <translation>Tema al que publica el script del usuario</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1746"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1752"/>
         <source>Publish Notifications</source>
         <translation>Publicar Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1747"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1753"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>Reflejar notificaciones del tablero a un tema dedicado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1758"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1764"/>
         <source>Notification Topic</source>
         <translation>Tema de Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1760"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1766"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>Tema donde se reflejan las notificaciones del tablero</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1773"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1779"/>
         <source>Broker</source>
         <translation>Broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1783"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1789"/>
         <source>Hostname</source>
         <translation>Nombre de Host</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1784"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1790"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1785"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1791"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>Nombre de host o dirección IP del broker MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1794"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1800"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1795"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1801"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>Puerto TCP expuesto por el broker (1883 plano, 8883 TLS)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1805"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1811"/>
         <source>Custom Client ID</source>
         <translation>ID de Cliente Personalizado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1807"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1813"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>Desactivado: se genera un ID aleatorio nuevo en cada carga del proyecto. Activado: usar el ID de abajo.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1818"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1824"/>
         <source>Client ID</source>
         <translation>ID de Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1819"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1825"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>Identificador enviado al broker en CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1832"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1838"/>
         <source>Protocol Version</source>
         <translation>Versión de Protocolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1833"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1839"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>Revisión del protocolo MQTT utilizada en CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1842"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1848"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1843"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1849"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>Segundos entre paquetes PINGREQ cuando está inactivo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1852"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1858"/>
         <source>Clean Session</source>
         <translation>Sesión Limpia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1853"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1859"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>Descartar cualquier estado de sesión persistente en CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1868"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1874"/>
         <source>Username</source>
         <translation>Usuario</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1869"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1875"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>Nombre de usuario para autenticación del broker (dejar vacío para anónimo)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1879"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1885"/>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1880"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1886"/>
         <source>Password for broker authentication</source>
         <translation>Contraseña para autenticación del broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1891"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1897"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1901"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1907"/>
         <source>Use SSL/TLS</source>
         <translation>Usar SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1902"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1908"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Tunelizar la conexión del broker sobre TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1915"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1921"/>
         <source>Protocol</source>
         <translation>Protocolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1916"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1922"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Familia de protocolo TLS negociado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1926"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1932"/>
         <source>Peer Verify</source>
         <translation>Verificar Par</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1927"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1933"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Qué tan estrictamente se valida la cadena de certificados del broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1937"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1943"/>
         <source>Verify Depth</source>
         <translation>Profundidad de Verificación</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1938"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1944"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Longitud máxima de cadena de certificados aceptada (0 = ilimitado)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2211"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2825"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2217"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2831"/>
         <source>Device %1</source>
         <translation>Dispositivo %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2229"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2350"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2235"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2356"/>
         <source>Input Device</source>
         <translation>Dispositivo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2230"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2236"/>
         <source>Select which connected device provides data for this group</source>
         <translation>Seleccionar qué dispositivo conectado proporciona datos para este grupo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2261"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2267"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>La detección automática lee bytes mágicos JPEG/PNG; Manual usa secuencias explícitas de inicio/fin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2271"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2277"/>
         <source>Start Sequence (Hex)</source>
         <translation>Secuencia de Inicio (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2272"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2278"/>
         <source>e.g. FF D8 FF</source>
         <translation>p. ej. FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2273"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2279"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>Bytes hexadecimales que marcan el inicio de una trama de imagen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2282"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2288"/>
         <source>End Sequence (Hex)</source>
         <translation>Secuencia Final (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2283"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2289"/>
         <source>e.g. FF D9</source>
         <translation>p. ej. FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2284"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2290"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>Bytes hexadecimales que marcan el final de una trama de imagen</translation>
     </message>
@@ -2752,387 +2752,387 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Identidad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2360"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2366"/>
         <source>Device Name</source>
         <translation>Nombre del Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2361"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2367"/>
         <source>Device 1</source>
         <translation>Dispositivo 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2362"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2368"/>
         <source>Human-readable name for this input device</source>
         <translation>Nombre legible para este dispositivo de entrada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2371"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
         <source>Bus Type</source>
         <translation>Tipo de Bus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2372"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
         <source>Select the hardware interface for this input device</source>
         <translation>Seleccionar la interfaz de hardware para este dispositivo de entrada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2374"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Serial Port</source>
         <translation>Puerto Serial</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2374"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Network Socket</source>
         <translation>Socket de Red</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2374"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2376"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
         <source>Audio Input</source>
         <translation>Entrada de Audio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2376"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2376"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
         <source>CAN Bus</source>
         <translation>Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2376"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
         <source>Raw USB</source>
         <translation>USB Directo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
         <source>HID Device</source>
         <translation>Dispositivo HID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
         <source>Process</source>
         <translation>Proceso</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
         <source>MQTT Subscriber</source>
         <translation>Suscriptor MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2544"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2550"/>
         <source>Connection Settings</source>
         <translation>Configuración de Conexión</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2792"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3067"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4553"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2798"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3073"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4657"/>
         <source>General Information</source>
         <translation>Información General</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2801"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2807"/>
         <source>Action Title</source>
         <translation>Título de Acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2803"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2809"/>
         <source>Untitled Action</source>
         <translation>Acción sin Título</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2804"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2810"/>
         <source>Name or description of this action</source>
         <translation>Nombre o descripción de esta acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2813"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2819"/>
         <source>Action Icon</source>
         <translation>Icono de Acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2814"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2820"/>
         <source>Default Icon</source>
         <translation>Icono Predeterminado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2815"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2821"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>Icono mostrado para esta acción en el tablero</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2843"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2849"/>
         <source>Target Device</source>
         <translation>Dispositivo Destino</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2844"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2850"/>
         <source>Select which connected device this action sends data to</source>
         <translation>Seleccionar a qué dispositivo conectado envía datos esta acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2856"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2862"/>
         <source>Data Payload</source>
         <translation>Carga de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2867"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2873"/>
         <source>Send as Binary</source>
         <translation>Enviar como Binario</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2868"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2874"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>Enviar datos binarios sin procesar cuando se active esta acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2879"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2891"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2885"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2897"/>
         <source>Command</source>
         <translation>Comando</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2880"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2886"/>
         <source>Transmit Data (Hex)</source>
         <translation>Transmitir Datos (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2881"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2887"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Carga hexadecimal a enviar cuando se active la acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2892"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2898"/>
         <source>Transmit Data</source>
         <translation>Transmitir Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2893"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2899"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Carga de texto a enviar cuando se active la acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2904"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4612"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2910"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4716"/>
         <source>Text Encoding</source>
         <translation>Codificación de Texto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2905"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2911"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>Codificación de caracteres utilizada para serializar la carga de texto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2929"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2935"/>
         <source>End-of-Line Sequence</source>
         <translation>Secuencia de Fin de Línea</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2930"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2936"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>Caracteres EOL a agregar al mensaje (p. ej. </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2942"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2948"/>
         <source>Execution Behavior</source>
         <translation>Comportamiento de Ejecución</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2953"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2959"/>
         <source>Auto-Execute on Connect</source>
         <translation>Ejecutar Automáticamente al Conectar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2954"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2960"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>Activar automáticamente esta acción cuando el dispositivo se conecte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2960"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2966"/>
         <source>Timer Behavior</source>
         <translation>Comportamiento del Temporizador</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2969"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2975"/>
         <source>Timer Mode</source>
         <translation>Modo de Temporizador</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2972"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2978"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>Elegir cuándo y cómo esta acción debe repetirse automáticamente</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2979"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2985"/>
         <source>Interval (ms)</source>
         <translation>Intervalo (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2983"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2989"/>
         <source>Timer Interval (ms)</source>
         <translation>Intervalo del Temporizador (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2984"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2990"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>Milisegundos entre cada activación repetida de esta acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2991"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2995"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2997"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3001"/>
         <source>Repeat Count</source>
         <translation>Conteo de Repeticiones</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2996"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3002"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>Número de veces que se envía el comando en cada activación</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3077"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3083"/>
         <source>Untitled Dataset</source>
         <translation>Conjunto de Datos sin Título</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3078"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3084"/>
         <source>Dataset Title</source>
         <translation>Título del Conjunto de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3079"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3085"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Nombre del conjunto de datos, utilizado para etiquetado e identificación</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3109"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3115"/>
         <source>Hide on Dashboard</source>
         <translation>Ocultar en el Tablero</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3110"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3116"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Suprimir el mosaico independiente de este conjunto de datos en el tablero; el widget de pintor aún puede leer sus valores</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3234"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3240"/>
         <source>Frequency Analysis</source>
         <translation>Análisis de Frecuencia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3272"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3278"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Elige Tiempo (predeterminado) o cualquier conjunto de datos cuyo valor controle el eje Y -- produce un diagrama de Campbell cuando se vincula a, por ejemplo, RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3560"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
         <source>Painter Widget</source>
         <translation>Widget de Pintor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4823"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4927"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
         <translation>Valores sin procesar y transformados para cada conjunto de datos (solo lectura)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4833"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4937"/>
         <source>Shared table defined in this project</source>
         <translation>Tabla compartida definida en este proyecto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5169"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5273"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>¿Eliminar 1 referencia de widget cuyo grupo o conjunto de datos de destino ya no existe?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5170"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5274"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>¿Eliminar %1 referencias de widgets cuyos grupos o conjuntos de datos de destino ya no existen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5175"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5279"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>Esto solo afectará la ubicación de los mosaicos del espacio de trabajo; no se eliminan grupos, conjuntos de datos ni datos.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5178"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5282"/>
         <source>Clean Up Workspaces</source>
         <translation>Limpiar Espacios de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3123"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3129"/>
         <source>Frame Index</source>
         <translation>Índice de Trama</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3124"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3130"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Posición de trama utilizada para alinear conjuntos de datos en el tiempo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3133"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3139"/>
         <source>Measurement Unit</source>
         <translation>Unidad de Medida</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3134"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3140"/>
         <source>Volts, Amps, etc.</source>
         <translation>Voltios, Amperios, etc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3135"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3141"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Unidad de medida, como voltios o amperios (opcional)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3148"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3154"/>
         <source>Plot Settings</source>
         <translation>Configuración de Gráfica</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3171"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3177"/>
         <source>Enable Plot Widget</source>
         <translation>Habilitar Widget de Gráfica</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3173"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3179"/>
         <source>Plot data in real-time</source>
         <translation>Graficar datos en tiempo real</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3198"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3204"/>
         <source>X-Axis Source</source>
         <translation>Fuente del Eje X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3199"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3205"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>Elegir qué conjunto de datos usar para el eje X en las gráficas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3210"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3216"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>Valor Mínimo de Gráfica (opcional)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3211"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3217"/>
         <source>Lower bound for plot display range</source>
         <translation>Límite inferior para el rango de visualización de la gráfica</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3221"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3227"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>Valor Máximo de Gráfica (opcional)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3222"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3228"/>
         <source>Upper bound for plot display range</source>
         <translation>Límite superior para el rango de visualización de la gráfica</translation>
     </message>
@@ -3141,27 +3141,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Configuración de FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3245"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3251"/>
         <source>Enable FFT Analysis</source>
         <translation>Habilitar Análisis FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3246"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3252"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Realizar análisis en el dominio de frecuencia del conjunto de datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3256"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3262"/>
         <source>Enable Waterfall Plot</source>
         <translation>Habilitar Gráfica de Cascada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3257"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3263"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Muestra un espectrograma deslizante del contenido de frecuencia a lo largo del tiempo (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3271"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3277"/>
         <source>Waterfall Y Axis</source>
         <translation>Eje y de Cascada</translation>
     </message>
@@ -3170,369 +3170,440 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Elige Tiempo (predeterminado) o cualquier conjunto de datos cuyo valor controle el eje Y — produce un diagrama de Campbell cuando se vincula a, por ejemplo, RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3300"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3306"/>
         <source>FFT Window Size</source>
         <translation>Tamaño de Ventana FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3301"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3307"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Número de muestras utilizadas para cada ventana de cálculo FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3312"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3318"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Frecuencia de Muestreo FFT (Hz, requerida)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3313"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3319"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Frecuencia de muestreo utilizada para FFT (en Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3323"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3329"/>
         <source>Minimum Value (recommended)</source>
         <translation>Valor Mínimo (recomendado)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3324"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3330"/>
         <source>Lower bound for data normalization</source>
         <translation>Límite inferior para normalización de datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3334"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3340"/>
         <source>Maximum Value (recommended)</source>
         <translation>Valor Máximo (recomendado)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3335"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3341"/>
         <source>Upper bound for data normalization</source>
         <translation>Límite superior para normalización de datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3359"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3364"/>
         <source>Widget Settings</source>
         <translation>Configuración de Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3387"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3383"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3388"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Selecciona el widget visual utilizado para mostrar este conjunto de datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3396"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3414"/>
         <source>Minimum Display Value (required)</source>
         <translation>Valor Mínimo de Visualización (requerido)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3397"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3415"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>Límite inferior del rango de visualización del indicador o barra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3407"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3425"/>
         <source>Maximum Display Value (required)</source>
         <translation>Valor Máximo de Visualización (requerido)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3408"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3426"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>Límite superior del rango de visualización del indicador o barra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3424"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3440"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3647"/>
+        <source>Auto</source>
+        <translation>Automático</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3441"/>
+        <source>Tick Count</source>
+        <translation>Conteo de Marcas</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3445"/>
+        <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
+        <translation>Conteo de marcas principales en la escala del dial (0 = ajuste automático al tamaño del widget)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3464"/>
+        <source>Label Format</source>
+        <translation>Formato de Etiqueta</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3465"/>
+        <source>Decimal places or notation used on tick labels and the value display</source>
+        <translation>Lugares decimales o notación usada en las etiquetas de marcas y la visualización del valor</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3476"/>
+        <source>Show Value Indicator</source>
+        <translation>Mostrar Indicador de Valor</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3478"/>
+        <source>Toggle the boxed numeric readout that sits below or beside the widget</source>
+        <translation>Alternar la lectura numérica enmarcada que aparece debajo o al lado del widget</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3497"/>
         <source>Alarm Settings</source>
         <translation>Configuración de Alarmas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3435"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3508"/>
         <source>Enable Alarms</source>
         <translation>Habilitar Alarmas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3436"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3509"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
         <translation>Activa una alarma visual cuando el valor excede los umbrales de alarma</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3447"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3520"/>
         <source>Low Threshold</source>
         <translation>Umbral Bajo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3448"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3521"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>Activa una alarma visual cuando el valor cae por debajo de este umbral</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3459"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3532"/>
         <source>High Threshold</source>
         <translation>Umbral Alto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3460"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3533"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>Activa una alarma visual cuando el valor excede este umbral</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3473"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3546"/>
         <source>LED Display Settings</source>
         <translation>Configuración de Pantalla LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3484"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3557"/>
         <source>Show in LED Panel</source>
         <translation>Mostrar en Panel LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3485"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3558"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Habilita el monitoreo visual de estado mediante una pantalla LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3496"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3569"/>
         <source>LED On Threshold (required)</source>
         <translation>Umbral de Encendido del LED (requerido)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3497"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3570"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>El LED se enciende cuando el valor alcanza o supera este umbral</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3518"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Off</source>
         <translation>Apagado</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3518"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Auto Start</source>
         <translation>Inicio Automático</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3518"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Start on Trigger</source>
         <translation>Iniciar con Disparador</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3518"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Toggle on Trigger</source>
         <translation>Alternar con Disparador</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3519"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
         <source>Repeat N Times</source>
         <translation>Repetir N Veces</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3523"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
         <source>Plain Text (UTF8)</source>
         <translation>Texto Plano (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3523"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3523"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3524"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3597"/>
         <source>Binary (Direct)</source>
         <translation>Binario (Directo)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3531"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3604"/>
         <source>No Checksum</source>
         <translation>Sin Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3536"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
         <source>End Delimiter Only</source>
         <translation>Solo Delimitador Final</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3536"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
         <source>Start Delimiter Only</source>
         <translation>Solo Delimitador Inicial</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3537"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
         <source>Start + End Delimiter</source>
         <translation>Delimitador Inicial + Final</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3537"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
         <source>No Delimiters</source>
         <translation>Sin Delimitadores</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3547"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
         <source>Button</source>
         <translation>Botón</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3547"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
         <source>Slider</source>
         <translation>Control Deslizante</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3547"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
         <source>Toggle</source>
         <translation>Interruptor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3547"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
         <source>Text Field</source>
         <translation>Campo de Texto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3548"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3621"/>
         <source>Knob</source>
         <translation>Perilla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3553"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3626"/>
         <source>Data Grid</source>
         <translation>Cuadrícula de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3554"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3627"/>
         <source>GPS Map</source>
         <translation>Mapa GPS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3555"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3628"/>
         <source>Gyroscope</source>
         <translation>Giroscopio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3556"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3629"/>
         <source>Multiple Plot</source>
         <translation>Gráfica Múltiple</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3557"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
         <source>Accelerometer</source>
         <translation>Acelerómetro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3558"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
         <source>3D Plot</source>
         <translation>Gráfica 3D</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3559"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
         <source>Image View</source>
         <translation>Visor de Imagen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3561"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3565"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3572"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3634"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3638"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3656"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3566"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3639"/>
         <source>Bar</source>
         <translation>Barra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3567"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
         <source>Gauge</source>
         <translation>Indicador</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3568"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3641"/>
         <source>Compass</source>
         <translation>Brújula</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3573"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3642"/>
+        <source>Meter</source>
+        <translation>Medidor</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3643"/>
+        <source>Thermometer</source>
+        <translation>Termómetro</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3648"/>
+        <source>Integer (0 decimals)</source>
+        <translation>Entero (0 decimales)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3649"/>
+        <source>1 decimal</source>
+        <translation>1 decimal</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
+        <source>2 decimals</source>
+        <translation>2 decimales</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
+        <source>3 decimals</source>
+        <translation>3 decimales</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3652"/>
+        <source>Scientific</source>
+        <translation>Científico</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3657"/>
         <source>New Line (\n)</source>
         <translation>Nueva Línea (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3658"/>
         <source>Carriage Return (\r)</source>
         <translation>Retorno de Carro (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3575"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3659"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3579"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3663"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3580"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3664"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4563"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4667"/>
         <source>Label</source>
         <translation>Etiqueta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4564"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4668"/>
         <source>Display label</source>
         <translation>Mostrar etiqueta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4574"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4678"/>
         <source>Button Icon</source>
         <translation>Icono del Botón</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4583"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4687"/>
         <source>Colorize Icon</source>
         <translation>Colorear Ícono</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4584"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4688"/>
         <source>Tint the icon with the button color</source>
         <translation>Teñir el ícono con el color del botón</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4601"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4705"/>
         <source>Initial Value</source>
         <translation>Valor Inicial</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4613"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4717"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Codificación de caracteres utilizada cuando transmit() devuelve un valor de cadena</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4631"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4735"/>
         <source>Value Range</source>
         <translation>Rango de Valores</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4641"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4745"/>
         <source>Minimum Value</source>
         <translation>Valor Mínimo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4754"/>
         <source>Maximum Value</source>
         <translation>Valor Máximo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4659"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4763"/>
         <source>Step Size</source>
         <translation>Tamaño de Paso</translation>
     </message>
@@ -3853,239 +3924,249 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3514"/>
+        <source>New Meter</source>
+        <translation>Nuevo Medidor</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3518"/>
+        <source>New Thermometer</source>
+        <translation>Nuevo Termómetro</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3522"/>
         <source>New LED Indicator</source>
         <translation>Nuevo Indicador LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3518"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3526"/>
         <source>New Waterfall</source>
         <translation>Nueva Cascada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3594"/>
         <source>Channel %1</source>
         <translation>Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3656"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3670"/>
         <source>New Action</source>
         <translation>Nueva Acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3793"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3807"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>¿Confirma el cambio del widget a nivel de grupo?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3809"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Se borran los conjuntos de datos existentes de este grupo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3859"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3860"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3861"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3873"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3874"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3875"/>
         <source>Accelerometer %1</source>
         <translation>Acelerómetro %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3876"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3876"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3876"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
         <source>Gyro %1</source>
         <translation>Giroscopio %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3891"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
         <source>Latitude</source>
         <translation>Latitud</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3891"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
         <source>Longitude</source>
         <translation>Longitud</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3891"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
         <source>Altitude</source>
         <translation>Altitud</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3906"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3906"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3906"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4121"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4135"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
         <source>Workspace</source>
         <translation>Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4267"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4474"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4281"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
         <source>Shared Table</source>
         <translation>Tabla Compartida</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4349"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4363"/>
         <source>register</source>
         <translation>registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4474"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
         <source>New Shared Table</source>
         <translation>Nueva Tabla Compartida</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4474"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4492"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4511"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4535"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4562"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4581"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4604"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4627"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4996"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5017"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4506"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4525"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4549"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4576"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4618"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4641"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5031"/>
         <source>Name:</source>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4492"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4506"/>
         <source>Rename Table</source>
         <translation>Renombrar Tabla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4511"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4525"/>
         <source>Rename Group</source>
         <translation>Renombrar Grupo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4535"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4549"/>
         <source>Rename Dataset</source>
         <translation>Renombrar Conjunto de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4562"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4576"/>
         <source>Rename Data Source</source>
         <translation>Renombrar Fuente de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4581"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4595"/>
         <source>Rename Action</source>
         <translation>Renombrar Acción</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4603"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4617"/>
         <source>New Register</source>
         <translation>Nuevo Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4627"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4641"/>
         <source>Rename Register</source>
         <translation>Renombrar Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4666"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4691"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5544"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4680"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4705"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5558"/>
         <source>This action cannot be undone.</source>
         <translation>Esta acción no se puede deshacer.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4667"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4681"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Esto elimina %1 registro(s) junto con la tabla. Esta acción no se puede deshacer.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4670"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4690"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5543"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4704"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5557"/>
         <source>Delete "%1"?</source>
         <translation>¿Eliminar "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4673"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4687"/>
         <source>Delete Table</source>
         <translation>Eliminar Tabla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4707"/>
         <source>Delete Register</source>
         <translation>Eliminar Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4717"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4731"/>
         <source>Export Table</source>
         <translation>Exportar Tabla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4719"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4733"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4777"/>
         <source>CSV files (*.csv)</source>
         <translation>Archivos CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4761"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4775"/>
         <source>Import Table</source>
         <translation>Importar Tabla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
         <source>New Workspace</source>
         <translation>Nuevo Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5017"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5031"/>
         <source>Rename Workspace</source>
         <translation>Renombrar Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5106"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5120"/>
         <source>Overview</source>
         <translation>Resumen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5116"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
         <source>All Data</source>
         <translation>Todos los Datos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5300"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5314"/>
         <source>Discard workspace customisations?</source>
         <translation>¿Descartar personalizaciones del espacio de trabajo?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5301"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5315"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Desactivar Personalizar descarta tus ediciones y reconstruye la lista de espacios de trabajo desde los grupos del proyecto.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5318"/>
         <source>Customize Workspaces</source>
         <translation>Personalizar Espacios de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5546"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5560"/>
         <source>Delete Workspace</source>
         <translation>Eliminar Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5860"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5874"/>
         <source>File open error</source>
         <translation>Error al abrir archivo</translation>
     </message>
@@ -4503,41 +4584,61 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="259"/>
+        <source>Meter</source>
+        <translation>Medidor</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="264"/>
+        <source>Toggle analog meter (half-arc) widget</source>
+        <translation>Activar widget de medidor analógico (medio arco)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="279"/>
+        <source>Thermometer</source>
+        <translation>Termómetro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="283"/>
+        <source>Toggle thermometer widget for temperature data</source>
+        <translation>Activar widget de termómetro para datos de temperatura</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="297"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="264"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="302"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>Activar indicador LED para valores binarios o con umbral</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="281"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="319"/>
         <source>Transform</source>
         <translation>Transformación</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="323"/>
         <source>Edit a value transform expression for calibration, filtering, or unit conversion</source>
         <translation>Editar una expresión de transformación de valor para calibración, filtrado o conversión de unidades</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="305"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="343"/>
         <source>Duplicate</source>
         <translation>Duplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="310"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="348"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>Duplicar este conjunto de datos con la misma configuración</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="318"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="356"/>
         <source>Delete</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="321"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="359"/>
         <source>Delete this dataset from the group</source>
         <translation>Eliminar este conjunto de datos del grupo</translation>
     </message>
@@ -5216,7 +5317,7 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="390"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1380"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1406"/>
         <source>Output Panel</source>
         <translation>Panel de Salida</translation>
     </message>
@@ -5340,138 +5441,148 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1363"/>
+        <source>Meter</source>
+        <translation>Medidor</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1376"/>
+        <source>Thermometer</source>
+        <translation>Termómetro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1389"/>
         <source>LED Indicator</source>
         <translation>Indicador LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1392"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1418"/>
         <source>Slider</source>
         <translation>Control Deslizante</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1405"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1431"/>
         <source>Toggle</source>
         <translation>Interruptor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1418"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1444"/>
         <source>Knob</source>
         <translation>Perilla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1431"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1457"/>
         <source>Text Field</source>
         <translation>Campo de Texto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1444"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1470"/>
         <source>Button</source>
         <translation>Botón</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1468"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1542"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1628"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1494"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1570"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
         <source>Add Group</source>
         <translation>Agregar Grupo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1483"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1557"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1643"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1687"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1509"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1585"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1673"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1719"/>
         <source>Add Dataset</source>
         <translation>Agregar Conjunto de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1496"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1570"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1656"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1700"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1907"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1524"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1600"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1688"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1734"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1941"/>
         <source>Add Output</source>
         <translation>Agregar Salida</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1512"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1583"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1540"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1613"/>
         <source>Add Action</source>
         <translation>Agregar Acción</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1521"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1549"/>
         <source>Add Data Source</source>
         <translation>Agregar Fuente de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1528"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1556"/>
         <source>Add Data Table</source>
         <translation>Agregar Tabla de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1594"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1727"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1794"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1922"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1624"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1761"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1828"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1956"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2012"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1990"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2046"/>
         <source>Rename…</source>
         <translation>Renombrar…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1602"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1757"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1827"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1879"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1930"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1986"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1632"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1791"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1861"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1913"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1964"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2020"/>
         <source>Duplicate</source>
         <translation>Duplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1613"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1768"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1839"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1891"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1941"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1997"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2023"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1643"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1802"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1873"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1925"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1975"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2031"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2057"/>
         <source>Delete…</source>
         <translation>Eliminar…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1672"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1704"/>
         <source>Edit Frame Parser…</source>
         <translation>Editar Analizador de Tramas…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1713"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1747"/>
         <source>Edit Painter Code…</source>
         <translation>Editar Código de Painter…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1735"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1803"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1855"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1964"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1769"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1837"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1889"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1998"/>
         <source>Move Up</source>
         <translation>Mover Arriba</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1746"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1815"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1867"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1975"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1780"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1849"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1901"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2009"/>
         <source>Move Down</source>
         <translation>Mover Abajo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1783"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1817"/>
         <source>Edit Transform Code…</source>
         <translation>Editar Código de Transformación…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2038"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2072"/>
         <source>Edit Code…</source>
         <translation>Editar Código…</translation>
     </message>
@@ -5725,91 +5836,111 @@ Formato válido: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="229"/>
+        <source>Meter</source>
+        <translation>Medidor</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
+        <source>Add an analog meter (half-arc) widget</source>
+        <translation>Agregar un widget de medidor analógico (arco medio)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="242"/>
+        <source>Thermometer</source>
+        <translation>Termómetro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="246"/>
+        <source>Add a thermometer widget for temperature data</source>
+        <translation>Agregar un widget de termómetro para datos de temperatura</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="253"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="235"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="259"/>
         <source>Add an LED indicator for binary status signals</source>
         <translation>Agregar un indicador LED para señales de estado binario</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="269"/>
         <source>Button</source>
         <translation>Botón</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="249"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="273"/>
         <source>Add a button that sends a command on click</source>
         <translation>Agregar un botón que envíe un comando al hacer clic</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="256"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="280"/>
         <source>Slider</source>
         <translation>Control Deslizante</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="284"/>
         <source>Add a slider for sending scaled numeric values</source>
         <translation>Agregar un control deslizante para enviar valores numéricos escalados</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="291"/>
         <source>Toggle</source>
         <translation>Interruptor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="271"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="295"/>
         <source>Add a toggle switch for on/off commands</source>
         <translation>Agregar un interruptor para comandos de encendido/apagado</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="278"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="302"/>
         <source>Text Field</source>
         <translation>Campo de Texto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="282"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="306"/>
         <source>Add a text field for typing and sending commands</source>
         <translation>Agregar un campo de texto para escribir y enviar comandos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="288"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="312"/>
         <source>Knob</source>
         <translation>Perilla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="293"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="317"/>
         <source>Add a rotary knob for setpoint control</source>
         <translation>Agregar una perilla rotatoria para control de punto de ajuste</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="303"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="327"/>
         <source>Edit Code</source>
         <translation>Editar Código</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="308"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="332"/>
         <source>Edit the JavaScript that draws this painter widget</source>
         <translation>Editar el JavaScript que dibuja este widget de pintor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="325"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="349"/>
         <source>Duplicate</source>
         <translation>Duplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="353"/>
         <source>Duplicate the current group and its contents</source>
         <translation>Duplicar el grupo actual y su contenido</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="338"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="362"/>
         <source>Delete</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="342"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="366"/>
         <source>Delete the current group and all contained datasets</source>
         <translation>Eliminar el grupo actual y todos los conjuntos de datos contenidos</translation>
     </message>
@@ -8208,12 +8339,12 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="617"/>
+        <location filename="../../src/MDF4/Export.cpp" line="638"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>La Exportación MDF4 es una función Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="618"/>
+        <location filename="../../src/MDF4/Export.cpp" line="639"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Esta función requiere una licencia. Adquiera una para habilitar la exportación MDF4.</translation>
     </message>
@@ -9775,72 +9906,72 @@ Would you like to open the download page?</source>
         <translation>Paridad</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="222"/>
         <source>Data Bits</source>
         <translation>Bits de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="247"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="245"/>
         <source>Stop Bits</source>
         <translation>Bits de Parada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="270"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="268"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
         <source>IP Address</source>
         <translation>Dirección IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="292"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="301"/>
         <source>TCP Port</source>
         <translation>Puerto TCP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="331"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <source>Slave Address</source>
         <translation>Dirección de Esclavo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="334"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="382"/>
         <source>Configure Register Groups…</source>
         <translation>Configurar Grupos de Registros…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="394"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="392"/>
         <source>Import Register Map…</source>
         <translation>Importar Mapa de Registros…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="407"/>
         <source>%1 group(s) configured</source>
         <translation>%1 grupo(s) configurado(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="410"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="408"/>
         <source>No groups configured</source>
         <translation>No hay grupos configurados</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="351"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="349"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Sondeo (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="356"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="354"/>
         <source>Polling interval</source>
         <translation>Intervalo de sondeo</translation>
     </message>
@@ -11809,12 +11940,12 @@ function parse(%1) { ... }
 El parámetro separador ya no es necesario.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="166"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
         <source>Critical</source>
         <translation>Crítico</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="166"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
@@ -12365,147 +12496,157 @@ El parámetro separador ya no es necesario.</translation>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="321"/>
+        <location filename="../../src/SerialStudio.cpp" line="330"/>
         <source>Data Grids</source>
         <translation>Cuadrículas de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="324"/>
+        <location filename="../../src/SerialStudio.cpp" line="333"/>
         <source>Multiple Data Plots</source>
         <translation>Gráficas Múltiples de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="327"/>
+        <location filename="../../src/SerialStudio.cpp" line="336"/>
         <source>Accelerometers</source>
         <translation>Acelerómetros</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="330"/>
+        <location filename="../../src/SerialStudio.cpp" line="339"/>
         <source>Gyroscopes</source>
         <translation>Giroscopios</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="333"/>
+        <location filename="../../src/SerialStudio.cpp" line="342"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="336"/>
+        <location filename="../../src/SerialStudio.cpp" line="345"/>
         <source>FFT Plots</source>
         <translation>Gráficas FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="339"/>
+        <location filename="../../src/SerialStudio.cpp" line="348"/>
         <source>LED Panels</source>
         <translation>Paneles LED</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="342"/>
+        <location filename="../../src/SerialStudio.cpp" line="351"/>
         <source>Data Plots</source>
         <translation>Gráficas de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="345"/>
+        <location filename="../../src/SerialStudio.cpp" line="354"/>
         <source>Bars</source>
         <translation>Barras</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="348"/>
+        <location filename="../../src/SerialStudio.cpp" line="357"/>
         <source>Gauges</source>
         <translation>Medidores</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="351"/>
+        <location filename="../../src/SerialStudio.cpp" line="360"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="354"/>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Compasses</source>
         <translation>Brújulas</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="357"/>
+        <location filename="../../src/SerialStudio.cpp" line="366"/>
+        <source>Meters</source>
+        <translation>Medidores</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="369"/>
+        <source>Thermometers</source>
+        <translation>Termómetros</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="372"/>
         <source>3D Plots</source>
         <translation>Gráficas 3D</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="361"/>
+        <location filename="../../src/SerialStudio.cpp" line="376"/>
         <source>Image Views</source>
         <translation>Visores de Imagen</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="364"/>
+        <location filename="../../src/SerialStudio.cpp" line="379"/>
         <source>Output Panels</source>
         <translation>Paneles de Salida</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="367"/>
+        <location filename="../../src/SerialStudio.cpp" line="382"/>
         <source>Notifications</source>
         <translation>Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="370"/>
+        <location filename="../../src/SerialStudio.cpp" line="385"/>
         <source>Waterfalls</source>
         <translation>Cascadas</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="373"/>
+        <location filename="../../src/SerialStudio.cpp" line="388"/>
         <source>Painter Widgets</source>
         <translation>Widgets de Pintor</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="892"/>
+        <location filename="../../src/SerialStudio.cpp" line="912"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="893"/>
+        <location filename="../../src/SerialStudio.cpp" line="913"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="894"/>
+        <location filename="../../src/SerialStudio.cpp" line="914"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="895"/>
+        <location filename="../../src/SerialStudio.cpp" line="915"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="896"/>
+        <location filename="../../src/SerialStudio.cpp" line="916"/>
         <source>System</source>
         <translation>Sistema</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="897"/>
+        <location filename="../../src/SerialStudio.cpp" line="917"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="898"/>
+        <location filename="../../src/SerialStudio.cpp" line="918"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="899"/>
+        <location filename="../../src/SerialStudio.cpp" line="919"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="900"/>
+        <location filename="../../src/SerialStudio.cpp" line="920"/>
         <source>Shift-JIS</source>
         <translation>Shift-jis</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="901"/>
+        <location filename="../../src/SerialStudio.cpp" line="921"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="902"/>
+        <location filename="../../src/SerialStudio.cpp" line="922"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -12644,103 +12785,103 @@ El parámetro separador ya no es necesario.</translation>
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="980"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="992"/>
         <source>Select logo image</source>
         <translation>Seleccionar imagen de logotipo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="982"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="994"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>Imágenes (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="405"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="417"/>
         <source>Open Session File</source>
         <translation>Abrir Archivo de Sesión</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="407"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="419"/>
         <source>Session files (*.db)</source>
         <translation>Archivos de sesión (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1176"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1188"/>
         <source>Cannot open session file</source>
         <translation>No se puede abrir el archivo de sesión</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="635"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="647"/>
         <source>Delete session from %1?</source>
         <translation>¿Eliminar sesión de %1?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="638"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="650"/>
         <source>Delete Session</source>
         <translation>Eliminar Sesión</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1037"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1049"/>
         <source>No project data</source>
         <translation>No hay datos del proyecto</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="636"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="648"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Todas las lecturas y datos sin procesar de esta sesión se eliminan permanentemente.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="461"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="470"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="473"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="482"/>
         <source>Lock Session File</source>
         <translation>Bloquear Archivo de Sesión</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="462"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="474"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Elegir una contraseña para bloquear el archivo de sesión:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="471"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="483"/>
         <source>Confirm the password:</source>
         <translation>Confirmar la contraseña:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="479"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="491"/>
         <source>Passwords do not match</source>
         <translation>Las contraseñas no coinciden</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="480"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="492"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>Las dos contraseñas ingresadas no coinciden. El archivo de sesión no fue bloqueado.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="517"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="529"/>
         <source>Unlock Session File</source>
         <translation>Desbloquear Archivo de Sesión</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="518"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="530"/>
         <source>Enter the session file password:</source>
         <translation>Ingresar la contraseña del archivo de sesión:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="531"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="543"/>
         <source>Incorrect password</source>
         <translation>Contraseña incorrecta</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="532"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="544"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>La contraseña ingresada no coincide con la almacenada en el archivo de sesión.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="625"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="637"/>
         <source>Session file locked</source>
         <translation>Archivo de sesión bloqueado</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="626"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="638"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Desbloquear el archivo de sesión antes de eliminar las sesiones grabadas.</translation>
     </message>
@@ -12749,12 +12890,12 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">Esta sesión no contiene un archivo de proyecto embebido — el tablero recurre a un diseño de gráfico rápido.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="760"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="772"/>
         <source>Export Session to CSV</source>
         <translation>Exportar Sesión a CSV</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="760"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="772"/>
         <source>CSV files (*.csv)</source>
         <translation>Archivos CSV (*.CSV)</translation>
     </message>
@@ -12773,85 +12914,85 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">Preparando exportación…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="952"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="964"/>
         <source>Done</source>
         <translation>Listo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="916"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="952"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="928"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="964"/>
         <source>Failed</source>
         <translation>Falló</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="922"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="962"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="934"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="974"/>
         <source>Report Failed</source>
         <translation>Reporte Fallido</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="924"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="963"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="936"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="975"/>
         <source>Could not generate the report. Check the output path and try again.</source>
         <translation>No se pudo generar el reporte. Verificar la ruta de salida e intentar de nuevo.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="856"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="868"/>
         <source>Save PDF Report</source>
         <translation>Guardar Reporte PDF</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="836"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="848"/>
         <source>Loading session data…</source>
         <translation>Cargando datos de sesión…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="856"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="868"/>
         <source>Save HTML Report</source>
         <translation>Guardar Reporte HTML</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="857"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="869"/>
         <source>PDF files (*.pdf)</source>
         <translation>Archivos PDF (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="857"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="869"/>
         <source>HTML files (*.html)</source>
         <translation>Archivos HTML (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1038"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1050"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Este archivo de sesión no contiene un proyecto embebido.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1047"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1059"/>
         <source>Invalid project data</source>
         <translation>Datos de proyecto inválidos</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1048"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1060"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>El JSON del proyecto embebido está malformado y no se puede restaurar.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1058"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1070"/>
         <source>Restore Project</source>
         <translation>Restaurar Proyecto</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1058"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1070"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Proyectos de Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1066"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1078"/>
         <source>Cannot write file</source>
         <translation>No se puede escribir el archivo</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1066"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1078"/>
         <source>Check file permissions and try again.</source>
         <translation>Verificar permisos del archivo e intentar de nuevo.</translation>
     </message>
@@ -14365,12 +14506,18 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>(Ícono Personalizado)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="730"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="635"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="641"/>
+        <source>Auto</source>
+        <translation>Auto</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="730"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="798"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
@@ -14887,42 +15034,42 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
 <context>
     <name>UART</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="75"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="52"/>
         <source>COM Port</source>
         <translation>Puerto COM</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="104"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="81"/>
         <source>Baud Rate</source>
         <translation>Velocidad en Baudios</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
         <source>Data Bits</source>
         <translation>Bits de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="218"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="195"/>
         <source>Parity</source>
         <translation>Paridad</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="239"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="216"/>
         <source>Stop Bits</source>
         <translation>Bits de Parada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="237"/>
         <source>Flow Control</source>
         <translation>Control de Flujo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="292"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="269"/>
         <source>Auto Reconnect</source>
         <translation>Reconexión Automática</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="310"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="287"/>
         <source>Send DTR Signal</source>
         <translation>Enviar Señal DTR</translation>
     </message>
@@ -14956,7 +15103,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
 <context>
     <name>UI::DashboardWidget</name>
     <message>
-        <location filename="../../src/UI/DashboardWidget.cpp" line="147"/>
+        <location filename="../../src/UI/DashboardWidget.cpp" line="149"/>
         <source>Invalid</source>
         <translation>Inválido</translation>
     </message>
@@ -15356,6 +15503,29 @@ Entiendo que cuando termine, necesitaré comprar una licencia o compilar la vers
         <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="331"/>
         <source>Device Disconnected</source>
         <translation>Dispositivo Desconectado</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::Bar</name>
+    <message>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="256"/>
+        <source>Alarm</source>
+        <translation>Alarma</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="260"/>
+        <source>Value %1%2 reached the high alarm %3%2</source>
+        <translation>Valor %1%2 alcanzó la alarma alta %3%2</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="263"/>
+        <source>Value %1%2 reached the low alarm %3%2</source>
+        <translation>Valor %1%2 alcanzó la alarma baja %3%2</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="267"/>
+        <source>Alarms</source>
+        <translation>Alarmas</translation>
     </message>
 </context>
 <context>
