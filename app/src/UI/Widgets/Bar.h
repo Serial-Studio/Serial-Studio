@@ -62,6 +62,9 @@ class Bar : public QQuickItem {
   Q_PROPERTY(double normalizedAlarmHigh
              READ normalizedAlarmHigh
              CONSTANT)
+  Q_PROPERTY(QString title
+             READ title
+             CONSTANT)
   Q_PROPERTY(QString units
              READ units
              CONSTANT)
@@ -88,6 +91,7 @@ public:
   [[nodiscard]] bool alarmTriggered() const noexcept;
   [[nodiscard]] int displayTickCount() const noexcept;
   [[nodiscard]] bool showValueDisplay() const noexcept;
+  [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
   [[nodiscard]] const QString& displayFormat() const noexcept;
 

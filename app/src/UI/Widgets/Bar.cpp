@@ -110,6 +110,14 @@ bool Widgets::Bar::alarmTriggered() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns the dataset title associated with the widget.
+ */
+const QString& Widgets::Bar::title() const noexcept
+{
+  return m_title;
+}
+
+/**
  * @brief Returns the measurement units associated with the dataset.
  */
 const QString& Widgets::Bar::units() const noexcept

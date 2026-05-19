@@ -131,18 +131,24 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
 
-      readonly property bool showLabels: width >= 130 && height >= 90
-      readonly property real chromeW: Math.max(3, Math.min(8, Math.min(width, height) * 0.025))
       readonly property real topMargin: 2
-      readonly property real bottomMargin: 4
+      readonly property bool showLabels: width >= 130 && height >= 90
+      readonly property bool showFaceLabels: width >= 120 && height >= 130
+      readonly property real faceLabelReserve: meterArea.showFaceLabels ? Math.round(fontSize * 3.8 + 12) : 0
+      readonly property real bottomMargin: 4 + meterArea.faceLabelReserve
+      readonly property real chromeW: Math.max(3, Math.min(8, Math.min(width, height) * 0.025))
       readonly property real faceR: Math.max(16, Math.min(
         width / 2 - meterArea.chromeW - 2,
         (height - meterArea.topMargin - meterArea.bottomMargin) / 1.16
       ))
-      readonly property real visualHeight: meterArea.faceR + Math.max(meterArea.chromeW, meterArea.faceR * 0.13 + 2)
+      readonly property real tailExtension: Math.max(meterArea.chromeW, meterArea.faceR * 0.13 + 2)
+      readonly property real visualHeight: meterArea.faceR + meterArea.tailExtension
       readonly property real faceCx: width / 2
-      readonly property real faceCy: Math.max(meterArea.faceR + meterArea.topMargin,
-                                              (height - meterArea.visualHeight) / 2 + meterArea.faceR)
+      readonly property real faceCy: meterArea.showFaceLabels
+        ? Math.max(meterArea.faceR + meterArea.topMargin,
+                   meterArea.height - meterArea.faceLabelReserve - meterArea.tailExtension)
+        : Math.max(meterArea.faceR + meterArea.topMargin,
+                   (meterArea.height - meterArea.visualHeight) / 2 + meterArea.faceR)
       readonly property real arcBand: Math.max(3, meterArea.faceR * 0.11)
       readonly property int autoTargetTickCount: {
         const arcLen = (angleRangeDeg * Math.PI / 180) * meterArea.faceR
@@ -504,6 +510,69 @@ Shape {
         }
       }
 
+      //
+      // Face labels -- dataset title (bold), units, and a small value
+      // readout box sit in the empty area below the half-arc pivot
+      //
+      Column {
+        id: faceLabels
+
+        spacing: 2
+        visible: meterArea.showFaceLabels
+        x: meterArea.faceCx - width / 2
+        y: meterArea.faceCy + meterArea.tailExtension + 2
+        width: Math.min(meterArea.faceR * 1.9, meterArea.width - 8)
+
+        Text {
+          width: parent.width
+          font.bold: true
+          text: root.model.title
+          elide: Text.ElideRight
+          font.pixelSize: fontSize * 1.05
+          horizontalAlignment: Text.AlignHCenter
+          visible: root.model.title.length > 0
+          color: Cpp_ThemeManager.colors["widget_text"]
+          font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+        }
+
+        Text {
+          opacity: 0.75
+          width: parent.width
+          text: root.model.units
+          elide: Text.ElideRight
+          font.pixelSize: fontSize * 0.85
+          horizontalAlignment: Text.AlignHCenter
+          visible: root.model.units.length > 0
+          color: Cpp_ThemeManager.colors["widget_text"]
+          font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+        }
+
+        Item { width: 1; height: 3 }
+
+        Rectangle {
+          id: valueBox
+
+          radius: 3
+          border.width: 1
+          antialiasing: true
+          height: valueText.implicitHeight + 6
+          anchors.horizontalCenter: parent.horizontalCenter
+          width: Math.min(parent.width, valueText.implicitWidth + 16)
+          color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10)
+          border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.10)
+
+          Text {
+            id: valueText
+
+            font.bold: true
+            color: root.fillColor
+            anchors.centerIn: parent
+            font.pixelSize: fontSize * 1.05
+            text: formatValue(root.model.value)
+            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+          }
+        }
+      }
     }
 
     VisualRange {

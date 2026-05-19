@@ -417,17 +417,72 @@ Item {
             }
           }
 
-          Text {
-            color: fillColor
-            text: model.units
-            style: Text.Raised
-            font.pixelSize: fontSize
-            anchors.bottom: parent.bottom
-            styleColor: Qt.rgba(0, 0, 0, 0.3)
-            anchors.bottomMargin: parent.border.width + 8
-            anchors.horizontalCenter: parent.horizontalCenter
-            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-            visible: model.units.length > 0 && gaugeFace.width > 120
+          //
+          // Face labels -- dataset title (bold), units, and a small
+          // value readout sit in the bottom wedge of the dial, below
+          // the needle's reach
+          //
+          Column {
+            id: faceLabels
+
+            spacing: 2
+            visible: gaugeFace.width >= 120
+            anchors.bottomMargin: gaugeFace.border.width + 10
+            anchors.bottom: gaugeFace.bottom
+            anchors.horizontalCenter: gaugeFace.horizontalCenter
+            width: Math.min(gaugeFace.width * 0.55, gaugeFace.width - 16)
+
+            Text {
+              width: parent.width
+              font.bold: true
+              text: model.title
+              style: Text.Raised
+              elide: Text.ElideRight
+              font.pixelSize: fontSize * 1.05
+              styleColor: Qt.rgba(0, 0, 0, 0.3)
+              horizontalAlignment: Text.AlignHCenter
+              visible: model.title.length > 0
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+            }
+
+            Text {
+              opacity: 0.75
+              width: parent.width
+              text: model.units
+              elide: Text.ElideRight
+              font.pixelSize: fontSize * 0.85
+              horizontalAlignment: Text.AlignHCenter
+              visible: model.units.length > 0
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+            }
+
+            Item { width: 1; height: 3 }
+
+            Rectangle {
+              id: valueBox
+
+              radius: 3
+              border.width: 1
+              antialiasing: true
+              height: valueText.implicitHeight + 6
+              anchors.horizontalCenter: parent.horizontalCenter
+              width: Math.min(parent.width, valueText.implicitWidth + 16)
+              color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10)
+              border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.10)
+
+              Text {
+                id: valueText
+
+                font.bold: true
+                color: root.fillColor
+                anchors.centerIn: parent
+                text: formatValue(model.value)
+                font.pixelSize: fontSize * 1.05
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+              }
+            }
           }
         }
       }
