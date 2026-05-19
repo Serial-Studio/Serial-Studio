@@ -338,6 +338,8 @@ QStringList UI::TaskbarSettings::canonicalAvailableButtons()
   return {QStringLiteral("settings"),
           QStringLiteral("console"),
           QStringLiteral("notifications"),
+          QStringLiteral("clock"),
+          QStringLiteral("stopwatch"),
           QStringLiteral("pause"),
           QStringLiteral("file_transmission"),
           QStringLiteral("ai_assistant")};

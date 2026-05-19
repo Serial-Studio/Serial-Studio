@@ -36,7 +36,6 @@
 #include "UI/Widgets/Meter.h"
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Plot.h"
-#include "UI/Widgets/Thermometer.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "UI/Widgets/ImageView.h"
@@ -266,10 +265,6 @@ void UI::DashboardWidget::buildWidgetForType()
       m_dbWidget = new Widgets::Meter(relativeIndex(), this);
       m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Meter.qml";
       break;
-    case SerialStudio::DashboardThermometer:
-      m_dbWidget = new Widgets::Thermometer(relativeIndex(), this);
-      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Thermometer.qml";
-      break;
     case SerialStudio::DashboardCompass:
       m_dbWidget = new Widgets::Compass(relativeIndex(), this);
       m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Compass.qml";
@@ -285,6 +280,14 @@ void UI::DashboardWidget::buildWidgetForType()
     case SerialStudio::DashboardTerminal:
       m_dbWidget = nullptr;
       m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Terminal.qml";
+      break;
+    case SerialStudio::DashboardClock:
+      m_dbWidget = nullptr;
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Clock.qml";
+      break;
+    case SerialStudio::DashboardStopwatch:
+      m_dbWidget = nullptr;
+      m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Stopwatch.qml";
       break;
     case SerialStudio::DashboardGPS:
       m_dbWidget = new Widgets::GPS(relativeIndex(), this);

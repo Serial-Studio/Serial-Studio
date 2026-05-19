@@ -111,6 +111,18 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
           this,
           &UI::Taskbar::onNotificationLogToggled);
 
+  // Handle clock toggle incrementally
+  connect(&UI::Dashboard::instance(),
+          &UI::Dashboard::clockEnabledChanged,
+          this,
+          &UI::Taskbar::onClockToggled);
+
+  // Handle stopwatch toggle incrementally
+  connect(&UI::Dashboard::instance(),
+          &UI::Dashboard::stopwatchEnabledChanged,
+          this,
+          &UI::Taskbar::onStopwatchToggled);
+
   // Sync active group selection with the project model
   auto* pm = &DataModel::ProjectModel::instance();
   connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this, [this, pm] {
@@ -429,11 +441,13 @@ void UI::Taskbar::setActiveGroupId(int groupId)
     m_windowManager->preloadPendingGeometries(layout);
   }
 
-  // Add global overview rows first (terminal, then notification log)
+  // Add global overview rows first (terminal, notification log, clock)
   cloneSpecialOverviewRow(SerialStudio::DashboardTerminal);
 #ifdef BUILD_COMMERCIAL
   cloneSpecialOverviewRow(SerialStudio::DashboardNotificationLog);
 #endif
+  cloneSpecialOverviewRow(SerialStudio::DashboardClock);
+  cloneSpecialOverviewRow(SerialStudio::DashboardStopwatch);
 
   // Populate the rest from either a user workspace or an auto-generated group
   if (groupId >= WorkspaceIds::AutoStart)
@@ -516,7 +530,7 @@ void UI::Taskbar::populateTaskbarFromGroup(int groupId)
     if (!groupItem)
       continue;
 
-    // Skip terminal and notification-log overview rows (already added)
+    // Skip terminal, notification-log, and clock overview rows (already added)
     const auto type = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
     if (type == SerialStudio::DashboardTerminal)
       continue;
@@ -525,6 +539,12 @@ void UI::Taskbar::populateTaskbarFromGroup(int groupId)
     if (type == SerialStudio::DashboardNotificationLog)
       continue;
 #endif
+
+    if (type == SerialStudio::DashboardClock)
+      continue;
+
+    if (type == SerialStudio::DashboardStopwatch)
+      continue;
 
     // Filter by group ID when viewing a specific group
     if (groupId > -1 && groupItem->data(TaskbarModel::GroupIdRole).toInt() != groupId)
@@ -1447,6 +1467,188 @@ void UI::Taskbar::onNotificationLogToggled()
   Q_EMIT windowStatesChanged();
   Q_EMIT searchResultsChanged();
 #endif
+}
+
+/**
+ * @brief Incrementally adds or removes the clock widget from the models.
+ */
+void UI::Taskbar::onClockToggled()
+{
+  auto& db            = UI::Dashboard::instance();
+  const bool on       = db.clockEnabled();
+  const int clockType = static_cast<int>(SerialStudio::DashboardClock);
+
+  if (!on) {
+    removeOverviewByType(clockType);
+    Q_EMIT taskbarButtonsChanged();
+    Q_EMIT windowStatesChanged();
+    Q_EMIT searchResultsChanged();
+    return;
+  }
+
+  // Skip if already present
+  for (int i = 0; i < m_fullModel->rowCount(); ++i) {
+    auto* item = m_fullModel->item(i);
+    if (item && item->data(TaskbarModel::WidgetTypeRole).toInt() == clockType)
+      return;
+  }
+
+  // Locate the widget map entry created by Dashboard::setClockEnabled
+  int clockWindowId = -1;
+  const auto& wm    = db.widgetMap();
+  for (auto it = wm.begin(); it != wm.end(); ++it) {
+    if (it.value().first != SerialStudio::DashboardClock)
+      continue;
+
+    clockWindowId = it.key();
+    break;
+  }
+
+  if (clockWindowId < 0)
+    return;
+
+  // Resolve the synthetic group that Dashboard injected
+  int clockGroupId = -1;
+  QString clockTitle;
+  const auto& frame = db.processedFrame();
+  for (const auto& g : frame.groups) {
+    if (g.widget != QStringLiteral("clock"))
+      continue;
+
+    clockGroupId = g.groupId;
+    clockTitle   = g.title;
+    break;
+  }
+
+  // Build a row for the full model
+  const auto icon = SerialStudio::dashboardWidgetIcon(SerialStudio::DashboardClock, true);
+  auto* groupItem = new QStandardItem();
+  groupItem->setData(clockGroupId, TaskbarModel::GroupIdRole);
+  groupItem->setData(clockTitle, TaskbarModel::GroupNameRole);
+  groupItem->setData(clockTitle, TaskbarModel::WidgetNameRole);
+  groupItem->setData(clockType, TaskbarModel::WidgetTypeRole);
+  groupItem->setData(icon, TaskbarModel::WidgetIconRole);
+  groupItem->setData(clockWindowId, TaskbarModel::WindowIdRole);
+  groupItem->setData(true, TaskbarModel::IsGroupRole);
+  groupItem->setData(true, TaskbarModel::OverviewRole);
+  groupItem->setData(static_cast<int>(TaskbarModel::WindowNormal), TaskbarModel::WindowStateRole);
+
+  // Place after Terminal + NotificationLog overview rows so ordering stays stable
+  int insertRow = 0;
+  for (int i = 0; i < m_fullModel->rowCount(); ++i) {
+    auto* item       = m_fullModel->item(i);
+    const auto wtype = item ? item->data(TaskbarModel::WidgetTypeRole).toInt() : -1;
+    if (wtype == static_cast<int>(SerialStudio::DashboardTerminal)
+#ifdef BUILD_COMMERCIAL
+        || wtype == static_cast<int>(SerialStudio::DashboardNotificationLog)
+#endif
+    )
+      insertRow = i + 1;
+    else
+      break;
+  }
+
+  m_fullModel->insertRow(insertRow, groupItem);
+
+  // Mirror into taskbarButtons
+  auto* tbItem = groupItem->clone();
+  setWindowState(tbItem->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
+  m_taskbarButtons->insertRow(insertRow, tbItem);
+
+  Q_EMIT taskbarButtonsChanged();
+  Q_EMIT windowStatesChanged();
+  Q_EMIT searchResultsChanged();
+}
+
+/**
+ * @brief Incrementally adds or removes the stopwatch widget from the models.
+ */
+void UI::Taskbar::onStopwatchToggled()
+{
+  auto& db         = UI::Dashboard::instance();
+  const bool on    = db.stopwatchEnabled();
+  const int swType = static_cast<int>(SerialStudio::DashboardStopwatch);
+
+  if (!on) {
+    removeOverviewByType(swType);
+    Q_EMIT taskbarButtonsChanged();
+    Q_EMIT windowStatesChanged();
+    Q_EMIT searchResultsChanged();
+    return;
+  }
+
+  // Skip if already present
+  for (int i = 0; i < m_fullModel->rowCount(); ++i) {
+    auto* item = m_fullModel->item(i);
+    if (item && item->data(TaskbarModel::WidgetTypeRole).toInt() == swType)
+      return;
+  }
+
+  // Locate the widget map entry created by Dashboard::setStopwatchEnabled
+  int swWindowId = -1;
+  const auto& wm = db.widgetMap();
+  for (auto it = wm.begin(); it != wm.end(); ++it) {
+    if (it.value().first != SerialStudio::DashboardStopwatch)
+      continue;
+
+    swWindowId = it.key();
+    break;
+  }
+
+  if (swWindowId < 0)
+    return;
+
+  // Resolve the synthetic group that Dashboard injected
+  int swGroupId = -1;
+  QString swTitle;
+  const auto& frame = db.processedFrame();
+  for (const auto& g : frame.groups) {
+    if (g.widget != QStringLiteral("stopwatch"))
+      continue;
+
+    swGroupId = g.groupId;
+    swTitle   = g.title;
+    break;
+  }
+
+  // Build a row for the full model
+  const auto icon = SerialStudio::dashboardWidgetIcon(SerialStudio::DashboardStopwatch, true);
+  auto* groupItem = new QStandardItem();
+  groupItem->setData(swGroupId, TaskbarModel::GroupIdRole);
+  groupItem->setData(swTitle, TaskbarModel::GroupNameRole);
+  groupItem->setData(swTitle, TaskbarModel::WidgetNameRole);
+  groupItem->setData(swType, TaskbarModel::WidgetTypeRole);
+  groupItem->setData(icon, TaskbarModel::WidgetIconRole);
+  groupItem->setData(swWindowId, TaskbarModel::WindowIdRole);
+  groupItem->setData(true, TaskbarModel::IsGroupRole);
+  groupItem->setData(true, TaskbarModel::OverviewRole);
+  groupItem->setData(static_cast<int>(TaskbarModel::WindowNormal), TaskbarModel::WindowStateRole);
+
+  // Insert after Terminal, NotificationLog and Clock overview rows
+  int insertRow = 0;
+  for (int i = 0; i < m_fullModel->rowCount(); ++i) {
+    auto* item       = m_fullModel->item(i);
+    const auto wtype = item ? item->data(TaskbarModel::WidgetTypeRole).toInt() : -1;
+    if (wtype == static_cast<int>(SerialStudio::DashboardTerminal)
+#ifdef BUILD_COMMERCIAL
+        || wtype == static_cast<int>(SerialStudio::DashboardNotificationLog)
+#endif
+        || wtype == static_cast<int>(SerialStudio::DashboardClock))
+      insertRow = i + 1;
+    else
+      break;
+  }
+
+  m_fullModel->insertRow(insertRow, groupItem);
+
+  // Mirror into taskbarButtons
+  auto* tbItem = groupItem->clone();
+  setWindowState(tbItem->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
+  m_taskbarButtons->insertRow(insertRow, tbItem);
+
+  Q_EMIT taskbarButtonsChanged();
+  Q_EMIT windowStatesChanged();
+  Q_EMIT searchResultsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

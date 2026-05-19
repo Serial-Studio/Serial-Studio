@@ -776,6 +776,8 @@ Widgets.SmartDialog {
                 "settings": qsTr("Settings"),
                 "console": qsTr("Console"),
                 "notifications": qsTr("Notifications"),
+                "clock": qsTr("Clock"),
+                "stopwatch": qsTr("Stopwatch"),
                 "pause": qsTr("Pause / Resume"),
                 "file_transmission": qsTr("File Transmission"),
                 "ai_assistant": qsTr("AI Assistant")
@@ -784,6 +786,8 @@ Widgets.SmartDialog {
                 "settings": "qrc:/icons/taskbar/settings.svg",
                 "console": "qrc:/icons/taskbar/console.svg",
                 "notifications": "qrc:/icons/taskbar/notifications.svg",
+                "clock": "qrc:/icons/taskbar/clock.svg",
+                "stopwatch": "qrc:/icons/taskbar/stopwatch.svg",
                 "pause": "qrc:/icons/taskbar/pause.svg",
                 "file_transmission": "qrc:/icons/taskbar/file-transmission.svg",
                 "ai_assistant": "qrc:/icons/taskbar/ai.svg"

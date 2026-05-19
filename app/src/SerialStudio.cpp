@@ -163,6 +163,8 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
     case DashboardLED:
     case DashboardPlot3D:
     case DashboardTerminal:
+    case DashboardClock:
+    case DashboardStopwatch:
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
     case DashboardOutputPanel:
@@ -188,7 +190,6 @@ bool SerialStudio::isDatasetWidget(const DashboardWidget widget)
     case DashboardGauge:
     case DashboardCompass:
     case DashboardMeter:
-    case DashboardThermometer:
 #ifdef BUILD_COMMERCIAL
     case DashboardWaterfall:
 #endif
@@ -243,11 +244,14 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
     case DashboardMeter:
       return iconPath + "meter.svg";
       break;
-    case DashboardThermometer:
-      return iconPath + "thermometer.svg";
-      break;
     case DashboardTerminal:
       return iconPath + "terminal.svg";
+      break;
+    case DashboardClock:
+      return iconPath + "clock.svg";
+      break;
+    case DashboardStopwatch:
+      return iconPath + "stopwatch.svg";
       break;
     case DashboardPlot3D:
       return iconPath + "plot3d.svg";
@@ -293,7 +297,8 @@ bool SerialStudio::groupEligibleForWorkspace(const DataModel::Group& g)
  */
 bool SerialStudio::groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w)
 {
-  if (w == DashboardNoWidget || w == DashboardTerminal)
+  if (w == DashboardNoWidget || w == DashboardTerminal || w == DashboardClock
+      || w == DashboardStopwatch)
     return false;
 
 #ifdef BUILD_COMMERCIAL
@@ -309,7 +314,8 @@ bool SerialStudio::groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget
  */
 bool SerialStudio::datasetWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w)
 {
-  if (w == DashboardNoWidget || w == DashboardLED || w == DashboardTerminal)
+  if (w == DashboardNoWidget || w == DashboardLED || w == DashboardTerminal || w == DashboardClock
+      || w == DashboardStopwatch)
     return false;
 
 #ifdef BUILD_COMMERCIAL
@@ -359,14 +365,17 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
     case DashboardTerminal:
       return tr("Terminal");
       break;
+    case DashboardClock:
+      return tr("Clock");
+      break;
+    case DashboardStopwatch:
+      return tr("Stopwatch");
+      break;
     case DashboardCompass:
       return tr("Compasses");
       break;
     case DashboardMeter:
       return tr("Meters");
-      break;
-    case DashboardThermometer:
-      return tr("Thermometers");
       break;
     case DashboardPlot3D:
       return tr("3D Plots");
@@ -433,6 +442,12 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
   if (widget == "terminal")
     return DashboardTerminal;
 
+  if (widget == "clock")
+    return DashboardClock;
+
+  if (widget == "stopwatch")
+    return DashboardStopwatch;
+
 #ifdef BUILD_COMMERCIAL
   if (widget == "image")
     return DashboardImageView;
@@ -460,11 +475,10 @@ QList<SerialStudio::DashboardWidget> SerialStudio::getDashboardWidgets(
   QList<DashboardWidget> list;
 
   static const QHash<QString, DashboardWidget> kDatasetWidgetMap = {
-    {    QStringLiteral("compass"),     DashboardCompass},
-    {        QStringLiteral("bar"),         DashboardBar},
-    {      QStringLiteral("gauge"),       DashboardGauge},
-    {      QStringLiteral("meter"),       DashboardMeter},
-    {QStringLiteral("thermometer"), DashboardThermometer},
+    {QStringLiteral("compass"), DashboardCompass},
+    {    QStringLiteral("bar"),     DashboardBar},
+    {  QStringLiteral("gauge"),   DashboardGauge},
+    {  QStringLiteral("meter"),   DashboardMeter},
   };
   const auto it = kDatasetWidgetMap.constFind(dataset.widget);
   if (it != kDatasetWidgetMap.constEnd())
@@ -584,9 +598,6 @@ QString SerialStudio::datasetWidgetId(const DatasetWidget widget)
     case Meter:
       return "meter";
       break;
-    case Thermometer:
-      return "thermometer";
-      break;
     case NoDatasetWidget:
       return "";
       break;
@@ -602,11 +613,10 @@ QString SerialStudio::datasetWidgetId(const DatasetWidget widget)
 SerialStudio::DatasetWidget SerialStudio::datasetWidgetFromId(const QString& id)
 {
   static const QHash<QString, DatasetWidget> kIdMap = {
-    {        QStringLiteral("bar"),         Bar},
-    {      QStringLiteral("gauge"),       Gauge},
-    {    QStringLiteral("compass"),     Compass},
-    {      QStringLiteral("meter"),       Meter},
-    {QStringLiteral("thermometer"), Thermometer},
+    {    QStringLiteral("bar"),     Bar},
+    {  QStringLiteral("gauge"),   Gauge},
+    {QStringLiteral("compass"), Compass},
+    {  QStringLiteral("meter"),   Meter},
   };
   return kIdMap.value(id, NoDatasetWidget);
 }

@@ -233,7 +233,6 @@ set(SOURCES
   src/UI/Widgets/Compass.cpp
   src/UI/Widgets/Bar.cpp
   src/UI/Widgets/Meter.cpp
-  src/UI/Widgets/Thermometer.cpp
   src/UI/Widgets/FFTPlot.cpp
   src/UI/Widgets/Accelerometer.cpp
   src/UI/Widgets/DataGrid.cpp
@@ -338,7 +337,6 @@ set(HEADERS
   src/UI/Widgets/Gyroscope.h
   src/UI/Widgets/Bar.h
   src/UI/Widgets/Meter.h
-  src/UI/Widgets/Thermometer.h
   src/UI/Widgets/Accelerometer.h
   src/UI/Widgets/LEDPanel.h
   src/UI/Widgets/Compass.h
@@ -490,19 +488,20 @@ set(QML_SOURCES
   qml/ProjectEditor/ProjectEditor.qml
   qml/Widgets/Dashboard/Accelerometer.qml
   qml/Widgets/Dashboard/Bar.qml
+  qml/Widgets/Dashboard/Clock.qml
   qml/Widgets/Dashboard/Compass.qml
   qml/Widgets/Dashboard/DashboardToolButton.qml
   qml/Widgets/Dashboard/DataGrid.qml
   qml/Widgets/Dashboard/FFTPlot.qml
   qml/Widgets/Dashboard/Gauge.qml
   qml/Widgets/Dashboard/Meter.qml
-  qml/Widgets/Dashboard/Thermometer.qml
   qml/Widgets/Dashboard/GPS.qml
   qml/Widgets/Dashboard/Gyroscope.qml
   qml/Widgets/Dashboard/LEDPanel.qml
   qml/Widgets/Dashboard/MultiPlot.qml
   qml/Widgets/Dashboard/Plot.qml
   qml/Widgets/Dashboard/PlotCommon.qml
+  qml/Widgets/Dashboard/Stopwatch.qml
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/BigButton.qml
   qml/Widgets/BoundField.qml

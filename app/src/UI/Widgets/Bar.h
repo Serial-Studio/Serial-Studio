@@ -74,9 +74,6 @@ class Bar : public QQuickItem {
   Q_PROPERTY(QString displayFormat
              READ displayFormat
              CONSTANT)
-  Q_PROPERTY(bool showValueDisplay
-             READ showValueDisplay
-             CONSTANT)
   // clang-format on
 
 signals:
@@ -90,7 +87,6 @@ public:
   [[nodiscard]] bool alarmsDefined() const noexcept;
   [[nodiscard]] bool alarmTriggered() const noexcept;
   [[nodiscard]] int displayTickCount() const noexcept;
-  [[nodiscard]] bool showValueDisplay() const noexcept;
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
   [[nodiscard]] const QString& displayFormat() const noexcept;
@@ -126,7 +122,6 @@ protected:
 
   int m_index;
   int m_displayTickCount;
-  bool m_showValueDisplay;
   QString m_title;
   QString m_units;
   QString m_displayFormat;

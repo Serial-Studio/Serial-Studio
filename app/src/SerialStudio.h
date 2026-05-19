@@ -147,7 +147,6 @@ public:
     Gauge,
     Compass,
     Meter,
-    Thermometer,
     NoDatasetWidget
   };
   Q_ENUM(DatasetWidget)
@@ -191,7 +190,8 @@ public:
     DashboardGauge,
     DashboardCompass,
     DashboardMeter,
-    DashboardThermometer,
+    DashboardClock,
+    DashboardStopwatch,
     DashboardNoWidget,
 #ifdef BUILD_COMMERCIAL
     DashboardImageView,
@@ -209,16 +209,15 @@ public:
   // clang-format off
   enum DatasetOption
   {
-    DatasetGeneric     = 0b000000000,
-    DatasetPlot        = 0b000000001,
-    DatasetFFT         = 0b000000010,
-    DatasetBar         = 0b000000100,
-    DatasetGauge       = 0b000001000,
-    DatasetCompass     = 0b000010000,
-    DatasetLED         = 0b000100000,
-    DatasetWaterfall   = 0b001000000,
-    DatasetMeter       = 0b010000000,
-    DatasetThermometer = 0b100000000,
+    DatasetGeneric   = 0b00000000,
+    DatasetPlot      = 0b00000001,
+    DatasetFFT       = 0b00000010,
+    DatasetBar       = 0b00000100,
+    DatasetGauge     = 0b00001000,
+    DatasetCompass   = 0b00010000,
+    DatasetLED       = 0b00100000,
+    DatasetWaterfall = 0b01000000,
+    DatasetMeter     = 0b10000000,
   };
   Q_ENUM(DatasetOption)
   // clang-format on

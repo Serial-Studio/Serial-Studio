@@ -143,6 +143,10 @@ UI::Dashboard::Dashboard()
   , m_terminalWidgetId(kInvalidWidgetId)
   , m_notificationLogEnabled(false)
   , m_notificationLogWidgetId(kInvalidWidgetId)
+  , m_clockEnabled(false)
+  , m_clockWidgetId(kInvalidWidgetId)
+  , m_stopwatchEnabled(false)
+  , m_stopwatchWidgetId(kInvalidWidgetId)
   , m_autoHideToolbar(false)
   , m_persistSettings(true)
   , m_updateRetryInProgress(false)
@@ -209,6 +213,8 @@ UI::Dashboard::Dashboard()
   m_showActionPanel = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
   m_terminalEnabled = m_settings.value("Dashboard/TerminalEnabled", false).toBool();
   m_notificationLogEnabled = m_settings.value("Dashboard/NotificationLogEnabled", false).toBool();
+  m_clockEnabled           = m_settings.value("Dashboard/ClockEnabled", false).toBool();
+  m_stopwatchEnabled       = m_settings.value("Dashboard/StopwatchEnabled", false).toBool();
 }
 
 /**
@@ -240,6 +246,14 @@ bool UI::Dashboard::available() const
   if (m_notificationLogEnabled)
     return true;
 #endif
+
+  // Clock works without datasets, same promotion as NotificationLog
+  if (m_clockEnabled)
+    return true;
+
+  // Stopwatch works without datasets too
+  if (m_stopwatchEnabled)
+    return true;
 
   return false;
 }
@@ -297,6 +311,22 @@ bool UI::Dashboard::terminalEnabled() const noexcept
 bool UI::Dashboard::notificationLogEnabled() const noexcept
 {
   return m_notificationLogEnabled;
+}
+
+/**
+ * @brief Returns true if the clock widget should be displayed within the dashboard.
+ */
+bool UI::Dashboard::clockEnabled() const noexcept
+{
+  return m_clockEnabled;
+}
+
+/**
+ * @brief Returns true if the stopwatch widget should be displayed within the dashboard.
+ */
+bool UI::Dashboard::stopwatchEnabled() const noexcept
+{
+  return m_stopwatchEnabled;
 }
 
 /**
@@ -725,6 +755,8 @@ void UI::Dashboard::resetData(const bool notify)
 #ifdef BUILD_COMMERCIAL
   m_notificationLogWidgetId = kInvalidWidgetId;
 #endif
+  m_clockWidgetId     = kInvalidWidgetId;
+  m_stopwatchWidgetId = kInvalidWidgetId;
 
   // Clear plotting data
   m_fftValues.clear();
@@ -1025,6 +1057,162 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
 
   Q_EMIT widgetCountChanged();
   Q_EMIT notificationLogEnabledChanged();
+
+  // Re-evaluate Setup -> Dashboard transition in MainWindow
+  Q_EMIT updated();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Clock widget
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Removes the clock widget from the registry and internal structures.
+ */
+void UI::Dashboard::removeClockWidget()
+{
+  auto& registry = WidgetRegistry::instance();
+
+  if (m_clockWidgetId != kInvalidWidgetId) {
+    registry.destroyWidget(m_clockWidgetId);
+    m_clockWidgetId = kInvalidWidgetId;
+  }
+
+  m_widgetGroups.remove(SerialStudio::DashboardClock);
+
+  auto& groups = m_lastFrame.groups;
+  groups.erase(std::remove_if(groups.begin(),
+                              groups.end(),
+                              [](const DataModel::Group& g) { return g.widget == "clock"; }),
+               groups.end());
+
+  // Rebuild contiguous widget map from remaining widgets
+  m_widgetMap.clear();
+  m_widgetCount = 0;
+  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
+    const auto count = widgetCount(i.key());
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+  }
+  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
+    const auto count = widgetCount(i.key());
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+  }
+}
+
+/**
+ * @brief Enables or disables the clock widget.
+ */
+void UI::Dashboard::setClockEnabled(const bool enabled)
+{
+  if (m_clockEnabled == enabled)
+    return;
+
+  m_clockEnabled = enabled;
+  if (m_persistSettings)
+    m_settings.setValue("Dashboard/ClockEnabled", m_clockEnabled);
+
+  // Same gating as NotificationLog: needs a live source frame to register
+  if (!m_sourceRawFrames.isEmpty()) {
+    auto& registry = WidgetRegistry::instance();
+    if (enabled) {
+      DataModel::Group clock;
+      clock.widget  = "clock";
+      clock.title   = tr("Clock");
+      clock.groupId = static_cast<int>(m_lastFrame.groups.size());
+
+      m_lastFrame.groups.push_back(clock);
+      m_widgetGroups[SerialStudio::DashboardClock].append(clock);
+
+      m_clockWidgetId =
+        registry.createWidget(SerialStudio::DashboardClock, clock.title, clock.groupId, -1, true);
+      m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardClock, 0));
+    } else {
+      removeClockWidget();
+    }
+  }
+
+  Q_EMIT widgetCountChanged();
+  Q_EMIT clockEnabledChanged();
+
+  // Re-evaluate Setup -> Dashboard transition in MainWindow
+  Q_EMIT updated();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Stopwatch widget
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Removes the stopwatch widget from the registry and internal structures.
+ */
+void UI::Dashboard::removeStopwatchWidget()
+{
+  auto& registry = WidgetRegistry::instance();
+
+  if (m_stopwatchWidgetId != kInvalidWidgetId) {
+    registry.destroyWidget(m_stopwatchWidgetId);
+    m_stopwatchWidgetId = kInvalidWidgetId;
+  }
+
+  m_widgetGroups.remove(SerialStudio::DashboardStopwatch);
+
+  auto& groups = m_lastFrame.groups;
+  groups.erase(std::remove_if(groups.begin(),
+                              groups.end(),
+                              [](const DataModel::Group& g) { return g.widget == "stopwatch"; }),
+               groups.end());
+
+  // Rebuild contiguous widget map from remaining widgets
+  m_widgetMap.clear();
+  m_widgetCount = 0;
+  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
+    const auto count = widgetCount(i.key());
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+  }
+  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
+    const auto count = widgetCount(i.key());
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+  }
+}
+
+/**
+ * @brief Enables or disables the stopwatch widget.
+ */
+void UI::Dashboard::setStopwatchEnabled(const bool enabled)
+{
+  if (m_stopwatchEnabled == enabled)
+    return;
+
+  m_stopwatchEnabled = enabled;
+  if (m_persistSettings)
+    m_settings.setValue("Dashboard/StopwatchEnabled", m_stopwatchEnabled);
+
+  // Same gating as Clock: needs a live source frame to register
+  if (!m_sourceRawFrames.isEmpty()) {
+    auto& registry = WidgetRegistry::instance();
+    if (enabled) {
+      DataModel::Group stopwatch;
+      stopwatch.widget  = "stopwatch";
+      stopwatch.title   = tr("Stopwatch");
+      stopwatch.groupId = static_cast<int>(m_lastFrame.groups.size());
+
+      m_lastFrame.groups.push_back(stopwatch);
+      m_widgetGroups[SerialStudio::DashboardStopwatch].append(stopwatch);
+
+      m_stopwatchWidgetId = registry.createWidget(
+        SerialStudio::DashboardStopwatch, stopwatch.title, stopwatch.groupId, -1, true);
+      m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardStopwatch, 0));
+    } else {
+      removeStopwatchWidget();
+    }
+  }
+
+  Q_EMIT widgetCountChanged();
+  Q_EMIT stopwatchEnabledChanged();
 
   // Re-evaluate Setup -> Dashboard transition in MainWindow
   Q_EMIT updated();
@@ -1358,6 +1546,26 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   }
 #endif
 
+  // Add clock group
+  if (m_clockEnabled) {
+    DataModel::Group clock;
+    clock.widget  = "clock";
+    clock.title   = tr("Clock");
+    clock.groupId = m_lastFrame.groups.size();
+
+    m_lastFrame.groups.push_back(clock);
+  }
+
+  // Add stopwatch group
+  if (m_stopwatchEnabled) {
+    DataModel::Group stopwatch;
+    stopwatch.widget  = "stopwatch";
+    stopwatch.title   = tr("Stopwatch");
+    stopwatch.groupId = m_lastFrame.groups.size();
+
+    m_lastFrame.groups.push_back(stopwatch);
+  }
+
   // Build widget type -> group lists from the frame
   buildWidgetGroups(frame, pro);
 
@@ -1479,6 +1687,8 @@ void UI::Dashboard::registerWidgets()
 #ifdef BUILD_COMMERCIAL
   m_notificationLogWidgetId = kInvalidWidgetId;
 #endif
+  m_clockWidgetId     = kInvalidWidgetId;
+  m_stopwatchWidgetId = kInvalidWidgetId;
 
   // Register group-level widgets
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
@@ -1497,6 +1707,14 @@ void UI::Dashboard::registerWidgets()
       if (key == SerialStudio::DashboardNotificationLog)
         m_notificationLogWidgetId = widgetId;
 #endif
+
+      // Store clock widget ID for incremental updates
+      if (key == SerialStudio::DashboardClock)
+        m_clockWidgetId = widgetId;
+
+      // Store stopwatch widget ID for incremental updates
+      if (key == SerialStudio::DashboardStopwatch)
+        m_stopwatchWidgetId = widgetId;
 
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
     }

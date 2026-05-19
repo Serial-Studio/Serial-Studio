@@ -82,7 +82,6 @@ typedef enum {
   kDatasetView_Virtual,
   kDatasetView_DisplayTickCount,
   kDatasetView_DisplayFormat,
-  kDatasetView_ShowValueDisplay,
 } DatasetItem;
 
 typedef enum {
@@ -771,11 +770,10 @@ quint16 DataModel::ProjectEditor::datasetOptions() const
     option |= SerialStudio::DatasetWaterfall;
 
   static const QHash<QString, quint16> kWidgetFlags = {
-    {        QStringLiteral("bar"),         SerialStudio::DatasetBar},
-    {      QStringLiteral("gauge"),       SerialStudio::DatasetGauge},
-    {    QStringLiteral("compass"),     SerialStudio::DatasetCompass},
-    {      QStringLiteral("meter"),       SerialStudio::DatasetMeter},
-    {QStringLiteral("thermometer"), SerialStudio::DatasetThermometer},
+    {    QStringLiteral("bar"),     SerialStudio::DatasetBar},
+    {  QStringLiteral("gauge"),   SerialStudio::DatasetGauge},
+    {QStringLiteral("compass"), SerialStudio::DatasetCompass},
+    {  QStringLiteral("meter"),   SerialStudio::DatasetMeter},
   };
   option |= kWidgetFlags.value(m_selectedDataset.widget, 0);
 
@@ -3389,9 +3387,9 @@ void DataModel::ProjectEditor::addWidgetSection(CustomModel* model,
                       ParameterDescription);
   model->appendRow(widgetItem);
 
-  const bool rangeEnabled = showWidget
-                         && (dataset.widget == "bar" || dataset.widget == "gauge"
-                             || dataset.widget == "meter" || dataset.widget == "thermometer");
+  const bool rangeEnabled =
+    showWidget
+    && (dataset.widget == "bar" || dataset.widget == "gauge" || dataset.widget == "meter");
 
   buildWidgetRangeRows(model, dataset, rangeEnabled);
   buildWidgetFormatRows(model, dataset, rangeEnabled);
@@ -3428,7 +3426,7 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
 }
 
 /**
- * @brief Appends the tick-count, label-format, and show-value rows for the Widget section.
+ * @brief Appends the tick-count and label-format rows for the Widget section.
  */
 void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
                                                      const DataModel::Dataset& dataset,
@@ -3465,24 +3463,6 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
   formatItem->setData(tr("Decimal places or notation used on tick labels and the value display"),
                       ParameterDescription);
   model->appendRow(formatItem);
-
-  // Gauge and Meter always render the in-face value box
-  const bool valueIndicatorBuiltIn = (dataset.widget == "gauge" || dataset.widget == "meter");
-  const bool showValueEditable     = rangeEnabled && !valueIndicatorBuiltIn;
-  const bool showValueEffective    = valueIndicatorBuiltIn ? true : dataset.showValueDisplay;
-
-  auto* showValueItem = new QStandardItem();
-  showValueItem->setEditable(showValueEditable);
-  showValueItem->setData(0, PlaceholderValue);
-  showValueItem->setData(CheckBox, WidgetType);
-  showValueItem->setData(showValueEditable, Active);
-  showValueItem->setData(showValueEffective, EditableValue);
-  showValueItem->setData(kDatasetView_ShowValueDisplay, ParameterType);
-  showValueItem->setData(tr("Show Value Indicator"), ParameterName);
-  showValueItem->setData(
-    tr("Toggle the boxed numeric readout that sits below or beside the widget"),
-    ParameterDescription);
-  model->appendRow(showValueItem);
 }
 
 /**
@@ -3492,10 +3472,10 @@ void DataModel::ProjectEditor::addAlarmSection(CustomModel* model,
                                                const DataModel::Dataset& dataset)
 {
   // Determine editability based on widget type
-  const bool showWidget   = currentDatasetIsEditable();
-  const bool rangeEnabled = showWidget
-                         && (dataset.widget == "bar" || dataset.widget == "gauge"
-                             || dataset.widget == "meter" || dataset.widget == "thermometer");
+  const bool showWidget = currentDatasetIsEditable();
+  const bool rangeEnabled =
+    showWidget
+    && (dataset.widget == "bar" || dataset.widget == "gauge" || dataset.widget == "meter");
 
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
@@ -3645,9 +3625,8 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_datasetWidgets.insert(QStringLiteral("gauge"), tr("Gauge"));
   m_datasetWidgets.insert(QStringLiteral("compass"), tr("Compass"));
   m_datasetWidgets.insert(QStringLiteral("meter"), tr("Meter"));
-  m_datasetWidgets.insert(QStringLiteral("thermometer"), tr("Thermometer"));
 
-  // Display label format presets for analog widgets (bar/gauge/meter/thermometer)
+  // Display label format presets for analog widgets (bar/gauge/meter)
   m_displayFormats.clear();
   m_displayFormats.insert(QLatin1String(""), tr("Auto"));
   m_displayFormats.insert(QStringLiteral("0d"), tr("Integer (0 decimals)"));
@@ -4128,9 +4107,6 @@ void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
       break;
     case kDatasetView_DisplayTickCount:
       dataset.displayTickCount = qMax(0, value.toInt());
-      break;
-    case kDatasetView_ShowValueDisplay:
-      dataset.showValueDisplay = value.toBool();
       break;
     default:
       break;

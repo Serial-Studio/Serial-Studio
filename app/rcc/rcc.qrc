@@ -154,6 +154,10 @@
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/search.svg</file>
         <file>icons/buttons/send.svg</file>
+        <file>icons/buttons/stopwatch-lap.svg</file>
+        <file>icons/buttons/stopwatch-reset.svg</file>
+        <file>icons/buttons/stopwatch-start.svg</file>
+        <file>icons/buttons/stopwatch-stop.svg</file>
         <file>icons/buttons/switch.svg</file>
         <file>icons/buttons/test.svg</file>
         <file>icons/buttons/trash.svg</file>
@@ -210,6 +214,7 @@
         <file>icons/dashboard-buttons/zoom-out.svg</file>
         <file>icons/dashboard-large/accelerometer.svg</file>
         <file>icons/dashboard-large/bar.svg</file>
+        <file>icons/dashboard-large/clock.svg</file>
         <file>icons/dashboard-large/compass.svg</file>
         <file>icons/dashboard-large/datagrid.svg</file>
         <file>icons/dashboard-large/fft.svg</file>
@@ -226,11 +231,12 @@
         <file>icons/dashboard-large/painter.svg</file>
         <file>icons/dashboard-large/plot.svg</file>
         <file>icons/dashboard-large/plot3d.svg</file>
+        <file>icons/dashboard-large/stopwatch.svg</file>
         <file>icons/dashboard-large/terminal.svg</file>
-        <file>icons/dashboard-large/thermometer.svg</file>
         <file>icons/dashboard-large/waterfall.svg</file>
         <file>icons/dashboard-small/accelerometer.svg</file>
         <file>icons/dashboard-small/bar.svg</file>
+        <file>icons/dashboard-small/clock.svg</file>
         <file>icons/dashboard-small/compass.svg</file>
         <file>icons/dashboard-small/datagrid.svg</file>
         <file>icons/dashboard-small/fft.svg</file>
@@ -247,8 +253,8 @@
         <file>icons/dashboard-small/painter.svg</file>
         <file>icons/dashboard-small/plot.svg</file>
         <file>icons/dashboard-small/plot3d.svg</file>
+        <file>icons/dashboard-small/stopwatch.svg</file>
         <file>icons/dashboard-small/terminal.svg</file>
-        <file>icons/dashboard-small/thermometer.svg</file>
         <file>icons/dashboard-small/waterfall.svg</file>
         <file>icons/database/close.svg</file>
         <file>icons/database/delete.svg</file>
@@ -299,7 +305,6 @@
         <file>icons/project-editor/actions/add-gauge.svg</file>
         <file>icons/project-editor/actions/add-led.svg</file>
         <file>icons/project-editor/actions/add-meter.svg</file>
-        <file>icons/project-editor/actions/add-thermometer.svg</file>
         <file>icons/project-editor/actions/add-output-button.svg</file>
         <file>icons/project-editor/actions/add-output-knob.svg</file>
         <file>icons/project-editor/actions/add-output-slider.svg</file>
@@ -326,7 +331,6 @@
         <file>icons/project-editor/actions/insert-constant.svg</file>
         <file>icons/project-editor/actions/led.svg</file>
         <file>icons/project-editor/actions/meter.svg</file>
-        <file>icons/project-editor/actions/thermometer.svg</file>
         <file>icons/project-editor/actions/load-ca-certs.svg</file>
         <file>icons/project-editor/actions/move-down.svg</file>
         <file>icons/project-editor/actions/move-up.svg</file>
@@ -385,7 +389,6 @@
         <file>icons/project-editor/toolbar/add-gps.svg</file>
         <file>icons/project-editor/toolbar/add-group.svg</file>
         <file>icons/project-editor/toolbar/add-meter.svg</file>
-        <file>icons/project-editor/toolbar/add-thermometer.svg</file>
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
         <file>icons/project-editor/toolbar/add-led.svg</file>
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
@@ -443,6 +446,7 @@
         <file>icons/project-editor/open.svg</file>
         <file>icons/start/actions.svg</file>
         <file>icons/start/auto-layout.svg</file>
+        <file>icons/start/clock.svg</file>
         <file>icons/start/console-log.svg</file>
         <file>icons/start/console.svg</file>
         <file>icons/start/csv-log.svg</file>
@@ -463,7 +467,9 @@
         <file>icons/start/resume.svg</file>
         <file>icons/start/sessions.svg</file>
         <file>icons/start/settings.svg</file>
+        <file>icons/start/stopwatch.svg</file>
         <file>icons/start/tools.svg</file>
+        <file>icons/taskbar/clock.svg</file>
         <file>icons/taskbar/console.svg</file>
         <file>icons/taskbar/file-transmission.svg</file>
         <file>icons/taskbar/mqtt-off.svg</file>
@@ -472,6 +478,7 @@
         <file>icons/taskbar/pause.svg</file>
         <file>icons/taskbar/resume.svg</file>
         <file>icons/taskbar/settings.svg</file>
+        <file>icons/taskbar/stopwatch.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/activate.svg</file>
         <file>icons/toolbar/connect.svg</file>

@@ -3514,10 +3514,6 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
       title          = tr("New Meter");
       dataset.widget = QStringLiteral("meter");
       break;
-    case SerialStudio::DatasetThermometer:
-      title          = tr("New Thermometer");
-      dataset.widget = QStringLiteral("thermometer");
-      break;
     case SerialStudio::DatasetLED:
       title       = tr("New LED Indicator");
       dataset.led = true;
@@ -3630,9 +3626,6 @@ void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOpt
       break;
     case SerialStudio::DatasetMeter:
       m_selectedDataset.widget = checked ? QStringLiteral("meter") : "";
-      break;
-    case SerialStudio::DatasetThermometer:
-      m_selectedDataset.widget = checked ? QStringLiteral("thermometer") : "";
       break;
     case SerialStudio::DatasetLED:
       m_selectedDataset.led = checked;

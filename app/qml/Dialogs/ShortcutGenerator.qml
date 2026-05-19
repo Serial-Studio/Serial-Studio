@@ -43,6 +43,8 @@ Widgets.SmartDialog {
     var ids = []
     if (pinConsole.checked)          ids.push("console")
     if (pinNotifications.checked)    ids.push("notifications")
+    if (pinClock.checked)            ids.push("clock")
+    if (pinStopwatch.checked)        ids.push("stopwatch")
     if (pinPause.checked)            ids.push("pause")
     if (pinFileTransmission.checked) ids.push("file_transmission")
     return ids
@@ -581,6 +583,34 @@ Widgets.SmartDialog {
           } Switch {
             id: pinNotifications
             checked: true
+            enabled: root.taskbarMode !== "hidden"
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
+
+          Label {
+            text: qsTr("Clock")
+            color: Cpp_ThemeManager.colors["text"]
+            enabled: root.taskbarMode !== "hidden"
+            opacity: enabled ? 1 : 0.5
+          } Switch {
+            id: pinClock
+            checked: false
+            enabled: root.taskbarMode !== "hidden"
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
+
+          Label {
+            text: qsTr("Stopwatch")
+            color: Cpp_ThemeManager.colors["text"]
+            enabled: root.taskbarMode !== "hidden"
+            opacity: enabled ? 1 : 0.5
+          } Switch {
+            id: pinStopwatch
+            checked: false
             enabled: root.taskbarMode !== "hidden"
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight

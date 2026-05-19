@@ -22,6 +22,7 @@
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Layouts
+import QtQuick.Controls
 
 import SerialStudio
 
@@ -99,16 +100,31 @@ Item {
   }
 
   //
-  // Main layout
+  // SwipeView -- page 0 = analog bar, page 1 = digital readout.
+  // Active page is persisted per-widget via Cpp_JSON_ProjectModel.
   //
-  GridLayout {
-    id: barLayout
+  SwipeView {
+    id: swipeView
 
-    rows: 2
-    columns: 1
-    rowSpacing: 4
-    anchors.margins: 8
+    clip: true
+    interactive: true
     anchors.fill: parent
+    anchors.bottomMargin: pageIndicator.height + 4
+
+    //
+    // PAGE 0 -- Analog bar
+    //
+    Item {
+      id: analogPage
+
+      GridLayout {
+        id: barLayout
+
+        rows: 2
+        columns: 1
+        rowSpacing: 4
+        anchors.margins: 8
+        anchors.fill: parent
 
     //
     // Bar widget
@@ -339,15 +355,144 @@ Item {
       maxValue: model.maxValue
       minValue: model.minValue
       alarm: model.alarmTriggered
+      visible: root.height >= 110
       Layout.alignment: Qt.AlignHCenter
       Layout.minimumWidth: implicitWidth
       maximumWidth: Math.min(root.width * 0.85, 320)
       Layout.preferredHeight: visible ? implicitHeight : 0
-      visible: model.showValueDisplay && root.height >= 110
     }
 
     Item {
       implicitHeight: 4
+    }
+      }
+    }
+
+    //
+    // PAGE 1 -- Big digital readout
+    //
+    Item {
+      id: digitalPage
+
+      TextMetrics {
+        id: bigValueMetrics
+
+        font.bold: true
+        font.pixelSize: 100
+        font.family: Cpp_Misc_CommonFonts.monoFont.family
+        text: {
+          const a = formatValue(root.model.minValue)
+          const b = formatValue(root.model.maxValue)
+          const longer = a.length >= b.length ? a : b
+          return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
+        }
+      }
+
+      readonly property real availableW: Math.max(0, width  - 32)
+      readonly property real availableH: Math.max(0, height - 64)
+      readonly property real bigValueFontPx: {
+        const metricsW = Math.max(8, bigValueMetrics.width)
+        const widthFit  = (digitalPage.availableW * 0.85 / metricsW) * bigValueMetrics.font.pixelSize
+        const heightFit = digitalPage.availableH * 0.50
+        return Math.max(20, Math.min(160, widthFit, heightFit))
+      }
+
+      Rectangle {
+        id: digitalBox
+
+        radius: 4
+        antialiasing: true
+        anchors.centerIn: parent
+        border.width: 1
+        border.color: root.model.alarmTriggered
+                      ? Qt.darker(Cpp_ThemeManager.colors["alarm"], 1.20)
+                      : Qt.darker(root.color, 1.30)
+        width: digitalColumn.implicitWidth + 32
+        height: digitalColumn.implicitHeight + 24
+        color: root.model.alarmTriggered && digitalBox.alarmFlashOn
+               ? Cpp_ThemeManager.colors["alarm"]
+               : Cpp_ThemeManager.colors["console_base"]
+
+        Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
+
+        property bool alarmFlashOn: false
+        SequentialAnimation {
+          loops: Animation.Infinite
+          running: root.model.alarmTriggered
+          PropertyAction { target: digitalBox; property: "alarmFlashOn"; value: true }
+          PauseAnimation { duration: 450 }
+          PropertyAction { target: digitalBox; property: "alarmFlashOn"; value: false }
+          PauseAnimation { duration: 450 }
+        }
+
+        Column {
+          id: digitalColumn
+
+          spacing: 6
+          anchors.centerIn: parent
+
+          Text {
+            id: bigValueText
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: formatValue(root.model.value)
+                  + (root.model.units.length > 0 ? " " + root.model.units : "")
+            font.family: Cpp_Misc_CommonFonts.monoFont.family
+            font.bold: true
+            font.pixelSize: digitalPage.bigValueFontPx
+            color: root.model.alarmTriggered
+                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.colors["alarm"])
+                   : root.color
+            Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
+          }
+
+          Text {
+            opacity: 0.80
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: root.model.title
+            visible: root.model.title.length > 0
+            color: root.model.alarmTriggered && digitalBox.alarmFlashOn
+                   ? "#ffffff"
+                   : root.color
+            font.family: Cpp_Misc_CommonFonts.monoFont.family
+            font.pixelSize: bigValueText.font.pixelSize * 0.30
+          }
+        }
+      }
+    }
+  }
+
+  //
+  // Page indicator
+  //
+  PageIndicator {
+    id: pageIndicator
+
+    interactive: true
+    count: swipeView.count
+    anchors.bottomMargin: 4
+    anchors.bottom: parent.bottom
+    currentIndex: swipeView.currentIndex
+    anchors.horizontalCenter: parent.horizontalCenter
+    onCurrentIndexChanged: {
+      if (swipeView.currentIndex !== currentIndex)
+        swipeView.currentIndex = currentIndex
+    }
+  }
+
+  //
+  // Restore per-widget page from project settings, then persist on change.
+  //
+  Component.onCompleted: {
+    const s = Cpp_JSON_ProjectModel.widgetSettings(root.widgetId)
+    if (s["page"] !== undefined)
+      swipeView.currentIndex = parseInt(s["page"])
+  }
+  Connections {
+    target: swipeView
+    function onCurrentIndexChanged() {
+      Cpp_JSON_ProjectModel.saveWidgetSetting(
+        root.widgetId, "page", swipeView.currentIndex)
     }
   }
 }

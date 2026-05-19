@@ -130,6 +130,22 @@ Popup {
         }
       },
       {
+        name: qsTr("Clock"),
+        icon: "qrc:/icons/start/clock.svg",
+        visible: true,
+        run: function() {
+          Cpp_UI_Dashboard.clockEnabled = !Cpp_UI_Dashboard.clockEnabled
+        }
+      },
+      {
+        name: qsTr("Stopwatch"),
+        icon: "qrc:/icons/start/stopwatch.svg",
+        visible: true,
+        run: function() {
+          Cpp_UI_Dashboard.stopwatchEnabled = !Cpp_UI_Dashboard.stopwatchEnabled
+        }
+      },
+      {
         name: qsTr("Preferences"),
         icon: "qrc:/icons/start/settings.svg",
         visible: !app.runtimeMode,
@@ -665,8 +681,10 @@ Popup {
       icon.source: "qrc:/icons/start/tools.svg"
       visible: !app.runtimeMode || Cpp_CommercialBuild
 
+      readonly property string kClock: "clock"
       readonly property string kConsole: "console"
       readonly property string kSessions: "sessions"
+      readonly property string kStopwatch: "stopwatch"
       readonly property string kPreferences: "preferences"
       readonly property string kAiAssistant: "ai_assistant"
       readonly property string kNotifications: "notifications"
@@ -683,6 +701,12 @@ Popup {
             } else if (value === _tools.kNotifications && Cpp_CommercialBuild) {
               root.close()
               Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
+            } else if (value === _tools.kClock) {
+              root.close()
+              Cpp_UI_Dashboard.clockEnabled = !Cpp_UI_Dashboard.clockEnabled
+            } else if (value === _tools.kStopwatch) {
+              root.close()
+              Cpp_UI_Dashboard.stopwatchEnabled = !Cpp_UI_Dashboard.stopwatchEnabled
             } else if (value === _tools.kPreferences) {
               root.close()
               app.showSettingsDialog()
@@ -721,6 +745,20 @@ Popup {
             "checked": Cpp_UI_Dashboard.notificationLogEnabled
           })
         }
+
+        model.push({
+          "id": _tools.kClock,
+          "text": qsTr("Clock"),
+          "icon": "qrc:/icons/start/clock.svg",
+          "checked": Cpp_UI_Dashboard.clockEnabled
+        })
+
+        model.push({
+          "id": _tools.kStopwatch,
+          "text": qsTr("Stopwatch"),
+          "icon": "qrc:/icons/start/stopwatch.svg",
+          "checked": Cpp_UI_Dashboard.stopwatchEnabled
+        })
 
         if (!app.runtimeMode) {
           model.push({

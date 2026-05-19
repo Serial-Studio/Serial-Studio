@@ -431,6 +431,8 @@ Item {
         case "settings":          return !app.runtimeMode
         case "console":           return !app.runtimeMode
         case "notifications":     return Cpp_CommercialBuild
+        case "clock":             return true
+        case "stopwatch":         return true
         case "pause":             return true
         case "file_transmission": return Cpp_CommercialBuild
                                          && (!app.runtimeMode
@@ -494,6 +496,8 @@ Item {
             case "settings":          return qsTr("Settings")
             case "console":           return qsTr("Console")
             case "notifications":     return qsTr("Notifications")
+            case "clock":             return qsTr("Clock")
+            case "stopwatch":         return qsTr("Stopwatch")
             case "file_transmission": return qsTr("File Transmission")
             case "ai_assistant":      return qsTr("AI Assistant")
             case "pause":             return Cpp_IO_Manager.paused ? qsTr("Resume") : qsTr("Pause")
@@ -506,6 +510,8 @@ Item {
             case "settings":          return "qrc:/icons/taskbar/settings.svg"
             case "console":           return "qrc:/icons/taskbar/console.svg"
             case "notifications":     return "qrc:/icons/taskbar/notifications.svg"
+            case "clock":             return "qrc:/icons/taskbar/clock.svg"
+            case "stopwatch":         return "qrc:/icons/taskbar/stopwatch.svg"
             case "file_transmission": return "qrc:/icons/taskbar/file-transmission.svg"
             case "ai_assistant":      return "qrc:/icons/taskbar/ai.svg"
             case "pause":             return Cpp_IO_Manager.paused
@@ -522,6 +528,8 @@ Item {
             switch (modelData) {
             case "console":       return Cpp_UI_Dashboard.terminalEnabled
             case "notifications": return Cpp_UI_Dashboard.notificationLogEnabled
+            case "clock":         return Cpp_UI_Dashboard.clockEnabled
+            case "stopwatch":     return Cpp_UI_Dashboard.stopwatchEnabled
             case "pause":         return Cpp_IO_Manager.paused
             }
             return false
@@ -540,6 +548,14 @@ Item {
             case "notifications":
               taskBar.activeWindow = null
               Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
+              break
+            case "clock":
+              taskBar.activeWindow = null
+              Cpp_UI_Dashboard.clockEnabled = !Cpp_UI_Dashboard.clockEnabled
+              break
+            case "stopwatch":
+              taskBar.activeWindow = null
+              Cpp_UI_Dashboard.stopwatchEnabled = !Cpp_UI_Dashboard.stopwatchEnabled
               break
             case "pause":
               taskBar.activeWindow = null

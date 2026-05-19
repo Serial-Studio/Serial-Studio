@@ -36,7 +36,6 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   : QQuickItem(parent)
   , m_index(index)
   , m_displayTickCount(5)
-  , m_showValueDisplay(true)
   , m_value(0.0)
   , m_minValue(0.0)
   , m_maxValue(0.0)
@@ -53,7 +52,6 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
     m_units            = dataset.units;
     m_displayFormat    = dataset.displayFormat;
     m_displayTickCount = dataset.displayTickCount;
-    m_showValueDisplay = dataset.showValueDisplay;
     m_minValue         = qMin(dataset.wgtMin, dataset.wgtMax);
     m_maxValue         = qMax(dataset.wgtMin, dataset.wgtMax);
     m_alarmLow         = qMin(dataset.alarmLow, dataset.alarmHigh);
@@ -140,14 +138,6 @@ int Widgets::Bar::displayTickCount() const noexcept
 const QString& Widgets::Bar::displayFormat() const noexcept
 {
   return m_displayFormat;
-}
-
-/**
- * @brief Returns whether the numeric value indicator should be visible.
- */
-bool Widgets::Bar::showValueDisplay() const noexcept
-{
-  return m_showValueDisplay;
 }
 
 /**

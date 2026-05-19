@@ -65,6 +65,14 @@ class Dashboard : public QObject {
              READ  notificationLogEnabled
              WRITE setNotificationLogEnabled
              NOTIFY notificationLogEnabledChanged)
+  Q_PROPERTY(bool clockEnabled
+             READ  clockEnabled
+             WRITE setClockEnabled
+             NOTIFY clockEnabledChanged)
+  Q_PROPERTY(bool stopwatchEnabled
+             READ  stopwatchEnabled
+             WRITE setStopwatchEnabled
+             NOTIFY stopwatchEnabledChanged)
   Q_PROPERTY(bool autoHideToolbar
              READ  autoHideToolbar
              WRITE setAutoHideToolbar
@@ -89,6 +97,8 @@ signals:
   void showActionPanelChanged();
   void terminalEnabledChanged();
   void notificationLogEnabledChanged();
+  void clockEnabledChanged();
+  void stopwatchEnabledChanged();
   void autoHideToolbarChanged();
   void containsCommercialFeaturesChanged();
 
@@ -107,6 +117,8 @@ public:
   [[nodiscard]] bool streamAvailable() const;
   [[nodiscard]] bool terminalEnabled() const noexcept;
   [[nodiscard]] bool notificationLogEnabled() const noexcept;
+  [[nodiscard]] bool clockEnabled() const noexcept;
+  [[nodiscard]] bool stopwatchEnabled() const noexcept;
   [[nodiscard]] bool autoHideToolbar() const noexcept;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool containsCommercialFeatures() const noexcept;
@@ -158,6 +170,8 @@ public slots:
   void setShowActionPanel(const bool enabled);
   void setTerminalEnabled(const bool enabled);
   void setNotificationLogEnabled(const bool enabled);
+  void setClockEnabled(const bool enabled);
+  void setStopwatchEnabled(const bool enabled);
   void setAutoHideToolbar(const bool enabled);
   void setSettingsPersistent(const bool persistent);
   void activateAction(const int index, const bool guiTrigger = false);
@@ -177,6 +191,8 @@ private:
   void processDatasetIntoWidgetMaps(const DataModel::Dataset& dataset, DataModel::Group& ledPanel);
   void removeTerminalWidget();
   void removeNotificationLogWidget();
+  void removeClockWidget();
+  void removeStopwatchWidget();
   void handleMissingDataset(const DataModel::Frame& frame);
   void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
 
@@ -228,6 +244,10 @@ private:
   WidgetID m_terminalWidgetId;
   bool m_notificationLogEnabled;
   WidgetID m_notificationLogWidgetId;
+  bool m_clockEnabled;
+  WidgetID m_clockWidgetId;
+  bool m_stopwatchEnabled;
+  WidgetID m_stopwatchWidgetId;
   bool m_autoHideToolbar;
   bool m_persistSettings;
 

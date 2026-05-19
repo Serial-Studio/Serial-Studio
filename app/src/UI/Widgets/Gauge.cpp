@@ -40,7 +40,6 @@ Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, 
     m_units            = dataset.units;
     m_displayFormat    = dataset.displayFormat;
     m_displayTickCount = dataset.displayTickCount;
-    m_showValueDisplay = dataset.showValueDisplay;
     m_minValue         = qMin(dataset.wgtMin, dataset.wgtMax);
     m_maxValue         = qMax(dataset.wgtMin, dataset.wgtMax);
     m_alarmLow         = qMin(dataset.alarmLow, dataset.alarmHigh);

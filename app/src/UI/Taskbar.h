@@ -178,6 +178,8 @@ public slots:
 private slots:
   void onTerminalToggled();
   void onNotificationLogToggled();
+  void onClockToggled();
+  void onStopwatchToggled();
   void onRegistryCleared();
   void onBatchUpdateCompleted();
   void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo& info);

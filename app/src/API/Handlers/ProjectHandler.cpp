@@ -307,11 +307,10 @@ static int datasetOptionsBitflag(const DataModel::Dataset& ds)
     flags |= SerialStudio::DatasetWaterfall;
 
   static const QHash<QString, int> kWidgetFlags = {
-    {        QStringLiteral("bar"),         SerialStudio::DatasetBar},
-    {      QStringLiteral("gauge"),       SerialStudio::DatasetGauge},
-    {    QStringLiteral("compass"),     SerialStudio::DatasetCompass},
-    {      QStringLiteral("meter"),       SerialStudio::DatasetMeter},
-    {QStringLiteral("thermometer"), SerialStudio::DatasetThermometer},
+    {    QStringLiteral("bar"),     SerialStudio::DatasetBar},
+    {  QStringLiteral("gauge"),   SerialStudio::DatasetGauge},
+    {QStringLiteral("compass"), SerialStudio::DatasetCompass},
+    {  QStringLiteral("meter"),   SerialStudio::DatasetMeter},
   };
   flags |= kWidgetFlags.value(ds.widget, 0);
 
@@ -1379,9 +1378,6 @@ QString API::Handlers::ProjectHandler::widgetForDatasetOptions(int options)
   if (options & SerialStudio::DatasetCompass)
     return QStringLiteral("compass");
 
-  if (options & SerialStudio::DatasetThermometer)
-    return QStringLiteral("thermometer");
-
   if (options & SerialStudio::DatasetMeter)
     return QStringLiteral("meter");
 
@@ -1433,9 +1429,9 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id
 
   const int groupId = params.value(QStringLiteral("groupId")).toInt();
   const int options = params.value(QStringLiteral("options")).toInt();
-  if (options < 0 || options > 0b111111111)
+  if (options < 0 || options > 0b11111111)
     return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Invalid options: must be 0-511 (bit flags)"));
+      id, ErrorCode::InvalidParam, QStringLiteral("Invalid options: must be 0-255 (bit flags)"));
 
   auto& project      = DataModel::ProjectModel::instance();
   const auto& groups = project.groups();
@@ -1452,8 +1448,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id
                           SerialStudio::DatasetCompass,
                           SerialStudio::DatasetLED,
                           SerialStudio::DatasetWaterfall,
-                          SerialStudio::DatasetMeter,
-                          SerialStudio::DatasetThermometer}) {
+                          SerialStudio::DatasetMeter}) {
     if (options & cand) {
       headline = cand;
       break;
@@ -1494,8 +1489,7 @@ static SerialStudio::DatasetOption pickHeadlineDatasetOption(int options)
                           SerialStudio::DatasetCompass,
                           SerialStudio::DatasetLED,
                           SerialStudio::DatasetWaterfall,
-                          SerialStudio::DatasetMeter,
-                          SerialStudio::DatasetThermometer}) {
+                          SerialStudio::DatasetMeter}) {
     if (options & cand)
       return cand;
   }
@@ -3364,7 +3358,7 @@ void API::Handlers::ProjectHandler::registerEntityUpdateCommands()
                    "log, alarmEnabled, overviewDisplay, hideOnDashboard, xAxisId, "
                    "waterfallYAxis, fftSamples, fftSamplingRate, fftMin, fftMax, "
                    "pltMin, pltMax, wgtMin, wgtMax, alarmLow, alarmHigh, ledHigh, "
-                   "displayTickCount, displayFormat, showValueDisplay, "
+                   "displayTickCount, displayFormat, "
                    "transformCode, transformLanguage, virtual). The boolean fields "
                    "graph/fft/led/waterfall toggle the same flags as "
                    "project.dataset.setOption -- use them here when patching multiple "
@@ -3820,9 +3814,6 @@ static QString applyDatasetNumericFields(DataModel::Dataset& d,
 
   if (takeParam(params, consumed, Keys::DisplayFormat))
     d.displayFormat = params.value(Keys::DisplayFormat).toString();
-
-  if (takeParam(params, consumed, Keys::ShowValueDisplay))
-    d.showValueDisplay = params.value(Keys::ShowValueDisplay).toBool();
 
   if (takeParam(params, consumed, QStringLiteral("alarmEnabled")))
     d.alarmEnabled = params.value(QStringLiteral("alarmEnabled")).toBool();

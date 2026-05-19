@@ -219,26 +219,31 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>About</name>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="39"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="96"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="96"/>
         <source>Version %1</source>
         <translation>版本 %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="106"/>
         <source>Copyright © %1 %2</source>
         <translation>版权所有 © %1 %2</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="112"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="112"/>
         <source>All Rights Reserved</source>
         <translation>保留所有权利</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="127"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -248,56 +253,67 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="146"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>此配置已获得商业和专有使用许可。它可以在闭源和商业应用程序中使用，但须遵守商业许可证的条款。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="160"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>此配置仅供个人和评估使用。除非激活有效的商业许可证，否则禁止商业使用。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="174"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>本软件按"原样"提供，不提供任何明示或默示的保证，包括但不限于适销性或特定用途适用性的保证。在任何情况下，作者均不对因使用本软件而产生的任何损害承担责任。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="195"/>
         <source>Manage License</source>
         <translation>管理许可证</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="203"/>
         <source>Donate</source>
         <translation>捐赠</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="214"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="214"/>
         <source>Check for Updates</source>
         <translation>检查更新</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="223"/>
         <source>License Agreement</source>
         <translation>许可协议</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="232"/>
         <source>Report Bug</source>
         <translation>报告错误</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="241"/>
         <source>Acknowledgements</source>
         <translation>致谢</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="249"/>
         <source>Website</source>
         <translation>网站</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="265"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="265"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -307,21 +323,26 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="170"/>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="171"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="171"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="229"/>
         <source>G-FORCE</source>
         <translation>G力</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="265"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="265"/>
         <source>PITCH ↕</source>
         <translation>俯仰 ↕</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="300"/>
         <source>ROLL ↔</source>
         <translation>横滚 ↔</translation>
     </message>
@@ -330,41 +351,49 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>AccelerometerConfigDialog</name>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="35"/>
         <source>Accelerometer Configuration</source>
         <translation>加速度计配置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="95"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="95"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>配置加速度计显示范围和输入单位。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="109"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="109"/>
         <source>Display Range</source>
         <translation>显示范围</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="130"/>
         <source>Max G:</source>
         <translation>最大 G 值：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="144"/>
         <source>Enter max G value</source>
         <translation>输入最大 G 值</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="164"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="164"/>
         <source>Input Configuration</source>
         <translation>输入配置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="184"/>
         <source>Input already in G</source>
         <translation>输入已为 G 单位</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="219"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="219"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -373,16 +402,19 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>Acknowledgements</name>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="35"/>
         <source>Acknowledgements</source>
         <translation>致谢</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="77"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="77"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="89"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="89"/>
         <source>About Qt…</source>
         <translation>关于 QT…</translation>
     </message>
@@ -391,31 +423,37 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>ActionView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="136"/>
         <source>Change Icon</source>
         <translation>更改图标</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="138"/>
         <source>Change the icon used for this action</source>
         <translation>更改此操作使用的图标</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="156"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="160"/>
         <source>Duplicate this action with all its settings</source>
         <translation>复制此操作及其所有设置</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="169"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="171"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="171"/>
         <source>Delete this action from the project</source>
         <translation>从项目中删除此操作</translation>
     </message>
@@ -424,76 +462,91 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>AddWidgetDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="44"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="44"/>
         <source>Add Widget</source>
         <translation>添加控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="211"/>
         <source>Available Widgets</source>
         <translation>可用控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="220"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="220"/>
         <source>Click a row to add it to the workspace.</source>
         <translation>单击行以将其添加到工作区。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="228"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="228"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="247"/>
         <source>Widget</source>
         <translation>控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="248"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="249"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="316"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="316"/>
         <source>(entire group)</source>
         <translation>（整个组）</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="351"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="351"/>
         <source>Already in workspace</source>
         <translation>已在工作区中</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="352"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="352"/>
         <source>Add to workspace</source>
         <translation>添加到工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="381"/>
         <source>No widgets available.</source>
         <translation>无可用组件。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="382"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="382"/>
         <source>No widgets match.</source>
         <translation>无匹配组件。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="399"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="399"/>
         <source>%1 widgets</source>
         <translation>%1 个组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="400"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="400"/>
         <source>%1 of %2 widgets</source>
         <translation>%1 / %2 个组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="405"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="405"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -502,71 +555,85 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>AssistantPanel</name>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="31"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="31"/>
         <source>Assistant</source>
         <translation>助手</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="128"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="128"/>
         <source>CSV vs MDF4 export - what is the difference?</source>
         <translation>CSV 与 MDF4 导出 - 有什么区别？</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="131"/>
         <source>Plot, Bar, and Gauge - when to use each?</source>
         <translation>图表、柱状图和仪表 - 何时使用每种类型？</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="203"/>
         <source>How can I help with your project?</source>
         <translation>我能如何帮助您的项目?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="204"/>
         <source>Set up your API key to get started</source>
         <translation>设置您的 API 密钥以开始使用</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="216"/>
         <source>Describe what you would like to build, and I will configure the sources, groups, datasets, frame parsers, and transforms for you.</source>
         <translation>描述您想要构建的内容,我将为您配置数据源、组、数据集、帧解析器和转换。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="219"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="219"/>
         <source>To start chatting, paste an API key for the selected provider. Keys are encrypted on this machine and never leave your computer except to talk to the provider you choose.</source>
         <translation>要开始对话,请为所选提供商粘贴 API 密钥。密钥在本机加密,除了与您选择的提供商通信外,不会离开您的计算机。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="239"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="239"/>
         <source>Open API Key Setup</source>
         <translation>打开 API 密钥设置</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="249"/>
         <source>Get a key from %1</source>
         <translation>从 %1 获取密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="124"/>
         <source>List the sources in this project</source>
         <translation>列出此项目中的数据源</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="121"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="121"/>
         <source>Help me discover Serial Studio's features</source>
         <translation>帮我了解 Serial Studio 的功能</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="122"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="122"/>
         <source>What can this app do for my telemetry?</source>
         <translation>这个应用能为我的遥测做什么？</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="123"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="123"/>
         <source>Walk me through what this project already contains</source>
         <translation>带我了解这个项目已包含的内容</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="127"/>
         <source>What is a session database, and why would I use one?</source>
         <translation>什么是会话数据库，为什么要使用它？</translation>
     </message>
@@ -576,11 +643,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="129"/>
         <source>What is a frame parser, and when do I need one?</source>
         <translation>什么是帧解析器，什么时候需要使用？</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="130"/>
         <source>When should I use Lua vs JavaScript for the parser?</source>
         <translation>何时应使用 Lua 而非 JavaScript 作为解析器？</translation>
     </message>
@@ -590,151 +659,181 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="132"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="132"/>
         <source>What is the difference between a transform and a frame parser?</source>
         <translation>变换与帧解析器之间有什么区别？</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="135"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="135"/>
         <source>Add a UART source for an Arduino</source>
         <translation>为 Arduino 添加 UART 数据源</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="136"/>
         <source>Set up an IMU project from scratch</source>
         <translation>从头开始设置 IMU 项目</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="137"/>
         <source>Configure an MQTT subscriber</source>
         <translation>配置 MQTT 订阅者</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="138"/>
         <source>Add a CAN bus source</source>
         <translation>添加 CAN 总线数据源</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="139"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="139"/>
         <source>Set up a Modbus poller</source>
         <translation>设置 Modbus 轮询器</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="140"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="140"/>
         <source>Add a network (TCP/UDP) source</source>
         <translation>添加网络 (TCP/UDP) 数据源</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="141"/>
         <source>Write a CSV frame parser for me</source>
         <translation>为我编写 CSV 帧解析器</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="142"/>
         <source>Help me parse a JSON frame</source>
         <translation>帮我解析 JSON 帧</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="143"/>
         <source>Add an EMA smoothing transform to a dataset</source>
         <translation>为数据集添加 EMA 平滑变换</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="144"/>
         <source>Decode hexadecimal frames</source>
         <translation>解码十六进制帧</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="145"/>
         <source>Calibrate a sensor with a linear transform</source>
         <translation>使用线性变换校准传感器</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="148"/>
         <source>Suggest dashboard widgets for my data</source>
         <translation>为我的数据推荐仪表板部件</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="149"/>
         <source>Build an executive overview workspace</source>
         <translation>构建管理概览工作区</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="150"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="150"/>
         <source>Add a painter widget for a custom visualization</source>
         <translation>添加绘图器组件以实现自定义可视化</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="151"/>
         <source>Show Plot, FFT, and Waterfall for one dataset</source>
         <translation>为单个数据集显示绘图、FFT 和瀑布图</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="152"/>
         <source>Group my datasets into useful workspaces</source>
         <translation>将我的数据集分组到有用的工作区</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="445"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="445"/>
         <source>Ask Serial Studio anything…</source>
         <translation>向 Serial Studio 提问任何问题…</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="465"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="465"/>
         <source>Clear conversation</source>
         <translation>清除对话</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="509"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="509"/>
         <source>Stop generating</source>
         <translation>停止生成</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="510"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="510"/>
         <source>Send message (Enter)</source>
         <translation>发送消息 (Enter)</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="552"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="552"/>
         <source>Provider</source>
         <translation>提供商</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="585"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="585"/>
         <source>Model selection</source>
         <translation>模型选择</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="631"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="631"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>执行编辑操作时不再逐次询问。已阻止的操作保持阻止状态。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="633"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="633"/>
         <source>Auto-approve edits</source>
         <translation>自动批准编辑</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="652"/>
         <source>Manage API keys</source>
         <translation>管理 API 密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="673"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="673"/>
         <source>Working</source>
         <translation>处理中</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="674"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="674"/>
         <source>Ready</source>
         <translation>就绪</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="675"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="675"/>
         <source>  •  cache %1k tok</source>
         <translation>•  缓存 %1k tok</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="676"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="676"/>
         <source>  •  cache write %1k tok</source>
         <translation>缓存写入 %1k 令牌</translation>
     </message>
@@ -743,38 +842,47 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>Audio</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="89"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="89"/>
         <source>No Microphone Detected</source>
         <translation>未检测到麦克风</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="98"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="98"/>
         <source>Connect a mic or check your settings</source>
         <translation>连接麦克风或检查设置</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
         <source>Input Device</source>
         <translation>输入设备</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="142"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="161"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="230"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="161"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="230"/>
         <source>Sample Format</source>
         <translation>采样格式</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="180"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="180"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="249"/>
         <source>Channels</source>
         <translation>声道</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="211"/>
         <source>Output Device</source>
         <translation>输出设备</translation>
     </message>
@@ -782,75 +890,93 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AuthenticateDialog</name>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_AuthenticateDialog.h" line="100"/>
         <source>Dialog</source>
-        <translation type="vanished">对话框</translation>
+        <translation>对话框</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_AuthenticateDialog.h" line="101"/>
         <source>Please provide the user name and password for the download location.</source>
-        <translation type="vanished">请提供下载位置的用户名和密码。</translation>
+        <translation>请提供下载位置的用户名和密码。</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_AuthenticateDialog.h" line="102"/>
         <source>&amp;User name:</source>
-        <translation type="vanished">用户名(&amp;U)：</translation>
+        <translation>用户名(&amp;U)：</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_AuthenticateDialog.h" line="103"/>
         <source>&amp;Password:</source>
-        <translation type="vanished">密码(&amp;P)：</translation>
+        <translation>密码(&amp;P)：</translation>
     </message>
 </context>
 <context>
     <name>AxisRangeDialog</name>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="46"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="46"/>
         <source>Axis Range Configuration</source>
         <translation>坐标轴范围配置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="152"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>配置绘图坐标轴的可见范围。输入时数值实时更新。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="160"/>
         <source>X Axis</source>
         <translation>X 轴</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="183"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="183"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
         <source>Minimum:</source>
         <translation>最小值：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="195"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="266"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="266"/>
         <source>Enter min value</source>
         <translation>输入最小值</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
         <source>Maximum:</source>
         <translation>最大值：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="216"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="287"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="287"/>
         <source>Enter max value</source>
         <translation>输入最大值</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="231"/>
         <source>Y Axis</source>
         <translation>Y 轴</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="307"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="318"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -859,41 +985,49 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>BluetoothLE</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="54"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="54"/>
         <source>Device</source>
         <translation>设备</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="105"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="105"/>
         <source>Service</source>
         <translation>服务</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="141"/>
         <source>Characteristic</source>
         <translation>特征</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="199"/>
         <source>Scanning…</source>
         <translation>正在扫描…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="235"/>
         <source>No Bluetooth Adapter Detected</source>
         <translation>未检测到蓝牙适配器</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="246"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="246"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
         <translation>连接蓝牙适配器或检查系统设置</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="273"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="273"/>
         <source>This OS is not Supported Yet.</source>
         <translation>尚不支持此操作系统。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="284"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>一旦 QT 正式支持此操作系统，我们将更新 Serial Studio 以支持它</translation>
     </message>
@@ -902,46 +1036,55 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>CANBus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="57"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="57"/>
         <source>No CAN Drivers Found</source>
         <translation>未找到 CAN 驱动程序</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="70"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="70"/>
         <source>Install CAN hardware drivers for your system</source>
         <translation>为您的系统安装 CAN 硬件驱动程序</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="97"/>
         <source>CAN Driver</source>
         <translation>CAN 驱动程序</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
         <source>Interface</source>
         <translation>接口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="174"/>
         <source>Bitrate</source>
         <translation>比特率</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
         <source>Flexible Data-Rate</source>
         <translation>灵活数据速率</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="270"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="270"/>
         <source>DBC Database</source>
         <translation>DBC 数据库</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="274"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="274"/>
         <source>Import DBC File…</source>
         <translation>导入 DBC 文件…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="307"/>
         <source>No CAN Interfaces Found</source>
         <translation>未找到 CAN 接口</translation>
     </message>
@@ -1054,6 +1197,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>Console</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Console.qml" line="32"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Console.qml" line="32"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
@@ -1128,6 +1272,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>ConstantsLibraryDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="44"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="44"/>
         <source>Insert Constant</source>
         <translation>插入常量</translation>
     </message>
@@ -1138,68 +1283,88 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Fundamental</source>
         <translation>基本常量</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="126"/>
         <source>Speed of light in vacuum</source>
         <translation>真空光速</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
         <source>Planck constant</source>
         <translation>普朗克常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
         <source>Elementary charge</source>
         <translation>基本电荷</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
         <source>Avogadro constant</source>
         <translation>阿伏伽德罗常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <source>Boltzmann constant</source>
         <translation>玻尔兹曼常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Stefan-Boltzmann constant</source>
         <translation>斯特藩-玻尔兹曼常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Mechanics</source>
         <translation>力学</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <source>Standard gravity</source>
         <translation>标准重力加速度</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Gravitational constant</source>
         <translation>万有引力常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Pressure</source>
         <translation>压强</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
         <source>Standard atmosphere</source>
         <translation>标准大气压</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Sea-level barometric pressure</source>
         <translation>海平面气压</translation>
     </message>
@@ -1207,21 +1372,27 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
         <source>Absolute zero (Celsius)</source>
         <translation>绝对零度（摄氏度）</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <source>Water freezing point</source>
         <translation>水的冰点</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Water boiling point (1 atm)</source>
         <translation>水的沸点（1 atm）</translation>
     </message>
@@ -1233,57 +1404,75 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Gases &amp; Fluids</source>
         <translation>气体和流体</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
         <source>Universal gas constant</source>
         <translation>通用气体常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
         <source>Specific gas constant (dry air)</source>
         <translation>比气体常数（干空气）</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Specific gas constant (water vapor)</source>
         <translation>比气体常数（水蒸气）</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <source>Air density (sea level, 15°C)</source>
         <translation>空气密度（海平面，15°C）</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <source>Water density (4°C)</source>
         <translation>水密度 (4°C)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Speed of sound in air (20°C)</source>
         <translation>空气中的声速 (20°C)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Heat capacity ratio (dry air)</source>
         <translation>热容比 (干燥空气)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Electromagnetism</source>
         <translation>电磁学</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Vacuum permittivity</source>
         <translation>真空介电常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Vacuum permeability</source>
         <translation>真空磁导率</translation>
     </message>
@@ -1291,76 +1480,93 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Math</source>
         <translation>数学</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
         <source>Pi</source>
         <translation>圆周率</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
         <source>Euler's number</source>
         <translation>欧拉数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Golden ratio</source>
         <translation>黄金比例</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="212"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="212"/>
         <source>Physics Constants</source>
         <translation>物理常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="221"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
         <translation>SI 单位预设值。单击行以将其插入到 %1。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="231"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="250"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="250"/>
         <source>Symbol</source>
         <translation>符号</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="251"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="251"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="252"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="252"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="253"/>
         <source>Category</source>
         <translation>类别</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="357"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="357"/>
         <source>No constants match.</source>
         <translation>无匹配常数。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="378"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="378"/>
         <source>%1 constants</source>
         <translation>%1 个常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="379"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="379"/>
         <source>%1 of %2 constants</source>
         <translation>%1 / %2 个常数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="384"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="384"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -1369,6 +1575,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>CsvPlayer</name>
     <message>
         <location filename="../../qml/Dialogs/CsvPlayer.qml" line="36"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="36"/>
         <source>CSV Player</source>
         <translation>CSV 播放器</translation>
     </message>
@@ -1377,61 +1584,73 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>DBCPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="44"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="44"/>
         <source>DBC File Preview</source>
         <translation>DBC 文件预览</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <source>DBC File: %1</source>
         <translation>DBC 文件：%1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="177"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="177"/>
         <source>Review the CAN messages and signals to import into a new Serial Studio project.</source>
         <translation>查看要导入到新 Serial Studio 项目中的 CAN 消息和信号。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="185"/>
         <source>Messages</source>
         <translation>消息</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="219"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="219"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="229"/>
         <source>Message Name</source>
         <translation>消息名称</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="235"/>
         <source>CAN ID</source>
         <translation>CAN ID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="242"/>
         <source>Signals</source>
         <translation>信号</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="323"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="323"/>
         <source>No messages found in DBC file.</source>
         <translation>DBC 文件中未找到消息。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="341"/>
         <source>Total: %1 messages, %2 signals</source>
         <translation>总计：%1 条消息，%2 个信号</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="349"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="349"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="361"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="361"/>
         <source>Create Project</source>
         <translation>创建项目</translation>
     </message>
@@ -1440,6 +1659,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>Dashboard</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="127"/>
         <source>Dashboard %1</source>
         <translation>仪表板 %1</translation>
     </message>
@@ -1448,11 +1668,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>DashboardButton</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="40"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardButton.qml" line="40"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
         <source>No transmit function defined</source>
         <translation>未定义传输函数</translation>
     </message>
@@ -1461,41 +1683,49 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>DashboardCanvas</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="56"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="56"/>
         <source>Set Wallpaper…</source>
         <translation>设置壁纸…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="62"/>
         <source>Clear Wallpaper</source>
         <translation>清除壁纸</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="72"/>
         <source>Tile Windows</source>
         <translation>平铺窗口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="91"/>
         <source>Pro features detected in this project.</source>
         <translation>检测到此项目中的 Pro 功能。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="93"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
         <translation>后备控件已激活。购买许可证以获得完整功能。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="197"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="197"/>
         <source>Empty Workspace</source>
         <translation>空工作区</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="211"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>使用搜索栏查找并添加控件,或右键单击其他工作区中的控件以将其添加到此处。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="225"/>
         <source>Search Widgets</source>
         <translation>搜索控件</translation>
     </message>
@@ -1504,21 +1734,25 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>DashboardLayout</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
         <source>Dashboard</source>
         <translation>仪表板</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="204"/>
         <source>API Server Active (%1)</source>
         <translation>API 服务器活动 (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="205"/>
         <source>API Server Ready</source>
         <translation>API 服务器就绪</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="206"/>
         <source>API Server Off</source>
         <translation>API 服务器关闭</translation>
     </message>
@@ -1528,11 +1762,14 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="122"/>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="273"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="122"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="273"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="262"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="262"/>
         <source>Enter command…</source>
         <translation>输入命令…</translation>
     </message>
@@ -1541,6 +1778,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>DashboardSlider</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
         <source>No transmit function defined</source>
         <translation>未定义传输函数</translation>
     </message>
@@ -1549,16 +1787,19 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>DashboardTextField</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="47"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="47"/>
         <source>Enter command…</source>
         <translation>输入命令…</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="57"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="57"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="76"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="76"/>
         <source>No transmit function defined</source>
         <translation>未定义传输函数</translation>
     </message>
@@ -1567,16 +1808,19 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>DashboardToggle</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="57"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="57"/>
         <source>ON</source>
         <translation>开</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="59"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="59"/>
         <source>OFF</source>
         <translation>关</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
         <source>No transmit function defined</source>
         <translation>未定义传输函数</translation>
     </message>
@@ -1586,12 +1830,16 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="93"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="94"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="94"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="93"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="94"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="94"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
@@ -2263,487 +2511,487 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2160"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2158"/>
         <source>Project Information</source>
         <translation>项目信息</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2170"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2168"/>
         <source>Project Title</source>
         <translation>项目标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2171"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2169"/>
         <source>Untitled Project</source>
         <translation>无标题项目</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2172"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2170"/>
         <source>Name or description of the project</source>
         <translation>项目的名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2397"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2395"/>
         <source>Frame Detection</source>
         <translation>帧检测</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2413"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2411"/>
         <source>Frame Detection Method</source>
         <translation>帧检测方法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2414"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2412"/>
         <source>Select how incoming data frames are identified</source>
         <translation>选择如何识别传入的数据帧</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2422"/>
         <source>Hexadecimal Delimiters</source>
         <translation>十六进制分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2425"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2423"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>以十六进制值输入帧起始/结束序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2441"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2439"/>
         <source>Frame Start Delimiter</source>
         <translation>帧起始分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2442"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2440"/>
         <source>e.g. /*</source>
         <translation>例如 /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2443"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2441"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>标记数据帧开始的序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2455"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
         <source>Frame End Delimiter</source>
         <translation>帧结束分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2456"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2454"/>
         <source>e.g. */</source>
         <translation>例如 */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2457"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2455"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>标记数据帧结束的序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2469"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2467"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>有效载荷处理与验证</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2480"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2478"/>
         <source>Data Conversion Method</source>
         <translation>数据转换方法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2481"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2479"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>选择解析前如何解码传入的二进制数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2497"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2495"/>
         <source>Checksum Algorithm</source>
         <translation>校验和算法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2496"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>选择用于验证帧的校验和算法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2190"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2188"/>
         <source>Group Information</source>
         <translation>组信息</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2200"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2198"/>
         <source>Group Title</source>
         <translation>组标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2201"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2199"/>
         <source>Untitled Group</source>
         <translation>未命名组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2202"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2200"/>
         <source>Title or description of this dataset group</source>
         <translation>此数据集组的标题或描述</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2335"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2333"/>
         <source>Composite Widget</source>
         <translation>复合控件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2336"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2334"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>选择此数据集组的可视化方式（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2252"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2250"/>
         <source>Image Configuration</source>
         <translation>图像配置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3097"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3095"/>
         <source>Virtual Dataset</source>
         <translation>虚拟数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3098"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3096"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>虚拟数据集通过变换和数据表计算其值，不需要帧索引</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
         <source>Auto-detect</source>
         <translation>自动检测</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
         <source>Manual Delimiters</source>
         <translation>手动分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2265"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2263"/>
         <source>Detection Mode</source>
         <translation>检测模式</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1293"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1296"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1291"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1294"/>
         <source>Frame Parser</source>
         <translation>帧解析器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1436"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1437"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1481"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1434"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1435"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1479"/>
         <source>Groups</source>
         <translation>组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1511"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1524"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1525"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1509"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1522"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1523"/>
         <source>Shared Memory</source>
         <translation>共享内存</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1511"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1531"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1532"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4926"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1509"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1529"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4907"/>
         <source>Dataset Values</source>
         <translation>数据集值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1575"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1588"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1589"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1573"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1586"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1587"/>
         <source>Workspaces</source>
         <translation>工作区</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1627"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1630"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1631"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1625"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1628"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1629"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 发布者</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1680"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1678"/>
         <source>Publishing</source>
         <translation>发布中</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1691"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1689"/>
         <source>Enable Publishing</source>
         <translation>启用发布</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1692"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1690"/>
         <source>Broadcast frames, raw bytes and notifications to the broker</source>
         <translation>向代理广播帧、原始字节和通知</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1703"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1701"/>
         <source>Payload</source>
         <translation>有效载荷</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1704"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1702"/>
         <source>Selects what gets published: parsed dashboard data or raw RX bytes</source>
         <translation>选择发布内容：已解析的仪表板数据或原始 RX 字节</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1714"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1712"/>
         <source>Publish Rate (Hz)</source>
         <translation>发布速率 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1715"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1713"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
         <translation>每秒发布次数 (1-30 Hz)。较高速率会增加代理负载；仪表板数据受速率限制，因此缓慢的代理不会阻塞帧解析。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1727"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1725"/>
         <source>Topic Base</source>
         <translation>主题基础</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1728"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1726"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/device</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1729"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1727"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>用于帧和原始字节发布的基础主题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1740"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1738"/>
         <source>Script Topic</source>
         <translation>脚本主题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1741"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1765"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1739"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1763"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>为空时默认为基础主题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1742"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1740"/>
         <source>Topic the user script publishes to</source>
         <translation>用户脚本发布到的主题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1752"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1750"/>
         <source>Publish Notifications</source>
         <translation>发布通知</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1753"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1751"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>将仪表板通知镜像到专用主题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1764"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1762"/>
         <source>Notification Topic</source>
         <translation>通知主题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1766"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1764"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>仪表板通知镜像到的主题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1779"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1777"/>
         <source>Broker</source>
         <translation>代理</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1789"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1787"/>
         <source>Hostname</source>
         <translation>主机名</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1790"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1788"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1791"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1789"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>MQTT 代理的主机名或 IP 地址</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1800"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1798"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1801"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1799"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>代理公开的 TCP 端口（1883 明文，8883 TLS）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1811"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1809"/>
         <source>Custom Client ID</source>
         <translation>自定义客户端 ID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1813"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1811"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>关闭：每次加载项目时生成新的随机 ID。开启：使用下方的 ID。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1824"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1822"/>
         <source>Client ID</source>
         <translation>客户端 ID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1825"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1823"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>连接时发送给代理的标识符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1838"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1836"/>
         <source>Protocol Version</source>
         <translation>协议版本</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1839"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1837"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>CONNECT 时使用的 MQTT 协议版本</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1848"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1846"/>
         <source>Keep Alive (s)</source>
         <translation>保持连接 (秒)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1849"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1847"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>空闲时 PINGREQ 数据包之间的间隔秒数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1858"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1856"/>
         <source>Clean Session</source>
         <translation>清除会话</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1859"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1857"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>CONNECT 时丢弃任何持久会话状态</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1874"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1872"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1875"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1873"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>用于 Broker 身份验证的用户名（留空表示匿名）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1885"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1883"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1886"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1884"/>
         <source>Password for broker authentication</source>
         <translation>用于 Broker 身份验证的密码</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1897"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1895"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1907"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1905"/>
         <source>Use SSL/TLS</source>
         <translation>使用 SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1908"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1906"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>通过 TLS 隧道传输 Broker 连接</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1921"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1919"/>
         <source>Protocol</source>
         <translation>协议</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1922"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1920"/>
         <source>Negotiated TLS protocol family</source>
         <translation>协商的 TLS 协议族</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1932"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1930"/>
         <source>Peer Verify</source>
         <translation>对等方验证</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1933"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1931"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Broker 证书链的验证严格程度</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1943"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1941"/>
         <source>Verify Depth</source>
         <translation>验证深度</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1944"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1942"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>接受的最大证书链长度(0 = 无限制)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2217"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2831"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2215"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2829"/>
         <source>Device %1</source>
         <translation>设备 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2235"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2356"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2233"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2354"/>
         <source>Input Device</source>
         <translation>输入设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2236"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2234"/>
         <source>Select which connected device provides data for this group</source>
         <translation>选择为此组提供数据的已连接设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2267"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2265"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>自动检测读取 JPEG/PNG 魔术字节;手动使用显式起始/结束序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2277"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2275"/>
         <source>Start Sequence (Hex)</source>
         <translation>起始序列(十六进制)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2278"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2276"/>
         <source>e.g. FF D8 FF</source>
         <translation>例如 FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2279"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2277"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>标记图像帧起始的十六进制字节</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2288"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2286"/>
         <source>End Sequence (Hex)</source>
         <translation>结束序列(十六进制)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2289"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2287"/>
         <source>e.g. FF D9</source>
         <translation>例如 FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2290"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2288"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>标记图像帧结束的十六进制字节</translation>
     </message>
@@ -2752,387 +3000,387 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">标识</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2366"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2364"/>
         <source>Device Name</source>
         <translation>设备名称</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2367"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2365"/>
         <source>Device 1</source>
         <translation>设备 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2368"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2366"/>
         <source>Human-readable name for this input device</source>
         <translation>此输入设备的易读名称</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
         <source>Bus Type</source>
         <translation>总线类型</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2376"/>
         <source>Select the hardware interface for this input device</source>
         <translation>选择此输入设备的硬件接口</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
         <source>Serial Port</source>
         <translation>串口</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
         <source>Network Socket</source>
         <translation>网络套接字</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Audio Input</source>
         <translation>音频输入</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>CAN Bus</source>
         <translation>CAN 总线</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Raw USB</source>
         <translation>原始 USB</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2381"/>
         <source>HID Device</source>
         <translation>HID 设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2381"/>
         <source>Process</source>
         <translation>进程</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2381"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT 订阅者</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2550"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2548"/>
         <source>Connection Settings</source>
         <translation>连接设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2798"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3073"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4657"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3071"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4638"/>
         <source>General Information</source>
         <translation>常规信息</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2807"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2805"/>
         <source>Action Title</source>
         <translation>操作标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2809"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2807"/>
         <source>Untitled Action</source>
         <translation>未命名操作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2810"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2808"/>
         <source>Name or description of this action</source>
         <translation>此操作的名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2819"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2817"/>
         <source>Action Icon</source>
         <translation>操作图标</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2820"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2818"/>
         <source>Default Icon</source>
         <translation>默认图标</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2821"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2819"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>仪表板中为此操作显示的图标</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2849"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2847"/>
         <source>Target Device</source>
         <translation>目标设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2850"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2848"/>
         <source>Select which connected device this action sends data to</source>
         <translation>选择此操作将数据发送到哪个已连接设备</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2862"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2860"/>
         <source>Data Payload</source>
         <translation>数据负载</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2873"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2871"/>
         <source>Send as Binary</source>
         <translation>以二进制发送</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2874"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2872"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>触发此操作时发送原始二进制数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2885"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2897"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2883"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2895"/>
         <source>Command</source>
         <translation>命令</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2886"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2884"/>
         <source>Transmit Data (Hex)</source>
         <translation>传输数据（十六进制）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2887"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2885"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>触发操作时发送的十六进制负载</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2898"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2896"/>
         <source>Transmit Data</source>
         <translation>传输数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2899"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2897"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>触发操作时发送的文本负载</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2910"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4716"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2908"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4697"/>
         <source>Text Encoding</source>
         <translation>文本编码</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2911"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2909"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>用于序列化文本负载的字符编码</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2935"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2933"/>
         <source>End-of-Line Sequence</source>
         <translation>行尾序列</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2936"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2934"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>附加到消息的行尾字符（例如 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2948"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2946"/>
         <source>Execution Behavior</source>
         <translation>执行行为</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2959"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2957"/>
         <source>Auto-Execute on Connect</source>
         <translation>连接时自动执行</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2960"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2958"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>设备连接时自动触发此操作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2966"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2964"/>
         <source>Timer Behavior</source>
         <translation>定时器行为</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2975"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2973"/>
         <source>Timer Mode</source>
         <translation>定时器模式</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2978"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2976"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>选择此操作应何时以及如何自动重复</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2985"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2983"/>
         <source>Interval (ms)</source>
         <translation>间隔（毫秒）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2989"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2987"/>
         <source>Timer Interval (ms)</source>
         <translation>定时器间隔（毫秒）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2990"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2988"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>每次重复触发此操作之间的毫秒数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2997"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3001"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2995"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2999"/>
         <source>Repeat Count</source>
         <translation>重复次数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3002"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3000"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>每次触发时发送命令的次数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3083"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3081"/>
         <source>Untitled Dataset</source>
         <translation>未命名数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3084"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3082"/>
         <source>Dataset Title</source>
         <translation>数据集标题</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3085"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3083"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>数据集的名称，用于标记和识别</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3115"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3113"/>
         <source>Hide on Dashboard</source>
         <translation>在仪表板上隐藏</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3116"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3114"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>隐藏此数据集的独立仪表板磁贴;绘图控件仍可读取其值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3240"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3238"/>
         <source>Frequency Analysis</source>
         <translation>频率分析</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3278"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3276"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>选择时间(默认)或任何数据集的值来驱动 Y 轴 -- 绑定到例如 RPM 时可生成坎贝尔图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3618"/>
         <source>Painter Widget</source>
         <translation>绘图控件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4927"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4908"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
         <translation>每个数据集的原始值和转换值（只读）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4937"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4918"/>
         <source>Shared table defined in this project</source>
         <translation>此项目中定义的共享表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5273"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5254"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>移除 1 个目标组或数据集已不存在的控件引用?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5274"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5255"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>移除 %1 个目标组或数据集已不存在的控件引用?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5279"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5260"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>此操作仅影响工作区磁贴布局;不会删除任何组、数据集或数据。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5282"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5263"/>
         <source>Clean Up Workspaces</source>
         <translation>清理工作区</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3129"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3127"/>
         <source>Frame Index</source>
         <translation>帧索引</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3130"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3128"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>用于在时间上对齐数据集的帧位置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3139"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3137"/>
         <source>Measurement Unit</source>
         <translation>测量单位</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3140"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3138"/>
         <source>Volts, Amps, etc.</source>
         <translation>伏特、安培等</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3141"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3139"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>测量单位，例如伏特或安培（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3154"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3152"/>
         <source>Plot Settings</source>
         <translation>绘图设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3177"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3175"/>
         <source>Enable Plot Widget</source>
         <translation>启用绘图控件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3179"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3177"/>
         <source>Plot data in real-time</source>
         <translation>实时绘制数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3204"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3202"/>
         <source>X-Axis Source</source>
         <translation>X 轴数据源</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3205"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3203"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>选择用于绘图 X 轴的数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3216"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3214"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>最小绘图值（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3217"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3215"/>
         <source>Lower bound for plot display range</source>
         <translation>绘图显示范围的下限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3227"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3225"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>最大绘图值（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3228"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3226"/>
         <source>Upper bound for plot display range</source>
         <translation>绘图显示范围的上限</translation>
     </message>
@@ -3141,27 +3389,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT 配置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3251"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3249"/>
         <source>Enable FFT Analysis</source>
         <translation>启用 FFT 分析</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3252"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3250"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>对数据集执行频域分析</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3262"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3260"/>
         <source>Enable Waterfall Plot</source>
         <translation>启用瀑布图控件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3263"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3261"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>显示频率内容随时间变化的滚动频谱图 (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3277"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3275"/>
         <source>Waterfall Y Axis</source>
         <translation>瀑布图 Y 轴</translation>
     </message>
@@ -3170,440 +3418,437 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">选择时间(默认)或任何数据集的值来驱动 Y 轴 — 绑定到例如 RPM 时可生成坎贝尔图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3306"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3304"/>
         <source>FFT Window Size</source>
         <translation>FFT 窗口大小</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3307"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3305"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>每次 FFT 计算窗口使用的采样数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3318"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3316"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT 采样率（Hz，必填）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3319"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3317"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>用于 FFT 的采样频率（单位：Hz）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3329"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3327"/>
         <source>Minimum Value (recommended)</source>
         <translation>最小值（推荐）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3330"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3328"/>
         <source>Lower bound for data normalization</source>
         <translation>数据归一化的下限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3340"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3338"/>
         <source>Maximum Value (recommended)</source>
         <translation>最大值（推荐）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3341"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3339"/>
         <source>Upper bound for data normalization</source>
         <translation>数据归一化的上限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3364"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3362"/>
         <source>Widget Settings</source>
         <translation>控件设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3387"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3385"/>
         <source>Widget</source>
         <translation>控件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3388"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3386"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>选择用于显示此数据集的可视化控件</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3414"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3412"/>
         <source>Minimum Display Value (required)</source>
         <translation>最小显示值（必填）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3415"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3413"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>仪表或条形图显示范围的下限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3425"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3423"/>
         <source>Maximum Display Value (required)</source>
         <translation>最大显示值（必填）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3426"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3424"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>仪表或条形图显示范围的上限</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3440"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3647"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3438"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3441"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3439"/>
         <source>Tick Count</source>
         <translation>刻度数量</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3445"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3443"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>刻度盘上的主刻度数量（0 = 自动适应组件大小）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3464"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3462"/>
         <source>Label Format</source>
         <translation>标签格式</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3465"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3463"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>刻度标签和数值显示使用的小数位数或记数法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3476"/>
         <source>Show Value Indicator</source>
-        <translation>显示数值指示器</translation>
+        <translation type="vanished">显示数值指示器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3478"/>
         <source>Toggle the boxed numeric readout that sits below or beside the widget</source>
-        <translation>切换显示在组件下方或旁边的带框数值读数</translation>
+        <translation type="vanished">切换显示在组件下方或旁边的带框数值读数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3497"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3482"/>
         <source>Alarm Settings</source>
         <translation>报警设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3508"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3493"/>
         <source>Enable Alarms</source>
         <translation>启用报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3509"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3494"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
         <translation>当数值超出报警阈值时触发视觉报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3520"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3505"/>
         <source>Low Threshold</source>
         <translation>低阈值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3521"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3506"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>当数值低于此阈值时触发视觉报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3532"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3517"/>
         <source>High Threshold</source>
         <translation>高阈值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3533"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3518"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>当数值超过此阈值时触发视觉报警</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3546"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3531"/>
         <source>LED Display Settings</source>
         <translation>LED 显示设置</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3557"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3542"/>
         <source>Show in LED Panel</source>
         <translation>在 LED 面板中显示</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3558"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3543"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>使用 LED 显示启用视觉状态监控</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3569"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3554"/>
         <source>LED On Threshold (required)</source>
         <translation>LED 开启阈值(必填)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3570"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3555"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>当值达到或超过此阈值时 LED 点亮</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>Off</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>Auto Start</source>
         <translation>自动启动</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>Start on Trigger</source>
         <translation>触发时启动</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>Toggle on Trigger</source>
         <translation>触发时切换</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3577"/>
         <source>Repeat N Times</source>
         <translation>重复 N 次</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3581"/>
         <source>Plain Text (UTF8)</source>
         <translation>纯文本 (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3581"/>
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3581"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3597"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3582"/>
         <source>Binary (Direct)</source>
         <translation>二进制（直接）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3604"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3589"/>
         <source>No Checksum</source>
         <translation>无校验和</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3594"/>
         <source>End Delimiter Only</source>
         <translation>仅结束定界符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3594"/>
         <source>Start Delimiter Only</source>
         <translation>仅起始定界符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3595"/>
         <source>Start + End Delimiter</source>
         <translation>起始 + 结束定界符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3595"/>
         <source>No Delimiters</source>
         <translation>无定界符</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
         <source>Button</source>
         <translation>按钮</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
         <source>Slider</source>
         <translation>滑块</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
         <source>Toggle</source>
         <translation>开关</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
         <source>Text Field</source>
         <translation>文本字段</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3621"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3606"/>
         <source>Knob</source>
         <translation>旋钮</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3626"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3611"/>
         <source>Data Grid</source>
         <translation>数据网格</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3627"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3612"/>
         <source>GPS Map</source>
         <translation>GPS 地图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3628"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3613"/>
         <source>Gyroscope</source>
         <translation>陀螺仪</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3629"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3614"/>
         <source>Multiple Plot</source>
         <translation>多重绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3615"/>
         <source>Accelerometer</source>
         <translation>加速度计</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3616"/>
         <source>3D Plot</source>
         <translation>3D 绘图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
         <source>Image View</source>
         <translation>图像视图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3634"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3638"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3656"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3619"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3623"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3639"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3624"/>
         <source>Bar</source>
         <translation>条形图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3625"/>
         <source>Gauge</source>
         <translation>仪表盘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3641"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3626"/>
         <source>Compass</source>
         <translation>罗盘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3642"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3627"/>
         <source>Meter</source>
         <translation>仪表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3643"/>
         <source>Thermometer</source>
-        <translation>温度计</translation>
+        <translation type="vanished">温度计</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3648"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
         <source>Integer (0 decimals)</source>
         <translation>整数（0 位小数）</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3649"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
         <source>1 decimal</source>
         <translation>1 位小数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3634"/>
         <source>2 decimals</source>
         <translation>2 位小数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3635"/>
         <source>3 decimals</source>
         <translation>3 位小数</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3652"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3636"/>
         <source>Scientific</source>
         <translation>科学计数法</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3657"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3641"/>
         <source>New Line (\n)</source>
         <translation>换行符 (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3658"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3642"/>
         <source>Carriage Return (\r)</source>
         <translation>回车符 (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3659"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3643"/>
         <source>CRLF (\r\n)</source>
         <translation>回车换行符 (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3663"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3647"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3664"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3648"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4667"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4648"/>
         <source>Label</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4668"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4649"/>
         <source>Display label</source>
         <translation>显示标签</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4678"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4659"/>
         <source>Button Icon</source>
         <translation>按钮图标</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4687"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4668"/>
         <source>Colorize Icon</source>
         <translation>图标着色</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4688"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4669"/>
         <source>Tint the icon with the button color</source>
         <translation>使用按钮颜色为图标着色</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4705"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4686"/>
         <source>Initial Value</source>
         <translation>初始值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4717"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4698"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>transmit() 返回字符串值时使用的字符编码</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4735"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4716"/>
         <source>Value Range</source>
         <translation>数值范围</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4745"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4726"/>
         <source>Minimum Value</source>
         <translation>最小值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4754"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4735"/>
         <source>Maximum Value</source>
         <translation>最大值</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4763"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4744"/>
         <source>Step Size</source>
         <translation>步进大小</translation>
     </message>
@@ -3928,245 +4173,244 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>新建仪表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3518"/>
         <source>New Thermometer</source>
-        <translation>新建温度计</translation>
+        <translation type="vanished">新建温度计</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3522"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3518"/>
         <source>New LED Indicator</source>
         <translation>新建 LED 指示器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3526"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3522"/>
         <source>New Waterfall</source>
         <translation>新建瀑布图</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3594"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3590"/>
         <source>Channel %1</source>
         <translation>通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3670"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3663"/>
         <source>New Action</source>
         <translation>新建操作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3807"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3800"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>确定要更改组级别部件吗？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3809"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3802"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>此组的现有数据集将被删除</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3873"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3874"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3875"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3866"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3867"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3868"/>
         <source>Accelerometer %1</source>
         <translation>加速度计 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3883"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3883"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3883"/>
         <source>Gyro %1</source>
         <translation>陀螺仪 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3898"/>
         <source>Latitude</source>
         <translation>纬度</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3898"/>
         <source>Longitude</source>
         <translation>经度</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3898"/>
         <source>Altitude</source>
         <translation>海拔</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3913"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3927"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3913"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3927"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3913"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3927"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4135"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4128"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5003"/>
         <source>Workspace</source>
         <translation>工作区</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4281"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4274"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4481"/>
         <source>Shared Table</source>
         <translation>共享表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4363"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4356"/>
         <source>register</source>
         <translation>寄存器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4481"/>
         <source>New Shared Table</source>
         <translation>新建共享表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4506"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4525"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4549"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4576"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4595"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4618"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4641"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5031"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4481"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4499"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4518"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4542"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4569"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4588"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4611"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4634"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5003"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5024"/>
         <source>Name:</source>
         <translation>名称:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4506"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4499"/>
         <source>Rename Table</source>
         <translation>重命名表</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4525"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4518"/>
         <source>Rename Group</source>
         <translation>重命名组</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4549"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4542"/>
         <source>Rename Dataset</source>
         <translation>重命名数据集</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4576"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4569"/>
         <source>Rename Data Source</source>
         <translation>重命名数据源</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4588"/>
         <source>Rename Action</source>
         <translation>重命名操作</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4617"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4610"/>
         <source>New Register</source>
         <translation>新建寄存器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4641"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4634"/>
         <source>Rename Register</source>
         <translation>重命名寄存器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4680"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4705"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4673"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4698"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5551"/>
         <source>This action cannot be undone.</source>
         <translation>此操作无法撤销。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4681"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4674"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>这将删除 %1 个寄存器以及表格。此操作无法撤销。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4684"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4704"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5557"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4677"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5550"/>
         <source>Delete "%1"?</source>
         <translation>删除"%1"？</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4687"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4680"/>
         <source>Delete Table</source>
         <translation>删除表格</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4707"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4700"/>
         <source>Delete Register</source>
         <translation>删除寄存器</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4731"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4724"/>
         <source>Export Table</source>
         <translation>导出表格</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4733"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4777"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4726"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4770"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 文件 (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4775"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4768"/>
         <source>Import Table</source>
         <translation>导入表格</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5003"/>
         <source>New Workspace</source>
         <translation>新建工作区</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5031"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5024"/>
         <source>Rename Workspace</source>
         <translation>重命名工作区</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5120"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5113"/>
         <source>Overview</source>
         <translation>概览</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5123"/>
         <source>All Data</source>
         <translation>所有数据</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5314"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5307"/>
         <source>Discard workspace customisations?</source>
         <translation>放弃工作区自定义设置?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5315"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5308"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>关闭自定义将丢弃您的编辑内容,并根据项目的组重新构建工作区列表。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5311"/>
         <source>Customize Workspaces</source>
         <translation>自定义工作区</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5560"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5553"/>
         <source>Delete Workspace</source>
         <translation>删除工作区</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5874"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5867"/>
         <source>File open error</source>
         <translation>文件打开错误</translation>
     </message>
@@ -4353,46 +4597,55 @@ Valid format: 01 A2 FF 3C</source>
     <name>DataTablesView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="33"/>
         <source>Shared Memory</source>
         <translation>共享内存</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="149"/>
         <source>Add Shared Table</source>
         <translation>添加共享表</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="151"/>
         <source>Add shared table</source>
         <translation>添加共享表</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="160"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="165"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="165"/>
         <source>Open help documentation for shared memory</source>
         <translation>打开共享内存帮助文档</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="174"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="175"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="176"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="176"/>
         <source>Entries</source>
         <translation>条目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="269"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="269"/>
         <source>No shared tables.</source>
         <translation>无共享表。</translation>
     </message>
@@ -4401,111 +4654,133 @@ Valid format: 01 A2 FF 3C</source>
     <name>DatabaseExplorer</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="35"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="218"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="218"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="220"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="220"/>
         <source>Open a session file</source>
         <translation>打开会话文件</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="226"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="229"/>
         <source>Close session file</source>
         <translation>关闭会话文件</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="242"/>
         <source>Replay</source>
         <translation>回放</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="246"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="246"/>
         <source>Replay selected session on the dashboard</source>
         <translation>在仪表板上回放选定的会话</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="252"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="252"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="258"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="258"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>解锁会话文件以删除会话</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="259"/>
         <source>Delete the selected session</source>
         <translation>删除选定的会话</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="276"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="276"/>
         <source>Unlock</source>
         <translation>解锁</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="277"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="277"/>
         <source>Lock</source>
         <translation>锁定</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="282"/>
         <source>Unlock the session file to allow deletions</source>
         <translation>解锁会话文件以允许删除</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="283"/>
         <source>Set a password to prevent session deletions</source>
         <translation>设置密码以防止会话被删除</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
         <source>Export CSV</source>
         <translation>导出 CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="303"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="303"/>
         <source>Export selected session to CSV</source>
         <translation>将选定会话导出为 CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="310"/>
         <source>Export PDF</source>
         <translation>导出 PDF</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="315"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="315"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>为选定会话生成 PDF 报告</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="329"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="329"/>
         <source>Restore Project</source>
         <translation>恢复项目</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="333"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="333"/>
         <source>Restore the project file from this session file</source>
         <translation>从此会话文件恢复项目文件</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="402"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="402"/>
         <source>Loading session…</source>
         <translation>加载会话中…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="403"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="403"/>
         <source>Working…</source>
         <translation>处理中…</translation>
     </message>
@@ -4514,131 +4789,153 @@ Valid format: 01 A2 FF 3C</source>
     <name>DatasetView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="83"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="83"/>
         <source>Pro features detected in this project.</source>
         <translation>此项目中检测到 Pro 功能。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="85"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="85"/>
         <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
         <translation>正在使用备用组件。购买许可证以解锁完整功能。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="148"/>
         <source>Plot</source>
         <translation>绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="152"/>
         <source>Toggle 2D plot visualization for this dataset</source>
         <translation>切换此数据集的 2D 绘图可视化</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="167"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="167"/>
         <source>FFT Plot</source>
         <translation>FFT 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="170"/>
         <source>Toggle FFT plot to visualize frequency content</source>
         <translation>切换 FFT 绘图以可视化频率内容</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="180"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="180"/>
         <source>Waterfall</source>
         <translation>瀑布图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="184"/>
         <source>Toggle waterfall (spectrogram) plot — uses the FFT settings</source>
         <translation>切换瀑布图(频谱图)绘制 — 使用 FFT 设置</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="203"/>
         <source>Bar/Level</source>
         <translation>条形图/电平</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="207"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="207"/>
         <source>Toggle bar/level indicator for this dataset</source>
         <translation>切换此数据集的条形图/电平指示器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="221"/>
         <source>Gauge</source>
         <translation>仪表盘</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="226"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>切换仪表盘控件以显示模拟样式</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
         <source>Compass</source>
         <translation>罗盘</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="245"/>
         <source>Toggle compass widget for directional data</source>
         <translation>切换罗盘控件以显示方向数据</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="259"/>
         <source>Meter</source>
         <translation>仪表</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="264"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="264"/>
         <source>Toggle analog meter (half-arc) widget</source>
         <translation>切换模拟仪表(半圆弧)控件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="279"/>
         <source>Thermometer</source>
-        <translation>温度计</translation>
+        <translation type="vanished">温度计</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="283"/>
         <source>Toggle thermometer widget for temperature data</source>
-        <translation>切换温度计控件以显示温度数据</translation>
+        <translation type="vanished">切换温度计控件以显示温度数据</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="297"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="278"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="278"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="283"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>切换 LED 指示器以显示二进制或阈值</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="319"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="300"/>
         <source>Transform</source>
         <translation>变换</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="323"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="304"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="304"/>
         <source>Edit a value transform expression for calibration, filtering, or unit conversion</source>
         <translation>编辑值变换表达式以进行校准、滤波或单位转换</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="343"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="324"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="348"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="329"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="329"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>复制此数据集及其配置</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="356"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="337"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="359"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="340"/>
         <source>Delete this dataset from the group</source>
         <translation>从组中删除此数据集</translation>
     </message>
@@ -4647,36 +4944,43 @@ Valid format: 01 A2 FF 3C</source>
     <name>Donate</name>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="37"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="37"/>
         <source>Support Serial Studio</source>
         <translation>支持 Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="86"/>
         <source>Support the development of %1!</source>
         <translation>支持 %1 的开发！</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="97"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio 是由志愿者支持的免费开源软件。请考虑捐赠或获取 Pro 许可证以支持开发工作 :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="110"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="110"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>您也可以通过分享、报告错误和提出新功能来支持此项目！</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="125"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="125"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="137"/>
         <source>Donate</source>
         <translation>捐赠</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="153"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="153"/>
         <source>Get Serial Studio Pro</source>
         <translation>获取 Serial Studio Pro</translation>
     </message>
@@ -4684,11 +4988,13 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>Downloader</name>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="127"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="128"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="362"/>
         <source>Downloading updates</source>
@@ -4751,6 +5057,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>单击"打开"按钮应用更新</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="132"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="288"/>
         <source>Updater</source>
         <translation>更新程序</translation>
@@ -4834,113 +5141,135 @@ Valid format: 01 A2 FF 3C</source>
         <translation>1 秒</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="135"/>
         <source>Time remaining: 0 minutes</source>
-        <translation type="vanished">剩余时间：0 分钟</translation>
+        <translation>剩余时间：0 分钟</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Open</source>
-        <translation type="vanished">打开</translation>
+        <translation>打开</translation>
     </message>
 </context>
 <context>
     <name>ExamplesBrowser</name>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="34"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="34"/>
         <source>Examples Browser</source>
         <translation>示例浏览器</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="120"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="120"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="152"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="173"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="173"/>
         <source>Download &amp;&amp; Open</source>
         <translation>下载并打开</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="188"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="188"/>
         <source>View on GitHub</source>
         <translation>在 GitHub 上查看</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="91"/>
         <source>Search in Examples…</source>
         <translation>在示例中搜索…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="244"/>
         <source>Fetching examples…</source>
         <translation>正在获取示例…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="567"/>
         <source>Loading...</source>
         <translation>加载中...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="568"/>
         <source>No README available.</source>
         <translation>无可用 README。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="608"/>
         <source>Copied to Clipboard</source>
         <translation>已复制到剪贴板</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="671"/>
         <source>No screenshot available</source>
         <translation>无可用截图</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="703"/>
         <source>Details</source>
         <translation>详情</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="732"/>
         <source>Info</source>
         <translation>信息</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="755"/>
         <source>Category:</source>
         <translation>类别：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="768"/>
         <source>Difficulty:</source>
         <translation>难度：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="786"/>
         <source>Project:</source>
         <translation>项目：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="828"/>
         <source>No Results Found</source>
         <translation>未找到结果</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="839"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>请检查拼写或尝试其他搜索词。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="854"/>
         <source>%1 examples</source>
         <translation>%1 个示例</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="864"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="864"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -4949,191 +5278,229 @@ Valid format: 01 A2 FF 3C</source>
     <name>ExtensionManager</name>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="32"/>
         <source>Extension Manager</source>
         <translation>扩展管理器</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="119"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="133"/>
         <source>Repos</source>
         <translation>仓库</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="163"/>
         <source>Repository Settings</source>
         <translation>仓库设置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="175"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="216"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="233"/>
         <source>Uninstall</source>
         <translation>卸载</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="260"/>
         <source>Run</source>
         <translation>运行</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="284"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="318"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="78"/>
         <source>Search extensions…</source>
         <translation>搜索扩展…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="368"/>
         <source>Fetching extensions…</source>
         <translation>正在获取扩展…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="605"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="605"/>
         <source>Running</source>
         <translation>运行中</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="627"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="627"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="627"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="627"/>
         <source>Installed</source>
         <translation>已安装</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="644"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="644"/>
         <source>Unavailable</source>
         <translation>不可用</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="823"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="823"/>
         <source>No description available.</source>
         <translation>无可用描述。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="864"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="864"/>
         <source>Details</source>
         <translation>详细信息</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="885"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="885"/>
         <source>Type:</source>
         <translation>类型：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="898"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="898"/>
         <source>Author:</source>
         <translation>作者：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="910"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="910"/>
         <source>Version:</source>
         <translation>版本：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="922"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="922"/>
         <source>License:</source>
         <translation>许可证：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="983"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="983"/>
         <source>No preview</source>
         <translation>无预览</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1011"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1011"/>
         <source>  PLUGIN OUTPUT</source>
         <translation>插件输出</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1041"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1041"/>
         <source>No output yet. Run the plugin to see its log here.</source>
         <translation>尚无输出。运行插件以在此处查看其日志。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1076"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1076"/>
         <source>No preview available</source>
         <translation>无可用预览</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1120"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1120"/>
         <source>Repositories</source>
         <translation>仓库</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1133"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
         <translation>添加远程仓库的 URL 或本地文件夹路径。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1170"/>
         <source>LOCAL</source>
         <translation>本地</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1227"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1227"/>
         <source>URL or local path…</source>
         <translation>URL 或本地路径…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1258"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1258"/>
         <source>Browse…</source>
         <translation>浏览…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1235"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1295"/>
         <source>No Results Found</source>
         <translation>未找到结果</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1306"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1306"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>请检查拼写或尝试其他搜索词。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1330"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1330"/>
         <source>No Extensions Available</source>
         <translation>无可用扩展</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1341"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>在仓库设置中添加仓库 URL 或本地路径,然后刷新。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1356"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1356"/>
         <source>%1 extensions</source>
         <translation>%1 个扩展</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1366"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1366"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -5142,56 +5509,67 @@ Valid format: 01 A2 FF 3C</source>
     <name>FFTPlot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="157"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="157"/>
         <source>Interpolation: %1</source>
         <translation>插值:%1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="185"/>
         <source>Show Area Under Plot</source>
         <translation>显示曲线下方区域</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="203"/>
         <source>Show X Axis Label</source>
         <translation>显示 X 轴标签</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="215"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="215"/>
         <source>Show Y Axis Label</source>
         <translation>显示 Y 轴标签</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="233"/>
         <source>Show Crosshair</source>
         <translation>显示十字准线</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="240"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="240"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="259"/>
         <source>Reset View</source>
         <translation>重置视图</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="265"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="265"/>
         <source>Axis Range Settings</source>
         <translation>坐标轴范围设置</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="294"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="294"/>
         <source>Magnitude (dB)</source>
         <translation>幅度 (dB)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="295"/>
         <source>Frequency (Hz)</source>
         <translation>频率 (Hz)</translation>
     </message>
@@ -5200,6 +5578,7 @@ Valid format: 01 A2 FF 3C</source>
     <name>FileDropArea</name>
     <message>
         <location filename="../../qml/Widgets/FileDropArea.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/FileDropArea.qml" line="130"/>
         <source>Drop Projects and CSV files here</source>
         <translation>将项目和 CSV 文件拖放到此处</translation>
     </message>
@@ -5208,97 +5587,117 @@ Valid format: 01 A2 FF 3C</source>
     <name>FileTransmission</name>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="34"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="34"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="102"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="102"/>
         <source>Transfer Protocol:</source>
         <translation>传输协议:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="135"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="135"/>
         <source>File Selection:</source>
         <translation>文件选择:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="152"/>
         <source>Select File…</source>
         <translation>选择文件…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="170"/>
         <source>Transmission Interval:</source>
         <translation>传输间隔：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="272"/>
         <source>msecs</source>
         <translation>毫秒</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="206"/>
         <source>Block Size:</source>
         <translation>块大小：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="234"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="234"/>
         <source>bytes</source>
         <translation>字节</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="244"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="244"/>
         <source>Timeout:</source>
         <translation>超时：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="282"/>
         <source>Max Retries:</source>
         <translation>最大重试次数：</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="340"/>
         <source>Progress: %1%</source>
         <translation>进度：%1%</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="373"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="373"/>
         <source>%1 / %2 bytes</source>
         <translation>%1 / %2 字节</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="381"/>
         <source>Errors: %1</source>
         <translation>错误：%1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="461"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="461"/>
         <source>Activity Log</source>
         <translation>活动日志</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="465"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="465"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="419"/>
         <source>Pause Transmission</source>
         <translation>暂停传输</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="420"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="420"/>
         <source>Resume Transmission</source>
         <translation>恢复传输</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="423"/>
         <source>Stop Transmission</source>
         <translation>停止传输</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="424"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="424"/>
         <source>Begin Transmission</source>
         <translation>开始传输</translation>
     </message>
@@ -5307,292 +5706,381 @@ Valid format: 01 A2 FF 3C</source>
     <name>FlowDiagram</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="159"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="159"/>
         <source>Frame Parser</source>
         <translation>帧解析器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="166"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="166"/>
         <source>Device %1</source>
         <translation>设备 %1</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="390"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1406"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1393"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="390"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1393"/>
         <source>Output Panel</source>
         <translation>输出面板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="434"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="434"/>
         <source>Control</source>
         <translation>控制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Table</source>
         <translation>表格</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="473"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="473"/>
         <source>%1 regs</source>
         <translation>%1 个寄存器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="474"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="474"/>
         <source>empty</source>
         <translation>空</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="499"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="499"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 发布者</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="896"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="896"/>
         <source>Open the transform code editor for this dataset.</source>
         <translation>打开此数据集的转换代码编辑器。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1175"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1178"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1178"/>
         <source>Dataset Container</source>
         <translation>数据集容器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1187"/>
         <source>Multi-Plot</source>
         <translation>多重绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1190"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1190"/>
         <source>Multiple Plot</source>
         <translation>多重绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1199"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1202"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1202"/>
         <source>Accelerometer</source>
         <translation>加速度计</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1211"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1214"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1214"/>
         <source>Gyroscope</source>
         <translation>陀螺仪</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1223"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1226"/>
         <source>GPS Map</source>
         <translation>GPS 地图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1234"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1234"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1237"/>
         <source>3D Plot</source>
         <translation>3D 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1245"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1248"/>
         <source>Image View</source>
         <translation>图像视图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1257"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1260"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1257"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1260"/>
         <source>Painter Widget</source>
         <translation>绘图控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1269"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1269"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1272"/>
         <source>Data Grid</source>
         <translation>数据网格</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1285"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1285"/>
         <source>Generic</source>
         <translation>通用</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1298"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1298"/>
         <source>Plot</source>
         <translation>绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1311"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1311"/>
         <source>FFT Plot</source>
         <translation>FFT 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1324"/>
         <source>Gauge</source>
         <translation>仪表盘</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1337"/>
         <source>Level Indicator</source>
         <translation>电平指示器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1350"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1350"/>
         <source>Compass</source>
         <translation>罗盘</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1363"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1363"/>
         <source>Meter</source>
         <translation>仪表</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1376"/>
         <source>Thermometer</source>
-        <translation>温度计</translation>
+        <translation type="vanished">温度计</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1389"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1376"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1376"/>
         <source>LED Indicator</source>
         <translation>LED 指示灯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1418"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1405"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1405"/>
         <source>Slider</source>
         <translation>滑块</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1431"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1418"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1418"/>
         <source>Toggle</source>
         <translation>开关</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1444"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1431"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1431"/>
         <source>Knob</source>
         <translation>旋钮</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1457"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1444"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1444"/>
         <source>Text Field</source>
         <translation>文本字段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1470"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1457"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1457"/>
         <source>Button</source>
         <translation>按钮</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1494"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1570"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1481"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1556"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1643"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1481"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1556"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1643"/>
         <source>Add Group</source>
         <translation>添加组</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1509"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1585"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1673"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1719"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1496"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1571"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1703"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1496"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1571"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1703"/>
         <source>Add Dataset</source>
         <translation>添加数据集</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1524"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1600"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1688"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1734"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1941"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1510"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1585"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1672"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1717"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1924"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1510"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1585"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1672"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1717"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1924"/>
         <source>Add Output</source>
         <translation>添加输出</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1540"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1613"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1526"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1598"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1526"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1598"/>
         <source>Add Action</source>
         <translation>添加动作</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1549"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1535"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1535"/>
         <source>Add Data Source</source>
         <translation>添加数据源</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1556"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1542"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1542"/>
         <source>Add Data Table</source>
         <translation>添加数据表</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1624"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1761"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1828"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1956"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1990"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2046"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1609"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1744"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1811"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1939"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1973"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2029"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1609"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1744"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1811"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1939"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1973"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2029"/>
         <source>Rename…</source>
         <translation>重命名…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1632"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1791"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1861"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1913"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1964"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2020"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1617"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1774"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1844"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1896"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1947"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2003"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1617"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1774"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1844"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1896"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1947"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2003"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1643"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1802"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1873"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1925"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1975"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2031"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2057"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1628"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1785"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1856"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1908"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1958"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2014"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2040"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1628"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1785"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1856"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1908"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1958"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2014"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2040"/>
         <source>Delete…</source>
         <translation>删除…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1704"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1688"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1688"/>
         <source>Edit Frame Parser…</source>
         <translation>编辑帧解析器…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1747"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1730"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1730"/>
         <source>Edit Painter Code…</source>
         <translation>编辑绘图器代码…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1769"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1837"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1889"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1998"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1752"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1820"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1872"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1981"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1752"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1820"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1872"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1981"/>
         <source>Move Up</source>
         <translation>上移</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1780"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1849"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1901"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2009"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1763"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1832"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1884"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1992"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1763"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1832"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1884"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1992"/>
         <source>Move Down</source>
         <translation>下移</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1817"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1800"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1800"/>
         <source>Edit Transform Code…</source>
         <translation>编辑转换代码…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2072"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2055"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2055"/>
         <source>Edit Code…</source>
         <translation>编辑代码…</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="222"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="340"/>
         <source>Action</source>
         <translation>操作</translation>
     </message>
@@ -5606,120 +6094,148 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="102"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="102"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="249"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="263"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="263"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="118"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="288"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="118"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="288"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="123"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="123"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="301"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="128"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="314"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="128"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="314"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="135"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="135"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="145"/>
         <source>Format Document</source>
         <translation>格式化文档</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="152"/>
         <source>Format Selection</source>
         <translation>格式化选区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="228"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="228"/>
         <source>Reset to the default parsing script</source>
         <translation>重置为默认解析脚本</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="236"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="236"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="241"/>
         <source>Import a script file for data parsing</source>
         <translation>导入用于数据解析的脚本文件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="343"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="343"/>
         <source>Open help documentation for data parsing</source>
         <translation>打开数据解析帮助文档</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="365"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="365"/>
         <source>Language:</source>
         <translation>语言：</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="420"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="420"/>
         <source>Select Template…</source>
         <translation>选择模板…</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="434"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="434"/>
         <source>Test With Sample Data</source>
         <translation>使用示例数据测试</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="442"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="442"/>
         <source>Evaluate</source>
         <translation>评估</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <source>Undo the last code edit</source>
         <translation>撤销上次代码编辑</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
         <source>Redo the previously undone edit</source>
         <translation>重做上次撤销的编辑</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="293"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="293"/>
         <source>Cut selected code to clipboard</source>
         <translation>剪切选定代码到剪贴板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="306"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="306"/>
         <source>Copy selected code to clipboard</source>
         <translation>复制选定代码到剪贴板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <source>Paste code from clipboard</source>
         <translation>从剪贴板粘贴代码</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="338"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="338"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
@@ -5728,36 +6244,43 @@ Valid format: 01 A2 FF 3C</source>
     <name>GPS</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="105"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="105"/>
         <source>Auto Center</source>
         <translation>自动居中</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="121"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="121"/>
         <source>Plot Trajectory</source>
         <translation>绘制轨迹</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="138"/>
         <source>Zoom In</source>
         <translation>放大</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="149"/>
         <source>Zoom Out</source>
         <translation>缩小</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="173"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="173"/>
         <source>Show Weather</source>
         <translation>显示天气</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="191"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="191"/>
         <source>NASA Weather Overlay</source>
         <translation>NASA 天气叠加层</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="223"/>
         <source>Base Map: %1</source>
         <translation>底图:%1</translation>
     </message>
@@ -5766,181 +6289,213 @@ Valid format: 01 A2 FF 3C</source>
     <name>GroupView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="97"/>
         <source>Pro features detected in this project.</source>
         <translation>项目中检测到 Pro 功能。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="99"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="99"/>
         <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
         <translation>使用备用控件。购买许可证以解锁完整功能。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <source>Dataset</source>
         <translation>数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="162"/>
         <source>Add a generic dataset to the current group</source>
         <translation>向当前组添加通用数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="169"/>
         <source>Plot</source>
         <translation>绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="174"/>
         <source>Add a 2D plot to visualize numeric data</source>
         <translation>添加 2D 绘图以可视化数值数据</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="182"/>
         <source>FFT Plot</source>
         <translation>FFT 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="188"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="188"/>
         <source>Add an FFT plot for frequency domain visualization</source>
         <translation>添加 FFT 绘图以进行频域可视化</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="194"/>
         <source>Bar/Level</source>
         <translation>条形图/电平</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="199"/>
         <source>Add a bar or level indicator for scaled values</source>
         <translation>添加条形图或电平指示器以显示缩放值</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Gauge</source>
         <translation>仪表盘</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="211"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>添加仪表盘控件以实现模拟式可视化</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="218"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="218"/>
         <source>Compass</source>
         <translation>罗盘</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="223"/>
         <source>Add a compass to display directional or angular data</source>
         <translation>添加罗盘以显示方向或角度数据</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="229"/>
         <source>Meter</source>
         <translation>仪表</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <source>Add an analog meter (half-arc) widget</source>
         <translation>添加模拟仪表（半弧形）组件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="242"/>
         <source>Thermometer</source>
-        <translation>温度计</translation>
+        <translation type="vanished">温度计</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="246"/>
         <source>Add a thermometer widget for temperature data</source>
-        <translation>添加温度计组件以显示温度数据</translation>
+        <translation type="vanished">添加温度计组件以显示温度数据</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="241"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="259"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="247"/>
         <source>Add an LED indicator for binary status signals</source>
         <translation>添加 LED 指示器以显示二进制状态信号</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="269"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="257"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="257"/>
         <source>Button</source>
         <translation>按钮</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="261"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="261"/>
         <source>Add a button that sends a command on click</source>
         <translation>添加按钮以在单击时发送命令</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="280"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="268"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="268"/>
         <source>Slider</source>
         <translation>滑块</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="284"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="272"/>
         <source>Add a slider for sending scaled numeric values</source>
         <translation>添加滑块以发送缩放的数值</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="291"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="279"/>
         <source>Toggle</source>
         <translation>开关</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="295"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="283"/>
         <source>Add a toggle switch for on/off commands</source>
         <translation>添加用于开/关命令的开关控件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="290"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="290"/>
         <source>Text Field</source>
         <translation>文本字段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="306"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="294"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="294"/>
         <source>Add a text field for typing and sending commands</source>
         <translation>添加用于输入和发送命令的文本字段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="312"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="300"/>
         <source>Knob</source>
         <translation>旋钮</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="317"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="305"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="305"/>
         <source>Add a rotary knob for setpoint control</source>
         <translation>添加用于设定点控制的旋转旋钮</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="315"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="315"/>
         <source>Edit Code</source>
         <translation>编辑代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="332"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="320"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="320"/>
         <source>Edit the JavaScript that draws this painter widget</source>
         <translation>编辑绘制此绘图器组件的 JavaScript 代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="349"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="337"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="341"/>
         <source>Duplicate the current group and its contents</source>
         <translation>复制当前组及其内容</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="350"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="350"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="366"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="354"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="354"/>
         <source>Delete the current group and all contained datasets</source>
         <translation>删除当前组及其包含的所有数据集</translation>
     </message>
@@ -5949,16 +6504,19 @@ Valid format: 01 A2 FF 3C</source>
     <name>Gyroscope</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="370"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="370"/>
         <source>ROLL ↔</source>
         <translation>横滚 ↔</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="398"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="398"/>
         <source>YAW ↻</source>
         <translation>偏航 ↻</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="426"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="426"/>
         <source>PITCH ↕</source>
         <translation>俯仰 ↕</translation>
     </message>
@@ -5967,26 +6525,31 @@ Valid format: 01 A2 FF 3C</source>
     <name>HID</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="50"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="50"/>
         <source>HID Device</source>
         <translation>HID 设备</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="80"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="80"/>
         <source>Usage Page</source>
         <translation>用途页</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="96"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="96"/>
         <source>Usage</source>
         <translation>用途</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
         <translation>连接游戏手柄、操纵杆、方向盘、飞行控制器和其他 HID 类 USB 设备。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>HID 用途表 (USB.org)</translation>
     </message>
@@ -5995,46 +6558,55 @@ Valid format: 01 A2 FF 3C</source>
     <name>HelpCenter</name>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="33"/>
         <source>Help Center</source>
         <translation>帮助中心</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="95"/>
         <source>Fetching help pages…</source>
         <translation>正在获取帮助页面…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="129"/>
         <source>Search…</source>
         <translation>搜索…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="247"/>
         <source>Loading…</source>
         <translation>加载中…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="289"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="289"/>
         <source>Select a page from the sidebar</source>
         <translation>从侧边栏选择页面</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="319"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="319"/>
         <source>Copied to Clipboard</source>
         <translation>已复制到剪贴板</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="352"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="352"/>
         <source>View Online</source>
         <translation>在线查看</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="371"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="371"/>
         <source>%1 pages</source>
         <translation>%1 页</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="381"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -7838,21 +8410,25 @@ The device may not expose data endpoints in its active configuration, or it may 
     <name>IconPicker</name>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="42"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/IconPicker.qml" line="42"/>
         <source>Select Icon</source>
         <translation>选择图标</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="119"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/IconPicker.qml" line="119"/>
         <source>Search Online…</source>
         <translation>在线搜索…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/IconPicker.qml" line="133"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/IconPicker.qml" line="146"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -7861,71 +8437,85 @@ The device may not expose data endpoints in its active configuration, or it may 
     <name>ImageView</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="68"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="68"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="69"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="69"/>
         <source>Grayscale</source>
         <translation>灰度</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="70"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="70"/>
         <source>High Contrast</source>
         <translation>高对比度</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="71"/>
         <source>Vivid</source>
         <translation>鲜艳</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="72"/>
         <source>Night Vision</source>
         <translation>夜视</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="73"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="73"/>
         <source>Infrared</source>
         <translation>红外</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="74"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="74"/>
         <source>Deep Blue</source>
         <translation>深蓝色</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="75"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="75"/>
         <source>Amber</source>
         <translation>琥珀色</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="172"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="172"/>
         <source>Export Images</source>
         <translation>导出图像</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="182"/>
         <source>Open Export Folder</source>
         <translation>打开导出文件夹</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="198"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="198"/>
         <source>Zoom In</source>
         <translation>放大</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="211"/>
         <source>Zoom Out</source>
         <translation>缩小</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="231"/>
         <source>Show Crosshair</source>
         <translation>显示十字准线</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="554"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="554"/>
         <source>Waiting for Image…</source>
         <translation>等待图像…</translation>
     </message>
@@ -7934,11 +8524,13 @@ The device may not expose data endpoints in its active configuration, or it may 
     <name>KeyManagerDialog</name>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="24"/>
         <source>API Keys</source>
         <translation>API 密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="48"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="48"/>
         <source>Anthropic Claude. The default is Claude Haiku 4.5 ($1 input / $5 output per million tokens). Sonnet 4.6 and Opus 4.7 are also available. Supports streaming, tool use, extended thinking, and prompt caching.</source>
         <translation>Anthropic Claude。默认为 Claude Haiku 4.5(每百万令牌 $1 输入 / $5 输出)。也可使用 Sonnet 4.6 和 OPUS 4.7。支持流式传输、工具使用、扩展思考和提示缓存。</translation>
     </message>
@@ -7948,21 +8540,25 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="58"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="58"/>
         <source>Google Gemini. The default is Gemini 2.0 Flash, which has a generous free tier (subject to rate limits). Gemini 1.5 Pro and Gemini 1.5 Flash are also available.</source>
         <translation>Google Gemini。默认为 Gemini 2.0 Flash,提供慷慨的免费额度(受速率限制)。也可使用 Gemini 1.5 Pro 和 Gemini 1.5 Flash。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="101"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="101"/>
         <source>Bring your own API keys. They are encrypted at rest with a per-machine key and never leave your computer except to communicate with the provider you select.</source>
         <translation>使用您自己的 API 密钥。密钥在本地使用每台机器的密钥加密存储,除了与您选择的提供商通信外,不会离开您的计算机。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="167"/>
         <source>Key set</source>
         <translation>密钥已设置</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="168"/>
         <source>No key</source>
         <translation>无密钥</translation>
     </message>
@@ -7972,101 +8568,121 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="53"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="53"/>
         <source>OpenAI Chat Completions. The default is GPT-5 mini for fast, cost-conscious agentic work. GPT-5.2 is the stronger general-purpose option, and GPT-5.2 Chat tracks the model currently used in ChatGPT.</source>
         <translation>OpenAI Chat Completions。默认为 GPT-5 mini,适用于快速、成本敏感的代理工作。GPT-5.2 是更强大的通用选项,GPT-5.2 Chat 跟踪 ChatGPT 当前使用的模型。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="62"/>
         <source>DeepSeek. OpenAI-compatible API. The default is deepseek-chat (V3). deepseek-reasoner (R1) is also available. Often the cheapest cloud option for tool use.</source>
         <translation>DeepSeek。兼容 OpenAI API。默认为 deepseek-chat (V3)。deepseek-reasoner (R1) 也可用。通常是工具调用最便宜的云选项。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="66"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="66"/>
         <source>OpenRouter. One key, ~200 models from Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen, and others. Free-tier models (suffixed :free) are rate-limited but require no additional billing. Pay-as-you-go for the rest.</source>
         <translation>OpenRouter。一个密钥,约 200 个模型,来自 Anthropic、OpenAI、Google、Meta、Mistral、DeepSeek、Qwen 等。免费层模型(后缀 :free)有速率限制但无需额外付费。其余模型按使用量付费。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="71"/>
         <source>Groq. Hardware-accelerated inference (LPUs) for very fast Llama, Mixtral, Gemma, DeepSeek-R1 distill, and Qwen models. Generous free tier with daily token limits.</source>
         <translation>Groq。硬件加速推理(LPU),为 Llama、Mixtral、Gemma、DeepSeek-R1 distill 和 Qwen 模型提供极快速度。慷慨的免费层,每日令牌限额。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="75"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="75"/>
         <source>Mistral. The default is Mistral Large. Codestral targets code completion, Pixtral handles vision, and the Ministral models are tuned for edge / low-latency use.</source>
         <translation>Mistral。默认为 Mistral Large。Codestral 针对代码补全,Pixtral 处理视觉,Ministral 模型针对边缘/低延迟使用进行调优。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="79"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="79"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>本地模型服务器。兼容任何 OpenAI 端点 -- Ollama、llama.cpp 的 llama-server、LM Studio 或 vLLM。数据不离开本机。模型列表从服务器实时查询。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="205"/>
         <source>A key is on file -- paste a new one to replace it</source>
         <translation>已存储密钥 -- 粘贴新密钥以替换</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="206"/>
         <source>Paste your API key here</source>
         <translation>在此粘贴您的 API 密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="213"/>
         <source>Hide key</source>
         <translation>隐藏密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="214"/>
         <source>Show key while typing</source>
         <translation>输入时显示密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="225"/>
         <source>Get key</source>
         <translation>获取密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="226"/>
         <source>Open the provider's console to create a new key</source>
         <translation>打开提供商的控制台以创建新密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="237"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="255"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="255"/>
         <source>Remove the stored key for %1</source>
         <translation>移除 %1 的已存储密钥</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="279"/>
         <source>http://localhost:11434/v1</source>
         <translation>http://localhost:11434/v1</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="283"/>
         <source>Install Ollama</source>
         <translation>安装 Ollama</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="284"/>
         <source>Open the Ollama download page</source>
         <translation>打开 Ollama 下载页面</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="295"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="310"/>
         <source>Re-query the model list</source>
         <translation>重新查询模型列表</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="358"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="358"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>尚未配置 API 密钥。请添加密钥以开始使用。</translation>
     </message>
@@ -8076,11 +8692,13 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="361"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="361"/>
         <source>One provider is ready.</source>
         <translation>一个提供商已就绪。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="363"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="363"/>
         <source>%1 providers are ready.</source>
         <translation>%1 个提供商已就绪。</translation>
     </message>
@@ -8089,26 +8707,31 @@ The device may not expose data endpoints in its active configuration, or it may 
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="37"/>
         <source>Licensing</source>
         <translation>许可证管理</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="84"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="84"/>
         <source>Please wait…</source>
         <translation>请稍候…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="124"/>
         <source>Activate Serial Studio Pro</source>
         <translation>激活 Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="131"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>在下方粘贴您的许可证密钥以解锁 Pro 功能，如 MQTT、3D 绘图等。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="138"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>您的许可证包含 5 个设备激活。
@@ -8116,6 +8739,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="151"/>
         <source>Paste your license key here…</source>
         <translation>在此粘贴您的许可证密钥…</translation>
     </message>
@@ -8123,11 +8747,15 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="170"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="331"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="380"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="331"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="380"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="176"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="176"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
@@ -8135,71 +8763,87 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="182"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="337"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="386"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="386"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="233"/>
         <source>Product</source>
         <translation>产品</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="240"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Licensee</source>
         <translation>许可证持有人</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="270"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="270"/>
         <source>Licensee E-Mail</source>
         <translation>被许可人电子邮件</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="287"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="287"/>
         <source>Device Usage</source>
         <translation>设备使用情况</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="295"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>已使用 %1 台设备（无限制计划）</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="296"/>
         <source>%1 of %2 devices used</source>
         <translation>已使用 %1 / %2 台设备</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="306"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="306"/>
         <source>Device ID</source>
         <translation>设备 ID</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="353"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="353"/>
         <source>License Key</source>
         <translation>许可证密钥</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="409"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="409"/>
         <source>Customer Portal</source>
         <translation>客户门户</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="421"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="421"/>
         <source>Buy License</source>
         <translation>购买许可证</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="429"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="429"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="440"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="440"/>
         <source>Deactivate</source>
         <translation>停用</translation>
     </message>
@@ -8406,91 +9050,109 @@ Thank you again for supporting Serial Studio!</source>
     <name>MQTT</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="51"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="51"/>
         <source>Hostname</source>
         <translation>主机名</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="59"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="59"/>
         <source>e.g. broker.hivemq.com</source>
         <translation>例如 broker.hivemq.com</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="67"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="67"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="87"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="87"/>
         <source>Topic Filter</source>
         <translation>主题过滤器</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="95"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="95"/>
         <source>e.g. sensors/#</source>
         <translation>例如 sensors/#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="103"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="103"/>
         <source>Client ID</source>
         <translation>客户端 ID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="120"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="120"/>
         <source>Regenerate</source>
         <translation>重新生成</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="130"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="145"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="161"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="161"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="187"/>
         <source>Keep Alive (s)</source>
         <translation>保持连接 (秒)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="206"/>
         <source>Clean Session</source>
         <translation>清除会话</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="232"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="232"/>
         <source>Use SSL/TLS</source>
         <translation>使用 SSL/TLS</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="258"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="258"/>
         <source>SSL Protocol</source>
         <translation>SSL 协议</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="289"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="289"/>
         <source>Peer Verify</source>
         <translation>对等方验证</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="320"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="320"/>
         <source>Verify Depth</source>
         <translation>验证深度</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="341"/>
         <source>CA Certificates</source>
         <translation>CA 证书</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="349"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="349"/>
         <source>Load From Folder…</source>
         <translation>从文件夹加载…</translation>
     </message>
@@ -9228,31 +9890,37 @@ Please provide the necessary credentials.</source>
     <name>MainWindow</name>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="184"/>
         <source>Console Only Mode</source>
         <translation>仅控制台模式</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="187"/>
         <source>Quick Plot Mode</source>
         <translation>快速绘图模式</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="194"/>
         <source>Empty Project</source>
         <translation>空项目</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="659"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="659"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="667"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="667"/>
         <source>Waiting for data…</source>
         <translation>等待数据…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="668"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="668"/>
         <source>Connecting to device…</source>
         <translation>正在连接设备…</translation>
     </message>
@@ -9286,6 +9954,7 @@ Please provide the necessary credentials.</source>
     <name>MarkdownWebView</name>
     <message>
         <location filename="../../qml/Widgets/MarkdownWebView.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/MarkdownWebView.qml" line="35"/>
         <source>Copied to Clipboard</source>
         <translation>已复制到剪贴板</translation>
     </message>
@@ -9294,6 +9963,7 @@ Please provide the necessary credentials.</source>
     <name>Mdf4Player</name>
     <message>
         <location filename="../../qml/Dialogs/Mdf4Player.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Mdf4Player.qml" line="24"/>
         <source>MDF4 Player</source>
         <translation>MDF4 播放器</translation>
     </message>
@@ -9302,46 +9972,55 @@ Please provide the necessary credentials.</source>
     <name>MessageBubble</name>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="97"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="98"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="98"/>
         <source>You</source>
         <translation>您</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="98"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="98"/>
         <source>Assistant</source>
         <translation>助手</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="208"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="208"/>
         <source>Discovery</source>
         <translation>发现</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="209"/>
         <source>Execution</source>
         <translation>执行</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="239"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="239"/>
         <source>Approve %1 actions in %2?</source>
         <translation>批准 %2 中的 %1 个操作？</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="249"/>
         <source>These calls will run together. Expand each card below to inspect arguments.</source>
         <translation>这些调用将一起运行。展开下方每个卡片以检查参数。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="260"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="260"/>
         <source>Approve all</source>
         <translation>全部批准</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="266"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="266"/>
         <source>Deny all</source>
         <translation>全部拒绝</translation>
     </message>
@@ -9349,6 +10028,9 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/AI/MessageBubble.qml" line="332"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="384"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="436"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="332"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="384"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="436"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
@@ -9356,12 +10038,17 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/AI/MessageBubble.qml" line="337"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="389"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="441"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="389"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="441"/>
         <source>Copy All</source>
         <translation>全部复制</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="345"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="397"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="345"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="397"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
@@ -9370,97 +10057,117 @@ Please provide the necessary credentials.</source>
     <name>MessageWebView</name>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="62"/>
         <source>You</source>
         <translation>您</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="63"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="63"/>
         <source>Assistant</source>
         <translation>助手</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="64"/>
         <location filename="../../qml/AI/MessageWebView.qml" line="70"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="64"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="70"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="65"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="65"/>
         <source>Discovery</source>
         <translation>发现</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="66"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="66"/>
         <source>Execution</source>
         <translation>执行</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="67"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="67"/>
         <source>Running</source>
         <translation>运行中</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="68"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="68"/>
         <source>Awaiting approval</source>
         <translation>等待批准</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="69"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="69"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="71"/>
         <source>Denied</source>
         <translation>已拒绝</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="72"/>
         <source>Blocked</source>
         <translation>已阻止</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="73"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="73"/>
         <source>Approve</source>
         <translation>批准</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="74"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="74"/>
         <source>Deny</source>
         <translation>拒绝</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="75"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="75"/>
         <source>Approve all</source>
         <translation>全部批准</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="76"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="76"/>
         <source>Deny all</source>
         <translation>全部拒绝</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="77"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="77"/>
         <source>Arguments</source>
         <translation>参数</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="78"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="78"/>
         <source>Result</source>
         <translation>结果</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="79"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="79"/>
         <source>Approve {n} actions in {family}?</source>
         <translation>批准 {family} 中的 {n} 个操作?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="80"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="80"/>
         <source>These calls will run together. Expand each card to inspect arguments.</source>
         <translation>这些调用将一起运行。展开每个卡片以检查参数。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="81"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="81"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
@@ -9887,91 +10594,109 @@ Would you like to open the download page?</source>
     <name>Modbus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="49"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="49"/>
         <source>Protocol</source>
         <translation>协议</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
         <source>Serial Port</source>
         <translation>串口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="97"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="201"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="201"/>
         <source>Parity</source>
         <translation>校验位</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="222"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="245"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="268"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="268"/>
         <source>Host</source>
         <translation>主机</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
         <source>IP Address</source>
         <translation>IP 地址</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="292"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="292"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="301"/>
         <source>TCP Port</source>
         <translation>TCP 端口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <source>Slave Address</source>
         <translation>从站地址</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="334"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="334"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="382"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="382"/>
         <source>Configure Register Groups…</source>
         <translation>配置寄存器组…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="392"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="392"/>
         <source>Import Register Map…</source>
         <translation>导入寄存器映射…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="407"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="407"/>
         <source>%1 group(s) configured</source>
         <translation>已配置 %1 个组</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="408"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="408"/>
         <source>No groups configured</source>
         <translation>未配置组</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="349"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="349"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="354"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="354"/>
         <source>Polling interval</source>
         <translation>轮询间隔</translation>
     </message>
@@ -9980,86 +10705,103 @@ Would you like to open the download page?</source>
     <name>ModbusGroupsDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="45"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="45"/>
         <source>Modbus Register Groups</source>
         <translation>Modbus 寄存器组</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="166"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="166"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
         <translation>配置多个寄存器组以按顺序轮询不同的寄存器类型。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="174"/>
         <source>Add New Group</source>
         <translation>添加新组</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="198"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="198"/>
         <source>Register Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
         <source>Start Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="217"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="223"/>
         <source>Register Count:</source>
         <translation>寄存器数量：</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="239"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="239"/>
         <source>Add Group</source>
         <translation>添加组</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="262"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="262"/>
         <source>Configured Groups</source>
         <translation>已配置的组</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="311"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="311"/>
         <source>Start</source>
         <translation>起始地址</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="318"/>
         <source>Count</source>
         <translation>数量</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="325"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="325"/>
         <source>Action</source>
         <translation>操作</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="400"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="400"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="412"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="412"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>未配置组。
@@ -10067,21 +10809,25 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="430"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="430"/>
         <source>Total groups: %1</source>
         <translation>总组数：%1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="434"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="434"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="440"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="440"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="446"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="446"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -10090,71 +10836,85 @@ Add groups above to poll multiple register types.</source>
     <name>ModbusPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="33"/>
         <source>Modbus Register Map Preview</source>
         <translation>Modbus 寄存器映射预览</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="155"/>
         <source>File: %1</source>
         <translation>文件:%1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="163"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="163"/>
         <source>Review the registers to import into a new Serial Studio project.</source>
         <translation>查看要导入到新 Serial Studio 项目中的寄存器。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="171"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="171"/>
         <source>Registers</source>
         <translation>寄存器</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="205"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="212"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="212"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="221"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="227"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="227"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="235"/>
         <source>Data Type</source>
         <translation>数据类型</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="242"/>
         <source>Units</source>
         <translation>单位</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="343"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="343"/>
         <source>No registers found in file.</source>
         <translation>文件中未找到寄存器。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="361"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="361"/>
         <source>Total: %1 registers in %2 groups</source>
         <translation>总计：%2 个组中的 %1 个寄存器</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="368"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="368"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="381"/>
         <source>Create Project</source>
         <translation>创建项目</translation>
     </message>
@@ -10163,26 +10923,31 @@ Add groups above to poll multiple register types.</source>
     <name>MqttPublisherView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="33"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 发布者</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="110"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="110"/>
         <source>Connected to broker</source>
         <translation>已连接到代理</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="111"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="111"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="124"/>
         <source>Test Connection</source>
         <translation>测试连接</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="129"/>
         <source>Probe the broker with the current settings</source>
         <translation>使用当前设置探测代理</translation>
     </message>
@@ -10190,31 +10955,39 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="147"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="162"/>
         <source>Enable publishing first</source>
         <translation>请先启用发布</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="140"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="140"/>
         <source>Edit Script</source>
         <translation>编辑脚本</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="146"/>
         <source>Edit the publisher script (Lua or JavaScript)</source>
         <translation>编辑发布者脚本（Lua 或 JavaScript）</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="158"/>
         <source>Load CA Certs</source>
         <translation>加载 CA 证书</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="164"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="164"/>
         <source>Add PEM certificates from a folder</source>
         <translation>从文件夹添加 PEM 证书</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="165"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="165"/>
         <source>Enable SSL/TLS first</source>
         <translation>请先启用 SSL/TLS</translation>
     </message>
@@ -10227,51 +11000,61 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="178"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="178"/>
         <source>Interpolation: %1</source>
         <translation>插值:%1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="200"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="200"/>
         <source>Show Legends</source>
         <translation>显示图例</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="217"/>
         <source>Show X Axis Label</source>
         <translation>显示 X 轴标签</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="228"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="228"/>
         <source>Show Y Axis Label</source>
         <translation>显示 Y 轴标签</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="240"/>
         <source>Show Crosshair</source>
         <translation>显示十字准线</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="247"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="247"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="266"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="266"/>
         <source>Reset View</source>
         <translation>重置视图</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="272"/>
         <source>Axis Range Settings</source>
         <translation>坐标轴范围设置</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="307"/>
         <source>Samples</source>
         <translation>采样</translation>
     </message>
@@ -10280,32 +11063,39 @@ Add groups above to poll multiple register types.</source>
     <name>Network</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="78"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="78"/>
         <source>Socket Type</source>
         <translation>套接字类型</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="132"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="132"/>
         <source>Remote Address</source>
         <translation>远程地址</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
         <source>Local Port</source>
         <translation>本地端口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="106"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="106"/>
         <source>Type 0 for automatic port</source>
         <translation>输入 0 以自动分配端口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="156"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="189"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="189"/>
         <source>Remote Port</source>
         <translation>远程端口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="219"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="219"/>
         <source>Multicast</source>
         <translation>组播</translation>
     </message>
@@ -10314,21 +11104,25 @@ Add groups above to poll multiple register types.</source>
     <name>NotificationLog</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/NotificationLog.qml" line="162"/>
         <source>Filter by channel…</source>
         <translation>按通道筛选…</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/NotificationLog.qml" line="187"/>
         <source>Clear all notifications</source>
         <translation>清除所有通知</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="271"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/NotificationLog.qml" line="271"/>
         <source>(no title)</source>
         <translation>(无标题)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="329"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/NotificationLog.qml" line="329"/>
         <source>No notifications yet</source>
         <translation>暂无通知</translation>
     </message>
@@ -10341,36 +11135,43 @@ Add groups above to poll multiple register types.</source>
     <name>OnlineIconPicker</name>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="42"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="42"/>
         <source>Search Online Icons</source>
         <translation>搜索在线图标</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="72"/>
         <source>Download failed: %1</source>
         <translation>下载失败:%1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="97"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>搜索图标(例如 temperature、arrow、play)…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="109"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="109"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="148"/>
         <source>Search for icons above to get started</source>
         <translation>在上方搜索图标以开始</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="250"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="250"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="261"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="261"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -10379,156 +11180,187 @@ Add groups above to poll multiple register types.</source>
     <name>OutputWidgetView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="91"/>
         <source>Output widgets require a Pro license.</source>
         <translation>输出组件需要 Pro 许可证。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="125"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="125"/>
         <source>Button</source>
         <translation>按钮</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="129"/>
         <source>Send a command on click</source>
         <translation>点击时发送命令</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="134"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="134"/>
         <source>Slider</source>
         <translation>滑块</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="138"/>
         <source>Send scaled numeric values</source>
         <translation>发送缩放的数值</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="143"/>
         <source>Toggle</source>
         <translation>开关</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
         <source>Send on/off commands</source>
         <translation>发送开/关命令</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="152"/>
         <source>Text Field</source>
         <translation>文本字段</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="156"/>
         <source>Type and send arbitrary commands</source>
         <translation>输入并发送任意命令</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="160"/>
         <source>Knob</source>
         <translation>旋钮</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="165"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="165"/>
         <source>Rotary input for setpoints</source>
         <translation>用于设定点的旋转输入</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="93"/>
         <source>You can configure output widgets, but they only appear on the dashboard with a Pro license.</source>
         <translation>您可以配置输出组件，但它们仅在拥有 Pro 许可证时显示在仪表板上。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="182"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="185"/>
         <source>Duplicate this output widget</source>
         <translation>复制此输出组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="195"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="197"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="197"/>
         <source>Delete this output widget</source>
         <translation>删除此输出组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="274"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="274"/>
         <source>Transmit Function</source>
         <translation>传输函数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="284"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="290"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="290"/>
         <source>Import transmit function from a .js file</source>
         <translation>从 .js 文件导入传输函数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="297"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="297"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="301"/>
         <source>Select a pre-built transmit function template</source>
         <translation>选择预置的传输函数模板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="306"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="306"/>
         <source>Test</source>
         <translation>测试</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="312"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="312"/>
         <source>Test the transmit function with sample input</source>
         <translation>使用示例输入测试传输函数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="353"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="353"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="359"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="359"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="367"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="367"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="372"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="372"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="377"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="377"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="384"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="384"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="391"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="391"/>
         <source>Format Document</source>
         <translation>格式化文档</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="396"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="396"/>
         <source>Format Selection</source>
         <translation>格式化选区</translation>
     </message>
@@ -10537,6 +11369,7 @@ Add groups above to poll multiple register types.</source>
     <name>Painter</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Painter.qml" line="56"/>
         <source>Painter Widget Error</source>
         <translation>绘图器组件错误</translation>
     </message>
@@ -10545,101 +11378,121 @@ Add groups above to poll multiple register types.</source>
     <name>PainterCodeDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
         <source>Painter Widget Code Editor</source>
         <translation>绘图器组件代码编辑器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
         <source>paint(ctx, w, h)</source>
         <translation>paint(ctx, w, h)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="86"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
         <source>Import painter code from a .js file</source>
         <translation>从 .js 文件导入绘图器代码</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
         <source>Select a built-in painter template</source>
         <translation>选择内置绘图模板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
         <source>Format</source>
         <translation>格式化</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
         <source>Reformat the painter code</source>
         <translation>重新格式化绘图代码</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
         <source>Test</source>
         <translation>测试</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="124"/>
         <source>Open a live preview with simulated dataset values</source>
         <translation>使用模拟数据集值打开实时预览</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
         <source>Preview</source>
         <translation>预览</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="182"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="191"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="191"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="192"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="192"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="193"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="193"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="194"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="196"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="197"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="197"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="199"/>
         <source>Format Document</source>
         <translation>格式化文档</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="200"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="200"/>
         <source>Format Selection</source>
         <translation>格式化选区</translation>
     </message>
@@ -10648,42 +11501,51 @@ Add groups above to poll multiple register types.</source>
     <name>PainterTestDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
         <source>Painter Live Preview</source>
         <translation>绘图器实时预览</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="37"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="37"/>
         <source>Preview</source>
         <translation>预览</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="113"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="113"/>
         <source>Simulated datasets</source>
         <translation>模拟数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="180"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="180"/>
         <source>Runtime OK</source>
         <translation>运行时正常</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="181"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="181"/>
         <source>Awaiting first frame...</source>
         <translation>等待第一帧...</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="194"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="236"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="236"/>
         <source>Clear console</source>
         <translation>清空控制台</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="245"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -10696,46 +11558,55 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="179"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="179"/>
         <source>Interpolation: %1</source>
         <translation>插值:%1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="192"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="192"/>
         <source>Show Area Under Plot</source>
         <translation>显示曲线下方区域</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="210"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="210"/>
         <source>Show X Axis Label</source>
         <translation>显示 X 轴标签</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="221"/>
         <source>Show Y Axis Label</source>
         <translation>显示 Y 轴标签</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="233"/>
         <source>Show Crosshair</source>
         <translation>显示十字准线</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="240"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="240"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="259"/>
         <source>Reset View</source>
         <translation>重置视图</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="265"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="265"/>
         <source>Axis Range Settings</source>
         <translation>坐标轴范围设置</translation>
     </message>
@@ -10744,51 +11615,61 @@ Add groups above to poll multiple register types.</source>
     <name>Plot3D</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="203"/>
         <source>Interpolate</source>
         <translation>插值</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="221"/>
         <source>Orbit Navigation</source>
         <translation>轨道导航</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="231"/>
         <source>Pan Navigation</source>
         <translation>平移导航</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="242"/>
         <source>Orthogonal View</source>
         <translation>正交视图</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="248"/>
         <source>Top View</source>
         <translation>顶视图</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="254"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="254"/>
         <source>Left View</source>
         <translation>左视图</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="260"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="260"/>
         <source>Front View</source>
         <translation>前视图</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="277"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="277"/>
         <source>Auto Center</source>
         <translation>自动居中</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="293"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="293"/>
         <source>Anaglyph 3D</source>
         <translation>浮雕 3D</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="307"/>
         <source>Invert Eye Positions</source>
         <translation>反转眼睛位置</translation>
     </message>
@@ -10797,21 +11678,25 @@ Add groups above to poll multiple register types.</source>
     <name>PlotCommon</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/PlotCommon.qml" line="59"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/PlotCommon.qml" line="59"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/PlotCommon.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/PlotCommon.qml" line="62"/>
         <source>ZOH</source>
         <translation>零阶保持</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/PlotCommon.qml" line="65"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/PlotCommon.qml" line="65"/>
         <source>Stem</source>
         <translation>茎状图</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/PlotCommon.qml" line="67"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/PlotCommon.qml" line="67"/>
         <source>Linear</source>
         <translation>线性</translation>
     </message>
@@ -10820,16 +11705,19 @@ Add groups above to poll multiple register types.</source>
     <name>PlotWidget</name>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1238"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1238"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — 拖动以移动，右键单击以清除</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1240"/>
         <source>Click to place cursor</source>
         <translation>单击以放置光标</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1242"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>单击以放置第二个光标 — 拖动以移动</translation>
     </message>
@@ -10838,16 +11726,19 @@ Add groups above to poll multiple register types.</source>
     <name>ProNotice</name>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="120"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
         <translation>访问网站</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/ProNotice.qml" line="129"/>
         <source>Buy License</source>
         <translation>购买许可证</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/ProNotice.qml" line="143"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
@@ -10856,21 +11747,25 @@ Add groups above to poll multiple register types.</source>
     <name>ProUpgradeNotice</name>
     <message>
         <location filename="../../qml/AI/ProUpgradeNotice.qml" line="26"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ProUpgradeNotice.qml" line="26"/>
         <source>Assistant — Pro feature</source>
         <translation>助手 — Pro 功能</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ProUpgradeNotice.qml" line="44"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ProUpgradeNotice.qml" line="44"/>
         <source>The Assistant is a Serial Studio Pro feature. Activate your license to unlock it.</source>
         <translation>助手是 Serial Studio Pro 功能。激活您的许可证以解锁该功能。</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ProUpgradeNotice.qml" line="52"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ProUpgradeNotice.qml" line="52"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ProUpgradeNotice.qml" line="66"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ProUpgradeNotice.qml" line="66"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -10879,26 +11774,31 @@ Add groups above to poll multiple register types.</source>
     <name>Process</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="69"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="69"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
         <source>Launch Process</source>
         <translation>启动进程</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
         <source>Named Pipe</source>
         <translation>命名管道</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
         <source>Executable</source>
         <translation>可执行文件</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
         <source>/path/to/executable</source>
         <translation>/path/to/executable</translation>
     </message>
@@ -10906,46 +11806,57 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="133"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="209"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="257"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="257"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="145"/>
         <source>Arguments</source>
         <translation>参数</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 value1 --arg2 value2</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="177"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="177"/>
         <source>Working Dir</source>
         <translation>工作目录</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="192"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="192"/>
         <source>(optional) /working/directory</source>
         <translation>(可选) /working/directory</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="223"/>
         <source>Pipe Path</source>
         <translation>管道路径</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
         <source>Pick Running Process…</source>
         <translation>选择运行中的进程…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="311"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="311"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>启动子进程并捕获其 stdout，或连接到现有进程写入的命名管道。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="319"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="319"/>
         <source>Learn about named pipes</source>
         <translation>了解命名管道</translation>
     </message>
@@ -10954,51 +11865,61 @@ Add groups above to poll multiple register types.</source>
     <name>ProcessPicker</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="55"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="55"/>
         <source>Select Running Process</source>
         <translation>选择运行中的进程</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="206"/>
         <source>Select a running process to derive a named-pipe path suggestion.</source>
         <translation>选择一个运行中的进程以派生命名管道路径建议。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="212"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="212"/>
         <source>Filter Processes</source>
         <translation>筛选进程</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
         <source>Type to filter by name…</source>
         <translation>按名称筛选…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="230"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="230"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="238"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="238"/>
         <source>Running Processes</source>
         <translation>运行中的进程</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="276"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="276"/>
         <source>Process</source>
         <translation>进程</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="282"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="375"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="375"/>
         <source>No processes match the filter.</source>
         <translation>没有进程匹配筛选条件。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>未找到运行中的进程。
@@ -11006,16 +11927,19 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
         <source>%1 process(es)</source>
         <translation>%1 个进程</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="396"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="396"/>
         <source>Select</source>
         <translation>选择</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="402"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="402"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -11024,51 +11948,61 @@ Click Refresh to update the list.</source>
     <name>ProjectEditor</name>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="42"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="42"/>
         <source>modified</source>
         <translation>已修改</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="288"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="288"/>
         <source>This project is password protected</source>
         <translation>此项目受密码保护</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="289"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="289"/>
         <source>Editing is available in Project mode</source>
         <translation>项目模式下可进行编辑</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="300"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>输入密码以进行更改，或打开其他项目。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="301"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>切换到项目模式以加载和编辑项目。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="324"/>
         <source>Unlock</source>
         <translation>解锁</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="325"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="325"/>
         <source>Switch to Project Mode</source>
         <translation>切换到项目模式</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="345"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="345"/>
         <source>Open Other Project</source>
         <translation>打开其他项目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="346"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="346"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="363"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="363"/>
         <source>Create New Project</source>
         <translation>创建新项目</translation>
     </message>
@@ -11077,31 +12011,37 @@ Click Refresh to update the list.</source>
     <name>ProjectStructure</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="32"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="32"/>
         <source>Project Structure</source>
         <translation>项目结构</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="71"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="346"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="346"/>
         <source>Move Up</source>
         <translation>上移</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="351"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="351"/>
         <source>Move Down</source>
         <translation>下移</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="358"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="358"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="376"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="376"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -11110,41 +12050,49 @@ Click Refresh to update the list.</source>
     <name>ProjectToolbar</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="142"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="145"/>
         <source>Create a new JSON project</source>
         <translation>创建新的 JSON 项目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="158"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="162"/>
         <source>Open an existing JSON project</source>
         <translation>打开现有 JSON 项目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="168"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="168"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="175"/>
         <source>Save the current project</source>
         <translation>保存当前项目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="181"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="181"/>
         <source>Save As</source>
         <translation>另存为</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="188"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="188"/>
         <source>Save the current project under a new name</source>
         <translation>以新名称保存当前项目</translation>
     </message>
@@ -11154,6 +12102,7 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="217"/>
         <source>Lock</source>
         <translation>锁定</translation>
     </message>
@@ -11163,318 +12112,387 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="200"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="200"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="204"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="208"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="208"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>从 Protocol Buffers (.proto) 架构生成项目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>设置密码并锁定项目编辑器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="232"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="232"/>
         <source>Add Device</source>
         <translation>添加设备</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="236"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="236"/>
         <source>Add a new data source (device) to the project</source>
         <translation>向项目添加新数据源（设备）</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="245"/>
         <source>Action</source>
         <translation>操作</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="248"/>
         <source>Add a new action to the project</source>
         <translation>向项目添加新操作</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="259"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="263"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="263"/>
         <source>Output</source>
         <translation>输出</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>Add a new output control panel with a button</source>
         <translation>添加一个带按钮的新输出控制面板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="279"/>
         <source>Slider</source>
         <translation>滑块</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Add an output slider control</source>
         <translation>添加一个输出滑块控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="289"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="289"/>
         <source>Toggle</source>
         <translation>开关</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="292"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="292"/>
         <source>Add an output toggle control</source>
         <translation>添加一个输出开关控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Knob</source>
         <translation>旋钮</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="302"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="302"/>
         <source>Add an output knob control</source>
         <translation>添加一个输出旋钮控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <source>Text Field</source>
         <translation>文本字段</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="312"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="312"/>
         <source>Add an output text field control</source>
         <translation>添加一个输出文本字段控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="319"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="319"/>
         <source>Button</source>
         <translation>按钮</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
         <source>Add an output button control</source>
         <translation>添加输出按钮控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="335"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="339"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="335"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="339"/>
         <source>Dataset</source>
         <translation>数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
         <source>Add a generic dataset</source>
         <translation>添加通用数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="355"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="355"/>
         <source>Plot</source>
         <translation>绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
         <source>Add a 2D plot dataset</source>
         <translation>添加 2D 绘图数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>FFT Plot</source>
         <translation>FFT 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="368"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="368"/>
         <source>Add a Fast Fourier Transform plot</source>
         <translation>添加快速傅里叶变换绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
         <source>Gauge</source>
         <translation>仪表盘</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="378"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="378"/>
         <source>Add a gauge widget for numeric data</source>
         <translation>添加数值数据仪表盘组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="386"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="386"/>
         <source>Level Indicator</source>
         <translation>电平指示器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="388"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="388"/>
         <source>Add a vertical bar level indicator</source>
         <translation>添加垂直条形电平指示器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="395"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="395"/>
         <source>Compass</source>
         <translation>罗盘</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <source>Add a compass widget for directional data</source>
         <translation>添加罗盘控件以显示方向数据</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="406"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="406"/>
         <source>LED Indicator</source>
         <translation>LED 指示器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="408"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="408"/>
         <source>Add an LED-style status indicator</source>
         <translation>添加 LED 样式状态指示器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="421"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="425"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="421"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="425"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="427"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="427"/>
         <source>Add a dataset container group</source>
         <translation>添加数据集容器组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="429"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="429"/>
         <source>Dataset Container</source>
         <translation>数据集容器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="433"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="433"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <source>Add an image/video stream viewer</source>
         <translation>添加图像/视频流查看器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
         <source>Image View</source>
         <translation>图像视图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="445"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="445"/>
         <source>Painter</source>
         <translation>绘图器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="449"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="449"/>
         <source>Add a custom JavaScript-rendered painter widget</source>
         <translation>添加自定义 JavaScript 渲染的绘图器组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="450"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="450"/>
         <source>Painter widgets require a Pro license — adding one will fall back to a data grid</source>
         <translation>绘图器组件需要 Pro 许可证 — 添加后将回退为数据网格</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
         <source>Painter Widget</source>
         <translation>绘图器组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="463"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="463"/>
         <source>Table</source>
         <translation>表格</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="466"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="466"/>
         <source>Add a data table view</source>
         <translation>添加数据表格视图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="468"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="468"/>
         <source>Data Grid</source>
         <translation>数据网格</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="474"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="474"/>
         <source>Multi-Plot</source>
         <translation>多重绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="476"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="476"/>
         <source>Add a 2D plot with multiple signals</source>
         <translation>添加包含多个信号的 2D 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="478"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="478"/>
         <source>Multiple Plot</source>
         <translation>多重绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="483"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="488"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="483"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="488"/>
         <source>3D Plot</source>
         <translation>3D 绘图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="486"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="486"/>
         <source>Add a 3D plot visualization</source>
         <translation>添加 3D 绘图可视化</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="494"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="498"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="494"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="498"/>
         <source>Accelerometer</source>
         <translation>加速度计</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="496"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="496"/>
         <source>Add a group for 3-axis accelerometer data</source>
         <translation>添加用于 3 轴加速度计数据的组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="504"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="507"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="504"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="507"/>
         <source>Gyroscope</source>
         <translation>陀螺仪</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="508"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="508"/>
         <source>Add a group for 3-axis gyroscope data</source>
         <translation>添加用于 3 轴陀螺仪数据的组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="513"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="518"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="513"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="518"/>
         <source>GPS Map</source>
         <translation>GPS 地图</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="516"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="516"/>
         <source>Add a map widget for GPS data</source>
         <translation>添加用于 GPS 数据的地图组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="532"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="532"/>
         <source>Assistant</source>
         <translation>助手</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="535"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="535"/>
         <source>Open the Assistant</source>
         <translation>打开助手</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="541"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="541"/>
         <source>Help Center</source>
         <translation>帮助中心</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="545"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="545"/>
         <source>Open the Project Editor documentation</source>
         <translation>打开项目编辑器文档</translation>
     </message>
@@ -11483,76 +12501,91 @@ Click Refresh to update the list.</source>
     <name>ProjectView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="34"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="34"/>
         <source>Project Summary</source>
         <translation>项目摘要</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
         <translation>项目中检测到 Pro 功能。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="83"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="83"/>
         <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
         <translation>正在使用备用组件。购买许可证以解锁完整功能。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="118"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="118"/>
         <source>Project Title:</source>
         <translation>项目标题:</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="129"/>
         <source>Untitled Project</source>
         <translation>未命名项目</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="149"/>
         <source>Points:</source>
         <translation>点数:</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="209"/>
         <source>Source</source>
         <translation>源</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="210"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="210"/>
         <source>Sources</source>
         <translation>源</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="215"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="215"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="216"/>
         <source>Groups</source>
         <translation>组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="221"/>
         <source>Dataset</source>
         <translation>数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="222"/>
         <source>Datasets</source>
         <translation>数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="227"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="227"/>
         <source>Action</source>
         <translation>操作</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="228"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="228"/>
         <source>Actions</source>
         <translation>操作</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="316"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="316"/>
         <source>Double-click a block to edit it. Right-click anywhere to add a group, dataset, action, data table, or device.</source>
         <translation>双击块进行编辑。右键单击任意位置以添加组、数据集、动作、数据表或设备。</translation>
     </message>
@@ -11561,61 +12594,73 @@ Click Refresh to update the list.</source>
     <name>ProtoPreviewDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="41"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="41"/>
         <source>Protocol Buffers File Preview</source>
         <translation>Protocol Buffers 文件预览</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="165"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="165"/>
         <source>Proto File: %1</source>
         <translation>Proto 文件：%1</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="173"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="173"/>
         <source>Browse the messages below, then create the project. Every message becomes a dashboard group; matching-type channel blocks get a MultiPlot and mixed-type messages get a DataGrid.</source>
         <translation>浏览下方的消息，然后创建项目。每条消息将成为一个仪表板组；相同类型的通道块将获得多重绘图，混合类型的消息将获得数据网格。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="183"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="183"/>
         <source>Show fields for</source>
         <translation>显示字段</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="209"/>
         <source>Fields</source>
         <translation>字段</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="243"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="243"/>
         <source>Tag</source>
         <translation>标签</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="253"/>
         <source>Field Name</source>
         <translation>字段名称</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="258"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="258"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="345"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="345"/>
         <source>No fields in the selected message.</source>
         <translation>所选消息中没有字段。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="363"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="363"/>
         <source>Total: %1 messages, %2 fields</source>
         <translation>总计：%1 条消息，%2 个字段</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="371"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="371"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="383"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="383"/>
         <source>Create Project</source>
         <translation>创建项目</translation>
     </message>
@@ -11940,12 +12985,12 @@ function parse(%1) { ... }
 不再需要分隔符参数。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
         <source>Critical</source>
         <translation>严重</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -12157,247 +13202,297 @@ function parse(%1) { ... }
     <name>ReportOptionsDialog</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
         <source>Generate PDF Report</source>
         <translation>生成 PDF 报告</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
         <source>Generate Report</source>
         <translation>生成报告</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="61"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="61"/>
         <source>Solid</source>
         <translation>实线</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="62"/>
         <source>Dashed</source>
         <translation>虚线</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="63"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="63"/>
         <source>Dotted</source>
         <translation>点线</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="80"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="80"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="81"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="81"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="82"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="82"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="83"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="83"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="84"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="84"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="85"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="85"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="86"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="87"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="87"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="88"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="88"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="89"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="89"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 英寸)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="90"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="90"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 英寸)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="91"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 英寸)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="92"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="92"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 英寸)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="93"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 英寸)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>%1 — Session Report</source>
         <translation>%1 — 会话报告</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="279"/>
         <source>Session Report</source>
         <translation>会话报告</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
         <source>Branding</source>
         <translation>品牌标识</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
         <source>Page</source>
         <translation>页面</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="199"/>
         <source>Sections</source>
         <translation>部分</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="247"/>
         <source>Identity</source>
         <translation>标识</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="261"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="261"/>
         <source>Company</source>
         <translation>公司</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="268"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="268"/>
         <source>e.g. Acme Test Systems</source>
         <translation>例如 Acme Test Systems</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="272"/>
         <source>Document title</source>
         <translation>文档标题</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="283"/>
         <source>Author</source>
         <translation>作者</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
         <source>Prepared by (optional)</source>
         <translation>制作者（可选）</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="299"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="299"/>
         <source>Logo</source>
         <translation>徽标</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG、JPG 或 SVG（可选）</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
         <source>Browse…</source>
         <translation>浏览…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="328"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="328"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
         <source>Paper</source>
         <translation>纸张</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="381"/>
         <source>Page size</source>
         <translation>页面大小</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="509"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="509"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>在图表上标注最小值、最大值和平均值</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
         <source>Export HTML</source>
         <translation>导出 HTML</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="497"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="497"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>封面页（徽标、文档标题、测试副标题）</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="500"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="500"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>测试信息(项目、时间戳、分类和备注)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="503"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>测量摘要(每个参数的最小值、最大值、平均值、标准差)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="506"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="506"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>参数趋势(每个数值参数的时间序列图表)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="396"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="396"/>
         <source>Plot appearance</source>
         <translation>绘图外观</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="410"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="410"/>
         <source>Line width</source>
         <translation>线宽</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="442"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="442"/>
         <source>Line style</source>
         <translation>线型</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="482"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="482"/>
         <source>Include</source>
         <translation>包含</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="531"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="531"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
         <source>Export PDF</source>
         <translation>导出 PDF</translation>
     </message>
@@ -12406,16 +13501,19 @@ function parse(%1) { ... }
     <name>ReportProgressDialog</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="20"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportProgressDialog.qml" line="20"/>
         <source>Generating Report</source>
         <translation>正在生成报告</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="69"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportProgressDialog.qml" line="69"/>
         <source>Working…</source>
         <translation>处理中…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>对于包含大量参数的会话,此操作可能需要几秒钟。报告准备就绪后窗口将自动关闭。</translation>
     </message>
@@ -12424,42 +13522,51 @@ function parse(%1) { ... }
     <name>RuntimeReconfigure</name>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
         <source>Connection Lost</source>
         <translation>连接丢失</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
         <source>Device Unavailable</source>
         <translation>设备不可用</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
         <source>The connection to your device was lost.</source>
         <translation>与设备的连接已丢失。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
         <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio 无法连接到您的设备。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
         <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
         <translation>请检查线缆、电源,并确保没有其他应用程序占用该设备。您可以尝试重新连接、切换到其他设备或退出。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
         <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>请确保设备已插入、已开机且未被其他应用程序占用。您可以重试、选择其他设备或退出。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="121"/>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="193"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="121"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="193"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="132"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="132"/>
         <source>Pick Different Device</source>
         <translation>选择其他设备</translation>
     </message>
@@ -12469,26 +13576,31 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="144"/>
         <source>Try Again</source>
         <translation>重试</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="144"/>
         <source>Reconnect</source>
         <translation>重新连接</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="160"/>
         <source>Pick the correct device, then press Connect.</source>
         <translation>选择正确的设备,然后按连接。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="169"/>
         <source>I/O Interface: %1</source>
         <translation>I/O 接口:%1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="204"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
@@ -12496,157 +13608,166 @@ function parse(%1) { ... }
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="330"/>
+        <location filename="../../src/SerialStudio.cpp" line="336"/>
         <source>Data Grids</source>
         <translation>数据网格</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="333"/>
+        <location filename="../../src/SerialStudio.cpp" line="339"/>
         <source>Multiple Data Plots</source>
         <translation>多重数据绘图</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="336"/>
+        <location filename="../../src/SerialStudio.cpp" line="342"/>
         <source>Accelerometers</source>
         <translation>加速度计</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="339"/>
+        <location filename="../../src/SerialStudio.cpp" line="345"/>
         <source>Gyroscopes</source>
         <translation>陀螺仪</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="342"/>
+        <location filename="../../src/SerialStudio.cpp" line="348"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="345"/>
+        <location filename="../../src/SerialStudio.cpp" line="351"/>
         <source>FFT Plots</source>
         <translation>FFT 绘图</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="348"/>
+        <location filename="../../src/SerialStudio.cpp" line="354"/>
         <source>LED Panels</source>
         <translation>LED 面板</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="351"/>
+        <location filename="../../src/SerialStudio.cpp" line="357"/>
         <source>Data Plots</source>
         <translation>数据绘图</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="354"/>
+        <location filename="../../src/SerialStudio.cpp" line="360"/>
         <source>Bars</source>
         <translation>条形图</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="357"/>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Gauges</source>
         <translation>仪表盘</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="360"/>
+        <location filename="../../src/SerialStudio.cpp" line="366"/>
         <source>Terminal</source>
         <translation>终端</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="363"/>
+        <location filename="../../src/SerialStudio.cpp" line="369"/>
+        <source>Clock</source>
+        <translation>时钟</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="372"/>
+        <source>Stopwatch</source>
+        <translation>秒表</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="375"/>
         <source>Compasses</source>
         <translation>罗盘</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="366"/>
+        <location filename="../../src/SerialStudio.cpp" line="378"/>
         <source>Meters</source>
         <translation>仪表</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="369"/>
         <source>Thermometers</source>
-        <translation>温度计</translation>
+        <translation type="vanished">温度计</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="372"/>
+        <location filename="../../src/SerialStudio.cpp" line="381"/>
         <source>3D Plots</source>
         <translation>3D 绘图</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="376"/>
+        <location filename="../../src/SerialStudio.cpp" line="385"/>
         <source>Image Views</source>
         <translation>图像视图</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="379"/>
+        <location filename="../../src/SerialStudio.cpp" line="388"/>
         <source>Output Panels</source>
         <translation>输出面板</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="382"/>
+        <location filename="../../src/SerialStudio.cpp" line="391"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="385"/>
+        <location filename="../../src/SerialStudio.cpp" line="394"/>
         <source>Waterfalls</source>
         <translation>瀑布图</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="388"/>
+        <location filename="../../src/SerialStudio.cpp" line="397"/>
         <source>Painter Widgets</source>
         <translation>绘图组件</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="912"/>
+        <location filename="../../src/SerialStudio.cpp" line="922"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="913"/>
+        <location filename="../../src/SerialStudio.cpp" line="923"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="914"/>
+        <location filename="../../src/SerialStudio.cpp" line="924"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="915"/>
+        <location filename="../../src/SerialStudio.cpp" line="925"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="916"/>
+        <location filename="../../src/SerialStudio.cpp" line="926"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="917"/>
+        <location filename="../../src/SerialStudio.cpp" line="927"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="918"/>
+        <location filename="../../src/SerialStudio.cpp" line="928"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="919"/>
+        <location filename="../../src/SerialStudio.cpp" line="929"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="920"/>
+        <location filename="../../src/SerialStudio.cpp" line="930"/>
         <source>Shift-JIS</source>
         <translation>Shift-JIS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="921"/>
+        <location filename="../../src/SerialStudio.cpp" line="931"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="922"/>
+        <location filename="../../src/SerialStudio.cpp" line="932"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -12655,91 +13776,109 @@ function parse(%1) { ... }
     <name>SessionDetail</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="19"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="19"/>
         <source>Session Details</source>
         <translation>会话详情</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="88"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="88"/>
         <source>Select a session to view details.</source>
         <translation>选择一个会话以查看详细信息。</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="130"/>
         <source>Project:</source>
         <translation>项目：</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="143"/>
         <source>Started:</source>
         <translation>开始时间：</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="156"/>
         <source>Ended:</source>
         <translation>结束时间：</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="162"/>
         <source>(in progress)</source>
         <translation>(进行中)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="169"/>
         <source>Frames:</source>
         <translation>帧数：</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="185"/>
         <source>Notes</source>
         <translation>备注</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="200"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="200"/>
         <source>Add session notes…</source>
         <translation>添加会话备注…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="201"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="201"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>已完成会话的备注为只读。</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
         <source>New tag…</source>
         <translation>新建标签…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="366"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="366"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>解锁会话文件以删除会话</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="222"/>
         <source>Tags</source>
         <translation>标签</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="293"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="293"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="331"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="331"/>
         <source>Replay</source>
         <translation>回放</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="340"/>
         <source>Export CSV</source>
         <translation>导出 CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="348"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="348"/>
         <source>Generate Report</source>
         <translation>生成报告</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="360"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="360"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -12748,36 +13887,43 @@ function parse(%1) { ... }
     <name>SessionList</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="19"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="19"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="71"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="91"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="92"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="92"/>
         <source>Frames</source>
         <translation>帧</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="93"/>
         <source>Tags</source>
         <translation>标签</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="193"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="193"/>
         <source>No sessions found.</source>
         <translation>未找到会话。</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="194"/>
         <source>No session file open.</source>
         <translation>未打开会话文件。</translation>
     </message>
@@ -13352,235 +14498,297 @@ function parse(%1) { ... }
     <name>Settings</name>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="49"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="49"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="76"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="76"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="174"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="190"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="190"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="225"/>
         <source>Workspace Folder</source>
         <translation>工作区文件夹</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="253"/>
         <source>Automatically Check for Updates</source>
         <translation>自动检查更新</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="82"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="82"/>
         <source>Dashboard</source>
         <translation>仪表板</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="342"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="342"/>
         <source>Export…</source>
         <translation>导出…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="388"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="388"/>
         <source>Data Plotting</source>
         <translation>数据绘图</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="403"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="403"/>
         <source>Point Count</source>
         <translation>点数</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>界面刷新率 (Hz)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="665"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="665"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>始终显示任务栏按钮</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="552"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="552"/>
         <source>Show Actions Panel</source>
         <translation>显示操作面板</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="303"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="303"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>启用 API 服务器（端口 7777）</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="94"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="777"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="94"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="777"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="159"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="159"/>
         <source>Appearance</source>
         <translation>外观</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="209"/>
         <source>Files &amp; Updates</source>
         <translation>文件与更新</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="271"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="271"/>
         <source>Advanced</source>
         <translation>高级</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="321"/>
         <source>Allow External API Connections</source>
         <translation>允许外部 API 连接</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="286"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="286"/>
         <source>Auto-Hide Toolbar</source>
         <translation>自动隐藏工具栏</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="88"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="88"/>
         <source>Taskbar</source>
         <translation>任务栏</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Small</source>
         <translation>小</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Large</source>
         <translation>大</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Extra Large</source>
         <translation>超大</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Custom</source>
         <translation>自定义</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="537"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="537"/>
         <source>Layout</source>
         <translation>布局</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="575"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="575"/>
         <source>Video Export</source>
         <translation>视频导出</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="593"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="593"/>
         <source>Save Videos by Default</source>
         <translation>默认保存视频</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="644"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="644"/>
         <source>Behavior</source>
         <translation>行为</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="680"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="680"/>
         <source>Show Search Field</source>
         <translation>显示搜索字段</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="695"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="695"/>
         <source>Auto-hide Taskbar</source>
         <translation>自动隐藏任务栏</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="713"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="713"/>
         <source>Hide Delay (ms)</source>
         <translation>隐藏延迟 (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="737"/>
         <source>Pinned Buttons</source>
         <translation>固定按钮</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="755"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="755"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>在任务栏上拖动固定按钮以重新排序。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="776"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="776"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="779"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="779"/>
+        <source>Clock</source>
+        <translation>时钟</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="780"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="780"/>
+        <source>Stopwatch</source>
+        <translation>秒表</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="781"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="781"/>
         <source>Pause / Resume</source>
         <translation>暂停 / 恢复</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="780"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="782"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="782"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="781"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="783"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="783"/>
         <source>AI Assistant</source>
         <translation>AI 助手</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="908"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="912"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="912"/>
         <source>Display</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="923"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="927"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="927"/>
         <source>Display Mode</source>
         <translation>显示模式</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="465"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="936"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="940"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="465"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="940"/>
         <source>Font Family</source>
         <translation>字体系列</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="101"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="101"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="778"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="340"/>
         <source>Export Protobuf File</source>
         <translation>导出 Protobuf 文件</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="450"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="450"/>
         <source>Dashboard Font</source>
         <translation>仪表板字体</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="480"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="951"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="955"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="480"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="955"/>
         <source>Font Size</source>
         <translation>字体大小</translation>
     </message>
@@ -13593,97 +14801,116 @@ function parse(%1) { ... }
         <translation type="vanished">默认保存图像</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="968"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="972"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="972"/>
         <source>Show Timestamps</source>
         <translation>显示时间戳</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="987"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="991"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="991"/>
         <source>Data Transmission</source>
         <translation>数据传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1002"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1006"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1006"/>
         <source>Line Ending</source>
         <translation>行结束符</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1015"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1019"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1019"/>
         <source>Input Mode</source>
         <translation>输入模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1028"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1032"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1032"/>
         <source>Text Encoding</source>
         <translation>文本编码</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1041"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1045"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1045"/>
         <source>Checksum</source>
         <translation>校验和</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1054"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1058"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1058"/>
         <source>Echo Sent Data</source>
         <translation>回显发送数据</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1073"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1077"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1077"/>
         <source>Escape Codes</source>
         <translation>转义码</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1088"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1092"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1092"/>
         <source>VT100 Emulation</source>
         <translation>VT100 仿真</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1107"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1111"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1111"/>
         <source>ANSI Colors</source>
         <translation>ANSI 颜色</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1169"/>
         <source>Delivery</source>
         <translation>传递</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1180"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1184"/>
         <source>System Notifications</source>
         <translation>系统通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1201"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1205"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>当 Serial Studio 不在前台窗口时,将警告/严重事件显示为操作系统桌面通知。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1211"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1215"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1215"/>
         <source>Application Logs</source>
         <translation>应用程序日志</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1230"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1230"/>
         <source>Route Warnings to Notifications</source>
         <translation>将警告路由至通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1247"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1251"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1251"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>默认关闭 — QT 和 QML 频繁发出警告，启用此选项可能会淹没真正的警报。无论此设置如何，关键消息始终会被路由。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1267"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1271"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1271"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1303"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1307"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1312"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1316"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1316"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
@@ -13693,76 +14920,92 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="35"/>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="378"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="378"/>
         <source>Device Setup</source>
         <translation>设备设置</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="124"/>
         <source>API Server Active (%1)</source>
         <translation>API 服务器活动 (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="125"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="125"/>
         <source>API Server Ready</source>
         <translation>API 服务器就绪</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="126"/>
         <source>API Server Off</source>
         <translation>API 服务器关闭</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="186"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="186"/>
         <source>Frame Parsing</source>
         <translation>帧解析</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="196"/>
         <source>Console Only (No Parsing)</source>
         <translation>仅控制台(不解析)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="209"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>快速绘图(逗号分隔值)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="220"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="220"/>
         <source>Parse via Project File</source>
         <translation>通过项目文件解析</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="243"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="243"/>
         <source>Change Project File (%1)</source>
         <translation>更改项目文件 (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="244"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="244"/>
         <source>Select Project File</source>
         <translation>选择项目文件</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="259"/>
         <source>Data Export</source>
         <translation>数据导出</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="283"/>
         <source>CSV Spreadsheet</source>
         <translation>CSV 电子表格</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="301"/>
         <source>Session Recording</source>
         <translation>会话记录</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="322"/>
         <source>MDF4 Recording</source>
         <translation>MDF4 记录</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="338"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="338"/>
         <source>Console Log</source>
         <translation>控制台日志</translation>
     </message>
@@ -13800,26 +15043,31 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="390"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="390"/>
         <source>I/O Interface: %1</source>
         <translation>I/O 接口:%1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="459"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="459"/>
         <source>Multi-Device Project</source>
         <translation>多设备项目</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="472"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="472"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>此项目从 %1 个独立设备流式传输数据。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="485"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="485"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under the Sources tab.</source>
         <translation>每个设备都有自己的连接设置。在项目编辑器的"数据源"选项卡中配置它们。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="505"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="505"/>
         <source>Open Project Editor</source>
         <translation>打开项目编辑器</translation>
     </message>
@@ -13831,7 +15079,8 @@ function parse(%1) { ... }
         <translation type="vanished">新建快捷方式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="93"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="95"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="95"/>
         <source>Choose an Icon</source>
         <translation>选择图标</translation>
     </message>
@@ -13841,137 +15090,177 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="24"/>
         <source>New Deployment</source>
         <translation>新建部署</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="106"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="108"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="108"/>
         <source>Save Deployment</source>
         <translation>保存部署</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="146"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="148"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="152"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="154"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="154"/>
         <source>Taskbar</source>
         <translation>任务栏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="158"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="160"/>
         <source>Logging</source>
         <translation>日志记录</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="215"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="217"/>
         <source>Identity</source>
         <translation>标识</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="271"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="273"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="273"/>
         <source>Click to choose an icon</source>
         <translation>点击以选择图标</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="280"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="282"/>
         <source>Name:</source>
         <translation>名称:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="289"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="291"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="291"/>
         <source>Deployment Name</source>
         <translation>部署名称</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="381"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="383"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="383"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="391"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="393"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="393"/>
         <source>Same as Serial Studio</source>
         <translation>与 Serial Studio 相同</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="413"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="415"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="415"/>
         <source>Actions Panel</source>
         <translation>操作面板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="424"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="605"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="426"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="635"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="426"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="635"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="440"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="442"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="442"/>
         <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>双击此部署可直接进入该项目的实时仪表板。没有工具栏或设置面板,只有数据,并且 Serial Studio 会在设备断开连接后立即退出。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="486"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="488"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="488"/>
         <source>Visibility</source>
         <translation>可见性</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="501"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="503"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="510"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="512"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="512"/>
         <source>Always shown</source>
         <translation>始终显示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="513"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="513"/>
         <source>Auto-hide</source>
         <translation>自动隐藏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="512"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="514"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="514"/>
         <source>Hidden</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="527"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="529"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="529"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>隐藏任务栏会移除窗口最小化/最大化/关闭按钮并强制自动布局,使仪表板始终填充可用区域。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="531"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="533"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="533"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>当用户将光标移至底部边缘附近时,任务栏会滑入。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="533"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="535"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="535"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>任务栏在仪表板底部永久可见。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="546"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="548"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="548"/>
         <source>Pinned Buttons</source>
         <translation>固定按钮</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="563"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="565"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="565"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="577"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="579"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="579"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="591"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="593"/>
+        <source>Clock</source>
+        <translation>时钟</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="607"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="607"/>
+        <source>Stopwatch</source>
+        <translation>秒表</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="621"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="621"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="746"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="746"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>录制内容保存在 Serial Studio 工作区文件夹中</translation>
     </message>
@@ -13980,28 +15269,34 @@ function parse(%1) { ... }
         <translation type="vanished">快捷方式名称</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="298"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="300"/>
         <source>Change Icon…</source>
         <translation>更改图标…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="315"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="333"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="317"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="335"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="317"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="335"/>
         <source>Project</source>
         <translation>项目</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="343"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="345"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="345"/>
         <source>Choose a project file to begin</source>
         <translation>选择项目文件以开始</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="366"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="368"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="368"/>
         <source>Behavior</source>
         <translation>行为</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="403"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="405"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="405"/>
         <source>Fullscreen</source>
         <translation>全屏</translation>
     </message>
@@ -14022,27 +15317,32 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 启用"嵌入项目"可将项目嵌入快捷方式中,即使原始文件被移动或删除,快捷方式仍可正常工作。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="655"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="685"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="685"/>
         <source>Recorders</source>
         <translation>记录器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="670"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="700"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="700"/>
         <source>CSV File</source>
         <translation>CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="680"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="710"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="710"/>
         <source>MDF4 File</source>
         <translation>MDF4 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="690"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="720"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="720"/>
         <source>Session Database</source>
         <translation>会话数据库</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="700"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="730"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="730"/>
         <source>Console Log</source>
         <translation>控制台日志</translation>
     </message>
@@ -14051,12 +15351,14 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">记录保存到各模块的默认位置。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="746"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="776"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="776"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="786"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="786"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -14066,120 +15368,148 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="110"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="110"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="242"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="117"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="117"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="126"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="272"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="131"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="282"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="136"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="292"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="292"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="143"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="153"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="153"/>
         <source>Format Document</source>
         <translation>格式化文档</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="160"/>
         <source>Format Selection</source>
         <translation>格式化选区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="222"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="227"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="227"/>
         <source>Reset to the default parsing script</source>
         <translation>重置为默认解析脚本</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="232"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="232"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="237"/>
         <source>Import a script file for data parsing</source>
         <translation>导入用于数据解析的脚本文件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="315"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="315"/>
         <source>Open help documentation for data parsing</source>
         <translation>打开数据解析帮助文档</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="352"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="352"/>
         <source>Language:</source>
         <translation>语言：</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="379"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="379"/>
         <source>Select Template…</source>
         <translation>选择模板…</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="247"/>
         <source>Undo the last code edit</source>
         <translation>撤销上次代码编辑</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="259"/>
         <source>Redo the previously undone edit</source>
         <translation>重做上次撤销的编辑</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="277"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="277"/>
         <source>Cut selected code to clipboard</source>
         <translation>剪切选定代码到剪贴板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="287"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="287"/>
         <source>Copy selected code to clipboard</source>
         <translation>复制选中的代码到剪贴板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="296"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="296"/>
         <source>Paste code from clipboard</source>
         <translation>从剪贴板粘贴代码</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="310"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="389"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="389"/>
         <source>Test With Sample Data</source>
         <translation>使用示例数据测试</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="397"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="397"/>
         <source>Evaluate</source>
         <translation>评估</translation>
     </message>
@@ -14188,26 +15518,31 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>SourceView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="107"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="107"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="109"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="109"/>
         <source>Create a copy of this data source</source>
         <translation>创建此数据源的副本</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="121"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="121"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="126"/>
         <source>Remove this data source</source>
         <translation>移除此数据源</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="127"/>
         <source>The primary data source cannot be removed</source>
         <translation>主数据源无法移除</translation>
     </message>
@@ -14216,11 +15551,13 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>SqlitePlayer</name>
     <message>
         <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="25"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/SqlitePlayer.qml" line="25"/>
         <source>Session Player</source>
         <translation>会话播放器</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="92"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/SqlitePlayer.qml" line="92"/>
         <source>Loading session…</source>
         <translation>正在加载会话…</translation>
     </message>
@@ -14228,177 +15565,236 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <source>Workspaces</source>
         <translation>工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="388"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
         <source>Actions</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="410"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="426"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="426"/>
         <source>No Actions Available</source>
         <translation>无可用操作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="456"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="456"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="487"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="503"/>
         <source>No Plugins Installed</source>
         <translation>未安装插件</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="99"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="523"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="539"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="99"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="539"/>
         <source>Auto Layout</source>
         <translation>自动布局</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="107"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="535"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="551"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="107"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="551"/>
         <source>Full Screen</source>
         <translation>全屏</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="113"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="548"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="564"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="113"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="564"/>
         <source>Add External Window</source>
         <translation>添加外部窗口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="139"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="809"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="847"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="847"/>
         <source>Help Center</source>
         <translation>帮助中心</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="663"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="679"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="679"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="769"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="807"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="807"/>
         <source>No Tools Available</source>
         <translation>无可用工具</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="837"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="858"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="895"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="933"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="933"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="934"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="934"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="355"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="355"/>
         <source>New Workspace…</source>
         <translation>新建工作区…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="145"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="737"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="751"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="751"/>
+        <source>Clock</source>
+        <translation>时钟</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="141"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="758"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="758"/>
+        <source>Stopwatch</source>
+        <translation>秒表</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="775"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="161"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="775"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="152"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="746"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="784"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="784"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="159"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="754"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="175"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="792"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="792"/>
         <source>AI Assistant</source>
         <translation>AI 助手</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="325"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="341"/>
         <source>Show "%1"</source>
         <translation>显示"%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="346"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="346"/>
         <source>Show All Hidden Workspaces</source>
         <translation>显示所有隐藏的工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="354"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
         <source>No Workspaces Available</source>
         <translation>无可用工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="477"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="493"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="493"/>
         <source>Manage Plugins…</source>
         <translation>管理插件…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="568"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="584"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="584"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="614"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="614"/>
         <source>CSV File</source>
         <translation>CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="604"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="620"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="620"/>
         <source>MDF4 File</source>
         <translation>MDF4 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="610"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="626"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="626"/>
         <source>Console Transcript</source>
         <translation>控制台记录</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="619"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="635"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="635"/>
         <source>Session Database</source>
         <translation>会话数据库</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="633"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="649"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="649"/>
         <source>No Export Formats Available</source>
         <translation>无可用导出格式</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="119"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="710"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="734"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="119"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="734"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="125"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="719"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="743"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="125"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="743"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="133"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="728"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="149"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="766"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="766"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="884"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="922"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="922"/>
         <source>Edit…</source>
         <translation>编辑…</translation>
     </message>
@@ -14407,25 +15803,82 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="830"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="868"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="868"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="831"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="869"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="869"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="858"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
+    </message>
+</context>
+<context>
+    <name>Stopwatch</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <source>Stop</source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <source>Start</source>
+        <translation>启动</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="205"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="279"/>
+        <source>Lap</source>
+        <translation>计圈</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="221"/>
+        <source>Reset</source>
+        <translation>重置</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="271"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="271"/>
+        <source>#</source>
+        <translation>#</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="288"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="288"/>
+        <source>Total</source>
+        <translation>总计</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="380"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="380"/>
+        <source>No laps recorded</source>
+        <translation>无计圈记录</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="388"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="388"/>
+        <source>Press Lap while the stopwatch is running</source>
+        <translation>在秒表运行时按计圈</translation>
     </message>
 </context>
 <context>
     <name>SubMenuCombo</name>
     <message>
         <location filename="../../qml/Widgets/SubMenuCombo.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="86"/>
         <source>No Data Available</source>
         <translation>无可用数据</translation>
     </message>
@@ -14434,56 +15887,67 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>SystemDatasetsView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="33"/>
         <source>Dataset Values</source>
         <translation>数据集值</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="158"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="179"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="179"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="180"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="180"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="181"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="181"/>
         <source>Dataset</source>
         <translation>数据集</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="182"/>
         <source>Units</source>
         <translation>单位</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="252"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="252"/>
         <source>(virtual)</source>
         <translation>(虚拟)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="298"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="298"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>复制访问代码 %1 到剪贴板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="374"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="374"/>
         <source>Dataset access code copied</source>
         <translation>数据集访问代码已复制</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="323"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="323"/>
         <source>No datasets defined in this project.</source>
         <translation>此项目中未定义数据集。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="324"/>
         <source>No datasets match your search.</source>
         <translation>没有数据集匹配您的搜索。</translation>
     </message>
@@ -14492,32 +15956,39 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>TableDelegate</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="130"/>
         <source>Parameter</source>
         <translation>参数</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="151"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="513"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="513"/>
         <source>(Custom Icon)</source>
         <translation>（自定义图标）</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="637"/>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="643"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="637"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="643"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="804"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="804"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="804"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="804"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
@@ -14526,101 +15997,133 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>Taskbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="66"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="66"/>
         <source>Start Menu</source>
         <translation>开始菜单</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="194"/>
         <source>Menu</source>
         <translation>菜单</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="230"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="230"/>
         <source>Search…</source>
         <translation>搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="496"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="496"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="497"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="497"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="496"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="498"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="498"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="498"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="499"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="499"/>
+        <source>Clock</source>
+        <translation>时钟</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="500"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="500"/>
+        <source>Stopwatch</source>
+        <translation>秒表</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="502"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="502"/>
         <source>AI Assistant</source>
         <translation>AI 助手</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="503"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="503"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="925"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="941"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="941"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT：已连接到 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="926"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT：未连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="950"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 发布者</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="960"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
         <source>Status:</source>
         <translation>状态:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="968"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="984"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="984"/>
         <source>Connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="969"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="985"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="985"/>
         <source>Disconnected</source>
         <translation>已断开</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="992"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="992"/>
         <source>Broker:</source>
         <translation>代理:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1005"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1005"/>
         <source>Mode:</source>
         <translation>模式:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1002"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1018"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1018"/>
         <source>Messages sent:</source>
         <translation>已发送消息:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1016"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1032"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1032"/>
         <source>Open MQTT Settings</source>
         <translation>打开 MQTT 设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="497"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="501"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="501"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
@@ -14637,46 +16140,55 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>Terminal</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="141"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="149"/>
         <source>Select all</source>
         <translation>全选</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="155"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="253"/>
         <source>Send Data to Device</source>
         <translation>发送数据到设备</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="428"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="428"/>
         <source>Show Timestamp</source>
         <translation>显示时间戳</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="436"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="436"/>
         <source>Echo</source>
         <translation>回显</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="453"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="453"/>
         <source>Emulate VT-100</source>
         <translation>模拟 VT-100</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="466"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="466"/>
         <source>ANSI Colors</source>
         <translation>ANSI 颜色</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="486"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="486"/>
         <source>Display: %1</source>
         <translation>显示：%1</translation>
     </message>
@@ -14685,69 +16197,85 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>ToolCallCard</name>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="47"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="47"/>
         <source>Awaiting approval</source>
         <translation>等待批准</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="48"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="48"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="49"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="49"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="50"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="50"/>
         <source>Denied</source>
         <translation>已拒绝</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="51"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="51"/>
         <source>Blocked</source>
         <translation>已阻止</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="52"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="52"/>
         <source>Running</source>
         <translation>运行中</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="152"/>
         <source>Approve</source>
         <translation>批准</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="158"/>
         <source>Deny</source>
         <translation>拒绝</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="175"/>
         <source>Arguments</source>
         <translation>参数</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="212"/>
         <location filename="../../qml/AI/ToolCallCard.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="212"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="272"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="217"/>
         <location filename="../../qml/AI/ToolCallCard.qml" line="277"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="277"/>
         <source>Copy All</source>
         <translation>全部复制</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="225"/>
         <location filename="../../qml/AI/ToolCallCard.qml" line="285"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="285"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="233"/>
         <source>Result</source>
         <translation>结果</translation>
     </message>
@@ -14756,27 +16284,33 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>Toolbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="196"/>
         <source>Project Editor</source>
         <translation>项目编辑器</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="199"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>打开项目编辑器以创建或修改 JSON 布局</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>播放 CSV 文件,如同实时传感器数据</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="318"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="322"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="322"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="326"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="326"/>
         <source>Open application settings and preferences</source>
         <translation>打开应用程序设置和偏好设置</translation>
     </message>
@@ -14786,21 +16320,25 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Open CSV</source>
         <translation>打开 CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <source>Open MDF4</source>
         <translation>打开 MDF4</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="291"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="291"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="295"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>浏览、回放和导出已记录的会话</translation>
     </message>
@@ -14816,12 +16354,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="301"/>
         <source>Extensions</source>
         <translation>扩展</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="304"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="264"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="304"/>
         <source>Browse and install extensions</source>
         <translation>浏览和安装扩展</translation>
     </message>
@@ -14831,6 +16374,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="280"/>
         <source>Deploy</source>
         <translation>部署</translation>
     </message>
@@ -14840,184 +16384,223 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="350"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="350"/>
         <source>Select Serial port (UART) communication</source>
         <translation>选择串口 (UART) 通信</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="361"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="361"/>
         <source>Audio</source>
         <translation>音频</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="365"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="365"/>
         <source>Select audio input device (Pro)</source>
         <translation>选择音频输入设备 (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="380"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="380"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="385"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="385"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>选择原始 USB 通信 (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="394"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="394"/>
         <source>Network</source>
         <translation>网络</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="399"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="399"/>
         <source>Select TCP/UDP network communication</source>
         <translation>选择 TCP/UDP 网络通信</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="416"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>选择 MODBUS 通信 (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="430"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="430"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="435"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="435"/>
         <source>Select HID device communication (Pro)</source>
         <translation>选择 HID 设备通信 (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="445"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="445"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="449"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="449"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>选择 Bluetooth Low Energy 通信</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="461"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="461"/>
         <source>CAN Bus</source>
         <translation>CAN 总线</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="466"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>选择 CAN 总线通信 (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="480"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="480"/>
         <source>Process</source>
         <translation>进程</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="485"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="485"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>选择进程管道通信 (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="521"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="521"/>
         <source>Examples</source>
         <translation>示例</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="524"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="524"/>
         <source>Browse example projects</source>
         <translation>浏览示例项目</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="532"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="532"/>
         <source>Help Center</source>
         <translation>帮助中心</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="536"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="536"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>浏览文档、常见问题和维基</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="545"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>在 DeepWiki 上查看详细文档并提问</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="601"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="601"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>连接或断开已配置的设备</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="501"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="505"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="501"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="505"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="213"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="213"/>
         <source>Open Project</source>
         <translation>打开项目</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="216"/>
         <source>Open an existing JSON project</source>
         <translation>打开现有 JSON 项目</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="242"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>播放 MDF4 文件，如同实时传感器数据（Pro）</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="259"/>
         <source>Assistant</source>
         <translation>助手</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="263"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="263"/>
         <source>Chat with an AI to build and edit your project</source>
         <translation>与 AI 对话以构建和编辑您的项目</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="285"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="285"/>
         <source>Build an operator app for the current project</source>
         <translation>为当前项目构建操作员应用</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="411"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="509"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="509"/>
         <source>Show application info and license details</source>
         <translation>显示应用程序信息和许可证详情</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="542"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="542"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>AI 维基与聊天</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="584"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="584"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>管理许可证并激活 Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="599"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="621"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="599"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="621"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="599"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="599"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
@@ -15027,6 +16610,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="580"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="580"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
@@ -15035,41 +16619,49 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>UART</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="52"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="52"/>
         <source>COM Port</source>
         <translation>COM 端口</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="81"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="81"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="195"/>
         <source>Parity</source>
         <translation>校验位</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="216"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="237"/>
         <source>Flow Control</source>
         <translation>流控制</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="269"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="269"/>
         <source>Auto Reconnect</source>
         <translation>自动重连</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="287"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="287"/>
         <source>Send DTR Signal</source>
         <translation>发送 DTR 信号</translation>
     </message>
@@ -15077,25 +16669,37 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="931"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1343"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="963"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1531"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1011"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1354"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1043"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1542"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1403"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1419"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1122"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1553"/>
+        <source>Clock</source>
+        <translation>时钟</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="1200"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1563"/>
+        <source>Stopwatch</source>
+        <translation>秒表</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="1611"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1627"/>
         <source>%1 (Fallback)</source>
         <translation>%1(备用)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1444"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1652"/>
         <source>LED Panel (%1)</source>
         <translation>LED 面板 (%1)</translation>
     </message>
@@ -15103,7 +16707,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::DashboardWidget</name>
     <message>
-        <location filename="../../src/UI/DashboardWidget.cpp" line="149"/>
+        <location filename="../../src/UI/DashboardWidget.cpp" line="148"/>
         <source>Invalid</source>
         <translation>无效</translation>
     </message>
@@ -15125,71 +16729,85 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>USB</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="50"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="50"/>
         <source>USB Device</source>
         <translation>USB 设备</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="80"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="80"/>
         <source>Transfer Mode</source>
         <translation>传输模式</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
         <source>Bulk Stream</source>
         <translation>批量流</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="90"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="90"/>
         <source>Advanced (Bulk + Control)</source>
         <translation>高级(批量 + 控制)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="91"/>
         <source>Isochronous</source>
         <translation>同步</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="143"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>使用批量、控制或同步传输连接到 USB 设备。适用于数据记录器、自定义固件设备和 USB 仪器。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="152"/>
         <source>USB specifications (USB.org)</source>
         <translation>USB 规范 (USB.org)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="169"/>
         <source>IN Endpoint</source>
         <translation>IN 端点</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="205"/>
         <source>OUT Endpoint</source>
         <translation>OUT 端点</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="241"/>
         <source>Max Packet Size</source>
         <translation>最大数据包大小</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="301"/>
         <source>Control Transfers Enabled</source>
         <translation>已启用控制传输</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="310"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>发送不正确的控制请求可能会导致连接的硬件崩溃或损坏。请谨慎使用。</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="317"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="317"/>
         <source>Learn about USB control transfers</source>
         <translation>了解 USB 控制传输</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="351"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="351"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>数据包大小应与端点报告的最大传输大小匹配。典型值：192 B（FS 音频）、1024 B（HS）。</translation>
     </message>
@@ -15231,116 +16849,139 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>UserTableView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="166"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="166"/>
         <source>Add Register</source>
         <translation>添加寄存器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="169"/>
         <source>Add register</source>
         <translation>添加寄存器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
         <source>Insert Constant</source>
         <translation>插入常量</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
         <source>Insert constant</source>
         <translation>插入常量</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="189"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="189"/>
         <source>Import registers from CSV</source>
         <translation>从 CSV 导入寄存器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="196"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
         <source>Export registers to CSV</source>
         <translation>导出寄存器到 CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="211"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="214"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="214"/>
         <source>Rename table</source>
         <translation>重命名表</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="224"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="224"/>
         <source>Delete table</source>
         <translation>删除表格</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="238"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="238"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="243"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="243"/>
         <source>Open help documentation for shared memory</source>
         <translation>打开共享内存帮助文档</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="283"/>
         <source>Permissions</source>
         <translation>权限</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="284"/>
         <source>Register Name</source>
         <translation>寄存器名称</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="285"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="285"/>
         <source>Default Value</source>
         <translation>默认值</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
         <source>Read-Only</source>
         <translation>只读</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
         <source>Read/Write</source>
         <translation>读/写</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="462"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="462"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>复制访问代码 %1 到剪贴板</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="495"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="495"/>
         <source>Delete register</source>
         <translation>删除寄存器</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
         <source>No registers.</source>
         <translation>无寄存器。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="562"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="562"/>
         <source>Register access code copied</source>
         <translation>寄存器访问代码已复制</translation>
     </message>
@@ -15349,26 +16990,31 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>Waterfall</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="235"/>
         <source>Show Colorbar</source>
         <translation>显示色条</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="248"/>
         <source>Show Axes &amp; Grid</source>
         <translation>显示坐标轴和网格</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="261"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="261"/>
         <source>Show Crosshair</source>
         <translation>显示十字准线</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="275"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="275"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="275"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="275"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
@@ -15381,38 +17027,47 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     <name>Welcome</name>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="176"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="176"/>
         <source>Welcome to %1!</source>
         <translation>欢迎使用 %1！</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="187"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
         <translation>Serial Studio 是一款功能强大的实时可视化工具，专为工程师、学生和创客打造。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="198"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="198"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
         <translation>您可以开始 14 天全功能试用、使用许可证密钥激活，或自行下载并编译 GPLv3 源代码。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="208"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="390"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="208"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="390"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
         <translation>购买 Pro 版直接支持作者，并帮助资助未来的开发工作。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="216"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="398"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="398"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
         <translation>自行构建 GPLv3 版本有助于社区发展，并鼓励技术贡献。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="237"/>
         <source>Please wait…</source>
         <translation>请稍候…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="272"/>
         <source>%1 days remaining in your trial.</source>
         <translation>试用期剩余 %1 天。</translation>
     </message>
@@ -15422,26 +17077,31 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="282"/>
         <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
         <translation>您当前正在使用功能完整的 %1 Pro 试用版。试用期为 14 天，仅限个人非商业用途。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="293"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="293"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
         <translation>升级至付费计划以继续使用 Serial Studio Pro。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="301"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
         <translation>或者，编译 GPLv3 源代码以免费使用。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="309"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="309"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
         <translation>要查看可用的订阅计划，请点击下方"立即升级"。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="330"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="330"/>
         <source>Don't nag me about the trial.
 I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
         <translation>不再提醒试用期。
@@ -15449,46 +17109,55 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="360"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="360"/>
         <source>Your %1 trial has expired.</source>
         <translation>您的 %1 试用期已过期。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="370"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="370"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
         <translation>试用期已结束。要继续使用具有所有 Pro 功能的 %1，请升级至付费计划。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="381"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
         <translation>如果您愿意，也可以在 GPLv3 许可证下编译开源版本。</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="409"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="409"/>
         <source>Thank you for trying %1!</source>
         <translation>感谢试用 %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="452"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="452"/>
         <source>Upgrade Now</source>
         <translation>立即升级</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="462"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="462"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="478"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="478"/>
         <source>Open in Limited Mode</source>
         <translation>以受限模式打开</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="478"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="478"/>
         <source>Continue</source>
         <translation>继续</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="478"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="478"/>
         <source>Start Trial</source>
         <translation>开始试用</translation>
     </message>
@@ -15501,6 +17170,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="331"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="331"/>
         <source>Device Disconnected</source>
         <translation>设备已断开连接</translation>
     </message>
@@ -15508,22 +17178,22 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Bar</name>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="256"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="261"/>
         <source>Alarm</source>
         <translation>报警</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="260"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="265"/>
         <source>Value %1%2 reached the high alarm %3%2</source>
         <translation>值 %1%2 达到高位报警 %3%2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="263"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="268"/>
         <source>Value %1%2 reached the low alarm %3%2</source>
         <translation>值 %1%2 达到低位报警 %3%2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="267"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="272"/>
         <source>Alarms</source>
         <translation>报警</translation>
     </message>
@@ -15725,41 +17395,49 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <name>WorkspaceDialog</name>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="51"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="51"/>
         <source>Edit Workspace</source>
         <translation>编辑工作区</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="52"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="52"/>
         <source>New Workspace</source>
         <translation>新建工作区</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="157"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="157"/>
         <source>Name:</source>
         <translation>名称:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="166"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="166"/>
         <source>My Workspace</source>
         <translation>我的工作区</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="181"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="181"/>
         <source>Select widgets to include:</source>
         <translation>选择要包含的控件:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="187"/>
         <source>Filter widgets…</source>
         <translation>筛选控件…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="303"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="303"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="311"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="311"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
@@ -15768,70 +17446,87 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <name>WorkspaceView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="41"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="41"/>
         <source>Workspace</source>
         <translation>工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="129"/>
         <source>Add Widget</source>
         <translation>添加控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="131"/>
         <source>Add widget to workspace</source>
         <translation>添加控件到工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="142"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="144"/>
         <source>Rename workspace</source>
         <translation>重命名工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="153"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="153"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="155"/>
         <source>Delete workspace</source>
         <translation>删除工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="177"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="183"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="177"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="183"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="178"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="178"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="184"/>
         <source>Widget</source>
         <translation>控件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="179"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="179"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="185"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="229"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="267"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="267"/>
         <source>(unknown)</source>
         <translation>(未知)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="247"/>
         <source>(group widget)</source>
         <translation>(组控件)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="297"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="297"/>
         <source>Remove widget from workspace</source>
         <translation>从工作区移除组件</translation>
     </message>
@@ -15841,6 +17536,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="317"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="317"/>
         <source>No widgets in this workspace.</source>
         <translation>此工作区中无组件。</translation>
     </message>
@@ -15849,86 +17545,103 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <name>WorkspacesView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
         <source>Workspaces</source>
         <translation>工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="127"/>
         <source>Customize</source>
         <translation>自定义</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="129"/>
         <source>Edit workspaces manually</source>
         <translation>手动编辑工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="145"/>
         <source>Move Up</source>
         <translation>上移</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="147"/>
         <source>Move the selected workspace up</source>
         <translation>将选定的工作区上移</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="158"/>
         <source>Move Down</source>
         <translation>下移</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="160"/>
         <source>Move the selected workspace down</source>
         <translation>将选定的工作区下移</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="171"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="171"/>
         <source>Add Workspace</source>
         <translation>添加工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="173"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="173"/>
         <source>Add workspace</source>
         <translation>添加工作区</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="182"/>
         <source>Cleanup</source>
         <translation>清理</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="185"/>
         <source>Remove %1 widget reference(s) whose target group or dataset no longer exists</source>
         <translation>移除 %1 个目标组或数据集已不存在的控件引用</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="188"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="188"/>
         <source>No stale widget references in any workspace</source>
         <translation>所有工作区中无过期的控件引用</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="203"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="204"/>
         <source>Widgets</source>
         <translation>组件</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="276"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="276"/>
         <source>No workspaces. Add one with the toolbar above, or reset to the auto layout.</source>
         <translation>无工作区。使用上方工具栏添加一个,或重置为自动布局。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="278"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="278"/>
         <source>Project has no eligible groups -- add a group with widgets to populate workspaces.</source>
         <translation>项目没有符合条件的组 —— 添加一个带有小部件的组以填充工作区。</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="284"/>
         <source>Reset to Auto Layout</source>
         <translation>重置为自动布局</translation>
     </message>

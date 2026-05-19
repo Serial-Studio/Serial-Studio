@@ -219,26 +219,31 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>About</name>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="39"/>
         <source>About</source>
         <translation>Informazioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="96"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="96"/>
         <source>Version %1</source>
         <translation>Versione %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="106"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="112"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="112"/>
         <source>All Rights Reserved</source>
         <translation>Tutti i Diritti Riservati</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="127"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -248,56 +253,67 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="146"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Questa configurazione è concessa in licenza per uso commerciale e proprietario. Può essere utilizzata in applicazioni closed-source e commerciali, secondo i termini della licenza commerciale.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="160"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Questa configurazione è solo per uso personale e di valutazione. L'uso commerciale è vietato a meno che non sia attivata una licenza commerciale valida.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="174"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Questo software è fornito 'così com'è' senza garanzie di alcun tipo, esplicite o implicite, incluse ma non limitate alle garanzie di commerciabilità o idoneità per un particolare scopo. In nessun caso l'autore sarà responsabile per danni derivanti dall'uso di questo software.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="195"/>
         <source>Manage License</source>
         <translation>Gestisci Licenza</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="203"/>
         <source>Donate</source>
         <translation>Dona</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="214"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="214"/>
         <source>Check for Updates</source>
         <translation>Verifica Aggiornamenti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="223"/>
         <source>License Agreement</source>
         <translation>Contratto di Licenza</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="232"/>
         <source>Report Bug</source>
         <translation>Segnala Bug</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="241"/>
         <source>Acknowledgements</source>
         <translation>Ringraziamenti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="249"/>
         <source>Website</source>
         <translation>Sito Web</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="265"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/About.qml" line="265"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -307,21 +323,26 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="170"/>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="171"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="171"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="229"/>
         <source>G-FORCE</source>
         <translation>FORZA-G</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="265"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="265"/>
         <source>PITCH ↕</source>
         <translation>BECCHEGGIO ↕</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="300"/>
         <source>ROLL ↔</source>
         <translation>ROLLIO ↔</translation>
     </message>
@@ -330,41 +351,49 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>AccelerometerConfigDialog</name>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="35"/>
         <source>Accelerometer Configuration</source>
         <translation>Configurazione Accelerometro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="95"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="95"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Configura l'intervallo di visualizzazione e le unità di misura dell'accelerometro.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="109"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="109"/>
         <source>Display Range</source>
         <translation>Intervallo di Visualizzazione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="130"/>
         <source>Max G:</source>
         <translation>G Massimi:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="144"/>
         <source>Enter max G value</source>
         <translation>Inserire valore G massimo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="164"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="164"/>
         <source>Input Configuration</source>
         <translation>Configurazione Ingresso</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="184"/>
         <source>Input already in G</source>
         <translation>Ingresso già in G</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="219"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="219"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -373,16 +402,19 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>Acknowledgements</name>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="35"/>
         <source>Acknowledgements</source>
         <translation>Riconoscimenti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="77"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="77"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="89"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="89"/>
         <source>About Qt…</source>
         <translation>Informazioni su QT…</translation>
     </message>
@@ -391,31 +423,37 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>ActionView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="136"/>
         <source>Change Icon</source>
         <translation>Cambia Icona</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="138"/>
         <source>Change the icon used for this action</source>
         <translation>Cambia l'icona utilizzata per questa azione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="156"/>
         <source>Duplicate</source>
         <translation>Duplica</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="160"/>
         <source>Duplicate this action with all its settings</source>
         <translation>Duplica questa azione con tutte le sue impostazioni</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="169"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="171"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="171"/>
         <source>Delete this action from the project</source>
         <translation>Elimina questa azione dal progetto</translation>
     </message>
@@ -424,76 +462,91 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>AddWidgetDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="44"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="44"/>
         <source>Add Widget</source>
         <translation>Aggiungi Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="211"/>
         <source>Available Widgets</source>
         <translation>Widget Disponibili</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="220"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="220"/>
         <source>Click a row to add it to the workspace.</source>
         <translation>Fare clic su una riga per aggiungerla all'area di lavoro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="228"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="228"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="247"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="248"/>
         <source>Group</source>
         <translation>Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="249"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="316"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="316"/>
         <source>(entire group)</source>
         <translation>(intero gruppo)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="351"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="351"/>
         <source>Already in workspace</source>
         <translation>Già nell'area di lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="352"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="352"/>
         <source>Add to workspace</source>
         <translation>Aggiungi all'area di lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="381"/>
         <source>No widgets available.</source>
         <translation>Nessun widget disponibile.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="382"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="382"/>
         <source>No widgets match.</source>
         <translation>Nessun widget corrispondente.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="399"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="399"/>
         <source>%1 widgets</source>
         <translation>%1 widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="400"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="400"/>
         <source>%1 of %2 widgets</source>
         <translation>%1 di %2 widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="405"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/AddWidgetDialog.qml" line="405"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -502,71 +555,85 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>AssistantPanel</name>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="31"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="31"/>
         <source>Assistant</source>
         <translation>Assistente</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="128"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="128"/>
         <source>CSV vs MDF4 export - what is the difference?</source>
         <translation>Esportazione CSV vs MDF4 - qual è la differenza?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="131"/>
         <source>Plot, Bar, and Gauge - when to use each?</source>
         <translation>Plot, Bar e Gauge - quando usare ciascuno?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="203"/>
         <source>How can I help with your project?</source>
         <translation>Come posso aiutarti con il tuo progetto?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="204"/>
         <source>Set up your API key to get started</source>
         <translation>Configura la tua chiave API per iniziare</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="216"/>
         <source>Describe what you would like to build, and I will configure the sources, groups, datasets, frame parsers, and transforms for you.</source>
         <translation>Descrivi cosa vorresti costruire e configurerò sorgenti, gruppi, dataset, frame parser e trasformazioni per te.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="219"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="219"/>
         <source>To start chatting, paste an API key for the selected provider. Keys are encrypted on this machine and never leave your computer except to talk to the provider you choose.</source>
         <translation>Per iniziare a chattare, incolla una chiave API per il provider selezionato. Le chiavi sono crittografate su questa macchina e non lasciano mai il tuo computer se non per comunicare con il provider che scegli.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="239"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="239"/>
         <source>Open API Key Setup</source>
         <translation>Apri Configurazione Chiave API</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="249"/>
         <source>Get a key from %1</source>
         <translation>Ottieni una chiave da %1</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="124"/>
         <source>List the sources in this project</source>
         <translation>Elenca le sorgenti in questo progetto</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="121"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="121"/>
         <source>Help me discover Serial Studio's features</source>
         <translation>Aiutami a scoprire le funzionalità di Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="122"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="122"/>
         <source>What can this app do for my telemetry?</source>
         <translation>Cosa può fare questa app per la mia telemetria?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="123"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="123"/>
         <source>Walk me through what this project already contains</source>
         <translation>Guidami attraverso ciò che questo progetto contiene già</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="127"/>
         <source>What is a session database, and why would I use one?</source>
         <translation>Cos'è un database di sessione e perché dovrei usarne uno?</translation>
     </message>
@@ -576,11 +643,13 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="129"/>
         <source>What is a frame parser, and when do I need one?</source>
         <translation>Cos'è un parser di frame e quando ne ho bisogno?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="130"/>
         <source>When should I use Lua vs JavaScript for the parser?</source>
         <translation>Quando dovrei usare Lua vs JavaScript per il parser?</translation>
     </message>
@@ -590,151 +659,181 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="132"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="132"/>
         <source>What is the difference between a transform and a frame parser?</source>
         <translation>Qual è la differenza tra una trasformazione e un parser di frame?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="135"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="135"/>
         <source>Add a UART source for an Arduino</source>
         <translation>Aggiungi una sorgente UART per un Arduino</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="136"/>
         <source>Set up an IMU project from scratch</source>
         <translation>Configura un progetto IMU da zero</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="137"/>
         <source>Configure an MQTT subscriber</source>
         <translation>Configura un sottoscrittore MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="138"/>
         <source>Add a CAN bus source</source>
         <translation>Aggiungi una sorgente bus CAN</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="139"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="139"/>
         <source>Set up a Modbus poller</source>
         <translation>Configura un poller Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="140"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="140"/>
         <source>Add a network (TCP/UDP) source</source>
         <translation>Aggiungi una sorgente di rete (TCP/UDP)</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="141"/>
         <source>Write a CSV frame parser for me</source>
         <translation>Scrivi un frame parser CSV per me</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="142"/>
         <source>Help me parse a JSON frame</source>
         <translation>Aiutami ad analizzare una trama JSON</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="143"/>
         <source>Add an EMA smoothing transform to a dataset</source>
         <translation>Aggiungi una trasformata di smoothing EMA a un dataset</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="144"/>
         <source>Decode hexadecimal frames</source>
         <translation>Decodifica trame esadecimali</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="145"/>
         <source>Calibrate a sensor with a linear transform</source>
         <translation>Calibra un sensore con una trasformata lineare</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="148"/>
         <source>Suggest dashboard widgets for my data</source>
         <translation>Suggerisci widget per la dashboard per i miei dati</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="149"/>
         <source>Build an executive overview workspace</source>
         <translation>Costruisci uno spazio di lavoro panoramica esecutiva</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="150"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="150"/>
         <source>Add a painter widget for a custom visualization</source>
         <translation>Aggiungi un widget painter per una visualizzazione personalizzata</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="151"/>
         <source>Show Plot, FFT, and Waterfall for one dataset</source>
         <translation>Mostra Grafico, FFT e Waterfall per un Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="152"/>
         <source>Group my datasets into useful workspaces</source>
         <translation>Raggruppa i Miei Dataset in Workspace Utili</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="445"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="445"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Chiedi qualsiasi cosa a Serial Studio…</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="465"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="465"/>
         <source>Clear conversation</source>
         <translation>Cancella conversazione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="509"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="509"/>
         <source>Stop generating</source>
         <translation>Interrompi generazione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="510"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="510"/>
         <source>Send message (Enter)</source>
         <translation>Invia messaggio (Invio)</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="552"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="552"/>
         <source>Provider</source>
         <translation>Provider</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="585"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="585"/>
         <source>Model selection</source>
         <translation>Selezione modello</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="631"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="631"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>Esegui azioni di modifica senza chiedere ogni volta. Le azioni bloccate restano bloccate.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="633"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="633"/>
         <source>Auto-approve edits</source>
         <translation>Approva automaticamente le modifiche</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="652"/>
         <source>Manage API keys</source>
         <translation>Gestisci chiavi API</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="673"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="673"/>
         <source>Working</source>
         <translation>In Elaborazione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="674"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="674"/>
         <source>Ready</source>
         <translation>Pronto</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="675"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="675"/>
         <source>  •  cache %1k tok</source>
         <translation>•  cache %1k tok</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="676"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/AssistantPanel.qml" line="676"/>
         <source>  •  cache write %1k tok</source>
         <translation>scrittura cache %1k tok</translation>
     </message>
@@ -743,38 +842,47 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>Audio</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="89"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="89"/>
         <source>No Microphone Detected</source>
         <translation>Nessun Microfono Rilevato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="98"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="98"/>
         <source>Connect a mic or check your settings</source>
         <translation>Collega un microfono o controlla le impostazioni</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
         <source>Input Device</source>
         <translation>Dispositivo di Ingresso</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="142"/>
         <source>Sample Rate</source>
         <translation>Frequenza di Campionamento</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="161"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="230"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="161"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="230"/>
         <source>Sample Format</source>
         <translation>Formato Campione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="180"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="180"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="249"/>
         <source>Channels</source>
         <translation>Canali</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="211"/>
         <source>Output Device</source>
         <translation>Dispositivo di Uscita</translation>
     </message>
@@ -782,75 +890,93 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
 <context>
     <name>AuthenticateDialog</name>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_AuthenticateDialog.h" line="100"/>
         <source>Dialog</source>
-        <translation type="vanished">Dialogo</translation>
+        <translation>Dialogo</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_AuthenticateDialog.h" line="101"/>
         <source>Please provide the user name and password for the download location.</source>
-        <translation type="vanished">Fornire nome utente e password per la posizione di download.</translation>
+        <translation>Fornire nome utente e password per la posizione di download.</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_AuthenticateDialog.h" line="102"/>
         <source>&amp;User name:</source>
-        <translation type="vanished">&amp;Nome utente:</translation>
+        <translation>&amp;Nome utente:</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_AuthenticateDialog.h" line="103"/>
         <source>&amp;Password:</source>
-        <translation type="vanished">&amp;Password:</translation>
+        <translation>&amp;Password:</translation>
     </message>
 </context>
 <context>
     <name>AxisRangeDialog</name>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="46"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="46"/>
         <source>Axis Range Configuration</source>
         <translation>Configurazione Intervallo Assi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="152"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Configura l'intervallo visibile per gli assi del grafico. I valori si aggiornano in tempo reale durante la digitazione.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="160"/>
         <source>X Axis</source>
         <translation>Asse X</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="183"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="183"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
         <source>Minimum:</source>
         <translation>Minimo:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="195"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="266"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="266"/>
         <source>Enter min value</source>
         <translation>Inserire valore minimo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
         <source>Maximum:</source>
         <translation>Massimo:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="216"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="287"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="287"/>
         <source>Enter max value</source>
         <translation>Inserire valore massimo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="231"/>
         <source>Y Axis</source>
         <translation>Asse Y</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="307"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="318"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -859,41 +985,49 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>BluetoothLE</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="54"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="54"/>
         <source>Device</source>
         <translation>Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="105"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="105"/>
         <source>Service</source>
         <translation>Servizio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="141"/>
         <source>Characteristic</source>
         <translation>Caratteristica</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="199"/>
         <source>Scanning…</source>
         <translation>Scansione…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="235"/>
         <source>No Bluetooth Adapter Detected</source>
         <translation>Nessun Adattatore Bluetooth Rilevato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="246"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="246"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
         <translation>Collega un adattatore Bluetooth o verifica le impostazioni di sistema</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="273"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="273"/>
         <source>This OS is not Supported Yet.</source>
         <translation>Questo Sistema Operativo non è Ancora Supportato.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="284"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Serial Studio verrà aggiornato per funzionare con questo sistema operativo non appena QT lo supporterà ufficialmente</translation>
     </message>
@@ -902,46 +1036,55 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>CANBus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="57"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="57"/>
         <source>No CAN Drivers Found</source>
         <translation>Nessun Driver CAN Trovato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="70"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="70"/>
         <source>Install CAN hardware drivers for your system</source>
         <translation>Installa i driver hardware CAN per il tuo sistema</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="97"/>
         <source>CAN Driver</source>
         <translation>Driver CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
         <source>Interface</source>
         <translation>Interfaccia</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="174"/>
         <source>Bitrate</source>
         <translation>Bitrate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="238"/>
         <source>Flexible Data-Rate</source>
         <translation>Flexible Data-rate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="270"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="270"/>
         <source>DBC Database</source>
         <translation>Database DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="274"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="274"/>
         <source>Import DBC File…</source>
         <translation>Importa File DBC…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="307"/>
         <source>No CAN Interfaces Found</source>
         <translation>Nessuna Interfaccia CAN Trovata</translation>
     </message>
@@ -1054,6 +1197,7 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>Console</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Console.qml" line="32"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Console.qml" line="32"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
@@ -1128,6 +1272,7 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>ConstantsLibraryDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="44"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="44"/>
         <source>Insert Constant</source>
         <translation>Inserisci Costante</translation>
     </message>
@@ -1138,68 +1283,88 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Fundamental</source>
         <translation>Fondamentale</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="126"/>
         <source>Speed of light in vacuum</source>
         <translation>Velocità della luce nel vuoto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
         <source>Planck constant</source>
         <translation>Costante di Planck</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
         <source>Elementary charge</source>
         <translation>Carica elementare</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
         <source>Avogadro constant</source>
         <translation>Costante di Avogadro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <source>Boltzmann constant</source>
         <translation>Costante di Boltzmann</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Stefan-Boltzmann constant</source>
         <translation>Costante di Stefan-Boltzmann</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Mechanics</source>
         <translation>Meccanica</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <source>Standard gravity</source>
         <translation>Accelerazione di gravità standard</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Gravitational constant</source>
         <translation>Costante gravitazionale</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Pressure</source>
         <translation>Pressione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
         <source>Standard atmosphere</source>
         <translation>Atmosfera standard</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Sea-level barometric pressure</source>
         <translation>Pressione barometrica al livello del mare</translation>
     </message>
@@ -1207,21 +1372,27 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Temperature</source>
         <translation>Temperatura</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
         <source>Absolute zero (Celsius)</source>
         <translation>Zero assoluto (Celsius)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <source>Water freezing point</source>
         <translation>Punto di congelamento dell'acqua</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Water boiling point (1 atm)</source>
         <translation>Punto di ebollizione dell'acqua (1 atm)</translation>
     </message>
@@ -1233,57 +1404,75 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Gases &amp; Fluids</source>
         <translation>Gas e Fluidi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
         <source>Universal gas constant</source>
         <translation>Costante universale dei gas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
         <source>Specific gas constant (dry air)</source>
         <translation>Costante specifica dei gas (aria secca)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Specific gas constant (water vapor)</source>
         <translation>Costante specifica dei gas (vapore acqueo)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <source>Air density (sea level, 15°C)</source>
         <translation>Densità dell'aria (livello del mare, 15°C)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <source>Water density (4°C)</source>
         <translation>Densità dell'acqua (4°C)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Speed of sound in air (20°C)</source>
         <translation>Velocità del suono nell'aria (20°C)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Heat capacity ratio (dry air)</source>
         <translation>Rapporto di capacità termica (aria secca)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Electromagnetism</source>
         <translation>Elettromagnetismo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Vacuum permittivity</source>
         <translation>Permittività del vuoto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Vacuum permeability</source>
         <translation>Permeabilità del vuoto</translation>
     </message>
@@ -1291,76 +1480,93 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Math</source>
         <translation>Matematica</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
         <source>Pi</source>
         <translation>Pi Greco</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
         <source>Euler's number</source>
         <translation>Numero di Eulero</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Golden ratio</source>
         <translation>Rapporto aureo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="212"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="212"/>
         <source>Physics Constants</source>
         <translation>Costanti Fisiche</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="221"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
         <translation>Valori predefiniti in unità SI. Fare clic su una riga per inserirla in %1.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="231"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="250"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="250"/>
         <source>Symbol</source>
         <translation>Simbolo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="251"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="251"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="252"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="252"/>
         <source>Value</source>
         <translation>Valore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="253"/>
         <source>Category</source>
         <translation>Categoria</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="357"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="357"/>
         <source>No constants match.</source>
         <translation>Nessuna costante corrispondente.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="378"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="378"/>
         <source>%1 constants</source>
         <translation>%1 costanti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="379"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="379"/>
         <source>%1 of %2 constants</source>
         <translation>%1 di %2 costanti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="384"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="384"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -1369,6 +1575,7 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>CsvPlayer</name>
     <message>
         <location filename="../../qml/Dialogs/CsvPlayer.qml" line="36"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="36"/>
         <source>CSV Player</source>
         <translation>Lettore CSV</translation>
     </message>
@@ -1377,61 +1584,73 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>DBCPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="44"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="44"/>
         <source>DBC File Preview</source>
         <translation>Anteprima File DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <source>DBC File: %1</source>
         <translation>File DBC: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="177"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="177"/>
         <source>Review the CAN messages and signals to import into a new Serial Studio project.</source>
         <translation>Esamina i messaggi e i segnali CAN da importare in un nuovo progetto Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="185"/>
         <source>Messages</source>
         <translation>Messaggi</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="219"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="219"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="229"/>
         <source>Message Name</source>
         <translation>Nome Messaggio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="235"/>
         <source>CAN ID</source>
         <translation>ID CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="242"/>
         <source>Signals</source>
         <translation>Segnali</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="323"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="323"/>
         <source>No messages found in DBC file.</source>
         <translation>Nessun messaggio trovato nel file DBC.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="341"/>
         <source>Total: %1 messages, %2 signals</source>
         <translation>Totale: %1 messaggi, %2 segnali</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="349"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="349"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="361"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="361"/>
         <source>Create Project</source>
         <translation>Crea Progetto</translation>
     </message>
@@ -1440,6 +1659,7 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>Dashboard</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="127"/>
         <source>Dashboard %1</source>
         <translation>Dashboard %1</translation>
     </message>
@@ -1448,11 +1668,13 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>DashboardButton</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="40"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardButton.qml" line="40"/>
         <source>Send</source>
         <translation>Invia</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
         <source>No transmit function defined</source>
         <translation>Nessuna funzione di trasmissione definita</translation>
     </message>
@@ -1461,41 +1683,49 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>DashboardCanvas</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="56"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="56"/>
         <source>Set Wallpaper…</source>
         <translation>Imposta Sfondo…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="62"/>
         <source>Clear Wallpaper</source>
         <translation>Rimuovi Sfondo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="72"/>
         <source>Tile Windows</source>
         <translation>Disponi Finestre</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="91"/>
         <source>Pro features detected in this project.</source>
         <translation>Funzionalità Pro rilevate in questo progetto.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="93"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
         <translation>Widget di fallback attivi. Acquista una licenza per la funzionalità completa.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="197"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="197"/>
         <source>Empty Workspace</source>
         <translation>Area di Lavoro Vuota</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="211"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Usa la barra di ricerca per trovare e aggiungere widget, oppure fai clic destro su un widget in un'altra area di lavoro per aggiungerlo qui.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="225"/>
         <source>Search Widgets</source>
         <translation>Cerca Widget</translation>
     </message>
@@ -1504,21 +1734,25 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>DashboardLayout</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="204"/>
         <source>API Server Active (%1)</source>
         <translation>Server API Attivo (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="205"/>
         <source>API Server Ready</source>
         <translation>Server API Pronto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="206"/>
         <source>API Server Off</source>
         <translation>Server API Spento</translation>
     </message>
@@ -1528,11 +1762,14 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="122"/>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="273"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="122"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="273"/>
         <source>Send</source>
         <translation>Invia</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="262"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="262"/>
         <source>Enter command…</source>
         <translation>Inserire comando…</translation>
     </message>
@@ -1541,6 +1778,7 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>DashboardSlider</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
         <source>No transmit function defined</source>
         <translation>Nessuna funzione di trasmissione definita</translation>
     </message>
@@ -1549,16 +1787,19 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>DashboardTextField</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="47"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="47"/>
         <source>Enter command…</source>
         <translation>Inserire comando…</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="57"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="57"/>
         <source>Send</source>
         <translation>Invia</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="76"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="76"/>
         <source>No transmit function defined</source>
         <translation>Nessuna funzione di trasmissione definita</translation>
     </message>
@@ -1567,16 +1808,19 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <name>DashboardToggle</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="57"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="57"/>
         <source>ON</source>
         <translation>ON</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="59"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="59"/>
         <source>OFF</source>
         <translation>OFF</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
         <source>No transmit function defined</source>
         <translation>Nessuna funzione di trasmissione definita</translation>
     </message>
@@ -1586,12 +1830,16 @@ Abilitare solo su reti attendibili. Client non attendibili potrebbero leggere da
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="93"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="94"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="94"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="93"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="94"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="94"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
@@ -2263,487 +2511,487 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2160"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2158"/>
         <source>Project Information</source>
         <translation>Informazioni Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2170"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2168"/>
         <source>Project Title</source>
         <translation>Titolo Progetto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2171"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2169"/>
         <source>Untitled Project</source>
         <translation>Progetto Senza Titolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2172"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2170"/>
         <source>Name or description of the project</source>
         <translation>Nome o descrizione del progetto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2397"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2395"/>
         <source>Frame Detection</source>
         <translation>Rilevamento Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2413"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2411"/>
         <source>Frame Detection Method</source>
         <translation>Metodo di Rilevamento Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2414"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2412"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Seleziona come vengono identificati i frame di dati in arrivo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2422"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Delimitatori Esadecimali</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2425"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2423"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>Inserisci le sequenze di inizio/fine frame come valori esadecimali</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2441"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2439"/>
         <source>Frame Start Delimiter</source>
         <translation>Delimitatore di Inizio Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2442"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2440"/>
         <source>e.g. /*</source>
         <translation>es. /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2443"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2441"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>Sequenza che marca l'inizio di un frame di dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2455"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
         <source>Frame End Delimiter</source>
         <translation>Delimitatore Fine Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2456"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2454"/>
         <source>e.g. */</source>
         <translation>es. */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2457"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2455"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>Sequenza che marca la fine di un frame di dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2469"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2467"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Elaborazione e Validazione Payload</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2480"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2478"/>
         <source>Data Conversion Method</source>
         <translation>Metodo di Conversione Dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2481"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2479"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>Selezionare come i dati binari in ingresso vengono decodificati prima del parsing</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2497"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2495"/>
         <source>Checksum Algorithm</source>
         <translation>Algoritmo Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2496"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>Selezionare l'algoritmo checksum utilizzato per validare i frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2190"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2188"/>
         <source>Group Information</source>
         <translation>Informazioni Gruppo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2200"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2198"/>
         <source>Group Title</source>
         <translation>Titolo Gruppo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2201"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2199"/>
         <source>Untitled Group</source>
         <translation>Gruppo Senza Titolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2202"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2200"/>
         <source>Title or description of this dataset group</source>
         <translation>Titolo o descrizione di questo gruppo di dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2335"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2333"/>
         <source>Composite Widget</source>
         <translation>Widget Composito</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2336"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2334"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Seleziona come questo gruppo di dataset deve essere visualizzato (facoltativo)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2252"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2250"/>
         <source>Image Configuration</source>
         <translation>Configurazione Immagine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3097"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3095"/>
         <source>Virtual Dataset</source>
         <translation>Dataset Virtuale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3098"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3096"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>I dataset virtuali calcolano il loro valore da trasformazioni e tabelle dati, non richiedono un indice frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
         <source>Auto-detect</source>
         <translation>Rilevamento Automatico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
         <source>Manual Delimiters</source>
         <translation>Delimitatori Manuali</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2265"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2263"/>
         <source>Detection Mode</source>
         <translation>Modalità di Rilevamento</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1293"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1296"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1291"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1294"/>
         <source>Frame Parser</source>
         <translation>Frame Parser</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1436"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1437"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1481"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1434"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1435"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1479"/>
         <source>Groups</source>
         <translation>Gruppi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1511"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1524"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1525"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1509"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1522"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1523"/>
         <source>Shared Memory</source>
         <translation>Memoria Condivisa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1511"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1531"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1532"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4926"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1509"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1529"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4907"/>
         <source>Dataset Values</source>
         <translation>Valori Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1575"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1588"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1589"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1573"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1586"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1587"/>
         <source>Workspaces</source>
         <translation>Aree di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1627"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1630"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1631"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1625"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1628"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1629"/>
         <source>MQTT Publisher</source>
         <translation>Publisher MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1680"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1678"/>
         <source>Publishing</source>
         <translation>Pubblicazione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1691"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1689"/>
         <source>Enable Publishing</source>
         <translation>Abilita Pubblicazione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1692"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1690"/>
         <source>Broadcast frames, raw bytes and notifications to the broker</source>
         <translation>Trasmette frame, byte grezzi e notifiche al broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1703"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1701"/>
         <source>Payload</source>
         <translation>Payload</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1704"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1702"/>
         <source>Selects what gets published: parsed dashboard data or raw RX bytes</source>
         <translation>Seleziona cosa pubblicare: dati della dashboard analizzati o byte RX grezzi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1714"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1712"/>
         <source>Publish Rate (Hz)</source>
         <translation>Frequenza di Pubblicazione (Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1715"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1713"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
         <translation>Quante volte al secondo pubblicare (1-30 Hz). Frequenze più alte aumentano il carico sul broker; i dati della dashboard sono limitati in frequenza così un broker lento non blocca mai l'analisi dei frame.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1727"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1725"/>
         <source>Topic Base</source>
         <translation>Base Topic</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1728"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1726"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/device</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1729"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1727"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>Topic base utilizzato per la pubblicazione di frame e byte grezzi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1740"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1738"/>
         <source>Script Topic</source>
         <translation>Topic Script</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1741"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1765"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1739"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1763"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>Predefinito a Topic Base quando vuoto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1742"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1740"/>
         <source>Topic the user script publishes to</source>
         <translation>Topic a cui lo script utente pubblica</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1752"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1750"/>
         <source>Publish Notifications</source>
         <translation>Pubblica Notifiche</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1753"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1751"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>Replica le notifiche del dashboard su un topic dedicato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1764"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1762"/>
         <source>Notification Topic</source>
         <translation>Topic Notifiche</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1766"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1764"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>Topic dove vengono replicate le notifiche del dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1779"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1777"/>
         <source>Broker</source>
         <translation>Broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1789"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1787"/>
         <source>Hostname</source>
         <translation>Hostname</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1790"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1788"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1791"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1789"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>Hostname o indirizzo IP del broker MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1800"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1798"/>
         <source>Port</source>
         <translation>Porta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1801"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1799"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>Porta TCP esposta dal broker (1883 plain, 8883 TLS)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1811"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1809"/>
         <source>Custom Client ID</source>
         <translation>ID Client Personalizzato</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1813"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1811"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>Off: viene generato un ID casuale nuovo ad ogni caricamento del progetto. On: utilizza l'ID sottostante.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1824"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1822"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1825"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1823"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>Identificatore inviato al broker durante la CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1838"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1836"/>
         <source>Protocol Version</source>
         <translation>Versione Protocollo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1839"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1837"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>Revisione del protocollo MQTT utilizzata su CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1848"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1846"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1849"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1847"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>Secondi tra pacchetti PINGREQ quando inattivo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1858"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1856"/>
         <source>Clean Session</source>
         <translation>Sessione Pulita</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1859"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1857"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>Scarta qualsiasi stato di sessione persistente su CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1874"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1872"/>
         <source>Username</source>
         <translation>Nome Utente</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1875"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1873"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>Nome utente per l'autenticazione al broker (lasciare vuoto per anonimo)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1885"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1883"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1886"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1884"/>
         <source>Password for broker authentication</source>
         <translation>Password per l'autenticazione al broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1897"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1895"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1907"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1905"/>
         <source>Use SSL/TLS</source>
         <translation>Usa SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1908"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1906"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Effettua il tunneling della connessione al broker tramite TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1921"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1919"/>
         <source>Protocol</source>
         <translation>Protocollo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1922"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1920"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Famiglia di protocolli TLS negoziata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1932"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1930"/>
         <source>Peer Verify</source>
         <translation>Verifica Peer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1933"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1931"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Quanto rigorosamente viene validata la catena di certificati del broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1943"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1941"/>
         <source>Verify Depth</source>
         <translation>Profondità di Verifica</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1944"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1942"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Lunghezza massima della catena di certificati accettata (0 = illimitata)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2217"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2831"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2215"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2829"/>
         <source>Device %1</source>
         <translation>Dispositivo %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2235"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2356"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2233"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2354"/>
         <source>Input Device</source>
         <translation>Dispositivo di Ingresso</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2236"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2234"/>
         <source>Select which connected device provides data for this group</source>
         <translation>Seleziona quale dispositivo connesso fornisce dati per questo gruppo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2267"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2265"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>Il rilevamento automatico legge i byte magici JPEG/PNG; Manuale usa sequenze di inizio/fine esplicite</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2277"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2275"/>
         <source>Start Sequence (Hex)</source>
         <translation>Sequenza di Inizio (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2278"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2276"/>
         <source>e.g. FF D8 FF</source>
         <translation>es. FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2279"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2277"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>Byte esadecimali che marcano l'inizio di un frame immagine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2288"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2286"/>
         <source>End Sequence (Hex)</source>
         <translation>Sequenza di Fine (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2289"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2287"/>
         <source>e.g. FF D9</source>
         <translation>es. FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2290"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2288"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>Byte esadecimali che marcano la fine di un frame immagine</translation>
     </message>
@@ -2752,387 +3000,387 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Identità</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2366"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2364"/>
         <source>Device Name</source>
         <translation>Nome Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2367"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2365"/>
         <source>Device 1</source>
         <translation>Dispositivo 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2368"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2366"/>
         <source>Human-readable name for this input device</source>
         <translation>Nome leggibile per questo dispositivo di ingresso</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
         <source>Bus Type</source>
         <translation>Tipo di Bus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2376"/>
         <source>Select the hardware interface for this input device</source>
         <translation>Seleziona l'interfaccia hardware per questo dispositivo di ingresso</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
         <source>Serial Port</source>
         <translation>Porta Seriale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
         <source>Network Socket</source>
         <translation>Socket di Rete</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Audio Input</source>
         <translation>Ingresso Audio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>CAN Bus</source>
         <translation>Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2382"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2380"/>
         <source>Raw USB</source>
         <translation>USB Raw</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2381"/>
         <source>HID Device</source>
         <translation>Dispositivo HID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2381"/>
         <source>Process</source>
         <translation>Processo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2383"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2381"/>
         <source>MQTT Subscriber</source>
         <translation>Sottoscrittore MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2550"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2548"/>
         <source>Connection Settings</source>
         <translation>Impostazioni di Connessione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2798"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3073"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4657"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3071"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4638"/>
         <source>General Information</source>
         <translation>Informazioni Generali</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2807"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2805"/>
         <source>Action Title</source>
         <translation>Titolo Azione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2809"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2807"/>
         <source>Untitled Action</source>
         <translation>Azione Senza Titolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2810"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2808"/>
         <source>Name or description of this action</source>
         <translation>Nome o descrizione di questa azione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2819"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2817"/>
         <source>Action Icon</source>
         <translation>Icona Azione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2820"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2818"/>
         <source>Default Icon</source>
         <translation>Icona Predefinita</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2821"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2819"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>Icona visualizzata per questa azione nel dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2849"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2847"/>
         <source>Target Device</source>
         <translation>Dispositivo di Destinazione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2850"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2848"/>
         <source>Select which connected device this action sends data to</source>
         <translation>Seleziona a quale dispositivo connesso questa azione invia dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2862"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2860"/>
         <source>Data Payload</source>
         <translation>Payload Dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2873"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2871"/>
         <source>Send as Binary</source>
         <translation>Invia come Binario</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2874"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2872"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>Invia dati binari grezzi quando questa azione viene attivata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2885"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2897"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2883"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2895"/>
         <source>Command</source>
         <translation>Comando</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2886"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2884"/>
         <source>Transmit Data (Hex)</source>
         <translation>Trasmetti Dati (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2887"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2885"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Payload esadecimale da inviare quando l'azione viene attivata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2898"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2896"/>
         <source>Transmit Data</source>
         <translation>Trasmetti Dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2899"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2897"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Payload testuale da inviare quando l'azione viene attivata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2910"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4716"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2908"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4697"/>
         <source>Text Encoding</source>
         <translation>Codifica Testo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2911"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2909"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>Codifica caratteri utilizzata per serializzare il payload testuale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2935"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2933"/>
         <source>End-of-Line Sequence</source>
         <translation>Sequenza di Fine Riga</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2936"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2934"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>Caratteri EOL da aggiungere al messaggio (es. </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2948"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2946"/>
         <source>Execution Behavior</source>
         <translation>Comportamento di Esecuzione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2959"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2957"/>
         <source>Auto-Execute on Connect</source>
         <translation>Esecuzione Automatica alla Connessione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2960"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2958"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>Attiva automaticamente questa azione quando il dispositivo si connette</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2966"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2964"/>
         <source>Timer Behavior</source>
         <translation>Comportamento del Timer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2975"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2973"/>
         <source>Timer Mode</source>
         <translation>Modalità Timer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2978"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2976"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>Scegli quando e come questa azione deve ripetersi automaticamente</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2985"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2983"/>
         <source>Interval (ms)</source>
         <translation>Intervallo (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2989"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2987"/>
         <source>Timer Interval (ms)</source>
         <translation>Intervallo Timer (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2990"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2988"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>Millisecondi tra ogni attivazione ripetuta di questa azione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2997"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3001"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2995"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2999"/>
         <source>Repeat Count</source>
         <translation>Conteggio Ripetizioni</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3002"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3000"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>Numero di volte in cui inviare il comando ad ogni attivazione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3083"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3081"/>
         <source>Untitled Dataset</source>
         <translation>Dataset Senza Titolo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3084"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3082"/>
         <source>Dataset Title</source>
         <translation>Titolo Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3085"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3083"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Nome del dataset, utilizzato per etichettatura e identificazione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3115"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3113"/>
         <source>Hide on Dashboard</source>
         <translation>Nascondi nel Dashboard</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3116"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3114"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Sopprime il riquadro autonomo di questo dataset nel dashboard; il widget painter può comunque leggerne i valori</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3240"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3238"/>
         <source>Frequency Analysis</source>
         <translation>Analisi di Frequenza</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3278"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3276"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Scegli Tempo (predefinito) o qualsiasi dataset il cui valore guida l'asse Y -- produce un diagramma di Campbell quando associato ad es. RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3618"/>
         <source>Painter Widget</source>
         <translation>Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4927"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4908"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
         <translation>Valori grezzi e trasformati per ogni dataset (sola lettura)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4937"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4918"/>
         <source>Shared table defined in this project</source>
         <translation>Tabella condivisa definita in questo progetto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5273"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5254"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>Rimuovere 1 riferimento widget il cui gruppo o dataset di destinazione non esiste più?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5274"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5255"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>Rimuovere %1 riferimenti widget i cui gruppi o dataset di destinazione non esistono più?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5279"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5260"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>Questo influenzerà solo il posizionamento dei riquadri nell'area di lavoro; nessun gruppo, dataset o dato verrà eliminato.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5282"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5263"/>
         <source>Clean Up Workspaces</source>
         <translation>Pulisci Aree di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3129"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3127"/>
         <source>Frame Index</source>
         <translation>Indice Frame</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3130"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3128"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Posizione del frame utilizzata per allineare i dataset nel tempo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3139"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3137"/>
         <source>Measurement Unit</source>
         <translation>Unità di Misura</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3140"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3138"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Ampere, ecc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3141"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3139"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Unità di misura, come volt o ampere (opzionale)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3154"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3152"/>
         <source>Plot Settings</source>
         <translation>Impostazioni Grafico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3177"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3175"/>
         <source>Enable Plot Widget</source>
         <translation>Abilita Widget Grafico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3179"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3177"/>
         <source>Plot data in real-time</source>
         <translation>Traccia dati in tempo reale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3204"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3202"/>
         <source>X-Axis Source</source>
         <translation>Sorgente Asse X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3205"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3203"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>Scegli quale dataset utilizzare per l'Asse X nei grafici</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3216"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3214"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>Valore Minimo Grafico (opzionale)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3217"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3215"/>
         <source>Lower bound for plot display range</source>
         <translation>Limite inferiore per l'intervallo di visualizzazione del grafico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3227"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3225"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>Valore Massimo del Grafico (opzionale)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3228"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3226"/>
         <source>Upper bound for plot display range</source>
         <translation>Limite superiore per l'intervallo di visualizzazione del grafico</translation>
     </message>
@@ -3141,27 +3389,27 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Configurazione FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3251"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3249"/>
         <source>Enable FFT Analysis</source>
         <translation>Abilita Analisi FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3252"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3250"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Esegue l'analisi nel dominio della frequenza del dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3262"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3260"/>
         <source>Enable Waterfall Plot</source>
         <translation>Abilita Grafico Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3263"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3261"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Mostra uno spettrogramma scorrevole del contenuto di frequenza nel tempo (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3277"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3275"/>
         <source>Waterfall Y Axis</source>
         <translation>Asse Y Waterfall</translation>
     </message>
@@ -3170,440 +3418,437 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation type="vanished">Scegli Tempo (predefinito) o qualsiasi dataset il cui valore guida l'asse Y — produce un diagramma di Campbell quando associato ad es. RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3306"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3304"/>
         <source>FFT Window Size</source>
         <translation>Dimensione Finestra FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3307"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3305"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Numero di campioni utilizzati per ogni finestra di calcolo FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3318"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3316"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Frequenza di Campionamento FFT (Hz, richiesta)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3319"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3317"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Frequenza di campionamento utilizzata per FFT (in Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3329"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3327"/>
         <source>Minimum Value (recommended)</source>
         <translation>Valore Minimo (consigliato)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3330"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3328"/>
         <source>Lower bound for data normalization</source>
         <translation>Limite inferiore per la normalizzazione dei dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3340"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3338"/>
         <source>Maximum Value (recommended)</source>
         <translation>Valore Massimo (consigliato)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3341"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3339"/>
         <source>Upper bound for data normalization</source>
         <translation>Limite superiore per la normalizzazione dei dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3364"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3362"/>
         <source>Widget Settings</source>
         <translation>Impostazioni Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3387"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3385"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3388"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3386"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Seleziona il widget visivo utilizzato per visualizzare questo dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3414"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3412"/>
         <source>Minimum Display Value (required)</source>
         <translation>Valore Minimo di Visualizzazione (obbligatorio)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3415"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3413"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>Limite inferiore dell'intervallo di visualizzazione del misuratore o della barra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3425"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3423"/>
         <source>Maximum Display Value (required)</source>
         <translation>Valore Massimo di Visualizzazione (obbligatorio)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3426"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3424"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>Limite superiore dell'intervallo di visualizzazione del misuratore o della barra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3440"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3647"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3438"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
         <source>Auto</source>
         <translation>Automatico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3441"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3439"/>
         <source>Tick Count</source>
         <translation>Conteggio Tacche</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3445"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3443"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Numero di tacche principali sulla scala del quadrante (0 = adatta automaticamente alla dimensione del widget)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3464"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3462"/>
         <source>Label Format</source>
         <translation>Formato Etichetta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3465"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3463"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>Cifre decimali o notazione utilizzata sulle etichette delle tacche e sul display del valore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3476"/>
         <source>Show Value Indicator</source>
-        <translation>Mostra Indicatore Valore</translation>
+        <translation type="vanished">Mostra Indicatore Valore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3478"/>
         <source>Toggle the boxed numeric readout that sits below or beside the widget</source>
-        <translation>Attiva o disattiva la lettura numerica incorniciata che si trova sotto o accanto al widget</translation>
+        <translation type="vanished">Attiva o disattiva la lettura numerica incorniciata che si trova sotto o accanto al widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3497"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3482"/>
         <source>Alarm Settings</source>
         <translation>Impostazioni Allarme</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3508"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3493"/>
         <source>Enable Alarms</source>
         <translation>Abilita Allarmi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3509"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3494"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
         <translation>Attiva un allarme visivo quando il valore supera le soglie di allarme</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3520"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3505"/>
         <source>Low Threshold</source>
         <translation>Soglia Inferiore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3521"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3506"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>Attiva un allarme visivo quando il valore scende sotto questa soglia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3532"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3517"/>
         <source>High Threshold</source>
         <translation>Soglia Superiore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3533"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3518"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>Attiva un allarme visivo quando il valore supera questa soglia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3546"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3531"/>
         <source>LED Display Settings</source>
         <translation>Impostazioni Display LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3557"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3542"/>
         <source>Show in LED Panel</source>
         <translation>Mostra nel Pannello LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3558"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3543"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Abilita il monitoraggio visivo dello stato tramite un display LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3569"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3554"/>
         <source>LED On Threshold (required)</source>
         <translation>Soglia LED Acceso (obbligatorio)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3570"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3555"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>Il LED si accende quando il valore raggiunge o supera questa soglia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>Off</source>
         <translation>Off</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>Auto Start</source>
         <translation>Avvio Automatico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>Start on Trigger</source>
         <translation>Avvia su Trigger</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>Toggle on Trigger</source>
         <translation>Commuta su Trigger</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3577"/>
         <source>Repeat N Times</source>
         <translation>Ripeti N Volte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3581"/>
         <source>Plain Text (UTF8)</source>
         <translation>Testo Semplice (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3581"/>
         <source>Hexadecimal</source>
         <translation>Esadecimale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3581"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3597"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3582"/>
         <source>Binary (Direct)</source>
         <translation>Binario (Diretto)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3604"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3589"/>
         <source>No Checksum</source>
         <translation>Nessun Checksum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3594"/>
         <source>End Delimiter Only</source>
         <translation>Solo Delimitatore Finale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3594"/>
         <source>Start Delimiter Only</source>
         <translation>Solo Delimitatore Iniziale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3595"/>
         <source>Start + End Delimiter</source>
         <translation>Delimitatore Iniziale + Finale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3595"/>
         <source>No Delimiters</source>
         <translation>Nessun Delimitatore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
         <source>Button</source>
         <translation>Pulsante</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
         <source>Slider</source>
         <translation>Cursore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
         <source>Toggle</source>
         <translation>Interruttore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
         <source>Text Field</source>
         <translation>Campo di Testo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3621"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3606"/>
         <source>Knob</source>
         <translation>Manopola</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3626"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3611"/>
         <source>Data Grid</source>
         <translation>Griglia Dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3627"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3612"/>
         <source>GPS Map</source>
         <translation>Mappa GPS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3628"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3613"/>
         <source>Gyroscope</source>
         <translation>Giroscopio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3629"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3614"/>
         <source>Multiple Plot</source>
         <translation>Grafico Multiplo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3615"/>
         <source>Accelerometer</source>
         <translation>Accelerometro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3616"/>
         <source>3D Plot</source>
         <translation>Grafico 3D</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
         <source>Image View</source>
         <translation>Visualizzatore Immagini</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3634"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3638"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3656"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3619"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3623"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
         <source>None</source>
         <translation>Nessuno</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3639"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3624"/>
         <source>Bar</source>
         <translation>Barra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3625"/>
         <source>Gauge</source>
         <translation>Indicatore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3641"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3626"/>
         <source>Compass</source>
         <translation>Bussola</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3642"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3627"/>
         <source>Meter</source>
         <translation>Misuratore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3643"/>
         <source>Thermometer</source>
-        <translation>Termometro</translation>
+        <translation type="vanished">Termometro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3648"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
         <source>Integer (0 decimals)</source>
         <translation>Intero (0 decimali)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3649"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
         <source>1 decimal</source>
         <translation>1 decimale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3634"/>
         <source>2 decimals</source>
         <translation>2 decimali</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3635"/>
         <source>3 decimals</source>
         <translation>3 decimali</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3652"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3636"/>
         <source>Scientific</source>
         <translation>Scientifica</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3657"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3641"/>
         <source>New Line (\n)</source>
         <translation>Nuova Riga (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3658"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3642"/>
         <source>Carriage Return (\r)</source>
         <translation>Ritorno Carrello (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3659"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3643"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3663"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3647"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3664"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3648"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4667"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4648"/>
         <source>Label</source>
         <translation>Etichetta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4668"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4649"/>
         <source>Display label</source>
         <translation>Etichetta di Visualizzazione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4678"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4659"/>
         <source>Button Icon</source>
         <translation>Icona Pulsante</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4687"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4668"/>
         <source>Colorize Icon</source>
         <translation>Colora Icona</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4688"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4669"/>
         <source>Tint the icon with the button color</source>
         <translation>Tinta l'icona con il colore del pulsante</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4705"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4686"/>
         <source>Initial Value</source>
         <translation>Valore Iniziale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4717"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4698"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Codifica dei caratteri utilizzata quando transmit() restituisce un valore stringa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4735"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4716"/>
         <source>Value Range</source>
         <translation>Intervallo di Valore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4745"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4726"/>
         <source>Minimum Value</source>
         <translation>Valore Minimo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4754"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4735"/>
         <source>Maximum Value</source>
         <translation>Valore Massimo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4763"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4744"/>
         <source>Step Size</source>
         <translation>Dimensione del Passo</translation>
     </message>
@@ -3928,245 +4173,244 @@ Aggiungere %4 dataset usando i valori predefiniti del modello?</translation>
         <translation>Nuovo Indicatore</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3518"/>
         <source>New Thermometer</source>
-        <translation>Nuovo Termometro</translation>
+        <translation type="vanished">Nuovo Termometro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3522"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3518"/>
         <source>New LED Indicator</source>
         <translation>Nuovo Indicatore LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3526"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3522"/>
         <source>New Waterfall</source>
         <translation>Nuovo Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3594"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3590"/>
         <source>Channel %1</source>
         <translation>Canale %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3670"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3663"/>
         <source>New Action</source>
         <translation>Nuova Azione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3807"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3800"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Cambiare il widget a livello di gruppo?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3809"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3802"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>I dataset esistenti per questo gruppo vengono eliminati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3873"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3874"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3875"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3866"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3867"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3868"/>
         <source>Accelerometer %1</source>
         <translation>Accelerometro %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3890"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3883"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3883"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3883"/>
         <source>Gyro %1</source>
         <translation>Giroscopio %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3898"/>
         <source>Latitude</source>
         <translation>Latitudine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3898"/>
         <source>Longitude</source>
         <translation>Longitudine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3898"/>
         <source>Altitude</source>
         <translation>Altitudine</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3913"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3927"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3913"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3927"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3934"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3913"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3927"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4135"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4128"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5003"/>
         <source>Workspace</source>
         <translation>Area di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4281"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4274"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4481"/>
         <source>Shared Table</source>
         <translation>Tabella Condivisa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4363"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4356"/>
         <source>register</source>
         <translation>registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4481"/>
         <source>New Shared Table</source>
         <translation>Nuova Tabella Condivisa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4488"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4506"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4525"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4549"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4576"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4595"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4618"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4641"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5031"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4481"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4499"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4518"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4542"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4569"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4588"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4611"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4634"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5003"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5024"/>
         <source>Name:</source>
         <translation>Nome:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4506"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4499"/>
         <source>Rename Table</source>
         <translation>Rinomina Tabella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4525"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4518"/>
         <source>Rename Group</source>
         <translation>Rinomina Gruppo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4549"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4542"/>
         <source>Rename Dataset</source>
         <translation>Rinomina Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4576"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4569"/>
         <source>Rename Data Source</source>
         <translation>Rinomina Sorgente Dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4588"/>
         <source>Rename Action</source>
         <translation>Rinomina Azione</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4617"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4610"/>
         <source>New Register</source>
         <translation>Nuovo Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4641"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4634"/>
         <source>Rename Register</source>
         <translation>Rinomina Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4680"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4705"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4673"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4698"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5551"/>
         <source>This action cannot be undone.</source>
         <translation>Questa azione non può essere annullata.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4681"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4674"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Questo rimuove %1 registro/i insieme alla tabella. Questa azione non può essere annullata.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4684"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4704"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5557"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4677"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4697"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5550"/>
         <source>Delete "%1"?</source>
         <translation>Eliminare "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4687"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4680"/>
         <source>Delete Table</source>
         <translation>Elimina Tabella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4707"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4700"/>
         <source>Delete Register</source>
         <translation>Elimina Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4731"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4724"/>
         <source>Export Table</source>
         <translation>Esporta Tabella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4733"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4777"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4726"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4770"/>
         <source>CSV files (*.csv)</source>
         <translation>File CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4775"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4768"/>
         <source>Import Table</source>
         <translation>Importa Tabella</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5010"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5003"/>
         <source>New Workspace</source>
         <translation>Nuova Area di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5031"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5024"/>
         <source>Rename Workspace</source>
         <translation>Rinomina Area di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5120"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5113"/>
         <source>Overview</source>
         <translation>Panoramica</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5123"/>
         <source>All Data</source>
         <translation>Tutti i Dati</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5314"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5307"/>
         <source>Discard workspace customisations?</source>
         <translation>Scartare le personalizzazioni dell'area di lavoro?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5315"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5308"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Disattivando Personalizza si scartano le modifiche e si ricostruisce l'elenco delle aree di lavoro dai gruppi del progetto.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5311"/>
         <source>Customize Workspaces</source>
         <translation>Personalizza Aree di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5560"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5553"/>
         <source>Delete Workspace</source>
         <translation>Elimina Spazio di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5874"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5867"/>
         <source>File open error</source>
         <translation>Errore apertura file</translation>
     </message>
@@ -4353,46 +4597,55 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>DataTablesView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="33"/>
         <source>Shared Memory</source>
         <translation>Memoria Condivisa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="149"/>
         <source>Add Shared Table</source>
         <translation>Aggiungi Tabella Condivisa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="151"/>
         <source>Add shared table</source>
         <translation>Aggiungi tabella condivisa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="160"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="165"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="165"/>
         <source>Open help documentation for shared memory</source>
         <translation>Apri la documentazione di aiuto per la memoria condivisa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="174"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="175"/>
         <source>Description</source>
         <translation>Descrizione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="176"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="176"/>
         <source>Entries</source>
         <translation>Voci</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="269"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DataTablesView.qml" line="269"/>
         <source>No shared tables.</source>
         <translation>Nessuna tabella condivisa.</translation>
     </message>
@@ -4401,111 +4654,133 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>DatabaseExplorer</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="35"/>
         <source>Sessions</source>
         <translation>Sessioni</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="218"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="218"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="220"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="220"/>
         <source>Open a session file</source>
         <translation>Apri un file di sessione</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="226"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="229"/>
         <source>Close session file</source>
         <translation>Chiudi file di sessione</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="242"/>
         <source>Replay</source>
         <translation>Riproduci</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="246"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="246"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Riproduci la sessione selezionata sul dashboard</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="252"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="252"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="258"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="258"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>Sblocca il file di sessione per eliminare le sessioni</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="259"/>
         <source>Delete the selected session</source>
         <translation>Elimina la sessione selezionata</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="276"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="276"/>
         <source>Unlock</source>
         <translation>Sblocca</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="277"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="277"/>
         <source>Lock</source>
         <translation>Blocca</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="282"/>
         <source>Unlock the session file to allow deletions</source>
         <translation>Sblocca il file di sessione per consentire le eliminazioni</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="283"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Imposta una password per impedire l'eliminazione delle sessioni</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
         <source>Export CSV</source>
         <translation>Esporta CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="303"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="303"/>
         <source>Export selected session to CSV</source>
         <translation>Esporta la sessione selezionata in CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="310"/>
         <source>Export PDF</source>
         <translation>Esporta PDF</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="315"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="315"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>Genera un report PDF per la sessione selezionata</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="329"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="329"/>
         <source>Restore Project</source>
         <translation>Ripristina Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="333"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="333"/>
         <source>Restore the project file from this session file</source>
         <translation>Ripristina il file di progetto da questo file di sessione</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="402"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="402"/>
         <source>Loading session…</source>
         <translation>Caricamento sessione…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="403"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/DatabaseExplorer.qml" line="403"/>
         <source>Working…</source>
         <translation>In Elaborazione…</translation>
     </message>
@@ -4514,131 +4789,153 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>DatasetView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="83"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="83"/>
         <source>Pro features detected in this project.</source>
         <translation>Funzionalità Pro rilevate in questo progetto.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="85"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="85"/>
         <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
         <translation>Widget di fallback in uso. Acquista una licenza per sbloccare la funzionalità completa.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="148"/>
         <source>Plot</source>
         <translation>Grafico</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="152"/>
         <source>Toggle 2D plot visualization for this dataset</source>
         <translation>Attiva/disattiva la visualizzazione del grafico 2D per questo dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="167"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="167"/>
         <source>FFT Plot</source>
         <translation>Grafico FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="170"/>
         <source>Toggle FFT plot to visualize frequency content</source>
         <translation>Attiva il grafico FFT per visualizzare il contenuto in frequenza</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="180"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="180"/>
         <source>Waterfall</source>
         <translation>Waterfall</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="184"/>
         <source>Toggle waterfall (spectrogram) plot — uses the FFT settings</source>
         <translation>Attiva/disattiva grafico a cascata (spettrogramma) — utilizza le impostazioni FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="203"/>
         <source>Bar/Level</source>
         <translation>Barra/livello</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="207"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="207"/>
         <source>Toggle bar/level indicator for this dataset</source>
         <translation>Attiva l'indicatore barra/livello per questo dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="221"/>
         <source>Gauge</source>
         <translation>Indicatore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="226"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>Attiva il widget indicatore per la visualizzazione in stile analogico</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
         <source>Compass</source>
         <translation>Bussola</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="245"/>
         <source>Toggle compass widget for directional data</source>
         <translation>Attiva il widget bussola per i dati direzionali</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="259"/>
         <source>Meter</source>
         <translation>Indicatore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="264"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="264"/>
         <source>Toggle analog meter (half-arc) widget</source>
         <translation>Attiva il widget indicatore analogico (semicerchio)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="279"/>
         <source>Thermometer</source>
-        <translation>Termometro</translation>
+        <translation type="vanished">Termometro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="283"/>
         <source>Toggle thermometer widget for temperature data</source>
-        <translation>Attiva il widget termometro per i dati di temperatura</translation>
+        <translation type="vanished">Attiva il widget termometro per i dati di temperatura</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="297"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="278"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="278"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="283"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>Attiva l'indicatore LED per valori binari o con soglia</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="319"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="300"/>
         <source>Transform</source>
         <translation>Trasformazione</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="323"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="304"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="304"/>
         <source>Edit a value transform expression for calibration, filtering, or unit conversion</source>
         <translation>Modifica un'espressione di trasformazione del valore per calibrazione, filtraggio o conversione di unità</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="343"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="324"/>
         <source>Duplicate</source>
         <translation>Duplica</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="348"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="329"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="329"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>Duplica questo dataset con la stessa configurazione</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="356"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="337"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="359"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="340"/>
         <source>Delete this dataset from the group</source>
         <translation>Elimina questo dataset dal gruppo</translation>
     </message>
@@ -4647,36 +4944,43 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>Donate</name>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="37"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="37"/>
         <source>Support Serial Studio</source>
         <translation>Supporta Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="86"/>
         <source>Support the development of %1!</source>
         <translation>Supporta lo sviluppo di %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="97"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio è un software libero e open-source supportato da volontari. Considera di fare una donazione o di ottenere una licenza Pro per supportare gli sforzi di sviluppo :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="110"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="110"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Puoi anche supportare questo progetto condividendolo, segnalando bug e proponendo nuove funzionalità!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="125"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="125"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="137"/>
         <source>Donate</source>
         <translation>Dona</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="153"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Donate.qml" line="153"/>
         <source>Get Serial Studio Pro</source>
         <translation>Ottieni Serial Studio Pro</translation>
     </message>
@@ -4684,11 +4988,13 @@ Formato valido: 01 A2 FF 3C</translation>
 <context>
     <name>Downloader</name>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="127"/>
         <source>Stop</source>
         <translation>Interrompi</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="128"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="362"/>
         <source>Downloading updates</source>
@@ -4751,6 +5057,7 @@ Formato valido: 01 A2 FF 3C</translation>
         <translation>Fare clic sul pulsante "Apri" per applicare l'aggiornamento</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="132"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="288"/>
         <source>Updater</source>
         <translation>Aggiornamento</translation>
@@ -4834,113 +5141,135 @@ Formato valido: 01 A2 FF 3C</translation>
         <translation>1 secondo</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="135"/>
         <source>Time remaining: 0 minutes</source>
-        <translation type="vanished">Tempo rimanente: 0 minuti</translation>
+        <translation>Tempo rimanente: 0 minuti</translation>
     </message>
     <message>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Open</source>
-        <translation type="vanished">Apri</translation>
+        <translation>Apri</translation>
     </message>
 </context>
 <context>
     <name>ExamplesBrowser</name>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="34"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="34"/>
         <source>Examples Browser</source>
         <translation>Browser Esempi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="120"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="120"/>
         <source>Back</source>
         <translation>Indietro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="152"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="173"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="173"/>
         <source>Download &amp;&amp; Open</source>
         <translation>Scarica e Apri</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="188"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="188"/>
         <source>View on GitHub</source>
         <translation>Visualizza su GitHub</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="91"/>
         <source>Search in Examples…</source>
         <translation>Cerca negli Esempi…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="244"/>
         <source>Fetching examples…</source>
         <translation>Recupero esempi…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="567"/>
         <source>Loading...</source>
         <translation>Caricamento...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="568"/>
         <source>No README available.</source>
         <translation>Nessun README disponibile.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="608"/>
         <source>Copied to Clipboard</source>
         <translation>Copiato negli Appunti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="671"/>
         <source>No screenshot available</source>
         <translation>Nessuna schermata disponibile</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="703"/>
         <source>Details</source>
         <translation>Dettagli</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="732"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="755"/>
         <source>Category:</source>
         <translation>Categoria:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="768"/>
         <source>Difficulty:</source>
         <translation>Difficoltà:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="786"/>
         <source>Project:</source>
         <translation>Progetto:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="828"/>
         <source>No Results Found</source>
         <translation>Nessun Risultato Trovato</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="839"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Controlla l'ortografia o prova un termine di ricerca diverso.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="854"/>
         <source>%1 examples</source>
         <translation>%1 esempi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="864"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="864"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -4949,191 +5278,229 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>ExtensionManager</name>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="32"/>
         <source>Extension Manager</source>
         <translation>Gestione Estensioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="119"/>
         <source>Refresh</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="133"/>
         <source>Repos</source>
         <translation>Repository</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="163"/>
         <source>Repository Settings</source>
         <translation>Impostazioni Repository</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="175"/>
         <source>Back</source>
         <translation>Indietro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="216"/>
         <source>Install</source>
         <translation>Installa</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="233"/>
         <source>Uninstall</source>
         <translation>Disinstalla</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="260"/>
         <source>Run</source>
         <translation>Esegui</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="284"/>
         <source>Stop</source>
         <translation>Interrompi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="318"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="78"/>
         <source>Search extensions…</source>
         <translation>Cerca estensioni…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="368"/>
         <source>Fetching extensions…</source>
         <translation>Recupero estensioni…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="605"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="605"/>
         <source>Running</source>
         <translation>In Esecuzione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="627"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="627"/>
         <source>Update</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="627"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="627"/>
         <source>Installed</source>
         <translation>Installata</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="644"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="644"/>
         <source>Unavailable</source>
         <translation>Non Disponibile</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="823"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="823"/>
         <source>No description available.</source>
         <translation>Nessuna descrizione disponibile.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="864"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="864"/>
         <source>Details</source>
         <translation>Dettagli</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="885"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="885"/>
         <source>Type:</source>
         <translation>Tipo:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="898"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="898"/>
         <source>Author:</source>
         <translation>Autore:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="910"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="910"/>
         <source>Version:</source>
         <translation>Versione:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="922"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="922"/>
         <source>License:</source>
         <translation>Licenza:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="983"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="983"/>
         <source>No preview</source>
         <translation>Nessuna anteprima</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1011"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1011"/>
         <source>  PLUGIN OUTPUT</source>
         <translation>USCITA PLUGIN</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1041"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1041"/>
         <source>No output yet. Run the plugin to see its log here.</source>
         <translation>Nessuna uscita ancora. Esegui il plugin per vedere il suo log qui.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1076"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1076"/>
         <source>No preview available</source>
         <translation>Nessuna anteprima disponibile</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1120"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1120"/>
         <source>Repositories</source>
         <translation>Repository</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1133"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
         <translation>Aggiungi URL a repository remoti o percorsi di cartelle locali.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1170"/>
         <source>LOCAL</source>
         <translation>LOCALE</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1227"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1227"/>
         <source>URL or local path…</source>
         <translation>URL o percorso locale…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1258"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1258"/>
         <source>Browse…</source>
         <translation>Sfoglia…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1235"/>
         <source>Add</source>
         <translation>Aggiungi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1295"/>
         <source>No Results Found</source>
         <translation>Nessun Risultato Trovato</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1306"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1306"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Controlla l'ortografia o prova un termine di ricerca diverso.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1330"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1330"/>
         <source>No Extensions Available</source>
         <translation>Nessuna Estensione Disponibile</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1341"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>Aggiungi un URL di repository o un percorso locale nelle impostazioni Repos, quindi aggiorna.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1356"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1356"/>
         <source>%1 extensions</source>
         <translation>%1 estensioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1366"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1366"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -5142,56 +5509,67 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>FFTPlot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="157"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="157"/>
         <source>Interpolation: %1</source>
         <translation>Interpolazione: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="185"/>
         <source>Show Area Under Plot</source>
         <translation>Mostra Area Sotto il Grafico</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="203"/>
         <source>Show X Axis Label</source>
         <translation>Mostra Etichetta Asse X</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="215"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="215"/>
         <source>Show Y Axis Label</source>
         <translation>Mostra Etichetta Asse Y</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="233"/>
         <source>Show Crosshair</source>
         <translation>Mostra Mirino</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="240"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="240"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="259"/>
         <source>Reset View</source>
         <translation>Ripristina Vista</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="265"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="265"/>
         <source>Axis Range Settings</source>
         <translation>Impostazioni Intervallo Assi</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="294"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="294"/>
         <source>Magnitude (dB)</source>
         <translation>Magnitudine (dB)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="295"/>
         <source>Frequency (Hz)</source>
         <translation>Frequenza (Hz)</translation>
     </message>
@@ -5200,6 +5578,7 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>FileDropArea</name>
     <message>
         <location filename="../../qml/Widgets/FileDropArea.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/FileDropArea.qml" line="130"/>
         <source>Drop Projects and CSV files here</source>
         <translation>Rilascia qui Progetti e file CSV</translation>
     </message>
@@ -5208,97 +5587,117 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>FileTransmission</name>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="34"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="34"/>
         <source>File Transmission</source>
         <translation>Trasmissione File</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="102"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="102"/>
         <source>Transfer Protocol:</source>
         <translation>Protocollo di Trasferimento:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="135"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="135"/>
         <source>File Selection:</source>
         <translation>Selezione File:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="152"/>
         <source>Select File…</source>
         <translation>Seleziona File…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="170"/>
         <source>Transmission Interval:</source>
         <translation>Intervallo di Trasmissione:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="272"/>
         <source>msecs</source>
         <translation>ms</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="206"/>
         <source>Block Size:</source>
         <translation>Dimensione Blocco:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="234"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="234"/>
         <source>bytes</source>
         <translation>byte</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="244"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="244"/>
         <source>Timeout:</source>
         <translation>Timeout:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="282"/>
         <source>Max Retries:</source>
         <translation>Tentativi Massimi:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="340"/>
         <source>Progress: %1%</source>
         <translation>Progresso: %1%</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="373"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="373"/>
         <source>%1 / %2 bytes</source>
         <translation>%1 / %2 byte</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="381"/>
         <source>Errors: %1</source>
         <translation>Errori: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="461"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="461"/>
         <source>Activity Log</source>
         <translation>Registro Attività</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="465"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="465"/>
         <source>Clear</source>
         <translation>Cancella</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="419"/>
         <source>Pause Transmission</source>
         <translation>Sospendi Trasmissione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="420"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="420"/>
         <source>Resume Transmission</source>
         <translation>Riprendi Trasmissione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="423"/>
         <source>Stop Transmission</source>
         <translation>Interrompi Trasmissione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="424"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="424"/>
         <source>Begin Transmission</source>
         <translation>Avvia Trasmissione</translation>
     </message>
@@ -5307,292 +5706,381 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>FlowDiagram</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="159"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="159"/>
         <source>Frame Parser</source>
         <translation>Frame Parser</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="166"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="166"/>
         <source>Device %1</source>
         <translation>Dispositivo %1</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="390"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1406"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1393"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="390"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1393"/>
         <source>Output Panel</source>
         <translation>Pannello di Output</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="434"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="434"/>
         <source>Control</source>
         <translation>Controllo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="457"/>
         <source>Table</source>
         <translation>Tabella</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="473"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="473"/>
         <source>%1 regs</source>
         <translation>%1 reg</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="474"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="474"/>
         <source>empty</source>
         <translation>vuoto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="499"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="499"/>
         <source>MQTT Publisher</source>
         <translation>Publisher MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="896"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="896"/>
         <source>Open the transform code editor for this dataset.</source>
         <translation>Apri l'editor del codice di trasformazione per questo dataset.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1175"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1178"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1178"/>
         <source>Dataset Container</source>
         <translation>Contenitore di Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1187"/>
         <source>Multi-Plot</source>
         <translation>Grafico Multiplo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1190"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1190"/>
         <source>Multiple Plot</source>
         <translation>Grafico Multiplo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1199"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1202"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1202"/>
         <source>Accelerometer</source>
         <translation>Accelerometro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1211"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1214"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1214"/>
         <source>Gyroscope</source>
         <translation>Giroscopio</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1223"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1226"/>
         <source>GPS Map</source>
         <translation>Mappa GPS</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1234"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1234"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1237"/>
         <source>3D Plot</source>
         <translation>Grafico 3D</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1245"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1248"/>
         <source>Image View</source>
         <translation>Visualizzatore Immagini</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1257"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1260"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1257"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1260"/>
         <source>Painter Widget</source>
         <translation>Widget Painter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1269"/>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1269"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1272"/>
         <source>Data Grid</source>
         <translation>Griglia Dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1285"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1285"/>
         <source>Generic</source>
         <translation>Generico</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1298"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1298"/>
         <source>Plot</source>
         <translation>Grafico</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1311"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1311"/>
         <source>FFT Plot</source>
         <translation>Grafico FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1324"/>
         <source>Gauge</source>
         <translation>Indicatore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1337"/>
         <source>Level Indicator</source>
         <translation>Indicatore di Livello</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1350"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1350"/>
         <source>Compass</source>
         <translation>Bussola</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1363"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1363"/>
         <source>Meter</source>
         <translation>Indicatore</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1376"/>
         <source>Thermometer</source>
-        <translation>Termometro</translation>
+        <translation type="vanished">Termometro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1389"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1376"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1376"/>
         <source>LED Indicator</source>
         <translation>Indicatore LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1418"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1405"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1405"/>
         <source>Slider</source>
         <translation>Cursore</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1431"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1418"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1418"/>
         <source>Toggle</source>
         <translation>Interruttore</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1444"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1431"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1431"/>
         <source>Knob</source>
         <translation>Manopola</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1457"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1444"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1444"/>
         <source>Text Field</source>
         <translation>Campo di Testo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1470"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1457"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1457"/>
         <source>Button</source>
         <translation>Pulsante</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1494"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1570"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1481"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1556"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1643"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1481"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1556"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1643"/>
         <source>Add Group</source>
         <translation>Aggiungi Gruppo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1509"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1585"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1673"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1719"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1496"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1571"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1703"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1496"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1571"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1658"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1703"/>
         <source>Add Dataset</source>
         <translation>Aggiungi Dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1524"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1600"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1688"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1734"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1941"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1510"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1585"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1672"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1717"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1924"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1510"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1585"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1672"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1717"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1924"/>
         <source>Add Output</source>
         <translation>Aggiungi Output</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1540"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1613"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1526"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1598"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1526"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1598"/>
         <source>Add Action</source>
         <translation>Aggiungi Azione</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1549"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1535"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1535"/>
         <source>Add Data Source</source>
         <translation>Aggiungi Sorgente Dati</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1556"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1542"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1542"/>
         <source>Add Data Table</source>
         <translation>Aggiungi Tabella Dati</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1624"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1761"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1828"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1956"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1990"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2046"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1609"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1744"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1811"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1939"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1973"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2029"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1609"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1744"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1811"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1939"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1973"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2029"/>
         <source>Rename…</source>
         <translation>Rinomina…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1632"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1791"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1861"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1913"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1964"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2020"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1617"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1774"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1844"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1896"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1947"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2003"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1617"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1774"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1844"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1896"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1947"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2003"/>
         <source>Duplicate</source>
         <translation>Duplica</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1643"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1802"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1873"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1925"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1975"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2031"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2057"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1628"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1785"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1856"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1908"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1958"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2014"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2040"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1628"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1785"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1856"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1908"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1958"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2014"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2040"/>
         <source>Delete…</source>
         <translation>Elimina…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1704"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1688"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1688"/>
         <source>Edit Frame Parser…</source>
         <translation>Modifica Frame Parser…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1747"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1730"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1730"/>
         <source>Edit Painter Code…</source>
         <translation>Modifica Codice Painter…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1769"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1837"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1889"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1998"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1752"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1820"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1872"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1981"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1752"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1820"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1872"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1981"/>
         <source>Move Up</source>
         <translation>Sposta Su</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1780"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1849"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1901"/>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2009"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1763"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1832"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1884"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1992"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1763"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1832"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1884"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1992"/>
         <source>Move Down</source>
         <translation>Sposta Giù</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1817"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="1800"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="1800"/>
         <source>Edit Transform Code…</source>
         <translation>Modifica Codice Transform…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2072"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="2055"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="2055"/>
         <source>Edit Code…</source>
         <translation>Modifica Codice…</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="222"/>
         <source>Group</source>
         <translation>Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="340"/>
         <source>Action</source>
         <translation>Azione</translation>
     </message>
@@ -5606,120 +6094,148 @@ Formato valido: 01 A2 FF 3C</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="102"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="102"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="249"/>
         <source>Undo</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="263"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="263"/>
         <source>Redo</source>
         <translation>Ripeti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="118"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="288"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="118"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="288"/>
         <source>Cut</source>
         <translation>Taglia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="123"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="123"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="301"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="128"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="314"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="128"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="314"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="135"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="135"/>
         <source>Select All</source>
         <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="145"/>
         <source>Format Document</source>
         <translation>Formatta Documento</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="152"/>
         <source>Format Selection</source>
         <translation>Formatta Selezione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="228"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="228"/>
         <source>Reset to the default parsing script</source>
         <translation>Ripristina allo script di analisi predefinito</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="236"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="236"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="241"/>
         <source>Import a script file for data parsing</source>
         <translation>Importa un file di script per l'analisi dei dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="343"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="343"/>
         <source>Open help documentation for data parsing</source>
         <translation>Apri la documentazione di aiuto per l'analisi dei dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="365"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="365"/>
         <source>Language:</source>
         <translation>Linguaggio:</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="420"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="420"/>
         <source>Select Template…</source>
         <translation>Seleziona Modello…</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="434"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="434"/>
         <source>Test With Sample Data</source>
         <translation>Testa con Dati di Esempio</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="442"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="442"/>
         <source>Evaluate</source>
         <translation>Valuta</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <source>Undo the last code edit</source>
         <translation>Annulla l'ultima modifica del codice</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
         <source>Redo the previously undone edit</source>
         <translation>Ripristina la modifica precedentemente annullata</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="293"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="293"/>
         <source>Cut selected code to clipboard</source>
         <translation>Taglia il codice selezionato negli appunti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="306"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="306"/>
         <source>Copy selected code to clipboard</source>
         <translation>Copia il codice selezionato negli appunti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <source>Paste code from clipboard</source>
         <translation>Incolla il codice dagli appunti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="338"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="338"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
@@ -5728,36 +6244,43 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>GPS</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="105"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="105"/>
         <source>Auto Center</source>
         <translation>Centra Automaticamente</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="121"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="121"/>
         <source>Plot Trajectory</source>
         <translation>Traccia Traiettoria</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="138"/>
         <source>Zoom In</source>
         <translation>Ingrandisci</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="149"/>
         <source>Zoom Out</source>
         <translation>Riduci</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="173"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="173"/>
         <source>Show Weather</source>
         <translation>Mostra Meteo</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="191"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="191"/>
         <source>NASA Weather Overlay</source>
         <translation>Sovrapposizione Meteo NASA</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="223"/>
         <source>Base Map: %1</source>
         <translation>Mappa Base: %1</translation>
     </message>
@@ -5766,181 +6289,213 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>GroupView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="97"/>
         <source>Pro features detected in this project.</source>
         <translation>Funzionalità Pro rilevate in questo progetto.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="99"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="99"/>
         <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
         <translation>Widget di fallback in uso. Acquista una licenza per sbloccare la funzionalità completa.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="162"/>
         <source>Add a generic dataset to the current group</source>
         <translation>Aggiungi un dataset generico al gruppo corrente</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="169"/>
         <source>Plot</source>
         <translation>Grafico</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="174"/>
         <source>Add a 2D plot to visualize numeric data</source>
         <translation>Aggiungi un grafico 2D per visualizzare dati numerici</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="182"/>
         <source>FFT Plot</source>
         <translation>Grafico FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="188"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="188"/>
         <source>Add an FFT plot for frequency domain visualization</source>
         <translation>Aggiungi un grafico FFT per la visualizzazione nel dominio delle frequenze</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="194"/>
         <source>Bar/Level</source>
         <translation>Barra/livello</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="199"/>
         <source>Add a bar or level indicator for scaled values</source>
         <translation>Aggiungi un indicatore a barra o livello per valori scalati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Gauge</source>
         <translation>Indicatore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="211"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>Aggiungi un widget indicatore per la visualizzazione in stile analogico</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="218"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="218"/>
         <source>Compass</source>
         <translation>Bussola</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="223"/>
         <source>Add a compass to display directional or angular data</source>
         <translation>Aggiungi una bussola per visualizzare dati direzionali o angolari</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="229"/>
         <source>Meter</source>
         <translation>Indicatore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <source>Add an analog meter (half-arc) widget</source>
         <translation>Aggiungi un widget indicatore analogico (arco semicircolare)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="242"/>
         <source>Thermometer</source>
-        <translation>Termometro</translation>
+        <translation type="vanished">Termometro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="246"/>
         <source>Add a thermometer widget for temperature data</source>
-        <translation>Aggiungi un widget termometro per i dati di temperatura</translation>
+        <translation type="vanished">Aggiungi un widget termometro per i dati di temperatura</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="241"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="259"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="247"/>
         <source>Add an LED indicator for binary status signals</source>
         <translation>Aggiungi un indicatore LED per segnali di stato binari</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="269"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="257"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="257"/>
         <source>Button</source>
         <translation>Pulsante</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="261"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="261"/>
         <source>Add a button that sends a command on click</source>
         <translation>Aggiungi un pulsante che invia un comando al clic</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="280"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="268"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="268"/>
         <source>Slider</source>
         <translation>Cursore</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="284"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="272"/>
         <source>Add a slider for sending scaled numeric values</source>
         <translation>Aggiungi un cursore per inviare valori numerici scalati</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="291"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="279"/>
         <source>Toggle</source>
         <translation>Interruttore</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="295"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="283"/>
         <source>Add a toggle switch for on/off commands</source>
         <translation>Aggiungi un interruttore per comandi on/off</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="290"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="290"/>
         <source>Text Field</source>
         <translation>Campo di Testo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="306"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="294"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="294"/>
         <source>Add a text field for typing and sending commands</source>
         <translation>Aggiungi un campo di testo per digitare e inviare comandi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="312"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="300"/>
         <source>Knob</source>
         <translation>Manopola</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="317"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="305"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="305"/>
         <source>Add a rotary knob for setpoint control</source>
         <translation>Aggiungi una manopola rotativa per il controllo del setpoint</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="315"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="315"/>
         <source>Edit Code</source>
         <translation>Modifica Codice</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="332"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="320"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="320"/>
         <source>Edit the JavaScript that draws this painter widget</source>
         <translation>Modifica il JavaScript che disegna questo widget painter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="349"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="337"/>
         <source>Duplicate</source>
         <translation>Duplica</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="341"/>
         <source>Duplicate the current group and its contents</source>
         <translation>Duplica il gruppo corrente e il suo contenuto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="350"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="350"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="366"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="354"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="354"/>
         <source>Delete the current group and all contained datasets</source>
         <translation>Elimina il gruppo corrente e tutti i dataset contenuti</translation>
     </message>
@@ -5949,16 +6504,19 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>Gyroscope</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="370"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="370"/>
         <source>ROLL ↔</source>
         <translation>ROLLIO ↔</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="398"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="398"/>
         <source>YAW ↻</source>
         <translation>IMBARDATA ↻</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="426"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="426"/>
         <source>PITCH ↕</source>
         <translation>BECCHEGGIO ↕</translation>
     </message>
@@ -5967,26 +6525,31 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>HID</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="50"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="50"/>
         <source>HID Device</source>
         <translation>Dispositivo HID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="80"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="80"/>
         <source>Usage Page</source>
         <translation>Pagina di Utilizzo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="96"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="96"/>
         <source>Usage</source>
         <translation>Utilizzo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
         <translation>Collega gamepad, joystick, volanti, controller di volo e altri dispositivi USB di classe HID.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>Tabelle di Utilizzo HID (USB.org)</translation>
     </message>
@@ -5995,46 +6558,55 @@ Formato valido: 01 A2 FF 3C</translation>
     <name>HelpCenter</name>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="33"/>
         <source>Help Center</source>
         <translation>Centro Assistenza</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="95"/>
         <source>Fetching help pages…</source>
         <translation>Recupero pagine di assistenza…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="129"/>
         <source>Search…</source>
         <translation>Cerca…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="247"/>
         <source>Loading…</source>
         <translation>Caricamento…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="289"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="289"/>
         <source>Select a page from the sidebar</source>
         <translation>Seleziona una pagina dalla barra laterale</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="319"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="319"/>
         <source>Copied to Clipboard</source>
         <translation>Copiato negli Appunti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="352"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="352"/>
         <source>View Online</source>
         <translation>Visualizza Online</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="371"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="371"/>
         <source>%1 pages</source>
         <translation>%1 pagine</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="381"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -7838,21 +8410,25 @@ Il dispositivo potrebbe non esporre endpoint dati nella sua configurazione attiv
     <name>IconPicker</name>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="42"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/IconPicker.qml" line="42"/>
         <source>Select Icon</source>
         <translation>Seleziona Icona</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="119"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/IconPicker.qml" line="119"/>
         <source>Search Online…</source>
         <translation>Cerca Online…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/IconPicker.qml" line="133"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/IconPicker.qml" line="146"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
@@ -7861,71 +8437,85 @@ Il dispositivo potrebbe non esporre endpoint dati nella sua configurazione attiv
     <name>ImageView</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="68"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="68"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="69"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="69"/>
         <source>Grayscale</source>
         <translation>Scala di Grigi</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="70"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="70"/>
         <source>High Contrast</source>
         <translation>Alto Contrasto</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="71"/>
         <source>Vivid</source>
         <translation>Vivido</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="72"/>
         <source>Night Vision</source>
         <translation>Visione Notturna</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="73"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="73"/>
         <source>Infrared</source>
         <translation>Infrarosso</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="74"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="74"/>
         <source>Deep Blue</source>
         <translation>Blu Profondo</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="75"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="75"/>
         <source>Amber</source>
         <translation>Ambra</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="172"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="172"/>
         <source>Export Images</source>
         <translation>Esporta Immagini</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="182"/>
         <source>Open Export Folder</source>
         <translation>Apri Cartella di Esportazione</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="198"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="198"/>
         <source>Zoom In</source>
         <translation>Ingrandisci</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="211"/>
         <source>Zoom Out</source>
         <translation>Riduci</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="231"/>
         <source>Show Crosshair</source>
         <translation>Mostra Mirino</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="554"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="554"/>
         <source>Waiting for Image…</source>
         <translation>In Attesa di Immagine…</translation>
     </message>
@@ -7934,11 +8524,13 @@ Il dispositivo potrebbe non esporre endpoint dati nella sua configurazione attiv
     <name>KeyManagerDialog</name>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="24"/>
         <source>API Keys</source>
         <translation>Chiavi API</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="48"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="48"/>
         <source>Anthropic Claude. The default is Claude Haiku 4.5 ($1 input / $5 output per million tokens). Sonnet 4.6 and Opus 4.7 are also available. Supports streaming, tool use, extended thinking, and prompt caching.</source>
         <translation>Anthropic Claude. Il modello predefinito è Claude Haiku 4.5 ($1 input / $5 output per milione di token). Sono disponibili anche Sonnet 4.6 e OPUS 4.7. Supporta streaming, uso di strumenti, ragionamento esteso e caching dei prompt.</translation>
     </message>
@@ -7948,21 +8540,25 @@ Il dispositivo potrebbe non esporre endpoint dati nella sua configurazione attiv
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="58"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="58"/>
         <source>Google Gemini. The default is Gemini 2.0 Flash, which has a generous free tier (subject to rate limits). Gemini 1.5 Pro and Gemini 1.5 Flash are also available.</source>
         <translation>Google Gemini. Il modello predefinito è Gemini 2.0 Flash, che offre un livello gratuito generoso (soggetto a limiti di frequenza). Sono disponibili anche Gemini 1.5 Pro e Gemini 1.5 Flash.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="101"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="101"/>
         <source>Bring your own API keys. They are encrypted at rest with a per-machine key and never leave your computer except to communicate with the provider you select.</source>
         <translation>Utilizza le tue chiavi API. Vengono crittografate a riposo con una chiave specifica per la macchina e non lasciano mai il tuo computer se non per comunicare con il provider selezionato.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="167"/>
         <source>Key set</source>
         <translation>Chiave impostata</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="168"/>
         <source>No key</source>
         <translation>Nessuna chiave</translation>
     </message>
@@ -7972,101 +8568,121 @@ Il dispositivo potrebbe non esporre endpoint dati nella sua configurazione attiv
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="53"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="53"/>
         <source>OpenAI Chat Completions. The default is GPT-5 mini for fast, cost-conscious agentic work. GPT-5.2 is the stronger general-purpose option, and GPT-5.2 Chat tracks the model currently used in ChatGPT.</source>
         <translation>OpenAI Chat Completions. L'impostazione predefinita è GPT-5 mini per lavoro agente veloce ed economico. GPT-5.2 è l'opzione generale più potente, e GPT-5.2 Chat segue il modello attualmente usato in ChatGPT.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="62"/>
         <source>DeepSeek. OpenAI-compatible API. The default is deepseek-chat (V3). deepseek-reasoner (R1) is also available. Often the cheapest cloud option for tool use.</source>
         <translation>DeepSeek. API compatibile con OpenAI. L'impostazione predefinita è deepseek-chat (V3). È disponibile anche deepseek-reasoner (R1). Spesso l'opzione cloud più economica per l'uso di strumenti.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="66"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="66"/>
         <source>OpenRouter. One key, ~200 models from Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen, and others. Free-tier models (suffixed :free) are rate-limited but require no additional billing. Pay-as-you-go for the rest.</source>
         <translation>OpenRouter. Una chiave, ~200 modelli da Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen e altri. I modelli gratuiti (con suffisso :free) hanno limiti di velocità ma non richiedono fatturazione aggiuntiva. Pagamento a consumo per gli altri.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="71"/>
         <source>Groq. Hardware-accelerated inference (LPUs) for very fast Llama, Mixtral, Gemma, DeepSeek-R1 distill, and Qwen models. Generous free tier with daily token limits.</source>
         <translation>Groq. Inferenza accelerata via hardware (LPU) per modelli Llama, Mixtral, Gemma, DeepSeek-R1 distill e Qwen molto veloci. Piano gratuito generoso con limiti giornalieri di token.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="75"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="75"/>
         <source>Mistral. The default is Mistral Large. Codestral targets code completion, Pixtral handles vision, and the Ministral models are tuned for edge / low-latency use.</source>
         <translation>Mistral. Il predefinito è Mistral Large. Codestral è destinato al completamento del codice, Pixtral gestisce la visione e i modelli Ministral sono ottimizzati per uso edge / bassa latenza.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="79"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="79"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Server di modelli locale. Funziona con qualsiasi endpoint compatibile con OpenAI -- Ollama, llama-server di llama.cpp, LM Studio o vLLM. Nulla esce dalla tua macchina. L'elenco dei modelli viene interrogato in tempo reale dal server.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="205"/>
         <source>A key is on file -- paste a new one to replace it</source>
         <translation>Una chiave è registrata -- incollane una nuova per sostituirla</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="206"/>
         <source>Paste your API key here</source>
         <translation>Incolla la tua chiave API qui</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="213"/>
         <source>Hide key</source>
         <translation>Nascondi chiave</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="214"/>
         <source>Show key while typing</source>
         <translation>Mostra chiave durante la digitazione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="225"/>
         <source>Get key</source>
         <translation>Ottieni chiave</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="226"/>
         <source>Open the provider's console to create a new key</source>
         <translation>Apri la console del provider per creare una nuova chiave</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="237"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="255"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="255"/>
         <source>Remove the stored key for %1</source>
         <translation>Rimuovi la chiave memorizzata per %1</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="279"/>
         <source>http://localhost:11434/v1</source>
         <translation>http://localhost:11434/v1</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="283"/>
         <source>Install Ollama</source>
         <translation>Installa Ollama</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="284"/>
         <source>Open the Ollama download page</source>
         <translation>Apri la pagina di download di Ollama</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="295"/>
         <source>Apply</source>
         <translation>Applica</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="310"/>
         <source>Re-query the model list</source>
         <translation>Richiedi nuovamente l'elenco dei modelli</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="358"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="358"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>Nessuna chiave API configurata. Aggiungi una chiave per iniziare.</translation>
     </message>
@@ -8076,11 +8692,13 @@ Il dispositivo potrebbe non esporre endpoint dati nella sua configurazione attiv
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="361"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="361"/>
         <source>One provider is ready.</source>
         <translation>Un provider è pronto.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/KeyManagerDialog.qml" line="363"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/KeyManagerDialog.qml" line="363"/>
         <source>%1 providers are ready.</source>
         <translation>%1 provider sono pronti.</translation>
     </message>
@@ -8089,26 +8707,31 @@ Il dispositivo potrebbe non esporre endpoint dati nella sua configurazione attiv
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="37"/>
         <source>Licensing</source>
         <translation>Licenze</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="84"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="84"/>
         <source>Please wait…</source>
         <translation>Attendere…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="124"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Attiva Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="131"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Incolla la tua chiave di licenza qui sotto per sbloccare le funzionalità Pro come MQTT, grafici 3D e altro.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="138"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>La tua licenza include 5 attivazioni dispositivo.
@@ -8116,6 +8739,7 @@ I piani includono opzioni Mensile, Annuale e Lifetime.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="151"/>
         <source>Paste your license key here…</source>
         <translation>Incolla la tua chiave di licenza qui…</translation>
     </message>
@@ -8123,11 +8747,15 @@ I piani includono opzioni Mensile, Annuale e Lifetime.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="170"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="331"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="380"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="170"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="331"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="380"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="176"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="176"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>
@@ -8135,71 +8763,87 @@ I piani includono opzioni Mensile, Annuale e Lifetime.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="182"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="337"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="386"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="386"/>
         <source>Select All</source>
         <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="233"/>
         <source>Product</source>
         <translation>Prodotto</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="240"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Licensee</source>
         <translation>Licenziatario</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="270"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="270"/>
         <source>Licensee E-Mail</source>
         <translation>E-mail Licenziatario</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="287"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="287"/>
         <source>Device Usage</source>
         <translation>Utilizzo Dispositivi</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="295"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 dispositivi in uso (Piano Illimitato)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="296"/>
         <source>%1 of %2 devices used</source>
         <translation>%1 di %2 dispositivi utilizzati</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="306"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="306"/>
         <source>Device ID</source>
         <translation>ID Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="353"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="353"/>
         <source>License Key</source>
         <translation>Chiave di Licenza</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="409"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="409"/>
         <source>Customer Portal</source>
         <translation>Portale Cliente</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="421"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="421"/>
         <source>Buy License</source>
         <translation>Acquista Licenza</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="429"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="429"/>
         <source>Activate</source>
         <translation>Attiva</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="440"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="440"/>
         <source>Deactivate</source>
         <translation>Disattiva</translation>
     </message>
@@ -8406,91 +9050,109 @@ Grazie ancora per aver supportato Serial Studio!</translation>
     <name>MQTT</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="51"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="51"/>
         <source>Hostname</source>
         <translation>Hostname</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="59"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="59"/>
         <source>e.g. broker.hivemq.com</source>
         <translation>es. broker.hivemq.com</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="67"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="67"/>
         <source>Port</source>
         <translation>Porta</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="87"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="87"/>
         <source>Topic Filter</source>
         <translation>Filtro Topic</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="95"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="95"/>
         <source>e.g. sensors/#</source>
         <translation>es. sensors/#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="103"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="103"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="120"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="120"/>
         <source>Regenerate</source>
         <translation>Rigenera</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="130"/>
         <source>Username</source>
         <translation>Nome Utente</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="145"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="161"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="161"/>
         <source>Version</source>
         <translation>Versione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="187"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="206"/>
         <source>Clean Session</source>
         <translation>Sessione Pulita</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="232"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="232"/>
         <source>Use SSL/TLS</source>
         <translation>Usa SSL/TLS</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="258"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="258"/>
         <source>SSL Protocol</source>
         <translation>Protocollo SSL</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="289"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="289"/>
         <source>Peer Verify</source>
         <translation>Verifica Peer</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="320"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="320"/>
         <source>Verify Depth</source>
         <translation>Profondità Verifica</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="341"/>
         <source>CA Certificates</source>
         <translation>Certificati CA</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="349"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="349"/>
         <source>Load From Folder…</source>
         <translation>Carica da Cartella…</translation>
     </message>
@@ -9228,31 +9890,37 @@ Fornire le credenziali necessarie.</translation>
     <name>MainWindow</name>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="184"/>
         <source>Console Only Mode</source>
         <translation>Modalità Solo Console</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="187"/>
         <source>Quick Plot Mode</source>
         <translation>Modalità Grafico Rapido</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="194"/>
         <source>Empty Project</source>
         <translation>Progetto Vuoto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="659"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="659"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="667"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="667"/>
         <source>Waiting for data…</source>
         <translation>In attesa di dati…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="668"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/MainWindow.qml" line="668"/>
         <source>Connecting to device…</source>
         <translation>Connessione al dispositivo…</translation>
     </message>
@@ -9286,6 +9954,7 @@ Fornire le credenziali necessarie.</translation>
     <name>MarkdownWebView</name>
     <message>
         <location filename="../../qml/Widgets/MarkdownWebView.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/MarkdownWebView.qml" line="35"/>
         <source>Copied to Clipboard</source>
         <translation>Copiato negli Appunti</translation>
     </message>
@@ -9294,6 +9963,7 @@ Fornire le credenziali necessarie.</translation>
     <name>Mdf4Player</name>
     <message>
         <location filename="../../qml/Dialogs/Mdf4Player.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Mdf4Player.qml" line="24"/>
         <source>MDF4 Player</source>
         <translation>Lettore MDF4</translation>
     </message>
@@ -9302,46 +9972,55 @@ Fornire le credenziali necessarie.</translation>
     <name>MessageBubble</name>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="97"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="98"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="98"/>
         <source>You</source>
         <translation>Tu</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="98"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="98"/>
         <source>Assistant</source>
         <translation>Assistente</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="208"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="208"/>
         <source>Discovery</source>
         <translation>Rilevamento</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="209"/>
         <source>Execution</source>
         <translation>Esecuzione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="239"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="239"/>
         <source>Approve %1 actions in %2?</source>
         <translation>Approvare %1 azioni in %2?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="249"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="249"/>
         <source>These calls will run together. Expand each card below to inspect arguments.</source>
         <translation>Queste chiamate verranno eseguite insieme. Espandere ogni scheda per ispezionare gli argomenti.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="260"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="260"/>
         <source>Approve all</source>
         <translation>Approva tutto</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="266"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="266"/>
         <source>Deny all</source>
         <translation>Nega tutto</translation>
     </message>
@@ -9349,6 +10028,9 @@ Fornire le credenziali necessarie.</translation>
         <location filename="../../qml/AI/MessageBubble.qml" line="332"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="384"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="436"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="332"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="384"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="436"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
@@ -9356,12 +10038,17 @@ Fornire le credenziali necessarie.</translation>
         <location filename="../../qml/AI/MessageBubble.qml" line="337"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="389"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="441"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="337"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="389"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="441"/>
         <source>Copy All</source>
         <translation>Copia Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageBubble.qml" line="345"/>
         <location filename="../../qml/AI/MessageBubble.qml" line="397"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="345"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageBubble.qml" line="397"/>
         <source>Select All</source>
         <translation>Seleziona Tutto</translation>
     </message>
@@ -9370,97 +10057,117 @@ Fornire le credenziali necessarie.</translation>
     <name>MessageWebView</name>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="62"/>
         <source>You</source>
         <translation>Tu</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="63"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="63"/>
         <source>Assistant</source>
         <translation>Assistente</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="64"/>
         <location filename="../../qml/AI/MessageWebView.qml" line="70"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="64"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="70"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="65"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="65"/>
         <source>Discovery</source>
         <translation>Scoperta</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="66"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="66"/>
         <source>Execution</source>
         <translation>Esecuzione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="67"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="67"/>
         <source>Running</source>
         <translation>In Esecuzione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="68"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="68"/>
         <source>Awaiting approval</source>
         <translation>In attesa di approvazione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="69"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="69"/>
         <source>Done</source>
         <translation>Completato</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="71"/>
         <source>Denied</source>
         <translation>Negato</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="72"/>
         <source>Blocked</source>
         <translation>Bloccato</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="73"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="73"/>
         <source>Approve</source>
         <translation>Approva</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="74"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="74"/>
         <source>Deny</source>
         <translation>Nega</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="75"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="75"/>
         <source>Approve all</source>
         <translation>Approva tutto</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="76"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="76"/>
         <source>Deny all</source>
         <translation>Nega tutto</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="77"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="77"/>
         <source>Arguments</source>
         <translation>Argomenti</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="78"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="78"/>
         <source>Result</source>
         <translation>Risultato</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="79"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="79"/>
         <source>Approve {n} actions in {family}?</source>
         <translation>Approvare {n} azioni in {family}?</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="80"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="80"/>
         <source>These calls will run together. Expand each card to inspect arguments.</source>
         <translation>Queste chiamate verranno eseguite insieme. Espandere ogni scheda per ispezionare gli argomenti.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/MessageWebView.qml" line="81"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/MessageWebView.qml" line="81"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
@@ -9887,91 +10594,109 @@ Aprire la pagina di download?</translation>
     <name>Modbus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="49"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="49"/>
         <source>Protocol</source>
         <translation>Protocollo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
         <source>Serial Port</source>
         <translation>Porta Seriale</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="97"/>
         <source>Baud Rate</source>
         <translation>Baud Rate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="201"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="201"/>
         <source>Parity</source>
         <translation>Parità</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="222"/>
         <source>Data Bits</source>
         <translation>Bit di Dati</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="245"/>
         <source>Stop Bits</source>
         <translation>Bit di Stop</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="268"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="268"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
         <source>IP Address</source>
         <translation>Indirizzo IP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="292"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="292"/>
         <source>Port</source>
         <translation>Porta</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="301"/>
         <source>TCP Port</source>
         <translation>Porta TCP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <source>Slave Address</source>
         <translation>Indirizzo Slave</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="334"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="334"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="382"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="382"/>
         <source>Configure Register Groups…</source>
         <translation>Configura Gruppi di Registri…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="392"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="392"/>
         <source>Import Register Map…</source>
         <translation>Importa Mappa Registri…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="407"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="407"/>
         <source>%1 group(s) configured</source>
         <translation>%1 gruppo/i configurato/i</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="408"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="408"/>
         <source>No groups configured</source>
         <translation>Nessun gruppo configurato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="349"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="349"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervallo di Polling (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="354"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="354"/>
         <source>Polling interval</source>
         <translation>Intervallo di polling</translation>
     </message>
@@ -9980,86 +10705,103 @@ Aprire la pagina di download?</translation>
     <name>ModbusGroupsDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="45"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="45"/>
         <source>Modbus Register Groups</source>
         <translation>Gruppi di Registri Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="166"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="166"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
         <translation>Configura più gruppi di registri per interrogare diversi tipi di registro in sequenza.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="174"/>
         <source>Add New Group</source>
         <translation>Aggiungi Nuovo Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="198"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="198"/>
         <source>Register Type:</source>
         <translation>Tipo di Registro:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
         <source>Start Address:</source>
         <translation>Indirizzo Iniziale:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="217"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="223"/>
         <source>Register Count:</source>
         <translation>Numero di Registri:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="239"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="239"/>
         <source>Add Group</source>
         <translation>Aggiungi Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="262"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="262"/>
         <source>Configured Groups</source>
         <translation>Gruppi Configurati</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="311"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="311"/>
         <source>Start</source>
         <translation>Inizio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="318"/>
         <source>Count</source>
         <translation>Conteggio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="325"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="325"/>
         <source>Action</source>
         <translation>Azione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="400"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="400"/>
         <source>Remove</source>
         <translation>Rimuovi</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="412"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="412"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Nessun gruppo configurato.
@@ -10067,21 +10809,25 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="430"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="430"/>
         <source>Total groups: %1</source>
         <translation>Gruppi totali: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="434"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="434"/>
         <source>Generate Project</source>
         <translation>Genera Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="440"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="440"/>
         <source>Clear All</source>
         <translation>Cancella Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="446"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="446"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -10090,71 +10836,85 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>ModbusPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="33"/>
         <source>Modbus Register Map Preview</source>
         <translation>Anteprima Mappa Registri Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="155"/>
         <source>File: %1</source>
         <translation>File: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="163"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="163"/>
         <source>Review the registers to import into a new Serial Studio project.</source>
         <translation>Rivedi i registri da importare in un nuovo progetto Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="171"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="171"/>
         <source>Registers</source>
         <translation>Registri</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="205"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="212"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="212"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="221"/>
         <source>Address</source>
         <translation>Indirizzo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="227"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="227"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="235"/>
         <source>Data Type</source>
         <translation>Tipo di Dato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="242"/>
         <source>Units</source>
         <translation>Unità</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="343"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="343"/>
         <source>No registers found in file.</source>
         <translation>Nessun registro trovato nel file.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="361"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="361"/>
         <source>Total: %1 registers in %2 groups</source>
         <translation>Totale: %1 registri in %2 gruppi</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="368"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="368"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="381"/>
         <source>Create Project</source>
         <translation>Crea Progetto</translation>
     </message>
@@ -10163,26 +10923,31 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>MqttPublisherView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="33"/>
         <source>MQTT Publisher</source>
         <translation>Publisher MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="110"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="110"/>
         <source>Connected to broker</source>
         <translation>Connesso al broker</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="111"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="111"/>
         <source>Not connected</source>
         <translation>Non connesso</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="124"/>
         <source>Test Connection</source>
         <translation>Testa Connessione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="129"/>
         <source>Probe the broker with the current settings</source>
         <translation>Verifica il broker con le impostazioni correnti</translation>
     </message>
@@ -10190,31 +10955,39 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="147"/>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="162"/>
         <source>Enable publishing first</source>
         <translation>Abilitare prima la pubblicazione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="140"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="140"/>
         <source>Edit Script</source>
         <translation>Modifica Script</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="146"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="146"/>
         <source>Edit the publisher script (Lua or JavaScript)</source>
         <translation>Modifica lo script di pubblicazione (Lua o JavaScript)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="158"/>
         <source>Load CA Certs</source>
         <translation>Carica Certificati CA</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="164"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="164"/>
         <source>Add PEM certificates from a folder</source>
         <translation>Aggiungi certificati PEM da una cartella</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/MqttPublisherView.qml" line="165"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/MqttPublisherView.qml" line="165"/>
         <source>Enable SSL/TLS first</source>
         <translation>Abilitare prima SSL/TLS</translation>
     </message>
@@ -10227,51 +11000,61 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="178"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="178"/>
         <source>Interpolation: %1</source>
         <translation>Interpolazione: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="200"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="200"/>
         <source>Show Legends</source>
         <translation>Mostra Legende</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="217"/>
         <source>Show X Axis Label</source>
         <translation>Mostra Etichetta Asse X</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="228"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="228"/>
         <source>Show Y Axis Label</source>
         <translation>Mostra Etichetta Asse Y</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="240"/>
         <source>Show Crosshair</source>
         <translation>Mostra Mirino</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="247"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="247"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="266"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="266"/>
         <source>Reset View</source>
         <translation>Ripristina Vista</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="272"/>
         <source>Axis Range Settings</source>
         <translation>Impostazioni Intervallo Assi</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="307"/>
         <source>Samples</source>
         <translation>Campioni</translation>
     </message>
@@ -10280,32 +11063,39 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>Network</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="78"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="78"/>
         <source>Socket Type</source>
         <translation>Tipo di Socket</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="132"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="132"/>
         <source>Remote Address</source>
         <translation>Indirizzo Remoto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="99"/>
         <source>Local Port</source>
         <translation>Porta Locale</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="106"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="106"/>
         <source>Type 0 for automatic port</source>
         <translation>Digita 0 per porta automatica</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="156"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="189"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="189"/>
         <source>Remote Port</source>
         <translation>Porta Remota</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="219"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="219"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
     </message>
@@ -10314,21 +11104,25 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>NotificationLog</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/NotificationLog.qml" line="162"/>
         <source>Filter by channel…</source>
         <translation>Filtra per canale…</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/NotificationLog.qml" line="187"/>
         <source>Clear all notifications</source>
         <translation>Cancella tutte le notifiche</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="271"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/NotificationLog.qml" line="271"/>
         <source>(no title)</source>
         <translation>(nessun titolo)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="329"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/NotificationLog.qml" line="329"/>
         <source>No notifications yet</source>
         <translation>Nessuna notifica ancora</translation>
     </message>
@@ -10341,36 +11135,43 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>OnlineIconPicker</name>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="42"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="42"/>
         <source>Search Online Icons</source>
         <translation>Cerca Icone Online</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="72"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="72"/>
         <source>Download failed: %1</source>
         <translation>Download fallito: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="97"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>Cerca icone (es. temperatura, freccia, play)…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="109"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="109"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="148"/>
         <source>Search for icons above to get started</source>
         <translation>Cerca icone sopra per iniziare</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="250"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="250"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="261"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="261"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
@@ -10379,156 +11180,187 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>OutputWidgetView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="91"/>
         <source>Output widgets require a Pro license.</source>
         <translation>I widget di output richiedono una licenza Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="125"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="125"/>
         <source>Button</source>
         <translation>Pulsante</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="129"/>
         <source>Send a command on click</source>
         <translation>Invia un comando al clic</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="134"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="134"/>
         <source>Slider</source>
         <translation>Cursore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="138"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="138"/>
         <source>Send scaled numeric values</source>
         <translation>Invia valori numerici scalati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="143"/>
         <source>Toggle</source>
         <translation>Interruttore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
         <source>Send on/off commands</source>
         <translation>Invia comandi on/off</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="152"/>
         <source>Text Field</source>
         <translation>Campo di Testo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="156"/>
         <source>Type and send arbitrary commands</source>
         <translation>Digita e invia comandi arbitrari</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="160"/>
         <source>Knob</source>
         <translation>Manopola</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="165"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="165"/>
         <source>Rotary input for setpoints</source>
         <translation>Ingresso rotativo per setpoint</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="93"/>
         <source>You can configure output widgets, but they only appear on the dashboard with a Pro license.</source>
         <translation>Puoi configurare i widget di output, ma appaiono sulla dashboard solo con una licenza Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="182"/>
         <source>Duplicate</source>
         <translation>Duplica</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="185"/>
         <source>Duplicate this output widget</source>
         <translation>Duplica questo widget di output</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="195"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="197"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="197"/>
         <source>Delete this output widget</source>
         <translation>Elimina questo widget di output</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="274"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="274"/>
         <source>Transmit Function</source>
         <translation>Funzione di Trasmissione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="284"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="290"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="290"/>
         <source>Import transmit function from a .js file</source>
         <translation>Importa funzione di trasmissione da un file .js</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="297"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="297"/>
         <source>Template</source>
         <translation>Modello</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="301"/>
         <source>Select a pre-built transmit function template</source>
         <translation>Seleziona un modello di funzione di trasmissione predefinito</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="306"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="306"/>
         <source>Test</source>
         <translation>Prova</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="312"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="312"/>
         <source>Test the transmit function with sample input</source>
         <translation>Prova la funzione di trasmissione con input di esempio</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="353"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="353"/>
         <source>Undo</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="359"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="359"/>
         <source>Redo</source>
         <translation>Ripeti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="367"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="367"/>
         <source>Cut</source>
         <translation>Taglia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="372"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="372"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="377"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="377"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="384"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="384"/>
         <source>Select All</source>
         <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="391"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="391"/>
         <source>Format Document</source>
         <translation>Formatta Documento</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="396"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/OutputWidgetView.qml" line="396"/>
         <source>Format Selection</source>
         <translation>Formatta Selezione</translation>
     </message>
@@ -10537,6 +11369,7 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>Painter</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Painter.qml" line="56"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Painter.qml" line="56"/>
         <source>Painter Widget Error</source>
         <translation>Errore Widget Painter</translation>
     </message>
@@ -10545,101 +11378,121 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>PainterCodeDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="30"/>
         <source>Painter Widget Code Editor</source>
         <translation>Editor Codice Widget Painter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="76"/>
         <source>paint(ctx, w, h)</source>
         <translation>paint(ctx, w, h)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="86"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
         <source>Import painter code from a .js file</source>
         <translation>Importa codice painter da un file .js</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="99"/>
         <source>Template</source>
         <translation>Modello</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
         <source>Select a built-in painter template</source>
         <translation>Seleziona un modello di painter integrato</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="108"/>
         <source>Format</source>
         <translation>Formatta</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="113"/>
         <source>Reformat the painter code</source>
         <translation>Riformatta il codice del painter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="119"/>
         <source>Test</source>
         <translation>Prova</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="124"/>
         <source>Open a live preview with simulated dataset values</source>
         <translation>Apri un'anteprima live con valori di dataset simulati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
         <source>Preview</source>
         <translation>Anteprima</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="182"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="191"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="191"/>
         <source>Cut</source>
         <translation>Taglia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="192"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="192"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="193"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="193"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="194"/>
         <source>Select All</source>
         <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="196"/>
         <source>Undo</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="197"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="197"/>
         <source>Redo</source>
         <translation>Ripeti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="199"/>
         <source>Format Document</source>
         <translation>Formatta Documento</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="200"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="200"/>
         <source>Format Selection</source>
         <translation>Formatta Selezione</translation>
     </message>
@@ -10648,42 +11501,51 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>PainterTestDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
         <source>Painter Live Preview</source>
         <translation>Anteprima Live Painter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="37"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="37"/>
         <source>Preview</source>
         <translation>Anteprima</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="113"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="113"/>
         <source>Simulated datasets</source>
         <translation>Dataset simulati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="180"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="180"/>
         <source>Runtime OK</source>
         <translation>Runtime OK</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="181"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="181"/>
         <source>Awaiting first frame...</source>
         <translation>In attesa del primo frame...</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="194"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="236"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="236"/>
         <source>Clear console</source>
         <translation>Cancella console</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="245"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -10696,46 +11558,55 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="179"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="179"/>
         <source>Interpolation: %1</source>
         <translation>Interpolazione: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="192"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="192"/>
         <source>Show Area Under Plot</source>
         <translation>Mostra Area Sotto il Grafico</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="210"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="210"/>
         <source>Show X Axis Label</source>
         <translation>Mostra Etichetta Asse X</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="221"/>
         <source>Show Y Axis Label</source>
         <translation>Mostra Etichetta Asse Y</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="233"/>
         <source>Show Crosshair</source>
         <translation>Mostra Mirino</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="240"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="240"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="259"/>
         <source>Reset View</source>
         <translation>Ripristina Vista</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="265"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="265"/>
         <source>Axis Range Settings</source>
         <translation>Impostazioni Intervallo Assi</translation>
     </message>
@@ -10744,51 +11615,61 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>Plot3D</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="203"/>
         <source>Interpolate</source>
         <translation>Interpola</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="221"/>
         <source>Orbit Navigation</source>
         <translation>Navigazione Orbita</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="231"/>
         <source>Pan Navigation</source>
         <translation>Navigazione Pan</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="242"/>
         <source>Orthogonal View</source>
         <translation>Vista Ortogonale</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="248"/>
         <source>Top View</source>
         <translation>Vista Dall'alto</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="254"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="254"/>
         <source>Left View</source>
         <translation>Vista da Sinistra</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="260"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="260"/>
         <source>Front View</source>
         <translation>Vista Frontale</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="277"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="277"/>
         <source>Auto Center</source>
         <translation>Centra Automaticamente</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="293"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="293"/>
         <source>Anaglyph 3D</source>
         <translation>Anaglifo 3D</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="307"/>
         <source>Invert Eye Positions</source>
         <translation>Inverti Posizioni Occhi</translation>
     </message>
@@ -10797,21 +11678,25 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>PlotCommon</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/PlotCommon.qml" line="59"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/PlotCommon.qml" line="59"/>
         <source>None</source>
         <translation>Nessuno</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/PlotCommon.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/PlotCommon.qml" line="62"/>
         <source>ZOH</source>
         <translation>ZOH</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/PlotCommon.qml" line="65"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/PlotCommon.qml" line="65"/>
         <source>Stem</source>
         <translation>Stem</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/PlotCommon.qml" line="67"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/PlotCommon.qml" line="67"/>
         <source>Linear</source>
         <translation>Lineare</translation>
     </message>
@@ -10820,16 +11705,19 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>PlotWidget</name>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1238"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1238"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — Trascina per spostare, clic destro per cancellare</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1240"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1240"/>
         <source>Click to place cursor</source>
         <translation>Clicca per posizionare il cursore</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1242"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Clicca per posizionare il secondo cursore — Trascina per spostare</translation>
     </message>
@@ -10838,16 +11726,19 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>ProNotice</name>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="120"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
         <translation>Visita il Sito Web</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/ProNotice.qml" line="129"/>
         <source>Buy License</source>
         <translation>Acquista Licenza</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/ProNotice.qml" line="143"/>
         <source>Activate</source>
         <translation>Attiva</translation>
     </message>
@@ -10856,21 +11747,25 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>ProUpgradeNotice</name>
     <message>
         <location filename="../../qml/AI/ProUpgradeNotice.qml" line="26"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ProUpgradeNotice.qml" line="26"/>
         <source>Assistant — Pro feature</source>
         <translation>Assistente — Funzionalità Pro</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ProUpgradeNotice.qml" line="44"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ProUpgradeNotice.qml" line="44"/>
         <source>The Assistant is a Serial Studio Pro feature. Activate your license to unlock it.</source>
         <translation>L'Assistente è una funzionalità di Serial Studio Pro. Attiva la tua licenza per sbloccarlo.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ProUpgradeNotice.qml" line="52"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ProUpgradeNotice.qml" line="52"/>
         <source>Activate</source>
         <translation>Attiva</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ProUpgradeNotice.qml" line="66"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ProUpgradeNotice.qml" line="66"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -10879,26 +11774,31 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>Process</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="69"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="69"/>
         <source>Mode</source>
         <translation>Modalità</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
         <source>Launch Process</source>
         <translation>Avvia Processo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
         <source>Named Pipe</source>
         <translation>Named Pipe</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
         <source>Executable</source>
         <translation>Eseguibile</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
         <source>/path/to/executable</source>
         <translation>/percorso/eseguibile</translation>
     </message>
@@ -10906,46 +11806,57 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="133"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="209"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="257"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="257"/>
         <source>Browse</source>
         <translation>Sfoglia</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="145"/>
         <source>Arguments</source>
         <translation>Argomenti</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 valore1 --arg2 valore2</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="177"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="177"/>
         <source>Working Dir</source>
         <translation>Directory di Lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="192"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="192"/>
         <source>(optional) /working/directory</source>
         <translation>(opzionale) /directory/di/lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="223"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="223"/>
         <source>Pipe Path</source>
         <translation>Percorso Pipe</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
         <source>Pick Running Process…</source>
         <translation>Seleziona Processo in Esecuzione…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="311"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="311"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>Avvia un processo figlio e cattura il suo stdout, oppure connettiti a una named pipe scritta da un processo esistente.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="319"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="319"/>
         <source>Learn about named pipes</source>
         <translation>Scopri di più sulle named pipe</translation>
     </message>
@@ -10954,51 +11865,61 @@ Aggiungi gruppi sopra per interrogare più tipi di registro.</translation>
     <name>ProcessPicker</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="55"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="55"/>
         <source>Select Running Process</source>
         <translation>Seleziona Processo in Esecuzione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="206"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="206"/>
         <source>Select a running process to derive a named-pipe path suggestion.</source>
         <translation>Seleziona un processo in esecuzione per derivare un suggerimento di percorso named-pipe.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="212"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="212"/>
         <source>Filter Processes</source>
         <translation>Filtra Processi</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
         <source>Type to filter by name…</source>
         <translation>Digita per filtrare per nome…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="230"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="230"/>
         <source>Refresh</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="238"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="238"/>
         <source>Running Processes</source>
         <translation>Processi in Esecuzione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="276"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="276"/>
         <source>Process</source>
         <translation>Processo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="282"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="375"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="375"/>
         <source>No processes match the filter.</source>
         <translation>Nessun processo corrisponde al filtro.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>Nessun processo in esecuzione trovato.
@@ -11006,16 +11927,19 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
         <source>%1 process(es)</source>
         <translation>%1 processo/i</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="396"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="396"/>
         <source>Select</source>
         <translation>Seleziona</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="402"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="402"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -11024,51 +11948,61 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     <name>ProjectEditor</name>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="42"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="42"/>
         <source>modified</source>
         <translation>modificato</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="288"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="288"/>
         <source>This project is password protected</source>
         <translation>Questo progetto è protetto da password</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="289"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="289"/>
         <source>Editing is available in Project mode</source>
         <translation>La modifica è disponibile in modalità Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="300"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Inserisci la password per apportare modifiche o apri un progetto diverso.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="301"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>Passa alla modalità Progetto per caricare e modificare un progetto.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="324"/>
         <source>Unlock</source>
         <translation>Sblocca</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="325"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="325"/>
         <source>Switch to Project Mode</source>
         <translation>Passa alla Modalità Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="345"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="345"/>
         <source>Open Other Project</source>
         <translation>Apri Altro Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="346"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="346"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="363"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="363"/>
         <source>Create New Project</source>
         <translation>Crea Nuovo Progetto</translation>
     </message>
@@ -11077,31 +12011,37 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     <name>ProjectStructure</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="32"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="32"/>
         <source>Project Structure</source>
         <translation>Struttura Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="71"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="346"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="346"/>
         <source>Move Up</source>
         <translation>Sposta Su</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="351"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="351"/>
         <source>Move Down</source>
         <translation>Sposta Giù</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="358"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="358"/>
         <source>Duplicate</source>
         <translation>Duplica</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="376"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="376"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
@@ -11110,41 +12050,49 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     <name>ProjectToolbar</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="142"/>
         <source>New</source>
         <translation>Nuovo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="145"/>
         <source>Create a new JSON project</source>
         <translation>Crea un nuovo progetto JSON</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="158"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="162"/>
         <source>Open an existing JSON project</source>
         <translation>Apri un progetto JSON esistente</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="168"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="168"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="175"/>
         <source>Save the current project</source>
         <translation>Salva il progetto corrente</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="181"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="181"/>
         <source>Save As</source>
         <translation>Salva Come</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="188"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="188"/>
         <source>Save the current project under a new name</source>
         <translation>Salva il progetto corrente con un nuovo nome</translation>
     </message>
@@ -11154,6 +12102,7 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="217"/>
         <source>Lock</source>
         <translation>Blocca</translation>
     </message>
@@ -11163,318 +12112,387 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="200"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="200"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="204"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="208"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="208"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Genera un progetto da uno schema Protocol Buffers (.proto)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Imposta una Password e Blocca l'Editor di Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="232"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="232"/>
         <source>Add Device</source>
         <translation>Aggiungi Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="236"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="236"/>
         <source>Add a new data source (device) to the project</source>
         <translation>Aggiungi una nuova sorgente dati (dispositivo) al progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="245"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="245"/>
         <source>Action</source>
         <translation>Azione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="248"/>
         <source>Add a new action to the project</source>
         <translation>Aggiungi una nuova azione al progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="259"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="263"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="263"/>
         <source>Output</source>
         <translation>Uscita</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>Add a new output control panel with a button</source>
         <translation>Aggiungi un nuovo pannello di controllo uscita con un pulsante</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="279"/>
         <source>Slider</source>
         <translation>Cursore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Add an output slider control</source>
         <translation>Aggiungi un controllo cursore di uscita</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="289"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="289"/>
         <source>Toggle</source>
         <translation>Interruttore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="292"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="292"/>
         <source>Add an output toggle control</source>
         <translation>Aggiungi un controllo interruttore di uscita</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Knob</source>
         <translation>Manopola</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="302"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="302"/>
         <source>Add an output knob control</source>
         <translation>Aggiungi un controllo manopola di uscita</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <source>Text Field</source>
         <translation>Campo di Testo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="312"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="312"/>
         <source>Add an output text field control</source>
         <translation>Aggiungi un controllo campo di testo di uscita</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="319"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="319"/>
         <source>Button</source>
         <translation>Pulsante</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
         <source>Add an output button control</source>
         <translation>Aggiungi un controllo pulsante di output</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="335"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="339"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="335"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="339"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
         <source>Add a generic dataset</source>
         <translation>Aggiungi un dataset generico</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="355"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="355"/>
         <source>Plot</source>
         <translation>Grafico</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
         <source>Add a 2D plot dataset</source>
         <translation>Aggiungi un dataset grafico 2D</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>FFT Plot</source>
         <translation>Grafico FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="368"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="368"/>
         <source>Add a Fast Fourier Transform plot</source>
         <translation>Aggiungi un grafico Fast Fourier Transform</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
         <source>Gauge</source>
         <translation>Indicatore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="378"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="378"/>
         <source>Add a gauge widget for numeric data</source>
         <translation>Aggiungi un widget indicatore per dati numerici</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="386"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="386"/>
         <source>Level Indicator</source>
         <translation>Indicatore di Livello</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="388"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="388"/>
         <source>Add a vertical bar level indicator</source>
         <translation>Aggiungi un indicatore di livello a barra verticale</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="395"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="395"/>
         <source>Compass</source>
         <translation>Bussola</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <source>Add a compass widget for directional data</source>
         <translation>Aggiungi un widget bussola per i dati direzionali</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="406"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="406"/>
         <source>LED Indicator</source>
         <translation>Indicatore LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="408"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="408"/>
         <source>Add an LED-style status indicator</source>
         <translation>Aggiungi un indicatore di stato in stile LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="421"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="425"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="421"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="425"/>
         <source>Group</source>
         <translation>Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="427"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="427"/>
         <source>Add a dataset container group</source>
         <translation>Aggiungi un gruppo contenitore di dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="429"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="429"/>
         <source>Dataset Container</source>
         <translation>Contenitore di Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="433"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="433"/>
         <source>Image</source>
         <translation>Immagine</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <source>Add an image/video stream viewer</source>
         <translation>Aggiungi un visualizzatore di flussi immagini/video</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
         <source>Image View</source>
         <translation>Visualizzatore Immagini</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="445"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="445"/>
         <source>Painter</source>
         <translation>Painter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="449"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="449"/>
         <source>Add a custom JavaScript-rendered painter widget</source>
         <translation>Aggiungi un widget painter personalizzato renderizzato in JavaScript</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="450"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="450"/>
         <source>Painter widgets require a Pro license — adding one will fall back to a data grid</source>
         <translation>I widget painter richiedono una licenza Pro — aggiungendone uno verrà utilizzata una griglia dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
         <source>Painter Widget</source>
         <translation>Widget Painter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="463"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="463"/>
         <source>Table</source>
         <translation>Tabella</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="466"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="466"/>
         <source>Add a data table view</source>
         <translation>Aggiungi una vista tabella dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="468"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="468"/>
         <source>Data Grid</source>
         <translation>Griglia Dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="474"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="474"/>
         <source>Multi-Plot</source>
         <translation>Grafico Multiplo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="476"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="476"/>
         <source>Add a 2D plot with multiple signals</source>
         <translation>Aggiungi un grafico 2D con segnali multipli</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="478"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="478"/>
         <source>Multiple Plot</source>
         <translation>Grafico Multiplo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="483"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="488"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="483"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="488"/>
         <source>3D Plot</source>
         <translation>Grafico 3D</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="486"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="486"/>
         <source>Add a 3D plot visualization</source>
         <translation>Aggiungi una visualizzazione grafico 3D</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="494"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="498"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="494"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="498"/>
         <source>Accelerometer</source>
         <translation>Accelerometro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="496"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="496"/>
         <source>Add a group for 3-axis accelerometer data</source>
         <translation>Aggiungi un gruppo per dati accelerometrici a 3 assi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="504"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="507"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="504"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="507"/>
         <source>Gyroscope</source>
         <translation>Giroscopio</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="508"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="508"/>
         <source>Add a group for 3-axis gyroscope data</source>
         <translation>Aggiungi un gruppo per dati giroscopici a 3 assi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="513"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="518"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="513"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="518"/>
         <source>GPS Map</source>
         <translation>Mappa GPS</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="516"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="516"/>
         <source>Add a map widget for GPS data</source>
         <translation>Aggiungi un widget mappa per dati GPS</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="532"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="532"/>
         <source>Assistant</source>
         <translation>Assistente</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="535"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="535"/>
         <source>Open the Assistant</source>
         <translation>Apri l'Assistente</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="541"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="541"/>
         <source>Help Center</source>
         <translation>Centro Assistenza</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="545"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="545"/>
         <source>Open the Project Editor documentation</source>
         <translation>Apri la documentazione dell'Editor Progetto</translation>
     </message>
@@ -11483,76 +12501,91 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     <name>ProjectView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="34"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="34"/>
         <source>Project Summary</source>
         <translation>Riepilogo Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
         <translation>Funzionalità Pro rilevate in questo progetto.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="83"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="83"/>
         <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
         <translation>Widget di fallback in uso. Acquista una licenza per sbloccare la funzionalità completa.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="118"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="118"/>
         <source>Project Title:</source>
         <translation>Titolo Progetto:</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="129"/>
         <source>Untitled Project</source>
         <translation>Progetto Senza Titolo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="149"/>
         <source>Points:</source>
         <translation>Punti:</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="209"/>
         <source>Source</source>
         <translation>Sorgente</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="210"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="210"/>
         <source>Sources</source>
         <translation>Sorgenti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="215"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="215"/>
         <source>Group</source>
         <translation>Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="216"/>
         <source>Groups</source>
         <translation>Gruppi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="221"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="222"/>
         <source>Datasets</source>
         <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="227"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="227"/>
         <source>Action</source>
         <translation>Azione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="228"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="228"/>
         <source>Actions</source>
         <translation>Azioni</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="316"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="316"/>
         <source>Double-click a block to edit it. Right-click anywhere to add a group, dataset, action, data table, or device.</source>
         <translation>Fare doppio clic su un blocco per modificarlo. Fare clic destro ovunque per aggiungere un gruppo, dataset, azione, tabella dati o dispositivo.</translation>
     </message>
@@ -11561,61 +12594,73 @@ Fai clic su Aggiorna per aggiornare l'elenco.</translation>
     <name>ProtoPreviewDialog</name>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="41"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="41"/>
         <source>Protocol Buffers File Preview</source>
         <translation>Anteprima File Protocol Buffers</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="165"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="165"/>
         <source>Proto File: %1</source>
         <translation>File Proto: %1</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="173"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="173"/>
         <source>Browse the messages below, then create the project. Every message becomes a dashboard group; matching-type channel blocks get a MultiPlot and mixed-type messages get a DataGrid.</source>
         <translation>Esplorare i messaggi qui sotto, quindi creare il progetto. Ogni messaggio diventa un gruppo della dashboard; i blocchi di canale con tipo corrispondente ottengono un MultiPlot e i messaggi con tipo misto ottengono una DataGrid.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="183"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="183"/>
         <source>Show fields for</source>
         <translation>Mostra campi per</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="209"/>
         <source>Fields</source>
         <translation>Campi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="243"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="243"/>
         <source>Tag</source>
         <translation>Tag</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="253"/>
         <source>Field Name</source>
         <translation>Nome Campo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="258"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="258"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="345"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="345"/>
         <source>No fields in the selected message.</source>
         <translation>Nessun campo nel messaggio selezionato.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="363"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="363"/>
         <source>Total: %1 messages, %2 fields</source>
         <translation>Totale: %1 messaggi, %2 campi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="371"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="371"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="383"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="383"/>
         <source>Create Project</source>
         <translation>Crea Progetto</translation>
     </message>
@@ -11940,12 +12985,12 @@ function parse(%1) { ... }
 Il parametro separatore non è più necessario.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
         <source>Critical</source>
         <translation>Critico</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
         <source>Warning</source>
         <translation>Avviso</translation>
     </message>
@@ -12157,247 +13202,297 @@ Il parametro separatore non è più necessario.</translation>
     <name>ReportOptionsDialog</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
         <source>Generate PDF Report</source>
         <translation>Genera Report PDF</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
         <source>Generate Report</source>
         <translation>Genera Report</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="61"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="61"/>
         <source>Solid</source>
         <translation>Solido</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="62"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="62"/>
         <source>Dashed</source>
         <translation>Tratteggiato</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="63"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="63"/>
         <source>Dotted</source>
         <translation>Punteggiato</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="80"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="80"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="81"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="81"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="82"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="82"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="83"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="83"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="84"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="84"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="85"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="85"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="86"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="87"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="87"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="88"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="88"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="89"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="89"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8,5 × 11 in)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="90"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="90"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8,5 × 14 in)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="91"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7,25 × 10,5 in)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="92"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="92"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 in)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="93"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 in)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>%1 — Session Report</source>
         <translation>%1 — Report Sessione</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="279"/>
         <source>Session Report</source>
         <translation>Report Sessione</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
         <source>Branding</source>
         <translation>Branding</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
         <source>Page</source>
         <translation>Pagina</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="199"/>
         <source>Sections</source>
         <translation>Sezioni</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="247"/>
         <source>Identity</source>
         <translation>Identità</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="261"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="261"/>
         <source>Company</source>
         <translation>Azienda</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="268"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="268"/>
         <source>e.g. Acme Test Systems</source>
         <translation>es. Acme Test Systems</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="272"/>
         <source>Document title</source>
         <translation>Titolo documento</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="283"/>
         <source>Author</source>
         <translation>Autore</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
         <source>Prepared by (optional)</source>
         <translation>Preparato da (facoltativo)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="299"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="299"/>
         <source>Logo</source>
         <translation>Logo</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
         <source>File</source>
         <translation>File</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG o SVG (facoltativo)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
         <source>Browse…</source>
         <translation>Sfoglia…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="328"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="328"/>
         <source>Clear</source>
         <translation>Cancella</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
         <source>Paper</source>
         <translation>Carta</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="381"/>
         <source>Page size</source>
         <translation>Dimensione pagina</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="509"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="509"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Annota i valori minimi, massimi e medi sui grafici</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
         <source>Export HTML</source>
         <translation>Esporta HTML</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="497"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="497"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Copertina (logo, titolo documento, sottotitolo test)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="500"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="500"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Informazioni del test (progetto, timestamp, classificazione e note)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="503"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Riepilogo delle misurazioni (min, max, media, deviazione std. per parametro)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="506"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="506"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Tendenze dei parametri (grafico temporale per parametro numerico)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="396"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="396"/>
         <source>Plot appearance</source>
         <translation>Aspetto del Grafico</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="410"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="410"/>
         <source>Line width</source>
         <translation>Spessore Linea</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="442"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="442"/>
         <source>Line style</source>
         <translation>Stile Linea</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="482"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="482"/>
         <source>Include</source>
         <translation>Includi</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="531"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="531"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
         <source>Export PDF</source>
         <translation>Esporta PDF</translation>
     </message>
@@ -12406,16 +13501,19 @@ Il parametro separatore non è più necessario.</translation>
     <name>ReportProgressDialog</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="20"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportProgressDialog.qml" line="20"/>
         <source>Generating Report</source>
         <translation>Generazione Report</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="69"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportProgressDialog.qml" line="69"/>
         <source>Working…</source>
         <translation>In Elaborazione…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>Questa operazione può richiedere alcuni secondi per sessioni con molti parametri. La finestra si chiude automaticamente quando il report è pronto.</translation>
     </message>
@@ -12424,42 +13522,51 @@ Il parametro separatore non è più necessario.</translation>
     <name>RuntimeReconfigure</name>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
         <source>Connection Lost</source>
         <translation>Connessione Persa</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
         <source>Device Unavailable</source>
         <translation>Dispositivo Non Disponibile</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
         <source>The connection to your device was lost.</source>
         <translation>La connessione al dispositivo è stata persa.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
         <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio non è riuscito a raggiungere il dispositivo.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
         <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
         <translation>Verificare il cavo, l'alimentazione e che nessun'altra applicazione abbia preso il controllo del dispositivo. È possibile provare a riconnettersi, passare a un dispositivo diverso o uscire.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
         <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Verificare che sia collegato, acceso e non già in uso da un'altra applicazione. È possibile riprovare, selezionare un dispositivo diverso o uscire.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="121"/>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="193"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="121"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="193"/>
         <source>Quit</source>
         <translation>Esci</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="132"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="132"/>
         <source>Pick Different Device</source>
         <translation>Scegli Dispositivo Diverso</translation>
     </message>
@@ -12469,26 +13576,31 @@ Il parametro separatore non è più necessario.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="144"/>
         <source>Try Again</source>
         <translation>Riprova</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="144"/>
         <source>Reconnect</source>
         <translation>Riconnetti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="160"/>
         <source>Pick the correct device, then press Connect.</source>
         <translation>Seleziona il dispositivo corretto, quindi premi Connetti.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="169"/>
         <source>I/O Interface: %1</source>
         <translation>Interfaccia I/O: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/RuntimeReconfigure.qml" line="204"/>
         <source>Connect</source>
         <translation>Connetti</translation>
     </message>
@@ -12496,157 +13608,166 @@ Il parametro separatore non è più necessario.</translation>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="330"/>
+        <location filename="../../src/SerialStudio.cpp" line="336"/>
         <source>Data Grids</source>
         <translation>Griglie Dati</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="333"/>
+        <location filename="../../src/SerialStudio.cpp" line="339"/>
         <source>Multiple Data Plots</source>
         <translation>Grafici Dati Multipli</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="336"/>
+        <location filename="../../src/SerialStudio.cpp" line="342"/>
         <source>Accelerometers</source>
         <translation>Accelerometri</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="339"/>
+        <location filename="../../src/SerialStudio.cpp" line="345"/>
         <source>Gyroscopes</source>
         <translation>Giroscopi</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="342"/>
+        <location filename="../../src/SerialStudio.cpp" line="348"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="345"/>
+        <location filename="../../src/SerialStudio.cpp" line="351"/>
         <source>FFT Plots</source>
         <translation>Grafici FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="348"/>
+        <location filename="../../src/SerialStudio.cpp" line="354"/>
         <source>LED Panels</source>
         <translation>Pannelli LED</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="351"/>
+        <location filename="../../src/SerialStudio.cpp" line="357"/>
         <source>Data Plots</source>
         <translation>Grafici Dati</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="354"/>
+        <location filename="../../src/SerialStudio.cpp" line="360"/>
         <source>Bars</source>
         <translation>Barre</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="357"/>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Gauges</source>
         <translation>Indicatori</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="360"/>
+        <location filename="../../src/SerialStudio.cpp" line="366"/>
         <source>Terminal</source>
         <translation>Terminale</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="363"/>
+        <location filename="../../src/SerialStudio.cpp" line="369"/>
+        <source>Clock</source>
+        <translation>Orologio</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="372"/>
+        <source>Stopwatch</source>
+        <translation>Cronometro</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="375"/>
         <source>Compasses</source>
         <translation>Bussole</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="366"/>
+        <location filename="../../src/SerialStudio.cpp" line="378"/>
         <source>Meters</source>
         <translation>Indicatori</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="369"/>
         <source>Thermometers</source>
-        <translation>Termometri</translation>
+        <translation type="vanished">Termometri</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="372"/>
+        <location filename="../../src/SerialStudio.cpp" line="381"/>
         <source>3D Plots</source>
         <translation>Grafici 3D</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="376"/>
+        <location filename="../../src/SerialStudio.cpp" line="385"/>
         <source>Image Views</source>
         <translation>Visualizzatori Immagini</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="379"/>
+        <location filename="../../src/SerialStudio.cpp" line="388"/>
         <source>Output Panels</source>
         <translation>Pannelli di Uscita</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="382"/>
+        <location filename="../../src/SerialStudio.cpp" line="391"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="385"/>
+        <location filename="../../src/SerialStudio.cpp" line="394"/>
         <source>Waterfalls</source>
         <translation>Cascate</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="388"/>
+        <location filename="../../src/SerialStudio.cpp" line="397"/>
         <source>Painter Widgets</source>
         <translation>Widget Painter</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="912"/>
+        <location filename="../../src/SerialStudio.cpp" line="922"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="913"/>
+        <location filename="../../src/SerialStudio.cpp" line="923"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="914"/>
+        <location filename="../../src/SerialStudio.cpp" line="924"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="915"/>
+        <location filename="../../src/SerialStudio.cpp" line="925"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="916"/>
+        <location filename="../../src/SerialStudio.cpp" line="926"/>
         <source>System</source>
         <translation>Sistema</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="917"/>
+        <location filename="../../src/SerialStudio.cpp" line="927"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="918"/>
+        <location filename="../../src/SerialStudio.cpp" line="928"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="919"/>
+        <location filename="../../src/SerialStudio.cpp" line="929"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="920"/>
+        <location filename="../../src/SerialStudio.cpp" line="930"/>
         <source>Shift-JIS</source>
         <translation>Shift-jis</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="921"/>
+        <location filename="../../src/SerialStudio.cpp" line="931"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="922"/>
+        <location filename="../../src/SerialStudio.cpp" line="932"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -12655,91 +13776,109 @@ Il parametro separatore non è più necessario.</translation>
     <name>SessionDetail</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="19"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="19"/>
         <source>Session Details</source>
         <translation>Dettagli Sessione</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="88"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="88"/>
         <source>Select a session to view details.</source>
         <translation>Seleziona una sessione per visualizzare i dettagli.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="130"/>
         <source>Project:</source>
         <translation>Progetto:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="143"/>
         <source>Started:</source>
         <translation>Avviata:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="156"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="156"/>
         <source>Ended:</source>
         <translation>Terminata:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="162"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="162"/>
         <source>(in progress)</source>
         <translation>(in corso)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="169"/>
         <source>Frames:</source>
         <translation>Frame:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="185"/>
         <source>Notes</source>
         <translation>Note</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="200"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="200"/>
         <source>Add session notes…</source>
         <translation>Aggiungi note sessione…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="201"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="201"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>Le note sono di sola lettura per le sessioni completate.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
         <source>New tag…</source>
         <translation>Nuovo tag…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="366"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="366"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>Sblocca il file di sessione per eliminare le sessioni</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="222"/>
         <source>Tags</source>
         <translation>Tag</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="293"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="293"/>
         <source>Add</source>
         <translation>Aggiungi</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="331"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="331"/>
         <source>Replay</source>
         <translation>Riproduci</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="340"/>
         <source>Export CSV</source>
         <translation>Esporta CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="348"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="348"/>
         <source>Generate Report</source>
         <translation>Genera Report</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="360"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionDetail.qml" line="360"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
@@ -12748,36 +13887,43 @@ Il parametro separatore non è più necessario.</translation>
     <name>SessionList</name>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="19"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="19"/>
         <source>Sessions</source>
         <translation>Sessioni</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="71"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="71"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="91"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="92"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="92"/>
         <source>Frames</source>
         <translation>Frame</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="93"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="93"/>
         <source>Tags</source>
         <translation>Tag</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="193"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="193"/>
         <source>No sessions found.</source>
         <translation>Nessuna sessione trovata.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/DatabaseExplorer/SessionList.qml" line="194"/>
         <source>No session file open.</source>
         <translation>Nessun file di sessione aperto.</translation>
     </message>
@@ -13352,235 +14498,297 @@ Il parametro separatore non è più necessario.</translation>
     <name>Settings</name>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="49"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="49"/>
         <source>Preferences</source>
         <translation>Preferenze</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="76"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="76"/>
         <source>General</source>
         <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="174"/>
         <source>Language</source>
         <translation>Linguaggio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="190"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="190"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="225"/>
         <source>Workspace Folder</source>
         <translation>Cartella Workspace</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="253"/>
         <source>Automatically Check for Updates</source>
         <translation>Verifica Automaticamente gli Aggiornamenti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="82"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="82"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="342"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="342"/>
         <source>Export…</source>
         <translation>Esporta…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="388"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="388"/>
         <source>Data Plotting</source>
         <translation>Tracciamento Dati</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="403"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="403"/>
         <source>Point Count</source>
         <translation>Numero di Punti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="428"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Frequenza di Aggiornamento UI (Hz)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="665"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="665"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Mostra Sempre i Pulsanti della Barra delle Applicazioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="552"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="552"/>
         <source>Show Actions Panel</source>
         <translation>Mostra Pannello Azioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="303"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="303"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>Abilita Server API (Porta 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="94"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="777"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="94"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="777"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="159"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="159"/>
         <source>Appearance</source>
         <translation>Aspetto</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="209"/>
         <source>Files &amp; Updates</source>
         <translation>File e Aggiornamenti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="271"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="271"/>
         <source>Advanced</source>
         <translation>Avanzate</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="321"/>
         <source>Allow External API Connections</source>
         <translation>Consenti Connessioni API Esterne</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="286"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="286"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Nascondi Automaticamente la Barra Degli Strumenti</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="88"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="88"/>
         <source>Taskbar</source>
         <translation>Barra delle Applicazioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Small</source>
         <translation>Piccolo</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Large</source>
         <translation>Grande</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Extra Large</source>
         <translation>Extra Grande</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="490"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="490"/>
         <source>Custom</source>
         <translation>Personalizzato</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="537"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="537"/>
         <source>Layout</source>
         <translation>Layout</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="575"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="575"/>
         <source>Video Export</source>
         <translation>Esportazione Video</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="593"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="593"/>
         <source>Save Videos by Default</source>
         <translation>Salva Video per Impostazione Predefinita</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="644"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="644"/>
         <source>Behavior</source>
         <translation>Comportamento</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="680"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="680"/>
         <source>Show Search Field</source>
         <translation>Mostra Campo di Ricerca</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="695"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="695"/>
         <source>Auto-hide Taskbar</source>
         <translation>Nascondi Automaticamente la Barra delle Applicazioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="713"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="713"/>
         <source>Hide Delay (ms)</source>
         <translation>Ritardo Nascondimento (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="737"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="737"/>
         <source>Pinned Buttons</source>
         <translation>Pulsanti Bloccati</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="755"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="755"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Trascina un pulsante bloccato sulla barra delle applicazioni per riordinarlo.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="776"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="776"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="779"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="779"/>
+        <source>Clock</source>
+        <translation>Orologio</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="780"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="780"/>
+        <source>Stopwatch</source>
+        <translation>Cronometro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="781"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="781"/>
         <source>Pause / Resume</source>
         <translation>Pausa / Riprendi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="780"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="782"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="782"/>
         <source>File Transmission</source>
         <translation>Trasmissione File</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="781"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="783"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="783"/>
         <source>AI Assistant</source>
         <translation>Assistente AI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="908"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="912"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="912"/>
         <source>Display</source>
         <translation>Visualizzazione</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="923"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="927"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="927"/>
         <source>Display Mode</source>
         <translation>Modalità di Visualizzazione</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="465"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="936"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="940"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="465"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="940"/>
         <source>Font Family</source>
         <translation>Famiglia di Caratteri</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="101"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="778"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="101"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="778"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="340"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="340"/>
         <source>Export Protobuf File</source>
         <translation>Esporta File Protobuf</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="450"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="450"/>
         <source>Dashboard Font</source>
         <translation>Font Dashboard</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="480"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="951"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="955"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="480"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="955"/>
         <source>Font Size</source>
         <translation>Dimensione Font</translation>
     </message>
@@ -13593,97 +14801,116 @@ Il parametro separatore non è più necessario.</translation>
         <translation type="vanished">Salva Immagini per Impostazione Predefinita</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="968"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="972"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="972"/>
         <source>Show Timestamps</source>
         <translation>Mostra Timestamp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="987"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="991"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="991"/>
         <source>Data Transmission</source>
         <translation>Trasmissione Dati</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1002"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1006"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1006"/>
         <source>Line Ending</source>
         <translation>Terminazione di Riga</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1015"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1019"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1019"/>
         <source>Input Mode</source>
         <translation>Modalità Ingresso</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1028"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1032"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1032"/>
         <source>Text Encoding</source>
         <translation>Codifica Testo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1041"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1045"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1045"/>
         <source>Checksum</source>
         <translation>Checksum</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1054"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1058"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1058"/>
         <source>Echo Sent Data</source>
         <translation>Eco Dati Inviati</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1073"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1077"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1077"/>
         <source>Escape Codes</source>
         <translation>Codici di Escape</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1088"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1092"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1092"/>
         <source>VT100 Emulation</source>
         <translation>Emulazione VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1107"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1111"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1111"/>
         <source>ANSI Colors</source>
         <translation>Colori ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1165"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1169"/>
         <source>Delivery</source>
         <translation>Consegna</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1180"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1184"/>
         <source>System Notifications</source>
         <translation>Notifiche di Sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1201"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1205"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Mostra eventi di Avviso/Critici come notifiche desktop del SO quando Serial Studio non è la finestra in primo piano.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1211"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1215"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1215"/>
         <source>Application Logs</source>
         <translation>Log Applicazione</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1230"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1230"/>
         <source>Route Warnings to Notifications</source>
         <translation>Inoltra Avvisi alle Notifiche</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1247"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1251"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1251"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Disattivato per impostazione predefinita — QT e QML emettono avvisi frequentemente e abilitare questa opzione può oscurare allarmi reali. I messaggi critici vengono sempre instradati indipendentemente da questa impostazione.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1267"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1271"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1271"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1303"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1307"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1307"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1312"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1316"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Settings.qml" line="1316"/>
         <source>Apply</source>
         <translation>Applica</translation>
     </message>
@@ -13693,76 +14920,92 @@ Il parametro separatore non è più necessario.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="35"/>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="378"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="35"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="378"/>
         <source>Device Setup</source>
         <translation>Configurazione Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="124"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="124"/>
         <source>API Server Active (%1)</source>
         <translation>Server API Attivo (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="125"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="125"/>
         <source>API Server Ready</source>
         <translation>Server API Pronto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="126"/>
         <source>API Server Off</source>
         <translation>Server API Disattivato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="186"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="186"/>
         <source>Frame Parsing</source>
         <translation>Analisi Frame</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="196"/>
         <source>Console Only (No Parsing)</source>
         <translation>Solo Console (Nessuna Analisi)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="209"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="209"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>Grafico Rapido (Valori Separati da Virgola)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="220"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="220"/>
         <source>Parse via Project File</source>
         <translation>Analizza tramite File Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="243"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="243"/>
         <source>Change Project File (%1)</source>
         <translation>Cambia File Progetto (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="244"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="244"/>
         <source>Select Project File</source>
         <translation>Seleziona File Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="259"/>
         <source>Data Export</source>
         <translation>Esportazione Dati</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="283"/>
         <source>CSV Spreadsheet</source>
         <translation>Foglio di Calcolo CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="301"/>
         <source>Session Recording</source>
         <translation>Registrazione Sessione</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="322"/>
         <source>MDF4 Recording</source>
         <translation>Registrazione MDF4</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="338"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="338"/>
         <source>Console Log</source>
         <translation>Log della Console</translation>
     </message>
@@ -13800,26 +15043,31 @@ Il parametro separatore non è più necessario.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="390"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="390"/>
         <source>I/O Interface: %1</source>
         <translation>Interfaccia I/O: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="459"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="459"/>
         <source>Multi-Device Project</source>
         <translation>Progetto Multi-dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="472"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="472"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Questo progetto riceve dati da %1 dispositivi indipendenti.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="485"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="485"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under the Sources tab.</source>
         <translation>Ogni dispositivo ha le proprie impostazioni di connessione. Configurale nell'Editor Progetto sotto la scheda Sorgenti.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="505"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="505"/>
         <source>Open Project Editor</source>
         <translation>Apri Editor Progetto</translation>
     </message>
@@ -13831,7 +15079,8 @@ Il parametro separatore non è più necessario.</translation>
         <translation type="vanished">Nuova Scorciatoia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="93"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="95"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="95"/>
         <source>Choose an Icon</source>
         <translation>Scegli un'Icona</translation>
     </message>
@@ -13841,137 +15090,177 @@ Il parametro separatore non è più necessario.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="24"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="24"/>
         <source>New Deployment</source>
         <translation>Nuovo Deployment</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="106"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="108"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="108"/>
         <source>Save Deployment</source>
         <translation>Salva Deployment</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="146"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="148"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="148"/>
         <source>General</source>
         <translation>Generale</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="152"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="154"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="154"/>
         <source>Taskbar</source>
         <translation>Barra delle Applicazioni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="158"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="160"/>
         <source>Logging</source>
         <translation>Registrazione</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="215"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="217"/>
         <source>Identity</source>
         <translation>Identità</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="271"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="273"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="273"/>
         <source>Click to choose an icon</source>
         <translation>Clicca per scegliere un'icona</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="280"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="282"/>
         <source>Name:</source>
         <translation>Nome:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="289"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="291"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="291"/>
         <source>Deployment Name</source>
         <translation>Nome Deployment</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="381"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="383"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="383"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="391"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="393"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="393"/>
         <source>Same as Serial Studio</source>
         <translation>Uguale a Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="413"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="415"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="415"/>
         <source>Actions Panel</source>
         <translation>Pannello Azioni</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="424"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="605"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="426"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="635"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="426"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="635"/>
         <source>File Transmission</source>
         <translation>Trasmissione File</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="440"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="442"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="442"/>
         <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>Facendo doppio clic su questo deployment si accede direttamente alla dashboard in tempo reale per questo progetto. Non ci sono barra degli strumenti o pannello di configurazione, solo i dati, e Serial Studio si chiude non appena il dispositivo si disconnette.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="486"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="488"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="488"/>
         <source>Visibility</source>
         <translation>Visibilità</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="501"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="503"/>
         <source>Mode</source>
         <translation>Modalità</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="510"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="512"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="512"/>
         <source>Always shown</source>
         <translation>Sempre Visibile</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="513"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="513"/>
         <source>Auto-hide</source>
         <translation>Nascondi Automaticamente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="512"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="514"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="514"/>
         <source>Hidden</source>
         <translation>Nascosta</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="527"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="529"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="529"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>Nascondere la barra delle applicazioni rimuove i pulsanti di riduzione/ingrandimento/chiusura della finestra e forza il layout automatico, così il dashboard riempie sempre l'area disponibile.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="531"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="533"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="533"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>La barra delle applicazioni scorre quando l'utente sposta il cursore vicino al bordo inferiore.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="533"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="535"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="535"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>La barra delle applicazioni è permanentemente visibile nella parte inferiore del dashboard.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="546"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="548"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="548"/>
         <source>Pinned Buttons</source>
         <translation>Pulsanti Bloccati</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="563"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="565"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="565"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="577"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="579"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="579"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="591"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="593"/>
+        <source>Clock</source>
+        <translation>Orologio</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="607"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="607"/>
+        <source>Stopwatch</source>
+        <translation>Cronometro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="621"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="621"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="746"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="746"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>Le registrazioni vengono salvate nella cartella workspace di Serial Studio</translation>
     </message>
@@ -13980,28 +15269,34 @@ Il parametro separatore non è più necessario.</translation>
         <translation type="vanished">Nome Collegamento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="298"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="300"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="300"/>
         <source>Change Icon…</source>
         <translation>Cambia Icona…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="315"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="333"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="317"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="335"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="317"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="335"/>
         <source>Project</source>
         <translation>Progetto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="343"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="345"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="345"/>
         <source>Choose a project file to begin</source>
         <translation>Scegli un file di progetto per iniziare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="366"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="368"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="368"/>
         <source>Behavior</source>
         <translation>Comportamento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="403"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="405"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="405"/>
         <source>Fullscreen</source>
         <translation>Schermo Intero</translation>
     </message>
@@ -14022,27 +15317,32 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo che continui a funzionare anche se il file originale viene spostato o eliminato.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="655"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="685"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="685"/>
         <source>Recorders</source>
         <translation>Registratori</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="670"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="700"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="700"/>
         <source>CSV File</source>
         <translation>File CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="680"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="710"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="710"/>
         <source>MDF4 File</source>
         <translation>File MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="690"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="720"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="720"/>
         <source>Session Database</source>
         <translation>Database di Sessione</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="700"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="730"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="730"/>
         <source>Console Log</source>
         <translation>Log della Console</translation>
     </message>
@@ -14051,12 +15351,14 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation type="vanished">Le registrazioni vengono salvate nella posizione predefinita di ciascun modulo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="746"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="776"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="776"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="786"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/ShortcutGenerator.qml" line="786"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
@@ -14066,120 +15368,148 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="110"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="110"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="242"/>
         <source>Undo</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="117"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="117"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
         <source>Redo</source>
         <translation>Ripeti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="126"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="272"/>
         <source>Cut</source>
         <translation>Taglia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="131"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="282"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="136"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="292"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="136"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="292"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="143"/>
         <source>Select All</source>
         <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="153"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="153"/>
         <source>Format Document</source>
         <translation>Formatta Documento</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="160"/>
         <source>Format Selection</source>
         <translation>Formatta Selezione</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="222"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="222"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="227"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="227"/>
         <source>Reset to the default parsing script</source>
         <translation>Ripristina allo script di analisi predefinito</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="232"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="232"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="237"/>
         <source>Import a script file for data parsing</source>
         <translation>Importa un file di script per l'analisi dei dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="315"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="315"/>
         <source>Open help documentation for data parsing</source>
         <translation>Apri la documentazione di aiuto per l'analisi dei dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="352"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="352"/>
         <source>Language:</source>
         <translation>Linguaggio:</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="379"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="379"/>
         <source>Select Template…</source>
         <translation>Seleziona Modello…</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="247"/>
         <source>Undo the last code edit</source>
         <translation>Annulla l'ultima modifica al codice</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="259"/>
         <source>Redo the previously undone edit</source>
         <translation>Ripristina la modifica precedentemente annullata</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="277"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="277"/>
         <source>Cut selected code to clipboard</source>
         <translation>Taglia il codice selezionato negli appunti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="287"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="287"/>
         <source>Copy selected code to clipboard</source>
         <translation>Copia il codice selezionato negli appunti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="296"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="296"/>
         <source>Paste code from clipboard</source>
         <translation>Incolla il codice dagli appunti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="310"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="389"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="389"/>
         <source>Test With Sample Data</source>
         <translation>Testa con Dati di Esempio</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="397"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="397"/>
         <source>Evaluate</source>
         <translation>Valuta</translation>
     </message>
@@ -14188,26 +15518,31 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>SourceView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="107"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="107"/>
         <source>Duplicate</source>
         <translation>Duplica</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="109"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="109"/>
         <source>Create a copy of this data source</source>
         <translation>Crea una copia di questa sorgente dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="121"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="121"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="126"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="126"/>
         <source>Remove this data source</source>
         <translation>Rimuovi questa sorgente dati</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="127"/>
         <source>The primary data source cannot be removed</source>
         <translation>La sorgente dati primaria non può essere rimossa</translation>
     </message>
@@ -14216,11 +15551,13 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>SqlitePlayer</name>
     <message>
         <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="25"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/SqlitePlayer.qml" line="25"/>
         <source>Session Player</source>
         <translation>Riproduttore Sessioni</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="92"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/SqlitePlayer.qml" line="92"/>
         <source>Loading session…</source>
         <translation>Caricamento sessione…</translation>
     </message>
@@ -14228,177 +15565,236 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="276"/>
         <source>Workspaces</source>
         <translation>Aree di Lavoro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="388"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
         <source>Actions</source>
         <translation>Azioni</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="410"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="426"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="426"/>
         <source>No Actions Available</source>
         <translation>Nessuna Azione Disponibile</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="456"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="456"/>
         <source>Plugins</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="487"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="503"/>
         <source>No Plugins Installed</source>
         <translation>Nessun Plugin Installato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="99"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="523"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="539"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="99"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="539"/>
         <source>Auto Layout</source>
         <translation>Layout Automatico</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="107"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="535"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="551"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="107"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="551"/>
         <source>Full Screen</source>
         <translation>Schermo Intero</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="113"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="548"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="564"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="113"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="564"/>
         <source>Add External Window</source>
         <translation>Aggiungi Finestra Esterna</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="139"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="809"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="847"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="847"/>
         <source>Help Center</source>
         <translation>Centro Assistenza</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="663"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="679"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="679"/>
         <source>Tools</source>
         <translation>Strumenti</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="769"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="807"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="807"/>
         <source>No Tools Available</source>
         <translation>Nessuno Strumento Disponibile</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="837"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="858"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
         <source>Quit</source>
         <translation>Esci</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="895"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="933"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="933"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="934"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="934"/>
         <source>Hide</source>
         <translation>Nascondi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="355"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="355"/>
         <source>New Workspace…</source>
         <translation>Nuova Area di Lavoro…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="145"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="737"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="751"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="133"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="751"/>
+        <source>Clock</source>
+        <translation>Orologio</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="141"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="758"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="758"/>
+        <source>Stopwatch</source>
+        <translation>Cronometro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="775"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="161"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="775"/>
         <source>Sessions</source>
         <translation>Sessioni</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="152"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="746"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="784"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="784"/>
         <source>File Transmission</source>
         <translation>Trasmissione File</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="159"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="754"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="175"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="792"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="792"/>
         <source>AI Assistant</source>
         <translation>Assistente AI</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="325"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="341"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="341"/>
         <source>Show "%1"</source>
         <translation>Mostra "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="346"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="346"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Mostra Tutte le Aree di Lavoro Nascoste</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="354"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
         <source>No Workspaces Available</source>
         <translation>Nessuna Area di Lavoro Disponibile</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="477"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="493"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="493"/>
         <source>Manage Plugins…</source>
         <translation>Gestisci Plugin…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="568"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="584"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="584"/>
         <source>Export</source>
         <translation>Esporta</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="614"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="614"/>
         <source>CSV File</source>
         <translation>File CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="604"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="620"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="620"/>
         <source>MDF4 File</source>
         <translation>File MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="610"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="626"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="626"/>
         <source>Console Transcript</source>
         <translation>Trascrizione Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="619"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="635"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="635"/>
         <source>Session Database</source>
         <translation>Database Sessione</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="633"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="649"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="649"/>
         <source>No Export Formats Available</source>
         <translation>Nessun Formato di Esportazione Disponibile</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="119"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="710"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="734"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="119"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="734"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="125"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="719"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="743"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="125"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="743"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="133"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="728"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="149"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="766"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="766"/>
         <source>Preferences</source>
         <translation>Preferenze</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="884"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="922"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="922"/>
         <source>Edit…</source>
         <translation>Modifica…</translation>
     </message>
@@ -14407,25 +15803,82 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <translation type="vanished">MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="830"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="868"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="868"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="831"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="869"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="869"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="858"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
         <source>Disconnect</source>
         <translation>Disconnetti</translation>
+    </message>
+</context>
+<context>
+    <name>Stopwatch</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <source>Stop</source>
+        <translation>Interrompi</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <source>Start</source>
+        <translation>Avvia</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="205"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="279"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="279"/>
+        <source>Lap</source>
+        <translation>Giro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="221"/>
+        <source>Reset</source>
+        <translation>Ripristina</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="271"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="271"/>
+        <source>#</source>
+        <translation>#</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="288"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="288"/>
+        <source>Total</source>
+        <translation>Totale</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="380"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="380"/>
+        <source>No laps recorded</source>
+        <translation>Nessun giro registrato</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="388"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Stopwatch.qml" line="388"/>
+        <source>Press Lap while the stopwatch is running</source>
+        <translation>Premi Giro mentre il cronometro è in esecuzione</translation>
     </message>
 </context>
 <context>
     <name>SubMenuCombo</name>
     <message>
         <location filename="../../qml/Widgets/SubMenuCombo.qml" line="86"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="86"/>
         <source>No Data Available</source>
         <translation>Nessun Dato Disponibile</translation>
     </message>
@@ -14434,56 +15887,67 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>SystemDatasetsView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="33"/>
         <source>Dataset Values</source>
         <translation>Valori Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="158"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="179"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="179"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="180"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="180"/>
         <source>Group</source>
         <translation>Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="181"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="181"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="182"/>
         <source>Units</source>
         <translation>Unità</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="252"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="252"/>
         <source>(virtual)</source>
         <translation>(virtuale)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="298"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="298"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>Copia codice di accesso %1 negli appunti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="374"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="374"/>
         <source>Dataset access code copied</source>
         <translation>Codice di accesso dataset copiato</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="323"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="323"/>
         <source>No datasets defined in this project.</source>
         <translation>Nessun dataset definito in questo progetto.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/SystemDatasetsView.qml" line="324"/>
         <source>No datasets match your search.</source>
         <translation>Nessun dataset corrisponde alla ricerca.</translation>
     </message>
@@ -14492,32 +15956,39 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>TableDelegate</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="130"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="130"/>
         <source>Parameter</source>
         <translation>Parametro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="151"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="151"/>
         <source>Value</source>
         <translation>Valore</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="513"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="513"/>
         <source>(Custom Icon)</source>
         <translation>(Icona Personalizzata)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="637"/>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="643"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="637"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="643"/>
         <source>Auto</source>
         <translation>Automatico</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="804"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="804"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="800"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="804"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="804"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
@@ -14526,101 +15997,133 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>Taskbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="66"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="66"/>
         <source>Start Menu</source>
         <translation>Menu di Avvio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="194"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="194"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="230"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="230"/>
         <source>Search…</source>
         <translation>Cerca…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="496"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="496"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="497"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="497"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="496"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="498"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="498"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="498"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="499"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="499"/>
+        <source>Clock</source>
+        <translation>Orologio</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="500"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="500"/>
+        <source>Stopwatch</source>
+        <translation>Cronometro</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="502"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="502"/>
         <source>AI Assistant</source>
         <translation>Assistente AI</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="503"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="503"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="503"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="925"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="941"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="941"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Connesso a %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="926"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Non connesso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="950"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
         <source>MQTT Publisher</source>
         <translation>Publisher MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="960"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
         <source>Status:</source>
         <translation>Stato:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="968"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="984"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="984"/>
         <source>Connected</source>
         <translation>Connesso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="969"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="985"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="985"/>
         <source>Disconnected</source>
         <translation>Disconnesso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="992"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="992"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1005"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1005"/>
         <source>Mode:</source>
         <translation>Modalità:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1002"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1018"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1018"/>
         <source>Messages sent:</source>
         <translation>Messaggi inviati:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1016"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1032"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1032"/>
         <source>Open MQTT Settings</source>
         <translation>Apri Impostazioni MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="497"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="501"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="501"/>
         <source>File Transmission</source>
         <translation>Trasmissione File</translation>
     </message>
@@ -14637,46 +16140,55 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>Terminal</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="141"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="141"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="149"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="149"/>
         <source>Select all</source>
         <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="155"/>
         <source>Clear</source>
         <translation>Cancella</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="253"/>
         <source>Send Data to Device</source>
         <translation>Invia Dati al Dispositivo</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="428"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="428"/>
         <source>Show Timestamp</source>
         <translation>Mostra Timestamp</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="436"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="436"/>
         <source>Echo</source>
         <translation>Echo</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="453"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="453"/>
         <source>Emulate VT-100</source>
         <translation>Emula VT-100</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="466"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="466"/>
         <source>ANSI Colors</source>
         <translation>Colori ANSI</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="486"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="486"/>
         <source>Display: %1</source>
         <translation>Visualizzazione: %1</translation>
     </message>
@@ -14685,69 +16197,85 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>ToolCallCard</name>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="47"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="47"/>
         <source>Awaiting approval</source>
         <translation>In attesa di approvazione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="48"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="48"/>
         <source>Done</source>
         <translation>Completato</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="49"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="49"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="50"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="50"/>
         <source>Denied</source>
         <translation>Negato</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="51"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="51"/>
         <source>Blocked</source>
         <translation>Bloccato</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="52"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="52"/>
         <source>Running</source>
         <translation>In Esecuzione</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="152"/>
         <source>Approve</source>
         <translation>Approva</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="158"/>
         <source>Deny</source>
         <translation>Nega</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="175"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="175"/>
         <source>Arguments</source>
         <translation>Argomenti</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="212"/>
         <location filename="../../qml/AI/ToolCallCard.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="212"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="272"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="217"/>
         <location filename="../../qml/AI/ToolCallCard.qml" line="277"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="217"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="277"/>
         <source>Copy All</source>
         <translation>Copia Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="225"/>
         <location filename="../../qml/AI/ToolCallCard.qml" line="285"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="285"/>
         <source>Select All</source>
         <translation>Seleziona Tutto</translation>
     </message>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="233"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/AI/ToolCallCard.qml" line="233"/>
         <source>Result</source>
         <translation>Risultato</translation>
     </message>
@@ -14756,27 +16284,33 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>Toolbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="196"/>
         <source>Project Editor</source>
         <translation>Editor di Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="199"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Apri l'Editor di Progetto per creare o modificare il tuo layout JSON</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Riproduci un file CSV come se fossero dati del sensore in tempo reale</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="318"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="322"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="318"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="322"/>
         <source>Preferences</source>
         <translation>Preferenze</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="326"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="326"/>
         <source>Open application settings and preferences</source>
         <translation>Apri impostazioni e preferenze dell'applicazione</translation>
     </message>
@@ -14786,21 +16320,25 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Open CSV</source>
         <translation>Apri CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <source>Open MDF4</source>
         <translation>Apri MDF4</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="291"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="291"/>
         <source>Sessions</source>
         <translation>Sessioni</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="295"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="295"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>Sfoglia, riproduci ed esporta sessioni registrate</translation>
     </message>
@@ -14816,12 +16354,17 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="301"/>
         <source>Extensions</source>
         <translation>Estensioni</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="304"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="264"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="304"/>
         <source>Browse and install extensions</source>
         <translation>Sfoglia e installa estensioni</translation>
     </message>
@@ -14831,6 +16374,7 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="280"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="280"/>
         <source>Deploy</source>
         <translation>Deploy</translation>
     </message>
@@ -14840,184 +16384,223 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="350"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="350"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Seleziona comunicazione porta seriale (UART)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="361"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="361"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="365"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="365"/>
         <source>Select audio input device (Pro)</source>
         <translation>Seleziona dispositivo di ingresso audio (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="380"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="380"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="385"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="385"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Seleziona comunicazione USB raw (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="394"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="394"/>
         <source>Network</source>
         <translation>Rete</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="399"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="399"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Seleziona comunicazione di rete TCP/UDP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="416"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Seleziona comunicazione MODBUS (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="430"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="430"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="435"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="435"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Seleziona comunicazione dispositivo HID (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="445"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="445"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="449"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="449"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Seleziona comunicazione Bluetooth Low Energy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="461"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="461"/>
         <source>CAN Bus</source>
         <translation>Bus CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="466"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Seleziona comunicazione Bus CAN (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="480"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="480"/>
         <source>Process</source>
         <translation>Processo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="485"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="485"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Seleziona comunicazione pipe di processo (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="521"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="521"/>
         <source>Examples</source>
         <translation>Esempi</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="524"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="524"/>
         <source>Browse example projects</source>
         <translation>Sfoglia progetti di esempio</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="532"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="532"/>
         <source>Help Center</source>
         <translation>Centro Assistenza</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="536"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="536"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>Sfoglia documentazione, FAQ e wiki</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="545"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Visualizza documentazione dettagliata e fai domande su DeepWiki</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="601"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="601"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Connetti o disconnetti dal dispositivo configurato</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="501"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="505"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="501"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="505"/>
         <source>About</source>
         <translation>Informazioni</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="213"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="213"/>
         <source>Open Project</source>
         <translation>Apri Progetto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="216"/>
         <source>Open an existing JSON project</source>
         <translation>Apri un progetto JSON esistente</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="242"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="242"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Riproduci un file MDF4 come se fossero dati dal sensore in tempo reale (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="253"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="259"/>
         <source>Assistant</source>
         <translation>Assistente</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="263"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="263"/>
         <source>Chat with an AI to build and edit your project</source>
         <translation>Chatta con un'IA per creare e modificare il tuo progetto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="285"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="285"/>
         <source>Build an operator app for the current project</source>
         <translation>Crea un'app operatore per il progetto corrente</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="411"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="411"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="509"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="509"/>
         <source>Show application info and license details</source>
         <translation>Mostra informazioni applicazione e dettagli licenza</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="542"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="542"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>Wiki e Chat AI</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="584"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="584"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Gestisci la licenza e attiva Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="599"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="621"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="599"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="621"/>
         <source>Disconnect</source>
         <translation>Disconnetti</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="599"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="599"/>
         <source>Connect</source>
         <translation>Connetti</translation>
     </message>
@@ -15027,6 +16610,7 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="580"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="580"/>
         <source>Activate</source>
         <translation>Attiva</translation>
     </message>
@@ -15035,41 +16619,49 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>UART</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="52"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="52"/>
         <source>COM Port</source>
         <translation>Porta COM</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="81"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="81"/>
         <source>Baud Rate</source>
         <translation>Baud Rate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
         <source>Data Bits</source>
         <translation>Bit di Dati</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="195"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="195"/>
         <source>Parity</source>
         <translation>Parità</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="216"/>
         <source>Stop Bits</source>
         <translation>Bit di Stop</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="237"/>
         <source>Flow Control</source>
         <translation>Controllo di Flusso</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="269"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="269"/>
         <source>Auto Reconnect</source>
         <translation>Riconnessione Automatica</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="287"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="287"/>
         <source>Send DTR Signal</source>
         <translation>Invia Segnale DTR</translation>
     </message>
@@ -15077,25 +16669,37 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="931"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1343"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="963"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1531"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1011"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1354"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1043"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1542"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1403"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1419"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1122"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1553"/>
+        <source>Clock</source>
+        <translation>Orologio</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="1200"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1563"/>
+        <source>Stopwatch</source>
+        <translation>Cronometro</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="1611"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1627"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Fallback)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1444"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1652"/>
         <source>LED Panel (%1)</source>
         <translation>Pannello LED (%1)</translation>
     </message>
@@ -15103,7 +16707,7 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
 <context>
     <name>UI::DashboardWidget</name>
     <message>
-        <location filename="../../src/UI/DashboardWidget.cpp" line="149"/>
+        <location filename="../../src/UI/DashboardWidget.cpp" line="148"/>
         <source>Invalid</source>
         <translation>Non Valido</translation>
     </message>
@@ -15125,71 +16729,85 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>USB</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="50"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="50"/>
         <source>USB Device</source>
         <translation>Dispositivo USB</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="80"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="80"/>
         <source>Transfer Mode</source>
         <translation>Modalità di Trasferimento</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
         <source>Bulk Stream</source>
         <translation>Flusso Bulk</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="90"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="90"/>
         <source>Advanced (Bulk + Control)</source>
         <translation>Avanzato (Bulk + Control)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="91"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="91"/>
         <source>Isochronous</source>
         <translation>Isocrono</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="143"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="143"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>Connetti a dispositivi USB utilizzando trasferimenti bulk, control o isocroni. Adatto per data logger, dispositivi con firmware personalizzato e strumenti USB.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="152"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="152"/>
         <source>USB specifications (USB.org)</source>
         <translation>Specifiche USB (USB.org)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="169"/>
         <source>IN Endpoint</source>
         <translation>Endpoint IN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="205"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="205"/>
         <source>OUT Endpoint</source>
         <translation>Endpoint OUT</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="241"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="241"/>
         <source>Max Packet Size</source>
         <translation>Dimensione Massima Pacchetto</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="301"/>
         <source>Control Transfers Enabled</source>
         <translation>Trasferimenti di Controllo Abilitati</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="310"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="310"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>L'invio di richieste di controllo errate può bloccare o danneggiare l'hardware connesso. Usare con cautela.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="317"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="317"/>
         <source>Learn about USB control transfers</source>
         <translation>Informazioni sui trasferimenti di controllo USB</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="351"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="351"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>La dimensione del pacchetto deve corrispondere alla dimensione massima di trasferimento riportata dall'endpoint. Valori tipici: 192 B (audio FS), 1024 B (HS).</translation>
     </message>
@@ -15231,116 +16849,139 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>UserTableView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="166"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="166"/>
         <source>Add Register</source>
         <translation>Aggiungi Registro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="169"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="169"/>
         <source>Add register</source>
         <translation>Aggiungi registro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="176"/>
         <source>Insert Constant</source>
         <translation>Inserisci Costante</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="179"/>
         <source>Insert constant</source>
         <translation>Inserisci costante</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="186"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="189"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="189"/>
         <source>Import registers from CSV</source>
         <translation>Importa registri da CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="196"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="196"/>
         <source>Export</source>
         <translation>Esporta</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="199"/>
         <source>Export registers to CSV</source>
         <translation>Esporta registri in CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="211"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="211"/>
         <source>Rename</source>
         <translation>Rinomina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="214"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="214"/>
         <source>Rename table</source>
         <translation>Rinomina tabella</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="221"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="224"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="224"/>
         <source>Delete table</source>
         <translation>Elimina tabella</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="238"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="238"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="243"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="243"/>
         <source>Open help documentation for shared memory</source>
         <translation>Apri la documentazione di aiuto per la memoria condivisa</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="283"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="283"/>
         <source>Permissions</source>
         <translation>Permessi</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="284"/>
         <source>Register Name</source>
         <translation>Nome Registro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="285"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="285"/>
         <source>Default Value</source>
         <translation>Valore Predefinito</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
         <source>Read-Only</source>
         <translation>Sola Lettura</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="324"/>
         <source>Read/Write</source>
         <translation>Lettura/scrittura</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="462"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="462"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>Copia il codice di accesso %1 negli appunti</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="495"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="495"/>
         <source>Delete register</source>
         <translation>Elimina registro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
         <source>No registers.</source>
         <translation>Nessun registro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="562"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/UserTableView.qml" line="562"/>
         <source>Register access code copied</source>
         <translation>Codice di accesso registro copiato</translation>
     </message>
@@ -15349,26 +16990,31 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>Waterfall</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="235"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="235"/>
         <source>Show Colorbar</source>
         <translation>Mostra Barra dei Colori</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="248"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="248"/>
         <source>Show Axes &amp; Grid</source>
         <translation>Mostra Assi e Griglia</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="261"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="261"/>
         <source>Show Crosshair</source>
         <translation>Mostra Mirino</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="275"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="275"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="275"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Widgets/Dashboard/Waterfall.qml" line="275"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
@@ -15381,38 +17027,47 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     <name>Welcome</name>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="176"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="176"/>
         <source>Welcome to %1!</source>
         <translation>Benvenuto in %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="187"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
         <translation>Serial Studio è un potente strumento di visualizzazione in tempo reale, progettato per ingegneri, studenti e maker.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="198"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="198"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
         <translation>È possibile avviare una prova completamente funzionale di 14 giorni, attivarla con la propria chiave di licenza oppure scaricare e compilare autonomamente il codice sorgente GPLv3.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="208"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="390"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="208"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="390"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
         <translation>L'acquisto di Pro sostiene direttamente l'autore e contribuisce a finanziare lo sviluppo futuro.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="216"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="398"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="216"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="398"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
         <translation>Compilare autonomamente la versione GPLv3 aiuta a far crescere la comunità e incoraggia i contributi tecnici.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="237"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="237"/>
         <source>Please wait…</source>
         <translation>Attendere…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="272"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="272"/>
         <source>%1 days remaining in your trial.</source>
         <translation>%1 giorni rimanenti nella prova.</translation>
     </message>
@@ -15422,26 +17077,31 @@ Attiva Incorpora Progetto per integrare il progetto nel collegamento, in modo ch
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="282"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="282"/>
         <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
         <translation>Stai utilizzando la versione di prova completa di %1 Pro. È valida per 14 giorni di uso personale e non commerciale.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="293"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="293"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
         <translation>Effettua l'upgrade a un piano a pagamento per continuare a utilizzare Serial Studio Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="301"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="301"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
         <translation>Oppure compila il codice sorgente GPLv3 per utilizzarlo gratuitamente.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="309"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="309"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
         <translation>Per visualizzare i piani di abbonamento disponibili, fai clic su "Effettua l'Upgrade" qui sotto.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="330"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="330"/>
         <source>Don't nag me about the trial.
 I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
         <translation>Non ricordarmi più la versione di prova.
@@ -15449,46 +17109,55 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="360"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="360"/>
         <source>Your %1 trial has expired.</source>
         <translation>La versione di prova di %1 è scaduta.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="370"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="370"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
         <translation>Il periodo di prova è terminato. Per continuare a utilizzare %1 con tutte le funzionalità Pro, effettua l'upgrade a un piano a pagamento.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="381"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="381"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
         <translation>Se preferisci, puoi anche compilare la versione open-source con licenza GPLv3.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="409"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="409"/>
         <source>Thank you for trying %1!</source>
         <translation>Grazie per aver provato %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="452"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="452"/>
         <source>Upgrade Now</source>
         <translation>Effettua L'upgrade</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="462"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="462"/>
         <source>Activate</source>
         <translation>Attiva</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="478"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="478"/>
         <source>Open in Limited Mode</source>
         <translation>Apri in Modalità Limitata</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="478"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="478"/>
         <source>Continue</source>
         <translation>Continua</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="478"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/Welcome.qml" line="478"/>
         <source>Start Trial</source>
         <translation>Avvia Prova</translation>
     </message>
@@ -15501,6 +17170,7 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="331"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="331"/>
         <source>Device Disconnected</source>
         <translation>Dispositivo Disconnesso</translation>
     </message>
@@ -15508,22 +17178,22 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
 <context>
     <name>Widgets::Bar</name>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="256"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="261"/>
         <source>Alarm</source>
         <translation>Allarme</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="260"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="265"/>
         <source>Value %1%2 reached the high alarm %3%2</source>
         <translation>Il valore %1%2 ha raggiunto l'allarme alto %3%2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="263"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="268"/>
         <source>Value %1%2 reached the low alarm %3%2</source>
         <translation>Il valore %1%2 ha raggiunto l'allarme basso %3%2</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="267"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="272"/>
         <source>Alarms</source>
         <translation>Allarmi</translation>
     </message>
@@ -15725,41 +17395,49 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
     <name>WorkspaceDialog</name>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="51"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="51"/>
         <source>Edit Workspace</source>
         <translation>Modifica Area di Lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="52"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="52"/>
         <source>New Workspace</source>
         <translation>Nuova Area di Lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="157"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="157"/>
         <source>Name:</source>
         <translation>Nome:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="166"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="166"/>
         <source>My Workspace</source>
         <translation>La Mia Area di Lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="181"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="181"/>
         <source>Select widgets to include:</source>
         <translation>Seleziona i widget da includere:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="187"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="187"/>
         <source>Filter widgets…</source>
         <translation>Filtra widget…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="303"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="303"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="311"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/Dialogs/WorkspaceDialog.qml" line="311"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -15768,70 +17446,87 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
     <name>WorkspaceView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="41"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="41"/>
         <source>Workspace</source>
         <translation>Area di Lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="129"/>
         <source>Add Widget</source>
         <translation>Aggiungi Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="131"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="131"/>
         <source>Add widget to workspace</source>
         <translation>Aggiungi widget all'area di lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="142"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="142"/>
         <source>Rename</source>
         <translation>Rinomina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="144"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="144"/>
         <source>Rename workspace</source>
         <translation>Rinomina area di lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="153"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="153"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="155"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="155"/>
         <source>Delete workspace</source>
         <translation>Elimina area di lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="177"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="183"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="177"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="183"/>
         <source>Group</source>
         <translation>Gruppo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="178"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="184"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="178"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="184"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="179"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="179"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="185"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="229"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="267"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="229"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="267"/>
         <source>(unknown)</source>
         <translation>(sconosciuto)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="247"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="247"/>
         <source>(group widget)</source>
         <translation>(widget di gruppo)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="297"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="297"/>
         <source>Remove widget from workspace</source>
         <translation>Rimuovi widget dallo spazio di lavoro</translation>
     </message>
@@ -15841,6 +17536,7 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="317"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspaceView.qml" line="317"/>
         <source>No widgets in this workspace.</source>
         <translation>Nessun widget in quest'area di lavoro.</translation>
     </message>
@@ -15849,86 +17545,103 @@ Comprendo che alla scadenza dovrò acquistare una licenza o compilare la version
     <name>WorkspacesView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
         <source>Workspaces</source>
         <translation>Aree di Lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="127"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="127"/>
         <source>Customize</source>
         <translation>Personalizza</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="129"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="129"/>
         <source>Edit workspaces manually</source>
         <translation>Modifica le aree di lavoro manualmente</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="145"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="145"/>
         <source>Move Up</source>
         <translation>Sposta Su</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="147"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="147"/>
         <source>Move the selected workspace up</source>
         <translation>Sposta l'area di lavoro selezionata verso l'alto</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="158"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="158"/>
         <source>Move Down</source>
         <translation>Sposta Giù</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="160"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="160"/>
         <source>Move the selected workspace down</source>
         <translation>Sposta l'area di lavoro selezionata verso il basso</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="171"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="171"/>
         <source>Add Workspace</source>
         <translation>Aggiungi Area di Lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="173"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="173"/>
         <source>Add workspace</source>
         <translation>Aggiungi area di lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="182"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="182"/>
         <source>Cleanup</source>
         <translation>Pulizia</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="185"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="185"/>
         <source>Remove %1 widget reference(s) whose target group or dataset no longer exists</source>
         <translation>Rimuovi %1 riferimento/i widget il cui gruppo o dataset di destinazione non esiste più</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="188"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="188"/>
         <source>No stale widget references in any workspace</source>
         <translation>Nessun riferimento widget obsoleto in alcuna area di lavoro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="203"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="203"/>
         <source>Title</source>
         <translation>Titolo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="204"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="204"/>
         <source>Widgets</source>
         <translation>Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="276"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="276"/>
         <source>No workspaces. Add one with the toolbar above, or reset to the auto layout.</source>
         <translation>Nessuna area di lavoro. Aggiungine una con la barra degli strumenti sopra, oppure ripristina il layout automatico.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="278"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="278"/>
         <source>Project has no eligible groups -- add a group with widgets to populate workspaces.</source>
         <translation>Il progetto non ha gruppi idonei -- aggiungi un gruppo con widget per popolare le aree di lavoro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="284"/>
+        <location filename="../../../build/Desktop_Qt_6_11_0_MSVC2022_64bit-Release/app/gui/qml/ProjectEditor/Views/WorkspacesView.qml" line="284"/>
         <source>Reset to Auto Layout</source>
         <translation>Ripristina Layout Automatico</translation>
     </message>
