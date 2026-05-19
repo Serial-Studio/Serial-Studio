@@ -460,10 +460,10 @@ QList<SerialStudio::DashboardWidget> SerialStudio::getDashboardWidgets(
   QList<DashboardWidget> list;
 
   static const QHash<QString, DashboardWidget> kDatasetWidgetMap = {
-    {QStringLiteral("compass"), DashboardCompass},
-    {QStringLiteral("bar"), DashboardBar},
-    {QStringLiteral("gauge"), DashboardGauge},
-    {QStringLiteral("meter"), DashboardMeter},
+    {    QStringLiteral("compass"),     DashboardCompass},
+    {        QStringLiteral("bar"),         DashboardBar},
+    {      QStringLiteral("gauge"),       DashboardGauge},
+    {      QStringLiteral("meter"),       DashboardMeter},
     {QStringLiteral("thermometer"), DashboardThermometer},
   };
   const auto it = kDatasetWidgetMap.constFind(dataset.widget);
@@ -602,10 +602,10 @@ QString SerialStudio::datasetWidgetId(const DatasetWidget widget)
 SerialStudio::DatasetWidget SerialStudio::datasetWidgetFromId(const QString& id)
 {
   static const QHash<QString, DatasetWidget> kIdMap = {
-    {QStringLiteral("bar"), Bar},
-    {QStringLiteral("gauge"), Gauge},
-    {QStringLiteral("compass"), Compass},
-    {QStringLiteral("meter"), Meter},
+    {        QStringLiteral("bar"),         Bar},
+    {      QStringLiteral("gauge"),       Gauge},
+    {    QStringLiteral("compass"),     Compass},
+    {      QStringLiteral("meter"),       Meter},
     {QStringLiteral("thermometer"), Thermometer},
   };
   return kIdMap.value(id, NoDatasetWidget);

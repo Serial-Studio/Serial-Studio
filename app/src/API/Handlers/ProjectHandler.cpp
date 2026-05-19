@@ -307,10 +307,10 @@ static int datasetOptionsBitflag(const DataModel::Dataset& ds)
     flags |= SerialStudio::DatasetWaterfall;
 
   static const QHash<QString, int> kWidgetFlags = {
-    {QStringLiteral("bar"), SerialStudio::DatasetBar},
-    {QStringLiteral("gauge"), SerialStudio::DatasetGauge},
-    {QStringLiteral("compass"), SerialStudio::DatasetCompass},
-    {QStringLiteral("meter"), SerialStudio::DatasetMeter},
+    {        QStringLiteral("bar"),         SerialStudio::DatasetBar},
+    {      QStringLiteral("gauge"),       SerialStudio::DatasetGauge},
+    {    QStringLiteral("compass"),     SerialStudio::DatasetCompass},
+    {      QStringLiteral("meter"),       SerialStudio::DatasetMeter},
     {QStringLiteral("thermometer"), SerialStudio::DatasetThermometer},
   };
   flags |= kWidgetFlags.value(ds.widget, 0);

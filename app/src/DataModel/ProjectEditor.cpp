@@ -771,10 +771,10 @@ quint16 DataModel::ProjectEditor::datasetOptions() const
     option |= SerialStudio::DatasetWaterfall;
 
   static const QHash<QString, quint16> kWidgetFlags = {
-    {QStringLiteral("bar"), SerialStudio::DatasetBar},
-    {QStringLiteral("gauge"), SerialStudio::DatasetGauge},
-    {QStringLiteral("compass"), SerialStudio::DatasetCompass},
-    {QStringLiteral("meter"), SerialStudio::DatasetMeter},
+    {        QStringLiteral("bar"),         SerialStudio::DatasetBar},
+    {      QStringLiteral("gauge"),       SerialStudio::DatasetGauge},
+    {    QStringLiteral("compass"),     SerialStudio::DatasetCompass},
+    {      QStringLiteral("meter"),       SerialStudio::DatasetMeter},
     {QStringLiteral("thermometer"), SerialStudio::DatasetThermometer},
   };
   option |= kWidgetFlags.value(m_selectedDataset.widget, 0);
