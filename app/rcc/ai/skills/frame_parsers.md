@@ -113,3 +113,14 @@ Parsers can drive output without going through a widget:
 
 Use for acks, alarms, or status requests decided by the incoming frame.
 For user-triggered commands, build an Output Widget instead.
+
+## Dashboard controls
+
+Seven runtime UI helpers, all `{ ok, error? }`, NO logging:
+
+- `clearPlots()` — wipe line / multiplot / FFT / GPS / 3D / waterfall buffers without rebuilding widgets, datasets, or actions. Typical use: reset a GPS trace the moment the first valid fix arrives.
+- `setPlotPoints(n)` — horizontal sample window for line plots (n >= 1).
+- `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)` — show/hide the corresponding dashboard widgets.
+- `setActiveWorkspace(idOrName)` — switch the active workspace tab. Pass a numeric `workspaceId` (>= 1000) or a case-insensitive title string.
+
+Latch every call behind a state transition (a top-level `var` / `local` flag). Calling them per frame produces empty plots, flicker, or workspace-yank. They affect the active dashboard window only and do NOT persist to the project file or QSettings.

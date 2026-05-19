@@ -482,6 +482,188 @@ end
 
 `actionFire` is also available in dataset transforms and painter scripts.
 
+## Controlling the dashboard: `clearPlots()` and friends
+
+Parsers and dataset transforms can call a small set of dashboard helpers that affect what the user sees on the active window. These do NOT change the project file, do NOT touch widgets, datasets, or actions, and do NOT log anything to the console. They are intended for runtime UI orchestration driven by what the data tells you, for example: clearing a stale GPS trace the moment a valid fix arrives, hiding the terminal once the device is talking cleanly, or switching to a different workspace when the device reports a new operating mode.
+
+All of them return the same shape as `deviceWrite` / `actionFire`:
+
+```text
+{ ok = true }
+{ ok = false, error = "..." }
+```
+
+They never throw. They never block. They are available from frame parsers, dataset transforms, and painter scripts.
+
+### Function reference
+
+| Function                               | Argument(s)                          | What it does                                                                                          |
+|----------------------------------------|--------------------------------------|-------------------------------------------------------------------------------------------------------|
+| `clearPlots()`                         | none                                 | Empties every time-series buffer: line plots, multiplots, FFT, GPS traces, 3D plots, waterfall.       |
+| `setPlotPoints(n)`                     | integer, >= 1                        | Changes the horizontal sample window for all line plots. Mirrors the **Points** spinner in the toolbar. |
+| `setTerminalVisible(visible)`          | boolean                              | Shows or hides the dashboard terminal pane.                                                            |
+| `setNotificationLogVisible(visible)`   | boolean                              | Shows or hides the notification log.                                                                   |
+| `setClockVisible(visible)`             | boolean                              | Shows or hides the dashboard clock.                                                                    |
+| `setStopwatchVisible(visible)`         | boolean                              | Shows or hides the dashboard stopwatch.                                                                |
+| `setActiveWorkspace(idOrName)`         | integer workspace id, or string name | Switches the dashboard to the named (or numbered) workspace tab. String match is case-insensitive.     |
+
+`clearPlots` only resets the plot data buffers. Widget settings, dataset definitions, FFT configuration, axis bounds, and actions are left alone. After the call, plots continue to draw the next incoming sample as usual.
+
+`setPlotPoints` takes the same effect as the user changing the **Points** value: every line plot reconfigures its rolling buffer. Calling it on every frame is wasteful; call it once after detecting a regime change.
+
+The four visibility helpers map one-to-one to the user-facing **Show terminal / notifications / clock / stopwatch** toggles. Per-window: the change applies to whichever dashboard window is active.
+
+`setActiveWorkspace` accepts either the workspace's numeric `workspaceId` (>= 1000) or its title string. If no workspace matches the name, it returns `{ ok = false, error = "setActiveWorkspace: no workspace named \"X\"" }`.
+
+### Example: reset a GPS plot once a valid fix arrives
+
+Many GPS receivers emit `0, 0` (or last-known stale coordinates) for several seconds before the first real fix. The plot ends up with a garbage line from the origin out to the first valid sample. Watch for the fix transition and clear once.
+
+**Lua:**
+```lua
+local hadValidFix = false
+
+function parse(frame)
+  -- Frame: "lat,lon,quality"  (quality 1 = GPS fix, 0 = no fix)
+  local lat, lon, quality = frame:match("([^,]+),([^,]+),([^,]+)")
+  lat     = tonumber(lat)
+  lon     = tonumber(lon)
+  quality = tonumber(quality) or 0
+
+  if not hadValidFix and quality > 0 then
+    clearPlots()
+    hadValidFix = true
+  end
+
+  return {lat, lon, quality}
+end
+```
+
+**JavaScript:**
+```javascript
+var hadValidFix = false;
+
+function parse(frame) {
+  const parts   = frame.split(",");
+  const lat     = parseFloat(parts[0]);
+  const lon     = parseFloat(parts[1]);
+  const quality = parseInt(parts[2], 10) || 0;
+
+  if (!hadValidFix && quality > 0) {
+    clearPlots();
+    hadValidFix = true;
+  }
+
+  return [lat, lon, quality];
+}
+```
+
+### Example: switch workspaces when the device changes mode
+
+A multi-mode device (for example, a flight controller that toggles between *Standby*, *Calibration*, and *Flight*) can drive the dashboard layout from the parser, so the user always sees the workspace that matches the current device mode.
+
+**Lua:**
+```lua
+local lastMode = nil
+
+function parse(frame)
+  -- Frame: "MODE=Flight,alt=120,speed=42"
+  local mode = frame:match("MODE=([^,]+)")
+  if mode and mode ~= lastMode then
+    setActiveWorkspace(mode)
+    lastMode = mode
+  end
+
+  local alt   = tonumber(frame:match("alt=([%-%d%.]+)"))   or 0
+  local speed = tonumber(frame:match("speed=([%-%d%.]+)")) or 0
+  return {alt, speed}
+end
+```
+
+**JavaScript:**
+```javascript
+var lastMode = null;
+
+function parse(frame) {
+  const modeMatch  = frame.match(/MODE=([^,]+)/);
+  const mode       = modeMatch ? modeMatch[1] : null;
+  if (mode && mode !== lastMode) {
+    setActiveWorkspace(mode);
+    lastMode = mode;
+  }
+
+  const alt   = parseFloat((frame.match(/alt=([\-\d.]+)/)   || [])[1] || 0);
+  const speed = parseFloat((frame.match(/speed=([\-\d.]+)/) || [])[1] || 0);
+  return [alt, speed];
+}
+```
+
+### Example: focus mode while streaming
+
+Hide the chatty terminal, notification log, and stopwatch as soon as a valid telemetry stream is detected, so the user gets a clean dashboard. Restore them when the stream stalls (handled in a transform that watches `frameNumber` ticks elsewhere).
+
+**Lua:**
+```lua
+local focused = false
+
+function parse(frame)
+  local values = {}
+  for f in frame:gmatch("([^,]+)") do
+    values[#values + 1] = tonumber(f) or f
+  end
+
+  if not focused and #values >= 3 then
+    setTerminalVisible(false)
+    setNotificationLogVisible(false)
+    setStopwatchVisible(false)
+    setPlotPoints(2000)
+    focused = true
+  end
+
+  return values
+end
+```
+
+**JavaScript:**
+```javascript
+var focused = false;
+
+function parse(frame) {
+  const values = frame.split(",").map(parseFloat);
+
+  if (!focused && values.length >= 3) {
+    setTerminalVisible(false);
+    setNotificationLogVisible(false);
+    setStopwatchVisible(false);
+    setPlotPoints(2000);
+    focused = true;
+  }
+
+  return values;
+}
+```
+
+### Example: use from a dataset transform
+
+The helpers are also available inside `transform(value, info)`. Useful when only one dataset's value is the trigger, for example clearing the plots the moment a "reset" sentinel value passes through.
+
+```lua
+-- Dataset transform: any reading >= 9999 means the device just rebooted.
+function transform(value)
+  if value >= 9999 then
+    clearPlots()
+    return 0  -- swap the sentinel out for a clean 0
+  end
+  return value
+end
+```
+
+### When NOT to use these
+
+- Do not call any of them on every frame. They are coarse UI commands. `clearPlots` on every frame produces an empty graph; `setActiveWorkspace` on every frame yanks the user's view away. Gate every call behind a state transition (`hadValidFix`, `lastMode`, `focused`) so the call fires once per event.
+- Do not use them as user-preference settings. The user's toolbar toggles, **Points** spinner, and active workspace are persisted to QSettings or the project file. Script-driven changes are ephemeral, intended to react to the data, not to overwrite user choice.
+- They affect the **active dashboard window** only. In a multi-window setup, scripts have no way to address a specific window.
+
 ## Built-in Template Scripts
 
 Serial Studio includes 28 ready-to-use parser templates, available in both Lua and JavaScript. Select a template from the dropdown in the frame parser editor:

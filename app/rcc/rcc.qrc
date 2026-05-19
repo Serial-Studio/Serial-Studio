@@ -472,8 +472,6 @@
         <file>icons/taskbar/clock.svg</file>
         <file>icons/taskbar/console.svg</file>
         <file>icons/taskbar/file-transmission.svg</file>
-        <file>icons/taskbar/mqtt-off.svg</file>
-        <file>icons/taskbar/mqtt-on.svg</file>
         <file>icons/taskbar/notifications.svg</file>
         <file>icons/taskbar/pause.svg</file>
         <file>icons/taskbar/resume.svg</file>
@@ -804,5 +802,9 @@
         <file>icons/project-editor/toolbar/protobuf.svg</file>
         <file>icons/project-editor/treeview/save-warning.svg</file>
         <file>icons/toolbar/extensions-small.svg</file>
+        <file>icons/buttons/workspace-settings.svg</file>
+        <file>icons/buttons/add-workspace.svg</file>
+        <file>icons/buttons/mqtt-off.svg</file>
+        <file>icons/buttons/mqtt-on.svg</file>
     </qresource>
 </RCC>

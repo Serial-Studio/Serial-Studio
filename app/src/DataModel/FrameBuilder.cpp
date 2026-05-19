@@ -38,6 +38,7 @@
 #include "CSV/Export.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/LuaCompat.h"
@@ -1192,6 +1193,9 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
   // Expose actionFire(actionId) for firing dashboard actions from transforms
   DataModel::ActionFireApi::installLua(L);
 
+  // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
+  DataModel::DashboardApi::installLua(L);
+
   // Notification API -- gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(L);
 
@@ -1293,6 +1297,9 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
 
   // Expose actionFire(actionId) for firing dashboard actions from transforms
   DataModel::ActionFireApi::installJS(js);
+
+  // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
+  DataModel::DashboardApi::installJS(js);
 
   // Notification API -- gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(js);

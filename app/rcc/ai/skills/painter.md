@@ -132,11 +132,21 @@ console          // log/warn/error to the editor status pane
 tableGet, tableSet, datasetGetRaw, datasetGetFinal
 deviceWrite(data, sourceId?)  // -> {ok, error?}  -- defaults to group.sourceId
 actionFire(actionId)          // -> {ok, error?}  -- triggers a project Action
+
+// Dashboard helpers (shared with parsers and transforms; never log)
+clearPlots()                  // wipe plot/multiplot/FFT/GPS/3D/waterfall
+setPlotPoints(n)              // horizontal sample window (n >= 1)
+setTerminalVisible(bool)
+setNotificationLogVisible(bool)
+setClockVisible(bool)
+setStopwatchVisible(bool)
+setActiveWorkspace(idOrName)  // workspaceId (>= 1000) OR title (case-insensitive)
 ```
 
-`deviceWrite` and `actionFire`: call from `onFrame()`, NOT `paint()`.
-`paint` runs every UI tick (~24 Hz); writing on every tick saturates the
-link. Use `onFrame()` (once per parsed frame) or guard with state.
+`deviceWrite`, `actionFire`, and the dashboard helpers: call from
+`onFrame()`, NOT `paint()`. `paint` runs every UI tick (~24 Hz);
+writing or `clearPlots`-ing on every tick saturates the link / yanks
+the plot. Use `onFrame()` (once per parsed frame) or guard with state.
 
 ## Color from theme
 

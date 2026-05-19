@@ -237,6 +237,34 @@ function transform(value) {
 }
 ```
 
+## Dashboard controls
+
+Seven UI helpers, all returning `{ ok: true }` or `{ ok: false, error: "..." }`. None of them log. Latch with a top-level `let` so each call fires once per state transition, not every frame.
+
+```js
+clearPlots()                          // wipe plot/multiplot/FFT/GPS/3D/waterfall
+setPlotPoints(n)                      // horizontal sample window (n >= 1)
+setTerminalVisible(visible)           // bool
+setNotificationLogVisible(visible)    // bool
+setClockVisible(visible)              // bool
+setStopwatchVisible(visible)          // bool
+setActiveWorkspace(idOrName)          // workspaceId (int >= 1000) OR title
+```
+
+Example: any reading at the device's reboot sentinel value (>= 9999) wipes the plot history so the new boot draws cleanly.
+
+```js
+function transform(value) {
+  if (value >= 9999) {
+    clearPlots();
+    return 0;
+  }
+  return value;
+}
+```
+
+These affect the active dashboard window only. They do NOT modify the project file or the user's persisted preferences.
+
 ## Errors
 
 Returning `NaN` or `Infinity` falls back to the raw value silently. Throwing

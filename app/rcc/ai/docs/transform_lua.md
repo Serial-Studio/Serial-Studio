@@ -178,6 +178,34 @@ Transforms run on every frame, so be conservative — latch repeated actions
 with a local flag, or rate-limit with a counter, to avoid saturating the
 link.
 
+## Dashboard controls
+
+Seven UI helpers, all returning `{ ok = true }` or `{ ok = false, error = "..." }`. None of them log. Latch with a local flag so each call fires once per state transition, not every frame.
+
+```lua
+clearPlots()                          -- wipe plot/multiplot/FFT/GPS/3D/waterfall
+setPlotPoints(n)                      -- horizontal sample window (n >= 1)
+setTerminalVisible(visible)           -- bool
+setNotificationLogVisible(visible)    -- bool
+setClockVisible(visible)              -- bool
+setStopwatchVisible(visible)          -- bool
+setActiveWorkspace(idOrName)          -- workspaceId (int >= 1000) OR title
+```
+
+Example: any reading at the device's reboot sentinel value (>= 9999) wipes the plot history so the new boot draws cleanly.
+
+```lua
+function transform(value)
+  if value >= 9999 then
+    clearPlots()
+    return 0
+  end
+  return value
+end
+```
+
+These affect the active dashboard window only. They do NOT modify the project file or the user's persisted preferences.
+
 ## Errors
 
 A Lua error logs a watchdog warning and the raw value is used. Returning a

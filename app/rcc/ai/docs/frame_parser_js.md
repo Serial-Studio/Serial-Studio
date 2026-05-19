@@ -148,6 +148,36 @@ Reuses an existing project Action (with its prebuilt payload + timer
 mode). `actionId` is the action's stable id, NOT its index in the list.
 Same shape as `deviceWrite`; never throws.
 
+## Dashboard controls
+
+Seven UI helpers, all returning `{ ok: true }` or `{ ok: false, error: "..." }`. None of them log. Call once on a state transition, NOT on every frame.
+
+```js
+clearPlots()                          // wipe line/multiplot/FFT/GPS/3D/waterfall buffers
+setPlotPoints(n)                      // horizontal sample window (n >= 1)
+setTerminalVisible(visible)           // bool
+setNotificationLogVisible(visible)    // bool
+setClockVisible(visible)              // bool
+setStopwatchVisible(visible)          // bool
+setActiveWorkspace(idOrName)          // workspaceId (int >= 1000) OR title (case-insensitive)
+```
+
+Typical use: reset a GPS trace the moment a valid fix arrives so the line from origin to first real sample disappears.
+
+```js
+var hadFix = false;
+function parse(frame) {
+  const [lat, lon, q] = frame.split(",").map(parseFloat);
+  if (!hadFix && q > 0) {
+    clearPlots();
+    hadFix = true;
+  }
+  return [lat, lon, q];
+}
+```
+
+These affect the active dashboard window only. They do NOT modify the project file or the user's persisted preferences.
+
 ## Errors
 
 Throwing an exception logs a watchdog warning and skips the frame. Returning

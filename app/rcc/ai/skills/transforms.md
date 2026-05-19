@@ -302,3 +302,26 @@ end
 
 Use for closed-loop control (setpoint write-back, alarm raise). For
 user-triggered actions, use an Output Widget instead.
+
+## Dashboard controls
+
+Seven runtime UI helpers, all `{ ok, error? }`, NO logging:
+
+- `clearPlots()` — wipe line / multiplot / FFT / GPS / 3D / waterfall buffers. Widgets, datasets, actions, axis bounds intact.
+- `setPlotPoints(n)` — horizontal sample window for line plots (n >= 1).
+- `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)` — show/hide the dashboard widgets.
+- `setActiveWorkspace(idOrName)` — switch active workspace tab. Numeric `workspaceId` (>= 1000) or case-insensitive title.
+
+Transforms run on every frame — gate every call behind a latch (`local fired = false` / `let fired = false`) or a sentinel-value match. Example: any reading at the device reboot sentinel (>= 9999) clears the plot history:
+
+```lua
+function transform(value)
+  if value >= 9999 then
+    clearPlots()
+    return 0
+  end
+  return value
+end
+```
+
+Affects the active dashboard window only. Does NOT persist to the project file or QSettings.

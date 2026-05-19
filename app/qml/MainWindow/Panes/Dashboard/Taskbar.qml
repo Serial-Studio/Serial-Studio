@@ -891,9 +891,9 @@ Item {
       Layout.preferredHeight: 24
       opacity: enabled ? 1 : 0.5
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/icons/buttons/wrench.svg"
       enabled: taskBar && taskBar.activeGroupId >= 1000
       icon.color: Cpp_ThemeManager.colors["taskbar_text"]
+      icon.source: "qrc:/icons/buttons/workspace-settings.svg"
       onClicked: {
         var model = taskBar.workspaceModel
         for (var i = 0; i < model.length; ++i) {
@@ -915,7 +915,7 @@ Item {
       Layout.preferredHeight: 24
       Layout.alignment: Qt.AlignVCenter
       onClicked: root.newWorkspaceRequested()
-      icon.source: "qrc:/icons/buttons/plus.svg"
+      icon.source: "qrc:/icons/buttons/add-workspace.svg"
       icon.color: Cpp_ThemeManager.colors["taskbar_text"]
       visible: !(typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
     }
@@ -928,14 +928,15 @@ Item {
 
       iconSize: 18
       background: Item{}
+      icon.color: "transparent"
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
       Layout.alignment: Qt.AlignVCenter
+      opacity: Cpp_MQTT_Publisher.isConnected ? 1 : 0.5
       visible: Cpp_CommercialBuild && Cpp_MQTT_Publisher.enabled
       icon.source: Cpp_MQTT_Publisher.isConnected
-                   ? "qrc:/icons/taskbar/mqtt-on.svg"
-                   : "qrc:/icons/taskbar/mqtt-off.svg"
-      icon.color: "transparent"
+                   ? "qrc:/icons/buttons/mqtt-on.svg"
+                   : "qrc:/icons/buttons/mqtt-off.svg"
       ToolTip.visible: hovered && !mqttStatusPopup.opened
       ToolTip.text: Cpp_MQTT_Publisher.isConnected
                     ? qsTr("MQTT: Connected to %1").arg(Cpp_MQTT_Publisher.brokerEndpoint)

@@ -384,6 +384,22 @@ Behaves like the user pressing the action's button, including running the action
 
 `actionFire` is also available in frame parsers and painter scripts.
 
+## Controlling the dashboard
+
+Transforms can also drive a small set of dashboard helpers: `clearPlots()`, `setPlotPoints(n)`, `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)`, and `setActiveWorkspace(idOrName)`. They behave the same way they do in parsers and return the same `{ ok, error }` shape. The typical pattern from a transform is "fire once on a state transition", for example:
+
+```lua
+function transform(value)
+  if value >= 9999 then    -- device reboot sentinel
+    clearPlots()
+    return 0
+  end
+  return value
+end
+```
+
+Full reference, including argument types and longer examples (GPS fix reset, mode-driven workspace switching, focus mode): see [Controlling the dashboard](JavaScript-API.md#controlling-the-dashboard-clearplots-and-friends) in the Frame Parser Scripting Reference.
+
 ## Using the Transform Editor
 
 1. Select a dataset in the Project Editor tree.

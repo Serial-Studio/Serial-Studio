@@ -128,6 +128,37 @@ Reuses an existing project Action (with its prebuilt payload + timer
 mode). `actionId` is the action's stable id, NOT its index in the list.
 Same shape as `deviceWrite`; never throws.
 
+## Dashboard controls
+
+Seven UI helpers, all returning `{ ok = true }` or `{ ok = false, error = "..." }`. None of them log. Call once on a state transition, NOT on every frame.
+
+```lua
+clearPlots()                          -- wipe line/multiplot/FFT/GPS/3D/waterfall buffers
+setPlotPoints(n)                      -- horizontal sample window (n >= 1)
+setTerminalVisible(visible)           -- bool
+setNotificationLogVisible(visible)    -- bool
+setClockVisible(visible)              -- bool
+setStopwatchVisible(visible)          -- bool
+setActiveWorkspace(idOrName)          -- workspaceId (int >= 1000) OR title (case-insensitive)
+```
+
+Typical use: reset a GPS trace the moment a valid fix arrives so the line from origin to first real sample disappears.
+
+```lua
+local hadFix = false
+function parse(frame)
+  local lat, lon, q = frame:match("([^,]+),([^,]+),([^,]+)")
+  q = tonumber(q) or 0
+  if not hadFix and q > 0 then
+    clearPlots()
+    hadFix = true
+  end
+  return { tonumber(lat), tonumber(lon), q }
+end
+```
+
+These affect the active dashboard window only. They do NOT modify the project file or the user's persisted preferences.
+
 ## Errors
 
 A Lua error logs a watchdog warning and skips the frame. The Lua state is

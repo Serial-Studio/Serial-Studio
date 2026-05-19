@@ -97,15 +97,26 @@ datasetGetFinal(uniqueId)                      // final value of any dataset
 // Closed-loop control APIs (shared with parsers and transforms)
 deviceWrite(data, sourceId?)                   // -> { ok, error? }
 actionFire(actionId)                           // -> { ok, error? }
+
+// Dashboard helpers (shared with parsers and transforms)
+clearPlots()                                   // wipe plot/multiplot/FFT/GPS/3D/waterfall
+setPlotPoints(n)                               // horizontal sample window (n >= 1)
+setTerminalVisible(visible)                    // bool
+setNotificationLogVisible(visible)             // bool
+setClockVisible(visible)                       // bool
+setStopwatchVisible(visible)                   // bool
+setActiveWorkspace(idOrName)                   // workspaceId (>= 1000) OR title
 ```
 
 `deviceWrite`'s default `sourceId` follows the painter's group sourceId
 (updated automatically when the host group changes). `actionFire` fires a
-project Action by its stable `actionId`.
+project Action by its stable `actionId`. The dashboard helpers all return
+`{ ok, error? }` and never log.
 
 **Call these from `onFrame()`, NOT `paint()`.** `paint` runs on every
-dashboard tick (24 Hz); a write per paint will saturate the link. Use
-`onFrame()` (one call per parsed frame) or guard with a state machine.
+dashboard tick (24 Hz); a write or `clearPlots` per paint will saturate
+the link / yank the plot. Use `onFrame()` (one call per parsed frame) or
+guard with a state machine.
 
 ## Top-level state
 

@@ -31,6 +31,7 @@
 
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
+#include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "Misc/Utilities.h"
@@ -168,6 +169,9 @@ void DataModel::LuaScriptEngine::createState()
 
   // Expose actionFire(actionId) for firing dashboard actions from the parser
   DataModel::ActionFireApi::installLua(m_state);
+
+  // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
+  DataModel::DashboardApi::installLua(m_state);
 
   // Store 'this' pointer in the Lua registry for the watchdog hook
   lua_pushlightuserdata(m_state, this);

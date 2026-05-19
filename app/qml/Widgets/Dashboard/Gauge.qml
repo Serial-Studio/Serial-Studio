@@ -171,6 +171,19 @@ Item {
   }
 
   //
+  // Padded text honoring the dataset displayFormat.
+  //
+  function getPaddedFormattedText(val) {
+    const a = formatValue(model.minValue)
+    const b = formatValue(model.maxValue)
+    const v = formatValue(val)
+    const refLen = Math.max(a.length, b.length, v.length)
+    const pad = " ".repeat(Math.max(0, refLen - v.length))
+    const units = model.units.length > 0 ? " " + model.units : ""
+    return pad + v + units
+  }
+
+  //
   // SwipeView -- page 0 = analog dial, page 1 = digital readout.
   // Active page is persisted per-widget via Cpp_JSON_ProjectModel.
   //
@@ -424,7 +437,8 @@ Item {
               anchors.bottom: gaugeFace.bottom
               anchors.bottomMargin: gaugeFace.border.width + 16
               anchors.horizontalCenter: gaugeFace.horizontalCenter
-              width: Math.min(gaugeFace.width * 0.55, gaugeFace.width - 16)
+              width: Math.min(Math.max(gaugeFace.width * 0.55, valueBoxMetrics.width + 22),
+                              gaugeFace.width - 16)
 
               Text {
                 width: parent.width
@@ -450,7 +464,7 @@ Item {
                 antialiasing: true
                 height: valueText.implicitHeight + 8
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(parent.width, valueText.implicitWidth + 18)
+                width: Math.min(parent.width, valueBoxMetrics.width + 18)
                 border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.35)
                 color: model.alarmTriggered
                        ? (valueBox.alarmFlashOn
@@ -461,6 +475,20 @@ Item {
                 Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
 
                 property bool alarmFlashOn: false
+
+                TextMetrics {
+                  id: valueBoxMetrics
+
+                  font.bold: true
+                  font.pixelSize: fontSize * 1.05
+                  font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                  text: {
+                    const a = root.formatValue(root.model.minValue)
+                    const b = root.formatValue(root.model.maxValue)
+                    const longer = a.length >= b.length ? a : b
+                    return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
+                  }
+                }
 
                 SequentialAnimation {
                   loops: Animation.Infinite
@@ -483,8 +511,7 @@ Item {
                             ? "#ffffff"
                             : Cpp_ThemeManager.colors["alarm"])
                          : Cpp_ThemeManager.colors["console_text"]
-                  text: formatValue(model.value)
-                        + (model.units.length > 0 ? " " + model.units : "")
+                  text: root.getPaddedFormattedText(model.value)
 
                   Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
                 }

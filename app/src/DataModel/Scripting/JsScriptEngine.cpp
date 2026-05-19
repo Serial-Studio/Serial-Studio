@@ -26,6 +26,7 @@
 
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
+#include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "Misc/Utilities.h"
 
@@ -229,6 +230,9 @@ DataModel::JsScriptEngine::JsScriptEngine()
 
   // Expose actionFire(actionId) for firing dashboard actions from the parser
   DataModel::ActionFireApi::installJS(&m_engine);
+
+  // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
+  DataModel::DashboardApi::installJS(&m_engine);
 }
 
 /**

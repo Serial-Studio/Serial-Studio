@@ -216,11 +216,11 @@
                 },
                 {
                     "alarmEnabled": true,
-                    "alarmHigh": 80,
+                    "alarmHigh": 110,
                     "alarmLow": 0,
                     "datasetId": 4,
                     "displayFormat": "0d",
-                    "displayTickCount": 11,
+                    "displayTickCount": 13,
                     "fft": false,
                     "fftMax": 0,
                     "fftMin": 0,
@@ -241,7 +241,7 @@
                     "units": "km/h",
                     "value": "",
                     "widget": "meter",
-                    "widgetMax": 100,
+                    "widgetMax": 120,
                     "widgetMin": 0,
                     "xAxis": -1
                 },
@@ -301,7 +301,7 @@
         "sslProtocol": 5,
         "topicBase": ""
     },
-    "pointCount": 4000,
+    "pointCount": 10000,
     "schemaVersion": 2,
     "sources": [
         {
@@ -311,7 +311,7 @@
             "connection": {
                 "autoKeepAlive": true,
                 "cleanSession": true,
-                "clientId": "xmekagztjl3757pu",
+                "clientId": "nh23qq37hstnzex3",
                 "hostname": "mqtt.hsl.fi",
                 "keepAlive": 60,
                 "mqttVersion": 2,
@@ -325,7 +325,7 @@
             "decoderMethod": 0,
             "frameDetection": 2,
             "frameEnd": "\\n",
-            "frameParserCode": "/**\n * HSL Helsinki Public Transit Vehicle Position Parser\n * \n * Streams live GPS coordinates and telemetry from Helsinki's public transport fleet\n * (~1500 vehicles, 1+ update per second per vehicle).\n * \n * MQTT Source:\n *   - Host: mqtt.hsl.fi\n *   - Topic: /hfp/v2/journey/ongoing/vp/#\n *   - Payload: {\"VP\":{vehicle_position_object}}\n * \n * Features:\n *   - Buffers incoming MQTT stream (handles multi-frame JSON)\n *   - Extracts complete JSON objects from arbitrary byte boundaries\n *   - Filters to single target vehicle (vehicle \"610\" by default)\n *   - Respects string escapes and nested braces\n * \n * Target Vehicle: Set via const TARGET_VEHICLE (line 16)\n * \n * Dataset Output (8 columns):\n *   [1] Latitude (°)           — GPS latitude coordinate\n *   [2] Longitude (°)          — GPS longitude coordinate\n *   [3] Altitude (m)           — Placeholder (always 0)\n *   [4] Vehicle ID             — Bus/tram/train identifier\n *   [5] Line Designation       — Route number (e.g., \"U\", \"2015\")\n *   [6] Direction              — Route direction (\"1\" or \"2\")\n *   [7] Timestamp (UTC)        — ISO 8601 departure time\n *   [8] Speed (m/s)            — Instantaneous velocity\n *   [9] Heading (°)            — Direction of travel (0-360)\n */\n\nconst TARGET_VEHICLE = \"610\";\nlet buffer = \"\";\n\nfunction parse(frame) {\n  // Accumulate incoming bytes into buffer (MQTT is stream, not frame-delimited)\n  buffer += frame;\n\n  const results = [];\n\n  // Extract as many complete JSON messages as possible from the buffer\n  while (buffer.length > 0) {\n    // Locate the next JSON object start\n    const jsonStart = buffer.indexOf('{');\n\n    // No JSON found; discard accumulated garbage and wait for next chunk\n    if (jsonStart === -1) {\n      buffer = \"\";\n      return results.length > 0 ? results : [];\n    }\n\n    // Remove any non-JSON prefix (e.g., MQTT topic cruft)\n    if (jsonStart > 0) {\n      buffer = buffer.substring(jsonStart);\n    }\n\n    // Scan forward to find the matching closing brace, respecting string literals\n    let braceCount = 0;\n    let inString = false;\n    let escape = false;\n    let jsonEnd = -1;\n\n    for (let i = 0; i < buffer.length; i++) {\n      const char = buffer[i];\n\n      // Handle escape sequences in string values\n      if (escape) {\n        escape = false;\n        continue;\n      }\n\n      if (char === '\\\\') {\n        escape = true;\n        continue;\n      }\n\n      // Track whether we're inside a quoted string\n      if (char === '\"') {\n        inString = !inString;\n        continue;\n      }\n\n      // Count braces only outside strings\n      if (!inString) {\n        if (char === '{') braceCount++;\n        else if (char === '}') braceCount--;\n\n        // Complete JSON object found when we return to brace depth 0\n        if (braceCount === 0 && i > 0) {\n          jsonEnd = i + 1;\n          break;\n        }\n      }\n    }\n\n    // Incomplete JSON; wait for more data from MQTT\n    if (jsonEnd === -1) {\n      return results.length > 0 ? results : [];\n    }\n\n    // Extract the JSON string and remove it from buffer\n    const jsonStr = buffer.substring(0, jsonEnd);\n    buffer = buffer.substring(jsonEnd);\n\n    // Parse and extract vehicle position\n    try {\n      const obj = JSON.parse(jsonStr);\n\n      // HSL wraps position data under the \"VP\" key\n      if (obj.VP) {\n        const vp = obj.VP;\n\n        // Only emit rows for the target vehicle; skip all others silently\n        if (String(vp.veh) === TARGET_VEHICLE) {\n          results.push([\n            vp.lat || 0,              // [1] Latitude\n            vp.long || 0,             // [2] Longitude\n            0,                        // [3] Altitude (placeholder)\n            vp.veh || \"\",             // [4] Vehicle ID\n            vp.desi || \"\",            // [5] Line Designation\n            vp.dir || \"\",             // [6] Direction\n            vp.tst || \"\",             // [7] Timestamp\n            vp.spd || 0,              // [8] Speed (m/s) → converted to km/h by transform\n            vp.hdg || 0               // [9] Heading (degrees)\n          ]);\n        }\n      }\n    } catch (e) {\n      console.warn(\"JSON parse error:\", e.message);\n    }\n  }\n\n  return results;\n}\n",
+            "frameParserCode": "/**\n * HSL Helsinki Public Transit Vehicle Position Parser\n *\n * Streams live GPS coordinates and telemetry from Helsinki's public transport fleet\n * (~1500 vehicles, 1+ update per second per vehicle).\n *\n * MQTT Source:\n *   - Host: mqtt.hsl.fi\n *   - Topic: /hfp/v2/journey/ongoing/vp/#\n *   - Payload: {\"VP\":{vehicle_position_object}}\n *\n * Features:\n *   - Buffers incoming MQTT stream (handles multi-frame JSON)\n *   - Extracts complete JSON objects from arbitrary byte boundaries\n *   - Filters to single target vehicle (vehicle \"610\" by default)\n *   - Respects string escapes and nested braces\n *   - Maintains last valid packet; displays stub data until first packet received\n *   - After first valid packet, re-sends last packet each frame until new data arrives\n *\n * Target Vehicle: Set via const TARGET_VEHICLE (line 16)\n * Default Map Center: Helsinki city center (60.1699° N, 24.9384° E)\n *\n * Dataset Output (9 columns):\n *   [1] Latitude (°)           — GPS latitude coordinate\n *   [2] Longitude (°)          — GPS longitude coordinate\n *   [3] Altitude (m)           — Placeholder (always 0)\n *   [4] Vehicle ID             — Bus/tram/train identifier\n *   [5] Line Designation       — Route number (e.g., \"U\", \"2015\")\n *   [6] Direction              — Route direction (\"1\" or \"2\")\n *   [7] Timestamp (UTC)        — ISO 8601 departure time\n *   [8] Speed (m/s)            — Instantaneous velocity\n *   [9] Heading (°)            — Direction of travel (0-360)\n */\n\nconst TARGET_VEHICLE = \"6314\";\nconst HELSINKI_LAT = 60.1699;    // Helsinki city center latitude\nconst HELSINKI_LON = 24.9384;    // Helsinki city center longitude\n\nlet buffer = \"\";\nlet lastPacket = null;        // Holds [lat, lon, alt, veh, desi, dir, tst, spd, hdg]\nlet haveFirstPacket = false;  // Flag: set once first valid packet arrives\n\nfunction parse(frame) {\n  // Accumulate incoming bytes into buffer (MQTT is stream, not frame-delimited)\n  buffer += frame;\n\n  const results = [];\n\n  // Extract as many complete JSON messages as possible from the buffer\n  while (buffer.length > 0) {\n    // Locate the next JSON object start\n    const jsonStart = buffer.indexOf('{');\n\n    // No JSON found; discard accumulated garbage and wait for next chunk\n    if (jsonStart === -1) {\n      buffer = \"\";\n      break;\n    }\n\n    // Remove any non-JSON prefix (e.g., MQTT topic cruft)\n    if (jsonStart > 0) {\n      buffer = buffer.substring(jsonStart);\n    }\n\n    // Scan forward to find the matching closing brace, respecting string literals\n    let braceCount = 0;\n    let inString = false;\n    let escape = false;\n    let jsonEnd = -1;\n\n    for (let i = 0; i < buffer.length; i++) {\n      const char = buffer[i];\n\n      // Handle escape sequences in string values\n      if (escape) {\n        escape = false;\n        continue;\n      }\n\n      if (char === '\\\\') {\n        escape = true;\n        continue;\n      }\n\n      // Track whether we're inside a quoted string\n      if (char === '\"') {\n        inString = !inString;\n        continue;\n      }\n\n      // Count braces only outside strings\n      if (!inString) {\n        if (char === '{') braceCount++;\n        else if (char === '}') braceCount--;\n\n        // Complete JSON object found when we return to brace depth 0\n        if (braceCount === 0 && i > 0) {\n          jsonEnd = i + 1;\n          break;\n        }\n      }\n    }\n\n    // Incomplete JSON; wait for more data from MQTT\n    if (jsonEnd === -1) {\n      break;\n    }\n\n    // Extract the JSON string and remove it from buffer\n    const jsonStr = buffer.substring(0, jsonEnd);\n    buffer = buffer.substring(jsonEnd);\n\n    // Parse and extract vehicle position\n    try {\n      const obj = JSON.parse(jsonStr);\n\n      // HSL wraps position data under the \"VP\" key\n      if (obj.VP) {\n        const vp = obj.VP;\n\n        // Only process packets for the target vehicle\n        if (String(vp.veh) === TARGET_VEHICLE) {\n          // Cache this valid packet\n          lastPacket = [\n          vp.lat || 0,              // [1] Latitude\n          vp.long || 0,             // [2] Longitude\n          0,                        // [3] Altitude (placeholder)\n          vp.veh || \"\",             // [4] Vehicle ID\n          vp.desi || \"\",            // [5] Line Designation\n          vp.dir || \"\",             // [6] Direction\n          vp.tst || \"\",             // [7] Timestamp\n          vp.spd || 0,              // [8] Speed (m/s)\n          vp.hdg || 0               // [9] Heading (degrees)\n          ];\n\n          // Clear dashboard plots on first valid packet\n          if (!haveFirstPacket) {\n            clearPlots();\n            haveFirstPacket = true;\n          }\n\n          results.push(lastPacket);\n        }\n      }\n    } catch (e) {\n      console.warn(\"JSON parse error:\", e.message);\n    }\n  }\n\n  // If we found target packets this frame, return them\n  if (results.length > 0) {\n    return results;\n  }\n\n  // If we have a cached packet, re-send it\n  if (haveFirstPacket && lastPacket) {\n    return [lastPacket];\n  }\n\n  // Before first packet: return Helsinki city center as default\n  return [\n  [HELSINKI_LAT, HELSINKI_LON, 0, \"\", \"\", \"\", \"\", 0, 0]\n  ];\n}\n",
             "frameStart": "$",
             "hexadecimalDelimiters": false,
             "sourceId": 0,
@@ -342,7 +342,7 @@
         },
         "5:0:-1": {
             "autoCenter": true,
-            "mapType": 5
+            "mapType": 0
         },
         "activeGroup": 1001,
         "layout:1000": {
@@ -469,12 +469,12 @@
                 "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 494,
+                        "height": 247,
                         "id": 1,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 5,
-                        "width": 513,
+                        "width": 514,
                         "x": 4,
                         "y": 4
                     },
@@ -484,18 +484,28 @@
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 1,
-                        "width": 515,
-                        "x": 516,
+                        "width": 514,
+                        "x": 517,
                         "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 3,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 13,
+                        "width": 514,
+                        "x": 4,
+                        "y": 250
                     },
                     {
                         "height": 247,
                         "id": 2,
                         "relativeIndex": 0,
                         "state": "normal",
-                        "widgetType": 13,
-                        "width": 515,
-                        "x": 516,
+                        "widgetType": 12,
+                        "width": 514,
+                        "x": 517,
                         "y": 250
                     }
                 ],
@@ -503,6 +513,7 @@
                 "windowOrder": [
                     1,
                     0,
+                    3,
                     2
                 ],
                 "windowOrderTyped": [
@@ -517,6 +528,10 @@
                     {
                         "relativeIndex": 0,
                         "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 12
                     }
                 ]
             }

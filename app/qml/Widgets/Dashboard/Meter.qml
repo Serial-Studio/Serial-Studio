@@ -102,6 +102,19 @@ Item {
     return pad + v + units
   }
 
+  //
+  // Padded text honoring the dataset displayFormat.
+  //
+  function getPaddedFormattedText(val) {
+    const a = formatValue(model.minValue)
+    const b = formatValue(model.maxValue)
+    const v = formatValue(val)
+    const refLen = Math.max(a.length, b.length, v.length)
+    const pad = " ".repeat(Math.max(0, refLen - v.length))
+    const units = model.units.length > 0 ? " " + model.units : ""
+    return pad + v + units
+  }
+
   function niceTickValues(minV, maxV, target) {
     if (minV >= maxV || target < 2) return [minV, maxV]
     const range = maxV - minV
@@ -532,7 +545,7 @@ Item {
                 antialiasing: true
                 anchors.centerIn: parent
                 height: valueText.implicitHeight + 8
-                width: Math.min(parent.width, valueText.implicitWidth + 18)
+                width: Math.min(parent.width, valueBoxMetrics.width + 18)
                 border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.35)
                 color: model.alarmTriggered
                        ? (valueBox.alarmFlashOn
@@ -543,6 +556,20 @@ Item {
                 Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
 
                 property bool alarmFlashOn: false
+
+                TextMetrics {
+                  id: valueBoxMetrics
+
+                  font.bold: true
+                  font.pixelSize: digitalFontSize * 1.05
+                  font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                  text: {
+                    const a = root.formatValue(root.model.minValue)
+                    const b = root.formatValue(root.model.maxValue)
+                    const longer = a.length >= b.length ? a : b
+                    return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
+                  }
+                }
 
                 SequentialAnimation {
                   loops: Animation.Infinite
@@ -565,8 +592,7 @@ Item {
                             ? "#ffffff"
                             : Cpp_ThemeManager.colors["alarm"])
                          : Cpp_ThemeManager.colors["console_text"]
-                  text: formatValue(root.model.value)
-                        + (root.model.units.length > 0 ? " " + root.model.units : "")
+                  text: root.getPaddedFormattedText(root.model.value)
 
                   Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
                 }

@@ -159,6 +159,8 @@ function onFrame() {
 }
 ```
 
+The dashboard helpers (`clearPlots()`, `setPlotPoints(n)`, `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)`, `setActiveWorkspace(idOrName)`) are also available, with the same `{ ok, error }` return shape and the same "fire once on a state transition" guidance. Do not call them from `paint()`.
+
 See [Frame Parser Scripting](JavaScript-API.md) for full signatures and failure modes shared across parsers, transforms, and painters.
 
 ## Drawing API

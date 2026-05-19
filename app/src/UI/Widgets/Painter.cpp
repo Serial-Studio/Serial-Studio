@@ -24,6 +24,7 @@
 #  include "DataModel/Frame.h"
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/NotificationCenter.h"
+#  include "DataModel/Scripting/DashboardApi.h"
 #  include "DataModel/Scripting/DeviceWriteApi.h"
 #  include "Misc/ThemeManager.h"
 #  include "Misc/TimerEvents.h"
@@ -144,6 +145,9 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   // Closed-loop control APIs -- deviceWrite() default source is refreshed in updateData()
   DataModel::DeviceWriteApi::installJS(&m_engine, /*defaultSourceId=*/0);
   DataModel::ActionFireApi::installJS(&m_engine);
+
+  // Dashboard helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
+  DataModel::DashboardApi::installJS(&m_engine);
 
   const auto projectPath = AppState::instance().projectFilePath();
   if (!projectPath.isEmpty())
