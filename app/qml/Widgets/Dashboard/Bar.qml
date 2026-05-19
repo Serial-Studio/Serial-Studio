@@ -273,6 +273,45 @@ Item {
             }
 
             //
+            // Alarm zone highlights -- coloured bands in the tick row, mirroring
+            // the outer-rim alarm shapes on the Gauge/Meter faces.
+            //
+            Repeater {
+              model: [
+                { fromFrac: 0,
+                  toFrac: root.model.normalizedAlarmLow,
+                  active: root.model.alarmsDefined
+                          && root.model.alarmLow  > root.model.minValue
+                          && root.model.alarmLow  < root.model.maxValue },
+                { fromFrac: root.model.normalizedAlarmHigh,
+                  toFrac: 1,
+                  active: root.model.alarmsDefined
+                          && root.model.alarmHigh > root.model.minValue
+                          && root.model.alarmHigh < root.model.maxValue }
+              ]
+              delegate: Rectangle {
+                required property var modelData
+                visible: modelData.active
+                opacity: 0.65
+                antialiasing: true
+                color: Cpp_ThemeManager.colors["alarm"]
+
+                x: isHorizontal
+                   ? modelData.fromFrac * progressBar.width
+                   : progressBar.width
+                y: isHorizontal
+                   ? progressBar.height
+                   : (1 - modelData.toFrac) * progressBar.height
+                width: isHorizontal
+                       ? Math.max(0, (modelData.toFrac - modelData.fromFrac) * progressBar.width)
+                       : 3
+                height: isHorizontal
+                        ? 3
+                        : Math.max(0, (modelData.toFrac - modelData.fromFrac) * progressBar.height)
+              }
+            }
+
+            //
             // Major ticks + labels
             //
             Repeater {
@@ -323,33 +362,6 @@ Item {
               }
             }
 
-            Rectangle {
-              x: isHorizontal ? root.model.normalizedAlarmLow * progressBar.width - width / 2
-                              : progressBar.width
-              y: isHorizontal ? progressBar.height
-                              : (1 - root.model.normalizedAlarmLow) * progressBar.height - height / 2
-              radius: 1
-              width: isHorizontal ? 3 : 12
-              height: isHorizontal ? 12 : 3
-              visible: root.model.alarmsDefined
-                       && root.model.alarmLow > root.model.minValue
-                       && root.model.alarmLow < root.model.maxValue
-              color: Cpp_ThemeManager.colors["alarm"]
-            }
-
-            Rectangle {
-              x: isHorizontal ? root.model.normalizedAlarmHigh * progressBar.width - width / 2
-                              : progressBar.width
-              y: isHorizontal ? progressBar.height
-                              : (1 - root.model.normalizedAlarmHigh) * progressBar.height - height / 2
-              radius: 1
-              width: isHorizontal ? 3 : 12
-              height: isHorizontal ? 12 : 3
-              visible: root.model.alarmsDefined
-                       && root.model.alarmHigh > root.model.minValue
-                       && root.model.alarmHigh < root.model.maxValue
-              color: Cpp_ThemeManager.colors["alarm"]
-            }
           }
 
         }
