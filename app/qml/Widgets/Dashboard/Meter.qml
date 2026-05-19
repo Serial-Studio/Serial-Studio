@@ -132,9 +132,12 @@ Item {
       Layout.fillHeight: true
 
       readonly property real topMargin: 2
-      readonly property real bottomMargin: 4
       readonly property bool showLabels: width >= 130 && height >= 90
-      readonly property bool showFaceLabels: meterArea.faceR >= 45
+      readonly property bool showFaceLabels: width >= 140 && height >= 150
+      readonly property real labelBaseHeight: meterArea.showFaceLabels
+                                              ? Math.round(fontSize * 1.8 + 14) : 0
+      readonly property real labelBaseGap: meterArea.showFaceLabels ? 6 : 0
+      readonly property real bottomMargin: 4 + meterArea.labelBaseGap + meterArea.labelBaseHeight
       readonly property real chromeW: Math.max(3, Math.min(8, Math.min(width, height) * 0.025))
       readonly property real faceR: Math.max(16, Math.min(
                                                width / 2 - meterArea.chromeW - 2,
@@ -144,7 +147,8 @@ Item {
       readonly property real visualHeight: meterArea.faceR + meterArea.tailExtension
       readonly property real faceCx: width / 2
       readonly property real faceCy: Math.max(meterArea.faceR + meterArea.topMargin,
-                                              (meterArea.height - meterArea.visualHeight) / 2 + meterArea.faceR)
+                                              (meterArea.height - meterArea.labelBaseHeight - meterArea.labelBaseGap
+                                               - meterArea.visualHeight) / 2 + meterArea.faceR)
       readonly property real arcBand: Math.max(3, meterArea.faceR * 0.11)
       readonly property int autoTargetTickCount: {
         const arcLen = (angleRangeDeg * Math.PI / 180) * meterArea.faceR
@@ -426,54 +430,73 @@ Item {
       }
 
       //
-      // Face labels -- title (bold) and value+units readout, centered
-      // horizontally on the dial axis and vertically in the middle of
-      // the half-disk face. The needle still sweeps over them, which
-      // matches a classic painted-face analog meter.
+      // Label base -- rectangular panel below the half-arc face,
+      // styled to match the meter's inner face (cream gradient, dark
+      // thin border). Holds the digital value readout on the left and
+      // the dataset title on the right, so the user can always read
+      // the value regardless of needle position.
       //
-      Column {
-        id: faceLabels
+      Rectangle {
+        id: labelBase
 
-        spacing: 4
+        radius: 4
+        border.width: 1.5
+        antialiasing: true
         visible: meterArea.showFaceLabels
-        width: Math.min(meterArea.faceR * 1.3, meterArea.width - 8)
-        x: meterArea.faceCx - width / 2
-        y: meterArea.faceCy - meterArea.faceR / 2 - height / 2
-
-        Text {
-          width: parent.width
-          font.bold: true
-          text: root.model.title
-          elide: Text.ElideRight
-          font.pixelSize: fontSize * 1.05
-          horizontalAlignment: Text.AlignHCenter
-          visible: root.model.title.length > 0
-          color: Cpp_ThemeManager.colors["widget_text"]
-          font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+        height: meterArea.labelBaseHeight
+        width: meterArea.faceR * 2
+        x: meterArea.faceCx - meterArea.faceR
+        y: meterArea.faceCy + meterArea.tailExtension + meterArea.labelBaseGap
+        border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.25)
+        gradient: Gradient {
+          GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.28) }
+          GradientStop { position: 0.5; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.20) }
+          GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.10) }
         }
 
-        Rectangle {
-          id: valueBox
+        RowLayout {
+          spacing: 8
+          anchors.fill: parent
+          anchors.margins: 6
 
-          radius: 3
-          border.width: 1
-          antialiasing: true
-          height: valueText.implicitHeight + 6
-          anchors.horizontalCenter: parent.horizontalCenter
-          width: Math.min(parent.width, valueText.implicitWidth + 16)
-          color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10)
-          border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.10)
+          Rectangle {
+            id: valueBox
+
+            radius: 3
+            border.width: 1
+            antialiasing: true
+            Layout.alignment: Qt.AlignVCenter
+            height: valueText.implicitHeight + 6
+            width: valueText.implicitWidth + 14
+            color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10)
+            border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.10)
+
+            Text {
+              id: valueText
+
+              font.bold: true
+              color: root.fillColor
+              anchors.centerIn: parent
+              font.pixelSize: fontSize * 1.05
+              font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+              text: formatValue(root.model.value)
+                    + (root.model.units.length > 0 ? " " + root.model.units : "")
+            }
+          }
 
           Text {
-            id: valueText
+            id: titleText
 
             font.bold: true
-            color: root.fillColor
-            anchors.centerIn: parent
+            elide: Text.ElideRight
+            Layout.fillWidth: true
+            text: root.model.title
+            Layout.alignment: Qt.AlignVCenter
             font.pixelSize: fontSize * 1.05
+            horizontalAlignment: Text.AlignRight
+            visible: root.model.title.length > 0
+            color: Cpp_ThemeManager.colors["widget_text"]
             font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-            text: formatValue(root.model.value)
-                  + (root.model.units.length > 0 ? " " + root.model.units : "")
           }
         }
       }
