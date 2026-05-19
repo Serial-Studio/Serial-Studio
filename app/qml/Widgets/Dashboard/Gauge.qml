@@ -446,18 +446,6 @@ Item {
               font.family: Cpp_Misc_CommonFonts.widgetFontFamily
             }
 
-            Text {
-              opacity: 0.75
-              width: parent.width
-              text: model.units
-              elide: Text.ElideRight
-              font.pixelSize: fontSize * 0.85
-              horizontalAlignment: Text.AlignHCenter
-              visible: model.units.length > 0
-              color: Cpp_ThemeManager.colors["widget_text"]
-              font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-            }
-
             Item { width: 1; height: 3 }
 
             Rectangle {
@@ -478,9 +466,10 @@ Item {
                 font.bold: true
                 color: root.fillColor
                 anchors.centerIn: parent
-                text: formatValue(model.value)
                 font.pixelSize: fontSize * 1.05
                 font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                text: formatValue(model.value)
+                      + (model.units.length > 0 ? " " + model.units : "")
               }
             }
           }
