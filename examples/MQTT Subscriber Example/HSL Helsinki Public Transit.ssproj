@@ -10,6 +10,7 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
                     "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
@@ -38,6 +39,7 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
                     "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
@@ -66,6 +68,7 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
                     "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
@@ -100,6 +103,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
                     "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
@@ -128,6 +132,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "0d",
                     "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
@@ -156,6 +161,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "0d",
                     "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
@@ -184,6 +190,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 3,
+                    "displayFormat": "0d",
                     "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
@@ -243,6 +250,7 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 5,
+                    "displayFormat": "0d",
                     "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 0,
@@ -261,7 +269,7 @@
                     "title": "Heading",
                     "units": "",
                     "value": "",
-                    "widget": "",
+                    "widget": "compass",
                     "widgetMax": 0,
                     "widgetMin": 0,
                     "xAxis": -1
@@ -293,7 +301,7 @@
         "sslProtocol": 5,
         "topicBase": ""
     },
-    "pointCount": 100,
+    "pointCount": 4000,
     "schemaVersion": 2,
     "sources": [
         {
@@ -301,21 +309,17 @@
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
-                "autoReconnect": false,
-                "baudRate": 115200,
-                "dataBitsIndex": 3,
-                "deviceId": {
-                    "description": "XDS110 (03.00.00.32) Embed with CMSIS-DAP",
-                    "pid": "BEF3",
-                    "portName": "COM5",
-                    "serial": "NOSERIAL",
-                    "vid": "0451"
-                },
-                "dtr": false,
-                "flowControlIndex": 0,
-                "parityIndex": 0,
-                "portIndex": 3,
-                "stopBitsIndex": 0
+                "autoKeepAlive": true,
+                "cleanSession": true,
+                "clientId": "xmekagztjl3757pu",
+                "hostname": "mqtt.hsl.fi",
+                "keepAlive": 60,
+                "mqttVersion": 2,
+                "password": "",
+                "port": 1883,
+                "sslEnabled": false,
+                "topicFilter": "/hfp/v2/journey/ongoing/vp/#",
+                "username": ""
             },
             "decoder": 0,
             "decoderMethod": 0,
@@ -330,9 +334,15 @@
     ],
     "title": "HSL Helsinki Public Transit",
     "widgetSettings": {
+        "12:1:9": {
+            "page": 0
+        },
+        "13:1:8": {
+            "page": 0
+        },
         "5:0:-1": {
             "autoCenter": true,
-            "mapType": 0
+            "mapType": 5
         },
         "activeGroup": 1001,
         "layout:1000": {
@@ -455,32 +465,38 @@
         "layout:5000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 477,
-                "canvasWidth": 950,
+                "canvasHeight": 502,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 469,
+                        "height": 494,
                         "id": 1,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 471,
+                        "widgetType": 5,
+                        "width": 513,
                         "x": 4,
                         "y": 4
                     },
                     {
-                        "height": 235,
+                        "height": 247,
                         "id": 0,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 472,
-                        "x": 474,
+                        "widgetType": 1,
+                        "width": 515,
+                        "x": 516,
                         "y": 4
                     },
                     {
-                        "height": 235,
+                        "height": 247,
                         "id": 2,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 472,
-                        "x": 474,
-                        "y": 238
+                        "widgetType": 13,
+                        "width": 515,
+                        "x": 516,
+                        "y": 250
                     }
                 ],
                 "userReordered": true,
@@ -488,6 +504,20 @@
                     1,
                     0,
                     2
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 5
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 13
+                    }
                 ]
             }
         },
@@ -600,6 +630,11 @@
                     "groupId": 1,
                     "relativeIndex": 0,
                     "widgetType": 13
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 12
                 }
             ],
             "workspaceId": 5000
