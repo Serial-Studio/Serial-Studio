@@ -59,10 +59,11 @@ Item {
   readonly property int hours:   now.getHours()
   readonly property int minutes: now.getMinutes()
   readonly property int seconds: now.getSeconds()
-
   readonly property real secondAngle: seconds * 6
   readonly property real minuteAngle: (minutes + seconds / 60) * 6
   readonly property real hourAngle:   ((hours % 12) + minutes / 60) * 30
+  readonly property real fontSize: Math.max(10, Math.min(14, Math.min(width, height) / 22))
+                                   * Cpp_Misc_CommonFonts.widgetFontScale
 
   function pad(n) { return (n < 10 ? "0" : "") + n }
 
@@ -225,12 +226,9 @@ Item {
               }
 
               Text {
-                visible: faceArea.showHourLabels
-                style: Text.Raised
-                font.bold: true
+                font.pixelSize: fontSize
                 text: hourTickItem.label
-                font.pixelSize: faceArea.fontSize * 1.10
-                styleColor: Qt.rgba(0, 0, 0, 0.3)
+                visible: faceArea.showHourLabels
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 color: Cpp_ThemeManager.colors["widget_text"]
@@ -289,8 +287,6 @@ Item {
             readonly property real cy: height / 2
 
             readonly property color handBase:   Cpp_ThemeManager.colors["widget_border"]
-            readonly property color handLight:  Qt.lighter(handBase, 1.10)
-            readonly property color handDark:   Qt.darker(handBase, 1.10)
             readonly property color handStroke: Qt.darker(handBase, 1.35)
 
             //
@@ -314,16 +310,16 @@ Item {
               ShapePath {
                 strokeWidth: 0.6
                 capStyle: ShapePath.RoundCap
-                joinStyle: ShapePath.RoundJoin
+                joinStyle: ShapePath.MiterJoin
                 strokeColor: needleLayer.handStroke
                 fillGradient: LinearGradient {
+                  x1: needleLayer.cx
+                  x2: needleLayer.cx
                   y1: needleLayer.cy
-                  y2: needleLayer.cy
-                  x1: needleLayer.cx - hourShape.baseW / 2
-                  x2: needleLayer.cx + hourShape.baseW / 2
-                  GradientStop { position: 0.0; color: needleLayer.handLight }
+                  y2: needleLayer.cy - hourShape.tipLen
+                  GradientStop { position: 0.0; color: Qt.darker(needleLayer.handBase, 1.10) }
                   GradientStop { position: 0.5; color: needleLayer.handBase }
-                  GradientStop { position: 1.0; color: needleLayer.handDark }
+                  GradientStop { position: 1.0; color: Qt.lighter(needleLayer.handBase, 1.06) }
                 }
 
                 startY: needleLayer.cy
@@ -372,16 +368,16 @@ Item {
               ShapePath {
                 strokeWidth: 0.6
                 capStyle: ShapePath.RoundCap
-                joinStyle: ShapePath.RoundJoin
+                joinStyle: ShapePath.MiterJoin
                 strokeColor: needleLayer.handStroke
                 fillGradient: LinearGradient {
+                  x1: needleLayer.cx
+                  x2: needleLayer.cx
                   y1: needleLayer.cy
-                  y2: needleLayer.cy
-                  x1: needleLayer.cx - minuteShape.baseW / 2
-                  x2: needleLayer.cx + minuteShape.baseW / 2
-                  GradientStop { position: 0.0; color: needleLayer.handLight }
+                  y2: needleLayer.cy - minuteShape.tipLen
+                  GradientStop { position: 0.0; color: Qt.darker(needleLayer.handBase, 1.10) }
                   GradientStop { position: 0.5; color: needleLayer.handBase }
-                  GradientStop { position: 1.0; color: needleLayer.handDark }
+                  GradientStop { position: 1.0; color: Qt.lighter(needleLayer.handBase, 1.06) }
                 }
 
                 startY: needleLayer.cy

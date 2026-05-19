@@ -139,245 +139,245 @@ Item {
         anchors.margins: 8
         anchors.fill: parent
 
-    //
-    // Bar widget
-    //
-    Item {
-      id: barContainer
-
-      Layout.row: 0
-      Layout.column: 0
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-      //
-      // Hidden source for the soft drop shadow (single MultiEffect pass)
-      //
-      Rectangle {
-        id: progressBarShadowSrc
-
-        visible: false
-        anchors.centerIn: progressBar
-        width: progressBar.width
-        height: progressBar.height
-        radius: 4
-        color: Cpp_ThemeManager.colors["widget_base"]
-      }
-      MultiEffect {
-        shadowBlur: 0.45
-        shadowEnabled: true
-        shadowOpacity: 0.25
-        shadowColor: "#000000"
-        shadowVerticalOffset: 2
-        source: progressBarShadowSrc
-        anchors.fill: progressBarShadowSrc
-      }
-
-      Item {
-        id: progressBar
-
-        anchors.centerIn: parent
-        width: isHorizontal
-               ? Math.max(40, parent.width - (showLabels ? labelMetrics.width + 12 : 8))
-               : Math.max(28, Math.min(parent.width * 0.55, 220))
-        height: isHorizontal
-               ? Math.max(28, Math.min(parent.height * 0.65, 220))
-               : Math.max(40, parent.height - (showLabels ? labelMetrics.height * 2 + 8 : 8))
-
-        readonly property real fillFrac: root.normalizedValue
-
         //
-        // Bezel frame: light at top edge, darker at bottom
+        // Bar widget
         //
-        Rectangle {
-          id: bezel
+        Item {
+          id: barContainer
 
-          radius: 4
-          border.width: 2
-          anchors.fill: parent
-          antialiasing: true
-          border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.2)
-          gradient: Gradient {
-            orientation: isHorizontal ? Gradient.Vertical : Gradient.Horizontal
-            GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.15) }
-            GradientStop { position: 0.5; color: Cpp_ThemeManager.colors["widget_base"] }
-            GradientStop { position: 1.0; color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10) }
-          }
-        }
-
-        //
-        // Inner well (cream/lighter interior, sits inside the frame)
-        //
-        Rectangle {
-          id: innerWell
-
-          radius: 3
-          clip: true
-          border.width: 1
-          anchors.margins: 3
-          antialiasing: true
-          anchors.fill: parent
-          border.color: Qt.rgba(0, 0, 0, 0.18)
-          gradient: Gradient {
-            orientation: isHorizontal ? Gradient.Vertical : Gradient.Horizontal
-            GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.20) }
-            GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.06) }
-          }
+          Layout.row: 0
+          Layout.column: 0
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
           //
-          // Coloured fill -- grows from low end of the range
+          // Hidden source for the soft drop shadow (single MultiEffect pass)
           //
           Rectangle {
-            id: fillRect
+            id: progressBarShadowSrc
 
-            radius: 2
-            antialiasing: true
-            readonly property real innerW: innerWell.width - innerWell.border.width * 2
-            readonly property real innerH: innerWell.height - innerWell.border.width * 2
-            x: innerWell.border.width
-            y: isHorizontal
-               ? innerWell.border.width
-               : innerWell.border.width + (1 - progressBar.fillFrac) * fillRect.innerH
+            visible: false
+            anchors.centerIn: progressBar
+            width: progressBar.width
+            height: progressBar.height
+            radius: 4
+            color: Cpp_ThemeManager.colors["widget_base"]
+          }
+          MultiEffect {
+            shadowBlur: 0.45
+            shadowEnabled: true
+            shadowOpacity: 0.25
+            shadowColor: "#000000"
+            shadowVerticalOffset: 2
+            source: progressBarShadowSrc
+            anchors.fill: progressBarShadowSrc
+          }
+
+          Item {
+            id: progressBar
+
+            anchors.centerIn: parent
             width: isHorizontal
-                   ? Math.max(0, progressBar.fillFrac * fillRect.innerW)
-                   : fillRect.innerW
+                   ? Math.max(40, parent.width - (showLabels ? labelMetrics.width + 12 : 8))
+                   : Math.max(28, Math.min(parent.width * 0.55, 220))
             height: isHorizontal
-                    ? fillRect.innerH
-                    : Math.max(0, progressBar.fillFrac * fillRect.innerH)
+                    ? Math.max(28, Math.min(parent.height * 0.65, 220))
+                    : Math.max(40, parent.height - (showLabels ? labelMetrics.height * 2 + 8 : 8))
 
-            gradient: Gradient {
-              orientation: isHorizontal ? Gradient.Horizontal : Gradient.Vertical
-              GradientStop { position: 0.0; color: Qt.lighter(root.fillColor, 1.20) }
-              GradientStop { position: 0.5; color: root.fillColor }
-              GradientStop { position: 1.0; color: Qt.darker(root.fillColor, 1.10) }
+            readonly property real fillFrac: root.normalizedValue
+
+            //
+            // Bezel frame: light at top edge, darker at bottom
+            //
+            Rectangle {
+              id: bezel
+
+              radius: 4
+              border.width: 2
+              anchors.fill: parent
+              antialiasing: true
+              border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.2)
+              gradient: Gradient {
+                orientation: isHorizontal ? Gradient.Vertical : Gradient.Horizontal
+                GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.15) }
+                GradientStop { position: 0.5; color: Cpp_ThemeManager.colors["widget_base"] }
+                GradientStop { position: 1.0; color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10) }
+              }
+            }
+
+            //
+            // Inner well (cream/lighter interior, sits inside the frame)
+            //
+            Rectangle {
+              id: innerWell
+
+              radius: 3
+              clip: true
+              border.width: 1
+              anchors.margins: 3
+              antialiasing: true
+              anchors.fill: parent
+              border.color: Qt.rgba(0, 0, 0, 0.18)
+              gradient: Gradient {
+                orientation: isHorizontal ? Gradient.Vertical : Gradient.Horizontal
+                GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.20) }
+                GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.06) }
+              }
+
+              //
+              // Coloured fill -- grows from low end of the range
+              //
+              Rectangle {
+                id: fillRect
+
+                radius: 2
+                antialiasing: true
+                readonly property real innerW: innerWell.width - innerWell.border.width * 2
+                readonly property real innerH: innerWell.height - innerWell.border.width * 2
+                x: innerWell.border.width
+                y: isHorizontal
+                   ? innerWell.border.width
+                   : innerWell.border.width + (1 - progressBar.fillFrac) * fillRect.innerH
+                width: isHorizontal
+                       ? Math.max(0, progressBar.fillFrac * fillRect.innerW)
+                       : fillRect.innerW
+                height: isHorizontal
+                        ? fillRect.innerH
+                        : Math.max(0, progressBar.fillFrac * fillRect.innerH)
+
+                gradient: Gradient {
+                  orientation: isHorizontal ? Gradient.Horizontal : Gradient.Vertical
+                  GradientStop { position: 0.0; color: Qt.lighter(root.fillColor, 1.20) }
+                  GradientStop { position: 0.5; color: root.fillColor }
+                  GradientStop { position: 1.0; color: Qt.darker(root.fillColor, 1.10) }
+                }
+
+                Rectangle {
+                  x: 0
+                  width: 1
+                  visible: !isHorizontal
+                  anchors.top: parent.top
+                  anchors.bottom: parent.bottom
+                  color: Qt.rgba(1, 1, 1, 0.30)
+                }
+                Rectangle {
+                  y: 0
+                  height: 1
+                  visible: isHorizontal
+                  anchors.left: parent.left
+                  anchors.right: parent.right
+                  color: Qt.rgba(1, 1, 1, 0.30)
+                }
+              }
+            }
+
+            //
+            // Major ticks + labels
+            //
+            Repeater {
+              model: tickCount
+              delegate: Item {
+                required property int index
+                readonly property real frac: index / (tickCount - 1)
+                readonly property real tickValue: root.model.minValue + frac * (root.model.maxValue - root.model.minValue)
+
+                Rectangle {
+                  width: isHorizontal ? 1.5 : 8
+                  height: isHorizontal ? 8 : 1.5
+                  radius: 0.75
+                  color: Cpp_ThemeManager.colors["widget_border"]
+                  x: isHorizontal ? (parent.frac * progressBar.width - width / 2) : progressBar.width
+                  y: isHorizontal ? progressBar.height : ((1 - parent.frac) * progressBar.height - height / 2)
+                }
+
+                Text {
+                  visible: showLabels && root.labelsFit
+                  font.pixelSize: fontSize
+                  text: formatValue(parent.tickValue)
+                  color: Cpp_ThemeManager.colors["widget_text"]
+                  font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                  x: isHorizontal ? (parent.frac * progressBar.width - width / 2) : progressBar.width + 10
+                  y: isHorizontal ? progressBar.height + 10 : ((1 - parent.frac) * progressBar.height - height / 2)
+                }
+              }
+            }
+
+            //
+            // Minor ticks between majors (4 between each pair)
+            //
+            Repeater {
+              model: (tickCount - 1) * 4
+              delegate: Rectangle {
+                required property int index
+                readonly property int subIndex: (index % 4) + 1
+                readonly property int majorIndex: Math.floor(index / 4)
+                readonly property real frac: (majorIndex + subIndex / 5) / (tickCount - 1)
+
+                width: isHorizontal ? 1 : 4
+                height: isHorizontal ? 4 : 1
+                opacity: 0.65
+                color: Cpp_ThemeManager.colors["widget_border"]
+                x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width
+                y: isHorizontal ? progressBar.height : ((1 - frac) * progressBar.height - height / 2)
+              }
             }
 
             Rectangle {
-              x: 0
-              width: 1
-              visible: !isHorizontal
-              anchors.top: parent.top
-              anchors.bottom: parent.bottom
-              color: Qt.rgba(1, 1, 1, 0.30)
+              x: isHorizontal ? root.model.normalizedAlarmLow * progressBar.width - width / 2
+                              : progressBar.width
+              y: isHorizontal ? progressBar.height
+                              : (1 - root.model.normalizedAlarmLow) * progressBar.height - height / 2
+              radius: 1
+              width: isHorizontal ? 3 : 12
+              height: isHorizontal ? 12 : 3
+              visible: root.model.alarmsDefined
+                       && root.model.alarmLow > root.model.minValue
+                       && root.model.alarmLow < root.model.maxValue
+              color: Cpp_ThemeManager.colors["alarm"]
             }
-            Rectangle {
-              y: 0
-              height: 1
-              visible: isHorizontal
-              anchors.left: parent.left
-              anchors.right: parent.right
-              color: Qt.rgba(1, 1, 1, 0.30)
-            }
-          }
-        }
-
-        //
-        // Major ticks + labels
-        //
-        Repeater {
-          model: tickCount
-          delegate: Item {
-            required property int index
-            readonly property real frac: index / (tickCount - 1)
-            readonly property real tickValue: root.model.minValue + frac * (root.model.maxValue - root.model.minValue)
 
             Rectangle {
-              width: isHorizontal ? 1.5 : 8
-              height: isHorizontal ? 8 : 1.5
-              radius: 0.75
-              color: Cpp_ThemeManager.colors["widget_border"]
-              x: isHorizontal ? (parent.frac * progressBar.width - width / 2) : progressBar.width
-              y: isHorizontal ? progressBar.height : ((1 - parent.frac) * progressBar.height - height / 2)
-            }
-
-            Text {
-              visible: showLabels && root.labelsFit
-              font.pixelSize: fontSize
-              text: formatValue(parent.tickValue)
-              color: Cpp_ThemeManager.colors["widget_text"]
-              font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-              x: isHorizontal ? (parent.frac * progressBar.width - width / 2) : progressBar.width + 10
-              y: isHorizontal ? progressBar.height + 10 : ((1 - parent.frac) * progressBar.height - height / 2)
+              x: isHorizontal ? root.model.normalizedAlarmHigh * progressBar.width - width / 2
+                              : progressBar.width
+              y: isHorizontal ? progressBar.height
+                              : (1 - root.model.normalizedAlarmHigh) * progressBar.height - height / 2
+              radius: 1
+              width: isHorizontal ? 3 : 12
+              height: isHorizontal ? 12 : 3
+              visible: root.model.alarmsDefined
+                       && root.model.alarmHigh > root.model.minValue
+                       && root.model.alarmHigh < root.model.maxValue
+              color: Cpp_ThemeManager.colors["alarm"]
             }
           }
+
         }
 
         //
-        // Minor ticks between majors (4 between each pair)
+        // Range/scale + current value display
         //
-        Repeater {
-          model: (tickCount - 1) * 4
-          delegate: Rectangle {
-            required property int index
-            readonly property int subIndex: (index % 4) + 1
-            readonly property int majorIndex: Math.floor(index / 4)
-            readonly property real frac: (majorIndex + subIndex / 5) / (tickCount - 1)
+        VisualRange {
+          id: range
 
-            width: isHorizontal ? 1 : 4
-            height: isHorizontal ? 4 : 1
-            opacity: 0.65
-            color: Cpp_ThemeManager.colors["widget_border"]
-            x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width
-            y: isHorizontal ? progressBar.height : ((1 - frac) * progressBar.height - height / 2)
-          }
+          Layout.row: 1
+          Layout.column: 0
+          value: model.value
+          units: model.units
+          rangeVisible: false
+          maxValue: model.maxValue
+          minValue: model.minValue
+          alarm: model.alarmTriggered
+          visible: root.height >= 110
+          Layout.alignment: Qt.AlignHCenter
+          Layout.minimumWidth: implicitWidth
+          maximumWidth: Math.min(root.width * 0.85, 320)
+          Layout.preferredHeight: visible ? implicitHeight : 0
         }
 
-        Rectangle {
-          x: isHorizontal ? root.model.normalizedAlarmLow * progressBar.width - width / 2
-                          : progressBar.width
-          y: isHorizontal ? progressBar.height
-                          : (1 - root.model.normalizedAlarmLow) * progressBar.height - height / 2
-          radius: 1
-          width: isHorizontal ? 3 : 12
-          height: isHorizontal ? 12 : 3
-          visible: root.model.alarmsDefined
-                   && root.model.alarmLow > root.model.minValue
-                   && root.model.alarmLow < root.model.maxValue
-          color: Cpp_ThemeManager.colors["alarm"]
+        Item {
+          implicitHeight: 4
         }
-
-        Rectangle {
-          x: isHorizontal ? root.model.normalizedAlarmHigh * progressBar.width - width / 2
-                          : progressBar.width
-          y: isHorizontal ? progressBar.height
-                          : (1 - root.model.normalizedAlarmHigh) * progressBar.height - height / 2
-          radius: 1
-          width: isHorizontal ? 3 : 12
-          height: isHorizontal ? 12 : 3
-          visible: root.model.alarmsDefined
-                   && root.model.alarmHigh > root.model.minValue
-                   && root.model.alarmHigh < root.model.maxValue
-          color: Cpp_ThemeManager.colors["alarm"]
-        }
-      }
-
-    }
-
-    //
-    // Range/scale + current value display
-    //
-    VisualRange {
-      id: range
-
-      Layout.row: 1
-      Layout.column: 0
-      value: model.value
-      units: model.units
-      rangeVisible: false
-      maxValue: model.maxValue
-      minValue: model.minValue
-      alarm: model.alarmTriggered
-      visible: root.height >= 110
-      Layout.alignment: Qt.AlignHCenter
-      Layout.minimumWidth: implicitWidth
-      maximumWidth: Math.min(root.width * 0.85, 320)
-      Layout.preferredHeight: visible ? implicitHeight : 0
-    }
-
-    Item {
-      implicitHeight: 4
-    }
       }
     }
 
@@ -517,7 +517,7 @@ Item {
     target: swipeView
     function onCurrentIndexChanged() {
       Cpp_JSON_ProjectModel.saveWidgetSetting(
-        root.widgetId, "page", swipeView.currentIndex)
+            root.widgetId, "page", swipeView.currentIndex)
     }
   }
 }

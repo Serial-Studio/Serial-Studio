@@ -198,8 +198,8 @@ Item {
               readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
               readonly property real tickOuter: gaugeFace.width / 2 - gaugeFace.border.width - 4
               readonly property real tickInner: tickOuter - (isMajor
-                                                ? Math.max(8, gaugeFace.width * 0.060)
-                                                : Math.max(3, gaugeFace.width * 0.025))
+                                                             ? Math.max(8, gaugeFace.width * 0.060)
+                                                             : Math.max(3, gaugeFace.width * 0.025))
               readonly property real tickRadius: (tickOuter + tickInner) / 2
 
               Rectangle {
@@ -236,10 +236,8 @@ Item {
                                                   - Math.max(10, root.fontSize * 1.10)
 
               Text {
-                style: Text.Raised
                 text: parent.modelData
                 font.bold: parent.isPrimary
-                styleColor: Qt.rgba(0, 0, 0, 0.30)
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: root.fontSize * (parent.isPrimary ? 1.35 : 1.00)
@@ -409,7 +407,7 @@ Item {
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             text: root.getPaddedText(root.model.value) + " "
                   + (root.model.cardinal.length < 2 ? root.model.cardinal + " "
-                                                   : root.model.cardinal)
+                                                    : root.model.cardinal)
           }
 
           Text {
@@ -440,6 +438,18 @@ Item {
     anchors.bottom: parent.bottom
     currentIndex: swipeView.currentIndex
     anchors.horizontalCenter: parent.horizontalCenter
+
+    delegate: Rectangle {
+      required property int index
+      implicitWidth: 8
+      implicitHeight: 8
+      radius: width / 2
+      antialiasing: true
+      color: Cpp_ThemeManager.colors["widget_text"]
+      opacity: index === pageIndicator.currentIndex ? 0.95 : 0.40
+      Behavior on opacity { NumberAnimation { duration: 120 } }
+    }
+
     onCurrentIndexChanged: {
       if (swipeView.currentIndex !== currentIndex)
         swipeView.currentIndex = currentIndex
@@ -459,7 +469,7 @@ Item {
     target: swipeView
     function onCurrentIndexChanged() {
       Cpp_JSON_ProjectModel.saveWidgetSetting(
-        root.widgetId, "page", swipeView.currentIndex)
+            root.widgetId, "page", swipeView.currentIndex)
     }
   }
 }
