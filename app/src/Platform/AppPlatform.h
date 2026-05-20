@@ -39,6 +39,20 @@ protected:
 };
 
 /**
+ * @brief Amplifies trackpad pixelDelta wheel events so QML views scroll at usable speed.
+ */
+class TrackpadScrollFilter : public QObject {
+public:
+  explicit TrackpadScrollFilter(QObject* parent = nullptr);
+
+protected:
+  bool eventFilter(QObject* obj, QEvent* event) override;
+
+private:
+  bool m_reentry;
+};
+
+/**
  * @brief Per-platform startup hooks (console, AUMID, power, file association, FreeType).
  */
 namespace AppPlatform {

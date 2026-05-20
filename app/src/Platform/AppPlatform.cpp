@@ -35,6 +35,7 @@
 #include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QFileOpenEvent>
+#include <QWheelEvent>
 
 #ifdef SERIAL_STUDIO_WITH_WEBENGINE
 #  include <QtWebEngineQuick>
@@ -66,6 +67,58 @@ bool FileOpenEventFilter::eventFilter(QObject* obj, QEvent* event)
   }
 
   return QObject::eventFilter(obj, event);
+}
+
+//---------------------------------------------------------------------------------------------------
+// TrackpadScrollFilter
+//---------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Initializes the trackpad scroll filter with reentry guard cleared.
+ */
+TrackpadScrollFilter::TrackpadScrollFilter(QObject* parent) : QObject(parent), m_reentry(false) {}
+
+/**
+ * @brief Multiplies trackpad pixelDelta so QML Flickables scroll usably; angleDelta untouched.
+ */
+bool TrackpadScrollFilter::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() != QEvent::Wheel || m_reentry)
+    return QObject::eventFilter(obj, event);
+
+  auto* wheel = static_cast<QWheelEvent*>(event);
+
+  // Amplify pixel-precise trackpad scrolls only; mouse wheels use angleDelta.
+  const QPoint pixel = wheel->pixelDelta();
+  if (pixel.isNull())
+    return QObject::eventFilter(obj, event);
+
+  // Skip synthesized gesture events.
+  if (wheel->source() != Qt::MouseEventNotSynthesized)
+    return QObject::eventFilter(obj, event);
+
+  // Scale pixelDelta only; angleDelta-driven zoom widgets keep their tuned factors.
+  constexpr qreal kScale = 1.0;
+  const QPoint scaledPixel(static_cast<int>(pixel.x() * kScale),
+                           static_cast<int>(pixel.y() * kScale));
+
+  QWheelEvent amplified(wheel->position(),
+                        wheel->globalPosition(),
+                        scaledPixel,
+                        wheel->angleDelta(),
+                        wheel->buttons(),
+                        wheel->modifiers(),
+                        wheel->phase(),
+                        wheel->inverted(),
+                        wheel->source(),
+                        wheel->pointingDevice());
+
+  m_reentry            = true;
+  const bool delivered = QCoreApplication::sendEvent(obj, &amplified);
+  m_reentry            = false;
+
+  event->setAccepted(amplified.isAccepted());
+  return delivered && amplified.isAccepted();
 }
 
 //---------------------------------------------------------------------------------------------------

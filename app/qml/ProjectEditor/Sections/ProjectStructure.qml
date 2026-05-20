@@ -91,13 +91,103 @@ Widgets.Pane {
 
       clip: true
       focus: true
-      reuseItems: false
+      reuseItems: true
       interactive: true
       Layout.fillWidth: true
       Layout.fillHeight: true
       boundsBehavior: Flickable.StopAtBounds
       model: Cpp_JSON_ProjectEditor.treeModel
       selectionModel: Cpp_JSON_ProjectEditor.selectionModel
+
+      //
+      // Force layout walk so contentHeight is known before scrolling.
+      //
+      function warmupContentHeight() {
+        const lastRow = treeView.rows - 1
+        if (lastRow < 0 || treeView.height <= 0)
+          return
+
+        const savedY = treeView.contentY
+        treeView.positionViewAtRow(lastRow, Qt.AlignBottom)
+        treeView.forceLayout()
+
+        const maxY = Math.max(0, treeView.contentHeight - treeView.height)
+        treeView.contentY = Math.min(savedY, maxY)
+      }
+
+      onHeightChanged: Qt.callLater(warmupContentHeight)
+
+      //
+      // Shared context menu populated on right-click, outside the delegate.
+      //
+      property int ctxItemId: -1
+      property int ctxItemParentId: -1
+      property int ctxItemKind: ProjectEditor.KindNone
+
+      function moveContextItemBy(direction) {
+        if (ctxItemKind === ProjectEditor.KindGroup)
+          Cpp_JSON_ProjectModel.moveGroup(ctxItemId, ctxItemId + direction)
+        else if (ctxItemKind === ProjectEditor.KindDataset)
+          Cpp_JSON_ProjectModel.moveDataset(ctxItemParentId,
+                                            ctxItemId, ctxItemId + direction)
+        else if (ctxItemKind === ProjectEditor.KindAction)
+          Cpp_JSON_ProjectModel.moveAction(ctxItemId, ctxItemId + direction)
+        else if (ctxItemKind === ProjectEditor.KindOutputWidget)
+          Cpp_JSON_ProjectModel.moveOutputWidget(ctxItemParentId,
+                                                 ctxItemId, ctxItemId + direction)
+        else if (ctxItemKind === ProjectEditor.KindWorkspace)
+          Cpp_JSON_ProjectEditor.moveWorkspace(ctxItemId, direction)
+      }
+
+      Menu {
+        id: sharedContextMenu
+
+        MenuItem {
+          text: qsTr("Move Up")
+          onTriggered: treeView.moveContextItemBy(-1)
+        }
+
+        MenuItem {
+          text: qsTr("Move Down")
+          onTriggered: treeView.moveContextItemBy(1)
+        }
+
+        MenuSeparator {}
+
+        MenuItem {
+          text: qsTr("Duplicate")
+          visible: treeView.ctxItemKind === ProjectEditor.KindGroup
+                   || treeView.ctxItemKind === ProjectEditor.KindDataset
+                   || treeView.ctxItemKind === ProjectEditor.KindAction
+                   || treeView.ctxItemKind === ProjectEditor.KindOutputWidget
+          onTriggered: {
+            if (treeView.ctxItemKind === ProjectEditor.KindGroup)
+              Cpp_JSON_ProjectModel.duplicateCurrentGroup()
+            else if (treeView.ctxItemKind === ProjectEditor.KindDataset)
+              Cpp_JSON_ProjectModel.duplicateCurrentDataset()
+            else if (treeView.ctxItemKind === ProjectEditor.KindAction)
+              Cpp_JSON_ProjectModel.duplicateCurrentAction()
+            else if (treeView.ctxItemKind === ProjectEditor.KindOutputWidget)
+              Cpp_JSON_ProjectModel.duplicateCurrentOutputWidget()
+          }
+        }
+
+        MenuItem {
+          text: qsTr("Delete")
+          onTriggered: {
+            if (treeView.ctxItemKind === ProjectEditor.KindGroup)
+              Cpp_JSON_ProjectModel.deleteCurrentGroup()
+            else if (treeView.ctxItemKind === ProjectEditor.KindDataset)
+              Cpp_JSON_ProjectModel.deleteCurrentDataset()
+            else if (treeView.ctxItemKind === ProjectEditor.KindAction)
+              Cpp_JSON_ProjectModel.deleteCurrentAction()
+            else if (treeView.ctxItemKind === ProjectEditor.KindOutputWidget)
+              Cpp_JSON_ProjectModel.deleteCurrentOutputWidget()
+            else if (treeView.ctxItemKind === ProjectEditor.KindWorkspace)
+              Cpp_JSON_ProjectModel.confirmDeleteWorkspace(treeView.ctxItemId)
+          }
+        }
+      }
 
       Connections {
         target: Cpp_JSON_ProjectEditor
@@ -113,6 +203,7 @@ Widgets.Pane {
             if (revealIndex && revealIndex.valid) {
               treeView.expandToIndex(revealIndex)
               treeView.forceLayout()
+              treeView.warmupContentHeight()
               const row = treeView.rowAtIndex(revealIndex)
               if (row >= 0)
                 treeView.positionViewAtRow(row, Qt.AlignVCenter)
@@ -120,6 +211,7 @@ Widgets.Pane {
               return
             }
 
+            treeView.warmupContentHeight()
             const maxY = Math.max(0, treeView.contentHeight - treeView.height)
             treeView.contentY = Math.min(previousY, maxY)
           })
@@ -129,25 +221,6 @@ Widgets.Pane {
       ScrollBar.vertical: ScrollBar {
         policy: treeView.contentHeight > treeView.height ? ScrollBar.AlwaysOn :
                                                            ScrollBar.AsNeeded
-      }
-
-      //
-      // Override default scroll speed (trackpad pixelDelta vs mouse angleDelta).
-      //
-      WheelHandler {
-        property real wheelStep: 60
-
-        onWheel: (event) => {
-          const maxY = Math.max(0, treeView.contentHeight - treeView.height)
-          let dy = 0
-          if (event.pixelDelta.y !== 0)
-            dy = event.pixelDelta.y
-          else
-            dy = event.angleDelta.y / 15 * (wheelStep / 8)
-
-          treeView.contentY = Math.max(0, Math.min(treeView.contentY - dy, maxY))
-          event.accepted = true
-        }
       }
 
       //
@@ -219,6 +292,7 @@ Widgets.Pane {
 
         implicitWidth: treeView.width
         implicitHeight: depth === 0 ? 30 : 18
+        TableView.onReused: syncExpandedState()
         Component.onCompleted: syncExpandedState()
 
         required property int row
@@ -306,7 +380,10 @@ Widgets.Pane {
               if (mouse.button === Qt.RightButton) {
                 if (item.itemKind !== ProjectEditor.KindNone) {
                   onLabelClicked()
-                  contextMenu.popup()
+                  treeView.ctxItemKind     = item.itemKind
+                  treeView.ctxItemId       = item.itemId
+                  treeView.ctxItemParentId = item.itemParentId
+                  sharedContextMenu.popup()
                 }
 
                 return
@@ -317,78 +394,6 @@ Widgets.Pane {
             onDoubleClicked: onLabelDoubleClicked()
           }
         }
-
-        //
-        // Move the row up (-1) or down (+1) via the project model
-        //
-        function moveItemBy(direction) {
-          if (item.itemKind === ProjectEditor.KindGroup)
-            Cpp_JSON_ProjectModel.moveGroup(item.itemId, item.itemId + direction)
-          else if (item.itemKind === ProjectEditor.KindDataset)
-            Cpp_JSON_ProjectModel.moveDataset(item.itemParentId,
-                                              item.itemId, item.itemId + direction)
-          else if (item.itemKind === ProjectEditor.KindAction)
-            Cpp_JSON_ProjectModel.moveAction(item.itemId, item.itemId + direction)
-          else if (item.itemKind === ProjectEditor.KindOutputWidget)
-            Cpp_JSON_ProjectModel.moveOutputWidget(item.itemParentId,
-                                                   item.itemId, item.itemId + direction)
-          else if (item.itemKind === ProjectEditor.KindWorkspace)
-            Cpp_JSON_ProjectEditor.moveWorkspace(item.itemId, direction)
-        }
-
-        //
-        // Right-click context menu (only for reorderable rows)
-        //
-        Menu {
-          id: contextMenu
-
-          MenuItem {
-            text: qsTr("Move Up")
-            onTriggered: item.moveItemBy(-1)
-          }
-
-          MenuItem {
-            text: qsTr("Move Down")
-            onTriggered: item.moveItemBy(1)
-          }
-
-          MenuSeparator {}
-
-          MenuItem {
-            text: qsTr("Duplicate")
-            visible: item.itemKind === ProjectEditor.KindGroup
-                     || item.itemKind === ProjectEditor.KindDataset
-                     || item.itemKind === ProjectEditor.KindAction
-                     || item.itemKind === ProjectEditor.KindOutputWidget
-            onTriggered: {
-              if (item.itemKind === ProjectEditor.KindGroup)
-                Cpp_JSON_ProjectModel.duplicateCurrentGroup()
-              else if (item.itemKind === ProjectEditor.KindDataset)
-                Cpp_JSON_ProjectModel.duplicateCurrentDataset()
-              else if (item.itemKind === ProjectEditor.KindAction)
-                Cpp_JSON_ProjectModel.duplicateCurrentAction()
-              else if (item.itemKind === ProjectEditor.KindOutputWidget)
-                Cpp_JSON_ProjectModel.duplicateCurrentOutputWidget()
-            }
-          }
-
-          MenuItem {
-            text: qsTr("Delete")
-            onTriggered: {
-              if (item.itemKind === ProjectEditor.KindGroup)
-                Cpp_JSON_ProjectModel.deleteCurrentGroup()
-              else if (item.itemKind === ProjectEditor.KindDataset)
-                Cpp_JSON_ProjectModel.deleteCurrentDataset()
-              else if (item.itemKind === ProjectEditor.KindAction)
-                Cpp_JSON_ProjectModel.deleteCurrentAction()
-              else if (item.itemKind === ProjectEditor.KindOutputWidget)
-                Cpp_JSON_ProjectModel.deleteCurrentOutputWidget()
-              else if (item.itemKind === ProjectEditor.KindWorkspace)
-                Cpp_JSON_ProjectModel.confirmDeleteWorkspace(item.itemId)
-            }
-          }
-        }
-
 
         //
         // Item controls

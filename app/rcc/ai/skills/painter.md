@@ -156,6 +156,52 @@ Don't hard-code hex. Use `theme.widget_base` for background,
 for per-channel colors, `theme.alarm` for red/critical states. The
 canvas tracks light/dark theme switches automatically.
 
+## Design — readability before cleverness
+
+A painter that looks technically impressive but takes the operator three
+seconds to read is a worse painter than a boring DataGrid. Apply these
+before you tune visuals:
+
+- **One primary signal per canvas.** If you're tempted to overlay four
+  traces, two needles, and a status grid on one painter, split it into
+  two groups. Hick's Law: each extra independently-readable element adds
+  decision time. Cap visible primitives (distinct shape kinds, not
+  draw calls) at ~5 before you ask whether a second tile would be clearer.
+- **State must NEVER be color-only.** Roughly 8% of male operators have
+  red/green color deficiency. An alarm shown as a red dot turning green
+  is invisible to them. Always pair color with a second cue: shape
+  (circle vs triangle), position (a needle moving into a marked zone),
+  or text (`"FAULT"` vs `"OK"`). `theme.alarm` is fine for emphasis, NOT
+  for the sole signal.
+- **Contrast against `theme.widget_base`, not against your assumption of
+  dark mode.** Users flip themes. Foreground colors must read on both.
+  Use `theme.widget_text` for labels and `theme.widget_highlight` for
+  the primary signal — those are designed for the theme's background.
+  Hardcoded `#FFFFFF` text vanishes on the light theme.
+- **Anchor numbers with units and a reference range.** `87` floating
+  alone is unreadable; `87 °C  (idle 70-90)` tells the operator both
+  the value AND whether it's normal in one glance. The dataset's
+  `.units`, `.widgetMin`, `.widgetMax` already carry this — read them
+  off the proxy.
+- **Doherty threshold: stay under 400 ms.** `paint` runs at ~24 Hz
+  (~42 ms budget) and `onFrame` runs immediately before each `paint`.
+  If a single tick's `onFrame + paint` cost exceeds ~40 ms, the UI feels
+  laggy regardless of how good the visualization is. Push heavy math
+  into transforms (per-frame, runs on the frame thread); keep `onFrame`
+  bounded; keep `paint` to layout + draw against cached arrays.
+- **Peak-End on time-series.** When the painter renders a rolling window,
+  the operator's memory of "is this healthy" is anchored by the most
+  recent value AND the worst value in view. Highlight both — a faint
+  marker on the current sample and a labeled max/min — instead of
+  leaving them to read off an unmarked trace.
+- **Negative space is signal.** Don't fill 100% of the canvas. Leave
+  ~10% margin so axis labels, units, and current-value readouts have
+  room to render without clipping when the tile is resized.
+
+These are guidance, not lint rules. The Painter dryRun won't catch a
+color-only alarm or a 600 ms onFrame — the operator will. If you're
+unsure whether a design choice helps, ask the user before pushing.
+
 ## arc / moveTo discipline
 
 The Painter renderer requires `moveTo` BEFORE `arc` to start a new

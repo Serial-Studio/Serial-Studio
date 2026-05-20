@@ -40,6 +40,9 @@ Item {
     if (!w || !w.contentItem)
       return
 
+    if (typeof Cpp_Misc_Translator === "undefined")
+      return
+
     w.contentItem.LayoutMirroring.enabled = Cpp_Misc_Translator.rtl
     w.contentItem.LayoutMirroring.childrenInherit = true
   }
@@ -48,7 +51,8 @@ Item {
   onParentChanged: Qt.callLater(_apply)
 
   Connections {
-    target: Cpp_Misc_Translator
+    target: (typeof Cpp_Misc_Translator !== "undefined") ? Cpp_Misc_Translator
+                                                         : null
     function onLanguageChanged() { root._apply() }
   }
 }

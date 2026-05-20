@@ -1,7 +1,6 @@
 {
     "actions": [
     ],
-    "customizeWorkspaces": true,
     "groups": [
         {
             "datasets": [
@@ -10,6 +9,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "1d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 7000,
                     "fftMin": 0,
@@ -27,8 +28,8 @@
                     "title": "EngineRPM",
                     "units": "rpm",
                     "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 7000,
+                    "widget": "meter",
+                    "widgetMax": 8000,
                     "widgetMin": 0,
                     "xAxis": -1
                 },
@@ -37,6 +38,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "1d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
@@ -54,7 +57,7 @@
                     "title": "VehicleSpeed",
                     "units": "km/h",
                     "value": "",
-                    "widget": "gauge",
+                    "widget": "meter",
                     "widgetMax": 200,
                     "widgetMin": 0,
                     "xAxis": -1
@@ -70,6 +73,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -87,7 +92,7 @@
                     "title": "EngineLoad",
                     "units": "%",
                     "value": "",
-                    "widget": "",
+                    "widget": "bar",
                     "widgetMax": 100,
                     "widgetMin": 0,
                     "xAxis": -1
@@ -97,6 +102,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 215,
                     "fftMin": -40,
@@ -115,8 +122,8 @@
                     "units": "degC",
                     "value": "",
                     "widget": "bar",
-                    "widgetMax": 215,
-                    "widgetMin": -40,
+                    "widgetMax": 250,
+                    "widgetMin": -50,
                     "xAxis": -1
                 },
                 {
@@ -124,6 +131,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 215,
                     "fftMin": -40,
@@ -142,8 +151,8 @@
                     "units": "degC",
                     "value": "",
                     "widget": "bar",
-                    "widgetMax": 215,
-                    "widgetMin": -40,
+                    "widgetMax": 250,
+                    "widgetMin": -50,
                     "xAxis": -1
                 }
             ],
@@ -157,6 +166,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 1000,
                     "fftMin": 0,
@@ -184,6 +195,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "1d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -217,6 +230,37 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 9,
+                    "fft": false,
+                    "fftMax": 255,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 3,
+                    "index": 8,
+                    "led": false,
+                    "ledHigh": 0,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 8,
+                    "plotMin": 0,
+                    "title": "CurrentGear",
+                    "units": "",
+                    "value": "",
+                    "widget": "gauge",
+                    "widgetMax": 8,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -224,7 +268,7 @@
                     "fftSamplingRate": 100,
                     "graph": false,
                     "groupId": 3,
-                    "index": 8,
+                    "index": 9,
                     "led": false,
                     "ledHigh": 0,
                     "log": true,
@@ -243,34 +287,9 @@
                     "alarmEnabled": false,
                     "alarmHigh": 80,
                     "alarmLow": 20,
-                    "datasetId": 1,
-                    "fft": false,
-                    "fftMax": 255,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 3,
-                    "index": 9,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 255,
-                    "plotMin": 0,
-                    "title": "CurrentGear",
-                    "units": "",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 255,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 215,
                     "fftMin": -40,
@@ -289,8 +308,8 @@
                     "units": "degC",
                     "value": "",
                     "widget": "bar",
-                    "widgetMax": 215,
-                    "widgetMin": -40,
+                    "widgetMax": 250,
+                    "widgetMin": -50,
                     "xAxis": -1
                 }
             ],
@@ -304,6 +323,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 1,
                     "fftMin": 0,
@@ -331,6 +352,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 1,
                     "fftMin": 0,
@@ -339,33 +362,6 @@
                     "graph": false,
                     "groupId": 4,
                     "index": 12,
-                    "led": true,
-                    "ledHigh": 1,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 1,
-                    "plotMin": 0,
-                    "title": "Headlights",
-                    "units": "",
-                    "value": "",
-                    "widget": "",
-                    "widgetMax": 1,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 2,
-                    "fft": false,
-                    "fftMax": 1,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 4,
-                    "index": 13,
                     "led": true,
                     "ledHigh": 1,
                     "log": true,
@@ -384,7 +380,9 @@
                     "alarmEnabled": false,
                     "alarmHigh": 80,
                     "alarmLow": 20,
-                    "datasetId": 3,
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 1,
                     "fftMin": 0,
@@ -392,7 +390,7 @@
                     "fftSamplingRate": 100,
                     "graph": false,
                     "groupId": 4,
-                    "index": 14,
+                    "index": 13,
                     "led": true,
                     "ledHigh": 1,
                     "log": true,
@@ -411,7 +409,38 @@
                     "alarmEnabled": false,
                     "alarmHigh": 80,
                     "alarmLow": 20,
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
+                    "fft": false,
+                    "fftMax": 1,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 4,
+                    "index": 14,
+                    "led": true,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 1,
+                    "plotMin": 0,
+                    "title": "Headlights",
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 1,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
                     "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 1,
                     "fftMin": 0,
@@ -445,6 +474,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 1,
                     "fftMin": 0,
@@ -453,60 +484,6 @@
                     "graph": false,
                     "groupId": 5,
                     "index": 16,
-                    "led": true,
-                    "ledHigh": 1,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 1,
-                    "plotMin": 0,
-                    "title": "Trunk",
-                    "units": "",
-                    "value": "",
-                    "widget": "",
-                    "widgetMax": 1,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "fft": false,
-                    "fftMax": 1,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 5,
-                    "index": 17,
-                    "led": true,
-                    "ledHigh": 1,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 1,
-                    "plotMin": 0,
-                    "title": "DoorRearLeft",
-                    "units": "",
-                    "value": "",
-                    "widget": "",
-                    "widgetMax": 1,
-                    "widgetMin": 0,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 2,
-                    "fft": false,
-                    "fftMax": 1,
-                    "fftMin": 0,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 5,
-                    "index": 18,
                     "led": true,
                     "ledHigh": 1,
                     "log": true,
@@ -525,7 +502,9 @@
                     "alarmEnabled": false,
                     "alarmHigh": 80,
                     "alarmLow": 20,
-                    "datasetId": 3,
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 1,
                     "fftMin": 0,
@@ -533,7 +512,7 @@
                     "fftSamplingRate": 100,
                     "graph": false,
                     "groupId": 5,
-                    "index": 19,
+                    "index": 17,
                     "led": true,
                     "ledHigh": 1,
                     "log": true,
@@ -552,7 +531,67 @@
                     "alarmEnabled": false,
                     "alarmHigh": 80,
                     "alarmLow": 20,
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
+                    "fft": false,
+                    "fftMax": 1,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 5,
+                    "index": 18,
+                    "led": true,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 1,
+                    "plotMin": 0,
+                    "title": "DoorRearLeft",
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 1,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
+                    "fft": false,
+                    "fftMax": 1,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 5,
+                    "index": 19,
+                    "led": true,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 1,
+                    "plotMin": 0,
+                    "title": "DoorRearRight",
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 1,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
                     "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 1,
                     "fftMin": 0,
@@ -567,7 +606,7 @@
                     "numericValue": 0,
                     "plotMax": 1,
                     "plotMin": 0,
-                    "title": "DoorRearRight",
+                    "title": "Trunk",
                     "units": "",
                     "value": "",
                     "widget": "",
@@ -586,6 +625,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 500,
                     "fftMin": -500,
@@ -604,8 +645,8 @@
                     "units": "A",
                     "value": "",
                     "widget": "gauge",
-                    "widgetMax": 500,
-                    "widgetMin": -500,
+                    "widgetMax": 600,
+                    "widgetMin": -600,
                     "xAxis": -1
                 },
                 {
@@ -613,6 +654,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "1d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 850,
                     "fftMin": 0,
@@ -631,7 +674,7 @@
                     "units": "V",
                     "value": "",
                     "widget": "gauge",
-                    "widgetMax": 850,
+                    "widgetMax": 1000,
                     "widgetMin": 0,
                     "xAxis": -1
                 }
@@ -646,33 +689,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
-                    "fft": false,
-                    "fftMax": 215,
-                    "fftMin": -40,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 7,
-                    "index": 23,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 215,
-                    "plotMin": -40,
-                    "title": "PackTemperature",
-                    "units": "degC",
-                    "value": "",
-                    "widget": "bar",
-                    "widgetMax": 215,
-                    "widgetMin": -40,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -680,7 +698,7 @@
                     "fftSamplingRate": 100,
                     "graph": false,
                     "groupId": 7,
-                    "index": 24,
+                    "index": 23,
                     "led": false,
                     "ledHigh": 0,
                     "log": true,
@@ -694,6 +712,35 @@
                     "widgetMax": 100,
                     "widgetMin": 0,
                     "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 215,
+                    "fftMin": -40,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 7,
+                    "index": 24,
+                    "led": false,
+                    "ledHigh": 0,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 215,
+                    "plotMin": -40,
+                    "title": "PackTemperature",
+                    "units": "degC",
+                    "value": "",
+                    "widget": "bar",
+                    "widgetMax": 250,
+                    "widgetMin": -50,
+                    "xAxis": -1
                 }
             ],
             "title": "BMS_SOC_TEMP",
@@ -706,6 +753,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 4.2,
                     "fftMin": 3,
@@ -714,60 +763,6 @@
                     "graph": false,
                     "groupId": 8,
                     "index": 25,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell1Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 1,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 26,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell4Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 2,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 27,
                     "led": false,
                     "ledHigh": 0,
                     "log": true,
@@ -786,7 +781,9 @@
                     "alarmEnabled": false,
                     "alarmHigh": 80,
                     "alarmLow": 20,
-                    "datasetId": 3,
+                    "datasetId": 1,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 4.2,
                     "fftMin": 3,
@@ -794,61 +791,7 @@
                     "fftSamplingRate": 100,
                     "graph": false,
                     "groupId": 8,
-                    "index": 28,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell7Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 4,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 29,
-                    "led": false,
-                    "ledHigh": 0,
-                    "log": true,
-                    "numericValue": 0,
-                    "plotMax": 4.2,
-                    "plotMin": 3,
-                    "title": "Cell8Voltage",
-                    "units": "V",
-                    "value": "",
-                    "widget": "gauge",
-                    "widgetMax": 4.2,
-                    "widgetMin": 3,
-                    "xAxis": -1
-                },
-                {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
-                    "datasetId": 5,
-                    "fft": false,
-                    "fftMax": 4.2,
-                    "fftMin": 3,
-                    "fftSamples": 256,
-                    "fftSamplingRate": 100,
-                    "graph": false,
-                    "groupId": 8,
-                    "index": 30,
+                    "index": 26,
                     "led": false,
                     "ledHigh": 0,
                     "log": true,
@@ -867,7 +810,9 @@
                     "alarmEnabled": false,
                     "alarmHigh": 80,
                     "alarmLow": 20,
-                    "datasetId": 6,
+                    "datasetId": 2,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 4.2,
                     "fftMin": 3,
@@ -875,7 +820,36 @@
                     "fftSamplingRate": 100,
                     "graph": false,
                     "groupId": 8,
-                    "index": 31,
+                    "index": 27,
+                    "led": false,
+                    "ledHigh": 0,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell6Voltage",
+                    "units": "V",
+                    "value": "",
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
+                    "datasetId": 3,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 8,
+                    "index": 28,
                     "led": false,
                     "ledHigh": 0,
                     "log": true,
@@ -894,7 +868,96 @@
                     "alarmEnabled": false,
                     "alarmHigh": 80,
                     "alarmLow": 20,
+                    "datasetId": 4,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 8,
+                    "index": 29,
+                    "led": false,
+                    "ledHigh": 0,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell4Voltage",
+                    "units": "V",
+                    "value": "",
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
+                    "datasetId": 5,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 8,
+                    "index": 30,
+                    "led": false,
+                    "ledHigh": 0,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell8Voltage",
+                    "units": "V",
+                    "value": "",
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
+                    "datasetId": 6,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
+                    "fft": false,
+                    "fftMax": 4.2,
+                    "fftMin": 3,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "groupId": 8,
+                    "index": 31,
+                    "led": false,
+                    "ledHigh": 0,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 4.2,
+                    "plotMin": 3,
+                    "title": "Cell1Voltage",
+                    "units": "V",
+                    "value": "",
+                    "widget": "gauge",
+                    "widgetMax": 4.2,
+                    "widgetMin": 3,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 80,
+                    "alarmLow": 20,
                     "datasetId": 7,
+                    "displayFormat": "1d",
+                    "displayTickCount": 7,
                     "fft": false,
                     "fftMax": 4.2,
                     "fftMin": 3,
@@ -909,7 +972,7 @@
                     "numericValue": 0,
                     "plotMax": 4.2,
                     "plotMin": 3,
-                    "title": "Cell6Voltage",
+                    "title": "Cell7Voltage",
                     "units": "V",
                     "value": "",
                     "widget": "gauge",
@@ -928,8 +991,10 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "1d",
+                    "displayTickCount": 6,
                     "fft": false,
-                    "fftMax": 9999.9,
+                    "fftMax": 999999.9,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
@@ -940,13 +1005,13 @@
                     "ledHigh": 0,
                     "log": true,
                     "numericValue": 0,
-                    "plotMax": 9999.9,
+                    "plotMax": 999999.9,
                     "plotMin": 0,
-                    "title": "TripDistance",
+                    "title": "Odometer",
                     "units": "km",
                     "value": "",
                     "widget": "",
-                    "widgetMax": 9999.9,
+                    "widgetMax": 1000000,
                     "widgetMin": 0,
                     "xAxis": -1
                 },
@@ -955,8 +1020,10 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "1d",
+                    "displayTickCount": 6,
                     "fft": false,
-                    "fftMax": 999999.9,
+                    "fftMax": 9999.9,
                     "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
@@ -967,13 +1034,13 @@
                     "ledHigh": 0,
                     "log": true,
                     "numericValue": 0,
-                    "plotMax": 999999.9,
+                    "plotMax": 9999.9,
                     "plotMin": 0,
-                    "title": "Odometer",
+                    "title": "TripDistance",
                     "units": "km",
                     "value": "",
                     "widget": "",
-                    "widgetMax": 999999.9,
+                    "widgetMax": 10000,
                     "widgetMin": 0,
                     "xAxis": -1
                 }
@@ -988,6 +1055,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "1d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 50,
                     "fftMin": 0,
@@ -1015,6 +1084,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 6,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -1048,6 +1119,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "1d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
@@ -1062,10 +1135,10 @@
                     "numericValue": 0,
                     "plotMax": 200,
                     "plotMin": 0,
-                    "title": "WheelSpeedRR",
+                    "title": "WheelSpeedFL",
                     "units": "km/h",
                     "value": "",
-                    "widget": "gauge",
+                    "widget": "meter",
                     "widgetMax": 200,
                     "widgetMin": 0,
                     "xAxis": -1
@@ -1075,6 +1148,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "1d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
@@ -1089,10 +1164,10 @@
                     "numericValue": 0,
                     "plotMax": 200,
                     "plotMin": 0,
-                    "title": "WheelSpeedFL",
+                    "title": "WheelSpeedRR",
                     "units": "km/h",
                     "value": "",
-                    "widget": "gauge",
+                    "widget": "meter",
                     "widgetMax": 200,
                     "widgetMin": 0,
                     "xAxis": -1
@@ -1102,6 +1177,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "1d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
@@ -1116,10 +1193,10 @@
                     "numericValue": 0,
                     "plotMax": 200,
                     "plotMin": 0,
-                    "title": "WheelSpeedFR",
+                    "title": "WheelSpeedRL",
                     "units": "km/h",
                     "value": "",
-                    "widget": "gauge",
+                    "widget": "meter",
                     "widgetMax": 200,
                     "widgetMin": 0,
                     "xAxis": -1
@@ -1129,6 +1206,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 3,
+                    "displayFormat": "1d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
@@ -1143,10 +1222,10 @@
                     "numericValue": 0,
                     "plotMax": 200,
                     "plotMin": 0,
-                    "title": "WheelSpeedRL",
+                    "title": "WheelSpeedFR",
                     "units": "km/h",
                     "value": "",
-                    "widget": "gauge",
+                    "widget": "meter",
                     "widgetMax": 200,
                     "widgetMin": 0,
                     "xAxis": -1
@@ -1162,6 +1241,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "1d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 200,
                     "fftMin": 0,
@@ -1195,6 +1276,8 @@
                     "alarmHigh": 80,
                     "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "1d",
+                    "displayTickCount": 9,
                     "fft": false,
                     "fftMax": 720,
                     "fftMin": -720,
@@ -1213,8 +1296,8 @@
                     "units": "deg",
                     "value": "",
                     "widget": "gauge",
-                    "widgetMax": 720,
-                    "widgetMin": -720,
+                    "widgetMax": 800,
+                    "widgetMin": -800,
                     "xAxis": -1
                 }
             ],
@@ -1251,28 +1334,16 @@
             "busType": 5,
             "checksum": "",
             "checksumAlgorithm": "",
-            "connection": {
-                "autoReconnect": true,
-                "baudRate": 110,
-                "dataBitsIndex": 3,
-                "deviceId": {
-                    "portName": "cu.Bluetooth-Incoming-Port"
-                },
-                "dtr": true,
-                "flowControlIndex": 0,
-                "parityIndex": 0,
-                "portIndex": 2,
-                "stopBitsIndex": 0
-            },
             "decoder": 3,
             "decoderMethod": 3,
             "frameDetection": 2,
             "frameEnd": "",
-            "frameParserCode": "/**\n * CAN DBC Frame Parser\n *\n * Auto-generated from: ecu_simulator.dbc\n *\n * This parser decodes CAN frames based on DBC message definitions.\n * It maintains a global array of all signal values across different\n * CAN message types, allowing multiple messages to coexist in a\n * single project.\n *\n * Total signals: 42\n * Total messages: 14\n */\n\n/**\n * Global array holding all CAN signal values.\n *\n * This array persists between parse() calls, maintaining the most\n * recent value for each signal across all CAN messages.\n *\n * @type {Array<number>} Array of 42 signal values\n */\nconst values = new Array(42).fill(0);\n\n/**\n * Parses a CAN frame and extracts signal values.\n *\n * Frame format:\n *   Byte 0-1: CAN ID (big-endian, 16-bit)\n *   Byte 2:   Data Length Code (DLC)\n *   Byte 3+:  CAN data payload\n *\n * @param {Uint8Array} frame - Raw CAN frame data\n * @returns {Array<number>} Global values array with updated signals\n */\nfunction parse(frame) {\n  if (frame.length < 3) return values;\n\n  const canId = (frame[0] << 8) | frame[1];\n  const dlc = frame[2];\n  const data = frame.slice(3, 3 + dlc);\n\n  switch(canId) {\n    case 0x100:\n      decode_100(data);\n      break;\n    case 0x101:\n      decode_101(data);\n      break;\n    case 0x102:\n      decode_102(data);\n      break;\n    case 0x200:\n      decode_200(data);\n      break;\n    case 0x300:\n      decode_300(data);\n      break;\n    case 0x301:\n      decode_301(data);\n      break;\n    case 0x400:\n      decode_400(data);\n      break;\n    case 0x401:\n      decode_401(data);\n      break;\n    case 0x402:\n      decode_402(data);\n      break;\n    case 0x500:\n      decode_500(data);\n      break;\n    case 0x501:\n      decode_501(data);\n      break;\n    case 0x600:\n      decode_600(data);\n      break;\n    case 0x601:\n      decode_601(data);\n      break;\n    case 0x700:\n      decode_700(data);\n      break;\n  }\n\n  return values;\n}\n\n/**\n * Decodes CAN message: ENGINE_RPM_SPEED (ID: 0x100)\n *\n * Signals (2):\n *   [1] EngineRPM (rpm)\n *   [2] VehicleSpeed (km/h)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_100(data) {\n  const raw_EngineRPM = extractSignal(data, 0, 16, false, false);\n  const value_EngineRPM = (raw_EngineRPM * 0.25) + 0;\n  values[0] = value_EngineRPM;\n  const raw_VehicleSpeed = extractSignal(data, 16, 16, false, false);\n  const value_VehicleSpeed = (raw_VehicleSpeed * 0.01) + 0;\n  values[1] = value_VehicleSpeed;\n}\n\n/**\n * Decodes CAN message: ENGINE_TEMP_LOAD (ID: 0x101)\n *\n * Signals (3):\n *   [3] EngineLoad (%)\n *   [4] CoolantTemp (degC)\n *   [5] IntakeTemp (degC)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_101(data) {\n  const raw_EngineLoad = extractSignal(data, 16, 8, false, false);\n  const value_EngineLoad = (raw_EngineLoad * 1) + 0;\n  values[2] = value_EngineLoad;\n  const raw_CoolantTemp = extractSignal(data, 0, 8, false, false);\n  const value_CoolantTemp = (raw_CoolantTemp * 1) + -40;\n  values[3] = value_CoolantTemp;\n  const raw_IntakeTemp = extractSignal(data, 8, 8, false, false);\n  const value_IntakeTemp = (raw_IntakeTemp * 1) + -40;\n  values[4] = value_IntakeTemp;\n}\n\n/**\n * Decodes CAN message: ENGINE_THROTTLE (ID: 0x102)\n *\n * Signals (2):\n *   [6] FuelPressure (kPa)\n *   [7] ThrottlePosition (%)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_102(data) {\n  const raw_FuelPressure = extractSignal(data, 8, 16, false, false);\n  const value_FuelPressure = (raw_FuelPressure * 1) + 0;\n  values[5] = value_FuelPressure;\n  const raw_ThrottlePosition = extractSignal(data, 0, 8, false, false);\n  const value_ThrottlePosition = (raw_ThrottlePosition * 0.392157) + 0;\n  values[6] = value_ThrottlePosition;\n}\n\n/**\n * Decodes CAN message: TRANSMISSION_GEAR (ID: 0x200)\n *\n * Signals (3):\n *   [8] TorqueConverterSlip (%)\n *   [9] CurrentGear (no unit)\n *   [10] TransmissionTemp (degC)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_200(data) {\n  const raw_TorqueConverterSlip = extractSignal(data, 16, 8, false, false);\n  const value_TorqueConverterSlip = (raw_TorqueConverterSlip * 1) + 0;\n  values[7] = value_TorqueConverterSlip;\n  const raw_CurrentGear = extractSignal(data, 0, 8, false, false);\n  const value_CurrentGear = (raw_CurrentGear * 1) + 0;\n  values[8] = value_CurrentGear;\n  const raw_TransmissionTemp = extractSignal(data, 8, 8, false, false);\n  const value_TransmissionTemp = (raw_TransmissionTemp * 1) + -40;\n  values[9] = value_TransmissionTemp;\n}\n\n/**\n * Decodes CAN message: BCM_LIGHTS (ID: 0x300)\n *\n * Signals (5):\n *   [11] TurnSignalLeft (no unit)\n *   [12] Headlights (no unit)\n *   [13] HazardLights (no unit)\n *   [14] TurnSignalRight (no unit)\n *   [15] HighBeams (no unit)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_300(data) {\n  const raw_TurnSignalLeft = extractSignal(data, 2, 1, false, false);\n  const value_TurnSignalLeft = (raw_TurnSignalLeft * 1) + 0;\n  values[10] = value_TurnSignalLeft;\n  const raw_Headlights = extractSignal(data, 0, 1, false, false);\n  const value_Headlights = (raw_Headlights * 1) + 0;\n  values[11] = value_Headlights;\n  const raw_HazardLights = extractSignal(data, 4, 1, false, false);\n  const value_HazardLights = (raw_HazardLights * 1) + 0;\n  values[12] = value_HazardLights;\n  const raw_TurnSignalRight = extractSignal(data, 3, 1, false, false);\n  const value_TurnSignalRight = (raw_TurnSignalRight * 1) + 0;\n  values[13] = value_TurnSignalRight;\n  const raw_HighBeams = extractSignal(data, 1, 1, false, false);\n  const value_HighBeams = (raw_HighBeams * 1) + 0;\n  values[14] = value_HighBeams;\n}\n\n/**\n * Decodes CAN message: BCM_DOORS (ID: 0x301)\n *\n * Signals (5):\n *   [16] Trunk (no unit)\n *   [17] DoorRearLeft (no unit)\n *   [18] DoorFrontRight (no unit)\n *   [19] DoorFrontLeft (no unit)\n *   [20] DoorRearRight (no unit)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_301(data) {\n  const raw_Trunk = extractSignal(data, 4, 1, false, false);\n  const value_Trunk = (raw_Trunk * 1) + 0;\n  values[15] = value_Trunk;\n  const raw_DoorRearLeft = extractSignal(data, 2, 1, false, false);\n  const value_DoorRearLeft = (raw_DoorRearLeft * 1) + 0;\n  values[16] = value_DoorRearLeft;\n  const raw_DoorFrontRight = extractSignal(data, 1, 1, false, false);\n  const value_DoorFrontRight = (raw_DoorFrontRight * 1) + 0;\n  values[17] = value_DoorFrontRight;\n  const raw_DoorFrontLeft = extractSignal(data, 0, 1, false, false);\n  const value_DoorFrontLeft = (raw_DoorFrontLeft * 1) + 0;\n  values[18] = value_DoorFrontLeft;\n  const raw_DoorRearRight = extractSignal(data, 3, 1, false, false);\n  const value_DoorRearRight = (raw_DoorRearRight * 1) + 0;\n  values[19] = value_DoorRearRight;\n}\n\n/**\n * Decodes CAN message: BMS_VOLTAGE_CURRENT (ID: 0x400)\n *\n * Signals (2):\n *   [21] PackCurrent (A)\n *   [22] PackVoltage (V)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_400(data) {\n  const raw_PackCurrent = extractSignal(data, 16, 16, false, true);\n  const value_PackCurrent = (raw_PackCurrent * 0.1) + 0;\n  values[20] = value_PackCurrent;\n  const raw_PackVoltage = extractSignal(data, 0, 16, false, false);\n  const value_PackVoltage = (raw_PackVoltage * 0.1) + 0;\n  values[21] = value_PackVoltage;\n}\n\n/**\n * Decodes CAN message: BMS_SOC_TEMP (ID: 0x401)\n *\n * Signals (2):\n *   [23] PackTemperature (degC)\n *   [24] StateOfCharge (%)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_401(data) {\n  const raw_PackTemperature = extractSignal(data, 8, 8, false, false);\n  const value_PackTemperature = (raw_PackTemperature * 1) + -40;\n  values[22] = value_PackTemperature;\n  const raw_StateOfCharge = extractSignal(data, 0, 8, false, false);\n  const value_StateOfCharge = (raw_StateOfCharge * 1) + 0;\n  values[23] = value_StateOfCharge;\n}\n\n/**\n * Decodes CAN message: BMS_CELL_VOLTAGES (ID: 0x402)\n *\n * Signals (8):\n *   [25] Cell1Voltage (V)\n *   [26] Cell4Voltage (V)\n *   [27] Cell2Voltage (V)\n *   [28] Cell7Voltage (V)\n *   [29] Cell8Voltage (V)\n *   [30] Cell3Voltage (V)\n *   [31] Cell5Voltage (V)\n *   [32] Cell6Voltage (V)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_402(data) {\n  const raw_Cell1Voltage = extractSignal(data, 0, 8, false, false);\n  const value_Cell1Voltage = (raw_Cell1Voltage * 0.00471) + 3;\n  values[24] = value_Cell1Voltage;\n  const raw_Cell4Voltage = extractSignal(data, 24, 8, false, false);\n  const value_Cell4Voltage = (raw_Cell4Voltage * 0.00471) + 3;\n  values[25] = value_Cell4Voltage;\n  const raw_Cell2Voltage = extractSignal(data, 8, 8, false, false);\n  const value_Cell2Voltage = (raw_Cell2Voltage * 0.00471) + 3;\n  values[26] = value_Cell2Voltage;\n  const raw_Cell7Voltage = extractSignal(data, 48, 8, false, false);\n  const value_Cell7Voltage = (raw_Cell7Voltage * 0.00471) + 3;\n  values[27] = value_Cell7Voltage;\n  const raw_Cell8Voltage = extractSignal(data, 56, 8, false, false);\n  const value_Cell8Voltage = (raw_Cell8Voltage * 0.00471) + 3;\n  values[28] = value_Cell8Voltage;\n  const raw_Cell3Voltage = extractSignal(data, 16, 8, false, false);\n  const value_Cell3Voltage = (raw_Cell3Voltage * 0.00471) + 3;\n  values[29] = value_Cell3Voltage;\n  const raw_Cell5Voltage = extractSignal(data, 32, 8, false, false);\n  const value_Cell5Voltage = (raw_Cell5Voltage * 0.00471) + 3;\n  values[30] = value_Cell5Voltage;\n  const raw_Cell6Voltage = extractSignal(data, 40, 8, false, false);\n  const value_Cell6Voltage = (raw_Cell6Voltage * 0.00471) + 3;\n  values[31] = value_Cell6Voltage;\n}\n\n/**\n * Decodes CAN message: CLUSTER_ODOMETER (ID: 0x500)\n *\n * Signals (2):\n *   [33] TripDistance (km)\n *   [34] Odometer (km)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_500(data) {\n  const raw_TripDistance = extractSignal(data, 32, 16, false, false);\n  const value_TripDistance = (raw_TripDistance * 0.1) + 0;\n  values[32] = value_TripDistance;\n  const raw_Odometer = extractSignal(data, 0, 32, false, false);\n  const value_Odometer = (raw_Odometer * 0.1) + 0;\n  values[33] = value_Odometer;\n}\n\n/**\n * Decodes CAN message: CLUSTER_FUEL (ID: 0x501)\n *\n * Signals (2):\n *   [35] FuelConsumption (L/100km)\n *   [36] FuelLevel (%)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_501(data) {\n  const raw_FuelConsumption = extractSignal(data, 8, 16, false, false);\n  const value_FuelConsumption = (raw_FuelConsumption * 0.01) + 0;\n  values[34] = value_FuelConsumption;\n  const raw_FuelLevel = extractSignal(data, 0, 8, false, false);\n  const value_FuelLevel = (raw_FuelLevel * 1) + 0;\n  values[35] = value_FuelLevel;\n}\n\n/**\n * Decodes CAN message: ABS_WHEEL_SPEEDS (ID: 0x600)\n *\n * Signals (4):\n *   [37] WheelSpeedRR (km/h)\n *   [38] WheelSpeedFL (km/h)\n *   [39] WheelSpeedFR (km/h)\n *   [40] WheelSpeedRL (km/h)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_600(data) {\n  const raw_WheelSpeedRR = extractSignal(data, 48, 16, false, false);\n  const value_WheelSpeedRR = (raw_WheelSpeedRR * 0.01) + 0;\n  values[36] = value_WheelSpeedRR;\n  const raw_WheelSpeedFL = extractSignal(data, 0, 16, false, false);\n  const value_WheelSpeedFL = (raw_WheelSpeedFL * 0.01) + 0;\n  values[37] = value_WheelSpeedFL;\n  const raw_WheelSpeedFR = extractSignal(data, 16, 16, false, false);\n  const value_WheelSpeedFR = (raw_WheelSpeedFR * 0.01) + 0;\n  values[38] = value_WheelSpeedFR;\n  const raw_WheelSpeedRL = extractSignal(data, 32, 16, false, false);\n  const value_WheelSpeedRL = (raw_WheelSpeedRL * 0.01) + 0;\n  values[39] = value_WheelSpeedRL;\n}\n\n/**\n * Decodes CAN message: ABS_BRAKE_PRESSURE (ID: 0x601)\n *\n * Signals (1):\n *   [41] BrakePressure (bar)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_601(data) {\n  const raw_BrakePressure = extractSignal(data, 0, 16, false, false);\n  const value_BrakePressure = (raw_BrakePressure * 0.1) + 0;\n  values[40] = value_BrakePressure;\n}\n\n/**\n * Decodes CAN message: STEERING_ANGLE (ID: 0x700)\n *\n * Signals (1):\n *   [42] SteeringAngle (deg)\n *\n * @param {Uint8Array} data - CAN message data payload\n */\nfunction decode_700(data) {\n  const raw_SteeringAngle = extractSignal(data, 0, 16, false, true);\n  const value_SteeringAngle = (raw_SteeringAngle * 0.1) + 0;\n  values[41] = value_SteeringAngle;\n}\n\n/**\n * Extracts a signal from CAN data with arbitrary bit positioning.\n *\n * Supports:\n * - Intel (little-endian) and Motorola (big-endian) byte order\n * - Signed and unsigned integers\n * - Signals spanning multiple bytes\n * - Non-byte-aligned signals\n *\n * NOTE: For best compatibility, use byte-aligned signals:\n *   - Start bits: 0, 8, 16, 24, 32, 40, 48, 56\n *   - Lengths: 8, 16, 32 bits\n *\n * Non-byte-aligned Motorola signals depend on Qt's bit position\n * normalization and may require validation against other tools.\n *\n * @param {Uint8Array} data - CAN message data payload\n * @param {number} startBit - Signal start bit position\n * @param {number} length - Signal length in bits\n * @param {boolean} isBigEndian - true for Motorola, false for Intel\n * @param {boolean} isSigned - true for signed integer\n * @returns {number} Extracted raw signal value\n */\nfunction extractSignal(data, startBit, length, isBigEndian, isSigned) {\n  let value = 0;\n\n  // Implementation note: Qt's QCanDbcFileParser provides bit positions.\n  // For byte-aligned signals, this works correctly for both byte orders.\n  // Non-byte-aligned Motorola signals assume Qt normalizes bit positions.\n\n  if (isBigEndian) {\n    // Motorola (big-endian): Read bytes in big-endian order\n    const startByte = Math.floor(startBit / 8);\n    const numBytes = Math.ceil(length / 8);\n\n    // For byte-aligned signals, read bytes directly\n    if (startBit % 8 === 0 && length % 8 === 0) {\n      for (let i = 0; i < numBytes && (startByte + i) < data.length; i++) {\n        value = (value << 8) | data[startByte + i];\n      }\n    } else {\n      // Non-byte-aligned: bit-by-bit extraction\n      for (let bit = 0; bit < length; bit++) {\n        const bitPos = startBit + bit;\n        const byteIdx = Math.floor(bitPos / 8);\n        const bitIdx = 7 - (bitPos % 8);\n        if (byteIdx < data.length) {\n          const bitVal = (data[byteIdx] >> bitIdx) & 1;\n          value = (value << 1) | bitVal;\n        }\n      }\n    }\n  } else {\n    const startByte = Math.floor(startBit / 8);\n    const startBitInByte = startBit % 8;\n    let bitsRead = 0;\n\n    for (let i = startByte; i < data.length && bitsRead < length; i++) {\n      const bitsInThisByte = Math.min(8 - (i === startByte ? startBitInByte : 0), length - bitsRead);\n      const shift = (i === startByte) ? startBitInByte : 0;\n      const mask = ((1 << bitsInThisByte) - 1) << shift;\n      const bits = (data[i] & mask) >> shift;\n      value |= bits << bitsRead;\n      bitsRead += bitsInThisByte;\n    }\n  }\n\n  if (isSigned && (value & (1 << (length - 1)))) {\n    value -= (1 << length);\n  }\n\n  return value;\n}\n",
+            "frameParserCode": "--\n-- CAN DBC Frame Parser\n--\n-- Auto-generated from: ecu_simulator.dbc\n--\n-- Total signals: 42\n-- Total messages: 14\n--\n-- Frame format:\n--   Byte 1-2: CAN ID (big-endian, 16-bit)\n--   Byte 3:   Data Length Code (DLC)\n--   Byte 4+:  CAN data payload\n--\n-- Multiplex notes:\n--   Selector signals are listed as [selector] and extracted first.\n--   Muxed signals are listed as [mux N] and only updated when the\n--   selector raw value equals N. Extended multiplexing is not supported.\n--\n\nlocal values = {}\nfor i = 1, 42 do values[i] = 0 end\n\nlocal function extractSignal(data, startBit, length, isBigEndian, isSigned)\n  local value = 0\n\n  if isBigEndian then\n    local startByte = startBit // 8\n    local numBytes = (length + 7) // 8\n\n    -- Byte-aligned fast path\n    if startBit % 8 == 0 and length % 8 == 0 then\n      for i = 0, numBytes - 1 do\n        if startByte + i + 1 <= #data then\n          value = (value << 8) | data[startByte + i + 1]\n        end\n      end\n    else\n      -- Non-byte-aligned: bit-by-bit extraction\n      for bit = 0, length - 1 do\n        local bitPos = startBit + bit\n        local byteIdx = bitPos // 8 + 1\n        local bitIdx = 7 - (bitPos % 8)\n        if byteIdx <= #data then\n          value = (value << 1) | ((data[byteIdx] >> bitIdx) & 1)\n        end\n      end\n    end\n  else\n    -- Intel (little-endian)\n    local startByte = startBit // 8\n    local startBitInByte = startBit % 8\n    local bitsRead = 0\n\n    local i = startByte\n    while i + 1 <= #data and bitsRead < length do\n      local bitsInThisByte\n      if i == startByte then\n        bitsInThisByte = math.min(8 - startBitInByte, length - bitsRead)\n      else\n        bitsInThisByte = math.min(8, length - bitsRead)\n      end\n      local shift = (i == startByte) and startBitInByte or 0\n      local mask = ((1 << bitsInThisByte) - 1) << shift\n      local bits = (data[i + 1] & mask) >> shift\n      value = value | (bits << bitsRead)\n      bitsRead = bitsRead + bitsInThisByte\n      i = i + 1\n    end\n  end\n\n  -- Apply signed conversion\n  if isSigned and (value & (1 << (length - 1))) ~= 0 then\n    value = value - (1 << length)\n  end\n\n  return value\nend\n\n--\n-- Decodes CAN message: ENGINE_RPM_SPEED (ID: 0x100)\n--\n-- Signals (2):\n--   [1] EngineRPM (rpm)\n--   [2] VehicleSpeed (km/h)\n--\nlocal function decode_100(data)\n  -- EngineRPM [rpm]\n  local raw_EngineRPM = extractSignal(data, 0, 16, false, false)\n  local value_EngineRPM = (raw_EngineRPM * 0.25) + 0\n  values[1] = value_EngineRPM\n\n  -- VehicleSpeed [km/h]\n  local raw_VehicleSpeed = extractSignal(data, 16, 16, false, false)\n  local value_VehicleSpeed = (raw_VehicleSpeed * 0.01) + 0\n  values[2] = value_VehicleSpeed\nend\n\n--\n-- Decodes CAN message: ENGINE_TEMP_LOAD (ID: 0x101)\n--\n-- Signals (3):\n--   [3] EngineLoad (%)\n--   [4] CoolantTemp (degC)\n--   [5] IntakeTemp (degC)\n--\nlocal function decode_101(data)\n  -- EngineLoad [%]\n  local raw_EngineLoad = extractSignal(data, 16, 8, false, false)\n  local value_EngineLoad = (raw_EngineLoad * 1) + 0\n  values[3] = value_EngineLoad\n\n  -- CoolantTemp [degC]\n  local raw_CoolantTemp = extractSignal(data, 0, 8, false, false)\n  local value_CoolantTemp = (raw_CoolantTemp * 1) + -40\n  values[4] = value_CoolantTemp\n\n  -- IntakeTemp [degC]\n  local raw_IntakeTemp = extractSignal(data, 8, 8, false, false)\n  local value_IntakeTemp = (raw_IntakeTemp * 1) + -40\n  values[5] = value_IntakeTemp\nend\n\n--\n-- Decodes CAN message: ENGINE_THROTTLE (ID: 0x102)\n--\n-- Signals (2):\n--   [6] FuelPressure (kPa)\n--   [7] ThrottlePosition (%)\n--\nlocal function decode_102(data)\n  -- FuelPressure [kPa]\n  local raw_FuelPressure = extractSignal(data, 8, 16, false, false)\n  local value_FuelPressure = (raw_FuelPressure * 1) + 0\n  values[6] = value_FuelPressure\n\n  -- ThrottlePosition [%]\n  local raw_ThrottlePosition = extractSignal(data, 0, 8, false, false)\n  local value_ThrottlePosition = (raw_ThrottlePosition * 0.392157) + 0\n  values[7] = value_ThrottlePosition\nend\n\n--\n-- Decodes CAN message: TRANSMISSION_GEAR (ID: 0x200)\n--\n-- Signals (3):\n--   [8] CurrentGear (no unit)\n--   [9] TorqueConverterSlip (%)\n--   [10] TransmissionTemp (degC)\n--\nlocal function decode_200(data)\n  -- CurrentGear\n  local raw_CurrentGear = extractSignal(data, 0, 8, false, false)\n  local value_CurrentGear = (raw_CurrentGear * 1) + 0\n  values[8] = value_CurrentGear\n\n  -- TorqueConverterSlip [%]\n  local raw_TorqueConverterSlip = extractSignal(data, 16, 8, false, false)\n  local value_TorqueConverterSlip = (raw_TorqueConverterSlip * 1) + 0\n  values[9] = value_TorqueConverterSlip\n\n  -- TransmissionTemp [degC]\n  local raw_TransmissionTemp = extractSignal(data, 8, 8, false, false)\n  local value_TransmissionTemp = (raw_TransmissionTemp * 1) + -40\n  values[10] = value_TransmissionTemp\nend\n\n--\n-- Decodes CAN message: BCM_LIGHTS (ID: 0x300)\n--\n-- Signals (5):\n--   [11] TurnSignalLeft (no unit)\n--   [12] HazardLights (no unit)\n--   [13] TurnSignalRight (no unit)\n--   [14] Headlights (no unit)\n--   [15] HighBeams (no unit)\n--\nlocal function decode_300(data)\n  -- TurnSignalLeft\n  local raw_TurnSignalLeft = extractSignal(data, 2, 1, false, false)\n  local value_TurnSignalLeft = (raw_TurnSignalLeft * 1) + 0\n  values[11] = value_TurnSignalLeft\n\n  -- HazardLights\n  local raw_HazardLights = extractSignal(data, 4, 1, false, false)\n  local value_HazardLights = (raw_HazardLights * 1) + 0\n  values[12] = value_HazardLights\n\n  -- TurnSignalRight\n  local raw_TurnSignalRight = extractSignal(data, 3, 1, false, false)\n  local value_TurnSignalRight = (raw_TurnSignalRight * 1) + 0\n  values[13] = value_TurnSignalRight\n\n  -- Headlights\n  local raw_Headlights = extractSignal(data, 0, 1, false, false)\n  local value_Headlights = (raw_Headlights * 1) + 0\n  values[14] = value_Headlights\n\n  -- HighBeams\n  local raw_HighBeams = extractSignal(data, 1, 1, false, false)\n  local value_HighBeams = (raw_HighBeams * 1) + 0\n  values[15] = value_HighBeams\nend\n\n--\n-- Decodes CAN message: BCM_DOORS (ID: 0x301)\n--\n-- Signals (5):\n--   [16] DoorFrontRight (no unit)\n--   [17] DoorFrontLeft (no unit)\n--   [18] DoorRearLeft (no unit)\n--   [19] DoorRearRight (no unit)\n--   [20] Trunk (no unit)\n--\nlocal function decode_301(data)\n  -- DoorFrontRight\n  local raw_DoorFrontRight = extractSignal(data, 1, 1, false, false)\n  local value_DoorFrontRight = (raw_DoorFrontRight * 1) + 0\n  values[16] = value_DoorFrontRight\n\n  -- DoorFrontLeft\n  local raw_DoorFrontLeft = extractSignal(data, 0, 1, false, false)\n  local value_DoorFrontLeft = (raw_DoorFrontLeft * 1) + 0\n  values[17] = value_DoorFrontLeft\n\n  -- DoorRearLeft\n  local raw_DoorRearLeft = extractSignal(data, 2, 1, false, false)\n  local value_DoorRearLeft = (raw_DoorRearLeft * 1) + 0\n  values[18] = value_DoorRearLeft\n\n  -- DoorRearRight\n  local raw_DoorRearRight = extractSignal(data, 3, 1, false, false)\n  local value_DoorRearRight = (raw_DoorRearRight * 1) + 0\n  values[19] = value_DoorRearRight\n\n  -- Trunk\n  local raw_Trunk = extractSignal(data, 4, 1, false, false)\n  local value_Trunk = (raw_Trunk * 1) + 0\n  values[20] = value_Trunk\nend\n\n--\n-- Decodes CAN message: BMS_VOLTAGE_CURRENT (ID: 0x400)\n--\n-- Signals (2):\n--   [21] PackCurrent (A)\n--   [22] PackVoltage (V)\n--\nlocal function decode_400(data)\n  -- PackCurrent [A]\n  local raw_PackCurrent = extractSignal(data, 16, 16, false, true)\n  local value_PackCurrent = (raw_PackCurrent * 0.1) + 0\n  values[21] = value_PackCurrent\n\n  -- PackVoltage [V]\n  local raw_PackVoltage = extractSignal(data, 0, 16, false, false)\n  local value_PackVoltage = (raw_PackVoltage * 0.1) + 0\n  values[22] = value_PackVoltage\nend\n\n--\n-- Decodes CAN message: BMS_SOC_TEMP (ID: 0x401)\n--\n-- Signals (2):\n--   [23] StateOfCharge (%)\n--   [24] PackTemperature (degC)\n--\nlocal function decode_401(data)\n  -- StateOfCharge [%]\n  local raw_StateOfCharge = extractSignal(data, 0, 8, false, false)\n  local value_StateOfCharge = (raw_StateOfCharge * 1) + 0\n  values[23] = value_StateOfCharge\n\n  -- PackTemperature [degC]\n  local raw_PackTemperature = extractSignal(data, 8, 8, false, false)\n  local value_PackTemperature = (raw_PackTemperature * 1) + -40\n  values[24] = value_PackTemperature\nend\n\n--\n-- Decodes CAN message: BMS_CELL_VOLTAGES (ID: 0x402)\n--\n-- Signals (8):\n--   [25] Cell2Voltage (V)\n--   [26] Cell3Voltage (V)\n--   [27] Cell6Voltage (V)\n--   [28] Cell5Voltage (V)\n--   [29] Cell4Voltage (V)\n--   [30] Cell8Voltage (V)\n--   [31] Cell1Voltage (V)\n--   [32] Cell7Voltage (V)\n--\nlocal function decode_402(data)\n  -- Cell2Voltage [V]\n  local raw_Cell2Voltage = extractSignal(data, 8, 8, false, false)\n  local value_Cell2Voltage = (raw_Cell2Voltage * 0.00471) + 3\n  values[25] = value_Cell2Voltage\n\n  -- Cell3Voltage [V]\n  local raw_Cell3Voltage = extractSignal(data, 16, 8, false, false)\n  local value_Cell3Voltage = (raw_Cell3Voltage * 0.00471) + 3\n  values[26] = value_Cell3Voltage\n\n  -- Cell6Voltage [V]\n  local raw_Cell6Voltage = extractSignal(data, 40, 8, false, false)\n  local value_Cell6Voltage = (raw_Cell6Voltage * 0.00471) + 3\n  values[27] = value_Cell6Voltage\n\n  -- Cell5Voltage [V]\n  local raw_Cell5Voltage = extractSignal(data, 32, 8, false, false)\n  local value_Cell5Voltage = (raw_Cell5Voltage * 0.00471) + 3\n  values[28] = value_Cell5Voltage\n\n  -- Cell4Voltage [V]\n  local raw_Cell4Voltage = extractSignal(data, 24, 8, false, false)\n  local value_Cell4Voltage = (raw_Cell4Voltage * 0.00471) + 3\n  values[29] = value_Cell4Voltage\n\n  -- Cell8Voltage [V]\n  local raw_Cell8Voltage = extractSignal(data, 56, 8, false, false)\n  local value_Cell8Voltage = (raw_Cell8Voltage * 0.00471) + 3\n  values[30] = value_Cell8Voltage\n\n  -- Cell1Voltage [V]\n  local raw_Cell1Voltage = extractSignal(data, 0, 8, false, false)\n  local value_Cell1Voltage = (raw_Cell1Voltage * 0.00471) + 3\n  values[31] = value_Cell1Voltage\n\n  -- Cell7Voltage [V]\n  local raw_Cell7Voltage = extractSignal(data, 48, 8, false, false)\n  local value_Cell7Voltage = (raw_Cell7Voltage * 0.00471) + 3\n  values[32] = value_Cell7Voltage\nend\n\n--\n-- Decodes CAN message: CLUSTER_ODOMETER (ID: 0x500)\n--\n-- Signals (2):\n--   [33] Odometer (km)\n--   [34] TripDistance (km)\n--\nlocal function decode_500(data)\n  -- Odometer [km]\n  local raw_Odometer = extractSignal(data, 0, 32, false, false)\n  local value_Odometer = (raw_Odometer * 0.1) + 0\n  values[33] = value_Odometer\n\n  -- TripDistance [km]\n  local raw_TripDistance = extractSignal(data, 32, 16, false, false)\n  local value_TripDistance = (raw_TripDistance * 0.1) + 0\n  values[34] = value_TripDistance\nend\n\n--\n-- Decodes CAN message: CLUSTER_FUEL (ID: 0x501)\n--\n-- Signals (2):\n--   [35] FuelConsumption (L/100km)\n--   [36] FuelLevel (%)\n--\nlocal function decode_501(data)\n  -- FuelConsumption [L/100km]\n  local raw_FuelConsumption = extractSignal(data, 8, 16, false, false)\n  local value_FuelConsumption = (raw_FuelConsumption * 0.01) + 0\n  values[35] = value_FuelConsumption\n\n  -- FuelLevel [%]\n  local raw_FuelLevel = extractSignal(data, 0, 8, false, false)\n  local value_FuelLevel = (raw_FuelLevel * 1) + 0\n  values[36] = value_FuelLevel\nend\n\n--\n-- Decodes CAN message: ABS_WHEEL_SPEEDS (ID: 0x600)\n--\n-- Signals (4):\n--   [37] WheelSpeedFL (km/h)\n--   [38] WheelSpeedRR (km/h)\n--   [39] WheelSpeedRL (km/h)\n--   [40] WheelSpeedFR (km/h)\n--\nlocal function decode_600(data)\n  -- WheelSpeedFL [km/h]\n  local raw_WheelSpeedFL = extractSignal(data, 0, 16, false, false)\n  local value_WheelSpeedFL = (raw_WheelSpeedFL * 0.01) + 0\n  values[37] = value_WheelSpeedFL\n\n  -- WheelSpeedRR [km/h]\n  local raw_WheelSpeedRR = extractSignal(data, 48, 16, false, false)\n  local value_WheelSpeedRR = (raw_WheelSpeedRR * 0.01) + 0\n  values[38] = value_WheelSpeedRR\n\n  -- WheelSpeedRL [km/h]\n  local raw_WheelSpeedRL = extractSignal(data, 32, 16, false, false)\n  local value_WheelSpeedRL = (raw_WheelSpeedRL * 0.01) + 0\n  values[39] = value_WheelSpeedRL\n\n  -- WheelSpeedFR [km/h]\n  local raw_WheelSpeedFR = extractSignal(data, 16, 16, false, false)\n  local value_WheelSpeedFR = (raw_WheelSpeedFR * 0.01) + 0\n  values[40] = value_WheelSpeedFR\nend\n\n--\n-- Decodes CAN message: ABS_BRAKE_PRESSURE (ID: 0x601)\n--\n-- Signals (1):\n--   [41] BrakePressure (bar)\n--\nlocal function decode_601(data)\n  -- BrakePressure [bar]\n  local raw_BrakePressure = extractSignal(data, 0, 16, false, false)\n  local value_BrakePressure = (raw_BrakePressure * 0.1) + 0\n  values[41] = value_BrakePressure\nend\n\n--\n-- Decodes CAN message: STEERING_ANGLE (ID: 0x700)\n--\n-- Signals (1):\n--   [42] SteeringAngle (deg)\n--\nlocal function decode_700(data)\n  -- SteeringAngle [deg]\n  local raw_SteeringAngle = extractSignal(data, 0, 16, false, true)\n  local value_SteeringAngle = (raw_SteeringAngle * 0.1) + 0\n  values[42] = value_SteeringAngle\nend\n\nfunction parse(frame)\n  if #frame < 3 then return values end\n\n  local canId = (frame[1] << 8) | frame[2]\n  local dlc = frame[3]\n\n  -- Extract data payload (1-indexed)\n  local data = {}\n  for i = 1, dlc do\n    if 3 + i <= #frame then data[i] = frame[3 + i] end\n  end\n\n  -- Route CAN ID to the matching message decoder\n  if canId == 0x100 then\n    -- ENGINE_RPM_SPEED\n    decode_100(data)\n  elseif canId == 0x101 then\n    -- ENGINE_TEMP_LOAD\n    decode_101(data)\n  elseif canId == 0x102 then\n    -- ENGINE_THROTTLE\n    decode_102(data)\n  elseif canId == 0x200 then\n    -- TRANSMISSION_GEAR\n    decode_200(data)\n  elseif canId == 0x300 then\n    -- BCM_LIGHTS\n    decode_300(data)\n  elseif canId == 0x301 then\n    -- BCM_DOORS\n    decode_301(data)\n  elseif canId == 0x400 then\n    -- BMS_VOLTAGE_CURRENT\n    decode_400(data)\n  elseif canId == 0x401 then\n    -- BMS_SOC_TEMP\n    decode_401(data)\n  elseif canId == 0x402 then\n    -- BMS_CELL_VOLTAGES\n    decode_402(data)\n  elseif canId == 0x500 then\n    -- CLUSTER_ODOMETER\n    decode_500(data)\n  elseif canId == 0x501 then\n    -- CLUSTER_FUEL\n    decode_501(data)\n  elseif canId == 0x600 then\n    -- ABS_WHEEL_SPEEDS\n    decode_600(data)\n  elseif canId == 0x601 then\n    -- ABS_BRAKE_PRESSURE\n    decode_601(data)\n  elseif canId == 0x700 then\n    -- STEERING_ANGLE\n    decode_700(data)\n  end\n\n  return values\nend\n",
+            "frameParserLanguage": 1,
             "frameStart": "",
             "hexadecimalDelimiters": false,
             "sourceId": 0,
-            "title": "Device A"
+            "title": "CAN Bus"
         }
     ],
     "title": "ecu_simulator",
@@ -1281,88 +1352,128 @@
         "layout:1000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 504,
-                "canvasWidth": 1053,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 248,
+                        "height": 165,
                         "id": 5,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 209,
+                        "widgetType": 2,
+                        "width": 206,
                         "x": 4,
                         "y": 4
                     },
                     {
-                        "height": 248,
+                        "height": 165,
                         "id": 6,
+                        "relativeIndex": 1,
                         "state": "normal",
-                        "width": 209,
-                        "x": 212,
+                        "widgetType": 2,
+                        "width": 206,
+                        "x": 209,
                         "y": 4
                     },
                     {
-                        "height": 248,
+                        "height": 165,
                         "id": 0,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 209,
-                        "x": 420,
+                        "widgetType": 1,
+                        "width": 205,
+                        "x": 414,
                         "y": 4
                     },
                     {
-                        "height": 248,
+                        "height": 165,
                         "id": 1,
+                        "relativeIndex": 1,
                         "state": "normal",
-                        "width": 209,
-                        "x": 628,
+                        "widgetType": 1,
+                        "width": 205,
+                        "x": 618,
                         "y": 4
                     },
                     {
-                        "height": 248,
-                        "id": 2,
+                        "height": 165,
+                        "id": 10,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 209,
-                        "x": 836,
+                        "widgetType": 8,
+                        "width": 205,
+                        "x": 822,
                         "y": 4
                     },
                     {
-                        "height": 248,
-                        "id": 3,
+                        "height": 164,
+                        "id": 11,
+                        "relativeIndex": 1,
                         "state": "normal",
-                        "width": 209,
+                        "widgetType": 8,
+                        "width": 206,
                         "x": 4,
-                        "y": 251
+                        "y": 168
                     },
                     {
-                        "height": 248,
+                        "height": 164,
+                        "id": 2,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 206,
+                        "x": 209,
+                        "y": 168
+                    },
+                    {
+                        "height": 164,
+                        "id": 3,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 205,
+                        "x": 414,
+                        "y": 168
+                    },
+                    {
+                        "height": 164,
                         "id": 7,
+                        "relativeIndex": 2,
                         "state": "normal",
-                        "width": 209,
-                        "x": 212,
-                        "y": 251
+                        "widgetType": 2,
+                        "width": 205,
+                        "x": 618,
+                        "y": 168
                     },
                     {
-                        "height": 248,
+                        "height": 164,
                         "id": 4,
+                        "relativeIndex": 4,
                         "state": "normal",
-                        "width": 209,
-                        "x": 420,
-                        "y": 251
+                        "widgetType": 1,
+                        "width": 205,
+                        "x": 822,
+                        "y": 168
                     },
                     {
-                        "height": 248,
+                        "height": 164,
                         "id": 8,
+                        "relativeIndex": 3,
                         "state": "normal",
-                        "width": 209,
-                        "x": 628,
-                        "y": 251
+                        "widgetType": 2,
+                        "width": 514,
+                        "x": 4,
+                        "y": 331
                     },
                     {
-                        "height": 248,
+                        "height": 164,
                         "id": 9,
+                        "relativeIndex": 4,
                         "state": "normal",
-                        "width": 209,
-                        "x": 836,
-                        "y": 251
+                        "widgetType": 2,
+                        "width": 513,
+                        "x": 517,
+                        "y": 331
                     }
                 ],
                 "userReordered": false,
@@ -1371,474 +1482,1269 @@
                     6,
                     0,
                     1,
+                    10,
+                    11,
                     2,
                     3,
                     7,
                     4,
                     8,
                     9
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 8
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 8
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 2
+                    }
                 ]
             }
         },
         "layout:1001": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 504,
-                "canvasWidth": 1053,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 124,
+                        "height": 99,
                         "id": 5,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 105,
+                        "widgetType": 2,
+                        "width": 103,
                         "x": 4,
                         "y": 4
                     },
                     {
-                        "height": 124,
-                        "id": 20,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 108,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 21,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 212,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 6,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 316,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 12,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 420,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 13,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 524,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 0,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 627,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 22,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 730,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 14,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 833,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 1,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 936,
-                        "y": 4
-                    },
-                    {
-                        "height": 124,
-                        "id": 15,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 4,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 23,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 108,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 16,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 212,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 2,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 316,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 24,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 420,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 25,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 524,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 3,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 627,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 17,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 730,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 18,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 833,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 7,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 936,
-                        "y": 127
-                    },
-                    {
-                        "height": 124,
-                        "id": 26,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 4,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 27,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 108,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 28,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 212,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 29,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 316,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 30,
-                        "state": "normal",
-                        "width": 105,
-                        "x": 420,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 31,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 524,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 32,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 627,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 33,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 730,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 4,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 833,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 8,
-                        "state": "normal",
-                        "width": 104,
-                        "x": 936,
-                        "y": 250
-                    },
-                    {
-                        "height": 124,
-                        "id": 34,
-                        "state": "normal",
-                        "width": 117,
-                        "x": 4,
-                        "y": 373
-                    },
-                    {
-                        "height": 124,
-                        "id": 19,
-                        "state": "normal",
-                        "width": 116,
-                        "x": 120,
-                        "y": 373
-                    },
-                    {
-                        "height": 124,
-                        "id": 9,
-                        "state": "normal",
-                        "width": 116,
-                        "x": 235,
-                        "y": 373
-                    },
-                    {
-                        "height": 124,
+                        "height": 99,
                         "id": 35,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 116,
-                        "x": 350,
-                        "y": 373
+                        "widgetType": 13,
+                        "width": 103,
+                        "x": 106,
+                        "y": 4
                     },
                     {
-                        "height": 124,
+                        "height": 99,
                         "id": 36,
+                        "relativeIndex": 1,
                         "state": "normal",
-                        "width": 116,
-                        "x": 465,
-                        "y": 373
+                        "widgetType": 13,
+                        "width": 103,
+                        "x": 208,
+                        "y": 4
                     },
                     {
-                        "height": 124,
+                        "height": 99,
+                        "id": 6,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 103,
+                        "x": 310,
+                        "y": 4
+                    },
+                    {
+                        "height": 99,
+                        "id": 12,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 103,
+                        "x": 412,
+                        "y": 4
+                    },
+                    {
+                        "height": 99,
+                        "id": 13,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 103,
+                        "x": 514,
+                        "y": 4
+                    },
+                    {
+                        "height": 99,
+                        "id": 0,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 103,
+                        "x": 616,
+                        "y": 4
+                    },
+                    {
+                        "height": 99,
+                        "id": 20,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 102,
+                        "x": 718,
+                        "y": 4
+                    },
+                    {
+                        "height": 99,
+                        "id": 14,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 102,
+                        "x": 819,
+                        "y": 4
+                    },
+                    {
+                        "height": 99,
+                        "id": 1,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 102,
+                        "x": 920,
+                        "y": 4
+                    },
+                    {
+                        "height": 99,
+                        "id": 21,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 103,
+                        "x": 4,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 15,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 103,
+                        "x": 106,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 16,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 103,
+                        "x": 208,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 10,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 8,
+                        "width": 103,
+                        "x": 310,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 11,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 8,
+                        "width": 103,
+                        "x": 412,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 2,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 103,
+                        "x": 514,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 22,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 103,
+                        "x": 616,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 23,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 102,
+                        "x": 718,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 3,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 102,
+                        "x": 819,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 17,
+                        "relativeIndex": 5,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 102,
+                        "x": 920,
+                        "y": 102
+                    },
+                    {
+                        "height": 99,
+                        "id": 18,
+                        "relativeIndex": 6,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 103,
+                        "x": 4,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 7,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 103,
+                        "x": 106,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 24,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 103,
+                        "x": 208,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 25,
+                        "relativeIndex": 5,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 103,
+                        "x": 310,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 26,
+                        "relativeIndex": 6,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 103,
+                        "x": 412,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 27,
+                        "relativeIndex": 7,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 103,
+                        "x": 514,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 28,
+                        "relativeIndex": 8,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 103,
+                        "x": 616,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 29,
+                        "relativeIndex": 9,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 102,
+                        "x": 718,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 30,
+                        "relativeIndex": 10,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 102,
+                        "x": 819,
+                        "y": 200
+                    },
+                    {
+                        "height": 99,
+                        "id": 31,
+                        "relativeIndex": 11,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 102,
+                        "x": 920,
+                        "y": 200
+                    },
+                    {
+                        "height": 98,
+                        "id": 4,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 103,
+                        "x": 4,
+                        "y": 298
+                    },
+                    {
+                        "height": 98,
+                        "id": 8,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 103,
+                        "x": 106,
+                        "y": 298
+                    },
+                    {
+                        "height": 98,
+                        "id": 32,
+                        "relativeIndex": 12,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 103,
+                        "x": 208,
+                        "y": 298
+                    },
+                    {
+                        "height": 98,
+                        "id": 19,
+                        "relativeIndex": 7,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 103,
+                        "x": 310,
+                        "y": 298
+                    },
+                    {
+                        "height": 98,
+                        "id": 9,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 103,
+                        "x": 412,
+                        "y": 298
+                    },
+                    {
+                        "height": 98,
                         "id": 37,
+                        "relativeIndex": 2,
                         "state": "normal",
-                        "width": 116,
-                        "x": 580,
-                        "y": 373
+                        "widgetType": 13,
+                        "width": 103,
+                        "x": 514,
+                        "y": 298
                     },
                     {
-                        "height": 124,
+                        "height": 98,
                         "id": 38,
+                        "relativeIndex": 3,
                         "state": "normal",
-                        "width": 116,
-                        "x": 695,
-                        "y": 373
+                        "widgetType": 13,
+                        "width": 103,
+                        "x": 616,
+                        "y": 298
                     },
                     {
-                        "height": 124,
+                        "height": 98,
                         "id": 39,
+                        "relativeIndex": 4,
                         "state": "normal",
-                        "width": 116,
-                        "x": 810,
-                        "y": 373
+                        "widgetType": 13,
+                        "width": 102,
+                        "x": 718,
+                        "y": 298
                     },
                     {
-                        "height": 124,
+                        "height": 98,
                         "id": 40,
+                        "relativeIndex": 5,
                         "state": "normal",
-                        "width": 116,
-                        "x": 925,
-                        "y": 373
+                        "widgetType": 13,
+                        "width": 102,
+                        "x": 819,
+                        "y": 298
+                    },
+                    {
+                        "height": 98,
+                        "id": 33,
+                        "relativeIndex": 13,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 102,
+                        "x": 920,
+                        "y": 298
+                    },
+                    {
+                        "height": 98,
+                        "id": 34,
+                        "relativeIndex": 14,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 1027,
+                        "x": 4,
+                        "y": 395
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
                     5,
-                    20,
-                    21,
+                    35,
+                    36,
                     6,
                     12,
                     13,
                     0,
-                    22,
+                    20,
                     14,
                     1,
+                    21,
                     15,
-                    23,
                     16,
+                    10,
+                    11,
                     2,
-                    24,
-                    25,
+                    22,
+                    23,
                     3,
                     17,
                     18,
                     7,
+                    24,
+                    25,
                     26,
                     27,
                     28,
                     29,
                     30,
                     31,
-                    32,
-                    33,
                     4,
                     8,
-                    34,
+                    32,
                     19,
                     9,
-                    35,
-                    36,
                     37,
                     38,
                     39,
-                    40
+                    40,
+                    33,
+                    34
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 8
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 8
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 5,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 6,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 5,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 6,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 7,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 8,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 9,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 10,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 11,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 12,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 7,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 5,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 13,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 14,
+                        "widgetType": 11
+                    }
+                ]
+            }
+        },
+        "layout:1002": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 493,
+                        "id": 5,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 513,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 35,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 13,
+                        "width": 515,
+                        "x": 516,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 36,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 13,
+                        "width": 515,
+                        "x": 516,
+                        "y": 250
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    5,
+                    35,
+                    36
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 13
+                    }
+                ]
+            }
+        },
+        "layout:1003": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 493,
+                        "id": 6,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 513,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 12,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 515,
+                        "x": 516,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 13,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 515,
+                        "x": 516,
+                        "y": 250
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    6,
+                    12,
+                    13
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 10
+                    }
                 ]
             }
         },
         "layout:1004": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 871,
-                "canvasWidth": 1922,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 863,
+                        "height": 493,
                         "id": 0,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 957,
+                        "widgetType": 1,
+                        "width": 513,
                         "x": 4,
                         "y": 4
                     },
                     {
-                        "height": 432,
-                        "id": 22,
+                        "height": 247,
+                        "id": 20,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 958,
-                        "x": 960,
+                        "widgetType": 11,
+                        "width": 515,
+                        "x": 516,
                         "y": 4
                     },
                     {
-                        "height": 432,
+                        "height": 247,
                         "id": 14,
+                        "relativeIndex": 2,
                         "state": "normal",
-                        "width": 958,
-                        "x": 960,
-                        "y": 435
+                        "widgetType": 10,
+                        "width": 515,
+                        "x": 516,
+                        "y": 250
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
                     0,
-                    22,
+                    20,
                     14
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 10
+                    }
+                ]
+            }
+        },
+        "layout:1005": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 247,
+                        "id": 1,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 514,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 21,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 514,
+                        "x": 517,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 15,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 514,
+                        "x": 4,
+                        "y": 250
+                    },
+                    {
+                        "height": 247,
+                        "id": 16,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 514,
+                        "x": 517,
+                        "y": 250
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    1,
+                    21,
+                    15,
+                    16
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 10
+                    }
                 ]
             }
         },
         "layout:1006": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 871,
-                "canvasWidth": 1922,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 863,
-                        "id": 2,
+                        "height": 493,
+                        "id": 10,
+                        "relativeIndex": 0,
                         "state": "normal",
-                        "width": 957,
+                        "widgetType": 8,
+                        "width": 1027,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    10
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 8
+                    }
+                ]
+            }
+        },
+        "layout:1007": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 493,
+                        "id": 11,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 8,
+                        "width": 1027,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    11
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 8
+                    }
+                ]
+            }
+        },
+        "layout:1008": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 493,
+                        "id": 2,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 513,
                         "x": 4,
                         "y": 4
                     },
                     {
-                        "height": 432,
-                        "id": 24,
+                        "height": 247,
+                        "id": 22,
+                        "relativeIndex": 2,
                         "state": "normal",
-                        "width": 958,
-                        "x": 960,
+                        "widgetType": 11,
+                        "width": 515,
+                        "x": 516,
                         "y": 4
                     },
                     {
-                        "height": 432,
-                        "id": 25,
+                        "height": 247,
+                        "id": 23,
+                        "relativeIndex": 3,
                         "state": "normal",
-                        "width": 958,
-                        "x": 960,
-                        "y": 435
+                        "widgetType": 11,
+                        "width": 515,
+                        "x": 516,
+                        "y": 250
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
                     2,
-                    24,
-                    25
+                    22,
+                    23
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 11
+                    }
                 ]
             }
         },
         "layout:1009": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 871,
-                "canvasWidth": 1922,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 863,
-                        "id": 4,
+                        "height": 493,
+                        "id": 3,
+                        "relativeIndex": 3,
                         "state": "normal",
-                        "width": 1914,
+                        "widgetType": 1,
+                        "width": 513,
                         "x": 4,
                         "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 17,
+                        "relativeIndex": 5,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 515,
+                        "x": 516,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 18,
+                        "relativeIndex": 6,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 515,
+                        "x": 516,
+                        "y": 250
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
-                    4
+                    3,
+                    17,
+                    18
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 5,
+                        "widgetType": 10
+                    },
+                    {
+                        "relativeIndex": 6,
+                        "widgetType": 10
+                    }
+                ]
+            }
+        },
+        "layout:1010": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 247,
+                        "id": 7,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 206,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 24,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 206,
+                        "x": 209,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 25,
+                        "relativeIndex": 5,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 205,
+                        "x": 414,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 26,
+                        "relativeIndex": 6,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 205,
+                        "x": 618,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 27,
+                        "relativeIndex": 7,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 205,
+                        "x": 822,
+                        "y": 4
+                    },
+                    {
+                        "height": 246,
+                        "id": 28,
+                        "relativeIndex": 8,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 257,
+                        "x": 4,
+                        "y": 250
+                    },
+                    {
+                        "height": 246,
+                        "id": 29,
+                        "relativeIndex": 9,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 257,
+                        "x": 260,
+                        "y": 250
+                    },
+                    {
+                        "height": 246,
+                        "id": 30,
+                        "relativeIndex": 10,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 257,
+                        "x": 516,
+                        "y": 250
+                    },
+                    {
+                        "height": 246,
+                        "id": 31,
+                        "relativeIndex": 11,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 256,
+                        "x": 772,
+                        "y": 250
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    7,
+                    24,
+                    25,
+                    26,
+                    27,
+                    28,
+                    29,
+                    30,
+                    31
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 5,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 6,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 7,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 8,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 9,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 10,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 11,
+                        "widgetType": 11
+                    }
                 ]
             }
         },
@@ -1846,562 +2752,238 @@
             "data": {
                 "autoLayout": true,
                 "canvasHeight": 501,
-                "canvasWidth": 1027,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 247,
-                        "id": 9,
+                        "height": 493,
+                        "id": 4,
+                        "relativeIndex": 4,
                         "state": "normal",
-                        "width": 510,
+                        "widgetType": 1,
+                        "width": 1027,
                         "x": 4,
                         "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 35,
-                        "state": "normal",
-                        "width": 510,
-                        "x": 513,
-                        "y": 4
-                    },
-                    {
-                        "height": 247,
-                        "id": 36,
-                        "state": "normal",
-                        "width": 340,
-                        "x": 4,
-                        "y": 250
-                    },
-                    {
-                        "height": 247,
-                        "id": 37,
-                        "state": "normal",
-                        "width": 340,
-                        "x": 343,
-                        "y": 250
-                    },
-                    {
-                        "height": 247,
-                        "id": 38,
-                        "state": "normal",
-                        "width": 340,
-                        "x": 682,
-                        "y": 250
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
-                    9,
-                    35,
-                    36,
-                    37,
-                    38
+                    4
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 1
+                    }
                 ]
             }
         },
         "layout:1012": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 871,
-                "canvasWidth": 1922,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 863,
-                        "id": 39,
+                        "height": 493,
+                        "id": 8,
+                        "relativeIndex": 3,
                         "state": "normal",
-                        "width": 1914,
+                        "widgetType": 2,
+                        "width": 513,
                         "x": 4,
                         "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 32,
+                        "relativeIndex": 12,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 515,
+                        "x": 516,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 19,
+                        "relativeIndex": 7,
+                        "state": "normal",
+                        "widgetType": 10,
+                        "width": 515,
+                        "x": 516,
+                        "y": 250
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
-                    39
+                    8,
+                    32,
+                    19
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 12,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 7,
+                        "widgetType": 10
+                    }
                 ]
             }
         },
         "layout:1013": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 871,
-                "canvasWidth": 1922,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
                 "geometries": [
                     {
-                        "height": 863,
-                        "id": 40,
+                        "height": 247,
+                        "id": 9,
+                        "relativeIndex": 4,
                         "state": "normal",
-                        "width": 1914,
+                        "widgetType": 2,
+                        "width": 514,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 37,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 13,
+                        "width": 514,
+                        "x": 517,
+                        "y": 4
+                    },
+                    {
+                        "height": 247,
+                        "id": 38,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 13,
+                        "width": 343,
+                        "x": 4,
+                        "y": 250
+                    },
+                    {
+                        "height": 247,
+                        "id": 39,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 13,
+                        "width": 343,
+                        "x": 346,
+                        "y": 250
+                    },
+                    {
+                        "height": 247,
+                        "id": 40,
+                        "relativeIndex": 5,
+                        "state": "normal",
+                        "widgetType": 13,
+                        "width": 343,
+                        "x": 688,
+                        "y": 250
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    9,
+                    37,
+                    38,
+                    39,
+                    40
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 13
+                    },
+                    {
+                        "relativeIndex": 5,
+                        "widgetType": 13
+                    }
+                ]
+            }
+        },
+        "layout:1014": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 493,
+                        "id": 33,
+                        "relativeIndex": 13,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 1027,
                         "x": 4,
                         "y": 4
                     }
                 ],
                 "userReordered": false,
                 "windowOrder": [
-                    40
+                    33
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 13,
+                        "widgetType": 11
+                    }
+                ]
+            }
+        },
+        "layout:1015": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 501,
+                "canvasWidth": 1035,
+                "geometries": [
+                    {
+                        "height": 493,
+                        "id": 34,
+                        "relativeIndex": 14,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 1027,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    34
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 14,
+                        "widgetType": 11
+                    }
                 ]
             }
         }
     },
-    "workspaces": [
-        {
-            "icon": "qrc:/rcc/icons/panes/overview.svg",
-            "title": "Overview",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 1,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 2,
-                    "relativeIndex": 0,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 3,
-                    "relativeIndex": 1,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 6,
-                    "relativeIndex": 2,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 7,
-                    "relativeIndex": 3,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 2,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 9,
-                    "relativeIndex": 4,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 3,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 4,
-                    "widgetType": 2
-                }
-            ],
-            "workspaceId": 1000
-        },
-        {
-            "icon": "qrc:/rcc/icons/panes/dashboard.svg",
-            "title": "All Data",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 1,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 1,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 1,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 2,
-                    "relativeIndex": 0,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 2,
-                    "relativeIndex": 2,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 2,
-                    "relativeIndex": 2,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 3,
-                    "relativeIndex": 1,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 3,
-                    "relativeIndex": 3,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 3,
-                    "relativeIndex": 3,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 3,
-                    "relativeIndex": 4,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 6,
-                    "relativeIndex": 2,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 6,
-                    "relativeIndex": 4,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 6,
-                    "relativeIndex": 5,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 7,
-                    "relativeIndex": 3,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 7,
-                    "relativeIndex": 5,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 7,
-                    "relativeIndex": 6,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 2,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 6,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 7,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 8,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 9,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 10,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 11,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 12,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 13,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 9,
-                    "relativeIndex": 4,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 3,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 14,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 7,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 4,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 15,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 16,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 17,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 18,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 12,
-                    "relativeIndex": 19,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 13,
-                    "relativeIndex": 20,
-                    "widgetType": 11
-                }
-            ],
-            "workspaceId": 1001
-        },
-        {
-            "title": "ENGINE_THROTTLE",
-            "widgetRefs": [
-                {
-                    "groupId": 2,
-                    "relativeIndex": 0,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 2,
-                    "relativeIndex": 2,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 2,
-                    "relativeIndex": 2,
-                    "widgetType": 10
-                }
-            ],
-            "workspaceId": 1004
-        },
-        {
-            "title": "BCM_LIGHTS",
-            "widgetRefs": [
-                {
-                    "groupId": 6,
-                    "relativeIndex": 2,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 6,
-                    "relativeIndex": 4,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 6,
-                    "relativeIndex": 5,
-                    "widgetType": 11
-                }
-            ],
-            "workspaceId": 1006
-        },
-        {
-            "title": "BCM_DOORS",
-            "widgetRefs": [
-                {
-                    "groupId": 7,
-                    "relativeIndex": 3,
-                    "widgetType": 1
-                },
-                {
-                    "groupId": 7,
-                    "relativeIndex": 5,
-                    "widgetType": 10
-                },
-                {
-                    "groupId": 7,
-                    "relativeIndex": 6,
-                    "widgetType": 10
-                }
-            ],
-            "workspaceId": 1007
-        },
-        {
-            "title": "BMS_VOLTAGE_CURRENT",
-            "widgetRefs": [
-                {
-                    "groupId": 8,
-                    "relativeIndex": 2,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 6,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 7,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 8,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 9,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 10,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 11,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 12,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 8,
-                    "relativeIndex": 13,
-                    "widgetType": 11
-                }
-            ],
-            "workspaceId": 1008
-        },
-        {
-            "title": "BMS_SOC_TEMP",
-            "widgetRefs": [
-                {
-                    "groupId": 9,
-                    "relativeIndex": 4,
-                    "widgetType": 1
-                }
-            ],
-            "workspaceId": 1009
-        },
-        {
-            "title": "BMS_CELL_VOLTAGES",
-            "widgetRefs": [
-                {
-                    "groupId": 10,
-                    "relativeIndex": 3,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 14,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 10,
-                    "relativeIndex": 7,
-                    "widgetType": 10
-                }
-            ],
-            "workspaceId": 1010
-        },
-        {
-            "title": "CLUSTER_ODOMETER",
-            "widgetRefs": [
-                {
-                    "groupId": 11,
-                    "relativeIndex": 4,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 15,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 16,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 17,
-                    "widgetType": 11
-                },
-                {
-                    "groupId": 11,
-                    "relativeIndex": 18,
-                    "widgetType": 11
-                }
-            ],
-            "workspaceId": 1011
-        },
-        {
-            "title": "CLUSTER_FUEL",
-            "widgetRefs": [
-                {
-                    "groupId": 12,
-                    "relativeIndex": 19,
-                    "widgetType": 11
-                }
-            ],
-            "workspaceId": 1012
-        },
-        {
-            "title": "ABS_WHEEL_SPEEDS",
-            "widgetRefs": [
-                {
-                    "groupId": 13,
-                    "relativeIndex": 20,
-                    "widgetType": 11
-                }
-            ],
-            "workspaceId": 1013
-        }
-    ],
     "writerVersion": "3.2.7",
     "writerVersionAtCreation": "3.2.7"
 }

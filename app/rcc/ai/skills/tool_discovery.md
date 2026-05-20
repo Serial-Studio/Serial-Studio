@@ -107,6 +107,26 @@ functions. `scripts.get{kind, id}` returns the full source.
 Adapt a real reference instead of writing from scratch. The ones already
 in the codebase have been tested against real edge cases.
 
+## Design-judgment skills — load before laying out
+
+`painter` and `dashboard_layout` cover the **mechanics**: API calls,
+slugs, min/max pairs, addWidget pre-flight. Two companion skills cover
+the **design judgment** that comes before the API calls. Load them
+when the task is "make this readable", not just "make this work":
+
+| Skill                | Load when the user asks for...                     |
+|----------------------|----------------------------------------------------|
+| `painter` (design section) | A new painter, OR "make the painter clearer" |
+| `workspace_design`   | "Organize my dashboard", "build an overview",      |
+|                      | "what should I put on which tab", or moving more   |
+|                      | than ~3 tiles between workspaces                   |
+
+The design skills carry the readability rules (contrast, color-
+independence, Miller's Law tile budgets, Peak-End placement). The
+mechanics skills carry the API. Both apply on a painter or workspace
+task — don't pick one. The design skill tells you *what* to build;
+the mechanics skill tells you *how* to push it.
+
 ## Batch mutations — use `project.batch`, don't loop
 
 The most common discovery-skill mistake is iterating individual
