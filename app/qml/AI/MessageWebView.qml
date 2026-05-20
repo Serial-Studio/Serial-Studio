@@ -15,10 +15,10 @@
 
 import QtQuick
 import QtWebEngine
+import QtWebChannel
 
 //
-// Chromium-backed conversation transcript. Loaded only when Cpp_HasWebEngine
-// is true so the QtWebEngine import is never resolved on builds without it.
+// Chromium-backed transcript; HTML-to-QML IPC via QWebChannel.
 //
 Item {
   id: root
@@ -119,10 +119,34 @@ Item {
     }
   }
 
+  //
+  // IPC bridge exposed to the page as `window.ai`.
+  //
+  QtObject {
+    id: aiBridge
+
+    WebChannel.id: "ai"
+
+    function approve(callId)         { Cpp_AI_Assistant.approveToolCall(callId) }
+    function deny(callId)            { Cpp_AI_Assistant.denyToolCall(callId) }
+    function approveAll(family)      { Cpp_AI_Assistant.approveToolCallGroup(family) }
+    function denyAll(family)         { Cpp_AI_Assistant.denyToolCallGroup(family) }
+    function copy(text)              { Cpp_Misc_Utilities.copyText(text) }
+    function chip(text)              { root.chipClicked(text) }
+    function ext(url)                { Qt.openUrlExternally(url) }
+  }
+
+  WebChannel {
+    id: aiChannel
+
+    registeredObjects: [aiBridge]
+  }
+
   WebEngineView {
     id: view
 
     anchors.fill: parent
+    webChannel: aiChannel
     url: "qrc:/chat-viewer.html"
     backgroundColor: "transparent"
     settings.localContentCanAccessRemoteUrls: true
@@ -149,54 +173,11 @@ Item {
       if (url.startsWith("qrc:"))
         return
 
-      if (url.startsWith("approveAll:")) {
-        request.reject()
-        Cpp_AI_Assistant.approveToolCallGroup(
-          decodeURIComponent(url.substring(11)))
-        return
-      }
-
-      if (url.startsWith("denyAll:")) {
-        request.reject()
-        Cpp_AI_Assistant.denyToolCallGroup(
-          decodeURIComponent(url.substring(8)))
-        return
-      }
-
-      if (url.startsWith("approve:")) {
-        request.reject()
-        Cpp_AI_Assistant.approveToolCall(
-          decodeURIComponent(url.substring(8)))
-        return
-      }
-
-      if (url.startsWith("deny:")) {
-        request.reject()
-        Cpp_AI_Assistant.denyToolCall(
-          decodeURIComponent(url.substring(5)))
-        return
-      }
-
-      if (url.startsWith("copy:")) {
-        request.reject()
-        Cpp_Misc_Utilities.copyText(decodeURIComponent(url.substring(5)))
-        return
-      }
-
-      if (url.startsWith("chip:")) {
-        request.reject()
-        root.chipClicked(decodeURIComponent(url.substring(5)))
-        return
-      }
-
-      if (url.startsWith("ext:")) {
-        request.reject()
-        Qt.openUrlExternally(decodeURIComponent(url.substring(4)))
-        return
-      }
-
       request.reject()
-      Qt.openUrlExternally(url)
+
+      if (url.startsWith("http://") || url.startsWith("https://") ||
+          url.startsWith("mailto:"))
+        Qt.openUrlExternally(url)
     }
   }
 }

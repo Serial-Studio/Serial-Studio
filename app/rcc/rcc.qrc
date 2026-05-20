@@ -110,6 +110,12 @@
         <file>actions/Zoom Out.svg</file>
         <file>chartjs/chart.umd.min.js</file>
         <file>chartjs/LICENSE.md</file>
+        <file>vendor/highlight-github-dark.min.css</file>
+        <file>vendor/highlight-github.min.css</file>
+        <file>vendor/highlight.LICENSE</file>
+        <file>vendor/highlight.min.js</file>
+        <file>vendor/showdown.LICENSE</file>
+        <file>vendor/showdown.min.js</file>
         <file>fonts/GeistMono-Bold.ttf</file>
         <file>fonts/GeistMono-Medium.ttf</file>
         <file>fonts/GeistMono-Regular.ttf</file>

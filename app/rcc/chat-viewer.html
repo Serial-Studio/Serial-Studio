@@ -4,13 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Showdown.js for assistant Markdown -> HTML -->
-  <script src="https://cdn.jsdelivr.net/npm/showdown@latest/dist/showdown.min.js"></script>
+  <!-- Showdown.js for assistant Markdown -> HTML (bundled, see app/rcc/vendor/) -->
+  <script src="qrc:/vendor/showdown.min.js"></script>
 
-  <!-- highlight.js for fenced code blocks -->
+  <!-- highlight.js for fenced code blocks (bundled, see app/rcc/vendor/) -->
   <link rel="stylesheet" id="hljs-theme"
-        href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/github.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/highlight.min.js"></script>
+        href="qrc:/vendor/highlight-github.min.css">
+  <script src="qrc:/vendor/highlight.min.js"></script>
+
+  <!-- QWebChannel for HTML-to-QML IPC; served by Qt itself -->
+  <script src="qrc:/qtwebchannel/qwebchannel.js"></script>
 
   <style>
     :root {
@@ -505,6 +508,30 @@
   <div id="messages" class="messages"></div>
 
   <script>
+    // QWebChannel bridge to QML. `window.ai` is populated asynchronously
+    // when the channel handshake completes; bridge() queues calls made
+    // before that point and replays them once `ai` is ready.
+    var __ai = null;
+    var __pendingBridgeCalls = [];
+
+    new QWebChannel(qt.webChannelTransport, function (channel) {
+      __ai = channel.objects.ai;
+      for (var i = 0; i < __pendingBridgeCalls.length; i++) {
+        var p = __pendingBridgeCalls[i];
+        if (__ai[p.method]) __ai[p.method](p.payload);
+      }
+      __pendingBridgeCalls.length = 0;
+    });
+
+    function bridge(method, payload) {
+      payload = payload || "";
+      if (__ai && __ai[method]) {
+        __ai[method](payload);
+      } else {
+        __pendingBridgeCalls.push({ method: method, payload: payload });
+      }
+    }
+
     var converter = new showdown.Converter({
       tables:                    true,
       tasklists:                 true,
@@ -562,10 +589,6 @@
         return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;",
                   "\"": "&quot;", "'": "&#39;" })[c];
       });
-    }
-
-    function bridge(scheme, payload) {
-      window.location.href = scheme + ":" + encodeURIComponent(payload || "");
     }
 
     function renderMarkdown(md) {
@@ -858,8 +881,7 @@
 
       var hljsLink = document.getElementById("hljs-theme");
       var theme = colors.isDark ? "github-dark" : "github";
-      hljsLink.href = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest" +
-                      "/build/styles/" + theme + ".min.css";
+      hljsLink.href = "qrc:/vendor/highlight-" + theme + ".min.css";
 
       lastSerialized = "";
     }
