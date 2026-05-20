@@ -22,6 +22,7 @@
 
 #include "DataModel/Importers/DBCImporter.h"
 
+#include <cmath>
 #include <QApplication>
 #include <QFile>
 #include <QFileDialog>
@@ -29,6 +30,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QRegularExpression>
+#include <QSet>
 #include <QStandardPaths>
 
 #include "AppState.h"
@@ -124,9 +126,13 @@ void DataModel::DBCImporter::importDBC()
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      showPreview(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { showPreview(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();
@@ -302,12 +308,18 @@ DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
     maxVal = 100.0;
   }
 
-  dataset.wgtMin = minVal;
-  dataset.wgtMax = maxVal;
+  // Plot/FFT ranges stay tied to the raw signal limits
   dataset.pltMin = minVal;
   dataset.pltMax = maxVal;
   dataset.fftMin = minVal;
   dataset.fftMax = maxVal;
+
+  // Round widget bounds outward to friendly multiples.
+  const auto nice          = niceWidgetBounds(minVal, maxVal);
+  dataset.wgtMin           = nice.min;
+  dataset.wgtMax           = nice.max;
+  dataset.displayTickCount = nice.tickCount;
+  dataset.displayFormat    = isIntegerSignal(signal) ? QStringLiteral("0d") : QStringLiteral("1d");
 
   const auto isSingleBit = (signal.bitLength() == 1);
   if (isSingleBit) {
@@ -1047,31 +1059,60 @@ QString DataModel::DBCImporter::sanitizeString(const QString& str)
 }
 
 /**
- * @brief Picks a dataset widget (bar/gauge/empty) for one CAN signal.
+ * @brief Picks a dataset widget (bar/gauge/meter/empty) for one CAN signal.
  */
 QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescription& signal)
 {
   const auto name = signal.name().toLower();
-  const auto unit = signal.physicalUnit().toLower();
+  const auto unit = signal.physicalUnit().toLower().trimmed();
 
   // Skip counters and status fields
   if (name.contains("odometer") || name.contains("trip") || name.contains("counter")
       || name.contains("timestamp") || name.contains("status"))
     return QString("");
 
+  // Percentages and 0..100 ranges land on the horizontal bar
   if (unit == "%" || (signal.minimum() == 0 && signal.maximum() == 100))
     return SerialStudio::datasetWidgetId(SerialStudio::Bar);
 
+  // Temperatures use the bar so positive/negative excursions are obvious
   // code-verify off
   if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc") || unit.contains("degf")
       || name.contains("temp") || name.contains("temperature"))
     return SerialStudio::datasetWidgetId(SerialStudio::Bar);
   // code-verify on
 
-  if (unit.contains("rpm") || unit.contains("km/h") || unit.contains("mph") || unit.contains("v")
-      || unit.contains("a") || unit.contains("psi") || unit.contains("bar") || unit.contains("nm")
-      || unit.contains("kpa") || unit.contains("mbar") || unit.contains("kg")
-      || unit.contains("deg"))
+  // Speed, RPM and power signals get the speedometer-style half-circle meter
+  static const QSet<QString> kMeterUnits = {
+    "rpm", "r/min", "1/min", "km/h", "kmh", "kph", "mph", "knot", "knots", "kn", "m/s", "kw", "hp"};
+  if (kMeterUnits.contains(unit) || name.contains("rpm") || name.contains("speed")
+      || name.contains("velocity") || name.contains("power"))
+    return SerialStudio::datasetWidgetId(SerialStudio::Meter);
+
+  // Whole-word unit match for typical analog gauges.
+  static const QSet<QString> kGaugeUnits = {"v",
+                                            "mv",
+                                            "kv",
+                                            "a",
+                                            "ma",
+                                            "ka",
+                                            "psi",
+                                            "bar",
+                                            "nm",
+                                            "kpa",
+                                            "pa",
+                                            "hpa",
+                                            "mbar",
+                                            "kg",
+                                            "g",
+                                            "n",
+                                            "deg",
+                                            "rad"};
+  if (kGaugeUnits.contains(unit))
+    return SerialStudio::datasetWidgetId(SerialStudio::Gauge);
+
+  // Pressure-like compound units still resolve to gauge
+  if (unit.contains("psi") || unit.contains("kpa") || unit.contains("mbar"))
     return SerialStudio::datasetWidgetId(SerialStudio::Gauge);
 
   const auto range = signal.maximum() - signal.minimum();
@@ -1079,6 +1120,68 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
     return SerialStudio::datasetWidgetId(SerialStudio::Gauge);
 
   return QString("");
+}
+
+/**
+ * @brief Rounds raw signal bounds outward to friendly multiples and chooses a tick count.
+ */
+DataModel::DBCImporter::NiceBounds DataModel::DBCImporter::niceWidgetBounds(double rawMin,
+                                                                            double rawMax)
+{
+  NiceBounds out{rawMin, rawMax, 5};
+  if (!(rawMax > rawMin))
+    return out;
+
+  // Pick a step from the {2, 5, 10, 20} family scaled to the range magnitude.
+  const double range = rawMax - rawMin;
+  // Import-time only; pow cost is irrelevant.
+  // code-verify off
+  const double mag   = std::pow(10.0, std::floor(std::log10(range)));
+  // code-verify on
+  const double norm  = range / mag;
+
+  double step;
+  if (norm < 1.5)
+    step = 0.2 * mag;
+  else if (norm < 3.0)
+    step = 0.5 * mag;
+  else if (norm < 6.0)
+    step = 1.0 * mag;
+  else
+    step = 2.0 * mag;
+
+  const double epsilon    = step * 1e-9;
+  const double snappedMin = std::floor((rawMin + epsilon) / step) * step;
+  const double snappedMax = std::ceil((rawMax - epsilon) / step) * step;
+
+  const double finalMin = std::min(snappedMin, rawMin);
+  const double finalMax = std::max(snappedMax, rawMax);
+
+  int intervals = static_cast<int>(std::lround((finalMax - finalMin) / step));
+  if (intervals < 2)
+    intervals = 2;
+
+  if (intervals > 10)
+    intervals = 10;
+
+  out.min       = finalMin;
+  out.max       = finalMax;
+  out.tickCount = intervals + 1;
+  return out;
+}
+
+/**
+ * @brief Returns true when the signal can only take integer physical values.
+ */
+bool DataModel::DBCImporter::isIntegerSignal(const QCanSignalDescription& signal)
+{
+  const double factor = signal.factor();
+  const double offset = signal.offset();
+  const auto isWhole  = [](double v) {
+    return std::isfinite(v) && std::fabs(v - std::round(v)) < 1e-9;
+  };
+
+  return isWhole(factor) && isWhole(offset);
 }
 
 //--------------------------------------------------------------------------------------------------
