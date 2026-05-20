@@ -120,14 +120,19 @@ void Misc::WorkspaceManager::selectPath()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
 
-    m_path = path;
-    m_settings.setValue(QStringLiteral("Workspace"), path);
-
-    Q_EMIT pathChanged();
+    QMetaObject::invokeMethod(
+      this,
+      [this, path]() {
+        m_path = path;
+        m_settings.setValue(QStringLiteral("Workspace"), path);
+        Q_EMIT pathChanged();
+      },
+      Qt::QueuedConnection);
   });
 
   dialog->open();

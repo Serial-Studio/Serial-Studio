@@ -874,9 +874,13 @@ void DataModel::ProtoImporter::importProto()
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      showPreview(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { showPreview(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();

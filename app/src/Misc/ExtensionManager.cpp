@@ -529,9 +529,12 @@ void Misc::ExtensionManager::browseLocalRepo()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      addRepository(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { addRepository(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();

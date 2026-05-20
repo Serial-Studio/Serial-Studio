@@ -1262,7 +1262,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
     dialog->setFileMode(QFileDialog::AnyFile);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-    // Track whether the user accepted; finished() fires on both accept/reject
+    // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
     auto accepted = std::make_shared<bool>(false);
     connect(dialog, &QFileDialog::fileSelected, this, [this, accepted](const QString& path) {
       if (path.isEmpty())
@@ -1270,20 +1270,24 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 
       *accepted = true;
 
-      // Enforce .ssproj extension -- append when missing
-      QString finalPath = path;
-      if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
-        finalPath += QStringLiteral(".ssproj");
+      QMetaObject::invokeMethod(
+        this,
+        [this, path]() {
+          QString finalPath = path;
+          if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
+            finalPath += QStringLiteral(".ssproj");
 
-      // Promote chosen filename to title if still on the default
-      const QString chosenTitle = QFileInfo(finalPath).completeBaseName();
-      if (m_title == tr("Untitled Project") && !chosenTitle.isEmpty() && chosenTitle != m_title) {
-        m_title = chosenTitle;
-        Q_EMIT titleChanged();
-      }
+          const QString chosenTitle = QFileInfo(finalPath).completeBaseName();
+          if (m_title == tr("Untitled Project") && !chosenTitle.isEmpty()
+              && chosenTitle != m_title) {
+            m_title = chosenTitle;
+            Q_EMIT titleChanged();
+          }
 
-      m_filePath = finalPath;
-      (void)finalizeProjectSave();
+          m_filePath = finalPath;
+          (void)finalizeProjectSave();
+        },
+        Qt::QueuedConnection);
     });
 
     connect(dialog, &QFileDialog::finished, this, [this, accepted](int) {
@@ -1680,9 +1684,12 @@ void DataModel::ProjectModel::openJsonFile()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      openJsonFile(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { openJsonFile(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();

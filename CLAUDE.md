@@ -357,6 +357,7 @@ the style sections below — don't restate.
 | `std::make_shared<DataModel::TimestampedFrame>(...)` directly on the FrameBuilder hotpath | Use `acquireFrame(src)` / `acquireFrame(src, ts)`. Direct `make_shared` bypasses the slot pool and brings back per-frame heap allocs. |
 | Treating `CapturedData::data` as a smart pointer (`*data->data`, `data->data->size()`, `if (!data->data)`) | It's a `QByteArray` now. Use `data->data`, `data->data.size()`, `data->data.isEmpty()`. The shared_ptr indirection was removed because `QByteArray` is already COW with atomic refcount. |
 | Per-call `m_jsTransformWatchdog.start()/stop()` inside `applyTransformJs` | The watchdog is armed once per frame in `applyDatasetValues`. Don't reintroduce per-call timer churn. |
+| Running heavy work synchronously inside a `QFileDialog::fileSelected` slot (open another dialog, parse a file, mutate model) | On macOS `fileSelected` fires from inside `QFileDialog::done()`, which runs from an NSSavePanel KVO callback (`ViewBridge`/`NSRemoteViewMarshal`). Re-entering Qt synchronously can leave the `WA_DeleteOnClose` dialog deleted under the panel and crash on return. **Always wrap the body in `QMetaObject::invokeMethod(this, [...] { ... }, Qt::QueuedConnection)`** so `done()` unwinds first. Same applies to slots calling `dialog->deleteLater()` — defer the *work*, not just the deletion. |
 
 ## Code Style
 

@@ -298,15 +298,22 @@ void DataModel::PainterCodeEditor::import()
     nullptr, tr("Select Javascript file to import"), QDir::homePath(), QStringLiteral("*.js"));
   dialog->setFileMode(QFileDialog::ExistingFile);
 
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
-    if (!path.isEmpty()) {
-      QFile file(path);
-      if (file.open(QFile::ReadOnly)) {
-        m_widget.setPlainText(QString::fromUtf8(file.readAll()));
-        file.close();
-      }
-    }
     dialog->deleteLater();
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(
+      this,
+      [this, path]() {
+        QFile file(path);
+        if (file.open(QFile::ReadOnly)) {
+          m_widget.setPlainText(QString::fromUtf8(file.readAll()));
+          file.close();
+        }
+      },
+      Qt::QueuedConnection);
   });
 
   dialog->open();

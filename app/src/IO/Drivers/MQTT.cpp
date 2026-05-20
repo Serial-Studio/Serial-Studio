@@ -446,9 +446,13 @@ void IO::Drivers::MQTT::addCaCertificates()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      m_sslConfiguration.addCaCertificates(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(
+      this, [this, path]() { m_sslConfiguration.addCaCertificates(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();

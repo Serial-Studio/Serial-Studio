@@ -1340,34 +1340,40 @@ void MQTT::Publisher::addCaCertificates()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
 
-    QDir dir(path);
-    if (!dir.exists())
-      return;
+    QMetaObject::invokeMethod(
+      this,
+      [this, path]() {
+        QDir dir(path);
+        if (!dir.exists())
+          return;
 
-    const auto entries =
-      dir.entryInfoList({"*.pem", "*.crt", "*.cer"}, QDir::Files | QDir::Readable);
-    for (const auto& info : entries) {
-      QFile f(info.absoluteFilePath());
-      if (!f.open(QIODevice::ReadOnly))
-        continue;
+        const auto entries =
+          dir.entryInfoList({"*.pem", "*.crt", "*.cer"}, QDir::Files | QDir::Readable);
+        for (const auto& info : entries) {
+          QFile f(info.absoluteFilePath());
+          if (!f.open(QIODevice::ReadOnly))
+            continue;
 
-      const auto data = f.readAll();
-      const auto pem  = QSslCertificate::fromData(data, QSsl::Pem);
-      const auto der  = QSslCertificate::fromData(data, QSsl::Der);
-      for (const auto& cert : pem)
-        if (!cert.isNull() && !m_caCertificates.contains(cert))
-          m_caCertificates.append(cert);
+          const auto data = f.readAll();
+          const auto pem  = QSslCertificate::fromData(data, QSsl::Pem);
+          const auto der  = QSslCertificate::fromData(data, QSsl::Der);
+          for (const auto& cert : pem)
+            if (!cert.isNull() && !m_caCertificates.contains(cert))
+              m_caCertificates.append(cert);
 
-      for (const auto& cert : der)
-        if (!cert.isNull() && !m_caCertificates.contains(cert))
-          m_caCertificates.append(cert);
-    }
+          for (const auto& cert : der)
+            if (!cert.isNull() && !m_caCertificates.contains(cert))
+              m_caCertificates.append(cert);
+        }
 
-    scheduleSyncToWorker();
+        scheduleSyncToWorker();
+      },
+      Qt::QueuedConnection);
   });
 
   dialog->open();

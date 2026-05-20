@@ -293,7 +293,13 @@ void DataModel::ModbusMapImporter::importRegisterMap()
     tr("Modbus Register Maps (*.csv *.xml *.json);;CSV Files (*.csv);;XML Files "
        "(*.xml);;JSON Files (*.json);;All Files (*)"));
 
-  connect(dialog, &QFileDialog::fileSelected, this, &DataModel::ModbusMapImporter::showPreview);
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
+  connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { showPreview(path); }, Qt::QueuedConnection);
+  });
 
   dialog->open();
 }

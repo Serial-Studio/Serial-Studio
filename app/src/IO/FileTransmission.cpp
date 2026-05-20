@@ -269,30 +269,36 @@ void IO::FileTransmission::openFile()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
 
-    if (fileOpen())
-      closeFile();
+    QMetaObject::invokeMethod(
+      this,
+      [this, path]() {
+        if (fileOpen())
+          closeFile();
 
-    m_filePath = path;
-    m_file.setFileName(path);
-    if (m_file.open(QFile::ReadOnly)) {
-      m_bytesTotal = m_file.size();
-      m_bytesSent  = 0;
+        m_filePath = path;
+        m_file.setFileName(path);
+        if (m_file.open(QFile::ReadOnly)) {
+          m_bytesTotal = m_file.size();
+          m_bytesSent  = 0;
 
-      if (m_transferMode == PlainText)
-        m_stream = new QTextStream(&m_file);
+          if (m_transferMode == PlainText)
+            m_stream = new QTextStream(&m_file);
 
-      Q_EMIT fileChanged();
-      Q_EMIT progressChanged();
-      appendLog(
-        tr("File selected: %1 (%2 bytes)").arg(QFileInfo(path).fileName()).arg(m_bytesTotal));
-    } else {
-      qWarning() << "File open error:" << m_file.errorString();
-      appendLog(tr("Error opening file: %1").arg(m_file.errorString()));
-    }
+          Q_EMIT fileChanged();
+          Q_EMIT progressChanged();
+          appendLog(
+            tr("File selected: %1 (%2 bytes)").arg(QFileInfo(path).fileName()).arg(m_bytesTotal));
+        } else {
+          qWarning() << "File open error:" << m_file.errorString();
+          appendLog(tr("Error opening file: %1").arg(m_file.errorString()));
+        }
+      },
+      Qt::QueuedConnection);
   });
 
   dialog->open();

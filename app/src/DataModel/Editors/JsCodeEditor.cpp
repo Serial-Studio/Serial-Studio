@@ -340,15 +340,22 @@ void DataModel::JsCodeEditor::import()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty()) {
-      QFile file(path);
-      if (file.open(QFile::ReadOnly)) {
-        m_widget.setPlainText(QString::fromUtf8(file.readAll()));
-        file.close();
-        apply();
-      }
-    }
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(
+      this,
+      [this, path]() {
+        QFile file(path);
+        if (file.open(QFile::ReadOnly)) {
+          m_widget.setPlainText(QString::fromUtf8(file.readAll()));
+          file.close();
+          apply();
+        }
+      },
+      Qt::QueuedConnection);
   });
 
   dialog->open();

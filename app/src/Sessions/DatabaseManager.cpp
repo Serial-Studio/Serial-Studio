@@ -421,9 +421,12 @@ void Sessions::DatabaseManager::openDatabase()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      openDatabase(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { openDatabase(path); }, Qt::QueuedConnection);
   });
   dialog->open();
 }
@@ -885,6 +888,7 @@ void Sessions::DatabaseManager::requestPdfOutputPath(int sessionId, HtmlReportOp
   dialog->setFileMode(QFileDialog::AnyFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog,
           &QFileDialog::fileSelected,
           this,
@@ -894,13 +898,18 @@ void Sessions::DatabaseManager::requestPdfOutputPath(int sessionId, HtmlReportOp
               return;
             }
 
-            QString finalPath = path;
-            const QString dot = QStringLiteral(".") + ext;
-            if (!finalPath.endsWith(dot, Qt::CaseInsensitive))
-              finalPath += dot;
+            QMetaObject::invokeMethod(
+              this,
+              [this, opts = std::move(opts), ext, sessionId, path]() mutable {
+                QString finalPath = path;
+                const QString dot = QStringLiteral(".") + ext;
+                if (!finalPath.endsWith(dot, Qt::CaseInsensitive))
+                  finalPath += dot;
 
-            opts.outputPath = finalPath;
-            launchPdfExport(sessionId, std::move(opts));
+                opts.outputPath = finalPath;
+                launchPdfExport(sessionId, std::move(opts));
+              },
+              Qt::QueuedConnection);
           });
 
   connect(
@@ -996,9 +1005,13 @@ void Sessions::DatabaseManager::pickReportLogo()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      Q_EMIT reportLogoPicked(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(
+      this, [this, path]() { Q_EMIT reportLogoPicked(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();

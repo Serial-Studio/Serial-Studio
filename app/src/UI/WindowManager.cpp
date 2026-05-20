@@ -1102,10 +1102,15 @@ void UI::WindowManager::selectBackgroundImage()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Apply selected image once the user picks a file
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      setBackgroundImage(QUrl::fromLocalFile(path).toString());
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(
+      this,
+      [this, path]() { setBackgroundImage(QUrl::fromLocalFile(path).toString()); },
+      Qt::QueuedConnection);
   });
 
   dialog->open();

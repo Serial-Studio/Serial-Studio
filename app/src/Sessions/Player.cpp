@@ -263,9 +263,12 @@ void Sessions::Player::openFile()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      openFile(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { openFile(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();

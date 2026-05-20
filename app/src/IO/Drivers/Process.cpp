@@ -381,9 +381,12 @@ void IO::Drivers::Process::browseExecutable()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      setExecutable(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { setExecutable(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();
@@ -404,9 +407,12 @@ void IO::Drivers::Process::browseWorkingDir()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      setWorkingDir(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { setWorkingDir(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();
@@ -426,9 +432,12 @@ void IO::Drivers::Process::browsePipePath()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
-    if (!path.isEmpty())
-      setPipePath(path);
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(this, [this, path]() { setPipePath(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();
