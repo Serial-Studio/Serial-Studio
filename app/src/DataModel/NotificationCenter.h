@@ -138,9 +138,10 @@ private:
   void appendEvent(Event&& e);
 
 private:
-  static constexpr int kMaxHistory    = 1024;
-  static constexpr int kDedupWindowMs = 100;
-  static constexpr int kTrayTimeoutMs = 5000;
+  static constexpr int kMaxHistory      = 1024;
+  static constexpr int kDedupWindowMs   = 100;
+  static constexpr int kTrayTimeoutMs   = 5000;
+  static constexpr int kMaxDedupEntries = 4096;
 
   std::deque<Event> m_history;
   QHash<DedupKey, qint64> m_lastSeen;

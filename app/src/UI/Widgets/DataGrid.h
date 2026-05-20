@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -21,43 +21,91 @@
 
 #pragma once
 
+#include <QAbstractListModel>
+#include <QPair>
+#include <QQuickItem>
+#include <QVector>
+
 #include "DataModel/Frame.h"
-#include "UI/DeclarativeWidgets/StaticTable.h"
 
 namespace Widgets {
+
 /**
- * @brief Tabular data display widget for structured dataset visualization.
+ * @brief List model backing the DataGrid's rows with per-row dataChanged() updates.
  */
-class DataGrid : public StaticTable {
+class DataGridRowsModel : public QAbstractListModel {
+  // clang-format off
+  Q_OBJECT
+  // clang-format on
+
+public:
+  enum Role {
+    TitleRole = Qt::UserRole + 1,
+    ValueRole,
+  };
+
+  explicit DataGridRowsModel(QObject* parent = nullptr);
+
+  [[nodiscard]] int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+  [[nodiscard]] QVariant data(const QModelIndex& index, int role) const override;
+  [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
+
+  void reset(const QVector<QPair<QString, QString>>& rows);
+  bool updateRow(int row, const QString& title, const QString& value);
+
+private:
+  QVector<QPair<QString, QString>> m_rows;
+};
+
+/**
+ * @brief Tabular data display widget; the QQuickItem only owns the row model and paused state.
+ */
+class DataGrid : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool paused
              READ  paused
              WRITE setPaused
              NOTIFY pausedChanged)
+  Q_PROPERTY(DataGridRowsModel* rowsModel
+             READ  rowsModel
+             CONSTANT)
+  Q_PROPERTY(QString titleHeader
+             READ  titleHeader
+             NOTIFY headersChanged)
+  Q_PROPERTY(QString valueHeader
+             READ  valueHeader
+             NOTIFY headersChanged)
   // clang-format on
 
 signals:
   void pausedChanged();
+  void headersChanged();
 
 public:
   explicit DataGrid(const int index = -1, QQuickItem* parent = nullptr);
 
   [[nodiscard]] bool paused() const noexcept;
+  [[nodiscard]] DataGridRowsModel* rowsModel() const noexcept;
+  [[nodiscard]] const QString& titleHeader() const noexcept;
+  [[nodiscard]] const QString& valueHeader() const noexcept;
 
 public slots:
   void setPaused(const bool paused);
 
 private slots:
   void updateData();
-  void onFontsChanged();
 
 private:
-  QStringList getRow(const DataModel::Dataset& dataset);
-  QString formatValue(const DataModel::Dataset& dataset);
+  [[nodiscard]] QString formatValue(const DataModel::Dataset& dataset) const;
+  void rebuildRows();
 
 private:
   int m_index;
   bool m_paused;
+  QString m_titleHeader;
+  QString m_valueHeader;
+  DataGridRowsModel* m_rowsModel;
+  int m_lastRowCount;
 };
 }  // namespace Widgets

@@ -168,7 +168,7 @@ Rectangle {
   Widgets.RibbonToolbar {
     id: ribbon
 
-    visible: root.showContent
+    visible: opacity > 0
     enabled: root.showContent
     opacity: root.showContent ? 1 : 0
 
@@ -556,7 +556,7 @@ Rectangle {
     id: connectSection
 
     spacing: 4
-    visible: root.showContent
+    visible: opacity > 0
     opacity: root.showContent ? 1 : 0
 
     Behavior on opacity {

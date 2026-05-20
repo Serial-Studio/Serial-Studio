@@ -24,12 +24,17 @@
 #include <lauxlib.h>
 #include <lua.h>
 
+#include <atomic>
+#include <chrono>
+#include <map>
+#include <mutex>
 #include <QByteArray>
 #include <QJSEngine>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QSet>
 #include <QString>
 #include <QUuid>
 #include <stdexcept>
@@ -37,6 +42,136 @@
 #include "API/CommandHandler.h"
 #include "API/CommandProtocol.h"
 #include "API/CommandRegistry.h"
+
+//--------------------------------------------------------------------------------------------------
+// Sandbox policy -- default-deny allow-list plus per-source rate limit and body cap
+//--------------------------------------------------------------------------------------------------
+
+namespace detail {
+struct TokenBucket {
+  double tokens;
+  std::chrono::steady_clock::time_point lastRefill;
+  int activeCount;
+};
+}  // namespace detail
+
+static constexpr int kMaxBodyBytes    = 1 * 1024 * 1024;
+static constexpr int kMaxConcurrent   = 8;
+static constexpr double kTokensPerSec = 100.0;
+static constexpr double kBucketSize   = 100.0;
+
+static std::atomic<bool> s_allowFullSurface{false};
+
+/**
+ * @brief Read-only command families safely callable from user scripts without opt-in.
+ */
+static const QSet<QString>& safeMethods()
+{
+  static const QSet<QString> kSet = {
+    QStringLiteral("system.info"),         QStringLiteral("system.ping"),
+    QStringLiteral("system.commands"),     QStringLiteral("project.get"),
+    QStringLiteral("project.snapshot"),    QStringLiteral("project.title"),
+    QStringLiteral("project.dataset.get"), QStringLiteral("project.dataset.list"),
+    QStringLiteral("project.group.get"),   QStringLiteral("project.group.list"),
+    QStringLiteral("project.source.get"),  QStringLiteral("project.source.list"),
+    QStringLiteral("workspace.get"),       QStringLiteral("workspace.list"),
+    QStringLiteral("workspace.active"),    QStringLiteral("dashboard.snapshot"),
+    QStringLiteral("dashboard.values"),    QStringLiteral("notification.list"),
+    QStringLiteral("notification.post"),   QStringLiteral("sessions.list"),
+    QStringLiteral("sessions.get"),        QStringLiteral("data_tables.list"),
+    QStringLiteral("data_tables.get"),
+  };
+  return kSet;
+}
+
+/**
+ * @brief Returns true when the method is in the safe allow-list or the full surface is opted in.
+ */
+static bool isAllowed(const QString& method)
+{
+  if (s_allowFullSurface.load(std::memory_order_acquire))
+    return true;
+
+  return safeMethods().contains(method);
+}
+
+static std::mutex& bucketMutex()
+{
+  static std::mutex m;
+  return m;
+}
+
+static std::map<int, detail::TokenBucket>& buckets()
+{
+  static std::map<int, detail::TokenBucket> b;
+  return b;
+}
+
+/**
+ * @brief Returns true if a token was consumed; false if rate-limited or concurrency-capped.
+ */
+static bool consumeRateToken(int sourceId)
+{
+  using clock = std::chrono::steady_clock;
+  std::lock_guard<std::mutex> lock(bucketMutex());
+  auto& b        = buckets()[sourceId];
+  const auto now = clock::now();
+
+  if (b.lastRefill.time_since_epoch().count() == 0) {
+    b.tokens      = kBucketSize;
+    b.lastRefill  = now;
+    b.activeCount = 0;
+  }
+
+  const double dt = std::chrono::duration<double>(now - b.lastRefill).count();
+  b.tokens        = std::min(kBucketSize, b.tokens + dt * kTokensPerSec);
+  b.lastRefill    = now;
+
+  if (b.activeCount >= kMaxConcurrent)
+    return false;
+
+  if (b.tokens < 1.0)
+    return false;
+
+  b.tokens      -= 1.0;
+  b.activeCount += 1;
+  return true;
+}
+
+/**
+ * @brief Decrements the per-source in-flight counter after a dispatched apiCall returns.
+ */
+static void releaseConcurrency(int sourceId)
+{
+  std::lock_guard<std::mutex> lock(bucketMutex());
+  auto it = buckets().find(sourceId);
+  if (it != buckets().end() && it->second.activeCount > 0)
+    --it->second.activeCount;
+}
+
+/**
+ * @brief Returns the UTF-8 byte length of @p obj serialized as compact JSON.
+ */
+static int approxJsonSize(const QJsonObject& obj)
+{
+  return QJsonDocument(obj).toJson(QJsonDocument::Compact).size();
+}
+
+/**
+ * @brief Opts the running project into the full MCP command surface for apiCall().
+ */
+void DataModel::ScriptApiCall::setAllowFullSurface(bool allow)
+{
+  s_allowFullSurface.store(allow, std::memory_order_release);
+}
+
+/**
+ * @brief Returns the body-size cap (bytes) applied to apiCall request params and response payloads.
+ */
+int DataModel::ScriptApiCall::maxBodyBytes()
+{
+  return kMaxBodyBytes;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Recursion guard -- mirrors JsonValidator's 128 cap so a self-referencing table can't blow up
@@ -251,7 +386,9 @@ static API::CommandResponse dispatchApiCall(const QString& method, const QJsonOb
 /**
  * @brief Constructs the JS-side apiCall bridge owned by @p parent.
  */
-DataModel::ScriptApiCallBridge::ScriptApiCallBridge(QObject* parent) : QObject(parent) {}
+DataModel::ScriptApiCallBridge::ScriptApiCallBridge(int sourceId, QObject* parent)
+  : QObject(parent), m_sourceId(sourceId)
+{}
 
 /**
  * @brief Implements apiCall(method, params?) for the JS scripting engine.
@@ -274,6 +411,15 @@ QVariantMap DataModel::ScriptApiCallBridge::call(const QJSValue& methodVal,
     return out;
   }
 
+  if (!isAllowed(method)) {
+    out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("error"),
+               QStringLiteral("apiCall: method '%1' not in default allow-list "
+                              "(enable apiCall.allowFullSurface in project to opt in)")
+                 .arg(method));
+    return out;
+  }
+
   QJsonObject params;
   if (!paramsVal.isUndefined() && !paramsVal.isNull()) {
     if (!paramsVal.isObject() || paramsVal.isArray() || paramsVal.isCallable()) {
@@ -284,18 +430,42 @@ QVariantMap DataModel::ScriptApiCallBridge::call(const QJSValue& methodVal,
 
     const QVariant qv = paramsVal.toVariant();
     params            = QJsonObject::fromVariantMap(qv.toMap());
+
+    if (approxJsonSize(params) > kMaxBodyBytes) {
+      out.insert(QStringLiteral("ok"), false);
+      out.insert(QStringLiteral("error"),
+                 QStringLiteral("apiCall: params exceed %1 byte cap").arg(kMaxBodyBytes));
+      return out;
+    }
+  }
+
+  if (!consumeRateToken(m_sourceId)) {
+    out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("error"),
+               QStringLiteral("apiCall: rate-limited or concurrency cap reached for source"));
+    return out;
   }
 
   API::CommandResponse response;
   try {
     response = dispatchApiCall(method, params);
   } catch (const std::exception& e) {
+    releaseConcurrency(m_sourceId);
     out.insert(QStringLiteral("ok"), false);
     out.insert(QStringLiteral("error"), QString::fromUtf8(e.what()));
     return out;
   } catch (...) {
+    releaseConcurrency(m_sourceId);
     out.insert(QStringLiteral("ok"), false);
     out.insert(QStringLiteral("error"), QStringLiteral("apiCall: unknown exception"));
+    return out;
+  }
+  releaseConcurrency(m_sourceId);
+
+  if (response.success && approxJsonSize(response.result) > kMaxBodyBytes) {
+    out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("error"),
+               QStringLiteral("apiCall: response exceeds %1 byte cap").arg(kMaxBodyBytes));
     return out;
   }
 
@@ -380,6 +550,8 @@ static void pushLuaErr(lua_State* L, const QString& msg)
  */
 static int luaApiCall(lua_State* L)
 {
+  const int sourceId = static_cast<int>(lua_tointeger(L, lua_upvalueindex(1)));
+
   if (!lua_isstring(L, 1)) {
     pushLuaErr(L, QStringLiteral("apiCall: method must be a string"));
     return 1;
@@ -390,6 +562,14 @@ static int luaApiCall(lua_State* L)
   const QString method(QString::fromUtf8(mstr, static_cast<int>(mlen)));
   if (method.isEmpty()) {
     pushLuaErr(L, QStringLiteral("apiCall: method must not be empty"));
+    return 1;
+  }
+
+  if (!isAllowed(method)) {
+    pushLuaErr(L,
+               QStringLiteral("apiCall: method '%1' not in default allow-list "
+                              "(enable apiCall.allowFullSurface in project to opt in)")
+                 .arg(method));
     return 1;
   }
 
@@ -407,14 +587,31 @@ static int luaApiCall(lua_State* L)
       pushLuaErr(L, QStringLiteral("apiCall: params must be an object-like table"));
       return 1;
     }
+
+    if (approxJsonSize(params) > kMaxBodyBytes) {
+      pushLuaErr(L, QStringLiteral("apiCall: params exceed %1 byte cap").arg(kMaxBodyBytes));
+      return 1;
+    }
+  }
+
+  if (!consumeRateToken(sourceId)) {
+    pushLuaErr(L, QStringLiteral("apiCall: rate-limited or concurrency cap reached for source"));
+    return 1;
   }
 
   try {
     const auto r = dispatchApiCall(method, params);
+    releaseConcurrency(sourceId);
+    if (r.success && approxJsonSize(r.result) > kMaxBodyBytes) {
+      pushLuaErr(L, QStringLiteral("apiCall: response exceeds %1 byte cap").arg(kMaxBodyBytes));
+      return 1;
+    }
     pushApiResult(L, r);
   } catch (const std::exception& e) {
+    releaseConcurrency(sourceId);
     pushLuaErr(L, QString::fromUtf8(e.what()));
   } catch (...) {
+    releaseConcurrency(sourceId);
     pushLuaErr(L, QStringLiteral("apiCall: unknown exception"));
   }
   return 1;
@@ -442,13 +639,14 @@ static int luaApiCallList(lua_State* L)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Installs apiCall() / apiCallList() as Lua globals.
+ * @brief Installs apiCall() / apiCallList() as Lua globals scoped to @p sourceId.
  */
-void DataModel::ScriptApiCall::installLua(lua_State* L)
+void DataModel::ScriptApiCall::installLua(lua_State* L, int sourceId)
 {
   Q_ASSERT(L);
 
-  lua_pushcfunction(L, luaApiCall);
+  lua_pushinteger(L, sourceId);
+  lua_pushcclosure(L, luaApiCall, 1);
   lua_setglobal(L, "apiCall");
 
   lua_pushcfunction(L, luaApiCallList);
@@ -458,7 +656,7 @@ void DataModel::ScriptApiCall::installLua(lua_State* L)
 /**
  * @brief Installs apiCall() / apiCallList() into a QJSEngine, reusing the bridge if attached.
  */
-void DataModel::ScriptApiCall::installJS(QJSEngine* js)
+void DataModel::ScriptApiCall::installJS(QJSEngine* js, int sourceId)
 {
   Q_ASSERT(js);
 
@@ -468,7 +666,7 @@ void DataModel::ScriptApiCall::installJS(QJSEngine* js)
       && qobject_cast<DataModel::ScriptApiCallBridge*>(existingProp.toQObject()))
     return;
 
-  auto* bridge   = new DataModel::ScriptApiCallBridge(js);
+  auto* bridge   = new DataModel::ScriptApiCallBridge(sourceId, js);
   auto bridgeVal = js->newQObject(bridge);
   global.setProperty(QStringLiteral("__ss_api"), bridgeVal);
 

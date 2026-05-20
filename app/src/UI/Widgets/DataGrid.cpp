@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -21,41 +21,122 @@
 
 #include "UI/Widgets/DataGrid.h"
 
-#include "Misc/CommonFonts.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
-// Constructor & initialization
+// DataGridRowsModel -- backing list model
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs a DataGrid widget and initializes it with dashboard data.
+ * @brief Constructs an empty list model.
+ */
+Widgets::DataGridRowsModel::DataGridRowsModel(QObject* parent) : QAbstractListModel(parent) {}
+
+/**
+ * @brief Returns the number of rows currently held by the model.
+ */
+int Widgets::DataGridRowsModel::rowCount(const QModelIndex& parent) const
+{
+  if (parent.isValid())
+    return 0;
+
+  return m_rows.size();
+}
+
+/**
+ * @brief Returns the value of @p role for the row at @p index.
+ */
+QVariant Widgets::DataGridRowsModel::data(const QModelIndex& index, int role) const
+{
+  if (!index.isValid() || index.row() < 0 || index.row() >= m_rows.size())
+    return {};
+
+  switch (role) {
+    case TitleRole:
+      return m_rows.at(index.row()).first;
+    case ValueRole:
+      return m_rows.at(index.row()).second;
+    default:
+      return {};
+  }
+}
+
+/**
+ * @brief Maps the role enum to the names QML uses to bind ("title", "value").
+ */
+QHash<int, QByteArray> Widgets::DataGridRowsModel::roleNames() const
+{
+  return {
+    {TitleRole, "title"},
+    {ValueRole, "value"},
+  };
+}
+
+/**
+ * @brief Replaces every row with @p rows. Use only when the row set itself changes
+ *        (project edit, dataset added or removed) -- tears down all delegates.
+ */
+void Widgets::DataGridRowsModel::reset(const QVector<QPair<QString, QString>>& rows)
+{
+  beginResetModel();
+  m_rows = rows;
+  endResetModel();
+}
+
+/**
+ * @brief Updates the title and/or value of an existing row, emitting dataChanged() only
+ *        for the roles that actually moved. Out-of-range rows are ignored.
+ */
+bool Widgets::DataGridRowsModel::updateRow(int row, const QString& title, const QString& value)
+{
+  if (row < 0 || row >= m_rows.size())
+    return false;
+
+  auto& entry = m_rows[row];
+  QVector<int> roles;
+  roles.reserve(2);
+
+  if (entry.first != title) {
+    entry.first = title;
+    roles.append(TitleRole);
+  }
+
+  if (entry.second != value) {
+    entry.second = value;
+    roles.append(ValueRole);
+  }
+
+  if (roles.isEmpty())
+    return false;
+
+  const auto idx = index(row);
+  Q_EMIT dataChanged(idx, idx, roles);
+  return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// DataGrid -- QML model wrapper
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Builds the row model and wires it to the dashboard update tick.
  */
 Widgets::DataGrid::DataGrid(const int index, QQuickItem* parent)
-  : StaticTable(parent), m_index(index), m_paused(false)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_paused(false)
+  , m_titleHeader(tr("Title"))
+  , m_valueHeader(tr("Value"))
+  , m_rowsModel(new DataGridRowsModel(this))
+  , m_lastRowCount(-1)
 {
   if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
     return;
 
-  const auto& group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+  rebuildRows();
 
-  QList<QStringList> rows;
-  rows.append({tr("Title"), tr("Value")});
-
-  for (const auto& dataset : group.datasets)
-    rows.append(getRow(dataset));
-
-  setPlaceholderText(tr("Awaiting data…"));
-  setData(rows);
-  onFontsChanged();
   connect(
     &UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Widgets::DataGrid::updateData);
-  connect(&Misc::CommonFonts::instance(),
-          &Misc::CommonFonts::fontsChanged,
-          this,
-          &Widgets::DataGrid::onFontsChanged);
-
-  updateData();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -70,39 +151,48 @@ bool Widgets::DataGrid::paused() const noexcept
   return m_paused;
 }
 
+/**
+ * @brief Returns the row model exposed to QML.
+ */
+Widgets::DataGridRowsModel* Widgets::DataGrid::rowsModel() const noexcept
+{
+  return m_rowsModel;
+}
+
+/**
+ * @brief Returns the localized header label for the left column.
+ */
+const QString& Widgets::DataGrid::titleHeader() const noexcept
+{
+  return m_titleHeader;
+}
+
+/**
+ * @brief Returns the localized header label for the right column.
+ */
+const QString& Widgets::DataGrid::valueHeader() const noexcept
+{
+  return m_valueHeader;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Configuration setters
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sets the paused state of the DataGrid.
+ * @brief Pauses or resumes the per-tick refresh. Resuming pulls a fresh snapshot immediately.
  */
 void Widgets::DataGrid::setPaused(const bool paused)
 {
-  // Toggle pause state, triggering an immediate update when unpaused
-  if (m_paused != paused) {
-    m_paused = paused;
+  if (m_paused == paused)
+    return;
 
-    if (!m_paused)
-      updateData();
+  m_paused = paused;
 
-    Q_EMIT pausedChanged();
-  }
-}
+  if (!m_paused)
+    updateData();
 
-//--------------------------------------------------------------------------------------------------
-// Font management
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Refreshes the table fonts when the global widget font settings change.
- */
-void Widgets::DataGrid::onFontsChanged()
-{
-  // Apply the current widget font to both body and header
-  auto& fonts = Misc::CommonFonts::instance();
-  setFont(fonts.widgetFont());
-  setHeaderFont(fonts.widgetFont(1, true));
+  Q_EMIT pausedChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -110,56 +200,25 @@ void Widgets::DataGrid::onFontsChanged()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the displayed values in the DataGrid.
+ * @brief Reads the dashboard's current dataset values and pushes them into the model.
  */
 void Widgets::DataGrid::updateData()
 {
-  // Validate that the widget exists and that the dashboard is not paused
-  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index) || paused())
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index) || m_paused)
     return;
 
-  // Obtain a reference to the datagrid group & copy current table data
-  const auto& group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
-  auto rows         = data();
+  const auto& group  = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+  const int rowCount = static_cast<int>(group.datasets.size());
 
-  // Initialize parameters
-  bool changed         = false;
-  const int valueIndex = 1;
-
-  // Update values for every dataset in the group
-  for (size_t i = 0; i < group.datasets.size(); ++i) {
-    // Obtain a reference to the dataset object & format its value
-    const auto& dataset = group.datasets[i];
-    QString value       = formatValue(dataset);
-
-    // Obtain the row index for the current dataset
-    const int rowIndex = i + 1;
-
-    // Guard against stale row count (issue #307)
-    if (rows.count() <= rowIndex || rows[rowIndex].count() <= valueIndex) {
-      QList<QStringList> r;
-      // first-build / row-mismatch path; not per-frame
-      // code-verify off
-      r.append({tr("Title"), tr("Value")});
-      for (const auto& ds : group.datasets)
-        r.append(getRow(ds));
-      // code-verify on
-
-      setData(r);
-      return;
-    }
-
-    // Update dataset value in current row
-    auto& row = rows[rowIndex];
-    if (row[valueIndex] != value) {
-      row[valueIndex] = value;
-      changed         = true;
-    }
+  if (rowCount != m_lastRowCount) [[unlikely]] {
+    rebuildRows();
+    return;
   }
 
-  // Update table data & render
-  if (changed)
-    setData(rows);
+  for (int i = 0; i < rowCount; ++i) {
+    const auto& dataset = group.datasets[static_cast<size_t>(i)];
+    m_rowsModel->updateRow(i, dataset.title, formatValue(dataset));
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,32 +226,45 @@ void Widgets::DataGrid::updateData()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Generates a table row from a dataset.
+ * @brief Reseeds the row model from scratch when the dataset count or set changes.
  */
-QStringList Widgets::DataGrid::getRow(const DataModel::Dataset& dataset)
+void Widgets::DataGrid::rebuildRows()
 {
-  return {dataset.title, formatValue(dataset)};
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index)) {
+    m_rowsModel->reset({});
+    m_lastRowCount = 0;
+    return;
+  }
+
+  const auto& group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+  QVector<QPair<QString, QString>> rows;
+  rows.reserve(static_cast<int>(group.datasets.size()));
+
+  for (const auto& dataset : group.datasets)
+    rows.append({dataset.title, formatValue(dataset)});
+
+  m_rowsModel->reset(rows);
+  m_lastRowCount = rows.size();
 }
 
 /**
  * @brief Formats a dataset value for display; returns empty when no sample has arrived.
  */
-QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset)
+QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset) const
 {
-  // Leave the cell empty so StaticTable can render its placeholder
+  // Leave the cell empty so the QML side can paint its placeholder
   if (dataset.value.isEmpty())
     return QString();
 
-  // Format numeric values; pass strings through verbatim
-  QString value = dataset.value;
-  bool isNumber;
+  // Numeric path goes through the dashboard's locale-aware formatter
+  QString value  = dataset.value;
+  bool isNumber  = false;
   const double n = value.toDouble(&isNumber);
   if (isNumber)
     value = FMT_VAL(n, dataset);
 
-  // Append dataset units (if available)
   if (!dataset.units.isEmpty())
-    value += " " + dataset.units;
+    value += QStringLiteral(" ") + dataset.units;
 
   return value;
 }

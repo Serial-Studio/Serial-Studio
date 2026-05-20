@@ -30,6 +30,7 @@
 // clang-format on
 
 #include "IO/HAL_Driver.h"
+#include "MQTT/CredentialVault.h"
 
 namespace IO {
 namespace Drivers {
@@ -207,6 +208,7 @@ private:
   QString m_password;
   QString m_topicFilter;
   QSettings m_settings;
+  ::MQTT::CredentialVault m_vault;
   QMqttClient m_client;
   QSslConfiguration m_sslConfiguration;
   QMap<QString, QSsl::SslProtocol> m_sslProtocols;

@@ -400,6 +400,15 @@ bool DataModel::NotificationCenter::shouldDropDuplicate(const DedupKey& k, qint6
     return true;
 
   m_lastSeen.insert(k, now);
+
+  if (m_lastSeen.size() > kMaxDedupEntries) [[unlikely]] {
+    for (auto pit = m_lastSeen.begin(); pit != m_lastSeen.end();)
+      if ((now - pit.value()) >= kDedupWindowMs)
+        pit = m_lastSeen.erase(pit);
+      else
+        ++pit;
+  }
+
   return false;
 }
 

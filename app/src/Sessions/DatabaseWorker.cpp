@@ -121,8 +121,11 @@ void Sessions::DatabaseWorker::closeDatabase()
   m_passwordHash.clear();
   m_locked = false;
 
-  if (m_db.isOpen())
+  if (m_db.isOpen()) {
+    QSqlQuery checkpoint(m_db);
+    checkpoint.exec("PRAGMA wal_checkpoint(RESTART)");
     m_db.close();
+  }
 
   const QString conn = m_connectionName;
   m_db               = QSqlDatabase();
@@ -261,7 +264,7 @@ void Sessions::DatabaseWorker::addTag(const QString& label, quint64 token)
   }
 
   QSqlQuery q(m_db);
-  q.prepare("INSERT OR IGNORE INTO tags (label) VALUES (?)");
+  q.prepare("INSERT INTO tags (label) VALUES (?) ON CONFLICT(label) DO NOTHING");
   q.bindValue(0, label.trimmed());
   if (!q.exec()) {
     Q_EMIT mutationFinished(token, false, q.lastError().text());
@@ -355,7 +358,8 @@ void Sessions::DatabaseWorker::assignTag(int sessionId, int tagId, quint64 token
   }
 
   QSqlQuery q(m_db);
-  q.prepare("INSERT OR IGNORE INTO session_tags (session_id, tag_id) VALUES (?, ?)");
+  q.prepare("INSERT INTO session_tags (session_id, tag_id) VALUES (?, ?) "
+            "ON CONFLICT(session_id, tag_id) DO NOTHING");
   q.bindValue(0, sessionId);
   q.bindValue(1, tagId);
   if (!q.exec()) {
@@ -468,7 +472,9 @@ void Sessions::DatabaseWorker::storeProjectMetadata(const QString& projectJson,
   q.bindValue(0, now);
   ok = ok && q.exec();
 
-  q.prepare("INSERT OR IGNORE INTO project_metadata (key, value) VALUES ('created_at', ?)");
+  // First-write-wins: preserve the original creation stamp across saves
+  q.prepare("INSERT INTO project_metadata (key, value) VALUES ('created_at', ?) "
+            "ON CONFLICT(key) DO NOTHING");
   q.bindValue(0, now);
   ok = ok && q.exec();
 

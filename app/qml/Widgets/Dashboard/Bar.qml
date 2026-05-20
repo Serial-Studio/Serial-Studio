@@ -130,6 +130,11 @@ Item {
     Item {
       id: analogPage
 
+      clip: true
+      visible: opacity > 0
+      opacity: SwipeView.isCurrentItem ? 1.0 : 0.0
+      Behavior on opacity { NumberAnimation { duration: 150 } }
+
       GridLayout {
         id: barLayout
 
@@ -399,6 +404,11 @@ Item {
     Item {
       id: digitalPage
 
+      clip: true
+      visible: opacity > 0
+      opacity: SwipeView.isCurrentItem ? 1.0 : 0.0
+      Behavior on opacity { NumberAnimation { duration: 150 } }
+
       TextMetrics {
         id: bigValueMetrics
 
@@ -432,8 +442,8 @@ Item {
         border.color: root.model.alarmTriggered
                       ? Qt.darker(Cpp_ThemeManager.colors["alarm"], 1.20)
                       : Qt.darker(root.color, 1.30)
-        width: digitalColumn.implicitWidth + 32
-        height: digitalColumn.implicitHeight + 24
+        width: Math.min(parent.width - 16, digitalColumn.implicitWidth + 32)
+        height: Math.min(parent.height - 16, digitalColumn.implicitHeight + 24)
         color: root.model.alarmTriggered && digitalBox.alarmFlashOn
                ? Cpp_ThemeManager.colors["alarm"]
                : Cpp_ThemeManager.colors["console_base"]
@@ -460,6 +470,9 @@ Item {
             id: bigValueText
 
             anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.min(implicitWidth, digitalPage.width - 32)
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
             text: getPaddedText(root.model.value)
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.bold: true
@@ -473,6 +486,9 @@ Item {
           Text {
             opacity: 0.80
             anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.min(implicitWidth, digitalPage.width - 32)
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
             text: root.model.title
             visible: root.model.title.length > 0
             color: root.model.alarmTriggered

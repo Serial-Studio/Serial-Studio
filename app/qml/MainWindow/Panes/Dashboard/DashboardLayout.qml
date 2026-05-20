@@ -398,6 +398,7 @@ Widgets.Pane {
           //
           y: parent.height - height
 
+          visible: opacity > 0
           opacity: Cpp_UI_Dashboard.available ? 1 : 0
           Behavior on opacity {
             NumberAnimation { duration: 350; easing.type: Easing.OutCubic }

@@ -239,6 +239,15 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
     return reply;
   }
 
+  // AlwaysConfirm bypasses autoApproveEdits so destructive families never run silently
+  if (safety == Safety::AlwaysConfirm) {
+    Q_EMIT confirmationRequested(name, args);
+    QJsonObject reply;
+    reply[QStringLiteral("ok")]    = false;
+    reply[QStringLiteral("error")] = QStringLiteral("awaiting_confirmation");
+    return reply;
+  }
+
   if (safety == Safety::Confirm && !autoConfirmSafe) {
     Q_EMIT confirmationRequested(name, args);
     QJsonObject reply;

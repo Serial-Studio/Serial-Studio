@@ -98,12 +98,6 @@ int main(int argc, char** argv)
 {
   setupQtApplicationMetadata();
 
-#ifdef SERIAL_STUDIO_WITH_WEBENGINE
-  // Enable Chromium remote debugging on port 9223 when SS_WEBENGINE_DEBUG=1.
-  if (qEnvironmentVariableIntValue("SS_WEBENGINE_DEBUG") == 1)
-    qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9223");
-#endif
-
   const bool headless = Misc::CLI::argvHasFlag(argc, argv, "--headless");
   if (headless)
     argv = Platform::AppPlatform::injectPlatformArg(argc, argv, "offscreen");

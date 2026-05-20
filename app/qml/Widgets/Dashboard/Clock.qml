@@ -115,6 +115,11 @@ Item {
     Item {
       id: analogPage
 
+      clip: true
+      visible: opacity > 0
+      opacity: SwipeView.isCurrentItem ? 1.0 : 0.0
+      Behavior on opacity { NumberAnimation { duration: 150 } }
+
       Item {
         id: faceArea
 
@@ -296,7 +301,9 @@ Item {
               id: hourShape
 
               smooth: true
+              layer.samples: 8
               antialiasing: true
+              layer.enabled: true
               anchors.fill: parent
               rotation: root.hourAngle
               transformOrigin: Item.Center
@@ -355,7 +362,9 @@ Item {
               id: minuteShape
 
               smooth: true
+              layer.samples: 8
               antialiasing: true
+              layer.enabled: true
               anchors.fill: parent
               rotation: root.minuteAngle
               transformOrigin: Item.Center
@@ -415,7 +424,9 @@ Item {
               id: secondShape
 
               smooth: true
+              layer.samples: 8
               antialiasing: true
+              layer.enabled: true
               anchors.fill: parent
               rotation: root.secondAngle
               transformOrigin: Item.Center
@@ -492,6 +503,11 @@ Item {
     Item {
       id: digitalPage
 
+      clip: true
+      visible: opacity > 0
+      opacity: SwipeView.isCurrentItem ? 1.0 : 0.0
+      Behavior on opacity { NumberAnimation { duration: 150 } }
+
       //
       // Reference measurement -- back-solves the largest font that fits the page width.
       //
@@ -522,8 +538,8 @@ Item {
         border.width: 1
         color: Cpp_ThemeManager.colors["console_base"]
         border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.35)
-        width: digitalColumn.implicitWidth + 32
-        height: digitalColumn.implicitHeight + 24
+        width: Math.min(parent.width - 16, digitalColumn.implicitWidth + 32)
+        height: Math.min(parent.height - 16, digitalColumn.implicitHeight + 24)
 
         Column {
           id: digitalColumn
@@ -535,6 +551,9 @@ Item {
             id: bigTimeText
 
             anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.min(implicitWidth, digitalPage.width - 32)
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
             text: root.formatTime12(root.now)
             color: Cpp_ThemeManager.colors["console_text"]
             font.family: Cpp_Misc_CommonFonts.monoFont.family
@@ -546,6 +565,9 @@ Item {
             id: bigDateText
 
             anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.min(implicitWidth, digitalPage.width - 32)
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
             opacity: 0.85
             text: root.formatDate(root.now)
             color: Cpp_ThemeManager.colors["console_text"]

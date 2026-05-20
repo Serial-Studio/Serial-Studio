@@ -85,6 +85,8 @@ void Sessions::ExportWorker::closeResources()
   QString connName;
   if (m_db) {
     connName = m_db->connectionName();
+    QSqlQuery checkpoint(*m_db);
+    checkpoint.exec("PRAGMA wal_checkpoint(RESTART)");
     m_db->close();
   }
 
@@ -393,7 +395,9 @@ void Sessions::ExportWorker::storeProjectMetadata(const DataModel::Frame& frame)
   q.bindValue(0, now);
   q.exec();
 
-  q.prepare("INSERT OR IGNORE INTO project_metadata (key, value) VALUES ('created_at', ?)");
+  // First-write-wins: preserve the original creation stamp across saves
+  q.prepare("INSERT INTO project_metadata (key, value) VALUES ('created_at', ?) "
+            "ON CONFLICT(key) DO NOTHING");
   q.bindValue(0, now);
   q.exec();
 

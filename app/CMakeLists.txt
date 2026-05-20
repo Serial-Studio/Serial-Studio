@@ -210,6 +210,7 @@ set(SOURCES
   src/Misc/ThemeManager.cpp
   src/Misc/CommonFonts.cpp
   src/Misc/Utilities.cpp
+  src/Misc/PasswordHash.cpp
   src/Misc/Translator.cpp
   src/Misc/ModuleManager.cpp
   src/Misc/TimerEvents.cpp
@@ -241,8 +242,6 @@ set(SOURCES
   src/UI/Widgets/Gyroscope.cpp
   src/UI/Widgets/GPS.cpp
   src/UI/Widgets/MultiPlot.cpp
-  src/UI/DeclarativeWidgets/DeclarativeWidget.cpp
-  src/UI/DeclarativeWidgets/StaticTable.cpp
   src/API/Server.cpp
   src/API/CommandRegistry.cpp
   src/API/CommandHandler.cpp
@@ -314,6 +313,7 @@ set(SOURCES
 set(HEADERS
   src/Misc/ModuleManager.h
   src/Misc/Utilities.h
+  src/Misc/PasswordHash.h
   src/Misc/CommonFonts.h
   src/Misc/JsonValidator.h
   src/Misc/ThemeManager.h
@@ -344,8 +344,6 @@ set(HEADERS
   src/UI/Widgets/Compass.h
   src/UI/Widgets/Terminal.h
   src/UI/QuickPaintedItemCompat.h
-  src/UI/DeclarativeWidgets/DeclarativeWidget.h
-  src/UI/DeclarativeWidgets/StaticTable.h
   src/API/Server.h
   src/API/CommandProtocol.h
   src/API/MCPProtocol.h

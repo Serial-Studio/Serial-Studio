@@ -39,10 +39,13 @@ class ScriptApiCallBridge : public QObject {
   // clang-format on
 
 public:
-  explicit ScriptApiCallBridge(QObject* parent = nullptr);
+  explicit ScriptApiCallBridge(int sourceId, QObject* parent = nullptr);
 
   Q_INVOKABLE [[nodiscard]] QVariantMap call(const QJSValue& methodVal, const QJSValue& paramsVal);
   Q_INVOKABLE [[nodiscard]] QVariantList listCommands();
+
+private:
+  int m_sourceId;
 };
 
 /**
@@ -50,8 +53,10 @@ public:
  */
 class ScriptApiCall {
 public:
-  static void installLua(lua_State* L);
-  static void installJS(QJSEngine* js);
+  static void installLua(lua_State* L, int sourceId);
+  static void installJS(QJSEngine* js, int sourceId);
+  static void setAllowFullSurface(bool allow);
+  static int maxBodyBytes();
 };
 
 }  // namespace DataModel

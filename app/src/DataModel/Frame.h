@@ -174,11 +174,14 @@ inline constexpr KeyView SchemaVersion("schemaVersion");
 inline constexpr KeyView WriterVersion("writerVersion");
 inline constexpr KeyView WriterVersionAtCreation("writerVersionAtCreation");
 
-// Project lock -- MD5 of optional Project Editor password (UX gate, not crypto).
+// Project lock -- PBKDF2 hash (legacy MD5 still accepted on load).
 inline constexpr KeyView PasswordHash("passwordHash");
 
 // Per-project MQTT publisher configuration (Pro).
 inline constexpr KeyView MqttPublisher("mqttPublisher");
+
+// Full MCP command surface opt-in for user-script apiCall()
+inline constexpr KeyView ApiCallAllowFullSurface("apiCallAllowFullSurface");
 
 inline QString layoutKey(int groupId)
 {

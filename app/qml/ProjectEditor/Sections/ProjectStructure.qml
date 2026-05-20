@@ -99,6 +99,9 @@ Widgets.Pane {
       model: Cpp_JSON_ProjectEditor.treeModel
       selectionModel: Cpp_JSON_ProjectEditor.selectionModel
 
+      selectionBehavior: TableView.SelectRows
+      selectionMode: TableView.ExtendedSelection
+
       //
       // Force layout walk so contentHeight is known before scrolling.
       //
@@ -139,6 +142,26 @@ Widgets.Pane {
           Cpp_JSON_ProjectEditor.moveWorkspace(ctxItemId, direction)
       }
 
+      //
+      // Reactive selection counters
+      //
+      property int selectableSelectionCount: 0
+      function refreshSelectableCount() {
+        selectableSelectionCount = Cpp_JSON_ProjectEditor.selectedTreeItems().filter(
+          it => it.kind === ProjectEditor.KindGroup
+                || it.kind === ProjectEditor.KindDataset
+                || it.kind === ProjectEditor.KindAction
+                || it.kind === ProjectEditor.KindOutputWidget).length
+      }
+
+      Connections {
+        target: treeView.selectionModel
+        function onSelectionChanged() { treeView.refreshSelectableCount() }
+        function onCurrentChanged()   { treeView.refreshSelectableCount() }
+      }
+
+      Component.onCompleted: refreshSelectableCount()
+
       Menu {
         id: sharedContextMenu
 
@@ -154,37 +177,41 @@ Widgets.Pane {
 
         MenuSeparator {}
 
+        //
+        // Bulk-aware duplicate
+        //
         MenuItem {
-          text: qsTr("Duplicate")
-          visible: treeView.ctxItemKind === ProjectEditor.KindGroup
-                   || treeView.ctxItemKind === ProjectEditor.KindDataset
-                   || treeView.ctxItemKind === ProjectEditor.KindAction
-                   || treeView.ctxItemKind === ProjectEditor.KindOutputWidget
+          text: treeView.selectableSelectionCount > 1
+                ? qsTr("Duplicate Selected (%1)").arg(treeView.selectableSelectionCount)
+                : qsTr("Duplicate")
+          visible: treeView.selectableSelectionCount > 0
           onTriggered: {
-            if (treeView.ctxItemKind === ProjectEditor.KindGroup)
-              Cpp_JSON_ProjectModel.duplicateCurrentGroup()
-            else if (treeView.ctxItemKind === ProjectEditor.KindDataset)
-              Cpp_JSON_ProjectModel.duplicateCurrentDataset()
-            else if (treeView.ctxItemKind === ProjectEditor.KindAction)
-              Cpp_JSON_ProjectModel.duplicateCurrentAction()
-            else if (treeView.ctxItemKind === ProjectEditor.KindOutputWidget)
-              Cpp_JSON_ProjectModel.duplicateCurrentOutputWidget()
+            const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
+                            .filter(it => it.kind !== ProjectEditor.KindWorkspace
+                                          && it.kind !== ProjectEditor.KindNone)
+            if (items.length > 0)
+              Cpp_JSON_ProjectModel.duplicateSelectedItems(items)
           }
         }
 
         MenuItem {
-          text: qsTr("Delete")
+          text: treeView.selectableSelectionCount > 1
+                ? qsTr("Delete Selected (%1)").arg(treeView.selectableSelectionCount)
+                : qsTr("Delete")
+          visible: treeView.selectableSelectionCount > 0
+                   || treeView.ctxItemKind === ProjectEditor.KindWorkspace
           onTriggered: {
-            if (treeView.ctxItemKind === ProjectEditor.KindGroup)
-              Cpp_JSON_ProjectModel.deleteCurrentGroup()
-            else if (treeView.ctxItemKind === ProjectEditor.KindDataset)
-              Cpp_JSON_ProjectModel.deleteCurrentDataset()
-            else if (treeView.ctxItemKind === ProjectEditor.KindAction)
-              Cpp_JSON_ProjectModel.deleteCurrentAction()
-            else if (treeView.ctxItemKind === ProjectEditor.KindOutputWidget)
-              Cpp_JSON_ProjectModel.deleteCurrentOutputWidget()
-            else if (treeView.ctxItemKind === ProjectEditor.KindWorkspace)
+            if (treeView.ctxItemKind === ProjectEditor.KindWorkspace
+                && treeView.selectableSelectionCount === 0) {
               Cpp_JSON_ProjectModel.confirmDeleteWorkspace(treeView.ctxItemId)
+              return
+            }
+
+            const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
+                            .filter(it => it.kind !== ProjectEditor.KindWorkspace
+                                          && it.kind !== ProjectEditor.KindNone)
+            if (items.length > 0)
+              Cpp_JSON_ProjectModel.deleteSelectedItems(items)
           }
         }
       }
@@ -275,12 +302,18 @@ Widgets.Pane {
                           treeView.selectionModel.setCurrentIndex(prevIndex, ItemSelectionModel.ClearAndSelect)
                         }
 
-                        // Delete current item
                         else if (event.key === Qt.Key_Delete) {
-                          if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView)
-                          Cpp_JSON_ProjectModel.deleteCurrentDataset()
-                          else if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.GroupView)
-                          Cpp_JSON_ProjectModel.deleteCurrentGroup()
+                          const items = Cpp_JSON_ProjectEditor.selectedTreeItems()
+                            .filter(it => it.kind !== ProjectEditor.KindWorkspace
+                                          && it.kind !== ProjectEditor.KindNone)
+                          if (items.length > 0) {
+                            Cpp_JSON_ProjectModel.deleteSelectedItems(items)
+                            event.accepted = true
+                          } else if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView) {
+                            Cpp_JSON_ProjectModel.deleteCurrentDataset()
+                          } else if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.GroupView) {
+                            Cpp_JSON_ProjectModel.deleteCurrentGroup()
+                          }
                         }
                       }
 
@@ -377,16 +410,56 @@ Widgets.Pane {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: (mouse) => {
+              const idx = treeView.index(row, column)
+
+              //
+              // Right click -- preserve multi-selection when the click lands on an
+              // already-selected row; otherwise drop to single-select on that row.
+              //
               if (mouse.button === Qt.RightButton) {
                 if (item.itemKind !== ProjectEditor.KindNone) {
-                  onLabelClicked()
+                  treeView.forceActiveFocus()
+                  if (!treeView.selectionModel.isSelected(idx))
+                    onLabelClicked()
+
                   treeView.ctxItemKind     = item.itemKind
                   treeView.ctxItemId       = item.itemId
                   treeView.ctxItemParentId = item.itemParentId
                   sharedContextMenu.popup()
                 }
-
                 return
+              }
+
+              //
+              // Left click -- modifiers drive multi-select. Skip spacer rows so
+              // they still cannot become "selected".
+              //
+              if (model.treeViewText.trim().length === 0) {
+                onLabelClicked()
+                return
+              }
+
+              treeView.forceActiveFocus()
+
+              if (mouse.modifiers & Qt.ControlModifier) {
+                treeView.selectionModel.select(idx, ItemSelectionModel.Toggle)
+                treeView.selectionModel.setCurrentIndex(idx, ItemSelectionModel.NoUpdate)
+                return
+              }
+
+              if (mouse.modifiers & Qt.ShiftModifier) {
+                const curIdx = treeView.selectionModel.currentIndex
+                if (curIdx && curIdx.valid && curIdx.row !== row) {
+                  const startRow = Math.min(curIdx.row, row)
+                  const endRow   = Math.max(curIdx.row, row)
+                  treeView.selectionModel.clear()
+                  for (let r = startRow; r <= endRow; ++r)
+                    treeView.selectionModel.select(treeView.index(r, column),
+                                                   ItemSelectionModel.Select)
+
+                  treeView.selectionModel.setCurrentIndex(idx, ItemSelectionModel.NoUpdate)
+                  return
+                }
               }
 
               onLabelClicked()

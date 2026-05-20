@@ -150,8 +150,8 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   // Dashboard helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(&m_engine);
 
-  // Generic API gateway (apiCall("namespace.method", params))
-  DataModel::ScriptApiCall::installJS(&m_engine);
+  // Generic API gateway (apiCall) -- painter widgets share the source-0 rate bucket
+  DataModel::ScriptApiCall::installJS(&m_engine, 0);
 
   const auto projectPath = AppState::instance().projectFilePath();
   if (!projectPath.isEmpty())

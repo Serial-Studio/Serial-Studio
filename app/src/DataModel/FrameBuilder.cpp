@@ -45,6 +45,7 @@
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/ConnectionManager.h"
 #include "MDF4/Export.h"
+#include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
 #include "UI/Dashboard.h"
 
@@ -126,6 +127,8 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_engineCacheSourceId(-1)
   , m_luaEngineForSource(nullptr)
   , m_jsEngineForSource(nullptr)
+  , m_compileGuard(0)
+  , m_compilePending(false)
   , m_framePoolHint(0)
 {
   // Pre-allocate frame pool -- reused across sub-frames so steady-state publishing won't malloc.
@@ -133,13 +136,20 @@ DataModel::FrameBuilder::FrameBuilder()
   for (int i = 0; i < kFramePoolSize; ++i)
     m_framePool.emplace_back(std::make_shared<PooledFrameSlot>());
 
-  // JS transform watchdog -- flips interrupt flag to unwind runaway scripts.
+  // JS transform watchdog -- flips interrupt flag to unwind runaway scripts
   m_jsTransformWatchdog.setSingleShot(true);
   m_jsTransformWatchdog.setInterval(kTransformWatchdogMs);
   connect(&m_jsTransformWatchdog, &QTimer::timeout, this, [this]() {
     for (auto& [id, engine] : m_transformEngines)
       if (engine.jsEngine)
         engine.jsEngine->setInterrupted(true);
+
+    NotificationCenter::instance().postWarning(
+      QStringLiteral("FrameBuilder"),
+      tr("JavaScript transform exceeded budget"),
+      tr("A dataset transform took longer than %1 ms; remaining datasets in the frame fell "
+         "back to raw values until the next frame. Profile or simplify the transform code.")
+        .arg(kTransformWatchdogMs));
   });
 
 #ifdef BUILD_COMMERCIAL
@@ -201,12 +211,23 @@ DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
     }
   }
 
-  // Pool exhausted -- log once, fall back to heap allocation so the producer never blocks.
+  // Pool exhausted -- log once, fall back to heap allocation so the producer never blocks
   static bool warned = false;
   if (!warned) [[unlikely]] {
     warned = true;
     qWarning() << "[FrameBuilder] Frame pool exhausted (" << kFramePoolSize
                << " slots), consumers are not draining; falling back to heap allocation.";
+    QMetaObject::invokeMethod(
+      &NotificationCenter::instance(),
+      "postWarning",
+      Qt::QueuedConnection,
+      Q_ARG(QString, QStringLiteral("FrameBuilder")),
+      Q_ARG(QString, tr("Frame pool exhausted")),
+      Q_ARG(QString,
+            tr("A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API "
+               "subscriber) is not draining frames fast enough. Serial Studio is falling "
+               "back to per-frame allocations until the backlog clears. Disable a heavy "
+               "consumer or reduce the data rate.")));
   }
   return std::make_shared<TimestampedFrame>(src, ts);
 }
@@ -239,6 +260,14 @@ const DataModel::Frame& DataModel::FrameBuilder::quickPlotFrame() const noexcept
   return m_quickPlotFrame;
 }
 
+/**
+ * @brief Returns the shared DataTableStore for read-only callers (e.g. clearLookupCache).
+ */
+const DataModel::DataTableStore& DataModel::FrameBuilder::tableStore() const noexcept
+{
+  return m_tableStore;
+}
+
 //--------------------------------------------------------------------------------------------------
 // External connection setup
 //--------------------------------------------------------------------------------------------------
@@ -258,6 +287,12 @@ void DataModel::FrameBuilder::setupExternalConnections()
           &DataModel::ProjectModel::sourceDeleted,
           this,
           &DataModel::FrameBuilder::onSourceRemoved);
+
+  // Periodic GC for the transform Lua/JS engines
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::timeout1Hz,
+          this,
+          &DataModel::FrameBuilder::collectTransformEngineGarbage);
 
 #ifdef BUILD_COMMERCIAL
   // Session player bypasses ConnectionManager; rebuild engines on its openChanged.
@@ -771,12 +806,23 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
     m_jsTransformWatchdog.start();
   }
 
+  // Re-entrancy guard: pin engine storage while cached pointers into it are live
+  ++m_compileGuard;
+
   for (auto& group : frame.groups)
     for (auto& dataset : group.datasets)
       applyDatasetValue(dataset, channelData, channelCount, info);
 
+  --m_compileGuard;
+
   if (armJsWatchdog) [[unlikely]]
     m_jsTransformWatchdog.stop();
+
+  // Drain any project mutation a transform queued, now that hot pointers have been released
+  if (m_compileGuard == 0 && m_compilePending) [[unlikely]] {
+    m_compilePending = false;
+    QMetaObject::invokeMethod(this, [this] { compileTransforms(); }, Qt::QueuedConnection);
+  }
 }
 
 /**
@@ -1125,6 +1171,12 @@ void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* 
  */
 void DataModel::FrameBuilder::compileTransforms()
 {
+  // Defer if a frame is in flight -- mutating m_transformEngines under hot pointers dangles them
+  if (m_compileGuard > 0) [[unlikely]] {
+    m_compilePending = true;
+    return;
+  }
+
   destroyTransformEngines();
   Q_ASSERT(m_transformEngines.empty());
 
@@ -1197,8 +1249,8 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installLua(L);
 
-  // Expose apiCall(method, params?) -- generic gateway to the full API command surface
-  DataModel::ScriptApiCall::installLua(L);
+  // Expose apiCall(method, params?) -- gated to a read-only allow-list by default
+  DataModel::ScriptApiCall::installLua(L, sourceId);
 
   // Notification API -- gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(L);
@@ -1228,58 +1280,75 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
                                                         TransformEngine& engine,
                                                         const TransformEntry& entry)
 {
+  // Each dataset runs in its own _ENV table; reads fall through to _G via metatable
+  const int baseTop = lua_gettop(L);
+
   try {
+    // 1. Build per-dataset env { __index = _G }
+    lua_newtable(L);                 // env
+    lua_createtable(L, 0, 1);        // mt
+    lua_pushglobaltable(L);          // _G
+    lua_setfield(L, -2, "__index");  // mt.__index = _G
+    lua_setmetatable(L, -2);         // setmetatable(env, mt)
+
+    // 2. Load the user's chunk
     const QByteArray utf8 = entry.code.toUtf8();
-    if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
-      qWarning() << "[FrameBuilder] Transform compile error for"
-                 << "dataset" << entry.uniqueId << ":" << lua_tostring(L, -1);
-      lua_pop(L, 1);
+    const QByteArray chunkName =
+      QByteArray("=transform[") + QByteArray::number(entry.uniqueId) + "]";
+    if (luaL_loadbufferx(L, utf8.constData(), utf8.size(), chunkName.constData(), "t") != LUA_OK) {
+      qWarning() << "[FrameBuilder] Transform compile error for dataset" << entry.uniqueId << ":"
+                 << lua_tostring(L, -1);
+      lua_settop(L, baseTop);
       return;
     }
 
-    // Clear any values the chunk may have returned
-    lua_settop(L, 0);
+    // 3. Re-target chunk._ENV (upvalue 1 of a main chunk in Lua 5.4) at the per-dataset env
+    lua_pushvalue(L, -2);
+    lua_setupvalue(L, -2, 1);
 
-    // Verify that the user defined a transform() function
-    lua_getglobal(L, "transform");
+    // 4. Execute the chunk
+    if (lua_pcall(L, 0, 0, 0) != LUA_OK) {
+      qWarning() << "[FrameBuilder] Transform runtime error for dataset" << entry.uniqueId << ":"
+                 << lua_tostring(L, -1);
+      lua_settop(L, baseTop);
+      return;
+    }
+
+    // 5. Look the transform up in the per-dataset env (not _G)
+    lua_getfield(L, -1, "transform");
     if (!lua_isfunction(L, -1)) {
-      lua_pop(L, 1);
       qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
                  << "transform code does not define transform()";
+      lua_settop(L, baseTop);
       return;
     }
 
-    // Move transform -> __tf_<id> so the next dataset can reuse the name
-    const auto alias = QStringLiteral("__tf_%1").arg(entry.uniqueId);
-    lua_setglobal(L, alias.toUtf8().constData());
-    lua_pushnil(L);
-    lua_setglobal(L, "transform");
-
-    // Store a registry reference for O(1) hotpath lookup
-    lua_getglobal(L, alias.toUtf8().constData());
-    Q_ASSERT(lua_isfunction(L, -1));
-
-    // Detect whether transform declares an `info` parameter
+    // 6. Detect whether transform declares an `info` parameter (lua_getinfo with ">" pops)
     bool acceptsInfo = false;
     lua_pushvalue(L, -1);
     lua_Debug ar;
     if (lua_getinfo(L, ">u", &ar) != 0) [[likely]]
       acceptsInfo = (ar.nparams >= 2);
 
-    // Release any previous ref for this dataset before overwriting
+    // 7. Release any previous ref for this dataset before overwriting
     auto existingIt = engine.luaRefs.find(entry.uniqueId);
     if (existingIt != engine.luaRefs.end()) [[unlikely]]
       luaL_unref(L, LUA_REGISTRYINDEX, existingIt->second.ref);
 
+    // 8. Store the function ref; the per-dataset env stays alive via its _ENV upvalue
     engine.luaRefs[entry.uniqueId] = LuaTransformRef{luaL_ref(L, LUA_REGISTRYINDEX), acceptsInfo};
+
+    // Pop the env table
+    lua_pop(L, 1);
+    Q_ASSERT(lua_gettop(L) == baseTop);
   } catch (const std::exception& e) {
     qWarning() << "[FrameBuilder] Transform compile uncaught exception for dataset"
                << entry.uniqueId << ":" << e.what();
-    lua_settop(L, 0);
+    lua_settop(L, baseTop);
   } catch (...) {
     qWarning() << "[FrameBuilder] Transform compile uncaught non-std exception for dataset"
                << entry.uniqueId;
-    lua_settop(L, 0);
+    lua_settop(L, baseTop);
   }
 }
 
@@ -1305,8 +1374,8 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(js);
 
-  // Expose apiCall(method, params?) -- generic gateway to the full API command surface
-  DataModel::ScriptApiCall::installJS(js);
+  // Expose apiCall(method, params?) -- gated to a read-only allow-list by default
+  DataModel::ScriptApiCall::installJS(js, sourceId);
 
   // Notification API -- gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(js);
@@ -1345,6 +1414,23 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
 }
 
 /**
+ * @brief Runs one GC pass over every per-source transform engine.
+ */
+void DataModel::FrameBuilder::collectTransformEngineGarbage()
+{
+  if (m_transformEngines.empty())
+    return;
+
+  for (auto& [id, engine] : m_transformEngines) {
+    if (engine.luaState)
+      lua_gc(engine.luaState, LUA_GCCOLLECT);
+
+    if (engine.jsEngine)
+      engine.jsEngine->collectGarbage();
+  }
+}
+
+/**
  * @brief Destroys all per-source transform engines and releases resources.
  */
 void DataModel::FrameBuilder::destroyTransformEngines()
@@ -1353,6 +1439,9 @@ void DataModel::FrameBuilder::destroyTransformEngines()
   m_engineCacheSourceId = -1;
   m_luaEngineForSource  = nullptr;
   m_jsEngineForSource   = nullptr;
+
+  // Drop the (interned-string) lookup cache before any owning Lua state closes
+  m_tableStore.clearLookupCache();
 
   for (auto& [id, engine] : m_transformEngines) {
     // Clear JS function refs before deleting the engine.
@@ -1589,7 +1678,7 @@ static int luaTableGet(lua_State* L)
   const char* table = luaL_checkstring(L, 1);
   const char* reg   = luaL_checkstring(L, 2);
 
-  const auto* val = store->get(QString::fromUtf8(table), QString::fromUtf8(reg));
+  const auto* val = store->getByInternedKey(table, reg);
   if (!val) {
     lua_pushnil(L);
     return 1;
@@ -1606,7 +1695,7 @@ static int luaTableGet(lua_State* L)
 }
 
 /**
- * @brief Lua C closure for tableSet(table, reg, value).
+ * @brief Lua C closure for tableSet(table, reg, value). Cache-aware like tableGet.
  */
 static int luaTableSet(lua_State* L)
 {
@@ -1625,7 +1714,7 @@ static int luaTableSet(lua_State* L)
     rv.isNumeric   = false;
   }
 
-  store->set(QString::fromUtf8(table), QString::fromUtf8(reg), rv);
+  store->setByInternedKey(table, reg, rv);
   return 0;
 }
 

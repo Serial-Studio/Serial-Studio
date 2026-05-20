@@ -23,7 +23,6 @@
 
 #include <algorithm>
 #include <QApplication>
-#include <QCryptographicHash>
 #include <QDirIterator>
 #include <QFile>
 #include <QFileDialog>
@@ -41,12 +40,15 @@
 #include "AppState.h"
 #include "DataModel/Editors/OutputCodeEditor.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/IconEngine.h"
 #include "Misc/JsonValidator.h"
+#include "Misc/PasswordHash.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
@@ -54,6 +56,49 @@
 
 #ifdef BUILD_COMMERCIAL
 #endif
+
+/**
+ * @brief Returns a unique title for a duplicated item using a numbered " (N)" suffix.
+ */
+static QString nextDuplicateTitle(const QString& title, const QStringList& taken)
+{
+  static const QRegularExpression kSuffixRe(QStringLiteral("^(.*?)\\s*\\((\\d+)\\)\\s*$"));
+
+  // Recover the base name by peeling the " (N)" off the source title, if present
+  QString base        = title;
+  const auto stripped = kSuffixRe.match(title);
+  if (stripped.hasMatch())
+    base = stripped.captured(1).trimmed();
+
+  const QString basePattern = QStringLiteral("^") + QRegularExpression::escape(base)
+                            + QStringLiteral("(?:\\s*\\((\\d+)\\))?\\s*$");
+  const QRegularExpression baseRe(basePattern);
+
+  int maxN = -1;
+  for (const auto& t : taken) {
+    const auto m = baseRe.match(t);
+    if (!m.hasMatch())
+      continue;
+
+    const QString suffix = m.captured(1);
+    if (suffix.isEmpty()) {
+      // Bare base name counts as N=0, so the next slot is " (1)"
+      maxN = qMax(maxN, 0);
+      continue;
+    }
+
+    bool ok     = false;
+    const int n = suffix.toInt(&ok);
+    if (ok)
+      maxN = qMax(maxN, n);
+  }
+
+  // No siblings share the base -- the duplicate is the first numbered instance
+  if (maxN < 0)
+    return QStringLiteral("%1 (1)").arg(base);
+
+  return QStringLiteral("%1 (%2)").arg(base, QString::number(maxN + 1));
+}
 
 /**
  * @brief Increments the per-type counter for every eligible dataset widget.
@@ -240,6 +285,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_customizeWorkspaces(false)
   , m_passwordHash("")
   , m_locked(false)
+  , m_apiCallAllowFullSurface(false)
   , m_autoSaveTimer(new QTimer(this))
   , m_autoSaveSuspended(false)
   , m_mutationEpoch(0)
@@ -497,15 +543,13 @@ void DataModel::ProjectModel::lockProject()
     return;
   }
 
-  m_passwordHash =
-    QString::fromLatin1(QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
+  m_passwordHash = Misc::PasswordHash::hashPassword(first);
 
   if (!m_locked) {
     m_locked = true;
     Q_EMIT lockedChanged();
   }
 
-  // Save the project if its valid
   if (validateProject(true)) {
     setModified(true);
     (void)saveJsonFile(false);
@@ -535,10 +579,7 @@ void DataModel::ProjectModel::unlockProject()
   if (!ok)
     return;
 
-  const auto hashPwd =
-    QString::fromLatin1(QCryptographicHash::hash(pwd.toUtf8(), QCryptographicHash::Md5).toHex());
-
-  if (hashPwd != m_passwordHash) {
+  if (!Misc::PasswordHash::verifyPassword(pwd, m_passwordHash)) {
     QTimer::singleShot(0, this, [] {
       Misc::Utilities::showMessageBox(
         tr("Incorrect password"),
@@ -1025,8 +1066,14 @@ void DataModel::ProjectModel::duplicateSource(int sourceId)
   // Clone the source, reset connection settings for the new copy
   DataModel::Source copy  = m_sources[sourceId];
   copy.sourceId           = static_cast<int>(m_sources.size());
-  copy.title              = copy.title + tr(" (Copy)");
   copy.connectionSettings = QJsonObject();
+
+  QStringList existingTitles;
+  existingTitles.reserve(static_cast<int>(m_sources.size()));
+  for (const auto& s : m_sources)
+    existingTitles.append(s.title);
+
+  copy.title = nextDuplicateTitle(m_sources[sourceId].title, existingTitles);
 
   m_sources.push_back(copy);
   setModified(true);
@@ -1358,9 +1405,13 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   json.insert(Keys::WriterVersion, writer);
   json.insert(Keys::WriterVersionAtCreation, creator);
 
-  // Optional editor-lock MD5 hash (UX flag, not crypto)
+  // Editor-lock PBKDF2 hash (legacy MD5 still accepted on load, rewritten on relock)
   if (!m_passwordHash.isEmpty())
     json.insert(Keys::PasswordHash, m_passwordHash);
+
+  // Preserve the apiCall sandbox opt-in across save cycles when it was set true.
+  if (m_apiCallAllowFullSurface)
+    json.insert(Keys::ApiCallAllowFullSurface, true);
 
   // Groups
   QJsonArray groupArray;
@@ -1760,6 +1811,12 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   const QString legacyParserCode = json.value(QLatin1StringView("frameParser")).toString();
   const bool legacyFormat        = !json.contains(Keys::Sources);
 
+  const int loadedSchema = ss_jsr(json, Keys::SchemaVersion, 0).toInt();
+  const bool olderSchema = loadedSchema < DataModel::kSchemaVersion;
+
+  m_apiCallAllowFullSurface = ss_jsr(json, Keys::ApiCallAllowFullSurface, false).toBool();
+  DataModel::ScriptApiCall::setAllowFullSurface(m_apiCallAllowFullSurface);
+
   loadProjectRootScalars(json);
   loadProjectArrays(json, legacyParserCode);
   enforceGplSingleSource();
@@ -1787,6 +1844,19 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   // Resume autosave
   m_autoSaveSuspended = false;
+
+  if (olderSchema && !sourcePath.isEmpty()) {
+    const QString title = tr("Project upgraded from an earlier file format");
+    const QString body  = tr("This project was saved with schema version %1; the current version "
+                             "is %2. Defaults have been applied to any new fields. Save the "
+                             "project to lock in the upgrade.")
+                           .arg(loadedSchema)
+                           .arg(DataModel::kSchemaVersion);
+    QTimer::singleShot(0, this, [title, body] {
+      DataModel::NotificationCenter::instance().postInfo(
+        QStringLiteral("ProjectModel"), title, body);
+    });
+  }
 
   return true;
 }
@@ -2140,6 +2210,33 @@ void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject&
       DataModel::Workspace ws;
       if (DataModel::read(ws, val.toObject()))
         m_workspaces.push_back(ws);
+    }
+
+    // Remap pre-4.0 user workspace IDs out of the reserved auto range
+    int collisions = 0;
+    int nextId     = WorkspaceIds::UserStart;
+    for (const auto& ws : std::as_const(m_workspaces))
+      if (ws.workspaceId >= WorkspaceIds::UserStart && ws.workspaceId >= nextId)
+        nextId = ws.workspaceId + 1;
+
+    for (auto& ws : m_workspaces) {
+      if (ws.workspaceId >= WorkspaceIds::AutoStart && ws.workspaceId < WorkspaceIds::UserStart) {
+        ws.workspaceId = nextId++;
+        ++collisions;
+      }
+    }
+
+    if (collisions > 0) {
+      const int n = collisions;
+      QTimer::singleShot(0, this, [n] {
+        DataModel::NotificationCenter::instance().postWarning(
+          QStringLiteral("ProjectModel"),
+          tr("Workspace IDs remapped on load"),
+          tr("%n custom workspace ID(s) overlapped the new reserved auto range and were "
+             "moved into the user range. Save the project to make the remap permanent.",
+             "",
+             n));
+      });
     }
   }
 
@@ -2646,9 +2743,15 @@ void DataModel::ProjectModel::duplicateCurrentGroup()
   // Clone every group-level field; only groupId + title get rewritten
   DataModel::Group group = m_selectedGroup;
   group.groupId          = m_groups.size();
-  group.title            = tr("%1 (Copy)").arg(m_selectedGroup.title);
   group.datasets.clear();
   group.outputWidgets.clear();
+
+  QStringList existingTitles;
+  existingTitles.reserve(static_cast<int>(m_groups.size()));
+  for (const auto& g : m_groups)
+    existingTitles.append(g.title);
+
+  group.title = nextDuplicateTitle(m_selectedGroup.title, existingTitles);
 
   for (size_t i = 0; i < m_selectedGroup.datasets.size(); ++i) {
     auto dataset    = m_selectedGroup.datasets[i];
@@ -2684,8 +2787,14 @@ void DataModel::ProjectModel::duplicateCurrentAction()
   action.repeatCount          = m_selectedAction.repeatCount;
   action.eolSequence          = m_selectedAction.eolSequence;
   action.timerIntervalMs      = m_selectedAction.timerIntervalMs;
-  action.title                = tr("%1 (Copy)").arg(m_selectedAction.title);
   action.autoExecuteOnConnect = m_selectedAction.autoExecuteOnConnect;
+
+  QStringList existingTitles;
+  existingTitles.reserve(static_cast<int>(m_actions.size()));
+  for (const auto& a : m_actions)
+    existingTitles.append(a.title);
+
+  action.title = nextDuplicateTitle(m_selectedAction.title, existingTitles);
 
   m_actions.push_back(action);
   m_selectedAction = action;
@@ -3372,7 +3481,13 @@ void DataModel::ProjectModel::duplicateCurrentOutputWidget()
 
   DataModel::OutputWidget ow = m_selectedOutputWidget;
   ow.widgetId                = static_cast<int>(widgets.size());
-  ow.title                   = tr("%1 (Copy)").arg(ow.title);
+
+  QStringList existingTitles;
+  existingTitles.reserve(static_cast<int>(widgets.size()));
+  for (const auto& w : widgets)
+    existingTitles.append(w.title);
+
+  ow.title = nextDuplicateTitle(m_selectedOutputWidget.title, existingTitles);
 
   widgets.push_back(ow);
   m_selectedOutputWidget = ow;
@@ -3418,8 +3533,15 @@ void DataModel::ProjectModel::duplicateCurrentDataset()
     return;
 
   dataset.index     = nextDatasetIndex();
-  dataset.title     = tr("%1 (Copy)").arg(dataset.title);
   dataset.datasetId = m_groups[dataset.groupId].datasets.size();
+
+  const auto& siblings = m_groups[dataset.groupId].datasets;
+  QStringList existingTitles;
+  existingTitles.reserve(static_cast<int>(siblings.size()));
+  for (const auto& d : siblings)
+    existingTitles.append(d.title);
+
+  dataset.title = nextDuplicateTitle(m_selectedDataset.title, existingTitles);
 
   m_groups[dataset.groupId].datasets.push_back(dataset);
   m_selectedDataset = dataset;
@@ -6077,4 +6199,91 @@ void DataModel::ProjectModel::duplicateOutputWidget(int groupId, int widgetId)
            < m_groups[previousSelection.groupId].outputWidgets.size())
     setSelectedOutputWidget(
       m_groups[previousSelection.groupId].outputWidgets[previousSelection.widgetId]);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Bulk multi-selection mutators
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Duplicates every item described in @p items in declared order.
+ */
+void DataModel::ProjectModel::duplicateSelectedItems(const QVariantList& items)
+{
+  for (const auto& v : items) {
+    const auto entry = v.toMap();
+    const int kind   = entry.value(QStringLiteral("kind"), -1).toInt();
+    const int id     = entry.value(QStringLiteral("id"), -1).toInt();
+    const int parent = entry.value(QStringLiteral("parentId"), -1).toInt();
+
+    switch (kind) {
+      case ProjectEditor::KindGroup:
+        duplicateGroup(id);
+        break;
+      case ProjectEditor::KindDataset:
+        duplicateDataset(parent, id);
+        break;
+      case ProjectEditor::KindAction:
+        duplicateAction(id);
+        break;
+      case ProjectEditor::KindOutputWidget:
+        duplicateOutputWidget(parent, id);
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+/**
+ * @brief Deletes every item described in @p items in dependency-safe order.
+ */
+void DataModel::ProjectModel::deleteSelectedItems(const QVariantList& items)
+{
+  struct Entry {
+    int kind;
+    int id;
+    int parentId;
+  };
+
+  QList<Entry> entries;
+  entries.reserve(items.size());
+  for (const auto& v : items) {
+    const auto m = v.toMap();
+    Entry e;
+    e.kind     = m.value(QStringLiteral("kind"), -1).toInt();
+    e.id       = m.value(QStringLiteral("id"), -1).toInt();
+    e.parentId = m.value(QStringLiteral("parentId"), -1).toInt();
+    entries.append(e);
+  }
+
+  // Descending parentId / id within each kind so removals never invalidate later indices
+  std::sort(entries.begin(), entries.end(), [](const Entry& a, const Entry& b) {
+    if (a.kind != b.kind)
+      return a.kind < b.kind;
+
+    if (a.parentId != b.parentId)
+      return a.parentId > b.parentId;
+
+    return a.id > b.id;
+  });
+
+  for (const auto& e : entries) {
+    switch (e.kind) {
+      case ProjectEditor::KindGroup:
+        deleteGroup(e.id, /*confirm=*/false);
+        break;
+      case ProjectEditor::KindDataset:
+        deleteDataset(e.parentId, e.id, /*confirm=*/false);
+        break;
+      case ProjectEditor::KindAction:
+        deleteAction(e.id, /*confirm=*/false);
+        break;
+      case ProjectEditor::KindOutputWidget:
+        deleteOutputWidget(e.parentId, e.id, /*confirm=*/false);
+        break;
+      default:
+        break;
+    }
+  }
 }

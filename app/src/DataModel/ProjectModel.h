@@ -384,6 +384,9 @@ public slots:
                           const DataModel::OutputWidget& widget,
                           bool rebuildTree = false);
 
+  void duplicateSelectedItems(const QVariantList& items);
+  void deleteSelectedItems(const QVariantList& items);
+
 public:
   void flushAutoSave();
   void setAutoSaveSuspended(bool suspend);
@@ -462,6 +465,7 @@ private:
 
   QString m_passwordHash;
   bool m_locked;
+  bool m_apiCallAllowFullSurface;
 
   QTimer* m_autoSaveTimer;
   bool m_autoSaveSuspended;

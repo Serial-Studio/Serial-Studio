@@ -17,7 +17,6 @@
 
 #  include <QApplication>
 #  include <QCoreApplication>
-#  include <QCryptographicHash>
 #  include <QDateTime>
 #  include <QDir>
 #  include <QFile>
@@ -35,6 +34,7 @@
 
 #  include "AppState.h"
 #  include "DataModel/ProjectModel.h"
+#  include "Misc/PasswordHash.h"
 #  include "Misc/Utilities.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "SerialStudio.h"
@@ -498,8 +498,7 @@ void Sessions::DatabaseManager::lockDatabase()
     return;
   }
 
-  const QString hash =
-    QString::fromLatin1(QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
+  const QString hash = Misc::PasswordHash::hashPassword(first);
 
   setBusy(true);
   QMetaObject::invokeMethod(m_worker,
@@ -537,10 +536,7 @@ void Sessions::DatabaseManager::unlockDatabase()
   if (!ok)
     return;
 
-  const auto hashPwd =
-    QString::fromLatin1(QCryptographicHash::hash(pwd.toUtf8(), QCryptographicHash::Md5).toHex());
-
-  if (hashPwd != m_passwordHash) {
+  if (!Misc::PasswordHash::verifyPassword(pwd, m_passwordHash)) {
     QTimer::singleShot(0, this, [] {
       Misc::Utilities::showMessageBox(
         tr("Incorrect password"),

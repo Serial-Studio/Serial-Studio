@@ -235,8 +235,8 @@ DataModel::JsScriptEngine::JsScriptEngine()
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(&m_engine);
 
-  // Expose apiCall(method, params?) -- generic gateway to the full API command surface
-  DataModel::ScriptApiCall::installJS(&m_engine);
+  // Expose apiCall(method, params?) -- gated to a read-only allow-list by default
+  DataModel::ScriptApiCall::installJS(&m_engine, m_sourceId);
 }
 
 /**
@@ -585,46 +585,13 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
 }
 
 /**
- * @brief Verifies the script declares a single-parameter parse() function.
+ * @brief Verifies the script defines a callable parse() function with a usable arity.
  */
 bool DataModel::JsScriptEngine::validateParseSignature(const QString& script, bool showMessageBoxes)
 {
-  static QRegularExpression functionRegex(
-    R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
-  const auto match = functionRegex.match(script);
-  if (!match.hasMatch()) {
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        QObject::tr("Invalid Function Declaration"),
-        QObject::tr("No valid 'parse' function declaration found.\n\n"
-                    "Expected format:\nfunction parse(frame) { ... }"),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[JsScriptEngine] No valid 'parse' function "
-                    "declaration found";
-    }
-    return false;
-  }
-
-  const QString firstArg  = match.captured(1);
-  const QString secondArg = match.captured(3);
-
-  if (firstArg.isEmpty()) {
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        QObject::tr("Invalid Function Parameter"),
-        QObject::tr("The 'parse' function must have at least one parameter."
-                    "\n\nExpected format:\n"
-                    "function parse(frame) { ... }"),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[JsScriptEngine] Parse function must have at "
-                    "least one parameter";
-    }
-    return false;
-  }
-
-  if (!secondArg.isEmpty()) {
+  static QRegularExpression legacyTwoArgRegex(
+    R"(\bparse\b\s*(?:=\s*)?(?:function)?\s*\(\s*([a-zA-Z_$][\w$]*)\s*,\s*([a-zA-Z_$][\w$]*)\s*\))");
+  if (const auto legacy = legacyTwoArgRegex.match(script); legacy.hasMatch()) {
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
         QObject::tr("Deprecated Function Signature"),
@@ -634,11 +601,40 @@ bool DataModel::JsScriptEngine::validateParseSignature(const QString& script, bo
                     "to the new single-parameter format:\n"
                     "function parse(%1) { ... }\n\n"
                     "The separator parameter is no longer needed.")
-          .arg(firstArg, secondArg),
+          .arg(legacy.captured(1), legacy.captured(2)),
         QMessageBox::Warning);
     } else {
-      qWarning() << "[JsScriptEngine] Deprecated two-parameter "
-                    "parse function";
+      qWarning() << "[JsScriptEngine] Deprecated two-parameter parse function";
+    }
+    return false;
+  }
+
+  // Engine-side check: parse must exist as a callable
+  const auto parseFn = m_engine.globalObject().property(QStringLiteral("parse"));
+  if (!parseFn.isCallable()) {
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(QObject::tr("Invalid Function Declaration"),
+                                      QObject::tr("No callable 'parse' export found.\n\n"
+                                                  "Define one of:\n"
+                                                  "  function parse(frame) { ... }\n"
+                                                  "  const parse = (frame) => { ... }"),
+                                      QMessageBox::Critical);
+    } else {
+      qWarning() << "[JsScriptEngine] No callable parse function found";
+    }
+    return false;
+  }
+
+  const int arity = parseFn.property(QStringLiteral("length")).toInt();
+  if (arity < 1) {
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        QObject::tr("Invalid Function Parameter"),
+        QObject::tr("The 'parse' function must accept at least one parameter (the frame "
+                    "payload)."),
+        QMessageBox::Critical);
+    } else {
+      qWarning() << "[JsScriptEngine] Parse function must take at least one parameter";
     }
     return false;
   }

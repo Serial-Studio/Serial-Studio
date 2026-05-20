@@ -174,8 +174,8 @@ void DataModel::LuaScriptEngine::createState()
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installLua(m_state);
 
-  // Expose apiCall(method, params?) -- generic gateway to the full API command surface
-  DataModel::ScriptApiCall::installLua(m_state);
+  // Expose apiCall(method, params?) -- gated to a read-only allow-list by default
+  DataModel::ScriptApiCall::installLua(m_state, m_sourceId);
 
   // Store 'this' pointer in the Lua registry for the watchdog hook
   lua_pushlightuserdata(m_state, this);
@@ -197,6 +197,7 @@ void DataModel::LuaScriptEngine::createState()
 void DataModel::LuaScriptEngine::destroyState()
 {
   if (m_state) {
+    DataModel::FrameBuilder::instance().tableStore().clearLookupCache();
     lua_close(m_state);
     m_state = nullptr;
   }

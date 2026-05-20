@@ -161,6 +161,7 @@ Window {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            visible: opacity > 0
             opacity: Cpp_Licensing_Trial.firstRun ? 1 : 0
             Behavior on opacity {NumberAnimation{}}
 
@@ -223,6 +224,7 @@ Window {
 
             RowLayout {
               spacing: 4
+              visible: opacity > 0
               opacity: Cpp_Licensing_Trial.busy ? 1 : 0
 
               Behavior on opacity {NumberAnimation{}}
@@ -255,6 +257,7 @@ Window {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            visible: opacity > 0
             opacity: Cpp_Licensing_Trial.trialEnabled ? 1 : 0
             Behavior on opacity {NumberAnimation{}}
 
@@ -344,6 +347,7 @@ Window {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            visible: opacity > 0
             opacity: Cpp_Licensing_Trial.trialExpired ? 1 : 0
             Behavior on opacity {NumberAnimation{}}
 

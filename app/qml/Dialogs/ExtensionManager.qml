@@ -990,6 +990,7 @@ SmartDialog {
             // Plugin output log
             //
             Item {
+              visible: opacity > 0
               Layout.fillWidth: true
               Layout.fillHeight: true
               opacity: (Cpp_ExtensionManager.selectedExtension.type || "") === "plugin" ? 1 : 0

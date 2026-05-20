@@ -32,15 +32,9 @@
 
 namespace CSD {
 // Chrome dimensions shared between CSD.cpp and NativeWindow_CSD.cpp (pre-show fallback).
-#if defined(Q_OS_WIN)
 inline constexpr int ShadowRadius            = 24;
 inline constexpr int TitleBarHeight          = 32;
 inline constexpr int TitleBarHeightMaximized = 28;
-#else
-inline constexpr int ShadowRadius            = 24;
-inline constexpr int TitleBarHeight          = 32;
-inline constexpr int TitleBarHeightMaximized = 28;
-#endif
 
 /**
  * @brief Custom title bar widget with window controls for CSD windows.

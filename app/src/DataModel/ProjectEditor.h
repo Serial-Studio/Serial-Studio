@@ -269,6 +269,8 @@ public:
   [[nodiscard]] CustomModel* mqttPublisherModel() const;
   [[nodiscard]] const DataModel::OutputWidget& selectedOutputWidget() const noexcept;
 
+  Q_INVOKABLE [[nodiscard]] QVariantList selectedTreeItems() const;
+
   Q_INVOKABLE [[nodiscard]] QVariantList tablesSummary() const;
   Q_INVOKABLE [[nodiscard]] QVariantList systemDatasetsSummary() const;
   [[nodiscard]] QString selectedUserTable() const;

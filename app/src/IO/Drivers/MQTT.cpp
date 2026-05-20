@@ -649,7 +649,7 @@ void IO::Drivers::MQTT::setUsername(const QString& username)
     return;
 
   m_username = username;
-  m_settings.setValue(settingsKey("username"), username);
+  m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -663,7 +663,7 @@ void IO::Drivers::MQTT::setPassword(const QString& password)
     return;
 
   m_password = password;
-  m_settings.setValue(settingsKey("password"), password);
+  m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -1022,8 +1022,6 @@ void IO::Drivers::MQTT::loadPersistedSettings()
   // Strings
   const auto host = m_settings.value(settingsKey("hostname"), m_hostname).toString();
   const auto cid  = m_settings.value(settingsKey("clientId"), QString()).toString();
-  const auto user = m_settings.value(settingsKey("username"), QString()).toString();
-  const auto pwd  = m_settings.value(settingsKey("password"), QString()).toString();
   const auto top  = m_settings.value(settingsKey("topicFilter"), QString()).toString();
 
   // Numerics
@@ -1039,11 +1037,27 @@ void IO::Drivers::MQTT::loadPersistedSettings()
   const auto clean  = m_settings.value(settingsKey("cleanSession"), m_cleanSession).toBool();
   const auto ssl    = m_settings.value(settingsKey("sslEnabled"), false).toBool();
 
+  // Credentials: prefer encrypted vault; migrate any legacy plaintext on first load
+  const auto port16        = static_cast<quint16>(p);
+  auto creds               = m_vault.credentials(host, port16);
+  const bool hasLegacyUser = m_settings.contains(settingsKey("username"));
+  const bool hasLegacyPass = m_settings.contains(settingsKey("password"));
+  if ((hasLegacyUser || hasLegacyPass) && creds.username.isEmpty() && creds.password.isEmpty()) {
+    creds.username = m_settings.value(settingsKey("username"), QString()).toString();
+    creds.password = m_settings.value(settingsKey("password"), QString()).toString();
+    m_vault.setCredentials(host, port16, creds.username, creds.password);
+  }
+  if (hasLegacyUser)
+    m_settings.remove(settingsKey("username"));
+
+  if (hasLegacyPass)
+    m_settings.remove(settingsKey("password"));
+
   setHostname(host);
-  setPort(static_cast<quint16>(p));
+  setPort(port16);
   setClientId(cid);
-  setUsername(user);
-  setPassword(pwd);
+  setUsername(creds.username);
+  setPassword(creds.password);
   setTopicFilter(top);
   setKeepAlive(static_cast<quint16>(ka));
   setAutoKeepAlive(autoKa);

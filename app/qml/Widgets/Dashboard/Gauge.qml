@@ -199,6 +199,11 @@ Item {
     // PAGE 0 -- Analog dial
     //
     Item {
+      clip: true
+      visible: opacity > 0
+      opacity: SwipeView.isCurrentItem ? 1.0 : 0.0
+      Behavior on opacity { NumberAnimation { duration: 150 } }
+
       Dial {
         id: control
 
@@ -440,18 +445,42 @@ Item {
               width: Math.min(Math.max(gaugeFace.width * 0.55, valueBoxMetrics.width + 22),
                               gaugeFace.width - 16)
 
+              //
+              // Tick clearance for the face label -- chord through the central
+              // tick-free disk at the title's bottom edge (the tighter y).
+              //
+              readonly property real tickInnerR: gaugeFace.width / 2 - gaugeFace.border.width - 4
+                                                 - Math.max(6, gaugeFace.width * 0.045)
+              readonly property real titleBottomFromCenter: gaugeFace.height / 2
+                                                            - gaugeFace.border.width - 23
+                                                            - valueBox.height
+              readonly property real titleClearanceWidth: {
+                const y = Math.abs(titleBottomFromCenter)
+                if (y >= tickInnerR) return 0
+                return 2 * Math.sqrt(tickInnerR * tickInnerR - y * y) - 8
+              }
+
+              TextMetrics {
+                id: titleLabelMetrics
+
+                font.bold: true
+                text: model.title
+                font.pixelSize: fontSize * 1.05
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+              }
+
               Text {
-                width: parent.width
                 font.bold: true
                 text: model.title
                 style: Text.Raised
-                elide: Text.ElideRight
                 font.pixelSize: fontSize * 1.05
                 styleColor: Qt.rgba(0, 0, 0, 0.3)
                 horizontalAlignment: Text.AlignHCenter
-                visible: model.title.length > 0
+                anchors.horizontalCenter: parent.horizontalCenter
                 color: Cpp_ThemeManager.colors["widget_text"]
                 font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                visible: model.title.length > 0
+                         && titleLabelMetrics.width <= parent.titleClearanceWidth
               }
 
               Item { width: 1; height: 3 }
@@ -534,7 +563,9 @@ Item {
             id: needleShape
 
             smooth: true
+            layer.samples: 8
             antialiasing: true
+            layer.enabled: true
             anchors.fill: parent
             rotation: control.angle
             transformOrigin: Item.Center
@@ -610,6 +641,11 @@ Item {
     Item {
       id: digitalPage
 
+      clip: true
+      visible: opacity > 0
+      opacity: SwipeView.isCurrentItem ? 1.0 : 0.0
+      Behavior on opacity { NumberAnimation { duration: 150 } }
+
       TextMetrics {
         id: bigValueMetrics
 
@@ -643,8 +679,8 @@ Item {
         border.color: root.model.alarmTriggered
                       ? Qt.darker(Cpp_ThemeManager.colors["alarm"], 1.20)
                       : Qt.darker(root.color, 1.30)
-        width: digitalColumn.implicitWidth + 32
-        height: digitalColumn.implicitHeight + 24
+        width: Math.min(parent.width - 16, digitalColumn.implicitWidth + 32)
+        height: Math.min(parent.height - 16, digitalColumn.implicitHeight + 24)
         color: root.model.alarmTriggered && digitalBox.alarmFlashOn
                ? Cpp_ThemeManager.colors["alarm"]
                : Cpp_ThemeManager.colors["console_base"]
@@ -671,6 +707,9 @@ Item {
             id: bigValueText
 
             anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.min(implicitWidth, digitalPage.width - 32)
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
             text: getPaddedText(root.model.value)
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.bold: true
@@ -686,6 +725,9 @@ Item {
 
             opacity: 0.80
             anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.min(implicitWidth, digitalPage.width - 32)
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
             text: root.model.title
             visible: root.model.title.length > 0
             font.family: Cpp_Misc_CommonFonts.monoFont.family

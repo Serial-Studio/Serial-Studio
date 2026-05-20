@@ -1,5 +1,5 @@
 {
-  "_comment": "AI safety tags for the in-process tool dispatcher. Names mirror API::CommandRegistry. 'safe' auto-executes, 'blocked' is denied outright (driver settings, connection state, licensing mutations, and any command that writes bytes to the device), anything else falls through to Confirm and requires a user click.",
+  "_comment": "AI safety tags for the in-process tool dispatcher. Names mirror API::CommandRegistry. 'safe' auto-executes, 'blocked' is denied outright (driver settings, connection state, licensing mutations, and any command that writes bytes to the device), 'alwaysConfirm' requires user click EVEN when autoApproveEdits is on (destructive families: delete / clear / new / import / uninstall), anything else falls through to Confirm and runs silently only when autoApproveEdits is on.",
   "safe": [
     "console.getConfig",
     "consoleExport.getStatus",
@@ -132,5 +132,28 @@
     "mqtt.setPassword",
     "mqtt.setSslEnabled",
     "mqtt.setSslProtocol"
+  ],
+  "alwaysConfirm": [
+    "project.new",
+    "project.import",
+    "project.group.delete",
+    "project.dataset.delete",
+    "project.action.delete",
+    "project.dataTable.delete",
+    "project.source.delete",
+    "project.outputWidget.delete",
+    "project.workspace.delete",
+    "project.frameParser.reset",
+    "sessions.delete",
+    "sessions.clearAll",
+    "sessions.deleteTag",
+    "sessions.removeTag",
+    "extensions.uninstall",
+    "extensions.removeRepository",
+    "notifications.clearAll",
+    "notifications.clearChannel",
+    "console.clear",
+    "ui.window.clearLayout",
+    "ui.window.resetLayout"
   ]
 }

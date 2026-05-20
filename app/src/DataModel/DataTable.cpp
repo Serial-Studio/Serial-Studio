@@ -133,7 +133,96 @@ void DataModel::DataTableStore::clear()
   m_tableRegNames.clear();
   m_warnedMissing.clear();
   m_warnedMissingDatasets.clear();
+  clearLookupCache();
   m_initialized = false;
+}
+
+/**
+ * @brief Invalidates the (table_ptr, reg_ptr) cache before any Lua state populating it closes.
+ */
+void DataModel::DataTableStore::clearLookupCache() const
+{
+  for (auto& entry : m_internedKeyCache)
+    entry = InternedKeyCacheEntry{};
+
+  m_internedKeyCacheNext = 0;
+}
+
+/**
+ * @brief Hot-path lookup keyed by Lua's interned string pointers.
+ *
+ * Falls back to the QString-keyed indexOf() on a cache miss and inserts the result
+ * (positive index OR -1 for "not found") so subsequent calls with the same literal hit
+ * the cache. The -1 entries dedupe the per-call warning for unknown registers; the
+ * existing noteMissingLookup() still fires once on the miss path.
+ */
+const DataModel::RegisterValue* DataModel::DataTableStore::getByInternedKey(const char* table,
+                                                                            const char* reg) const
+{
+  Q_ASSERT(m_initialized);
+
+  for (const auto& entry : m_internedKeyCache) {
+    if (entry.tablePtr == table && entry.regPtr == reg) {
+      if (entry.storeIndex < 0)
+        return nullptr;
+
+      return &m_storage[static_cast<size_t>(entry.storeIndex)];
+    }
+  }
+
+  // Cache miss: pay the QString conversion + hash probe once, then memoize.
+  const QString tableStr = QString::fromUtf8(table);
+  const QString regStr   = QString::fromUtf8(reg);
+  const int idx          = indexOf(tableStr, regStr);
+
+  m_internedKeyCache[m_internedKeyCacheNext] = {table, reg, idx};
+  m_internedKeyCacheNext                     = (m_internedKeyCacheNext + 1) % kInternedKeyCacheSize;
+
+  if (idx < 0) [[unlikely]] {
+    noteMissingLookup(tableStr, regStr);
+    return nullptr;
+  }
+
+  return &m_storage[static_cast<size_t>(idx)];
+}
+
+/**
+ * @brief Hot-path write keyed by Lua's interned string pointers.
+ */
+bool DataModel::DataTableStore::setByInternedKey(const char* table,
+                                                 const char* reg,
+                                                 const RegisterValue& val)
+{
+  Q_ASSERT(m_initialized);
+  Q_ASSERT(m_isComputed.size() == m_storage.size());
+
+  int idx = -1;
+  for (const auto& entry : m_internedKeyCache) {
+    if (entry.tablePtr == table && entry.regPtr == reg) {
+      idx = entry.storeIndex;
+      break;
+    }
+  }
+
+  if (idx == -1) {
+    const QString tableStr                     = QString::fromUtf8(table);
+    const QString regStr                       = QString::fromUtf8(reg);
+    idx                                        = indexOf(tableStr, regStr);
+    m_internedKeyCache[m_internedKeyCacheNext] = {table, reg, idx};
+    m_internedKeyCacheNext = (m_internedKeyCacheNext + 1) % kInternedKeyCacheSize;
+  }
+
+  if (idx < 0) [[unlikely]]
+    return false;
+
+  if (!m_isComputed[static_cast<size_t>(idx)]) [[unlikely]] {
+    qWarning() << "[DataTableStore] Cannot write to non-computed register"
+               << QLatin1StringView(table) << "/" << QLatin1StringView(reg);
+    return false;
+  }
+
+  m_storage[static_cast<size_t>(idx)] = val;
+  return true;
 }
 
 /**

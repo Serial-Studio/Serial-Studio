@@ -59,6 +59,11 @@ public:
 
   [[nodiscard]] const RegisterValue* get(const QString& table, const QString& reg) const;
 
+  [[nodiscard]] const RegisterValue* getByInternedKey(const char* table, const char* reg) const;
+  bool setByInternedKey(const char* table, const char* reg, const RegisterValue& val);
+
+  void clearLookupCache() const;
+
   bool set(const QString& table, const QString& reg, const RegisterValue& val);
 
   void setDatasetRaw(int uniqueId, double numeric, const QString& str, bool isNum);
@@ -98,6 +103,17 @@ private:
 
   mutable QSet<QPair<QString, QString>> m_warnedMissing;
   mutable QSet<int> m_warnedMissingDatasets;
+
+  static constexpr int kInternedKeyCacheSize = 32;
+
+  struct InternedKeyCacheEntry {
+    const char* tablePtr = nullptr;
+    const char* regPtr   = nullptr;
+    int storeIndex       = -1;
+  };
+
+  mutable InternedKeyCacheEntry m_internedKeyCache[kInternedKeyCacheSize];
+  mutable int m_internedKeyCacheNext = 0;
 };
 
 /**

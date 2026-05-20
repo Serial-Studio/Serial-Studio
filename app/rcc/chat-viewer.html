@@ -7,6 +7,9 @@
   <!-- Showdown.js for assistant Markdown -> HTML (bundled, see app/rcc/vendor/) -->
   <script src="qrc:/vendor/showdown.min.js"></script>
 
+  <!-- Allow-list HTML sanitizer applied to model output before innerHTML -->
+  <script src="qrc:/vendor/sanitize.js"></script>
+
   <!-- highlight.js for fenced code blocks (bundled, see app/rcc/vendor/) -->
   <link rel="stylesheet" id="hljs-theme"
         href="qrc:/vendor/highlight-github.min.css">
@@ -593,7 +596,11 @@
 
     function renderMarkdown(md) {
       if (!md) return "";
-      var html = converter.makeHtml(md);
+      // Showdown emits HTML and lets raw HTML in the source pass through. The
+      // sanitizer applies a tight allow-list before the string is inserted as
+      // innerHTML, so a poisoned model or injected prompt cannot reach the
+      // QWebChannel bridge through <script>, on*, or javascript: URLs.
+      var html = SerialStudioSanitize.sanitize(converter.makeHtml(md));
       var tmp = document.createElement("div");
       tmp.innerHTML = html;
 

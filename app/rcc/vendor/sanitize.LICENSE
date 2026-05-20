@@ -1,0 +1,9 @@
+Serial Studio chat viewer HTML sanitizer
+Copyright (C) 2020-2026 Alex Spataru
+
+Released as part of Serial Studio under the project's dual-license:
+- GNU GPLv3 (or later) for builds that exclude Pro modules.
+- Serial Studio Commercial License for builds that include any Pro
+  functionality.
+
+See the project root LICENSE files for full terms.

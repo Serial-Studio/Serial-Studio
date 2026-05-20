@@ -4887,6 +4887,46 @@ void DataModel::ProjectEditor::restoreExpandedStateMap(QStandardItem* item,
 }
 
 //--------------------------------------------------------------------------------------------------
+// Multi-selection
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Packages each tree selection into a {kind, id, parentId} QVariantMap.
+ */
+QVariantList DataModel::ProjectEditor::selectedTreeItems() const
+{
+  QVariantList result;
+  if (!m_selectionModel || !m_treeModel)
+    return result;
+
+  QSet<qint64> seen;
+  const auto indexes = m_selectionModel->selectedIndexes();
+  for (const auto& idx : indexes) {
+    if (!idx.isValid() || idx.column() != 0)
+      continue;
+
+    const auto key =
+      (static_cast<qint64>(idx.row()) << 32) ^ reinterpret_cast<qint64>(idx.internalPointer());
+    if (seen.contains(key))
+      continue;
+
+    seen.insert(key);
+
+    const int kind = m_treeModel->data(idx, TreeItemKind).toInt();
+    if (kind == KindNone)
+      continue;
+
+    QVariantMap entry;
+    entry.insert(QStringLiteral("kind"), kind);
+    entry.insert(QStringLiteral("id"), m_treeModel->data(idx, TreeItemId).toInt());
+    entry.insert(QStringLiteral("parentId"), m_treeModel->data(idx, TreeItemParentId).toInt());
+    result.append(entry);
+  }
+
+  return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Data tables -- read-only summaries for QML views
 //--------------------------------------------------------------------------------------------------
 

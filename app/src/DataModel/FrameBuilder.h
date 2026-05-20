@@ -68,6 +68,7 @@ public:
 
   [[nodiscard]] const DataModel::Frame& frame() const noexcept;
   [[nodiscard]] const DataModel::Frame& quickPlotFrame() const noexcept;
+  [[nodiscard]] const DataModel::DataTableStore& tableStore() const noexcept;
 
   void injectTableApiLua(lua_State* L);
   void injectTableApiJS(QJSEngine* js);
@@ -80,6 +81,8 @@ public slots:
 
   void hotpathRxFrame(const IO::CapturedDataPtr& data);
   void hotpathRxSourceFrame(int sourceId, const IO::CapturedDataPtr& data);
+
+  void collectTransformEngineGarbage();
 
 private slots:
   void onSourceRemoved();
@@ -154,6 +157,9 @@ private:
   int m_engineCacheSourceId;
   TransformEngine* m_luaEngineForSource;
   TransformEngine* m_jsEngineForSource;
+
+  int m_compileGuard;
+  bool m_compilePending;
 
   /**
    * @brief Recyclable pool slot holding one TimestampedFrame and its in-use flag.

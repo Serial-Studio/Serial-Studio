@@ -116,6 +116,8 @@
         <file>vendor/highlight.min.js</file>
         <file>vendor/showdown.LICENSE</file>
         <file>vendor/showdown.min.js</file>
+        <file>vendor/sanitize.LICENSE</file>
+        <file>vendor/sanitize.js</file>
         <file>fonts/GeistMono-Bold.ttf</file>
         <file>fonts/GeistMono-Medium.ttf</file>
         <file>fonts/GeistMono-Regular.ttf</file>
