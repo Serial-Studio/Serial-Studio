@@ -26,6 +26,7 @@
 #  include "DataModel/NotificationCenter.h"
 #  include "DataModel/Scripting/DashboardApi.h"
 #  include "DataModel/Scripting/DeviceWriteApi.h"
+#  include "DataModel/Scripting/ScriptApiCall.h"
 #  include "Misc/ThemeManager.h"
 #  include "Misc/TimerEvents.h"
 #  include "SerialStudio.h"
@@ -148,6 +149,9 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
 
   // Dashboard helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(&m_engine);
+
+  // Generic API gateway (apiCall("namespace.method", params))
+  DataModel::ScriptApiCall::installJS(&m_engine);
 
   const auto projectPath = AppState::instance().projectFilePath();
   if (!projectPath.isEmpty())

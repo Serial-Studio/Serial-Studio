@@ -42,6 +42,7 @@
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/LuaCompat.h"
+#include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/ConnectionManager.h"
 #include "MDF4/Export.h"
 #include "Misc/Utilities.h"
@@ -1196,6 +1197,9 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installLua(L);
 
+  // Expose apiCall(method, params?) -- generic gateway to the full API command surface
+  DataModel::ScriptApiCall::installLua(L);
+
   // Notification API -- gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(L);
 
@@ -1300,6 +1304,9 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
 
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(js);
+
+  // Expose apiCall(method, params?) -- generic gateway to the full API command surface
+  DataModel::ScriptApiCall::installJS(js);
 
   // Notification API -- gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(js);

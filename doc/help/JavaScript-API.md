@@ -664,6 +664,94 @@ end
 - Do not use them as user-preference settings. The user's toolbar toggles, **Points** spinner, and active workspace are persisted to QSettings or the project file. Script-driven changes are ephemeral, intended to react to the data, not to overwrite user choice.
 - They affect the **active dashboard window** only. In a multi-window setup, scripts have no way to address a specific window.
 
+## Calling any API command: `apiCall()`
+
+Beyond the focused helpers above, parsers can invoke **any** of Serial Studio's ~290 API commands directly through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, and Painter widgets.
+
+```text
+apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }
+```
+
+`method` is a dotted command name (for example `"dashboard.snapshot"`, `"workspaces.setActive"`, `"console.write"`). `params` is an optional object/table that maps to the same JSON parameters the TCP API accepts. See [API Reference](API-Reference.md) for the complete catalog.
+
+A second helper, `apiCallList()`, returns an array of every registered command name -- handy for quick discovery from the parser console.
+
+### Return shape
+
+| Field        | When set     | Description                                                                  |
+|--------------|--------------|------------------------------------------------------------------------------|
+| `ok`         | always       | `true` if the command executed successfully, `false` otherwise.              |
+| `result`     | success      | The command-specific result object. Absent when the command returns nothing. |
+| `error`      | failure      | Human-readable error message.                                                |
+| `errorCode`  | failure      | One of `INVALID_PARAM`, `MISSING_PARAM`, `UNKNOWN_COMMAND`, ...              |
+| `errorData`  | failure      | Optional structured diagnostic payload (e.g. nearest-name suggestions).      |
+
+`apiCall` never throws -- every failure mode (unknown command, bad params, internal exception) returns a structured `{ ok = false, ... }` table.
+
+### Examples
+
+**Lua -- bring up the right workspace when a fault flag goes high:**
+
+```lua
+local lastFaultBit = 0
+
+function parse(frame)
+  local values = {}
+  for f in frame:gmatch("([^,]+)") do
+    values[#values + 1] = f
+  end
+
+  local fault = tonumber(values[4] or "0") or 0
+  if fault ~= 0 and lastFaultBit == 0 then
+    apiCall("workspaces.setActive", { idOrName = "Diagnostics" })
+    apiCall("console.write", { text = "[FAULT] code=" .. fault .. "\n" })
+  end
+  lastFaultBit = fault
+
+  return values
+end
+```
+
+**JavaScript -- bridge a parser event to MQTT:**
+
+```javascript
+function parse(frame) {
+    const values = frame.split(",");
+    if (values[0] === "ALERT") {
+        apiCall("mqtt.publish", {
+            topic: "telemetry/alerts",
+            payload: values.slice(1).join("|"),
+            retain: false,
+            qos: 1
+        });
+    }
+    return values;
+}
+```
+
+**Lua -- discover what's available:**
+
+```lua
+function parse(frame)
+  if not _G.__listed then
+    _G.__listed = true
+    local cmds = apiCallList()
+    print("Registered commands: " .. #cmds)
+    for i = 1, math.min(5, #cmds) do
+      print("  " .. cmds[i])
+    end
+  end
+  return { frame }
+end
+```
+
+### When NOT to use it
+
+- **One-shot, fire-and-forget.** `apiCall` runs synchronously on the dashboard thread. Heavy work (mass mutations, project save, MDF4 export) blocks frame processing. Gate every call on an event transition; never `apiCall` on every frame.
+- **Don't shadow the focused helpers.** `dashboard.clearPlots`, `dashboard.setActiveWorkspace`, etc. are available as both `apiCall("dashboard.clearPlots", ...)` and as the dedicated `clearPlots()` / `setActiveWorkspace()` shortcuts. Prefer the shortcuts -- they read better and trim a layer of marshalling.
+- **Avoid destructive commands from a parser.** Anything that mutates the project (`project.save`, `project.batch`, `groups.delete`) is fine from a one-time setup hook, but should not fire from the streaming hotpath.
+- **Pro features stay gated.** Commands behind the commercial tier (Modbus, CAN, sessions, MDF4, MQTT...) return `{ ok = false, errorCode = "EXECUTION_ERROR" }` in GPL builds. Check `result.ok` before assuming success.
+
 ## Built-in Template Scripts
 
 Serial Studio includes 28 ready-to-use parser templates, available in both Lua and JavaScript. Select a template from the dropdown in the frame parser editor:

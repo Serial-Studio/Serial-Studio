@@ -28,6 +28,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
+#include "DataModel/Scripting/ScriptApiCall.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -233,6 +234,9 @@ DataModel::JsScriptEngine::JsScriptEngine()
 
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(&m_engine);
+
+  // Expose apiCall(method, params?) -- generic gateway to the full API command surface
+  DataModel::ScriptApiCall::installJS(&m_engine);
 }
 
 /**

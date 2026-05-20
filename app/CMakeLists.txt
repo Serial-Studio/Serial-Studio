@@ -285,6 +285,7 @@ set(SOURCES
   src/DataModel/Scripting/LuaCompat.cpp
   src/DataModel/Scripting/DashboardApi.cpp
   src/DataModel/Scripting/DeviceWriteApi.cpp
+  src/DataModel/Scripting/ScriptApiCall.cpp
   src/DataModel/Scripting/ScriptTemplates.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
   src/DataModel/Editors/CodeFormatter.cpp
@@ -398,6 +399,7 @@ set(HEADERS
   src/DataModel/Scripting/LuaCompat.h
   src/DataModel/Scripting/DashboardApi.h
   src/DataModel/Scripting/DeviceWriteApi.h
+  src/DataModel/Scripting/ScriptApiCall.h
   src/DataModel/Scripting/ScriptTemplates.h
   src/DataModel/Editors/JsCodeEditor.h
   src/DataModel/Editors/CodeFormatter.h

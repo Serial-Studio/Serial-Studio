@@ -34,6 +34,7 @@
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
+#include "DataModel/Scripting/ScriptApiCall.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -172,6 +173,9 @@ void DataModel::LuaScriptEngine::createState()
 
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installLua(m_state);
+
+  // Expose apiCall(method, params?) -- generic gateway to the full API command surface
+  DataModel::ScriptApiCall::installLua(m_state);
 
   // Store 'this' pointer in the Lua registry for the watchdog hook
   lua_pushlightuserdata(m_state, this);

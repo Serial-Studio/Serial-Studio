@@ -76,6 +76,26 @@ The API Server is available in both **Serial Studio GPL** and **Serial Studio Pr
 - 🟢 = GPL/Pro (available in all builds)
 - 🔵 = Pro only (requires commercial license)
 
+## Calling the API from Frame Parsers, Transforms, and Painters
+
+Every command listed in this document is also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required -- the call is dispatched in-process on the dashboard thread.
+
+```lua
+local r = apiCall("dashboard.snapshot")
+if r.ok then
+  print("Got " .. #r.result.datasets .. " datasets")
+end
+```
+
+```javascript
+const r = apiCall("workspaces.setActive", { idOrName: "Diagnostics" });
+if (!r.ok) console.warn(r.error);
+```
+
+Return shape: `{ ok, result?, error?, errorCode?, errorData? }`. See [Frame Parser Scripting -> apiCall](JavaScript-API.md) for the full signature, examples, and the list of focused helpers (`clearPlots`, `deviceWrite`, `actionFire`, `setActiveWorkspace`, ...) that exist as thin shortcuts over `apiCall`.
+
+`apiCall` runs synchronously and never throws. Treat it as a one-shot, event-driven trigger -- not as something to invoke on every frame.
+
 ## Getting Started
 
 ### Prerequisites
