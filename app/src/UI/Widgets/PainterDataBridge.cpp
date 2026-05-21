@@ -258,19 +258,57 @@ double Widgets::PainterDataBridge::dsFftMax(int i) const
 }
 
 /**
- * @brief Returns the dataset's low-alarm threshold.
+ * @brief Returns the lower edge of the first Warning+ band; NaN when none defined.
  */
 double Widgets::PainterDataBridge::dsAlarmLow(int i) const
 {
-  return valid(i) ? m_group->datasets[i].alarmLow : 0.0;
+  if (!valid(i))
+    return 0.0;
+
+  for (const auto& band : m_group->datasets[i].alarmBands)
+    if (static_cast<int>(band.severity) >= 2)
+      return qMin(band.min, band.max);
+
+  return std::numeric_limits<double>::quiet_NaN();
 }
 
 /**
- * @brief Returns the dataset's high-alarm threshold.
+ * @brief Returns the upper edge of the last Warning+ band; NaN when none defined.
  */
 double Widgets::PainterDataBridge::dsAlarmHigh(int i) const
 {
-  return valid(i) ? m_group->datasets[i].alarmHigh : 0.0;
+  if (!valid(i))
+    return 0.0;
+
+  double hi = std::numeric_limits<double>::quiet_NaN();
+  for (const auto& band : m_group->datasets[i].alarmBands)
+    if (static_cast<int>(band.severity) >= 2)
+      hi = qMax(band.min, band.max);
+
+  return hi;
+}
+
+/**
+ * @brief Returns the dataset's alarm bands as a list of {min, max, severity, color, label}.
+ */
+QVariantList Widgets::PainterDataBridge::dsAlarmBands(int i) const
+{
+  QVariantList out;
+  if (!valid(i))
+    return out;
+
+  out.reserve(static_cast<int>(m_group->datasets[i].alarmBands.size()));
+  for (const auto& band : m_group->datasets[i].alarmBands) {
+    QVariantMap entry;
+    entry.insert(QStringLiteral("min"), qMin(band.min, band.max));
+    entry.insert(QStringLiteral("max"), qMax(band.min, band.max));
+    entry.insert(QStringLiteral("severity"), static_cast<int>(band.severity));
+    entry.insert(QStringLiteral("color"), band.color);
+    entry.insert(QStringLiteral("label"), band.label);
+    out.append(entry);
+  }
+
+  return out;
 }
 
 /**

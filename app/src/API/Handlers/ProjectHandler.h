@@ -50,6 +50,7 @@ private:
   static void registerDatasetLifecycleCommands();
   static void registerDatasetOptionCommands();
   static void registerDatasetFieldCommands();
+  static void registerDatasetAlarmCommands();
   static void registerActionCommands();
   static void registerOutputWidgetCommands();
   static void registerParserCommands();
@@ -139,6 +140,9 @@ private:
 
   static CommandResponse datasetSetVirtual(const QString& id, const QJsonObject& params);
   static CommandResponse datasetSetTransformCode(const QString& id, const QJsonObject& params);
+
+  static CommandResponse datasetGetAlarmBands(const QString& id, const QJsonObject& params);
+  static CommandResponse datasetSetAlarmBands(const QString& id, const QJsonObject& params);
 
   static CommandResponse projectBatch(const QString& id, const QJsonObject& params);
 

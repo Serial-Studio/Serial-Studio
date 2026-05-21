@@ -68,6 +68,32 @@ Widgets.Pane {
       bottomMargin: -10
     }
 
+    //
+    // Lazy-loaded alarm-band editor dialog. Activated via Cpp_JSON_ProjectEditor signal.
+    //
+    Loader {
+      id: alarmBandsDialog
+
+      active: false
+      asynchronous: false
+      source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml"
+
+      function show(gId, dId, rMin, rMax, bands) {
+        alarmBandsDialog.active = true
+        if (alarmBandsDialog.item) {
+          alarmBandsDialog.item.closing.connect(() => alarmBandsDialog.active = false)
+          alarmBandsDialog.item.showDialog(gId, dId, rMin, rMax, bands)
+        }
+      }
+    }
+
+    Connections {
+      target: Cpp_JSON_ProjectEditor
+      function onOpenAlarmBandsEditor(groupId, datasetId, rangeMin, rangeMax, bands) {
+        alarmBandsDialog.show(groupId, datasetId, rangeMin, rangeMax, bands)
+      }
+    }
+
     ColumnLayout {
       spacing: 0
       anchors.fill: parent
@@ -302,6 +328,23 @@ Widgets.Pane {
             onClicked: Cpp_JSON_ProjectEditor.openTransformEditor()
             icon.source: "qrc:/icons/project-editor/actions/transform.svg"
             ToolTip.text: qsTr("Edit a value transform expression for calibration, filtering, or unit conversion")
+          }
+
+          //
+          // Alarm bands editor -- only meaningful for bar / gauge / meter widgets
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Alarm Bands")
+            Layout.alignment: Qt.AlignVCenter
+            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+                     && (Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
+                         || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
+                         || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter)
+            onClicked: Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection()
+            icon.source: "qrc:/icons/project-editor/actions/alarm-bands.svg"
+            ToolTip.text: qsTr("Define colored value ranges with severity tiers for this dataset's gauge.")
           }
 
           //

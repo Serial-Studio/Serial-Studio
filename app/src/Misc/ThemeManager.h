@@ -87,6 +87,7 @@ public:
 
   [[nodiscard]] const QStringList& availableThemes() const;
   [[nodiscard]] QColor getColor(const QString& name) const;
+  [[nodiscard]] Q_INVOKABLE QColor alarmColorForSeverity(int severity) const;
 
   [[nodiscard]] const QPalette& palette() const { return m_palette; }
 

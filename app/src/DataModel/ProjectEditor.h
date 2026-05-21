@@ -153,6 +153,8 @@ signals:
   void outputWidgetModelChanged();
   void mqttPublisherModelChanged();
   void treeRebuildFinished(const QModelIndex& revealIndex);
+  void openAlarmBandsEditor(
+    int groupId, int datasetId, double rangeMin, double rangeMax, QVariantList currentBands);
 
 private:
   explicit ProjectEditor();
@@ -193,6 +195,7 @@ public:
     SectionHeader,
     PasswordField,
     AutoIntField,
+    Button,
   };
   Q_ENUM(EditorWidget)
 
@@ -332,6 +335,8 @@ public slots:
   void openTransformEditor();
   void openTransformEditorFor(int groupId, int datasetId);
   void setSuppressViewChange(bool suppress) noexcept;
+  void openAlarmBandsEditorForSelection();
+  void commitAlarmBands(const QVariantList& bands);
 
   Q_INVOKABLE [[nodiscard]] bool moveCurrentGroup(int direction);
   Q_INVOKABLE [[nodiscard]] bool moveCurrentDataset(int direction);
@@ -357,7 +362,6 @@ private:
   void addPlotSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addFFTSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addWidgetSection(CustomModel* model, const DataModel::Dataset& dataset);
-  void addAlarmSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addLEDSection(CustomModel* model, const DataModel::Dataset& dataset);
 
   void buildTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);

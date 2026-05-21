@@ -482,6 +482,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/SourceView.qml
   qml/ProjectEditor/Views/SourceFrameParserView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
+  qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml
   qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml
   qml/ProjectEditor/ProjectEditor.qml
   qml/Widgets/Dashboard/Accelerometer.qml

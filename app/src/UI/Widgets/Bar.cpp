@@ -21,9 +21,19 @@
 
 #include "UI/Widgets/Bar.h"
 
+#include <QDateTime>
+#include <QVariantMap>
+
+#include "DataModel/Frame.h"
 #include "DataModel/NotificationCenter.h"
 #include "DSP.h"
 #include "UI/Dashboard.h"
+
+//--------------------------------------------------------------------------------------------------
+// Tunables
+//--------------------------------------------------------------------------------------------------
+
+static constexpr qint64 kMinNotifyIntervalMs = 3000;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
@@ -39,11 +49,11 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   , m_value(0.0)
   , m_minValue(0.0)
   , m_maxValue(0.0)
-  , m_alarmLow(std::nan(""))
-  , m_alarmHigh(std::nan(""))
-  , m_alarmsDefined(false)
+  , m_activeBandIndex(-1)
+  , m_lastBandHint(-1)
+  , m_lastFiredBand(-2)
+  , m_lastFireTimestampMs(0)
   , m_alarmInitialized(false)
-  , m_alarmActive(false)
 {
   if (autoInitFromBarDataset && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
@@ -54,20 +64,52 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
     m_displayTickCount = dataset.displayTickCount;
     m_minValue         = qMin(dataset.wgtMin, dataset.wgtMax);
     m_maxValue         = qMax(dataset.wgtMin, dataset.wgtMax);
-    m_alarmLow         = qMin(dataset.alarmLow, dataset.alarmHigh);
-    m_alarmHigh        = qMax(dataset.alarmLow, dataset.alarmHigh);
-    m_alarmLow         = qBound(m_minValue, m_alarmLow, m_maxValue);
-    m_alarmHigh        = qBound(m_minValue, m_alarmHigh, m_maxValue);
-
-    if (dataset.alarmEnabled) {
-      if (m_alarmHigh == m_alarmLow)
-        m_alarmLow = m_minValue;
-
-      m_alarmsDefined = (m_alarmLow > m_minValue && m_alarmLow < m_maxValue)
-                     || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
-    }
+    buildBands(dataset.alarmBands);
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Bar::updateData);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Band construction
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Precomputes render data for the dataset's alarm bands.
+ */
+void Widgets::Bar::buildBands(const std::vector<DataModel::AlarmBand>& srcBands)
+{
+  m_bands.clear();
+  m_bandsAsVariant.clear();
+  m_bands.reserve(static_cast<int>(srcBands.size()));
+  m_bandsAsVariant.reserve(static_cast<int>(srcBands.size()));
+
+  const double range = m_maxValue - m_minValue;
+  for (const auto& src : srcBands) {
+    const double lo = qBound(m_minValue, qMin(src.min, src.max), m_maxValue);
+    const double hi = qBound(m_minValue, qMax(src.min, src.max), m_maxValue);
+    if (hi <= lo)
+      continue;
+
+    BarBand band;
+    band.min         = lo;
+    band.max         = hi;
+    band.severity    = static_cast<int>(src.severity);
+    band.customColor = src.color;
+    band.label       = src.label;
+    band.fracMin     = DSP::isZero(range) ? 0.0 : qBound(0.0, (lo - m_minValue) / range, 1.0);
+    band.fracMax     = DSP::isZero(range) ? 0.0 : qBound(0.0, (hi - m_minValue) / range, 1.0);
+    m_bands.append(band);
+
+    QVariantMap entry;
+    entry.insert(QStringLiteral("min"), band.min);
+    entry.insert(QStringLiteral("max"), band.max);
+    entry.insert(QStringLiteral("fracMin"), band.fracMin);
+    entry.insert(QStringLiteral("fracMax"), band.fracMax);
+    entry.insert(QStringLiteral("severity"), band.severity);
+    entry.insert(QStringLiteral("customColor"), band.customColor);
+    entry.insert(QStringLiteral("label"), band.label);
+    m_bandsAsVariant.append(entry);
   }
 }
 
@@ -76,32 +118,49 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Checks if the dataset options indicate that a valid alarm range is available.
+ * @brief True when the dataset declares one or more alarm bands.
  */
 bool Widgets::Bar::alarmsDefined() const noexcept
 {
-  return m_alarmsDefined;
+  return !m_bands.isEmpty();
 }
 
 /**
- * @brief Checks if the current value is in an alarm state.
+ * @brief True when the current value sits in a band with Warning severity or worse.
  */
 bool Widgets::Bar::alarmTriggered() const noexcept
 {
-  // Check value against low and high alarm thresholds
-  if (m_alarmsDefined) {
-    if (!std::isnan(m_alarmLow) && m_alarmLow > m_minValue) {
-      if (m_value <= m_alarmLow)
-        return true;
-    }
+  return activeBandSeverity() >= 2;
+}
 
-    if (!std::isnan(m_alarmHigh) && m_alarmHigh < m_maxValue) {
-      if (m_value >= m_alarmHigh)
-        return true;
-    }
-  }
+/**
+ * @brief Returns the severity (0..3) of the band the value sits in, or -1 if none.
+ */
+int Widgets::Bar::activeBandSeverity() const noexcept
+{
+  if (m_activeBandIndex < 0 || m_activeBandIndex >= m_bands.size())
+    return -1;
 
-  return false;
+  return m_bands[m_activeBandIndex].severity;
+}
+
+/**
+ * @brief Returns the label of the active band; empty when no band is active.
+ */
+const QString& Widgets::Bar::activeBandLabel() const noexcept
+{
+  if (m_activeBandIndex < 0 || m_activeBandIndex >= m_bands.size())
+    return m_emptyLabel;
+
+  return m_bands[m_activeBandIndex].label;
+}
+
+/**
+ * @brief Returns the precomputed alarm-band list as a QML-accessible QVariantList.
+ */
+const QVariantList& Widgets::Bar::alarmBands() const noexcept
+{
+  return m_bandsAsVariant;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,26 +224,6 @@ double Widgets::Bar::maxValue() const noexcept
 }
 
 /**
- * @brief Returns the configured low alarm threshold.
- */
-double Widgets::Bar::alarmLow() const noexcept
-{
-  return m_alarmLow;
-}
-
-/**
- * @brief Returns the configured high alarm threshold.
- */
-double Widgets::Bar::alarmHigh() const noexcept
-{
-  return m_alarmHigh;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Normalized position getters
-//--------------------------------------------------------------------------------------------------
-
-/**
  * @brief Returns the normalized fractional position of the current value.
  */
 double Widgets::Bar::normalizedValue() const noexcept
@@ -192,20 +231,41 @@ double Widgets::Bar::normalizedValue() const noexcept
   return computeFractional(m_value);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Band lookup
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Returns the normalized fractional position of the low alarm threshold.
+ * @brief Returns the index of the band that contains @a value; -1 if none.
  */
-double Widgets::Bar::normalizedAlarmLow() const noexcept
+int Widgets::Bar::bandIndexFor(double value) const noexcept
 {
-  return computeFractional(m_alarmLow);
+  if (m_bands.isEmpty())
+    return -1;
+
+  if (m_lastBandHint >= 0 && m_lastBandHint < m_bands.size()) [[likely]] {
+    const auto& b = m_bands[m_lastBandHint];
+    if (value >= b.min && value <= b.max)
+      return m_lastBandHint;
+  }
+
+  for (int i = 0; i < m_bands.size(); ++i) {
+    const auto& b = m_bands[i];
+    if (value >= b.min && value <= b.max)
+      return i;
+  }
+
+  return -1;
 }
 
 /**
- * @brief Returns the normalized fractional position of the high alarm threshold.
+ * @brief Updates the cached active band index from the current value.
  */
-double Widgets::Bar::normalizedAlarmHigh() const noexcept
+void Widgets::Bar::recomputeActiveBand(double value)
 {
-  return computeFractional(m_alarmHigh);
+  m_activeBandIndex = bandIndexFor(value);
+  if (m_activeBandIndex >= 0)
+    m_lastBandHint = m_activeBandIndex;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -225,7 +285,8 @@ void Widgets::Bar::updateData()
     auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
-      notifyOnAlarmEdge();
+      recomputeActiveBand(value);
+      notifyOnBandEdge();
       if (isEnabled())
         Q_EMIT updated();
     }
@@ -233,41 +294,50 @@ void Widgets::Bar::updateData()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Alarm notification routing
+// Band-edge notification routing
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Posts a Critical notification on the rising edge of alarmTriggered().
+ * @brief Posts a notification on transition to a band with Warning or Critical severity.
  */
-void Widgets::Bar::notifyOnAlarmEdge()
+void Widgets::Bar::notifyOnBandEdge()
 {
-  const bool nowActive = alarmTriggered();
+  const int idx         = m_activeBandIndex;
+  const int sev         = activeBandSeverity();
+  const bool fireWorthy = sev >= 2;
 
-  // Suppress the first edge so an already-out-of-range value at connect doesn't fire
   if (!m_alarmInitialized) {
     m_alarmInitialized = true;
-    m_alarmActive      = nowActive;
+    m_lastFiredBand    = idx;
     return;
   }
 
-  if (nowActive == m_alarmActive)
+  if (idx == m_lastFiredBand)
     return;
 
-  m_alarmActive = nowActive;
-  if (!nowActive)
+  m_lastFiredBand = idx;
+  if (!fireWorthy || idx < 0 || idx >= m_bands.size())
     return;
 
+  // Per-widget cooldown suppresses notification storms on edge oscillation.
+  const qint64 now = QDateTime::currentMSecsSinceEpoch();
+  if (now - m_lastFireTimestampMs < kMinNotifyIntervalMs)
+    return;
+
+  m_lastFireTimestampMs = now;
+
+  const auto& band   = m_bands[idx];
   const QString unit = m_units.isEmpty() ? QString() : QStringLiteral(" ") + m_units;
   const QString name = m_title.isEmpty() ? tr("Alarm") : m_title;
+  const QString tier = sev >= 3 ? tr("critical") : tr("warning");
+  const QString lbl  = band.label.isEmpty() ? tier : band.label;
 
-  QString subtitle;
-  if (!std::isnan(m_alarmHigh) && m_alarmHigh < m_maxValue && m_value >= m_alarmHigh)
-    subtitle = tr("Value %1%2 reached the high alarm %3%2")
-                 .arg(QString::number(m_value), unit, QString::number(m_alarmHigh));
-  else if (!std::isnan(m_alarmLow) && m_alarmLow > m_minValue && m_value <= m_alarmLow)
-    subtitle = tr("Value %1%2 reached the low alarm %3%2")
-                 .arg(QString::number(m_value), unit, QString::number(m_alarmLow));
+  const QString subtitle =
+    tr("Value %1%2 entered the %3 band (%4–%5).")
+      .arg(
+        QString::number(m_value), unit, lbl, QString::number(band.min), QString::number(band.max));
 
-  DataModel::NotificationCenter::instance().post(
-    DataModel::NotificationCenter::Critical, tr("Alarms"), name, subtitle);
+  const auto level =
+    sev >= 3 ? DataModel::NotificationCenter::Critical : DataModel::NotificationCenter::Warning;
+  DataModel::NotificationCenter::instance().post(level, tr("Alarms"), name, subtitle);
 }

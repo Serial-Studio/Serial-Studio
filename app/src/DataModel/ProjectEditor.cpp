@@ -70,10 +70,7 @@ typedef enum {
   kDatasetView_PltMax,
   kDatasetView_WgtMin,
   kDatasetView_WgtMax,
-  kDatasetView_AlarmLow,
-  kDatasetView_AlarmHigh,
   kDatasetView_FFT_Samples,
-  kDatasetView_AlarmEnabled,
   kDatasetView_FFT_SamplingRate,
   kDatasetView_xAxis,
   kDatasetView_Overview,
@@ -3044,7 +3041,6 @@ void DataModel::ProjectEditor::buildDatasetModel(const DataModel::Dataset& datas
   addPlotSection(m_datasetModel, dataset);
   addFFTSection(m_datasetModel, dataset);
   addWidgetSection(m_datasetModel, dataset);
-  addAlarmSection(m_datasetModel, dataset);
   addLEDSection(m_datasetModel, dataset);
 
   connect(m_datasetModel,
@@ -3466,58 +3462,27 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
 }
 
 /**
- * @brief Appends the Alarm section rows to the dataset form model.
+ * @brief Emits openAlarmBandsEditor for the currently-selected dataset.
  */
-void DataModel::ProjectEditor::addAlarmSection(CustomModel* model,
-                                               const DataModel::Dataset& dataset)
+void DataModel::ProjectEditor::openAlarmBandsEditorForSelection()
 {
-  // Determine editability based on widget type
-  const bool showWidget = currentDatasetIsEditable();
-  const bool rangeEnabled =
-    showWidget
-    && (dataset.widget == "bar" || dataset.widget == "gauge" || dataset.widget == "meter");
+  QVariantList bands;
+  bands.reserve(static_cast<int>(m_selectedDataset.alarmBands.size()));
+  for (const auto& b : m_selectedDataset.alarmBands) {
+    QVariantMap entry;
+    entry.insert(QStringLiteral("min"), qMin(b.min, b.max));
+    entry.insert(QStringLiteral("max"), qMax(b.min, b.max));
+    entry.insert(QStringLiteral("severity"), static_cast<int>(b.severity));
+    entry.insert(QStringLiteral("color"), b.color);
+    entry.insert(QStringLiteral("label"), b.label);
+    bands.append(entry);
+  }
 
-  auto* hdr = new QStandardItem();
-  hdr->setData(SectionHeader, WidgetType);
-  hdr->setData(tr("Alarm Settings"), PlaceholderValue);
-  hdr->setData("qrc:/icons/project-editor/model/alarm.svg", ParameterIcon);
-  model->appendRow(hdr);
-
-  auto* alarmEnabled = new QStandardItem();
-  alarmEnabled->setEditable(rangeEnabled);
-  alarmEnabled->setData(0, PlaceholderValue);
-  alarmEnabled->setData(CheckBox, WidgetType);
-  alarmEnabled->setData(alarmEnabled->isEditable(), Active);
-  alarmEnabled->setData(dataset.alarmEnabled, EditableValue);
-  alarmEnabled->setData(kDatasetView_AlarmEnabled, ParameterType);
-  alarmEnabled->setData(tr("Enable Alarms"), ParameterName);
-  alarmEnabled->setData(tr("Triggers a visual alarm when the value exceeds alarm thresholds"),
-                        ParameterDescription);
-  model->appendRow(alarmEnabled);
-
-  auto* alarmLow = new QStandardItem();
-  alarmLow->setEditable(rangeEnabled && dataset.alarmEnabled);
-  alarmLow->setData(0, PlaceholderValue);
-  alarmLow->setData(FloatField, WidgetType);
-  alarmLow->setData(alarmLow->isEditable(), Active);
-  alarmLow->setData(dataset.alarmLow, EditableValue);
-  alarmLow->setData(kDatasetView_AlarmLow, ParameterType);
-  alarmLow->setData(tr("Low Threshold"), ParameterName);
-  alarmLow->setData(tr("Triggers a visual alarm when the value drops below this threshold"),
-                    ParameterDescription);
-  model->appendRow(alarmLow);
-
-  auto* alarmHigh = new QStandardItem();
-  alarmHigh->setEditable(rangeEnabled && dataset.alarmEnabled);
-  alarmHigh->setData(0, PlaceholderValue);
-  alarmHigh->setData(FloatField, WidgetType);
-  alarmHigh->setData(alarmHigh->isEditable(), Active);
-  alarmHigh->setData(dataset.alarmHigh, EditableValue);
-  alarmHigh->setData(kDatasetView_AlarmHigh, ParameterType);
-  alarmHigh->setData(tr("High Threshold"), ParameterName);
-  alarmHigh->setData(tr("Triggers a visual alarm when the value exceeds this threshold"),
-                     ParameterDescription);
-  model->appendRow(alarmHigh);
+  Q_EMIT openAlarmBandsEditor(m_selectedDataset.groupId,
+                              m_selectedDataset.datasetId,
+                              qMin(m_selectedDataset.wgtMin, m_selectedDataset.wgtMax),
+                              qMax(m_selectedDataset.wgtMin, m_selectedDataset.wgtMax),
+                              bands);
 }
 
 /**
@@ -4022,10 +3987,9 @@ void DataModel::ProjectEditor::onDatasetWidgetItemChanged(QStandardItem* item,
 
     dataset.widget = datasetWidgetKeys.at(widgetIdx);
     if (dataset.widget == "compass") {
-      dataset.wgtMin    = 0;
-      dataset.wgtMax    = 360;
-      dataset.alarmLow  = 0;
-      dataset.alarmHigh = 0;
+      dataset.wgtMin = 0;
+      dataset.wgtMax = 360;
+      dataset.alarmBands.clear();
     }
     buildDatasetModel(dataset);
     return;
@@ -4099,12 +4063,6 @@ void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
     case kDatasetView_WgtMax:
       dataset.wgtMax = value.toDouble();
       break;
-    case kDatasetView_AlarmLow:
-      dataset.alarmLow = value.toDouble();
-      break;
-    case kDatasetView_AlarmHigh:
-      dataset.alarmHigh = value.toDouble();
-      break;
     case kDatasetView_DisplayTickCount:
       dataset.displayTickCount = qMax(0, value.toInt());
       break;
@@ -4173,16 +4131,40 @@ void DataModel::ProjectEditor::onDatasetFlagItemChanged(QStandardItem* item,
     case kDatasetView_LED_High:
       dataset.ledHigh = value.toDouble();
       break;
-    case kDatasetView_AlarmEnabled:
-      dataset.alarmEnabled = value.toBool();
-      buildDatasetModel(dataset);
-      break;
     case kDatasetView_HideOnDashboard:
       dataset.hideOnDashboard = value.toBool();
       break;
     default:
       break;
   }
+}
+
+/**
+ * @brief Commits the result of the AlarmBandsEditor dialog into the currently-selected dataset.
+ */
+void DataModel::ProjectEditor::commitAlarmBands(const QVariantList& bands)
+{
+  m_selectedDataset.alarmBands.clear();
+  m_selectedDataset.alarmBands.reserve(bands.size());
+  for (const auto& v : bands) {
+    const auto m = v.toMap();
+    DataModel::AlarmBand band;
+    band.min   = m.value(QStringLiteral("min")).toDouble();
+    band.max   = m.value(QStringLiteral("max")).toDouble();
+    band.color = m.value(QStringLiteral("color")).toString().simplified();
+    band.label = m.value(QStringLiteral("label")).toString().simplified();
+    const int sev =
+      m.value(QStringLiteral("severity"), static_cast<int>(DataModel::AlarmSeverity::Warning))
+        .toInt();
+    band.severity = static_cast<DataModel::AlarmSeverity>(qBound(0, sev, 3));
+    if (band.max > band.min)
+      m_selectedDataset.alarmBands.push_back(std::move(band));
+  }
+
+  auto& pm = DataModel::ProjectModel::instance();
+  pm.updateDataset(
+    m_selectedDataset.groupId, m_selectedDataset.datasetId, m_selectedDataset, false);
+  buildDatasetModel(m_selectedDataset);
 }
 
 /**

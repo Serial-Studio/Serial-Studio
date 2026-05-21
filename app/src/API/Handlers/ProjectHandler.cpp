@@ -22,8 +22,10 @@
 #include "API/Handlers/ProjectHandler.h"
 
 #include <algorithm>
+#include <limits>
 #include <map>
 #include <memory>
+#include <optional>
 #include <QFile>
 #include <QHash>
 #include <QJSEngine>
@@ -44,6 +46,66 @@
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "IO/ConnectionManager.h"
 #include "SerialStudio.h"
+
+//--------------------------------------------------------------------------------------------------
+// Legacy alarm-field synthesis for MCP input compatibility
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Applies simple-mode alarmEnabled / alarmLow / alarmHigh fields to a dataset's alarmBands.
+ */
+static void applySimpleAlarmFields(DataModel::Dataset& d,
+                                   std::optional<bool> enabled,
+                                   std::optional<double> low,
+                                   std::optional<double> high)
+{
+  bool curEnabled       = !d.alarmBands.empty();
+  double curLow         = std::numeric_limits<double>::quiet_NaN();
+  double curHigh        = std::numeric_limits<double>::quiet_NaN();
+  const double rangeMin = qMin(d.wgtMin, d.wgtMax);
+  const double rangeMax = qMax(d.wgtMin, d.wgtMax);
+  for (const auto& b : d.alarmBands) {
+    if (static_cast<int>(b.severity) < 2)
+      continue;
+
+    const double bLo = qMin(b.min, b.max);
+    const double bHi = qMax(b.min, b.max);
+    if (qFuzzyCompare(1.0 + bLo, 1.0 + rangeMin) && bHi < rangeMax)
+      curLow = bHi;
+    else if (bLo > rangeMin && qFuzzyCompare(1.0 + bHi, 1.0 + rangeMax))
+      curHigh = bLo;
+  }
+
+  const bool useEnabled = enabled.value_or(curEnabled);
+  const double useLow   = low.value_or(curLow);
+  const double useHigh  = high.value_or(curHigh);
+
+  d.alarmBands.clear();
+  if (!useEnabled)
+    return;
+
+  const double range = rangeMax - rangeMin;
+  if (range <= 0)
+    return;
+
+  const double lo = std::isnan(useLow) ? rangeMin + range * 0.20 : useLow;
+  const double hi = std::isnan(useHigh) ? rangeMin + range * 0.80 : useHigh;
+  if (lo > rangeMin && lo < rangeMax) {
+    DataModel::AlarmBand band;
+    band.min      = rangeMin;
+    band.max      = lo;
+    band.severity = DataModel::AlarmSeverity::Warning;
+    d.alarmBands.push_back(band);
+  }
+
+  if (hi > rangeMin && hi < rangeMax && hi > lo) {
+    DataModel::AlarmBand band;
+    band.min      = hi;
+    band.max      = rangeMax;
+    band.severity = DataModel::AlarmSeverity::Warning;
+    d.alarmBands.push_back(band);
+  }
+}
 
 /**
  * @brief Appends a dataset's compatible DashboardWidget enums to compat (deduped).
@@ -92,7 +154,7 @@ static QJsonObject buildDatasetObject(const DataModel::Dataset& dataset,
   if (dataset.waterfall)
     enabled.append(QStringLiteral("waterfall"));
 
-  if (dataset.alarmEnabled)
+  if (!dataset.alarmBands.empty())
     enabled.append(QStringLiteral("alarm"));
 
   if (!dataset.widget.isEmpty())
@@ -530,6 +592,7 @@ void API::Handlers::ProjectHandler::registerDatasetCommands()
 {
   registerDatasetCrudCommands();
   registerDatasetFieldCommands();
+  registerDatasetAlarmCommands();
 }
 
 /**
@@ -741,6 +804,83 @@ void API::Handlers::ProjectHandler::registerDatasetFieldCommands()
         QStringLiteral("Optional: 0=JavaScript, 1=Lua (recommended). If omitted, "
                        "the dataset inherits the source's frameParserLanguage.")}}),
     &datasetSetTransformCode);
+}
+
+/**
+ * @brief Register dataset alarm-band getter / setter commands.
+ */
+void API::Handlers::ProjectHandler::registerDatasetAlarmCommands()
+{
+  auto& registry = CommandRegistry::instance();
+
+  registry.registerCommand(
+    QStringLiteral("project.dataset.getAlarmBands"),
+    QStringLiteral("Returns the dataset's coloured alarm bands as a JSON array. Each entry: "
+                   "{min, max, severity (0=Info, 1=OK, 2=Warning, 3=Critical), color "
+                   "(\"#rrggbb\" override or empty for severity default), label}. Also returns "
+                   "rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can validate "
+                   "band ranges before writing back. An empty array means no alarms "
+                   "configured. Applies only to bar / gauge / meter widgets; calling on other "
+                   "widget types succeeds with an empty array."),
+    makeSchema({
+      {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                  },
+      {QString(Keys::DatasetId),
+       QStringLiteral("integer"),
+       QStringLiteral("Dataset id within the group")}
+  }),
+    &datasetGetAlarmBands);
+
+  registry.registerCommand(
+    QStringLiteral("project.dataset.setAlarmBands"),
+    QStringLiteral("Atomically replaces the dataset's alarmBands array. Each band entry must "
+                   "provide numeric min and max (max>min; bands with max<=min are silently "
+                   "dropped and counted in result.droppedInvalid), and an integer severity "
+                   "(0=Info, 1=OK, 2=Warning, 3=Critical). color is optional (\"#rrggbb\" "
+                   "override; empty/missing = severity's theme colour). label is optional "
+                   "(surfaces in band-edge notifications). Bands may have gaps and may "
+                   "overlap; rendering paints them in array order behind the value indicator. "
+                   "Severity >= Warning triggers a notification when the value enters the "
+                   "band (3-second per-widget cooldown suppresses oscillation spam).\n"
+                   "Pass an empty array to clear all alarms."),
+    makeSchema({
+      {                     QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                     },
+      {                          QString(Keys::DatasetId),
+       QStringLiteral("integer"),
+       QStringLiteral("Dataset id within the group")                             },
+      arrayProp(
+        QString(Keys::AlarmBands),
+        QStringLiteral("Full replacement band list (empty = no alarms)."),
+        QJsonObject{
+       {QStringLiteral("type"), QStringLiteral("object")},
+       {QStringLiteral("properties"),
+       QJsonObject{{QStringLiteral("min"),
+       QJsonObject{{QStringLiteral("type"), QStringLiteral("number")},
+       {QStringLiteral("description"),
+       QStringLiteral("Lower bound (inclusive)")}}},
+       {QStringLiteral("max"),
+       QJsonObject{{QStringLiteral("type"), QStringLiteral("number")},
+       {QStringLiteral("description"),
+       QStringLiteral("Upper bound (exclusive at top of range)")}}},
+       {QStringLiteral("severity"),
+       QJsonObject{{QStringLiteral("type"), QStringLiteral("integer")},
+       {QStringLiteral("description"),
+       QStringLiteral("0=Info, 1=OK, 2=Warning, 3=Critical")}}},
+       {QStringLiteral("color"),
+       QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
+       {QStringLiteral("description"),
+       QStringLiteral("Optional \"#rrggbb\" override; empty = "
+       "use severity's theme colour")}}},
+       {QStringLiteral("label"),
+       QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
+       {QStringLiteral("description"),
+       QStringLiteral("Optional band name (shown in "
+       "notifications)")}}}}},
+       {QStringLiteral("required"),
+       QJsonArray{
+       QStringLiteral("min"), QStringLiteral("max"), QStringLiteral("severity")}}}
+      )
+  }),
+    &datasetSetAlarmBands);
 }
 
 /**
@@ -1971,6 +2111,118 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
                      "dataset has no slot in the parser output array, set "
                      "virtual=true via project.dataset.update{virtual:true} "
                      "or the dataset will read empty channel data.");
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Returns the dataset's alarm bands as a JSON array.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::datasetGetAlarmBands(const QString& id,
+                                                                         const QJsonObject& params)
+{
+  const QStringList required{QString(Keys::GroupId), QString(Keys::DatasetId)};
+  for (const auto& key : required)
+    if (!params.contains(key))
+      return CommandResponse::makeError(
+        id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: %1").arg(key));
+
+  const int groupId   = params.value(Keys::GroupId).toInt();
+  const int datasetId = params.value(Keys::DatasetId).toInt();
+
+  auto& pm           = DataModel::ProjectModel::instance();
+  const auto& groups = pm.groups();
+  const auto git     = std::find_if(
+    groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
+
+  if (git == groups.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
+
+  const auto& datasets = git->datasets;
+  const auto dit       = std::find_if(datasets.begin(), datasets.end(), [datasetId](const auto& d) {
+    return d.datasetId == datasetId;
+  });
+
+  if (dit == datasets.end())
+    return CommandResponse::makeError(id,
+                                      ErrorCode::InvalidParam,
+                                      QStringLiteral("Dataset id not found in group: %1/%2")
+                                        .arg(QString::number(groupId), QString::number(datasetId)));
+
+  QJsonArray bands;
+  for (const auto& b : dit->alarmBands)
+    bands.append(DataModel::serialize(b));
+
+  QJsonObject result;
+  result[Keys::GroupId]              = groupId;
+  result[Keys::DatasetId]            = datasetId;
+  result[Keys::AlarmBands]           = bands;
+  result[QStringLiteral("count")]    = bands.size();
+  result[QStringLiteral("rangeMin")] = qMin(dit->wgtMin, dit->wgtMax);
+  result[QStringLiteral("rangeMax")] = qMax(dit->wgtMin, dit->wgtMax);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Atomic write of the full alarmBands array onto a dataset.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::datasetSetAlarmBands(const QString& id,
+                                                                         const QJsonObject& params)
+{
+  const QStringList required{
+    QString(Keys::GroupId), QString(Keys::DatasetId), QString(Keys::AlarmBands)};
+  for (const auto& key : required)
+    if (!params.contains(key))
+      return CommandResponse::makeError(
+        id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: %1").arg(key));
+
+  const int groupId   = params.value(Keys::GroupId).toInt();
+  const int datasetId = params.value(Keys::DatasetId).toInt();
+  const auto arr      = params.value(Keys::AlarmBands).toArray();
+
+  auto& pm           = DataModel::ProjectModel::instance();
+  const auto& groups = pm.groups();
+  const auto git     = std::find_if(
+    groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
+
+  if (git == groups.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
+
+  const auto& datasets = git->datasets;
+  const auto dit       = std::find_if(datasets.begin(), datasets.end(), [datasetId](const auto& d) {
+    return d.datasetId == datasetId;
+  });
+
+  if (dit == datasets.end())
+    return CommandResponse::makeError(id,
+                                      ErrorCode::InvalidParam,
+                                      QStringLiteral("Dataset id not found in group: %1/%2")
+                                        .arg(QString::number(groupId), QString::number(datasetId)));
+
+  DataModel::Dataset updated = *dit;
+  updated.alarmBands.clear();
+  updated.alarmBands.reserve(arr.size());
+
+  int dropped = 0;
+  for (const auto& v : arr) {
+    DataModel::AlarmBand b;
+    if (DataModel::read(b, v.toObject()))
+      updated.alarmBands.push_back(std::move(b));
+    else
+      ++dropped;
+  }
+
+  pm.updateDataset(groupId, datasetId, updated, false);
+
+  QJsonObject result;
+  result[Keys::GroupId]             = groupId;
+  result[Keys::DatasetId]           = datasetId;
+  result[QStringLiteral("count")]   = static_cast<int>(updated.alarmBands.size());
+  result[QStringLiteral("updated")] = true;
+  if (dropped > 0)
+    result[QStringLiteral("droppedInvalid")] = dropped;
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -3355,9 +3607,12 @@ void API::Handlers::ProjectHandler::registerEntityUpdateCommands()
     QStringLiteral("project.dataset.update"),
     QStringLiteral("Patch dataset fields by id (params: groupId, datasetId, plus any of "
                    "title, units, widget, index, sourceId, graph, fft, led, waterfall, "
-                   "log, alarmEnabled, overviewDisplay, hideOnDashboard, xAxisId, "
+                   "log, overviewDisplay, hideOnDashboard, xAxisId, "
                    "waterfallYAxis, fftSamples, fftSamplingRate, fftMin, fftMax, "
-                   "pltMin, pltMax, wgtMin, wgtMax, alarmLow, alarmHigh, ledHigh, "
+                   "pltMin, pltMax, wgtMin, wgtMax, ledHigh, "
+                   "alarmBands (array of {min,max,severity,color,label} objects, "
+                   "severity=0..3 for Info/Ok/Warning/Critical), "
+                   "or legacy alarmLow/alarmHigh/alarmEnabled for 2-band simple mode, "
                    "displayTickCount, displayFormat, "
                    "transformCode, transformLanguage, virtual). The boolean fields "
                    "graph/fft/led/waterfall toggle the same flags as "
@@ -3826,20 +4081,43 @@ static QString applyDatasetNumericFields(DataModel::Dataset& d,
   if (takeParam(params, consumed, QStringLiteral("wgtMax")))
     d.wgtMax = params.value(QStringLiteral("wgtMax")).toDouble();
 
-  if (takeParam(params, consumed, QStringLiteral("alarmLow")))
-    d.alarmLow = params.value(QStringLiteral("alarmLow")).toDouble();
+  const bool hasAlarmBands = takeParam(params, consumed, Keys::AlarmBands);
+  const bool hasAlarmLow   = takeParam(params, consumed, QStringLiteral("alarmLow"));
+  const bool hasAlarmHigh  = takeParam(params, consumed, QStringLiteral("alarmHigh"));
+  const bool hasAlarmEnab  = takeParam(params, consumed, QStringLiteral("alarmEnabled"));
 
-  if (takeParam(params, consumed, QStringLiteral("alarmHigh")))
-    d.alarmHigh = params.value(QStringLiteral("alarmHigh")).toDouble();
+  if (hasAlarmBands) {
+    d.alarmBands.clear();
+    const auto arr = params.value(Keys::AlarmBands).toArray();
+    d.alarmBands.reserve(arr.size());
+    for (const auto& v : arr) {
+      DataModel::AlarmBand b;
+      if (DataModel::read(b, v.toObject()))
+        d.alarmBands.push_back(std::move(b));
+    }
+  }
+
+  else if (hasAlarmLow || hasAlarmHigh || hasAlarmEnab) {
+    std::optional<bool> en;
+    std::optional<double> lo;
+    std::optional<double> hi;
+    if (hasAlarmEnab)
+      en = params.value(QStringLiteral("alarmEnabled")).toBool();
+
+    if (hasAlarmLow)
+      lo = params.value(QStringLiteral("alarmLow")).toDouble();
+
+    if (hasAlarmHigh)
+      hi = params.value(QStringLiteral("alarmHigh")).toDouble();
+
+    applySimpleAlarmFields(d, en, lo, hi);
+  }
 
   if (takeParam(params, consumed, Keys::DisplayTickCount))
     d.displayTickCount = qMax(0, params.value(Keys::DisplayTickCount).toInt());
 
   if (takeParam(params, consumed, Keys::DisplayFormat))
     d.displayFormat = params.value(Keys::DisplayFormat).toString();
-
-  if (takeParam(params, consumed, QStringLiteral("alarmEnabled")))
-    d.alarmEnabled = params.value(QStringLiteral("alarmEnabled")).toBool();
 
   if (takeParam(params, consumed, QStringLiteral("ledHigh")))
     d.ledHigh = params.value(QStringLiteral("ledHigh")).toDouble();

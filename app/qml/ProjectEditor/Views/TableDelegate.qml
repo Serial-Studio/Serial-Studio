@@ -820,6 +820,40 @@ ColumnLayout {
         }
 
         //
+        // Button row -- emits a setData click sentinel so the C++ side can route to a signal
+        //
+        Loader {
+          id: buttonLoader
+
+          Layout.fillWidth: true
+          Layout.alignment: Qt.AlignVCenter
+          active: model.widgetType === ProjectEditor.Button
+          visible: model.widgetType === ProjectEditor.Button
+
+          property int modelRow: row
+          property int modelColumn: column
+          property var modelActive: model.active
+          property var modelPlaceholder: model.placeholderValue
+
+          sourceComponent: Button {
+            id: _btn
+
+            text: buttonLoader.modelPlaceholder ?? ""
+            enabled: buttonLoader.modelActive
+            opacity: buttonLoader.modelActive ? 1 : 0.5
+            font: Cpp_Misc_CommonFonts.boldUiFont
+
+            onClicked: {
+              // Monotonic stamp forces the dispatcher to fire even on repeat presses.
+              root.modelPointer.setData(
+                    view.index(buttonLoader.modelRow, buttonLoader.modelColumn),
+                    Date.now(),
+                    ProjectEditor.EditableValue)
+            }
+          }
+        }
+
+        //
         // HexTextEdit editor
         //
         Loader {

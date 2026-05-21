@@ -47,7 +47,7 @@ Item {
   //
   readonly property bool isHorizontal: root.width > 1.5 * root.height
   readonly property bool showLabels: isHorizontal ? root.width >= 200 : root.height >= 160
-  readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.colors["alarm"] : root.color
+  readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity) : root.color
   readonly property real fontSize: Math.max(10, Math.min(14, Math.min(root.width, root.height) / 22))
                                    * Cpp_Misc_CommonFonts.widgetFontScale
   readonly property int tickCount: {
@@ -280,41 +280,30 @@ Item {
             }
 
             //
-            // Alarm zone highlights -- coloured bands in the tick row, mirroring
-            // the outer-rim alarm shapes on the Gauge/Meter faces.
+            // Alarm-band highlights -- coloured stripes in the tick row, one per dataset band.
             //
             Repeater {
-              model: [
-                { fromFrac: 0,
-                  toFrac: root.model.normalizedAlarmLow,
-                  active: root.model.alarmsDefined
-                          && root.model.alarmLow  > root.model.minValue
-                          && root.model.alarmLow  < root.model.maxValue },
-                { fromFrac: root.model.normalizedAlarmHigh,
-                  toFrac: 1,
-                  active: root.model.alarmsDefined
-                          && root.model.alarmHigh > root.model.minValue
-                          && root.model.alarmHigh < root.model.maxValue }
-              ]
+              model: root.model.alarmBands
               delegate: Rectangle {
                 required property var modelData
-                visible: modelData.active
                 opacity: 0.65
                 antialiasing: true
-                color: Cpp_ThemeManager.colors["alarm"]
+                color: modelData.customColor && modelData.customColor.length > 0
+                       ? modelData.customColor
+                       : Cpp_ThemeManager.alarmColorForSeverity(modelData.severity)
 
                 x: isHorizontal
-                   ? modelData.fromFrac * progressBar.width
+                   ? modelData.fracMin * progressBar.width
                    : progressBar.width
                 y: isHorizontal
                    ? progressBar.height
-                   : (1 - modelData.toFrac) * progressBar.height
+                   : (1 - modelData.fracMax) * progressBar.height
                 width: isHorizontal
-                       ? Math.max(0, (modelData.toFrac - modelData.fromFrac) * progressBar.width)
+                       ? Math.max(0, (modelData.fracMax - modelData.fracMin) * progressBar.width)
                        : 3
                 height: isHorizontal
                         ? 3
-                        : Math.max(0, (modelData.toFrac - modelData.fromFrac) * progressBar.height)
+                        : Math.max(0, (modelData.fracMax - modelData.fracMin) * progressBar.height)
               }
             }
 
@@ -442,12 +431,12 @@ Item {
         anchors.centerIn: parent
         border.width: 1
         border.color: root.model.alarmTriggered
-                      ? Qt.darker(Cpp_ThemeManager.colors["alarm"], 1.20)
+                      ? Qt.darker(Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity), 1.20)
                       : Qt.darker(root.color, 1.30)
         width: Math.min(parent.width - 16, digitalColumn.implicitWidth + 32)
         height: Math.min(parent.height - 16, digitalColumn.implicitHeight + 24)
         color: root.model.alarmTriggered && digitalBox.alarmFlashOn
-               ? Cpp_ThemeManager.colors["alarm"]
+               ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                : Cpp_ThemeManager.colors["console_base"]
 
         Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
@@ -480,7 +469,7 @@ Item {
             font.bold: true
             font.pixelSize: digitalPage.bigValueFontPx
             color: root.model.alarmTriggered
-                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.colors["alarm"])
+                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity))
                    : root.color
             Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
           }
@@ -494,7 +483,7 @@ Item {
             text: root.model.title
             visible: root.model.title.length > 0
             color: root.model.alarmTriggered
-                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.colors["alarm"])
+                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity))
                    : root.color
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.pixelSize: bigValueText.font.pixelSize * 0.30

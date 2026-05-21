@@ -40,7 +40,7 @@ Item {
   property real normalizedValue: model.normalizedValue
   Behavior on normalizedValue {NumberAnimation{duration: 140; easing.type: Easing.OutCubic}}
 
-  readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.colors["alarm"] : root.color
+  readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity) : root.color
 
   //
   // Theme-aware chrome stops -- adapts lighten/darken amounts to widget_base luminance
@@ -417,13 +417,10 @@ Item {
         }
 
         //
-        // Alarm zone highlights -- colored arc bands at the outer rim
+        // Alarm-band highlights -- colored arc segments at the outer rim, one per dataset band.
         //
         Repeater {
-          model: [
-            { fromValue: root.model.minValue, toValue: root.model.alarmLow,  active: root.model.alarmsDefined && root.model.alarmLow  > root.model.minValue && root.model.alarmLow  < root.model.maxValue },
-            { fromValue: root.model.alarmHigh, toValue: root.model.maxValue, active: root.model.alarmsDefined && root.model.alarmHigh > root.model.minValue && root.model.alarmHigh < root.model.maxValue }
-          ]
+          model: root.model.alarmBands
           delegate: Shape {
             id: alarmZoneShape
 
@@ -433,21 +430,21 @@ Item {
             layer.smooth: true
             antialiasing: true
             anchors.fill: parent
-            visible: modelData.active
             preferredRendererType: Shape.CurveRenderer
             layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
             required property var modelData
+            readonly property color bandColor: modelData.customColor && modelData.customColor.length > 0
+                                               ? modelData.customColor
+                                               : Cpp_ThemeManager.alarmColorForSeverity(modelData.severity)
             readonly property real rOut: meterArea.faceR - 2
             readonly property real rIn: alarmZoneShape.rOut - Math.max(3, meterArea.faceR * 0.035)
-            readonly property real angA: (startAngleDeg + alarmZoneShape.fracA * angleRangeDeg) * Math.PI / 180
-            readonly property real angB: (startAngleDeg + alarmZoneShape.fracB * angleRangeDeg) * Math.PI / 180
-            readonly property real fracA: (modelData.fromValue - root.model.minValue) / (root.model.maxValue - root.model.minValue)
-            readonly property real fracB: (modelData.toValue   - root.model.minValue) / (root.model.maxValue - root.model.minValue)
+            readonly property real angA: (startAngleDeg + modelData.fracMin * angleRangeDeg) * Math.PI / 180
+            readonly property real angB: (startAngleDeg + modelData.fracMax * angleRangeDeg) * Math.PI / 180
 
             ShapePath {
               strokeWidth: -1
-              fillColor: Cpp_ThemeManager.colors["alarm"]
+              fillColor: alarmZoneShape.bandColor
 
               startX: meterArea.faceCx + alarmZoneShape.rOut * Math.sin(alarmZoneShape.angA)
               startY: meterArea.faceCy - alarmZoneShape.rOut * Math.cos(alarmZoneShape.angA)
@@ -583,7 +580,7 @@ Item {
                 border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.35)
                 color: model.alarmTriggered
                        ? (valueBox.alarmFlashOn
-                          ? Cpp_ThemeManager.colors["alarm"]
+                          ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                           : Cpp_ThemeManager.colors["console_base"])
                        : Cpp_ThemeManager.colors["console_base"]
 
@@ -624,7 +621,7 @@ Item {
                   color: model.alarmTriggered
                          ? (valueBox.alarmFlashOn
                             ? "#ffffff"
-                            : Cpp_ThemeManager.colors["alarm"])
+                            : Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity))
                          : Cpp_ThemeManager.colors["console_text"]
                   text: root.getPaddedFormattedText(root.model.value)
 
@@ -766,12 +763,12 @@ Item {
         anchors.centerIn: parent
         border.width: 1
         border.color: root.model.alarmTriggered
-                      ? Qt.darker(Cpp_ThemeManager.colors["alarm"], 1.20)
+                      ? Qt.darker(Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity), 1.20)
                       : Qt.darker(root.color, 1.30)
         width: Math.min(parent.width - 16, digitalColumn.implicitWidth + 32)
         height: Math.min(parent.height - 16, digitalColumn.implicitHeight + 24)
         color: root.model.alarmTriggered && digitalBox.alarmFlashOn
-               ? Cpp_ThemeManager.colors["alarm"]
+               ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                : Cpp_ThemeManager.colors["console_base"]
 
         Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
@@ -804,7 +801,7 @@ Item {
             font.bold: true
             font.pixelSize: digitalPage.bigValueFontPx
             color: root.model.alarmTriggered
-                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.colors["alarm"])
+                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity))
                    : root.color
             Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
           }
@@ -818,7 +815,7 @@ Item {
             text: root.model.title
             visible: root.model.title.length > 0
             color: root.model.alarmTriggered
-                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.colors["alarm"])
+                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity))
                    : root.color
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.pixelSize: bigValueText.font.pixelSize * 0.30

@@ -22,10 +22,31 @@
 #pragma once
 
 #include <QQuickItem>
+#include <QString>
+#include <QVariantList>
+#include <QVector>
+#include <vector>
 
 #include "DSP.h"
 
+namespace DataModel {
+struct AlarmBand;
+}  // namespace DataModel
+
 namespace Widgets {
+/**
+ * @brief Precomputed render data for a single alarm band on a widget.
+ */
+struct BarBand {
+  double min     = 0;  ///< Raw lower bound
+  double max     = 0;  ///< Raw upper bound
+  double fracMin = 0;  ///< Normalised lower bound (0..1)
+  double fracMax = 0;  ///< Normalised upper bound (0..1)
+  int severity   = 2;  ///< AlarmSeverity enum value (0..3); default Warning
+  QString customColor;
+  QString label;
+};
+
 /**
  * @brief Data model for a normalized value display (e.g. bar or gauge).
  */
@@ -38,6 +59,15 @@ class Bar : public QQuickItem {
   Q_PROPERTY(bool alarmTriggered
              READ alarmTriggered
              NOTIFY updated)
+  Q_PROPERTY(int activeBandSeverity
+             READ activeBandSeverity
+             NOTIFY updated)
+  Q_PROPERTY(QString activeBandLabel
+             READ activeBandLabel
+             NOTIFY updated)
+  Q_PROPERTY(QVariantList alarmBands
+             READ alarmBands
+             CONSTANT)
   Q_PROPERTY(double value
              READ value
              NOTIFY updated)
@@ -47,21 +77,9 @@ class Bar : public QQuickItem {
   Q_PROPERTY(double maxValue
              READ maxValue
              CONSTANT)
-  Q_PROPERTY(double alarmLow
-             READ alarmLow
-             CONSTANT)
-  Q_PROPERTY(double alarmHigh
-             READ alarmHigh
-             CONSTANT)
   Q_PROPERTY(double normalizedValue
              READ normalizedValue
              NOTIFY updated)
-  Q_PROPERTY(double normalizedAlarmLow
-             READ normalizedAlarmLow
-             CONSTANT)
-  Q_PROPERTY(double normalizedAlarmHigh
-             READ normalizedAlarmHigh
-             CONSTANT)
   Q_PROPERTY(QString title
              READ title
              CONSTANT)
@@ -86,6 +104,9 @@ public:
 
   [[nodiscard]] bool alarmsDefined() const noexcept;
   [[nodiscard]] bool alarmTriggered() const noexcept;
+  [[nodiscard]] int activeBandSeverity() const noexcept;
+  [[nodiscard]] const QString& activeBandLabel() const noexcept;
+  [[nodiscard]] const QVariantList& alarmBands() const noexcept;
   [[nodiscard]] int displayTickCount() const noexcept;
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
@@ -94,11 +115,7 @@ public:
   [[nodiscard]] double value() const noexcept;
   [[nodiscard]] double minValue() const noexcept;
   [[nodiscard]] double maxValue() const noexcept;
-  [[nodiscard]] double alarmLow() const noexcept;
-  [[nodiscard]] double alarmHigh() const noexcept;
   [[nodiscard]] double normalizedValue() const noexcept;
-  [[nodiscard]] double normalizedAlarmLow() const noexcept;
-  [[nodiscard]] double normalizedAlarmHigh() const noexcept;
 
 protected slots:
   virtual void updateData();
@@ -118,7 +135,10 @@ private:
   }
 
 protected:
-  void notifyOnAlarmEdge();
+  void buildBands(const std::vector<DataModel::AlarmBand>& srcBands);
+  [[nodiscard]] int bandIndexFor(double value) const noexcept;
+  void recomputeActiveBand(double value);
+  void notifyOnBandEdge();
 
   int m_index;
   int m_displayTickCount;
@@ -129,11 +149,14 @@ protected:
   double m_value;
   double m_minValue;
   double m_maxValue;
-  double m_alarmLow;
-  double m_alarmHigh;
 
-  bool m_alarmsDefined;
+  QVector<BarBand> m_bands;
+  QVariantList m_bandsAsVariant;
+  QString m_emptyLabel;
+  int m_activeBandIndex;
+  int m_lastBandHint;
+  int m_lastFiredBand;
+  qint64 m_lastFireTimestampMs;
   bool m_alarmInitialized;
-  bool m_alarmActive;
 };
 }  // namespace Widgets

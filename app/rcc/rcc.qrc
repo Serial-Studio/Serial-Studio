@@ -352,6 +352,7 @@
         <file>icons/project-editor/actions/rename-table.svg</file>
         <file>icons/project-editor/actions/rename.svg</file>
         <file>icons/project-editor/actions/test-connection.svg</file>
+        <file>icons/project-editor/actions/alarm-bands.svg</file>
         <file>icons/project-editor/actions/transform.svg</file>
         <file>icons/project-editor/actions/waterfall.svg</file>
         <file>icons/project-editor/model/action-behavior.svg</file>

@@ -16,6 +16,7 @@
 #  include <QObject>
 #  include <QString>
 #  include <QVariant>
+#  include <QVariantList>
 
 namespace DataModel {
 struct Group;
@@ -62,6 +63,7 @@ public slots:
   [[nodiscard]] double dsFftMax(int i) const;
   [[nodiscard]] double dsAlarmLow(int i) const;
   [[nodiscard]] double dsAlarmHigh(int i) const;
+  [[nodiscard]] QVariantList dsAlarmBands(int i) const;
   [[nodiscard]] double dsLedHigh(int i) const;
   [[nodiscard]] bool dsHasPlot(int i) const;
   [[nodiscard]] bool dsHasFft(int i) const;

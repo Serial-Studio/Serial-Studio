@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40px" height="40px">
+  <!-- Color wheel (scaled and centered on the left to leave room for the scale) -->
+  <g transform="translate(13 20) scale(0.685) translate(-20 -20)">
+    <path fill="#b53838" d="M33.435,6.565C29.997,3.127,25.247,1,20,1v19L33.435,6.565z"/>
+    <path fill="#b86e3e" d="M39,20c0-4.863-1.855-9.725-5.565-13.435L20,20H39z"/>
+    <path fill="#b88f28" d="M33.435,33.435C36.873,29.997,39,25.247,39,20H20L33.435,33.435z"/>
+    <path fill="#51966c" d="M20,39c4.863,0,9.725-1.855,13.435-5.565L20,20V39z"/>
+    <path fill="#5682ba" d="M6.565,33.435C10.003,36.873,14.753,39,20,39V20L6.565,33.435z"/>
+    <path fill="#4965a8" d="M1,20c0,4.863,1.855,9.725,5.565,13.435L20,20H1z"/>
+    <path fill="#7e5d9e" d="M6.565,6.565C3.127,10.003,1,14.753,1,20h19L6.565,6.565z"/>
+    <path fill="#914683" d="M20,1c-4.863,0-9.725,1.855-13.435,5.565L20,20V1z"/>
+    <path fill="#eb8d8d" d="M32.728,7.272C29.471,4.015,24.971,2,20,2v18L32.728,7.272z"/>
+    <path fill="#f0a371" d="M38,20c0-4.607-1.757-9.213-5.272-12.728L20,20H38z"/>
+    <path fill="#f2dc7e" d="M32.728,32.728C35.985,29.471,38,24.971,38,20H20L32.728,32.728z"/>
+    <path fill="#96d69b" d="M20,38c4.607,0,9.213-1.757,12.728-5.272L20,20V38z"/>
+    <path fill="#80b1f2" d="M7.272,32.728C10.529,35.985,15.029,38,20,38V20L7.272,32.728z"/>
+    <path fill="#7d91e8" d="M2,20c0,4.607,1.757,9.213,5.272,12.728L20,20H2z"/>
+    <path fill="#c185e6" d="M7.272,7.272C4.015,10.529,2,15.029,2,20h18L7.272,7.272z"/>
+    <path fill="#db84e0" d="M20,2c-4.607,0-9.213,1.757-12.728,5.272L20,20V2z"/>
+  </g>
+
+  <!-- Vertical scale, right side. Red ticks mark the top "alarm" zone. -->
+  <path fill="#7496c4" d="M38 3H39V36H38z"/>
+  <path fill="#c74343" d="M38 3H39V12H38z"/>
+  <path fill="#7496c4" d="M32 35H39V36H32z"/>
+  <path fill="#7496c4" d="M32 19H39V20H32z"/>
+  <path fill="#c74343" d="M32 3H39V4H32z"/>
+  <path fill="#7496c4" d="M35 31H39V32H35z"/>
+  <path fill="#7496c4" d="M35 27H39V28H35z"/>
+  <path fill="#7496c4" d="M35 23H39V24H35z"/>
+  <path fill="#7496c4" d="M35 15H39V16H35z"/>
+  <path fill="#c74343" d="M35 11H39V12H35z"/>
+  <path fill="#c74343" d="M35 7H39V8H35z"/>
+</svg>

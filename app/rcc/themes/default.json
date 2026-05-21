@@ -52,6 +52,10 @@
 
     "error":"#f95258",
     "alarm":"#fa0a0a",
+    "alarm_info":"#4ea1d3",
+    "alarm_ok":"#3fb950",
+    "alarm_warning":"#ffa726",
+    "alarm_critical":"#fa0a0a",
     "dashboard_background":"#e0e3e5",
 
     "mid":"#d4d4d4",

@@ -21,6 +21,7 @@
 
 #include "UI/Widgets/Meter.h"
 
+#include "DataModel/Frame.h"
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
@@ -42,18 +43,7 @@ Widgets::Meter::Meter(const int index, QQuickItem* parent) : Bar(index, parent, 
     m_displayTickCount = dataset.displayTickCount;
     m_minValue         = qMin(dataset.wgtMin, dataset.wgtMax);
     m_maxValue         = qMax(dataset.wgtMin, dataset.wgtMax);
-    m_alarmLow         = qMin(dataset.alarmLow, dataset.alarmHigh);
-    m_alarmHigh        = qMax(dataset.alarmLow, dataset.alarmHigh);
-    m_alarmLow         = qBound(m_minValue, m_alarmLow, m_maxValue);
-    m_alarmHigh        = qBound(m_minValue, m_alarmHigh, m_maxValue);
-
-    if (dataset.alarmEnabled) {
-      if (m_alarmHigh == m_alarmLow)
-        m_alarmLow = m_minValue;
-
-      m_alarmsDefined = (m_alarmLow > m_minValue && m_alarmLow < m_maxValue)
-                     || (m_alarmHigh < m_maxValue && m_alarmHigh > m_minValue);
-    }
+    buildBands(dataset.alarmBands);
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Meter::updateData);
   }
@@ -76,7 +66,8 @@ void Widgets::Meter::updateData()
     auto value = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
     if (DSP::notEqual(value, m_value)) {
       m_value = value;
-      notifyOnAlarmEdge();
+      recomputeActiveBand(value);
+      notifyOnBandEdge();
       if (isEnabled())
         Q_EMIT updated();
     }

@@ -166,20 +166,19 @@ flowchart TD
 
 - Dataset widget key: `"bar"`.
 - Horizontal bar gauge with min/max range.
-- Alarm thresholds with visual trigger state.
+- Color-banded alarm zones with per-band severity (Info / OK / Warning / Critical).
 - Shows current value and units.
 - Best for: level indicators, resource usage, bounded values.
-- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmLow` (default 20), `alarmHigh` (default 80).
-- Alarms have to be enabled with `alarmEnabled: true`.
+- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmBands` (array; see [Alarm bands](#alarm-bands)).
 - **Two-page swipe view.** Page 0 is the analog bar; page 1 is a large monospace digital readout. Swipe horizontally (or use the page indicator dots at the bottom) to flip. The active page is saved per-widget in the project file, so each Bar tile remembers its own preference.
 
 ### Gauge
 
 - Dataset widget key: `"gauge"`.
-- Circular or arc gauge display.
-- Same configuration as Bar (min/max, alarms).
+- Circular or arc gauge display with colored outer-rim arc segments for each alarm band.
+- Same configuration as Bar (min/max, bands).
 - Best for: speedometers, RPM, pressure, temperature.
-- Configuration fields: `wgtMin`, `wgtMax`, `alarmLow`, `alarmHigh`.
+- Configuration fields: `wgtMin`, `wgtMax`, `alarmBands`.
 - **Two-page swipe view.** Page 0 is the analog dial; page 1 is a large digital readout. The active page is persisted per widget.
 
 ### Compass
@@ -192,12 +191,31 @@ flowchart TD
 ### Meter
 
 - Dataset widget key: `"meter"`.
-- Analog half-arc meter with a sweeping needle, tick marks, and value readout.
-- Same min/max model as Bar and Gauge.
+- Analog half-arc meter with a sweeping needle, tick marks, colored arc bands, and value readout.
+- Same min/max + bands model as Bar and Gauge.
 - Best for: VU-style readouts, signal strength, pressure, voltage.
-- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmLow`, `alarmHigh`.
-- Alarms have to be enabled with `alarmEnabled: true`.
+- Configuration fields: `wgtMin` (default 0), `wgtMax` (default 100), `alarmBands`.
 - **Two-page swipe view.** Page 0 is the analog half-arc meter; page 1 is a large digital readout. The active page is persisted per widget.
+
+## Alarm bands
+
+Bar, Gauge, and Meter widgets render one or more **alarm bands** behind the value indicator. Each band is a contiguous value range with a color and a severity tier — the gauge paints them as colored stripes (Bar) or arc segments (Gauge / Meter), and the needle / fill tints to the active band's color when the value enters it. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
+
+**Band schema** — under the dataset's `alarmBands` array, each entry is an object:
+
+| Field      | Type   | Required | Notes |
+|------------|--------|----------|-------|
+| `min`      | double | yes      | Lower bound of the band (inclusive). |
+| `max`      | double | yes      | Upper bound of the band (exclusive at top of range). |
+| `severity` | int    | yes      | `0` = Info, `1` = OK, `2` = Warning, `3` = Critical. Drives the default color and whether the band raises a notification on entry. |
+| `color`    | string | no       | Hex override (`"#rrggbb"`). When empty, the severity's theme color is used (theme switches re-tint live). |
+| `label`    | string | no       | Optional human-readable name. Surfaces in the band-edge notification subtitle. |
+
+Bands may have gaps (the dataset's default background shows through), may overlap (later bands paint over earlier ones), and need not cover the full range. Editing is via the **Alarm Bands** button in the dataset toolbar (next to **Transform**), which opens a dedicated dialog with presets (Tachometer, Speedometer, Engine Temperature, Pressure, Battery Voltage, Fuel Level, Signal Strength, CPU / System Load, OK / Warning / Critical), per-band color picker, severity selector, and a live preview strip.
+
+**Notifications.** When the value enters a band with severity ≥ Warning, the widget posts a notification (`Warning` or `Critical` level, with the band's `label` in the subtitle). A 3-second per-widget cooldown suppresses oscillation spam.
+
+**Legacy compatibility.** Project files written by Serial Studio 3.3 and earlier carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back — projects re-saved by 3.4+ carry only `alarmBands`. For painter scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
 
 ## Utility widgets
 
@@ -234,10 +252,10 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 | Plot          | Dataset | auto           | —            | `graph: true`, `pltMin`/`pltMax`             |
 | FFT Plot      | Dataset | auto           | —            | `fft: true`, `fftSamples`, `fftSamplingRate` |
 | Waterfall     | Dataset | auto           | —            | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
-| Bar           | Dataset | `bar`          | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`, swipe to digital page |
-| Gauge         | Dataset | `gauge`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`, swipe to digital page |
+| Bar           | Dataset | `bar`          | —            | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
+| Gauge         | Dataset | `gauge`        | —            | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
 | Compass       | Dataset | `compass`      | —            | value 0-360                                  |
-| Meter         | Dataset | `meter`        | —            | `wgtMin`/`wgtMax`, `alarmLow`/`alarmHigh`, swipe to digital page |
+| Meter         | Dataset | `meter`        | —            | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
 | Clock         | Utility | (toggle)       | 0            | system-clock driven; swipe between analog face / digital readout |
 | Stopwatch     | Utility | (toggle)       | 0            | local Start/Stop/Lap/Reset with lap table    |
 
@@ -263,9 +281,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `wgtMin`           | double | 0       | Widget (bar/gauge/meter) minimum. |
 | `wgtMax`           | double | 100     | Widget (bar/gauge/meter) maximum. |
 | `ledHigh`          | double | 80      | LED activation threshold. |
-| `alarmEnabled`     | bool   | false   | Enable alarm thresholds on bar/gauge/meter. |
-| `alarmLow`         | double | 20      | Low alarm threshold. |
-| `alarmHigh`        | double | 80      | High alarm threshold. |
+| `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets. Each entry: `{min, max, severity, color?, label?}` — see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from 3.3 and earlier are still read and migrated to bands on load, but no longer written. |
 | `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 16384). |
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |
 | `fftMin`           | double | 0       | FFT frequency axis minimum. |

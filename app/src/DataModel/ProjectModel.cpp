@@ -218,8 +218,6 @@ static void populateThreeAxisDatasets(DataModel::Group& grp,
     axes[i].wgtMin    = layout.wgtMin[i];
     axes[i].wgtMax    = layout.wgtMax[i];
     axes[i].plt       = layout.plt;
-    axes[i].alarmLow  = 0;
-    axes[i].alarmHigh = 0;
 
     grp.datasets.push_back(axes[i]);
   }
@@ -3718,12 +3716,10 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
       dataset.widget = QStringLiteral("gauge");
       break;
     case SerialStudio::DatasetCompass:
-      title             = tr("New Compass");
-      dataset.wgtMin    = 0;
-      dataset.wgtMax    = 360;
-      dataset.alarmLow  = 0;
-      dataset.alarmHigh = 0;
-      dataset.widget    = QStringLiteral("compass");
+      title          = tr("New Compass");
+      dataset.wgtMin = 0;
+      dataset.wgtMax = 360;
+      dataset.widget = QStringLiteral("compass");
       break;
     case SerialStudio::DatasetMeter:
       title          = tr("New Meter");

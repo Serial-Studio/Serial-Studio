@@ -262,6 +262,23 @@ QColor Misc::ThemeManager::getColor(const QString& name) const
   return QColor(qRgb(0xff, 0x00, 0xff));
 }
 
+/**
+ * @brief Returns the theme colour for an AlarmSeverity tier (0=Info, 1=Ok, 2=Warning, 3=Critical).
+ */
+QColor Misc::ThemeManager::alarmColorForSeverity(int severity) const
+{
+  switch (severity) {
+    case 0:
+      return getColor(QStringLiteral("alarm_info"));
+    case 1:
+      return getColor(QStringLiteral("alarm_ok"));
+    case 3:
+      return getColor(QStringLiteral("alarm_critical"));
+    default:
+      return getColor(QStringLiteral("alarm_warning"));
+  }
+}
+
 //--------------------------------------------------------------------------------------------------
 // Theme loading
 //--------------------------------------------------------------------------------------------------

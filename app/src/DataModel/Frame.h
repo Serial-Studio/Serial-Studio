@@ -23,6 +23,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <limits>
 #include <memory>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -30,6 +31,7 @@
 #include <QSet>
 #include <QString>
 #include <QVariant>
+#include <utility>
 #include <vector>
 
 #include "Concepts.h"
@@ -103,6 +105,10 @@ inline constexpr KeyView DisplayFormat("displayFormat");
 inline constexpr KeyView FFTSamples("fftSamples");
 inline constexpr KeyView Overview("overviewDisplay");
 inline constexpr KeyView AlarmEnabled("alarmEnabled");
+inline constexpr KeyView AlarmBands("alarmBands");
+inline constexpr KeyView Color("color");
+inline constexpr KeyView Label("label");
+inline constexpr KeyView Severity("severity");
 inline constexpr KeyView FFTSamplingRate("fftSamplingRate");
 inline constexpr KeyView TransformCode("transformCode");
 inline constexpr KeyView TransformLanguage("transformLanguage");
@@ -343,6 +349,29 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
 }
 
 /**
+ * @brief Severity tier for an alarm band; drives default colour and notification policy.
+ */
+enum class AlarmSeverity : quint8 {
+  Info     = 0,  ///< Informational; never raises a notification
+  Ok       = 1,  ///< Healthy / operating range; never raises a notification
+  Warning  = 2,  ///< Out-of-normal; raises a Warning notification on entry
+  Critical = 3   ///< Out-of-safe; raises a Critical notification on entry
+};
+
+/**
+ * @brief Coloured value band attached to a Dataset for alarm visualisation.
+ */
+struct alignas(8) AlarmBand {
+  double min             = 0;                       ///< Lower bound (inclusive)
+  double max             = 0;                       ///< Upper bound (exclusive at top of range)
+  AlarmSeverity severity = AlarmSeverity::Warning;  ///< Default colour + notification policy
+  QString color;  ///< Optional hex override; empty -> severity default
+  QString label;  ///< Optional human label (used in notifications)
+};
+
+static_assert(sizeof(AlarmBand) % alignof(AlarmBand) == 0, "Unaligned AlarmBand struct");
+
+/**
  * @brief Represents a single unit of sensor data with optional metadata and
  * graphing. Fully aligned and stack-optimized.
  */
@@ -362,7 +391,6 @@ struct alignas(8) Dataset {
   bool log              = false;  ///< Enables logging
   bool plt              = false;  ///< Enables plotting
   bool waterfall        = false;  ///< Enables waterfall (spectrogram) widget -- Pro
-  bool alarmEnabled     = false;  ///< Enable/disable alarm values
   bool overviewDisplay  = false;  ///< Show in overview
   bool isNumeric        = false;  ///< True if value was parsed as numeric
   bool virtual_         = false;  ///< True if dataset is generated rather than parsed directly
@@ -374,8 +402,6 @@ struct alignas(8) Dataset {
   double wgtMin         = 0;      ///< Minimum value (for widgets)
   double wgtMax         = 0;      ///< Maximum value (for widgets)
   double ledHigh        = 80;     ///< LED activation threshold
-  double alarmLow       = 20;     ///< Low alarm threshold
-  double alarmHigh      = 80;     ///< High alarm threshold
   double numericValue   = 0;      ///< Parsed numeric value after transforms
   double rawNumericValue = 0;     ///< Parsed numeric value before transforms
   int displayTickCount   = 5;     ///< Preferred major-tick count on analog widgets (0 = auto)
@@ -387,6 +413,7 @@ struct alignas(8) Dataset {
   QString transformCode;          ///< Optional per-dataset transform script
   QString displayFormat =
     QStringLiteral("0d");  ///< Tick/value label format on analog widgets ("0d" = integer)
+  std::vector<AlarmBand> alarmBands;  ///< Colour-banded alarm zones (empty = no alarms)
 };
 
 static_assert(sizeof(Dataset) % alignof(Dataset) == 0, "Unaligned Dataset struct");
@@ -661,7 +688,7 @@ struct Workspace {
 /**
  * @brief Current Serial Studio project schema version.
  */
-inline constexpr int kSchemaVersion = 2;
+inline constexpr int kSchemaVersion = 3;
 
 /**
  * @brief Represents a full data frame, including groups and actions.
@@ -825,6 +852,24 @@ void read_io_settings(QByteArray& frameStart,
 }
 
 /**
+ * @brief Serializes an AlarmBand to a QJsonObject.
+ */
+[[nodiscard]] inline QJsonObject serialize(const AlarmBand& b)
+{
+  QJsonObject obj;
+  obj.insert(Keys::Min, qMin(b.min, b.max));
+  obj.insert(Keys::Max, qMax(b.min, b.max));
+  obj.insert(Keys::Severity, static_cast<int>(b.severity));
+  if (!b.color.isEmpty())
+    obj.insert(Keys::Color, b.color);
+
+  if (!b.label.isEmpty())
+    obj.insert(Keys::Label, b.label);
+
+  return obj;
+}
+
+/**
  * @brief Serializes a Dataset to a QJsonObject.
  */
 [[nodiscard]] inline QJsonObject serialize(const Dataset& d)
@@ -847,7 +892,6 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Title, d.title.simplified());
   obj.insert(Keys::Value, d.value.simplified());
   obj.insert(Keys::Units, d.units.simplified());
-  obj.insert(Keys::AlarmEnabled, d.alarmEnabled);
   obj.insert(Keys::Widget, d.widget.simplified());
   obj.insert(Keys::FFTMin, qMin(d.fftMin, d.fftMax));
   obj.insert(Keys::FFTMax, qMax(d.fftMin, d.fftMax));
@@ -856,8 +900,15 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::WgtMin, qMin(d.wgtMin, d.wgtMax));
   obj.insert(Keys::WgtMax, qMax(d.wgtMin, d.wgtMax));
   obj.insert(Keys::FFTSamplingRate, d.fftSamplingRate);
-  obj.insert(Keys::AlarmLow, qMin(d.alarmLow, d.alarmHigh));
-  obj.insert(Keys::AlarmHigh, qMax(d.alarmLow, d.alarmHigh));
+
+  if (!d.alarmBands.empty()) {
+    QJsonArray bands;
+    for (const auto& band : d.alarmBands)
+      bands.append(serialize(band));
+
+    obj.insert(Keys::AlarmBands, bands);
+  }
+
   if (d.displayTickCount > 0)
     obj.insert(Keys::DisplayTickCount, d.displayTickCount);
 
@@ -1023,6 +1074,85 @@ void read_io_settings(QByteArray& frameStart,
 }
 
 /**
+ * @brief Deserializes an AlarmBand from a QJsonObject.
+ */
+[[nodiscard]] inline bool read(AlarmBand& b, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  b.min = ss_jsr(obj, Keys::Min, 0).toDouble();
+  b.max = ss_jsr(obj, Keys::Max, 0).toDouble();
+  if (b.min > b.max)
+    std::swap(b.min, b.max);
+
+  const int sev = ss_jsr(obj, Keys::Severity, static_cast<int>(AlarmSeverity::Warning)).toInt();
+  b.severity    = static_cast<AlarmSeverity>(qBound(0, sev, 3));
+  b.color       = ss_jsr(obj, Keys::Color, "").toString().simplified();
+  b.label       = ss_jsr(obj, Keys::Label, "").toString().simplified();
+  return b.max > b.min;
+}
+
+/**
+ * @brief Populates @p d.alarmBands from @p obj, accepting both canonical and v3.3 legacy fields.
+ */
+inline void readDatasetAlarmBands(Dataset& d, const QJsonObject& obj)
+{
+  d.alarmBands.clear();
+  if (obj.contains(Keys::AlarmBands)) {
+    const auto arr = obj.value(Keys::AlarmBands).toArray();
+    d.alarmBands.reserve(arr.size());
+    for (const auto& v : arr) {
+      AlarmBand b;
+      if (read(b, v.toObject()))
+        d.alarmBands.push_back(std::move(b));
+    }
+    return;
+  }
+
+  if (!ss_jsr(obj, Keys::AlarmEnabled, false).toBool())
+    return;
+
+  double lo = ss_jsr(obj, Keys::AlarmLow, std::numeric_limits<double>::quiet_NaN()).toDouble();
+  double hi = ss_jsr(obj, Keys::AlarmHigh, std::numeric_limits<double>::quiet_NaN()).toDouble();
+  if (std::isnan(hi) && obj.contains(Keys::Alarm))
+    hi = ss_jsr(obj, Keys::Alarm, 0).toDouble();
+
+  const double rangeMin = qMin(d.wgtMin, d.wgtMax);
+  const double rangeMax = qMax(d.wgtMin, d.wgtMax);
+  if (!std::isnan(lo) && lo > rangeMin && lo < rangeMax) {
+    AlarmBand low;
+    low.min      = rangeMin;
+    low.max      = lo;
+    low.severity = AlarmSeverity::Warning;
+    d.alarmBands.push_back(std::move(low));
+  }
+
+  if (!std::isnan(hi) && hi > rangeMin && hi < rangeMax) {
+    AlarmBand high;
+    high.min      = hi;
+    high.max      = rangeMax;
+    high.severity = AlarmSeverity::Warning;
+    d.alarmBands.push_back(std::move(high));
+  }
+}
+
+/**
+ * @brief Swaps inverted (min > max) FFT / plot / widget range pairs from legacy projects.
+ */
+inline void normalizeDatasetRanges(Dataset& d)
+{
+  if (d.fftMin > d.fftMax)
+    std::swap(d.fftMin, d.fftMax);
+
+  if (d.pltMin > d.pltMax)
+    std::swap(d.pltMin, d.pltMax);
+
+  if (d.wgtMin > d.wgtMax)
+    std::swap(d.wgtMin, d.wgtMax);
+}
+
+/**
  * @brief Deserializes a Dataset from a QJsonObject.
  */
 [[nodiscard]] inline bool read(Dataset& d, const QJsonObject& obj)
@@ -1049,12 +1179,9 @@ void read_io_settings(QByteArray& frameStart,
   d.value             = ss_jsr(obj, Keys::Value, "").toString().simplified();
   d.units             = ss_jsr(obj, Keys::Units, "").toString().simplified();
   d.overviewDisplay   = ss_jsr(obj, Keys::Overview, false).toBool();
-  d.alarmEnabled      = ss_jsr(obj, Keys::AlarmEnabled, false).toBool();
   d.ledHigh           = ss_jsr(obj, Keys::LedHigh, 0).toDouble();
   d.widget            = ss_jsr(obj, Keys::Widget, "").toString().simplified();
-  d.alarmLow          = ss_jsr(obj, Keys::AlarmLow, 0).toDouble();
   d.fftSamplingRate   = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
-  d.alarmHigh         = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
   d.displayTickCount  = ss_jsr(obj, Keys::DisplayTickCount, 5).toInt();
   d.displayFormat     = ss_jsr(obj, Keys::DisplayFormat, "0d").toString();
   d.sourceId          = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
@@ -1082,29 +1209,8 @@ void read_io_settings(QByteArray& frameStart,
     d.wgtMax = ss_jsr(obj, Keys::Max, 0).toDouble();
   }
 
-  // Legacy single-field "alarm" seeds alarmHigh when high/low are absent.
-  if (obj.contains(Keys::Alarm) && !obj.contains(Keys::AlarmLow) && !obj.contains(Keys::AlarmHigh))
-    d.alarmHigh = ss_jsr(obj, Keys::Alarm, 0).toDouble();
-
-  // Normalize swapped min/max pairs from legacy / hand-edited project files.
-  if (d.fftMin > d.fftMax) {
-    const double mn = d.fftMin;
-    d.fftMin        = d.fftMax;
-    d.fftMax        = mn;
-  }
-
-  if (d.pltMin > d.pltMax) {
-    const double mn = d.pltMin;
-    d.pltMin        = d.pltMax;
-    d.pltMax        = mn;
-  }
-
-  if (d.wgtMin > d.wgtMax) {
-    const double mn = d.wgtMin;
-    d.wgtMin        = d.wgtMax;
-    d.wgtMax        = mn;
-  }
-
+  readDatasetAlarmBands(d, obj);
+  normalizeDatasetRanges(d);
   return true;
 }
 

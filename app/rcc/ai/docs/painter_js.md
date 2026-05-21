@@ -51,7 +51,8 @@ datasets[0].max           // dataset max
 datasets[0].plotMin / .plotMax       // plot Y-axis bounds
 datasets[0].widgetMin / .widgetMax   // gauge / bar bounds
 datasets[0].fftMin / .fftMax         // FFT bounds
-datasets[0].alarmLow / .alarmHigh    // alarm thresholds
+datasets[0].alarmLow / .alarmHigh    // legacy alarm thresholds (derived; see below)
+datasets[0].alarmBands               // [{min,max,severity,color,label}, ...] (see below)
 datasets[0].ledHigh                  // LED activation threshold
 datasets[0].hasPlot / .hasFft / .hasLed
 datasets.length
@@ -117,6 +118,53 @@ project Action by its stable `actionId`. The dashboard helpers all return
 dashboard tick (24 Hz); a write or `clearPlots` per paint will saturate
 the link / yank the plot. Use `onFrame()` (one call per parsed frame) or
 guard with a state machine.
+
+## Alarm bands — colored value ranges
+
+Bar / Gauge / Meter datasets carry an **`alarmBands` array** describing
+colored value ranges (aviation-tachometer style: white / green / yellow
+/ red). Each entry:
+
+```js
+{
+  min:      Number,   // lower bound (inclusive)
+  max:      Number,   // upper bound (exclusive at top of range)
+  severity: Number,   // 0=Info, 1=OK, 2=Warning, 3=Critical
+  color:    String,   // "#rrggbb" override; empty -> severity's theme color
+  label:    String    // optional name (used in notifications)
+}
+```
+
+Bands may have gaps and may overlap. Severity ≥ Warning posts a
+notification when the value enters the band (3-second per-widget
+cooldown suppresses oscillation spam).
+
+```js
+// Find the band a value sits in (linear scan; band counts are tiny)
+function bandFor(ds, value) {
+  if (!ds.alarmBands) return null;
+  for (var i = 0; i < ds.alarmBands.length; i++) {
+    var b = ds.alarmBands[i];
+    if (value >= b.min && value <= b.max) return b;
+  }
+  return null;
+}
+
+function colorFor(ds, value) {
+  var b = bandFor(ds, value);
+  if (!b) return theme.widget_highlight;
+  if (b.color && b.color.length) return b.color;
+  // Severity defaults match the QML widgets' theme palette
+  if (b.severity >= 3) return theme.alarm;
+  return theme.widget_highlight;
+}
+```
+
+**Legacy compat.** `datasets[i].alarmLow` and `.alarmHigh` are still
+readable — they're derived from the first / last band with severity ≥
+Warning (`NaN` when no such band exists). Old painter scripts that
+predate the band schema keep working unchanged. Prefer `alarmBands` for
+new code; it carries the full color/severity/label intent.
 
 ## Top-level state
 

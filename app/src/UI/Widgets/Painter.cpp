@@ -64,6 +64,7 @@ static constexpr int kSlowPaintMs       = 30;
     "    get fftMax()     { return __pp.dsFftMax(i); },"
     "    get alarmLow()   { return __pp.dsAlarmLow(i); },"
     "    get alarmHigh()  { return __pp.dsAlarmHigh(i); },"
+    "    get alarmBands() { return __pp.dsAlarmBands(i); },"
     "    get ledHigh()    { return __pp.dsLedHigh(i); },"
     "    get hasPlot()    { return __pp.dsHasPlot(i); },"
     "    get hasFft()     { return __pp.dsHasFft(i); },"
@@ -261,6 +262,55 @@ void Widgets::Painter::setPreviewMode(bool enabled)
 }
 
 /**
+ * @brief Decodes a QVariantList of alarm-band maps into a typed AlarmBand vector.
+ */
+static void readBandsFromVariantList(const QVariantList& list,
+                                     std::vector<DataModel::AlarmBand>& out)
+{
+  out.reserve(list.size());
+  for (const auto& b : list) {
+    const auto m = b.toMap();
+    DataModel::AlarmBand band;
+    band.min   = m.value(QStringLiteral("min")).toDouble();
+    band.max   = m.value(QStringLiteral("max")).toDouble();
+    band.color = m.value(QStringLiteral("color")).toString();
+    band.label = m.value(QStringLiteral("label")).toString();
+    const int sev =
+      m.value(QStringLiteral("severity"), static_cast<int>(DataModel::AlarmSeverity::Warning))
+        .toInt();
+    band.severity = static_cast<DataModel::AlarmSeverity>(qBound(0, sev, 3));
+    if (band.max > band.min)
+      out.push_back(std::move(band));
+  }
+}
+
+/**
+ * @brief Synthesises Warning bands from legacy alarmLow / alarmHigh entries on a preview dataset.
+ */
+static void synthesizeLegacyAlarmBands(const QVariantMap& entry, DataModel::Dataset& ds)
+{
+  const double lo       = entry.value(QStringLiteral("alarmLow"), ds.wgtMin).toDouble();
+  const double hi       = entry.value(QStringLiteral("alarmHigh"), ds.wgtMax).toDouble();
+  const double rangeMin = qMin(ds.wgtMin, ds.wgtMax);
+  const double rangeMax = qMax(ds.wgtMin, ds.wgtMax);
+  if (lo > rangeMin && lo < rangeMax) {
+    DataModel::AlarmBand low;
+    low.min      = rangeMin;
+    low.max      = lo;
+    low.severity = DataModel::AlarmSeverity::Warning;
+    ds.alarmBands.push_back(std::move(low));
+  }
+
+  if (hi > rangeMin && hi < rangeMax) {
+    DataModel::AlarmBand high;
+    high.min      = hi;
+    high.max      = rangeMax;
+    high.severity = DataModel::AlarmSeverity::Warning;
+    ds.alarmBands.push_back(std::move(high));
+  }
+}
+
+/**
  * @brief Pushes a list of synthetic dataset values into the preview group.
  */
 void Widgets::Painter::setSimulatedDatasets(const QVariantList& datasets)
@@ -282,8 +332,15 @@ void Widgets::Painter::setSimulatedDatasets(const QVariantList& datasets)
     ds.rawValue        = QString::number(ds.rawNumericValue);
     ds.wgtMin          = entry.value(QStringLiteral("min"), 0.0).toDouble();
     ds.wgtMax          = entry.value(QStringLiteral("max"), 100.0).toDouble();
-    ds.alarmLow        = entry.value(QStringLiteral("alarmLow"), ds.wgtMin).toDouble();
-    ds.alarmHigh       = entry.value(QStringLiteral("alarmHigh"), ds.wgtMax).toDouble();
+
+    // Accept bands explicitly; otherwise synthesise from legacy alarmLow/alarmHigh entries.
+    const auto bandsVar = entry.value(QStringLiteral("alarmBands"));
+    if (bandsVar.canConvert<QVariantList>())
+      readBandsFromVariantList(bandsVar.toList(), ds.alarmBands);
+
+    else if (entry.contains(QStringLiteral("alarmLow"))
+             || entry.contains(QStringLiteral("alarmHigh")))
+      synthesizeLegacyAlarmBands(entry, ds);
 
     m_previewGroup.datasets.push_back(std::move(ds));
   }
