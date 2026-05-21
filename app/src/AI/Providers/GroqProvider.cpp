@@ -120,6 +120,17 @@ QString AI::GroqProvider::modelDisplayName(const QString& modelId) const
   return modelId;
 }
 
+/**
+ * @brief Returns capability hints tuned for Groq-hosted models.
+ */
+AI::ProviderCapabilities AI::GroqProvider::capabilities() const
+{
+  ProviderCapabilities caps;
+  caps.needsSmallToolSurface = true;
+  caps.toolResultByteBudget  = 4096;
+  return caps;
+}
+
 //--------------------------------------------------------------------------------------------------
 // sendMessage
 //--------------------------------------------------------------------------------------------------

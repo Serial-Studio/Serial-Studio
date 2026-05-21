@@ -136,6 +136,17 @@ QString AI::MistralProvider::modelDisplayName(const QString& modelId) const
   return modelId;
 }
 
+/**
+ * @brief Returns capability hints tuned for the active Mistral model.
+ */
+AI::ProviderCapabilities AI::MistralProvider::capabilities() const
+{
+  ProviderCapabilities caps;
+  caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("small"));
+  caps.toolResultByteBudget  = caps.needsSmallToolSurface ? 4096 : 8192;
+  return caps;
+}
+
 //--------------------------------------------------------------------------------------------------
 // sendMessage
 //--------------------------------------------------------------------------------------------------

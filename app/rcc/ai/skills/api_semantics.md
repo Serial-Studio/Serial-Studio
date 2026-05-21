@@ -26,6 +26,7 @@ those numbers. The right pattern:
 project.dataset.getByPath { path: "Audio/Channel A" }
 project.dataset.getByTitle { title: "Channel A", groupId: 0 }
 project.dataset.getByUniqueId { uniqueId: 10001 }
+assistant.dataset.resolve { path: "Audio/Channel A" }
 
 // Inside transforms / painter scripts: read peers via the API
 const v = datasetGetFinal(uid)        // uid from the response above

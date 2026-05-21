@@ -168,6 +168,21 @@ QString AI::AnthropicProvider::modelDisplayName(const QString& modelId) const
 }
 
 /**
+ * @brief Returns Anthropic-specific assistant shaping hints.
+ */
+AI::ProviderCapabilities AI::AnthropicProvider::capabilities() const
+{
+  ProviderCapabilities caps;
+  caps.structuredSystemBlocks = true;
+  caps.promptCaching          = true;
+  caps.thinking               = !currentModel().contains(QStringLiteral("haiku"));
+  caps.structuredToolResults  = true;
+  caps.needsSmallToolSurface  = currentModel().contains(QStringLiteral("haiku"));
+  caps.toolResultByteBudget   = caps.needsSmallToolSurface ? 4096 : 8192;
+  return caps;
+}
+
+/**
  * @brief Builds the Messages API request body and returns a streaming Reply.
  */
 AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history, const QJsonArray& tools)
@@ -177,8 +192,8 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history, const Q
     return new AI::detail::ImmediateErrorReply(
       QObject::tr("No Anthropic API key set. Open Manage Keys to add one."));
 
-  const auto model   = currentModel();
-  const bool isHaiku = model.contains(QStringLiteral("haiku"));
+  const auto model = currentModel();
+  const auto caps  = capabilities();
 
   QJsonObject body;
   body[QStringLiteral("model")]      = model;
@@ -187,7 +202,7 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history, const Q
   body[QStringLiteral("system")]     = ContextBuilder::buildSystemArray();
 
   // Adaptive thinking + effort:medium (Sonnet 4.6 / Opus 4.6+); Haiku 4.5 rejects both
-  if (!isHaiku) {
+  if (caps.thinking) {
     QJsonObject thinking;
     thinking[QStringLiteral("type")]    = QStringLiteral("adaptive");
     thinking[QStringLiteral("display")] = QStringLiteral("summarized");

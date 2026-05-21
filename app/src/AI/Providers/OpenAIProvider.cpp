@@ -140,6 +140,21 @@ QString AI::OpenAIProvider::modelDisplayName(const QString& modelId) const
   return modelId;
 }
 
+/**
+ * @brief Returns OpenAI-specific assistant shaping hints.
+ */
+AI::ProviderCapabilities AI::OpenAIProvider::capabilities() const
+{
+  ProviderCapabilities caps;
+  caps.promptCaching         = true;
+  caps.parallelToolCalls     = true;
+  caps.developerRole         = prefersDeveloperRole(currentModel());
+  caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("mini"))
+                            || currentModel().contains(QStringLiteral("4o-mini"));
+  caps.toolResultByteBudget = caps.needsSmallToolSurface ? 4096 : 8192;
+  return caps;
+}
+
 /** @brief Returns true when the model should receive top-level instructions as a developer message.
  */
 bool AI::OpenAIProvider::prefersDeveloperRole(const QString& modelId)
@@ -323,17 +338,17 @@ AI::Reply* AI::OpenAIProvider::sendMessage(const QJsonArray& history, const QJso
     }
   }
 
-  const auto model            = currentModel();
-  const bool useDeveloperRole = prefersDeveloperRole(model);
+  const auto model = currentModel();
+  const auto caps  = capabilities();
 
   QJsonObject body;
   body[QStringLiteral("model")]                  = model;
   body[QStringLiteral("stream")]                 = true;
   body[QStringLiteral("store")]                  = false;
-  body[QStringLiteral("parallel_tool_calls")]    = true;
+  body[QStringLiteral("parallel_tool_calls")]    = caps.parallelToolCalls;
   body[QStringLiteral("prompt_cache_key")]       = QStringLiteral("serial-studio-ai-assistant");
   body[QStringLiteral("prompt_cache_retention")] = QStringLiteral("24h");
-  body[QStringLiteral("messages")] = translateHistory(history, systemText, useDeveloperRole);
+  body[QStringLiteral("messages")] = translateHistory(history, systemText, caps.developerRole);
 
   if (isReasoningModel(model))
     body[QStringLiteral("reasoning_effort")] = QStringLiteral("none");

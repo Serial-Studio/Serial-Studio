@@ -117,6 +117,18 @@ QString AI::GeminiProvider::modelDisplayName(const QString& modelId) const
   return modelId;
 }
 
+/**
+ * @brief Returns Gemini-specific tool/context shaping hints.
+ */
+AI::ProviderCapabilities AI::GeminiProvider::capabilities() const
+{
+  ProviderCapabilities caps;
+  caps.structuredToolResults = true;
+  caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("flash"));
+  caps.toolResultByteBudget  = caps.needsSmallToolSurface ? 4096 : 8192;
+  return caps;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Translators
 //--------------------------------------------------------------------------------------------------

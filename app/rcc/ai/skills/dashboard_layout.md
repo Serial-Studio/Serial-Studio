@@ -4,6 +4,28 @@ Serial Studio's dashboard is a tabbed surface. Each tab is a "workspace"
 holding a curated set of widgets pinned from your project's groups and
 datasets.
 
+## Default AI path
+
+Prefer the assistant-native rails for ordinary workspace edits:
+
+```
+assistant.snapshot
+assistant.dataset.resolve { path | title | uniqueId }       // when a dataset-specific tile is needed
+assistant.workspace.addTile {
+  workspaceId | workspace,
+  groupId | group,
+  dataset | uniqueId,                                       // optional, but recommended for plot/fft/gauge/etc.
+  widgetType: "plot" | "fft" | "bar" | "gauge" | "compass" | "led" | "waterfall" | ...
+}
+```
+
+`assistant.workspace.addTile` resolves the workspace/group/dataset,
+enables the matching dataset option when required, patches optional
+ranges, flips customize mode on, calls `project.workspace.addWidget`,
+and verifies the workspace. Use the lower-level `project.workspace.*`
+and `project.dataset.setOptions` sequence only when the assistant rail
+cannot express the edit.
+
 ## Widget catalog
 
 Widgets are the things you see on the dashboard. They are NOT the same
@@ -289,25 +311,45 @@ references. The user creates them via:
 project.workspace.setCustomizeMode{enabled: true}    // required for edits
 project.workspace.add{title, icon}                    // -> workspaceId
 project.workspace.addWidget{workspaceId, widgetType, groupId}
-                                                      // relativeIndex auto-assigned
+                                                      // relativeIndex auto-computed
+                                                      // datasetId optional for per-dataset widgets
 project.workspace.setCustomizeMode{enabled: false}    // optional
 ```
 
-`relativeIndex` is **optional and not a dataset index**. Omit it and
-the API auto-assigns the next free slot for `(widgetType, groupId)` on
-that workspace. The response includes the assigned value in
-`relativeIndex` and `relativeIndexAutoAssigned: true`. Pass an explicit
-integer ONLY when reproducing a specific layout (e.g. restoring from
-an export). Passing a dataset index here was the old pre-3.3 footgun;
-the auto-assign behavior makes that mistake impossible.
+`relativeIndex` is a **dashboard-level global index across every widget
+of this type in the project** — NOT a per-workspace counter and NOT a
+dataset index. **Always omit it.** The API walks the project's groups
+in order and computes the right index from `groupId` (and optional
+`datasetId` for per-dataset widgets). The response carries the assigned
+value in `relativeIndex` and `relativeIndexAutoAssigned: true`. Passing
+an explicit integer is fragile (any later structural change shifts the
+correct value) and is only useful when restoring a hand-crafted layout
+from an export.
 
-## MANDATORY pre-flight before any workspace edit
+`datasetId` is **optional but recommended for per-dataset widgets**
+(`plot`, `fft`, `bar`, `gauge`, `meter`, `compass`, `waterfall`). It pins
+the tile to one specific dataset inside the group; without it, the
+first dataset in the group with the matching option enabled is used.
+For group-level widgets (`datagrid`, `multiplot`, `led`, `accelerometer`,
+`gyroscope`, `gps`, `plot3d`, `painter`, `imageview`, `output-panel`)
+the field is ignored — one tile per group regardless.
+
+**Why this matters.** Earlier versions of this API auto-assigned
+`relativeIndex` as a per-workspace counter, which meant every
+freshly-added ref landed at index 0 and pointed to the same global
+widget instance — producing workspaces with duplicate or invisible
+tiles. The fixed auto-assign mirrors the runtime dashboard's flat
+per-type bucket order; refs now resolve to the intended widget.
+
+## MANDATORY pre-flight before any manual workspace edit
 
 Trial-and-error against `addWidget` burns calls on validation errors and
-leaves the workspace half-built. ALWAYS run this exact sequence first:
+leaves the workspace half-built. When you are not using
+`assistant.workspace.addTile`, ALWAYS run this exact sequence first:
 
 ```
-1. project.snapshot         -> ONE call returns sources, groups (with
+1. assistant.snapshot       -> preferred compact context for LLMs.
+   OR project.snapshot      -> ONE call returns sources, groups (with
                                 datasets and compatibleWidgetTypeSlugs),
                                 and the workspaces summary. Prefer this
                                 over chaining list calls.
@@ -323,16 +365,21 @@ If you only need part of the picture, the granular calls still work:
 `project.dataset.getByPath{path: "Group/Dataset"}` for a specific
 dataset. Use `project.snapshot` when you need broad context.
 
-The plan is: for each widget the user asked for, pick a `groupId` whose
+The manual plan is: for each widget the user asked for, pick a `groupId` whose
 `compatibleWidgetTypeSlugs` contains the desired slug. If the desired
 slug isn't in any group's compatible list, FIRST flip the matching
 dataset option (see "How to enable a workspace tile from scratch"
 above), THEN re-read the relevant group to confirm the slug is now
 compatible, THEN call `addWidget`.
 
-`relativeIndex` is **optional**. Omit it and the API auto-assigns the
-next free slot for that `(widgetType, groupId)` pair on the workspace.
-Pass an explicit integer ONLY when reproducing a specific layout.
+The assistant rail plan is shorter: call `assistant.workspace.addTile`
+with the dataset identifier and widget slug. It performs those preflight
+and compatibility steps and returns repair hints if it cannot complete.
+
+`relativeIndex` is a **dashboard-level global index** auto-computed
+from `groupId` (and optional `datasetId` for per-dataset widgets).
+Always omit it. Pass an explicit integer ONLY when reproducing a
+specific layout from an export.
 
 ## Verify-after-mutation rule
 
@@ -389,6 +436,30 @@ auto-workspaces (one per group's natural widget type, loosely organised)
 into the customised list. It's a one-shot — call once for users who want
 "a reasonable starting layout", then iterate.
 
+## Resetting / starting from scratch
+
+When the user asks to "delete all workspaces", "start over", or "reset
+the dashboard layout", **use `project.workspace.clearAll{}` — one call,
+one approval card, no params**. Do NOT loop `project.workspace.delete`
+across every workspaceId: each delete is `alwaysConfirm`, which means N
+separate approval cards and N round-trips through the model.
+
+`clearAll` wipes every workspace (auto-generated tabs 1000–4999 AND user
+tabs >= 5000), forces customize mode on, and leaves the list empty.
+Follow with:
+
+- `project.workspace.autoGenerate{}` to recreate the default
+  Overview / AllData / per-group tabs, then iterate from there, OR
+- `project.workspace.add` + `project.workspace.addWidget` to build a
+  bespoke layout from scratch.
+
+Workspace ID ranges (for awareness, not because you'll address them
+during a clear-and-rebuild flow):
+- `1000` = Overview (auto)
+- `1001` = All Data (auto)
+- `1002+gid` = per-group tabs (auto)
+- `>= 5000` = user-created workspaces
+
 ## Building an executive / overview dashboard
 
 When the user asks for "an overview" or "executive dashboard":
@@ -430,6 +501,21 @@ When the user asks for "an overview" or "executive dashboard":
 
 Goal: one workspace tab that shows the time-domain signal, its FFT, and
 a waterfall (Pro) for the same audio/vibration channel.
+
+Short path:
+
+```
+assistant.workspace.addTile { workspace: "Signal Analysis", createWorkspace: true,
+                              dataset: "Audio/Channel A",
+                              widgetType: "plot",
+                              ranges: { pltMin: -1, pltMax: 1, fftMin: -1, fftMax: 1 } }
+assistant.workspace.addTile { workspace: "Signal Analysis", dataset: "Audio/Channel A",
+                              widgetType: "fft" }
+assistant.workspace.addTile { workspace: "Signal Analysis", dataset: "Audio/Channel A",
+                              widgetType: "waterfall" }
+```
+
+Manual path, when you need exact low-level control:
 
 ```
 // 1. Find the dataset by path, or via snapshot.
@@ -533,8 +619,8 @@ project.workspace.addWidget {
   groupId: 0
 }
 
-// 7. Save.
-project.save
+// 7. Autosave handles the disk write. Do not call project.save unless
+//    the user explicitly asked for Save or Save As.
 ```
 
 If step 6 returns "widgetType=gauge not compatible with group 0", step

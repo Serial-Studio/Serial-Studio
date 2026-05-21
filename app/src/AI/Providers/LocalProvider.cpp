@@ -151,6 +151,17 @@ QString AI::LocalProvider::modelDisplayName(const QString& modelId) const
 }
 
 /**
+ * @brief Returns conservative capabilities for local OpenAI-compatible servers.
+ */
+AI::ProviderCapabilities AI::LocalProvider::capabilities() const
+{
+  ProviderCapabilities caps;
+  caps.needsSmallToolSurface = true;
+  caps.toolResultByteBudget  = 3072;
+  return caps;
+}
+
+/**
  * @brief Accepts any non-empty model id since the live list may not yet be loaded.
  */
 void AI::LocalProvider::setCurrentModel(const QString& model)

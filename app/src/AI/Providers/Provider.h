@@ -24,6 +24,20 @@
 namespace AI {
 
 /**
+ * @brief Backend capability hints used to shape the assistant tool surface.
+ */
+struct ProviderCapabilities {
+  bool structuredSystemBlocks = false;
+  bool promptCaching          = false;
+  bool parallelToolCalls      = false;
+  bool thinking               = false;
+  bool developerRole          = false;
+  bool structuredToolResults  = false;
+  bool needsSmallToolSurface  = true;
+  int toolResultByteBudget    = 4096;
+};
+
+/**
  * @brief Streamed reply handle returned by Provider::sendMessage.
  */
 class Reply : public QObject {
@@ -69,6 +83,8 @@ public:
    * @brief Returns a user-friendly label for a model id (e.g. "Claude Haiku 4.5").
    */
   [[nodiscard]] virtual QString modelDisplayName(const QString& modelId) const { return modelId; }
+
+  [[nodiscard]] virtual ProviderCapabilities capabilities() const { return {}; }
 
   [[nodiscard]] QString currentModel() const
   {

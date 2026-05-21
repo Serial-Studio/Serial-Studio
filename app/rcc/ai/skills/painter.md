@@ -113,10 +113,11 @@ changes. With it, `paint` only laces lines through the cached
 4. Read scripting reference: `meta.fetchScriptingDocs{kind: "painter_js"}`.
 5. Adapt a real example: `scripts.list{kind: "painter"}` then
    `scripts.get{kind: "painter", id: "<closest match>"}`.
-6. Dry-run: `project.painter.dryRun{code}` verifies compile + that
+6. Dry-run: `assistant.script.dryRun{kind:"painter", code}` verifies compile + that
    `paint(ctx, w, h)` is defined. Doesn't render — runtime errors inside
    `paint` only surface when the live widget mounts.
-7. Push: `project.painter.setCode{groupId, code}`.
+7. Push: `assistant.script.apply{kind:"painter", groupId, code}`. It
+   dry-runs first, then calls `project.painter.setCode`.
 
 ## Globals you can use
 

@@ -827,8 +827,11 @@ void AI::Conversation::dispatchByCallSafety(const QString& callId,
     return;
   }
 
-  if (safety == Safety::Confirm) {
-    if (Assistant::instance().autoApproveEdits()) {
+  // Confirm gates queue a UI card; AlwaysConfirm also bypasses autoApproveEdits.
+  if (safety == Safety::Confirm || safety == Safety::AlwaysConfirm) {
+    const bool autoApprove =
+      (safety == Safety::Confirm) && Assistant::instance().autoApproveEdits();
+    if (autoApprove) {
       appendToolCallCard(callId, name, arguments, CallStatus::Running);
       runToolCall(callId, name, arguments, /*autoConfirmSafe=*/true);
       return;
@@ -1583,9 +1586,10 @@ void AI::Conversation::recordToolResult(const QString& callId,
   // Scrub secrets before forwarding to the model
   const auto scrubbed = AI::Redactor::scrubObject(payload);
 
-  // Cap a single tool result at ~4KB to keep the context bounded
-  constexpr int kMaxToolResultBytes = 4 * 1024;
-  auto contentBytes                 = QJsonDocument(scrubbed).toJson(QJsonDocument::Compact);
+  // Cap a single tool result to keep the context bounded; stronger providers get a larger budget.
+  const int kMaxToolResultBytes =
+    qBound(2048, m_provider ? m_provider->capabilities().toolResultByteBudget : 4096, 16 * 1024);
+  auto contentBytes = QJsonDocument(scrubbed).toJson(QJsonDocument::Compact);
   if (contentBytes.size() > kMaxToolResultBytes) {
     const auto kept = contentBytes.left(kMaxToolResultBytes - 64);
     contentBytes =
@@ -1997,13 +2001,22 @@ QJsonArray AI::Conversation::dispatcherTools() const
   if (!m_dispatcher)
     return {};
 
-  // Discovery-first: 3 meta tools + curated essentials (~13 tools, ~8KB cached)
+  // Discovery-first meta tools + curated essentials
   QJsonArray remapped;
+  const auto caps = m_provider ? m_provider->capabilities() : ProviderCapabilities{};
 
   appendCoreMetaTools(remapped);
   appendDocMetaTools(remapped);
 
-  static const QStringList kEssentials = {
+  QStringList essentials = {
+    QStringLiteral("assistant.snapshot"),
+    QStringLiteral("assistant.dataset.resolve"),
+    QStringLiteral("assistant.workspace.resolve"),
+    QStringLiteral("assistant.workspace.plan"),
+    QStringLiteral("assistant.workspace.addTile"),
+    QStringLiteral("assistant.script.dryRun"),
+    QStringLiteral("assistant.script.apply"),
+    QStringLiteral("assistant.project.bulkApply"),
     QStringLiteral("project.new"),
     QStringLiteral("project.open"),
     QStringLiteral("project.save"),
@@ -2022,6 +2035,7 @@ QJsonArray AI::Conversation::dispatcherTools() const
     QStringLiteral("project.workspace.addWidget"),
     QStringLiteral("project.workspace.removeWidget"),
     QStringLiteral("project.workspace.setCustomizeMode"),
+    QStringLiteral("project.workspace.clearAll"),
     QStringLiteral("project.frameParser.getCode"),
     QStringLiteral("project.frameParser.setCode"),
     QStringLiteral("project.frameParser.getConfig"),
@@ -2044,6 +2058,13 @@ QJsonArray AI::Conversation::dispatcherTools() const
     QStringLiteral("io.getStatus"),
   };
 
+  if (caps.needsSmallToolSurface) {
+    essentials.removeAll(QStringLiteral("project.workspace.addWidget"));
+    essentials.removeAll(QStringLiteral("project.workspace.removeWidget"));
+    essentials.removeAll(QStringLiteral("project.workspace.setCustomizeMode"));
+    essentials.removeAll(QStringLiteral("project.dataset.setOptions"));
+  }
+
   const auto raw = m_dispatcher->availableTools();
 
   auto append = [&remapped](const QJsonObject& obj) {
@@ -2062,7 +2083,7 @@ QJsonArray AI::Conversation::dispatcherTools() const
   };
 
   // Add essentials first
-  for (const auto& essentialName : kEssentials) {
+  for (const auto& essentialName : essentials) {
     for (const auto& v : raw) {
       const auto obj = v.toObject();
       if (obj.value(QStringLiteral("name")).toString() == essentialName) {

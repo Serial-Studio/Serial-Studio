@@ -113,6 +113,17 @@ QString AI::DeepSeekProvider::modelDisplayName(const QString& modelId) const
   return modelId;
 }
 
+/**
+ * @brief Returns capability hints tuned for the active DeepSeek model.
+ */
+AI::ProviderCapabilities AI::DeepSeekProvider::capabilities() const
+{
+  ProviderCapabilities caps;
+  caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("chat"));
+  caps.toolResultByteBudget  = caps.needsSmallToolSurface ? 4096 : 8192;
+  return caps;
+}
+
 //--------------------------------------------------------------------------------------------------
 // sendMessage
 //--------------------------------------------------------------------------------------------------

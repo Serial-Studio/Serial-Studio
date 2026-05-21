@@ -42,6 +42,7 @@ public:
   [[nodiscard]] QStringList availableModels() const override;
   [[nodiscard]] QString defaultModel() const override;
   [[nodiscard]] QString modelDisplayName(const QString& modelId) const override;
+  [[nodiscard]] ProviderCapabilities capabilities() const override;
 
   void setCurrentModel(const QString& model) override;
 

@@ -34,6 +34,7 @@ public:
   [[nodiscard]] QStringList availableModels() const override;
   [[nodiscard]] QString defaultModel() const override;
   [[nodiscard]] QString modelDisplayName(const QString& modelId) const override;
+  [[nodiscard]] ProviderCapabilities capabilities() const override;
 
   [[nodiscard]] Reply* sendMessage(const QJsonArray& history, const QJsonArray& tools) override;
 

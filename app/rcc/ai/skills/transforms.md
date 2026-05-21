@@ -158,11 +158,14 @@ declare `let alpha = 0.2` without clobbering each other.
 1. Read the dataset's current transform:
    `project.dataset.list` returns `transformCode` per dataset; or fetch
    `project.frameParser.getCode` for context on what `value` looks like.
-2. Dry-run: `project.dataset.transform.dryRun{code, language, values}`
+2. Dry-run: `assistant.script.dryRun{kind:"transform", code, language,
+   values}`
    compiles + runs `transform()` against an array of sample inputs.
    Returns the per-input outputs. Iterate on the code until outputs look
    right.
-3. Push: `project.dataset.setTransformCode{groupId, datasetId, code}`.
+3. Push: `assistant.script.apply{kind:"transform", groupId, datasetId,
+   code, language, values, virtual}`. It dry-runs first, optionally marks
+   compute-only datasets virtual, then calls `project.dataset.setTransformCode`.
 
 ## Tables: the central data bus
 
@@ -188,9 +191,9 @@ datasetGetRaw(uniqueId)                        // any dataset, this frame
 datasetGetFinal(uniqueId)                      // EARLIER datasets only
 ```
 
-`uniqueId` is a stable INTEGER, not a name. Get it from
-`project.dataset.list` (`uniqueId` field) or compute as
-`sourceId * 1_000_000 + groupId * 10_000 + datasetId`.
+`uniqueId` is a stable INTEGER, not a name. Read it from
+`assistant.dataset.resolve`, `project.dataset.list`, or
+`project.snapshot`. Treat it as opaque; do not compute it in chat.
 
 ## Processing order
 

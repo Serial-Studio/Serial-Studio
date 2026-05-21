@@ -145,6 +145,17 @@ QString AI::OpenRouterProvider::modelDisplayName(const QString& modelId) const
   return modelId;
 }
 
+/**
+ * @brief Returns capability hints tuned for OpenRouter-routed models.
+ */
+AI::ProviderCapabilities AI::OpenRouterProvider::capabilities() const
+{
+  ProviderCapabilities caps;
+  caps.needsSmallToolSurface = false;
+  caps.toolResultByteBudget  = 6144;
+  return caps;
+}
+
 //--------------------------------------------------------------------------------------------------
 // sendMessage
 //--------------------------------------------------------------------------------------------------

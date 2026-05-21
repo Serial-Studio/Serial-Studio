@@ -127,18 +127,19 @@ mechanics skills carry the API. Both apply on a painter or workspace
 task — don't pick one. The design skill tells you *what* to build;
 the mechanics skill tells you *how* to push it.
 
-## Batch mutations — use `project.batch`, don't loop
+## Batch mutations — use `assistant.project.bulkApply`, don't loop
 
 The most common discovery-skill mistake is iterating individual
 `project.dataset.update` / `project.dataset.setOption` calls when patching
-many datasets at once. Don't. Use `project.batch{ops: [...]}` for **any
-loop of ≥3 project mutations**.
+many datasets at once. Don't. Use `assistant.project.bulkApply{ops: [...]}`
+for **any loop of ≥3 project mutations**. It wraps `project.batch`,
+rejects nested batches, and summarizes failures.
 
 Why it matters:
 
 - Each individual call round-trips through autosave + tree-model rebuild.
   At 40 datasets, that's 40× the latency and 40× the QML model thrash.
-- `project.batch` suspends autosave for the whole batch, applies every
+- `assistant.project.bulkApply` / `project.batch` suspends autosave for the whole batch, applies every
   op sequentially under one save-flush, and returns per-op results in
   order — same self-correction signal as N round-trips, fraction of the
   cost.
@@ -146,7 +147,7 @@ Why it matters:
   best-effort).
 
 Pre-flight self-check: **before authoring a loop, ask "am I about to
-issue ≥3 project.* mutations?" If yes, switch to `project.batch`.**
+issue ≥3 project.* mutations?" If yes, switch to `assistant.project.bulkApply`.**
 Specialized bulk endpoints (`project.dataset.addMany`,
 `project.dataTable.setRegisters`) win where they exist, but `project.batch`
 is the universal escape hatch.
@@ -154,7 +155,7 @@ is the universal escape hatch.
 Example — renumber + rename 40 datasets in one call:
 
 ```
-project.batch{
+assistant.project.bulkApply{
   ops: [
     {command: "project.dataset.update",
      params: {groupId: 0, datasetId: 0, title: "LED 1", index: 1}},

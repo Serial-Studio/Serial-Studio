@@ -116,13 +116,11 @@ ProjectFile.
 
 ## The auto-save loop
 
-Mutating tool calls that emit `widgetSettingsChanged` (workspace edits,
-layout drags, source changes) schedule a debounced save (~1.5s) to the
-project's existing file path. Pure structural calls (e.g.
-`project.dataset.update`, `project.group.update`) flag the project as
-modified but rely on the next layout-touching event to schedule the
-disk write — so a save will land soon after the next interactive nudge.
-You don't need to drive it manually.
+Successful mutating AI tool calls schedule a debounced save (~1s) to the
+project's existing file path. The assistant runtime skips autosave only
+for read-only Safe tools, meta tools, and explicit project lifecycle
+commands such as `project.save`, `project.new`, and `project.open`.
+You don't need to drive normal autosave manually.
 
 - Don't call `project.save{}` after every edit — it's redundant.
 - Do call `project.save{filePath: "..."}` when the user wants Save As.
@@ -258,9 +256,9 @@ conflate. Memorize them once.
 **Treat `uniqueId` as opaque.** It happens to be computed as
 `sourceId*1_000_000 + groupId*10_000 + datasetId`, but that arithmetic
 breaks the moment a dataset is moved or duplicated. Read `uniqueId`
-fresh from `project.dataset.getByPath {path: "Group/Dataset"}`,
-`project.dataset.getByTitle`, or `project.snapshot` -- never cache or
-compute it.
+fresh from `assistant.dataset.resolve`, `project.dataset.getByPath
+{path: "Group/Dataset"}`, `project.dataset.getByTitle`, or
+`project.snapshot` -- never cache or compute it.
 
 Workspace IDs live in a separate range -- always `>= 1000`.
 
