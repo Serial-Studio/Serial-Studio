@@ -58,9 +58,14 @@ public:
 
   [[nodiscard]] QString path(const QString& subdirectory) const;
 
+  [[nodiscard]] QString remapLegacyPath(const QString& path) const;
+
 public slots:
   void reset();
   void selectPath();
+
+private:
+  void migrateLegacyProjectsFolder();
 
 private:
   QString m_path;

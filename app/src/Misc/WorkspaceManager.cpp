@@ -23,7 +23,9 @@
 
 #include <QApplication>
 #include <QDir>
+#include <QFile>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QStandardPaths>
 
 //--------------------------------------------------------------------------------------------------
@@ -46,6 +48,8 @@ Misc::WorkspaceManager::WorkspaceManager()
     m_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/Serial Studio";
     qWarning() << "Using fallback workspace:" << m_path;
   }
+
+  migrateLegacyProjectsFolder();
 }
 
 /**
@@ -107,6 +111,83 @@ void Misc::WorkspaceManager::reset()
   m_settings.setValue(QStringLiteral("Workspace"), m_path);
 
   Q_EMIT pathChanged();
+}
+
+/**
+ * @brief Rewrites a saved "JSON Projects" path so it resolves under the new "Projects" folder.
+ */
+QString Misc::WorkspaceManager::remapLegacyPath(const QString& path) const
+{
+  if (path.isEmpty())
+    return path;
+
+  QString p = QDir::fromNativeSeparators(path);
+  if (!p.contains(QStringLiteral("/JSON Projects/")))
+    return path;
+
+  p.replace(QStringLiteral("/JSON Projects/"), QStringLiteral("/Projects/"));
+  return p;
+}
+
+/**
+ * @brief One-shot migration that renames {workspace}/JSON Projects to {workspace}/Projects.
+ */
+void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
+{
+  static const QLatin1StringView kMigratedKey("Workspace/LegacyProjectsFolderMigrated");
+  if (m_settings.value(kMigratedKey, false).toBool())
+    return;
+
+  const QString legacyDir = QStringLiteral("%1/JSON Projects").arg(m_path);
+  const QString newDir    = QStringLiteral("%1/Projects").arg(m_path);
+
+  QDir legacy(legacyDir);
+  if (!legacy.exists()) {
+    m_settings.setValue(kMigratedKey, true);
+    return;
+  }
+
+  QDir target(newDir);
+  if (!target.exists()) {
+    QDir parent(m_path);
+    if (parent.rename(QStringLiteral("JSON Projects"), QStringLiteral("Projects"))) {
+      m_settings.setValue(kMigratedKey, true);
+      return;
+    }
+
+    if (!target.mkpath(".")) {
+      qWarning() << "Failed to create" << newDir << "for legacy projects migration";
+      return;
+    }
+  }
+
+  const auto entries =
+    legacy.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+  for (const auto& entry : entries) {
+    const QString src = entry.absoluteFilePath();
+    QString dst       = QStringLiteral("%1/%2").arg(newDir, entry.fileName());
+
+    if (QFileInfo::exists(dst)) {
+      const QString base = entry.completeBaseName();
+      const QString ext  = entry.suffix();
+      int n              = 1;
+      do {
+        const QString suffix =
+          n == 1 ? QStringLiteral(".legacy") : QStringLiteral(".legacy.%1").arg(n);
+        dst = ext.isEmpty() ? QStringLiteral("%1/%2%3").arg(newDir, base, suffix)
+                            : QStringLiteral("%1/%2%3.%4").arg(newDir, base, suffix, ext);
+        ++n;
+      } while (QFileInfo::exists(dst) && n < 1000);
+    }
+
+    if (!QFile::rename(src, dst))
+      qWarning() << "Failed to migrate" << src << "to" << dst;
+  }
+
+  if (legacy.isEmpty())
+    QDir(m_path).rmdir(QStringLiteral("JSON Projects"));
+
+  m_settings.setValue(kMigratedKey, true);
 }
 
 /**
