@@ -25,16 +25,15 @@
 #include <kiss_fft.h>
 
 #include <QImage>
+#include <QQuickPaintedItem>
 #include <QVector>
-
-#include "UI/QuickPaintedItemCompat.h"
 
 namespace Widgets {
 
 /**
  * @brief Pro waterfall (spectrogram) widget -- scrolling time-frequency plot.
  */
-class Waterfall : public QuickPaintedItemCompat {
+class Waterfall : public QQuickPaintedItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool running

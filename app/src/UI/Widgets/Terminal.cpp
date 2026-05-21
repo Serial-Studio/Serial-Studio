@@ -50,7 +50,7 @@ constexpr int MAX_LINES = 1000;
  * @brief Constructs a Terminal object with the given parent item.
  */
 Widgets::Terminal::Terminal(QQuickItem* parent)
-  : QuickPaintedItemCompat(parent)
+  : QQuickPaintedItem(parent)
   , m_cWidth(0)
   , m_cHeight(0)
   , m_borderX(0)
@@ -671,7 +671,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   // Delegate to base class when VT-100 emulation is inactive
   if (!vt100emulation() || !IO::ConnectionManager::instance().isConnected()
       || !IO::ConnectionManager::instance().readWrite()) {
-    QuickPaintedItemCompat::keyPressEvent(event);
+    QQuickPaintedItem::keyPressEvent(event);
     return;
   }
 
@@ -683,7 +683,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
     return;
   }
 
-  QuickPaintedItemCompat::keyPressEvent(event);
+  QQuickPaintedItem::keyPressEvent(event);
 }
 
 /**
@@ -845,7 +845,7 @@ QByteArray Widgets::Terminal::translateSpecialKey(int key)
 void Widgets::Terminal::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
   // Forward to base class and notify QML when the size changes
-  QuickPaintedItemCompat::geometryChange(newGeometry, oldGeometry);
+  QQuickPaintedItem::geometryChange(newGeometry, oldGeometry);
 
   if (newGeometry.size() != oldGeometry.size())
     Q_EMIT terminalSizeChanged();

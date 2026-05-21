@@ -101,6 +101,7 @@ static inline double fastPow10(double exponent) noexcept
   const int idx = static_cast<int>(exponent) + 15;
   if (idx < 0 || idx >= static_cast<int>(sizeof(kTable) / sizeof(kTable[0]))) [[unlikely]]
     return std::pow(10.0, exponent);
+
   return kTable[idx];
 }
 
@@ -116,6 +117,7 @@ QRgb Widgets::Waterfall::interpolateLut(
   const int rr   = static_cast<int>((r[i] + (r[i + 1] - r[i]) * s) * 255.0);
   const int gg   = static_cast<int>((g[i] + (g[i + 1] - g[i]) * s) * 255.0);
   const int bb   = static_cast<int>((b[i] + (b[i + 1] - b[i]) * s) * 255.0);
+
   return qRgb(qBound(0, rr, 255), qBound(0, gg, 255), qBound(0, bb, 255));
 }
 
@@ -208,7 +210,7 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
  * @brief Constructs a Waterfall widget bound to the dataset at @a index.
  */
 Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
-  : QuickPaintedItemCompat(parent)
+  : QQuickPaintedItem(parent)
   , m_index(index)
   , m_size(0)
   , m_samplingRate(0)
@@ -1527,7 +1529,7 @@ void Widgets::Waterfall::mouseReleaseEvent(QMouseEvent* event)
  */
 void Widgets::Waterfall::geometryChange(const QRectF& newGeom, const QRectF& oldGeom)
 {
-  QuickPaintedItemCompat::geometryChange(newGeom, oldGeom);
+  QQuickPaintedItem::geometryChange(newGeom, oldGeom);
   if (newGeom.size() != oldGeom.size())
     markAxisDirty();
 }

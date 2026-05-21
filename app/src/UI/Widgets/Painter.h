@@ -16,12 +16,12 @@
 #  include <QImage>
 #  include <QJSEngine>
 #  include <QJSValue>
+#  include <QQuickPaintedItem>
 #  include <QString>
 #  include <QVariantList>
 
 #  include "DataModel/Frame.h"
 #  include "DataModel/Scripting/JsWatchdog.h"
-#  include "UI/QuickPaintedItemCompat.h"
 
 namespace Widgets {
 
@@ -31,7 +31,7 @@ class PainterDataBridge;
 /**
  * @brief Pro-tier user-scripted widget. Renders a JS paint(ctx, w, h) callback.
  */
-class Painter : public QuickPaintedItemCompat {
+class Painter : public QQuickPaintedItem {
   Q_OBJECT
   Q_PROPERTY(bool runtimeOk READ runtimeOk NOTIFY runtimeOkChanged)
   Q_PROPERTY(QString lastError READ lastError NOTIFY lastErrorChanged)

@@ -121,7 +121,7 @@ static constexpr int kSlowPaintMs       = 30;
  * @brief Constructs the painter widget bound to a dashboard slot.
  */
 Widgets::Painter::Painter(int index, QQuickItem* parent)
-  : QuickPaintedItemCompat(parent)
+  : QQuickPaintedItem(parent)
   , m_index(index)
   , m_compileDirty(true)
   , m_runtimeOk(false)

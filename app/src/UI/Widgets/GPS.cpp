@@ -65,7 +65,7 @@ bool Widgets::GPS::s_cacheInitialized = false;
  * @brief Constructs a GPS map widget using ArcGIS Maps tile data.
  */
 Widgets::GPS::GPS(const int index, QQuickItem* parent)
-  : QuickPaintedItemCompat(parent)
+  : QQuickPaintedItem(parent)
   , m_zoom(MIN_ZOOM)
   , m_index(index)
   , m_mapType(0)

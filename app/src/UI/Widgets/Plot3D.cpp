@@ -55,7 +55,7 @@ static double fastPow10(double exponent) noexcept
  * @brief Constructs a Plot3D widget.
  */
 Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
-  : QuickPaintedItemCompat(parent)
+  : QQuickPaintedItem(parent)
   , m_index(index)
   , m_minX(INT_MAX)
   , m_maxX(INT_MIN)

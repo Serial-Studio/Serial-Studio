@@ -24,9 +24,8 @@
 #include <QColor>
 #include <QKeyEvent>
 #include <QPalette>
+#include <QQuickPaintedItem>
 #include <QTimer>
-
-#include "UI/QuickPaintedItemCompat.h"
 
 namespace Widgets {
 /**
@@ -44,7 +43,7 @@ struct CharColor {
 /**
  * @brief QML terminal widget with optional VT-100 emulation.
  */
-class Terminal : public QuickPaintedItemCompat {
+class Terminal : public QQuickPaintedItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QFont font

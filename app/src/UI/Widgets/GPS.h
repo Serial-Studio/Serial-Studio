@@ -24,15 +24,14 @@
 #include <QCache>
 #include <QImage>
 #include <QNetworkAccessManager>
+#include <QQuickPaintedItem>
 #include <QSettings>
-
-#include "UI/QuickPaintedItemCompat.h"
 
 namespace Widgets {
 /**
  * @brief Custom QML widget for displaying GPS position on a tile-based map.
  */
-class GPS : public QuickPaintedItemCompat {
+class GPS : public QQuickPaintedItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int mapType

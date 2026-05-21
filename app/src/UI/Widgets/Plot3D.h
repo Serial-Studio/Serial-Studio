@@ -23,17 +23,17 @@
 
 #include <QMatrix4x4>
 #include <QPainter>
+#include <QQuickPaintedItem>
 #include <QSettings>
 #include <QVector3D>
 
 #include "DSP.h"
-#include "UI/QuickPaintedItemCompat.h"
 
 namespace Widgets {
 /**
  * @brief 3D plotting widget with optional anaglyph (stereo) rendering.
  */
-class Plot3D : public QuickPaintedItemCompat {
+class Plot3D : public QQuickPaintedItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool anaglyphEnabled
