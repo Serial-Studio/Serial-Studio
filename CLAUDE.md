@@ -318,7 +318,7 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   `Taskbar::deleteWorkspace(id)` branches on the threshold — don't cross-wire. Edits stage
   in memory + `setModified(true)`; no autosave.
 - **Waterfall / Spectrogram (Pro)** (`UI/Widgets/Waterfall.h/.cpp`): per-dataset Pro widget
-  reusing the dataset's FFT settings. Class IS the painted item (`QuickPaintedItemCompat`).
+  reusing the dataset's FFT settings. Class IS the painted item (`QQuickPaintedItem`).
   Toggle via `DatasetWaterfall = 0b01000000`; persists as `Keys::Waterfall` (omit when false).
   `Keys::WaterfallYAxis` non-zero → **Campbell mode**: rows placed by another dataset's
   value (e.g. RPM) instead of time. `commercialCfg()` flags any project using waterfall.
