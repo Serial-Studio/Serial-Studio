@@ -314,11 +314,8 @@ IO::Drivers::Audio::Audio()
   generateLists();
   refreshAudioDevices();
 
-  // Sync UI selection with applied format
-  syncInputParameters();
-  syncOutputParameters();
-
-  // Configure model
+  // configureInput/configureOutput sync m_config at the end -- no separate sync call needed
+  restoreSettings();
   configureInput();
   configureOutput();
 
@@ -832,6 +829,7 @@ void IO::Drivers::Audio::setSelectedSampleRate(int index)
 
   m_selectedSampleRate = index;
   configureInput();
+  persistSettings();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -856,6 +854,7 @@ void IO::Drivers::Audio::setSelectedInputDevice(int index)
 
   syncInputParameters();
   configureInput();
+  persistSettings();
 }
 
 /**
@@ -871,6 +870,7 @@ void IO::Drivers::Audio::setSelectedInputSampleFormat(int index)
 
   m_selectedInputSampleFormat = index;
   configureInput();
+  persistSettings();
 }
 
 /**
@@ -886,6 +886,7 @@ void IO::Drivers::Audio::setSelectedInputChannelConfiguration(int index)
 
   m_selectedInputChannelConfiguration = index;
   configureInput();
+  persistSettings();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -909,6 +910,7 @@ void IO::Drivers::Audio::setSelectedOutputDevice(int index)
 
   syncOutputParameters();
   configureOutput();
+  persistSettings();
 }
 
 /**
@@ -924,6 +926,7 @@ void IO::Drivers::Audio::setSelectedOutputSampleFormat(int index)
 
   m_selectedOutputSampleFormat = index;
   configureOutput();
+  persistSettings();
 }
 
 /**
@@ -939,6 +942,7 @@ void IO::Drivers::Audio::setSelectedOutputChannelConfiguration(int index)
 
   m_selectedOutputChannelConfiguration = index;
   configureOutput();
+  persistSettings();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1606,4 +1610,131 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
 
   Q_EMIT inputSettingsChanged();
   Q_EMIT configurationChanged();
+}
+
+/**
+ * @brief Writes the current selection to QSettings using stable identifiers.
+ */
+void IO::Drivers::Audio::persistSettings()
+{
+  // Persist input by stable identifiers (name, Hz, format name, channel count)
+  if (validateInput()) {
+    const auto& caps = m_inputCapabilities[m_selectedInputDevice];
+    m_settings.setValue(QStringLiteral("AudioDriver/inputDeviceName"),
+                        QString::fromUtf8(m_inputDevices[m_selectedInputDevice].name));
+
+    if (m_selectedSampleRate >= 0 && m_selectedSampleRate < caps.supportedSampleRates.size())
+      m_settings.setValue(QStringLiteral("AudioDriver/sampleRate"),
+                          caps.supportedSampleRates[m_selectedSampleRate]);
+
+    const auto fmts = inputSampleFormats();
+    if (m_selectedInputSampleFormat >= 0 && m_selectedInputSampleFormat < fmts.size())
+      m_settings.setValue(QStringLiteral("AudioDriver/inputFormat"),
+                          fmts.at(m_selectedInputSampleFormat));
+
+    if (m_selectedInputChannelConfiguration >= 0
+        && m_selectedInputChannelConfiguration < caps.supportedChannelCounts.size())
+      m_settings.setValue(QStringLiteral("AudioDriver/inputChannels"),
+                          caps.supportedChannelCounts[m_selectedInputChannelConfiguration]);
+  }
+
+  // Persist output by stable identifiers (name, format name, channel count)
+  if (validateOutput()) {
+    const auto& caps = m_outputCapabilities[m_selectedOutputDevice];
+    m_settings.setValue(QStringLiteral("AudioDriver/outputDeviceName"),
+                        QString::fromUtf8(m_outputDevices[m_selectedOutputDevice].name));
+
+    const auto fmts = outputSampleFormats();
+    if (m_selectedOutputSampleFormat >= 0 && m_selectedOutputSampleFormat < fmts.size())
+      m_settings.setValue(QStringLiteral("AudioDriver/outputFormat"),
+                          fmts.at(m_selectedOutputSampleFormat));
+
+    if (m_selectedOutputChannelConfiguration >= 0
+        && m_selectedOutputChannelConfiguration < caps.supportedChannelCounts.size())
+      m_settings.setValue(QStringLiteral("AudioDriver/outputChannels"),
+                          caps.supportedChannelCounts[m_selectedOutputChannelConfiguration]);
+  }
+}
+
+/**
+ * @brief Restores the last-used selection from QSettings, falling back to defaults.
+ */
+void IO::Drivers::Audio::restoreSettings()
+{
+  // Resolve input device by saved name, fall back to first available
+  const auto inName = m_settings.value(QStringLiteral("AudioDriver/inputDeviceName")).toString();
+  if (!inName.isEmpty()) {
+    for (int i = 0; i < m_inputDevices.size(); ++i) {
+      if (QString::fromUtf8(m_inputDevices[i].name) == inName) {
+        m_selectedInputDevice = i;
+        break;
+      }
+    }
+  }
+
+  if ((m_selectedInputDevice < 0 || m_selectedInputDevice >= m_inputDevices.size())
+      && !m_inputDevices.isEmpty())
+    m_selectedInputDevice = 0;
+
+  // Resolve input sub-settings against the selected device's capabilities
+  if (validateInput()) {
+    const auto& caps = m_inputCapabilities[m_selectedInputDevice];
+
+    const int savedRate = m_settings.value(QStringLiteral("AudioDriver/sampleRate"), 0).toInt();
+    if (savedRate > 0) {
+      const int idx = caps.supportedSampleRates.indexOf(savedRate);
+      if (idx >= 0)
+        m_selectedSampleRate = idx;
+    }
+
+    const auto savedFmt = m_settings.value(QStringLiteral("AudioDriver/inputFormat")).toString();
+    if (!savedFmt.isEmpty()) {
+      const auto fmts = inputSampleFormats();
+      const int idx   = fmts.indexOf(savedFmt);
+      if (idx >= 0)
+        m_selectedInputSampleFormat = idx;
+    }
+
+    const int savedCh = m_settings.value(QStringLiteral("AudioDriver/inputChannels"), 0).toInt();
+    if (savedCh > 0) {
+      const int idx = caps.supportedChannelCounts.indexOf(savedCh);
+      if (idx >= 0)
+        m_selectedInputChannelConfiguration = idx;
+    }
+  }
+
+  // Resolve output device by saved name, fall back to first available
+  const auto outName = m_settings.value(QStringLiteral("AudioDriver/outputDeviceName")).toString();
+  if (!outName.isEmpty()) {
+    for (int i = 0; i < m_outputDevices.size(); ++i) {
+      if (QString::fromUtf8(m_outputDevices[i].name) == outName) {
+        m_selectedOutputDevice = i;
+        break;
+      }
+    }
+  }
+
+  if ((m_selectedOutputDevice < 0 || m_selectedOutputDevice >= m_outputDevices.size())
+      && !m_outputDevices.isEmpty())
+    m_selectedOutputDevice = 0;
+
+  // Resolve output sub-settings against the selected device's capabilities
+  if (validateOutput()) {
+    const auto& caps = m_outputCapabilities[m_selectedOutputDevice];
+
+    const auto savedFmt = m_settings.value(QStringLiteral("AudioDriver/outputFormat")).toString();
+    if (!savedFmt.isEmpty()) {
+      const auto fmts = outputSampleFormats();
+      const int idx   = fmts.indexOf(savedFmt);
+      if (idx >= 0)
+        m_selectedOutputSampleFormat = idx;
+    }
+
+    const int savedCh = m_settings.value(QStringLiteral("AudioDriver/outputChannels"), 0).toInt();
+    if (savedCh > 0) {
+      const int idx = caps.supportedChannelCounts.indexOf(savedCh);
+      if (idx >= 0)
+        m_selectedOutputChannelConfiguration = idx;
+    }
+  }
 }

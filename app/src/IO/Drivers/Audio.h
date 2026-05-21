@@ -191,6 +191,9 @@ private:
   [[nodiscard]] bool configurePlaybackFormat(QIODevice::OpenMode mode);
   void startInputWorker();
 
+  void persistSettings();
+  void restoreSettings();
+
 private:
   bool m_init;
   bool m_isOpen;
