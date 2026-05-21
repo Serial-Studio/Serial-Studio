@@ -1195,6 +1195,7 @@ void IO::ConnectionManager::rebuildDevices()
 
   // Only rebuild device 0 if it has saved connectionSettings
   bool willRebuildDevice0 = (opMode != SerialStudio::ProjectFile);
+  bool didChangeBusType   = false;
   if (opMode == SerialStudio::ProjectFile) {
     const auto& srcs = DataModel::ProjectModel::instance().sources();
     for (const auto& src : srcs) {
@@ -1204,6 +1205,14 @@ void IO::ConnectionManager::rebuildDevices()
       const bool missingPrimary = (m_devices.find(0) == m_devices.end());
       const bool busTypeChanged = m_busType != static_cast<SerialStudio::BusType>(src.busType);
       willRebuildDevice0 = missingPrimary || busTypeChanged || !src.connectionSettings.isEmpty();
+
+      // Keep m_busType in sync so setBusType() fast-path matches the live driver
+      if (busTypeChanged && willRebuildDevice0) {
+        m_busType = static_cast<SerialStudio::BusType>(src.busType);
+        m_settings.setValue("IOManager/busType", static_cast<int>(m_busType));
+        didChangeBusType = true;
+      }
+
       break;
     }
   }
@@ -1236,6 +1245,9 @@ void IO::ConnectionManager::rebuildDevices()
   Q_EMIT driverChanged();
   Q_EMIT connectedChanged();
   Q_EMIT contextsRebuilt();
+
+  if (didChangeBusType)
+    Q_EMIT busTypeChanged();
 
   // Sync UI drivers (ProjectFile) or restore user bus type (other modes)
   if (opMode == SerialStudio::ProjectFile) {
