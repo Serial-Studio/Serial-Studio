@@ -233,7 +233,7 @@ Item {
           Rectangle {
             id: chromeRing
 
-            visible: false
+            visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
             width: gaugeFace.width + parent.chromeW * 2
             height: gaugeFace.height + parent.chromeW * 2
             radius: width / 2
@@ -254,6 +254,8 @@ Item {
             shadowColor: "#000000"
             shadowVerticalOffset: 2
             anchors.fill: chromeRing
+            visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+            enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           }
 
 
@@ -565,11 +567,11 @@ Item {
             smooth: true
             layer.samples: 8
             antialiasing: true
-            layer.enabled: true
             anchors.fill: parent
             rotation: control.angle
             transformOrigin: Item.Center
             preferredRendererType: Shape.CurveRenderer
+            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
             readonly property real cx: needleShape.width / 2
             readonly property real cy: needleShape.height / 2

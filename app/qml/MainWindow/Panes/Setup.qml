@@ -75,7 +75,9 @@ Widgets.Pane {
         anchors.fill: label
         shadowVerticalOffset: 0
         shadowHorizontalOffset: 0
-        visible: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
+        enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+        visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+                 && Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
         shadowColor: Cpp_API_Server.enabled ? Cpp_ThemeManager.colors["highlight"] :
                                               Cpp_ThemeManager.colors["pane_caption_border"]
 

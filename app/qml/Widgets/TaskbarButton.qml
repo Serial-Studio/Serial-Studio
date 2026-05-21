@@ -187,6 +187,8 @@ Item {
     source: _background
     anchors.fill: _background
     opacity: baseVisibility * hoverStateOpacity
+    visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+    enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
     brightness: root.enabled && root.hovered ? (_mouseArea.pressed ? -0.07 : 0.07) : 0
 
     property real baseVisibility: root.startMenu ? 0 : (root.enabled ? 1 : 0.5)
@@ -213,10 +215,10 @@ Item {
       Image {
         id: _icon
 
-        visible: false
         anchors.fill: parent
         sourceSize.width: root.iconSize
         sourceSize.height: root.iconSize
+        visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
       }
 
       MultiEffect {
@@ -224,6 +226,8 @@ Item {
 
         source: _icon
         anchors.fill: _icon
+        visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+        enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         saturation: !root.open ? -1 : (root.hovered && root.enabled ? 0.07 : 0)
         brightness: root.hovered && root.enabled ? (_mouseArea.pressed ? -0.07 : 0.07) : 0
       }

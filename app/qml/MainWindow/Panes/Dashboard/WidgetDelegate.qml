@@ -272,7 +272,7 @@ Widgets.MiniWindow {
     //
     // Grayscale + slight blur when disconnected
     //
-    layer.enabled: root.sourceDisconnected
+    layer.enabled: root.sourceDisconnected && Cpp_Misc_GraphicsBackend.effectsEnabled
     layer.effect: MultiEffect {
       blur: 0.4
       blurMax: 16

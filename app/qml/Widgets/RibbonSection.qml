@@ -148,7 +148,7 @@ RowLayout {
         border.width: 1
         border.color: Cpp_ThemeManager.colors["toolbar_border"]
 
-        layer.enabled: true
+        layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         layer.effect: MultiEffect {
           shadowBlur: 0.5
           shadowEnabled: true

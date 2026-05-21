@@ -20,6 +20,7 @@
 #  include <grpcpp/grpcpp.h>
 #  include <QCoreApplication>
 #  include <QFile>
+#  include <QFileDialog>
 #  include <QJsonDocument>
 #  include <QMetaObject>
 #  include <QTimer>
@@ -345,11 +346,18 @@ void API::GRPC::GRPCServer::hotpathTxData(const QByteArray& data)
 }
 
 /**
- * @brief Exports a typed .proto file to the given path.
+ * @brief Prompts the user for a destination and writes a typed .proto file.
  */
-void API::GRPC::GRPCServer::exportProto(const QString& filePath)
+void API::GRPC::GRPCServer::exportProto()
 {
-  (void)ProtoGenerator::exportToFile(filePath);
+  const auto path = QFileDialog::getSaveFileName(nullptr,
+                                                 tr("Export Protobuf File"),
+                                                 QStringLiteral("serial_studio.proto"),
+                                                 tr("Protocol Buffers (*.proto)"));
+  if (path.isEmpty())
+    return;
+
+  (void)ProtoGenerator::exportToFile(path);
 }
 
 //--------------------------------------------------------------------------------------------------

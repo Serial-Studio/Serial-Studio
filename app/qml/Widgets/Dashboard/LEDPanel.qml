@@ -132,6 +132,8 @@ Item {
             blurMax: root.model.states[index] ? 64 : 0
             brightness: root.model.states[index] ? 0.4 : 0
             saturation: root.model.states[index] ? 0.2 : 0
+            visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+            enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           }
 
           MultiEffect {
@@ -146,6 +148,8 @@ Item {
             blurMax: root.model.states[index] ? 64 : 0
             brightness: root.model.states[index] ? 0.4 : 0
             saturation: root.model.states[index] ? 0.2 : 0
+            visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+            enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           }
         }
       }

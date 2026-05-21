@@ -177,6 +177,8 @@ Item {
             shadowVerticalOffset: 2
             source: progressBarShadowSrc
             anchors.fill: progressBarShadowSrc
+            visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+            enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           }
 
           Item {

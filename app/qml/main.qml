@@ -126,9 +126,34 @@ Item {
   }
 
   //
+  // Confirm the configured rendering backend works
+  //
+  property bool rhiStartupConfirmed: false
+  Timer {
+    id: rhiConfirmTimer
+
+    repeat: false
+    interval: 5000
+    onTriggered: Cpp_Misc_GraphicsBackend.confirmStartupSuccess()
+  }
+
+  //
   // Boot path -- runtime mode skips the welcome dialog
   //
   Component.onCompleted: {
+    if (Cpp_Misc_CrashTracker.previousRunCrashed
+        && Cpp_Misc_CrashTracker.recoveryRecommended) {
+      crashRecoveryDialog.activate()
+      return
+    }
+
+    app.continueBoot()
+  }
+
+  //
+  // Boot continuation -- skipped only when the crash-recovery dialog is up
+  //
+  function continueBoot() {
     if (Cpp_CommercialBuild
         && !app.runtimeMode
         && !Cpp_Licensing_LemonSqueezy.isActivated) {
@@ -137,6 +162,15 @@ Item {
     }
 
     app.showMainWindow()
+  }
+
+  //
+  // Crash recovery dialog -- shown only when several consecutive crashes are detected
+  //
+  DialogLoader {
+    id: crashRecoveryDialog
+
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/CrashRecovery.qml"
   }
 
   //
@@ -174,8 +208,13 @@ Item {
     // Dismiss every floating dialog when the main window hides
     //
     onVisibleChanged: {
-      if (visible)
+      if (visible) {
+        if (!app.rhiStartupConfirmed) {
+          app.rhiStartupConfirmed = true
+          rhiConfirmTimer.start()
+        }
         return
+      }
 
       aboutDialog.close()
       donateDialog.close()

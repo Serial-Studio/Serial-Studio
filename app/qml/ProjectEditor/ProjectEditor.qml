@@ -210,6 +210,8 @@ Widgets.SmartWindow {
         blurEnabled: true
         anchors.fill: parent
         autoPaddingEnabled: false
+        enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+        visible: Cpp_Misc_GraphicsBackend.effectsEnabled
       }
 
       //

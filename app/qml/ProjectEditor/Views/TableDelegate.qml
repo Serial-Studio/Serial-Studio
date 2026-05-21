@@ -326,16 +326,17 @@ ColumnLayout {
 
             sourceSize.width: 18
             sourceSize.height: 18
-            visible: root.enabled
             anchors.centerIn: parent
             source: model.parameterIcon || ""
+            visible: root.enabled || !Cpp_Misc_GraphicsBackend.effectsEnabled
           }
 
           MultiEffect {
             saturation: -1.0
             source: parameterIcon
-            visible: !root.enabled
             anchors.fill: parameterIcon
+            enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+            visible: !root.enabled && Cpp_Misc_GraphicsBackend.effectsEnabled
           }
         }
 

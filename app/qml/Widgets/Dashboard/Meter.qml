@@ -230,11 +230,11 @@ Item {
           id: chromeShape
 
           smooth: true
-          visible: false
           layer.samples: 8
           antialiasing: true
-          layer.enabled: true
           anchors.fill: parent
+          visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
+          layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
           readonly property real bottomExtension: meterArea.labelBaseHeight
           readonly property real rOuter: meterArea.faceR + meterArea.chromeW
@@ -283,6 +283,8 @@ Item {
           shadowColor: "#000000"
           shadowVerticalOffset: 2
           anchors.fill: chromeShape
+          visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+          enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         }
 
         Shape {
@@ -291,8 +293,8 @@ Item {
           smooth: true
           layer.samples: 8
           antialiasing: true
-          layer.enabled: true
           anchors.fill: parent
+          layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
           readonly property real bottomExtension: Math.max(0, meterArea.labelBaseHeight - meterArea.chromeW)
 
@@ -625,9 +627,9 @@ Item {
             smooth: true
             layer.samples: 8
             antialiasing: true
-            layer.enabled: true
             anchors.fill: parent
             preferredRendererType: Shape.CurveRenderer
+            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
             readonly property real cx: needleShape.width / 2
             readonly property real cy: needleShape.height / 2

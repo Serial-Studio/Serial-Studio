@@ -22,26 +22,11 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Dialogs
 
 import "../Widgets" as Widgets
 
 Widgets.SmartDialog {
   id: root
-
-  //
-  // Proto file export dialog
-  //
-  FileDialog {
-    id: _protoFileDialog
-
-    fileMode: FileDialog.SaveFile
-    nameFilters: ["Protocol Buffers (*.proto)"]
-    onAccepted: {
-      if (Cpp_GrpcAvailable && Cpp_GRPC_Server)
-        Cpp_GRPC_Server.exportProto(selectedFile.toString().replace("file://", ""))
-    }
-  }
 
   //
   // Window options
@@ -283,6 +268,39 @@ Widgets.SmartDialog {
           }
 
           Label {
+            text: qsTr("Rendering Backend")
+            visible: Cpp_Misc_GraphicsBackend.configurable
+            color: Cpp_ThemeManager.colors["text"]
+          } Widgets.Combo {
+            id: _rhiBackend
+
+            Layout.fillWidth: true
+            visible: Cpp_Misc_GraphicsBackend.configurable
+            model: Cpp_Misc_GraphicsBackend.availableBackends.map(e => e.label)
+            currentIndex: {
+              const list = Cpp_Misc_GraphicsBackend.availableBackends
+              for (let i = 0; i < list.length; ++i)
+                if (list[i].id === Cpp_Misc_GraphicsBackend.currentBackend)
+                  return i
+
+              return 0
+            }
+
+            onActivated: (index) => {
+              const list = Cpp_Misc_GraphicsBackend.availableBackends
+              if (index < 0 || index >= list.length)
+                return
+
+              const id = list[index].id
+              if (id === Cpp_Misc_GraphicsBackend.currentBackend)
+                return
+
+              Cpp_Misc_GraphicsBackend.currentBackend = id
+              Cpp_Misc_GraphicsBackend.promptRestartAndQuit()
+            }
+          }
+
+          Label {
             text: qsTr("Auto-Hide Toolbar")
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
@@ -344,7 +362,10 @@ Widgets.SmartDialog {
             opacity: enabled ? 1 : 0.5
             enabled: _apiServer.checked
             Layout.alignment: Qt.AlignRight
-            onClicked: _protoFileDialog.open()
+            onClicked: {
+              if (Cpp_GrpcAvailable && Cpp_GRPC_Server)
+                Cpp_GRPC_Server.exportProto()
+            }
           }
 
           Item { Layout.fillHeight: true }

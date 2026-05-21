@@ -28,6 +28,8 @@
 
 #include "AppInfo.h"
 #include "Misc/CLI.h"
+#include "Misc/CrashTracker.h"
+#include "Misc/GraphicsBackend.h"
 #include "Misc/ModuleManager.h"
 #include "Platform/AppPlatform.h"
 
@@ -98,6 +100,8 @@ int main(int argc, char** argv)
 {
   setupQtApplicationMetadata();
 
+  Misc::CrashTracker::instance().markStartup();
+
   const bool headless = Misc::CLI::argvHasFlag(argc, argv, "--headless");
   if (headless)
     argv = Platform::AppPlatform::injectPlatformArg(argc, argv, "offscreen");
@@ -105,6 +109,10 @@ int main(int argc, char** argv)
   const QString shortcutPath = Misc::CLI::argvValueFor(argc, argv, "--shortcut-path");
   Platform::AppPlatform::prepareEnvironment(argc, argv, shortcutPath);
 
+  Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("graphics-backend-apply"));
+  Misc::GraphicsBackend::applyConfiguredBackend();
+
+  Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("qapplication-construct"));
   QApplication app(argc, argv);
 
   Platform::FileOpenEventFilter fileOpenFilter;
@@ -136,11 +144,14 @@ int main(int argc, char** argv)
   cli.applyThemeOverride();
 #endif
 
+  Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("module-manager-bootstrap"));
   Misc::ModuleManager moduleManager;
   if (!bootstrapModuleManager(moduleManager, cli, headless, shortcutPath)) {
     qCritical() << "Critical QML error";
     return EXIT_FAILURE;
   }
+
+  Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("event-loop"));
 
   cli.applyProjectAndAutoConnect(app);
 

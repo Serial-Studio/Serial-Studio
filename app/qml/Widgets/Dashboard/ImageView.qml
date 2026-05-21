@@ -302,7 +302,9 @@ Item {
         blurEnabled: true
         blurMultiplier: 10
         anchors.fill: parent
-        visible: model && model.frameCount > 0
+        enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+        visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+                 && model && model.frameCount > 0
         saturation:        root.currentFilter.sat
         contrast:          root.currentFilter.cont
         colorizationColor: root.currentFilter.color
@@ -332,7 +334,7 @@ Item {
           }
         ]
 
-        layer.enabled: true
+        layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         layer.effect: MultiEffect {
           saturation:        root.currentFilter.sat
           contrast:          root.currentFilter.cont
@@ -540,7 +542,7 @@ Item {
 
         Image {
           opacity: 0.55
-          layer.enabled: true
+          layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           sourceSize.width: 48
           sourceSize.height: 48
           Layout.alignment: Qt.AlignHCenter

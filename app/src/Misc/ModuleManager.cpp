@@ -49,8 +49,10 @@
 #include "MDF4/Export.h"
 #include "MDF4/Player.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/CrashTracker.h"
 #include "Misc/Examples.h"
 #include "Misc/ExtensionManager.h"
+#include "Misc/GraphicsBackend.h"
 #include "Misc/HelpCenter.h"
 #include "Misc/IconEngine.h"
 #include "Misc/ThemeManager.h"
@@ -284,6 +286,8 @@ void Misc::ModuleManager::onQuit()
   API::GRPC::GRPCServer::instance().setEnabled(false);
 #endif
 
+  Misc::CrashTracker::instance().markCleanExit();
+
   // Terminate the application event loop
   qApp->exit(0);
 }
@@ -504,6 +508,8 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_HelpCenter", &Misc::HelpCenter::instance());
   ctx->setContextProperty("Cpp_ExtensionManager", &Misc::ExtensionManager::instance());
   ctx->setContextProperty("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
+  ctx->setContextProperty("Cpp_Misc_GraphicsBackend", &Misc::GraphicsBackend::instance());
+  ctx->setContextProperty("Cpp_Misc_CrashTracker", &Misc::CrashTracker::instance());
 }
 
 #ifdef BUILD_COMMERCIAL

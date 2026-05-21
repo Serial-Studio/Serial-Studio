@@ -219,6 +219,8 @@ set(SOURCES
   src/Misc/Examples.cpp
   src/Misc/HelpCenter.cpp
   src/Misc/IconEngine.cpp
+  src/Misc/GraphicsBackend.cpp
+  src/Misc/CrashTracker.cpp
   src/Misc/CLI.cpp
   src/Platform/AppPlatform.cpp
   src/UI/DashboardWidget.cpp
@@ -324,6 +326,8 @@ set(HEADERS
   src/Misc/Examples.h
   src/Misc/HelpCenter.h
   src/Misc/IconEngine.h
+  src/Misc/GraphicsBackend.h
+  src/Misc/CrashTracker.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
   src/UI/Taskbar.h
@@ -435,6 +439,7 @@ set(QML_SOURCES
   qml/Dialogs/Acknowledgements.qml
   qml/Dialogs/AccelerometerConfigDialog.qml
   qml/Dialogs/AxisRangeDialog.qml
+  qml/Dialogs/CrashRecovery.qml
   qml/Dialogs/CsvPlayer.qml
   qml/Dialogs/Mdf4Player.qml
   qml/Dialogs/SqlitePlayer.qml

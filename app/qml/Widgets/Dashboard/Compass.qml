@@ -128,7 +128,7 @@ Item {
         Rectangle {
           id: chromeRing
 
-          visible: false
+          visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
           width: gaugeFace.width + control.chromeW * 2
           height: gaugeFace.height + control.chromeW * 2
           radius: width / 2
@@ -149,6 +149,8 @@ Item {
           shadowColor: "#000000"
           shadowVerticalOffset: 2
           anchors.fill: chromeRing
+          visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+          enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         }
 
         //

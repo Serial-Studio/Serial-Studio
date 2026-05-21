@@ -102,7 +102,7 @@ Item {
   ColumnLayout {
     id: _layout
 
-    visible: false
+    visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
 
     spacing: 0
     anchors.fill: parent
@@ -174,6 +174,8 @@ Item {
     brightness: _mouseArea.containsMouse && root.enabled ?
                   (_mouseArea.containsPress ? -0.07 : 0.07) : 0
     saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
+    visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+    enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
     Behavior on saturation {NumberAnimation{}}
     Behavior on brightness {NumberAnimation{}}

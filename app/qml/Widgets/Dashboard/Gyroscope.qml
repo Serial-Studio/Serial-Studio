@@ -246,6 +246,8 @@ Item {
           source: rollDial
           blurEnabled: true
           anchors.fill: rollDial
+          visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+          enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         }
 
         //
@@ -259,6 +261,8 @@ Item {
           blurEnabled: true
           source: rollPointer
           anchors.fill: rollPointer
+          visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+          enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         }
 
         //
@@ -272,6 +276,8 @@ Item {
           blurEnabled: true
           source: crosshair
           anchors.fill: crosshair
+          visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+          enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         }
 
         //

@@ -64,6 +64,8 @@ Item {
     blurMax: root.on ? 64 : 0
     brightness: root.on ? 0.4 : 0
     saturation: root.on ? 0.2 : 0
+    visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+    enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
   }
 
   MultiEffect {
@@ -75,5 +77,7 @@ Item {
     blurMax: root.on ? 64 : 0
     brightness: root.on ? 0.4 : 0
     saturation: root.on ? 0.2 : 0
+    visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+    enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
   }
 }

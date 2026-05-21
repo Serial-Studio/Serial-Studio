@@ -151,10 +151,10 @@ Item {
         Image {
           id: _icon
 
-          visible: false
           anchors.fill: parent
           sourceSize.width: root.iconSize
           sourceSize.height: root.iconSize
+          visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
         }
 
         MultiEffect {
@@ -163,6 +163,8 @@ Item {
           brightness: _mouseArea.containsMouse && root.enabled ?
                         (_mouseArea.containsPress ? -0.07 : 0.07) : 0
           saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
+          visible: Cpp_Misc_GraphicsBackend.effectsEnabled
+          enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         }
       }
 

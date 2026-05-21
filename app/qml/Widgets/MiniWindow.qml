@@ -307,8 +307,8 @@ Item {
     //
     // Only enabled when using RHI
     //
-    enabled: root.shadowEnabled
-    visible: root.shadowEnabled
+    enabled: root.shadowEnabled && Cpp_Misc_GraphicsBackend.effectsEnabled
+    visible: root.shadowEnabled && Cpp_Misc_GraphicsBackend.effectsEnabled
   }
 
   //
