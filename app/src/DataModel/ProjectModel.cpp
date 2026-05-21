@@ -2232,10 +2232,9 @@ void DataModel::ProjectModel::loadWidgetSettingsAndWorkspaces(const QJsonObject&
         DataModel::NotificationCenter::instance().postWarning(
           QStringLiteral("ProjectModel"),
           tr("Workspace IDs remapped on load"),
-          tr("%n custom workspace ID(s) overlapped the new reserved auto range and were "
-             "moved into the user range. Save the project to make the remap permanent.",
-             "",
-             n));
+          tr("%1 custom workspace ID(s) overlapped the new reserved auto range and were "
+             "moved into the user range. Save the project to make the remap permanent.")
+            .arg(n));
       });
     }
   }
