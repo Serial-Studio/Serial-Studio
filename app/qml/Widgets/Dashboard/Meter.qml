@@ -230,9 +230,11 @@ Item {
           id: chromeShape
 
           smooth: true
-          layer.samples: 8
+          layer.samples: 16
+          layer.smooth: true
           antialiasing: true
           anchors.fill: parent
+          preferredRendererType: Shape.CurveRenderer
           visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
           layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
@@ -291,9 +293,11 @@ Item {
           id: faceShape
 
           smooth: true
-          layer.samples: 8
+          layer.samples: 16
+          layer.smooth: true
           antialiasing: true
           anchors.fill: parent
+          preferredRendererType: Shape.CurveRenderer
           layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
           readonly property real bottomExtension: Math.max(0, meterArea.labelBaseHeight - meterArea.chromeW)
@@ -425,12 +429,15 @@ Item {
 
             smooth: true
             opacity: 0.60
-            required property var modelData
+            layer.samples: 16
+            layer.smooth: true
             antialiasing: true
             anchors.fill: parent
             visible: modelData.active
             preferredRendererType: Shape.CurveRenderer
+            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
+            required property var modelData
             readonly property real rOut: meterArea.faceR - 2
             readonly property real rIn: alarmZoneShape.rOut - Math.max(3, meterArea.faceR * 0.035)
             readonly property real angA: (startAngleDeg + alarmZoneShape.fracA * angleRangeDeg) * Math.PI / 180
@@ -509,6 +516,26 @@ Item {
           x: meterArea.faceCx - meterArea.faceR + 1
           height: meterArea.labelBaseHeight - meterArea.chromeW - 4
 
+          //
+          // Hide the title and let the value box span the full row when either the
+          // title would elide or the value text would overflow its half-row slot.
+          //
+          readonly property real rowInnerWidth: width - 12
+          readonly property real halfWidth: (rowInnerWidth - 4) / 2
+          readonly property bool titleFits: titleTextMetrics.width <= halfWidth - 8
+          readonly property bool valueFits: valueBoxMetrics.width + 18 <= halfWidth
+          readonly property bool showTitle: root.model.title.length > 0
+                                            && titleFits && valueFits
+
+          TextMetrics {
+            id: titleTextMetrics
+
+            font.bold: true
+            text: root.model.title
+            font.pixelSize: digitalFontSize
+            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+          }
+
           RowLayout {
             spacing: 4
             anchors.fill: parent
@@ -518,6 +545,7 @@ Item {
             Item {
               Layout.fillWidth: true
               Layout.fillHeight: true
+              visible: labelBase.showTitle
 
               Text {
                 id: titleText
@@ -531,7 +559,6 @@ Item {
                 font.pixelSize: digitalFontSize
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                visible: root.model.title.length > 0
                 color: Cpp_ThemeManager.colors["widget_text"]
                 font.family: Cpp_Misc_CommonFonts.widgetFontFamily
               }
@@ -625,7 +652,8 @@ Item {
             id: needleShape
 
             smooth: true
-            layer.samples: 8
+            layer.samples: 16
+            layer.smooth: true
             antialiasing: true
             anchors.fill: parent
             preferredRendererType: Shape.CurveRenderer

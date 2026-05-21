@@ -303,7 +303,8 @@ Item {
               id: hourShape
 
               smooth: true
-              layer.samples: 8
+              layer.samples: 16
+              layer.smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.hourAngle
@@ -364,7 +365,8 @@ Item {
               id: minuteShape
 
               smooth: true
-              layer.samples: 8
+              layer.samples: 16
+              layer.smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.minuteAngle
@@ -426,7 +428,8 @@ Item {
               id: secondShape
 
               smooth: true
-              layer.samples: 8
+              layer.samples: 16
+              layer.smooth: true
               antialiasing: true
               anchors.fill: parent
               rotation: root.secondAngle

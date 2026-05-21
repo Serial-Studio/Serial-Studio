@@ -262,6 +262,8 @@ Item {
             id: needleShape
 
             smooth: true
+            layer.samples: 16
+            layer.smooth: true
             antialiasing: true
             width: gaugeFace.width
             anchors.centerIn: parent
@@ -269,6 +271,7 @@ Item {
             transformOrigin: Item.Center
             rotation: root.unwrappedHeading
             preferredRendererType: Shape.CurveRenderer
+            layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
             readonly property real cx: needleShape.width / 2
             readonly property real cy: needleShape.height / 2

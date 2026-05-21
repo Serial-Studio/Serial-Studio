@@ -192,23 +192,6 @@ Item {
 
     DashboardToolButton {
       onClicked: {
-        root.userShowLegends = !root.userShowLegends
-        root.updateWidgetOptions()
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowLegends", root.userShowLegends)
-      }
-      checked: root.userShowLegends
-      ToolTip.text: qsTr("Show Legends")
-      icon.source: "qrc:/icons/dashboard-buttons/labels.svg"
-    }
-
-    Rectangle {
-      implicitWidth: 1
-      implicitHeight: 24
-      color: Cpp_ThemeManager.colors["widget_border"]
-    }
-
-    DashboardToolButton {
-      onClicked: {
         root.userShowXLabel = !root.userShowXLabel
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowXLabel", root.userShowXLabel)
@@ -355,7 +338,8 @@ Item {
     Item {
       opacity: plot.opacity
       Layout.fillHeight: true
-      visible: root.showLegends
+      enabled: root.model.count > 1
+      visible: enabled && root.showLegends
       implicitWidth: _legends.implicitWidth + 8
 
       Rectangle {

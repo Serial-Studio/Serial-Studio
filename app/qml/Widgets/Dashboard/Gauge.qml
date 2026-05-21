@@ -355,12 +355,15 @@ Item {
 
                 smooth: true
                 opacity: 0.60
-                required property var modelData
+                layer.samples: 16
+                layer.smooth: true
                 antialiasing: true
                 anchors.fill: parent
                 visible: modelData.active
                 preferredRendererType: Shape.CurveRenderer
+                layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
+                required property var modelData
                 readonly property real rOut: gaugeFace.width / 2 - gaugeFace.border.width - 1
                 readonly property real rIn: alarmZoneShape.rOut - Math.max(3, gaugeFace.width * 0.025)
                 readonly property real angA: (startAngleDeg + alarmZoneShape.fracA * angleRangeDeg) * Math.PI / 180
@@ -565,7 +568,8 @@ Item {
             id: needleShape
 
             smooth: true
-            layer.samples: 8
+            layer.samples: 16
+            layer.smooth: true
             antialiasing: true
             anchors.fill: parent
             rotation: control.angle
