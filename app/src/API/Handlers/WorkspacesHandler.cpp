@@ -240,6 +240,57 @@ struct ParsedWidgetId {
 }
 
 /**
+ * @brief Returns an error message when datasetId is not in group; nullopt otherwise.
+ */
+[[nodiscard]] static std::optional<QString> validateDatasetIdInGroup(
+  const DataModel::Group& group, int targetDatasetId, int gid)
+{
+  const auto& dsList = group.datasets;
+  const bool dsExists = std::any_of(dsList.begin(), dsList.end(), [targetDatasetId](const auto& d) {
+    return d.datasetId == targetDatasetId;
+  });
+  if (dsExists)
+    return std::nullopt;
+
+  return QStringLiteral("datasetId=%1 not found in group %2. Check project.dataset.list "
+                        "for valid datasetIds (scoped within their parent group).")
+    .arg(targetDatasetId)
+    .arg(gid);
+}
+
+/**
+ * @brief Returns an error message when wtype is unknown or a sentinel; nullopt otherwise.
+ */
+[[nodiscard]] static std::optional<QString> validateResolvedWidgetType(
+  int wtype, const QJsonValue& wtypeJson)
+{
+  if (wtype < 0)
+    return QStringLiteral("Unknown widgetType slug '%1'. Use one of: plot, fft, bar, gauge, "
+                          "compass, led, datagrid, multiplot, accelerometer, gyroscope, gps, "
+                          "plot3d, terminal, imageview, output-panel, notification-log, "
+                          "waterfall, painter.")
+      .arg(wtypeJson.toString());
+
+  if (wtype == SerialStudio::DashboardTerminal)
+    return QStringLiteral("widgetType=0 is DashboardTerminal/Console, not a workspace tile. "
+                          "Common cause: confusing the DatasetOption bitflag (used by "
+                          "project.dataset.setOptions: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, "
+                          "16=Compass, 32=LED, 64=Waterfall) with the DashboardWidget enum "
+                          "(used here: 9=Plot, 7=FFT, 10=Bar, 11=Gauge, 12=Compass, 8=LED, "
+                          "17=Waterfall, 1=DataGrid, 2=MultiPlot, 5=GPS). The numbers do not "
+                          "line up. Pick a value from the group's compatibleWidgetTypes "
+                          "(see project.group.list).");
+
+  if (wtype == SerialStudio::DashboardNoWidget)
+    return QStringLiteral("widgetType=13 is DashboardNoWidget (a sentinel value, "
+                          "not a tile). Pick a real visualization type from the "
+                          "group's compatibleWidgetTypes "
+                          "(see project.group.list).");
+
+  return std::nullopt;
+}
+
+/**
  * @brief Validates wtype is compatible with the group; returns empty optional on success.
  */
 [[nodiscard]] static std::optional<QString> validateGroupCompatibility(
@@ -263,28 +314,104 @@ struct ParsedWidgetId {
 }
 
 /**
- * @brief Picks the next free relativeIndex for (widgetType, groupId) on the workspace.
+ * @brief Returns the relative offset of (widgetType, targetDatasetId) within targetGroup.
  */
-[[nodiscard]] static int nextFreeRelativeIndex(const std::vector<DataModel::Workspace>& wsList,
-                                               int wid,
-                                               int wtype,
-                                               int gid)
+[[nodiscard]] static int datasetOffsetInGroup(const DataModel::Group& group,
+                                              SerialStudio::DashboardWidget wtype,
+                                              int targetDatasetId)
 {
-  const auto wsIt = std::find_if(
-    wsList.begin(), wsList.end(), [wid](const auto& ws) { return ws.workspaceId == wid; });
-  if (wsIt == wsList.end())
+  int offset = 0;
+  for (const auto& ds : group.datasets) {
+    if (ds.hideOnDashboard)
+      continue;
+
+    const auto keys = SerialStudio::getDashboardWidgets(ds);
+    if (!keys.contains(wtype))
+      continue;
+
+    if (targetDatasetId >= 0 && ds.datasetId == targetDatasetId)
+      return offset;
+
+    ++offset;
+  }
+
+  return 0;
+}
+
+/**
+ * @brief Returns how many widget instances of wtype this non-target group contributes.
+ */
+[[nodiscard]] static int groupContribution(const DataModel::Group& group,
+                                           SerialStudio::DashboardWidget wtype, bool isLed,
+                                           bool isGroupShape, bool isDatasetShape, bool pro)
+{
+  if (isGroupShape) {
+    auto key = SerialStudio::getDashboardWidget(group);
+    if (key == SerialStudio::DashboardPlot3D && !pro)
+      key = SerialStudio::DashboardMultiPlot;
+
+    if (key == wtype && SerialStudio::groupWidgetEligibleForWorkspace(key))
+      return 1;
+
+    return 0;
+  }
+
+  if (isLed) {
+    for (const auto& ds : group.datasets) {
+      if (ds.hideOnDashboard)
+        continue;
+
+      if (ds.led)
+        return 1;
+    }
+    return 0;
+  }
+
+  if (!isDatasetShape)
     return 0;
 
-  QSet<int> taken;
-  for (const auto& ref : wsIt->widgetRefs)
-    if (ref.widgetType == wtype && ref.groupId == gid)
-      taken.insert(ref.relativeIndex);
+  int count = 0;
+  for (const auto& ds : group.datasets) {
+    if (ds.hideOnDashboard)
+      continue;
 
-  int relIndex = 0;
-  while (taken.contains(relIndex))
-    ++relIndex;
+    const auto keys = SerialStudio::getDashboardWidgets(ds);
+    if (keys.contains(wtype))
+      ++count;
+  }
+  return count;
+}
 
-  return relIndex;
+/**
+ * @brief Computes the dashboard-level relativeIndex for (widgetType, groupId).
+ */
+[[nodiscard]] static int dashboardRelativeIndexFor(const std::vector<DataModel::Group>& groups,
+                                                   int targetGroupId,
+                                                   SerialStudio::DashboardWidget wtype,
+                                                   int targetDatasetId = -1)
+{
+  const bool pro            = SerialStudio::proWidgetsEnabled();
+  const bool isLed          = (wtype == SerialStudio::DashboardLED);
+  const bool isGroupShape   = SerialStudio::isGroupWidget(wtype) && !isLed;
+  const bool isDatasetShape = SerialStudio::isDatasetWidget(wtype);
+
+  int counter = 0;
+  for (const auto& group : groups) {
+    if (group.groupId != targetGroupId) {
+      counter += groupContribution(group, wtype, isLed, isGroupShape, isDatasetShape, pro);
+      continue;
+    }
+
+    if (isGroupShape || isLed)
+      return counter;
+
+    if (isDatasetShape)
+      return counter + datasetOffsetInGroup(group, wtype, targetDatasetId);
+
+    return -1;
+  }
+
+  return -1;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -336,6 +463,15 @@ void API::Handlers::WorkspacesHandler::registerWorkspaceCrudCommands()
   }),
     &remove);
   registry.registerCommand(
+    QStringLiteral("project.workspace.clearAll"),
+    QStringLiteral("Wipe every workspace in one call (no params). Forces customize mode on and "
+                   "leaves an empty list. Use this instead of looping project.workspace.delete -- "
+                   "one approval card, one autosave flush. Follow with project.workspace."
+                   "autoGenerate to restore the default Overview/AllData/per-group layout, or "
+                   "project.workspace.add + addWidget to build a custom layout."),
+    API::emptySchema(),
+    &clearAll);
+  registry.registerCommand(
     QStringLiteral("project.workspace.rename"),
     QStringLiteral("Rename a workspace (params: id, title)"),
     API::makeSchema({
@@ -366,12 +502,11 @@ void API::Handlers::WorkspacesHandler::registerWorkspaceCrudCommands()
                    "every user workspace id in the desired order -- partial reorders are rejected "
                    "to avoid silent corruption. System workspaces (auto-generated, ids 1000-4999) "
                    "keep their original slots."),
-    API::makeSchema({
-      {QStringLiteral("workspaceIds"),
-       QStringLiteral("array"),
-       QStringLiteral("Every user-workspace id (>= 5000), in the desired order. Must "
-                      "exactly match the set of current user workspaces.")}
-  }),
+    API::makeSchema({API::typedArrayProp(
+      QStringLiteral("workspaceIds"),
+      QStringLiteral("Every user-workspace id (>= 5000), in the desired order. Must "
+                     "exactly match the set of current user workspaces."),
+      QStringLiteral("integer"))}),
     &reorder);
   registry.registerCommand(
     QStringLiteral("project.workspace.autoGenerate"),
@@ -419,30 +554,42 @@ void API::Handlers::WorkspacesHandler::registerWidgetAddCommand()
 {
   auto& registry = CommandRegistry::instance();
 
-  const auto addSchema = API::makeSchema({
-    {  QStringLiteral("workspaceId"),
-     QStringLiteral("integer"),
-     QStringLiteral("Workspace id from project.workspace.list. IDs 1000-4999 are "
-     "auto-generated (Overview=1000, AllData=1001, per-group >= 1002); "
-     "user-created workspaces start at 5000.")                                             },
-    {   QStringLiteral("widgetType"),
-     QStringLiteral("string|integer"),
-     QStringLiteral("Widget kind. PREFERRED form: a string slug -- 'plot', 'fft', "
-     "'bar', 'gauge', 'compass', 'led', 'datagrid', 'multiplot', "
-     "'accelerometer', 'gyroscope', 'gps', 'plot3d', 'imageview' (Pro), "
-     "'output-panel' (Pro), 'notification-log' (Pro), 'waterfall' (Pro), "
-     "'painter' (Pro). Integer DashboardWidget enum still accepted for "
-     "back-compat (1=DataGrid, 2=MultiPlot, ... 9=Plot, 10=Bar, 11=Gauge, "
-     "12=Compass) but the strings are unambiguous and forwards-compatible.")               },
-    {      QStringLiteral("groupId"),
-     QStringLiteral("integer"),
-     QStringLiteral("groupId from project.groups.list. Use group.id, NOT the array index.")},
-    {QStringLiteral("relativeIndex"),
-     QStringLiteral("integer"),
-     QStringLiteral("OPTIONAL. Per-(widgetType,groupId) deduplication counter; NOT a "
-     "dataset index. Omit to auto-assign the next free slot. Pass an "
-     "explicit value only when you are reproducing a prior layout.")                       }
-  });
+  const auto addSchema = API::makeSchema(
+    {
+      {QStringLiteral("workspaceId"),
+       QStringLiteral("integer"),
+       QStringLiteral("Workspace id from project.workspace.list. IDs 1000-4999 are "
+       "auto-generated (Overview=1000, AllData=1001, per-group >= 1002); "
+       "user-created workspaces start at 5000.")                                             },
+      { QStringLiteral("widgetType"),
+       QStringLiteral("string|integer"),
+       QStringLiteral("Widget kind. PREFERRED form: a string slug -- 'plot', 'fft', "
+       "'bar', 'gauge', 'compass', 'led', 'datagrid', 'multiplot', "
+       "'accelerometer', 'gyroscope', 'gps', 'plot3d', 'imageview' (Pro), "
+       "'output-panel' (Pro), 'notification-log' (Pro), 'waterfall' (Pro), "
+       "'painter' (Pro). Integer DashboardWidget enum still accepted for "
+       "back-compat (1=DataGrid, 2=MultiPlot, ... 9=Plot, 10=Bar, 11=Gauge, "
+       "12=Compass) but the strings are unambiguous and forwards-compatible.")               },
+      {    QStringLiteral("groupId"),
+       QStringLiteral("integer"),
+       QStringLiteral("groupId from project.groups.list. Use group.id, NOT the array index.")},
+  },
+    {{QString(Keys::DatasetId),
+      QStringLiteral("integer"),
+      QStringLiteral("OPTIONAL. For per-dataset widgets (plot/fft/bar/gauge/meter/"
+                     "compass/waterfall): pin the tile to THIS dataset within groupId. "
+                     "When omitted, the first dataset in the group with the matching "
+                     "option enabled is used. Ignored for group-level widgets "
+                     "(datagrid/multiplot/led/accelerometer/gyroscope/gps/plot3d/"
+                     "painter/imageview/output-panel).")},
+     {QStringLiteral("relativeIndex"),
+      QStringLiteral("integer"),
+      QStringLiteral("OPTIONAL and DISCOURAGED. Dashboard-level global index across "
+                     "all widgets of this type in the project (NOT a per-workspace or "
+                     "per-group counter). Omit it and the API computes the correct "
+                     "index from groupId (and datasetId for per-dataset widgets). "
+                     "Setting this manually is fragile and only useful when restoring "
+                     "a hand-crafted layout.")}});
   registry.registerCommand(
     QStringLiteral("project.workspace.addWidget"),
     QStringLiteral("Pin a visualization tile onto a workspace. The tile renders the "
@@ -658,6 +805,32 @@ API::CommandResponse API::Handlers::WorkspacesHandler::remove(const QString& id,
 }
 
 /**
+ * @brief Wipes every workspace in one shot. Leaves customize mode on with an empty list.
+ */
+API::CommandResponse API::Handlers::WorkspacesHandler::clearAll(const QString& id,
+                                                                const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  if (!inProjectFileMode())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
+
+  auto& pm                = DataModel::ProjectModel::instance();
+  const int previousCount = static_cast<int>(pm.editorWorkspaces().size());
+  pm.clearAllWorkspaces();
+
+  QJsonObject result;
+  result[QStringLiteral("cleared")]   = previousCount;
+  result[QStringLiteral("remaining")] = static_cast<int>(pm.editorWorkspaces().size());
+  result[QStringLiteral("hint")]      = QStringLiteral(
+    "All workspaces removed; customize mode is on. Call project.workspace.autoGenerate "
+         "to recreate the default Overview/AllData/per-group layout, or build a custom layout "
+         "with project.workspace.add + project.workspace.addWidget.");
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
  * @brief Renames a workspace. No-op if id not found.
  */
 API::CommandResponse API::Handlers::WorkspacesHandler::rename(const QString& id,
@@ -858,43 +1031,8 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetAdd(const QString& 
   // widgetType accepts either an integer (DashboardWidget enum) or a string slug
   const QJsonValue wtypeJson = params.value(QStringLiteral("widgetType"));
   const int wtype            = resolveWidgetType(wtypeJson);
-  if (wtype < 0)
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QStringLiteral("Unknown widgetType slug '%1'. Use one of: plot, fft, bar, gauge, "
-                     "compass, led, datagrid, multiplot, accelerometer, gyroscope, gps, "
-                     "plot3d, terminal, imageview, output-panel, notification-log, "
-                     "waterfall, painter.")
-        .arg(wtypeJson.toString()));
-
-  const bool hasRelIndex = params.contains(QStringLiteral("relativeIndex"));
-  int relIndex           = hasRelIndex ? params.value(QStringLiteral("relativeIndex")).toInt()
-                                       : nextFreeRelativeIndex(pm.editorWorkspaces(), wid, wtype, gid);
-  const bool relIndexAutoAssigned = !hasRelIndex && relIndex != 0;
-
-  // Reject DashboardTerminal / DashboardNoWidget with actionable errors
-  if (wtype == SerialStudio::DashboardTerminal)
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QStringLiteral("widgetType=0 is DashboardTerminal/Console, not a workspace tile. "
-                     "Common cause: confusing the DatasetOption bitflag (used by "
-                     "project.dataset.setOptions: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, "
-                     "16=Compass, 32=LED, 64=Waterfall) with the DashboardWidget enum "
-                     "(used here: 9=Plot, 7=FFT, 10=Bar, 11=Gauge, 12=Compass, 8=LED, "
-                     "17=Waterfall, 1=DataGrid, 2=MultiPlot, 5=GPS). The numbers do not "
-                     "line up. Pick a value from the group's compatibleWidgetTypes "
-                     "(see project.group.list)."));
-
-  if (wtype == SerialStudio::DashboardNoWidget)
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QStringLiteral("widgetType=13 is DashboardNoWidget (a sentinel value, "
-                     "not a tile). Pick a real visualization type from the "
-                     "group's compatibleWidgetTypes "
-                     "(see project.group.list)."));
+  if (const auto err = validateResolvedWidgetType(wtype, wtypeJson))
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, *err);
 
   const auto& wsList = pm.editorWorkspaces();
   const auto exists  = std::any_of(
@@ -916,13 +1054,41 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetAdd(const QString& 
   if (const auto err = validateGroupCompatibility(*group_it, wtype, gid))
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, *err);
 
+  // Resolve relativeIndex AFTER all validation so error messages stay specific.
+  const bool hasRelIndex    = params.contains(QStringLiteral("relativeIndex"));
+  const bool hasDatasetId   = params.contains(Keys::DatasetId);
+  const int targetDatasetId = hasDatasetId ? params.value(Keys::DatasetId).toInt() : -1;
+
+  if (hasDatasetId)
+    if (const auto err = validateDatasetIdInGroup(*group_it, targetDatasetId, gid))
+      return CommandResponse::makeError(id, ErrorCode::InvalidParam, *err);
+
+  const int autoRelIndex = dashboardRelativeIndexFor(
+    groups, gid, static_cast<SerialStudio::DashboardWidget>(wtype), targetDatasetId);
+  int relIndex = hasRelIndex ? params.value(QStringLiteral("relativeIndex")).toInt() : autoRelIndex;
+  const bool relIndexAutoAssigned = !hasRelIndex;
+
+  if (relIndex < 0)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Cannot resolve relativeIndex for widgetType=%1 on group %2. The widget "
+                     "type may not be compatible with this group, or the group has no datasets "
+                     "with the matching option enabled (e.g. led=true for an LED panel, or "
+                     "graph=true for a plot tile).")
+        .arg(wtype)
+        .arg(gid));
+
   pm.addWidgetToWorkspace(wid, wtype, gid, relIndex);
 
   QJsonObject result;
-  result[QStringLiteral("workspaceId")]               = wid;
-  result[QStringLiteral("widgetType")]                = wtype;
-  result[QStringLiteral("widgetTypeSlug")]            = API::EnumLabels::dashboardWidgetSlug(wtype);
-  result[QStringLiteral("groupId")]                   = gid;
+  result[QStringLiteral("workspaceId")]    = wid;
+  result[QStringLiteral("widgetType")]     = wtype;
+  result[QStringLiteral("widgetTypeSlug")] = API::EnumLabels::dashboardWidgetSlug(wtype);
+  result[QStringLiteral("groupId")]        = gid;
+  if (hasDatasetId)
+    result[Keys::DatasetId] = targetDatasetId;
+
   result[QStringLiteral("relativeIndex")]             = relIndex;
   result[QStringLiteral("relativeIndexAutoAssigned")] = relIndexAutoAssigned;
   result[QStringLiteral("widgetId")]                  = widgetIdFor(wid, wtype, gid, relIndex);

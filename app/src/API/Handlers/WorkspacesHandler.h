@@ -45,6 +45,7 @@ private:
   static CommandResponse get(const QString& id, const QJsonObject& params);
   static CommandResponse add(const QString& id, const QJsonObject& params);
   static CommandResponse remove(const QString& id, const QJsonObject& params);
+  static CommandResponse clearAll(const QString& id, const QJsonObject& params);
   static CommandResponse rename(const QString& id, const QJsonObject& params);
   static CommandResponse update(const QString& id, const QJsonObject& params);
   static CommandResponse autoGenerate(const QString& id, const QJsonObject& params);

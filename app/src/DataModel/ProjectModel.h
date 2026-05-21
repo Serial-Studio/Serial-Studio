@@ -123,6 +123,7 @@ signals:
   void lockedChanged();
   void mqttPublisherChanged();
   void saveDialogCompleted(bool accepted);
+  void importCompleted(bool accepted, const QString& savedPath);
 
   void groupAdded(int groupId);
   void groupDeleted();
@@ -234,6 +235,7 @@ public slots:
   bool openJsonFile(const QString& path);
 
   bool loadFromJsonDocument(const QJsonDocument& document, const QString& sourcePath = {});
+  void importProjectFromJson(const QJsonObject& project, const QString& suggestedFileName);
 
   void setTitle(const QString& title);
   void setPointCount(const int points);
@@ -351,6 +353,7 @@ public slots:
   void showAllHiddenGroups();
 
   void deleteWorkspace(int workspaceId);
+  void clearAllWorkspaces();
   void renameWorkspace(int workspaceId, const QString& title);
   void updateWorkspace(int workspaceId,
                        const QString& title,

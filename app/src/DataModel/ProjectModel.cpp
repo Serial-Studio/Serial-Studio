@@ -623,7 +623,7 @@ QString DataModel::ProjectModel::jsonFileName() const
  */
 QString DataModel::ProjectModel::jsonProjectsPath() const
 {
-  return Misc::WorkspaceManager::instance().path("JSON Projects");
+  return Misc::WorkspaceManager::instance().path("Projects");
 }
 
 /**
@@ -1756,14 +1756,22 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   if (path.isEmpty())
     return false;
 
-  if (m_filePath == path && !m_groups.empty())
+  // Legacy "JSON Projects" folder fallback
+  QString resolved = path;
+  if (!QFileInfo::exists(resolved)) {
+    const QString remapped = Misc::WorkspaceManager::instance().remapLegacyPath(path);
+    if (remapped != path && QFileInfo::exists(remapped))
+      resolved = remapped;
+  }
+
+  if (m_filePath == resolved && !m_groups.empty())
     return true;
 
   // Force ProjectFile mode before deserialisation so derived state sees groups
   AppState::instance().setOperationMode(SerialStudio::ProjectFile);
 
   // Read and validate the JSON file
-  QFile file(path);
+  QFile file(resolved);
   QJsonDocument document;
   if (file.open(QFile::ReadOnly)) {
     auto result = Misc::JsonValidator::parseAndValidate(file.readAll());
@@ -1781,7 +1789,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     file.close();
   }
 
-  return loadFromJsonDocument(document, path);
+  return loadFromJsonDocument(document, resolved);
 }
 
 /**
@@ -1860,6 +1868,84 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   }
 
   return true;
+}
+
+/**
+ * @brief Prompts for a save path, writes the imported project, then opens it.
+ */
+void DataModel::ProjectModel::importProjectFromJson(const QJsonObject& project,
+                                                    const QString& suggestedFileName)
+{
+  // Defer so any UI dialog that initiated the import has time to unwind
+  QMetaObject::invokeMethod(
+    this,
+    [this, project, suggestedFileName]() {
+      QString suggested = suggestedFileName.isEmpty() ? tr("Untitled Project") : suggestedFileName;
+      if (!suggested.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
+        suggested += QStringLiteral(".ssproj");
+
+      const QString defaultPath = jsonProjectsPath() + QStringLiteral("/") + suggested;
+
+      auto* dialog = new QFileDialog(qApp->activeWindow(),
+                                     tr("Save Imported Project"),
+                                     defaultPath,
+                                     tr("Serial Studio Project Files (*.ssproj)"));
+
+      dialog->setAcceptMode(QFileDialog::AcceptSave);
+      dialog->setFileMode(QFileDialog::AnyFile);
+      dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+      auto accepted   = std::make_shared<bool>(false);
+      auto chosenPath = std::make_shared<QString>();
+      connect(
+        dialog, &QFileDialog::fileSelected, this, [accepted, chosenPath](const QString& path) {
+          if (path.isEmpty())
+            return;
+
+          *accepted   = true;
+          *chosenPath = path;
+          if (!chosenPath->endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
+            *chosenPath += QStringLiteral(".ssproj");
+        });
+
+      connect(dialog, &QFileDialog::finished, this, [this, accepted, chosenPath, project](int) {
+        if (!*accepted) {
+          Q_EMIT importCompleted(false, QString());
+          return;
+        }
+
+        // Defer write+open so QFileDialog::done() unwinds first (macOS NSSavePanel KVO)
+        QMetaObject::invokeMethod(
+          this,
+          [this, chosenPath, project]() {
+            QFile file(*chosenPath);
+            if (!file.open(QFile::WriteOnly)) {
+              if (m_suppressMessageBoxes)
+                qWarning() << "[ProjectModel] Import save error:" << file.errorString();
+              else
+                Misc::Utilities::showMessageBox(
+                  tr("File open error"), file.errorString(), QMessageBox::Critical);
+
+              Q_EMIT importCompleted(false, QString());
+              return;
+            }
+
+            file.write(QJsonDocument(project).toJson(QJsonDocument::Indented));
+            file.close();
+
+            AppState::instance().setOperationMode(SerialStudio::ProjectFile);
+
+            // Clear cached path so openJsonFile()'s redundant-reload guard doesn't skip
+            m_filePath.clear();
+            const bool ok = openJsonFile(*chosenPath);
+            Q_EMIT importCompleted(ok, ok ? *chosenPath : QString());
+          },
+          Qt::QueuedConnection);
+      });
+
+      dialog->open();
+    },
+    Qt::QueuedConnection);
 }
 
 /**
@@ -4282,6 +4368,26 @@ void DataModel::ProjectModel::deleteWorkspace(int workspaceId)
     return;
 
   m_workspaces.erase(it);
+  setModified(true);
+  Q_EMIT editorWorkspacesChanged();
+  Q_EMIT activeWorkspacesChanged();
+}
+
+/**
+ * @brief Wipes every workspace, leaving an empty customised list.
+ */
+void DataModel::ProjectModel::clearAllWorkspaces()
+{
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
+  if (m_workspaces.empty())
+    return;
+
+  m_workspaces.clear();
   setModified(true);
   Q_EMIT editorWorkspacesChanged();
   Q_EMIT activeWorkspacesChanged();

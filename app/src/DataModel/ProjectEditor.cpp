@@ -5168,6 +5168,22 @@ QHash<qint64, DataModel::ProjectEditor::ResolvedWidget> DataModel::ProjectEditor
 
     for (const auto& ds : g.datasets)
       walkDatasetWidgets(ds);
+
+    // Synthesise one LED panel entry per group with any led:true dataset.
+    const bool groupHasLed =
+      std::any_of(g.datasets.begin(), g.datasets.end(), [](const DataModel::Dataset& ds) {
+        return !ds.hideOnDashboard && ds.led;
+      });
+    if (groupHasLed) {
+      const int typeKey = static_cast<int>(SerialStudio::DashboardLED);
+      const int relIdx  = groupRunning.value(typeKey, 0);
+      groupRunning.insert(typeKey, relIdx + 1);
+
+      ResolvedWidget entry;
+      entry.groupTitle   = g.title;
+      entry.datasetTitle = QString();
+      lookup.insert(workspaceWidgetKey(typeKey, g.groupId, relIdx), entry);
+    }
   }
 
   return lookup;
@@ -5371,6 +5387,25 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
 
     for (const auto& ds : group.datasets)
       walkDatasetWidgets(ds);
+
+    // Synthesise one LED panel entry per group with any led:true dataset.
+    const bool groupHasLed =
+      std::any_of(group.datasets.begin(), group.datasets.end(), [](const DataModel::Dataset& ds) {
+        return !ds.hideOnDashboard && ds.led;
+      });
+    if (groupHasLed) {
+      const auto ledKey = SerialStudio::DashboardLED;
+      QVariantMap row;
+      row["widgetType"]    = static_cast<int>(ledKey);
+      row["groupId"]       = group.groupId;
+      row["relativeIndex"] = groupIdx.value(ledKey, 0);
+      row["groupTitle"]    = group.title;
+      row["datasetTitle"]  = QString();
+      row["isGroupWidget"] = true;
+      row["widgetLabel"]   = SerialStudio::dashboardWidgetTitle(ledKey);
+      groupIdx[ledKey]     = row["relativeIndex"].toInt() + 1;
+      result.append(row);
+    }
   }
 
   return result;

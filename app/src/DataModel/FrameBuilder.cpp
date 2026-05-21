@@ -1022,14 +1022,15 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
   while (fftSamples < targetSamples && fftSamples < 8192)
     fftSamples *= 2;
 
-  // Build datasets with FFT and plot enabled
-  int index = 1;
+  // Build datasets with FFT enabled; per-dataset plot only when mono
+  const bool multipleChannels = channels.count() > 1;
+  int index                   = 1;
   std::vector<DataModel::Dataset> datasets;
   datasets.reserve(channels.count());
   for (const auto& channel : std::as_const(channels)) {
     DataModel::Dataset dataset;
     dataset.fft             = true;
-    dataset.plt             = true;
+    dataset.plt             = !multipleChannels;
     dataset.groupId         = 0;
     dataset.datasetId       = index - 1;
     dataset.index           = index;
@@ -1057,7 +1058,7 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
   group.groupId  = 0;
   group.datasets = datasets;
   group.title    = tr("Audio Input");
-  if (index > 2)
+  if (multipleChannels)
     group.widget = QStringLiteral("multiplot");
 
   clear_frame(m_quickPlotFrame);

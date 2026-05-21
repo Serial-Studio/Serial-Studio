@@ -41,6 +41,7 @@ struct SchemaProp {
   QJsonValue maximum      = {};
   QJsonValue defaultValue = {};
   QString itemsType       = {};
+  QJsonObject itemsSchema = {};
 };
 
 /**
@@ -68,6 +69,35 @@ struct SchemaProp {
   p.description  = std::move(description);
   p.enumValues   = std::move(values);
   p.defaultValue = std::move(default_value);
+  return p;
+}
+
+/**
+ * @brief Build a SchemaProp for an array with a full items sub-schema.
+ */
+[[nodiscard]] inline SchemaProp arrayProp(QString name,
+                                          QString description,
+                                          QJsonObject items_schema)
+{
+  SchemaProp p;
+  p.name        = std::move(name);
+  p.type        = QStringLiteral("array");
+  p.description = std::move(description);
+  p.itemsSchema = std::move(items_schema);
+  return p;
+}
+
+/**
+ * @brief Build a SchemaProp for an array of a single primitive type (integer, number, string,
+ * boolean).
+ */
+[[nodiscard]] inline SchemaProp typedArrayProp(QString name, QString description, QString itemsType)
+{
+  SchemaProp p;
+  p.name        = std::move(name);
+  p.type        = QStringLiteral("array");
+  p.description = std::move(description);
+  p.itemsType   = std::move(itemsType);
   return p;
 }
 
@@ -119,12 +149,16 @@ struct SchemaProp {
   if (!p.defaultValue.isUndefined() && !p.defaultValue.isNull())
     prop.insert(QStringLiteral("default"), p.defaultValue);
 
-  // items only applies when the type is exactly "array" (single, not union)
+  // items: itemsSchema overrides itemsType; only emitted for type == "array".
   if (p.type == QStringLiteral("array")) {
-    QJsonObject items;
-    items.insert(QStringLiteral("type"),
-                 p.itemsType.isEmpty() ? QStringLiteral("string") : p.itemsType);
-    prop.insert(QStringLiteral("items"), items);
+    if (!p.itemsSchema.isEmpty()) {
+      prop.insert(QStringLiteral("items"), p.itemsSchema);
+    } else {
+      QJsonObject items;
+      items.insert(QStringLiteral("type"),
+                   p.itemsType.isEmpty() ? QStringLiteral("string") : p.itemsType);
+      prop.insert(QStringLiteral("items"), items);
+    }
   }
 
   return prop;

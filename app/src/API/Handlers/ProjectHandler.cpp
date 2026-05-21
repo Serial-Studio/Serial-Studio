@@ -3448,10 +3448,28 @@ void API::Handlers::ProjectHandler::registerBatchCommand()
       "    ...\n"
       "  ]"),
     makeSchema({
-      {QStringLiteral("ops"),
-       QStringLiteral("array"),
-       QStringLiteral("Array of {command, params} ops to execute sequentially. "
-                      "Max 1024.")}
+      arrayProp(
+        QStringLiteral("ops"),
+        QStringLiteral("Array of {command, params} ops to execute sequentially. Max 1024."),
+        QJsonObject{
+                    {QStringLiteral("type"), QStringLiteral("object")},
+                    {QStringLiteral("properties"),
+           QJsonObject{
+             {QStringLiteral("command"),
+              QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
+                          {QStringLiteral("description"),
+                           QStringLiteral("Registered command name (e.g. "
+                                          "'project.dataset.update'). Not "
+                                          "'project.batch' -- nested batches are rejected.")}}},
+             {QStringLiteral("params"),
+              QJsonObject{{QStringLiteral("type"), QStringLiteral("object")},
+                          {QStringLiteral("description"),
+                           QStringLiteral(
+                             "Arguments object for the command, exactly "
+                             "what you would pass at the top level if calling it directly.")}}}}},
+                    {QStringLiteral("required"),
+           QJsonArray{QStringLiteral("command"), QStringLiteral("params")}}}
+        )
   }),
     &projectBatch);
 }
@@ -3482,16 +3500,17 @@ void API::Handlers::ProjectHandler::registerDryRunCommands()
                    "(top-level closures, EMA-style state) reveal their behavior. Use "
                    "this to iterate before project.frameParser.setCode."),
     makeSchema({
-      {        QStringLiteral("code"),QStringLiteral("string"),      QStringLiteral("Frame parser source")                          },
-      {    QStringLiteral("language"),
+      {       QStringLiteral("code"),QStringLiteral("string"),      QStringLiteral("Frame parser source")                          },
+      {   QStringLiteral("language"),
        QStringLiteral("integer"),
        QStringLiteral("0 = JavaScript, 1 = Lua")                                               },
-      { QStringLiteral("sampleFrame"),
+      {QStringLiteral("sampleFrame"),
        QStringLiteral("string"),
        QStringLiteral("Single frame body (without delimiters). Use sampleFrames for an array.")},
-      {QStringLiteral("sampleFrames"),
-       QStringLiteral("array"),
-       QStringLiteral("Array of frame bodies; runs sequentially in one engine instance.")      }
+      typedArrayProp(
+        QStringLiteral("sampleFrames"),
+        QStringLiteral("Array of frame bodies; runs sequentially in one engine instance."),
+        QStringLiteral("string"))
   }),
     &frameParserDryRun);
 
@@ -3517,15 +3536,18 @@ void API::Handlers::ProjectHandler::registerDryRunCommands()
                    "code (string), language (0=JS, 1=Lua), values (array of "
                    "numbers or strings)."),
     makeSchema({
-      {    QStringLiteral("code"),
+      {QStringLiteral("code"),
        QStringLiteral("string"),
        QStringLiteral("Transform source. Must define transform(value).")},
       {QStringLiteral("language"),
        QStringLiteral("integer"),
-       QStringLiteral("0 = JavaScript, 1 = Lua")                        },
-      {  QStringLiteral("values"),
-       QStringLiteral("array"),
-       QStringLiteral("Sample values to pass through transform()")      }
+       QStringLiteral("0 = JavaScript, 1 = Lua")},
+      arrayProp(QStringLiteral("values"),
+                QStringLiteral("Sample values to pass through transform(). Each entry may be a "
+                               "number or a string -- the dispatcher coerces as needed."),
+                QJsonObject{{QStringLiteral("type"),
+                             QJsonArray{QStringLiteral("number"), QStringLiteral("string")}}}
+      )
   }),
     &transformDryRun);
 
@@ -3561,23 +3583,24 @@ void API::Handlers::ProjectHandler::registerEndToEndDryRunCommand()
                    "transforms that depend on it should be tested with "
                    "project.dataset.transform.dryRun individually."),
     makeSchema({
-      { QStringLiteral("sampleFrame"),
+      {QStringLiteral("sampleFrame"),
        QStringLiteral("string"),
        QStringLiteral("Single frame body (without delimiters). Use sampleFrames for an array.")   },
-      {QStringLiteral("sampleFrames"),
-       QStringLiteral("array"),
-       QStringLiteral("Array of frame bodies; runs sequentially in one parser engine instance.")  },
-      {       QString(Keys::SourceId),
+      typedArrayProp(
+        QStringLiteral("sampleFrames"),
+        QStringLiteral("Array of frame bodies; runs sequentially in one parser engine instance."),
+        QStringLiteral("string")),
+      {      QString(Keys::SourceId),
        QStringLiteral("integer"),
        QStringLiteral("Source index to use for parser code + dataset transforms (default 0)")     },
-      {        QStringLiteral("code"),
+      {       QStringLiteral("code"),
        QStringLiteral("string"),
        QStringLiteral("Optional override for the frame parser source (default: use live project)")},
-      {    QStringLiteral("language"),
+      {   QStringLiteral("language"),
        QStringLiteral("integer"),
        QStringLiteral(
        "Optional override: 0 = JavaScript, 1 = Lua (default: live source language)")              },
-      {     QStringLiteral("verbose"),
+      {    QStringLiteral("verbose"),
        QStringLiteral("boolean"),
        QStringLiteral(
        "Include raw cell values alongside final transformed values (default false)")              }

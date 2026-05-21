@@ -215,6 +215,15 @@ Widgets.SmartWindow {
       }
 
       //
+      // Opaque fallback when the scene graph has no RHI (MultiEffect is a no-op there)
+      //
+      Rectangle {
+        anchors.fill: parent
+        color: Cpp_ThemeManager.colors["toolbar_top"]
+        visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
+      }
+
+      //
       // Swallow clicks/wheel so the toolbar/splitter underneath stay quiet
       //
       MouseArea {
@@ -260,9 +269,24 @@ Widgets.SmartWindow {
       }
 
       //
+      // Software-mode card backdrop sized to the call-to-action column
+      //
+      Rectangle {
+        radius: 6
+        border.width: 1
+        anchors.fill: cta
+        anchors.margins: -24
+        color: Cpp_ThemeManager.colors["widget_base"]
+        border.color: Cpp_ThemeManager.colors["widget_border"]
+        visible: !Cpp_Misc_GraphicsBackend.effectsEnabled
+      }
+
+      //
       // Centered lock/mode call-to-action; offset to align with the perceived editor body.
       //
       ColumnLayout {
+        id: cta
+
         spacing: 16
         anchors.centerIn: parent
         width: Math.min(parent.width - 96, 520)
