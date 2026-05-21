@@ -40,7 +40,7 @@ Item {
   required property string widgetId
 
   property real normalizedValue: model.normalizedValue
-  Behavior on normalizedValue {NumberAnimation{duration: 120; easing.type: Easing.OutCubic}}
+  Behavior on normalizedValue {NumberAnimation{duration: 140; easing.type: Easing.OutCubic}}
 
   //
   // Helper properties

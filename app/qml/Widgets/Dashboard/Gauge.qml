@@ -43,7 +43,7 @@ Item {
   // Custom properties
   //
   property real normalizedValue: model.normalizedValue
-  Behavior on normalizedValue {NumberAnimation{duration: 120; easing.type: Easing.OutCubic}}
+  Behavior on normalizedValue {NumberAnimation{duration: 140; easing.type: Easing.OutCubic}}
 
   //
   // Helper properties
@@ -576,6 +576,7 @@ Item {
             transformOrigin: Item.Center
             preferredRendererType: Shape.CurveRenderer
             layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+            Behavior on rotation {NumberAnimation{duration: 140; easing.type: Easing.OutCubic}}
 
             readonly property real cx: needleShape.width / 2
             readonly property real cy: needleShape.height / 2
