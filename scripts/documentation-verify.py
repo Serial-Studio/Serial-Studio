@@ -722,6 +722,33 @@ phrasing in a technical manual. The script does not auto-fix anything;
 documentation rewrites are judgement calls and belong to a human or an
 LLM that has read the surrounding paragraph.
 
+## Why these rules exist (read this first)
+
+Readers reach for the manual when they're stuck. They came here for the
+answer, not for our narrative voice. The patterns these rules catch are
+the ones that most reliably distinguish a sales page or a tutorial from
+a reference manual:
+
+- Marketing voice ("powerful", "seamless", "world-class", "blazing
+  fast") tells the reader they're in the wrong kind of document. A
+  manual that sounds like a product page burns its own credibility.
+- Tutorial voice ("we'll", "let's", "now we'll see") forces the reader
+  into the writer's narrative when they wanted a direct answer. The
+  reader isn't on a journey with us; they're trying to ship something.
+- Conversational asides ("obviously", "of course", "needless to say")
+  signal that the writer is more invested in sounding clever than in
+  being useful, and patronise readers who didn't already know.
+- Filler ("essentially", "basically", "simply", "just") promises
+  shortness it doesn't deliver. Manuals are tighter without it.
+- Meta-references ("this section will", "see above") rot the moment
+  the doc is reorganised; link to the section by name instead.
+
+A finding is a *place to look*, not a change to apply blindly. The
+matched phrase is sometimes correct in context — a quoted sentence
+might legitimately say "powerful" if the surrounding text is reporting
+someone else's claim. Read the paragraph; decide; rewrite only when
+the rewrite is genuinely shorter or clearer.
+
 ## How to read this report
 
 For each finding the report shows the file, line, column, the matched

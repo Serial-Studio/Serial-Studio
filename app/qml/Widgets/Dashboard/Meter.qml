@@ -661,10 +661,10 @@ Item {
 
             readonly property real cx: needleShape.width / 2
             readonly property real cy: needleShape.height / 2
-            readonly property real tipLen: meterArea.faceR * 0.70
             readonly property real baseW: Math.max(4, meterArea.faceR * 0.07)
             readonly property real tailW: Math.max(3, meterArea.faceR * 0.05)
             readonly property real tailLen: Math.max(6, meterArea.faceR * 0.13)
+            readonly property real tipLen: meterArea.faceR - 2 - Math.max(4, meterArea.faceR * 0.05)
 
             ShapePath {
               strokeWidth: 0.6

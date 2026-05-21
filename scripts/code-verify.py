@@ -1802,6 +1802,32 @@ heuristic that often signals AI-generated narration or a CLAUDE.md style
 violation. The script will not auto-fix these — judgement calls belong
 to a human or an LLM that has read the surrounding context.
 
+## Why these rules exist (read this first)
+
+Trust between a human reviewer and an LLM contributor depends on
+predictability. The reviewer must be able to tell, at a glance, that
+(a) the agent stayed inside the scope of the ask, (b) every comment
+encodes a *why* that wouldn't be obvious from the code, and (c) no
+narration was slipped in to pad the diff.
+
+These rules do NOT ban comments. They ban *opaque* and *narrating*
+comments, the ones that re-state what the next line already says or
+hedge with tutorial voice. The cleanup decision is per-line, not
+per-rule:
+
+- A `// Drop unset rows so the median weighs only present samples`
+  encodes a *why* the reader needs and the code can't show. **Keep.**
+- A `// Loop over the rows` re-states what `for (auto& r : rows)`
+  already says. **Delete.**
+- A `// We loop over the rows so that we can compute the median` is
+  tutorial voice with no extra information over either of the above.
+  **Delete.**
+
+When in doubt, ask: "if I removed this comment, would the next reader
+miss something they couldn't recover from the code, the commit message,
+or CLAUDE.md?" If no — delete. If yes — keep it, and shorten until only
+the *why* survives.
+
 ## Rules to apply
 
 - **One-line `//` section headers only.** Multi-line `//` blocks should

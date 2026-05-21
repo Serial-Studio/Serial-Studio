@@ -242,10 +242,11 @@ struct ParsedWidgetId {
 /**
  * @brief Returns an error message when datasetId is not in group; nullopt otherwise.
  */
-[[nodiscard]] static std::optional<QString> validateDatasetIdInGroup(
-  const DataModel::Group& group, int targetDatasetId, int gid)
+[[nodiscard]] static std::optional<QString> validateDatasetIdInGroup(const DataModel::Group& group,
+                                                                     int targetDatasetId,
+                                                                     int gid)
 {
-  const auto& dsList = group.datasets;
+  const auto& dsList  = group.datasets;
   const bool dsExists = std::any_of(dsList.begin(), dsList.end(), [targetDatasetId](const auto& d) {
     return d.datasetId == targetDatasetId;
   });
@@ -261,8 +262,8 @@ struct ParsedWidgetId {
 /**
  * @brief Returns an error message when wtype is unknown or a sentinel; nullopt otherwise.
  */
-[[nodiscard]] static std::optional<QString> validateResolvedWidgetType(
-  int wtype, const QJsonValue& wtypeJson)
+[[nodiscard]] static std::optional<QString> validateResolvedWidgetType(int wtype,
+                                                                       const QJsonValue& wtypeJson)
 {
   if (wtype < 0)
     return QStringLiteral("Unknown widgetType slug '%1'. Use one of: plot, fft, bar, gauge, "
@@ -342,8 +343,11 @@ struct ParsedWidgetId {
  * @brief Returns how many widget instances of wtype this non-target group contributes.
  */
 [[nodiscard]] static int groupContribution(const DataModel::Group& group,
-                                           SerialStudio::DashboardWidget wtype, bool isLed,
-                                           bool isGroupShape, bool isDatasetShape, bool pro)
+                                           SerialStudio::DashboardWidget wtype,
+                                           bool isLed,
+                                           bool isGroupShape,
+                                           bool isDatasetShape,
+                                           bool pro)
 {
   if (isGroupShape) {
     auto key = SerialStudio::getDashboardWidget(group);

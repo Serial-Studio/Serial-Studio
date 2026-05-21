@@ -9,10 +9,37 @@
 - **Read existing signal/slot wiring** in a file before adding or changing any.
 - **Plan before multi-file changes** (>3 files): state the plan, get confirmation.
 - **Edit, don't rewrite.** Targeted `Edit` calls; full rewrite only when asked or >70% changed.
-- **No preamble, no trailing summary.** Lead with the action or the result.
+- **No preamble, no trailing summary** — except a one-line statement of
+  intent before non-trivial work, and one or two sentences naming what
+  changed (and what's next) when you stop. Skip both on trivial edits.
 - **Do not create markdown/doc files** unless asked. Share info conversationally.
 - **Update CLAUDE.md** for any architectural change that future me would otherwise miss.
 - **`scripts/` is the style contract.** When in doubt, run it; don't restate it here.
+
+## Trust Contract
+
+These rules govern the human-agent relationship in this repo. They are about
+predictability, not productivity — the difference between a tool the user
+has to re-audit every time and a collaborator they can rely on. Capability
+without predictability gets disabled.
+
+- **Stay in your lane.** Every file you touch outside the explicit ask costs
+  the reviewer an audit pass. If you spot an adjacent fix, *name it in chat*
+  ("noticed X — want it in this pass?") instead of slipping it into the
+  diff. Bundled scope creep — even when each individual change is correct
+  — erodes trust in every diff that follows.
+- **Show the why, not the what.** Code shows *what*. A short comment, the
+  chat reply, or the commit message shows *why* — but only when the choice
+  was non-obvious (picked one of two reasonable approaches, worked around a
+  known bug, satisfied a hidden invariant). One sentence is enough. When
+  the choice was obvious, say nothing — silence is the default.
+- **State the plan before non-trivial work.** Not just multi-file: any
+  change where a reasonable reviewer could prefer a different approach.
+  State the plan, get a nod, then execute. "Plan visible before execution"
+  is the contract — a summary *after* the fact is not a substitute.
+- **Self-review before handoff.** Before declaring a non-trivial change
+  done, re-read the diff and ask: is what I did *what was asked, and only
+  that*? If you can't answer yes, say so before claiming completion.
 
 ## Build
 
@@ -358,6 +385,7 @@ the style sections below — don't restate.
 | Treating `CapturedData::data` as a smart pointer (`*data->data`, `data->data->size()`, `if (!data->data)`) | It's a `QByteArray` now. Use `data->data`, `data->data.size()`, `data->data.isEmpty()`. The shared_ptr indirection was removed because `QByteArray` is already COW with atomic refcount. |
 | Per-call `m_jsTransformWatchdog.start()/stop()` inside `applyTransformJs` | The watchdog is armed once per frame in `applyDatasetValues`. Don't reintroduce per-call timer churn. |
 | Running heavy work synchronously inside a `QFileDialog::fileSelected` slot (open another dialog, parse a file, mutate model) | On macOS `fileSelected` fires from inside `QFileDialog::done()`, which runs from an NSSavePanel KVO callback (`ViewBridge`/`NSRemoteViewMarshal`). Re-entering Qt synchronously can leave the `WA_DeleteOnClose` dialog deleted under the panel and crash on return. **Always wrap the body in `QMetaObject::invokeMethod(this, [...] { ... }, Qt::QueuedConnection)`** so `done()` unwinds first. Same applies to slots calling `dialog->deleteLater()` — defer the *work*, not just the deletion. |
+| Bundled scope creep — slipping an unrelated bug-fix, "small cleanup", rename, or import-sort into the same diff as the user's actual ask | Name it in chat first ("noticed X — want it in this pass?"). Every unrelated file you touch costs the reviewer an audit pass, and "all the changes were individually correct" doesn't restore the trust the surprise diff cost. The user can always say yes; they can't say no after the fact. |
 
 ## Code Style
 

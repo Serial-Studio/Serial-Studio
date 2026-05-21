@@ -579,7 +579,8 @@ Item {
 
             readonly property real cx: needleShape.width / 2
             readonly property real cy: needleShape.height / 2
-            readonly property real tipLen: handleItem.width * 0.42
+            readonly property real tipLen: gaugeFace.width / 2 - gaugeFace.border.width - 4
+                                           - Math.max(3, gaugeFace.width * 0.022)
             readonly property real baseW: Math.max(5, handleItem.width * 0.045)
             readonly property real tailW: Math.max(3, handleItem.width * 0.030)
             readonly property real tailLen: Math.max(6, handleItem.width * 0.10)
