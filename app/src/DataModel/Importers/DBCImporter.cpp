@@ -28,13 +28,12 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QRegularExpression>
 #include <QSet>
 #include <QStandardPaths>
 
-#include "AppState.h"
 #include "DataModel/Frame.h"
+#include "DataModel/Importers/AxisTicks.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
@@ -198,28 +197,19 @@ void DataModel::DBCImporter::confirmImport()
   if (m_messages.isEmpty())
     return;
 
-  const auto project = generateProject(m_messages);
-
-  auto& pm = ProjectModel::instance();
-  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
-  if (!pm.loadFromJsonDocument(QJsonDocument(project), QString())) {
-    Misc::Utilities::showMessageBox(tr("Failed to load imported project"),
-                                    tr("The generated project JSON could not be loaded."),
-                                    QMessageBox::Critical,
-                                    tr("DBC Import Error"));
-    return;
-  }
-
-  pm.setModified(true);
+  const auto project       = generateProject(m_messages);
+  const QString suggestion = QFileInfo(m_dbcFilePath).baseName();
 
   const int messageCount  = m_messages.count();
   const int signalCount   = countTotalSignals(m_messages);
   const int skippedExtMux = m_skippedExtendedMuxSignals;
+
+  auto& pm = ProjectModel::instance();
   QObject::connect(
     &pm,
-    &ProjectModel::saveDialogCompleted,
+    &ProjectModel::importCompleted,
     this,
-    [messageCount, signalCount, skippedExtMux](bool accepted) {
+    [messageCount, signalCount, skippedExtMux](bool accepted, const QString&) {
       if (!accepted)
         return;
 
@@ -239,7 +229,7 @@ void DataModel::DBCImporter::confirmImport()
     },
     Qt::SingleShotConnection);
 
-  (void)pm.saveJsonFile(true);
+  pm.importProjectFromJson(project, suggestion);
 }
 
 /**
@@ -315,7 +305,7 @@ DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
   dataset.fftMax = maxVal;
 
   // Round widget bounds outward to friendly multiples.
-  const auto nice          = niceWidgetBounds(minVal, maxVal);
+  const auto nice          = niceAxisTicks(minVal, maxVal);
   dataset.wgtMin           = nice.min;
   dataset.wgtMax           = nice.max;
   dataset.displayTickCount = nice.tickCount;
@@ -1120,54 +1110,6 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
     return SerialStudio::datasetWidgetId(SerialStudio::Gauge);
 
   return QString("");
-}
-
-/**
- * @brief Rounds raw signal bounds outward to friendly multiples and chooses a tick count.
- */
-DataModel::DBCImporter::NiceBounds DataModel::DBCImporter::niceWidgetBounds(double rawMin,
-                                                                            double rawMax)
-{
-  NiceBounds out{rawMin, rawMax, 5};
-  if (!(rawMax > rawMin))
-    return out;
-
-  // Pick a step from the {2, 5, 10, 20} family scaled to the range magnitude.
-  const double range = rawMax - rawMin;
-  // Import-time only; pow cost is irrelevant.
-  // code-verify off
-  const double mag   = std::pow(10.0, std::floor(std::log10(range)));
-  // code-verify on
-  const double norm  = range / mag;
-
-  double step;
-  if (norm < 1.5)
-    step = 0.2 * mag;
-  else if (norm < 3.0)
-    step = 0.5 * mag;
-  else if (norm < 6.0)
-    step = 1.0 * mag;
-  else
-    step = 2.0 * mag;
-
-  const double epsilon    = step * 1e-9;
-  const double snappedMin = std::floor((rawMin + epsilon) / step) * step;
-  const double snappedMax = std::ceil((rawMax - epsilon) / step) * step;
-
-  const double finalMin = std::min(snappedMin, rawMin);
-  const double finalMax = std::max(snappedMax, rawMax);
-
-  int intervals = static_cast<int>(std::lround((finalMax - finalMin) / step));
-  if (intervals < 2)
-    intervals = 2;
-
-  if (intervals > 10)
-    intervals = 10;
-
-  out.min       = finalMin;
-  out.max       = finalMax;
-  out.tickCount = intervals + 1;
-  return out;
 }
 
 /**

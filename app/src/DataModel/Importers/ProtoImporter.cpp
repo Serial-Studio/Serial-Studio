@@ -28,11 +28,9 @@
 #include <QFileInfo>
 #include <QHash>
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QStandardPaths>
 #include <QTextStream>
 
-#include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/Utilities.h"
@@ -954,30 +952,20 @@ void DataModel::ProtoImporter::confirmImport()
   if (m_messages.isEmpty())
     return;
 
-  const auto project = generateProject();
-
-  auto& pm = ProjectModel::instance();
-  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
-  if (!pm.loadFromJsonDocument(QJsonDocument(project), QString())) {
-    Misc::Utilities::showMessageBox(tr("Failed to load imported project"),
-                                    tr("The generated project JSON could not be loaded."),
-                                    QMessageBox::Critical,
-                                    tr("Protobuf Import Error"));
-    return;
-  }
-
-  pm.setModified(true);
+  const auto project       = generateProject();
+  const QString suggestion = QFileInfo(m_protoFilePath).baseName();
 
   const int messageCount = m_messages.size();
   int totalFields        = 0;
   for (const auto& m : m_messages)
     totalFields += countFieldsRecursive(m);
 
+  auto& pm = ProjectModel::instance();
   QObject::connect(
     &pm,
-    &ProjectModel::saveDialogCompleted,
+    &ProjectModel::importCompleted,
     this,
-    [messageCount, totalFields](bool accepted) {
+    [messageCount, totalFields](bool accepted, const QString&) {
       if (!accepted)
         return;
 
@@ -991,7 +979,7 @@ void DataModel::ProtoImporter::confirmImport()
     },
     Qt::SingleShotConnection);
 
-  (void)pm.saveJsonFile(true);
+  pm.importProjectFromJson(project, suggestion);
 }
 
 //--------------------------------------------------------------------------------------------------

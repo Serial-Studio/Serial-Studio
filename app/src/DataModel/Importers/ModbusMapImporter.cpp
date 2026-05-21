@@ -32,8 +32,8 @@
 #include <QStandardPaths>
 #include <QXmlStreamReader>
 
-#include "AppState.h"
 #include "DataModel/Frame.h"
+#include "DataModel/Importers/AxisTicks.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/Modbus.h"
@@ -358,30 +358,21 @@ void DataModel::ModbusMapImporter::confirmImport()
   if (m_registers.isEmpty())
     return;
 
-  const auto blocks  = computeBlocks();
-  const auto project = buildProject();
+  const auto blocks        = computeBlocks();
+  const auto project       = buildProject();
+  const QString suggestion = QFileInfo(m_filePath).baseName();
 
   loadRegisterGroups(blocks);
 
-  auto& pm = ProjectModel::instance();
-  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
-  if (!pm.loadFromJsonDocument(QJsonDocument(project), QString())) {
-    Misc::Utilities::showMessageBox(tr("Failed to load imported project"),
-                                    tr("The generated project JSON could not be loaded."),
-                                    QMessageBox::Critical,
-                                    tr("Modbus Import"));
-    return;
-  }
-
-  pm.setModified(true);
-
   const int registerCount = m_registers.count();
   const int blockCount    = blocks.count();
+
+  auto& pm = ProjectModel::instance();
   QObject::connect(
     &pm,
-    &ProjectModel::saveDialogCompleted,
+    &ProjectModel::importCompleted,
     this,
-    [registerCount, blockCount](bool accepted) {
+    [registerCount, blockCount](bool accepted, const QString&) {
       if (!accepted)
         return;
 
@@ -394,7 +385,7 @@ void DataModel::ModbusMapImporter::confirmImport()
     },
     Qt::SingleShotConnection);
 
-  (void)pm.saveJsonFile(true);
+  pm.importProjectFromJson(project, suggestion);
 }
 
 /**
@@ -759,12 +750,17 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
         dataset.wgtMin  = 0;
         dataset.wgtMax  = 1;
       } else {
-        dataset.wgtMin = entry.min;
-        dataset.wgtMax = entry.max;
+        // Plot range stays tied to the raw register limits
         dataset.pltMin = entry.min;
         dataset.pltMax = entry.max;
         dataset.widget = selectDatasetWidget(entry);
         dataset.plt    = dataset.widget.isEmpty();
+
+        // Snap widget bounds and tick count to friendly multiples for analog widgets
+        const auto nice          = niceAxisTicks(entry.min, entry.max);
+        dataset.wgtMin           = nice.min;
+        dataset.wgtMax           = nice.max;
+        dataset.displayTickCount = nice.tickCount;
       }
 
       group.datasets.push_back(dataset);

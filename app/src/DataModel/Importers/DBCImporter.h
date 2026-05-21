@@ -116,16 +116,6 @@ private:
   QString selectGroupWidget(const QCanMessageDescription& message);
   QString selectWidgetForSignal(const QCanSignalDescription& signal);
 
-  /**
-   * @brief Snapped widget bounds plus a friendly major-tick count for analog widgets.
-   */
-  struct NiceBounds {
-    double min;
-    double max;
-    int tickCount;
-  };
-
-  [[nodiscard]] static NiceBounds niceWidgetBounds(double rawMin, double rawMax);
   [[nodiscard]] static bool isIntegerSignal(const QCanSignalDescription& signal);
   QString generateSignalExtraction(const QCanSignalDescription& signal);
   QString generateMessageDecoder(const QCanMessageDescription& message, int& datasetIndex);

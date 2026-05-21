@@ -574,6 +574,7 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/PainterDataBridge.h
     src/DataModel/Editors/PainterCodeEditor.h
     src/UI/ImageProvider.h
+    src/DataModel/Importers/AxisTicks.h
     src/DataModel/Importers/DBCImporter.h
     src/DataModel/Importers/ModbusMapImporter.h
     src/Licensing/Trial.h
