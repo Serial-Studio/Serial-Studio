@@ -189,6 +189,7 @@ public slots:
 
 private slots:
   void rebuildDevices();
+  void onProjectSourceChanged(int sourceId);
   void syncUiDriverToLive();
   void syncUiDriverFromSource0();
   void wireDevice(DeviceManager* dm);

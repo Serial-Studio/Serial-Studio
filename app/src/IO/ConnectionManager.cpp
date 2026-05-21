@@ -525,7 +525,10 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
   const auto captured = makeCapturedData(payload);
   server.hotpathTxData(captured->data);
   console.hotpathRxData(captured->data);
-  frameBuilder.hotpathRxFrame(captured);
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    frameBuilder.hotpathRxSourceFrame(0, captured);
+  else
+    frameBuilder.hotpathRxFrame(captured);
 
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
@@ -735,6 +738,12 @@ void IO::ConnectionManager::setupExternalConnections()
           &DataModel::ProjectModel::sourceStructureChanged,
           this,
           &IO::ConnectionManager::rebuildDevices,
+          Qt::DirectConnection);
+
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::sourceChanged,
+          this,
+          &IO::ConnectionManager::onProjectSourceChanged,
           Qt::DirectConnection);
 
   // Recreate FrameReader when frame config changes (delimiters, detection mode)
@@ -1189,10 +1198,12 @@ void IO::ConnectionManager::rebuildDevices()
   if (opMode == SerialStudio::ProjectFile) {
     const auto& srcs = DataModel::ProjectModel::instance().sources();
     for (const auto& src : srcs) {
-      if (src.sourceId != 0 || src.connectionSettings.isEmpty())
+      if (src.sourceId != 0)
         continue;
 
-      willRebuildDevice0 = true;
+      const bool missingPrimary = (m_devices.find(0) == m_devices.end());
+      const bool busTypeChanged = m_busType != static_cast<SerialStudio::BusType>(src.busType);
+      willRebuildDevice0 = missingPrimary || busTypeChanged || !src.connectionSettings.isEmpty();
       break;
     }
   }
@@ -1243,6 +1254,22 @@ void IO::ConnectionManager::rebuildDevices()
   // Restore the prior connected state if any
   if (wasConnected)
     QMetaObject::invokeMethod(this, [this] { connectDevice(); }, Qt::QueuedConnection);
+}
+
+/**
+ * @brief Reconfigures a live project source when its framing settings change.
+ */
+void IO::ConnectionManager::onProjectSourceChanged(int sourceId)
+{
+  if (sourceId <= 0 || AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
+  auto it = m_devices.find(sourceId);
+  if (it == m_devices.end() || !it->second)
+    return;
+
+  it->second->reconfigure(buildFrameConfig(sourceId));
+  Q_EMIT configurationChanged();
 }
 
 /**

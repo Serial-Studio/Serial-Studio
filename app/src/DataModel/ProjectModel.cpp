@@ -1108,6 +1108,7 @@ void DataModel::ProjectModel::updateSource(int sourceId, const DataModel::Source
 
   setModified(true);
   Q_EMIT sourcesChanged();
+  Q_EMIT sourceChanged(sourceId);
 }
 
 /**

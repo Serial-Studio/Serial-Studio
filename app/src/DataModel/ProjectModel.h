@@ -131,6 +131,7 @@ signals:
   void actionAdded(int actionId);
   void actionDeleted();
   void sourceAdded(int sourceId);
+  void sourceChanged(int sourceId);
   void sourceDeleted();
   void outputWidgetAdded(int groupId, int widgetId);
   void outputWidgetDeleted(int groupId);

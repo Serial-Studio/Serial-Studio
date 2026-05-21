@@ -349,13 +349,13 @@ void IO::FrameReader::readStartDelimitedFrames()
     qsizetype frameLength = frameEndPos - frameStart;
 
     if (frameLength <= 0) {
-      (void)m_circularBuffer.read(frameEndPos);
+      consumeBytes(frameEndPos);
       continue;
     }
 
     const auto crcPosition = frameEndPos - m_checksumLength;
     if (crcPosition < frameStart) {
-      (void)m_circularBuffer.read(frameEndPos);
+      consumeBytes(frameEndPos);
       continue;
     }
 
@@ -412,7 +412,7 @@ void IO::FrameReader::readStartEndDelimitedFrames()
     qsizetype frameStart  = startIndex + startSeq.size();
     qsizetype frameLength = finishIndex - frameStart;
     if (frameLength <= 0) {
-      (void)m_circularBuffer.read(finishIndex + finishSeq.size());
+      consumeBytes(finishIndex + finishSeq.size());
       continue;
     }
 
