@@ -696,8 +696,6 @@ def test_frame_end_delimiters(api_client, device_simulator, clean_state, end_del
     This test verifies that Serial Studio can correctly extract frames using
     various frame end delimiters configured in the project file.
     """
-    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-
     if end_delimiter == "\n":
         project_end_delimiter = "\\n"
     elif end_delimiter == "\r\n":
@@ -736,6 +734,11 @@ def test_frame_end_delimiters(api_client, device_simulator, clean_state, end_del
     result = api_client.command("project.activate")
     time.sleep(0.2)
     assert result["loaded"], "Should have loaded into FrameBuilder"
+
+    # Configure network AFTER project activation so the project's source[0]
+    # bus type doesn't get overridden by a subsequent rebuildDevices.
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+    time.sleep(0.1)
 
     # Generate 10 CSV frames with the custom delimiter
     frames = []
@@ -788,8 +791,6 @@ def test_frame_start_end_delimiters(
     This test verifies that Serial Studio can correctly extract frames using
     custom start+end delimiter pairs in StartAndEndDelimiter detection mode.
     """
-    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-
     # Create project with custom delimiters (StartAndEndDelimiter mode = 1)
     project = DataGenerator.generate_project_with_frame_delimiters(
         start=start,
@@ -821,6 +822,11 @@ def test_frame_start_end_delimiters(
     result = api_client.command("project.activate")
     time.sleep(0.2)
     assert result["loaded"], "Should have loaded into FrameBuilder"
+
+    # Configure network AFTER project activation so the project's source[0]
+    # bus type doesn't get overridden by a subsequent rebuildDevices.
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+    time.sleep(0.1)
 
     # Generate 10 CSV frames with the custom delimiters
     frames = []

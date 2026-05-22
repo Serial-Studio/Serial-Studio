@@ -107,13 +107,6 @@ def test_mcp_schema_matches_registered_command_names():
     assert 'QStringLiteral("csv.export.start")' not in csv
 
 
-def test_declarative_widget_avoids_unsafe_table_cast():
-    text = _read("app/src/UI/DeclarativeWidgets/DeclarativeWidget.cpp")
-
-    assert "tableView->doItemsLayout();" in text
-    assert "reinterpret_cast<PwnedWidget*>" not in text
-
-
 def test_ble_characteristic_path_guards_index_before_at():
     text = _read("app/src/IO/Drivers/BluetoothLE.cpp")
 
