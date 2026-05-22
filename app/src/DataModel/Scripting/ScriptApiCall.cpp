@@ -75,7 +75,8 @@ static const QSet<QString>& safeMethods()
     QStringLiteral("project.group.get"),   QStringLiteral("project.group.list"),
     QStringLiteral("project.source.get"),  QStringLiteral("project.source.list"),
     QStringLiteral("workspace.get"),       QStringLiteral("workspace.list"),
-    QStringLiteral("workspace.active"),    QStringLiteral("dashboard.snapshot"),
+    QStringLiteral("workspace.active"),    QStringLiteral("dashboard.getStatus"),
+    QStringLiteral("dashboard.getData"),   QStringLiteral("dashboard.snapshot"),
     QStringLiteral("dashboard.values"),    QStringLiteral("notification.list"),
     QStringLiteral("notification.post"),   QStringLiteral("sessions.list"),
     QStringLiteral("sessions.get"),        QStringLiteral("data_tables.list"),
@@ -411,8 +412,21 @@ QVariantMap DataModel::ScriptApiCallBridge::call(const QJSValue& methodVal,
     return out;
   }
 
+  // Run unknown-command lookup before the allow-list so scripts get UNKNOWN_COMMAND + did_you_mean
+  if (!API::CommandRegistry::instance().hasCommand(method)) {
+    const auto unknown = dispatchApiCall(method, QJsonObject());
+    out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("error"), unknown.errorMessage);
+    out.insert(QStringLiteral("errorCode"), unknown.errorCode);
+    if (!unknown.errorData.isEmpty())
+      out.insert(QStringLiteral("errorData"), unknown.errorData.toVariantMap());
+
+    return out;
+  }
+
   if (!isAllowed(method)) {
     out.insert(QStringLiteral("ok"), false);
+    out.insert(QStringLiteral("errorCode"), QStringLiteral("METHOD_NOT_ALLOWED"));
     out.insert(QStringLiteral("error"),
                QStringLiteral("apiCall: method '%1' not in default allow-list "
                               "(enable apiCall.allowFullSurface in project to opt in)")
@@ -532,17 +546,23 @@ static void pushApiResult(lua_State* L, const API::CommandResponse& r)
 }
 
 /**
- * @brief Pushes an early-failure {ok = false, error = msg} table onto the Lua stack.
+ * @brief Pushes an early-failure {ok = false, error = msg[, errorCode]} table onto the Lua stack.
  */
-static void pushLuaErr(lua_State* L, const QString& msg)
+static void pushLuaErr(lua_State* L, const QString& msg, const QString& code = QString())
 {
-  lua_createtable(L, 0, 2);
+  lua_createtable(L, 0, code.isEmpty() ? 2 : 3);
   lua_pushboolean(L, 0);
   lua_setfield(L, -2, "ok");
 
   const QByteArray utf8 = msg.toUtf8();
   lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
   lua_setfield(L, -2, "error");
+
+  if (!code.isEmpty()) {
+    const QByteArray codeUtf8 = code.toUtf8();
+    lua_pushlstring(L, codeUtf8.constData(), static_cast<size_t>(codeUtf8.size()));
+    lua_setfield(L, -2, "errorCode");
+  }
 }
 
 /**
@@ -565,11 +585,18 @@ static int luaApiCall(lua_State* L)
     return 1;
   }
 
+  // Run unknown-command lookup before the allow-list so scripts get UNKNOWN_COMMAND + did_you_mean
+  if (!API::CommandRegistry::instance().hasCommand(method)) {
+    pushApiResult(L, dispatchApiCall(method, QJsonObject()));
+    return 1;
+  }
+
   if (!isAllowed(method)) {
     pushLuaErr(L,
                QStringLiteral("apiCall: method '%1' not in default allow-list "
                               "(enable apiCall.allowFullSurface in project to opt in)")
-                 .arg(method));
+                 .arg(method),
+               QStringLiteral("METHOD_NOT_ALLOWED"));
     return 1;
   }
 
