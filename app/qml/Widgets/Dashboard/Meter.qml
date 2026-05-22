@@ -441,6 +441,7 @@ Item {
             readonly property real rIn: alarmZoneShape.rOut - Math.max(3, meterArea.faceR * 0.035)
             readonly property real angA: (startAngleDeg + modelData.fracMin * angleRangeDeg) * Math.PI / 180
             readonly property real angB: (startAngleDeg + modelData.fracMax * angleRangeDeg) * Math.PI / 180
+            readonly property bool largeArc: (modelData.fracMax - modelData.fracMin) * angleRangeDeg > 180
 
             ShapePath {
               strokeWidth: -1
@@ -453,6 +454,7 @@ Item {
                 radiusX: alarmZoneShape.rOut
                 radiusY: alarmZoneShape.rOut
                 direction: PathArc.Clockwise
+                useLargeArc: alarmZoneShape.largeArc
                 x: meterArea.faceCx + alarmZoneShape.rOut * Math.sin(alarmZoneShape.angB)
                 y: meterArea.faceCy - alarmZoneShape.rOut * Math.cos(alarmZoneShape.angB)
               }
@@ -464,6 +466,7 @@ Item {
                 radiusX: alarmZoneShape.rIn
                 radiusY: alarmZoneShape.rIn
                 direction: PathArc.Counterclockwise
+                useLargeArc: alarmZoneShape.largeArc
                 x: meterArea.faceCx + alarmZoneShape.rIn * Math.sin(alarmZoneShape.angA)
                 y: meterArea.faceCy - alarmZoneShape.rIn * Math.cos(alarmZoneShape.angA)
               }
