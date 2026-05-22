@@ -318,20 +318,7 @@ Widgets.Pane {
           }
 
           //
-          // Transform code editor
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Transform")
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: Cpp_JSON_ProjectEditor.openTransformEditor()
-            icon.source: "qrc:/icons/project-editor/actions/transform.svg"
-            ToolTip.text: qsTr("Edit a value transform expression for calibration, filtering, or unit conversion")
-          }
-
-          //
-          // Alarm bands editor -- only meaningful for bar / gauge / meter widgets
+          // Alarm bands editor
           //
           Widgets.ToolbarButton {
             iconSize: 24
@@ -345,6 +332,19 @@ Widgets.Pane {
             onClicked: Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection()
             icon.source: "qrc:/icons/project-editor/actions/alarm-bands.svg"
             ToolTip.text: qsTr("Define colored value ranges with severity tiers for this dataset's gauge.")
+          }
+
+          //
+          // Transform code editor
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Transform")
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: Cpp_JSON_ProjectEditor.openTransformEditor()
+            icon.source: "qrc:/icons/project-editor/actions/transform.svg"
+            ToolTip.text: qsTr("Edit a value transform expression for calibration, filtering, or unit conversion")
           }
 
           //
