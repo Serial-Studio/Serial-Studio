@@ -701,7 +701,8 @@ void DataModel::ProjectModel::migrateLegacyXAxisIds()
 /**
  * @brief Translates one dataset's legacy index-based waterfall Y-axis to a uniqueId.
  */
-static void remapWaterfallYAxisId(DataModel::Dataset& dataset, const QSet<int>& liveUids,
+static void remapWaterfallYAxisId(DataModel::Dataset& dataset,
+                                  const QSet<int>& liveUids,
                                   const QMap<int, int>& indexMap)
 {
   if (dataset.waterfallYAxis <= 0)

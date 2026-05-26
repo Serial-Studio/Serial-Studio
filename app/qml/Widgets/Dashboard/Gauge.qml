@@ -689,13 +689,14 @@ Item {
                       : Qt.darker(root.color, 1.30)
         width: Math.min(parent.width - 16, digitalColumn.implicitWidth + 32)
         height: Math.min(parent.height - 16, digitalColumn.implicitHeight + 24)
-        color: root.model.alarmTriggered && digitalBox.alarmFlashOn
-               ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
-               : Cpp_ThemeManager.colors["console_base"]
+        color: digitalBox.targetColor
 
         Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
 
         property bool alarmFlashOn: false
+        readonly property color targetColor: root.model.alarmTriggered && digitalBox.alarmFlashOn
+                                              ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
+                                              : Cpp_ThemeManager.colors["console_base"]
         SequentialAnimation {
           loops: Animation.Infinite
           running: root.model.alarmTriggered
