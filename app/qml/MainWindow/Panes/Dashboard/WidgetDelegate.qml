@@ -283,35 +283,6 @@ Widgets.MiniWindow {
   }
 
   //
-  // Click-anywhere focus catcher -- transparent while focused, eats one click otherwise
-  //
-  MouseArea {
-    id: focusCatcher
-
-    z: 1000
-    hoverEnabled: false
-    enabled: !root.focused
-    anchors.fill: container
-    acceptedButtons: Qt.AllButtons
-    onPressed: function(mouse) {
-      root.taskBar.activeWindow = root
-
-      //
-      // Manual-layout: hand the press off to WindowManager so it can drag the window
-      // without forcing the user to click the (possibly hidden) caption.
-      //
-      if (mouse.button === Qt.LeftButton
-          && root.windowManager
-          && !root.windowManager.autoLayoutEnabled) {
-        const wmPos = focusCatcher.mapToItem(root.windowManager, mouse.x, mouse.y)
-        root.windowManager.beginManualDrag(root, wmPos.x, wmPos.y)
-      }
-
-      mouse.accepted = true
-    }
-  }
-
-  //
   // Disconnected overlay
   //
   Item {

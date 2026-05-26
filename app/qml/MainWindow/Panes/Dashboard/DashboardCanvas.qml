@@ -157,6 +157,25 @@ Item {
     }
 
     //
+    // Manual-mode press router: one transparent layer above every window so the
+    // WindowManager authoritatively picks, raises, and drags the pressed window
+    //
+    MouseArea {
+      id: pressRouter
+
+      hoverEnabled: false
+      z: _wm.zCounter + 10
+      anchors.fill: parent
+      propagateComposedEvents: true
+      acceptedButtons: Qt.AllButtons
+      enabled: !_wm.autoLayoutEnabled
+      onPressed: function(mouse) {
+        const pt = mapToItem(_wm, mouse.x, mouse.y)
+        mouse.accepted = _wm.startManualPress(pt.x, pt.y, mouse.button)
+      }
+    }
+
+    //
     // Snap indicator
     //
     Rectangle {

@@ -103,11 +103,12 @@ public:
     BottomRight
   };
 
+  [[nodiscard]] Q_INVOKABLE bool startManualPress(qreal x, qreal y, int button);
+
 public slots:
   void clear();
   void loadLayout();
   void autoLayout();
-  void beginManualDrag(QQuickItem* window, qreal x, qreal y);
   void cascadeLayout();
   void constrainWindows();
   void triggerLayoutUpdate();

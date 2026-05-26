@@ -1925,24 +1925,60 @@ void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta
 }
 
 /**
- * @brief Begins a manual-layout drag at the given WindowManager-local coordinates.
+ * @brief Authoritative manual-mode press entry: hit-tests the genuinely topmost
+ *        window at the canvas point, raises it, and starts a resize or drag.
  */
-void UI::WindowManager::beginManualDrag(QQuickItem* window, qreal x, qreal y)
+bool UI::WindowManager::startManualPress(qreal x, qreal y, int button)
 {
-  if (!window || autoLayoutEnabled())
-    return;
+  if (autoLayoutEnabled())
+    return false;
 
-  if (window->property("state").toString() != QStringLiteral("normal"))
-    return;
-
-  m_dragWindow      = window;
-  m_focusedWindow   = window;
+  // Reset interaction state before hit-testing
+  m_dragWindow      = nullptr;
   m_targetWindow    = nullptr;
   m_resizeWindow    = nullptr;
+  m_focusedWindow   = nullptr;
   m_resizeEdge      = ResizeEdge::None;
-  m_initialGeometry = extractGeometry(window);
   m_initialMousePos = QPoint(qRound(x), qRound(y));
 
+  // A top window's resize edge wins over a lower window's body
+  m_focusedWindow = manualResizeTargetAt(m_initialMousePos);
+  if (!m_focusedWindow)
+    m_focusedWindow = topmostWindowAt(m_initialMousePos);
+  if (!m_focusedWindow)
+    return false;
+
+  // First click on an unfocused window may grab its body; once focused only the caption drags
+  const bool wasFocused = m_taskbar && m_taskbar->activeWindow() == m_focusedWindow;
+
+  // Raise + focus the window the user actually pressed
+  if (m_taskbar)
+    m_taskbar->setActiveWindow(m_focusedWindow);
+
+  bringToFront(m_focusedWindow);
+
+  if (button != Qt::LeftButton || m_focusedWindow->state() != "normal")
+    return false;
+
+  // Start a resize when the press is on an edge
+  m_resizeEdge = detectResizeEdge(m_focusedWindow, m_initialMousePos);
+  if (m_resizeEdge != ResizeEdge::None) {
+    m_resizeWindow    = m_focusedWindow;
+    m_initialGeometry = extractGeometry(m_focusedWindow);
+    grabMouse();
+    return true;
+  }
+
+  // Caption presses always drag; an already-focused body press stays interactive
+  const auto local     = m_focusedWindow->mapFromItem(this, m_initialMousePos);
+  const int captionH   = m_focusedWindow->property("captionHeight").toInt();
+  const bool onCaption = local.y() <= captionH;
+  if (wasFocused && !onCaption)
+    return false;
+
+  // Start a body/caption drag of the raised window
+  m_dragWindow      = m_focusedWindow;
+  m_initialGeometry = extractGeometry(m_focusedWindow);
   if (m_snapIndicatorVisible) {
     m_snapIndicatorVisible = false;
     Q_EMIT snapIndicatorChanged();
@@ -1950,6 +1986,7 @@ void UI::WindowManager::beginManualDrag(QQuickItem* window, qreal x, qreal y)
 
   grabMouse();
   setCursor(Qt::ClosedHandCursor);
+  return true;
 }
 
 /**
@@ -1957,6 +1994,16 @@ void UI::WindowManager::beginManualDrag(QQuickItem* window, qreal x, qreal y)
  */
 void UI::WindowManager::mousePressEvent(QMouseEvent* event)
 {
+  // Manual mode is routed authoritatively through the canvas press router
+  if (!autoLayoutEnabled()) {
+    if (startManualPress(event->pos().x(), event->pos().y(), event->button()))
+      event->accept();
+    else
+      QQuickItem::mousePressEvent(event);
+
+    return;
+  }
+
   // Clear previous interaction state before hit-testing
   m_dragWindow      = nullptr;
   m_targetWindow    = nullptr;
@@ -1970,13 +2017,8 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     Q_EMIT snapIndicatorChanged();
   }
 
-  // Manual mode: a top window's resize edge must win over a lower window's body
-  if (!autoLayoutEnabled())
-    m_focusedWindow = manualResizeTargetAt(m_initialMousePos);
-
-  // Fall back to the topmost-window-under-cursor pick when no resize edge applies
-  if (!m_focusedWindow)
-    m_focusedWindow = topmostWindowAt(m_initialMousePos);
+  // Auto-layout reaches here: pick the topmost window under the cursor
+  m_focusedWindow = topmostWindowAt(m_initialMousePos);
 
   if (!m_focusedWindow) {
     if (m_taskbar)
