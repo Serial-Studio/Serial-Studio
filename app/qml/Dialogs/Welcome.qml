@@ -451,7 +451,6 @@ Window {
           }
 
           Widgets.IconButton {
-            iconSize: 18
             horizontalPadding: 8
             text: qsTr("Upgrade Now")
             Layout.alignment: Qt.AlignVCenter
@@ -461,7 +460,6 @@ Window {
           }
 
           Widgets.IconButton {
-            iconSize: 18
             horizontalPadding: 8
             text: qsTr("Activate")
             Layout.alignment: Qt.AlignVCenter
@@ -474,7 +472,6 @@ Window {
           }
 
           Widgets.IconButton {
-            iconSize: 18
             horizontalPadding: 8
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/buttons/apply.svg"

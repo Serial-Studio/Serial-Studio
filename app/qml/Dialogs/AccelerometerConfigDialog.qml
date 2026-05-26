@@ -215,7 +215,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Close")
         onClicked: root.close()
         icon.source: "qrc:/icons/buttons/close.svg"

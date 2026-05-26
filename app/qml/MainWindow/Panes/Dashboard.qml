@@ -74,22 +74,22 @@ Item {
   //
   // Track open external windows and provide a counter for unique categories
   //
-  property int _extWindowCounter: 0
-  property var _extWindows: []
+  property int extWindowCounter: 0
+  property var extWindows: []
 
   function openExternalWindow() {
-    var num = ++_extWindowCounter
+    var num = ++extWindowCounter
     var win = _extDashboardComponent.createObject(root, {
       "category": "ExternalDashboard_" + num,
       "windowNumber": num
     })
 
     if (win) {
-      _extWindows.push(win)
+      extWindows.push(win)
       win.closing.connect(function() {
-        var idx = _extWindows.indexOf(win)
+        var idx = extWindows.indexOf(win)
         if (idx !== -1)
-          _extWindows.splice(idx, 1)
+          extWindows.splice(idx, 1)
 
         win.destroy()
       })
@@ -102,10 +102,10 @@ Item {
   Connections {
     target: Cpp_UI_Dashboard
     function onDataReset() {
-      for (var i = _extWindows.length - 1; i >= 0; --i)
-        _extWindows[i].close()
+      for (var i = extWindows.length - 1; i >= 0; --i)
+        extWindows[i].close()
 
-      _extWindows = []
+      extWindows = []
     }
   }
 

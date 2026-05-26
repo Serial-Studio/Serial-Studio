@@ -233,6 +233,7 @@ Widgets.SmartDialog {
 
               Widgets.IconButton {
                 spacing: 8
+                iconSize: 16
                 leftPadding: 16
                 rightPadding: 16
                 Layout.preferredHeight: 36

@@ -82,6 +82,7 @@ Item {
       }
 
       Widgets.IconButton {
+        iconSize: 16
         implicitWidth: 24
         implicitHeight: 24
         enabled: app.ioEnabled

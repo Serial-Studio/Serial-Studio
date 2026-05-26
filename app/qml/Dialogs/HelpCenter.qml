@@ -347,7 +347,6 @@ SmartDialog {
       visible: !root.fetchingData
 
       Widgets.IconButton {
-        iconSize: 18
         horizontalPadding: 8
         text: qsTr("View Online")
         Layout.alignment: Qt.AlignVCenter
@@ -377,7 +376,6 @@ SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Close")
         horizontalPadding: 8
         onClicked: root.close()

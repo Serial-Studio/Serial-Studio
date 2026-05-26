@@ -614,13 +614,13 @@ Item {
       //
       // Custom properties for drag handling
       //
-      property real _lastX: 0
-      property real _lastY: 0
-      property real _startX: 0
-      property real _startY: 0
-      property bool _didDrag: false
+      property real lastX: 0
+      property real lastY: 0
+      property real dragStartX: 0
+      property real dragStartY: 0
+      property bool didDrag: false
       property var draggedCursor: null
-      property int _pressedButton: Qt.NoButton
+      property int pressedButton: Qt.NoButton
       readonly property bool dragging: containsPress && _axisX.zoom > 1 && draggedCursor === null
 
       function getNearestCursor(mouseX, mouseY) {
@@ -649,12 +649,12 @@ Item {
       // Drag state handling
       //
       onPressed: (mouse) => {
-        _lastX = mouse.x
-        _lastY = mouse.y
-        _startX = mouse.x
-        _startY = mouse.y
-        _didDrag = false
-        _pressedButton = mouse.button
+        lastX = mouse.x
+        lastY = mouse.y
+        dragStartX = mouse.x
+        dragStartY = mouse.y
+        didDrag = false
+        pressedButton = mouse.button
 
         // Handle cursor interactions when in cursor mode
         if (root.cursorMode) {
@@ -685,7 +685,7 @@ Item {
 
       onReleased: (mouse) => {
         // Handle cursor placement on release (only if no drag occurred)
-        if (root.cursorMode && _pressedButton === Qt.LeftButton && !_didDrag && draggedCursor === null) {
+        if (root.cursorMode && pressedButton === Qt.LeftButton && !didDrag && draggedCursor === null) {
           const worldX = root.pixelToWorldX(mouse.x)
           const worldY = root.pixelToWorldY(mouse.y)
 
@@ -710,8 +710,8 @@ Item {
 
         // Reset state
         draggedCursor = null
-        _pressedButton = Qt.NoButton
-        _didDrag = false
+        pressedButton = Qt.NoButton
+        didDrag = false
       }
 
       //
@@ -757,12 +757,12 @@ Item {
         }
 
         // Calculate drag distance from start position
-        const dragDistSq = Math.pow(mouse.x - _startX, 2) + Math.pow(mouse.y - _startY, 2)
+        const dragDistSq = Math.pow(mouse.x - dragStartX, 2) + Math.pow(mouse.y - dragStartY, 2)
         const dragThreshold = 5
 
         // Past the threshold, treat as a drag.
         if (containsPress && dragDistSq > dragThreshold * dragThreshold) {
-          _didDrag = true
+          didDrag = true
         }
 
         // Handle cursor dragging
@@ -785,8 +785,8 @@ Item {
           //
           // Obtain drag distance
           //
-          const dx = mouse.x - _lastX
-          const dy = mouse.y - _lastY
+          const dx = mouse.x - lastX
+          const dy = mouse.y - lastY
 
           //
           // Update pan
@@ -797,8 +797,8 @@ Item {
           //
           // Update drag start point
           //
-          _lastX = mouse.x
-          _lastY = mouse.y
+          lastX = mouse.x
+          lastY = mouse.y
         }
       }
     }

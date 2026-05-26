@@ -85,7 +85,6 @@ SmartDialog {
         Layout.alignment: Qt.AlignHCenter
 
         Widgets.IconButton {
-          iconSize: 18
           opacity: enabled ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_MDF4_Player.previousFrame()
@@ -104,7 +103,6 @@ SmartDialog {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           opacity: enabled ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_MDF4_Player.nextFrame()

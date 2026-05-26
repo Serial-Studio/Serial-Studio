@@ -119,6 +119,7 @@ Item {
           Item { Layout.fillHeight: true }
 
           Widgets.IconButton {
+            iconSize: 16
             text: cell.owTitle.length > 0 ? cell.owTitle : qsTr("Send")
             icon.source: cell.owIcon.length > 0
                          ? cell.owIcon
@@ -268,6 +269,7 @@ Item {
             }
 
             Widgets.IconButton {
+              iconSize: 16
               id: textSendBtn
 
               text: qsTr("Send")

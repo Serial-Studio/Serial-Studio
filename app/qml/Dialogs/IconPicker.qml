@@ -129,7 +129,6 @@ SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("OK")
         highlighted: true
         horizontalPadding: 8
@@ -141,7 +140,6 @@ SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         horizontalPadding: 8
         text: qsTr("Cancel")
         icon.source: "qrc:/icons/buttons/cancel.svg"

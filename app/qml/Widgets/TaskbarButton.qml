@@ -258,22 +258,22 @@ Item {
     //
     anchors.fill: parent
 
-    property real _pressX: 0
-    property bool _dragging: false
+    property real pressStartX: 0
+    property bool isDragging: false
 
     onPressed: (mouse) => {
-      _pressX   = mouse.x
-      _dragging = false
+      pressStartX   = mouse.x
+      isDragging = false
     }
 
     onPositionChanged: (mouse) => {
       if (!root.draggable || !pressed)
         return
 
-      const dx = mouse.x - _pressX
-      if (!_dragging) {
+      const dx = mouse.x - pressStartX
+      if (!isDragging) {
         if (Math.abs(dx) >= root.dragThreshold) {
-          _dragging = true
+          isDragging = true
           root.dragStarted()
           root.dragMoved(dx)
         }
@@ -283,14 +283,14 @@ Item {
     }
 
     onReleased: () => {
-      if (_dragging) {
-        _dragging = false
+      if (isDragging) {
+        isDragging = false
         root.dragEnded()
       }
     }
 
     onClicked: () => {
-      if (_dragging)
+      if (isDragging)
         return
 
       if (root.checkable)

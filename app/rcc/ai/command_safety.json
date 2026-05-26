@@ -1,7 +1,9 @@
 {
   "_comment": "AI safety tags for the in-process tool dispatcher. Names mirror API::CommandRegistry. 'safe' auto-executes, 'blocked' is denied outright (driver settings, connection state, licensing mutations, and any command that writes bytes to the device), 'alwaysConfirm' requires user click EVEN when autoApproveEdits is on (destructive families: delete / clear / new / import / uninstall), anything else falls through to Confirm and runs silently only when autoApproveEdits is on.",
   "safe": [
+    "assistant.checkpoint",
     "assistant.dataset.resolve",
+    "assistant.listCheckpoints",
     "assistant.snapshot",
     "assistant.script.dryRun",
     "assistant.workspace.plan",
@@ -146,6 +148,7 @@
     "mqtt.setSslProtocol"
   ],
   "alwaysConfirm": [
+    "assistant.restore",
     "project.new",
     "project.import",
     "project.group.delete",

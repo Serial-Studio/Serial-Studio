@@ -401,7 +401,6 @@ Window {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           text: qsTr("Close")
           horizontalPadding: 8
           icon.source: "qrc:/icons/buttons/close.svg"

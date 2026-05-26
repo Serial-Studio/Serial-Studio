@@ -298,7 +298,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         leftPadding: 8
         text: qsTr("Cancel")
         onClicked: root.close()
@@ -306,7 +305,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         leftPadding: 8
         text: qsTr("OK")
         onClicked: root.apply()

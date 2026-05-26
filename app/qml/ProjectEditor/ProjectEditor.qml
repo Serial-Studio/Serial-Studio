@@ -65,9 +65,17 @@ Widgets.SmartWindow {
   Component.onCompleted: Cpp_JSON_ProjectModel.openJsonFile(Cpp_AppState.projectFilePath)
 
   //
-  // Dummy string to increase width of buttons
+  // Backup recovery dialog (parented here so transientParent is the ProjectEditor window).
   //
-  readonly property string _btSpacer: "  "
+  DialogLoader {
+    id: backupRecoveryDialog
+
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/BackupRecovery.qml"
+  }
+
+  function showBackupRecovery() {
+    backupRecoveryDialog.activate()
+  }
 
   //
   // Shortcuts
@@ -336,7 +344,6 @@ Widgets.SmartWindow {
           Layout.alignment: Qt.AlignHCenter
 
           Widgets.IconButton {
-            iconSize: 18
             highlighted: true
             topPadding: 8
             bottomPadding: 8
@@ -358,7 +365,6 @@ Widgets.SmartWindow {
           }
 
           Widgets.IconButton {
-            iconSize: 18
             topPadding: 8
             bottomPadding: 8
             leftPadding: 16
@@ -379,7 +385,6 @@ Widgets.SmartWindow {
           }
 
           Widgets.IconButton {
-            iconSize: 18
             topPadding: 8
             leftPadding: 16
             bottomPadding: 8

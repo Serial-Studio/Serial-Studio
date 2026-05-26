@@ -1363,7 +1363,6 @@ SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Close")
         horizontalPadding: 8
         onClicked: root.close()

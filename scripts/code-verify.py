@@ -1485,6 +1485,76 @@ def find_qml_inline_comment_violations(
     return violations
 
 
+# Matches QML property declarations:
+#   property bool foo: ...
+#   readonly property int bar: ...
+#   default property var baz: ...
+#   property alias qux: ...
+#   readonly property list<Item> items: ...
+# Captures the property NAME (group 1) so we can flag leading underscores.
+_QML_PROPERTY_DECL = re.compile(
+    r"^\s*(?:default\s+)?(?:readonly\s+)?property\s+"
+    r"(?:alias|list<[^>]+>|[A-Za-z_][\w.]*)\s+"
+    r"([A-Za-z_]\w*)\s*[:{]"
+)
+
+
+def find_qml_underscore_property_violations(
+    lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag any QML property declared with a leading underscore.
+
+    QML's auto-derived signal handler naming (`onFooChanged` for property
+    `foo`) does not work reliably when the property starts with an
+    underscore: handlers like `on_FooChanged` may never fire, which silently
+    breaks change tracking. The Ribbon* widgets hit this exact bug -- a
+    cache binding never updated because its `on_LiveExpandedWidthChanged`
+    handler was a dead form. The fix is a project-wide convention: no
+    leading underscores on QML properties.
+
+    Signal-handler/JS-variable leading underscores are NOT flagged here --
+    they're plain JS identifiers, not declarative QML properties, and
+    don't trip the handler-naming auto-derivation."""
+    if path.suffix != ".qml":
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(lines):
+        if fence_mask[i]:
+            continue
+
+        # Strip an EOL comment so a `// _foo` note doesn't confuse the match.
+        stripped = _strip_eol_comment(line)
+        match = _QML_PROPERTY_DECL.match(stripped)
+        if match is None:
+            continue
+
+        name = match.group(1)
+        if not name.startswith("_"):
+            continue
+
+        violations.append(
+            Violation(
+                path,
+                i + 1,
+                "qml-underscore-property",
+                f"QML property `{name}` starts with `_`. QML's auto-derived "
+                "`on<Name>Changed` handler can silently skip underscore-"
+                "prefixed properties, breaking change tracking. FIX BY HAND, "
+                "ONE AT A TIME -- do NOT batch-rename with sed/regex. "
+                "Each occurrence needs the call sites audited: a corresponding "
+                "`on_FooChanged` handler may exist and be quietly dead, in "
+                "which case the fix is not just a rename but also re-wiring "
+                "the handler logic that never ran. Bindings that read the "
+                "property must also be updated. Have an LLM (or a careful "
+                "human) review every use, decide whether the handler was "
+                "ever meant to fire, and rewrite accordingly.",
+            )
+        )
+
+    return violations
+
+
 # ---------------------------------------------------------------------------
 # File-level processing
 # ---------------------------------------------------------------------------
@@ -1536,6 +1606,9 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
         violations.extend(find_non_ascii_violations(raw_lines, path, fence_mask))
         violations.extend(
             find_qml_inline_comment_violations(raw_lines, path, fence_mask)
+        )
+        violations.extend(
+            find_qml_underscore_property_violations(raw_lines, path, fence_mask)
         )
 
         # Static-analysis rules (Qt/C++ semantic checks + QML conventions).

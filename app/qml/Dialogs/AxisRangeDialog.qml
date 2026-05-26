@@ -303,7 +303,6 @@ Widgets.SmartDialog {
       Layout.alignment: Qt.AlignRight
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Reset")
         onClicked: root.resetToAuto()
         icon.source: "qrc:/icons/buttons/refresh.svg"
@@ -314,7 +313,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Close")
         onClicked: root.close()
         icon.source: "qrc:/icons/buttons/close.svg"

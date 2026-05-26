@@ -112,330 +112,235 @@ Widgets.Pane {
       }
 
       //
-      // Dataset actions panel
+      // Dataset actions panel -- a ribbon toolbar that collapses sections when the
+      // window is narrower than the full set of buttons would need.
       //
       Rectangle {
         id: header
 
         z: 2
         Layout.fillWidth: true
-        height: layout.implicitHeight + 12
+        Layout.preferredHeight: 80
         color: Cpp_ThemeManager.colors["groupbox_background"]
 
-        //
-        // Scrollable toolbar
-        //
-        Flickable {
-          id: flickable
-
-          clip: true
-          contentHeight: height
-          boundsBehavior: Flickable.StopAtBounds
-          contentWidth: layout.implicitWidth + 16
-          flickableDirection: Flickable.HorizontalFlick
-
-          anchors {
-            margins: 8
-            topMargin: 0
-            bottomMargin: 0
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-          }
-
-          height: layout.implicitHeight
-
-          ScrollBar.horizontal: ScrollBar {
-            height: 3
-            policy: flickable.contentWidth > flickable.width
-                    ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-          }
+        Widgets.RibbonToolbar {
+          anchors.fill: parent
+          anchors.leftMargin: 4
+          anchors.rightMargin: 4
+          secondaryToolbar: true
+          showScrollFades: false
 
           //
-          // Buttons
+          // Visualisations -- time/freq plots
           //
-          RowLayout {
-            id: layout
+          Widgets.RibbonSection {
+            collapsible: true
+            collapsePriority: 30
+            collapsedText: qsTr("Plots")
+            collapsedIcon: "qrc:/icons/project-editor/actions/plot.svg"
 
-            spacing: 4
-            anchors.verticalCenter: parent.verticalCenter
-            width: Math.max(implicitWidth, flickable.width)
-
-          //
-          // Add plot
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            onClicked: {
-              const option = SerialStudio.DatasetPlot
-              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            Widgets.ToolbarButton {
+              iconSize: 24
+              text: qsTr("Plot")
+              toolbarButton: false
+              Layout.alignment: Qt.AlignVCenter
+              icon.source: "qrc:/icons/project-editor/actions/plot.svg"
+              ToolTip.text: qsTr("Toggle 2D plot visualization for this dataset")
+              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetPlot
+              onClicked: {
+                const option = SerialStudio.DatasetPlot
+                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+              }
             }
-            text: qsTr("Plot")
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/project-editor/actions/plot.svg"
-            ToolTip.text: qsTr("Toggle 2D plot visualization for this dataset")
-            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetPlot
-          }
 
-          //
-          // Add FFT plot
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            onClicked: {
-              const option = SerialStudio.DatasetFFT
-              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
+              text: qsTr("FFT Plot")
+              Layout.alignment: Qt.AlignVCenter
+              icon.source: "qrc:/icons/project-editor/actions/fft.svg"
+              ToolTip.text: qsTr("Toggle FFT plot to visualize frequency content")
+              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetFFT
+              onClicked: {
+                const option = SerialStudio.DatasetFFT
+                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+              }
             }
-            toolbarButton: false
-            text: qsTr("FFT Plot")
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/project-editor/actions/fft.svg"
-            ToolTip.text: qsTr("Toggle FFT plot to visualize frequency content")
-            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetFFT
-          }
 
-          //
-          // Add waterfall (Pro)
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Waterfall")
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/project-editor/actions/waterfall.svg"
-            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetWaterfall
-            ToolTip.text: qsTr("Toggle waterfall (spectrogram) plot — uses the FFT settings")
-            onClicked: {
-              const option = SerialStudio.DatasetWaterfall
-              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
+              text: qsTr("Waterfall")
+              Layout.alignment: Qt.AlignVCenter
+              icon.source: "qrc:/icons/project-editor/actions/waterfall.svg"
+              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetWaterfall
+              ToolTip.text: qsTr("Toggle waterfall (spectrogram) plot — uses the FFT settings")
+              onClicked: {
+                const option = SerialStudio.DatasetWaterfall
+                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+              }
             }
           }
 
           //
-          // Add bar
+          // Instantaneous-value widgets. No right separator -- the spacer below
+          // carries the boundary marker via its own showSeparator flag.
           //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            onClicked: {
-              const option = SerialStudio.DatasetBar
-              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-            }
-            toolbarButton: false
-            text: qsTr("Bar/Level")
-            Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            icon.source: "qrc:/icons/project-editor/actions/bar.svg"
-            ToolTip.text: qsTr("Toggle bar/level indicator for this dataset")
-            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
-          }
+          Widgets.RibbonSection {
+            collapsible: true
+            collapsePriority: 20
+            showSeparator: false
+            collapsedText: qsTr("Widgets")
+            collapsedIcon: "qrc:/icons/project-editor/actions/gauge.svg"
 
-          //
-          // Add gauge
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            onClicked: {
-              const option = SerialStudio.DatasetGauge
-              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
+              text: qsTr("Bar/Level")
+              Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+              icon.source: "qrc:/icons/project-editor/actions/bar.svg"
+              ToolTip.text: qsTr("Toggle bar/level indicator for this dataset")
+              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
+              onClicked: {
+                const option = SerialStudio.DatasetBar
+                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+              }
             }
-            text: qsTr("Gauge")
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            icon.source: "qrc:/icons/project-editor/actions/gauge.svg"
-            ToolTip.text: qsTr("Toggle gauge widget for analog-style display")
-            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
-          }
 
-          //
-          // Add compass
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            onClicked: {
-              const option = SerialStudio.DatasetCompass
-              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            Widgets.ToolbarButton {
+              iconSize: 24
+              text: qsTr("Gauge")
+              toolbarButton: false
+              Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+              icon.source: "qrc:/icons/project-editor/actions/gauge.svg"
+              ToolTip.text: qsTr("Toggle gauge widget for analog-style display")
+              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
+              onClicked: {
+                const option = SerialStudio.DatasetGauge
+                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+              }
             }
-            toolbarButton: false
-            text: qsTr("Compass")
-            Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            icon.source: "qrc:/icons/project-editor/actions/compass.svg"
-            ToolTip.text: qsTr("Toggle compass widget for directional data")
-            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetCompass
-          }
 
-          //
-          // Add meter
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            onClicked: {
-              const option = SerialStudio.DatasetMeter
-              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
+              text: qsTr("Compass")
+              Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+              icon.source: "qrc:/icons/project-editor/actions/compass.svg"
+              ToolTip.text: qsTr("Toggle compass widget for directional data")
+              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetCompass
+              onClicked: {
+                const option = SerialStudio.DatasetCompass
+                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+              }
             }
-            text: qsTr("Meter")
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            icon.source: "qrc:/icons/project-editor/actions/meter.svg"
-            ToolTip.text: qsTr("Toggle analog meter (half-arc) widget")
-            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter
-          }
 
-          //
-          // Add LED
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            onClicked: {
-              const option = SerialStudio.DatasetLED
-              const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+            Widgets.ToolbarButton {
+              iconSize: 24
+              text: qsTr("Meter")
+              toolbarButton: false
+              Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+              icon.source: "qrc:/icons/project-editor/actions/meter.svg"
+              ToolTip.text: qsTr("Toggle analog meter (half-arc) widget")
+              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter
+              onClicked: {
+                const option = SerialStudio.DatasetMeter
+                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+              }
             }
-            text: qsTr("LED")
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/project-editor/actions/led.svg"
-            checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED
-            ToolTip.text: qsTr("Toggle LED indicator for binary or thresholded values")
+
+            Widgets.ToolbarButton {
+              iconSize: 24
+              text: qsTr("LED")
+              toolbarButton: false
+              Layout.alignment: Qt.AlignVCenter
+              icon.source: "qrc:/icons/project-editor/actions/led.svg"
+              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED
+              ToolTip.text: qsTr("Toggle LED indicator for binary or thresholded values")
+              onClicked: {
+                const option = SerialStudio.DatasetLED
+                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+              }
+            }
           }
 
           //
           // Spacer
           //
-          Item {
-            Layout.fillWidth: true
-            Layout.minimumWidth: 16
-          }
+          Widgets.RibbonSpacer {}
 
           //
-          // Alarm bands editor
+          // Behaviour -- alarm thresholds and value transforms
           //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Alarm Bands")
-            Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-                     && (Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
-                         || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
-                         || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter)
-            onClicked: Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection()
-            icon.source: "qrc:/icons/project-editor/actions/alarm-bands.svg"
-            ToolTip.text: qsTr("Define colored value ranges with severity tiers for this dataset's gauge.")
-          }
+          Widgets.RibbonSection {
+            collapsible: true
+            collapsePriority: 10
+            collapsedText: qsTr("Behavior")
+            collapsedIcon: "qrc:/icons/project-editor/actions/transform.svg"
 
-          //
-          // Transform code editor
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Transform")
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: Cpp_JSON_ProjectEditor.openTransformEditor()
-            icon.source: "qrc:/icons/project-editor/actions/transform.svg"
-            ToolTip.text: qsTr("Edit a value transform expression for calibration, filtering, or unit conversion")
-          }
-
-          //
-          // Separator
-          //
-          Rectangle {
-            implicitWidth: 1
-            Layout.fillHeight: true
-            Layout.maximumHeight: 48
-            Layout.alignment: Qt.AlignVCenter
-            color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
-
-          //
-          // Duplicate dataset
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Duplicate")
-            Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
-            icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
-            ToolTip.text: qsTr("Duplicate this dataset with the same configuration")
-          }
-
-          //
-          // Delete dataset
-          //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Delete")
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Delete this dataset from the group")
-            onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
-            enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            icon.source: "qrc:/icons/project-editor/actions/delete.svg"
-          }
-        }
-        }
-
-        //
-        // Left fade indicator
-        //
-        Rectangle {
-          z: 10
-          width: 16
-          anchors.top: flickable.top
-          anchors.left: flickable.left
-          visible: flickable.contentX > 4
-          anchors.bottom: flickable.bottom
-
-          gradient: Gradient {
-            orientation: Gradient.Horizontal
-
-            GradientStop {
-              position: 0
-              color: Cpp_ThemeManager.colors["groupbox_background"]
+            Widgets.ToolbarButton {
+              iconSize: 24
+              text: qsTr("Alarm Bands")
+              toolbarButton: false
+              Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+                       && (Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
+                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
+                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter)
+              onClicked: Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection()
+              icon.source: "qrc:/icons/project-editor/actions/alarm-bands.svg"
+              ToolTip.text: qsTr("Define colored value ranges with severity tiers for this dataset's gauge.")
             }
 
-            GradientStop {
-              position: 1
-              color: "transparent"
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
+              text: qsTr("Transform")
+              Layout.alignment: Qt.AlignVCenter
+              onClicked: Cpp_JSON_ProjectEditor.openTransformEditor()
+              icon.source: "qrc:/icons/project-editor/actions/transform.svg"
+              ToolTip.text: qsTr("Edit a value transform expression for calibration, filtering, or unit conversion")
             }
           }
-        }
 
-        //
-        // Right fade indicator
-        //
-        Rectangle {
-          z: 10
-          width: 16
-          anchors.top: flickable.top
-          anchors.right: flickable.right
-          anchors.bottom: flickable.bottom
-          visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
+          //
+          // Lifecycle -- always visible so the user can always duplicate / delete.
+          //
+          Widgets.RibbonSection {
+            showSeparator: false
 
-          gradient: Gradient {
-            orientation: Gradient.Horizontal
-
-            GradientStop {
-              position: 0
-              color: "transparent"
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
+              text: qsTr("Duplicate")
+              Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+              onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
+              icon.source: "qrc:/icons/project-editor/actions/duplicate.svg"
+              ToolTip.text: qsTr("Duplicate this dataset with the same configuration")
             }
 
-            GradientStop {
-              position: 1
-              color: Cpp_ThemeManager.colors["groupbox_background"]
+            Widgets.ToolbarButton {
+              iconSize: 24
+              text: qsTr("Delete")
+              toolbarButton: false
+              Layout.alignment: Qt.AlignVCenter
+              ToolTip.text: qsTr("Delete this dataset from the group")
+              onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
+              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+              icon.source: "qrc:/icons/project-editor/actions/delete.svg"
             }
           }
         }

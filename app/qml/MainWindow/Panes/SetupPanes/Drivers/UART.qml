@@ -88,8 +88,8 @@ Item {
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
 
-      property bool _initializing: true
-      property bool _updatingIndex: false
+      property bool initializing: true
+      property bool updatingIndex: false
 
       validator: IntValidator { bottom: 1 }
 
@@ -108,15 +108,15 @@ Item {
             _baudCombo.editText = current
           }
 
-          _initializing = false
+          initializing = false
         })
       }
 
       Connections {
         target: Cpp_IO_Serial
         function onBaudRateChanged() {
-          if (!_baudCombo._initializing) {
-            _baudCombo._updatingIndex = true
+          if (!_baudCombo.initializing) {
+            _baudCombo.updatingIndex = true
 
             const rates = Cpp_IO_Serial.baudRateList
             const current = String(Cpp_IO_Serial.baudRate)
@@ -128,13 +128,13 @@ Item {
             else
               _baudCombo.editText = current
 
-            _baudCombo._updatingIndex = false
+            _baudCombo.updatingIndex = false
           }
         }
       }
 
       onAccepted: {
-        if (!_initializing) {
+        if (!initializing) {
           const value = parseInt(editText)
           if (!isNaN(value) && value > 0) {
             if (Cpp_IO_Serial.baudRate !== value)
@@ -144,13 +144,13 @@ Item {
       }
 
       onCurrentIndexChanged: {
-        if (!_initializing && !_updatingIndex
+        if (!initializing && !updatingIndex
             && currentIndex >= 0 && currentIndex < model.length) {
           const value = parseInt(model[currentIndex])
           if (!isNaN(value) && Cpp_IO_Serial.baudRate !== value) {
-            _updatingIndex = true
+            updatingIndex = true
             Cpp_IO_Serial.baudRate = value
-            _updatingIndex = false
+            updatingIndex = false
           }
         }
       }

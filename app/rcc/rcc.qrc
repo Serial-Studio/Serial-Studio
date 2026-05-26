@@ -321,6 +321,7 @@
         <file>icons/project-editor/actions/add-plot.svg</file>
         <file>icons/project-editor/actions/add-register.svg</file>
         <file>icons/project-editor/actions/add-table.svg</file>
+        <file>icons/project-editor/actions/add-waterfall.svg</file>
         <file>icons/project-editor/actions/bar.svg</file>
         <file>icons/project-editor/actions/change-group.svg</file>
         <file>icons/project-editor/actions/clear.svg</file>
@@ -416,6 +417,7 @@
         <file>icons/project-editor/toolbar/lock.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
+        <file>icons/project-editor/toolbar/recover-backup.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>

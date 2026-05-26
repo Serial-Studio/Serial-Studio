@@ -346,7 +346,6 @@ Widgets.SmartDialog {
             }
 
             Widgets.IconButton {
-              iconSize: 18
               Layout.fillWidth: false
               Layout.maximumWidth: 24
               Layout.maximumHeight: 24
@@ -772,7 +771,6 @@ Widgets.SmartDialog {
       Item { Layout.fillWidth: true }
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Cancel")
         horizontalPadding: 8
         onClicked: root.close()
@@ -781,7 +779,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         highlighted: true
         text: qsTr("Save")
         horizontalPadding: 8

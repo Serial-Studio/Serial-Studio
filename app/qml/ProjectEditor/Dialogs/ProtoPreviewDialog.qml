@@ -366,7 +366,6 @@ Window {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Cancel")
           icon.source: "qrc:/icons/buttons/close.svg"
@@ -377,7 +376,6 @@ Window {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           highlighted: true
           horizontalPadding: 8
           text: qsTr("Create Project")

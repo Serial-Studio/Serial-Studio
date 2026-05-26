@@ -218,6 +218,7 @@ Item {
         }
 
         Widgets.IconButton {
+          iconSize: 16
           topPadding: 8
           leftPadding: 16
           bottomPadding: 8

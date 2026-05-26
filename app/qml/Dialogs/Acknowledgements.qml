@@ -73,7 +73,6 @@ SmartDialog {
         Layout.fillWidth: true
 
         Widgets.IconButton {
-          iconSize: 18
           text: qsTr("Close")
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
@@ -85,7 +84,6 @@ SmartDialog {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           text: qsTr("About Qt…")
           onClicked: Cpp_Misc_Utilities.aboutQt()
           icon.source: "qrc:/icons/buttons/info.svg"

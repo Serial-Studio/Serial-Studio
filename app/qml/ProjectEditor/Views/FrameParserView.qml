@@ -415,7 +415,6 @@ Widgets.Pane {
           }
 
           Widgets.IconButton {
-            iconSize: 18
             horizontalPadding: 12
             text: qsTr("Select Template…")
             Layout.alignment: Qt.AlignVCenter
@@ -428,7 +427,6 @@ Widgets.Pane {
           }
 
           Widgets.IconButton {
-            iconSize: 18
             horizontalPadding: 12
             Layout.alignment: Qt.AlignVCenter
             text: qsTr("Test With Sample Data")
@@ -437,7 +435,6 @@ Widgets.Pane {
           }
 
           Widgets.IconButton {
-            iconSize: 18
             horizontalPadding: 12
             text: qsTr("Evaluate")
             onClicked: frameParser.evaluate()

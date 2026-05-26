@@ -43,6 +43,19 @@ Item {
   default property alias sections: sectionLayout.data
 
   //
+  // Switches the ribbon to groupbox-tinted defaults; sections inherit via parent chain.
+  //
+  property bool secondaryToolbar: false
+
+  //
+  // Scroll-edge fade gradients; tint follows secondaryToolbar for embedded ribbons.
+  //
+  property bool showScrollFades: true
+  property color fadeColor: secondaryToolbar
+                            ? Cpp_ThemeManager.colors["groupbox_background"]
+                            : Cpp_ThemeManager.colors["toolbar_top"]
+
+  //
   // Flickable wrapping the section row
   //
   Flickable {
@@ -64,9 +77,9 @@ Item {
     RowLayout {
       id: sectionLayout
 
-      width: implicitWidth
       anchors.left: parent.left
       anchors.verticalCenter: parent.verticalCenter
+      width: Math.max(implicitWidth, flickable.width)
 
       Item {
         implicitWidth: 4
@@ -77,16 +90,16 @@ Item {
   //
   // Collapse logic -- runs whenever width changes
   //
-  property bool _updating: false
+  property bool collapseInProgress: false
 
   onWidthChanged: Qt.callLater(updateCollapse)
   Component.onCompleted: Qt.callLater(updateCollapse)
 
   function updateCollapse() {
-    if (width <= 0 || _updating)
+    if (width <= 0 || collapseInProgress)
       return
 
-    _updating = true
+    collapseInProgress = true
 
     var available = width
 
@@ -113,7 +126,7 @@ Item {
       for (var j = 0; j < sections.length; ++j)
         sections[j].collapsed = false
 
-      _updating = false
+      collapseInProgress = false
       return
     }
 
@@ -139,7 +152,7 @@ Item {
       currentWidth -= savings
     }
 
-    _updating = false
+    collapseInProgress = false
   }
 
   //
@@ -151,14 +164,14 @@ Item {
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.bottom: parent.bottom
-    visible: flickable.contentX > 4
+    visible: root.showScrollFades && flickable.contentX > 4
 
     gradient: Gradient {
       orientation: Gradient.Horizontal
 
       GradientStop {
         position: 0
-        color: Cpp_ThemeManager.colors["toolbar_top"]
+        color: root.fadeColor
       }
 
       GradientStop {
@@ -177,7 +190,8 @@ Item {
     anchors.top: parent.top
     anchors.right: parent.right
     anchors.bottom: parent.bottom
-    visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
+    visible: root.showScrollFades
+             && flickable.contentX + flickable.width < flickable.contentWidth - 4
 
     gradient: Gradient {
       orientation: Gradient.Horizontal
@@ -189,7 +203,7 @@ Item {
 
       GradientStop {
         position: 1
-        color: Cpp_ThemeManager.colors["toolbar_top"]
+        color: root.fadeColor
       }
     }
   }

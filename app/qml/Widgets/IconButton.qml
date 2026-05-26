@@ -16,16 +16,16 @@ Button {
   id: root
 
   padding: 4
-  property int iconSize: 16
+  property int iconSize: 18
   property bool mirrorIconInRtl: icon.source.toString() !== "qrc:/icons/buttons/apply.svg"
 
   icon.width: iconSize
   icon.height: iconSize
   icon.color: Cpp_ThemeManager.colors["button_text"]
 
-  readonly property bool _hasText: text.length > 0
-  readonly property bool _flip: mirrorIconInRtl && Cpp_Misc_Translator.rtl
-  readonly property bool _hasIcon: icon.source.toString().length > 0 || icon.name.length > 0
+  readonly property bool hasText: text.length > 0
+  readonly property bool flip: mirrorIconInRtl && Cpp_Misc_Translator.rtl
+  readonly property bool hasIcon: icon.source.toString().length > 0 || icon.name.length > 0
 
   contentItem: Item {
     implicitWidth: _layout.implicitWidth
@@ -35,11 +35,11 @@ Button {
       id: _layout
 
       anchors.centerIn: parent
-      spacing: root._hasIcon && root._hasText ? 6 : 0
+      spacing: root.hasIcon && root.hasText ? 6 : 0
 
       IconImage {
         name: root.icon.name
-        visible: root._hasIcon
+        visible: root.hasIcon
         color: root.icon.color
         source: root.icon.source
         Layout.alignment: Qt.AlignVCenter
@@ -48,7 +48,7 @@ Button {
         sourceSize: Qt.size(root.icon.width, root.icon.height)
 
         transform: Scale {
-          xScale: root._flip ? -1 : 1
+          xScale: root.flip ? -1 : 1
           origin.x: root.icon.width / 2
           origin.y: root.icon.height / 2
         }
@@ -57,8 +57,8 @@ Button {
       Label {
         text: root.text
         font: root.font
+        visible: root.hasText
         color: root.icon.color
-        visible: root._hasText
         Layout.alignment: Qt.AlignVCenter
       }
     }

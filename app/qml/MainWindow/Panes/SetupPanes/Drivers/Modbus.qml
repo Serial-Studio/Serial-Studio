@@ -108,8 +108,8 @@ Item {
       model: Cpp_IO_Modbus.baudRateList
       visible: Cpp_IO_Modbus.protocolIndex === 0
 
-      property bool _initializing: true
-      property bool _updatingIndex: false
+      property bool initializing: true
+      property bool updatingIndex: false
 
       validator: IntValidator { bottom: 1 }
 
@@ -125,15 +125,15 @@ Item {
             _baudRateCombo.editText = current
           }
 
-          _initializing = false
+          initializing = false
         })
       }
 
       Connections {
         target: Cpp_IO_Modbus
         function onBaudRateChanged() {
-          if (!_baudRateCombo._initializing && Cpp_IO_Modbus.protocolIndex === 0) {
-            _baudRateCombo._updatingIndex = true
+          if (!_baudRateCombo.initializing && Cpp_IO_Modbus.protocolIndex === 0) {
+            _baudRateCombo.updatingIndex = true
 
             const rates = Cpp_IO_Modbus.baudRateList
             const current = String(Cpp_IO_Modbus.baudRate)
@@ -145,7 +145,7 @@ Item {
             else
               _baudRateCombo.editText = current
 
-            _baudRateCombo._updatingIndex = false
+            _baudRateCombo.updatingIndex = false
           }
         }
       }
@@ -153,8 +153,8 @@ Item {
       Connections {
         target: Cpp_IO_Modbus
         function onProtocolIndexChanged() {
-          if (Cpp_IO_Modbus.protocolIndex === 0 && !_baudRateCombo._initializing) {
-            _baudRateCombo._updatingIndex = true
+          if (Cpp_IO_Modbus.protocolIndex === 0 && !_baudRateCombo.initializing) {
+            _baudRateCombo.updatingIndex = true
 
             const rates = Cpp_IO_Modbus.baudRateList
             const current = String(Cpp_IO_Modbus.baudRate)
@@ -166,13 +166,13 @@ Item {
             else
               _baudRateCombo.editText = current
 
-            _baudRateCombo._updatingIndex = false
+            _baudRateCombo.updatingIndex = false
           }
         }
       }
 
       onAccepted: {
-        if (!_initializing) {
+        if (!initializing) {
           const value = parseInt(editText)
           if (!isNaN(value) && value > 0) {
             if (Cpp_IO_Modbus.baudRate !== value)
@@ -182,13 +182,13 @@ Item {
       }
 
       onCurrentIndexChanged: {
-        if (!_initializing && !_updatingIndex
+        if (!initializing && !updatingIndex
             && currentIndex >= 0 && currentIndex < model.length) {
           const value = parseInt(model[currentIndex])
           if (!isNaN(value) && Cpp_IO_Modbus.baudRate !== value) {
-            _updatingIndex = true
+            updatingIndex = true
             Cpp_IO_Modbus.baudRate = value
-            _updatingIndex = false
+            updatingIndex = false
           }
         }
       }

@@ -48,6 +48,7 @@
 #include "IO/FileTransmission.h"
 #include "MDF4/Export.h"
 #include "MDF4/Player.h"
+#include "Misc/BackupManager.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/CrashTracker.h"
 #include "Misc/Examples.h"
@@ -426,6 +427,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   MDF4::Export::instance().setupExternalConnections();
   DataModel::FrameParser::instance().setupExternalConnections();
   DataModel::ProjectModel::instance().setupExternalConnections();
+  Misc::BackupManager::instance().setupExternalConnections();
   DataModel::FrameBuilder::instance().setupExternalConnections();
   Console::Export::instance().setupExternalConnections();
   Console::Handler::instance().setupExternalConnections();
@@ -510,6 +512,7 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
   ctx->setContextProperty("Cpp_Misc_GraphicsBackend", &Misc::GraphicsBackend::instance());
   ctx->setContextProperty("Cpp_Misc_CrashTracker", &Misc::CrashTracker::instance());
+  ctx->setContextProperty("Cpp_Misc_BackupManager", &Misc::BackupManager::instance());
 }
 
 #ifdef BUILD_COMMERCIAL

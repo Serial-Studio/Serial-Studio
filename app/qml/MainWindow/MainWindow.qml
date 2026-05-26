@@ -57,8 +57,8 @@ Widgets.SmartWindow {
   //
   // Toolbar full-screen restore state
   //
-  property bool _toolbarAutoHidden: false
-  property bool _toolbarVisibleBeforeFullScreen: true
+  property bool toolbarAutoHidden: false
+  property bool toolbarVisibleBeforeFullScreen: true
 
   //
   // Wraps any QML disconnect entry point so device-initiated drops can be told apart.
@@ -302,16 +302,16 @@ Widgets.SmartWindow {
 
     // Auto-hide the toolbar in full-screen with the dashboard active
     if (root.visibility === Window.FullScreen && root.dashboardVisible) {
-      if (!root._toolbarAutoHidden) {
-        root._toolbarVisibleBeforeFullScreen = root.toolbarVisible
-        root._toolbarAutoHidden              = true
+      if (!root.toolbarAutoHidden) {
+        root.toolbarVisibleBeforeFullScreen = root.toolbarVisible
+        root.toolbarAutoHidden              = true
         root.toolbarVisible                  = false
       }
     }
 
-    else if (root._toolbarAutoHidden) {
-      root.toolbarVisible    = root._toolbarVisibleBeforeFullScreen
-      root._toolbarAutoHidden = false
+    else if (root.toolbarAutoHidden) {
+      root.toolbarVisible    = root.toolbarVisibleBeforeFullScreen
+      root.toolbarAutoHidden = false
     }
   }
 
@@ -563,23 +563,23 @@ Widgets.SmartWindow {
                   anchors.left: parent.left
                   cursorShape: Qt.SplitHCursor
 
-                  property int _startX: 0
-                  property int _startWidth: 0
+                  property int dragStartX: 0
+                  property int dragStartWidth: 0
 
                   onPressed: (mouse) => {
-                               _startX = mouse.x
-                               _startWidth = setup.width
+                               dragStartX = mouse.x
+                               dragStartWidth = setup.width
                              }
 
                   onPositionChanged: (mouse) => {
                                        if (!pressed)
                                        return
 
-                                       const delta = _startX - mouse.x
+                                       const delta = dragStartX - mouse.x
                                        const maxW = consoleSetupPage.width
                                                     - terminal.Layout.minimumWidth - 1
                                        const newW = Math.max(setup.kMinPaneWidth,
-                                                             Math.min(_startWidth + delta, maxW))
+                                                             Math.min(dragStartWidth + delta, maxW))
                                        setup.userPaneWidth = newW
                                      }
                 }

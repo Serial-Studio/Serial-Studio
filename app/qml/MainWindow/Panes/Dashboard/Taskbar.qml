@@ -868,6 +868,7 @@ Item {
     // Auto-layout button
     //
     Widgets.IconButton {
+      iconSize: 16
       background: Item{}
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
@@ -886,6 +887,7 @@ Item {
     // Edit workspace button (only for user workspaces)
     //
     Widgets.IconButton {
+      iconSize: 16
       background: Item{}
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
@@ -910,6 +912,7 @@ Item {
     // New workspace button (hidden in operator runtime mode)
     //
     Widgets.IconButton {
+      iconSize: 16
       background: Item{}
       Layout.preferredWidth: 24
       Layout.preferredHeight: 24
@@ -924,9 +927,9 @@ Item {
     // MQTT status indicator (visible only when publisher enabled on a Pro build)
     //
     Widgets.IconButton {
+      iconSize: 16
       id: mqttIndicator
 
-      iconSize: 18
       background: Item{}
       icon.color: "transparent"
       Layout.preferredWidth: 24

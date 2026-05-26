@@ -123,7 +123,6 @@ SmartDialog {
       visible: Cpp_Sessions_Player.isOpen
 
       Widgets.IconButton {
-        iconSize: 18
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_Sessions_Player.previousFrame()
@@ -143,7 +142,6 @@ SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         onClicked: Cpp_Sessions_Player.nextFrame()

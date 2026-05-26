@@ -278,7 +278,12 @@ Item {
           } else {
             newArrows.push({
               x1: colGrp + nodeW, y1: cardY + nodeH / 2,
-              x2: colChip,        y2: chipY + chipH / 2
+              x2: colTrans,       y2: chipY + chipH / 2,
+              noHead: true
+            })
+            newArrows.push({
+              x1: colTrans, y1: chipY + chipH / 2,
+              x2: colChip,  y2: chipY + chipH / 2
             })
           }
 
@@ -743,7 +748,7 @@ Item {
               const dirY = (y2 >= y1) ? 1 : -1
               const dirX = (x2 >= x1) ? 1 : -1
               const hly  = hl * dirY
-              const y2a  = y2 - hly
+              const y2a  = a.noHead ? y2 : (y2 - hly)
 
               const exitDx = Math.max(30 * z, Math.abs(x2 - x1) * 0.3) * dirX
               const c1x    = x1 + exitDx
@@ -756,16 +761,18 @@ Item {
               ctx.bezierCurveTo(c1x, c1y, c2x, c2y, x2, y2a)
               ctx.stroke()
 
-              ctx.beginPath()
-              ctx.moveTo(x2, y2)
-              ctx.lineTo(x2 - hl * sin, y2 - hly)
-              ctx.lineTo(x2 + hl * sin, y2 - hly)
-              ctx.closePath()
-              ctx.fill()
+              if (!a.noHead) {
+                ctx.beginPath()
+                ctx.moveTo(x2, y2)
+                ctx.lineTo(x2 - hl * sin, y2 - hly)
+                ctx.lineTo(x2 + hl * sin, y2 - hly)
+                ctx.closePath()
+                ctx.fill()
+              }
             } else {
               const dirX = (x2 >= x1) ? 1 : -1
               const hlx  = hl * dirX
-              const x2a  = x2 - hlx
+              const x2a  = a.noHead ? x2 : (x2 - hlx)
               const mx   = (x1 + x2a) / 2
 
               ctx.beginPath()
@@ -773,12 +780,14 @@ Item {
               ctx.bezierCurveTo(mx, y1, mx, y2, x2a, y2)
               ctx.stroke()
 
-              ctx.beginPath()
-              ctx.moveTo(x2, y2)
-              ctx.lineTo(x2 - hlx, y2 - hl * sin)
-              ctx.lineTo(x2 - hlx, y2 + hl * sin)
-              ctx.closePath()
-              ctx.fill()
+              if (!a.noHead) {
+                ctx.beginPath()
+                ctx.moveTo(x2, y2)
+                ctx.lineTo(x2 - hlx, y2 - hl * sin)
+                ctx.lineTo(x2 - hlx, y2 + hl * sin)
+                ctx.closePath()
+                ctx.fill()
+              }
             }
           }
         }

@@ -103,11 +103,11 @@ Item {
         currentIndex: Cpp_IO_CANBus.pluginIndex
         Component.onCompleted: _pluginCombo.updatePluginModel()
         onCurrentIndexChanged: {
-          if (!_updating && currentIndex !== Cpp_IO_CANBus.pluginIndex)
+          if (!updating && currentIndex !== Cpp_IO_CANBus.pluginIndex)
             Cpp_IO_CANBus.pluginIndex = currentIndex
         }
 
-        property bool _updating: false
+        property bool updating: false
 
         model: ListModel {
           id: pluginModel
@@ -121,7 +121,7 @@ Item {
         }
 
         function updatePluginModel() {
-          _updating = true
+          updating = true
           pluginModel.clear()
           const plugins = Cpp_IO_CANBus.pluginList
           for (let i = 0; i < plugins.length; ++i) {
@@ -131,7 +131,7 @@ Item {
             })
           }
           currentIndex = Cpp_IO_CANBus.pluginIndex
-          _updating = false
+          updating = false
         }
       }
 
@@ -182,14 +182,14 @@ Item {
         visible: Cpp_IO_CANBus.interfaceList.length > 0
 
         //
-        // _updating brackets internal writes so QML->C++ handlers can distinguish user input from echoes.
+        // updating brackets internal writes so QML->C++ handlers can distinguish user input from echoes.
         //
-        property bool _updating: true
+        property bool updating: true
 
         validator: IntValidator { bottom: 1 }
 
         function syncFromDriver() {
-          _updating = true
+          updating = true
           const current = String(Cpp_IO_CANBus.bitrate)
           const rates = Cpp_IO_CANBus.bitrateList
           const idx = rates.indexOf(current)
@@ -200,7 +200,7 @@ Item {
             _bitrateCombo.currentIndex = -1
             _bitrateCombo.editText = current
           }
-          _updating = false
+          updating = false
         }
 
         Component.onCompleted: Qt.callLater(syncFromDriver)
@@ -213,7 +213,7 @@ Item {
         }
 
         onEditTextChanged: {
-          if (_updating)
+          if (updating)
             return
 
           const value = parseInt(editText)
@@ -222,7 +222,7 @@ Item {
         }
 
         onCurrentIndexChanged: {
-          if (_updating || currentIndex < 0 || currentIndex >= model.length)
+          if (updating || currentIndex < 0 || currentIndex >= model.length)
             return
 
           const value = parseInt(model[currentIndex])

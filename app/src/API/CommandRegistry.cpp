@@ -22,6 +22,9 @@
 #include "API/CommandRegistry.h"
 
 #include <QJsonArray>
+#include <QSet>
+
+#include "Misc/BackupManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Closest-match suggestion helpers
@@ -138,6 +141,34 @@ bool API::CommandRegistry::hasCommand(const QString& name) const
 }
 
 /**
+ * @brief Closed set of mutating commands that warrant a pre-mutation snapshot.
+ */
+static const QSet<QString>& destructiveCommandSet()
+{
+  static const QSet<QString> kSet = {
+    QStringLiteral("project.new"),
+    QStringLiteral("project.open"),
+    QStringLiteral("project.loadJson"),
+    QStringLiteral("project.template.apply"),
+    QStringLiteral("project.dataset.delete"),
+    QStringLiteral("project.group.delete"),
+    QStringLiteral("project.action.delete"),
+    QStringLiteral("project.outputWidget.delete"),
+    QStringLiteral("project.dataset.move"),
+    QStringLiteral("project.group.move"),
+    QStringLiteral("project.workspace.delete"),
+    QStringLiteral("project.workspace.clearAll"),
+    QStringLiteral("project.workspace.removeWidget"),
+    QStringLiteral("project.workspace.reorder"),
+    QStringLiteral("project.batch"),
+    QStringLiteral("assistant.project.bulkApply"),
+    QStringLiteral("assistant.workspace.addTile"),
+    QStringLiteral("assistant.restore"),
+  };
+  return kSet;
+}
+
+/**
  * @brief Execute a registered command
  */
 API::CommandResponse API::CommandRegistry::execute(const QString& name,
@@ -147,9 +178,23 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
   if (!hasCommand(name))
     return buildUnknownCommandResponse(name, id);
 
+  // Snapshot destructive commands so the response carries a "backupPath"; skip dryRun.
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+  QString preMutationBackup;
+  if (!isDryRun && destructiveCommandSet().contains(name))
+    preMutationBackup = Misc::BackupManager::instance().snapshot(QStringLiteral("pre-") + name);
+
   try {
     auto response = m_commands[name].handler(id, params);
     attachErrorMetadata(name, response);
+
+    if (!preMutationBackup.isEmpty() && response.success
+        && !response.result.contains(QStringLiteral("backupPath"))) {
+      auto result                          = response.result;
+      result[QStringLiteral("backupPath")] = preMutationBackup;
+      response.result                      = result;
+    }
+
     return response;
   } catch (const std::exception& e) {
     return CommandResponse::makeError(

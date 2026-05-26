@@ -188,6 +188,7 @@ SmartDialog {
               }
 
               Widgets.IconButton {
+                iconSize: 16
                 checkable: true
                 icon.color: palette.text
                 Layout.maximumWidth: height
@@ -404,7 +405,6 @@ SmartDialog {
         Layout.minimumWidth: 480
 
         Widgets.IconButton {
-          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Customer Portal")
           icon.source: "qrc:/icons/buttons/lemonsqueezy.svg"
@@ -416,7 +416,6 @@ SmartDialog {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Buy License")
           onClicked: Cpp_Licensing_LemonSqueezy.buy()
@@ -424,7 +423,6 @@ SmartDialog {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Activate")
           opacity: enabled ? 1 : 0.5
@@ -435,7 +433,6 @@ SmartDialog {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Deactivate")
           opacity: enabled ? 1 : 0.5

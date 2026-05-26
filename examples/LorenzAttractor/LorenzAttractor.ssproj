@@ -1,15 +1,13 @@
 {
     "actions": [
     ],
-    "customizeWorkspaces": false,
     "groups": [
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 20,
                     "fftMin": -20,
@@ -25,6 +23,7 @@
                     "plotMax": 20,
                     "plotMin": -20,
                     "title": "X",
+                    "uniqueId": 0,
                     "units": "",
                     "value": "",
                     "widget": "",
@@ -33,10 +32,9 @@
                     "xAxis": 2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 30,
                     "fftMin": -30,
@@ -52,18 +50,18 @@
                     "plotMax": 30,
                     "plotMin": -30,
                     "title": "Y",
+                    "uniqueId": 1,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 30,
                     "widgetMin": -30,
-                    "xAxis": 3
+                    "xAxis": 2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 50,
                     "fftMin": 0,
@@ -79,6 +77,7 @@
                     "plotMax": 50,
                     "plotMin": 0,
                     "title": "Z",
+                    "uniqueId": 2,
                     "units": "",
                     "value": "",
                     "widget": "",
@@ -88,15 +87,15 @@
                 }
             ],
             "title": "2D Visualization",
+            "uniqueId": 10003,
             "widget": "multiplot"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 20,
                     "fftMin": -20,
@@ -112,6 +111,7 @@
                     "plotMax": 20,
                     "plotMin": -20,
                     "title": "X",
+                    "uniqueId": 10000,
                     "units": "",
                     "value": "",
                     "widget": "x",
@@ -120,10 +120,9 @@
                     "xAxis": 2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 30,
                     "fftMin": -30,
@@ -139,6 +138,7 @@
                     "plotMax": 30,
                     "plotMin": -30,
                     "title": "Y",
+                    "uniqueId": 10001,
                     "units": "",
                     "value": "",
                     "widget": "y",
@@ -147,10 +147,9 @@
                     "xAxis": 3
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 50,
                     "fftMin": 0,
@@ -166,6 +165,7 @@
                     "plotMax": 50,
                     "plotMin": 0,
                     "title": "Z",
+                    "uniqueId": 10002,
                     "units": "",
                     "value": "",
                     "widget": "z",
@@ -175,11 +175,35 @@
                 }
             ],
             "title": "3D Visualization",
+            "uniqueId": 10004,
             "widget": "plot3d"
         }
     ],
     "hexadecimalDelimiters": false,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 10005,
     "pointCount": 4000,
+    "schemaVersion": 3,
     "sources": [
         {
             "busType": 1,
@@ -205,92 +229,245 @@
         }
     ],
     "title": "Lorenz Attractor",
-    "workspaces": [
-        {
-            "icon": "qrc:/rcc/icons/panes/overview.svg",
-            "title": "Overview",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 6
-                }
-            ],
-            "workspaceId": 1000
+    "widgetSettings": {
+        "activeGroup": 1000,
+        "layout:1000": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 477,
+                "canvasWidth": 974,
+                "geometries": [
+                    {
+                        "height": 469,
+                        "id": 0,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 483,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 469,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 6,
+                        "width": 483,
+                        "x": 486,
+                        "y": 4
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    0,
+                    1
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 6
+                    }
+                ]
+            }
         },
-        {
-            "icon": "qrc:/rcc/icons/panes/dashboard.svg",
-            "title": "All Data",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 1,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 2,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 6
-                }
-            ],
-            "workspaceId": 1001
+        "layout:1001": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 477,
+                "canvasWidth": 974,
+                "geometries": [
+                    {
+                        "height": 235,
+                        "id": 0,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 483,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 235,
+                        "id": 2,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 483,
+                        "x": 486,
+                        "y": 4
+                    },
+                    {
+                        "height": 235,
+                        "id": 3,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 322,
+                        "x": 4,
+                        "y": 238
+                    },
+                    {
+                        "height": 235,
+                        "id": 4,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 322,
+                        "x": 325,
+                        "y": 238
+                    },
+                    {
+                        "height": 235,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 6,
+                        "width": 322,
+                        "x": 646,
+                        "y": 238
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    0,
+                    2,
+                    3,
+                    4,
+                    1
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 6
+                    }
+                ]
+            }
         },
-        {
-            "title": "2D Visualization",
-            "widgetRefs": [
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 2
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 0,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 1,
-                    "widgetType": 9
-                },
-                {
-                    "groupId": 0,
-                    "relativeIndex": 2,
-                    "widgetType": 9
-                }
-            ],
-            "workspaceId": 1002
+        "layout:1002": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 477,
+                "canvasWidth": 974,
+                "geometries": [
+                    {
+                        "height": 235,
+                        "id": 0,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 2,
+                        "width": 483,
+                        "x": 4,
+                        "y": 4
+                    },
+                    {
+                        "height": 235,
+                        "id": 2,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 483,
+                        "x": 486,
+                        "y": 4
+                    },
+                    {
+                        "height": 235,
+                        "id": 3,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 483,
+                        "x": 4,
+                        "y": 238
+                    },
+                    {
+                        "height": 235,
+                        "id": 4,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 483,
+                        "x": 486,
+                        "y": 238
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    0,
+                    2,
+                    3,
+                    4
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 2
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 9
+                    }
+                ]
+            }
         },
-        {
-            "title": "3D Visualization",
-            "widgetRefs": [
-                {
-                    "groupId": 1,
-                    "relativeIndex": 0,
-                    "widgetType": 6
-                }
-            ],
-            "workspaceId": 1003
+        "layout:1003": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 477,
+                "canvasWidth": 974,
+                "geometries": [
+                    {
+                        "height": 469,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 6,
+                        "width": 966,
+                        "x": 4,
+                        "y": 4
+                    }
+                ],
+                "userReordered": false,
+                "windowOrder": [
+                    1
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 6
+                    }
+                ]
+            }
         }
-    ]
+    },
+    "writerVersion": "3.2.7",
+    "writerVersionAtCreation": "3.2.7"
 }

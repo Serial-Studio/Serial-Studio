@@ -195,7 +195,7 @@ Rectangle {
     // Import section (collapsible)
     //
     Widgets.RibbonSection {
-      collapsible: true
+      collapsible: false
       collapsePriority: 40
       collapsedText: qsTr("Import")
       collapsedIcon: "qrc:/icons/project-editor/toolbar/protobuf.svg"
@@ -210,9 +210,22 @@ Rectangle {
     }
 
     //
-    // Project lock section
+    // Project lock + backup recovery section
     //
     Widgets.RibbonSection {
+      collapsible: true
+      collapsePriority: 30
+      collapsedText: qsTr("Restore")
+      collapsedIcon: "qrc:/icons/project-editor/toolbar/recover-backup.svg"
+
+      Widgets.ToolbarButton {
+        text: qsTr("Restore")
+        Layout.alignment: Qt.AlignVCenter
+        onClicked: projectEditor.showBackupRecovery()
+        icon.source: "qrc:/icons/project-editor/toolbar/recover-backup.svg"
+        ToolTip.text: qsTr("Restore a recent automatic snapshot of the current project")
+      }
+
       Widgets.ToolbarButton {
         text: qsTr("Lock")
         Layout.alignment: Qt.AlignVCenter
@@ -238,20 +251,8 @@ Rectangle {
     }
 
     //
-    // Action section
-    //
-    Widgets.RibbonSection {
-      Widgets.ToolbarButton {
-        text: qsTr("Action")
-        Layout.alignment: Qt.AlignVCenter
-        onClicked: Cpp_JSON_ProjectModel.addAction()
-        ToolTip.text: qsTr("Add a new action to the project")
-        icon.source: "qrc:/icons/project-editor/toolbar/add-action.svg"
-      }
-    }
-
-    //
-    // Output controls section (collapsible)
+    // Output controls section (collapsible) -- now also hosts the Action button so
+    // standalone single-button sections don't clutter the ribbon.
     //
     Widgets.RibbonSection {
       collapsible: true
@@ -265,6 +266,14 @@ Rectangle {
         onClicked: Cpp_JSON_ProjectModel.addOutputPanel()
         ToolTip.text: qsTr("Add a new output control panel with a button")
         icon.source: "qrc:/icons/project-editor/toolbar/add-output-panel.svg"
+      }
+
+      Widgets.ToolbarButton {
+        text: qsTr("Action")
+        Layout.alignment: Qt.AlignVCenter
+        onClicked: Cpp_JSON_ProjectModel.addAction()
+        ToolTip.text: qsTr("Add a new action to the project")
+        icon.source: "qrc:/icons/project-editor/toolbar/add-action.svg"
       }
 
       GridLayout {
@@ -438,14 +447,14 @@ Rectangle {
       }
 
       Widgets.ToolbarButton {
-        readonly property bool _hasPro: Cpp_CommercialBuild
+        readonly property bool hasPro: Cpp_CommercialBuild
                                         && (Cpp_Licensing_LemonSqueezy.isActivated
                                             || Cpp_Licensing_Trial.trialEnabled)
 
         text: qsTr("Painter")
         Layout.alignment: Qt.AlignVCenter
         icon.source: "qrc:/icons/project-editor/toolbar/add-painter.svg"
-        ToolTip.text: _hasPro
+        ToolTip.text: hasPro
                       ? qsTr("Add a custom JavaScript-rendered painter widget")
                       : qsTr("Painter widgets require a Pro license — adding one will fall back to a data grid")
         onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Painter Widget"), SerialStudio.Painter)
@@ -523,10 +532,12 @@ Rectangle {
     //
     // Help section
     //
-    RowLayout {
-      spacing: 4
-      Layout.fillHeight: true
-      Layout.alignment: Qt.AlignVCenter
+    Widgets.RibbonSection {
+      collapsible: true
+      collapsePriority: 30
+      showSeparator: false
+      collapsedText: qsTr("Assistant")
+      collapsedIcon: "qrc:/icons/project-editor/toolbar/ai.svg"
 
       Widgets.ToolbarButton {
         text: qsTr("Assistant")
@@ -545,6 +556,11 @@ Rectangle {
         ToolTip.text: qsTr("Open the Project Editor documentation")
       }
     }
+
+    //
+    // Spacer
+    //
+    Widgets.RibbonSpacer {}
   }
 
   //

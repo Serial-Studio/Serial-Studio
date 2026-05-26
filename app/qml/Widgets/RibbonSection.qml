@@ -43,6 +43,41 @@ RowLayout {
   property bool showSeparator: true
 
   //
+  // Resolve the enclosing RibbonToolbar so sections can inherit secondaryToolbar.
+  //
+  readonly property var parentRibbonToolbar: {
+    var p = parent
+    while (p) {
+      if (p && p.secondaryToolbar !== undefined && p.fadeColor !== undefined)
+        return p
+
+      p = p.parent
+    }
+    return null
+  }
+  readonly property bool secondaryToolbar: parentRibbonToolbar
+                                           ? parentRibbonToolbar.secondaryToolbar
+                                           : false
+
+  //
+  // Color overrides -- defaults flip based on `secondaryToolbar`. Call sites
+  // can set any of these explicitly to override.
+  //
+  property color separatorColor: secondaryToolbar
+                                 ? Cpp_ThemeManager.colors["groupbox_border"]
+                                 : Cpp_ThemeManager.colors["toolbar_separator"]
+  property color collapsedTextColor: secondaryToolbar
+                                     ? Cpp_ThemeManager.colors["text"]
+                                     : Cpp_ThemeManager.colors["toolbar_text"]
+  property color collapsedHoverColor: Cpp_ThemeManager.colors["highlight"]
+  property color popupBackgroundColor: secondaryToolbar
+                                       ? Cpp_ThemeManager.colors["groupbox_background"]
+                                       : Cpp_ThemeManager.colors["toolbar_bottom"]
+  property color popupBorderColor: secondaryToolbar
+                                   ? Cpp_ThemeManager.colors["groupbox_border"]
+                                   : Cpp_ThemeManager.colors["toolbar_border"]
+
+  //
   // Default content
   //
   default property alias content: contentRow.data
@@ -81,9 +116,9 @@ RowLayout {
     background: Rectangle {
       radius: 4
       color: collapsedBtn.hovered
-             ? Qt.rgba(Cpp_ThemeManager.colors["highlight"].r,
-                       Cpp_ThemeManager.colors["highlight"].g,
-                       Cpp_ThemeManager.colors["highlight"].b, 0.15)
+             ? Qt.rgba(root.collapsedHoverColor.r,
+                       root.collapsedHoverColor.g,
+                       root.collapsedHoverColor.b, 0.15)
              : "transparent"
     }
 
@@ -108,7 +143,7 @@ RowLayout {
           iconSize: 12
           background: Item {}
           icon.source: "qrc:/icons/buttons/dropdown.svg"
-          icon.color: Cpp_ThemeManager.colors["toolbar_text"]
+          icon.color: root.collapsedTextColor
         }
       }
 
@@ -116,9 +151,9 @@ RowLayout {
         id: collapsedLabel
 
         text: root.collapsedText
+        color: root.collapsedTextColor
         Layout.alignment: Qt.AlignHCenter
         font: Cpp_Misc_CommonFonts.uiFont
-        color: Cpp_ThemeManager.colors["toolbar_text"]
       }
     }
   }
@@ -141,12 +176,12 @@ RowLayout {
       Rectangle {
         id: bgRect
 
-        anchors.fill: parent
         radius: 6
         opacity: 0.95
-        color: Cpp_ThemeManager.colors["toolbar_bottom"]
         border.width: 1
-        border.color: Cpp_ThemeManager.colors["toolbar_border"]
+        anchors.fill: parent
+        color: root.popupBackgroundColor
+        border.color: root.popupBorderColor
 
         layer.enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         layer.effect: MultiEffect {
@@ -177,12 +212,18 @@ RowLayout {
           function onThemeChanged() { arrow.requestPaint() }
         }
 
+        Connections {
+          target: root
+          function onPopupBackgroundColorChanged() { arrow.requestPaint() }
+          function onPopupBorderColorChanged()     { arrow.requestPaint() }
+        }
+
         onPaint: {
           var ctx = getContext("2d")
           ctx.clearRect(0, 0, width, height)
 
-          var bg = Cpp_ThemeManager.colors["toolbar_bottom"].toString()
-          var border = Cpp_ThemeManager.colors["toolbar_border"].toString()
+          var bg = root.popupBackgroundColor.toString()
+          var border = root.popupBorderColor.toString()
 
           // Outer border triangle
           ctx.beginPath()
@@ -255,10 +296,10 @@ RowLayout {
   //
   Rectangle {
     width: 1
-    visible: root.showSeparator
     Layout.fillHeight: true
     Layout.maximumHeight: 64
+    color: root.separatorColor
+    visible: root.showSeparator
     Layout.alignment: Qt.AlignVCenter
-    color: Cpp_ThemeManager.colors["toolbar_separator"]
   }
 }

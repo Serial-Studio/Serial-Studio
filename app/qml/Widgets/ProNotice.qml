@@ -115,7 +115,6 @@ Rectangle {
         Layout.fillWidth: true
 
         IconButton {
-          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Visit Website")
           visible: !Cpp_CommercialBuild
@@ -124,7 +123,6 @@ Rectangle {
         }
 
         IconButton {
-          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Buy License")
           icon.source: "qrc:/icons/buttons/buy.svg"
@@ -138,7 +136,6 @@ Rectangle {
         }
 
         IconButton {
-          iconSize: 18
           horizontalPadding: 8
           text: qsTr("Activate")
           visible: Cpp_CommercialBuild

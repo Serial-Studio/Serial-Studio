@@ -121,7 +121,6 @@ Widgets.SmartDialog {
       Layout.fillWidth: true
 
       Widgets.IconButton {
-        iconSize: 18
         horizontalPadding: 8
         Layout.fillWidth: true
         icon.source: "qrc:/icons/buttons/refresh.svg"
@@ -130,7 +129,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         horizontalPadding: 8
         Layout.fillWidth: true
         icon.source: "qrc:/icons/buttons/refresh.svg"
@@ -139,7 +137,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         horizontalPadding: 8
         Layout.fillWidth: true
         text: qsTr("Reset all Preferences")
@@ -159,7 +156,6 @@ Widgets.SmartDialog {
       Item { Layout.fillWidth: true }
 
       Widgets.IconButton {
-        iconSize: 18
         horizontalPadding: 8
         text: qsTr("Continue Anyway")
         icon.source: "qrc:/icons/buttons/apply.svg"

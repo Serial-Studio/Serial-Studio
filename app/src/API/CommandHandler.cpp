@@ -22,6 +22,7 @@
 #include "API/CommandHandler.h"
 
 #include "API/CommandRegistry.h"
+#include "API/Handlers/AssistantHandler.h"
 #include "API/Handlers/BluetoothLEHandler.h"
 #include "API/Handlers/ConsoleHandler.h"
 #include "API/Handlers/CSVExportHandler.h"
@@ -236,6 +237,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::DataTablesHandler::registerCommands();
   Handlers::WorkspacesHandler::registerCommands();
   Handlers::ScriptsHandler::registerCommands();
+  Handlers::AssistantHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL
   Handlers::ModbusHandler::registerCommands();

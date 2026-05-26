@@ -69,11 +69,6 @@ SplitView {
   }
 
   //
-  // Internal: track preferred width for persistence
-  //
-  property int _defaultLeftWidth: settings.panelWidth
-
-  //
   // Physical first slot: holds logical "right" panel in RTL, "left" in LTR
   //
   Loader {

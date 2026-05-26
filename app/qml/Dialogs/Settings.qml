@@ -223,7 +223,6 @@ Widgets.SmartDialog {
             }
 
             Widgets.IconButton {
-              iconSize: 18
               Layout.fillWidth: false
               Layout.maximumWidth: 24
               Layout.maximumHeight: 24
@@ -1288,7 +1287,6 @@ Widgets.SmartDialog {
       Layout.fillWidth: true
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Reset")
         horizontalPadding: 8
         opacity: enabled ? 1 : 0.5
@@ -1324,7 +1322,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Close")
         horizontalPadding: 8
         onClicked: root.close()
@@ -1333,7 +1330,6 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
-        iconSize: 18
         text: qsTr("Apply")
         horizontalPadding: 8
         onClicked: root.close()

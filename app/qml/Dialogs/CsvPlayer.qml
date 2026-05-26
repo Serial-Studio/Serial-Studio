@@ -109,7 +109,6 @@ SmartDialog {
         Layout.alignment: Qt.AlignHCenter
 
         Widgets.IconButton {
-          iconSize: 18
           opacity: enabled ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_CSV_Player.previousFrame()
@@ -128,7 +127,6 @@ SmartDialog {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           opacity: enabled ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_CSV_Player.nextFrame()

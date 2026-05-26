@@ -280,6 +280,46 @@ static QJsonObject bulkInputSchema()
 }
 
 /**
+ * @brief Input schema for assistant.checkpoint.
+ */
+static QJsonObject checkpointInputSchema()
+{
+  QJsonObject props;
+  props[QStringLiteral("label")] = makeProperty(
+    QStringLiteral("string"), QStringLiteral("Optional human-readable tag for the checkpoint."));
+  return makeObjectSchema(props);
+}
+
+/**
+ * @brief Input schema for assistant.restore.
+ */
+static QJsonObject restoreInputSchema()
+{
+  QJsonObject props;
+  props[QStringLiteral("path")] =
+    makeProperty(QStringLiteral("string"),
+                 QStringLiteral("Absolute snapshot path from assistant.checkpoint or from a "
+                                "destructive command's backupPath."));
+  props[QStringLiteral("timestamp")] = makeProperty(
+    QStringLiteral("string"), QStringLiteral("Snapshot timestamp from assistant.listCheckpoints."));
+  props[QStringLiteral("label")] =
+    makeProperty(QStringLiteral("string"), QStringLiteral("Label assigned at checkpoint time."));
+  return makeObjectSchema(props);
+}
+
+/**
+ * @brief Input schema for assistant.listCheckpoints.
+ */
+static QJsonObject listCheckpointsInputSchema()
+{
+  QJsonObject props;
+  props[QStringLiteral("limit")] =
+    makeProperty(QStringLiteral("integer"),
+                 QStringLiteral("Cap the number of entries returned (default 20, max 50)."));
+  return makeObjectSchema(props);
+}
+
+/**
  * @brief Returns the snapshot/dataset/workspace tool schemas exposed under the assistant.* prefix.
  */
 static QVector<detail::AssistantToolDef> assistantToolDefs()
@@ -320,6 +360,22 @@ static QVector<detail::AssistantToolDef> assistantToolDefs()
      QStringLiteral("Validate and execute a project.batch mutation, rejecting nested batches and "
                     "summarizing per-op failures so models do not loop individual edits."),
      bulkInputSchema()},
+    {QStringLiteral("assistant.checkpoint"),
+     QStringLiteral("Force an immediate project snapshot to disk and return its absolute path. "
+                    "Call BEFORE any multi-step risky edit so you can roll back atomically with "
+                    "assistant.restore if any subsequent step fails."),
+     checkpointInputSchema()},
+    {QStringLiteral("assistant.restore"),
+     QStringLiteral("Restore a previously taken checkpoint, replacing the current project state. "
+                    "Provide one of: path (absolute path), timestamp (ISO string from "
+                    "assistant.listCheckpoints), or label. Returns reverseSnapshotPath so the "
+                    "restore itself is reversible."),
+     restoreInputSchema()},
+    {QStringLiteral("assistant.listCheckpoints"),
+     QStringLiteral("List the rolling backup snapshots for the currently loaded project, newest "
+                    "first. Returns {checkpoints:[{path,timestamp,sizeBytes,label}],count,"
+                    "directory}."),
+     listCheckpointsInputSchema()},
   };
 }
 
@@ -1438,6 +1494,10 @@ static QJsonObject executeAssistantTool(const QString& name, const QJsonObject& 
   if (name == QStringLiteral("assistant.project.bulkApply"))
     return executeBulkApply(args);
 
+  if (name == QStringLiteral("assistant.checkpoint") || name == QStringLiteral("assistant.restore")
+      || name == QStringLiteral("assistant.listCheckpoints"))
+    return runCommand(name, args);
+
   QJsonObject out;
   out[QStringLiteral("ok")]    = false;
   out[QStringLiteral("error")] = QStringLiteral("unknown_assistant_tool");
@@ -1675,8 +1735,9 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
     return reply;
   }
 
-  // Honor safety tags
-  const auto safety = AI::CommandRegistry::instance().safetyOf(name);
+  // Read-only previews (dryRun:true) bypass the Confirm gate; Blocked still blocks.
+  const auto safety        = AI::CommandRegistry::instance().safetyOf(name);
+  const bool isDryRunQuery = args.value(QStringLiteral("dryRun")).toBool(false);
   if (safety == Safety::Blocked) {
     qCWarning(serialStudioAI) << "Tool execution blocked:" << name;
     QJsonObject error;
@@ -1695,7 +1756,8 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
   }
 
   // Confirm gates require explicit user approval (autoConfirmSafe=true).
-  if ((safety == Safety::Confirm || safety == Safety::AlwaysConfirm) && !autoConfirmSafe) {
+  if ((safety == Safety::Confirm || safety == Safety::AlwaysConfirm) && !autoConfirmSafe
+      && !isDryRunQuery) {
     Q_EMIT confirmationRequested(name, args);
     QJsonObject reply;
     reply[QStringLiteral("ok")]    = false;

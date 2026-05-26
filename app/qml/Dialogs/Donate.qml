@@ -121,7 +121,6 @@ SmartDialog {
         Layout.fillWidth: true
 
         Widgets.IconButton {
-          iconSize: 18
           text: qsTr("Close")
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
@@ -133,7 +132,6 @@ SmartDialog {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           text: qsTr("Donate")
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/icons/buttons/paypal.svg"
@@ -144,7 +142,6 @@ SmartDialog {
         }
 
         Widgets.IconButton {
-          iconSize: 18
           highlighted: true
           horizontalPadding: 8
           Keys.onEnterPressed: clicked()

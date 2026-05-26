@@ -117,7 +117,6 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
 
             Widgets.IconButton {
-              iconSize: 18
               text: qsTr("Quit")
               font: Cpp_Misc_CommonFonts.uiFont
               onClicked: app.quitApplication()
@@ -127,7 +126,6 @@ Widgets.SmartDialog {
             Item { Layout.fillWidth: true }
 
             Widgets.IconButton {
-              iconSize: 18
               font: Cpp_Misc_CommonFonts.uiFont
               text: qsTr("Pick Different Device")
               onClicked: root.pageIndex = 1
@@ -135,7 +133,6 @@ Widgets.SmartDialog {
             }
 
             Widgets.IconButton {
-              iconSize: 18
               highlighted: true
               font: Cpp_Misc_CommonFonts.uiFont
               enabled: !Cpp_IO_Manager.isConnected
@@ -189,7 +186,6 @@ Widgets.SmartDialog {
           Layout.fillWidth: true
 
           Widgets.IconButton {
-            iconSize: 18
             text: qsTr("Quit")
             font: Cpp_Misc_CommonFonts.uiFont
             onClicked: app.quitApplication()
@@ -199,7 +195,6 @@ Widgets.SmartDialog {
           Item { Layout.fillWidth: true }
 
           Widgets.IconButton {
-            iconSize: 18
             highlighted: true
             text: qsTr("Connect")
             font: Cpp_Misc_CommonFonts.uiFont

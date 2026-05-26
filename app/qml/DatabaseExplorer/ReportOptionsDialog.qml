@@ -528,6 +528,7 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
+        iconSize: 16
         text: qsTr("Cancel")
         onClicked: root.close()
         icon.source: "qrc:/icons/buttons/close.svg"
@@ -551,6 +552,7 @@ Widgets.SmartDialog {
       }*/
 
       Widgets.IconButton {
+        iconSize: 16
         highlighted: true
         text: Cpp_HasWebEngine ? qsTr("Export PDF") : qsTr("Export HTML")
         icon.source: Cpp_HasWebEngine ? "qrc:/icons/buttons/pdf.svg"

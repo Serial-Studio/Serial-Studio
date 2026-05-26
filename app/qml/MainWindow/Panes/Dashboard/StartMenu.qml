@@ -309,8 +309,8 @@ Popup {
             // Suppress edit/hide/delete context menu in operator runtime mode
             var runtimeMode = (typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
             if (value >= 0 && !runtimeMode) {
-              _wsContextId = value
-              _wsContextName = text
+              wsContextId = value
+              wsContextName = text
               _wsContextMenu.popup()
             }
           })
@@ -909,8 +909,8 @@ Popup {
   //
   // Workspace context menu state
   //
-  property int _wsContextId: -1
-  property string _wsContextName: ""
+  property int wsContextId: -1
+  property string wsContextName: ""
 
   //
   // Right-click context menu for workspaces
@@ -920,20 +920,20 @@ Popup {
 
     MenuItem {
       text: qsTr("Edit…")
-      visible: root._wsContextId >= 1000
+      visible: root.wsContextId >= 1000
       height: visible ? implicitHeight : 0
       onTriggered: {
         root.close()
-        root.renameWorkspaceRequested(root._wsContextId,
-                                      root._wsContextName)
+        root.renameWorkspaceRequested(root.wsContextId,
+                                      root.wsContextName)
       }
     }
 
     MenuItem {
-      text: root._wsContextId >= 1000 ? qsTr("Delete")
+      text: root.wsContextId >= 1000 ? qsTr("Delete")
                                       : qsTr("Hide")
       onTriggered: {
-        taskBar.deleteWorkspace(root._wsContextId)
+        taskBar.deleteWorkspace(root.wsContextId)
         if (_groups.popup)
           _groups.popup.close()
       }

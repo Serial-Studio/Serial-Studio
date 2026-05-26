@@ -636,11 +636,13 @@ Item {
         }
 
         //
-        // Pointed needle -- tapered triangle with a small counterweight tail
+        // Pointed needle -- tapered triangle with a small counterweight tail.
+        // z: 2 keeps the needle above the z: 1 tick labels.
         //
         Item {
           id: needleHolder
 
+          z: 2
           width: meterArea.faceR * 2
           height: meterArea.faceR * 2
           x: meterArea.faceCx - width / 2
@@ -697,6 +699,7 @@ Item {
         Rectangle {
           id: pivotHub
 
+          z: 2
           x: meterArea.faceCx - width / 2
           y: meterArea.faceCy - height / 2
           width: Math.max(10, meterArea.faceR * 0.11)

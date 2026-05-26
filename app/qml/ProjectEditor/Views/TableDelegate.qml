@@ -531,6 +531,7 @@ ColumnLayout {
             }
 
             Widgets.IconButton {
+              iconSize: 16
               enabled: iconPickerLoader.modelActive
               opacity: iconPickerLoader.modelActive ? 1 : 0.5
 

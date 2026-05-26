@@ -214,6 +214,7 @@ set(SOURCES
   src/Misc/IconEngine.cpp
   src/Misc/GraphicsBackend.cpp
   src/Misc/CrashTracker.cpp
+  src/Misc/BackupManager.cpp
   src/Misc/CLI.cpp
   src/Platform/AppPlatform.cpp
   src/UI/DashboardWidget.cpp
@@ -257,6 +258,7 @@ set(SOURCES
   src/API/Handlers/SourceHandler.cpp
   src/API/Handlers/WorkspacesHandler.cpp
   src/API/Handlers/ScriptsHandler.cpp
+  src/API/Handlers/AssistantHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
@@ -320,6 +322,7 @@ set(HEADERS
   src/Misc/IconEngine.h
   src/Misc/GraphicsBackend.h
   src/Misc/CrashTracker.h
+  src/Misc/BackupManager.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
   src/UI/Taskbar.h
@@ -362,6 +365,7 @@ set(HEADERS
   src/API/Handlers/SourceHandler.h
   src/API/Handlers/WorkspacesHandler.h
   src/API/Handlers/ScriptsHandler.h
+  src/API/Handlers/AssistantHandler.h
   src/UI/UISessionRegistry.h
   src/Misc/CLI.h
   src/Platform/AppPlatform.h
@@ -430,6 +434,7 @@ set(QML_SOURCES
   qml/Dialogs/Acknowledgements.qml
   qml/Dialogs/AccelerometerConfigDialog.qml
   qml/Dialogs/AxisRangeDialog.qml
+  qml/Dialogs/BackupRecovery.qml
   qml/Dialogs/CrashRecovery.qml
   qml/Dialogs/CsvPlayer.qml
   qml/Dialogs/Mdf4Player.qml

@@ -186,6 +186,7 @@ Rectangle {
       verticalCenter: parent.verticalCenter
       verticalCenterOffset: root.titlebarHeight / 2
     }
+
     height: 64 + 16
 
     //
@@ -547,6 +548,11 @@ Rectangle {
         }
       }
     }
+
+    //
+    // Spacer
+    //
+    Widgets.RibbonSpacer {}
   }
 
   //

@@ -502,7 +502,6 @@ Widgets.Pane {
                 }
 
                 Widgets.IconButton {
-                  iconSize: 18
                   Layout.alignment: Qt.AlignHCenter
                   text: qsTr("Open Project Editor")
                   onClicked: app.showProjectEditor()
