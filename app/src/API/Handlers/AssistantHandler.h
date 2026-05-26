@@ -34,6 +34,10 @@ public:
   static void registerCommands();
 
 private:
+  static void registerResolverCommands();
+  static void registerEditCommands();
+  static void registerCheckpointCommands();
+
   static CommandResponse snapshot(const QString& id, const QJsonObject& params);
   static CommandResponse datasetResolve(const QString& id, const QJsonObject& params);
   static CommandResponse workspaceResolve(const QString& id, const QJsonObject& params);

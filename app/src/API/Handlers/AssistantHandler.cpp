@@ -952,8 +952,9 @@ API::CommandResponse API::Handlers::AssistantHandler::listCheckpoints(const QStr
 /**
  * @brief Register the snapshot + resolver assistant commands.
  */
-static void registerResolverCommands(API::CommandRegistry& registry)
+void API::Handlers::AssistantHandler::registerResolverCommands()
 {
+  auto& registry = CommandRegistry::instance();
   registry.registerCommand(
     QStringLiteral("assistant.snapshot"),
     QStringLiteral("Token-efficient project snapshot for LLMs. Identical payload to "
@@ -1031,8 +1032,9 @@ static void registerResolverCommands(API::CommandRegistry& registry)
 /**
  * @brief Register the assistant script + workspace-edit commands.
  */
-static void registerEditCommands(API::CommandRegistry& registry)
+void API::Handlers::AssistantHandler::registerEditCommands()
 {
+  auto& registry = CommandRegistry::instance();
   registry.registerCommand(
     QStringLiteral("assistant.script.dryRun"),
     QStringLiteral("Validate a script by kind without writing. Routes to "
@@ -1126,8 +1128,9 @@ static void registerEditCommands(API::CommandRegistry& registry)
 /**
  * @brief Register the assistant checkpoint / restore / batch commands.
  */
-static void registerCheckpointCommands(API::CommandRegistry& registry)
+void API::Handlers::AssistantHandler::registerCheckpointCommands()
 {
+  auto& registry = CommandRegistry::instance();
   registry.registerCommand(
     QStringLiteral("assistant.checkpoint"),
     QStringLiteral("Force an immediate project snapshot to disk and return its absolute path. "
@@ -1219,8 +1222,7 @@ static void registerCheckpointCommands(API::CommandRegistry& registry)
  */
 void API::Handlers::AssistantHandler::registerCommands()
 {
-  auto& registry = CommandRegistry::instance();
-  registerResolverCommands(registry);
-  registerEditCommands(registry);
-  registerCheckpointCommands(registry);
+  registerResolverCommands();
+  registerEditCommands();
+  registerCheckpointCommands();
 }
