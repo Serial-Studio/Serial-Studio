@@ -81,6 +81,15 @@ Never call `assistant.restore` without first showing the user the list
 they're picking from. Restore is a destructive operation; the user must
 know what they're getting back.
 
+### Checkpoint before risky multi-step edits
+
+Before a sequence of mutations the user could regret as a whole (a bulk
+rename across dozens of datasets, restructuring groups, applying a template
+over existing work), call `assistant.checkpoint{label}` first. Each
+destructive command already snapshots itself, but one labelled checkpoint
+gives the user a single named point to roll the WHOLE sequence back to.
+Tell the user the label you used so it's easy to find in the list later.
+
 ## Destructive op pre-flight (dryRun first)
 
 The following commands accept `dryRun: true` and return the SAME response

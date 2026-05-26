@@ -116,8 +116,7 @@ QString Misc::BackupManager::snapshot(const QString& label)
   const auto bytes   = QJsonDocument(serialised).toJson(QJsonDocument::Compact);
   const auto newHash = QCryptographicHash::hash(bytes, QCryptographicHash::Sha1);
 
-  // First snapshot of the session: seed m_lastContentHash from the newest on-disk snapshot to
-  // suppress a same-state duplicate write.
+  // First session snapshot: seed m_lastContentHash from newest on-disk snapshot to skip dup write.
   if (m_lastContentHash.isEmpty()) {
     QDir d(dir);
     const auto entries = d.entryInfoList(QStringList{QStringLiteral("*.ssproj")},
@@ -186,16 +185,14 @@ bool Misc::BackupManager::restore(const QString& path)
 
   auto& pm = DataModel::ProjectModel::instance();
 
-  // Capture the project file association BEFORE load: loadFromJsonDocument overwrites m_filePath
-  // with sourcePath.
+  // Capture project file association before load: loadFromJsonDocument overwrites m_filePath.
   const auto originalPath = pm.jsonFilePath();
 
   pm.setSuppressMessageBoxes(true);
   const bool ok = pm.loadFromJsonDocument(doc, originalPath);
   pm.setSuppressMessageBoxes(false);
 
-  // Persist on disk so a crash before the next manual save can't leave stale content with an
-  // "unmodified" marker.
+  // Persist to disk so a crash before the next manual save can't leave stale content unmodified.
   if (ok && !originalPath.isEmpty())
     (void)pm.apiSaveJsonFile(originalPath);
 

@@ -1351,8 +1351,7 @@ bool DataModel::ProjectModel::askSave()
     if (jsonFilePath().isEmpty())
       newJsonFile();
     else {
-      // openJsonFile() flips to ProjectFile mode; restore caller mode below for
-      // QuickPlot/ConsoleOnly.
+      // openJsonFile() flips to ProjectFile mode; restore caller mode for QuickPlot/ConsoleOnly.
       const auto path = m_filePath;
       m_silentReload  = true;
       m_filePath.clear();

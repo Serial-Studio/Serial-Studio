@@ -1643,8 +1643,7 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& i
 
   const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
 
-  // Groups above target compact down by 1 (uniqueId is derived from sourceId/groupId/datasetId, so
-  // shifted IDs are stale).
+  // Groups above target compact by 1; uniqueId derives from group/dataset IDs, so they go stale.
   QJsonArray renumbered;
   for (const auto& g : groups) {
     if (g.groupId <= groupId)
