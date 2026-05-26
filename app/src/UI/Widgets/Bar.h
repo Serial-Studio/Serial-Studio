@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <array>
 #include <QQuickItem>
 #include <QString>
 #include <QVariantList>
@@ -156,7 +157,7 @@ protected:
   int m_activeBandIndex;
   int m_lastBandHint;
   int m_lastFiredBand;
-  qint64 m_lastFireTimestampMs;
+  std::array<qint64, 4> m_lastFireBySeverityMs;
   bool m_alarmInitialized;
 };
 }  // namespace Widgets

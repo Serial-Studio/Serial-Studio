@@ -52,7 +52,7 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   , m_activeBandIndex(-1)
   , m_lastBandHint(-1)
   , m_lastFiredBand(-2)
-  , m_lastFireTimestampMs(0)
+  , m_lastFireBySeverityMs({0, 0, 0, 0})
   , m_alarmInitialized(false)
 {
   if (autoInitFromBarDataset && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
@@ -319,12 +319,13 @@ void Widgets::Bar::notifyOnBandEdge()
   if (!fireWorthy || idx < 0 || idx >= m_bands.size())
     return;
 
-  // Per-widget cooldown suppresses notification storms on edge oscillation.
+  // Severity-aware cooldown: a higher severity escalates through a lower one's cooldown.
   const qint64 now = QDateTime::currentMSecsSinceEpoch();
-  if (now - m_lastFireTimestampMs < kMinNotifyIntervalMs)
-    return;
+  for (int s = sev; s <= 3; ++s)
+    if (now - m_lastFireBySeverityMs[s] < kMinNotifyIntervalMs)
+      return;
 
-  m_lastFireTimestampMs = now;
+  m_lastFireBySeverityMs[sev] = now;
 
   const auto& band   = m_bands[idx];
   const QString unit = m_units.isEmpty() ? QString() : QStringLiteral(" ") + m_units;
