@@ -1469,42 +1469,42 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="208"/>
+        <location filename="../../src/CSV/Player.cpp" line="210"/>
         <source>Select CSV file</source>
         <translation>Chọn tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="210"/>
+        <location filename="../../src/CSV/Player.cpp" line="212"/>
         <source>CSV files (*.csv)</source>
         <translation>Tệp CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="381"/>
+        <location filename="../../src/CSV/Player.cpp" line="383"/>
         <source>Device Connection Active</source>
         <translation>Kết Nối Thiết Bị Đang Hoạt Động</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="382"/>
+        <location filename="../../src/CSV/Player.cpp" line="384"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Để sử dụng tính năng này, bạn phải ngắt kết nối khỏi thiết bị. Bạn có muốn tiếp tục không?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="397"/>
+        <location filename="../../src/CSV/Player.cpp" line="399"/>
         <source>Cannot read CSV file</source>
         <translation>Không thể đọc tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="397"/>
+        <location filename="../../src/CSV/Player.cpp" line="399"/>
         <source>Check file permissions and location</source>
         <translation>Kiểm tra quyền truy cập và vị trí tệp</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="430"/>
+        <location filename="../../src/CSV/Player.cpp" line="432"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Dữ Liệu Không Đủ trong Tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="431"/>
+        <location filename="../../src/CSV/Player.cpp" line="433"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>Tệp CSV phải chứa ít nhất một hàng dữ liệu để tiếp tục. Kiểm tra tệp và thử lại.</translation>
     </message>
@@ -2486,54 +2486,54 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="806"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="835"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Chuyển đổi JavaScript vượt quá giới hạn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="807"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="836"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Một phép biến đổi tập dữ liệu mất hơn %1 ms; các tập dữ liệu còn lại trong frame sử dụng giá trị thô cho đến frame tiếp theo. Hãy phân tích hoặc đơn giản hóa mã chuyển đổi.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="210"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="212"/>
         <source>Frame pool exhausted</source>
         <translation>Bộ nhớ frame đã cạn kiệt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="212"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="214"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Một tiến trình phía sau (dashboard, xuất CSV/MDF4, cơ sở dữ liệu phiên, hoặc API subscriber) không xử lý frame đủ nhanh. Serial Studio sẽ chuyển sang cấp phát từng frame cho đến khi xóa hết tồn đọng. Hãy tắt bớt tiến trình nặng hoặc giảm tốc độ dữ liệu.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="892"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="921"/>
         <source>Device A</source>
         <translation>Thiết Bị A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="929"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1046"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="958"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1075"/>
         <source>Channel %1</source>
         <translation>Kênh %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="938"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1063"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="967"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1092"/>
         <source>Quick Plot</source>
         <translation>Biểu Đồ Nhanh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="945"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="974"/>
         <source>Quick Plot Data</source>
         <translation>Dữ Liệu Biểu Đồ Nhanh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="957"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="986"/>
         <source>Multiple Plots</source>
         <translation>Nhiều Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1058"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1087"/>
         <source>Audio Input</source>
         <translation>Đầu Vào Âm Thanh</translation>
     </message>
@@ -4212,37 +4212,37 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Dự Án Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="712"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="733"/>
         <source>Samples</source>
         <translation>Mẫu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="760"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="781"/>
         <source>Time</source>
         <translation>Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1071"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1092"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Nhiều nguồn dữ liệu yêu cầu giấy phép Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1072"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1093"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro cho phép kết nối đồng thời với nhiều thiết bị. Vui lòng nâng cấp để mở khóa tính năng này.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1085"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1106"/>
         <source>Device %1</source>
         <translation>Thiết Bị %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1121"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1142"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>Bạn có muốn xóa nguồn dữ liệu "%1" không?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1122"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1143"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>Các nhóm sử dụng nguồn này sẽ chuyển về nguồn mặc định. Hành động này không thể hoàn tác.</translation>
     </message>
@@ -4251,119 +4251,119 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">(Bản Sao)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1369"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1390"/>
         <source>Do you want to save your changes?</source>
         <translation>Lưu các thay đổi?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1370"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1391"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Dự án có các thay đổi chưa được lưu!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1409"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1430"/>
         <source>Save Serial Studio Project</source>
         <translation>Lưu Dự Án Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1411"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2007"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1432"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2029"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Tệp Dự Án Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1433"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1672"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1998"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1454"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2020"/>
         <source>Untitled Project</source>
         <translation>Dự Án Chưa Đặt Tên</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1681"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2159"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1702"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2181"/>
         <source>Device A</source>
         <translation>Thiết Bị A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1838"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1859"/>
         <source>Select Project File</source>
         <translation>Chọn Tệp Dự Án</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1840"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1861"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Tệp Dự Án (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1889"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1910"/>
         <source>JSON validation error</source>
         <translation>Lỗi xác thực JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1973"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1995"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>Dự Án Đã Được Nâng Cấp Từ Định Dạng Tập Tin Cũ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1974"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1996"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>Dự án này được lưu với phiên bản schema %1; phiên bản hiện tại là %2. Các trường mới đã được áp dụng giá trị mặc định. Lưu dự án để hoàn tất nâng cấp.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2005"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2027"/>
         <source>Save Imported Project</source>
         <translation>Lưu Dự Án Đã Nhập</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2204"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2226"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Dự án đa nguồn yêu cầu giấy phép Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2205"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2227"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Dự án này chứa nhiều nguồn dữ liệu. Chỉ nguồn đầu tiên được tải. Cần có giấy phép Serial Studio Pro để sử dụng dự án đa nguồn.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2439"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2461"/>
         <source>Workspace IDs remapped on load</source>
         <translation>ID Không Gian Làm Việc Được Ánh Xạ Lại Khi Tải</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2440"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2462"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 ID không gian làm việc tùy chỉnh bị trùng với dải tự động mới đã được chuyển sang dải người dùng. Lưu dự án để áp dụng ánh xạ vĩnh viễn.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2569"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2591"/>
         <source>Legacy frame parser function updated</source>
         <translation>Hàm phân tích frame cũ đã được cập nhật</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2570"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2592"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Dự án của bạn đã sử dụng hàm phân tích frame cũ với tham số 'separator'. Nó đã được tự động chuyển đổi sang định dạng mới.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2772"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2794"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Bạn có muốn xóa nhóm "%1" không?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2773"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2824"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2859"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3626"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2881"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3648"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Hành động này không thể hoàn tác. Bạn có muốn tiếp tục không?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2823"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2845"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Bạn có muốn xóa hành động "%1" không?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2858"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2880"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Bạn có muốn xóa dataset "%1" không?</translation>
     </message>
@@ -4372,78 +4372,78 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">%1 (Bản Sao)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3534"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3573"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3556"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3595"/>
         <source>Output Controls</source>
         <translation>Điều Khiển Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3608"/>
         <source>New Button</source>
         <translation>Nút Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3589"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3611"/>
         <source>New Slider</source>
         <translation>Thanh Trượt Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3592"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3614"/>
         <source>New Toggle</source>
         <translation>Công Tắc Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3617"/>
         <source>New Text Field</source>
         <translation>Trường Văn Bản Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3598"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3620"/>
         <source>New Knob</source>
         <translation>Núm Xoay Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3625"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3647"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Bạn có muốn xóa widget đầu ra "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3820"/>
         <source>Group</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3817"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3839"/>
         <source>New Dataset</source>
         <translation>Dataset Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3820"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3842"/>
         <source>New Plot</source>
         <translation>Biểu Đồ Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3824"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3846"/>
         <source>New FFT Plot</source>
         <translation>Biểu Đồ FFT Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3828"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3850"/>
         <source>New Level Indicator</source>
         <translation>Chỉ Báo Mức Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3832"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3854"/>
         <source>New Gauge</source>
         <translation>Đồng Hồ Đo Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3836"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3858"/>
         <source>New Compass</source>
         <translation>La Bàn Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3842"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3864"/>
         <source>New Meter</source>
         <translation>Đồng Hồ Đo Mới</translation>
     </message>
@@ -4452,241 +4452,241 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation type="vanished">Nhiệt Kế Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3868"/>
         <source>New LED Indicator</source>
         <translation>Chỉ Báo LED Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3850"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3872"/>
         <source>New Waterfall</source>
         <translation>Thác Nước Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3942"/>
         <source>Channel %1</source>
         <translation>Kênh %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3993"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4015"/>
         <source>New Action</source>
         <translation>Hành Động Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4136"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4158"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Xác nhận thay đổi widget cấp nhóm?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4138"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4160"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Các tập dữ liệu hiện có của nhóm này sẽ bị xóa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4202"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4203"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4204"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4224"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4225"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4226"/>
         <source>Accelerometer %1</source>
         <translation>Gia Tốc Kế %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4219"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4219"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4241"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4241"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4241"/>
         <source>Gyro %1</source>
         <translation>Con Quay Hồi Chuyển %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4256"/>
         <source>Latitude</source>
         <translation>Vĩ Độ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4256"/>
         <source>Longitude</source>
         <translation>Kinh Độ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4256"/>
         <source>Altitude</source>
         <translation>Độ Cao</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4263"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4271"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4285"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4263"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4271"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4285"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4263"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4271"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4285"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4464"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5360"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4486"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5382"/>
         <source>Workspace</source>
         <translation>Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4630"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4837"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4652"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4859"/>
         <source>Shared Table</source>
         <translation>Bảng Dùng Chung</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4712"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4734"/>
         <source>register</source>
         <translation>thanh ghi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4837"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4859"/>
         <source>New Shared Table</source>
         <translation>Bảng Chia Sẻ Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4837"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4855"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4874"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4898"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4925"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4944"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4967"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4990"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5360"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5381"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4859"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4877"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4896"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4947"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4966"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5012"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5382"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5403"/>
         <source>Name:</source>
         <translation>Tên:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4855"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4877"/>
         <source>Rename Table</source>
         <translation>Đổi Tên Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4874"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4896"/>
         <source>Rename Group</source>
         <translation>Đổi Tên Nhóm</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4898"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4920"/>
         <source>Rename Dataset</source>
         <translation>Đổi Tên Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4925"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4947"/>
         <source>Rename Data Source</source>
         <translation>Đổi Tên Nguồn Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4944"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4966"/>
         <source>Rename Action</source>
         <translation>Đổi Tên Hành Động</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4966"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4988"/>
         <source>New Register</source>
         <translation>Thanh Ghi Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5012"/>
         <source>Rename Register</source>
         <translation>Đổi Tên Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5029"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5054"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5908"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5076"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5930"/>
         <source>This action cannot be undone.</source>
         <translation>Hành động này không thể hoàn tác.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5030"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5052"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Thao tác này sẽ xóa %1 thanh ghi cùng với bảng. Hành động này không thể hoàn tác.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5033"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5053"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5907"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5055"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5075"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5929"/>
         <source>Delete "%1"?</source>
         <translation>Xóa "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5036"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5058"/>
         <source>Delete Table</source>
         <translation>Xóa Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5056"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5078"/>
         <source>Delete Register</source>
         <translation>Xóa Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5080"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5102"/>
         <source>Export Table</source>
         <translation>Xuất Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5082"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5126"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5104"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5148"/>
         <source>CSV files (*.csv)</source>
         <translation>Tệp CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5124"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5146"/>
         <source>Import Table</source>
         <translation>Nhập Bảng</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5360"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5382"/>
         <source>New Workspace</source>
         <translation>Không Gian Làm Việc Mới</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5381"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5403"/>
         <source>Rename Workspace</source>
         <translation>Đổi Tên Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5470"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5492"/>
         <source>Overview</source>
         <translation>Tổng Quan</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5480"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5502"/>
         <source>All Data</source>
         <translation>Tất Cả Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5664"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5686"/>
         <source>Discard workspace customisations?</source>
         <translation>Hủy bỏ tùy chỉnh không gian làm việc?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5687"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Tắt Tùy chỉnh sẽ hủy các chỉnh sửa của bạn và xây dựng lại danh sách không gian làm việc từ các nhóm của dự án.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5668"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5690"/>
         <source>Customize Workspaces</source>
         <translation>Tùy Chỉnh Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5910"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5932"/>
         <source>Delete Workspace</source>
         <translation>Xóa Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2042"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6224"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2064"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6246"/>
         <source>File open error</source>
         <translation>Lỗi mở tệp</translation>
     </message>
@@ -8885,52 +8885,52 @@ Cảm ơn bạn một lần nữa vì đã ủng hộ Serial Studio!</translatio
 <context>
     <name>MDF4::Player</name>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="362"/>
+        <location filename="../../src/MDF4/Player.cpp" line="363"/>
         <source>Select MDF4 file</source>
         <translation>Chọn tệp MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="364"/>
+        <location filename="../../src/MDF4/Player.cpp" line="365"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
         <translation>Tệp MDF4 (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="388"/>
+        <location filename="../../src/MDF4/Player.cpp" line="389"/>
         <source>Disconnect from device?</source>
         <translation>Ngắt kết nối khỏi thiết bị?</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="389"/>
+        <location filename="../../src/MDF4/Player.cpp" line="390"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
         <translation>Bạn phải ngắt kết nối khỏi thiết bị hiện tại trước khi mở tệp MDF4.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="406"/>
+        <location filename="../../src/MDF4/Player.cpp" line="407"/>
         <source>Cannot open MDF4 file</source>
         <translation>Không thể mở tệp MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="407"/>
+        <location filename="../../src/MDF4/Player.cpp" line="408"/>
         <source>The file may be corrupted or in an unsupported format.</source>
         <translation>Tệp có thể bị hỏng hoặc ở định dạng không được hỗ trợ.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="414"/>
+        <location filename="../../src/MDF4/Player.cpp" line="415"/>
         <source>Invalid MDF4 file</source>
         <translation>Tệp MDF4 không hợp lệ</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="415"/>
+        <location filename="../../src/MDF4/Player.cpp" line="416"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
         <translation>Không đọc được cấu trúc tệp. Tệp có thể bị hỏng.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="432"/>
+        <location filename="../../src/MDF4/Player.cpp" line="433"/>
         <source>No data in file</source>
         <translation>Không có dữ liệu trong tệp</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="433"/>
+        <location filename="../../src/MDF4/Player.cpp" line="434"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>Tệp MDF4 không chứa dữ liệu đo lường.</translation>
     </message>
@@ -9881,8 +9881,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Không thể tạo cấu trúc thư mục bundle .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Trình ghi lối tắt Windows không khả dụng trên nền tảng này.</translation>
     </message>
@@ -9913,8 +9913,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Lưu tệp .lnk thất bại (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Trình tạo lối tắt macOS không khả dụng trên nền tảng này.</translation>
     </message>
@@ -11993,18 +11993,18 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Phản hồi từ máy chủ thiếu các trường bắt buộc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="625"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="633"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Bộ phân tích frame đang sử dụng hơn %1% thời gian CPU.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="627"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="635"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio đang loại bỏ các frame để giữ ứng dụng phản hồi. Vui lòng đơn giản hóa hoặc tối ưu hóa script bộ phân tích frame để giảm khối lượng công việc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>Frame Parser Disabled</source>
         <translation>Bộ Phân Tích Frame Đã Tắt</translation>
     </message>
@@ -12046,8 +12046,8 @@ Nguyên nhân có thể: vòng lặp vô hạn hoặc thao tác cực kỳ chậ
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="458"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="378"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
         <source>Missing Parse Function</source>
         <translation>Thiếu Hàm Parse</translation>
     </message>
@@ -12063,8 +12063,8 @@ Vui lòng đảm bảo mã của bạn bao gồm:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="512"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="441"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="533"/>
         <source>Parse Function Runtime Error</source>
         <translation>Lỗi Runtime Hàm Parse</translation>
     </message>
@@ -12091,12 +12091,26 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Nguyên nhân có thể: vòng lặp vô hạn hoặc thao tác cực chậm trong thân script. Sửa script và tải lại dự án để kích hoạt lại phân tích.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="416"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="418"/>
+        <source>JavaScript Timed Out</source>
+        <translation>Javascript Hết Thời Gian Chờ</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="419"/>
+        <source>The parser code did not finish evaluating within %1 ms and was interrupted.
+
+Most likely cause: an infinite loop at the top level of the script.</source>
+        <translation>Mã phân tích cú pháp không hoàn thành đánh giá trong vòng %1 ms và đã bị gián đoạn.
+
+Nguyên nhân có thể: vòng lặp vô hạn ở cấp cao nhất của script.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="437"/>
         <source>JavaScript Syntax Error</source>
         <translation>Lỗi Cú Pháp Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="417"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="438"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -12105,12 +12119,12 @@ Nguyên nhân có thể: vòng lặp vô hạn hoặc thao tác cực chậm tro
 %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="432"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="453"/>
         <source>JavaScript Exception Occurred</source>
         <translation>Xảy Ra Ngoại Lệ Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="433"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="454"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -12119,7 +12133,7 @@ Nguyên nhân có thể: vòng lặp vô hạn hoặc thao tác cực chậm tro
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="459"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="480"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -12130,7 +12144,7 @@ Vui lòng đảm bảo mã của bạn bao gồm:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="513"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="534"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -12143,12 +12157,12 @@ Please fix the error in the function body.</source>
 Vui lòng sửa lỗi trong thân hàm.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="616"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="637"/>
         <source>Invalid Function Declaration</source>
         <translation>Khai Báo Hàm Không Hợp Lệ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="617"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="638"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -12161,7 +12175,7 @@ Define one of:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="633"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="654"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>Hàm 'parse' phải nhận ít nhất một tham số (payload của frame).</translation>
     </message>
@@ -12176,7 +12190,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="632"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="653"/>
         <source>Invalid Function Parameter</source>
         <translation>Tham Số Hàm Không Hợp Lệ</translation>
     </message>
@@ -12191,12 +12205,12 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="597"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="618"/>
         <source>Deprecated Function Signature</source>
         <translation>Chữ Ký Hàm Đã Lỗi Thời</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="598"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="619"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -14337,73 +14351,73 @@ Không còn cần tham số phân tách nữa.</translation>
     <name>StartMenu</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="99"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="539"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="543"/>
         <source>Auto Layout</source>
         <translation>Bố Cục Tự Động</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="107"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="551"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="555"/>
         <source>Full Screen</source>
         <translation>Toàn Màn Hình</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="113"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="564"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="568"/>
         <source>Add External Window</source>
         <translation>Thêm Cửa Sổ Bên Ngoài</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="119"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="734"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="740"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="125"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="743"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="749"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="133"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="751"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="757"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="141"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="758"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="764"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="149"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="766"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="772"/>
         <source>Preferences</source>
         <translation>Tùy Chọn</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="155"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="847"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="853"/>
         <source>Help Center</source>
         <translation>Trung Tâm Trợ Giúp</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="161"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="775"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="781"/>
         <source>Sessions</source>
         <translation>Phiên</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="784"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="790"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="175"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="792"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="798"/>
         <source>AI Assistant</source>
         <translation>Trợ Lý AI</translation>
     </message>
@@ -14413,127 +14427,127 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="341"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="343"/>
         <source>Show "%1"</source>
         <translation>Hiển Thị "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="348"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Hiển Thị Tất Cả Không Gian Làm Việc Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="355"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="357"/>
         <source>New Workspace…</source>
         <translation>Không Gian Làm Việc Mới…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="372"/>
         <source>No Workspaces Available</source>
         <translation>Không Có Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="406"/>
         <source>Actions</source>
         <translation>Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="426"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="429"/>
         <source>No Actions Available</source>
         <translation>Không Có Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="456"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="459"/>
         <source>Plugins</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="493"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="497"/>
         <source>Manage Plugins…</source>
         <translation>Quản Lý Plugin…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="503"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="507"/>
         <source>No Plugins Installed</source>
         <translation>Không Có Plugin Nào Được Cài Đặt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="588"/>
         <source>Export</source>
         <translation>Xuất</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="614"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="619"/>
         <source>CSV File</source>
         <translation>Tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="620"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="625"/>
         <source>MDF4 File</source>
         <translation>Tệp MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="626"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="631"/>
         <source>Console Transcript</source>
         <translation>Bản Ghi Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="635"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="640"/>
         <source>Session Database</source>
         <translation>Cơ Sở Dữ Liệu Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="649"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="654"/>
         <source>No Export Formats Available</source>
         <translation>Không Có Định Dạng Xuất Nào</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="679"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="684"/>
         <source>Tools</source>
         <translation>Công Cụ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="807"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="813"/>
         <source>No Tools Available</source>
         <translation>Không Có Công Cụ Nào</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="868"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="874"/>
         <source>Resume</source>
         <translation>Tiếp Tục</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="869"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
         <source>Pause</source>
         <translation>Tạm Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="881"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="902"/>
         <source>Quit</source>
         <translation>Thoát</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="902"/>
         <source>Disconnect</source>
         <translation>Ngắt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="922"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="928"/>
         <source>Edit…</source>
         <translation>Chỉnh Sửa…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="933"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="939"/>
         <source>Delete</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="934"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="940"/>
         <source>Hide</source>
         <translation>Ẩn</translation>
     </message>

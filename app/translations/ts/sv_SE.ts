@@ -1481,42 +1481,42 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="208"/>
+        <location filename="../../src/CSV/Player.cpp" line="210"/>
         <source>Select CSV file</source>
         <translation>Välj CSV-fil</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="210"/>
+        <location filename="../../src/CSV/Player.cpp" line="212"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-filer (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="381"/>
+        <location filename="../../src/CSV/Player.cpp" line="383"/>
         <source>Device Connection Active</source>
         <translation>Enhetsanslutning Aktiv</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="382"/>
+        <location filename="../../src/CSV/Player.cpp" line="384"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>För att använda denna funktion måste du koppla från enheten. Vill du fortsätta?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="397"/>
+        <location filename="../../src/CSV/Player.cpp" line="399"/>
         <source>Check file permissions and location</source>
         <translation>Kontrollera filbehörigheter och plats</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="430"/>
+        <location filename="../../src/CSV/Player.cpp" line="432"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Otillräcklig Data i CSV-Fil</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="397"/>
+        <location filename="../../src/CSV/Player.cpp" line="399"/>
         <source>Cannot read CSV file</source>
         <translation>Kan inte läsa CSV-fil</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="431"/>
+        <location filename="../../src/CSV/Player.cpp" line="433"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>CSV-filen måste innehålla minst en datarad för att fortsätta. Kontrollera filen och försök igen.</translation>
     </message>
@@ -2562,54 +2562,54 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="929"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1046"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="958"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1075"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1058"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1087"/>
         <source>Audio Input</source>
         <translation>Ljudingång</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="938"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1063"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="967"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1092"/>
         <source>Quick Plot</source>
         <translation>Snabbdiagram</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="806"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="835"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript-transform överskred budgeten</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="807"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="836"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>En datasettransform tog längre än %1 ms; återstående dataset i framen föll tillbaka till råvärden tills nästa frame. Profilera eller förenkla transformkoden.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="210"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="212"/>
         <source>Frame pool exhausted</source>
         <translation>Frame-poolen är uttömd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="212"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="214"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>En nedströmskonsument (dashboard, CSV/MDF4-export, sessionsdatabas eller API-prenumerant) tömmer inte frames tillräckligt snabbt. Serial Studio faller tillbaka till per-frame-allokeringar tills kön är borta. Inaktivera en tung konsument eller sänk datahastigheten.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="892"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="921"/>
         <source>Device A</source>
         <translation>Enhet A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="945"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="974"/>
         <source>Quick Plot Data</source>
         <translation>Snabbdiagramdata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="957"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="986"/>
         <source>Multiple Plots</source>
         <translation>Flera Diagram</translation>
     </message>
@@ -4256,22 +4256,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Nytt Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="712"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="733"/>
         <source>Samples</source>
         <translation>Sampel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1071"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1092"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Flera datakällor kräver en Pro-licens</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1072"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1093"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro tillåter anslutning till flera enheter samtidigt. Uppgradera för att låsa upp denna funktion.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1085"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1106"/>
         <source>Device %1</source>
         <translation>Enhet %1</translation>
     </message>
@@ -4280,12 +4280,12 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">(Kopia)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1369"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1390"/>
         <source>Do you want to save your changes?</source>
         <translation>Vill du spara dina ändringar?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1370"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1391"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Du har osparade ändringar i detta projekt!</translation>
     </message>
@@ -4342,124 +4342,124 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Dataset är de värden som visas på instrumentpanelen. Välj en grupp i trädet och använd Dataset-knappen i verktygsfältet för att lägga till ett.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="760"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="781"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1121"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1142"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>Vill du ta bort datakälla "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1122"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1143"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>Grupper som använder denna källa flyttas till standardkällan. Denna åtgärd kan inte ångras.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1409"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1430"/>
         <source>Save Serial Studio Project</source>
         <translation>Spara Serial Studio-projekt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1411"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2007"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1432"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2029"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio-projektfiler (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1433"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1672"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1998"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1454"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2020"/>
         <source>Untitled Project</source>
         <translation>Namnlöst Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1681"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2159"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1702"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2181"/>
         <source>Device A</source>
         <translation>Enhet A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1838"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1859"/>
         <source>Select Project File</source>
         <translation>Välj Projektfil</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1840"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1861"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Projektfiler (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1889"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1910"/>
         <source>JSON validation error</source>
         <translation>JSON-valideringsfel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1973"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1995"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>Projekt uppgraderat från ett tidigare filformat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1974"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1996"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>Det här projektet sparades med schemaversion %1; den aktuella versionen är %2. Standardvärden har tillämpats på nya fält. Spara projektet för att låsa uppgraderingen.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2005"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2027"/>
         <source>Save Imported Project</source>
         <translation>Spara Importerat Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2204"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2226"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Projekt med flera källor kräver Pro-licens</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2205"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2227"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Detta projekt innehåller flera datakällor. Endast den första källan har laddats. En Serial Studio Pro-licens krävs för att använda projekt med flera källor.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2439"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2461"/>
         <source>Workspace IDs remapped on load</source>
         <translation>Arbetsyte-ID:n ommappades vid inläsning</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2440"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2462"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 anpassade arbetsyte-ID överlappade det nya reserverade automatiska intervallet och flyttades till användarintervallet. Spara projektet för att göra ommappningen permanent.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2569"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2591"/>
         <source>Legacy frame parser function updated</source>
         <translation>Äldre frame-parserfunktion uppdaterad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2570"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2592"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Ditt projekt använde en äldre frame-parser-funktion med ett 'separator'-argument. Den har automatiskt migrerats till det nya formatet.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2772"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2794"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Vill du ta bort grupp "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2773"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2824"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2859"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3626"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2881"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3648"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Denna åtgärd kan inte ångras. Vill du fortsätta?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2823"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2845"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Vill du ta bort åtgärd "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2858"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2880"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Vill du ta bort dataset "%1"?</translation>
     </message>
@@ -4468,78 +4468,78 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">%1 (Kopia)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3534"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3573"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3556"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3595"/>
         <source>Output Controls</source>
         <translation>Utgångskontroller</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3608"/>
         <source>New Button</source>
         <translation>Ny Knapp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3589"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3611"/>
         <source>New Slider</source>
         <translation>Ny Skjutreglage</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3592"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3614"/>
         <source>New Toggle</source>
         <translation>Ny Växlare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3617"/>
         <source>New Text Field</source>
         <translation>Nytt Textfält</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3598"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3620"/>
         <source>New Knob</source>
         <translation>Nytt Vred</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3625"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3647"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Vill du ta bort utgångswidget "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3820"/>
         <source>Group</source>
         <translation>Grupp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3817"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3839"/>
         <source>New Dataset</source>
         <translation>Ny Datauppsättning</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3820"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3842"/>
         <source>New Plot</source>
         <translation>Ny Graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3824"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3846"/>
         <source>New FFT Plot</source>
         <translation>Ny FFT-graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3828"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3850"/>
         <source>New Level Indicator</source>
         <translation>Ny Nivåindikator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3832"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3854"/>
         <source>New Gauge</source>
         <translation>Ny Mätare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3836"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3858"/>
         <source>New Compass</source>
         <translation>Ny Kompass</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3842"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3864"/>
         <source>New Meter</source>
         <translation>Ny Mätare</translation>
     </message>
@@ -4548,241 +4548,241 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Ny Termometer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3868"/>
         <source>New LED Indicator</source>
         <translation>Ny LED-indikator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3850"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3872"/>
         <source>New Waterfall</source>
         <translation>Nytt Vattenfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3942"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3993"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4015"/>
         <source>New Action</source>
         <translation>Ny Åtgärd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4136"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4158"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Är du säker på att du vill ändra gruppnivåwidgeten?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4138"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4160"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Befintliga dataset för denna grupp tas bort</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4202"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4203"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4204"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4224"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4225"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4226"/>
         <source>Accelerometer %1</source>
         <translation>Accelerometer %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4219"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4219"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4241"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4241"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4241"/>
         <source>Gyro %1</source>
         <translation>GYRO %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4256"/>
         <source>Latitude</source>
         <translation>Latitud</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4256"/>
         <source>Longitude</source>
         <translation>Longitud</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4256"/>
         <source>Altitude</source>
         <translation>Altitud</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4263"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4271"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4285"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4263"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4271"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4285"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4263"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4271"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4285"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4464"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5360"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4486"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5382"/>
         <source>Workspace</source>
         <translation>Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4630"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4837"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4652"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4859"/>
         <source>Shared Table</source>
         <translation>Delad Tabell</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4712"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4734"/>
         <source>register</source>
         <translation>register</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4837"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4859"/>
         <source>New Shared Table</source>
         <translation>Ny Delad Tabell</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4837"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4855"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4874"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4898"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4925"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4944"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4967"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4990"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5360"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5381"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4859"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4877"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4896"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4947"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4966"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5012"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5382"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5403"/>
         <source>Name:</source>
         <translation>Namn:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4855"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4877"/>
         <source>Rename Table</source>
         <translation>Byt Namn på Tabell</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4874"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4896"/>
         <source>Rename Group</source>
         <translation>Byt Namn på Grupp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4898"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4920"/>
         <source>Rename Dataset</source>
         <translation>Byt Namn på Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4925"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4947"/>
         <source>Rename Data Source</source>
         <translation>Byt Namn på Datakälla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4944"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4966"/>
         <source>Rename Action</source>
         <translation>Byt Namn på Åtgärd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4966"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4988"/>
         <source>New Register</source>
         <translation>Nytt Register</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4990"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5012"/>
         <source>Rename Register</source>
         <translation>Byt Namn på Register</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5029"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5054"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5908"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5076"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5930"/>
         <source>This action cannot be undone.</source>
         <translation>Denna åtgärd kan inte ångras.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5030"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5052"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Detta tar bort %1 register tillsammans med tabellen. Denna åtgärd kan inte ångras.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5033"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5053"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5907"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5055"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5075"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5929"/>
         <source>Delete "%1"?</source>
         <translation>Ta Bort "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5036"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5058"/>
         <source>Delete Table</source>
         <translation>Ta Bort Tabell</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5056"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5078"/>
         <source>Delete Register</source>
         <translation>Ta Bort Register</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5080"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5102"/>
         <source>Export Table</source>
         <translation>Exportera Tabell</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5082"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5126"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5104"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5148"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-filer (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5124"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5146"/>
         <source>Import Table</source>
         <translation>Importera Tabell</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5360"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5382"/>
         <source>New Workspace</source>
         <translation>Ny Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5381"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5403"/>
         <source>Rename Workspace</source>
         <translation>Byt Namn på Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5470"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5492"/>
         <source>Overview</source>
         <translation>Översikt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5480"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5502"/>
         <source>All Data</source>
         <translation>All Data</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5664"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5686"/>
         <source>Discard workspace customisations?</source>
         <translation>Kassera anpassningar av arbetsytor?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5665"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5687"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Att stänga av Anpassa kasserar dina ändringar och återskapar arbetsytelistan från projektets grupper.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5668"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5690"/>
         <source>Customize Workspaces</source>
         <translation>Anpassa Arbetsytor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5910"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5932"/>
         <source>Delete Workspace</source>
         <translation>Ta Bort Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2042"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6224"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2064"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6246"/>
         <source>File open error</source>
         <translation>Filöppningsfel</translation>
     </message>
@@ -9005,52 +9005,52 @@ Tack återigen för att du stödjer Serial Studio!</translation>
 <context>
     <name>MDF4::Player</name>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="362"/>
+        <location filename="../../src/MDF4/Player.cpp" line="363"/>
         <source>Select MDF4 file</source>
         <translation>Välj MDF4-fil</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="364"/>
+        <location filename="../../src/MDF4/Player.cpp" line="365"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
         <translation>MDF4-filer (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="388"/>
+        <location filename="../../src/MDF4/Player.cpp" line="389"/>
         <source>Disconnect from device?</source>
         <translation>Koppla från enhet?</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="389"/>
+        <location filename="../../src/MDF4/Player.cpp" line="390"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
         <translation>Du måste koppla från den aktuella enheten innan du öppnar en MDF4-fil.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="406"/>
+        <location filename="../../src/MDF4/Player.cpp" line="407"/>
         <source>Cannot open MDF4 file</source>
         <translation>Kan inte öppna MDF4-fil</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="407"/>
+        <location filename="../../src/MDF4/Player.cpp" line="408"/>
         <source>The file may be corrupted or in an unsupported format.</source>
         <translation>Filen kan vara skadad eller i ett format som inte stöds.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="414"/>
+        <location filename="../../src/MDF4/Player.cpp" line="415"/>
         <source>Invalid MDF4 file</source>
         <translation>Ogiltig MDF4-fil</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="415"/>
+        <location filename="../../src/MDF4/Player.cpp" line="416"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
         <translation>Misslyckades att läsa filstruktur. Filen kan vara skadad.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="432"/>
+        <location filename="../../src/MDF4/Player.cpp" line="433"/>
         <source>No data in file</source>
         <translation>Ingen data i fil</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="433"/>
+        <location filename="../../src/MDF4/Player.cpp" line="434"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>MDF4-filen innehåller ingen mätdata.</translation>
     </message>
@@ -10379,8 +10379,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation>Kunde inte skriva Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows-genvägsverktyget är inte tillgängligt på denna plattform.</translation>
     </message>
@@ -10411,8 +10411,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation>Sparande av .lnk-filen misslyckades (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS-genvägsverktyget är inte tillgängligt på denna plattform.</translation>
     </message>
@@ -12435,8 +12435,8 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
         <translation>Allmänt I/O-fel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Inaktiverad</translation>
     </message>
@@ -12478,8 +12478,8 @@ Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkrop
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="458"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="378"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
         <source>Missing Parse Function</source>
         <translation>Parse-funktion Saknas</translation>
     </message>
@@ -12495,8 +12495,8 @@ Säkerställ att din kod innehåller:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="512"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="441"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="533"/>
         <source>Parse Function Runtime Error</source>
         <translation>Körningsfel i Parse-funktionen</translation>
     </message>
@@ -12523,12 +12523,26 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkroppen. Åtgärda skriptet och ladda om projektet för att återaktivera parsning.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="416"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="418"/>
+        <source>JavaScript Timed Out</source>
+        <translation>Javascript Överskred Tidsgränsen</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="419"/>
+        <source>The parser code did not finish evaluating within %1 ms and was interrupted.
+
+Most likely cause: an infinite loop at the top level of the script.</source>
+        <translation>Tolkningskoden slutförde inte utvärderingen inom %1 ms och avbröts.
+
+Troligaste orsak: en oändlig loop på toppnivån i skriptet.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="437"/>
         <source>JavaScript Syntax Error</source>
         <translation>Javascript-syntaxfel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="417"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="438"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -12537,12 +12551,12 @@ Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkrop
 %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="432"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="453"/>
         <source>JavaScript Exception Occurred</source>
         <translation>Javascript-undantag Inträffade</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="433"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="454"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -12551,7 +12565,7 @@ Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkrop
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="459"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="480"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -12562,7 +12576,7 @@ Säkerställ att din kod inkluderar:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="513"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="534"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -12575,12 +12589,12 @@ Please fix the error in the function body.</source>
 Åtgärda felet i funktionskroppen.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="616"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="637"/>
         <source>Invalid Function Declaration</source>
         <translation>Ogiltig Funktionsdeklaration</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="617"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="638"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -12593,7 +12607,7 @@ Definiera en av:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="633"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="654"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>Funktionen 'parse' måste acceptera minst en parameter (frame-payloaden).</translation>
     </message>
@@ -12608,7 +12622,7 @@ Förväntad format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="632"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="653"/>
         <source>Invalid Function Parameter</source>
         <translation>Ogiltig Funktionsparameter</translation>
     </message>
@@ -12623,12 +12637,12 @@ Förväntad format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="597"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="618"/>
         <source>Deprecated Function Signature</source>
         <translation>Föråldrad Funktionssignatur</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="598"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="619"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -12737,12 +12751,12 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Ingen Groq API-nyckel angiven. Öppna Hantera Nycklar för att lägga till en.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="625"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="633"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Frame-parsern använder mer än %1% av CPU-tiden.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="627"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="635"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio tappar ramar för att hålla applikationen responsiv. Förenkla eller optimera frame-parser-skriptet för att minska dess arbetsbelastning.</translation>
     </message>
@@ -14985,184 +14999,184 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation>Arbetsytor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="372"/>
         <source>No Workspaces Available</source>
         <translation>Inga Arbetsytor Tillgängliga</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="406"/>
         <source>Actions</source>
         <translation>Åtgärder</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="426"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="429"/>
         <source>No Actions Available</source>
         <translation>Inga Åtgärder Tillgängliga</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="456"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="459"/>
         <source>Plugins</source>
         <translation>Tillägg</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="355"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="357"/>
         <source>New Workspace…</source>
         <translation>Ny Arbetsyta…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="493"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="497"/>
         <source>Manage Plugins…</source>
         <translation>Hantera Tillägg…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="503"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="507"/>
         <source>No Plugins Installed</source>
         <translation>Inga Tillägg Installerade</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="99"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="539"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="543"/>
         <source>Auto Layout</source>
         <translation>Automatisk Layout</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="107"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="551"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="555"/>
         <source>Full Screen</source>
         <translation>Helskärm</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="113"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="564"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="568"/>
         <source>Add External Window</source>
         <translation>Lägg till Externt Fönster</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="133"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="751"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="757"/>
         <source>Clock</source>
         <translation>Klocka</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="141"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="758"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="764"/>
         <source>Stopwatch</source>
         <translation>Stoppur</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="161"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="775"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="781"/>
         <source>Sessions</source>
         <translation>Sessioner</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="168"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="784"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="790"/>
         <source>File Transmission</source>
         <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="175"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="792"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="798"/>
         <source>AI Assistant</source>
         <translation>Ai-assistent</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="341"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="343"/>
         <source>Show "%1"</source>
         <translation>Visa "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="348"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Visa Alla Dolda Arbetsytor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="588"/>
         <source>Export</source>
         <translation>Exportera</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="614"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="619"/>
         <source>CSV File</source>
         <translation>CSV-fil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="620"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="625"/>
         <source>MDF4 File</source>
         <translation>MDF4-fil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="626"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="631"/>
         <source>Console Transcript</source>
         <translation>Konsolutskrift</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="635"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="640"/>
         <source>Session Database</source>
         <translation>Sessionsdatabas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="649"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="654"/>
         <source>No Export Formats Available</source>
         <translation>Inga Exportformat Tillgängliga</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="679"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="684"/>
         <source>Tools</source>
         <translation>Verktyg</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="807"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="813"/>
         <source>No Tools Available</source>
         <translation>Inga Verktyg Tillgängliga</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="881"/>
         <source>Reset</source>
         <translation>Återställ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="902"/>
         <source>Quit</source>
         <translation>Avsluta</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="922"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="928"/>
         <source>Edit…</source>
         <translation>Redigera…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="119"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="734"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="740"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="125"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="743"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="749"/>
         <source>Notifications</source>
         <translation>Aviseringar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="149"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="766"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="772"/>
         <source>Preferences</source>
         <translation>Inställningar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="155"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="847"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="853"/>
         <source>Help Center</source>
         <translation>Hjälpcenter</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="933"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="939"/>
         <source>Delete</source>
         <translation>Ta Bort</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="934"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="940"/>
         <source>Hide</source>
         <translation>Dölj</translation>
     </message>
@@ -15171,17 +15185,17 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="868"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="874"/>
         <source>Resume</source>
         <translation>Återuppta</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="869"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="896"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="902"/>
         <source>Disconnect</source>
         <translation>Koppla Från</translation>
     </message>
