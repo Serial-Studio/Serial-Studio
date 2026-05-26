@@ -415,6 +415,10 @@ QString API::EnumLabels::dashboardWidgetSlug(int value)
       return QStringLiteral("compass");
     case SerialStudio::DashboardMeter:
       return QStringLiteral("meter");
+    case SerialStudio::DashboardClock:
+      return QStringLiteral("clock");
+    case SerialStudio::DashboardStopwatch:
+      return QStringLiteral("stopwatch");
     case SerialStudio::DashboardNoWidget:
       return QStringLiteral("none");
 #ifdef BUILD_COMMERCIAL
@@ -480,6 +484,12 @@ int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
 
   if (s == QLatin1String("meter"))
     return SerialStudio::DashboardMeter;
+
+  if (s == QLatin1String("clock"))
+    return SerialStudio::DashboardClock;
+
+  if (s == QLatin1String("stopwatch"))
+    return SerialStudio::DashboardStopwatch;
 
   if (s == QLatin1String("none"))
     return SerialStudio::DashboardNoWidget;
