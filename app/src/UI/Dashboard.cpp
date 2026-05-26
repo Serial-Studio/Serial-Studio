@@ -2157,9 +2157,8 @@ void UI::Dashboard::configureLineSeries()
 #else
     if (false) {
 #endif
-      const auto& xDataset = m_datasets[yDataset.xAxisId];
       DSP::LineSeries series;
-      series.x = &m_xAxisData[xDataset.index];
+      series.x = &m_xAxisData[yDataset.xAxisId];
       series.y = &m_yAxisData[yDataset.uniqueId];
       m_pltValues.append(series);
     }
