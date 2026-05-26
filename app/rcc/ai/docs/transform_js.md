@@ -60,10 +60,12 @@ is one of two types:
 - `Constant` — single immutable value across the session. Set once at
   declaration; every `tableGet` returns it. Use for calibration
   coefficients, lookup tables, configuration flags.
-- `Computed` — resets to its `defaultValue` at the **start of every
-  parsed frame**. Writable from transforms via `tableSet`. Use for
-  per-frame accumulators, derived values, intermediate results another
-  transform reads later in the same frame.
+- `Computed` — writable from transforms via `tableSet`. Holds the last
+  value written **indefinitely** (no per-frame reset). Use for
+  filter/integrator state, cross-frame counters, latched flags, and
+  intermediate results another transform reads later. The
+  `defaultValue` is the starting value at project load, not a
+  recurring reset.
 
 Functions injected into your scope:
 
@@ -100,13 +102,15 @@ when peer reads return stale or empty values.
 
 ## When to use a table vs a transform local
 
-- **Per-dataset state** (EMA across frames, last-seen value, deadband
+- **Per-dataset state across frames** (EMA, last-seen value, deadband
   hysteresis): use a top-level `let`/`var` in your transform script. The
   IIFE wrapping keeps each dataset's locals private. Cheaper than a
-  table register.
-- **Shared state across datasets** (calibration constants used by N
-  channels, a global counter, lookup tables): use a Constant or Computed
-  register in a user table.
+  table register and isolated to the one dataset.
+- **State shared across datasets and frames** (a filter whose output
+  several downstream channels read, a long-running integrator, a
+  latched alarm): use a Computed register — it persists.
+- **Shared *constants*** (calibration coefficients used by N channels,
+  lookup tables, full-scale ranges): use a Constant register.
 - **Cross-dataset derived values within one frame** (compute speed from
   dx and dt that arrive in the same frame): use `datasetGetRaw` to read a
   peer dataset, OR write to a Computed register in the earlier transform
@@ -153,15 +157,20 @@ function transform(dx) {
 }
 ```
 
-### Per-frame accumulator via Computed register
+### Running integrator via Computed register
 
 ```js
-// Computed register "FuelTotal" with defaultValue 0; resets each frame.
-function transform(litresPerHour) {
-  // ms since last frame, populated by an earlier transform on dt_ms
-  const dtMs = tableGet('FrameTimer', 'dtMs');
+// Computed register Trip.litresUsed (defaultValue 0) persists across
+// frames, so the running total accumulates session-long.
+function transform(litresPerHour, info) {
+  if (!info) return tableGet('Trip', 'litresUsed') || 0;
+
+  const prevTs = tableGet('Trip', 'lastTimestampMs') || info.timestampMs;
+  const dtMs   = info.timestampMs - prevTs;
+  tableSet('Trip', 'lastTimestampMs', info.timestampMs);
+
   const delta = (litresPerHour / 3600.0) * (dtMs / 1000.0);
-  const total = tableGet('Trip', 'litresUsed') + delta;
+  const total = (tableGet('Trip', 'litresUsed') || 0) + delta;
   tableSet('Trip', 'litresUsed', total);
   return total;
 }

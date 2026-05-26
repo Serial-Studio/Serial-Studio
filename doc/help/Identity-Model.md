@@ -33,17 +33,14 @@ A separate field unrelated to identity. `index` is the **frame offset**, that is
 
 ### `uniqueId`
 
-A single integer that identifies a dataset *globally* across the whole project. It's derived from the other three identifiers:
+A single integer that identifies a dataset *globally* across the whole project. It's **persisted in the project file** (each dataset stores its `uniqueId` directly) and **assigned once** from a project-level counter when the dataset is created, duplicated, or imported. Reordering or renaming a dataset never changes its `uniqueId`.
 
-```cpp
-uniqueId = sourceId * 1'000'000
-         + groupId  * 10'000
-         + datasetId;
-```
+Treat the integer as opaque -- it's allocated, not derived. Two assumptions you'd otherwise make are no longer safe:
 
-So source 0, group 5, dataset 2 has `uniqueId = 50002`. Source 2, group 17, dataset 0 has `uniqueId = 2'170'000`. The strides (`kSourceIdStride = 1'000'000`, `kGroupIdStride = 10'000`) live in `app/src/DataModel/Frame.h`.
+- You **cannot** recover `(sourceId, groupId, datasetId)` from a `uniqueId` by arithmetic. The legacy formula `sourceId * 1'000'000 + groupId * 10'000 + datasetId` is only used as a one-shot back-fill when loading a project file from before this scheme existed; once the project is saved again, the values are persisted and no longer follow the formula.
+- You **cannot** guess what `uniqueId` a new dataset will receive. It's just the next value from the project's counter (`nextUniqueId`).
 
-`uniqueId` is what transform scripts and Data Tables use, because they need a single key that's stable across sources. It's what you read from the live data API and what the system data table (`__datasets__`) uses for its `raw:<uid>` and `final:<uid>` registers.
+`uniqueId` is what transform scripts and Data Tables use, because they need a single key that's stable across sources. It's what you read from the live data API and what the system data table (`__datasets__`) uses for its `raw:<uid>` and `final:<uid>` registers. The Group struct has its own `uniqueId` field with the same semantics, used inside workspace widget refs.
 
 ## Where each ID is used
 
@@ -54,18 +51,6 @@ So source 0, group 5, dataset 2 has `uniqueId = 50002`. Source 2, group 17, data
 | `datasetId`| Dataset CRUD addressing (`project.dataset.update`, `project.dataset.setOptions`, `project.dataset.delete`) |
 | `index`    | Frame-parser scripts when assigning values from the parsed array (`group.datasets[0].index = 1`) |
 | `uniqueId` | Live-data API (`live.dataset.read`), transform scripts (`datasetGetRaw(uid)`, `datasetGetFinal(uid)`), Data Tables (`raw:<uid>`, `final:<uid>`) |
-
-## Why the strides matter
-
-The arithmetic encoding lets any consumer recover the `(source, group, dataset)` triplet from a single integer:
-
-```cpp
-sourceId  = uniqueId / 1'000'000;
-groupId   = (uniqueId / 10'000) % 100;
-datasetId = uniqueId % 10'000;
-```
-
-Treat this as an internal detail. Downstream code should not parse `uniqueId` arithmetically, because the strides may grow if a future release needs more groups per source.
 
 ## Rule of thumb
 
@@ -82,8 +67,8 @@ In other words:
 ## Lifecycle gotchas
 
 - **`datasetId` shifts when you rearrange.** Inserting a dataset at slot 0 renumbers everything that came after. If you cache `datasetId` in your script and then edit the project, refresh it from the API after every mutation.
-- **`uniqueId` follows `datasetId`.** Because `uniqueId` is computed from `(sourceId, groupId, datasetId)`, anything that changes `datasetId` also changes `uniqueId`. Don't hard-code `uniqueId` literals in transform scripts that survive across project edits. Resolve them at script start with `tableGet("__datasets__", "raw:" + my_uid)` or by looking up the dataset's `uniqueId` from the project snapshot.
-- **`groupId` is stable.** Adding new groups doesn't renumber existing ones. `groupId` is the safest of the three to cache.
+- **`uniqueId` does NOT follow `datasetId`.** It's persisted with the dataset and stays the same across reorders, renames, retypes, and moves between sources. The one exception is duplicate / copy-paste: a duplicated dataset receives a fresh `uniqueId` from the counter so the original and the copy stay distinguishable.
+- **`groupId` shifts when you rearrange.** Adding a new group at the top renumbers everything that came after. For a stable group identifier, use `Group.uniqueId` (returned by `project.group.list` under `uniqueId`) -- that's what workspace widget refs persist.
 - **`index` is yours to set.** Frame parsers control `index` directly. The Project Editor assigns sequential defaults but you can override them.
 
 ## Quick reference
@@ -91,10 +76,10 @@ In other words:
 ```text
 Dataset
 ├─ sourceId   → which source produced the frame
-├─ groupId    → which group the dataset belongs to
-├─ datasetId  → slot within the group (used for mutations)
+├─ groupId    → positional slot of the parent group (shifts on group reorder)
+├─ datasetId  → slot within the group, used for mutations (shifts on dataset reorder)
 ├─ index      → which column of the parsed frame to read
-└─ uniqueId   → sourceId·1e6 + groupId·1e4 + datasetId  (used for reads)
+└─ uniqueId   → opaque, persisted, stable identity (used for reads, refs, transforms)
 ```
 
 If something is ever ambiguous, default to looking it up fresh from the project snapshot rather than caching it across an edit.

@@ -307,7 +307,11 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
 - **System table `__datasets__`**: auto-generated. Two registers per dataset:
   `raw:<uniqueId>`, `final:<uniqueId>`. Populated by FrameBuilder during parsing.
 - **User tables**: defined in project JSON under `"tables"`. Registers are `Constant`
-  (read-only at runtime) or `Computed` (reset per frame, writable by transforms).
+  (read-only at runtime) or `Computed` (writable by transforms, **persists across frames** —
+  no automatic per-frame reset). The `defaultValue` is the value at project load only.
+  Computed registers are the natural place for filter state, integrators, edge counters,
+  and latched flags; for a "clear me each frame" effect, the transform writes the reset
+  value explicitly at the top of an early dataset.
 - **Transform API** (injected at compile time): `tableGet`, `tableSet`, `datasetGetRaw`,
   `datasetGetFinal`. Lua = C closures; JS = `TableApiBridge` QObject.
 - **Processing order**: group-array then dataset-array. A transform sees raw of ALL datasets,

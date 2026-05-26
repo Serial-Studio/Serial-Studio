@@ -311,20 +311,28 @@ references. The user creates them via:
 project.workspace.setCustomizeMode{enabled: true}    // required for edits
 project.workspace.add{title, icon}                    // -> workspaceId
 project.workspace.addWidget{workspaceId, widgetType, groupId}
+                                                      // groupId here is Group.uniqueId (stable across reorders)
                                                       // relativeIndex auto-computed
                                                       // datasetId optional for per-dataset widgets
 project.workspace.setCustomizeMode{enabled: false}    // optional
 ```
 
+**`groupId` in workspace calls is the `Group.uniqueId`**, not the
+positional groupId you'd use in `project.group.update` /
+`project.dataset.*` CRUD calls. The same field name carries different
+semantics in different contexts: positional everywhere else, stable
+identity in workspace refs (so layouts survive group reorders). Read
+`uniqueId` from `project.group.list` and pass that.
+
 `relativeIndex` is a **dashboard-level global index across every widget
 of this type in the project** — NOT a per-workspace counter and NOT a
 dataset index. **Always omit it.** The API walks the project's groups
-in order and computes the right index from `groupId` (and optional
-`datasetId` for per-dataset widgets). The response carries the assigned
-value in `relativeIndex` and `relativeIndexAutoAssigned: true`. Passing
-an explicit integer is fragile (any later structural change shifts the
-correct value) and is only useful when restoring a hand-crafted layout
-from an export.
+in order and computes the right index from `groupId` (the
+`Group.uniqueId`) and optional `datasetId` for per-dataset widgets.
+The response carries the assigned value in `relativeIndex` and
+`relativeIndexAutoAssigned: true`. Passing an explicit integer is
+fragile (any later structural change shifts the correct value) and is
+only useful when restoring a hand-crafted layout from an export.
 
 `datasetId` is **optional but recommended for per-dataset widgets**
 (`plot`, `fft`, `bar`, `gauge`, `meter`, `compass`, `waterfall`). It pins

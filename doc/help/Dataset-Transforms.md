@@ -23,7 +23,7 @@ Transforms are useful when:
 
 Transforms are optional. Datasets without one display the raw parsed value unchanged.
 
-A transform can also read and write **shared data tables**: constants defined at project time, and computed registers shared across all transforms in a single frame. That's how you pass a calibration value into several channels, or have one transform compute a value that another transform consumes. See [Data Tables](Data-Tables.md) for the full reference.
+A transform can also read and write **shared data tables**: constants defined at project time, and computed registers that hold their value across frames. That's how you pass a calibration value into several channels, have one transform compute a value that another consumes, or keep state for an integrator, filter, or latch. See [Data Tables](Data-Tables.md) for the full reference.
 
 ## The `transform()` function
 
@@ -160,13 +160,13 @@ A plain `function foo() end` at chunk top level in Lua creates a global and woul
 
 ### When state resets
 
-Persistent state is cleared when:
+Persistent state -- both top-level Lua/JS upvalues *and* Computed table registers -- is cleared when:
 
 - The device is disconnected (transform engines are destroyed).
 - The user clicks **Apply** in the transform editor (engines are recompiled with fresh state).
 - The project is reloaded or saved with changes.
 
-So filters and accumulators start from scratch on each new connection session, which is usually what you want.
+So filters and accumulators start from scratch on each new connection session, which is usually what you want. Within a connection session, Computed registers and transform upvalues hold their values indefinitely; they aren't wiped between frames.
 
 ## Data Table API
 
@@ -223,7 +223,7 @@ Transforms are applied in order: groups in frame order, datasets in group order.
 
 - `datasetGetRaw(uid)` can read any dataset, since all raw values are populated before transforms run.
 - `datasetGetFinal(uid)` only works for datasets that have already been transformed (earlier datasets in the same group, or any dataset in an earlier group).
-- Computed registers are reset to their default at the start of each frame, so writes in one frame don't leak into the next.
+- Computed registers hold their last written value, so a value written in one frame is still visible in the next -- handy for integrators, derivatives, and latched flags. If you specifically want a register to start each frame fresh, write the reset value yourself at the top of an early transform.
 
 If you need dataset B to consume dataset A's final value, make sure A comes before B in the Project Editor tree.
 

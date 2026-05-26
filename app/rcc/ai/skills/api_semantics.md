@@ -14,12 +14,24 @@ same thing.
 |--------------|-------------|--------------------------------------------------|
 | `datasetId`  | Auto, on `dataset.add` | CRUD APIs: `project.dataset.update`, `project.dataset.delete`, every `setOption*`. Position within the group. |
 | `index`      | User        | Position in the parser's output array (1-based). The parser's `parse(frame)[i]` populates the dataset whose `index == i + 1`. **Patchable** via `project.dataset.update {index: N}` — bulk renumbers should go through `project.batch` (see "Bulk mutations" below). |
-| `uniqueId`   | Derived     | OPAQUE runtime handle for `datasetGetRaw / datasetGetFinal` and the `__datasets__` system table. |
+| `uniqueId`   | Allocated, persisted | OPAQUE stable handle for `datasetGetRaw / datasetGetFinal`, the `__datasets__` system table, `xAxisId`, and workspace `WidgetRef.groupId`. Stays stable across reorders, renames, and moves. |
 
-**Treat `uniqueId` as opaque.** It happens to be computed as
-`sourceId*1_000_000 + groupId*10_000 + datasetId`, but **arithmetic on
-it is fragile** -- reordering a group or moving a dataset changes
-those numbers. The right pattern:
+**Treat `uniqueId` as opaque.** It's allocated from a project-level
+counter (`nextUniqueId` in the project JSON) when a dataset or group
+is created, duplicated, or imported, then persisted on disk. Two
+common assumptions are wrong:
+
+- It is **not** derived from `(sourceId, groupId, datasetId)`. The old
+  `sourceId*1_000_000 + groupId*10_000 + datasetId` formula is only
+  used as a one-shot back-fill when loading projects from before this
+  scheme. Once those projects are saved again, the persisted values
+  are what you'll see -- arithmetic on a `uniqueId` is meaningless.
+- It does **not** change when datasets or groups are reordered.
+  `xAxisId` references, workspace `WidgetRef.groupId` values, and any
+  other persisted refs survive untouched.
+
+Resolve unfamiliar datasets by path or title, then use the returned
+`uniqueId`:
 
 ```
 // Looking up a dataset by name, in scripts or tools
@@ -33,9 +45,9 @@ const v = datasetGetFinal(uid)        // uid from the response above
 ```
 
 `project.dataset.list`, `project.group.list`'s `datasetSummary`, and
-`project.snapshot` all return `uniqueId` on every dataset. Read it
-fresh after every move/duplicate/delete -- don't cache it across
-mutations.
+`project.snapshot` all return `uniqueId` on every dataset. Duplicating
+a dataset (or group) allocates a fresh `uniqueId` -- so a copy is
+distinguishable from the original.
 
 When users say "the third dataset," ask them which they mean — the
 project-editor row order is `datasetId`, the parser-output position is
@@ -59,15 +71,14 @@ workspaces start at 5000.
          │   for each parsed row (1+):
          ▼
    ┌─────────────────────────────────────────────────────────────┐
-   │ Computed registers RESET (Constant registers untouched)     │
-   ├─────────────────────────────────────────────────────────────┤
    │ for each group (project order):                             │
    │   for each dataset (project order):                         │
    │     1. raw = channels[index - 1]                            │
    │     2. setDatasetRaw(uniqueId, raw)                         │
    │     3. if transformCode: final = transform(raw)             │
    │        - sees: all raw, final of EARLIER datasets only,     │
-   │                Constant + this-frame's Computed writes      │
+   │                Constants + persisted Computed register      │
+   │                values (writes from prior frames + this one) │
    │     4. setDatasetFinal(uniqueId, final)                     │
    ├─────────────────────────────────────────────────────────────┤
    │ TimestampedFramePtr published once, shared by all consumers │
@@ -82,22 +93,21 @@ workspaces start at 5000.
 
 The cycle in prose form, for each parsed frame in a source:
 
-1. **Computed registers reset.** `m_tableStore.resetComputedRegisters()`
-   runs once at the top of the frame, BEFORE any dataset is touched.
-   Constant registers don't reset (they're project-static).
-2. **Datasets walk in (group order, then dataset order within group).**
+1. **Datasets walk in (group order, then dataset order within group).**
    For each dataset:
    1. Read raw value from `parse()[index - 1]`.
    2. Write to the data table: `setDatasetRaw(uniqueId, value)`.
    3. If `transformCode` is non-empty, call `transform(value)`. The
       transform sees:
       - All Constant registers (read-only).
-      - Reset Computed registers + writes from EARLIER datasets in
-        this same frame (via `tableSet`).
+      - All Computed registers carrying whatever value was last written
+        — either by an earlier dataset in this frame OR by any dataset
+        in a previous frame. Computed registers persist; nothing wipes
+        them between frames.
       - Raw values of EVERY dataset (already populated above).
       - Final values of EARLIER datasets in this frame only.
    4. Write the result to the data table: `setDatasetFinal(uniqueId, value)`.
-3. **TimestampedFramePtr fans out.** One shared object reaches the
+2. **TimestampedFramePtr fans out.** One shared object reaches the
    dashboard, CSV/MDF4 export, the API server, gRPC, MQTT, and
    Sessions. They all see the same final values.
 
@@ -162,6 +172,12 @@ populate it directly; UART / network usually leave it 0.
   `tonumber(val)` first.
 - **`tableSet` only writes Computed registers.** Writing to a Constant
   register name silently no-ops.
+- **Computed registers persist across frames.** Nothing resets them
+  between frames. A value written in frame N is still visible in frame
+  N+1 (and N+1000) unless overwritten. This is the natural model for
+  filter state, integrators, latched flags, and derivatives — and the
+  reason `tableGet` on the very first frame returns the Constant
+  default declared in the project, not "zero from a reset".
 
 `__datasets__` is the auto-generated system table. Each dataset has
 two registers: `raw:<uniqueId>` and `final:<uniqueId>`. You almost

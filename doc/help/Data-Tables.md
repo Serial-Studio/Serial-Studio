@@ -1,6 +1,6 @@
 # Data Tables
 
-Shared registers that any dataset transform can read and write. Use them for project-wide constants (calibration factors, thresholds, scale values) and for computed values that need to flow between transforms inside the same frame.
+Shared registers that any dataset transform can read and write. Use them for project-wide constants (calibration factors, thresholds, scale values) and for computed values that flow between transforms, either within a single frame or across frames (running filters, integrators, latched state).
 
 ## Overview
 
@@ -23,14 +23,14 @@ Tables are useful when:
 
 Every register is one of two types:
 
-| Type         | Written at                        | Readable by      | Resets between frames                           |
-|--------------|-----------------------------------|------------------|-------------------------------------------------|
-| **Constant** | Project load only                 | All transforms   | No. Value is fixed for the session              |
-| **Computed** | Any transform via `tableSet()`    | All transforms   | Yes. Reset to the default at the start of every frame |
+| Type         | Written at                     | Readable by    | Lifetime                                    |
+|--------------|--------------------------------|----------------|---------------------------------------------|
+| **Constant** | Project load only              | All transforms | Fixed for the session                       |
+| **Computed** | Any transform via `tableSet()` | All transforms | Holds the last value written, indefinitely  |
 
 Constants are the right tool for configuration: sensor slopes, offsets, thresholds, full-scale ranges. They can't be modified by `tableSet()` at runtime.
 
-Computed registers are frame-scoped scratch space shared between transforms. A computed register's value survives across transforms inside one frame, but it's wiped back to its default at the start of the next frame. That keeps the model simple, so you never accidentally consume a stale value from the previous frame.
+Computed registers behave like ordinary memory: once you write a value, it stays there until you (or another transform) write again. That matches the way state lives in control and embedded systems -- Kalman states, integrators, PID controllers, edge counters, latched flags. If you specifically want a register to start each frame at a known value, write that value at the top of an early transform with `tableSet()`.
 
 ## The system table
 
@@ -101,17 +101,15 @@ See [Dataset Value Transforms](Dataset-Transforms.md#data-table-api) for the per
 Transforms are applied sequentially: groups in project order, datasets in group order. Within a single frame:
 
 1. All raw dataset values are populated from the frame parser first.
-2. All computed registers are reset to their defaults.
-3. Each dataset's transform runs in turn.
+2. Each dataset's transform runs in turn.
 
 That gives these guarantees:
 
 - `datasetGetRaw(uid)` can read any dataset at any time.
 - `datasetGetFinal(uid)` only returns a meaningful value for datasets that have already been transformed (that is, datasets earlier in the same group, or in an earlier group).
-- Computed registers written by earlier transforms are visible to later ones.
-- Nothing written to a computed register leaks into the next frame.
+- Computed registers written by earlier transforms are visible to later ones, inside the same frame and on every subsequent frame, until the next write.
 
-If dataset B depends on dataset A's final value, make sure A is listed before B in the Project Editor tree. Otherwise `datasetGetFinal(A)` will still return the default value from the reset in step 2.
+If dataset B depends on dataset A's final value, make sure A is listed before B in the Project Editor tree. Otherwise `datasetGetFinal(A)` will return whatever the previous frame left in the register -- almost certainly not what you want.
 
 ## Defining tables in the Project Editor
 
@@ -121,7 +119,7 @@ If dataset B depends on dataset A's final value, make sure A is listed before B 
 4. Add registers with **Add Register**. For each register, set:
    - **Name.** Unique within the table.
    - **Type.** Constant or Computed.
-   - **Default value.** The numeric or string value used at project load (constants) or at the start of each frame (computed).
+   - **Default value.** The numeric or string value used at project load. Constants stay at this value for the whole session; Computed registers start the session at this value and hold whatever transforms write thereafter.
 
 Tables are saved with the project file. When the project is shared, anyone opening it gets the same table definitions and defaults.
 
@@ -204,9 +202,9 @@ end
 
 Other classics that fit this shape: IMU accelerometer magnitude `sqrt(ax² + ay² + az²)`, RMS of three phase currents, torque × angular velocity, differential pressure from two absolute pressure channels.
 
-### Cross-dataset scratch pad within a frame
+### Cross-dataset scratch pad
 
-If two transforms both need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a Computed register, and read it from the later datasets. Computed registers reset at the start of every frame, so there's no risk of stale values leaking between frames.
+If two transforms both need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a Computed register, and read it from the later datasets. The value persists, so the downstream readers see whatever the earlier transform last wrote -- within the same frame or carried over from the previous frame if the upstream transform didn't run this time.
 
 Table `runtime`:
 
@@ -259,16 +257,47 @@ end
 
 ### Tunable filter parameters
 
-Keep the filter state in transform-local (closure/top-level) variables, but put the knob (cutoff, alpha, window size) in a Constant register. That separates *configuration* (in the table) from *running state* (in the script), and lets you re-tune a filter without editing its code.
+Put the knob (cutoff, alpha, window size) in a Constant register. Keep the filter's running state in a Computed register (or a transform-local upvalue -- both work, since Computed registers persist). That separates *configuration* (in a Constant) from *running state*, and lets you re-tune the filter without editing its code.
 
 ```lua
-local ema
-
 function transform(value)
   local alpha = tableGet("filters", "ema_alpha") or 0.1
+  local ema   = tableGet("filters", "ema_state")
   if ema == nil then ema = value end
   ema = alpha * value + (1 - alpha) * ema
+  tableSet("filters", "ema_state", ema)
   return ema
+end
+```
+
+### Cross-frame state: integrators, derivatives, latches
+
+Because Computed registers hold the last value written, they're a natural place for state that has to survive between frames -- the things every controls engineer recognizes: integrators, derivatives, edge counters, peak detectors, latched alarms. A discrete-time derivative `dT/dt`:
+
+Table `calibration`:
+
+| Register        | Type     | Default |
+|-----------------|----------|---------|
+| `last_temp`     | Computed | `0`     |
+| `last_t_ms`     | Computed | `0`     |
+
+```lua
+function transform(_, info)
+  if not info then return 0 end
+  local T  = datasetGetFinal(2)
+  if T == nil then return 0 end
+  local ts = info.timestampMs or 0
+
+  local prevT  = tableGet("calibration", "last_temp")
+  local prevTs = tableGet("calibration", "last_t_ms")
+
+  tableSet("calibration", "last_temp", T)
+  tableSet("calibration", "last_t_ms", ts)
+
+  if prevTs == 0 then return 0 end
+  local dt = ts - prevTs
+  if dt <= 0 then return 0 end
+  return (T - prevT) / (dt / 1000)
 end
 ```
 
@@ -285,9 +314,9 @@ end
 
 ### What *not* to do
 
-- **Don't expect Computed registers to survive between frames.** They reset every frame. For running state (filters, accumulators, peak tracking), use local variables in the transform itself.
 - **Don't put arrays in a register.** Registers are scalars. Use multiple registers or multiple datasets.
 - **Don't use a data table as a configuration dialog.** Tables persist with the project file, so editing a Constant register always means saving the project. For UI knobs that change at runtime, use an Output widget instead.
+- **Don't assume "first frame" gives sentinel zeros.** Computed registers start at their declared default at project load and then hold whatever transforms write. If your transform depends on detecting the very first sample, branch on `info.frameNumber == 1` rather than on a register being "still zero".
 
 ## Virtual datasets
 
@@ -304,7 +333,7 @@ Data tables are shared across all sources in a project. A transform on source A 
 1. Registers hold a number or a string, not arrays or tables. For a vector of values, use multiple registers or multiple datasets.
 2. `tableSet()` on a constant register is silently ignored. Constants are frozen at project load.
 3. `tableSet()` on a register that doesn't exist is also ignored. There's no auto-creation. Define the register in the Project Editor first.
-4. Computed registers reset to their default at the start of every frame. Don't rely on values surviving between frames. Use chunk-local variables in the transform itself for per-dataset state.
+4. Computed registers hold their last written value indefinitely. If you want one to start each frame at a known value, write that value with `tableSet()` at the top of an early transform.
 5. The `__datasets__` table is reserved. Don't create a user table with that name.
 6. Table and register names are case-sensitive.
 

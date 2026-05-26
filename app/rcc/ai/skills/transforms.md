@@ -180,9 +180,11 @@ those instead of `tableGet('__datasets__', 'raw:<uid>')`.
 
 - `Constant`: single value across the session. Set when declared. Use for
   calibration coefficients, lookup tables, configuration flags.
-- `Computed`: resets to `defaultValue` at the start of every frame.
-  Writable from transforms. Use for per-frame accumulators, derived
-  values that another transform reads later in the same frame.
+- `Computed`: writable from transforms. Holds the last value written
+  indefinitely (no per-frame reset). Use for filter/integrator state,
+  cross-frame counters, latched flags, and derived values that another
+  transform reads later in the same frame. The `defaultValue` is the
+  starting value at project load — not a recurring reset.
 
 ```js
 tableGet(tableName, registerName)              // -> number | string
@@ -208,9 +210,13 @@ Trying to read `datasetGetFinal` of a dataset processed later returns 0.
 ## When to use what
 
 - **Per-dataset state across frames** (EMA, last value, deadband): use a
-  top-level `let` in the transform. Cheaper than a table register.
-- **Shared state across datasets** (calibration constants used by N
-  channels, lookup tables): use a Constant register in a user table.
+  top-level `let`/`local` in the transform. Cheaper than a table register
+  and isolated to the one dataset.
+- **State shared across datasets and frames** (a filter whose output
+  several downstream channels read; a derivative tracked at frame
+  cadence; a latched alarm): use a Computed register — it persists.
+- **Shared *constants*** (calibration coefficients used by N channels,
+  lookup tables, full-scale ranges): use a Constant register.
 - **Cross-dataset compute within one frame** (speed from dx and dt that
   arrive together): use `datasetGetRaw` to read a peer, OR write to a
   Computed register in the earlier transform and `tableGet` it from the

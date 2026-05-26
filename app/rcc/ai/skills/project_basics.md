@@ -251,14 +251,21 @@ conflate. Memorize them once.
 |--------------|------------------|-----------|-----------------------------------------------|
 | `datasetId`  | per-group, 0..N  | API auto  | CRUD: `dataset.update / delete / setOptions`  |
 | `index`      | 1-based int      | User      | Position in `parse(frame)` output array       |
-| `uniqueId`   | global int       | Derived   | OPAQUE runtime handle for `datasetGetRaw / Final` |
+| `uniqueId`   | global int       | Allocated, persisted | OPAQUE stable handle for `datasetGetRaw / Final`, xAxisId, workspace refs |
 
-**Treat `uniqueId` as opaque.** It happens to be computed as
-`sourceId*1_000_000 + groupId*10_000 + datasetId`, but that arithmetic
-breaks the moment a dataset is moved or duplicated. Read `uniqueId`
-fresh from `assistant.dataset.resolve`, `project.dataset.getByPath
-{path: "Group/Dataset"}`, `project.dataset.getByTitle`, or
-`project.snapshot` -- never cache or compute it.
+**Treat `uniqueId` as opaque.** It's allocated once from the project's
+`nextUniqueId` counter when a dataset or group is created, duplicated,
+or imported, and then persisted in the project JSON. Reordering,
+renaming, retyping, or moving a dataset between sources does NOT
+change it -- so references like `xAxisId` and workspace
+`WidgetRef.groupId` survive reorders.
+
+The legacy `sourceId*1_000_000 + groupId*10_000 + datasetId` formula
+is only used as a one-shot back-fill when loading projects from before
+this scheme. Don't compute it; read it from
+`assistant.dataset.resolve`, `project.dataset.getByPath {path:
+"Group/Dataset"}`, `project.dataset.getByTitle`, or
+`project.snapshot`. Duplicates always get a fresh `uniqueId`.
 
 Workspace IDs live in a separate range -- always `>= 1000`.
 
@@ -314,15 +321,18 @@ verify-after-update rule, and full recipes.
 
 ### Constant vs Computed registers (data tables)
 
-| Kind       | Lifetime       | Writable at runtime?                      | Use for                                     |
-|------------|----------------|-------------------------------------------|---------------------------------------------|
-| Constant   | Whole session  | NO (project-static; `tableSet` no-ops)    | Calibration coefficients, thresholds, gains |
-| Computed   | One frame      | YES via `tableSet` (resets each frame)    | Cross-dataset rolling state, derived totals |
+| Kind       | Lifetime       | Writable at runtime?                      | Use for                                                |
+|------------|----------------|-------------------------------------------|--------------------------------------------------------|
+| Constant   | Whole session  | NO (project-static; `tableSet` no-ops)    | Calibration coefficients, thresholds, gains            |
+| Computed   | Whole session  | YES via `tableSet`                        | Filter/integrator state, latched flags, cross-frame totals |
 
-Computed registers reset at the START of every parsed frame, before
-any transform runs. If you want state that survives across frames,
-use a top-level `var` in your transform's IIFE — see `transforms`
-skill.
+Computed registers hold the last value written **indefinitely** — there
+is no per-frame reset. The `defaultValue` is the starting value at
+project load only. If you want a Computed register to start each frame
+at a known value, write that value yourself with `tableSet` at the top
+of an early transform. For per-dataset state isolated from other
+datasets, a top-level upvalue in the transform script is still the
+lightest option — see `transforms` skill.
 
 `project.dataTable.get { name }` returns each register's `type` field
 (`"Constant"` or `"Computed"`) along with its current value. Read it

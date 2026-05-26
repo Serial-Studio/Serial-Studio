@@ -211,11 +211,11 @@ A few things to keep in mind:
   one*. Heavy work in a transform that runs at 10 kHz across 50 datasets adds up quickly.
 - Transforms can read raw values from any dataset and final values from datasets that come
   earlier in group / dataset order. They can also publish to computed registers in the
-  project's [Data Tables](Data-Tables.md), which other transforms in the *same* frame can
-  then read.
-- Computed registers reset to their default at the start of every frame. Persistent state
-  belongs in chunk-`local` (Lua) or top-level `var` (JavaScript) declarations, not in the
-  shared registers.
+  project's [Data Tables](Data-Tables.md), which other transforms can then read -- in the
+  same frame, or in any later frame, since computed registers persist.
+- Computed registers hold their last written value indefinitely. For per-dataset state
+  isolated from other datasets, transform-local upvalues (top-level `local` in Lua,
+  top-level `var`/`let` in JavaScript) are still the lightest option.
 - A transform can return a string for label-style datasets. Non-finite numbers (`NaN`,
   `Infinity`) and errors fall back to the raw value silently.
 

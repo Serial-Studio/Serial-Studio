@@ -214,10 +214,12 @@ Two register types:
   Set when you declare it; every `tableGet` thereafter returns the same
   value. Use for: calibration coefficients, lookup tables, configuration
   flags.
-- **Computed**: resets to its `defaultValue` at the **start of every
-  parsed frame**. Transforms (and only transforms) write to it via
-  `tableSet`. Use for: per-frame accumulators, derived values, intermediate
-  results that another transform will read later in the same frame.
+- **Computed**: writable from transforms (and only transforms) via
+  `tableSet`. Holds the last value written **indefinitely** — there is
+  no per-frame reset. The `defaultValue` is the starting value at
+  project load. Use for: filter/integrator state, cross-frame counters,
+  latched flags, and intermediate results another transform reads later
+  in the same frame.
 
 A system-managed table named `__datasets__` is **always** present. It
 holds two registers per dataset: `raw:<uniqueId>` and `final:<uniqueId>`,

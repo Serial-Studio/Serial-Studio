@@ -286,7 +286,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |
 | `fftMin`           | double | 0       | FFT frequency axis minimum. |
 | `fftMax`           | double | 0       | FFT frequency axis maximum. |
-| `xAxisId`          | int    | -1      | Reference dataset for the custom X-axis (-1 = use time). |
+| `xAxisId`          | int    | -1      | `uniqueId` of the dataset to use as the X-axis (-1 = use sample index). |
 
 ## Dashboard layout
 

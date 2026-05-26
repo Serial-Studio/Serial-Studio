@@ -52,6 +52,13 @@ datasetGetRaw(uniqueId)                 -- raw value, this frame
 datasetGetFinal(uniqueId)               -- final value of an earlier dataset
 ```
 
+User-table registers are either `Constant` (immutable, set at project
+load) or `Computed` (writable from transforms). Computed registers hold
+the last value written **indefinitely** — there is no per-frame reset.
+That's what makes them the natural place for filter state, integrators,
+edge counters, and latched flags. The register's `defaultValue` is the
+starting value at project load, not a recurring reset.
+
 ## Compatibility shim (LuaCompat)
 
 Same shim as the parser API:
@@ -107,6 +114,25 @@ function transform(value)
     last = value
   end
   return last
+end
+```
+
+### Running integrator via Computed register
+
+```lua
+-- Computed register Trip.litresUsed (defaultValue 0) persists across
+-- frames, so the running total accumulates session-long.
+function transform(litresPerHour, info)
+  if not info then return tableGet("Trip", "litresUsed") or 0 end
+
+  local prevTs = tableGet("Trip", "lastTsMs") or info.timestampMs
+  local dtMs   = info.timestampMs - prevTs
+  tableSet("Trip", "lastTsMs", info.timestampMs)
+
+  local delta = (litresPerHour / 3600.0) * (dtMs / 1000.0)
+  local total = (tableGet("Trip", "litresUsed") or 0) + delta
+  tableSet("Trip", "litresUsed", total)
+  return total
 end
 ```
 
