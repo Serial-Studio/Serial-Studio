@@ -450,6 +450,7 @@ private:
   [[nodiscard]] int allocateUniqueId();
   void seedNextUniqueIdFromGroups();
   void migrateLegacyWorkspaceRefs();
+  void migrateLegacyXAxisIds();
 
 private:
   QString m_title;

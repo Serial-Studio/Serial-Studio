@@ -678,6 +678,27 @@ void DataModel::ProjectModel::migrateLegacyWorkspaceRefs()
 }
 
 /**
+ * @brief Rebinds legacy index-based X-axis references to dataset uniqueIds.
+ */
+void DataModel::ProjectModel::migrateLegacyXAxisIds()
+{
+  // Legacy xAxis held a 1-based frame index (0/absent = Samples); map index -> uniqueId
+  QMap<int, QMap<int, int>> uidByIndex;
+  for (const auto& group : m_groups)
+    for (const auto& dataset : group.datasets)
+      uidByIndex[group.sourceId].insert(dataset.index, dataset.uniqueId);
+
+  for (auto& group : m_groups) {
+    const auto indexMap = uidByIndex.value(group.sourceId);
+    for (auto& dataset : group.datasets)
+      if (dataset.xAxisId <= 0)
+        dataset.xAxisId = -1;
+      else
+        dataset.xAxisId = indexMap.value(dataset.xAxisId, -1);
+  }
+}
+
+/**
  * @brief Resolves a Group.uniqueId to its current positional groupId; returns -1 if absent.
  */
 int DataModel::ProjectModel::groupIdForUniqueId(int uniqueId) const
@@ -1924,7 +1945,6 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   const auto json                = document.object();
   const QString legacyParserCode = json.value(QLatin1StringView("frameParser")).toString();
-  const bool legacyFormat        = !json.contains(Keys::Sources);
   const bool legacyUniqueIds     = !json.contains(Keys::NextUniqueId);
 
   const int loadedSchema = ss_jsr(json, Keys::SchemaVersion, 0).toInt();
@@ -1943,9 +1963,11 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   seedNextUniqueIdFromGroups();
   loadWidgetSettingsAndWorkspaces(json);
 
-  // Legacy workspace refs were positional groupIds -- translate now that uids are seeded.
-  if (legacyUniqueIds)
+  // Legacy refs were positional/index-based -- translate now that uids are seeded.
+  if (legacyUniqueIds) {
     migrateLegacyWorkspaceRefs();
+    migrateLegacyXAxisIds();
+  }
 
   loadPointCount(json);
   migrateLegacyLayoutKeys();
@@ -1962,8 +1984,8 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   emitProjectLoadedSignals();
 
-  // Auto-save legacy -> multi-source migration; skip in-memory loads
-  if (legacyFormat && !m_filePath.isEmpty())
+  // Auto-save any pre-uniqueId migration to lock in the new schema; skip in-memory loads
+  if (legacyUniqueIds && !m_filePath.isEmpty())
     persistLegacyMigration();
 
   // Resume autosave
@@ -2608,11 +2630,11 @@ void DataModel::ProjectModel::emitProjectLoadedSignals()
 }
 
 /**
- * @brief Re-saves the project file after a legacy -> multi-source migration.
+ * @brief Re-saves the project file to lock in a legacy-schema migration.
  */
 void DataModel::ProjectModel::persistLegacyMigration()
 {
-  qInfo() << "[ProjectModel] Migrating legacy project to multi-source format, saving...";
+  qInfo() << "[ProjectModel] Migrating legacy project to current schema, saving...";
   QFile f(m_filePath);
   if (!f.open(QFile::WriteOnly))
     return;

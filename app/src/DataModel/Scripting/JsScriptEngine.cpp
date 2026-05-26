@@ -403,9 +403,30 @@ bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
   m_parseFunction = QJSValue();
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
+  // Arm the watchdog around evaluate() so a top-level infinite loop is interrupted off-thread.
   QStringList exceptionStackTrace;
+  m_watchdog.arm();
   auto result = m_engine.evaluate(
     script, QStringLiteral("parser_%1.js").arg(sourceId), 1, &exceptionStackTrace);
+  m_watchdog.disarm();
+
+  // Report a watchdog interruption (top-level evaluation that exceeded the time budget)
+  if (m_engine.isInterrupted()) {
+    m_engine.setInterrupted(false);
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        QObject::tr("JavaScript Timed Out"),
+        QObject::tr("The parser code did not finish evaluating within %1 ms and was "
+                    "interrupted.\n\nMost likely cause: an infinite loop at the top level "
+                    "of the script.")
+          .arg(kRuntimeWatchdogMs),
+        QMessageBox::Critical);
+    } else {
+      qWarning() << "[JsScriptEngine] Source" << sourceId << "evaluation timed out after"
+                 << kRuntimeWatchdogMs << "ms -- interrupted";
+    }
+    return false;
+  }
 
   // Report syntax errors
   if (result.isError()) {

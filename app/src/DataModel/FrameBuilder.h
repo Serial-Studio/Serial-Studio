@@ -227,6 +227,7 @@ private:
   void compileTransforms();
   void destroyTransformEngines();
   void initializeTableStore();
+  void rebuildTransformsForPlayback();
   void compileTransformsLua(TransformEngine& engine,
                             int sourceId,
                             const std::vector<TransformEntry>& entries);

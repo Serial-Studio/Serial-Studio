@@ -36,6 +36,7 @@
 #include "API/Server.h"
 #include "AppState.h"
 #include "CSV/Export.h"
+#include "CSV/Player.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/DashboardApi.h"
@@ -45,6 +46,7 @@
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/ConnectionManager.h"
 #include "MDF4/Export.h"
+#include "MDF4/Player.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
 #include "UI/Dashboard.h"
@@ -279,15 +281,21 @@ void DataModel::FrameBuilder::setupExternalConnections()
           this,
           &DataModel::FrameBuilder::collectTransformEngineGarbage);
 
+  // File players force a disconnect, tearing down transforms + table store; rebuild on open.
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [this] {
+    if (CSV::Player::instance().isOpen())
+      rebuildTransformsForPlayback();
+  });
+  connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [this] {
+    if (MDF4::Player::instance().isOpen())
+      rebuildTransformsForPlayback();
+  });
+
 #ifdef BUILD_COMMERCIAL
   // Session player bypasses ConnectionManager; rebuild engines on its openChanged.
   connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, [this] {
-    if (Sessions::Player::instance().isOpen()
-        && AppState::instance().operationMode() == SerialStudio::ProjectFile
-        && !m_frame.title.isEmpty()) {
-      compileTransforms();
-      initializeTableStore();
-    }
+    if (Sessions::Player::instance().isOpen())
+      rebuildTransformsForPlayback();
   });
 #endif
 }
@@ -1162,6 +1170,18 @@ void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* 
 
   if (engine->luaDeadline.hasExpired()) [[unlikely]]
     luaL_error(L, "transform timed out after %d ms", kTransformWatchdogMs);
+}
+
+/**
+ * @brief Recompiles transforms + table store for a file player that bypasses ConnectionManager.
+ */
+void DataModel::FrameBuilder::rebuildTransformsForPlayback()
+{
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile || m_frame.title.isEmpty())
+    return;
+
+  compileTransforms();
+  initializeTableStore();
 }
 
 /**
