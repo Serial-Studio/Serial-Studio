@@ -1597,7 +1597,7 @@ void UI::WindowManager::hoverMoveEvent(QHoverEvent* event)
   }
 
   const QPointF pos = event->position();
-  auto* target      = getWindow(static_cast<int>(pos.x()), static_cast<int>(pos.y()));
+  auto* target      = topmostWindowAt(pos);
   if (!target || target->state() != "normal") {
     unsetCursor();
     QQuickItem::hoverMoveEvent(event);
@@ -1640,18 +1640,51 @@ void UI::WindowManager::hoverLeaveEvent(QHoverEvent* event)
 }
 
 /**
- * @brief Returns the topmost window under a given point.
+ * @brief Returns m_windows sorted topmost-first: higher z wins, then a smaller
+ *        m_windowOrder index breaks the tie so equal-z stacks stay deterministic.
  */
-QQuickItem* UI::WindowManager::getWindow(const int x, const int y) const
+QVector<QQuickItem*> UI::WindowManager::sortedByVisualStacking() const
 {
-  // Sort windows by descending Z so the topmost is tested first
-  QPointF point(x, y);
-  QList<QQuickItem*> windows = m_windows.values();
-  std::sort(
-    windows.begin(), windows.end(), [](QQuickItem* a, QQuickItem* b) { return a->z() > b->z(); });
+  QVector<QPair<int, QQuickItem*>> entries;
+  entries.reserve(m_windows.size());
+  for (auto it = m_windows.cbegin(); it != m_windows.cend(); ++it)
+    entries.append({it.key(), it.value()});
 
-  // Return first hit
-  for (QQuickItem* window : std::as_const(windows)) {
+  std::sort(entries.begin(),
+            entries.end(),
+            [this](const QPair<int, QQuickItem*>& a, const QPair<int, QQuickItem*>& b) {
+              if (!a.second || !b.second)
+                return a.second != nullptr;
+
+              if (a.second->z() != b.second->z())
+                return a.second->z() > b.second->z();
+
+              const int ai = m_windowOrder.indexOf(a.first);
+              const int bi = m_windowOrder.indexOf(b.first);
+              if (ai < 0)
+                return false;
+
+              if (bi < 0)
+                return true;
+
+              return ai < bi;
+            });
+
+  QVector<QQuickItem*> out;
+  out.reserve(entries.size());
+  for (const auto& entry : std::as_const(entries))
+    out.append(entry.second);
+
+  return out;
+}
+
+/**
+ * @brief Returns the topmost visible normal/maximized window whose bounding
+ *        rect contains pos.
+ */
+QQuickItem* UI::WindowManager::topmostWindowAt(const QPointF& pos) const
+{
+  for (QQuickItem* window : sortedByVisualStacking()) {
     if (!window || !window->isVisible() || window == m_dragWindow)
       continue;
 
@@ -1659,8 +1692,30 @@ QQuickItem* UI::WindowManager::getWindow(const int x, const int y) const
     if (state != "normal" && state != "maximized")
       continue;
 
-    QRectF bounds(window->x(), window->y(), window->width(), window->height());
-    if (bounds.contains(point))
+    const QRectF bounds(window->x(), window->y(), window->width(), window->height());
+    if (bounds.contains(pos))
+      return window;
+  }
+
+  return nullptr;
+}
+
+/**
+ * @brief Manual-mode press pre-pass: returns the topmost normal window whose
+ *        bounding rect contains pos and whose edge would start a resize. Lets
+ *        a top window's corner win over a lower window's body at the same pixel.
+ */
+QQuickItem* UI::WindowManager::manualResizeTargetAt(const QPointF& pos) const
+{
+  for (QQuickItem* window : sortedByVisualStacking()) {
+    if (!window || !window->isVisible() || window->state() != "normal")
+      continue;
+
+    const QRectF bounds(window->x(), window->y(), window->width(), window->height());
+    if (!bounds.contains(pos))
+      continue;
+
+    if (detectResizeEdge(window, pos) != ResizeEdge::None)
       return window;
   }
 
@@ -1870,6 +1925,34 @@ void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta
 }
 
 /**
+ * @brief Begins a manual-layout drag at the given WindowManager-local coordinates.
+ */
+void UI::WindowManager::beginManualDrag(QQuickItem* window, qreal x, qreal y)
+{
+  if (!window || autoLayoutEnabled())
+    return;
+
+  if (window->property("state").toString() != QStringLiteral("normal"))
+    return;
+
+  m_dragWindow      = window;
+  m_focusedWindow   = window;
+  m_targetWindow    = nullptr;
+  m_resizeWindow    = nullptr;
+  m_resizeEdge      = ResizeEdge::None;
+  m_initialGeometry = extractGeometry(window);
+  m_initialMousePos = QPoint(qRound(x), qRound(y));
+
+  if (m_snapIndicatorVisible) {
+    m_snapIndicatorVisible = false;
+    Q_EMIT snapIndicatorChanged();
+  }
+
+  grabMouse();
+  setCursor(Qt::ClosedHandCursor);
+}
+
+/**
  * @brief Handles mouse press interactions for initiating window drag or resize.
  */
 void UI::WindowManager::mousePressEvent(QMouseEvent* event)
@@ -1887,8 +1970,14 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     Q_EMIT snapIndicatorChanged();
   }
 
-  // Find topmost window under the cursor
-  m_focusedWindow = getWindow(m_initialMousePos.x(), m_initialMousePos.y());
+  // Manual mode: a top window's resize edge must win over a lower window's body
+  if (!autoLayoutEnabled())
+    m_focusedWindow = manualResizeTargetAt(m_initialMousePos);
+
+  // Fall back to the topmost-window-under-cursor pick when no resize edge applies
+  if (!m_focusedWindow)
+    m_focusedWindow = topmostWindowAt(m_initialMousePos);
+
   if (!m_focusedWindow) {
     if (m_taskbar)
       m_taskbar->setActiveWindow(nullptr);
@@ -2049,7 +2138,7 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
 void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent* event)
 {
   // Hit-test for a window under the cursor
-  m_focusedWindow = getWindow(event->pos().x(), event->pos().y());
+  m_focusedWindow = topmostWindowAt(event->pos());
   if (!m_focusedWindow) {
     QQuickItem::mouseDoubleClickEvent(event);
     return;

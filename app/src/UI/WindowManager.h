@@ -107,6 +107,7 @@ public slots:
   void clear();
   void loadLayout();
   void autoLayout();
+  void beginManualDrag(QQuickItem* window, qreal x, qreal y);
   void cascadeLayout();
   void constrainWindows();
   void triggerLayoutUpdate();
@@ -128,8 +129,10 @@ private:
     const QJsonObject& layout, const QHash<detail::StableKey, int>& stableLookup) const;
 
   [[nodiscard]] QRect extractGeometry(QQuickItem* item) const;
+  [[nodiscard]] QVector<QQuickItem*> sortedByVisualStacking() const;
+  [[nodiscard]] QQuickItem* topmostWindowAt(const QPointF& pos) const;
+  [[nodiscard]] QQuickItem* manualResizeTargetAt(const QPointF& pos) const;
   [[nodiscard]] ResizeEdge detectResizeEdge(QQuickItem* target, const QPointF& pos) const;
-  QQuickItem* getWindow(const int x, const int y) const;
   void applySavedGeometries(const QJsonObject& layout,
                             const QHash<detail::StableKey, int>& stableLookup,
                             int marginCanvasW,
