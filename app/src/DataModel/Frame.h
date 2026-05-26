@@ -379,7 +379,7 @@ static_assert(sizeof(AlarmBand) % alignof(AlarmBand) == 0, "Unaligned AlarmBand 
 struct alignas(8) Dataset {
   int index             = 0;      ///< Frame offset index
   int xAxisId           = -1;     ///< X-axis source: -1 = sample index, else dataset uniqueId
-  int waterfallYAxis    = 0;      ///< Y source for the waterfall -- 0 = Time, N = dataset.index
+  int waterfallYAxis    = 0;      ///< Y source for the waterfall -- 0 = Time, else dataset uniqueId
   int groupId           = 0;      ///< Owning group ID
   int sourceId          = 0;      ///< Source this dataset belongs to
   int uniqueId          = -1;     ///< Persisted stable identity (-1 = unassigned, compute legacy)

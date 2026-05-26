@@ -234,7 +234,7 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   , m_cursorHovering(false)
   , m_axisDirty(true)
   , m_campbellMode(false)
-  , m_yDatasetIndex(0)
+  , m_yDatasetUniqueId(0)
   , m_yMin(0.0)
   , m_yMax(1.0)
   , m_plan(nullptr)
@@ -264,10 +264,10 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
     }
 
     // Resolve Campbell-mode binding (0 = time, fall back if dataset missing)
-    m_yDatasetIndex = dataset.waterfallYAxis;
-    if (m_yDatasetIndex > 0) {
+    m_yDatasetUniqueId = dataset.waterfallYAxis;
+    if (m_yDatasetUniqueId > 0) {
       const auto& datasets = UI::Dashboard::instance().datasets();
-      const auto it        = datasets.find(m_yDatasetIndex);
+      const auto it        = datasets.find(m_yDatasetUniqueId);
       if (it != datasets.end() && it->pltMax > it->pltMin) {
         m_campbellMode = true;
         m_yMin         = it->pltMin;
@@ -734,7 +734,7 @@ void Widgets::Waterfall::updateData()
   // Push the new row (time mode scrolls; Campbell mode writes by Y value)
   if (m_campbellMode && m_image.height() > 0) {
     const auto& datasets = UI::Dashboard::instance().datasets();
-    const auto it        = datasets.find(m_yDatasetIndex);
+    const auto it        = datasets.find(m_yDatasetUniqueId);
     if (it != datasets.end() && it->isNumeric) {
       const double v     = it->numericValue;
       const double range = m_yMax - m_yMin;

@@ -3256,10 +3256,20 @@ void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model,
   if (!dataset.waterfall)
     return;
 
+  // waterfallYAxis stores a dataset uniqueId; translate via the parallel list.
+  const auto yUids  = DataModel::ProjectModel::instance().yWaterfallSourceUniqueIds();
+  int yAxisComboPos = 0;
+  for (int i = 0; i < yUids.size(); ++i) {
+    if (yUids.at(i) == dataset.waterfallYAxis) {
+      yAxisComboPos = i;
+      break;
+    }
+  }
+
   auto* yAxisItem = new QStandardItem();
   yAxisItem->setEditable(true);
   yAxisItem->setData(ComboBox, WidgetType);
-  yAxisItem->setData(dataset.waterfallYAxis, EditableValue);
+  yAxisItem->setData(yAxisComboPos, EditableValue);
   yAxisItem->setData(yAxisItem->isEditable(), Active);
   yAxisItem->setData(DataModel::ProjectModel::instance().yWaterfallSources(), ComboBoxData);
   yAxisItem->setData(kDatasetView_WaterfallYAxis, ParameterType);
@@ -4086,9 +4096,13 @@ void DataModel::ProjectEditor::onDatasetFftItemChanged(QStandardItem* item,
     case kDatasetView_FFTMax:
       dataset.fftMax = value.toDouble();
       break;
-    case kDatasetView_WaterfallYAxis:
-      dataset.waterfallYAxis = value.toInt();
+    case kDatasetView_WaterfallYAxis: {
+      // Translate ComboBox position -> dataset uniqueId; 0 at position 0 = "Time".
+      const auto yUids       = DataModel::ProjectModel::instance().yWaterfallSourceUniqueIds();
+      const int pos          = value.toInt();
+      dataset.waterfallYAxis = (pos >= 0 && pos < yUids.size()) ? yUids.at(pos) : 0;
       break;
+    }
     case kDatasetView_FFT_Samples: {
       const int sampleIdx = value.toInt();
       if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())

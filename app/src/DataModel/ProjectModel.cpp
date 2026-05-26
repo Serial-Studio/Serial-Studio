@@ -699,6 +699,39 @@ void DataModel::ProjectModel::migrateLegacyXAxisIds()
 }
 
 /**
+ * @brief Translates one dataset's legacy index-based waterfall Y-axis to a uniqueId.
+ */
+static void remapWaterfallYAxisId(DataModel::Dataset& dataset, const QSet<int>& liveUids,
+                                  const QMap<int, int>& indexMap)
+{
+  if (dataset.waterfallYAxis <= 0)
+    dataset.waterfallYAxis = 0;
+  else if (!liveUids.contains(dataset.waterfallYAxis))
+    dataset.waterfallYAxis = indexMap.value(dataset.waterfallYAxis, 0);
+}
+
+/**
+ * @brief Rebinds legacy index-based waterfall Y-axis references to dataset uniqueIds.
+ */
+void DataModel::ProjectModel::migrateLegacyWaterfallYAxisIds()
+{
+  // Translate index -> uniqueId; 0 stays 0 (the Time sentinel)
+  QSet<int> liveUids;
+  QMap<int, QMap<int, int>> uidByIndex;
+  for (const auto& group : m_groups)
+    for (const auto& dataset : group.datasets) {
+      liveUids.insert(dataset.uniqueId);
+      uidByIndex[group.sourceId].insert(dataset.index, dataset.uniqueId);
+    }
+
+  for (auto& group : m_groups) {
+    const auto indexMap = uidByIndex.value(group.sourceId);
+    for (auto& dataset : group.datasets)
+      remapWaterfallYAxisId(dataset, liveUids, indexMap);
+  }
+}
+
+/**
  * @brief Resolves a Group.uniqueId to its current positional groupId; returns -1 if absent.
  */
 int DataModel::ProjectModel::groupIdForUniqueId(int uniqueId) const
@@ -773,19 +806,20 @@ QList<int> DataModel::ProjectModel::xDataSourceUniqueIds() const
 }
 
 /**
- * @brief Returns "Time" plus every dataset label, sorted by frame index.
+ * @brief Returns "Time" plus every dataset label, sorted by uniqueId.
  */
 QStringList DataModel::ProjectModel::yWaterfallSources() const
 {
   QStringList list;
   list.append(tr("Time"));
 
+  // Sort by uniqueId so yWaterfallSources() and yWaterfallSourceUniqueIds() share an order.
   QMap<int, QString> datasets;
   for (const auto& group : m_groups) {
     for (const auto& dataset : group.datasets) {
-      const auto index = dataset.index;
-      if (!datasets.contains(index))
-        datasets.insert(index, QString("%1 (%2)").arg(dataset.title, group.title));
+      const auto uid = dataset.uniqueId;
+      if (!datasets.contains(uid))
+        datasets.insert(uid, QString("%1 (%2)").arg(dataset.title, group.title));
     }
   }
 
@@ -793,6 +827,30 @@ QStringList DataModel::ProjectModel::yWaterfallSources() const
     list.append(it.value());
 
   return list;
+}
+
+/**
+ * @brief Parallel to yWaterfallSources(): the dataset uniqueId at each combo position
+ *        (position 0 -> 0, the "Time" sentinel).
+ */
+QList<int> DataModel::ProjectModel::yWaterfallSourceUniqueIds() const
+{
+  QList<int> out;
+  out.append(0);
+
+  QMap<int, bool> seen;
+  for (const auto& group : m_groups) {
+    for (const auto& dataset : group.datasets) {
+      const auto uid = dataset.uniqueId;
+      if (!seen.contains(uid))
+        seen.insert(uid, true);
+    }
+  }
+
+  for (auto it = seen.cbegin(); it != seen.cend(); ++it)
+    out.append(it.key());
+
+  return out;
 }
 
 /**
@@ -1968,6 +2026,9 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
     migrateLegacyWorkspaceRefs();
     migrateLegacyXAxisIds();
   }
+
+  // No-ops for any waterfallYAxis already resolving to a live uniqueId
+  migrateLegacyWaterfallYAxisIds();
 
   loadPointCount(json);
   migrateLegacyLayoutKeys();

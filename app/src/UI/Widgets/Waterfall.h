@@ -262,7 +262,7 @@ private:
   QColor m_gridColor;
 
   bool m_campbellMode;
-  int m_yDatasetIndex;
+  int m_yDatasetUniqueId;
   QString m_yAxisTitle;
   double m_yMin;
   double m_yMax;

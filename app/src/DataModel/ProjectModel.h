@@ -169,6 +169,7 @@ public:
   [[nodiscard]] QStringList xDataSources() const;
   [[nodiscard]] QList<int> xDataSourceUniqueIds() const;
   [[nodiscard]] QStringList yWaterfallSources() const;
+  [[nodiscard]] QList<int> yWaterfallSourceUniqueIds() const;
 
   [[nodiscard]] int groupIdForUniqueId(int uniqueId) const;
   [[nodiscard]] int groupUniqueIdForGroupId(int groupId) const;
@@ -451,6 +452,7 @@ private:
   void seedNextUniqueIdFromGroups();
   void migrateLegacyWorkspaceRefs();
   void migrateLegacyXAxisIds();
+  void migrateLegacyWaterfallYAxisIds();
 
 private:
   QString m_title;
