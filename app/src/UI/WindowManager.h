@@ -103,8 +103,6 @@ public:
     BottomRight
   };
 
-  [[nodiscard]] Q_INVOKABLE bool startManualPress(qreal x, qreal y, int button);
-
 public slots:
   void clear();
   void loadLayout();
@@ -139,6 +137,7 @@ private:
                             int marginCanvasW,
                             int marginCanvasH);
 
+  [[nodiscard]] bool startManualPress(const QPointF& pos, Qt::MouseButton button);
   void handleDragMove(QMouseEvent* event, const QPoint& delta);
   void handleResizeMove(QMouseEvent* event, const QPoint& delta);
   void applyManualAnchors(int newWidth, int newHeight);
@@ -156,6 +155,7 @@ protected:
   void mousePressEvent(QMouseEvent* event) override;
   void mouseReleaseEvent(QMouseEvent* event) override;
   void mouseDoubleClickEvent(QMouseEvent* event) override;
+  [[nodiscard]] bool childMouseEventFilter(QQuickItem* item, QEvent* event) override;
 
 private:
   int m_zCounter;

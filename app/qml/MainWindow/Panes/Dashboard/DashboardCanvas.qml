@@ -129,8 +129,8 @@ Item {
       delegate: WidgetDelegate {
         required property var model
 
+        parent: _wm
         windowManager: _wm
-        parent: windowCanvas
         taskBar: root.taskBar
         title: model.widgetName
         widgetIndex: model.windowId
@@ -153,25 +153,6 @@ Item {
         const firstWindow = taskBar.firstWindow()
         if (firstWindow)
           taskBar.activeWindow = firstWindow
-      }
-    }
-
-    //
-    // Manual-mode press router: one transparent layer above every window so the
-    // WindowManager authoritatively picks, raises, and drags the pressed window
-    //
-    MouseArea {
-      id: pressRouter
-
-      hoverEnabled: false
-      z: _wm.zCounter + 10
-      anchors.fill: parent
-      propagateComposedEvents: true
-      acceptedButtons: Qt.AllButtons
-      enabled: !_wm.autoLayoutEnabled
-      onPressed: function(mouse) {
-        const pt = mapToItem(_wm, mouse.x, mouse.y)
-        mouse.accepted = _wm.startManualPress(pt.x, pt.y, mouse.button)
       }
     }
 

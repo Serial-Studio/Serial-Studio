@@ -1925,10 +1925,10 @@ void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta
 }
 
 /**
- * @brief Authoritative manual-mode press entry: hit-tests the genuinely topmost
- *        window at the canvas point, raises it, and starts a resize or drag.
+ * @brief Manual-mode press logic: hit-tests the topmost window at pos, raises it,
+ *        and starts a resize or drag. Returns true when the press is consumed.
  */
-bool UI::WindowManager::startManualPress(qreal x, qreal y, int button)
+bool UI::WindowManager::startManualPress(const QPointF& pos, Qt::MouseButton button)
 {
   if (autoLayoutEnabled())
     return false;
@@ -1939,12 +1939,13 @@ bool UI::WindowManager::startManualPress(qreal x, qreal y, int button)
   m_resizeWindow    = nullptr;
   m_focusedWindow   = nullptr;
   m_resizeEdge      = ResizeEdge::None;
-  m_initialMousePos = QPoint(qRound(x), qRound(y));
+  m_initialMousePos = pos.toPoint();
 
   // A top window's resize edge wins over a lower window's body
   m_focusedWindow = manualResizeTargetAt(m_initialMousePos);
   if (!m_focusedWindow)
     m_focusedWindow = topmostWindowAt(m_initialMousePos);
+
   if (!m_focusedWindow)
     return false;
 
@@ -1969,11 +1970,19 @@ bool UI::WindowManager::startManualPress(qreal x, qreal y, int button)
     return true;
   }
 
-  // Caption presses always drag; an already-focused body press stays interactive
+  // Caption window-control buttons keep working: never consume a press over them
   const auto local     = m_focusedWindow->mapFromItem(this, m_initialMousePos);
   const int captionH   = m_focusedWindow->property("captionHeight").toInt();
-  const bool onCaption = local.y() <= captionH;
-  if (wasFocused && !onCaption)
+  const int externcW   = m_focusedWindow->property("externControlWidth").toInt();
+  const int buttonsW   = m_focusedWindow->property("windowControlsWidth").toInt();
+  const bool onCaption = local.y() <= captionH && local.x() > externcW
+                      && local.x() <= m_focusedWindow->width() - buttonsW;
+  const bool onControls = local.y() <= captionH && !onCaption;
+  if (onControls)
+    return false;
+
+  // An already-focused body press falls through so widget content stays interactive
+  if (wasFocused && local.y() > captionH)
     return false;
 
   // Start a body/caption drag of the raised window
@@ -1990,13 +1999,27 @@ bool UI::WindowManager::startManualPress(qreal x, qreal y, int button)
 }
 
 /**
+ * @brief Intercepts child-window presses so the manager owns focus/raise/drag in
+ *        manual mode, passing non-management presses through to the widget.
+ */
+bool UI::WindowManager::childMouseEventFilter(QQuickItem* item, QEvent* event)
+{
+  if (autoLayoutEnabled() || event->type() != QEvent::MouseButtonPress)
+    return false;
+
+  auto* mouse       = static_cast<QMouseEvent*>(event);
+  const QPointF pos = mapFromItem(item, mouse->position());
+  return startManualPress(pos, mouse->button());
+}
+
+/**
  * @brief Handles mouse press interactions for initiating window drag or resize.
  */
 void UI::WindowManager::mousePressEvent(QMouseEvent* event)
 {
-  // Manual mode is routed authoritatively through the canvas press router
+  // Bare-canvas manual presses route here; child windows use childMouseEventFilter
   if (!autoLayoutEnabled()) {
-    if (startManualPress(event->pos().x(), event->pos().y(), event->button()))
+    if (startManualPress(event->pos(), event->button()))
       event->accept();
     else
       QQuickItem::mousePressEvent(event);
