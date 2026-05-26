@@ -84,11 +84,18 @@ def _widget_remove(api_client, workspace_id, widget_type, group_id, relative_ind
 
 
 def _add_group_with_datasets(api_client, title, widget_type=0, dataset_count=2):
-    """Create a group and add N datasets. Returns the new groupId."""
-    gid = api_client.add_group(title, widget_type=widget_type)
+    """Create a group, add N datasets, return its stable uniqueId.
+
+    project.group.add takes a positional groupId; workspace handlers take a
+    uniqueId. Datasets are added via the positional id (the just-added group
+    is always the last entry); the returned uniqueId is what every workspace
+    assertion in this file needs.
+    """
+    pos = api_client.add_group(title, widget_type=widget_type)
     for _ in range(dataset_count):
-        api_client.add_dataset(gid)
-    return gid
+        api_client.add_dataset(pos)
+    groups = api_client.list_groups()
+    return int(groups[-1]["uniqueId"])
 
 
 def _project_groups(api_client):
@@ -313,40 +320,40 @@ def test_widget_remove_takes_triple_key(api_client, clean_state):
 
 
 @pytest.mark.project
-def test_group_delete_shifts_ref_group_id(api_client, clean_state):
+def test_group_delete_preserves_ref_unique_id(api_client, clean_state):
     """
-    Refs in groups after the deleted one must have their groupId
-    decremented by 1 (contiguous renumber).
+    WidgetRef.groupUniqueId is the *stable* uniqueId of the referenced group.
+    Deleting a different group must leave the surviving ref's uniqueId
+    untouched -- only the positional groupId of later groups compacts; the
+    uniqueId never renumbers.
     """
-    # GroupWidget::DataGrid (0) + DashboardWidget::DashboardDataGrid (1) is
-    # the compatible pair. Match the other group-delete tests in this file.
     _add_group_with_datasets(api_client, "G0", widget_type=0, dataset_count=0)
     _add_group_with_datasets(api_client, "G1", widget_type=0, dataset_count=0)
-    _add_group_with_datasets(api_client, "G2", widget_type=0, dataset_count=0)
+    g2_uid = _add_group_with_datasets(api_client, "G2", widget_type=0, dataset_count=0)
     time.sleep(0.3)
 
     wid = _add_workspace(api_client, "W")["id"]
     time.sleep(0.15)
 
-    # Widget ref pointing at G2
-    _widget_add(api_client, wid, widget_type=1, group_id=2, relative_index=2)
+    # Widget ref pointing at G2 by uniqueId, relativeIndex spans G0+G1+G2 slots
+    _widget_add(api_client, wid, widget_type=1, group_id=g2_uid, relative_index=2)
     time.sleep(0.15)
 
-    # Delete G1 by id — surviving G2 becomes G1 (ids are sequential)
+    # Delete G1 by positional id; G2's uniqueId stays the same
     api_client.delete_group(1)
     time.sleep(0.25)
 
-    # G2 is now G1; ref groupId must have shifted 2→1
     widgets = _get_workspace(api_client, wid)["widgets"]
     assert len(widgets) == 1
-    assert widgets[0]["groupId"] == 1
+    assert widgets[0]["groupId"] == g2_uid
 
 
 @pytest.mark.project
 def test_group_delete_shifts_ref_relative_index(api_client, clean_state):
     """
     After deleting a group that contributed N same-type widgets, every ref
-    in a later group loses N from its relativeIndex.
+    whose relativeIndex sits past the removed slice loses N. The ref's
+    groupUniqueId is unchanged (uniqueIds are persistent).
 
     We use the DataGrid GroupWidget so each group contributes exactly one
     group-level DashboardDataGrid widget. Enum values:
@@ -355,43 +362,43 @@ def test_group_delete_shifts_ref_relative_index(api_client, clean_state):
     """
     _add_group_with_datasets(api_client, "G0", widget_type=0, dataset_count=0)
     _add_group_with_datasets(api_client, "G1", widget_type=0, dataset_count=0)
-    _add_group_with_datasets(api_client, "G2", widget_type=0, dataset_count=0)
+    g2_uid = _add_group_with_datasets(api_client, "G2", widget_type=0, dataset_count=0)
     time.sleep(0.3)
 
     wid = _add_workspace(api_client, "W")["id"]
     time.sleep(0.15)
 
-    # Each group contributes exactly one DashboardDataGrid widget; relative
-    # indices across all three groups are 0, 1, 2. Pin a ref to the last one.
-    _widget_add(api_client, wid, widget_type=1, group_id=2, relative_index=2)
+    # Each group contributes one DashboardDataGrid; the three relativeIndex
+    # slots across all groups are 0, 1, 2. Pin to G2's slot (index 2).
+    _widget_add(api_client, wid, widget_type=1, group_id=g2_uid, relative_index=2)
     time.sleep(0.15)
 
     api_client.delete_group(1)
     time.sleep(0.25)
 
-    # G2 became G1; it contributed 1 DataGrid, and the deleted G1 also
-    # contributed 1 DataGrid. The ref's relativeIndex 2 → 2 - 1 = 1.
+    # The deleted G1 contributed 1 DataGrid at slot 1; G2's ref at slot 2
+    # shifts down to slot 1. G2's uniqueId is unchanged.
     widgets = _get_workspace(api_client, wid)["widgets"]
     assert len(widgets) == 1
-    assert widgets[0]["groupId"] == 1
+    assert widgets[0]["groupId"] == g2_uid
     assert widgets[0]["relativeIndex"] == 1
 
 
 @pytest.mark.project
 def test_group_delete_drops_refs_pointing_at_deleted(api_client, clean_state):
-    """Refs whose groupId equals the deleted group's id are removed."""
+    """Refs whose groupUniqueId equals the deleted group's uniqueId are removed."""
     # widgetType 0 = GroupWidget::DataGrid; widget_type=1 in refs = DashboardDataGrid
     _add_group_with_datasets(api_client, "G0", widget_type=0, dataset_count=0)
-    _add_group_with_datasets(api_client, "G1", widget_type=0, dataset_count=0)
+    g1_uid = _add_group_with_datasets(api_client, "G1", widget_type=0, dataset_count=0)
     time.sleep(0.3)
 
     wid = _add_workspace(api_client, "W")["id"]
     time.sleep(0.15)
 
-    _widget_add(api_client, wid, widget_type=1, group_id=1, relative_index=1)
+    _widget_add(api_client, wid, widget_type=1, group_id=g1_uid, relative_index=1)
     time.sleep(0.15)
 
-    # Delete G1 — ref pointing at it must disappear
+    # Delete G1 by positional id; ref keyed on its uniqueId must disappear
     api_client.delete_group(1)
     time.sleep(0.25)
 

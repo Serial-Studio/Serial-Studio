@@ -652,11 +652,13 @@ class SerialStudioClient:
 
     def add_group(self, title: str = "Group", widget_type: int = 0) -> int:
         """
-        Add a group and return its groupId.
+        Add a group and return its positional groupId.
 
-        project.group.add doesn't echo the new id and project.group.list does
-        not include groupId in each entry; ids are sequential indexes so the
-        new group's id is the last array index in project.group.list.
+        project.group.add doesn't echo the new id; the positional groupId is
+        the last array index in project.group.list. Use this with the
+        project.group.* (positional) handlers. For uniqueId-based handlers
+        (workspace refs, dataset.xAxisId, ...) read `uniqueId` from
+        project.group.list yourself.
         """
         self.command("project.group.add", {"title": title, "widgetType": widget_type})
         groups = self.list_groups()
