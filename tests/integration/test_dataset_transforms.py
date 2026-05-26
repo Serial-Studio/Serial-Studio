@@ -6,7 +6,7 @@ Covers per-dataset value transforms (Dataset::transformCode):
  * String in → number out transforms
  * Transform isolation (per-dataset upvalues / IIFE closures)
  * Persistence round-trip through project export/import
- * Watchdog behaviour on infinite loops (Lua hook + JS QTimer)
+ * Watchdog behaviour on infinite loops (Lua instruction hook + JS cross-thread watchdog)
 
 All tests use a TCP loopback device and verify outputs via
 dashboard.getData, which returns the post-transform Frame.
@@ -318,3 +318,33 @@ def test_lua_transform_non_numeric_return_falls_back(
 
     num, _ = _dataset_value(data, 0)
     assert num == pytest.approx(17.0)
+
+
+# ---------------------------------------------------------------------------
+# Watchdog — a runaway transform must be interrupted, never hang the app
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.project
+def test_js_transform_infinite_loop_does_not_hang(
+    api_client, device_simulator, clean_state
+):
+    """A JS transform stuck in `while(true){}` is interrupted per frame so the
+    dataset falls back to its raw value and the app stays responsive.
+
+    Before the cross-thread JsWatchdogThread, the same-thread QTimer could not
+    fire while the engine blocked the event loop, so this hung the main thread
+    on the first frame. pytest-timeout (see pytest.ini) turns a regression here
+    into a fast failure instead of a frozen run.
+    """
+    _setup_project(api_client, JS_PASSTHROUGH, parser_language=0, dataset_count=1)
+    _set_transform(api_client, 0, 0, "function transform(v) { while (true) {} }")
+
+    data = _send_csv_and_read(api_client, device_simulator, [b"42"], settle_seconds=1.5)
+
+    # Transform timed out -> raw value passes through unmodified.
+    num, _ = _dataset_value(data, 0)
+    assert num == pytest.approx(42.0)
+
+    # The app answered get_dashboard_data and still answers afterwards.
+    assert api_client.command("project.dataset.list").get("datasets")

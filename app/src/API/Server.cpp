@@ -25,6 +25,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QRandomGenerator>
 
 #include "API/CommandHandler.h"
 #include "API/CommandProtocol.h"
@@ -48,10 +49,29 @@ constexpr int kMaxApiMessagesPerWindow = 200;
 constexpr int kMaxApiMessageBytes      = 1024 * 1024;
 constexpr int kMaxApiBufferBytes       = 4 * 1024 * 1024;
 constexpr int kMaxApiBytesPerWindow    = 128 * 1024 * 1024;
+constexpr int kMaxAuthAttempts         = 3;
+constexpr int kAuthTokenBytes          = 32;
 
 //--------------------------------------------------------------------------------------------------
 // Static functions
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Generates a cryptographically random hex token for external API auth.
+ */
+static QString generateApiToken()
+{
+  QByteArray raw;
+  raw.reserve(kAuthTokenBytes);
+
+  auto* rng = QRandomGenerator::system();
+  for (int i = 0; i < kAuthTokenBytes / int(sizeof(quint32)); ++i) {
+    const quint32 value = rng->generate();
+    raw.append(reinterpret_cast<const char*>(&value), sizeof(value));
+  }
+
+  return QString::fromLatin1(raw.toHex());
+}
 
 /**
  * @brief Returns true if the JSON byte stream nests deeper than the given limit.
@@ -304,6 +324,11 @@ API::Server::Server()
 {
   // Restore persisted settings
   m_externalConnections = m_settings.value("API/ExternalConnections", false).toBool();
+  m_authToken           = m_settings.value("API/AuthToken").toString();
+
+  // A token must exist whenever external clients are allowed, or none could connect.
+  if (m_externalConnections)
+    ensureAuthToken();
 
   initializeWorker();
 
@@ -472,6 +497,10 @@ void API::Server::setExternalConnections(const bool enabled)
   m_settings.setValue("API/ExternalConnections", m_externalConnections);
   Q_EMIT externalConnectionsChanged();
 
+  // External clients authenticate with a token; make sure one exists before exposing the port.
+  if (m_externalConnections)
+    ensureAuthToken();
+
   if (m_enabled) {
     m_server.close();
     m_connections.clear();
@@ -487,6 +516,125 @@ void API::Server::setExternalConnections(const bool enabled)
       m_enabled = false;
       Q_EMIT enabledChanged();
     }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Server -- authentication (external connections)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the token external (non-loopback) clients must present to authenticate.
+ */
+QString API::Server::authToken() const
+{
+  return m_authToken;
+}
+
+/**
+ * @brief Generates and persists the auth token once; a no-op when one already exists.
+ */
+void API::Server::ensureAuthToken()
+{
+  if (!m_authToken.isEmpty())
+    return;
+
+  m_authToken = generateApiToken();
+  m_settings.setValue("API/AuthToken", m_authToken);
+  Q_EMIT authTokenChanged();
+}
+
+/**
+ * @brief Issues a fresh auth token; already-authenticated sessions stay connected.
+ */
+void API::Server::regenerateAuthToken()
+{
+  m_authToken = generateApiToken();
+  m_settings.setValue("API/AuthToken", m_authToken);
+  Q_EMIT authTokenChanged();
+}
+
+/**
+ * @brief Compares two byte arrays in constant time to avoid token timing side channels.
+ */
+bool API::Server::constantTimeEquals(const QByteArray& a, const QByteArray& b)
+{
+  if (a.size() != b.size())
+    return false;
+
+  quint8 diff = 0;
+  for (qsizetype i = 0; i < a.size(); ++i)
+    diff |= static_cast<quint8>(a[i]) ^ static_cast<quint8>(b[i]);
+
+  return diff == 0;
+}
+
+/**
+ * @brief Consumes the first line as a {"type":"auth","token":...} handshake before commands.
+ */
+void API::Server::handleAuthHandshake(QTcpSocket* socket,
+                                      ConnectionState& state,
+                                      const QByteArray& data)
+{
+  Q_ASSERT(socket);
+
+  // Buffer until a full line arrives; cap the pre-auth buffer to reject unauthenticated floods.
+  state.buffer.append(data);
+  if (state.buffer.size() > kMaxApiMessageBytes) {
+    disconnectClient(
+      socket, state, ErrorCode::ExecutionError, QStringLiteral("Authentication required"));
+    return;
+  }
+
+  const int newlineIndex = state.buffer.indexOf('\n');
+  if (newlineIndex < 0)
+    return;
+
+  const QByteArray line = state.buffer.left(newlineIndex).trimmed();
+  state.buffer.remove(0, newlineIndex + 1);
+
+  // Validate {"type":"auth","token":"<token>"} with a constant-time token match.
+  bool ok = false;
+  QJsonParseError parseError;
+  const auto doc = QJsonDocument::fromJson(line, &parseError);
+  if (parseError.error == QJsonParseError::NoError && doc.isObject()) {
+    const auto obj = doc.object();
+    if (obj.value(QStringLiteral("type")).toString() == QStringLiteral("auth")) {
+      const QByteArray provided = obj.value(QStringLiteral("token")).toString().toUtf8();
+      ok = !m_authToken.isEmpty() && constantTimeEquals(provided, m_authToken.toUtf8());
+    }
+  }
+
+  // Reject; drop the connection after a few failed attempts.
+  if (!ok) {
+    if (++state.authAttempts >= kMaxAuthAttempts) {
+      qWarning() << "[API] Authentication failed:" << state.peerAddress << ":" << state.peerPort
+                 << "- Disconnecting after" << state.authAttempts << "attempts";
+      disconnectClient(
+        socket, state, ErrorCode::ExecutionError, QStringLiteral("Authentication failed"));
+      return;
+    }
+
+    sendResponseToSocket(socket,
+                         CommandResponse::makeError(QString(),
+                                                    ErrorCode::ExecutionError,
+                                                    QStringLiteral("Authentication required"))
+                           .toJsonBytes());
+    return;
+  }
+
+  // Authenticated -- acknowledge, then process any data pipelined after the handshake.
+  state.authenticated = true;
+  qInfo() << "[API] Client authenticated:" << state.peerAddress << ":" << state.peerPort;
+
+  QJsonObject result;
+  result[QStringLiteral("authenticated")] = true;
+  sendResponseToSocket(socket, CommandResponse::makeSuccess(QString(), result).toJsonBytes());
+
+  if (!state.buffer.isEmpty()) {
+    const QByteArray pipelined = state.buffer;
+    state.buffer.clear();
+    onDataReceived(socket, pipelined);
   }
 }
 
@@ -975,6 +1123,12 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
   if (!validateRateLimits(socket, state, data))
     return;
 
+  // Untrusted (non-loopback) clients must authenticate before any command or raw data.
+  if (!state.authenticated) {
+    handleAuthHandshake(socket, state, data);
+    return;
+  }
+
   state.buffer.append(data);
   auto& buffer = state.buffer;
 
@@ -1053,6 +1207,9 @@ void API::Server::acceptConnection()
   state.sessionId   = QString::number(s_nextSessionId.fetchAndAddRelaxed(1));
   state.peerAddress = socket->peerAddress().toString();
   state.peerPort    = socket->peerPort();
+
+  // Loopback peers are trusted; only non-loopback peers authenticate (external mode only).
+  state.authenticated = !(m_externalConnections && !socket->peerAddress().isLoopback());
   m_connections.insert(socket, state);
 
   qInfo() << "[API] New client connected:" << state.peerAddress << ":" << state.peerPort

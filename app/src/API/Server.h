@@ -96,10 +96,14 @@ class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
              READ externalConnections
              WRITE setExternalConnections
              NOTIFY externalConnectionsChanged)
+  Q_PROPERTY(QString authToken
+             READ authToken
+             NOTIFY authTokenChanged)
   // clang-format on
 
 signals:
   void enabledChanged();
+  void authTokenChanged();
   void clientCountChanged();
   void externalConnectionsChanged();
 
@@ -116,10 +120,12 @@ public:
   [[nodiscard]] static Server& instance();
   [[nodiscard]] bool enabled() const noexcept;
   [[nodiscard]] int clientCount() const noexcept;
+  [[nodiscard]] QString authToken() const;
   [[nodiscard]] bool externalConnections() const noexcept;
 
 public slots:
   void removeConnection();
+  void regenerateAuthToken();
   void setEnabled(const bool enabled);
   void setExternalConnections(const bool enabled);
   void hotpathTxData(const QByteArray& data);
@@ -144,9 +150,15 @@ private:
     quint16 peerPort = 0;
     QByteArray buffer;
     QElapsedTimer window;
-    int messageCount = 0;
-    int byteCount    = 0;
+    int messageCount   = 0;
+    int byteCount      = 0;
+    bool authenticated = false;
+    int authAttempts   = 0;
   };
+
+  void ensureAuthToken();
+  void handleAuthHandshake(QTcpSocket* socket, ConnectionState& state, const QByteArray& data);
+  [[nodiscard]] static bool constantTimeEquals(const QByteArray& a, const QByteArray& b);
 
   void sendResponseToSocket(QTcpSocket* socket, const QByteArray& response);
   void disconnectClient(QTcpSocket* socket,
@@ -171,6 +183,7 @@ private:
   int m_clientCount;
   bool m_enabled;
   bool m_externalConnections;
+  QString m_authToken;
   QTcpServer m_server;
   QHash<QTcpSocket*, ConnectionState> m_connections;
 };

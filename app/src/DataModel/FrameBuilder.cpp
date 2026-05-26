@@ -124,6 +124,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_lastConnectedState(false)
   , m_parseBudgetUsedNs(0)
   , m_parseBudgetWindowStart(BudgetClock::time_point{})
+  , m_jsTransformTimedOut(false)
   , m_engineCacheSourceId(-1)
   , m_luaEngineForSource(nullptr)
   , m_jsEngineForSource(nullptr)
@@ -135,22 +136,6 @@ DataModel::FrameBuilder::FrameBuilder()
   m_framePool.reserve(kFramePoolSize);
   for (int i = 0; i < kFramePoolSize; ++i)
     m_framePool.emplace_back(std::make_shared<PooledFrameSlot>());
-
-  // JS transform watchdog -- flips interrupt flag to unwind runaway scripts
-  m_jsTransformWatchdog.setSingleShot(true);
-  m_jsTransformWatchdog.setInterval(kTransformWatchdogMs);
-  connect(&m_jsTransformWatchdog, &QTimer::timeout, this, [this]() {
-    for (auto& [id, engine] : m_transformEngines)
-      if (engine.jsEngine)
-        engine.jsEngine->setInterrupted(true);
-
-    NotificationCenter::instance().postWarning(
-      QStringLiteral("FrameBuilder"),
-      tr("JavaScript transform exceeded budget"),
-      tr("A dataset transform took longer than %1 ms; remaining datasets in the frame fell "
-         "back to raw values until the next frame. Profile or simplify the transform code.")
-        .arg(kTransformWatchdogMs));
-  });
 
 #ifdef BUILD_COMMERCIAL
   connect(&Licensing::LemonSqueezy::instance(),
@@ -796,11 +781,12 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
     m_jsEngineForSource   = (jsIt != m_transformEngines.end()) ? &jsIt->second : nullptr;
   }
 
-  // Frame-level JS watchdog -- one arm/disarm per frame; 100ms budget covers the whole frame.
+  // Frame-level JS watchdog -- one arm/disarm per frame; the budget covers the whole frame.
   const bool armJsWatchdog = (m_jsEngineForSource != nullptr);
   if (armJsWatchdog) [[unlikely]] {
-    m_jsEngineForSource->jsEngine->setInterrupted(false);
-    m_jsTransformWatchdog.start();
+    Q_ASSERT(m_jsEngineForSource->jsWatchdog);
+    m_jsTransformTimedOut = false;
+    m_jsEngineForSource->jsWatchdog->arm();
   }
 
   // Re-entrancy guard: pin engine storage while cached pointers into it are live
@@ -812,8 +798,16 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
 
   --m_compileGuard;
 
-  if (armJsWatchdog) [[unlikely]]
-    m_jsTransformWatchdog.stop();
+  if (armJsWatchdog) [[unlikely]] {
+    m_jsEngineForSource->jsWatchdog->disarm();
+    if (m_jsTransformTimedOut)
+      NotificationCenter::instance().postWarning(
+        QStringLiteral("FrameBuilder"),
+        tr("JavaScript transform exceeded budget"),
+        tr("A dataset transform took longer than %1 ms; remaining datasets in the frame fell "
+           "back to raw values until the next frame. Profile or simplify the transform code.")
+          .arg(kTransformWatchdogMs));
+  }
 
   // Drain any project mutation a transform queued, now that hot pointers have been released
   if (m_compileGuard == 0 && m_compilePending) [[unlikely]] {
@@ -1416,6 +1410,8 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
   }
 
   engine.jsEngine = js;
+  engine.jsWatchdog =
+    std::make_unique<JsWatchdog>(js, kTransformWatchdogMs, QStringLiteral("transform"));
 }
 
 /**
@@ -1464,6 +1460,9 @@ void DataModel::FrameBuilder::destroyTransformEngines()
       lua_close(engine.luaState);
       engine.luaState = nullptr;
     }
+
+    // Unregister the watchdog before freeing the engine -- it can never touch a freed engine.
+    engine.jsWatchdog.reset();
 
     // Release JS engine (refs already cleared above)
     delete engine.jsEngine;
@@ -1626,6 +1625,7 @@ QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
 
   if (engine.jsEngine->isInterrupted()) [[unlikely]] {
     engine.jsEngine->setInterrupted(false);
+    m_jsTransformTimedOut = true;
     qWarning() << "[FrameBuilder] JS transform for dataset" << uniqueId << "timed out after"
                << kTransformWatchdogMs << "ms";
     return rawValue;

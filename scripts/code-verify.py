@@ -1571,6 +1571,43 @@ def _is_first_party(path: Path) -> bool:
     )
 
 
+# QJSEngine interruption may only be triggered from the dedicated watchdog
+# thread. A QTimer on the same thread as a blocking QJSValue::call() can never
+# fire (the event loop is blocked), so `setInterrupted(true)` driven from a
+# same-thread timer is a silent no-op against `while(true){}` -- the original
+# JS-watchdog bug. DataModel::JsWatchdogThread is the one place allowed to flip
+# the flag; everything else arms a DataModel::JsWatchdog instead.
+_INTERRUPT_TRUE_RE = re.compile(r"\bsetInterrupted\s*\(\s*true\s*\)")
+_INTERRUPT_GUARD_ALLOWED = "JsWatchdogThread.cpp"
+
+
+def find_interrupt_guard_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag `setInterrupted(true)` outside the watchdog thread. The interrupt
+    must come from a thread other than the one running the (blocking) engine
+    call, so JsWatchdogThread.cpp is the only correct site."""
+    if path.name == _INTERRUPT_GUARD_ALLOWED:
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if _INTERRUPT_TRUE_RE.search(line):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "js-interrupt-off-thread",
+                    "setInterrupted(true) outside JsWatchdogThread.cpp -- a same-thread "
+                    "timer cannot interrupt a blocked QJSEngine; arm a "
+                    "DataModel::JsWatchdog instead",
+                )
+            )
+    return violations
+
+
 def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
     # Read as bytes first so CRLF detection isn't masked by Python's universal
     # newline translation in text mode — read_text() silently rewrites \r\n
@@ -1610,6 +1647,7 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
         violations.extend(
             find_qml_underscore_property_violations(raw_lines, path, fence_mask)
         )
+        violations.extend(find_interrupt_guard_violations(raw_lines, path, fence_mask))
 
         # Static-analysis rules (Qt/C++ semantic checks + QML conventions).
         # The rules module degrades gracefully when tree-sitter is missing.

@@ -21,23 +21,26 @@
 
 #pragma once
 
+#include <atomic>
 #include <QJSEngine>
 #include <QJSValue>
 #include <QString>
-#include <QTimer>
 
 namespace DataModel {
 
 /**
- * @brief Runtime watchdog for QJSEngine calls.
+ * @brief Runtime watchdog for QJSEngine calls, interrupted from a separate thread.
  */
 class JsWatchdog {
 public:
   explicit JsWatchdog(QJSEngine* engine, int budgetMs = 1000, QString tag = QString());
-  ~JsWatchdog() = default;
+  ~JsWatchdog();
 
   JsWatchdog(const JsWatchdog&)            = delete;
   JsWatchdog& operator=(const JsWatchdog&) = delete;
+
+  void arm() noexcept;
+  void disarm() noexcept;
 
   [[nodiscard]] QJSValue call(QJSValue& fn, const QJSValueList& args);
   [[nodiscard]] QJSValue call(QJSValue& fn, QJSValue thisObj, const QJSValueList& args);
@@ -47,9 +50,13 @@ public:
 
   [[nodiscard]] bool lastCallTimedOut() const noexcept;
 
+  [[nodiscard]] QJSEngine* engine() const noexcept;
+  [[nodiscard]] qint64 deadlineNs() const noexcept;
+
 private:
   QJSEngine* m_engine;
-  QTimer m_timer;
+  std::atomic<qint64> m_deadlineNs;
+  int m_budgetMs;
   QString m_tag;
   bool m_lastTimedOut;
 };

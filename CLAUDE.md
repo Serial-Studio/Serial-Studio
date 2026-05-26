@@ -272,6 +272,15 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
     only (**not** `AllExtensions`). Watchdog: **always route through
     `IScriptEngine::guardedCall()`**; never call `parseFunction.call()` directly.
   - `LuaScriptEngine` — Lua 5.4 (`lib/lua/lua54`), one `lua_State*` per source.
+- **JS interruption is cross-thread.** A `QTimer` on the thread running `QJSValue::call()`
+  can never fire — the event loop is blocked while the script runs (this was a real,
+  shipped no-op against `while(true){}`). `JsWatchdogThread` (a dedicated `QThread` polling
+  armed `JsWatchdog`s every 20 ms) flips `setInterrupted(true)` from off-thread, which Qt
+  documents as thread-safe. Lua uses an in-engine `LUA_MASKCOUNT` hook + `QDeadlineTimer`
+  instead. Every JS engine (parser, transform, Painter, Output, MQTT) holds a `JsWatchdog`
+  that registers with the thread; `arm()`/`disarm()` are lock-free atomic-deadline stores
+  safe on the hotpath. **`setInterrupted(true)` may appear only in `JsWatchdogThread.cpp`**
+  — `code-verify.py:js-interrupt-off-thread` blocks it anywhere else.
 - Per-source `frameParserLanguage` ("javascript" | "lua") picks the engine at
   `compileFrameParser()`. Templates in `app/rcc/scripts/{js,lua}/` + `templates.json`.
 
@@ -292,10 +301,12 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   `lua_pcall` / `QJSValue::call`. Single-arg transforms skip the info table / object
   allocation: `acceptsInfo` is detected at compile time via `lua_getinfo(">u")` (Lua) and
   `function.length` (JS) and stored on the per-dataset ref.
-- **JS watchdog is frame-level**, not per-call. `applyDatasetValues` arms
-  `m_jsTransformWatchdog` once if a JS engine exists for the source, runs the dataset loop,
-  and disarms it. The 100 ms budget covers the whole frame's transforms collectively.
-  `applyTransformJs` no longer touches the timer.
+- **JS watchdog is frame-level**, not per-call. `applyDatasetValues` arms the active source's
+  per-engine watchdog (`m_jsEngineForSource->jsWatchdog->arm()`) once, runs the dataset loop,
+  and disarms it. The 100 ms budget covers the whole frame's transforms collectively, and the
+  interrupt is delivered off-thread by `JsWatchdogThread` (see Frame Parser). On timeout
+  `applyTransformJs` sets `m_jsTransformTimedOut`; the user-facing notification is posted once
+  from the main thread after the loop, never from the watchdog thread.
 - Non-finite numeric results are rejected (`[[unlikely]]` guarded) and `rawValue` is returned.
 - **Editor**: `DatasetTransformEditor` prefills a multiline-comment placeholder when the
   dataset has no transform; `onApply` discards code that doesn't define `transform()` via
@@ -387,7 +398,7 @@ the style sections below — don't restate.
 | `Per-dataset transformCode` with a leftover placeholder | `DatasetTransformEditor::onApply` discards code that doesn't define `transform()`. |
 | `std::make_shared<DataModel::TimestampedFrame>(...)` directly on the FrameBuilder hotpath | Use `acquireFrame(src)` / `acquireFrame(src, ts)`. Direct `make_shared` bypasses the slot pool and brings back per-frame heap allocs. |
 | Treating `CapturedData::data` as a smart pointer (`*data->data`, `data->data->size()`, `if (!data->data)`) | It's a `QByteArray` now. Use `data->data`, `data->data.size()`, `data->data.isEmpty()`. The shared_ptr indirection was removed because `QByteArray` is already COW with atomic refcount. |
-| Per-call `m_jsTransformWatchdog.start()/stop()` inside `applyTransformJs` | The watchdog is armed once per frame in `applyDatasetValues`. Don't reintroduce per-call timer churn. |
+| Driving `setInterrupted(true)` from a `QTimer` on the thread that runs `QJSValue::call()` | The event loop is blocked during the call, so the timer never fires — the original watchdog no-op. Arm a `DataModel::JsWatchdog`; only `JsWatchdogThread` flips the flag (off-thread). `code-verify.py:js-interrupt-off-thread` blocks `setInterrupted(true)` outside `JsWatchdogThread.cpp`. |
 | Running heavy work synchronously inside a `QFileDialog::fileSelected` slot (open another dialog, parse a file, mutate model) | On macOS `fileSelected` fires from inside `QFileDialog::done()`, which runs from an NSSavePanel KVO callback (`ViewBridge`/`NSRemoteViewMarshal`). Re-entering Qt synchronously can leave the `WA_DeleteOnClose` dialog deleted under the panel and crash on return. **Always wrap the body in `QMetaObject::invokeMethod(this, [...] { ... }, Qt::QueuedConnection)`** so `done()` unwinds first. Same applies to slots calling `dialog->deleteLater()` — defer the *work*, not just the deletion. |
 | Bundled scope creep — slipping an unrelated bug-fix, "small cleanup", rename, or import-sort into the same diff as the user's actual ask | Name it in chat first ("noticed X — want it in this pass?"). Every unrelated file you touch costs the reviewer an audit pass, and "all the changes were individually correct" doesn't restore the trust the surprise diff cost. The user can always say yes; they can't say no after the fact. |
 

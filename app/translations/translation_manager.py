@@ -26,6 +26,13 @@ import argparse
 import tempfile
 from contextlib import contextmanager
 
+# Directories pruned during source collection. The walk root resolves to the
+# repo root, so without this lupdate would harvest generated .cpp/.h/.qml from
+# build trees (moc_*, qrc_*, ui_*, copied QML) and duplicate them into the .ts
+# files. Names are matched exactly; anything starting with "build" is also
+# skipped to cover cmake-build-* and build-<kit> variants.
+EXCLUDED_DIRS = {".git", ".vs", "qm", "out", "cmake-build-debug", "cmake-build-release"}
+
 
 @contextmanager
 def _sources_response_file(sources):
@@ -150,14 +157,20 @@ def collect_sources(app_dir, lib_dir):
     Collect all relevant .cpp, .h, and .qml files from app and lib directories.
     """
     app_sources = []
-    for root, _, files in os.walk(app_dir):
+    for root, dirs, files in os.walk(app_dir):
+        dirs[:] = [
+            d for d in dirs if d not in EXCLUDED_DIRS and not d.startswith("build")
+        ]
         for file in files:
             if file.endswith((".cpp", ".h", ".qml")):
                 app_sources.append(os.path.join(root, file))
 
     lib_sources = []
     if os.path.exists(lib_dir):
-        for root, _, files in os.walk(lib_dir):
+        for root, dirs, files in os.walk(lib_dir):
+            dirs[:] = [
+                d for d in dirs if d not in EXCLUDED_DIRS and not d.startswith("build")
+            ]
             for file in files:
                 if file.endswith((".cpp", ".h")):
                     lib_sources.append(os.path.join(root, file))

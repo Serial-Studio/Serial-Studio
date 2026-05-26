@@ -161,41 +161,92 @@ Expected output:
 
 ### Port Configuration
 
-Currently, the API Server uses **port 7777** by default. This port is:
+Currently, the API Server uses **port 7777** by default. By default this port is:
 - **Localhost-only**: Only accepts connections from 127.0.0.1 (same machine)
-- **No authentication**: Anyone with local access can connect
+- **No authentication**: Any local process can connect
 
-> **Note**: Future versions may support custom ports and authentication.
+When external connections are enabled, the server binds to all interfaces and non-loopback clients must authenticate with an access token. See [Authentication for External Connections](#authentication-for-external-connections).
+
+> **Note**: Future versions may support custom ports.
 
 ## Security Considerations
 
-### Localhost Only
+### Localhost By Default
 
-The API Server **only accepts connections from 127.0.0.1** (localhost). It is:
+By default, the API Server **only accepts connections from 127.0.0.1** (localhost). In this default configuration it is:
 - ✅ **Safe** for local development and automation
 - ✅ **Isolated** from network attacks
 - ❌ **Not accessible** from other machines
-- ❌ **No remote access** by default
+- ❌ **No remote access**
 
-The API server binds exclusively to **127.0.0.1 (localhost)** and is **not accessible from the network**. This is by design for security.
+This is the recommended configuration for most users. Remote access is opt-in: enabling **Allow External API Connections** binds the server to all interfaces and requires non-loopback clients to authenticate (see [Authentication for External Connections](#authentication-for-external-connections)).
 
-### No Authentication
+### Authentication
 
-Currently, the API Server has **no authentication mechanism**:
-- Anyone with local access can connect
-- No username/password required
-- No API keys or tokens
+By default the server binds to localhost only and requires **no authentication** -- any local process can connect. This is safe on single-user machines; on shared or multi-user systems, remember that any local process can control Serial Studio.
+
+When **external connections** are enabled, the server also accepts connections from other machines. To keep that exposure safe, **every non-loopback client must authenticate with an access token** before any command or raw data is honored. Loopback (127.0.0.1 / ::1) clients are always exempt, so existing local tooling keeps working unchanged.
 
 **Implications:**
-- Safe on single-user machines
-- Consider security implications on shared/multi-user systems
-- Malicious local processes could control Serial Studio
+- Safe on single-user machines in the default (localhost-only) configuration
+- On shared/multi-user systems, any local process can control Serial Studio
+- Enabling external connections exposes port 7777 to your network; the token is the only barrier, so keep it secret and disable external access when it is not needed
 
-**Important:**
-- The API has **no authentication** - any local process can connect
-- Anyone with local access can control Serial Studio
-- Do not expose port 7777 to external networks
-- Use firewall rules to block external access if needed
+### Authentication for External Connections
+
+The access token gate applies **only to non-loopback clients** and **only when external connections are enabled**. Local (loopback) clients never need a token, so scripts running on the same machine are unaffected.
+
+**Where to find the token**
+
+1. Open **Preferences -> Miscellaneous**.
+2. Enable **Allow External API Connections**.
+3. The **API Access Token** field shows a 64-character hexadecimal token. Use the refresh button beside it to issue a new token. Regenerating leaves already-authenticated sessions connected; new connections must use the new token.
+
+The token is generated automatically the first time external connections are enabled and persists across restarts.
+
+**How a client authenticates**
+
+A non-loopback client must send an auth handshake as its **first line**, before any other command:
+
+```json
+{"type":"auth","token":"<your-token>"}
+```
+
+On success the server replies, and the connection stays authenticated for its lifetime:
+
+```json
+{"type":"response","success":true,"result":{"authenticated":true}}
+```
+
+Any command sent before authenticating is rejected with an `EXECUTION_ERROR` ("Authentication required"), and the connection is closed after a few failed attempts. Loopback clients skip this step entirely.
+
+**Example (Python)**
+
+```python
+import json
+import socket
+
+TOKEN = "paste-your-token-here"
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect(("192.168.1.50", 7777))  # the machine running Serial Studio
+
+# Authenticate first (required only for non-loopback connections).
+sock.sendall((json.dumps({"type": "auth", "token": TOKEN}) + "\n").encode())
+print(sock.recv(4096).decode())  # {"type":"response","success":true,...}
+
+# Now send commands as usual.
+status = {"type": "command", "id": "1", "command": "io.getStatus"}
+sock.sendall((json.dumps(status) + "\n").encode())
+print(sock.recv(65536).decode())
+sock.close()
+```
+
+> **Token storage.** The token is kept in cleartext in Serial Studio's
+> application settings, alongside other preferences. Treat it like a
+> password: anyone holding it with network access to port 7777 can control
+> Serial Studio. Regenerate it if you suspect it leaked, and keep external
+> connections disabled unless you need them.
 
 ### Production Environments
 
@@ -256,7 +307,6 @@ wget http://example.com/script.py && python script.py
 ### Future Enhancements
 
 Planned security features (not yet implemented):
-- API key authentication
 - Per-command permissions
 - Connection logging
 - Rate limiting

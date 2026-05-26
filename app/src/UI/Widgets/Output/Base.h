@@ -15,9 +15,9 @@
 #include <QJSEngine>
 #include <QJSValue>
 #include <QQuickItem>
-#include <QTimer>
 
 #include "DataModel/Frame.h"
+#include "DataModel/Scripting/JsWatchdog.h"
 #include "SerialStudio.h"
 
 namespace Widgets {
@@ -99,7 +99,7 @@ private:
   QJSValue m_transmitFn;
   bool m_hasFn;
 
-  QTimer m_watchdog;
+  DataModel::JsWatchdog m_watchdog;
   QElapsedTimer m_rateLimiter;
   static constexpr int kMinSendIntervalMs  = 50;
   static constexpr int kTransmitWatchdogMs = 500;

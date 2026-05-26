@@ -350,6 +350,33 @@ Widgets.SmartDialog {
           }
 
           Label {
+            opacity: enabled ? 1 : 0.5
+            text: qsTr("API Access Token")
+            color: Cpp_ThemeManager.colors["text"]
+            enabled: _apiServer.checked && Cpp_API_Server.externalConnections
+          } RowLayout {
+            spacing: 2
+            opacity: enabled ? 1 : 0.5
+            enabled: _apiServer.checked && Cpp_API_Server.externalConnections
+
+            Widgets.LineField {
+              readOnly: true
+              Layout.fillWidth: true
+              text: Cpp_API_Server.authToken
+              Layout.alignment: Qt.AlignVCenter
+            }
+
+            Widgets.IconButton {
+              Layout.fillWidth: false
+              Layout.maximumWidth: 24
+              Layout.maximumHeight: 24
+              Layout.alignment: Qt.AlignVCenter
+              icon.source: "qrc:/icons/buttons/refresh.svg"
+              onClicked: Cpp_API_Server.regenerateAuthToken()
+            }
+          }
+
+          Label {
             visible: Cpp_GrpcAvailable
             opacity: enabled ? 1 : 0.5
             enabled: _apiServer.checked

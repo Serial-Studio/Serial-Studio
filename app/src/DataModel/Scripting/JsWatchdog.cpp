@@ -21,24 +21,70 @@
 
 #include "DataModel/Scripting/JsWatchdog.h"
 
+#include <chrono>
 #include <QDebug>
+
+#include "DataModel/Scripting/JsWatchdogThread.h"
+
+//--------------------------------------------------------------------------------------------------
+// File-local helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the steady-clock reading in nanoseconds, matching the watchdog thread.
+ */
+static qint64 steadyNowNs()
+{
+  using namespace std::chrono;
+  return duration_cast<nanoseconds>(steady_clock::now().time_since_epoch()).count();
+}
 
 //--------------------------------------------------------------------------------------------------
 // Construction
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds a watchdog that interrupts the given engine after budgetMs.
+ * @brief Registers a watchdog that interrupts the given engine after budgetMs.
  */
 DataModel::JsWatchdog::JsWatchdog(QJSEngine* engine, int budgetMs, QString tag)
-  : m_engine(engine), m_tag(std::move(tag)), m_lastTimedOut(false)
+  : m_engine(engine)
+  , m_deadlineNs(0)
+  , m_budgetMs(budgetMs)
+  , m_tag(std::move(tag))
+  , m_lastTimedOut(false)
 {
   Q_ASSERT(engine != nullptr);
   Q_ASSERT(budgetMs > 0);
+  JsWatchdogThread::instance().registerWatchdog(this);
+}
 
-  m_timer.setSingleShot(true);
-  m_timer.setInterval(budgetMs);
-  QObject::connect(&m_timer, &QTimer::timeout, [this]() { m_engine->setInterrupted(true); });
+/**
+ * @brief Unregisters from the watchdog thread before the engine can be destroyed.
+ */
+DataModel::JsWatchdog::~JsWatchdog()
+{
+  JsWatchdogThread::instance().unregisterWatchdog(this);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Arm / disarm
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Clears any prior interrupt and publishes a fresh deadline; lock-free on the hotpath.
+ */
+void DataModel::JsWatchdog::arm() noexcept
+{
+  m_engine->setInterrupted(false);
+  m_deadlineNs.store(steadyNowNs() + qint64(m_budgetMs) * 1000000, std::memory_order_release);
+}
+
+/**
+ * @brief Retires the deadline so the watchdog thread stops watching this engine.
+ */
+void DataModel::JsWatchdog::disarm() noexcept
+{
+  m_deadlineNs.store(0, std::memory_order_release);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,16 +100,15 @@ QJSValue DataModel::JsWatchdog::call(QJSValue& fn, const QJSValueList& args)
   Q_ASSERT(m_engine != nullptr);
 
   m_lastTimedOut = false;
-  m_engine->setInterrupted(false);
-  m_timer.start();
+  arm();
   const auto result = fn.call(args);
-  m_timer.stop();
+  disarm();
 
   if (m_engine->isInterrupted()) [[unlikely]] {
     m_engine->setInterrupted(false);
     m_lastTimedOut = true;
     qWarning().noquote() << "[JsWatchdog]" << (m_tag.isEmpty() ? QStringLiteral("script") : m_tag)
-                         << "timed out after" << m_timer.interval() << "ms -- interrupted";
+                         << "timed out after" << m_budgetMs << "ms -- interrupted";
   }
 
   return result;
@@ -78,16 +123,15 @@ QJSValue DataModel::JsWatchdog::call(QJSValue& fn, QJSValue thisObj, const QJSVa
   Q_ASSERT(m_engine != nullptr);
 
   m_lastTimedOut = false;
-  m_engine->setInterrupted(false);
-  m_timer.start();
+  arm();
   const auto result = fn.callWithInstance(thisObj, args);
-  m_timer.stop();
+  disarm();
 
   if (m_engine->isInterrupted()) [[unlikely]] {
     m_engine->setInterrupted(false);
     m_lastTimedOut = true;
     qWarning().noquote() << "[JsWatchdog]" << (m_tag.isEmpty() ? QStringLiteral("script") : m_tag)
-                         << "timed out after" << m_timer.interval() << "ms -- interrupted";
+                         << "timed out after" << m_budgetMs << "ms -- interrupted";
   }
 
   return result;
@@ -102,16 +146,16 @@ QJSValue DataModel::JsWatchdog::call(QJSValue& fn, QJSValue thisObj, const QJSVa
  */
 int DataModel::JsWatchdog::budgetMs() const noexcept
 {
-  return m_timer.interval();
+  return m_budgetMs;
 }
 
 /**
- * @brief Updates the watchdog budget; takes effect on the next call().
+ * @brief Updates the watchdog budget; takes effect on the next arm().
  */
 void DataModel::JsWatchdog::setBudgetMs(int ms) noexcept
 {
   Q_ASSERT(ms > 0);
-  m_timer.setInterval(ms);
+  m_budgetMs = ms;
 }
 
 /**
@@ -120,4 +164,24 @@ void DataModel::JsWatchdog::setBudgetMs(int ms) noexcept
 bool DataModel::JsWatchdog::lastCallTimedOut() const noexcept
 {
   return m_lastTimedOut;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Watchdog-thread accessors
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the guarded engine; read by the watchdog thread under its lock.
+ */
+QJSEngine* DataModel::JsWatchdog::engine() const noexcept
+{
+  return m_engine;
+}
+
+/**
+ * @brief Returns the armed deadline in steady-clock ns, or 0 when disarmed.
+ */
+qint64 DataModel::JsWatchdog::deadlineNs() const noexcept
+{
+  return m_deadlineNs.load(std::memory_order_acquire);
 }

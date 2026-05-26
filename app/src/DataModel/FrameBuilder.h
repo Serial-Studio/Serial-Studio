@@ -38,6 +38,7 @@
 
 #include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
+#include "DataModel/Scripting/JsWatchdog.h"
 #include "IO/HAL_Driver.h"
 #include "SerialStudio.h"
 
@@ -119,6 +120,7 @@ private:
   struct TransformEngine {
     lua_State* luaState = nullptr;
     QJSEngine* jsEngine = nullptr;
+    std::unique_ptr<JsWatchdog> jsWatchdog;
     std::map<int, LuaTransformRef> luaRefs;
     std::map<int, JsTransformRef> jsRefs;
     QDeadlineTimer luaDeadline{QDeadlineTimer::Forever};
@@ -142,7 +144,7 @@ private:
   qint64 m_parseBudgetUsedNs;
   BudgetClock::time_point m_parseBudgetWindowStart;
 
-  QTimer m_jsTransformWatchdog;
+  bool m_jsTransformTimedOut;
   QStringList m_channelScratch;
   QStringList m_quickPlotChannelNames;
 

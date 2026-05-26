@@ -276,6 +276,7 @@ set(SOURCES
   src/DataModel/Scripting/FrameParser.cpp
   src/DataModel/Scripting/JsScriptEngine.cpp
   src/DataModel/Scripting/JsWatchdog.cpp
+  src/DataModel/Scripting/JsWatchdogThread.cpp
   src/DataModel/Scripting/LuaScriptEngine.cpp
   src/DataModel/Scripting/LuaCompat.cpp
   src/DataModel/Scripting/DashboardApi.cpp
@@ -392,6 +393,7 @@ set(HEADERS
   src/DataModel/Scripting/IScriptEngine.h
   src/DataModel/Scripting/JsScriptEngine.h
   src/DataModel/Scripting/JsWatchdog.h
+  src/DataModel/Scripting/JsWatchdogThread.h
   src/DataModel/Scripting/LuaScriptEngine.h
   src/DataModel/Scripting/LuaCompat.h
   src/DataModel/Scripting/DashboardApi.h

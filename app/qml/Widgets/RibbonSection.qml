@@ -167,10 +167,27 @@ RowLayout {
     padding: 8
     modal: false
     y: root.height
-    x: Cpp_Misc_Translator.rtl
-       ? collapsedBtn.x + collapsedBtn.width - width
-       : collapsedBtn.x
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+    //
+    // Left-align with the collapsed button (mirrored in RTL), then clamp so the
+    // popup never spills past a window edge when the section sits near the edge.
+    //
+    x: {
+      var base = Cpp_Misc_Translator.rtl
+                 ? collapsedBtn.x + collapsedBtn.width - width
+                 : collapsedBtn.x
+
+      var winWidth = root.Window.width
+      if (winWidth <= 0)
+        return base
+
+      var margin = 8
+      var offset = root.mapToItem(null, 0, 0).x
+      var maxX = winWidth - margin - width - offset
+      var minX = margin - offset
+      return Math.max(minX, Math.min(base, maxX))
+    }
 
     background: Item {
       Rectangle {
@@ -200,9 +217,7 @@ RowLayout {
         height: 8
         opacity: 0.95
         x: {
-          var center = Cpp_Misc_Translator.rtl
-                       ? parent.width - collapsedBtn.width / 2 - 8
-                       : collapsedBtn.width / 2 - 8
+          var center = collapsedBtn.x + collapsedBtn.width / 2 - sectionPopup.x - 8
           return Math.max(4, Math.min(center, parent.width - 20))
         }
         y: -7

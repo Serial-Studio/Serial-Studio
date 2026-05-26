@@ -31,15 +31,11 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   , m_title(config.title)
   , m_txEncoding(static_cast<SerialStudio::TextEncoding>(config.txEncoding))
   , m_hasFn(false)
+  , m_watchdog(&m_jsEngine, kTransmitWatchdogMs, QStringLiteral("transmit"))
 {
   // Inject protocol helper functions before compiling user code
   m_rateLimiter.start();
   installProtocolHelpers(m_jsEngine);
-
-  // Arm the watchdog timer -- flips the interrupt flag to unwind runaway transmit scripts
-  m_watchdog.setSingleShot(true);
-  m_watchdog.setInterval(kTransmitWatchdogMs);
-  connect(&m_watchdog, &QTimer::timeout, this, [this]() { m_jsEngine.setInterrupted(true); });
 
   // Compile the user's transmit function
   if (!config.transmitFunction.isEmpty()) {
@@ -169,20 +165,13 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
   if (!m_hasFn)
     return {};
 
-  // Arm the watchdog so a runaway user script cannot hang the UI thread
-  m_jsEngine.setInterrupted(false);
-  m_watchdog.start();
-
-  // Invoke the JS function with the widget value
-  auto jsValue = m_jsEngine.toScriptValue(value);
-  auto result  = m_transmitFn.call(QJSValueList{jsValue});
-
-  // Disarm the watchdog once the script returns (or is interrupted)
-  m_watchdog.stop();
+  // Invoke the JS function with the widget value under the cross-thread watchdog
+  auto jsValue      = m_jsEngine.toScriptValue(value);
+  QJSValueList args = QJSValueList{jsValue};
+  auto result       = m_watchdog.call(m_transmitFn, args);
 
   // Report runaway-script interruption and drop the result
-  if (m_jsEngine.isInterrupted()) [[unlikely]] {
-    m_jsEngine.setInterrupted(false);
+  if (m_watchdog.lastCallTimedOut()) [[unlikely]] {
     Q_EMIT transmitError(tr("Transmit script timed out after %1 ms").arg(kTransmitWatchdogMs));
     return {};
   }

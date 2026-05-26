@@ -20,15 +20,15 @@
                     "ledHigh": 1,
                     "log": false,
                     "numericValue": 0,
-                    "plotMax": 50,
-                    "plotMin": -50,
+                    "plotMax": 20,
+                    "plotMin": -20,
                     "title": "X",
                     "uniqueId": 0,
                     "units": "",
                     "value": "",
                     "widget": "",
-                    "widgetMax": 50,
-                    "widgetMin": -50,
+                    "widgetMax": 20,
+                    "widgetMin": -20,
                     "xAxis": 2
                 },
                 {
@@ -47,15 +47,15 @@
                     "ledHigh": 1,
                     "log": false,
                     "numericValue": 0,
-                    "plotMax": 50,
-                    "plotMin": -50,
+                    "plotMax": 30,
+                    "plotMin": -30,
                     "title": "Y",
                     "uniqueId": 1,
                     "units": "",
                     "value": "",
                     "widget": "",
-                    "widgetMax": 50,
-                    "widgetMin": -50,
+                    "widgetMax": 30,
+                    "widgetMin": -30,
                     "xAxis": 2
                 },
                 {
@@ -75,14 +75,14 @@
                     "log": false,
                     "numericValue": 0,
                     "plotMax": 50,
-                    "plotMin": -50,
+                    "plotMin": 0,
                     "title": "Z",
                     "uniqueId": 2,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 50,
-                    "widgetMin": -50,
+                    "widgetMin": 0,
                     "xAxis": 1
                 }
             ],
@@ -108,15 +108,15 @@
                     "ledHigh": 1,
                     "log": false,
                     "numericValue": 0,
-                    "plotMax": 50,
-                    "plotMin": -50,
+                    "plotMax": 20,
+                    "plotMin": -20,
                     "title": "X",
                     "uniqueId": 10000,
                     "units": "",
                     "value": "",
                     "widget": "x",
-                    "widgetMax": 50,
-                    "widgetMin": -50,
+                    "widgetMax": 20,
+                    "widgetMin": -20,
                     "xAxis": 2
                 },
                 {
@@ -135,15 +135,15 @@
                     "ledHigh": 1,
                     "log": false,
                     "numericValue": 0,
-                    "plotMax": 50,
-                    "plotMin": -50,
+                    "plotMax": 30,
+                    "plotMin": -30,
                     "title": "Y",
                     "uniqueId": 10001,
                     "units": "",
                     "value": "",
                     "widget": "y",
-                    "widgetMax": 50,
-                    "widgetMin": -50,
+                    "widgetMax": 30,
+                    "widgetMin": -30,
                     "xAxis": 3
                 },
                 {
@@ -163,14 +163,14 @@
                     "log": false,
                     "numericValue": 0,
                     "plotMax": 50,
-                    "plotMin": -50,
+                    "plotMin": 0,
                     "title": "Z",
                     "uniqueId": 10002,
                     "units": "",
                     "value": "",
                     "widget": "z",
                     "widgetMax": 50,
-                    "widgetMin": -50,
+                    "widgetMin": 0,
                     "xAxis": 1
                 }
             ],
@@ -220,7 +220,7 @@
             "decoderMethod": 0,
             "frameDetection": 0,
             "frameEnd": "\\n",
-            "frameParserCode": "-- Robust CSV numeric parser\n-- - Splits by provided separator (from source config)\n-- - Converts numeric fields with tonumber()\n-- - Returns {} to skip invalid/empty frames\n\nfunction parse(frame, separator)\n  if not frame or frame == \"\" then\n    return {}\n  end\n\n  separator = separator or \",\"\n  local out = {}\n\n  -- Build a safe Lua pattern class for 1-char separators\n  local sep = separator\n  if #sep == 1 then\n    -- escape magic characters inside character class\n    if sep:match(\"[%^%-%]%[]\") then\n      sep = \"%\" .. sep\n    end\n    for token in frame:gmatch(\"([^\" .. sep .. \"]+)\") do\n      local v = tonumber(token)\n      out[#out + 1] = v ~= nil and v or token\n    end\n  else\n    -- Fallback for multi-char separators (rare): manual scan\n    local start = 1\n    while true do\n      local i = frame:find(separator, start, true)\n      if i then\n        local token = frame:sub(start, i - 1)\n        local v = tonumber(token)\n        out[#out + 1] = v ~= nil and v or token\n        start = i + #separator\n      else\n        local token = frame:sub(start)\n        local v = tonumber(token)\n        out[#out + 1] = v ~= nil and v or token\n        break\n      end\n    end\n  end\n\n  -- Drop trailing empty tokens (e.g. \"1,2,3,\")\n  while #out > 0 and out[#out] == \"\" do\n    out[#out] = nil\n  end\n\n  -- Require at least 3 channels for your X/Y/Z groups\n  if #out < 3 then\n    return {}\n  end\n\n  return out\nend\n",
+            "frameParserCode": "--\n-- Comma-Separated Values (CSV) Parser\n--\n-- Parses comma-separated data into an array of values.\n--\n-- INPUT FORMAT: \"a,b,c,d,e,f\"\n-- OUTPUT ARRAY: {\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"}\n--\n-- Note: Frame delimiters are automatically removed by Serial Studio.\n--\n\nfunction parse(frame)\n  local result = {}\n  local start = 1\n  while true do\n    local sep = frame:find(\",\", start, true)\n    if sep then\n      result[#result + 1] = frame:sub(start, sep - 1)\n      start = sep + 1\n    else\n      result[#result + 1] = frame:sub(start)\n      return result\n    end\n  end\nend\n",
             "frameParserLanguage": 1,
             "frameStart": "",
             "hexadecimalDelimiters": false,
@@ -267,95 +267,6 @@
                     {
                         "relativeIndex": 0,
                         "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 6
-                    }
-                ]
-            }
-        },
-        "layout:1001": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 477,
-                "canvasWidth": 974,
-                "geometries": [
-                    {
-                        "height": 235,
-                        "id": 0,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 2,
-                        "width": 483,
-                        "x": 4,
-                        "y": 4
-                    },
-                    {
-                        "height": 235,
-                        "id": 2,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 9,
-                        "width": 483,
-                        "x": 486,
-                        "y": 4
-                    },
-                    {
-                        "height": 235,
-                        "id": 3,
-                        "relativeIndex": 1,
-                        "state": "normal",
-                        "widgetType": 9,
-                        "width": 322,
-                        "x": 4,
-                        "y": 238
-                    },
-                    {
-                        "height": 235,
-                        "id": 4,
-                        "relativeIndex": 2,
-                        "state": "normal",
-                        "widgetType": 9,
-                        "width": 322,
-                        "x": 325,
-                        "y": 238
-                    },
-                    {
-                        "height": 235,
-                        "id": 1,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 6,
-                        "width": 322,
-                        "x": 646,
-                        "y": 238
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    0,
-                    2,
-                    3,
-                    4,
-                    1
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 2
-                    },
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 9
-                    },
-                    {
-                        "relativeIndex": 1,
-                        "widgetType": 9
-                    },
-                    {
-                        "relativeIndex": 2,
-                        "widgetType": 9
                     },
                     {
                         "relativeIndex": 0,
@@ -434,35 +345,6 @@
                     {
                         "relativeIndex": 2,
                         "widgetType": 9
-                    }
-                ]
-            }
-        },
-        "layout:1003": {
-            "data": {
-                "autoLayout": true,
-                "canvasHeight": 477,
-                "canvasWidth": 974,
-                "geometries": [
-                    {
-                        "height": 469,
-                        "id": 1,
-                        "relativeIndex": 0,
-                        "state": "normal",
-                        "widgetType": 6,
-                        "width": 966,
-                        "x": 4,
-                        "y": 4
-                    }
-                ],
-                "userReordered": false,
-                "windowOrder": [
-                    1
-                ],
-                "windowOrderTyped": [
-                    {
-                        "relativeIndex": 0,
-                        "widgetType": 6
                     }
                 ]
             }
