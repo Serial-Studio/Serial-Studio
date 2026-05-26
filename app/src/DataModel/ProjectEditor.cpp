@@ -3173,25 +3173,20 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
   plotItem->setData(tr("Plot data in real-time"), ParameterDescription);
   model->appendRow(plotItem);
 
-  // X-axis source
-  const auto& groups = DataModel::ProjectModel::instance().groups();
-  int xAxisIdx       = 0;
-  for (const auto& group : groups) {
-    for (const auto& d : group.datasets) {
-      if (d.index == m_selectedDataset.xAxisId) {
-        xAxisIdx = d.index;
-        break;
-      }
-    }
-
-    if (xAxisIdx != 0)
+  // X-axis source -- xAxisId stores a dataset uniqueId; translate via the parallel list.
+  const auto xUids  = DataModel::ProjectModel::instance().xDataSourceUniqueIds();
+  int xAxisComboPos = 0;
+  for (int i = 0; i < xUids.size(); ++i) {
+    if (xUids.at(i) == m_selectedDataset.xAxisId) {
+      xAxisComboPos = i;
       break;
+    }
   }
 
   auto* xAxisItem = new QStandardItem();
   xAxisItem->setEditable(dataset.plt);
   xAxisItem->setData(ComboBox, WidgetType);
-  xAxisItem->setData(xAxisIdx, EditableValue);
+  xAxisItem->setData(xAxisComboPos, EditableValue);
   xAxisItem->setData(xAxisItem->isEditable(), Active);
   xAxisItem->setData(DataModel::ProjectModel::instance().xDataSources(), ComboBoxData);
   xAxisItem->setData(kDatasetView_xAxis, ParameterType);
@@ -4048,9 +4043,13 @@ void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
   const auto value = item->data(EditableValue);
 
   switch (id) {
-    case kDatasetView_xAxis:
-      dataset.xAxisId = value.toInt();
+    case kDatasetView_xAxis: {
+      // Translate ComboBox position -> dataset uniqueId; -1 at position 0 = "Samples".
+      const auto xUids = DataModel::ProjectModel::instance().xDataSourceUniqueIds();
+      const int pos    = value.toInt();
+      dataset.xAxisId  = (pos >= 0 && pos < xUids.size()) ? xUids.at(pos) : -1;
       break;
+    }
     case kDatasetView_PltMin:
       dataset.pltMin = value.toDouble();
       break;
@@ -5044,7 +5043,7 @@ QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
 
   for (const auto& group : groups) {
     for (const auto& ds : group.datasets) {
-      const int uid = DataModel::dataset_unique_id(group.sourceId, ds.groupId, ds.datasetId);
+      const int uid = ds.uniqueId;
 
       QVariantMap row;
       row["uniqueId"]   = uid;
@@ -5126,7 +5125,7 @@ QHash<qint64, DataModel::ProjectEditor::ResolvedWidget> DataModel::ProjectEditor
       ResolvedWidget entry;
       entry.groupTitle   = g.title;
       entry.datasetTitle = QString();
-      lookup.insert(workspaceWidgetKey(typeKey, g.groupId, relIdx), entry);
+      lookup.insert(workspaceWidgetKey(typeKey, g.uniqueId, relIdx), entry);
     }
 
     const auto recordDatasetWidget = [&](const DataModel::Dataset& ds,
@@ -5138,7 +5137,7 @@ QHash<qint64, DataModel::ProjectEditor::ResolvedWidget> DataModel::ProjectEditor
       ResolvedWidget entry;
       entry.groupTitle   = g.title;
       entry.datasetTitle = ds.title;
-      lookup.insert(workspaceWidgetKey(typeKey, g.groupId, relIdx), entry);
+      lookup.insert(workspaceWidgetKey(typeKey, g.uniqueId, relIdx), entry);
     };
 
     const auto walkDatasetWidgets = [&](const DataModel::Dataset& ds) {
@@ -5164,7 +5163,7 @@ QHash<qint64, DataModel::ProjectEditor::ResolvedWidget> DataModel::ProjectEditor
       ResolvedWidget entry;
       entry.groupTitle   = g.title;
       entry.datasetTitle = QString();
-      lookup.insert(workspaceWidgetKey(typeKey, g.groupId, relIdx), entry);
+      lookup.insert(workspaceWidgetKey(typeKey, g.uniqueId, relIdx), entry);
     }
   }
 
@@ -5195,13 +5194,13 @@ QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) cons
     row["widgetType"]     = ref.widgetType;
     row["widgetTypeName"] = SerialStudio::dashboardWidgetTitle(
       static_cast<SerialStudio::DashboardWidget>(ref.widgetType));
-    row["groupId"]       = ref.groupId;
+    row["groupId"]       = ref.groupUniqueId;
     row["relativeIndex"] = ref.relativeIndex;
     row["groupTitle"]    = QString();
     row["datasetTitle"]  = QString();
 
     const auto it =
-      lookup.constFind(workspaceWidgetKey(ref.widgetType, ref.groupId, ref.relativeIndex));
+      lookup.constFind(workspaceWidgetKey(ref.widgetType, ref.groupUniqueId, ref.relativeIndex));
     if (it != lookup.constEnd()) {
       row["groupTitle"]   = it->groupTitle;
       row["datasetTitle"] = it->datasetTitle;
@@ -5233,7 +5232,7 @@ bool DataModel::ProjectEditor::workspaceHasUnresolvedRefs(int workspaceId) const
 
   const auto lookup = buildResolvedWidgetLookup(pm);
   for (const auto& ref : wsIt->widgetRefs) {
-    const auto key = workspaceWidgetKey(ref.widgetType, ref.groupId, ref.relativeIndex);
+    const auto key = workspaceWidgetKey(ref.widgetType, ref.groupUniqueId, ref.relativeIndex);
     if (!lookup.contains(key))
       return true;
   }
@@ -5253,7 +5252,7 @@ int DataModel::ProjectEditor::unresolvedWorkspaceWidgetCount() const
   int count = 0;
   for (const auto& ws : wsList) {
     for (const auto& ref : ws.widgetRefs) {
-      const auto key = workspaceWidgetKey(ref.widgetType, ref.groupId, ref.relativeIndex);
+      const auto key = workspaceWidgetKey(ref.widgetType, ref.groupUniqueId, ref.relativeIndex);
       if (!lookup.contains(key))
         ++count;
     }

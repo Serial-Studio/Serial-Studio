@@ -129,10 +129,10 @@ struct ParsedWidgetId {
     QJsonObject entry;
     entry[QStringLiteral("widgetType")]     = r.widgetType;
     entry[QStringLiteral("widgetTypeSlug")] = API::EnumLabels::dashboardWidgetSlug(r.widgetType);
-    entry[QStringLiteral("groupId")]        = r.groupId;
+    entry[QStringLiteral("groupId")]        = r.groupUniqueId;
     entry[QStringLiteral("relativeIndex")]  = r.relativeIndex;
     entry[QStringLiteral("widgetId")] =
-      widgetIdFor(workspaceId, r.widgetType, r.groupId, r.relativeIndex);
+      widgetIdFor(workspaceId, r.widgetType, r.groupUniqueId, r.relativeIndex);
     arr.append(entry);
   }
 
@@ -390,7 +390,7 @@ struct ParsedWidgetId {
  * @brief Computes the dashboard-level relativeIndex for (widgetType, groupId).
  */
 [[nodiscard]] static int dashboardRelativeIndexFor(const std::vector<DataModel::Group>& groups,
-                                                   int targetGroupId,
+                                                   int targetGroupUniqueId,
                                                    SerialStudio::DashboardWidget wtype,
                                                    int targetDatasetId = -1)
 {
@@ -401,7 +401,7 @@ struct ParsedWidgetId {
 
   int counter = 0;
   for (const auto& group : groups) {
-    if (group.groupId != targetGroupId) {
+    if (group.uniqueId != targetGroupUniqueId) {
       counter += groupContribution(group, wtype, isLed, isGroupShape, isDatasetShape, pro);
       continue;
     }
@@ -461,19 +461,32 @@ void API::Handlers::WorkspacesHandler::registerWorkspaceCrudCommands()
     &add);
   registry.registerCommand(
     QStringLiteral("project.workspace.delete"),
-    QStringLiteral("Delete a workspace (params: id)"),
-    API::makeSchema({
-      {QStringLiteral("id"), QStringLiteral("integer"), QStringLiteral("Workspace id")}
-  }),
+    QStringLiteral("Delete a workspace by id. Pass dryRun:true to preview the workspace + "
+                   "widgetCount that would be removed without committing."),
+    API::makeSchema(
+      {
+        {QStringLiteral("id"), QStringLiteral("integer"), QStringLiteral("Workspace id")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return what would be deleted without committing. "
+                       "Auto-runs without an approval card.")}}),
     &remove);
   registry.registerCommand(
     QStringLiteral("project.workspace.clearAll"),
-    QStringLiteral("Wipe every workspace in one call (no params). Forces customize mode on and "
-                   "leaves an empty list. Use this instead of looping project.workspace.delete -- "
-                   "one approval card, one autosave flush. Follow with project.workspace."
+    QStringLiteral("Wipe every workspace in one call. Forces customize mode on and leaves an "
+                   "empty list. Use this instead of looping project.workspace.delete -- one "
+                   "approval card, one autosave flush. Follow with project.workspace."
                    "autoGenerate to restore the default Overview/AllData/per-group layout, or "
-                   "project.workspace.add + addWidget to build a custom layout."),
-    API::emptySchema(),
+                   "project.workspace.add + addWidget to build a custom layout. Pass dryRun:"
+                   "true to enumerate every workspace that would be removed before committing."),
+    API::makeSchema(
+      {
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return the list of workspaces that would be cleared. "
+                       "Auto-runs without an approval card.")}}),
     &clearAll);
   registry.registerCommand(
     QStringLiteral("project.workspace.rename"),
@@ -564,7 +577,7 @@ void API::Handlers::WorkspacesHandler::registerWidgetAddCommand()
        QStringLiteral("integer"),
        QStringLiteral("Workspace id from project.workspace.list. IDs 1000-4999 are "
        "auto-generated (Overview=1000, AllData=1001, per-group >= 1002); "
-       "user-created workspaces start at 5000.")                                             },
+       "user-created workspaces start at 5000.")                              },
       { QStringLiteral("widgetType"),
        QStringLiteral("string|integer"),
        QStringLiteral("Widget kind. PREFERRED form: a string slug -- 'plot', 'fft', "
@@ -573,10 +586,11 @@ void API::Handlers::WorkspacesHandler::registerWidgetAddCommand()
        "'output-panel' (Pro), 'notification-log' (Pro), 'waterfall' (Pro), "
        "'painter' (Pro). Integer DashboardWidget enum still accepted for "
        "back-compat (1=DataGrid, 2=MultiPlot, ... 9=Plot, 10=Bar, 11=Gauge, "
-       "12=Compass) but the strings are unambiguous and forwards-compatible.")               },
+       "12=Compass) but the strings are unambiguous and forwards-compatible.")},
       {    QStringLiteral("groupId"),
        QStringLiteral("integer"),
-       QStringLiteral("groupId from project.groups.list. Use group.id, NOT the array index.")},
+       QStringLiteral("Group.uniqueId from project.group.list (stable across reorders). "
+       "NOT the positional array index and NOT Group.groupId.")               },
   },
     {{QString(Keys::DatasetId),
       QStringLiteral("integer"),
@@ -636,7 +650,9 @@ void API::Handlers::WorkspacesHandler::registerWidgetRemoveCommand()
      {QStringLiteral("widgetType"),
       QStringLiteral("string|integer"),
       QStringLiteral("SerialStudio.DashboardWidget slug or enum (tuple form)")},
-     {QStringLiteral("groupId"), QStringLiteral("integer"), QStringLiteral("Source group id")},
+     {QStringLiteral("groupId"),
+      QStringLiteral("integer"),
+      QStringLiteral("Group.uniqueId (stable across reorders) of the source group")},
      {QStringLiteral("relativeIndex"),
       QStringLiteral("integer"),
       QStringLiteral("Relative widget index (tuple form)")}});
@@ -792,6 +808,8 @@ API::CommandResponse API::Handlers::WorkspacesHandler::remove(const QString& id,
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: id"));
 
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+
   auto& pm = DataModel::ProjectModel::instance();
   if (!pm.customizeWorkspaces())
     return CommandResponse::makeError(
@@ -800,11 +818,32 @@ API::CommandResponse API::Handlers::WorkspacesHandler::remove(const QString& id,
       QStringLiteral("customizeWorkspaces is off; call project.workspaces.customize.set first"));
 
   const int wid = params.value(QStringLiteral("id")).toInt();
-  pm.deleteWorkspace(wid);
+
+  // Snapshot target details pre-mutation so dryRun and real call return the same shape.
+  const auto& workspaces = pm.activeWorkspaces();
+  const auto it          = findWorkspace(workspaces, wid);
+  if (it == workspaces.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Workspace not found: %1").arg(wid));
+
+  QJsonObject deleted;
+  deleted[QStringLiteral("id")]          = it->workspaceId;
+  deleted[QStringLiteral("title")]       = it->title;
+  deleted[QStringLiteral("widgetCount")] = static_cast<int>(it->widgetRefs.size());
+
+  if (!isDryRun)
+    pm.deleteWorkspace(wid);
 
   QJsonObject result;
-  result[QStringLiteral("id")]      = wid;
-  result[QStringLiteral("deleted")] = true;
+  if (isDryRun) {
+    result[QStringLiteral("dryRun")] = true;
+    result[QStringLiteral("warning")] =
+      QStringLiteral("DRY RUN: workspace not deleted. Re-call without dryRun:true to commit.");
+  }
+
+  result[QStringLiteral("id")]        = wid;
+  result[QStringLiteral("deleted")]   = !isDryRun;
+  result[QStringLiteral("workspace")] = deleted;
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -814,23 +853,48 @@ API::CommandResponse API::Handlers::WorkspacesHandler::remove(const QString& id,
 API::CommandResponse API::Handlers::WorkspacesHandler::clearAll(const QString& id,
                                                                 const QJsonObject& params)
 {
-  Q_UNUSED(params)
-
   if (!inProjectFileMode())
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
-  auto& pm                = DataModel::ProjectModel::instance();
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+
+  auto& pm = DataModel::ProjectModel::instance();
+
+  // Summarise the affected workspaces so dryRun + real call return the same shape.
+  const auto& active = pm.activeWorkspaces();
+  QJsonArray wouldDelete;
+  for (const auto& ws : active) {
+    QJsonObject row;
+    row[QStringLiteral("id")]          = ws.workspaceId;
+    row[QStringLiteral("title")]       = ws.title;
+    row[QStringLiteral("widgetCount")] = static_cast<int>(ws.widgetRefs.size());
+    wouldDelete.append(row);
+  }
+
   const int previousCount = static_cast<int>(pm.editorWorkspaces().size());
-  pm.clearAllWorkspaces();
+  if (!isDryRun)
+    pm.clearAllWorkspaces();
 
   QJsonObject result;
-  result[QStringLiteral("cleared")]   = previousCount;
-  result[QStringLiteral("remaining")] = static_cast<int>(pm.editorWorkspaces().size());
-  result[QStringLiteral("hint")]      = QStringLiteral(
+  if (isDryRun) {
+    result[QStringLiteral("dryRun")] = true;
+    result[QStringLiteral("warning")] =
+      QStringLiteral("DRY RUN: nothing was cleared. Re-call without dryRun:true to commit. "
+                     "wouldDelete[] enumerates every workspace that would be removed.");
+    result[QStringLiteral("wouldDelete")] = wouldDelete;
+    result[QStringLiteral("cleared")]     = 0;
+    result[QStringLiteral("remaining")]   = previousCount;
+  } else {
+    result[QStringLiteral("cleared")]   = previousCount;
+    result[QStringLiteral("remaining")] = static_cast<int>(pm.editorWorkspaces().size());
+    result[QStringLiteral("deleted")]   = wouldDelete;
+  }
+
+  result[QStringLiteral("hint")] = QStringLiteral(
     "All workspaces removed; customize mode is on. Call project.workspace.autoGenerate "
-         "to recreate the default Overview/AllData/per-group layout, or build a custom layout "
-         "with project.workspace.add + project.workspace.addWidget.");
+    "to recreate the default Overview/AllData/per-group layout, or build a custom layout "
+    "with project.workspace.add + project.workspace.addWidget.");
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -1045,13 +1109,14 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetAdd(const QString& 
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace not found: %1").arg(wid));
 
+  // The MCP "groupId" is a Group.uniqueId (stable identity); reorders don't invalidate it.
   const auto& groups  = DataModel::ProjectModel::instance().groups();
   const auto group_it = std::find_if(
-    groups.begin(), groups.end(), [gid](const DataModel::Group& g) { return g.groupId == gid; });
+    groups.begin(), groups.end(), [gid](const DataModel::Group& g) { return g.uniqueId == gid; });
   if (group_it == groups.end())
     return CommandResponse::makeError(id,
                                       ErrorCode::InvalidParam,
-                                      QStringLiteral("Group not found: %1. Use group.id from "
+                                      QStringLiteral("Group not found: %1. Use uniqueId from "
                                                      "project.group.list, not the array index.")
                                         .arg(gid));
 
@@ -1213,9 +1278,9 @@ API::CommandResponse API::Handlers::WorkspacesHandler::validate(const QString& i
     ++workspaceCount;
     int refIndex = 0;
     for (const auto& ref : ws.widgetRefs) {
-      referencedGroups.insert(ref.groupId);
+      referencedGroups.insert(ref.groupUniqueId);
       const auto key = DataModel::ProjectEditor::workspaceWidgetKey(
-        ref.widgetType, ref.groupId, ref.relativeIndex);
+        ref.widgetType, ref.groupUniqueId, ref.relativeIndex);
       if (!lookup.contains(key)) {
         ++orphanedCount;
         ok = false;
@@ -1228,10 +1293,10 @@ API::CommandResponse API::Handlers::WorkspacesHandler::validate(const QString& i
         issue[QStringLiteral("widgetType")]  = ref.widgetType;
         issue[QStringLiteral("widgetTypeSlug")] =
           API::EnumLabels::dashboardWidgetSlug(ref.widgetType);
-        issue[QStringLiteral("groupId")]       = ref.groupId;
+        issue[QStringLiteral("groupId")]       = ref.groupUniqueId;
         issue[QStringLiteral("relativeIndex")] = ref.relativeIndex;
         issue[QStringLiteral("widgetId")] =
-          widgetIdFor(ws.workspaceId, ref.widgetType, ref.groupId, ref.relativeIndex);
+          widgetIdFor(ws.workspaceId, ref.widgetType, ref.groupUniqueId, ref.relativeIndex);
         issue[QStringLiteral("message")] =
           QStringLiteral("Widget ref does not resolve to any live group/dataset/widgetType");
         issues.append(issue);
@@ -1244,7 +1309,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::validate(const QString& i
   QJsonArray unreferenced;
   if (!filtered) {
     for (const auto& g : pm.groups()) {
-      if (!referencedGroups.contains(g.groupId)) {
+      if (!referencedGroups.contains(g.uniqueId)) {
         unreferenced.append(g.groupId);
         QJsonObject issue;
         issue[QStringLiteral("level")]    = QStringLiteral("warning");
@@ -1293,7 +1358,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::cleanup(const QString& id
 
     for (const auto& ref : ws.widgetRefs) {
       const auto key = DataModel::ProjectEditor::workspaceWidgetKey(
-        ref.widgetType, ref.groupId, ref.relativeIndex);
+        ref.widgetType, ref.groupUniqueId, ref.relativeIndex);
       if (lookup.contains(key))
         continue;
 
@@ -1302,10 +1367,10 @@ API::CommandResponse API::Handlers::WorkspacesHandler::cleanup(const QString& id
       entry[QStringLiteral("widgetType")]  = ref.widgetType;
       entry[QStringLiteral("widgetTypeSlug")] =
         API::EnumLabels::dashboardWidgetSlug(ref.widgetType);
-      entry[QStringLiteral("groupId")]       = ref.groupId;
+      entry[QStringLiteral("groupId")]       = ref.groupUniqueId;
       entry[QStringLiteral("relativeIndex")] = ref.relativeIndex;
       entry[QStringLiteral("widgetId")] =
-        widgetIdFor(ws.workspaceId, ref.widgetType, ref.groupId, ref.relativeIndex);
+        widgetIdFor(ws.workspaceId, ref.widgetType, ref.groupUniqueId, ref.relativeIndex);
       removedRefs.append(entry);
     }
   }

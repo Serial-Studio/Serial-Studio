@@ -754,15 +754,12 @@ void Sessions::Player::alignColumnsToProject()
   if (m_columnUniqueIds.empty())
     return;
 
-  // Recompute uniqueId locally (ProjectModel doesn't run finalize_frame)
+  // Datasets carry persisted uniqueIds; just index them.
   QMap<int, QPair<int, int>> uidToSrcIndex;
   const auto& groups = DataModel::ProjectModel::instance().groups();
-  for (const auto& g : groups) {
-    for (const auto& d : g.datasets) {
-      const int uid = DataModel::dataset_unique_id(g, d);
-      uidToSrcIndex.insert(uid, qMakePair(g.sourceId, d.index));
-    }
-  }
+  for (const auto& g : groups)
+    for (const auto& d : g.datasets)
+      uidToSrcIndex.insert(d.uniqueId, qMakePair(g.sourceId, d.index));
 
   // Bucket session columns by source so each source ends up index-sorted
   QMap<int, std::vector<QPair<int, int>>> bySource;
@@ -809,7 +806,7 @@ void Sessions::Player::pickSlotForDataset(const DataModel::Group& g,
                                           QHash<QPair<int, int>, int>& slotPick,
                                           QSet<QPair<int, int>>& slotPickIsTransformFree)
 {
-  const int uid = DataModel::dataset_unique_id(g, d);
+  const int uid = d.uniqueId;
   uidToSource.insert(uid, g.sourceId);
 
   if (d.index <= 0)

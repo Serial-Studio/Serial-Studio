@@ -787,9 +787,6 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
   const auto* channelData = channels.data();
   const int channelCount  = channels.size();
 
-  if (m_tableStore.isInitialized())
-    m_tableStore.resetComputedRegisters();
-
   // Refresh per-source engine cache on sourceId change -- one map lookup per rotation.
   if (info.sourceId != m_engineCacheSourceId) [[unlikely]] {
     m_engineCacheSourceId = info.sourceId;
@@ -926,6 +923,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
     DataModel::Dataset dataset;
     dataset.groupId   = 0;
     dataset.datasetId = idx - 1;
+    dataset.uniqueId  = dataset_unique_id(0, 0, idx - 1);
     dataset.index     = idx;
     dataset.plt       = false;
     dataset.value     = channel;
@@ -948,6 +946,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 
   DataModel::Group datagrid;
   datagrid.groupId  = 0;
+  datagrid.uniqueId = runtime_group_unique_id(0);
   datagrid.datasets = datasets;
   datagrid.title    = tr("Quick Plot Data");
   datagrid.widget   = QStringLiteral("datagrid");
@@ -959,11 +958,14 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
   if (datasets.size() > 1) {
     DataModel::Group multiplot;
     multiplot.groupId  = 1;
+    multiplot.uniqueId = runtime_group_unique_id(1);
     multiplot.datasets = datasets;
     multiplot.title    = tr("Multiple Plots");
     multiplot.widget   = QStringLiteral("multiplot");
-    for (size_t i = 0; i < multiplot.datasets.size(); ++i)
-      multiplot.datasets[i].groupId = 1;
+    for (size_t i = 0; i < multiplot.datasets.size(); ++i) {
+      multiplot.datasets[i].groupId  = 1;
+      multiplot.datasets[i].uniqueId = dataset_unique_id(0, 1, static_cast<int>(i));
+    }
 
     m_quickPlotFrame.groups.push_back(multiplot);
   }
@@ -1033,6 +1035,7 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
     dataset.plt             = !multipleChannels;
     dataset.groupId         = 0;
     dataset.datasetId       = index - 1;
+    dataset.uniqueId        = dataset_unique_id(0, 0, index - 1);
     dataset.index           = index;
     dataset.value           = channel;
     dataset.pltMax          = maxValue;
@@ -1056,6 +1059,7 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
   // Assemble audio group and frame
   DataModel::Group group;
   group.groupId  = 0;
+  group.uniqueId = runtime_group_unique_id(0);
   group.datasets = datasets;
   group.title    = tr("Audio Input");
   if (multipleChannels)

@@ -45,6 +45,7 @@
 #include "DataModel/Scripting/JsScriptEngine.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "IO/ConnectionManager.h"
+#include "Misc/BackupManager.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -135,8 +136,7 @@ static QJsonObject buildDatasetObject(const DataModel::Dataset& dataset,
   dataset_obj[QStringLiteral("groupId")]    = group.groupId;
   dataset_obj[QStringLiteral("groupTitle")] = group.title;
   dataset_obj[Keys::SourceId]               = dataset.sourceId;
-  dataset_obj[Keys::UniqueId] =
-    DataModel::dataset_unique_id(dataset.sourceId, group.groupId, dataset.datasetId);
+  dataset_obj[Keys::UniqueId]               = dataset.uniqueId;
 
   QStringList enabled;
   if (dataset.plt)
@@ -423,8 +423,15 @@ void API::Handlers::ProjectHandler::registerFileLifecycleCommands()
                    "loaded project. Use only when the user explicitly says \"start "
                    "over\" or \"new project\". For starting a TYPED project, prefer "
                    "project.template.apply -- it gives the user a useful skeleton "
-                   "instead of an empty canvas."),
-    empty,
+                   "instead of an empty canvas. Pass dryRun:true to see what the "
+                   "current project (wouldDiscard) looks like before wiping it."),
+    makeSchema(
+      {
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return wouldDiscard + wouldCreate summary without "
+                       "committing.")}}),
     &fileNew);
 
   registry.registerCommand(
@@ -441,12 +448,18 @@ void API::Handlers::ProjectHandler::registerFileLifecycleCommands()
     QStringLiteral("project.open"),
     QStringLiteral("Open a .ssproj or .json project file. Replaces the current project. "
                    "Auto-switches operationMode to ProjectFile if it was QuickPlot or "
-                   "ConsoleOnly. Path must be absolute."),
-    makeSchema({
-      {QStringLiteral("filePath"),
-       QStringLiteral("string"),
-       QStringLiteral("Absolute path to project file (.json or .ssproj)")}
-  }),
+                   "ConsoleOnly. Path must be absolute. Pass dryRun:true to read the "
+                   "file and return wouldDiscard + wouldApply summaries without loading."),
+    makeSchema(
+      {
+        {QStringLiteral("filePath"),
+         QStringLiteral("string"),
+         QStringLiteral("Absolute path to project file (.json or .ssproj)")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, parse the file and return its summary without "
+                       "loading.")}}),
     &fileOpen);
 
   registry.registerCommand(
@@ -478,12 +491,17 @@ void API::Handlers::ProjectHandler::registerFileLifecycleCommands()
                    "custom template. The JSON shape must match the .ssproj schema "
                    "(top-level: title, frameStart, frameEnd, frameDetection, decoder, "
                    "frameParser, groups, actions, ...). Prefer project.template.apply "
-                   "for canned starters."),
-    makeSchema({
-      {QStringLiteral("config"),
-       QStringLiteral("object"),
-       QStringLiteral("Full project JSON document")}
-  }),
+                   "for canned starters. Pass dryRun:true to return wouldDiscard + "
+                   "wouldApply summaries without loading."),
+    makeSchema(
+      {
+        {QStringLiteral("config"),
+         QStringLiteral("object"),
+         QStringLiteral("Full project JSON document")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, summarize the config without loading it.")}}),
     &loadFromJSON);
 }
 
@@ -566,14 +584,24 @@ void API::Handlers::ProjectHandler::registerGroupCommands()
   }),
     &groupAdd);
 
-  registry.registerCommand(QStringLiteral("project.group.delete"),
-                           QStringLiteral("Delete a group by id (params: groupId)"),
-                           makeSchema({
-                             {QStringLiteral("groupId"),
-                              QStringLiteral("integer"),
-                              QStringLiteral("Group id to delete")}
-  }),
-                           &groupDelete);
+  registry.registerCommand(
+    QStringLiteral("project.group.delete"),
+    QStringLiteral("Delete a group by id. Pass dryRun:true to preview what would change "
+                   "without committing -- the response contains the same {deleted, "
+                   "renumbered, warnings} fields as a real call, plus a top-level "
+                   "dryRun:true flag. Always preview before committing when the user "
+                   "doesn't have a backup workflow."),
+    makeSchema(
+      {
+        {QStringLiteral("groupId"),
+         QStringLiteral("integer"),
+         QStringLiteral("Group id to delete")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return the affected entities without committing. Auto-runs "
+                       "without an approval card.")}}),
+    &groupDelete);
 
   registry.registerCommand(QStringLiteral("project.group.duplicate"),
                            QStringLiteral("Duplicate a group by id (params: groupId)"),
@@ -669,11 +697,22 @@ void API::Handlers::ProjectHandler::registerDatasetLifecycleCommands()
 
   registry.registerCommand(
     QStringLiteral("project.dataset.delete"),
-    QStringLiteral("Delete a dataset by id (params: groupId, datasetId)"),
-    makeSchema({
-      {QStringLiteral("groupId"), QStringLiteral("integer"),             QStringLiteral("Owning group id")},
-      {          Keys::DatasetId, QStringLiteral("integer"), QStringLiteral("Dataset id within the group")}
-  }),
+    QStringLiteral("Delete a dataset by id. Pass dryRun:true to preview the renumbering "
+                   "without committing -- the response carries the same {deleted, "
+                   "renumbered, warnings} shape as a real call, plus a top-level "
+                   "dryRun:true flag. Always preview before committing when destructive "
+                   "intent is even slightly uncertain."),
+    makeSchema(
+      {
+        {QStringLiteral("groupId"),QStringLiteral("integer"),QStringLiteral("Owning group id")                    },
+        {          Keys::DatasetId,
+         QStringLiteral("integer"),
+         QStringLiteral("Dataset id within the group")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return the affected entities without committing. Auto-runs "
+                       "without an approval card.")}}),
     &datasetDelete);
 
   registry.registerCommand(
@@ -1236,15 +1275,21 @@ void API::Handlers::ProjectHandler::registerSnapshotAndMoveCommands()
     QStringLiteral("Reorder a dataset within its group. Changes datasetId (and therefore "
                    "uniqueId) for the moved dataset and any it crossed; workspace refs "
                    "re-anchor automatically. Scripts that pinned a uniqueId must be "
-                   "updated -- prefer dataset.getByPath in scripts."),
-    makeSchema({
-      {      QString(Keys::UniqueId),
-       QStringLiteral("integer"),
-       QStringLiteral("Dataset uniqueId to move.")                                     },
-      {QStringLiteral("newPosition"),
-       QStringLiteral("integer"),
-       QStringLiteral("New 0-based position within the group; clamped to valid range.")},
-  }),
+                   "updated -- prefer dataset.getByPath in scripts. Pass dryRun:true to "
+                   "preview the renumbering without committing."),
+    makeSchema(
+      {
+        {      QString(Keys::UniqueId),
+         QStringLiteral("integer"),
+         QStringLiteral("Dataset uniqueId to move.")                                     },
+        {QStringLiteral("newPosition"),
+         QStringLiteral("integer"),
+         QStringLiteral("New 0-based position within the group; clamped to valid range.")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return the affected entities without committing. Auto-runs "
+                       "without an approval card.")}}),
     &datasetMove);
 
   registry.registerCommand(
@@ -1252,13 +1297,18 @@ void API::Handlers::ProjectHandler::registerSnapshotAndMoveCommands()
     QStringLiteral("Reorder a group within the project. Changes groupId for the moved "
                    "group and any it crossed (which propagates to dataset uniqueIds). "
                    "Workspace refs re-anchor automatically; scripts pinning a uniqueId "
-                   "must be updated."),
-    makeSchema({
-      {       QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Group id to move.")                           },
-      {QStringLiteral("newPosition"),
-       QStringLiteral("integer"),
-       QStringLiteral("New 0-based position; clamped to valid range.")},
-  }),
+                   "must be updated. Pass dryRun:true to preview the renumbering."),
+    makeSchema(
+      {
+        {       QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Group id to move.")                           },
+        {QStringLiteral("newPosition"),
+         QStringLiteral("integer"),
+         QStringLiteral("New 0-based position; clamped to valid range.")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, return the affected entities without committing. Auto-runs "
+                       "without an approval card.")}}),
     &groupMove);
 }
 
@@ -1267,12 +1317,80 @@ void API::Handlers::ProjectHandler::registerSnapshotAndMoveCommands()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Summarise a serialised project JSON object for dryRun replies (no model mutation).
+ */
+static QJsonObject summarizeProjectJson(const QJsonObject& project)
+{
+  QJsonObject out;
+  out[QStringLiteral("title")] = project.value(QStringLiteral("title")).toString();
+
+  const auto groups                 = project.value(QStringLiteral("groups")).toArray();
+  out[QStringLiteral("groupCount")] = groups.size();
+
+  int datasetCount = 0;
+  QJsonArray groupTitles;
+  for (const auto& gv : groups) {
+    const auto g  = gv.toObject();
+    datasetCount += g.value(QStringLiteral("datasets")).toArray().size();
+    if (groupTitles.size() < 32)
+      groupTitles.append(g.value(QStringLiteral("title")).toString());
+  }
+  out[QStringLiteral("datasetCount")] = datasetCount;
+  out[QStringLiteral("groupTitles")]  = groupTitles;
+
+  const auto sources = project.value(QStringLiteral("sources")).toArray();
+  out[QStringLiteral("sourceCount")] =
+    sources.isEmpty() ? 1 : sources.size();  // legacy projects have no `sources` array
+  return out;
+}
+
+/**
+ * @brief Summarise the current ProjectModel for the `wouldDiscard` half of a dryRun reply.
+ */
+static QJsonObject summarizeCurrentProject()
+{
+  const auto& pm = DataModel::ProjectModel::instance();
+  QJsonObject out;
+  out[QStringLiteral("title")]        = pm.title();
+  out[QStringLiteral("groupCount")]   = pm.groupCount();
+  out[QStringLiteral("datasetCount")] = pm.datasetCount();
+  out[QStringLiteral("sourceCount")]  = pm.sourceCount();
+  out[QStringLiteral("filePath")]     = pm.jsonFilePath();
+
+  QJsonArray groupTitles;
+  for (const auto& g : pm.groups())
+    if (groupTitles.size() < 32)
+      groupTitles.append(g.title);
+
+  out[QStringLiteral("groupTitles")] = groupTitles;
+  return out;
+}
+
+/**
  * @brief Reset the active project to a blank slate.
  */
 API::CommandResponse API::Handlers::ProjectHandler::fileNew(const QString& id,
                                                             const QJsonObject& params)
 {
-  Q_UNUSED(params);
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+
+  if (isDryRun) {
+    QJsonObject wouldCreate;
+    wouldCreate[QStringLiteral("title")]        = QStringLiteral("Untitled Project");
+    wouldCreate[QStringLiteral("groupCount")]   = 0;
+    wouldCreate[QStringLiteral("datasetCount")] = 0;
+    wouldCreate[QStringLiteral("sourceCount")]  = 1;
+
+    QJsonObject result;
+    result[QStringLiteral("dryRun")]       = true;
+    result[QStringLiteral("wouldDiscard")] = summarizeCurrentProject();
+    result[QStringLiteral("wouldCreate")]  = wouldCreate;
+    result[QStringLiteral("warning")] =
+      QStringLiteral("DRY RUN: no project was reset. The current project (wouldDiscard) "
+                     "would be replaced by a blank one. Confirm before re-issuing without "
+                     "dryRun:true.");
+    return CommandResponse::makeSuccess(id, result);
+  }
 
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
   DataModel::ProjectModel::instance().newJsonFile();
@@ -1330,6 +1448,37 @@ API::CommandResponse API::Handlers::ProjectHandler::fileOpen(const QString& id,
   if (!API::isPathAllowed(file_path)) {
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
+  }
+
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+
+  if (isDryRun) {
+    QFile f(file_path);
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+      return CommandResponse::makeError(
+        id,
+        ErrorCode::OperationFailed,
+        QStringLiteral("DRY RUN: cannot read filePath '%1'").arg(file_path));
+
+    QJsonParseError err{};
+    const auto doc = QJsonDocument::fromJson(f.readAll(), &err);
+    f.close();
+    if (err.error != QJsonParseError::NoError || !doc.isObject())
+      return CommandResponse::makeError(
+        id,
+        ErrorCode::InvalidParam,
+        QStringLiteral("DRY RUN: filePath does not contain a valid project JSON object."));
+
+    QJsonObject result;
+    result[QStringLiteral("dryRun")]       = true;
+    result[QStringLiteral("filePath")]     = file_path;
+    result[QStringLiteral("wouldDiscard")] = summarizeCurrentProject();
+    result[QStringLiteral("wouldApply")]   = summarizeProjectJson(doc.object());
+    result[QStringLiteral("warning")] =
+      QStringLiteral("DRY RUN: no project was loaded. wouldDiscard shows what would be lost; "
+                     "wouldApply shows what would replace it. Confirm before re-issuing "
+                     "without dryRun:true.");
+    return CommandResponse::makeSuccess(id, result);
   }
 
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
@@ -1474,13 +1623,80 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& i
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
 
-  const auto preEpoch = captureProjectEpoch();
-  project.deleteGroup(groupId);
+  // Capture target group + every dataset inside before mutation
+  const auto& targetGroup = groups[groupId];
+  QJsonArray childDatasets;
+  for (const auto& d : targetGroup.datasets) {
+    QJsonObject row;
+    row[Keys::DatasetId]         = d.datasetId;
+    row[Keys::UniqueId]          = d.uniqueId;
+    row[QStringLiteral("title")] = d.title;
+    childDatasets.append(row);
+  }
+
+  QJsonObject deleted;
+  deleted[QStringLiteral("groupId")]      = groupId;
+  deleted[QStringLiteral("title")]        = targetGroup.title;
+  deleted[QStringLiteral("widget")]       = targetGroup.widget;
+  deleted[QStringLiteral("datasetCount")] = childDatasets.size();
+  deleted[QStringLiteral("datasets")]     = childDatasets;
+
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+
+  // Groups above target compact down by 1 (uniqueId is derived from sourceId/groupId/datasetId, so
+  // shifted IDs are stale).
+  QJsonArray renumbered;
+  for (const auto& g : groups) {
+    if (g.groupId <= groupId)
+      continue;
+
+    QJsonObject row;
+    row[QStringLiteral("oldGroupId")]   = g.groupId;
+    row[QStringLiteral("newGroupId")]   = g.groupId - 1;
+    row[QStringLiteral("title")]        = g.title;
+    row[QStringLiteral("datasetCount")] = static_cast<int>(g.datasets.size());
+    renumbered.append(row);
+  }
+
+  QString backupPath;
+  qint64 preEpoch = 0;
+  if (!isDryRun) {
+    backupPath = Misc::BackupManager::instance().snapshot(QStringLiteral("pre-groupDelete"));
+    preEpoch   = captureProjectEpoch();
+    project.deleteGroup(groupId);
+  }
 
   QJsonObject result;
-  result[QStringLiteral("groupId")] = groupId;
-  result[QStringLiteral("deleted")] = true;
-  appendStaleProjectWarning(result, params, preEpoch);
+  if (isDryRun)
+    result[QStringLiteral("dryRun")] = true;
+
+  result[QStringLiteral("deleted")]    = deleted;
+  result[QStringLiteral("renumbered")] = renumbered;
+  if (!backupPath.isEmpty())
+    result[QStringLiteral("backupPath")] = backupPath;
+
+  QJsonArray warnings;
+  if (isDryRun)
+    warnings.append(QStringLiteral(
+      "DRY RUN: no changes were written. Re-call without dryRun:true to commit. The "
+      "renumbered[] array shows groupId values that WOULD shift; every dataset in those "
+      "groups would have its uniqueId invalidated."));
+
+  else if (!renumbered.isEmpty())
+    warnings.append(QStringLiteral(
+      "groupId values shifted after deletion; uniqueIds of every dataset in renumbered "
+      "groups are now stale -- re-read project state before further mutations."));
+
+  if (!isDryRun && !backupPath.isEmpty())
+    warnings.append(QStringLiteral(
+      "Pre-mutation snapshot saved at backupPath; pass it to assistant.restore to undo."));
+
+  if (!warnings.isEmpty())
+    result[QStringLiteral("warnings")] = warnings;
+
+  if (!isDryRun)
+    appendStaleProjectWarning(result, params, preEpoch);
+
   attachProjectEpoch(result);
   return CommandResponse::makeSuccess(id, result);
 }
@@ -1723,7 +1939,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAddMany(const QString
     entry[Keys::DatasetId]           = d.datasetId;
     entry[Keys::Title]               = d.title;
     entry[QStringLiteral("index")]   = d.index;
-    entry[Keys::UniqueId] = DataModel::dataset_unique_id(d.sourceId, groupId, d.datasetId);
+    entry[Keys::UniqueId]            = d.uniqueId;
     created.append(entry);
   }
 
@@ -1738,7 +1954,37 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAddMany(const QString
 }
 
 /**
- * @brief Delete a dataset by id
+ * @brief Build the warnings array for a dataset-delete response.
+ */
+static QJsonArray buildDatasetDeleteWarnings(int groupId,
+                                             bool isDryRun,
+                                             const QJsonArray& renumbered,
+                                             const QString& backupPath)
+{
+  QJsonArray warnings;
+  if (isDryRun)
+    warnings.append(
+      QStringLiteral(
+        "DRY RUN: no changes were written. Re-call without dryRun:true to commit. The "
+        "renumbered[] array shows datasetId/uniqueId values that WOULD shift in groupId=%1.")
+        .arg(groupId));
+
+  else if (!renumbered.isEmpty())
+    warnings.append(
+      QStringLiteral(
+        "datasetId values in groupId=%1 were renumbered; cached uniqueIds for the affected "
+        "datasets are now stale -- re-read project state before further mutations.")
+        .arg(groupId));
+
+  if (!isDryRun && !backupPath.isEmpty())
+    warnings.append(QStringLiteral(
+      "Pre-mutation snapshot saved at backupPath; pass it to assistant.restore to undo."));
+
+  return warnings;
+}
+
+/**
+ * @brief Delete a dataset by id, returning the deleted entity + any renumbered peers.
  */
 API::CommandResponse API::Handlers::ProjectHandler::datasetDelete(const QString& id,
                                                                   const QJsonObject& params)
@@ -1765,14 +2011,64 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetDelete(const QString&
                                       QStringLiteral("Dataset id not found: %1 in group %2")
                                         .arg(QString::number(datasetId), QString::number(groupId)));
 
-  const auto preEpoch = captureProjectEpoch();
-  project.deleteDataset(groupId, datasetId);
+  const auto& targetGroup   = groups[groupId];
+  const auto& targetDataset = targetGroup.datasets[datasetId];
+
+  QJsonObject deleted;
+  deleted[QStringLiteral("groupId")]    = groupId;
+  deleted[QStringLiteral("groupTitle")] = targetGroup.title;
+  deleted[Keys::DatasetId]              = datasetId;
+  deleted[Keys::UniqueId]               = targetDataset.uniqueId;
+  deleted[QStringLiteral("title")]      = targetDataset.title;
+  if (!targetDataset.units.isEmpty())
+    deleted[QStringLiteral("units")] = targetDataset.units;
+
+  if (!targetDataset.transformCode.isEmpty()) {
+    deleted[QStringLiteral("hadTransform")]       = true;
+    deleted[QStringLiteral("transformByteCount")] = targetDataset.transformCode.size();
+  }
+
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+
+  // Peers above target compact down by 1 (matches ProjectModel::deleteDataset semantics).
+  QJsonArray renumbered;
+  for (const auto& d : targetGroup.datasets) {
+    if (d.datasetId <= datasetId)
+      continue;
+
+    QJsonObject row;
+    row[QStringLiteral("groupId")]      = groupId;
+    row[QStringLiteral("oldDatasetId")] = d.datasetId;
+    row[QStringLiteral("newDatasetId")] = d.datasetId - 1;
+    row[Keys::UniqueId]                 = d.uniqueId;
+    row[QStringLiteral("title")]        = d.title;
+    renumbered.append(row);
+  }
+
+  QString backupPath;
+  qint64 preEpoch = 0;
+  if (!isDryRun) {
+    backupPath = Misc::BackupManager::instance().snapshot(QStringLiteral("pre-datasetDelete"));
+    preEpoch   = captureProjectEpoch();
+    project.deleteDataset(groupId, datasetId);
+  }
 
   QJsonObject result;
-  result[QStringLiteral("groupId")] = groupId;
-  result[Keys::DatasetId]           = datasetId;
-  result[QStringLiteral("deleted")] = true;
-  appendStaleProjectWarning(result, params, preEpoch);
+  if (isDryRun)
+    result[QStringLiteral("dryRun")] = true;
+
+  result[QStringLiteral("deleted")]    = deleted;
+  result[QStringLiteral("renumbered")] = renumbered;
+  if (!backupPath.isEmpty())
+    result[QStringLiteral("backupPath")] = backupPath;
+
+  const auto warnings = buildDatasetDeleteWarnings(groupId, isDryRun, renumbered, backupPath);
+  if (!warnings.isEmpty())
+    result[QStringLiteral("warnings")] = warnings;
+
+  if (!isDryRun)
+    appendStaleProjectWarning(result, params, preEpoch);
+
   attachProjectEpoch(result);
   return CommandResponse::makeSuccess(id, result);
 }
@@ -2647,8 +2943,8 @@ API::CommandResponse API::Handlers::ProjectHandler::groupsList(const QString& id
     QJsonArray ds_summary;
     for (const auto& ds : group.datasets) {
       QJsonObject d;
-      d[Keys::DatasetId] = ds.datasetId;
-      d[Keys::UniqueId]  = DataModel::dataset_unique_id(ds.sourceId, group.groupId, ds.datasetId);
+      d[Keys::DatasetId]         = ds.datasetId;
+      d[Keys::UniqueId]          = ds.uniqueId;
       d[QStringLiteral("index")] = ds.index;
       d[QStringLiteral("title")] = ds.title;
       if (!ds.units.isEmpty())
@@ -2784,12 +3080,9 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetGetByUniqueId(const Q
   const auto& groups = DataModel::ProjectModel::instance().groups();
 
   for (const auto& group : groups) {
-    for (const auto& dataset : group.datasets) {
-      const int uid =
-        DataModel::dataset_unique_id(dataset.sourceId, group.groupId, dataset.datasetId);
-      if (uid == uniqueId)
+    for (const auto& dataset : group.datasets)
+      if (dataset.uniqueId == uniqueId)
         return CommandResponse::makeSuccess(id, buildDatasetObject(dataset, group));
-    }
   }
 
   return CommandResponse::makeError(
@@ -2910,6 +3203,23 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetGetByPath(const QStri
 }
 
 /**
+ * @brief Compute the new ordinal for an item after a list move; mirrors std::vector reorder.
+ */
+static int projectedAfterMove(int oldIndex, int from, int to)
+{
+  if (oldIndex == from)
+    return to;
+
+  if (from < to && oldIndex > from && oldIndex <= to)
+    return oldIndex - 1;
+
+  if (from > to && oldIndex >= to && oldIndex < from)
+    return oldIndex + 1;
+
+  return oldIndex;
+}
+
+/**
  * @brief Moves a dataset to a new position within its group.
  */
 API::CommandResponse API::Handlers::ProjectHandler::datasetMove(const QString& id,
@@ -2925,40 +3235,87 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetMove(const QString& i
 
   const int uniqueId    = params.value(Keys::UniqueId).toInt();
   const int newPosition = params.value(QStringLiteral("newPosition")).toInt();
+  const bool isDryRun   = params.value(QStringLiteral("dryRun")).toBool(false);
 
   auto& pm           = DataModel::ProjectModel::instance();
   const auto& groups = pm.groups();
 
+  const DataModel::Group* matchGroup     = nullptr;
+  const DataModel::Dataset* matchDataset = nullptr;
   for (const auto& group : groups) {
     for (const auto& dataset : group.datasets) {
-      const int uid =
-        DataModel::dataset_unique_id(dataset.sourceId, group.groupId, dataset.datasetId);
-      if (uid != uniqueId)
-        continue;
-
-      const auto preEpoch   = captureProjectEpoch();
-      const int oldPosition = dataset.datasetId;
-      pm.moveDataset(group.groupId, oldPosition, newPosition);
-
-      QJsonObject result;
-      result[Keys::UniqueId]                = uniqueId;
-      result[Keys::GroupId]                 = group.groupId;
-      result[QStringLiteral("oldPosition")] = oldPosition;
-      result[QStringLiteral("newPosition")] = newPosition;
-      result[QStringLiteral("moved")]       = true;
-      result[QStringLiteral("warning")] =
-        QStringLiteral("Dataset reorder renumbers datasetId within the group, which "
-                       "changes uniqueId. Workspace refs are re-anchored automatically; "
-                       "scripts that hard-coded the old uniqueId must be updated. Prefer "
-                       "datasetGetByPath for stable script references.");
-      appendStaleProjectWarning(result, params, preEpoch);
-      attachProjectEpoch(result);
-      return CommandResponse::makeSuccess(id, result);
+      if (dataset.uniqueId == uniqueId) {
+        matchGroup   = &group;
+        matchDataset = &dataset;
+        break;
+      }
     }
+    if (matchDataset)
+      break;
   }
 
-  return CommandResponse::makeError(
-    id, ErrorCode::InvalidParam, QStringLiteral("Dataset not found for uniqueId %1").arg(uniqueId));
+  if (!matchDataset)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Dataset not found for uniqueId %1").arg(uniqueId));
+
+  const int oldPosition = matchDataset->datasetId;
+  const int clampedNewId =
+    std::clamp(newPosition, 0, static_cast<int>(matchGroup->datasets.size()) - 1);
+
+  // Compute the renumbering map; uniqueId stays stable across reorders.
+  QJsonArray renumbered;
+  for (const auto& d : matchGroup->datasets) {
+    const int newId = projectedAfterMove(d.datasetId, oldPosition, clampedNewId);
+    if (newId == d.datasetId)
+      continue;
+
+    QJsonObject row;
+    row[QStringLiteral("groupId")]      = matchGroup->groupId;
+    row[QStringLiteral("oldDatasetId")] = d.datasetId;
+    row[QStringLiteral("newDatasetId")] = newId;
+    row[Keys::UniqueId]                 = d.uniqueId;
+    row[QStringLiteral("title")]        = d.title;
+    renumbered.append(row);
+  }
+
+  qint64 preEpoch = 0;
+  if (!isDryRun) {
+    preEpoch = captureProjectEpoch();
+    pm.moveDataset(matchGroup->groupId, oldPosition, newPosition);
+  }
+
+  QJsonObject result;
+  if (isDryRun)
+    result[QStringLiteral("dryRun")] = true;
+
+  result[Keys::UniqueId]                = uniqueId;
+  result[Keys::GroupId]                 = matchGroup->groupId;
+  result[QStringLiteral("oldPosition")] = oldPosition;
+  result[QStringLiteral("newPosition")] = clampedNewId;
+  result[QStringLiteral("moved")]       = !isDryRun;
+  result[QStringLiteral("renumbered")]  = renumbered;
+
+  QString warning;
+  if (isDryRun)
+    warning = QStringLiteral(
+      "DRY RUN: no changes were written. Re-call without dryRun:true to commit. The "
+      "renumbered[] array shows the new datasetId for each affected dataset (uniqueId "
+      "is stable across reorders).");
+
+  else
+    warning = QStringLiteral(
+      "Dataset reorder renumbers datasetId within the group. uniqueId stays stable "
+      "across reorders, so workspace refs and xAxisId references survive untouched.");
+
+  result[QStringLiteral("warning")] = warning;
+
+  if (!isDryRun)
+    appendStaleProjectWarning(result, params, preEpoch);
+
+  attachProjectEpoch(result);
+  return CommandResponse::makeSuccess(id, result);
 }
 
 /**
@@ -2977,6 +3334,7 @@ API::CommandResponse API::Handlers::ProjectHandler::groupMove(const QString& id,
 
   const int groupId     = params.value(Keys::GroupId).toInt();
   const int newPosition = params.value(QStringLiteral("newPosition")).toInt();
+  const bool isDryRun   = params.value(QStringLiteral("dryRun")).toBool(false);
 
   auto& pm           = DataModel::ProjectModel::instance();
   const auto& groups = pm.groups();
@@ -2984,19 +3342,55 @@ API::CommandResponse API::Handlers::ProjectHandler::groupMove(const QString& id,
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Group id out of range: %1").arg(groupId));
 
-  const auto preEpoch = captureProjectEpoch();
-  pm.moveGroup(groupId, newPosition);
+  const int clampedNew = std::clamp(newPosition, 0, static_cast<int>(groups.size()) - 1);
+
+  // Compute renumbering map.
+  QJsonArray renumbered;
+  for (const auto& g : groups) {
+    const int newId = projectedAfterMove(g.groupId, groupId, clampedNew);
+    if (newId == g.groupId)
+      continue;
+
+    QJsonObject row;
+    row[QStringLiteral("oldGroupId")]   = g.groupId;
+    row[QStringLiteral("newGroupId")]   = newId;
+    row[QStringLiteral("title")]        = g.title;
+    row[QStringLiteral("datasetCount")] = static_cast<int>(g.datasets.size());
+    renumbered.append(row);
+  }
+
+  qint64 preEpoch = 0;
+  if (!isDryRun) {
+    preEpoch = captureProjectEpoch();
+    pm.moveGroup(groupId, newPosition);
+  }
 
   QJsonObject result;
+  if (isDryRun)
+    result[QStringLiteral("dryRun")] = true;
+
   result[QStringLiteral("oldPosition")] = groupId;
-  result[QStringLiteral("newPosition")] =
-    std::clamp(newPosition, 0, static_cast<int>(groups.size()) - 1);
-  result[QStringLiteral("moved")] = true;
-  result[QStringLiteral("warning")] =
-    QStringLiteral("Group reorder renumbers groupId, which changes uniqueIds for all "
-                   "datasets in the moved-past groups. Workspace refs are re-anchored "
-                   "automatically; scripts that hard-coded a uniqueId must be updated.");
-  appendStaleProjectWarning(result, params, preEpoch);
+  result[QStringLiteral("newPosition")] = clampedNew;
+  result[QStringLiteral("moved")]       = !isDryRun;
+  result[QStringLiteral("renumbered")]  = renumbered;
+
+  QString warning;
+  if (isDryRun)
+    warning = QStringLiteral(
+      "DRY RUN: no changes were written. Re-call without dryRun:true to commit. The "
+      "renumbered[] array shows the new groupId for each affected group; uniqueIds stay "
+      "stable across reorders.");
+
+  else
+    warning = QStringLiteral(
+      "Group reorder renumbers groupId. Dataset uniqueIds and Group.uniqueId stay stable, "
+      "so workspace refs and xAxisId references survive untouched.");
+
+  result[QStringLiteral("warning")] = warning;
+
+  if (!isDryRun)
+    appendStaleProjectWarning(result, params, preEpoch);
+
   attachProjectEpoch(result);
   return CommandResponse::makeSuccess(id, result);
 }
@@ -3251,11 +3645,8 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetGetExecutionOrder(
   QJsonArray order;
   for (const auto& group : groups) {
     for (const auto& dataset : group.datasets) {
-      const int uid =
-        DataModel::dataset_unique_id(dataset.sourceId, group.groupId, dataset.datasetId);
-
       QJsonObject entry;
-      entry[Keys::UniqueId]                      = uid;
+      entry[Keys::UniqueId]                      = dataset.uniqueId;
       entry[Keys::Title]                         = dataset.title;
       entry[Keys::SourceId]                      = dataset.sourceId;
       entry[Keys::GroupId]                       = group.groupId;
@@ -3323,6 +3714,19 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
   if (config.isEmpty()) {
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("config cannot be empty"));
+  }
+
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+  if (isDryRun) {
+    QJsonObject result;
+    result[QStringLiteral("dryRun")]       = true;
+    result[QStringLiteral("wouldDiscard")] = summarizeCurrentProject();
+    result[QStringLiteral("wouldApply")]   = summarizeProjectJson(config);
+    result[QStringLiteral("warning")] =
+      QStringLiteral("DRY RUN: no project was loaded. wouldDiscard shows what would be lost; "
+                     "wouldApply shows what would replace it. Confirm before re-issuing "
+                     "without dryRun:true.");
+    return CommandResponse::makeSuccess(id, result);
   }
 
   // In-memory load -- no temp file, no file association
@@ -3692,6 +4096,12 @@ void API::Handlers::ProjectHandler::registerBatchCommand()
       "results are returned in the same order with per-op success/error "
       "fields. Set stopOnError:true to abort the batch on the first failure "
       "(default false: best-effort, all ops attempted).\n"
+      "Pass dryRun:true at the top level to preview every op without "
+      "committing. Each op's per-result still carries the affected-entity "
+      "payload as if it had run. Rejected when any op is not in the "
+      "dryRun-aware command set -- mixing previewable and non-previewable "
+      "ops would leave a partial mutation, which is worse than no preview "
+      "at all.\n"
       "Note: NOT transactional. Already-applied ops are NOT rolled back on "
       "later failures -- this is a save-suspend wrapper, not a database "
       "transaction. Nested project.batch calls are rejected. Hard cap of "
@@ -4471,9 +4881,31 @@ static QJsonObject buildBatchErrorEntry(int index,
 }
 
 /**
+ * @brief Commands that honour `dryRun:true` -- used to validate batch previews.
+ */
+static const QSet<QString>& dryRunAwareCommands()
+{
+  static const QSet<QString> kSet = {
+    QStringLiteral("project.dataset.delete"),
+    QStringLiteral("project.group.delete"),
+    QStringLiteral("project.dataset.move"),
+    QStringLiteral("project.group.move"),
+    QStringLiteral("project.workspace.delete"),
+    QStringLiteral("project.workspace.clearAll"),
+    QStringLiteral("project.new"),
+    QStringLiteral("project.open"),
+    QStringLiteral("project.loadJson"),
+    QStringLiteral("project.template.apply"),
+    QStringLiteral("project.batch"),
+    QStringLiteral("assistant.project.bulkApply"),
+  };
+  return kSet;
+}
+
+/**
  * @brief Validates and executes a single project.batch op; returns the per-op result entry.
  */
-static QJsonObject executeBatchOp(int index, const QJsonObject& op, bool& success)
+static QJsonObject executeBatchOp(int index, const QJsonObject& op, bool dryRun, bool& success)
 {
   success = false;
 
@@ -4487,8 +4919,8 @@ static QJsonObject executeBatchOp(int index, const QJsonObject& op, bool& succes
       buildBatchSchemaHint());
   }
 
-  const auto command  = op.value(QStringLiteral("command")).toString();
-  const auto opParams = op.value(QStringLiteral("params")).toObject();
+  const auto command = op.value(QStringLiteral("command")).toString();
+  auto opParams      = op.value(QStringLiteral("params")).toObject();
 
   if (command.isEmpty()) {
     return buildBatchErrorEntry(index,
@@ -4507,6 +4939,10 @@ static QJsonObject executeBatchOp(int index, const QJsonObject& op, bool& succes
                                 QStringLiteral("project.batch cannot be nested"),
                                 QJsonObject());
   }
+
+  // Propagate dryRun into every op so the inner handler short-circuits without mutating.
+  if (dryRun)
+    opParams.insert(QStringLiteral("dryRun"), true);
 
   const auto response =
     API::CommandRegistry::instance().execute(command, QString::number(index), opParams);
@@ -4533,42 +4969,99 @@ static QJsonObject executeBatchOp(int index, const QJsonObject& op, bool& succes
 }
 
 /**
+ * @brief Validate the `ops` array against the batch handler's preconditions; returns an error
+ * response when invalid.
+ */
+static std::optional<API::CommandResponse> validateBatchOps(const QString& id,
+                                                            const QJsonObject& params,
+                                                            QJsonArray& outOps)
+{
+  constexpr int kMaxBatchOps = 1024;
+
+  if (!params.contains(QStringLiteral("ops")))
+    return API::CommandResponse::makeError(id,
+                                           API::ErrorCode::MissingParam,
+                                           QStringLiteral("Missing required parameter: ops"),
+                                           buildBatchSchemaHint());
+
+  if (!params.value(QStringLiteral("ops")).isArray())
+    return API::CommandResponse::makeError(id,
+                                           API::ErrorCode::InvalidParam,
+                                           QStringLiteral("ops must be an array"),
+                                           buildBatchSchemaHint());
+
+  outOps = params.value(QStringLiteral("ops")).toArray();
+  if (outOps.isEmpty())
+    return API::CommandResponse::makeError(id,
+                                           API::ErrorCode::InvalidParam,
+                                           QStringLiteral("ops array must not be empty"),
+                                           buildBatchSchemaHint());
+
+  if (outOps.size() > kMaxBatchOps)
+    return API::CommandResponse::makeError(
+      id,
+      API::ErrorCode::InvalidParam,
+      QStringLiteral("ops array exceeds limit of %1 (got %2)")
+        .arg(QString::number(kMaxBatchOps), QString::number(outOps.size())),
+      buildBatchSchemaHint());
+
+  return std::nullopt;
+}
+
+/**
+ * @brief When dryRun is set, ensure every op supports dryRun; returns an error response if any does
+ * not.
+ */
+static std::optional<API::CommandResponse> ensureBatchDryRunCompatible(const QString& id,
+                                                                       const QJsonArray& ops)
+{
+  QJsonArray unsupported;
+  for (int i = 0; i < ops.size(); ++i) {
+    const auto cmd = ops.at(i).toObject().value(QStringLiteral("command")).toString();
+    if (!dryRunAwareCommands().contains(cmd)) {
+      QJsonObject row;
+      row[QStringLiteral("index")]   = i;
+      row[QStringLiteral("command")] = cmd;
+      unsupported.append(row);
+    }
+  }
+  if (unsupported.isEmpty())
+    return std::nullopt;
+
+  QJsonObject data;
+  data[QStringLiteral("unsupportedOps")] = unsupported;
+  data[QStringLiteral("supportedSet")] = QJsonArray::fromStringList(dryRunAwareCommands().values());
+  return API::CommandResponse::makeError(
+    id,
+    API::ErrorCode::InvalidParam,
+    QStringLiteral("dryRun rejected: %1 op(s) do not support dryRun. Either drop dryRun "
+                   "for the whole batch or split the un-previewable ops out into a "
+                   "separate batch.")
+      .arg(unsupported.size()),
+    data);
+}
+
+/**
  * @brief Runs an array of project mutations under a single suspended-autosave window.
  */
 API::CommandResponse API::Handlers::ProjectHandler::projectBatch(const QString& id,
                                                                  const QJsonObject& params)
 {
-  constexpr int kMaxBatchOps = 1024;
-
-  if (!params.contains(QStringLiteral("ops")))
-    return CommandResponse::makeError(id,
-                                      ErrorCode::MissingParam,
-                                      QStringLiteral("Missing required parameter: ops"),
-                                      buildBatchSchemaHint());
-
-  if (!params.value(QStringLiteral("ops")).isArray())
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("ops must be an array"), buildBatchSchemaHint());
-
-  const auto ops = params.value(QStringLiteral("ops")).toArray();
-  if (ops.isEmpty())
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("ops array must not be empty"),
-                                      buildBatchSchemaHint());
-
-  if (ops.size() > kMaxBatchOps)
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QStringLiteral("ops array exceeds limit of %1 (got %2)")
-        .arg(QString::number(kMaxBatchOps), QString::number(ops.size())),
-      buildBatchSchemaHint());
+  QJsonArray ops;
+  if (const auto invalid = validateBatchOps(id, params, ops); invalid)
+    return *invalid;
 
   const bool stopOnError = params.value(QStringLiteral("stopOnError")).toBool(false);
+  const bool isDryRun    = params.value(QStringLiteral("dryRun")).toBool(false);
+
+  if (isDryRun) {
+    if (const auto invalid = ensureBatchDryRunCompatible(id, ops); invalid)
+      return *invalid;
+  }
 
   auto& project = DataModel::ProjectModel::instance();
-  project.setAutoSaveSuspended(true);
+  if (!isDryRun)
+    project.setAutoSaveSuspended(true);
 
   QJsonArray results;
   int successCount = 0;
@@ -4577,7 +5070,7 @@ API::CommandResponse API::Handlers::ProjectHandler::projectBatch(const QString& 
 
   for (int i = 0; i < ops.size(); ++i) {
     bool opSucceeded  = false;
-    QJsonObject entry = executeBatchOp(i, ops.at(i).toObject(), opSucceeded);
+    QJsonObject entry = executeBatchOp(i, ops.at(i).toObject(), isDryRun, opSucceeded);
     results.append(entry);
     if (opSucceeded)
       ++successCount;
@@ -4590,16 +5083,27 @@ API::CommandResponse API::Handlers::ProjectHandler::projectBatch(const QString& 
     }
   }
 
-  project.setAutoSaveSuspended(false);
-  project.flushAutoSave();
+  if (!isDryRun) {
+    project.setAutoSaveSuspended(false);
+    project.flushAutoSave();
+  }
 
   QJsonObject result;
-  result[QStringLiteral("results")]      = results;
-  result[QStringLiteral("total")]        = ops.size();
-  result[QStringLiteral("succeeded")]    = successCount;
-  result[QStringLiteral("failed")]       = failureCount;
-  result[QStringLiteral("aborted")]      = aborted;
-  result[QStringLiteral("autoSaveMode")] = QStringLiteral("flushed");
+  if (isDryRun)
+    result[QStringLiteral("dryRun")] = true;
+
+  result[QStringLiteral("results")]   = results;
+  result[QStringLiteral("total")]     = ops.size();
+  result[QStringLiteral("succeeded")] = successCount;
+  result[QStringLiteral("failed")]    = failureCount;
+  result[QStringLiteral("aborted")]   = aborted;
+  result[QStringLiteral("autoSaveMode")] =
+    isDryRun ? QStringLiteral("none") : QStringLiteral("flushed");
+  if (isDryRun)
+    result[QStringLiteral("warning")] =
+      QStringLiteral("DRY RUN: no ops were committed. Each op's per-result still carries the "
+                     "affected-entity payload as if it had run.");
+
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -4679,14 +5183,21 @@ void API::Handlers::ProjectHandler::registerTemplateCommands()
                    "  telemetry_udp: UDP listener on port 1234, CSV body parser, 5 "
                    "generic value channels. Adapt port + parser to your protocol.\n"
                    "  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After "
-                   "applying, configure broker via mqtt.set* commands."),
-    makeSchema({
-      {QStringLiteral("templateId"),
-       QStringLiteral("string"),
-       QStringLiteral("Template id from project.template.list (blank, imu_uart, "
-                      "gps_uart_nmea, scope_multichannel_uart, telemetry_udp, "
-                      "mqtt_subscriber)")}
-  }),
+                   "applying, configure broker via mqtt.set* commands.\n"
+                   "Pass dryRun:true to return wouldDiscard + wouldApply summaries "
+                   "without applying. Useful when the user is choosing between two "
+                   "templates."),
+    makeSchema(
+      {
+        {QStringLiteral("templateId"),
+         QStringLiteral("string"),
+         QStringLiteral("Template id from project.template.list (blank, imu_uart, "
+                        "gps_uart_nmea, scope_multichannel_uart, telemetry_udp, "
+                        "mqtt_subscriber)")}
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("If true, summarize the template without applying.")}}),
     &templateApply);
 }
 
@@ -4727,6 +5238,20 @@ API::CommandResponse API::Handlers::ProjectHandler::templateApply(const QString&
       QStringLiteral("Template not found: %1. Call project.template.list for the "
                      "available ids.")
         .arg(templateId));
+
+  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+  if (isDryRun) {
+    QJsonObject result;
+    result[QStringLiteral("dryRun")]       = true;
+    result[QStringLiteral("templateId")]   = templateId;
+    result[QStringLiteral("wouldDiscard")] = summarizeCurrentProject();
+    result[QStringLiteral("wouldApply")]   = summarizeProjectJson(body.object());
+    result[QStringLiteral("warning")] =
+      QStringLiteral("DRY RUN: template not applied. wouldDiscard shows what would be lost; "
+                     "wouldApply shows what would replace it. Confirm before re-issuing "
+                     "without dryRun:true.");
+    return CommandResponse::makeSuccess(id, result);
+  }
 
   auto& project = DataModel::ProjectModel::instance();
   project.setSuppressMessageBoxes(true);
@@ -5250,8 +5775,7 @@ static QJsonValue applyTransformForDryRun(
   std::map<int, std::unique_ptr<DataModel::IScriptEngine>>& engines,
   std::map<int, bool>& engineOk)
 {
-  const int datasetKey =
-    DataModel::dataset_unique_id(dataset.sourceId, dataset.groupId, dataset.datasetId);
+  const int datasetKey = dataset.uniqueId;
   const int language =
     (dataset.transformLanguage == -1) ? defaultLanguage : dataset.transformLanguage;
 
@@ -5300,8 +5824,7 @@ static QJsonObject buildDryRunDatasetEntry(
     rawCell = row.at(idx - 1);
 
   QJsonObject entry;
-  entry[Keys::UniqueId] =
-    DataModel::dataset_unique_id(dataset.sourceId, groupId, dataset.datasetId);
+  entry[Keys::UniqueId]              = dataset.uniqueId;
   entry[Keys::Title]                 = dataset.title;
   entry[Keys::GroupId]               = groupId;
   entry[Keys::DatasetId]             = dataset.datasetId;

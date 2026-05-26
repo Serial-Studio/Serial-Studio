@@ -98,7 +98,7 @@ bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
       return true;
 
     for (const auto& dataset : std::as_const((group.datasets))) {
-      if (dataset.xAxisId > 0)
+      if (dataset.xAxisId >= 0)
         return true;
 
       if (dataset.waterfall)
@@ -131,7 +131,7 @@ bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
       return true;
 
     for (const auto& dataset : std::as_const((group.datasets))) {
-      if (dataset.xAxisId > 0)
+      if (dataset.xAxisId >= 0)
         return true;
 
       if (dataset.waterfall)

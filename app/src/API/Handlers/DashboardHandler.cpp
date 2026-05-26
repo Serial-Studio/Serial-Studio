@@ -382,6 +382,7 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
   const int points     = UI::Dashboard::instance().points();
   const int widgetCnt  = UI::Dashboard::instance().totalWidgetCount();
   const int datasetCnt = static_cast<int>(UI::Dashboard::instance().datasets().size());
+  const bool running   = UI::Dashboard::instance().streamAvailable();
 
   QJsonObject result;
   result[QStringLiteral("operationMode")]      = modeIndex;
@@ -398,6 +399,7 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
   result[QStringLiteral("points")]            = points;
   result[QStringLiteral("widgetCount")]       = widgetCnt;
   result[QStringLiteral("datasetCount")]      = datasetCnt;
+  result[QStringLiteral("running")]           = running;
 
   result[QStringLiteral("_summary")] =
     QStringLiteral("Dashboard mode: %1. %2 widget%3 visible across %4 dataset%5, "

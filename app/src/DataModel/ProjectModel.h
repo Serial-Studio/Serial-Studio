@@ -167,7 +167,11 @@ public:
   [[nodiscard]] QString jsonProjectsPath() const;
 
   [[nodiscard]] QStringList xDataSources() const;
+  [[nodiscard]] QList<int> xDataSourceUniqueIds() const;
   [[nodiscard]] QStringList yWaterfallSources() const;
+
+  [[nodiscard]] int groupIdForUniqueId(int uniqueId) const;
+  [[nodiscard]] int groupUniqueIdForGroupId(int groupId) const;
 
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& jsonFilePath() const noexcept;
@@ -363,8 +367,11 @@ public slots:
                        bool setIcon,
                        bool setDescription);
   void reorderWorkspaces(const QList<int>& userWorkspaceIds);
-  void addWidgetToWorkspace(int workspaceId, int widgetType, int groupId, int relativeIndex);
-  void removeWidgetFromWorkspace(int workspaceId, int widgetType, int groupId, int relativeIndex);
+  void addWidgetToWorkspace(int workspaceId, int widgetType, int groupUniqueId, int relativeIndex);
+  void removeWidgetFromWorkspace(int workspaceId,
+                                 int widgetType,
+                                 int groupUniqueId,
+                                 int relativeIndex);
   int cleanupWorkspaceWidgetRefs(const QSet<qint64>& validKeys);
 
   void promptAddWorkspace();
@@ -440,6 +447,10 @@ private:
 
   bool mergeAutoWorkspaceUpdates();
 
+  [[nodiscard]] int allocateUniqueId();
+  void seedNextUniqueIdFromGroups();
+  void migrateLegacyWorkspaceRefs();
+
 private:
   QString m_title;
   QString m_frameEndSequence;
@@ -452,6 +463,7 @@ private:
   SerialStudio::FrameDetection m_frameDetection;
 
   int m_pointCount;
+  int m_nextUniqueId;
   bool m_modified;
   bool m_silentReload;
   QString m_filePath;

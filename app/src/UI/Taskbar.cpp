@@ -507,8 +507,9 @@ void UI::Taskbar::populateTaskbarFromWorkspace(int groupId)
       if (windowId < 0)
         continue;
 
-      auto* item = findItemByWindowId(windowId);
-      if (!item || item->data(TaskbarModel::GroupIdRole).toInt() != ref.groupId)
+      const int refGid = UI::Dashboard::instance().groupIdForUniqueId(ref.groupUniqueId);
+      auto* item       = findItemByWindowId(windowId);
+      if (!item || item->data(TaskbarModel::GroupIdRole).toInt() != refGid)
         continue;
 
       auto* clone = item->clone();
@@ -1979,8 +1980,9 @@ void UI::Taskbar::addWidgetToActiveWorkspace(int windowId)
   if (relIdx < 0)
     return;
 
+  const int groupUid = UI::Dashboard::instance().groupUniqueIdForGroupId(groupId);
   DataModel::ProjectModel::instance().addWidgetToWorkspace(
-    m_activeGroupId, widgetType, groupId, relIdx);
+    m_activeGroupId, widgetType, groupUid, relIdx);
 
   // Add to taskbar buttons and show
   auto clone = item->clone();
@@ -2015,9 +2017,11 @@ void UI::Taskbar::removeWidgetFromActiveWorkspace(int windowId)
     if (ws.workspaceId != m_activeGroupId)
       continue;
 
+    const int targetUid = UI::Dashboard::instance().groupUniqueIdForGroupId(groupId);
     for (size_t i = 0; i < ws.widgetRefs.size(); ++i) {
       const auto& ref = ws.widgetRefs[i];
-      if (ref.widgetType != widgetType || ref.groupId != groupId || ref.relativeIndex != relIdx)
+      if (ref.widgetType != widgetType || ref.groupUniqueId != targetUid
+          || ref.relativeIndex != relIdx)
         continue;
 
       pm->removeWidgetFromWorkspace(m_activeGroupId, static_cast<int>(i));
@@ -2067,8 +2071,9 @@ QVariantList UI::Taskbar::workspaceWidgetIds(int workspaceId) const
       if (windowId < 0)
         continue;
 
-      auto* item = findItemByWindowId(windowId);
-      if (!item || item->data(TaskbarModel::GroupIdRole).toInt() != ref.groupId)
+      const int refGid = UI::Dashboard::instance().groupIdForUniqueId(ref.groupUniqueId);
+      auto* item       = findItemByWindowId(windowId);
+      if (!item || item->data(TaskbarModel::GroupIdRole).toInt() != refGid)
         continue;
 
       ids.append(windowId);
@@ -2127,8 +2132,10 @@ void UI::Taskbar::setWorkspaceWidgets(int workspaceId, const QVariantList& windo
       }
     }
 
-    if (relIdx >= 0)
-      pm->addWidgetToWorkspace(workspaceId, widgetType, groupId, relIdx);
+    if (relIdx >= 0) {
+      const int groupUid = UI::Dashboard::instance().groupUniqueIdForGroupId(groupId);
+      pm->addWidgetToWorkspace(workspaceId, widgetType, groupUid, relIdx);
+    }
   }
 
   // Refresh taskbar if this workspace is active

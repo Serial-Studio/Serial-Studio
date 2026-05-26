@@ -115,7 +115,7 @@ static void tallyDatasetWidgetTypes(const DataModel::Dataset& ds, QMap<int, int>
  * @brief Appends a dataset widget ref unless the widget type is the LED aggregator.
  */
 static bool appendDatasetRef(SerialStudio::DashboardWidget k,
-                             int groupId,
+                             int groupUniqueId,
                              QMap<SerialStudio::DashboardWidget, int>& datasetIdx,
                              std::vector<DataModel::WidgetRef>& groupRefs,
                              std::vector<DataModel::WidgetRef>& allRefs)
@@ -128,7 +128,7 @@ static bool appendDatasetRef(SerialStudio::DashboardWidget k,
 
   DataModel::WidgetRef r;
   r.widgetType    = static_cast<int>(k);
-  r.groupId       = groupId;
+  r.groupUniqueId = groupUniqueId;
   r.relativeIndex = datasetIdx.value(k, 0);
   datasetIdx[k]   = r.relativeIndex + 1;
 
@@ -152,7 +152,7 @@ static bool collectGroupDatasetRefs(const DataModel::Group& group,
 
     const auto keys = SerialStudio::getDashboardWidgets(ds);
     for (const auto& k : keys)
-      if (appendDatasetRef(k, group.groupId, datasetIdx, groupRefs, allRefs))
+      if (appendDatasetRef(k, group.uniqueId, datasetIdx, groupRefs, allRefs))
         groupHasLed = true;
   }
   return groupHasLed;
@@ -162,7 +162,7 @@ static bool collectGroupDatasetRefs(const DataModel::Group& group,
  * @brief Pushes a tracked widget ref into the supplied output vectors.
  */
 static void pushTrackedRef(SerialStudio::DashboardWidget key,
-                           int groupId,
+                           int groupUniqueId,
                            QMap<SerialStudio::DashboardWidget, int>& runningIdx,
                            std::vector<DataModel::WidgetRef>& groupRefs,
                            std::vector<DataModel::WidgetRef>& allRefs,
@@ -170,7 +170,7 @@ static void pushTrackedRef(SerialStudio::DashboardWidget key,
 {
   DataModel::WidgetRef r;
   r.widgetType    = static_cast<int>(key);
-  r.groupId       = groupId;
+  r.groupUniqueId = groupUniqueId;
   r.relativeIndex = runningIdx.value(key, 0);
   runningIdx[key] = r.relativeIndex + 1;
 
@@ -246,7 +246,7 @@ static std::vector<DataModel::WidgetRef> buildAutoRefsForGroup(
     group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
 
   if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
-    pushTrackedRef(groupKey, group.groupId, groupIdx, groupRefs, allRefs, overviewRefs);
+    pushTrackedRef(groupKey, group.uniqueId, groupIdx, groupRefs, allRefs, overviewRefs);
 
   // LED datasets aggregate into a single per-group panel ref, emitted below
   const bool groupHasLed = collectGroupDatasetRefs(group, datasetIdx, groupRefs, allRefs);
@@ -254,7 +254,7 @@ static std::vector<DataModel::WidgetRef> buildAutoRefsForGroup(
   // Synthetic LED-panel ref shares groupIdx with group widgets to match Dashboard order
   if (groupHasLed)
     pushTrackedRef(
-      SerialStudio::DashboardLED, group.groupId, groupIdx, groupRefs, allRefs, overviewRefs);
+      SerialStudio::DashboardLED, group.uniqueId, groupIdx, groupRefs, allRefs, overviewRefs);
 
   return groupRefs;
 }
@@ -276,6 +276,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_frameDecoder(SerialStudio::PlainText)
   , m_frameDetection(SerialStudio::EndDelimiterOnly)
   , m_pointCount(100)
+  , m_nextUniqueId(1)
   , m_modified(false)
   , m_silentReload(false)
   , m_filePath("")
@@ -625,29 +626,129 @@ QString DataModel::ProjectModel::jsonProjectsPath() const
 }
 
 /**
- * @brief Returns "Samples" plus every dataset label, sorted by frame index.
+ * @brief Allocates the next persistent uniqueId for a new group or dataset.
+ */
+int DataModel::ProjectModel::allocateUniqueId()
+{
+  return m_nextUniqueId++;
+}
+
+/**
+ * @brief Back-fills missing uniqueIds and bumps the allocator past every assigned uid.
+ */
+void DataModel::ProjectModel::seedNextUniqueIdFromGroups()
+{
+  int maxUid = 0;
+
+  for (auto& group : m_groups) {
+    for (auto& dataset : group.datasets) {
+      if (dataset.uniqueId < 0)
+        dataset.uniqueId = dataset_unique_id(group.sourceId, dataset.groupId, dataset.datasetId);
+
+      if (dataset.uniqueId > maxUid)
+        maxUid = dataset.uniqueId;
+    }
+
+    if (group.uniqueId > maxUid)
+      maxUid = group.uniqueId;
+  }
+
+  if (m_nextUniqueId <= maxUid)
+    m_nextUniqueId = maxUid + 1;
+
+  for (auto& group : m_groups)
+    if (group.uniqueId < 0)
+      group.uniqueId = m_nextUniqueId++;
+}
+
+/**
+ * @brief Rewrites workspace refs whose groupUniqueId is actually a legacy positional groupId.
+ */
+void DataModel::ProjectModel::migrateLegacyWorkspaceRefs()
+{
+  for (auto& ws : m_workspaces) {
+    for (auto& ref : ws.widgetRefs) {
+      const int pos = ref.groupUniqueId;
+      if (pos < 0 || static_cast<size_t>(pos) >= m_groups.size())
+        continue;
+
+      ref.groupUniqueId = m_groups[static_cast<size_t>(pos)].uniqueId;
+    }
+  }
+}
+
+/**
+ * @brief Resolves a Group.uniqueId to its current positional groupId; returns -1 if absent.
+ */
+int DataModel::ProjectModel::groupIdForUniqueId(int uniqueId) const
+{
+  if (uniqueId < 0)
+    return -1;
+
+  for (const auto& group : m_groups)
+    if (group.uniqueId == uniqueId)
+      return group.groupId;
+
+  return -1;
+}
+
+/**
+ * @brief Resolves a positional groupId to its Group.uniqueId; returns -1 if out of range.
+ */
+int DataModel::ProjectModel::groupUniqueIdForGroupId(int groupId) const
+{
+  if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
+    return -1;
+
+  return m_groups[static_cast<size_t>(groupId)].uniqueId;
+}
+
+/**
+ * @brief Returns "Samples" plus every dataset label, sorted by uniqueId.
  */
 QStringList DataModel::ProjectModel::xDataSources() const
 {
-  // Start with the implicit "Samples" option
   QStringList list;
   list.append(tr("Samples"));
 
-  // Collect unique datasets sorted by frame index
+  // Sort by uniqueId so xDataSources() and xDataSourceUniqueIds() share an order.
   QMap<int, QString> datasets;
   for (const auto& group : m_groups) {
     for (const auto& dataset : group.datasets) {
-      const auto index = dataset.index;
-      if (!datasets.contains(index))
-        datasets.insert(index, QString("%1 (%2)").arg(dataset.title, group.title));
+      const auto uid = dataset.uniqueId;
+      if (!datasets.contains(uid))
+        datasets.insert(uid, QString("%1 (%2)").arg(dataset.title, group.title));
     }
   }
 
-  // Append dataset labels in index order
   for (auto it = datasets.cbegin(); it != datasets.cend(); ++it)
     list.append(it.value());
 
   return list;
+}
+
+/**
+ * @brief Parallel to xDataSources(): the dataset uniqueId at each combo position
+ *        (position 0 -> -1, the "Samples" sentinel).
+ */
+QList<int> DataModel::ProjectModel::xDataSourceUniqueIds() const
+{
+  QList<int> out;
+  out.append(-1);
+
+  QMap<int, bool> seen;
+  for (const auto& group : m_groups) {
+    for (const auto& dataset : group.datasets) {
+      const auto uid = dataset.uniqueId;
+      if (!seen.contains(uid))
+        seen.insert(uid, true);
+    }
+  }
+
+  for (auto it = seen.cbegin(); it != seen.cend(); ++it)
+    out.append(it.key());
+
+  return out;
 }
 
 /**
@@ -1250,11 +1351,15 @@ bool DataModel::ProjectModel::askSave()
     if (jsonFilePath().isEmpty())
       newJsonFile();
     else {
+      // openJsonFile() flips to ProjectFile mode; restore caller mode below for
+      // QuickPlot/ConsoleOnly.
       const auto path = m_filePath;
       m_silentReload  = true;
       m_filePath.clear();
       openJsonFile(path);
       m_silentReload = false;
+      if (opMode != SerialStudio::ProjectFile)
+        AppState::instance().setOperationMode(opMode);
     }
 
     return true;
@@ -1280,6 +1385,8 @@ bool DataModel::ProjectModel::askSave()
       m_filePath.clear();
       openJsonFile(path);
       m_silentReload = false;
+      if (opMode != SerialStudio::ProjectFile)
+        AppState::instance().setOperationMode(opMode);
     }
 
     return true;
@@ -1403,6 +1510,7 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   json.insert(Keys::SchemaVersion, DataModel::kSchemaVersion);
   json.insert(Keys::WriterVersion, writer);
   json.insert(Keys::WriterVersionAtCreation, creator);
+  json.insert(Keys::NextUniqueId, m_nextUniqueId);
 
   // Editor-lock PBKDF2 hash (legacy MD5 still accepted on load, rewritten on relock)
   if (!m_passwordHash.isEmpty())
@@ -1564,6 +1672,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_hexadecimalDelimiters   = false;
   m_title                   = tr("Untitled Project");
   m_pointCount              = 100;
+  m_nextUniqueId            = 1;
   m_frameDecoder            = SerialStudio::PlainText;
   m_frameDetection          = SerialStudio::EndDelimiterOnly;
   m_widgetSettings          = QJsonObject();
@@ -1817,6 +1926,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   const auto json                = document.object();
   const QString legacyParserCode = json.value(QLatin1StringView("frameParser")).toString();
   const bool legacyFormat        = !json.contains(Keys::Sources);
+  const bool legacyUniqueIds     = !json.contains(Keys::NextUniqueId);
 
   const int loadedSchema = ss_jsr(json, Keys::SchemaVersion, 0).toInt();
   const bool olderSchema = loadedSchema < DataModel::kSchemaVersion;
@@ -1829,7 +1939,15 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   enforceGplSingleSource();
   resolveDatasetTransformLanguages();
   resolveDatasetVirtualFlags();
+
+  // Legacy files lack persisted uniqueIds -- back-fill + seed the allocator past them.
+  seedNextUniqueIdFromGroups();
   loadWidgetSettingsAndWorkspaces(json);
+
+  // Legacy workspace refs were positional groupIds -- translate now that uids are seeded.
+  if (legacyUniqueIds)
+    migrateLegacyWorkspaceRefs();
+
   loadPointCount(json);
   migrateLegacyLayoutKeys();
   migrateLegacyDashboardLayout(json);
@@ -1972,6 +2090,9 @@ void DataModel::ProjectModel::loadProjectRootScalars(const QJsonObject& json)
 
   // Preserve the original creator stamp through save round-trips
   m_writerVersionAtCreation = json.value(Keys::WriterVersionAtCreation).toString();
+
+  // Restore the uniqueId allocator (legacy files: default 1, seeded post-load).
+  m_nextUniqueId = ss_jsr(json, Keys::NextUniqueId, 1).toInt();
 
   // Restore lock -- file with a hash opens read-only until user unlocks
   m_passwordHash       = json.value(Keys::PasswordHash).toString();
@@ -2824,9 +2945,10 @@ void DataModel::ProjectModel::deleteCurrentDataset()
  */
 void DataModel::ProjectModel::duplicateCurrentGroup()
 {
-  // Clone every group-level field; only groupId + title get rewritten
+  // Clone every group-level field; only groupId + title + uniqueId get rewritten
   DataModel::Group group = m_selectedGroup;
   group.groupId          = m_groups.size();
+  group.uniqueId         = allocateUniqueId();
   group.datasets.clear();
   group.outputWidgets.clear();
 
@@ -2838,9 +2960,10 @@ void DataModel::ProjectModel::duplicateCurrentGroup()
   group.title = nextDuplicateTitle(m_selectedGroup.title, existingTitles);
 
   for (size_t i = 0; i < m_selectedGroup.datasets.size(); ++i) {
-    auto dataset    = m_selectedGroup.datasets[i];
-    dataset.groupId = group.groupId;
-    dataset.index   = nextDatasetIndex() + static_cast<int>(i);
+    auto dataset     = m_selectedGroup.datasets[i];
+    dataset.groupId  = group.groupId;
+    dataset.index    = nextDatasetIndex() + static_cast<int>(i);
+    dataset.uniqueId = allocateUniqueId();
     group.datasets.push_back(dataset);
   }
 
@@ -2912,14 +3035,17 @@ static detail::RefAnchor anchorRef(const DataModel::WidgetRef& r,
 {
   detail::RefAnchor a;
   a.widgetType        = r.widgetType;
-  a.sourceGid         = r.groupId;
+  a.sourceGid         = r.groupUniqueId;
   a.datasetFrameIndex = -1;
   a.isGroupOrLed      = false;
 
-  if (r.groupId < 0 || static_cast<size_t>(r.groupId) >= groups.size())
+  auto git = std::find_if(groups.begin(), groups.end(), [uid = r.groupUniqueId](const auto& g) {
+    return g.uniqueId == uid;
+  });
+  if (git == groups.end())
     return a;
 
-  const auto& g            = groups[r.groupId];
+  const auto& g            = *git;
   const auto groupKey      = SerialStudio::getDashboardWidget(g);
   const bool emptyOutPanel = g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
   const bool groupRef = SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !emptyOutPanel
@@ -3000,38 +3126,29 @@ static std::vector<std::vector<detail::RefAnchor>> snapshotAllRefs(
 }
 
 /**
- * @brief Walks one workspace's refs against the new group/dataset layout,
- *        rewriting groupId and relativeIndex from each anchor.
+ * @brief Walks one workspace's refs against the new group/dataset layout, refreshing
+ *        the dataset slot. The group identity is uniqueId-based so it never needs remapping.
  */
 static void resolveOneWorkspaceRefs(DataModel::Workspace& ws,
                                     const std::vector<detail::RefAnchor>& src,
-                                    const std::vector<DataModel::Group>& groups,
-                                    const std::vector<int>& oldToNewGid)
+                                    const std::vector<DataModel::Group>& groups)
 {
   Q_ASSERT(src.size() == ws.widgetRefs.size());
-  const bool useMap = !oldToNewGid.empty();
 
   for (size_t i = 0; i < ws.widgetRefs.size(); ++i) {
     auto& r       = ws.widgetRefs[i];
     const auto& a = src[i];
 
-    if (a.sourceGid < 0)
+    if (a.sourceGid < 0 || a.isGroupOrLed)
       continue;
 
-    if (useMap) {
-      if (static_cast<size_t>(a.sourceGid) >= oldToNewGid.size())
-        continue;
-
-      r.groupId = oldToNewGid[static_cast<size_t>(a.sourceGid)];
-    }
-
-    if (a.isGroupOrLed)
+    auto git = std::find_if(groups.begin(), groups.end(), [uid = r.groupUniqueId](const auto& g) {
+      return g.uniqueId == uid;
+    });
+    if (git == groups.end())
       continue;
 
-    if (static_cast<size_t>(r.groupId) >= groups.size())
-      continue;
-
-    const int newSlot = slotForAnchor(a, groups[r.groupId]);
+    const int newSlot = slotForAnchor(a, *git);
     if (newSlot >= 0)
       r.relativeIndex = newSlot;
   }
@@ -3087,7 +3204,7 @@ void DataModel::ProjectModel::moveGroup(int fromGroupId, int toGroupId)
   // Re-resolve workspace refs against the new layout (auto refs regenerate on groupsChanged)
   if (m_customizeWorkspaces)
     for (size_t w = 0; w < m_workspaces.size(); ++w)
-      resolveOneWorkspaceRefs(m_workspaces[w], anchors[w], m_groups, oldToNewGid);
+      resolveOneWorkspaceRefs(m_workspaces[w], anchors[w], m_groups);
 
   if (m_selectedGroup.groupId == fromGroupId)
     m_selectedGroup = m_groups[target];
@@ -3131,7 +3248,7 @@ void DataModel::ProjectModel::moveDataset(int groupId, int fromDatasetId, int to
   // Resolve refs against the new layout using each anchor's stable Dataset::index
   if (m_customizeWorkspaces)
     for (size_t w = 0; w < m_workspaces.size(); ++w)
-      resolveOneWorkspaceRefs(m_workspaces[w], anchors[w], m_groups, {});
+      resolveOneWorkspaceRefs(m_workspaces[w], anchors[w], m_groups);
 
   if (m_selectedDataset.groupId == groupId && m_selectedDataset.datasetId == fromDatasetId)
     m_selectedDataset = datasets[target];
@@ -3618,6 +3735,7 @@ void DataModel::ProjectModel::duplicateCurrentDataset()
 
   dataset.index     = nextDatasetIndex();
   dataset.datasetId = m_groups[dataset.groupId].datasets.size();
+  dataset.uniqueId  = allocateUniqueId();
 
   const auto& siblings = m_groups[dataset.groupId].datasets;
   QStringList existingTitles;
@@ -3767,6 +3885,7 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
   dataset.title     = newTitle;
   dataset.index     = nextDatasetIndex();
   dataset.datasetId = m_groups[groupId].datasets.size();
+  dataset.uniqueId  = allocateUniqueId();
 
   m_groups[groupId].datasets.push_back(dataset);
   m_selectedDataset = dataset;
@@ -3798,6 +3917,7 @@ void DataModel::ProjectModel::ensurePainterDatasets(int groupId, const QVariantL
     ds.groupId   = groupId;
     ds.datasetId = static_cast<int>(grp.datasets.size());
     ds.index     = nextDatasetIndex();
+    ds.uniqueId  = allocateUniqueId();
     ds.title     = map.value(QStringLiteral("title"), tr("Channel %1").arg(i + 1)).toString();
     ds.units     = map.value(QStringLiteral("units")).toString();
     ds.wgtMin    = map.value(QStringLiteral("min"), 0.0).toDouble();
@@ -3943,8 +4063,9 @@ void DataModel::ProjectModel::addGroup(const QString& title,
   }
 
   DataModel::Group group;
-  group.title   = newTitle;
-  group.groupId = m_groups.size();
+  group.title    = newTitle;
+  group.groupId  = m_groups.size();
+  group.uniqueId = allocateUniqueId();
 
   // Explicit caller-supplied source wins; otherwise default (0) sticks
   if (sourceId >= 0)
@@ -3974,6 +4095,11 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
 
   if (!applyGroupWidget(grp, widget))
     return false;
+
+  // Back-fill uids for any datasets the fixed-layout populator just pushed in.
+  for (auto& d : grp.datasets)
+    if (d.uniqueId < 0)
+      d.uniqueId = allocateUniqueId();
 
   m_groups[group] = grp;
 
@@ -5082,7 +5208,7 @@ void DataModel::ProjectModel::importTableFromCsv(const QString& tableName)
  */
 void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
                                                    int widgetType,
-                                                   int groupId,
+                                                   int groupUniqueId,
                                                    int relativeIndex)
 {
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
@@ -5096,13 +5222,13 @@ void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
       continue;
 
     for (const auto& ref : ws.widgetRefs)
-      if (ref.widgetType == widgetType && ref.groupId == groupId
+      if (ref.widgetType == widgetType && ref.groupUniqueId == groupUniqueId
           && ref.relativeIndex == relativeIndex)
         return;
 
     DataModel::WidgetRef ref;
     ref.widgetType    = widgetType;
-    ref.groupId       = groupId;
+    ref.groupUniqueId = groupUniqueId;
     ref.relativeIndex = relativeIndex;
     ws.widgetRefs.push_back(ref);
 
@@ -5144,7 +5270,7 @@ void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId, int ind
  */
 void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId,
                                                         int widgetType,
-                                                        int groupId,
+                                                        int groupUniqueId,
                                                         int relativeIndex)
 {
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
@@ -5158,7 +5284,8 @@ void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId,
       continue;
 
     auto it = std::find_if(ws.widgetRefs.begin(), ws.widgetRefs.end(), [=](const auto& r) {
-      return r.widgetType == widgetType && r.groupId == groupId && r.relativeIndex == relativeIndex;
+      return r.widgetType == widgetType && r.groupUniqueId == groupUniqueId
+          && r.relativeIndex == relativeIndex;
     });
 
     if (it == ws.widgetRefs.end())
@@ -5189,7 +5316,7 @@ int DataModel::ProjectModel::cleanupWorkspaceWidgetRefs(const QSet<qint64>& vali
   for (auto& ws : m_workspaces) {
     auto& refs    = ws.widgetRefs;
     const auto it = std::remove_if(refs.begin(), refs.end(), [&](const auto& r) {
-      return !validKeys.contains(encode(r.widgetType, r.groupId, r.relativeIndex));
+      return !validKeys.contains(encode(r.widgetType, r.groupUniqueId, r.relativeIndex));
     });
 
     const auto count = std::distance(it, refs.end());
@@ -5400,7 +5527,7 @@ bool DataModel::ProjectModel::mergeAutoWorkspaceUpdates()
   bool dirty         = false;
 
   const auto refsEqual = [](const WidgetRef& a, const WidgetRef& b) {
-    return a.widgetType == b.widgetType && a.groupId == b.groupId
+    return a.widgetType == b.widgetType && a.groupUniqueId == b.groupUniqueId
         && a.relativeIndex == b.relativeIndex;
   };
 
@@ -5618,22 +5745,20 @@ void DataModel::ProjectModel::shiftWorkspaceRefsAfterGroupDelete(
     if (ws.workspaceId > deletedAutoId && ws.workspaceId < WorkspaceIds::UserStart)
       ws.workspaceId -= 1;
 
-    // Drop refs pointing at the deleted group
-    ws.widgetRefs.erase(
-      std::remove_if(ws.widgetRefs.begin(),
-                     ws.widgetRefs.end(),
-                     [deletedGid](const WidgetRef& r) { return r.groupId == deletedGid; }),
-      ws.widgetRefs.end());
-
-    // Shift surviving refs
-    for (auto& r : ws.widgetRefs) {
-      if (r.groupId <= deletedGid)
+    // groupIdForUniqueId -> post-renumber positional id, or -1 for the deleted group.
+    for (auto it = ws.widgetRefs.begin(); it != ws.widgetRefs.end();) {
+      const int newPos = groupIdForUniqueId(it->groupUniqueId);
+      if (newPos < 0) {
+        it = ws.widgetRefs.erase(it);
         continue;
+      }
 
-      r.groupId       -= 1;
-      const int lost   = deletedTypeCounts.value(r.widgetType, 0);
-      r.relativeIndex  = std::max(0, r.relativeIndex - lost);
-      Q_ASSERT(r.relativeIndex >= 0);
+      if (newPos >= deletedGid) {
+        const int lost    = deletedTypeCounts.value(it->widgetType, 0);
+        it->relativeIndex = std::max(0, it->relativeIndex - lost);
+      }
+
+      ++it;
     }
   }
 }
@@ -5738,13 +5863,15 @@ void DataModel::ProjectModel::shiftWorkspaceRefsAfterDatasetDelete(
       tallyDatasetWidgetTypes(ds, runningAtGroup);
   }
 
+  const int groupUid = groupUniqueIdForGroupId(groupId);
+
   for (auto& ws : m_workspaces) {
     // Drop refs that point into the removed dataset's slice
     ws.widgetRefs.erase(std::remove_if(ws.widgetRefs.begin(),
                                        ws.widgetRefs.end(),
                                        [&](const WidgetRef& r) {
                                          const int lost = datasetTypeCounts.value(r.widgetType, 0);
-                                         if (lost == 0 || r.groupId != groupId)
+                                         if (lost == 0 || r.groupUniqueId != groupUid)
                                            return false;
 
                                          const int base = runningAtGroup.value(r.widgetType, 0);

@@ -500,6 +500,36 @@ const SerialStudio::WidgetMap& UI::Dashboard::widgetMap() const
   return m_widgetMap;
 }
 
+/**
+ * @brief Resolves a Group.uniqueId to its positional groupId in the live frame.
+ */
+int UI::Dashboard::groupIdForUniqueId(int uniqueId) const
+{
+  if (uniqueId < 0)
+    return -1;
+
+  for (const auto& group : m_lastFrame.groups)
+    if (group.uniqueId == uniqueId)
+      return group.groupId;
+
+  return -1;
+}
+
+/**
+ * @brief Resolves a positional groupId to its Group.uniqueId; returns -1 if absent.
+ */
+int UI::Dashboard::groupUniqueIdForGroupId(int groupId) const
+{
+  if (groupId < 0)
+    return -1;
+
+  for (const auto& group : m_lastFrame.groups)
+    if (group.groupId == groupId)
+      return group.uniqueId;
+
+  return -1;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Dataset & group access functions
 //--------------------------------------------------------------------------------------------------
@@ -959,9 +989,10 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
     if (enabled) {
       // Create terminal group and add to internal structures
       DataModel::Group terminal;
-      terminal.widget  = "terminal";
-      terminal.title   = tr("Console");
-      terminal.groupId = static_cast<int>(m_lastFrame.groups.size());
+      terminal.widget   = "terminal";
+      terminal.title    = tr("Console");
+      terminal.groupId  = static_cast<int>(m_lastFrame.groups.size());
+      terminal.uniqueId = DataModel::runtime_group_unique_id(terminal.groupId);
 
       m_lastFrame.groups.push_back(terminal);
       m_widgetGroups[SerialStudio::DashboardTerminal].append(terminal);
@@ -1039,9 +1070,10 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
       DataModel::Group notif;
-      notif.widget  = "notification-log";
-      notif.title   = tr("Notifications");
-      notif.groupId = static_cast<int>(m_lastFrame.groups.size());
+      notif.widget   = "notification-log";
+      notif.title    = tr("Notifications");
+      notif.groupId  = static_cast<int>(m_lastFrame.groups.size());
+      notif.uniqueId = DataModel::runtime_group_unique_id(notif.groupId);
 
       m_lastFrame.groups.push_back(notif);
       m_widgetGroups[SerialStudio::DashboardNotificationLog].append(notif);
@@ -1118,9 +1150,10 @@ void UI::Dashboard::setClockEnabled(const bool enabled)
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
       DataModel::Group clock;
-      clock.widget  = "clock";
-      clock.title   = tr("Clock");
-      clock.groupId = static_cast<int>(m_lastFrame.groups.size());
+      clock.widget   = "clock";
+      clock.title    = tr("Clock");
+      clock.groupId  = static_cast<int>(m_lastFrame.groups.size());
+      clock.uniqueId = DataModel::runtime_group_unique_id(clock.groupId);
 
       m_lastFrame.groups.push_back(clock);
       m_widgetGroups[SerialStudio::DashboardClock].append(clock);
@@ -1196,9 +1229,10 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
       DataModel::Group stopwatch;
-      stopwatch.widget  = "stopwatch";
-      stopwatch.title   = tr("Stopwatch");
-      stopwatch.groupId = static_cast<int>(m_lastFrame.groups.size());
+      stopwatch.widget   = "stopwatch";
+      stopwatch.title    = tr("Stopwatch");
+      stopwatch.groupId  = static_cast<int>(m_lastFrame.groups.size());
+      stopwatch.uniqueId = DataModel::runtime_group_unique_id(stopwatch.groupId);
 
       m_lastFrame.groups.push_back(stopwatch);
       m_widgetGroups[SerialStudio::DashboardStopwatch].append(stopwatch);
@@ -1471,18 +1505,18 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
   Q_ASSERT(dataset.index >= 0);
   Q_ASSERT(dataset.uniqueId >= 0);
 
-  // Insert or merge dataset, preserving min/max across frames
-  if (!m_datasets.contains(dataset.index)) {
-    m_datasets.insert(dataset.index, dataset);
+  // Keyed by uniqueId; sibling datasets sharing a frame index stay distinct.
+  if (!m_datasets.contains(dataset.uniqueId)) {
+    m_datasets.insert(dataset.uniqueId, dataset);
   } else {
-    auto prev     = m_datasets.value(dataset.index);
+    auto prev     = m_datasets.value(dataset.uniqueId);
     double newMin = qMin(prev.pltMin, dataset.pltMin);
     double newMax = qMax(prev.pltMax, dataset.pltMax);
 
     auto d   = dataset;
     d.pltMin = newMin;
     d.pltMax = newMax;
-    m_datasets.insert(dataset.index, d);
+    m_datasets.insert(dataset.uniqueId, d);
   }
 
   // hideOnDashboard suppresses dataset-level tiles; painter still sees the dataset
@@ -1527,9 +1561,10 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   // Add terminal group
   if (m_terminalEnabled) {
     DataModel::Group terminal;
-    terminal.widget  = "terminal";
-    terminal.title   = tr("Console");
-    terminal.groupId = m_lastFrame.groups.size();
+    terminal.widget   = "terminal";
+    terminal.title    = tr("Console");
+    terminal.groupId  = m_lastFrame.groups.size();
+    terminal.uniqueId = DataModel::runtime_group_unique_id(terminal.groupId);
 
     m_lastFrame.groups.push_back(terminal);
   }
@@ -1538,9 +1573,10 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   // Add notification log group
   if (m_notificationLogEnabled) {
     DataModel::Group notif;
-    notif.widget  = "notification-log";
-    notif.title   = tr("Notifications");
-    notif.groupId = m_lastFrame.groups.size();
+    notif.widget   = "notification-log";
+    notif.title    = tr("Notifications");
+    notif.groupId  = m_lastFrame.groups.size();
+    notif.uniqueId = DataModel::runtime_group_unique_id(notif.groupId);
 
     m_lastFrame.groups.push_back(notif);
   }
@@ -1549,9 +1585,10 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   // Add clock group
   if (m_clockEnabled) {
     DataModel::Group clock;
-    clock.widget  = "clock";
-    clock.title   = tr("Clock");
-    clock.groupId = m_lastFrame.groups.size();
+    clock.widget   = "clock";
+    clock.title    = tr("Clock");
+    clock.groupId  = m_lastFrame.groups.size();
+    clock.uniqueId = DataModel::runtime_group_unique_id(clock.groupId);
 
     m_lastFrame.groups.push_back(clock);
   }
@@ -1559,9 +1596,10 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   // Add stopwatch group
   if (m_stopwatchEnabled) {
     DataModel::Group stopwatch;
-    stopwatch.widget  = "stopwatch";
-    stopwatch.title   = tr("Stopwatch");
-    stopwatch.groupId = m_lastFrame.groups.size();
+    stopwatch.widget   = "stopwatch";
+    stopwatch.title    = tr("Stopwatch");
+    stopwatch.groupId  = m_lastFrame.groups.size();
+    stopwatch.uniqueId = DataModel::runtime_group_unique_id(stopwatch.groupId);
 
     m_lastFrame.groups.push_back(stopwatch);
   }
@@ -1645,11 +1683,12 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
     for (const auto& dataset : group.datasets)
       processDatasetIntoWidgetMaps(dataset, ledPanel);
 
-    // Add group-level LED panel
+    // Group-level LED panel inherits parent uniqueId so workspace refs resolve.
     if (ledPanel.datasets.size() > 0) {
-      ledPanel.widget  = "led-panel";
-      ledPanel.groupId = group.groupId;
-      ledPanel.title   = tr("LED Panel (%1)").arg(group.title);
+      ledPanel.widget   = "led-panel";
+      ledPanel.groupId  = group.groupId;
+      ledPanel.uniqueId = group.uniqueId;
+      ledPanel.title    = tr("LED Panel (%1)").arg(group.title);
       m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
     }
   }
@@ -2166,9 +2205,9 @@ void UI::Dashboard::configureLineSeries()
     const int xAxisId =
       (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial)
         ? yDataset.xAxisId
-        : 0;
+        : -1;
 #else
-    const int xAxisId = 0;
+    const int xAxisId = -1;
 #endif
 
     auto xDsIt = m_datasets.find(xAxisId);

@@ -159,9 +159,10 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
     {QStringLiteral("description"), QStringLiteral("Register name (auto-uniquified)")}
   };
   addProps[QStringLiteral("computed")] = QJsonObject{
-    {       QStringLiteral("type"),QStringLiteral("boolean")                                   },
+    {       QStringLiteral("type"),QStringLiteral("boolean")},
     {QStringLiteral("description"),
-     QStringLiteral("true=computed (writable by transforms), false=constant")}
+     QStringLiteral("true=computed (writable by transforms, persists across frames), "
+     "false=constant")    }
   };
   addProps[QStringLiteral("defaultValue")] = defaultValueProp();
   QJsonObject addSchema;

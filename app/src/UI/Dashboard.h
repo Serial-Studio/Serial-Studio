@@ -138,6 +138,9 @@ public:
   [[nodiscard]] int actionIndexForId(int actionId) const noexcept;
   [[nodiscard]] const SerialStudio::WidgetMap& widgetMap() const;
 
+  [[nodiscard]] int groupIdForUniqueId(int uniqueId) const;
+  [[nodiscard]] int groupUniqueIdForGroupId(int groupId) const;
+
   // clang-format off
   [[nodiscard]] const QMap<int, DataModel::Dataset> &datasets() const;
   [[nodiscard]] const DataModel::Group &getGroupWidget(const SerialStudio::DashboardWidget widget, const int index) const;

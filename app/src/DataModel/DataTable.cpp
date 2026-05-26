@@ -127,8 +127,6 @@ void DataModel::DataTableStore::clear()
   m_storage.clear();
   m_index.clear();
   m_datasetIndex.clear();
-  m_computedOffsets.clear();
-  m_computedDefaults.clear();
   m_isComputed.clear();
   m_tableRegNames.clear();
   m_warnedMissing.clear();
@@ -355,23 +353,6 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetFinal(int u
 }
 
 //--------------------------------------------------------------------------------------------------
-// Per-frame lifecycle
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Resets all computed registers to their default values.
- */
-void DataModel::DataTableStore::resetComputedRegisters()
-{
-  Q_ASSERT(m_initialized);
-  Q_ASSERT(m_computedOffsets.size() == m_computedDefaults.size());
-
-  const size_t count = m_computedOffsets.size();
-  for (size_t i = 0; i < count; ++i)
-    m_storage[static_cast<size_t>(m_computedOffsets[i])] = m_computedDefaults[i];
-}
-
-//--------------------------------------------------------------------------------------------------
 // Export support
 //--------------------------------------------------------------------------------------------------
 
@@ -414,12 +395,6 @@ void DataModel::DataTableStore::addRegister(const QString& table,
   m_storage.push_back(defaultVal);
   m_isComputed.push_back(isComputed);
   m_index.insert(qMakePair(table, reg), offset);
-
-  // Track computed registers for per-frame reset
-  if (isComputed) {
-    m_computedOffsets.push_back(offset);
-    m_computedDefaults.push_back(defaultVal);
-  }
 }
 
 /**

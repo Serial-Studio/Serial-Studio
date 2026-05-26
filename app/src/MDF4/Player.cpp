@@ -1052,7 +1052,7 @@ void MDF4::Player::buildMultiSourceMapping()
   QVector<ChMeta> chs;
   for (const auto& g : groups)
     for (const auto& d : g.datasets)
-      chs.append({DataModel::dataset_unique_id(g, d), g.sourceId, d.index});
+      chs.append({d.uniqueId, g.sourceId, d.index});
 
   // Sort by uniqueId to match the file's channel layout
   std::sort(chs.begin(), chs.end(), [](const ChMeta& a, const ChMeta& b) { return a.uid < b.uid; });

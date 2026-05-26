@@ -945,7 +945,7 @@ void CSV::Player::buildMultiSourceMapping()
   QVector<ColMeta> cols;
   for (const auto& g : groups)
     for (const auto& d : g.datasets)
-      cols.append({DataModel::dataset_unique_id(g, d), g.sourceId, d.index});
+      cols.append({d.uniqueId, g.sourceId, d.index});
 
   // Sort by uniqueId to match the file's column layout produced by the export
   std::sort(

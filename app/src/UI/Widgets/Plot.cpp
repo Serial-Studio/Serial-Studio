@@ -58,9 +58,9 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
     const auto xAxisId =
       (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist)
         ? yDataset.xAxisId
-        : 0;
+        : -1;
 #else
-    const auto xAxisId = 0;
+    const auto xAxisId = -1;
 #endif
     if (UI::Dashboard::instance().datasets().contains(xAxisId)) {
       m_monotonicData      = false;
@@ -379,7 +379,7 @@ void Widgets::Plot::updateRange()
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
     const auto& yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
-    if (yD.xAxisId > 0) {
+    if (yD.xAxisId >= 0) {
       const auto& datasets = UI::Dashboard::instance().datasets();
       auto it              = datasets.find(yD.xAxisId);
       if (it != datasets.end()) {

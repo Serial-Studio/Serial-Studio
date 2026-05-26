@@ -179,6 +179,7 @@ inline constexpr KeyView Name("name");
 inline constexpr KeyView SchemaVersion("schemaVersion");
 inline constexpr KeyView WriterVersion("writerVersion");
 inline constexpr KeyView WriterVersionAtCreation("writerVersionAtCreation");
+inline constexpr KeyView NextUniqueId("nextUniqueId");
 
 // Project lock -- PBKDF2 hash (legacy MD5 still accepted on load).
 inline constexpr KeyView PasswordHash("passwordHash");
@@ -377,11 +378,11 @@ static_assert(sizeof(AlarmBand) % alignof(AlarmBand) == 0, "Unaligned AlarmBand 
  */
 struct alignas(8) Dataset {
   int index             = 0;      ///< Frame offset index
-  int xAxisId           = -1;     ///< Optional reference to x-axis dataset
+  int xAxisId           = -1;     ///< X-axis source: -1 = sample index, else dataset uniqueId
   int waterfallYAxis    = 0;      ///< Y source for the waterfall -- 0 = Time, N = dataset.index
   int groupId           = 0;      ///< Owning group ID
   int sourceId          = 0;      ///< Source this dataset belongs to
-  int uniqueId          = 0;      ///< Unique ID within frame
+  int uniqueId          = -1;     ///< Persisted stable identity (-1 = unassigned, compute legacy)
   int datasetId         = 0;      ///< Unique ID within group
   int fftSamples        = 256;    ///< Number of samples for FFT
   int fftSamplingRate   = 100;    ///< Sampling rate for FFT
@@ -431,9 +432,10 @@ enum class GroupType : quint8 {
  * specific sensor).
  */
 struct alignas(8) Group {
-  int groupId         = -1;                 ///< Unique group identifier
-  int sourceId        = 0;                  ///< Source this group reads from (0 = default)
-  int columns         = 2;                  ///< Number of columns for output panel grid layout
+  int groupId         = -1;  ///< Positional id within the project (changes on reorder)
+  int uniqueId        = -1;  ///< Persisted stable identity (-1 = unassigned)
+  int sourceId        = 0;   ///< Source this group reads from (0 = default)
+  int columns         = 2;   ///< Number of columns for output panel grid layout
   GroupType groupType = GroupType::Input;   ///< Input (visualization) or Output (controls)
   QString title;                            ///< Group display name
   QString widget;                           ///< Group widget type
@@ -612,11 +614,11 @@ struct TableDef {
 }
 
 /**
- * @brief Represents a reference to a specific widget in the dashboard.
+ * @brief Reference to a specific widget in the dashboard, stable across group reorders.
  */
 struct WidgetRef {
   int widgetType    = 0;
-  int groupId       = -1;
+  int groupUniqueId = -1;  ///< Group.uniqueId (stable identity, not the positional groupId)
   int relativeIndex = -1;
 };
 
@@ -649,7 +651,7 @@ struct Workspace {
   for (const auto& ref : w.widgetRefs) {
     QJsonObject r;
     r.insert(Keys::WidgetType, ref.widgetType);
-    r.insert(Keys::GroupId, ref.groupId);
+    r.insert(Keys::GroupId, ref.groupUniqueId);
     r.insert(Keys::RelativeIndex, ref.relativeIndex);
     refs.append(r);
   }
@@ -677,7 +679,7 @@ struct Workspace {
     const auto r = val.toObject();
     WidgetRef ref;
     ref.widgetType    = ss_jsr(r, Keys::WidgetType, 0).toInt();
-    ref.groupId       = ss_jsr(r, Keys::GroupId, -1).toInt();
+    ref.groupUniqueId = ss_jsr(r, Keys::GroupId, -1).toInt();
     ref.relativeIndex = ss_jsr(r, Keys::RelativeIndex, -1).toInt();
     w.widgetRefs.push_back(ref);
   }
@@ -795,6 +797,22 @@ inline constexpr int kSourceIdStride = 1000000;
  * @brief Stride applied to a dataset's group id when computing its uniqueId.
  */
 inline constexpr int kGroupIdStride = 10000;
+
+/**
+ * @brief High-offset base for uniqueIds assigned to runtime-synthesised groups
+ *        (QuickPlot, Dashboard's built-in Terminal / Clock / Stopwatch / LED panel).
+ *        Sits well above any value `dataset_unique_id()` can produce and well above
+ *        any plausible value of ProjectModel's nextUniqueId counter.
+ */
+inline constexpr int kRuntimeGroupUidBase = 0x40000000;
+
+/**
+ * @brief Deterministic uniqueId for a runtime-synthesised group.
+ */
+[[nodiscard]] inline constexpr int runtime_group_unique_id(int groupId) noexcept
+{
+  return kRuntimeGroupUidBase + groupId;
+}
 
 /**
  * @brief Single source of truth for the (source, group, dataset) -> uniqueId mapping.
@@ -917,6 +935,9 @@ void read_io_settings(QByteArray& frameStart,
 
   obj.insert(Keys::GroupId, d.groupId);
   obj.insert(Keys::DatasetId, d.datasetId);
+  if (d.uniqueId >= 0)
+    obj.insert(Keys::UniqueId, d.uniqueId);
+
   obj.insert(Keys::NumericValue, d.numericValue);
 
   if (!d.transformCode.isEmpty()) {
@@ -946,6 +967,9 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Datasets, datasetArray);
   obj.insert(Keys::Title, g.title.simplified());
   obj.insert(Keys::Widget, g.widget.simplified());
+
+  if (g.uniqueId >= 0)
+    obj.insert(Keys::UniqueId, g.uniqueId);
 
   if (g.groupType != GroupType::Input)
     obj.insert(Keys::GroupType, static_cast<int>(g.groupType));
@@ -1189,6 +1213,7 @@ inline void normalizeDatasetRanges(Dataset& d)
   d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();
   d.virtual_          = ss_jsr(obj, Keys::Virtual, false).toBool();
   d.hideOnDashboard   = ss_jsr(obj, Keys::HideOnDashboard, false).toBool();
+  d.uniqueId          = ss_jsr(obj, Keys::UniqueId, -1).toInt();
 
   if (!d.value.isEmpty())
     d.numericValue = d.value.toDouble(&d.isNumeric);
@@ -1244,6 +1269,7 @@ inline void normalizeDatasetRanges(Dataset& d)
   g.groupType = groupType;
   g.columns   = qBound(1, ss_jsr(obj, Keys::OutputColumns, 2).toInt(), 10);
   g.sourceId  = ss_jsr(obj, Keys::SourceId, 0).toInt();
+  g.uniqueId  = ss_jsr(obj, Keys::UniqueId, -1).toInt();
 
   if (isImageGroup) {
     g.imgDetectionMode = ss_jsr(obj, Keys::ImgMode, "autodetect").toString();

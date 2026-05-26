@@ -73,8 +73,6 @@ public:
   [[nodiscard]] const RegisterValue* getDatasetRaw(int uniqueId) const;
   [[nodiscard]] const RegisterValue* getDatasetFinal(int uniqueId) const;
 
-  void resetComputedRegisters();
-
   [[nodiscard]] QMap<QString, QMap<QString, RegisterValue>> snapshot() const;
 
 private:
@@ -95,8 +93,6 @@ private:
   QHash<QPair<QString, QString>, int> m_index;
   QHash<int, std::pair<int, int>> m_datasetIndex;
 
-  std::vector<int> m_computedOffsets;
-  std::vector<RegisterValue> m_computedDefaults;
   std::vector<bool> m_isComputed;
 
   std::vector<std::pair<QString, std::vector<QString>>> m_tableRegNames;
