@@ -230,7 +230,7 @@
     ],
     "title": "Lorenz Attractor",
     "widgetSettings": {
-        "activeGroup": 1000,
+        "activeGroup": 1002,
         "layout:1000": {
             "data": {
                 "autoLayout": true,

@@ -729,9 +729,22 @@ DataModel::Frame& DataModel::FrameBuilder::ensureSourceFrame(int sourceId)
 void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
                                                 const QString* channelData,
                                                 int channelCount,
-                                                const TransformFrameInfo& info)
+                                                const TransformFrameInfo& info,
+                                                const std::unordered_map<int, int>* replayColumns)
 {
-  if (dataset.virtual_) {
+  // Final-value replay: read recorded export columns by uniqueId, not parser index (virtual too).
+  if (replayColumns) [[unlikely]] {
+    const auto it = replayColumns->find(dataset.uniqueId);
+    const int col = (it != replayColumns->end()) ? it->second : -1;
+    if (col >= 0 && col < channelCount) {
+      dataset.value        = channelData[col];
+      dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+    } else {
+      dataset.numericValue = 0.0;
+      dataset.value.clear();
+      dataset.isNumeric = true;
+    }
+  } else if (dataset.virtual_) {
     dataset.numericValue = 0.0;
     dataset.value.clear();
     dataset.isNumeric = true;
@@ -780,6 +793,14 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
   const auto* channelData = channels.data();
   const int channelCount  = channels.size();
 
+  // Final-value replay (CSV/MDF4) reads recorded values by export-schema column for this source.
+  const std::unordered_map<int, int>* replayColumns = nullptr;
+  if (SerialStudio::isFinalValuePlayerOpen()) [[unlikely]] {
+    const auto it = m_replayColumnMap.find(info.sourceId);
+    if (it != m_replayColumnMap.end())
+      replayColumns = &it->second;
+  }
+
   // Refresh per-source engine cache on sourceId change -- one map lookup per rotation.
   if (info.sourceId != m_engineCacheSourceId) [[unlikely]] {
     m_engineCacheSourceId = info.sourceId;
@@ -802,7 +823,7 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
 
   for (auto& group : frame.groups)
     for (auto& dataset : group.datasets)
-      applyDatasetValue(dataset, channelData, channelCount, info);
+      applyDatasetValue(dataset, channelData, channelCount, info, replayColumns);
 
   --m_compileGuard;
 
@@ -1182,6 +1203,15 @@ void DataModel::FrameBuilder::rebuildTransformsForPlayback()
 
   compileTransforms();
   initializeTableStore();
+}
+
+/**
+ * @brief Installs the per-source uniqueId->column map a file player uses for final-value replay.
+ */
+void DataModel::FrameBuilder::setReplayColumnMap(
+  std::unordered_map<int, std::unordered_map<int, int>> map)
+{
+  m_replayColumnMap = std::move(map);
 }
 
 /**

@@ -35,6 +35,7 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QtMath>
+#include <unordered_map>
 
 #include "AppState.h"
 #include "DataModel/FrameBuilder.h"
@@ -466,10 +467,10 @@ void MDF4::Player::closeFile()
   m_multiSource        = false;
   m_isSerialStudioFile = false;
   m_masterTimeChannel  = nullptr;
-  m_channelToSource.clear();
-  m_sourceChannelCount.clear();
+  m_sourceChannelsByIndex.clear();
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+  DataModel::FrameBuilder::instance().setReplayColumnMap({});
 
   Q_EMIT openChanged();
   Q_EMIT playerStateChanged();
@@ -944,13 +945,11 @@ void MDF4::Player::sendHeaderFrame()
   if (!isOpen() || m_channels.empty())
     return;
 
-  // Multi-source project mode uses its own mapping instead of QuickPlot headers
+  // Project mode: derive the replay channel layout; multi-source skips QuickPlot headers
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
-    const auto& sources = DataModel::ProjectModel::instance().sources();
-    if (sources.size() > 1) {
-      buildMultiSourceMapping();
+    buildReplayLayout();
+    if (m_multiSource)
       return;
-    }
   }
 
   QStringList headers;
@@ -1034,61 +1033,55 @@ QByteArray MDF4::Player::getFrame(const int index)
 /**
  * @brief Builds a channel-to-source mapping for multi-source MDF4 playback.
  */
-void MDF4::Player::buildMultiSourceMapping()
+void MDF4::Player::buildReplayLayout()
 {
-  // Reset mapping state
-  m_channelToSource.clear();
-  m_sourceChannelCount.clear();
   m_sourceChannelsByIndex.clear();
 
-  // Per-channel metadata (uid, sourceId, parserIndex)
+  // Mirror the exporter's layout (skips image groups) so sorted datasets match file channels 1:1.
   struct ChMeta {
     int uid;
     int sourceId;
-    int parserIndex;
   };
 
-  const auto& groups = DataModel::ProjectModel::instance().groups();
   QVector<ChMeta> chs;
-  for (const auto& g : groups)
-    for (const auto& d : g.datasets)
-      chs.append({d.uniqueId, g.sourceId, d.index});
-
-  // Sort by uniqueId to match the file's channel layout
-  std::sort(chs.begin(), chs.end(), [](const ChMeta& a, const ChMeta& b) { return a.uid < b.uid; });
-
-  for (int ch = 0; ch < chs.size(); ++ch) {
-    const auto& m         = chs[ch];
-    m_channelToSource[ch] = m.sourceId;
-    m_sourceChannelCount[m.sourceId]++;
-  }
-
-  // Build the parser channel array (parserIndex slots, sparse-aware)
-  QMap<int, QMap<int, int>> indexToFileCh;
-  QMap<int, int> sourceMaxIndex;
-  for (int ch = 0; ch < chs.size(); ++ch) {
-    const auto& m = chs[ch];
-    if (m.parserIndex < 1)
+  for (const auto& g : DataModel::ProjectModel::instance().groups()) {
+    if (g.widget == QLatin1String("image"))
       continue;
 
-    auto& slotMap = indexToFileCh[m.sourceId];
-    if (!slotMap.contains(m.parserIndex))
-      slotMap.insert(m.parserIndex, ch);
-
-    sourceMaxIndex[m.sourceId] = std::max(sourceMaxIndex.value(m.sourceId, 0), m.parserIndex);
+    for (const auto& d : g.datasets)
+      chs.append({d.uniqueId, g.sourceId});
   }
 
-  for (auto it = indexToFileCh.constBegin(); it != indexToFileCh.constEnd(); ++it) {
-    const int srcId    = it.key();
-    const int maxIndex = sourceMaxIndex.value(srcId, 0);
-    QVector<int> ordered(maxIndex, -1);
-    for (auto sit = it.value().constBegin(); sit != it.value().constEnd(); ++sit)
-      ordered[sit.key() - 1] = sit.value();
+  std::sort(chs.begin(), chs.end(), [](const ChMeta& a, const ChMeta& b) { return a.uid < b.uid; });
 
-    m_sourceChannelsByIndex[srcId] = std::move(ordered);
+  // Count distinct sources to decide single- vs multi-source playback
+  std::unordered_map<int, int> localCounter;
+  for (const auto& m : chs)
+    localCounter[m.sourceId];
+
+  m_multiSource = localCounter.size() > 1;
+
+  // sourceId -> (uniqueId -> channel index within that source's replay channels)
+  std::unordered_map<int, std::unordered_map<int, int>> replay;
+
+  // Single-source: getFrame() emits every data channel, so channel ch == file index ch
+  if (!m_multiSource) {
+    for (int ch = 0; ch < chs.size(); ++ch)
+      replay[0][chs[ch].uid] = ch;
   }
 
-  m_multiSource = !m_channelToSource.isEmpty() && m_sourceChannelCount.size() > 1;
+  // Multi-source: each source receives its own channels in file (uniqueId) order
+  else {
+    for (auto& kv : localCounter)
+      kv.second = 0;
+
+    for (int ch = 0; ch < chs.size(); ++ch) {
+      m_sourceChannelsByIndex[chs[ch].sourceId].append(ch);
+      replay[chs[ch].sourceId][chs[ch].uid] = localCounter[chs[ch].sourceId]++;
+    }
+  }
+
+  DataModel::FrameBuilder::instance().setReplayColumnMap(std::move(replay));
 }
 
 /**

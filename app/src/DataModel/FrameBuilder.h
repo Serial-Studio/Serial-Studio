@@ -34,6 +34,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QVariant>
+#include <unordered_map>
 #include <vector>
 
 #include "DataModel/DataTable.h"
@@ -74,6 +75,7 @@ public:
   void injectTableApiLua(lua_State* L);
   void injectTableApiJS(QJSEngine* js);
   void refreshTableStoreFromProjectModel();
+  void setReplayColumnMap(std::unordered_map<int, std::unordered_map<int, int>> map);
 
 public slots:
   void setupExternalConnections();
@@ -155,6 +157,7 @@ private:
   QMap<int, DataModel::Frame> m_sourceFrames;
   std::map<int, quint64> m_sourceFrameCounters;
   std::map<EngineKey, TransformEngine> m_transformEngines;
+  std::unordered_map<int, std::unordered_map<int, int>> m_replayColumnMap;
 
   int m_engineCacheSourceId;
   TransformEngine* m_luaEngineForSource;
@@ -203,7 +206,8 @@ private:
   void applyDatasetValue(Dataset& dataset,
                          const QString* channelData,
                          int channelCount,
-                         const TransformFrameInfo& info);
+                         const TransformFrameInfo& info,
+                         const std::unordered_map<int, int>* replayColumns);
 
   // Parser-load budget guard
   bool parseBudgetSkipFrame();

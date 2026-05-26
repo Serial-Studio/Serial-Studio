@@ -2101,9 +2101,9 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
   if (!m_datasets.contains(xSource))
     return;
 
+  // Unfilled so the XY ring grows from empty -- no seeded (0,0) point draws a false first line.
   DSP::AxisData xAxis(points() + 1);
   m_xAxisData.insert(xSource, xAxis);
-  m_xAxisData[xSource].fill(0);
 }
 
 /**
@@ -2135,10 +2135,9 @@ void UI::Dashboard::configureLineSeries()
       if (!d->plt)
         continue;
 
-      // Register Y-axis; keyed by uniqueId so transformed siblings keep separate buffers
+      // Y-axis keyed by uniqueId for sibling separation; unfilled to skip the (0,0) phantom.
       DSP::AxisData yAxis(points() + 1);
       m_yAxisData.insert(d->uniqueId, yAxis);
-      m_yAxisData[d->uniqueId].fill(0);
 
       // Register X-axis
       registerXAxisIfNeeded(*d);
@@ -2266,10 +2265,8 @@ void UI::Dashboard::configureMultiLineSeries()
 
     DSP::MultiLineSeries series;
     series.x = &m_multipltXAxis;
-    for (size_t j = 0; j < group.datasets.size(); ++j) {
+    for (size_t j = 0; j < group.datasets.size(); ++j)
       series.y.push_back(DSP::AxisData(points() + 1));
-      series.y.back().fill(0);
-    }
 
     m_multipltValues.append(series);
     m_activeMultiplots.insert(i, true);

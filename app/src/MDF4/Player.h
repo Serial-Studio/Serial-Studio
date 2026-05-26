@@ -126,7 +126,7 @@ private:
                             uint64_t legacyTimeRecId);
 
   void sendHeaderFrame();
-  void buildMultiSourceMapping();
+  void buildReplayLayout();
   void injectFrame(const QByteArray& frame, int frameIndex = -1);
   QByteArray getFrame(const int index);
   [[nodiscard]] QString formatTimestamp(double timestamp) const;
@@ -157,9 +157,6 @@ private:
   std::map<uint64_t, double> m_timestampCache;
   std::map<uint64_t, std::vector<double>> m_sampleCache;
   std::map<uint64_t, std::vector<bool>> m_activeChannels;
-
-  QMap<int, int> m_channelToSource;
-  QMap<int, int> m_sourceChannelCount;
 
   QMap<int, QVector<int>> m_sourceChannelsByIndex;
 };

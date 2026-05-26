@@ -122,7 +122,7 @@ protected:
   bool handleKeyPress(QKeyEvent* keyEvent);
 
 private:
-  void buildMultiSourceMapping();
+  void buildReplayLayout();
   void injectFrame(const QByteArray& frame);
 
 private:
@@ -138,9 +138,6 @@ private:
   double m_startTimestampSeconds;
   bool m_useHighPrecisionTimestamps;
   QVector<double> m_timestampCache;
-
-  QMap<int, int> m_columnToSource;
-  QMap<int, int> m_sourceColumnCount;
 
   QMap<int, QVector<int>> m_sourceColumnsByIndex;
 };

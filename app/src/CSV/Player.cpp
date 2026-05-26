@@ -27,8 +27,10 @@
 #include <QSet>
 #include <QTimer>
 #include <QtMath>
+#include <unordered_map>
 
 #include "AppState.h"
+#include "DataModel/ExportSchema.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
@@ -242,10 +244,10 @@ void CSV::Player::closeFile()
   m_useHighPrecisionTimestamps = false;
   m_startTimestampSeconds      = 0.0;
   m_multiSource                = false;
-  m_columnToSource.clear();
-  m_sourceColumnCount.clear();
+  m_sourceColumnsByIndex.clear();
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
+  DataModel::FrameBuilder::instance().setReplayColumnMap({});
 
   Q_EMIT openChanged();
   Q_EMIT timestampChanged();
@@ -643,13 +645,11 @@ void CSV::Player::sendHeaderFrame()
   if (headerRow.size() <= 1)
     return;
 
-  // Multi-source project: build mapping and skip QuickPlot header registration
+  // Project mode: derive the replay column layout; multi-source skips QuickPlot headers
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
-    const auto& sources = DataModel::ProjectModel::instance().sources();
-    if (sources.size() > 1) {
-      buildMultiSourceMapping();
+    buildReplayLayout();
+    if (m_multiSource)
       return;
-    }
   }
 
   QStringList headers;
@@ -924,66 +924,47 @@ const QString CSV::Player::getCellValue(const int row, const int column, bool& e
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds a column-to-source mapping for multi-source CSV playback.
+ * @brief Builds the replay column layout from the export schema (uniqueId-ordered, virtual
+ * datasets included) and installs the per-source FrameBuilder lookup map.
  */
-void CSV::Player::buildMultiSourceMapping()
+void CSV::Player::buildReplayLayout()
 {
-  // Clear previous mapping before rebuilding
-  m_columnToSource.clear();
-  m_sourceColumnCount.clear();
   m_sourceColumnsByIndex.clear();
 
-  const auto& groups = DataModel::ProjectModel::instance().groups();
+  // Mirror the exporter's column layout so replay reads line up with the recorded columns.
+  DataModel::Frame frame;
+  frame.groups       = DataModel::ProjectModel::instance().groups();
+  frame.sources      = DataModel::ProjectModel::instance().sources();
+  const auto schema  = DataModel::buildExportSchema(frame);
+  const int colCount = static_cast<int>(schema.columns.size());
 
-  // Per-column metadata (uid, sourceId, parserIndex)
-  struct ColMeta {
-    int uid;
-    int sourceId;
-    int parserIndex;
-  };
+  // Distinct sources decide single- vs multi-source playback
+  QSet<int> sources;
+  for (const auto& col : schema.columns)
+    sources.insert(col.sourceId);
 
-  QVector<ColMeta> cols;
-  for (const auto& g : groups)
-    for (const auto& d : g.datasets)
-      cols.append({d.uniqueId, g.sourceId, d.index});
+  m_multiSource = sources.size() > 1;
 
-  // Sort by uniqueId to match the file's column layout produced by the export
-  std::sort(
-    cols.begin(), cols.end(), [](const ColMeta& a, const ColMeta& b) { return a.uid < b.uid; });
+  // sourceId -> (uniqueId -> column index within that source's replay channels)
+  std::unordered_map<int, std::unordered_map<int, int>> replay;
 
-  // Walk the sorted layout
-  for (int col = 0; col < cols.size(); ++col) {
-    const auto& m         = cols[col];
-    m_columnToSource[col] = m.sourceId;
-    m_sourceColumnCount[m.sourceId]++;
+  // Single-source: getFrame() strips the timestamp, so channel i == export column i
+  if (!m_multiSource) {
+    for (int i = 0; i < colCount; ++i)
+      replay[0][schema.columns[static_cast<size_t>(i)].uniqueId] = i;
   }
 
-  // For each source, build the channel array the parser expects (parserIndex slots, sparse-aware)
-  QMap<int, QMap<int, int>> indexToFileCol;
-  QMap<int, int> sourceMaxIndex;
-  for (int col = 0; col < cols.size(); ++col) {
-    const auto& m = cols[col];
-    if (m.parserIndex < 1)
-      continue;
-
-    auto& slotMap = indexToFileCol[m.sourceId];
-    if (!slotMap.contains(m.parserIndex))
-      slotMap.insert(m.parserIndex, col);
-
-    sourceMaxIndex[m.sourceId] = std::max(sourceMaxIndex.value(m.sourceId, 0), m.parserIndex);
+  // Multi-source: each source receives its own columns in export (uniqueId) order
+  else {
+    std::unordered_map<int, int> nextLocal;
+    for (int i = 0; i < colCount; ++i) {
+      const auto& col = schema.columns[static_cast<size_t>(i)];
+      m_sourceColumnsByIndex[col.sourceId].append(i);
+      replay[col.sourceId][col.uniqueId] = nextLocal[col.sourceId]++;
+    }
   }
 
-  for (auto it = indexToFileCol.constBegin(); it != indexToFileCol.constEnd(); ++it) {
-    const int srcId    = it.key();
-    const int maxIndex = sourceMaxIndex.value(srcId, 0);
-    QVector<int> ordered(maxIndex, -1);
-    for (auto sit = it.value().constBegin(); sit != it.value().constEnd(); ++sit)
-      ordered[sit.key() - 1] = sit.value();
-
-    m_sourceColumnsByIndex[srcId] = std::move(ordered);
-  }
-
-  m_multiSource = !m_columnToSource.isEmpty() && m_sourceColumnCount.size() > 1;
+  DataModel::FrameBuilder::instance().setReplayColumnMap(std::move(replay));
 }
 
 /**

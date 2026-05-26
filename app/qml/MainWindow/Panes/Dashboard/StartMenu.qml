@@ -278,8 +278,10 @@ Popup {
 
       property var popup: null
       function showMenu() {
+        // Submenu is reparented to the Start menu's parent so the CSD shadow doesn't shift it.
         if (_groups.popup === null) {
           _groups.popup = _subMenuComponent.createObject(root)
+          _groups.popup.parent = root.parent
           popup.valueSelected.connect((value) => {
             if (value === "__new_workspace__") {
               if (_groups.popup)
@@ -410,6 +412,7 @@ Popup {
       function showMenu() {
         if (_actions.popup === null) {
           _actions.popup = _subMenuComponent.createObject(root)
+          _actions.popup.parent = root.parent
           popup.valueSelected.connect((value) => {
                                         Cpp_UI_Dashboard.activateAction(value, true)
                                         root.close()
@@ -462,6 +465,7 @@ Popup {
       function showMenu() {
         if (_plugins.popup === null) {
           _plugins.popup = _subMenuComponent.createObject(root)
+          _plugins.popup.parent = root.parent
           _plugins.popup.textRole = "title"
           _plugins.popup.valueRole = "id"
           _plugins.popup.iconRole = "icon"
@@ -595,6 +599,7 @@ Popup {
       function showMenu() {
         if (_export.popup === null) {
           _export.popup = _subMenuComponent.createObject(root)
+          _export.popup.parent = root.parent
           _export.popup.valueSelected.connect((value) => {
             if (value === _export.kCsv)
               Cpp_CSV_Export.exportEnabled = !Cpp_CSV_Export.exportEnabled
@@ -694,6 +699,7 @@ Popup {
       function showMenu() {
         if (_tools.popup === null) {
           _tools.popup = _subMenuComponent.createObject(root)
+          _tools.popup.parent = root.parent
           _tools.popup.valueSelected.connect((value) => {
             if (value === _tools.kConsole) {
               root.close()
