@@ -251,7 +251,7 @@ Rectangle {
     }
 
     //
-    // Output controls section (collapsible) -- now also hosts the Action button so
+    // Output controls section (collapsible); now also hosts the Action button so
     // standalone single-button sections don't clutter the ribbon.
     //
     Widgets.RibbonSection {

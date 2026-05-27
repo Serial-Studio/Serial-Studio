@@ -93,7 +93,7 @@ static QString nextDuplicateTitle(const QString& title, const QStringList& taken
       maxN = qMax(maxN, n);
   }
 
-  // No siblings share the base -- the duplicate is the first numbered instance
+  // No siblings share the base: the duplicate is the first numbered instance
   if (maxN < 0)
     return QStringLiteral("%1 (1)").arg(base);
 
@@ -241,7 +241,7 @@ static std::vector<DataModel::WidgetRef> buildAutoRefsForGroup(
   if (groupKey == SerialStudio::DashboardPlot3D && !pro)
     groupKey = SerialStudio::DashboardMultiPlot;
 
-  // Skip empty output panels -- nothing to render on the dashboard.
+  // Skip empty output panels: nothing to render on the dashboard.
   const bool isEmptyOutputPanel =
     group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
 
@@ -322,7 +322,7 @@ DataModel::ProjectModel::ProjectModel()
     m_autoSaveTimer->start();
   });
 
-  // newJsonFile() before wiring auto-regen -- it emits groupsChanged and AppState is mid-init
+  // newJsonFile() before wiring auto-regen: it emits groupsChanged and AppState is mid-init
   newJsonFile();
 
   // Structural change -> rebuild auto workspaces, or merge into hand-edited list
@@ -496,7 +496,7 @@ QString DataModel::ProjectModel::saveBlockerDetail() const
 }
 
 //--------------------------------------------------------------------------------------------------
-// Project lock -- UX read-only flag (plain MD5, not crypto)
+// Project lock: UX read-only flag (plain MD5, not crypto)
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -1208,7 +1208,7 @@ void DataModel::ProjectModel::deleteSource(int sourceId, bool confirm)
   if (sourceId <= 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
-  // Confirm with the user when requested -- mirrors deleteCurrentGroup's UX.
+  // Confirm with the user when requested, mirroring deleteCurrentGroup's UX.
   if (confirm && !m_suppressMessageBoxes) {
     const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete data source \"%1\"?").arg(m_sources[sourceId].title),
@@ -1575,7 +1575,7 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
     return false;
   }
 
-  // Enforce .ssproj extension -- append when missing
+  // Enforce .ssproj extension: append when missing
   QString finalPath = path;
   if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
     finalPath += QStringLiteral(".ssproj");
@@ -1752,7 +1752,7 @@ void DataModel::ProjectModel::newJsonFile()
   const bool hadMqttPublisher = !m_mqttPublisher.isEmpty();
   m_mqttPublisher             = QJsonObject();
 
-  // Clear the lock -- a fresh project starts unlocked with no password set
+  // Clear the lock: a fresh project starts unlocked with no password set
   const bool wasLocked = m_locked;
   m_passwordHash.clear();
   m_locked = false;
@@ -2051,11 +2051,11 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   resolveDatasetTransformLanguages();
   resolveDatasetVirtualFlags();
 
-  // Legacy files lack persisted uniqueIds -- back-fill + seed the allocator past them.
+  // Legacy files lack persisted uniqueIds: back-fill + seed the allocator past them.
   seedNextUniqueIdFromGroups();
   loadWidgetSettingsAndWorkspaces(json);
 
-  // Legacy refs were positional/index-based -- translate now that uids are seeded.
+  // Legacy refs were positional/index-based: translate now that uids are seeded.
   if (legacyUniqueIds) {
     migrateLegacyWorkspaceRefs();
     migrateLegacyXAxisIds();
@@ -2211,7 +2211,7 @@ void DataModel::ProjectModel::loadProjectRootScalars(const QJsonObject& json)
   // Restore the uniqueId allocator (legacy files: default 1, seeded post-load).
   m_nextUniqueId = ss_jsr(json, Keys::NextUniqueId, 1).toInt();
 
-  // Restore lock -- file with a hash opens read-only until user unlocks
+  // Restore lock: file with a hash opens read-only until user unlocks
   m_passwordHash       = json.value(Keys::PasswordHash).toString();
   const bool wasLocked = m_locked;
   m_locked             = !m_passwordHash.isEmpty();
@@ -3014,7 +3014,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   if (m_customizeWorkspaces)
     deletedTypeCounts = widgetTypeCountsForGroup(m_groups[groupId]);
 
-  // Per-type counts the dataset contributes -- used to shift later refs if group survives
+  // Per-type counts the dataset contributes: used to shift later refs if group survives
   QMap<int, int> datasetTypeCounts;
   if (m_customizeWorkspaces) {
     const auto& ds  = m_groups[groupId].datasets[datasetId];
@@ -3043,7 +3043,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
         d->groupId = id;
     }
 
-    // Empty group was removed -- shift refs using the pre-delete per-type counts
+    // Empty group was removed: shift refs using the pre-delete per-type counts
     if (m_customizeWorkspaces)
       shiftWorkspaceRefsAfterGroupDelete(groupId, deletedTypeCounts);
 
@@ -3064,7 +3064,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   for (auto dataset = begin; dataset != end; ++dataset, ++id)
     dataset->datasetId = id;
 
-  // Group survives -- shift later same-type refs by datasetTypeCounts
+  // Group survives: shift later same-type refs by datasetTypeCounts
   if (m_customizeWorkspaces)
     shiftWorkspaceRefsAfterDatasetDelete(groupId, datasetTypeCounts);
 
@@ -4568,7 +4568,7 @@ void DataModel::ProjectModel::setGroupLayout(const int groupId, const QJsonObjec
 // Workspace ID layout (see WorkspaceIds:: in Frame.h):
 //   [1000, 5000) = auto IDs   (Overview=1000, AllData=1001, per-group=1002+gid)
 //   [5000, ...)  = user IDs   (addWorkspace picks max(>=5000)+1)
-// Disjoint ranges -- a future group can never claim an ID a user picked.
+// Disjoint ranges: a future group can never claim an ID a user picked.
 //
 // m_hiddenGroupIds removes per-group entries from buildAutoWorkspaces output;
 // it is independent of customize state and survives Customize toggles.
@@ -4723,7 +4723,7 @@ void DataModel::ProjectModel::reorderWorkspaces(const QList<int>& userWorkspaceI
     else
       systemSlots.push_back(std::move(ws));
 
-  // Reject mismatched sets -- partial reorder is a silent corruption hazard
+  // Reject mismatched sets: partial reorder is a silent corruption hazard
   if (userWorkspaceIds.size() != userById.size())
     return;
 
@@ -5597,7 +5597,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
   if (eligibleGroups == 0)
     return result;
 
-  // "Overview" workspace -- first so users land here by default
+  // "Overview" workspace: first so users land here by default
   if (overviewRefs.size() >= 2) {
     DataModel::Workspace ws;
     ws.workspaceId = WorkspaceIds::Overview;
@@ -5607,7 +5607,7 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
     result.push_back(std::move(ws));
   }
 
-  // "All Data" -- every widget across every group.
+  // "All Data": every widget across every group.
   if (eligibleGroups >= 2) {
     DataModel::Workspace ws;
     ws.workspaceId = WorkspaceIds::AllData;
@@ -5733,7 +5733,7 @@ int DataModel::ProjectModel::autoGenerateWorkspaces()
   if (m_customizeWorkspaces && !m_workspaces.empty())
     return m_workspaces.front().workspaceId;
 
-  // Bail out if nothing eligible -- don't flip customize mode on an empty list
+  // Bail out if nothing eligible: don't flip customize mode on an empty list
   auto seed = buildAutoWorkspaces();
   if (seed.empty())
     return -1;
@@ -5824,7 +5824,7 @@ QMap<int, int> DataModel::ProjectModel::widgetTypeCountsForGroup(const Group& g)
   if (groupKey == SerialStudio::DashboardPlot3D && !SerialStudio::proWidgetsEnabled())
     groupKey = SerialStudio::DashboardMultiPlot;
 
-  // Skip empty output panels -- nothing to render on the dashboard.
+  // Skip empty output panels: nothing to render on the dashboard.
   const bool isEmptyOutputPanel =
     g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
 
@@ -5985,7 +5985,7 @@ void DataModel::ProjectModel::shiftWorkspaceRefsAfterDatasetDelete(
 
     const auto groupKey = SerialStudio::getDashboardWidget(g);
 
-    // Skip empty output panels -- nothing to render on the dashboard.
+    // Skip empty output panels: nothing to render on the dashboard.
     const bool isEmptyOutputPanel =
       g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
 

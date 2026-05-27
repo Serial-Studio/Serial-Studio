@@ -161,7 +161,7 @@ bool Platform::SecretStore::remove(const QString& service, const QString& accoun
 #  else  // !HAVE_LIBSECRET
 
 //--------------------------------------------------------------------------------------------------
-// SecretStore (Linux without libsecret) -- forces the caller's encrypted-QSettings fallback
+// SecretStore (Linux without libsecret): forces the caller's encrypted-QSettings fallback
 //--------------------------------------------------------------------------------------------------
 
 /**

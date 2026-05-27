@@ -278,7 +278,7 @@ Widgets.Pane {
       // Keyboard navigation
       //
       Keys.onPressed: (event) => {
-                        // Alt+Up / Alt+Down -- reorder the current selection
+                        // Alt+Up / Alt+Down: reorder the current selection
                         if ((event.modifiers & Qt.AltModifier)
                             && (event.key === Qt.Key_Up || event.key === Qt.Key_Down)) {
                           const dir = event.key === Qt.Key_Up ? -1 : 1
@@ -413,7 +413,7 @@ Widgets.Pane {
               const idx = treeView.index(row, column)
 
               //
-              // Right click -- preserve multi-selection when the click lands on an
+              // Right click: preserve multi-selection when the click lands on an
               // already-selected row; otherwise drop to single-select on that row.
               //
               if (mouse.button === Qt.RightButton) {
@@ -431,7 +431,7 @@ Widgets.Pane {
               }
 
               //
-              // Left click -- modifiers drive multi-select. Skip spacer rows so
+              // Left click: modifiers drive multi-select. Skip spacer rows so
               // they still cannot become "selected".
               //
               if (model.treeViewText.trim().length === 0) {

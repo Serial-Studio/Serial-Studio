@@ -44,14 +44,14 @@ UI::TaskbarSettings::TaskbarSettings()
   , m_settingsPersistent(true)
   , m_autohideDelayMs(kDefaultAutohideDelayMs)
 {
-  // Pinned buttons -- sanitize against the canonical available list
+  // Pinned buttons: sanitize against the canonical available list
   if (m_settings.contains(QStringLiteral("Taskbar/PinnedButtons")))
     m_pinnedButtons =
       sanitizePinned(m_settings.value(QStringLiteral("Taskbar/PinnedButtons")).toStringList());
   else
     m_pinnedButtons = defaultPinnedButtons();
 
-  // Always-show toggle -- migrate legacy Dashboard/ShowTaskbarButtons on first run
+  // Always-show toggle: migrate legacy Dashboard/ShowTaskbarButtons on first run
   if (m_settings.contains(QStringLiteral("Taskbar/ShowTaskbarButtons")))
     m_showTaskbarButtons =
       m_settings.value(QStringLiteral("Taskbar/ShowTaskbarButtons"), false).toBool();

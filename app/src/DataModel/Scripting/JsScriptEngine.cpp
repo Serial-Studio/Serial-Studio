@@ -235,7 +235,7 @@ DataModel::JsScriptEngine::JsScriptEngine()
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(&m_engine);
 
-  // Expose apiCall(method, params?) -- gated to a read-only allow-list by default
+  // Expose apiCall(method, params?): gated to a read-only allow-list by default
   DataModel::ScriptApiCall::installJS(&m_engine, m_sourceId);
 }
 

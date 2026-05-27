@@ -32,7 +32,7 @@ ListView {
   model: conversation ? conversation.messages : []
 
   //
-  // Vertical scrollbar -- pinned to the right edge, fades when idle.
+  // Vertical scrollbar: pinned to the right edge, fades when idle.
   //
   ScrollBar.vertical: ScrollBar {
     id: vScroll

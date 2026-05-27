@@ -713,7 +713,7 @@ void Misc::ExtensionManager::autoUpdateExtensions()
   // Schedule next update via a queued hop so applyFilter() finishes before re-entry
   if (!m_autoUpdateQueue.isEmpty()) {
     if (found && m_loading) {
-      // Remote install in progress -- wait for completion, then queue
+      // Remote install in progress: wait for completion, then queue
       connect(
         this,
         &ExtensionManager::extensionInstalled,
@@ -874,7 +874,7 @@ void Misc::ExtensionManager::onFileDownloadReply()
     return;
   }
 
-  // All downloads complete -- register using saved metadata snapshot
+  // All downloads complete: register using saved metadata snapshot
   QJsonObject info;
   info.insert("version", m_currentInstallMeta.value("version").toString());
   info.insert("type", m_currentInstallMeta.value("type").toString());
@@ -1797,11 +1797,11 @@ void Misc::ExtensionManager::onDashboardAvailableChanged()
 {
   const bool available = UI::Dashboard::instance().available();
 
-  // Dashboard just became visible -- restore plugins
+  // Dashboard just became visible: restore plugins
   if (available && !m_dashboardWasAvailable)
     restoreRunningPlugins();
 
-  // Dashboard just became hidden -- save & stop plugins
+  // Dashboard just became hidden: save & stop plugins
   else if (!available && m_dashboardWasAvailable)
     stopAllPlugins();
 

@@ -93,7 +93,7 @@ Widgets.Pane {
       anchors.fill: parent
 
       //
-      // Secondary toolbar -- Rename, Delete
+      // Secondary toolbar: Rename, Delete
       //
       Rectangle {
         id: toolbar
@@ -168,7 +168,7 @@ Widgets.Pane {
       }
 
       //
-      // Widgets list -- header + rows via the shared ProjectTable components.
+      // Widgets list: header + rows via the shared ProjectTable components.
       //
       Widgets.ProjectTableHeader {
         Layout.fillWidth: true

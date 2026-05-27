@@ -46,7 +46,9 @@ public:
 
   void setCurrentModel(const QString& model) override;
 
-  [[nodiscard]] Reply* sendMessage(const QJsonArray& history, const QJsonArray& tools) override;
+  [[nodiscard]] Reply* sendMessage(const QJsonArray& history,
+                                   const QJsonArray& tools,
+                                   bool forbidToolUse = false) override;
 
   [[nodiscard]] QString baseUrl() const;
   void setBaseUrl(const QString& url);

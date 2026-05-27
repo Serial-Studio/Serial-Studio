@@ -532,6 +532,16 @@ logical block, only when not self-evident. **Forbidden**: inline EOL comments, m
 `//` prose, `/* ... */` inside function bodies, restating the code, AI narration ("we",
 "Note that", tutorial voice, "this used to...", hedging, bare `TODO`).
 
+**Don't fake the em-dash.** Source and user-facing Markdown are ASCII-only, so the em-dash
+glyph (U+2014) is out — but the fix is to *rewrite the sentence*, not to swap in a spaced
+double-hyphen ` -- `. `--` as a sentence dash is a mechanical glyph trade that reads like a
+robot did the edit; recast with a comma, colon, period, or parentheses instead. The point of
+the rule is human, considered prose, not one dash glyph for another. `code-verify.py` flags it
+in comments (`comment-dash-substitute`, advisory) and `documentation-verify.py` in docs
+(`style-dash-substitute`); `i--`, `--i`, and `//---` banners don't match (the rule needs a
+space on both sides). The whole codebase carries baseline `--` debt, so both ship as advisory
+— new prose should still clear them.
+
 ### QML
 
 - **Christmas-tree property order** by **total rendered line length** (shortest first).

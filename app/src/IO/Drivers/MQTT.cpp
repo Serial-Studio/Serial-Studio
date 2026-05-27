@@ -1103,7 +1103,7 @@ void IO::Drivers::MQTT::scheduleReconnectIfActive()
   if (m_client.state() == QMqttClient::Disconnected)
     return;
 
-  // Already in the middle of a teardown -- the pending lambda will pick up the fresh mirror
+  // Already in the middle of a teardown; the pending lambda will pick up the fresh mirror
   if (m_reconnectPending) {
     if (m_client.state() != QMqttClient::Disconnected)
       m_client.disconnectFromHost();
@@ -1124,7 +1124,7 @@ void IO::Drivers::MQTT::scheduleReconnectIfActive()
       delete conn;
       m_reconnectPending = false;
 
-      // The user may have hit Disconnect during our async teardown -- honor that
+      // The user may have hit Disconnect during our async teardown; honor that
       if (!m_userWantsOpen)
         return;
 

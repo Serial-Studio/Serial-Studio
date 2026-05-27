@@ -532,7 +532,7 @@ SmartDialog {
           anchors.fill: parent
 
           //
-          // README panel -- WebEngine when available, plain rich-text otherwise
+          // README panel: WebEngine when available, plain rich-text otherwise
           //
           Item {
             Layout.fillWidth: true

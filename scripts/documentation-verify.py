@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Serial Studio documentation linter for Markdown.
 
-Targets the prose under `doc/help/`, the top-level `README.md` and
-`AGENTS.md`, and the per-example `README.md` files under `examples/`.
+Targets every first-party Markdown file: the top-level docs (`README.md`,
+`AGENTS.md`, `CODE_OF_CONDUCT.md`, `DISCOVER.md`), the `doc/help/` manual,
+the in-app AI docs and skills under `app/`, the bundled `examples/`, and
+the translation README. Vendored `lib/` trees and `LICENSE*.md` (verbatim
+legal text) are skipped.
 
 The rules below catch the AI-narration / marketing-copy patterns that
 keep leaking into the docs. Documentation rewrites are judgement calls,
@@ -38,6 +41,7 @@ Findings are grouped by `kind`:
     ai-superlative         -- "blazing fast", "lightning", "world-class", ...
     ai-meta-reference      -- "in this guide", "this section will", ...
     style-shouting         -- trailing "!" in body prose
+    style-dash-substitute  -- ` -- ` as a sentence dash (rewrite, don't swap glyphs)
     style-emdash-density   -- > 8 em-dashes per file (rhythm tic)
     style-hr-separator     -- `---` / `***` / `___` horizontal rule used as section divider
 
@@ -345,6 +349,13 @@ _SHOUTING = re.compile(r"(?<![A-Z0-9!])!(?:\s|$|[)\]])")
 # upstream, so any HR seen here is a body-prose separator.
 _HR_SEPARATOR = re.compile(r"^\s{0,3}(?:(?:-\s*){3,}|(?:\*\s*){3,}|(?:_\s*){3,})\s*$")
 
+# `--` used as a sentence dash: the spaced double-hyphen an AI reaches for
+# when told to strip em dashes (ASCII-only docs ban the U+2014 glyph). It is
+# a mechanical glyph swap, not the rewrite the rule asks for. The fix is to
+# recast the sentence with a comma, colon, period, or parentheses. Spaces on
+# both sides keep CLI flags (`--check`) and `--`-prefixed options out of it.
+_DASH_SUBSTITUTE = re.compile(r"\S -- \S")
+
 # How many em-dashes in a single file before we flag the density itself.
 # A few are fine for parentheticals; ten or more is a rhythm tic.
 _EMDASH_DENSITY_THRESHOLD = 8
@@ -590,6 +601,25 @@ def scan_file(path: Path) -> list[Finding]:
             )
             break  # one per line
 
+        # Style: `--` used as a sentence dash. The mechanical em-dash swap an
+        # AI makes under the ASCII-only rule instead of rewriting the sentence.
+        m = _DASH_SUBSTITUTE.search(masked)
+        if m:
+            findings.append(
+                Finding(
+                    path=path,
+                    line=lineno,
+                    col=m.start() + 1,
+                    kind="style-dash-substitute",
+                    message=(
+                        "`--` as a sentence dash; rewrite the sentence "
+                        "(comma / colon / period / parentheses), don't swap "
+                        "em dash for `--`"
+                    ),
+                    excerpt=raw.strip()[:140],
+                )
+            )
+
         prev_raw = raw
 
     # Whole-file rules.
@@ -629,41 +659,63 @@ def scan_file(path: Path) -> list[Finding]:
 
 
 def default_targets(repo_root: Path) -> list[Path]:
-    """The default scan set: doc/help, README.md, AGENTS.md, and every
-    Markdown file under examples/."""
+    """The default scan set: every first-party Markdown file. Top-level docs
+    (README, AGENTS, CODE_OF_CONDUCT, DISCOVER), the `doc/help` manual, the
+    in-app AI docs and skills under `app/`, the bundled examples, and the
+    translation README. Vendored `lib/` trees and `LICENSE.md` are NOT in the
+    set; `iter_markdown_files` enforces that for any explicit target too."""
     out: list[Path] = []
-    help_dir = repo_root / "doc" / "help"
-    if help_dir.is_dir():
-        out.append(help_dir)
-    for top in ("README.md", "AGENTS.md"):
+
+    # Top-level docs. LICENSE.md is deliberately omitted: it is a verbatim
+    # legal text, not prose we author or rewrite.
+    for top in ("README.md", "AGENTS.md", "CODE_OF_CONDUCT.md", "DISCOVER.md"):
         p = repo_root / top
         if p.is_file():
             out.append(p)
-    examples = repo_root / "examples"
-    if examples.is_dir():
-        out.append(examples)
+
+    # First-party doc / example / app-resource trees.
+    for rel in ("doc/help", "examples", "app/rcc/ai", "app/translations"):
+        d = repo_root / rel
+        if d.is_dir():
+            out.append(d)
+
     return out
 
 
+# Directory names that are never first-party prose: vendored third-party
+# trees (`lib/`), build output, and tool caches. A path containing any of
+# these is skipped even when handed in explicitly.
+_SKIP_DIRS = frozenset({"lib", "node_modules", "build", ".git", "venv", "__pycache__"})
+
+
+def _is_skipped(path: Path) -> bool:
+    """True for vendored / build / cache paths and for any `LICENSE*.md`.
+    The license is verbatim legal text, not prose this linter should touch."""
+    if any(p in _SKIP_DIRS for p in path.parts):
+        return True
+    return path.stem.lower().startswith("license")
+
+
 def iter_markdown_files(targets: list[Path]) -> Iterable[Path]:
-    """Yield every `.md` file under `targets`, deduplicated and sorted."""
+    """Yield every first-party `.md` file under `targets`, deduplicated and
+    sorted. Vendored `lib/` trees, build output, and `LICENSE*.md` are
+    skipped (see `_is_skipped`) even when a target points straight at them."""
     seen: set[Path] = set()
     for t in targets:
         if t.is_file():
-            if t.suffix.lower() == ".md":
+            if t.suffix.lower() == ".md" and not _is_skipped(t):
                 seen.add(t.resolve())
         elif t.is_dir():
             for root, _, files in os.walk(t):
-                # Skip vendored / build trees.
-                parts = Path(root).parts
-                if any(
-                    p in {"node_modules", "build", ".git", "venv", "__pycache__"}
-                    for p in parts
-                ):
+                root_path = Path(root)
+                if any(p in _SKIP_DIRS for p in root_path.parts):
                     continue
                 for name in files:
-                    if name.lower().endswith(".md"):
-                        seen.add(Path(root, name).resolve())
+                    if not name.lower().endswith(".md"):
+                        continue
+                    p = root_path / name
+                    if not _is_skipped(p):
+                        seen.add(p.resolve())
     return sorted(seen)
 
 
@@ -744,9 +796,16 @@ These rules encode the writing principles we want the docs to follow:
 - **No shouting.** Trailing `!` in body prose. Manuals are declarative.
 - **ASCII typography.** Em dashes, en dashes, smart quotes, arrows,
   micro / degree glyphs all break older toolchains and read as escape
-  goo in legacy editors. Use `--`, `-`, `"`, `->`, `degrees`, etc. The
-  same rule the C++/QML linter applies in source.
-- **Em-dash density.** A few em dashes (or `--` substitutes) are fine
+  goo in legacy editors. Use `-`, `"`, `->`, `degrees`, etc. The same
+  rule the C++/QML linter applies in source. The em dash is the one
+  exception with no clean ASCII swap (see "No dash substitute" below).
+- **No dash substitute.** A spaced double-hyphen ` -- ` standing in for
+  an em dash is not the fix. ASCII-only docs ban the em-dash glyph, and
+  the reflex is to type `--` instead; that is a mechanical glyph trade,
+  not a rewrite. Recast the sentence with a comma, colon, period, or
+  parentheses. The point of the rule is human, considered prose, not a
+  mechanical swap of one dash glyph for another.
+- **Em-dash density.** A few em dashes (or ` -- ` substitutes) are fine
   for parentheticals. Past 8 in a single file the dashes start to read
   as a writing tic; replace some with parentheses, commas, or split
   sentences.

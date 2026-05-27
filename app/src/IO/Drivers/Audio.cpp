@@ -314,7 +314,7 @@ IO::Drivers::Audio::Audio()
   generateLists();
   refreshAudioDevices();
 
-  // configureInput/configureOutput sync m_config at the end -- no separate sync call needed
+  // configureInput/configureOutput sync m_config at the end; no separate sync call needed
   restoreSettings();
   configureInput();
   configureOutput();

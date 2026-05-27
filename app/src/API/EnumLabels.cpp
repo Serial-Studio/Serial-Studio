@@ -378,7 +378,7 @@ QString API::EnumLabels::datasetOptionsLabel(int value)
 }
 
 //--------------------------------------------------------------------------------------------------
-// DashboardWidget slug -- bidirectional
+// DashboardWidget slug (bidirectional)
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -513,7 +513,7 @@ int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
 }
 
 //--------------------------------------------------------------------------------------------------
-// DatasetOption slug -- bidirectional
+// DatasetOption slug (bidirectional)
 //--------------------------------------------------------------------------------------------------
 
 /**

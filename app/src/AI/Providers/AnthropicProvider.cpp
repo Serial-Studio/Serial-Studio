@@ -185,7 +185,9 @@ AI::ProviderCapabilities AI::AnthropicProvider::capabilities() const
 /**
  * @brief Builds the Messages API request body and returns a streaming Reply.
  */
-AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history, const QJsonArray& tools)
+AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
+                                              const QJsonArray& tools,
+                                              bool forbidToolUse)
 {
   const auto key = m_keyGetter ? m_keyGetter() : QString();
   if (key.isEmpty())
@@ -223,6 +225,13 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history, const Q
       sanitizedTools.append(t);
     }
     body[QStringLiteral("tools")] = sanitizedTools;
+
+    // Forced-summary round: keep the schema (history holds tool_use) but forbid new calls
+    if (forbidToolUse) {
+      QJsonObject toolChoice;
+      toolChoice[QStringLiteral("type")]  = QStringLiteral("none");
+      body[QStringLiteral("tool_choice")] = toolChoice;
+    }
   }
   body[QStringLiteral("messages")] = sanitizeHistoryToolNames(history);
 

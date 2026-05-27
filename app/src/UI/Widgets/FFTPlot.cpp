@@ -72,7 +72,7 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
   , m_plan(nullptr)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index)) {
-    // Clamp fftSamples -- project JSON is user-controlled, unbounded would OOM
+    // Clamp fftSamples: project JSON is user-controlled, unbounded would OOM
     static constexpr int kMaxFftSamples = 65536;
     const auto& dataset                 = GET_DATASET(SerialStudio::DashboardFFT, m_index);
     const int clampedSamples            = qBound(8, dataset.fftSamples, kMaxFftSamples);

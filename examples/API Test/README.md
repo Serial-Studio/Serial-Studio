@@ -238,7 +238,7 @@ introspects the live server with `api.getCommands`, then exercises:
 - protocol invariants (unknown command -> structured error, response IDs
   match request IDs, batch order is preserved);
 - one read-only command per scope (`io.getStatus`, `dashboard.getStatus`,
-  `project.exportJson`, `console.getConfig`, ...) -- skipped automatically
+  `project.exportJson`, `console.getConfig`, ...), skipped automatically
   when the command isn't registered (GPL build, feature off, missing Pro
   tier);
 - error-shape behavior (missing required param and type-mismatched param

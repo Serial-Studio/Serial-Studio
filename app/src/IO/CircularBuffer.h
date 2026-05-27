@@ -351,7 +351,7 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
   const auto pSize     = pattern.size();
   const auto* pData    = pattern.constData();
 
-  // Linear region fast path -- no wrap-around, scan with plain pointers (no mask).
+  // Linear region fast path: no wrap-around, scan with plain pointers (no mask).
   if ((head + current_size) <= m_capacity) [[likely]]
     return kmpScanLinear(m_buffer.data() + head, current_size, pos, pData, pSize, lps);
 
@@ -513,12 +513,12 @@ typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer
     return {};
   };
 
-  // Linear region fast path -- pointer scan, no mask per byte.
+  // Linear region fast path: pointer scan, no mask per byte.
   if ((head + bufSize) <= m_capacity) [[likely]] {
     const StorageType* base = m_buffer.data() + head;
     return scan([base](qsizetype k) { return base[k]; });
   }
 
-  // Wrap-around path -- mask per byte
+  // Wrap-around path: mask per byte
   return scan([this, head, mask](qsizetype k) { return m_buffer[(head + k) & mask]; });
 }

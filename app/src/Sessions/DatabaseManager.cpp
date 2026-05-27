@@ -186,7 +186,7 @@ void Sessions::DatabaseManager::shutdown()
     m_thread->wait(5000);
   }
 
-  // Thread is dead -- delete worker directly (deleteLater would never fire)
+  // Thread is dead, delete worker directly (deleteLater would never fire)
   delete m_worker;
   m_worker = nullptr;
 
@@ -919,7 +919,7 @@ void Sessions::DatabaseManager::requestPdfOutputPath(int sessionId, HtmlReportOp
  */
 void Sessions::DatabaseManager::renderReportFromPayload(const ReportPayloadPtr& payload)
 {
-  // Stale payload from a superseded request -- drop silently
+  // Stale payload from a superseded request: drop silently
   if (!m_pendingPdfActive)
     return;
 

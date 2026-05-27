@@ -138,7 +138,9 @@ AI::ProviderCapabilities AI::GroqProvider::capabilities() const
 /**
  * @brief Builds the Chat Completions request body and returns a streaming Reply.
  */
-AI::Reply* AI::GroqProvider::sendMessage(const QJsonArray& history, const QJsonArray& tools)
+AI::Reply* AI::GroqProvider::sendMessage(const QJsonArray& history,
+                                         const QJsonArray& tools,
+                                         bool forbidToolUse)
 {
   const auto key = m_keyGetter ? m_keyGetter() : QString();
   if (key.isEmpty())
@@ -165,8 +167,9 @@ AI::Reply* AI::GroqProvider::sendMessage(const QJsonArray& history, const QJsonA
   body[QStringLiteral("messages")] =
     OpenAIProvider::translateHistory(history, systemText, /*useDeveloperRole=*/false);
   if (!tools.isEmpty()) {
-    body[QStringLiteral("tools")]       = OpenAIProvider::translateTools(tools);
-    body[QStringLiteral("tool_choice")] = QStringLiteral("auto");
+    body[QStringLiteral("tools")] = OpenAIProvider::translateTools(tools);
+    body[QStringLiteral("tool_choice")] =
+      forbidToolUse ? QStringLiteral("none") : QStringLiteral("auto");
   }
 
   const auto bytes = QJsonDocument(body).toJson(QJsonDocument::Compact);

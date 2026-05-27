@@ -821,7 +821,7 @@ ColumnLayout {
         }
 
         //
-        // Button row -- emits a setData click sentinel so the C++ side can route to a signal
+        // Button row: emits a setData click sentinel so the C++ side can route to a signal
         //
         Loader {
           id: buttonLoader

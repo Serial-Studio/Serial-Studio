@@ -211,7 +211,7 @@ void Sessions::HtmlReport::render(const ReportData& data,
 
   Q_EMIT progress(tr("Assembling report…"), 0.10);
 
-  // Build the single HTML string -- used for both outputs
+  // Build the single HTML string used for both outputs
   m_htmlCache = buildHtml();
   if (m_htmlCache.isEmpty()) {
     Q_EMIT finished(QString(), false);
@@ -283,7 +283,7 @@ QString Sessions::HtmlReport::buildHtml() const
   const QString chartsHtml =
     (m_opts.includeCharts && !m_series.empty()) ? buildChartsSection() : QString();
 
-  // Template expansion (multi-pass replace -- one per placeholder)
+  // Template expansion (multi-pass replace, one per placeholder)
   html.replace(QStringLiteral("{{CHART_JS}}"), chartJs);
   html.replace(QStringLiteral("{{REPORT_CSS}}"), css);
   html.replace(QStringLiteral("{{REPORT_JS}}"), js);
@@ -380,7 +380,7 @@ QString Sessions::HtmlReport::buildCoverSection() const
                             ? QString()
                             : QStringLiteral("<div class=\"logo\">%1</div>").arg(logoMarkup);
 
-  // Cover facts strip -- at-a-glance document identity
+  // Cover facts strip: at-a-glance document identity
   const QString facts =
     QStringLiteral(
       "<div class=\"cover-facts\">"
@@ -498,7 +498,7 @@ QString Sessions::HtmlReport::buildSummarySection() const
                                     m_data.datasets.end(),
                                     [](const DatasetStats& d) { return !d.units.isEmpty(); });
 
-  // Table header -- data-sort-type drives the JS comparator
+  // Table header: data-sort-type drives the JS comparator
   QString header = QStringLiteral("<thead><tr>")
                  + QStringLiteral("<th class=\"align-left\" data-sort-type=\"text\">%1</th>")
                      .arg(escapeHtml(tr("Parameter")));
@@ -656,7 +656,7 @@ QString Sessions::HtmlReport::buildReportDataJson() const
     entry["times"]  = times;
     entry["values"] = values;
 
-    // Per-series stats payload -- only emitted when the dataset has numeric samples
+    // Per-series stats payload: only emitted when the dataset has numeric samples
     const auto it = statsByUid.find(s.uniqueId);
     if (it != statsByUid.end() && it->second->numericSamples > 0) {
       QJsonObject stats;
@@ -688,7 +688,7 @@ QString Sessions::HtmlReport::buildReportDataJson() const
   root["style"]   = style;
   root["options"] = options;
 
-  // Compact form -- whitespace would bloat the inline blob for big sessions
+  // Compact form: whitespace would bloat the inline blob for big sessions
   return QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
 }
 

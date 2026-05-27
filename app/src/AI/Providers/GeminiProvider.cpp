@@ -272,7 +272,9 @@ QJsonArray AI::GeminiProvider::translateTools(const QJsonArray& tools)
 /**
  * @brief Builds the streamGenerateContent request and returns a streaming Reply.
  */
-AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history, const QJsonArray& tools)
+AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history,
+                                           const QJsonArray& tools,
+                                           bool forbidToolUse)
 {
   const auto key = m_keyGetter ? m_keyGetter() : QString();
   if (key.isEmpty())
@@ -308,8 +310,18 @@ AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history, const QJso
   }
 
   const auto translatedTools = translateTools(tools);
-  if (!translatedTools.isEmpty())
+  if (!translatedTools.isEmpty()) {
     body[QStringLiteral("tools")] = translatedTools;
+
+    // Forced-summary round: Gemini forbids new calls via functionCallingConfig.mode=NONE
+    if (forbidToolUse) {
+      QJsonObject fnConfig;
+      fnConfig[QStringLiteral("mode")] = QStringLiteral("NONE");
+      QJsonObject toolConfig;
+      toolConfig[QStringLiteral("function_calling_config")] = fnConfig;
+      body[QStringLiteral("tool_config")]                   = toolConfig;
+    }
+  }
 
   // Endpoint: /v1beta/models/<model>:streamGenerateContent?key=<key>&alt=sse
   QUrl url(QStringLiteral(

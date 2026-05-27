@@ -43,7 +43,7 @@ Item {
   readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity) : root.color
 
   //
-  // Theme-aware chrome stops -- adapts lighten/darken amounts to widget_base luminance
+  // Theme-aware chrome stops that adapt lighten/darken amounts to widget_base luminance
   //
   readonly property bool darkBg: {
     const c = Cpp_ThemeManager.colors["widget_base"]
@@ -150,7 +150,7 @@ Item {
   }
 
   //
-  // SwipeView -- page 0 = analog meter, page 1 = digital readout.
+  // SwipeView: page 0 = analog meter, page 1 = digital readout.
   // Active page is persisted per-widget via Cpp_JSON_ProjectModel.
   //
   SwipeView {
@@ -162,7 +162,7 @@ Item {
     anchors.bottomMargin: pageIndicator.height + 4
 
     //
-    // PAGE 0 -- Analog meter
+    // PAGE 0: Analog meter
     //
     Item {
       clip: true
@@ -224,7 +224,7 @@ Item {
                                                    || meterArea.labelsArcStep * 2 > tickLabelMetrics.width + 4
 
         //
-        // Outer chrome ring -- hidden source for MultiEffect drop shadow
+        // Outer chrome ring: hidden source for MultiEffect drop shadow
         //
         Shape {
           id: chromeShape
@@ -417,7 +417,7 @@ Item {
         }
 
         //
-        // Alarm-band highlights -- colored arc segments at the outer rim, one per dataset band.
+        // Alarm-band highlights: colored arc segments at the outer rim, one per dataset band.
         //
         Repeater {
           model: root.model.alarmBands
@@ -636,7 +636,7 @@ Item {
         }
 
         //
-        // Pointed needle -- tapered triangle with a small counterweight tail.
+        // Pointed needle: tapered triangle with a small counterweight tail.
         // z: 2 keeps the needle above the z: 1 tick labels.
         //
         Item {
@@ -728,7 +728,7 @@ Item {
     }
 
     //
-    // PAGE 1 -- Big digital readout
+    // PAGE 1: Big digital readout
     //
     Item {
       id: digitalPage

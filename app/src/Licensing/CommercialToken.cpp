@@ -25,7 +25,7 @@
 #include <QCryptographicHash>
 
 //--------------------------------------------------------------------------------------------------
-// Obfuscated salt storage -- split into 4 XOR-masked 16-bit volatiles to defeat constant folding
+// Obfuscated salt storage: split into 4 XOR-masked 16-bit volatiles to defeat constant folding
 //--------------------------------------------------------------------------------------------------
 
 // clang-format off

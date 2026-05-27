@@ -224,7 +224,7 @@ private:
   QVariantList m_sessionList;
   QVariantList m_tagList;
 
-  // Pending PDF render context -- paired with worker reply by sessionId
+  // Pending PDF render context, paired with worker reply by sessionId
   HtmlReportOptions m_pendingPdfOpts;
   int m_pendingPdfSessionId;
   bool m_pendingPdfActive;

@@ -155,7 +155,7 @@ void Widgets::VideoExportWorker::processItems(const std::vector<ImageExportItem>
     if (!frame.map(QVideoFrame::WriteOnly))
       continue;
 
-    // RGB32 <-> BGRA8888 -- copy line-by-line (strides may differ)
+    // RGB32 <-> BGRA8888: copy line-by-line (strides may differ)
     const qsizetype dstStride = frame.bytesPerLine(0);
     const qsizetype srcStride = img.bytesPerLine();
     const qsizetype copyBytes = std::min(dstStride, srcStride);

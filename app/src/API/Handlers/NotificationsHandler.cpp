@@ -85,7 +85,7 @@ void API::Handlers::NotificationsHandler::registerCommands()
   eventProps[QStringLiteral("title")]    = stringProp(QStringLiteral("Event title"));
   eventProps[QStringLiteral("subtitle")] = stringProp(QStringLiteral("Event detail (optional)"));
 
-  // notifications.post -- one entrypoint with required severity level
+  // notifications.post: one entrypoint with required severity level
   {
     QJsonObject props              = eventProps;
     props[QStringLiteral("level")] = QJsonObject{
@@ -99,13 +99,13 @@ void API::Handlers::NotificationsHandler::registerCommands()
                              &post);
   }
 
-  // notifications.resolve -- emit a companion Info "Resolved: <title>"
+  // notifications.resolve: emit a companion Info "Resolved: <title>"
   registry.registerCommand(QStringLiteral("notifications.resolve"),
                            QStringLiteral("Emit a companion 'Resolved' Info event"),
                            makeSchema(eventProps, QJsonArray()),
                            &resolve);
 
-  // notifications.list -- optional channel filter + limit
+  // notifications.list: optional channel filter + limit
   {
     QJsonObject props;
     props[QStringLiteral("channel")] = stringProp(QStringLiteral("Filter by channel (optional)"));

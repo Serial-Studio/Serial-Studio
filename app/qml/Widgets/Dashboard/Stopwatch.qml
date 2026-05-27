@@ -33,7 +33,7 @@ Item {
   implicitHeight: 320
 
   //
-  // Widget data inputs (unused -- Stopwatch has no project-bound model)
+  // Widget data inputs (unused; Stopwatch has no project-bound model)
   //
   property var color
   property var model
@@ -41,7 +41,7 @@ Item {
   property string widgetId
 
   //
-  // Timer state -- accumulated ms across run/pause segments + the wall-clock
+  // Timer state: accumulated ms across run/pause segments + the wall-clock
   // start of the current active segment.
   //
   property real accumMs: 0
@@ -50,7 +50,7 @@ Item {
   property bool running: false
 
   //
-  // Pure read -- never mutates accumMs / runStartMs.
+  // Pure read: never mutates accumMs / runStartMs.
   //
   function currentMs() {
     if (!running)
@@ -60,7 +60,7 @@ Item {
   }
 
   //
-  // 30 Hz tick -- only running while the stopwatch is active.
+  // 30 Hz tick: only running while the stopwatch is active.
   //
   Timer {
     id: tickTimer
@@ -146,7 +146,7 @@ Item {
     anchors.fill: parent
 
     //
-    // Digital readout -- mirrors Gauge.qml value box (raised text, console palette)
+    // Digital readout: mirrors Gauge.qml value box (raised text, console palette)
     //
     Rectangle {
       id: readoutBox
@@ -242,7 +242,7 @@ Item {
       border.color: Cpp_ThemeManager.colors["groupbox_hard_border"]
 
       //
-      // Header row -- sits above the ListView
+      // Header row that sits above the ListView
       //
       Rectangle {
         id: header

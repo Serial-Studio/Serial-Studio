@@ -107,7 +107,7 @@ Item {
     }
 
     //
-    // Info block -- pre-connect, spans both columns
+    // Info block: pre-connect, spans both columns
     //
     Item {
       implicitHeight: 4
@@ -162,7 +162,7 @@ Item {
     }
 
     //
-    // IN endpoint (only shown while connected -- populated after open())
+    // IN endpoint (only shown while connected; populated after open())
     //
     Label {
       opacity: enabled ? 1 : 0.5

@@ -140,7 +140,7 @@ void API::Handlers::DashboardHandler::registerPointsCommands()
                            emptySchema,
                            &getPoints);
 
-  // Aliases under project.* -- the points value is per-project (saved/restored on load)
+  // Aliases under project.*: the points value is per-project (saved/restored on load)
   registry.registerCommand(
     QStringLiteral("project.dashboard.setPoints"),
     QStringLiteral("Set the number of data points per plot (alias of dashboard.setPoints; "
@@ -176,7 +176,7 @@ void API::Handlers::DashboardHandler::registerQueryCommands()
                            emptySchema,
                            &getData);
 
-  // dashboard.tailFrames -- last N samples of plot-enabled datasets
+  // dashboard.tailFrames: last N samples of plot-enabled datasets
   {
     QJsonObject countProp;
     countProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
@@ -389,7 +389,7 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
   result[QStringLiteral("operationModeLabel")] = API::EnumLabels::operationModeLabel(modeIndex);
   result[QStringLiteral("operationModeSlug")]  = API::EnumLabels::operationModeSlug(modeIndex);
 
-  // Bounds-guarded mode name -- legacy field for back-compat
+  // Bounds-guarded mode name (legacy field for back-compat)
   static const QStringList kModeNames = {
     QStringLiteral("ProjectFile"), QStringLiteral("ConsoleOnly"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("operationModeName")] = (modeIndex >= 0 && modeIndex < kModeNames.size())

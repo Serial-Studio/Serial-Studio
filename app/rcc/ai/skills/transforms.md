@@ -5,15 +5,15 @@ dashboard sees the value. They turn a raw value into the displayed value.
 
 ## Pick Lua first
 
-Both Lua and JavaScript work, but **Lua is the recommended default** —
-it's measurably faster on the hotpath at typical telemetry rates and
+Both Lua and JavaScript work, but **Lua is the recommended default**.
+It is measurably faster on the hotpath at typical telemetry rates and
 the embedded interpreter has a lighter per-call cost than `QJSEngine`.
 Use JavaScript only when you need a JS-specific feature (regex
 flavours, `JSON.stringify`, etc.).
 
 When you push transform code, ALWAYS pass `language` so the dataset's
 `transformLanguage` is locked to the syntax you wrote. A mismatch is a
-silent compile failure — the dashboard will show the raw value with no
+silent compile failure: the dashboard will show the raw value with no
 visible error. Two ways to set both at once:
 
 ```
@@ -27,15 +27,15 @@ project.dataset.update            {groupId, datasetId, transformCode, transformL
 frame, the parser supplies no value for it, and its output is built
 entirely from peer datasets, table registers, or constants. **Do not**
 flip `virtual` on a regular dataset just because it has a transform.
-Most transforms — unit conversion, calibration, smoothing, deadband,
-hysteresis — operate on a parser-supplied `value` and stay
+Most transforms (unit conversion, calibration, smoothing, deadband,
+hysteresis) operate on a parser-supplied `value` and stay
 **non-virtual**.
 
 **Rule of thumb.** If the transform USES its `value` argument, the
 dataset is non-virtual. If it ignores `value` and reads only from
 `datasetGetRaw` / `datasetGetFinal` / `tableGet`, it's virtual.
 
-**Virtual** — Power [W] = Voltage × Current. No parser slot; the value
+**Virtual.** Power [W] = Voltage × Current. No parser slot; the value
 is computed from two peer datasets. Set `virtual: true`:
 
 ```lua
@@ -44,7 +44,7 @@ function transform(_v)
 end
 ```
 
-**Non-virtual** — km/h from a m/s sensor reading. The parser writes
+**Non-virtual.** km/h from a m/s sensor reading. The parser writes
 m/s into `value`, the transform converts units. Leave `virtual: false`
 (the default):
 
@@ -55,7 +55,7 @@ end
 ```
 
 Same rule for EMA smoothing, ADC-counts → volts, gear-ratio applied
-to RPM, deadband filters — anything that touches `value` is a regular
+to RPM, and deadband filters: anything that touches `value` is a regular
 transform, not a virtual dataset.
 
 ```
@@ -74,12 +74,12 @@ project.dataset.update {                              -- flip ONLY for compute-o
 body. If `transformCode` is non-empty AND the body **never references
 `value`**, the dataset is auto-flagged `virtual: true`. So a Power-style
 transform is detected as virtual on save even if you forgot the flag,
-but the dataset stays empty until that save — set `virtual` explicitly
+but the dataset stays empty until that save. Set `virtual` explicitly
 when you push compute-only code.
 
 If `virtual=false` and `index<=0` after a `setTransformCode`, the API
-returns a `hint` field telling you to flip `virtual`. Listen to it — but
-only when the transform really is compute-only. If you wrote a regular
+returns a `hint` field telling you to flip `virtual`. Listen to it, but
+only when the transform is compute-only. If you wrote a regular
 `value`-using transform on a dataset that has no parser slot, the fix
 is usually to assign `index` (give it a slot), not to flip `virtual`.
 
@@ -91,7 +91,7 @@ a regular dataset reads slot N). Don't. Virtual datasets are the
 right shape because:
 
 - **Separation of concerns.** Frame parsers turn bytes into raw
-  channels — that's their whole job. Computation, calibration, and
+  channels; that is their whole job. Computation, calibration, and
   derivation belong in transforms. Mixing both in the parser turns
   it into an opaque blob that's painful to debug with `dryRun`.
 - **Testability.** `project.dataset.transform.dryRun{values, code}`
@@ -111,12 +111,12 @@ right shape because:
   config) is the unit you copy across projects. Parser code is
   source-bus-specific; transforms are portable.
 - **Performance.** Virtual datasets share the source's transform
-  engine — no extra QJSEngine / Lua state per derivation. A bloated
+  engine (no extra QJSEngine / Lua state per derivation). A bloated
   parser, by contrast, runs every byte through one big function on
   every frame, allocating intermediate arrays.
 
 Use a parser-emitted slot only when the derivation needs raw bytes
-that aren't otherwise exposed (uncommon — most cases are downstream
+that aren't otherwise exposed (uncommon; most cases are downstream
 arithmetic on already-extracted channels).
 
 ## Contract
@@ -172,7 +172,7 @@ declare `let alpha = 0.2` without clobbering each other.
 Transforms read and write two kinds of registers:
 
 **System table** (`__datasets__`, always present): two registers per
-dataset — `raw:<uniqueId>` and `final:<uniqueId>`. Read-only. Convenience
+dataset, `raw:<uniqueId>` and `final:<uniqueId>`. Read-only. Convenience
 helpers: `datasetGetRaw(uniqueId)` and `datasetGetFinal(uniqueId)`. Use
 those instead of `tableGet('__datasets__', 'raw:<uid>')`.
 
@@ -184,7 +184,7 @@ those instead of `tableGet('__datasets__', 'raw:<uid>')`.
   indefinitely (no per-frame reset). Use for filter/integrator state,
   cross-frame counters, latched flags, and derived values that another
   transform reads later in the same frame. The `defaultValue` is the
-  starting value at project load — not a recurring reset.
+  starting value at project load, not a recurring reset.
 
 ```js
 tableGet(tableName, registerName)              // -> number | string
@@ -214,7 +214,7 @@ Trying to read `datasetGetFinal` of a dataset processed later returns 0.
   and isolated to the one dataset.
 - **State shared across datasets and frames** (a filter whose output
   several downstream channels read; a derivative tracked at frame
-  cadence; a latched alarm): use a Computed register — it persists.
+  cadence; a latched alarm): use a Computed register, which persists.
 - **Shared *constants*** (calibration coefficients used by N channels,
   lookup tables, full-scale ranges): use a Constant register.
 - **Cross-dataset compute within one frame** (speed from dx and dt that
@@ -222,7 +222,7 @@ Trying to read `datasetGetFinal` of a dataset processed later returns 0.
   Computed register in the earlier transform and `tableGet` it from the
   later one.
 
-## Examples (Lua — preferred)
+## Examples (Lua, preferred)
 
 ```lua
 -- EMA smoothing (per-dataset state via upvalue)
@@ -249,7 +249,7 @@ function transform(dx)
 end
 ```
 
-## Examples (JavaScript — when Lua won't do)
+## Examples (JavaScript, when Lua won't do)
 
 ```js
 let ema = 0;
@@ -265,12 +265,12 @@ celsius/fahrenheit, accumulator, autozero, bit extract, ...), call
 `scripts.list{kind: "transform_lua"}` or
 `scripts.list{kind: "transform_js"}`.
 
-## Frame metadata — second `info` argument
+## Frame metadata: second `info` argument
 
 Transforms receive `{frameNumber, sourceId, timestampMs}` as a second arg.
 One-arg transforms keep working unchanged (both languages ignore extras).
 `timestampMs` is a **monotonic** ms counter (steady clock), not wall
-clock — use for deltas only.
+clock. Use it for deltas only.
 
 ```lua
 local lastTs = 0
@@ -287,11 +287,11 @@ end
 
 Transforms can drive output directly:
 
-- `deviceWrite(data, sourceId?)` — synchronous fire-and-forget byte
+- `deviceWrite(data, sourceId?)`: synchronous fire-and-forget byte
   write. `{ ok, error? }`, never throws. `sourceId` defaults to the
   source the dataset belongs to. Logged
   `[deviceWrite] source=N bytes=M written=K`.
-- `actionFire(actionId)` — fires an existing project Action by its
+- `actionFire(actionId)`: fires an existing project Action by its
   stable `actionId` (NOT its index). Reuses the action's payload and
   timer mode. Same shape. Logged `[actionFire] id=N index=M ok`.
 
@@ -316,12 +316,12 @@ user-triggered actions, use an Output Widget instead.
 
 Seven runtime UI helpers, all `{ ok, error? }`, NO logging:
 
-- `clearPlots()` — wipe line / multiplot / FFT / GPS / 3D / waterfall buffers. Widgets, datasets, actions, axis bounds intact.
-- `setPlotPoints(n)` — horizontal sample window for line plots (n >= 1).
-- `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)` — show/hide the dashboard widgets.
-- `setActiveWorkspace(idOrName)` — switch active workspace tab. Numeric `workspaceId` (>= 1000) or case-insensitive title.
+- `clearPlots()`: wipe line / multiplot / FFT / GPS / 3D / waterfall buffers. Widgets, datasets, actions, axis bounds intact.
+- `setPlotPoints(n)`: horizontal sample window for line plots (n >= 1).
+- `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)`: show/hide the dashboard widgets.
+- `setActiveWorkspace(idOrName)`: switch active workspace tab. Numeric `workspaceId` (>= 1000) or case-insensitive title.
 
-Transforms run on every frame — gate every call behind a latch (`local fired = false` / `let fired = false`) or a sentinel-value match. Example: any reading at the device reboot sentinel (>= 9999) clears the plot history:
+Transforms run on every frame, so gate every call behind a latch (`local fired = false` / `let fired = false`) or a sentinel-value match. Example: any reading at the device reboot sentinel (>= 9999) clears the plot history:
 
 ```lua
 function transform(value)

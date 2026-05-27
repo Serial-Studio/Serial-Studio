@@ -48,6 +48,7 @@ AI::Conversation::Conversation(QObject* parent)
   , m_outstandingToolResults(0)
   , m_toolCallCount(0)
   , m_cancelled(false)
+  , m_summaryForced(false)
   , m_busy(false)
   , m_lastAwaitingFlag(false)
   , m_streamFlushTimer(new QTimer(this))
@@ -180,6 +181,7 @@ void AI::Conversation::start(const QString& userText)
   }
 
   m_cancelled     = false;
+  m_summaryForced = false;
   m_toolCallCount = 0;
   m_currentStopReason.clear();
   setLastError(QString());
@@ -270,7 +272,7 @@ void AI::Conversation::approveToolCallGroup(const QString& family)
   if (family.isEmpty())
     return;
 
-  // Snapshot first -- approveToolCall mutates the map under us.
+  // Snapshot first: approveToolCall mutates the map under us.
   QStringList ids;
   for (auto it = m_awaitingConfirm.constBegin(); it != m_awaitingConfirm.constEnd(); ++it)
     if (it.value().name.startsWith(family + QLatin1Char('.')) || it.value().name == family)
@@ -442,14 +444,24 @@ void AI::Conversation::onToolCallRequested(const QString& callId,
   if (m_cancelled)
     return;
 
+  // Budget spent: deny the call but force a final tool-less round for a prose summary
   ++m_toolCallCount;
   if (m_toolCallCount > kMaxToolCalls) {
-    qCWarning(serialStudioAI) << "Tool-call budget exceeded; aborting";
-    if (m_reply)
-      m_reply->abort();
+    qCWarning(serialStudioAI) << "Tool-call budget exceeded; forcing summary";
+    m_summaryForced = true;
 
-    setLastError(tr("Tool-call budget exceeded"));
-    Q_EMIT errorOccurred(m_lastError);
+    QJsonObject toolUseBlock;
+    toolUseBlock[QStringLiteral("type")]  = QStringLiteral("tool_use");
+    toolUseBlock[QStringLiteral("id")]    = callId;
+    toolUseBlock[QStringLiteral("name")]  = name;
+    toolUseBlock[QStringLiteral("input")] = arguments;
+    m_pendingToolUseBlocks.append(toolUseBlock);
+
+    QJsonObject denial;
+    denial[QStringLiteral("error")] =
+      tr("Tool-call budget reached for this turn; no further tools will run.");
+    recordToolResult(callId, name, denial);
+    updateToolCallCard(callId, CallStatus::Blocked, denial);
     return;
   }
 
@@ -1000,7 +1012,8 @@ void AI::Conversation::issueRequest()
     Q_EMIT messagesChanged();
   }
 
-  m_reply = m_provider->sendMessage(m_history, dispatcherTools());
+  // Forced summary keeps tools (history holds tool_use) but forbids new calls
+  m_reply = m_provider->sendMessage(m_history, dispatcherTools(), m_summaryForced);
   if (!m_reply) {
     setLastError(tr("Provider returned no reply"));
     Q_EMIT errorOccurred(m_lastError);
@@ -1637,9 +1650,22 @@ void AI::Conversation::resumeAfterToolBatch()
     return;
   }
 
+  QJsonArray content = m_pendingToolResultBlocks;
+
+  // Budget exhausted: trail the tool results with a no-more-tools summary instruction
+  if (m_summaryForced) {
+    QJsonObject text;
+    text[QStringLiteral("type")] = QStringLiteral("text");
+    text[QStringLiteral("text")] =
+      tr("You have reached the tool-call budget for this turn. Do not request more "
+         "tools. Summarize what you found so far, and if the task is incomplete, say "
+         "which steps remain so the user can tell you to continue.");
+    content.append(text);
+  }
+
   QJsonObject userMsg;
   userMsg[QStringLiteral("role")]    = QStringLiteral("user");
-  userMsg[QStringLiteral("content")] = m_pendingToolResultBlocks;
+  userMsg[QStringLiteral("content")] = content;
   m_history.append(userMsg);
 
   m_pendingToolResultBlocks = QJsonArray();

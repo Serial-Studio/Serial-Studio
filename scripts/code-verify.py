@@ -1167,6 +1167,15 @@ _AI_PATTERNS: tuple[tuple[str, "re.Pattern[str]"], ...] = (
 )
 
 
+# `--` used as a sentence dash: the spaced double-hyphen an AI reaches for
+# when told to strip em dashes (ASCII-only source bans the U+2014 glyph). It
+# is a mechanical glyph swap, not the rewrite the rule actually asks for. The
+# fix is to recast the sentence with a comma, colon, period, or parentheses,
+# never to trade one dash glyph for another. Spaces on both sides keep `i--`,
+# `--i`, and `//---` banners out of the match.
+_DASH_SUBSTITUTE_RE = re.compile(r"\S -- \S")
+
+
 def _comment_payload(line: str) -> str | None:
     """Return the text after `//`/`///`/`//!` markers on a `//` comment line,
     or None when the line isn't a single-line comment. Leading/trailing
@@ -1230,13 +1239,28 @@ def find_ai_narration_violations(
                 # One violation per line is enough — the worst pattern wins
                 break
 
+        # Dash-substitute is orthogonal to the tone patterns: a comment can
+        # restate the code AND lean on a spaced double-hyphen. Report it on
+        # its own so the worst-pattern break above doesn't mask it.
+        if _DASH_SUBSTITUTE_RE.search(payload):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "comment-dash-substitute",
+                    "`--` as a sentence dash; rewrite the sentence (comma / "
+                    "colon / period / parentheses), don't swap em dash for "
+                    f"`--`: {payload.strip()[:80]}",
+                )
+            )
+
     return violations
 
 
 # Names for the most common non-ASCII characters that show up in AI-written
 # code, so the report can point at them instead of just listing codepoints.
 _NON_ASCII_NAMES: dict[str, str] = {
-    "—": "em dash (U+2014, type `--` or ` - `)",
+    "—": "em dash (U+2014, rewrite the sentence; don't swap in `--`)",
     "–": "en dash (U+2013, type `-`)",
     "‘": "left single quote (U+2018, type `'`)",
     "’": "right single quote / apostrophe (U+2019, type `'`)",
@@ -1851,6 +1875,11 @@ _ADVISORY_KINDS = frozenset(
         "ai-hedging",
         "ai-restate-obvious",
         "ai-todo-no-context",
+        # `--` as a sentence dash in a comment: the mechanical em-dash swap
+        # an AI makes under the ASCII-only rule instead of rewriting the
+        # sentence. Advisory, since hundreds of existing occurrences are the
+        # cleanup checklist; new comments should recast the sentence instead.
+        "comment-dash-substitute",
         "multi-line-comment",
         "qml-inline-comment",
         # comment-narration is the AST-style scan from code_verify_rules.py
@@ -1983,11 +2012,13 @@ the *why* survives.
   like the right arrow, non-breaking spaces, micro signs, super/subscripts)
   break older toolchains and read as escape goo in legacy editors. Type
   `->` not the arrow, `<=` not the less-or-equal glyph, `1/2` not the
-  fraction glyph, `--` or `-` not the dash glyph, `'` and `"` not smart
-  quotes. Words always work: `degrees`, `micro`, `approx`, `infinity`.
-  If you can't type it on a US keyboard, don't put it in source. Doesn't
-  matter how confidently the model emitted it — humans and LLMs both
-  read words fine.
+  fraction glyph, `'` and `"` not smart quotes. Words always work:
+  `degrees`, `micro`, `approx`, `infinity`. An em dash (U+2014) is the
+  exception: don't trade it for `--`, rewrite the sentence with a comma,
+  colon, period, or parentheses (see `comment-dash-substitute`). If you
+  can't type it on a US keyboard, don't put it in source. Doesn't matter
+  how confidently the model emitted it — humans and LLMs both read words
+  fine.
 - **No QML inline comments inside object bodies.** A `// note` on its
   own line inside an `Item { }` / `Rectangle { }` / etc. is the
   AI-narration smell CLAUDE.md bans. Either use the QML sandwich
@@ -2060,6 +2091,13 @@ the kinds below are short labels.
   "ideally", filler "simply"/"basically"). Vendored / upstream-prose
   files (`ThirdParty/`, `SimpleCrypt`, `lemonsqueezy/`) are exempt.
   `@brief` lines are also exempt to keep false-positives low.
+- `comment-dash-substitute` — a spaced double-hyphen ` -- ` used as a
+  sentence dash in a `//` comment. ASCII-only source bans the em dash
+  (U+2014), and the reflex is to swap in `--`; that is a mechanical glyph
+  trade, not the rewrite the rule asks for. Recast the sentence with a
+  comma, colon, period, or parentheses. The point is human, considered
+  prose, not one dash glyph for another. (`i--`, `--i`, and `//---`
+  banners don't match: the rule requires a space on both sides.)
 - `doc-header-function-block` — function doxygen block above a non-inline
   member-function declaration in a header. Per CLAUDE.md "Headers (.h) —
   strict rule": only `/** @brief */` above type-level definitions belongs

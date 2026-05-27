@@ -1305,7 +1305,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::validate(const QString& i
     }
   }
 
-  // Unreferenced groups -- warning, only meaningful for full-project scope
+  // Unreferenced groups: warning, only meaningful for full-project scope
   QJsonArray unreferenced;
   if (!filtered) {
     for (const auto& g : pm.groups()) {
@@ -1413,7 +1413,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::reorder(const QString& id
 
   const auto arr = params.value(QStringLiteral("workspaceIds")).toArray();
 
-  // Reject any id below the user threshold up-front -- system workspaces don't reorder
+  // Reject any id below the user threshold up-front: system workspaces don't reorder
   QList<int> orderedIds;
   QStringList rejected;
   for (const auto& v : arr) {

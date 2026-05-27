@@ -437,7 +437,7 @@ void DataModel::DataTableStore::noteMissingDataset(int uniqueId, const char* kin
 }
 
 //--------------------------------------------------------------------------------------------------
-// TableApiBridge -- QJSEngine bridge methods
+// TableApiBridge: QJSEngine bridge methods
 //--------------------------------------------------------------------------------------------------
 
 /**

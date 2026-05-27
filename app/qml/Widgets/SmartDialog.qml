@@ -47,7 +47,7 @@ Window {
   property int preferredHeight: contentArea.implicitHeight
 
   //
-  // Window sizing -- internal padding + titlebar/CSD frame wrap the preferred size
+  // Window sizing: internal padding + titlebar/CSD frame wrap the preferred size
   //
   width: preferredWidth + 2 * contentPadding + 2 * frameMargin
   minimumWidth: preferredWidth + 2 * contentPadding + 2 * frameMargin

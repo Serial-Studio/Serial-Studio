@@ -99,7 +99,9 @@ public:
     m_currentModel = model;
   }
 
-  [[nodiscard]] virtual Reply* sendMessage(const QJsonArray& history, const QJsonArray& tools) = 0;
+  [[nodiscard]] virtual Reply* sendMessage(const QJsonArray& history,
+                                           const QJsonArray& tools,
+                                           bool forbidToolUse = false) = 0;
 
 protected:
   QString m_currentModel;

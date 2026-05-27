@@ -36,7 +36,9 @@ public:
   [[nodiscard]] QString modelDisplayName(const QString& modelId) const override;
   [[nodiscard]] ProviderCapabilities capabilities() const override;
 
-  [[nodiscard]] Reply* sendMessage(const QJsonArray& history, const QJsonArray& tools) override;
+  [[nodiscard]] Reply* sendMessage(const QJsonArray& history,
+                                   const QJsonArray& tools,
+                                   bool forbidToolUse = false) override;
 
 private:
   [[nodiscard]] static QJsonArray translateHistory(const QJsonArray& history);

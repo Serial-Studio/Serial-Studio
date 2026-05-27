@@ -63,7 +63,7 @@ Widgets.Pane {
   }
 
   //
-  // Force auto-layout while taskbar is hidden -- no controls to escape manual overlap
+  // Force auto-layout while taskbar is hidden (no controls to escape manual overlap)
   //
   Connections {
     target: Cpp_UI_TaskbarSettings

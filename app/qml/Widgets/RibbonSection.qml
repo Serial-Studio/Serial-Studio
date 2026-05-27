@@ -60,7 +60,7 @@ RowLayout {
                                            : false
 
   //
-  // Color overrides -- defaults flip based on `secondaryToolbar`. Call sites
+  // Color overrides: defaults flip based on `secondaryToolbar`. Call sites
   // can set any of these explicitly to override.
   //
   property color separatorColor: secondaryToolbar
@@ -89,7 +89,7 @@ RowLayout {
   readonly property real collapsedWidth: collapsedBtn.implicitWidth + 4 + (showSeparator ? 1 : 0)
 
   //
-  // Content row -- visible when NOT collapsed
+  // Content row: visible when NOT collapsed
   //
   RowLayout {
     id: contentRow

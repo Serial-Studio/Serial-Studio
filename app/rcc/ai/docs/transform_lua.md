@@ -1,4 +1,4 @@
-# Per-Dataset Value Transform — Lua
+# Per-Dataset Value Transform (Lua)
 
 Lua 5.4 mirror of the JS transform API. Use Lua when your team is
 Lua-fluent or when you want closure-captured local state semantics.
@@ -18,7 +18,7 @@ end
 ## Virtual vs non-virtual
 
 Set `virtual: true` on the dataset **only** when the transform has no
-parser-supplied `value` — i.e. its output is built purely from peers,
+parser-supplied `value`, i.e. its output is built purely from peers,
 tables, or constants (e.g. `Power = Voltage * Current`). A transform
 that USES `value` (unit conversion like `km/h = m/s * 3.6`, EMA
 smoothing, calibration, deadband) stays non-virtual. Rule of thumb: if
@@ -28,7 +28,7 @@ the body references the `value` argument, leave `virtual` alone.
 
 The runtime invokes `luaL_dostring(your_code)` once per dataset. Top-level
 `local` declarations become **upvalues** captured by the `transform`
-closure — so two datasets that define `local ema = 0` get independent
+closure, so two datasets that define `local ema = 0` get independent
 state, even though the Lua state itself is shared across the source.
 
 ```lua
@@ -54,7 +54,7 @@ datasetGetFinal(uniqueId)               -- final value of an earlier dataset
 
 User-table registers are either `Constant` (immutable, set at project
 load) or `Computed` (writable from transforms). Computed registers hold
-the last value written **indefinitely** — there is no per-frame reset.
+the last value written **indefinitely**; there is no per-frame reset.
 That's what makes them the natural place for filter state, integrators,
 edge counters, and latched flags. The register's `defaultValue` is the
 starting value at project load, not a recurring reset.
@@ -139,10 +139,10 @@ end
 ## Performance
 
 Lua is fast at the call boundary. Avoid `string.format` in the hot path,
-avoid `pcall` unless you actually expect failures, and prefer arithmetic
+avoid `pcall` unless you expect failures, and prefer arithmetic
 to table lookups when you can.
 
-## Frame metadata — second `info` argument
+## Frame metadata: second `info` argument
 
 ```lua
 function transform(value, info)
@@ -153,7 +153,7 @@ end
 ```
 
 Existing one-arg transforms keep working unchanged (Lua ignores extra args).
-`timestampMs` is a monotonic counter — use it for deltas, not absolute time.
+`timestampMs` is a monotonic counter; use it for deltas, not absolute time.
 
 ```lua
 local lastTs = 0
@@ -166,7 +166,7 @@ function transform(v, info)
 end
 ```
 
-## Firing project actions — `actionFire()`
+## Firing project actions: `actionFire()`
 
 ```lua
 actionFire(actionId) -> { ok = true } | { ok = false, error = "..." }
@@ -176,7 +176,7 @@ Triggers an existing project Action by its stable `actionId` (NOT its
 index). Reuses the action's prebuilt payload, encoding, and timer mode.
 Calls are logged `[actionFire] id=N index=M ok`.
 
-## Device output — `deviceWrite()`
+## Device output: `deviceWrite()`
 
 ```lua
 deviceWrite(data, sourceId?) -> { ok = true } | { ok = false, error = "..." }
@@ -200,7 +200,7 @@ function transform(temperature)
 end
 ```
 
-Transforms run on every frame, so be conservative — latch repeated actions
+Transforms run on every frame, so be conservative: latch repeated actions
 with a local flag, or rate-limit with a counter, to avoid saturating the
 link.
 

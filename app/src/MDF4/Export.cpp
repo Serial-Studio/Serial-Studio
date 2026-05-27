@@ -297,7 +297,7 @@ void MDF4::ExportWorker::addDatasetChannels(mdf::IChannelGroup* channelGroup,
   info.channels.push_back(channel);
   info.isNumeric.push_back(isNum);
 
-  // Raw (pre-transform) channel -- always pushed (null included) to keep indices aligned
+  // Raw (pre-transform) channel: always pushed (null included) to keep indices aligned
   auto* rawChannel = channelGroup->CreateChannel();
   if (rawChannel) {
     rawChannel->Name(dataset.title.toStdString() + " (raw)");
@@ -363,7 +363,7 @@ void MDF4::ExportWorker::buildChannelGroups(mdf::IDataGroup* dataGroup,
   if (usingTemplate)
     numericLookup = buildNumericLookup(frame);
 
-  // Skip image groups entirely -- they have no telemetry datasets
+  // Skip image groups entirely: they have no telemetry datasets
   for (const auto& group : allGroups) {
     if (group.widget == QLatin1String("image"))
       continue;
@@ -617,7 +617,7 @@ void MDF4::Export::setExportEnabled(const bool enabled)
     return;
   }
 
-  // License invalid or missing -- force disable
+  // License invalid or missing: force disable
   closeFile();
   setConsumerEnabled(false);
   if (m_persistSettings)

@@ -100,7 +100,7 @@ Widgets.Pane {
       }
 
       //
-      // Group actions panel -- ribbon toolbar that collapses sections when the
+      // Group actions panel: ribbon toolbar that collapses sections when the
       // window is narrower than the full set of buttons would need.
       //
       Rectangle {
@@ -120,7 +120,7 @@ Widgets.Pane {
 
           //
           // Add Dataset section (visible for non-output groups, including painter).
-          // No right separator -- the spacer carries the left/right divider.
+          // No right separator: the spacer carries the left/right divider.
           //
           Widgets.RibbonSection {
             collapsible: true
@@ -316,7 +316,7 @@ Widgets.Pane {
           }
 
           //
-          // Group lifecycle -- always visible.
+          // Group lifecycle: always visible.
           //
           Widgets.RibbonSection {
             showSeparator: false

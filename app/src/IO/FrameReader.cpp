@@ -483,7 +483,7 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
   Q_ASSERT(!frame.isEmpty());
   Q_ASSERT(crcPosition >= 0);
 
-  // No checksum configured -- always valid
+  // No checksum configured: always valid
   if (m_checksumLength == 0)
     return ValidationStatus::FrameOk;
 

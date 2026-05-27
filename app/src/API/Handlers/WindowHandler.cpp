@@ -170,7 +170,7 @@ void API::Handlers::WindowHandler::registerWidgetSettingCommands()
   }),
                            &getWidgetSettings);
 
-  // setWidgetSetting accepts a typeless "settingValue" -- manual schema build.
+  // setWidgetSetting accepts a typeless "settingValue", so build the schema manually.
   QJsonObject swsProps;
   swsProps[QStringLiteral("widgetId")] = QJsonObject{
     {       QStringLiteral("type"),                QStringLiteral("string")},

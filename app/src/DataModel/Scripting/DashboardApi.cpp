@@ -68,7 +68,7 @@ static QVariantMap makeJsResult(bool ok, const QString& errorMsg)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Core operations (main-thread only -- parser + transform engines both run on main)
+// Core operations (main-thread only: parser + transform engines both run on main)
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -178,7 +178,7 @@ static bool coreSetActiveWorkspaceByName(const QString& name, QString& errorMsgO
 }
 
 //--------------------------------------------------------------------------------------------------
-// Lua glue -- one C closure per public name
+// Lua glue: one C closure per public name
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -248,7 +248,7 @@ static int luaSetActiveWorkspace(lua_State* L)
 }
 
 //--------------------------------------------------------------------------------------------------
-// JS bridge -- one QJSEngine bridge instance shared by every dashboard.* call
+// JS bridge: one QJSEngine bridge instance shared by every dashboard.* call
 //--------------------------------------------------------------------------------------------------
 
 /**

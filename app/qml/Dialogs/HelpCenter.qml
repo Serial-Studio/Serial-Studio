@@ -216,7 +216,7 @@ SmartDialog {
       }
 
       //
-      // Right content area -- markdown viewer
+      // Right content area: markdown viewer
       //
       Item {
         Layout.fillWidth: true
@@ -252,7 +252,7 @@ SmartDialog {
         }
 
         //
-        // Rendered markdown -- WebEngine when available, plain rich-text otherwise.
+        // Rendered markdown: WebEngine when available, plain rich-text otherwise.
         //
         Loader {
           id: contentLoader

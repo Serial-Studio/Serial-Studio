@@ -60,7 +60,7 @@ Item {
   readonly property real headerHeight: 32
 
   //
-  // Toolbar -- Pause/Resume affordance (only when there's room)
+  // Toolbar: Pause/Resume affordance (only when there's room)
   //
   RowLayout {
     id: toolbar
@@ -108,14 +108,14 @@ Item {
     }
 
     //
-    // Single source of truth for the column boundary -- header AND rows bind to this so
+    // Single source of truth for the column boundary: header AND rows bind to this so
     // the value column never drifts away from the "Value" header on resize.
     //
     readonly property real separatorWidth: 1
     readonly property real columnWidth: Math.max(0, (table.width - separatorWidth) / 2)
 
     //
-    // Header row -- gradient + bottom border, matches ProjectEditor TableDelegate
+    // Header row: gradient + bottom border, matches ProjectEditor TableDelegate
     //
     Rectangle {
       id: header

@@ -112,7 +112,7 @@ Widgets.Pane {
       }
 
       //
-      // Dataset actions panel -- a ribbon toolbar that collapses sections when the
+      // Dataset actions panel: a ribbon toolbar that collapses sections when the
       // window is narrower than the full set of buttons would need.
       //
       Rectangle {
@@ -131,7 +131,7 @@ Widgets.Pane {
           showScrollFades: false
 
           //
-          // Visualisations -- time/freq plots
+          // Visualisations: time/freq plots
           //
           Widgets.RibbonSection {
             collapsible: true
@@ -186,7 +186,7 @@ Widgets.Pane {
           }
 
           //
-          // Instantaneous-value widgets. No right separator -- the spacer below
+          // Instantaneous-value widgets. No right separator: the spacer below
           // carries the boundary marker via its own showSeparator flag.
           //
           Widgets.RibbonSection {
@@ -282,7 +282,7 @@ Widgets.Pane {
           Widgets.RibbonSpacer {}
 
           //
-          // Behaviour -- alarm thresholds and value transforms
+          // Behaviour: alarm thresholds and value transforms
           //
           Widgets.RibbonSection {
             collapsible: true
@@ -316,7 +316,7 @@ Widgets.Pane {
           }
 
           //
-          // Lifecycle -- always visible so the user can always duplicate / delete.
+          // Lifecycle: always visible so the user can always duplicate / delete.
           //
           Widgets.RibbonSection {
             showSeparator: false

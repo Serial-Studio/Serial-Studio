@@ -69,7 +69,7 @@ Widgets.SmartDialog {
       currentIndex: root.pageIndex
 
       //
-      // Page 0 -- failure / loss summary
+      // Page 0: failure / loss summary
       //
       RowLayout {
         spacing: 16
@@ -145,7 +145,7 @@ Widgets.SmartDialog {
       }
 
       //
-      // Page 1 -- driver picker
+      // Page 1: driver picker
       //
       ColumnLayout {
         spacing: 8

@@ -102,7 +102,7 @@ static void openSafeLibs(lua_State* L)
     lua_setglobal(L, name);
   }
 
-  // Strip string.dump -- bytecode exfiltration vector pairs with unsafe loaders.
+  // Strip string.dump: bytecode exfiltration vector pairs with unsafe loaders.
   lua_getglobal(L, "string");
   if (lua_istable(L, -1)) {
     lua_pushnil(L);
@@ -174,7 +174,7 @@ void DataModel::LuaScriptEngine::createState()
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installLua(m_state);
 
-  // Expose apiCall(method, params?) -- gated to a read-only allow-list by default
+  // Expose apiCall(method, params?): gated to a read-only allow-list by default
   DataModel::ScriptApiCall::installLua(m_state, m_sourceId);
 
   // Store 'this' pointer in the Lua registry for the watchdog hook
@@ -248,7 +248,7 @@ void DataModel::LuaScriptEngine::watchdogHook(lua_State* L, lua_Debug* ar)
   auto* self = static_cast<LuaScriptEngine*>(lua_touserdata(L, -1));
   lua_pop(L, 1);
 
-  // No engine pointer stored -- ignore (defensive, shouldn't happen)
+  // No engine pointer stored, so ignore (defensive, shouldn't happen)
   if (!self) [[unlikely]]
     return;
 
@@ -467,7 +467,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseString(const QString& frame)
   if (!m_loaded || m_disabled)
     return {};
 
-  // C++-boundary exception guard -- a thrown Lua error must not crash the host
+  // C++-boundary exception guard: a thrown Lua error must not crash the host
   try {
     lua_getglobal(m_state, "parse");
     const QByteArray utf8 = frame.toUtf8();
@@ -511,7 +511,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
   if (!m_loaded || m_disabled)
     return {};
 
-  // C++-boundary exception guard -- a thrown Lua error must not crash the host
+  // C++-boundary exception guard: a thrown Lua error must not crash the host
   try {
     lua_getglobal(m_state, "parse");
 

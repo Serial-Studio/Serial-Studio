@@ -160,7 +160,7 @@ A plain `function foo() end` at chunk top level in Lua creates a global and woul
 
 ### When state resets
 
-Persistent state -- both top-level Lua/JS upvalues *and* Computed table registers -- is cleared when:
+Persistent state (both top-level Lua/JS upvalues *and* Computed table registers) is cleared when:
 
 - The device is disconnected (transform engines are destroyed).
 - The user clicks **Apply** in the transform editor (engines are recompiled with fresh state).
@@ -223,7 +223,7 @@ Transforms are applied in order: groups in frame order, datasets in group order.
 
 - `datasetGetRaw(uid)` can read any dataset, since all raw values are populated before transforms run.
 - `datasetGetFinal(uid)` only works for datasets that have already been transformed (earlier datasets in the same group, or any dataset in an earlier group).
-- Computed registers hold their last written value, so a value written in one frame is still visible in the next -- handy for integrators, derivatives, and latched flags. If you specifically want a register to start each frame fresh, write the reset value yourself at the top of an early transform.
+- Computed registers hold their last written value, so a value written in one frame is still visible in the next, handy for integrators, derivatives, and latched flags. If you specifically want a register to start each frame fresh, write the reset value yourself at the top of an early transform.
 
 If you need dataset B to consume dataset A's final value, make sure A comes before B in the Project Editor tree.
 

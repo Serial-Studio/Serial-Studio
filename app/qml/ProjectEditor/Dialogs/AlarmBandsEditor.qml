@@ -74,7 +74,7 @@ Widgets.SmartDialog {
   ]
 
   //
-  // Presets -- author-friendly band setups for common gauges. Fractional bounds get
+  // Presets: author-friendly band setups for common gauges. Fractional bounds get
   // scaled to the dataset's wgtMin/wgtMax at apply time.
   //
   readonly property var presets: [
@@ -276,7 +276,7 @@ Widgets.SmartDialog {
   }
 
   //--------------------------------------------------------------------------------------------
-  // Layout -- section labels live outside their content cards; no internal separators
+  // Layout: section labels live outside their content cards; no internal separators
   //--------------------------------------------------------------------------------------------
 
   dialogContent: ColumnLayout {
@@ -287,7 +287,7 @@ Widgets.SmartDialog {
     anchors.centerIn: parent
 
     //
-    // Section 1 -- Preset picker + range readout
+    // Section 1: Preset picker + range readout
     //
     ColumnLayout {
       spacing: 4
@@ -359,7 +359,7 @@ Widgets.SmartDialog {
     }
 
     //
-    // Section 2 -- Bands table
+    // Section 2: Bands table
     //
     ColumnLayout {
       spacing: 4
@@ -409,7 +409,7 @@ Widgets.SmartDialog {
           anchors.fill: parent
 
           //
-          // Column headers -- shared widths with the row delegate
+          // Column headers: shared widths with the row delegate
           //
           RowLayout {
             Layout.fillWidth: true
@@ -533,7 +533,7 @@ Widgets.SmartDialog {
                 }
 
                 //
-                // Color column -- click to pick, right-click to reset to severity default
+                // Color column: click to pick, right-click to reset to severity default
                 //
                 Item {
                   Layout.preferredHeight: 24
@@ -649,7 +649,7 @@ Widgets.SmartDialog {
             }
 
             //
-            // Empty-state hint -- visible only when no bands defined
+            // Empty-state hint: visible only when no bands defined
             //
             Label {
               anchors.centerIn: parent
@@ -664,7 +664,7 @@ Widgets.SmartDialog {
     }
 
     //
-    // Section 3 -- Live preview strip
+    // Section 3: Live preview strip
     //
     ColumnLayout {
       spacing: 4
@@ -755,7 +755,7 @@ Widgets.SmartDialog {
     }
 
     //
-    // Footer -- Cancel / Apply
+    // Footer: Cancel / Apply
     //
     RowLayout {
       spacing: 8

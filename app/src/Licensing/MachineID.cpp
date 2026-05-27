@@ -164,7 +164,7 @@ void Licensing::MachineID::readInformation()
   }
 #endif
 
-  // Warn when every platform fallback returned empty -- derivation still proceeds
+  // Warn when every platform fallback returned empty; derivation still proceeds
   if (id.isEmpty()) [[unlikely]]
     qWarning() << "[MachineID] fallback produced empty fingerprint";
 

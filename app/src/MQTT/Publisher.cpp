@@ -299,7 +299,7 @@ void MQTT::PublisherWorker::processItems(const std::vector<DataModel::Timestampe
       publishBatchAsCsv(items);
       break;
 
-    // Script mode receives raw frame bytes, not parsed frames -- handled in processData()
+    // Script mode receives raw frame bytes, not parsed frames (handled in processData)
     case Publisher::Mode::ScriptDriven:
     case Publisher::Mode::RawRxData:
       break;

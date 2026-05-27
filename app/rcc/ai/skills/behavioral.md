@@ -56,17 +56,17 @@ mutation. When the user asks to **undo**, **roll back**, **revert**,
 wrong", do NOT guess what to mutate. Follow this flow:
 
 1. Call `assistant.listCheckpoints` (limit 20 by default). The most recent
-   snapshots are at the top of the list -- each entry has `path`,
+   snapshots are at the top of the list. Each entry has `path`,
    `timestamp`, `sizeBytes`, and `label` ("pre-project.dataset.delete",
    "pre-project.group.delete", "auto", "load", a user-provided label, etc.).
 2. Show the user a numbered list of the top 5–10 entries in plain prose:
    timestamp in the user's local timezone, label, size. DO NOT dump raw
    JSON.
 3. Ask the user to pick one by number, label, or "the most recent". Wait
-   for their answer -- do not auto-pick the latest.
+   for their answer; do not auto-pick the latest.
 4. Once they choose, call `assistant.restore` with the matching `path`.
    The user will see a confirmation card (`assistant.restore` is gated as
-   `alwaysConfirm`) -- DO NOT pre-emptively retry; the result arrives once
+   `alwaysConfirm`). DO NOT pre-emptively retry; the result arrives once
    they approve or deny.
 5. After approval, report what came back: confirm the restore succeeded,
    surface `reverseSnapshotPath` so the user knows the restore itself is
@@ -118,13 +118,13 @@ a `warning` explaining nothing was committed:
    change is recoverable.
 
 When the user explicitly authorises a destructive op up front
-("delete dataset 5 in group 2"), you may skip the dryRun -- but only when
+("delete dataset 5 in group 2"), you may skip the dryRun, but only when
 the exact target was named by the user and you've verified it in a recent
 read. Renumbering caveats from a prior session do not count as verified;
 when in doubt, dryRun.
 
 The `renumbered[]` array is the single most important field to surface.
 The May 22 incident happened because an AI couldn't see which peers got
-their datasetId/uniqueId shifted -- now it can, both on the preview and on
+their datasetId/uniqueId shifted. Now it can, both on the preview and on
 the real call. If `renumbered` is non-empty, name those peers in your
 prose summary; do not silently move on.

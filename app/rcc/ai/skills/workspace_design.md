@@ -1,4 +1,4 @@
-# Workspace Design — What Goes Where
+# Workspace Design: What Goes Where
 
 `dashboard_layout` covers the API: slugs, enums, min/max pairs, the
 addWidget pre-flight. **This skill covers the design judgment that
@@ -9,12 +9,12 @@ not a dump of every group as a tile.
 The dashboard exists to answer one question fast: **is the system
 operating normally right now?** Everything else is secondary.
 
-## Tab composition — what belongs on workspace N
+## Tab composition: what belongs on workspace N
 
 A workspace holds 5-9 tiles before the user starts tab-hopping instead
 of reading. Miller's Law: short-term recall holds 5±2 items; more than
 that and the operator scans rather than absorbs. Use the count as a
-budget, not a target — three well-chosen tiles beat seven adequate ones.
+budget, not a target: three well-chosen tiles beat seven adequate ones.
 
 Default workspace breakdown for a multi-system project:
 
@@ -28,7 +28,7 @@ Default workspace breakdown for a multi-system project:
 The Overview workspace is the most-used and the least-edited. Treat it
 like the front page of a newspaper: every tile fights for the slot.
 
-## Content priority — what makes the cut
+## Content priority: what makes the cut
 
 For each candidate group, ask in order:
 
@@ -46,20 +46,20 @@ For each candidate group, ask in order:
    pressures belong on Diagnostics; the derived "brake system OK / fault"
    LED belongs on Overview.
 
-If a group fails (1) and (4), it does NOT belong on Overview — push it
+If a group fails (1) and (4), it does NOT belong on Overview; push it
 to its subsystem workspace or Diagnostics. Resist the user's urge to
-"just show everything" — it's a request that gets harder to take back
+"just show everything". That request gets harder to take back
 once the layout is built.
 
-## Spatial layout — first and last tile matter most
+## Spatial layout: first and last tile matter most
 
 The Peak-End rule applies to dashboards: the operator's recall of the
 session is anchored by the most striking tile they saw AND the last
 tile they looked at. Use this:
 
 - **Top-left tile** (first scan position in LTR locales) is the most
-  important reading. Put the primary KPI here — speed, total power,
-  active alarms count. Not a decoration.
+  important reading. Put the primary KPI here (speed, total power,
+  active alarms count). Not a decoration.
 - **Bottom-right tile** is the last thing they read before walking
   away. Put a "system state" summary here (alarm count, connection
   health, current operating mode) so it's the parting impression.
@@ -70,9 +70,9 @@ tile they looked at. Use this:
 `relativeIndex` controls ordering. Omit it for auto-assignment when you
 don't care; pass it explicitly when corner placement matters.
 
-## Widget choice — match the cognitive task
+## Widget choice: match the cognitive task
 
-The user isn't picking a widget — they're picking how the operator will
+The user isn't picking a widget; they're picking how the operator will
 read the value. Map the task to the tile, not the dataset's type:
 
 | Operator task                       | Best widget        | Why                              |
@@ -85,12 +85,12 @@ read the value. Map the task to the tile, not the dataset's type:
 | "Where is X in 3D space?"           | Plot3D, GPS        | Spatial beats coordinate triples |
 | "Has X crossed a threshold?"        | NotificationLog    | Events are events, not samples   |
 
-A Gauge for "what's the exact value" is the wrong choice — needles read
+A Gauge for "what's the exact value" is the wrong choice: needles read
 to ±5%, digital readouts to the last digit. A Plot for "is X in range
-right now" is the wrong choice — the operator has to scan a line and
+right now" is the wrong choice: the operator has to scan a line and
 mentally compare to bounds. Match the tile to the question.
 
-## Accessibility — keyboard, focus, color
+## Accessibility: keyboard, focus, color
 
 Serial Studio runs on operator stations where mouse use is sometimes
 blocked (gloves, panel-mount, accessibility need). Workspaces are
@@ -100,7 +100,7 @@ matches `relativeIndex` order. So:
 - **Order workspaces left-to-right by frequency-of-use.** The first tab
   is the most-touched. Don't put Diagnostics first.
 - **Order tiles within a workspace by reading order.** The Tab key walks
-  through them in `relativeIndex` order — don't put the most-important
+  through them in `relativeIndex` order; don't put the most-important
   tile last in the tab cycle.
 - **Color is never the sole signal.** Same rule as the painter skill:
   an LED alarm tile that's only red-vs-green is invisible to ~8% of
@@ -114,7 +114,7 @@ matches `relativeIndex` order. So:
 ## Don't auto-generate and walk away
 
 `project.workspace.autoGenerate{}` produces a "reasonable starting
-layout" — one tile per group, default widget per dataset. It's a
+layout" (one tile per group, default widget per dataset). It's a
 starting point, not a finish line. After auto-generate:
 
 1. Read `project.workspace.list` to see what landed where.
@@ -134,13 +134,13 @@ starting point, not a finish line. After auto-generate:
   failed Overview.
 - **Picking Gauge for every numeric dataset** because it looks like a
   dashboard. Gauges are for bounded scalars where position-in-range
-  matters. RPM with redline: yes. Total odometer reading: no — that's
+  matters. RPM with redline: yes. Total odometer reading: no, that's
   a DataGrid.
 - **Multiple FFTs on one workspace.** FFTs eat horizontal space and
   the operator can only read one spectrum at a time. Put each FFT on
   its own Signal Analysis tab, or use Waterfall to summarize over time.
 - **No min/max on Gauges and Bars.** They render but show empty needles
-  / flat fills. See the `dashboard_layout` min/max section — `wgtMin` /
+  / flat fills. See the `dashboard_layout` min/max section: `wgtMin` /
   `wgtMax` are mandatory write-form names.
 - **Cross-workspace duplication.** Pinning the same KPI on Overview AND
   on its subsystem tab feels safe but trains the operator to ignore

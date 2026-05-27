@@ -243,7 +243,7 @@ void DataModel::ProjectEditor::wireProjectModelRebuilds()
       buildProjectModel();
   });
   connect(&pm, &DataModel::ProjectModel::jsonFileChanged, this, [this] {
-    // Same path means it was a re-save (autosave), not a project switch -- preserve selection
+    // Same path means it was a re-save (autosave), not a project switch: preserve selection
     const auto& path = DataModel::ProjectModel::instance().jsonFilePath();
     if (path == m_lastJsonFilePath)
       return;
@@ -347,7 +347,7 @@ void DataModel::ProjectEditor::wireDatasetSignals()
         return;
       }
 
-      // The tree rebuild scheduled by groupsChanged hasn't run yet -- defer.
+      // The tree rebuild scheduled by groupsChanged hasn't run yet, so defer.
       m_pendingSelectionKind    = PendingSelectionKind::Dataset;
       m_pendingSelectionGroupId = groupId;
       m_pendingSelectionItemId  = datasetId;
@@ -446,7 +446,7 @@ void DataModel::ProjectEditor::wireOutputWidgetSignals()
         return;
       }
 
-      // The tree rebuild scheduled by groupsChanged hasn't run yet -- defer.
+      // The tree rebuild scheduled by groupsChanged hasn't run yet, so defer.
       m_pendingSelectionKind    = PendingSelectionKind::OutputWidget;
       m_pendingSelectionGroupId = groupId;
       m_pendingSelectionItemId  = widgetId;
@@ -3208,7 +3208,7 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
   plotItem->setData(tr("Plot data in real-time"), ParameterDescription);
   model->appendRow(plotItem);
 
-  // X-axis source -- xAxisId is -2 (time) or a dataset uniqueId, via the parallel list
+  // X-axis source: xAxisId is -2 (time) or a dataset uniqueId, via the parallel list
   const auto xUids  = DataModel::ProjectModel::instance().xDataSourceUniqueIds();
   int xAxisComboPos = 0;
   for (int i = 0; i < xUids.size(); ++i) {
@@ -3801,7 +3801,7 @@ bool DataModel::ProjectEditor::applyGroupWidgetEdit(int widgetIdx, int groupId)
     return true;
   }
 
-  // Rejected -- rebuild tree and restore selection on the original group.
+  // Rejected: rebuild tree and restore selection on the original group.
   QTimer::singleShot(0, this, [this, groupId] {
     buildTreeModel();
     for (auto g = m_groupItems.begin(); g != m_groupItems.end(); ++g) {
@@ -3925,7 +3925,7 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
 
     Q_EMIT selectedTextChanged();
   } else {
-    // updateAction(rebuildTree=false) skips the tree refresh -- sync the cache here.
+    // updateAction(rebuildTree=false) skips the tree refresh; sync the cache here.
     for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
       if (it.value().actionId == actionId) {
         m_actionItems[it.key()] = m_selectedAction;
@@ -4943,7 +4943,7 @@ QVariantList DataModel::ProjectEditor::selectedTreeItems() const
 }
 
 //--------------------------------------------------------------------------------------------------
-// Data tables -- read-only summaries for QML views
+// Data tables: read-only summaries for QML views
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -5096,7 +5096,7 @@ QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
 }
 
 //--------------------------------------------------------------------------------------------------
-// Workspaces -- read-only summaries for QML views
+// Workspaces: read-only summaries for QML views
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -5356,12 +5356,12 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
     if (!SerialStudio::groupEligibleForWorkspace(group))
       continue;
 
-    // Group-level widget -- mirror Dashboard's non-Pro Plot3D fallback.
+    // Group-level widget: mirror Dashboard's non-Pro Plot3D fallback.
     auto groupKey = SerialStudio::getDashboardWidget(group);
     if (groupKey == SerialStudio::DashboardPlot3D && !pro)
       groupKey = SerialStudio::DashboardMultiPlot;
 
-    // Skip empty output panels -- nothing to offer in the picker.
+    // Skip empty output panels: nothing to offer in the picker.
     const bool isEmptyOutputPanel =
       group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
 

@@ -1535,7 +1535,7 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
     return;
   }
 
-  // DEC private mode prefix -- silently note it, stay in Format state
+  // DEC private mode prefix: silently note it, stay in Format state
   if (byte == '?' || byte == '>' || byte == '=') {
     m_privateMode = true;
     return;

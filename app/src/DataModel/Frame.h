@@ -182,7 +182,7 @@ inline constexpr KeyView WriterVersion("writerVersion");
 inline constexpr KeyView WriterVersionAtCreation("writerVersionAtCreation");
 inline constexpr KeyView NextUniqueId("nextUniqueId");
 
-// Project lock -- PBKDF2 hash (legacy MD5 still accepted on load).
+// Project lock: PBKDF2 hash (legacy MD5 still accepted on load).
 inline constexpr KeyView PasswordHash("passwordHash");
 
 // Per-project MQTT publisher configuration (Pro).

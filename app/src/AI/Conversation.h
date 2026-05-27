@@ -182,6 +182,7 @@ private:
   int m_outstandingToolResults;
   int m_toolCallCount;
   bool m_cancelled;
+  bool m_summaryForced;
   bool m_busy;
   QString m_lastError;
   QString m_currentStopReason;

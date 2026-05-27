@@ -145,7 +145,7 @@ Widgets.SmartWindow {
       }
 
       //
-      // Main Layout -- kept visible when locked; the lock overlay sits on top
+      // Main Layout: kept visible when locked; the lock overlay sits on top
       //
       Widgets.PaneSplitter {
         id: splitter
@@ -241,7 +241,7 @@ Widgets.SmartWindow {
       }
 
       //
-      // Preserve native-style window drag on the opaque top strip -- the
+      // Preserve native-style window drag on the opaque top strip. The
       // toolbar's own DragHandler is unreachable while the overlay is up
       //
       DragHandler {

@@ -1,24 +1,24 @@
-# Painter Widget API — JavaScript
+# Painter Widget API (JavaScript)
 
-The Painter widget (Pro) gives you a Canvas-style 2D drawing surface. Each
+The Painter widget (Pro) provides a Canvas-style 2D drawing surface. Each
 group with `widgetType: 8` (GroupWidget::Painter) gets its own painter
 script. Bind by calling `project.painter.setCode {groupId, code}`.
 
 A painter group can be **empty** (zero datasets). It will then draw using
 peer datasets read via `datasetGetFinal(uniqueId)` and shared registers
 read via `tableGet(table, register)`. Don't duplicate datasets just to
-feed a painter — see "Reading peer datasets" below.
+feed a painter; see "Reading peer datasets" below.
 
 ## Entry points
 
 The script defines TWO functions. Names must match exactly.
 
-- **`paint(ctx, w, h)` — REQUIRED.** Called every UI tick (24 Hz default)
+- **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (24 Hz default)
   to redraw the canvas. `ctx` is a Canvas-2D-like context. `w` and `h` are
-  the current widget size in pixels. Treat the canvas as ephemeral — clear
+  the current widget size in pixels. Treat the canvas as ephemeral; clear
   what you need at the top of each call.
 
-- **`onFrame()` — OPTIONAL.** Called once per parsed frame, before the
+- **`onFrame()`: OPTIONAL.** Called once per parsed frame, before the
   next paint, with no arguments. Read live values via
   `datasets[i].value` (etc.) or via `datasetGetFinal(uniqueId)` and cache
   them in top-level `var`s if you need to do per-frame computation outside
@@ -119,7 +119,7 @@ dashboard tick (24 Hz); a write or `clearPlots` per paint will saturate
 the link / yank the plot. Use `onFrame()` (one call per parsed frame) or
 guard with a state machine.
 
-## Alarm bands — colored value ranges
+## Alarm bands (colored value ranges)
 
 Bar / Gauge / Meter datasets carry an **`alarmBands` array** describing
 colored value ranges (aviation-tachometer style: white / green / yellow
@@ -161,7 +161,7 @@ function colorFor(ds, value) {
 ```
 
 **Legacy compat.** `datasets[i].alarmLow` and `.alarmHigh` are still
-readable — they're derived from the first / last band with severity ≥
+readable; they're derived from the first / last band with severity ≥
 Warning (`NaN` when no such band exists). Old painter scripts that
 predate the band schema keep working unchanged. Prefer `alarmBands` for
 new code; it carries the full color/severity/label intent.
@@ -177,7 +177,7 @@ geometry, gradients, and counters.
 - Use `var` (not `const` / `let`) for anything you intend to mutate
   across calls.
 
-## Reading peer datasets — DO NOT duplicate datasets for the painter
+## Reading peer datasets (DO NOT duplicate datasets for the painter)
 
 Painter groups address peer data by **uniqueId**, not by dataset index
 inside the painter group. The right pattern:
@@ -205,7 +205,7 @@ in a project costs a frame-table register, an exporter column, a
 dashboard row, and a project-file entry. Painters that just READ values
 should not own them.
 
-## Tables and registers — the central data bus
+## Tables and registers (the central data bus)
 
 Data tables let multiple scripts (transforms, painters) share state.
 Two register types:
@@ -215,8 +215,8 @@ Two register types:
   value. Use for: calibration coefficients, lookup tables, configuration
   flags.
 - **Computed**: writable from transforms (and only transforms) via
-  `tableSet`. Holds the last value written **indefinitely** — there is
-  no per-frame reset. The `defaultValue` is the starting value at
+  `tableSet`. Holds the last value written **indefinitely**, with no
+  per-frame reset. The `defaultValue` is the starting value at
   project load. Use for: filter/integrator state, cross-frame counters,
   latched flags, and intermediate results another transform reads later
   in the same frame.
@@ -224,7 +224,7 @@ Two register types:
 A system-managed table named `__datasets__` is **always** present. It
 holds two registers per dataset: `raw:<uniqueId>` and `final:<uniqueId>`,
 populated by the FrameBuilder. You almost never read it through
-`tableGet` — use `datasetGetRaw(uniqueId)` / `datasetGetFinal(uniqueId)`
+`tableGet`. Use `datasetGetRaw(uniqueId)` / `datasetGetFinal(uniqueId)`
 instead, which are faster and more legible.
 
 For your own tables:
@@ -263,10 +263,10 @@ ctx.arc(cx, cy, r, 0, Math.PI);  // arc opens cleanly
 ctx.stroke();
 ```
 
-For full circles, the order is the same — `moveTo` to the perimeter, then
+For full circles, the order is the same: `moveTo` to the perimeter, then
 `arc` to `2*Math.PI`.
 
-## Color from theme — never hard-code hex
+## Color from theme (never hard-code hex)
 
 Use the `widget_*` family for in-painter content so the canvas matches
 the rest of the dashboard:
@@ -280,7 +280,7 @@ ctx.fillStyle   = theme.alarm;             // alarm / red accent
 ```
 
 For multi-channel painters (one color per dataset), index into the
-`widget_colors` array — the dashboard's plot/multiplot widgets use the
+`widget_colors` array. The dashboard's plot/multiplot widgets use the
 same palette:
 
 ```js
@@ -506,14 +506,14 @@ scripts.get  {kind: "painter", id: "<id>"}   -> {body: "<full source>"}
 
 Adapt the closest match instead of writing from scratch.
 
-## Canvas context — supported API
+## Canvas context (supported API)
 
 The `ctx` argument behaves like a browser `CanvasRenderingContext2D`. The
 list below is exhaustive: anything not listed is not implemented and
 calling it from your script will throw or no-op.
 
 **Style state**
-- `fillStyle`, `strokeStyle` — accept a CSS color string OR a gradient
+- `fillStyle`, `strokeStyle`: accept a CSS color string OR a gradient
   object OR a pattern object (see "Gradients & patterns" below).
 - `lineWidth`, `lineCap` ("butt" / "round" / "square"),
   `lineJoin` ("miter" / "round" / "bevel"), `miterLimit`.
@@ -527,8 +527,8 @@ calling it from your script will throw or no-op.
 - Shadows: `shadowColor`, `shadowBlur`, `shadowOffsetX`, `shadowOffsetY`.
   Applied to `fill`, `stroke`, `fillRect`, `strokeRect`, `fillText`,
   `strokeText`. A box-blur approximation is used for `shadowBlur > 0`;
-  large blur radii are expensive — keep shadows out of per-frame hotpaths
-  if you can.
+  large blur radii are expensive, so keep shadows out of per-frame
+  hotpaths if you can.
 - `imageSmoothingEnabled`, `imageSmoothingQuality` ("low" / "medium" /
   "high"; Qt has only one filter so quality is recorded for parity but not
   switched).
@@ -567,7 +567,7 @@ calling it from your script will throw or no-op.
 - `measureTextWidth(s)` is a fast shortcut returning just the width.
 
 **Images**
-- `drawImage(src, x, y)` and `drawImage(src, x, y, w, h)` — source must be
+- `drawImage(src, x, y)` and `drawImage(src, x, y, w, h)`: source must be
   a `qrc:/` resource OR a path inside the project file's directory tree.
   URLs (`http://`, `https://`, etc.) are rejected for sandbox reasons.
 - `createPattern(src, repetition)` where repetition is "repeat" (default),
@@ -580,7 +580,7 @@ calling it from your script will throw or no-op.
 - `createConicGradient(startRadians, cx, cy)` -> gradient.
 - `gradient.addColorStop(offset, color)` (offset clamped to [0, 1]).
 - Bind via `ctx.fillStyle = gradient` or `ctx.strokeStyle = gradient`.
-- A single gradient handle can be reused across paint() calls — cache it
+- A single gradient handle can be reused across paint() calls; cache it
   in a top-level `var`.
 
 **Geometry**
@@ -591,7 +591,7 @@ calling it from your script will throw or no-op.
 - `putImageData`, `getImageData`, `createImageData`.
 - `drawFocusIfNeeded`, `scrollPathIntoView`.
 - `filter` (CSS filter strings).
-- Pixel-level access in general — Canvas2D image-data APIs return
+- Pixel-level access in general. Canvas2D image-data APIs return
   `Uint8ClampedArray`, which QJSEngine cannot bridge cheaply.
 
 Gradient/pattern example:

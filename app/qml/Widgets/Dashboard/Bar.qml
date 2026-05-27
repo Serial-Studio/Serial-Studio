@@ -113,7 +113,7 @@ Item {
   }
 
   //
-  // SwipeView -- page 0 = analog bar, page 1 = digital readout.
+  // SwipeView: page 0 = analog bar, page 1 = digital readout.
   // Active page is persisted per-widget via Cpp_JSON_ProjectModel.
   //
   SwipeView {
@@ -125,7 +125,7 @@ Item {
     anchors.bottomMargin: pageIndicator.height + 4
 
     //
-    // PAGE 0 -- Analog bar
+    // PAGE 0: Analog bar
     //
     Item {
       id: analogPage
@@ -233,7 +233,7 @@ Item {
               }
 
               //
-              // Coloured fill -- grows from low end of the range
+              // Coloured fill that grows from low end of the range
               //
               Rectangle {
                 id: fillRect
@@ -280,7 +280,7 @@ Item {
             }
 
             //
-            // Alarm-band highlights -- coloured stripes in the tick row, one per dataset band.
+            // Alarm-band highlights: coloured stripes in the tick row, one per dataset band.
             //
             Repeater {
               model: root.model.alarmBands
@@ -390,7 +390,7 @@ Item {
     }
 
     //
-    // PAGE 1 -- Big digital readout
+    // PAGE 1: Big digital readout
     //
     Item {
       id: digitalPage

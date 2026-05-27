@@ -68,7 +68,7 @@ SmartDialog {
     anchors.centerIn: parent
 
     //
-    // Loading placeholder -- shown while the worker thread is loading the
+    // Loading placeholder: shown while the worker thread is loading the
     // session, hidden once isOpen flips true
     //
     ColumnLayout {
@@ -94,7 +94,7 @@ SmartDialog {
     }
 
     //
-    // Playback controls -- visible only once the worker has finished loading
+    // Playback controls: visible only once the worker has finished loading
     //
     Label {
       Layout.alignment: Qt.AlignLeft

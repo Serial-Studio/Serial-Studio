@@ -44,7 +44,7 @@
 #include "API/CommandRegistry.h"
 
 //--------------------------------------------------------------------------------------------------
-// Sandbox policy -- default-deny allow-list plus per-source rate limit and body cap
+// Sandbox policy: default-deny allow-list plus per-source rate limit and body cap
 //--------------------------------------------------------------------------------------------------
 
 namespace detail {
@@ -175,7 +175,7 @@ int DataModel::ScriptApiCall::maxBodyBytes()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Recursion guard -- mirrors JsonValidator's 128 cap so a self-referencing table can't blow up
+// Recursion guard: mirrors JsonValidator's 128 cap so a self-referencing table can't blow up
 //--------------------------------------------------------------------------------------------------
 
 constexpr int kMaxJsonDepth = 64;

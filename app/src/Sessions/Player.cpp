@@ -331,7 +331,7 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
   // Snapshot mode + project path before restoreProjectFromJson mutates them
   capturePreSessionState();
 
-  // Prompt to disconnect live devices -- must happen on main thread
+  // Prompt to disconnect live devices: must happen on main thread
   if (IO::ConnectionManager::instance().isConnected()) {
     auto response =
       Misc::Utilities::showMessageBox(tr("Device Connection Active"),
@@ -399,7 +399,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
     return;
   }
 
-  // Restore project -- must happen on the main thread before column alignment
+  // Restore project: must happen on the main thread before column alignment
   if (!payload->projectJson.isEmpty()) {
     (void)restoreProjectFromJson(payload->projectJson);
   } else {
@@ -454,7 +454,7 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Local DB connection (per-frame fetch -- main thread)
+// Local DB connection (per-frame fetch on main thread)
 //--------------------------------------------------------------------------------------------------
 
 /**

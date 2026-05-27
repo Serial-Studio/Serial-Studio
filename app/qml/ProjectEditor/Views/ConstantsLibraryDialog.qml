@@ -364,7 +364,7 @@ Window {
       Item { implicitHeight: 4 }
 
       //
-      // Footer -- count + Close button
+      // Footer: count + Close button
       //
       RowLayout {
         spacing: 8

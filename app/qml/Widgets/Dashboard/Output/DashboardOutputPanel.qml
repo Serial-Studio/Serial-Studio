@@ -83,7 +83,7 @@ Item {
         property color accentColor: SerialStudio.getDatasetColor(index + 1)
 
         //
-        // Section label component -- uppercase title + separator
+        // Section label component: uppercase title + separator
         //
         component SectionLabel : ColumnLayout {
           property string text: ""

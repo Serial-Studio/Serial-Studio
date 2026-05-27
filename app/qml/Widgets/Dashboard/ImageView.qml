@@ -60,7 +60,7 @@ Item {
   readonly property real maxZoom: 5.0
 
   //
-  // Image filter -- index into filterModel
+  // Image filter: index into filterModel
   //
   property int filterIndex: 0
   readonly property var currentFilter: filterModel[filterIndex]
@@ -361,7 +361,7 @@ Item {
       }
 
       //
-      // Interaction host -- wraps the modern PinchHandler (Qt 6 replacement
+      // Interaction host: wraps the modern PinchHandler (Qt 6 replacement
       // for the deprecated PinchArea) and the click-drag MouseArea below.
       //
       Item {

@@ -6,7 +6,7 @@ Frame parsers turn one logical frame (the bytes between `frameStart` and
 ## Decision: do you need a parser?
 
 - **Yes**: framing is line-delimited, comma-separated, or has any
-  structure beyond raw bytes. The default project template ships with a
+  structure beyond raw bytes. The default project template includes a
   `parse(frame) { return frame.split(','); }` parser already.
 - **No**: you're reading raw uniform bytes (audio, image stream) where
   the dashboard widget consumes the unframed payload directly. Set
@@ -26,7 +26,7 @@ Frame parsers turn one logical frame (the bytes between `frameStart` and
 
 ALWAYS pass `language` on `project.frameParser.setCode`. A mismatch
 (JS code under language=Lua or vice versa) is a silent compile failure
-— the dashboard receives no data and there's no popup. The API now
+(the dashboard receives no data and there's no popup). The API now
 returns a `warning` field in the response when the syntax doesn't
 match the declared language; do not ignore it.
 
@@ -87,7 +87,7 @@ function parse(frame) {
 ## NMEA / hex / domain protocols
 
 For NMEA, AT-commands, hex-encoded, base64, COBS, TLV, see
-`scripts.list{kind: "frame_parser_js"}` — the codebase ships ~10
+`scripts.list{kind: "frame_parser_js"}`: the codebase includes ~10
 reference parsers for these patterns. Adapt the closest match.
 
 ## Gotchas
@@ -99,18 +99,18 @@ reference parsers for these patterns. Adapt the closest match.
 - Strings are UTF-8 by default. For binary protocols, set
   `console.setDataMode = 1` (Hex) on the user's request, but the parser
   still receives the decoded bytes as a string in JS.
-- Top-level `var` persists across calls — that's how you keep buffers,
+- Top-level `var` persists across calls; that's how you keep buffers,
   state, EMAs across frames.
 
 ## Closed-loop control: `deviceWrite()` and `actionFire()`
 
 Parsers can drive output without going through a widget:
 
-- `deviceWrite(data, sourceId?)` — synchronous fire-and-forget byte write.
+- `deviceWrite(data, sourceId?)`: synchronous fire-and-forget byte write.
   Returns `{ ok, error? }`, never throws. `data` is a Lua string or JS
   string / byte array. `sourceId` defaults to the source this parser
   belongs to. Logged `[deviceWrite] source=N bytes=M written=K`.
-- `actionFire(actionId)` — fires an existing project Action by its
+- `actionFire(actionId)`: fires an existing project Action by its
   stable `actionId` (NOT its index). Reuses the action's payload,
   encoding, and timer mode. Same return shape. Logged
   `[actionFire] id=N index=M ok`.
@@ -122,9 +122,9 @@ For user-triggered commands, build an Output Widget instead.
 
 Seven runtime UI helpers, all `{ ok, error? }`, NO logging:
 
-- `clearPlots()` — wipe line / multiplot / FFT / GPS / 3D / waterfall buffers without rebuilding widgets, datasets, or actions. Typical use: reset a GPS trace the moment the first valid fix arrives.
-- `setPlotPoints(n)` — horizontal sample window for line plots (n >= 1).
-- `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)` — show/hide the corresponding dashboard widgets.
-- `setActiveWorkspace(idOrName)` — switch the active workspace tab. Pass a numeric `workspaceId` (>= 1000) or a case-insensitive title string.
+- `clearPlots()`: wipe line / multiplot / FFT / GPS / 3D / waterfall buffers without rebuilding widgets, datasets, or actions. Typical use: reset a GPS trace the moment the first valid fix arrives.
+- `setPlotPoints(n)`: horizontal sample window for line plots (n >= 1).
+- `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)`: show/hide the corresponding dashboard widgets.
+- `setActiveWorkspace(idOrName)`: switch the active workspace tab. Pass a numeric `workspaceId` (>= 1000) or a case-insensitive title string.
 
 Latch every call behind a state transition (a top-level `var` / `local` flag). Calling them per frame produces empty plots, flicker, or workspace-yank. They affect the active dashboard window only and do NOT persist to the project file or QSettings.

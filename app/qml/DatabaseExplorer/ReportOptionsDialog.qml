@@ -55,7 +55,7 @@ Widgets.SmartDialog {
   }
 
   //
-  // Line style options -- index maps to C++ string keys
+  // Line style options: index maps to C++ string keys
   //
   readonly property var lineStyles: [
     { label: qsTr("Solid"),  value: "solid"  },

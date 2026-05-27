@@ -34,7 +34,7 @@ Item {
   implicitHeight: 280
 
   //
-  // Widget data inputs (unused -- Clock has no project-bound model)
+  // Widget data inputs (unused; Clock has no project-bound model)
   //
   property var color
   property var model
@@ -79,7 +79,7 @@ Item {
   }
 
   //
-  // Theme-aware chrome stops -- shared between the analog face and the digital
+  // Theme-aware chrome stops shared between the analog face and the digital
   // pane background so both pages feel like one widget.
   //
   readonly property bool darkBg: {
@@ -110,7 +110,7 @@ Item {
     anchors.bottomMargin: pageIndicator.height + 4
 
     //
-    // PAGE 0 -- Analog clock
+    // PAGE 0: Analog clock
     //
     Item {
       id: analogPage
@@ -135,7 +135,7 @@ Item {
                                          * Cpp_Misc_CommonFonts.widgetFontScale
 
         //
-        // Outer chrome ring -- invisible disc whose shadow gives the raised look.
+        // Outer chrome ring: invisible disc whose shadow gives the raised look.
         //
         Rectangle {
           id: chromeRing
@@ -281,7 +281,7 @@ Item {
           }
 
           //
-          // Needle layer -- hour/minute use the widget_border silver palette,
+          // Needle layer: hour/minute use the widget_border silver palette,
           // second hand keeps the alarm tint.
           //
           Item {
@@ -297,7 +297,7 @@ Item {
             readonly property color handStroke: Qt.darker(handBase, 1.35)
 
             //
-            // Hour hand -- short, tapered to a rounded tip; back end stops at pivot
+            // Hour hand: short, tapered to a rounded tip; back end stops at pivot
             //
             Shape {
               id: hourShape
@@ -359,7 +359,7 @@ Item {
             }
 
             //
-            // Minute hand -- longer than hour, same rounded-tip / no-tail style
+            // Minute hand: longer than hour, same rounded-tip / no-tail style
             //
             Shape {
               id: minuteShape
@@ -421,7 +421,7 @@ Item {
             }
 
             //
-            // Second hand -- thin, accent-colored, hard-snap each tick.
+            // Second hand: thin, accent-colored, hard-snap each tick.
             // Keeps its counterweight tail.
             //
             Shape {
@@ -469,7 +469,7 @@ Item {
             }
 
             //
-            // Pivot hub -- gauge-style silver gradient
+            // Pivot hub: gauge-style silver gradient
             //
             Rectangle {
               id: pivotHub
@@ -503,7 +503,7 @@ Item {
     }
 
     //
-    // PAGE 1 -- Large digital clock (AM/PM time + full date)
+    // PAGE 1: Large digital clock (AM/PM time + full date)
     //
     Item {
       id: digitalPage
@@ -514,7 +514,7 @@ Item {
       Behavior on opacity { NumberAnimation { duration: 150 } }
 
       //
-      // Reference measurement -- back-solves the largest font that fits the page width.
+      // Reference measurement: back-solves the largest font that fits the page width.
       //
       TextMetrics {
         id: bigTimeMetrics
@@ -585,7 +585,7 @@ Item {
   }
 
   //
-  // Page indicator -- swipe gesture is primary, but the dots are clickable too
+  // Page indicator: swipe gesture is primary, but the dots are clickable too
   //
   PageIndicator {
     id: pageIndicator

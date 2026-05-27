@@ -51,7 +51,7 @@ Item {
   readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity) : root.color
 
   //
-  // Theme-aware chrome stops -- adapts lighten/darken amounts to widget_base luminance
+  // Theme-aware chrome stops that adapt lighten/darken amounts to widget_base luminance
   //
   readonly property bool darkBg: {
     const c = Cpp_ThemeManager.colors["widget_base"]
@@ -184,7 +184,7 @@ Item {
   }
 
   //
-  // SwipeView -- page 0 = analog dial, page 1 = digital readout.
+  // SwipeView: page 0 = analog dial, page 1 = digital readout.
   // Active page is persisted per-widget via Cpp_JSON_ProjectModel.
   //
   SwipeView {
@@ -196,7 +196,7 @@ Item {
     anchors.bottomMargin: pageIndicator.height + 4
 
     //
-    // PAGE 0 -- Analog dial
+    // PAGE 0: Analog dial
     //
     Item {
       clip: true
@@ -226,7 +226,7 @@ Item {
           readonly property real gaugeSize: Math.min(control.width, control.height) * 0.95
 
           //
-          // Outer chrome ring -- silver gradient rendered via MultiEffect with shadow
+          // Outer chrome ring: silver gradient rendered via MultiEffect with shadow
           //
           readonly property real chromeW: Math.max(3, gaugeSize * 0.025)
 
@@ -343,7 +343,7 @@ Item {
             }
 
             //
-            // Alarm-band highlights -- colored arc segments at the outer rim, one per dataset band.
+            // Alarm-band highlights: colored arc segments at the outer rim, one per dataset band.
             //
             Repeater {
               model: root.model.alarmBands
@@ -451,7 +451,7 @@ Item {
                               gaugeFace.width - 16)
 
               //
-              // Tick clearance for the face label -- chord through the central
+              // Tick clearance for the face label: chord through the central
               // tick-free disk at the title's bottom edge (the tighter y).
               //
               readonly property real tickInnerR: gaugeFace.width / 2 - gaugeFace.border.width - 4
@@ -562,7 +562,7 @@ Item {
           height: control.background.gaugeSize
 
           //
-          // Pointed needle -- tapered triangle with counterweight tail
+          // Pointed needle: tapered triangle with counterweight tail
           //
           Shape {
             id: needleShape
@@ -644,7 +644,7 @@ Item {
     }
 
     //
-    // PAGE 1 -- Big digital readout (mirrors the Clock digital page)
+    // PAGE 1: Big digital readout (mirrors the Clock digital page)
     //
     Item {
       id: digitalPage

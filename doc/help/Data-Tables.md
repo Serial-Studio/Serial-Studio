@@ -30,7 +30,7 @@ Every register is one of two types:
 
 Constants are the right tool for configuration: sensor slopes, offsets, thresholds, full-scale ranges. They can't be modified by `tableSet()` at runtime.
 
-Computed registers behave like ordinary memory: once you write a value, it stays there until you (or another transform) write again. That matches the way state lives in control and embedded systems -- Kalman states, integrators, PID controllers, edge counters, latched flags. If you specifically want a register to start each frame at a known value, write that value at the top of an early transform with `tableSet()`.
+Computed registers behave like ordinary memory: once you write a value, it stays there until you (or another transform) write again. That matches the way state lives in control and embedded systems: Kalman states, integrators, PID controllers, edge counters, latched flags. If you specifically want a register to start each frame at a known value, write that value at the top of an early transform with `tableSet()`.
 
 ## The system table
 
@@ -109,7 +109,7 @@ That gives these guarantees:
 - `datasetGetFinal(uid)` only returns a meaningful value for datasets that have already been transformed (that is, datasets earlier in the same group, or in an earlier group).
 - Computed registers written by earlier transforms are visible to later ones, inside the same frame and on every subsequent frame, until the next write.
 
-If dataset B depends on dataset A's final value, make sure A is listed before B in the Project Editor tree. Otherwise `datasetGetFinal(A)` will return whatever the previous frame left in the register -- almost certainly not what you want.
+If dataset B depends on dataset A's final value, make sure A is listed before B in the Project Editor tree. Otherwise `datasetGetFinal(A)` will return whatever the previous frame left in the register, almost certainly not what you want.
 
 ## Defining tables in the Project Editor
 
@@ -204,7 +204,7 @@ Other classics that fit this shape: IMU accelerometer magnitude `sqrt(axÂ² + ayÂ
 
 ### Cross-dataset scratch pad
 
-If two transforms both need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a Computed register, and read it from the later datasets. The value persists, so the downstream readers see whatever the earlier transform last wrote -- within the same frame or carried over from the previous frame if the upstream transform didn't run this time.
+If two transforms both need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a Computed register, and read it from the later datasets. The value persists, so the downstream readers see whatever the earlier transform last wrote, within the same frame or carried over from the previous frame if the upstream transform didn't run this time.
 
 Table `runtime`:
 
@@ -257,7 +257,7 @@ end
 
 ### Tunable filter parameters
 
-Put the knob (cutoff, alpha, window size) in a Constant register. Keep the filter's running state in a Computed register (or a transform-local upvalue -- both work, since Computed registers persist). That separates *configuration* (in a Constant) from *running state*, and lets you re-tune the filter without editing its code.
+Put the knob (cutoff, alpha, window size) in a Constant register. Keep the filter's running state in a Computed register (or a transform-local upvalue; both work, since Computed registers persist). That separates *configuration* (in a Constant) from *running state*, and lets you re-tune the filter without editing its code.
 
 ```lua
 function transform(value)
@@ -272,7 +272,7 @@ end
 
 ### Cross-frame state: integrators, derivatives, latches
 
-Because Computed registers hold the last value written, they're a natural place for state that has to survive between frames -- the things every controls engineer recognizes: integrators, derivatives, edge counters, peak detectors, latched alarms. A discrete-time derivative `dT/dt`:
+Because Computed registers hold the last value written, they're a natural place for state that has to survive between frames, the things every controls engineer recognizes: integrators, derivatives, edge counters, peak detectors, latched alarms. A discrete-time derivative `dT/dt`:
 
 Table `calibration`:
 

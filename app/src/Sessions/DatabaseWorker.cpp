@@ -686,7 +686,7 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
 }
 
 //--------------------------------------------------------------------------------------------------
-// Report data load (SQL only -- rendering stays on main thread)
+// Report data load (SQL only; rendering stays on main thread)
 //--------------------------------------------------------------------------------------------------
 
 /**

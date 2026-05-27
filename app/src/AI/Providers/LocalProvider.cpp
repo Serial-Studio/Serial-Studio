@@ -313,7 +313,9 @@ void AI::LocalProvider::refreshModels()
 /**
  * @brief Builds the Chat Completions request body and returns a streaming Reply.
  */
-AI::Reply* AI::LocalProvider::sendMessage(const QJsonArray& history, const QJsonArray& tools)
+AI::Reply* AI::LocalProvider::sendMessage(const QJsonArray& history,
+                                          const QJsonArray& tools,
+                                          bool forbidToolUse)
 {
   if (m_baseUrl.isEmpty())
     return new detail::ImmediateErrorReplyLP(QObject::tr("No local model server URL configured. "
@@ -339,8 +341,9 @@ AI::Reply* AI::LocalProvider::sendMessage(const QJsonArray& history, const QJson
   body[QStringLiteral("messages")] =
     OpenAIProvider::translateHistory(history, systemText, /*useDeveloperRole=*/false);
   if (!tools.isEmpty()) {
-    body[QStringLiteral("tools")]       = OpenAIProvider::translateTools(tools);
-    body[QStringLiteral("tool_choice")] = QStringLiteral("auto");
+    body[QStringLiteral("tools")] = OpenAIProvider::translateTools(tools);
+    body[QStringLiteral("tool_choice")] =
+      forbidToolUse ? QStringLiteral("none") : QStringLiteral("auto");
   }
 
   const auto bytes = QJsonDocument(body).toJson(QJsonDocument::Compact);

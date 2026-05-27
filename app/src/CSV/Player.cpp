@@ -358,7 +358,7 @@ void CSV::Player::initializeTimestamps()
     return;
   }
 
-  // No recognized timestamp -- prompt user for a strategy
+  // No recognized timestamp: prompt user for a strategy
   m_useHighPrecisionTimestamps = false;
   m_timestampCache.clear();
 }

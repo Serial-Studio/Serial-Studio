@@ -144,14 +144,14 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   DataModel::NotificationCenter::installScriptApi(&m_engine);
   DataModel::FrameBuilder::instance().injectTableApiJS(&m_engine);
 
-  // Closed-loop control APIs -- deviceWrite() default source is refreshed in updateData()
+  // Closed-loop control APIs: deviceWrite() default source is refreshed in updateData()
   DataModel::DeviceWriteApi::installJS(&m_engine, /*defaultSourceId=*/0);
   DataModel::ActionFireApi::installJS(&m_engine);
 
   // Dashboard helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(&m_engine);
 
-  // Generic API gateway (apiCall) -- painter widgets share the source-0 rate bucket
+  // Generic API gateway (apiCall): painter widgets share the source-0 rate bucket
   DataModel::ScriptApiCall::installJS(&m_engine, 0);
 
   const auto projectPath = AppState::instance().projectFilePath();

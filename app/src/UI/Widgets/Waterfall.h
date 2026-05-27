@@ -250,7 +250,7 @@ private:
   bool m_cursorHovering;
   QPointF m_cursorPos;
 
-  // Cached axis layer -- rebuilt only when zoom/pan/size/theme changes
+  // Cached axis layer: rebuilt only when zoom/pan/size/theme changes
   bool m_axisDirty;
   QRectF m_cachedPlotRect;
   QImage m_axisLayer;

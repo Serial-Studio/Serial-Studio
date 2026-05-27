@@ -98,7 +98,7 @@ void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
   m_headerBuf.clear();
   m_zdleEscape = false;
 
-  // Reject >4 GiB up-front -- ZMODEM's base offsets are 32-bit unsigned.
+  // Reject >4 GiB up-front: ZMODEM's base offsets are 32-bit unsigned.
   static constexpr qint64 kZmodemMaxFileSize = static_cast<qint64>(0xFFFFFFFFULL);
   if (m_fileSize > kZmodemMaxFileSize) [[unlikely]] {
     m_file.close();
@@ -224,7 +224,7 @@ void IO::Protocols::ZMODEM::startHeaderForZdleByte(quint8 ch)
  */
 void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
 {
-  // Bound m_headerBuf -- peer without a line terminator would otherwise OOM.
+  // Bound m_headerBuf: a peer without a line terminator would otherwise OOM.
   static constexpr int kMaxHexHeaderBytes = 32;
 
   // Accumulate until line terminator
@@ -262,7 +262,7 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
         | (static_cast<quint32>(static_cast<quint8>(arg_bytes[3])) << 24);
   }
 
-  // Validate CRC-16 trailer -- corrupted headers would otherwise be obeyed.
+  // Validate CRC-16 trailer: corrupted headers would otherwise be obeyed.
   const QByteArray crc_bytes = QByteArray::fromHex(m_headerBuf.mid(10, 4));
   if (crc_bytes.size() == 2) {
     quint8 payload[5];
@@ -291,7 +291,7 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
  */
 void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
 {
-  // Bound m_headerBuf -- a hostile peer sending only ZDLE-escape prefixes would otherwise OOM.
+  // Bound m_headerBuf: a hostile peer sending only ZDLE-escape prefixes would otherwise OOM.
   static constexpr int kMaxBinHeaderBytes = 128;
 
   // Drop the in-flight header if growth exceeds the hard cap
@@ -332,7 +332,7 @@ void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
  */
 void IO::Protocols::ZMODEM::processBinByte(quint8 ch)
 {
-  // Bound m_headerBuf -- a hostile peer sending only ZDLE-escape prefixes would otherwise OOM.
+  // Bound m_headerBuf: a hostile peer sending only ZDLE-escape prefixes would otherwise OOM.
   static constexpr int kMaxBinHeaderBytes = 128;
 
   // Drop the in-flight header if growth exceeds the hard cap
@@ -583,7 +583,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
   m_timeoutTimer.stop();
 
   switch (type) {
-    // Receiver ready -- send file info or close session
+    // Receiver ready: send file info or close session
     case kZRINIT:
       if (m_state == State::SentZRQINIT) {
         Q_EMIT statusMessage(tr("Receiver ready, sending file info…"));
@@ -595,7 +595,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       }
       break;
 
-    // Resume from requested offset -- clamp so a bogus arg can't seek past EOF.
+    // Resume from requested offset: clamp so a bogus arg can't seek past EOF.
     case kZRPOS:
       m_fileOffset = qBound<qint64>(0, static_cast<qint64>(arg), m_fileSize);
       Q_EMIT statusMessage(tr("Receiver requests data from offset %1").arg(m_fileOffset));
@@ -611,7 +611,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       sendZFIN();
       break;
 
-    // NAK -- retry current phase
+    // NAK: retry current phase
     case kZNAK:
       ++m_retryCount;
       if (m_retryCount >= m_maxRetries) {
@@ -639,7 +639,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
 
       break;
 
-    // Session complete -- send "OO" (Over and Out)
+    // Session complete: send "OO" (Over and Out)
     case kZFIN:
       Q_EMIT writeRequested(QByteArray("OO"));
       m_state = State::Done;

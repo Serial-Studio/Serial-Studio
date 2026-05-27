@@ -108,7 +108,7 @@ Widgets.SmartWindow {
       anchors.fill: parent
 
       //
-      // Toolbar -- hidden in operator mode (deployed shortcut) so the explorer
+      // Toolbar: hidden in operator mode (deployed shortcut) so the explorer
       // becomes a read-only viewer using the standard OS window chrome.
       //
       Rectangle {

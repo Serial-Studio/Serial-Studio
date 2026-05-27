@@ -88,7 +88,7 @@ Item {
   }
 
   //
-  // Collapse logic -- runs whenever width changes
+  // Collapse logic: runs whenever width changes
   //
   property bool collapseInProgress: false
 

@@ -33,7 +33,7 @@ Widgets.SmartDialog {
   preferredHeight: layout.implicitHeight
 
   //
-  // Action handler -- applies the recovery and quits so the next launch is clean
+  // Action handler: applies the recovery and quits so the next launch is clean
   //
   function applyAndQuit(action) {
     Cpp_Misc_CrashTracker.applyRecovery(action)

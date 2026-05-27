@@ -34,7 +34,7 @@ Item {
   implicitWidth: layout.implicitWidth + 16
 
   //
-  // Process picker window -- instantiated once, shown on demand
+  // Process picker window: instantiated once, shown on demand
   //
   ProcessPicker {
     id: picker
@@ -284,7 +284,7 @@ Item {
     Item { implicitHeight: 4 } Item { implicitHeight: 4 }
 
     //
-    // Info block -- always visible, spans both columns
+    // Info block: always visible, spans both columns
     //
     RowLayout {
       spacing: 8

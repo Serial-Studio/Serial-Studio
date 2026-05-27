@@ -38,7 +38,7 @@ DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent)
 DataModel::FrameConsumerWorkerBase::~FrameConsumerWorkerBase() = default;
 
 //--------------------------------------------------------------------------------------------------
-// Monotonic clock tracker -- shared by every export worker
+// Monotonic clock tracker: shared by every export worker
 //--------------------------------------------------------------------------------------------------
 
 /**

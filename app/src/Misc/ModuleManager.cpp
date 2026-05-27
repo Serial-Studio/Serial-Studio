@@ -147,7 +147,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   if (output.isEmpty())
     return;
 
-  // Print to stdio (raw -- this IS the qDebug handler, so qDebug() would recurse)
+  // Print to stdio raw (this IS the qDebug handler, so qDebug() would recurse)
   // code-verify off
   std::cout << Widgets::Terminal::formatDebugMessage(type, message, false).toStdString()
             << std::endl;
@@ -169,7 +169,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   const QString channel = QStringLiteral("System");
   const QString title   = isCritical ? QObject::tr("Critical") : QObject::tr("Warning");
 
-  // Forward on the GUI thread -- post() asserts main-thread affinity
+  // Forward on the GUI thread: post() asserts main-thread affinity
   QMetaObject::invokeMethod(
     &nc,
     [level = isCritical ? 2 : 1, channel, title, msg]() {

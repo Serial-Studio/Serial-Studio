@@ -121,7 +121,7 @@ void Sessions::ExportWorker::processData()
   if (!consumerEnabled())
     return;
 
-  // Console-only has no frames -- open schema-less DB when raw bytes arrive
+  // Console-only has no frames: open schema-less DB when raw bytes arrive
   if (!m_dbOpen
       && m_operationMode->load(std::memory_order_relaxed)
            == static_cast<int>(SerialStudio::ConsoleOnly)) {
@@ -241,7 +241,7 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
   // Create every table the session format expects
   createSchema(pragma);
 
-  // Insert the new session row -- abandon the open on failure
+  // Insert the new session row, abandon the open on failure
   insertSession(frame, dt);
   if (m_sessionId < 0) [[unlikely]] {
     qWarning() << "[SQLite] Aborting database open -- session row was not inserted";
@@ -427,7 +427,7 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
     return json;
   }
 
-  // QuickPlot fallback -- synthesise a minimal project from the frame
+  // QuickPlot fallback: synthesise a minimal project from the frame
   QJsonObject json;
   json.insert(Keys::Title, frame.title);
 

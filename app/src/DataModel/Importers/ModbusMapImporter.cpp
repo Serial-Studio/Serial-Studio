@@ -497,7 +497,7 @@ static bool parseXmlRegisterElement(QXmlStreamReader& xml,
 {
   const auto attrs = xml.attributes();
 
-  // Validate the address attribute -- skip the element if missing or malformed
+  // Validate the address attribute: skip the element if missing or malformed
   bool addrOk              = false;
   const auto addrText      = attrs.value("address").toString();
   const quint16 addrParsed = addrText.toUShort(&addrOk);

@@ -36,7 +36,7 @@ Widgets.SmartDialog {
   readonly property var entries: backupList.model
 
   //
-  // Diff state -- recomputed whenever the selected snapshot changes
+  // Diff state, recomputed whenever the selected snapshot changes
   //
   property var currentSummary: ({})
   property var snapshotSummary: ({})
@@ -189,7 +189,7 @@ Widgets.SmartDialog {
     spacing: 10
 
     //
-    // Instruction line -- sentence case, no trailing heading
+    // Instruction line: sentence case, no trailing heading
     //
     Label {
       Layout.fillWidth: true
@@ -201,7 +201,7 @@ Widgets.SmartDialog {
     }
 
     //
-    // Snapshot list -- two columns: time + label
+    // Snapshot list with two columns: time + label
     //
     Rectangle {
       Layout.fillWidth: true
@@ -284,7 +284,7 @@ Widgets.SmartDialog {
     }
 
     //
-    // Preview -- one prose line. Reserved height keeps the dialog from jumping
+    // Preview: one prose line. Reserved height keeps the dialog from jumping
     // around when the selection changes.
     //
     Label {
@@ -299,7 +299,7 @@ Widgets.SmartDialog {
     }
 
     //
-    // Buttons -- Apple HIG order: secondary utility on the left, Cancel,
+    // Buttons in Apple HIG order: secondary utility on the left, Cancel,
     // then primary (default) action at far right.
     //
     RowLayout {

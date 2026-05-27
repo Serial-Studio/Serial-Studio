@@ -1172,7 +1172,7 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
     m_settings.setValue("Dashboard/NotificationLogEnabled", m_notificationLogEnabled);
 
 #ifdef BUILD_COMMERCIAL
-  // Unlike Terminal, NotificationLog can be the only widget -- only a live source frame is required
+  // Unlike Terminal, NotificationLog can be the only widget; only a live source frame is needed
   if (!m_sourceRawFrames.isEmpty()) {
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
@@ -2274,7 +2274,7 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
   if (!m_datasets.contains(xSource))
     return;
 
-  // Unfilled so the XY ring grows from empty -- no seeded (0,0) point draws a false first line.
+  // Unfilled so the XY ring grows from empty; no seeded (0,0) point draws a false first line.
   DSP::AxisData xAxis(points() + 1);
   m_xAxisData.insert(xSource, xAxis);
 }
@@ -2381,7 +2381,7 @@ void UI::Dashboard::configureLineSeries()
       continue;
     }
 
-    // Y push entry -- one per uniqueId
+    // Y push entry: one per uniqueId
     auto yIt = m_yAxisData.find(yDataset.uniqueId);
     if (yIt != m_yAxisData.end()) {
       auto cacheIt = yByUid.find(yDataset.uniqueId);
@@ -2397,7 +2397,7 @@ void UI::Dashboard::configureLineSeries()
       }
     }
 
-    // X push entry -- one per xAxisId
+    // X push entry: one per xAxisId
 #ifdef BUILD_COMMERCIAL
     const auto& tk = Licensing::CommercialToken::current();
     const int xAxisId =

@@ -37,7 +37,7 @@ Widgets.SmartDialog {
   preferredHeight: layout.implicitHeight
 
   //
-  // Allow resizing and maximizing -- the chat needs vertical room.
+  // Allow resizing and maximizing; the chat needs vertical room.
   //
   width: 820
   height: 680

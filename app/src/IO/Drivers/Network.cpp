@@ -477,7 +477,7 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
  */
 void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
-  // Ignore UDP "port unreachable" -- normal for fire-and-forget datagrams.
+  // Ignore UDP "port unreachable": normal for fire-and-forget datagrams.
   if (socketType() == QAbstractSocket::UdpSocket
       && socketError == QAbstractSocket::ConnectionRefusedError) [[unlikely]]
     return;

@@ -32,7 +32,7 @@ flowchart LR
 
 ## What the dashboard sees
 
-Nothing changes. Locking a project does **not** affect the live dashboard, frame parsers, dataset transforms, output widgets, exports, the API server, or any other runtime feature. Operators can connect, disconnect, switch workspaces, change widget layouts, run reports — all of it works exactly as before.
+Nothing changes. Locking a project does **not** affect the live dashboard, frame parsers, dataset transforms, output widgets, exports, the API server, or any other runtime feature. Operators can connect, disconnect, switch workspaces, change widget layouts, and run reports; all of it works exactly as before.
 
 The lock is scoped to the **Project Editor body** only. If an operator clicks the wrench icon, they get the lock screen instead of the form panes; everything else in Serial Studio is untouched.
 
@@ -48,7 +48,7 @@ Be honest with yourself about the threat model. The password hash sits in plain 
 | Will it stop someone with a text editor and patience? | No.    |
 | Is it a substitute for OS-level file permissions?     | No.    |
 
-If you need the project file itself protected from tampering — locked away from operators entirely — use your operating system's file ACLs, an admin-only network share, or a signed/read-only deployment. The lock here is a UI gate, not a vault.
+If you need the project file itself protected from tampering (locked away from operators entirely), use your operating system's file ACLs, an admin-only network share, or a signed/read-only deployment. The lock here is a UI gate, not a vault.
 
 ## Lifecycle
 
@@ -97,7 +97,7 @@ A locked project carries a single extra key under the JSON root:
 |----------------|---------|
 | `passwordHash` | MD5 hex digest of the password. Empty/absent means no lock. |
 
-When Serial Studio loads the file, `passwordHash` being non-empty is the entire trigger: the editor opens locked. There is no separate `locked` boolean — the hash is the lock.
+When Serial Studio loads the file, `passwordHash` being non-empty is the entire trigger: the editor opens locked. There is no separate `locked` boolean: the hash is the lock.
 
 > The lock state is **never** prompted at file-open time. Loading a locked project doesn't ask for the password; it just hides the editor body until the user explicitly clicks Unlock. This keeps live dashboards from being held hostage by a forgotten password during a shift change.
 
@@ -118,10 +118,10 @@ Both states use the same blurred-glass treatment so the editor's chrome (toolbar
 Not directly. The `lockProject()` slot is editor-only. Scripted deployments should ship a pre-locked `.ssproj` file by locking it once and then distributing the saved file.
 
 **What if I forget the password?**
-Open the `.ssproj` file in any text editor and delete the `passwordHash` line. Save. The next open will be unlocked. This is intentional — see the threat model above.
+Open the `.ssproj` file in any text editor and delete the `passwordHash` line. Save. The next open will be unlocked. This is intentional, as described in the threat model above.
 
 **Does the lock travel with the project file?**
-Yes. The hash is part of the project JSON. Email it, commit it, copy it onto a USB stick -- it stays locked wherever the file goes.
+Yes. The hash is part of the project JSON. Email it, commit it, copy it onto a USB stick: it stays locked wherever the file goes.
 
 **Does the lock affect the API or MCP commands?**
 No. The lock is purely a UI gate around the Project Editor. The API still serves frames, the MCP server still answers commands, and all scripting endpoints continue to work.

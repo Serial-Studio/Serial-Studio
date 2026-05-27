@@ -110,7 +110,7 @@ Item {
     Item { implicitHeight: 4 } Item { implicitHeight: 4 }
 
     //
-    // Info block -- always visible, spans both columns
+    // Info block: always visible, spans both columns
     //
     RowLayout {
       spacing: 8

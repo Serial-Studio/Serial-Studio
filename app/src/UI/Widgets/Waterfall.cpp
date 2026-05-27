@@ -243,7 +243,7 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   setAcceptedMouseButtons(Qt::LeftButton);
   setAcceptHoverEvents(true);
 
-  // Pull dataset config -- clamp samples since project JSON is user-controlled
+  // Pull dataset config: clamp samples since project JSON is user-controlled
   if (VALIDATE_WIDGET(SerialStudio::DashboardWaterfall, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardWaterfall, m_index);
     m_size              = floorPow2Bounded(dataset.fftSamples);
@@ -892,7 +892,7 @@ void Widgets::Waterfall::markAxisDirty()
  */
 QRectF Widgets::Waterfall::computePlotRect(const QFontMetrics& fm) const
 {
-  // No axes -- plot fills the whole item (border included)
+  // No axes: plot fills the whole item (border included)
   if (!m_axisVisible || width() < kMinAxisWidth || height() < kMinAxisHeight)
     return QRectF(0.5, 0.5, qMax(0.0, width() - 1), qMax(0.0, height() - 1));
 
@@ -1095,7 +1095,7 @@ void Widgets::Waterfall::drawCursor(QPainter* painter, const QRectF& plotRect) c
   painter->setFont(fonts.widgetFont(0.83, false));
   painter->setRenderHint(QPainter::TextAntialiasing, true);
 
-  // Crosshair lines -- clamped within plotRect to avoid overdrawing the axes
+  // Crosshair lines: clamped within plotRect to avoid overdrawing the axes
   const double cx = qBound(plotRect.left(), m_cursorPos.x(), plotRect.right());
   const double cy = qBound(plotRect.top(), m_cursorPos.y(), plotRect.bottom());
 

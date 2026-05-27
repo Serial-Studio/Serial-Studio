@@ -1,4 +1,4 @@
-# Per-Dataset Value Transform — JavaScript
+# Per-Dataset Value Transform (JavaScript)
 
 A transform turns a raw numeric (or string) dataset value into the value the
 dashboard plots, displays, and exports. Transforms run on every frame, in
@@ -22,7 +22,7 @@ function transform(value) {
 ## Virtual vs non-virtual
 
 Set `virtual: true` on the dataset **only** when the transform has no
-parser-supplied `value` — i.e. its output is built purely from peers,
+parser-supplied `value`, i.e. its output is built purely from peers,
 tables, or constants (e.g. `Power = Voltage × Current`). A transform
 that USES `value` (unit conversion like `km/h = m/s × 3.6`, EMA
 smoothing, calibration, deadband) stays non-virtual. Rule of thumb: if
@@ -43,24 +43,24 @@ That means top-level `var/let/const` are private per dataset, even when
 several datasets in the same source share a JS engine. Two datasets can
 both define `let alpha = 0.2` without clobbering each other.
 
-## Data table API — the central data bus
+## Data table API: the central data bus
 
 Transforms read from and write to two kinds of registers.
 
 **System table** (`__datasets__`, always present): two registers per
 dataset, `raw:<uniqueId>` and `final:<uniqueId>`, populated by the
 FrameBuilder during parsing. Read-only from a transform. You almost
-never read it via `tableGet` — use the convenience helpers below, which
+never read it via `tableGet`; use the convenience helpers below, which
 are faster and more legible.
 
 **User tables**: defined in the project (create via
 `project.dataTable.add` + `project.dataTable.addRegister`). Each register
 is one of two types:
 
-- `Constant` — single immutable value across the session. Set once at
+- `Constant`: single immutable value across the session. Set once at
   declaration; every `tableGet` returns it. Use for calibration
   coefficients, lookup tables, configuration flags.
-- `Computed` — writable from transforms via `tableSet`. Holds the last
+- `Computed`: writable from transforms via `tableSet`. Holds the last
   value written **indefinitely** (no per-frame reset). Use for
   filter/integrator state, cross-frame counters, latched flags, and
   intermediate results another transform reads later. The
@@ -85,7 +85,7 @@ within the project. It comes back from `project.dataset.list` (under
 **Treat the value as opaque.** It happens to be derived from
 `(sourceId, groupId, datasetId)`, but reordering changes those
 numbers. Resolve once via the API and pass the resulting integer into
-`datasetGetRaw / datasetGetFinal` -- never recompute it.
+`datasetGetRaw / datasetGetFinal`; never recompute it.
 
 ## Processing order
 
@@ -108,7 +108,7 @@ when peer reads return stale or empty values.
   table register and isolated to the one dataset.
 - **State shared across datasets and frames** (a filter whose output
   several downstream channels read, a long-running integrator, a
-  latched alarm): use a Computed register — it persists.
+  latched alarm): use a Computed register, which persists.
 - **Shared *constants*** (calibration coefficients used by N channels,
   lookup tables, full-scale ranges): use a Constant register.
 - **Cross-dataset derived values within one frame** (compute speed from
@@ -185,7 +185,7 @@ arithmetic, single `tableGet` calls, branchless math. Avoid:
 - Allocating arrays / objects per call
 - Try/catch in the hot path
 
-## Frame metadata — second `info` argument
+## Frame metadata: second `info` argument
 
 ```js
 function transform(value, info) {
@@ -196,7 +196,7 @@ function transform(value, info) {
 ```
 
 One-arg transforms keep working (JS ignores extra args). `timestampMs` is
-a monotonic counter — use deltas, not absolute time. Per-dataset state
+a monotonic counter; use deltas, not absolute time. Per-dataset state
 goes in a top-level `let` (IIFE-private):
 
 ```js
@@ -210,7 +210,7 @@ function transform(v, info) {
 }
 ```
 
-## Firing project actions — `actionFire()`
+## Firing project actions: `actionFire()`
 
 ```js
 actionFire(actionId) -> { ok: true } | { ok: false, error: "..." }
@@ -220,7 +220,7 @@ Triggers an existing project Action by its stable `actionId` (NOT its
 index). Reuses the action's prebuilt payload, encoding, and timer mode.
 Calls are logged `[actionFire] id=N index=M ok`.
 
-## Device output — `deviceWrite()`
+## Device output: `deviceWrite()`
 
 ```js
 deviceWrite(data, sourceId?) -> { ok: true } | { ok: false, error: "..." }

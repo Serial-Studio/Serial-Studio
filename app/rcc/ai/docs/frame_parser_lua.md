@@ -1,4 +1,4 @@
-# Frame Parser API — Lua
+# Frame Parser API (Lua)
 
 Lua 5.4 mirror of the JavaScript frame-parser API. Functionally identical to
 the JS version; choose Lua when your team is already Lua-fluent or when
@@ -23,11 +23,11 @@ end
 Serial Studio injects a small compatibility layer so scripts written
 against Lua 5.1/5.2 conventions still work:
 
-- `math.log10(x)` — alias for `math.log(x, 10)`.
-- `math.pow(a, b)` — alias for `a ^ b`.
-- `bit32` — full library (band, bor, bxor, bnot, lshift, rshift, arshift,
+- `math.log10(x)`: alias for `math.log(x, 10)`.
+- `math.pow(a, b)`: alias for `a ^ b`.
+- `bit32`: full library (band, bor, bxor, bnot, lshift, rshift, arshift,
   rrotate, lrotate, extract, replace).
-- `unpack(t)` — alias for `table.unpack(t)`.
+- `unpack(t)`: alias for `table.unpack(t)`.
 
 ## Sandbox
 
@@ -93,19 +93,19 @@ function parse(frame)
 end
 ```
 
-## Device output — `deviceWrite()`
+## Device output: `deviceWrite()`
 
 ```lua
 deviceWrite(data, sourceId?) -> { ok = true } | { ok = false, error = "..." }
 ```
 
-- `data` is a Lua string (raw bytes are fine — Lua strings are 8-bit clean).
+- `data` is a Lua string (raw bytes are fine, Lua strings are 8-bit clean).
 - `sourceId` is optional; default is the source this parser belongs to.
 - Synchronous, fire-and-forget. Does not throw. Calls are logged as
   `[deviceWrite] source=N bytes=M written=K`.
 
 Use for closed-loop control from inside `parse()`: ack a frame, raise an
-alarm, request a status push. NOT for user-triggered commands — those
+alarm, request a status push. NOT for user-triggered commands; those
 belong on an Output Widget.
 
 ```lua
@@ -118,7 +118,7 @@ function parse(frame)
 end
 ```
 
-## Firing project actions — `actionFire()`
+## Firing project actions: `actionFire()`
 
 ```lua
 actionFire(actionId) -> { ok = true } | { ok = false, error = "..." }
@@ -169,5 +169,5 @@ reconfigured.
 
 The two engines have parity for parser scripts. JS gets you a familiar
 syntax and good regex; Lua gets you cheaper allocations on hot paths and
-slightly faster startup. Pick one per source — you can mix engines across
+slightly faster startup. Pick one per source; you can mix engines across
 sources in the same project.

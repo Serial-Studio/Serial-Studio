@@ -994,7 +994,7 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 
     m_devices[0] = std::move(dm);
   } else {
-    // No driver for this bus type -- remove device 0 entirely
+    // No driver for this bus type: remove device 0 entirely
     auto existing = m_devices.find(0);
     if (existing != m_devices.end()) {
       if (existing->second)
@@ -1044,7 +1044,7 @@ void IO::ConnectionManager::syncUiDriverToLive()
   if (!liveDriver || liveDriver == uiDriver)
     return;
 
-  // Block live-driver fan-out -- UI driver's configurationChanged still notifies downstream.
+  // Block live-driver fan-out (UI driver's configurationChanged still notifies downstream).
   QSignalBlocker blocker(liveDriver);
   for (const auto& prop : uiDriver->driverProperties())
     liveDriver->setDriverProperty(prop.key, prop.value);
@@ -1378,11 +1378,11 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 {
   const auto opMode = AppState::instance().operationMode();
 
-  // QuickPlot/ConsoleOnly have fixed configs -- use AppState
+  // QuickPlot/ConsoleOnly have fixed configs: use AppState
   if (opMode == SerialStudio::QuickPlot || opMode == SerialStudio::ConsoleOnly)
     return AppState::instance().frameConfig();
 
-  // ProjectFile mode -- read from source settings
+  // ProjectFile mode: read from source settings
   FrameConfig cfg;
   cfg.operationMode = opMode;
 

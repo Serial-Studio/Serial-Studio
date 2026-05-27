@@ -134,7 +134,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_compilePending(false)
   , m_framePoolHint(0)
 {
-  // Pre-allocate frame pool -- reused across sub-frames so steady-state publishing won't malloc.
+  // Pre-allocate frame pool: reused across sub-frames so steady-state publishing won't malloc.
   m_framePool.reserve(kFramePoolSize);
   for (int i = 0; i < kFramePoolSize; ++i)
     m_framePool.emplace_back(std::make_shared<PooledFrameSlot>());
@@ -146,7 +146,7 @@ DataModel::FrameBuilder::FrameBuilder()
           [this] { syncFromProjectModel(); });
 #endif
 
-  // Tear down engines before static destruction -- QJSEngine depends on live Qt.
+  // Tear down engines before static destruction: QJSEngine depends on live Qt.
   if (auto* app = QCoreApplication::instance())
     connect(app, &QCoreApplication::aboutToQuit, this, [this]() { destroyTransformEngines(); });
 }
@@ -198,7 +198,7 @@ DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
     }
   }
 
-  // Pool exhausted -- log once, fall back to heap allocation so the producer never blocks
+  // Pool exhausted: log once, fall back to heap allocation so the producer never blocks
   static bool warned = false;
   if (!warned) [[unlikely]] {
     warned = true;
@@ -269,7 +269,7 @@ void DataModel::FrameBuilder::setupExternalConnections()
           this,
           &DataModel::FrameBuilder::onConnectedChanged);
 
-  // Wipe transform engines on source-delete -- IDs renumber, stale refs would misfire.
+  // Wipe transform engines on source-delete: IDs renumber, stale refs would misfire.
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::sourceDeleted,
           this,
@@ -435,7 +435,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
            && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
 
-  // Short-circuit non-transitions -- ConnectionManager re-emits connectedChanged on UI tweaks.
+  // Short-circuit non-transitions: ConnectionManager re-emits connectedChanged on UI tweaks.
   const bool nowConnected = IO::ConnectionManager::instance().isConnected();
   if (nowConnected == m_lastConnectedState)
     return;
@@ -801,7 +801,7 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
       replayColumns = &it->second;
   }
 
-  // Refresh per-source engine cache on sourceId change -- one map lookup per rotation.
+  // Refresh per-source engine cache on sourceId change: one map lookup per rotation.
   if (info.sourceId != m_engineCacheSourceId) [[unlikely]] {
     m_engineCacheSourceId = info.sourceId;
     auto luaIt            = m_transformEngines.find({info.sourceId, SerialStudio::Lua});
@@ -810,7 +810,7 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
     m_jsEngineForSource   = (jsIt != m_transformEngines.end()) ? &jsIt->second : nullptr;
   }
 
-  // Frame-level JS watchdog -- one arm/disarm per frame; the budget covers the whole frame.
+  // Frame-level JS watchdog: one arm/disarm per frame; the budget covers the whole frame.
   const bool armJsWatchdog = (m_jsEngineForSource != nullptr);
   if (armJsWatchdog) [[unlikely]] {
     Q_ASSERT(m_jsEngineForSource->jsWatchdog);
@@ -1165,7 +1165,7 @@ static void openSafeLibsForTransform(lua_State* L)
     lua_setglobal(L, name);
   }
 
-  // Strip string.dump -- bytecode serialization paired with the loader is unsafe.
+  // Strip string.dump: bytecode serialization paired with the loader is unsafe.
   lua_getglobal(L, "string");
   if (lua_istable(L, -1)) {
     lua_pushnil(L);
@@ -1220,7 +1220,7 @@ void DataModel::FrameBuilder::setReplayColumnMap(
  */
 void DataModel::FrameBuilder::compileTransforms()
 {
-  // Defer if a frame is in flight -- mutating m_transformEngines under hot pointers dangles them
+  // Defer if a frame is in flight: mutating m_transformEngines under hot pointers dangles them
   if (m_compileGuard > 0) [[unlikely]] {
     m_compilePending = true;
     return;
@@ -1245,7 +1245,7 @@ void DataModel::FrameBuilder::compileTransforms()
 
   // Compile one engine per (source, language) key
   for (auto& [key, entries] : byKey) {
-    // Insert before compile -- the Lua watchdog captures &engine by pointer
+    // Insert before compile: the Lua watchdog captures &engine by pointer
     auto [it, inserted] = m_transformEngines.emplace(key, TransformEngine{});
     Q_ASSERT(inserted);
     TransformEngine& engine = it->second;
@@ -1298,10 +1298,10 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installLua(L);
 
-  // Expose apiCall(method, params?) -- gated to a read-only allow-list by default
+  // Expose apiCall(method, params?): gated to a read-only allow-list by default
   DataModel::ScriptApiCall::installLua(L, sourceId);
 
-  // Notification API -- gated internally on the active license tier
+  // Notification API: gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(L);
 
   // Stash engine pointer in registry so the watchdog hook can find it.
@@ -1317,7 +1317,7 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
   for (const auto& entry : entries)
     compileTransformsLuaEntry(L, engine, entry);
 
-  // Disarm the deadline -- subsequent arming happens per-call
+  // Disarm the deadline: subsequent arming happens per-call
   engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
   engine.luaState    = L;
 }
@@ -1423,10 +1423,10 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
   // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(js);
 
-  // Expose apiCall(method, params?) -- gated to a read-only allow-list by default
+  // Expose apiCall(method, params?): gated to a read-only allow-list by default
   DataModel::ScriptApiCall::installJS(js, sourceId);
 
-  // Notification API -- gated internally on the active license tier
+  // Notification API: gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(js);
 
   for (const auto& entry : entries) {
@@ -1437,7 +1437,7 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
                      "})();")
         .arg(entry.code);
 
-    // Evaluate the IIFE -- its return value is the transform function
+    // Evaluate the IIFE: its return value is the transform function
     auto evalResult = js->evaluate(wrapped);
     if (evalResult.isError()) {
       qWarning() << "[FrameBuilder] Transform compile error for"
@@ -1454,7 +1454,7 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
       continue;
     }
 
-    // function.length = formal param count -- 1-arg transforms skip the info-object build.
+    // function.length = formal param count; 1-arg transforms skip the info-object build.
     const bool acceptsInfo        = (evalResult.property(QStringLiteral("length")).toInt() >= 2);
     engine.jsRefs[entry.uniqueId] = JsTransformRef{evalResult, acceptsInfo};
   }
@@ -1511,7 +1511,7 @@ void DataModel::FrameBuilder::destroyTransformEngines()
       engine.luaState = nullptr;
     }
 
-    // Unregister the watchdog before freeing the engine -- it can never touch a freed engine.
+    // Unregister the watchdog before freeing the engine: it can never touch a freed engine.
     engine.jsWatchdog.reset();
 
     // Release JS engine (refs already cleared above)
@@ -1653,14 +1653,14 @@ QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
   if (refIt == engine.jsRefs.end())
     return rawValue;
 
-  // Watchdog is armed once per frame in applyDatasetValues -- not per call.
+  // Watchdog is armed once per frame in applyDatasetValues, not per call.
   QJSValueList args;
   if (rawValue.typeId() == QMetaType::Double)
     args << QJSValue(rawValue.toDouble());
   else
     args << QJSValue(rawValue.toString());
 
-  // 2nd arg { frameNumber, sourceId, timestampMs } -- only built when the transform takes it.
+  // 2nd arg { frameNumber, sourceId, timestampMs }: only built when the transform takes it.
   if (refIt->second.acceptsInfo) {
     QJSValue jsInfo = engine.jsEngine->newObject();
     jsInfo.setProperty(QStringLiteral("frameNumber"),

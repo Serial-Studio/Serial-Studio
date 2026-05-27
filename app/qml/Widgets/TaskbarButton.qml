@@ -254,7 +254,7 @@ Item {
     id: _mouseArea
 
     //
-    // Hover tracked by sibling HoverHandler -- keep hoverEnabled off
+    // Hover tracked by sibling HoverHandler, so keep hoverEnabled off
     //
     anchors.fill: parent
 

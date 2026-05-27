@@ -410,7 +410,7 @@ Item {
     }
 
     //
-    // Pinned shortcut buttons -- registry-driven, drag-reorderable
+    // Pinned shortcut buttons: registry-driven, drag-reorderable
     //
     Row {
       id: pinRow
@@ -443,7 +443,7 @@ Item {
       }
 
       //
-      // Filtered + ordered model -- pinned IDs whose registry entry is visible.
+      // Filtered + ordered model: pinned IDs whose registry entry is visible.
       //
       readonly property var displayedPins: {
         // Touch the reactive inputs so this binding re-evaluates on change.

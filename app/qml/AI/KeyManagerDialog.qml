@@ -25,7 +25,7 @@ Widgets.SmartDialog {
   preferredHeight: Math.min(column.implicitHeight, 560)
 
   //
-  // Provider currently shown in the dialog -- tracks the active assistant provider
+  // Provider currently shown in the dialog: tracks the active assistant provider
   //
   readonly property int providerIdx: Cpp_AI_Assistant.currentProvider
 
@@ -104,7 +104,7 @@ Widgets.SmartDialog {
     }
 
     //
-    // Scrollable card area -- shows only the active provider's settings
+    // Scrollable card area: shows only the active provider's settings
     //
     ScrollView {
       id: cardScroll
@@ -188,7 +188,7 @@ Widgets.SmartDialog {
           }
 
           //
-          // Key field row -- shown for cloud providers that need an API key
+          // Key field row: shown for cloud providers that need an API key
           //
           RowLayout {
             spacing: 6
@@ -263,7 +263,7 @@ Widgets.SmartDialog {
           }
 
           //
-          // Local-server URL row -- shown only for the Local provider
+          // Local-server URL row: shown only for the Local provider
           //
           RowLayout {
             spacing: 6

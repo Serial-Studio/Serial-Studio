@@ -38,7 +38,7 @@ Item {
   required property CompassModel model
 
   //
-  // Unbounded accumulator -- needle takes shortest path across the 359->0 wrap.
+  // Unbounded accumulator: needle takes shortest path across the 359->0 wrap.
   //
   property real unwrappedHeading: 0
   Behavior on unwrappedHeading {
@@ -63,7 +63,7 @@ Item {
   readonly property color fillColor: model.alarmTriggered ? Cpp_ThemeManager.colors["alarm"] : root.color
 
   //
-  // Theme-aware chrome stops -- adapts lighten/darken amounts to widget_base luminance
+  // Theme-aware chrome stops that adapt lighten/darken amounts to widget_base luminance
   //
   readonly property bool darkBg: {
     const c = Cpp_ThemeManager.colors["widget_base"]
@@ -74,7 +74,7 @@ Item {
   readonly property color chromeBot: Qt.darker(Cpp_ThemeManager.colors["widget_base"], darkBg ? 1.05 : 1.18)
 
   //
-  // Compass parameters -- full 360 deg rose with fixed N at top
+  // Compass parameters: full 360 deg rose with fixed N at top
   //
   readonly property bool showLabels: width >= 130 && height >= 130
   readonly property bool showSubLabels: width >= 200 && height >= 200
@@ -96,7 +96,7 @@ Item {
   }
 
   //
-  // SwipeView -- page 0 = analog rose, page 1 = digital heading.
+  // SwipeView: page 0 = analog rose, page 1 = digital heading.
   // Active page is persisted per-widget via Cpp_JSON_ProjectModel.
   //
   SwipeView {
@@ -108,7 +108,7 @@ Item {
     anchors.bottomMargin: pageIndicator.height + 4
 
     //
-    // PAGE 0 -- Analog compass rose
+    // PAGE 0: Analog compass rose
     //
     Item {
       id: analogPage
@@ -123,7 +123,7 @@ Item {
         readonly property real gaugeSize: Math.min(control.width, control.height) * 0.95
 
         //
-        // Outer chrome ring -- silver gradient rendered via MultiEffect with shadow
+        // Outer chrome ring: silver gradient rendered via MultiEffect with shadow
         //
         Rectangle {
           id: chromeRing
@@ -187,7 +187,7 @@ Item {
           }
 
           //
-          // Tick ring -- 36 marks at 10 deg, every third is a longer major tick
+          // Tick ring: 36 marks at 10 deg, every third is a longer major tick
           //
           Repeater {
             model: 36
@@ -220,7 +220,7 @@ Item {
           }
 
           //
-          // Cardinal labels -- N/E/S/W bold and oversized, NE/SE/SW/NW only on larger faces.
+          // Cardinal labels: N/E/S/W bold and oversized, NE/SE/SW/NW only on larger faces.
           // N is tinted with the widget's accent to signal the "this end of the needle" convention.
           //
           Repeater {
@@ -255,7 +255,7 @@ Item {
           }
 
           //
-          // Compass needle -- accent-colored north end and silver counterweight tail.
+          // Compass needle: accent-colored north end and silver counterweight tail.
           // Rotates by the unwrapped accumulator so 359 -> 0 takes the short way.
           //
           Shape {
@@ -281,7 +281,7 @@ Item {
             readonly property real tailW:  Math.max(4, gaugeFace.width * 0.040)
 
             //
-            // North end -- accent-colored, tapered triangle
+            // North end: accent-colored, tapered triangle
             //
             ShapePath {
               strokeWidth: 0.6
@@ -305,7 +305,7 @@ Item {
             }
 
             //
-            // South end -- silver counterweight, slightly shorter than the north tip
+            // South end: silver counterweight, slightly shorter than the north tip
             //
             ShapePath {
               strokeWidth: 0.6
@@ -364,7 +364,7 @@ Item {
     }
 
     //
-    // PAGE 1 -- Big digital readout (heading + cardinal, mirrors Gauge digital page)
+    // PAGE 1: Big digital readout (heading + cardinal, mirrors Gauge digital page)
     //
     Item {
       id: digitalPage

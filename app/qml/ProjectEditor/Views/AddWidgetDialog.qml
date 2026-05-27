@@ -132,7 +132,7 @@ Window {
   }
 
   //
-  // Data model -- updated by refresh()
+  // Data model: updated by refresh()
   //
   property var allWidgets: []
   property var existingKeys: []   // keys like "widgetType:groupId:relativeIndex"

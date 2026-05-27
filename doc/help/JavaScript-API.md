@@ -674,7 +674,7 @@ apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }
 
 `method` is a dotted command name (for example `"dashboard.snapshot"`, `"workspaces.setActive"`, `"console.write"`). `params` is an optional object/table that maps to the same JSON parameters the TCP API accepts. See [API Reference](API-Reference.md) for the complete catalog.
 
-A second helper, `apiCallList()`, returns an array of every registered command name -- handy for quick discovery from the parser console.
+A second helper, `apiCallList()`, returns an array of every registered command name, handy for quick discovery from the parser console.
 
 ### Return shape
 
@@ -686,7 +686,7 @@ A second helper, `apiCallList()`, returns an array of every registered command n
 | `errorCode`  | failure      | One of `INVALID_PARAM`, `MISSING_PARAM`, `UNKNOWN_COMMAND`, ...              |
 | `errorData`  | failure      | Optional structured diagnostic payload (e.g. nearest-name suggestions).      |
 
-`apiCall` never throws -- every failure mode (unknown command, bad params, internal exception) returns a structured `{ ok = false, ... }` table.
+`apiCall` never throws. Every failure mode (unknown command, bad params, internal exception) returns a structured `{ ok = false, ... }` table.
 
 ### Examples
 
@@ -748,7 +748,7 @@ end
 ### When NOT to use it
 
 - **One-shot, fire-and-forget.** `apiCall` runs synchronously on the dashboard thread. Heavy work (mass mutations, project save, MDF4 export) blocks frame processing. Gate every call on an event transition; never `apiCall` on every frame.
-- **Don't shadow the focused helpers.** `dashboard.clearPlots`, `dashboard.setActiveWorkspace`, etc. are available as both `apiCall("dashboard.clearPlots", ...)` and as the dedicated `clearPlots()` / `setActiveWorkspace()` shortcuts. Prefer the shortcuts -- they read better and trim a layer of marshalling.
+- **Don't shadow the focused helpers.** `dashboard.clearPlots`, `dashboard.setActiveWorkspace`, etc. are available as both `apiCall("dashboard.clearPlots", ...)` and as the dedicated `clearPlots()` / `setActiveWorkspace()` shortcuts. Prefer the shortcuts, which read better and trim a layer of marshalling.
 - **Avoid destructive commands from a parser.** Anything that mutates the project (`project.save`, `project.batch`, `groups.delete`) is fine from a one-time setup hook, but should not fire from the streaming hotpath.
 - **Pro features stay gated.** Commands behind the commercial tier (Modbus, CAN, sessions, MDF4, MQTT...) return `{ ok = false, errorCode = "EXECUTION_ERROR" }` in GPL builds. Check `result.ok` before assuming success.
 

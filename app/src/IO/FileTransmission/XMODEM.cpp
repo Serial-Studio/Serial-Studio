@@ -151,7 +151,7 @@ bool IO::Protocols::XMODEM::handleAckByte(quint8 ch)
                            .arg(m_retryCount)
                            .arg(m_maxRetries));
 
-    // Rewind by actual bytes read -- fixed blockSize over-rewinds the final partial block.
+    // Rewind by actual bytes read: fixed blockSize over-rewinds the final partial block.
     m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
     if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
       m_file.close();

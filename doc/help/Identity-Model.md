@@ -35,7 +35,7 @@ A separate field unrelated to identity. `index` is the **frame offset**, that is
 
 A single integer that identifies a dataset *globally* across the whole project. It's **persisted in the project file** (each dataset stores its `uniqueId` directly) and **assigned once** from a project-level counter when the dataset is created, duplicated, or imported. Reordering or renaming a dataset never changes its `uniqueId`.
 
-Treat the integer as opaque -- it's allocated, not derived. Two assumptions you'd otherwise make are no longer safe:
+Treat the integer as opaque: it's allocated, not derived. Two assumptions you'd otherwise make are no longer safe:
 
 - You **cannot** recover `(sourceId, groupId, datasetId)` from a `uniqueId` by arithmetic. The legacy formula `sourceId * 1'000'000 + groupId * 10'000 + datasetId` is only used as a one-shot back-fill when loading a project file from before this scheme existed; once the project is saved again, the values are persisted and no longer follow the formula.
 - You **cannot** guess what `uniqueId` a new dataset will receive. It's just the next value from the project's counter (`nextUniqueId`).
@@ -68,7 +68,7 @@ In other words:
 
 - **`datasetId` shifts when you rearrange.** Inserting a dataset at slot 0 renumbers everything that came after. If you cache `datasetId` in your script and then edit the project, refresh it from the API after every mutation.
 - **`uniqueId` does NOT follow `datasetId`.** It's persisted with the dataset and stays the same across reorders, renames, retypes, and moves between sources. The one exception is duplicate / copy-paste: a duplicated dataset receives a fresh `uniqueId` from the counter so the original and the copy stay distinguishable.
-- **`groupId` shifts when you rearrange.** Adding a new group at the top renumbers everything that came after. For a stable group identifier, use `Group.uniqueId` (returned by `project.group.list` under `uniqueId`) -- that's what workspace widget refs persist.
+- **`groupId` shifts when you rearrange.** Adding a new group at the top renumbers everything that came after. For a stable group identifier, use `Group.uniqueId` (returned by `project.group.list` under `uniqueId`); that's what workspace widget refs persist.
 - **`index` is yours to set.** Frame parsers control `index` directly. The Project Editor assigns sequential defaults but you can override them.
 
 ## Quick reference

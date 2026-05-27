@@ -210,13 +210,13 @@ Widgets.SmartWindow {
     // Defer dialogs and update checks until after window is fully rendered
     Qt.callLater(function() {
       //
-      // Runtime mode is unattended -- skip nags entirely.
+      // Runtime mode is unattended: skip nags entirely.
       //
       if (app.runtimeMode)
         return
 
       //
-      // Show donations dialog every 15 launches (GPL builds only -- Pro skips it)
+      // Show donations dialog every 15 launches (GPL builds only; Pro skips it)
       //
       if (root.appLaunchCount % 15 == 0 && !Cpp_CommercialBuild)
         donateDialog.activate()

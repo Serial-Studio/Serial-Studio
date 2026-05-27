@@ -317,7 +317,9 @@ QJsonArray AI::OpenAIProvider::translateTools(const QJsonArray& tools)
 /**
  * @brief Builds the Chat Completions request body and returns a streaming Reply.
  */
-AI::Reply* AI::OpenAIProvider::sendMessage(const QJsonArray& history, const QJsonArray& tools)
+AI::Reply* AI::OpenAIProvider::sendMessage(const QJsonArray& history,
+                                           const QJsonArray& tools,
+                                           bool forbidToolUse)
 {
   const auto key = m_keyGetter ? m_keyGetter() : QString();
   if (key.isEmpty())
@@ -354,8 +356,9 @@ AI::Reply* AI::OpenAIProvider::sendMessage(const QJsonArray& history, const QJso
     body[QStringLiteral("reasoning_effort")] = QStringLiteral("none");
 
   if (!tools.isEmpty()) {
-    body[QStringLiteral("tools")]       = translateTools(tools);
-    body[QStringLiteral("tool_choice")] = QStringLiteral("auto");
+    body[QStringLiteral("tools")] = translateTools(tools);
+    body[QStringLiteral("tool_choice")] =
+      forbidToolUse ? QStringLiteral("none") : QStringLiteral("auto");
   }
 
   const auto bytes = QJsonDocument(body).toJson(QJsonDocument::Compact);

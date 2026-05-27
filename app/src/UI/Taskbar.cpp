@@ -85,7 +85,7 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   qmlRegisterUncreatableType<UI::TaskbarModel>(
     "SerialStudio.UI", 1, 0, "TaskbarModel", "TaskbarModel is exposed by Taskbar singleton");
 
-  // Focus-cycle animation -- ripples focus post-workspace-finalize to sync Z-order with layout.
+  // Focus-cycle animation: ripples focus post-workspace-finalize to sync Z-order with layout.
   m_focusCycleTimer.setSingleShot(false);
   connect(&m_focusCycleTimer, &QTimer::timeout, this, &UI::Taskbar::onFocusCycleTick);
 
@@ -195,7 +195,7 @@ int UI::Taskbar::activeGroupIndex() const
     ++index;
   }
 
-  // No match -- signal "not found" rather than an out-of-bounds index
+  // No match: signal "not found" rather than an out-of-bounds index
   return -1;
 }
 
@@ -814,7 +814,7 @@ void UI::Taskbar::startFocusCycle()
     return;
   }
 
-  // Append the first tile (copied -- QVector reallocation invalidates references).
+  // Append the first tile (copied; QVector reallocation invalidates references).
   QQuickItem* firstTile = m_focusCycleQueue.first();
   m_focusCycleQueue.append(firstTile);
 
@@ -946,7 +946,7 @@ void UI::Taskbar::rebuildModel()
     QList<SerialStudio::DashboardWidget> widgetTypes;
     collectGroupWidgetIds(groupId, windowIds, relativeIds, widgetTypes);
 
-    // Extract the main group widget (-1 sentinel -- 0 is a valid windowId)
+    // Extract the main group widget (-1 sentinel, since 0 is a valid windowId)
     int mainWindowId = -1;
     for (int i = 0; i < windowIds.count(); ++i) {
       if (widgetTypes[i] != groupType)
@@ -1174,7 +1174,7 @@ QStandardItem* UI::Taskbar::findItemByWindowId(int windowId,
                                                QStandardItem* parentItem,
                                                int depth) const
 {
-  // Bounded recursion (NASA PoT Rule 1) -- tree is at most 2 levels deep.
+  // Bounded recursion (NASA PoT Rule 1): tree is at most 2 levels deep.
   static constexpr int kMaxDepth = 4;
   Q_ASSERT(depth <= kMaxDepth);
   if (depth > kMaxDepth) [[unlikely]]

@@ -80,7 +80,7 @@ static QJsonObject toStep(const QString& label, const API::CommandResponse& r)
 }
 
 //--------------------------------------------------------------------------------------------------
-// assistant.snapshot -- pass-through to project.snapshot
+// assistant.snapshot: pass-through to project.snapshot
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -93,7 +93,7 @@ API::CommandResponse API::Handlers::AssistantHandler::snapshot(const QString& id
 }
 
 //--------------------------------------------------------------------------------------------------
-// assistant.dataset.resolve -- dispatch by which key is present
+// assistant.dataset.resolve: dispatch by which key is present
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -130,7 +130,7 @@ API::CommandResponse API::Handlers::AssistantHandler::datasetResolve(const QStri
 }
 
 //--------------------------------------------------------------------------------------------------
-// assistant.workspace.resolve -- match by id or case-insensitive title
+// assistant.workspace.resolve: match by id or case-insensitive title
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -207,7 +207,7 @@ API::CommandResponse API::Handlers::AssistantHandler::workspaceResolve(const QSt
 }
 
 //--------------------------------------------------------------------------------------------------
-// assistant.workspace.plan -- enumerate (group, widgetType) tuples valid for a workspace
+// assistant.workspace.plan: enumerate (group, widgetType) tuples valid for a workspace
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -293,7 +293,7 @@ API::CommandResponse API::Handlers::AssistantHandler::workspacePlan(const QStrin
 }
 
 //--------------------------------------------------------------------------------------------------
-// assistant.script.dryRun / assistant.script.apply -- kind-routed
+// assistant.script.dryRun / assistant.script.apply: kind-routed
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -428,7 +428,7 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
 }
 
 //--------------------------------------------------------------------------------------------------
-// assistant.workspace.addTile -- multi-step chained workspace edit
+// assistant.workspace.addTile: multi-step chained workspace edit
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -800,7 +800,7 @@ API::CommandResponse API::Handlers::AssistantHandler::workspaceAddTile(const QSt
 }
 
 //--------------------------------------------------------------------------------------------------
-// assistant.project.bulkApply -- nested-batch-rejecting wrapper around project.batch
+// assistant.project.bulkApply: nested-batch-rejecting wrapper around project.batch
 //--------------------------------------------------------------------------------------------------
 
 /**

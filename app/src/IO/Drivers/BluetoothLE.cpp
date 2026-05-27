@@ -836,7 +836,7 @@ void IO::Drivers::BluetoothLE::onHostModeStateChanged(QBluetoothLocalDevice::Hos
   for (auto* inst : std::as_const(s_instances))
     Q_EMIT inst->adapterAvailabilityChanged();
 
-  // Adapter lost -- close all connections and clear shared device list
+  // Adapter lost: close all connections and clear shared device list
   if (!s_adapterAvailable) {
     if (s_discoveryAgent && s_discoveryAgent->isActive())
       s_discoveryAgent->stop();
@@ -916,7 +916,7 @@ bool IO::Drivers::BluetoothLE::selectByIdentifier(const QJsonObject& id)
     return true;
   }
 
-  // Device not found yet -- save for deferred matching and start discovery
+  // Device not found yet: save for deferred matching and start discovery
   m_pendingIdentifier = id;
   if (!s_discoveryAgent || !s_discoveryAgent->isActive())
     startDiscovery();

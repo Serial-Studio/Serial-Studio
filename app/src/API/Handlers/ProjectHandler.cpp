@@ -187,7 +187,7 @@ static QJsonObject buildDatasetObject(const DataModel::Dataset& dataset,
   dataset_obj[QStringLiteral("hasTransform")] = !dataset.transformCode.isEmpty();
   dataset_obj[QStringLiteral("isVirtual")]    = dataset.virtual_;
 
-  // Prose explanations block -- saves the caller from translating raw enums and bitflags
+  // Prose explanations block: saves the caller from translating raw enums and bitflags
   QJsonObject explanations;
   explanations[QStringLiteral("enabledOptions")] =
     QStringLiteral("%1 (bitflag %2)")
@@ -2298,7 +2298,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetVirtual(const QStr
                                       QStringLiteral("Dataset id not found in group: %1/%2")
                                         .arg(QString::number(groupId), QString::number(datasetId)));
 
-  // Apply the flag -- updateDataset validates, emits signals, and rebuilds the tree
+  // Apply the flag: updateDataset validates, emits signals, and rebuilds the tree
   DataModel::Dataset updated = *dit;
   updated.virtual_           = isVirt;
   pm.updateDataset(groupId, datasetId, updated, true);
@@ -2763,7 +2763,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Invalid sourceId"));
 
-  // Optional language flip -- validate under the new engine and roll back if invalid.
+  // Optional language flip: validate under the new engine and roll back if invalid.
   const bool hasLanguage = params.contains(QStringLiteral("language"));
   int savedLanguage      = 0;
   if (hasLanguage) {
@@ -3728,7 +3728,7 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
     return CommandResponse::makeSuccess(id, result);
   }
 
-  // In-memory load -- no temp file, no file association
+  // In-memory load: no temp file, no file association
   auto& project = DataModel::ProjectModel::instance();
   project.setSuppressMessageBoxes(true);
   const bool ok = project.loadFromJsonDocument(QJsonDocument(config));
@@ -3777,7 +3777,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
   }
 
   if (sourceId == 0) {
-    // Route through top-level setters -- they sync into source[0] and update the FrameReader.
+    // Route through top-level setters: they sync into source[0] and update the FrameReader.
     if (params.contains(QStringLiteral("startSequence"))) {
       const QString start = params.value(QStringLiteral("startSequence")).toString();
       manager.setStartSequence(start.toUtf8());
@@ -3863,7 +3863,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
   for (const auto& f : cfg.finishSequences)
     endArr.append(QString::fromUtf8(f));
 
-  // Primary (source[0]) delimiters as singular scalars -- single-source clients
+  // Primary (source[0]) delimiters as singular scalars for single-source clients
   const QString primaryStart =
     cfg.startSequences.isEmpty() ? QString() : QString::fromUtf8(cfg.startSequences.first());
   const QString primaryEnd =
@@ -4328,7 +4328,7 @@ API::CommandResponse API::Handlers::ProjectHandler::painterGetCode(const QString
 }
 
 //--------------------------------------------------------------------------------------------------
-// Bulk update mutators -- stateless, id required, PATCH semantics
+// Bulk update mutators: stateless, id required, PATCH semantics
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -4817,7 +4817,7 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetUpdate(const QSt
 }
 
 //--------------------------------------------------------------------------------------------------
-// Project batch -- run a sequence of commands under one autosave window
+// Project batch: run a sequence of commands under one autosave window
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -5107,7 +5107,7 @@ API::CommandResponse API::Handlers::ProjectHandler::projectBatch(const QString& 
 }
 
 //--------------------------------------------------------------------------------------------------
-// Project templates -- starter projects loaded from rcc:/ai/templates/*
+// Project templates: starter projects loaded from rcc:/ai/templates/*
 //--------------------------------------------------------------------------------------------------
 
 /**

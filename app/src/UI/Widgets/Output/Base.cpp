@@ -189,7 +189,7 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
   else
     data = result.toVariant().toByteArray();
 
-  // Enforce hard payload size cap -- oversized returns indicate runaway / hostile scripts
+  // Enforce hard payload size cap: oversized returns indicate runaway / hostile scripts
   if (data.size() > kMaxPayloadBytes) [[unlikely]] {
     Q_EMIT transmitError(tr("Payload exceeds maximum size"));
     return {};

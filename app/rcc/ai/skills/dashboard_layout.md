@@ -53,8 +53,8 @@ existing scripts and clients that haven't migrated.
 | `"gauge"`           | 11           | Two-page swipe (analog dial / digital readout) |
 | `"compass"`         | 12           |                                                |
 | `"meter"`           | 13           | Analog half-arc; two-page swipe with digital   |
-| `"clock"`           | 14           | Utility — toggled from Start menu, NOT pinned via addWidget |
-| `"stopwatch"`       | 15           | Utility — toggled from Start menu, NOT pinned via addWidget |
+| `"clock"`           | 14           | Utility (toggled from Start menu, NOT pinned via addWidget) |
+| `"stopwatch"`       | 15           | Utility (toggled from Start menu, NOT pinned via addWidget) |
 | `"none"`            | 16           | Sentinel; never pin                            |
 | `"imageview"`       | 17           | Pro                                            |
 | `"output-panel"`    | 18           | Pro; ALL output widgets in a group on one tile |
@@ -71,7 +71,7 @@ does this from the Dashboard pane). State persists in QSettings under
 `Dashboard/ClockEnabled` and `Dashboard/StopwatchEnabled`. When enabled,
 Dashboard injects a synthetic group with `widget: "clock"` /
 `"stopwatch"` and the taskbar gets an overview row. Workspace-eligible:
-no. Project-file-addressable: no — they're a dashboard preference, not
+no. Project-file-addressable: no. They're a dashboard preference, not
 project state.
 
 **Bar / Gauge / Meter render as a two-page swipe view.** Page 0 is the
@@ -82,21 +82,21 @@ horizontally or taps the page-indicator dots. The active page is
 persisted **per widget instance** via
 `Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "page", N)`, so two
 Gauge tiles on the same dataset can show different pages. Compass is
-single-page (no digital twin makes sense). `addWidget` does not change —
-you still pass `widgetType: "bar"` / `"gauge"` / `"meter"` — but if a
+single-page (no digital twin makes sense). `addWidget` does not change
+(you still pass `widgetType: "bar"` / `"gauge"` / `"meter"`), but if a
 user reports "it shows a number not a dial," it's the page state, not a
 config bug.
 
 Each group/dataset is "compatible" with a subset of these. Use
 `project.group.list` and read each group's `compatibleWidgetTypes`
-array — the workspace-add command validates against it and rejects
+array. The workspace-add command validates against it and rejects
 mismatches. Responses also include `compatibleWidgetTypeSlugs` next
 to the integer array.
 
 ## Per-dataset visualization options
 
 A **dataset** carries its own visualization options. `setOptions` and
-`addWidget` both accept **string slugs** -- prefer those, since they
+`addWidget` both accept **string slugs**; prefer those, since they
 are the same name in both places. (Integer bitflags / enums are still
 accepted for back-compat. Their numbers do NOT line up between the two
 APIs, which is why slugs exist.)
@@ -124,34 +124,34 @@ Slug usage:
   `compatibleWidgetTypeSlugs`, `widgetTypeSlug`).
 
 Notes:
-- Bar / Gauge / Compass / Meter are **mutually exclusive** -- a
+- Bar / Gauge / Compass / Meter are **mutually exclusive**: a
   dataset's `widget` string holds at most one of them. `setOptions`
   enforces this: if more than one of those bits is set, the highest bit
   wins.
-- Plot / FFT / LED / Waterfall are **independent** -- a dataset can
+- Plot / FFT / LED / Waterfall are **independent**: a dataset can
   have Plot + FFT + Waterfall all on at once, and the group's
   `compatibleWidgetTypes` will list all three.
 - The integer bitflag for `setOptions` and the integer enum for
-  `addWidget` are **different numbering systems** -- Plot is bit `1`
+  `addWidget` are **different numbering systems**: Plot is bit `1`
   for `setOptions` but enum value `9` for `addWidget`. If you must
-  use integers, read the column you actually need. **Use slugs to
+  use integers, read the column you need. **Use slugs to
   avoid this entirely.**
 - `compatibleWidgetTypes` is computed live from the dataset flags +
   the group's own widget shape (see next section). Toggling a dataset
   option immediately expands or shrinks the group's compatible set.
 
-## Min/max ranges — three independent pairs, set BEFORE you addWidget
+## Min/max ranges (three independent pairs, set BEFORE you addWidget)
 
 Every dataset carries **three separate min/max pairs**, one per visualization
 family. They do NOT cascade. If you only set one, the other surfaces render at
-the default `0` / `0` — a flat, useless scale. This is the #1 reason a
+the default `0` / `0`, a flat, useless scale. This is the #1 reason a
 freshly-pinned Gauge / Bar / FFT looks empty or maxed out.
 
 | Pair (file/response key)         | API write-param name           | Drives                                                                              |
 |----------------------------------|--------------------------------|-------------------------------------------------------------------------------------|
 | `plotMin` / `plotMax`            | `pltMin` / `pltMax`            | Plot, MultiPlot Y-axis                                                              |
 | `widgetMin` / `widgetMax`        | `wgtMin` / `wgtMax`            | Gauge dial, Bar fill, Compass dial, Meter arc                                       |
-| `fftMin` / `fftMax`              | `fftMin` / `fftMax`            | Expected raw input range — used to normalize the time-domain signal to [-1, +1] before windowing + FFT (FFT and Waterfall). The dB Y-axis itself is hardcoded. |
+| `fftMin` / `fftMax`              | `fftMin` / `fftMax`            | Expected raw input range, used to normalize the time-domain signal to [-1, +1] before windowing + FFT (FFT and Waterfall). The dB Y-axis itself is hardcoded. |
 
 **The naming asymmetry is real and silent.** `project.dataset.getByPath`,
 `project.snapshot`, and the `.ssproj` file all use the full form
@@ -169,11 +169,11 @@ verifying.** `fftMin`/`fftMax` happen to be the same in both directions.
 | `"multiplot"`        | `pltMin` / `pltMax` on EACH dataset        | Group-level tile; per-dataset Y-axis bounds.      |
 | `"gauge"`            | `wgtMin` / `wgtMax`                        | Dial is unusable without bounds.                  |
 | `"bar"`              | `wgtMin` / `wgtMax`                        | Fill is unusable without bounds.                  |
-| `"compass"`          | (none — fixed 0–360)                       | `wgtMin`/`wgtMax` ignored.                        |
+| `"compass"`          | (none; fixed 0–360)                        | `wgtMin`/`wgtMax` ignored.                        |
 | `"meter"`            | `wgtMin` / `wgtMax`                        | Half-arc analog meter; needs bounds to draw scale and to size the digital-page value box. |
 | `"fft"`              | `fftMin` / `fftMax`                        | Expected raw signal range for input normalization (NOT a dB axis). Also tune `fftSamples` + `fftSamplingRate`. |
 | `"waterfall"` (Pro)  | `fftMin` / `fftMax`                        | Reuses the dataset's FFT settings, including the input-normalization range. |
-| `"led"`              | (none — uses `ledHigh` threshold)          | `ledHigh` is on/off boundary.                     |
+| `"led"`              | (none; uses `ledHigh` threshold)           | `ledHigh` is on/off boundary.                     |
 | `"datagrid"`         | (none)                                     | Shows raw values.                                 |
 
 A single dataset that drives multiple visualizations (e.g. Plot + FFT +
@@ -201,14 +201,14 @@ project.dataset.update {
 
 Pick numerically meaningful bounds for each surface:
 - **Plot Y-axis** (`pltMin`/`pltMax`): the value range you want the chart to
-  display — temperature 0–100 °C, RPM 0–8000, accelerometer −2…+2 g.
-- **Gauge / Bar scale** (`wgtMin`/`wgtMax`): the dial / fill range — same
+  display, for example temperature 0–100 °C, RPM 0–8000, accelerometer −2…+2 g.
+- **Gauge / Bar scale** (`wgtMin`/`wgtMax`): the dial / fill range, same
   units as the signal.
 - **FFT / Waterfall input range** (`fftMin`/`fftMax`): the **expected
   amplitude range of the raw time-domain samples** so the FFT input can be
   normalized to [-1, +1]. For 16-bit audio: −32768…32767. For normalized
   audio: −1…+1. For a 0–3.3 V ADC reading: 0…3.3. The FFT's dB Y-axis
-  itself is fixed in the widget — these values do NOT control it.
+  itself is fixed in the widget; these values do NOT control it.
 
 **Never leave these at 0/0 for a widget that needs them.** If the user
 didn't give you a range, ask, or pick a defensible default from the
@@ -224,7 +224,7 @@ from the response. If they're still 0, you almost certainly used the
 response-form key (`plotMin`) on the write side instead of the abbreviated
 write-form (`pltMin`). Re-issue with the right name.
 
-## Group widget shape — separate from per-dataset flags
+## Group widget shape (separate from per-dataset flags)
 
 A **group** also carries its own widget shape, which determines the
 GROUP-level tile (DataGrid, MultiPlot, Accelerometer, GPS, Painter,
@@ -238,19 +238,19 @@ DIFFERENT enum: `GroupWidget`.
 | `2`             | Gyroscope      | `4`  (DashboardGyroscope)        |
 | `3`             | GPS            | `5`  (DashboardGPS)              |
 | `4`             | MultiPlot      | `2`  (DashboardMultiPlot)        |
-| `5`             | NoGroupWidget  | (none — group has no native tile)|
+| `5`             | NoGroupWidget  | (none; group has no native tile) |
 | `6`             | Plot3D (Pro)   | `6`  (DashboardPlot3D)           |
 | `7`             | ImageView (Pro)| `16` (DashboardImageView)        |
 | `8`             | Painter (Pro)  | `20` (DashboardPainter)          |
 
 Reading the API:
-- `project.group.add{widgetType: <int>}` — REQUIRED at creation; this
+- `project.group.add{widgetType: <int>}` is REQUIRED at creation; this
   is the GroupWidget enum (the int column above).
 - `project.group.update` accepts `{title, widget, columns, sourceId,
   painterCode}`. **It does NOT accept `widgetType`.** Pass `widget` as
   a STRING ("datagrid", "multiplot", "accelerometer", "gyro", "map",
   "plot3d", "image", "painter") or `""` to clear. Sending
-  `widgetType: 4` to `update` is silently dropped — you'll see no
+  `widgetType: 4` to `update` is silently dropped. You'll see no
   error, and `compatibleWidgetTypes` won't change. If you wrote that
   call and saw nothing happen, that's why.
 - The group's `compatibleWidgetTypes` array is the **union** of:
@@ -271,19 +271,19 @@ If `addWidget` rejects your `widgetType` with "not compatible with group N":
    table above (`"plot"`, `"fft"`, `"gauge"`, `"waterfall"`, ...).
 3. `project.dataset.setOptions{groupId, datasetId, options:
    ["plot","fft","waterfall"]}` is the canonical call. Pass the
-   complete array of every option you want enabled -- any option NOT
+   complete array of every option you want enabled. Any option NOT
    in the array is **disabled**, so include the ones already on.
    `project.dataset.update{..., graph: true, fft: true, waterfall:
    true}` is the alternative when you're patching other dataset
    fields (title, units, ranges) in the same call.
-   `project.dataset.setOption` (singular) is **deprecated** -- it
+   `project.dataset.setOption` (singular) is **deprecated**: it
    silently corrupts state when the AI repeatedly toggles single
    options and forgets the rest. Don't use it from agent code; use
    `setOptions` (plural) and recompute the array each time.
 4. **VERIFY**: re-run `project.group.list` and read the target
    group's `compatibleWidgetTypeSlugs` (or `compatibleWidgetTypes`
    for integers). The new slug MUST appear in that list. If it
-   doesn't, your `setOptions` call did not land -- check the
+   doesn't, your `setOptions` call did not land. Check the
    `enabledWidgetTypesSlugs` of every dataset in that group, the
    slug you flipped, and that you used the right (groupId,
    datasetId) pair.
@@ -293,7 +293,7 @@ If `addWidget` rejects your `widgetType` with "not compatible with group N":
    `fftMin`/`fftMax`. A dataset that drives multiple visualizations
    needs every relevant pair. Skipping this is the #1 reason a
    freshly-pinned tile renders empty or stuck at zero.
-6. Now re-run `addWidget` -- pass `widgetType: "<slug>"`.
+6. Now re-run `addWidget`, passing `widgetType: "<slug>"`.
 
 **Never call `addWidget` twice with identical args expecting a
 different result.** If a call failed, something must change between
@@ -325,7 +325,7 @@ identity in workspace refs (so layouts survive group reorders). Read
 `uniqueId` from `project.group.list` and pass that.
 
 `relativeIndex` is a **dashboard-level global index across every widget
-of this type in the project** — NOT a per-workspace counter and NOT a
+of this type in the project**, NOT a per-workspace counter and NOT a
 dataset index. **Always omit it.** The API walks the project's groups
 in order and computes the right index from `groupId` (the
 `Group.uniqueId`) and optional `datasetId` for per-dataset widgets.
@@ -340,12 +340,12 @@ the tile to one specific dataset inside the group; without it, the
 first dataset in the group with the matching option enabled is used.
 For group-level widgets (`datagrid`, `multiplot`, `led`, `accelerometer`,
 `gyroscope`, `gps`, `plot3d`, `painter`, `imageview`, `output-panel`)
-the field is ignored — one tile per group regardless.
+the field is ignored: one tile per group regardless.
 
 **Why this matters.** Earlier versions of this API auto-assigned
 `relativeIndex` as a per-workspace counter, which meant every
 freshly-added ref landed at index 0 and pointed to the same global
-widget instance — producing workspaces with duplicate or invisible
+widget instance, producing workspaces with duplicate or invisible
 tiles. The fixed auto-assign mirrors the runtime dashboard's flat
 per-type bucket order; refs now resolve to the intended widget.
 
@@ -394,7 +394,7 @@ specific layout from an export.
 Every project mutation in this skill (group widget shape, dataset
 options, workspace add/delete) **changes derived state** the next call
 will validate against. The validators don't lie, but they return JSON
-errors — they don't apologize.
+errors; they don't apologize.
 
 After ANY mutation that could affect `compatibleWidgetTypes`, before
 the next `addWidget` call, re-run `project.group.list` and read the
@@ -411,7 +411,7 @@ Mutations that affect `compatibleWidgetTypes`:
 - `project.group.add{widgetType: <int>}`  (GroupWidget enum int)
 
 Mutations that **must also be verified by reading back the response**:
-- `project.dataset.update{pltMin/pltMax/wgtMin/wgtMax/fftMin/fftMax}` —
+- `project.dataset.update{pltMin/pltMax/wgtMin/wgtMax/fftMin/fftMax}`:
   the API silently drops unknown keys, so a typo (`plotMin` vs `pltMin`)
   returns `success: true` and writes nothing. After updating, call
   `project.dataset.getByPath` and confirm the response carries the new
@@ -420,9 +420,9 @@ Mutations that **must also be verified by reading back the response**:
   write didn't land.
 
 What does NOT affect `compatibleWidgetTypes` (silent no-op when used wrongly):
-- `project.group.update{widgetType: ...}` — `update` does not accept
+- `project.group.update{widgetType: ...}`: `update` does not accept
   `widgetType`. Use `widget` (string) instead.
-- `project.dataset.update{plotMin/widgetMin/...}` — `update` does not
+- `project.dataset.update{plotMin/widgetMin/...}`: `update` does not
   accept the full-name min/max form. Use the abbreviated `pltMin`/
   `wgtMin`/`fftMin` write-params.
 
@@ -441,14 +441,14 @@ When you call any `project.workspace.add*`, `delete*`, `update`, or
 
 `project.workspace.autoGenerate{}` materialises Serial Studio's default
 auto-workspaces (one per group's natural widget type, loosely organised)
-into the customised list. It's a one-shot — call once for users who want
+into the customised list. It's a one-shot: call once for users who want
 "a reasonable starting layout", then iterate.
 
 ## Resetting / starting from scratch
 
 When the user asks to "delete all workspaces", "start over", or "reset
-the dashboard layout", **use `project.workspace.clearAll{}` — one call,
-one approval card, no params**. Do NOT loop `project.workspace.delete`
+the dashboard layout", **use `project.workspace.clearAll{}` (one call,
+one approval card, no params)**. Do NOT loop `project.workspace.delete`
 across every workspaceId: each delete is `alwaysConfirm`, which means N
 separate approval cards and N round-trips through the model.
 
@@ -472,28 +472,28 @@ during a clear-and-rebuild flow):
 
 When the user asks for "an overview" or "executive dashboard":
 
-1. `project.group.list` — read every group's `datasetSummary` and
+1. `project.group.list`: read every group's `datasetSummary` and
    `compatibleWidgetTypes`.
 2. Pick 4–8 groups whose data is genuinely summary-relevant: speed, RPM,
    temperature, fuel, voltage, state-of-charge, primary alarms. SKIP
    raw-flag groups (door open, individual lights, individual brake
-   pressures) — those belong on dedicated diagnostic workspaces.
+   pressures): those belong on dedicated diagnostic workspaces.
 3. For each pick, choose the most readable widgetType from
    compatibleWidgetTypes:
-   - Gauge (11) for single scalars with min/max — needs `wgtMin`/`wgtMax`
-   - MultiPlot (2) for related time-series — needs `pltMin`/`pltMax` per dataset
-   - DataGrid (1) for tabular reads — no min/max needed
-   - Compass (12) for headings — no min/max (fixed 0–360)
-   - Bar (10) for bounded levels — needs `wgtMin`/`wgtMax`
-   - Meter (13) for analog half-arc readouts — needs `wgtMin`/`wgtMax`
-   - LED (8) for booleans/alarms — uses `ledHigh` threshold
-   - Plot (9) for single time-series — needs `pltMin`/`pltMax`
-   - FFT (7) for spectra of audio / vibration / signals — needs `fftMin`/`fftMax` (expected raw input range, used for normalization)
-   - Waterfall (20, Pro) for spectrograms — needs `fftMin`/`fftMax` (same input-normalization range)
+   - Gauge (11) for single scalars with min/max: needs `wgtMin`/`wgtMax`
+   - MultiPlot (2) for related time-series: needs `pltMin`/`pltMax` per dataset
+   - DataGrid (1) for tabular reads: no min/max needed
+   - Compass (12) for headings: no min/max (fixed 0–360)
+   - Bar (10) for bounded levels: needs `wgtMin`/`wgtMax`
+   - Meter (13) for analog half-arc readouts: needs `wgtMin`/`wgtMax`
+   - LED (8) for booleans/alarms: uses `ledHigh` threshold
+   - Plot (9) for single time-series: needs `pltMin`/`pltMax`
+   - FFT (7) for spectra of audio / vibration / signals: needs `fftMin`/`fftMax` (expected raw input range, used for normalization)
+   - Waterfall (20, Pro) for spectrograms: needs `fftMin`/`fftMax` (same input-normalization range)
 4. NEVER widgetType=0 (Terminal).
 5. Show the user the curated list in chat BEFORE pushing. **Include the
    min/max ranges you plan to set per dataset** so they can correct the
-   bounds. Don't pick 0..0 silently — pick a defensible default from the
+   bounds. Don't pick 0..0 silently; pick a defensible default from the
    dataset's units/title and say so.
 6. `setCustomizeMode{enabled: true}`, `workspace.add{title: 'Overview',
    icon: 'qrc:/icons/panes/overview.svg'}` (always provide an icon).
@@ -502,10 +502,10 @@ When the user asks for "an overview" or "executive dashboard":
 7. Re-read `project.dataset.getByPath` for each updated dataset and
    confirm the response carries the min/max under the FULL key names
    (`plotMin`/`widgetMin`/`fftMin`). If they're still 0, you used the
-   response-form key on the write side — re-issue with the abbreviated
+   response-form key on the write side. Re-issue with the abbreviated
    `pltMin`/`wgtMin` form.
 
-## Recipe — Plot + FFT + Waterfall on the same dataset
+## Recipe: Plot + FFT + Waterfall on the same dataset
 
 Goal: one workspace tab that shows the time-domain signal, its FFT, and
 a waterfall (Pro) for the same audio/vibration channel.
@@ -580,7 +580,7 @@ The slug form (`widgetType: "plot"`) makes the addWidget vs setOption
 numbering collision impossible. Integers still work for back-compat
 (`widgetType: 9` is DashboardPlot), but the slugs are unambiguous.
 
-## Recipe — Add a Gauge tile to an existing group
+## Recipe: Add a Gauge tile to an existing group
 
 Goal: a group has one numeric dataset that you want to show as a radial
 gauge on the executive workspace.
@@ -632,23 +632,23 @@ project.workspace.addWidget {
 ```
 
 If step 6 returns "widgetType=gauge not compatible with group 0", step
-3 didn't actually pass -- re-read the group and check what
-`compatibleWidgetTypeSlugs` really contains, instead of issuing
+3 didn't pass: re-read the group and check what
+`compatibleWidgetTypeSlugs` contains, instead of issuing
 addWidget again. If step 5 shows `widgetMin: 0, widgetMax: 0` after you
 "set" them, you used `widgetMin`/`widgetMax` instead of the abbreviated
-`wgtMin`/`wgtMax` write-form -- re-issue the update with the right names.
+`wgtMin`/`wgtMax` write-form. Re-issue the update with the right names.
 
-## Troubleshooting — what the API errors actually mean
+## Troubleshooting: what the API errors mean
 
 | Error message | What happened | Fix |
 |---------------|---------------|-----|
-| `widgetType=0 is DashboardTerminal, not a workspace tile.` | You passed `widgetType: 0` to `addWidget`. Often a swapped-args bug (groupId of 0 ended up in the widgetType slot, or you pulled an int from the wrong field of a JSON result). | Re-check your call. The schema is `{workspaceId, widgetType, groupId, relativeIndex}` — `groupId=0` is valid, `widgetType=0` is not. |
+| `widgetType=0 is DashboardTerminal, not a workspace tile.` | You passed `widgetType: 0` to `addWidget`. Often a swapped-args bug (groupId of 0 ended up in the widgetType slot, or you pulled an int from the wrong field of a JSON result). | Re-check your call. The schema is `{workspaceId, widgetType, groupId, relativeIndex}`, where `groupId=0` is valid but `widgetType=0` is not. |
 | `widgetType=N not compatible with group M.` | Group M's `compatibleWidgetTypes` doesn't contain N. | Either pick a different widgetType from M's list, or enable the corresponding bit on a dataset in M (see the "How to enable a workspace tile from scratch" recipe), then RE-LIST and verify before retrying. |
-| Group widget didn't change after `project.group.update {widgetType: ...}` | `group.update` doesn't have a `widgetType` field. The param was silently ignored. | Use `project.group.update {widget: "multiplot"}` (string), or accept that the shape is locked at `add` time and `delete + add` if you really need to change it. |
+| Group widget didn't change after `project.group.update {widgetType: ...}` | `group.update` doesn't have a `widgetType` field. The param was silently ignored. | Use `project.group.update {widget: "multiplot"}` (string), or accept that the shape is locked at `add` time and `delete + add` if you need to change it. |
 | `addWidget` succeeded but no tile appears on the dashboard | `customizeWorkspaces` mode is off, OR you pinned to the wrong workspaceId, OR the workspace title bar is filtered. | Confirm `setCustomizeMode {enabled: true}` ran successfully and the user is looking at the correct workspace tab. |
 | Same call keeps failing | The state hasn't changed between calls. | Read the error, read `project.group.list`, find the actual cause. Do NOT issue the same call a third time hoping for a different result. |
 | `dataset.update` returned success but Gauge/Bar/Plot/FFT scale is still 0..0 | You wrote `plotMin`/`widgetMin`/`plotMax`/`widgetMax` (the response/file form) instead of `pltMin`/`wgtMin`/`pltMax`/`wgtMax` (the API write-form). The API silently ignores unknown keys. | Re-issue with the abbreviated names. `fftMin`/`fftMax` are the same in both directions. |
-| Gauge / Bar / FFT mounts but the needle / fill / spectrum looks wrong | Min/max for that widget family was never set, or set on the wrong pair (e.g. `pltMin` for a Gauge). | Set the correct pair: `wgtMin`/`wgtMax` for Gauge/Bar, `pltMin`/`pltMax` for Plot, `fftMin`/`fftMax` for FFT/Waterfall. The pairs do NOT cascade — a dataset with Plot AND Gauge needs both. |
+| Gauge / Bar / FFT mounts but the needle / fill / spectrum looks wrong | Min/max for that widget family was never set, or set on the wrong pair (e.g. `pltMin` for a Gauge). | Set the correct pair: `wgtMin`/`wgtMax` for Gauge/Bar, `pltMin`/`pltMax` for Plot, `fftMin`/`fftMax` for FFT/Waterfall. The pairs do NOT cascade; a dataset with Plot AND Gauge needs both. |
 
 ## Common gotchas
 

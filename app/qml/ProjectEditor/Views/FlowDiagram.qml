@@ -89,7 +89,7 @@ Item {
     const colChip  = colTrans + transW + transGap      // dataset column
     const colMqtt  = colChip + chipW + hGap            // mqtt publisher column
 
-    // Collected dataset pill centres -- fed into the MQTT Publisher node below
+    // Collected dataset pill centres, fed into the MQTT Publisher node below
     const datasetAnchors = []
 
     // -- slot height helper -------------------------------------------------
@@ -124,7 +124,7 @@ Item {
     for (const sid in srcTotalH)
       srcTotalH[sid] = Math.max((srcTotalH[sid] || 0) - vGap, nodeH)
 
-    // sources stack vertically -- compute starting y for each source's block
+    // sources stack vertically: compute starting y for each source's block
     const srcBlockY = {}
     let   nextBlockY = pad
     for (const src of srcList) {
@@ -482,7 +482,7 @@ Item {
     }
 
     //
-    // MQTT Publisher node -- collects every dataset pill (commercial, opt-in)
+    // MQTT Publisher node: collects every dataset pill (commercial, opt-in)
     //
     if (mqttPublisherEnabled() && datasetAnchors.length > 0) {
       const minY     = datasetAnchors[0]
@@ -957,7 +957,7 @@ Item {
             }
 
             //
-            // Badge in the corner -- "[A]"/"[B]" on source cards,
+            // Badge in the corner: "[A]"/"[B]" on source cards,
             // "N regs"/"empty" on table cards.
             //
             Text {

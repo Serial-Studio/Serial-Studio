@@ -12,7 +12,8 @@ function output(state) {
 }
 ```
 
-- `state` is an object whose shape depends on the widget kind (see below).
+- `state` is an object whose shape depends on the widget kind (see
+  "Widget state shapes").
 - Return a `Uint8Array`, an `ArrayBuffer`, a `String`, or `null`.
   - `Uint8Array` / `ArrayBuffer` → bytes are written verbatim.
   - `String` → encoded UTF-8 and written.

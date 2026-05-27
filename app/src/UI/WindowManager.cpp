@@ -357,7 +357,7 @@ static void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
   if (n <= 0)
     return;
 
-  // Clamp degenerate availW/availH to 1 -- 0 denominator -> qSqrt(inf) -> INT_MIN on int cast.
+  // Clamp degenerate availW/availH to 1: 0 denominator -> qSqrt(inf) -> INT_MIN on int cast.
   const double safeW = qMax(1, env.availW);
   const double safeH = qMax(1, env.availH);
 

@@ -999,7 +999,7 @@ int IO::Drivers::UART::scorePortIdentifierMatch(const QSerialPortInfo& info,
   if (!savedDesc.isEmpty() && info.description() == savedDesc)
     score += 10;
 
-  // Port name match (weakest -- differs per OS)
+  // Port name match (weakest, differs per OS)
   if (!savedName.isEmpty() && info.portName() == savedName)
     score += 5;
 

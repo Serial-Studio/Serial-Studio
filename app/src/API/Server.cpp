@@ -34,7 +34,7 @@
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
-// Monotonic counter for session IDs -- socket addresses can be reused.
+// Monotonic counter for session IDs, since socket addresses can be reused.
 static QAtomicInteger<quintptr> s_nextSessionId{1};
 
 //--------------------------------------------------------------------------------------------------
@@ -525,7 +525,7 @@ void API::Server::setExternalConnections(const bool enabled)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Server -- authentication (external connections)
+// Server: authentication (external connections)
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -667,7 +667,7 @@ void API::Server::handleAuthHandshake(QTcpSocket* socket,
     return;
   }
 
-  // Authenticated -- acknowledge, then process any data pipelined after the handshake.
+  // Authenticated: acknowledge, then process any data pipelined after the handshake.
   state.authenticated = true;
   qInfo() << "[API] Client authenticated:" << state.peerAddress << ":" << state.peerPort;
 
@@ -727,7 +727,7 @@ void API::Server::broadcastLifecycleEvent(const QString& eventName)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Server -- data reception helpers
+// Server: data reception helpers
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -1163,7 +1163,7 @@ void API::Server::processRawLine(QTcpSocket* socket, ConnectionState& state, con
 }
 
 //--------------------------------------------------------------------------------------------------
-// Server -- data reception & dispatch
+// Server: data reception & dispatch
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -1204,7 +1204,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
 
     const int newlineIndex = buffer.indexOf('\n');
 
-    // No newline found -- attempt to process partial buffer
+    // No newline found, attempt to process partial buffer
     if (newlineIndex < 0) {
       processNoNewlineBuffer(socket, state);
       return;

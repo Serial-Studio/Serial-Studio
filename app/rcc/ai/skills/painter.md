@@ -1,10 +1,10 @@
 # Painter Widget
 
-The Painter widget (Pro) gives you a Canvas-2D drawing surface. One per
+The Painter widget (Pro) provides a Canvas-2D drawing surface. One per
 group with `widgetType: 8` (GroupWidget enum at create time). Bind code
 via `project.painter.setCode{groupId, code}`.
 
-**Painter scripts are JavaScript-only** — the Lua-first guidance in
+**Painter scripts are JavaScript-only.** The Lua-first guidance in
 the `frame_parsers` and `transforms` skills does NOT apply here. The
 reason is concrete: painters draw via Canvas2D, which only exists as a
 QJSEngine API surface. There is no Lua canvas API to expose; porting
@@ -16,7 +16,7 @@ integer enum `18`) on `addWidget`.
 
 ## Decision: when to use a painter
 
-- **Don't** for standard widgets (gauge, plot, bar, LED, compass) — those
+- **Don't** for standard widgets (gauge, plot, bar, LED, compass); those
   are dataset options, not painters. Painter is one or two orders of
   magnitude more code.
 - **Do** for visualizations the standard widgets can't express: status
@@ -30,14 +30,14 @@ group.
 
 ## Entry points
 
-- **`paint(ctx, w, h)` — REQUIRED.** Called every UI tick (~24 Hz) to
+- **`paint(ctx, w, h)`: REQUIRED.** Called every UI tick (~24 Hz) to
   redraw the canvas. The function name is `paint`, not `draw`, not
   `render`. The engine looks up `globalThis.paint` by name.
-- **`onFrame()` — optional, but powerful.** Called immediately before
+- **`onFrame()`: optional.** Called immediately before
   each `paint(ctx, w, h)`. No arguments. This is where you do
   expensive per-tick computation so `paint` stays cheap.
 - `bootstrap()` does NOT exist. Top-level statements at the script's
-  outer scope run once when the script compiles — that is your
+  outer scope run once when the script compiles: that is your
   bootstrap.
 
 ### When `onFrame` actually fires (timing reality)
@@ -60,7 +60,7 @@ tick time. So:
 - **Pure layout / drawing** → keep in `paint`. It runs against
   whatever `onFrame` last computed.
 
-### Recipe — spectrum analyzer painter
+### Recipe: spectrum analyzer painter
 
 ```js
 // Top-level: bootstrap once at compile time
@@ -98,7 +98,7 @@ function paint(ctx, w, h) {
 ```
 
 Without `onFrame`, that FFT would run inside `paint` and recompute on
-every redraw — including ones triggered by mouse hover and theme
+every redraw, including ones triggered by mouse hover and theme
 changes. With it, `paint` only laces lines through the cached
 `spectrum` array.
 
@@ -114,7 +114,7 @@ changes. With it, `paint` only laces lines through the cached
 5. Adapt a real example: `scripts.list{kind: "painter"}` then
    `scripts.get{kind: "painter", id: "<closest match>"}`.
 6. Dry-run: `assistant.script.dryRun{kind:"painter", code}` verifies compile + that
-   `paint(ctx, w, h)` is defined. Doesn't render — runtime errors inside
+   `paint(ctx, w, h)` is defined. Doesn't render; runtime errors inside
    `paint` only surface when the live widget mounts.
 7. Push: `assistant.script.apply{kind:"painter", groupId, code}`. It
    dry-runs first, then calls `project.painter.setCode`.
@@ -157,7 +157,7 @@ Don't hard-code hex. Use `theme.widget_base` for background,
 for per-channel colors, `theme.alarm` for red/critical states. The
 canvas tracks light/dark theme switches automatically.
 
-## Design — readability before cleverness
+## Design: readability before cleverness
 
 A painter that looks technically impressive but takes the operator three
 seconds to read is a worse painter than a boring DataGrid. Apply these
@@ -177,12 +177,12 @@ before you tune visuals:
 - **Contrast against `theme.widget_base`, not against your assumption of
   dark mode.** Users flip themes. Foreground colors must read on both.
   Use `theme.widget_text` for labels and `theme.widget_highlight` for
-  the primary signal — those are designed for the theme's background.
+  the primary signal; those are designed for the theme's background.
   Hardcoded `#FFFFFF` text vanishes on the light theme.
 - **Anchor numbers with units and a reference range.** `87` floating
   alone is unreadable; `87 °C  (idle 70-90)` tells the operator both
   the value AND whether it's normal in one glance. The dataset's
-  `.units`, `.widgetMin`, `.widgetMax` already carry this — read them
+  `.units`, `.widgetMin`, `.widgetMax` already carry this; read them
   off the proxy.
 - **Doherty threshold: stay under 400 ms.** `paint` runs at ~24 Hz
   (~42 ms budget) and `onFrame` runs immediately before each `paint`.
@@ -192,15 +192,15 @@ before you tune visuals:
   bounded; keep `paint` to layout + draw against cached arrays.
 - **Peak-End on time-series.** When the painter renders a rolling window,
   the operator's memory of "is this healthy" is anchored by the most
-  recent value AND the worst value in view. Highlight both — a faint
-  marker on the current sample and a labeled max/min — instead of
+  recent value AND the worst value in view. Highlight both (a faint
+  marker on the current sample and a labeled max/min) instead of
   leaving them to read off an unmarked trace.
 - **Negative space is signal.** Don't fill 100% of the canvas. Leave
   ~10% margin so axis labels, units, and current-value readouts have
   room to render without clipping when the tile is resized.
 
 These are guidance, not lint rules. The Painter dryRun won't catch a
-color-only alarm or a 600 ms onFrame — the operator will. If you're
+color-only alarm or a 600 ms onFrame; the operator will. If you're
 unsure whether a design choice helps, ask the user before pushing.
 
 ## arc / moveTo discipline

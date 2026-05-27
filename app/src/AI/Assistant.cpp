@@ -208,7 +208,7 @@ QStringList AI::Assistant::providerNames() const
  */
 bool AI::Assistant::hasKey(int providerIdx) const
 {
-  // The Local provider is always "ready" -- it needs a base URL, not an API key
+  // The Local provider is always "ready": it needs a base URL, not an API key
   if (static_cast<ProviderId>(providerIdx) == ProviderId::Local)
     return m_local != nullptr;
 

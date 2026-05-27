@@ -181,7 +181,7 @@ QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
     args << taskbarButtons.join(QLatin1Char(','));
   }
 
-  // Empty themeName == "Same as Serial Studio" -- inherit whatever the user has set globally
+  // Empty themeName == "Same as Serial Studio": inherit whatever the user has set globally
   const QString trimmedTheme = themeName.trimmed();
   if (!trimmedTheme.isEmpty())
     args << QStringLiteral("--theme") << trimmedTheme;

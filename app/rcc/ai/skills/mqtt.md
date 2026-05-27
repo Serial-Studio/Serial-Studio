@@ -53,7 +53,7 @@ parser. If it publishes CSV, the default parser works.
   most managed brokers require TLS. If `mqtt.connect{}` fails
   immediately on a cloud broker, check `mqtt.setSslEnabled{enabled:
   true}` was called.
-- **mqtt.setSslEnabled is hardware-write gated**: it doesn't actually
+- **mqtt.setSslEnabled is hardware-write gated**: it doesn't
   connect, but it changes how the connection negotiates. Don't toggle it
   blindly during a live session.
 - **Persistent client id**: brokers that enforce client uniqueness will

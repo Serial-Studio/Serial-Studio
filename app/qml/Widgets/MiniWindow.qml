@@ -586,7 +586,7 @@ Item {
   }
 
   //
-  // Highlight overlay -- flashing border for search navigation
+  // Highlight overlay: flashing border for search navigation
   //
   Rectangle {
     id: highlightBorder
