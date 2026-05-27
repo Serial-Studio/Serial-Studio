@@ -27,6 +27,7 @@
 #include <QMap>
 #include <QMargins>
 #include <QObject>
+#include <QPointF>
 #include <QQuickItem>
 #include <QRect>
 #include <QSettings>
@@ -115,6 +116,7 @@ public slots:
   void bringToFront(QQuickItem* item);
   void setTaskbar(QQuickItem* taskbar);
   void unregisterWindow(QQuickItem* item);
+  void updateHoverCursor(const QPointF& pos);
   void setBackgroundImage(const QString& path);
   void setAutoLayoutEnabled(const bool enabled);
   void registerWindow(const int id, QQuickItem* item);
@@ -132,6 +134,7 @@ private:
   [[nodiscard]] QQuickItem* topmostWindowAt(const QPointF& pos) const;
   [[nodiscard]] QQuickItem* manualResizeTargetAt(const QPointF& pos) const;
   [[nodiscard]] ResizeEdge detectResizeEdge(QQuickItem* target, const QPointF& pos) const;
+  void applyResizeCursor(ResizeEdge edge);
   void applySavedGeometries(const QJsonObject& layout,
                             const QHash<detail::StableKey, int>& stableLookup,
                             int marginCanvasW,

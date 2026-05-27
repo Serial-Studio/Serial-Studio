@@ -116,6 +116,18 @@ Item {
 
       anchors.fill: parent
       onRightClicked: (x, y) => contextMenu.popup(x, y)
+
+      //
+      // Passive hover monitor so manual-mode resize cursors show over stacked windows
+      //
+      HoverHandler {
+        id: resizeHover
+
+        enabled: !_wm.autoLayoutEnabled
+        property point hoverPosition: resizeHover.point.position
+        onHoveredChanged: if (!resizeHover.hovered) _wm.updateHoverCursor(Qt.point(-1, -1))
+        onHoverPositionChanged: if (resizeHover.hovered) _wm.updateHoverCursor(hoverPosition)
+      }
     }
 
     //

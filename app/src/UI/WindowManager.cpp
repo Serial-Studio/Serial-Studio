@@ -964,7 +964,7 @@ void UI::WindowManager::autoLayout()
 
   // Build the tiling environment and dispatch to the per-count helper
   TileEnv env;
-  env.margin      = 4;
+  env.margin      = 0;
   env.spacing     = -1;
   env.availW      = canvasW - 2 * env.margin;
   env.availH      = canvasH - 2 * env.margin;
@@ -1586,25 +1586,10 @@ UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* ta
 }
 
 /**
- * @brief Updates the cursor when hovering over resizable edges in manual layout mode.
+ * @brief Sets the manual-mode resize cursor matching the hovered edge.
  */
-void UI::WindowManager::hoverMoveEvent(QHoverEvent* event)
+void UI::WindowManager::applyResizeCursor(ResizeEdge edge)
 {
-  if (autoLayoutEnabled()) {
-    unsetCursor();
-    QQuickItem::hoverMoveEvent(event);
-    return;
-  }
-
-  const QPointF pos = event->position();
-  auto* target      = topmostWindowAt(pos);
-  if (!target || target->state() != "normal") {
-    unsetCursor();
-    QQuickItem::hoverMoveEvent(event);
-    return;
-  }
-
-  const ResizeEdge edge = detectResizeEdge(target, pos);
   switch (edge) {
     case ResizeEdge::Left:
     case ResizeEdge::Right:
@@ -1626,7 +1611,33 @@ void UI::WindowManager::hoverMoveEvent(QHoverEvent* event)
       unsetCursor();
       break;
   }
+}
 
+/**
+ * @brief Updates the resize cursor for a canvas-local point in manual mode.
+ */
+void UI::WindowManager::updateHoverCursor(const QPointF& pos)
+{
+  if (autoLayoutEnabled()) {
+    unsetCursor();
+    return;
+  }
+
+  auto* target = topmostWindowAt(pos);
+  if (!target || target->state() != "normal") {
+    unsetCursor();
+    return;
+  }
+
+  applyResizeCursor(detectResizeEdge(target, pos));
+}
+
+/**
+ * @brief Updates the cursor when hovering over resizable edges in manual layout mode.
+ */
+void UI::WindowManager::hoverMoveEvent(QHoverEvent* event)
+{
+  updateHoverCursor(event->position());
   QQuickItem::hoverMoveEvent(event);
 }
 
@@ -2019,11 +2030,22 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
 {
   // Bare-canvas manual presses route here; child windows use childMouseEventFilter
   if (!autoLayoutEnabled()) {
-    if (startManualPress(event->pos(), event->button()))
+    if (startManualPress(event->pos(), event->button())) {
       event->accept();
-    else
-      QQuickItem::mousePressEvent(event);
+      return;
+    }
 
+    // Right-click on empty canvas opens the desktop context menu (parity with auto mode)
+    if (event->button() == Qt::RightButton && !m_focusedWindow) {
+      if (m_taskbar)
+        m_taskbar->setActiveWindow(nullptr);
+
+      Q_EMIT rightClicked(event->pos().x(), event->pos().y());
+      event->accept();
+      return;
+    }
+
+    QQuickItem::mousePressEvent(event);
     return;
   }
 
@@ -2076,28 +2098,7 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     m_resizeEdge = detectResizeEdge(m_focusedWindow, m_initialMousePos);
     if (m_resizeEdge != ResizeEdge::None && !autoLayoutEnabled()) {
       grabMouse();
-      switch (m_resizeEdge) {
-        case ResizeEdge::Left:
-        case ResizeEdge::Right:
-          setCursor(Qt::SizeHorCursor);
-          break;
-        case ResizeEdge::Top:
-        case ResizeEdge::Bottom:
-          setCursor(Qt::SizeVerCursor);
-          break;
-        case ResizeEdge::TopRight:
-        case ResizeEdge::BottomLeft:
-          setCursor(Qt::SizeBDiagCursor);
-          break;
-        case ResizeEdge::TopLeft:
-        case ResizeEdge::BottomRight:
-          setCursor(Qt::SizeFDiagCursor);
-          break;
-        default:
-          unsetCursor();
-          break;
-      }
-
+      applyResizeCursor(m_resizeEdge);
       m_resizeWindow    = m_focusedWindow;
       m_initialGeometry = extractGeometry(m_focusedWindow);
       event->accept();
