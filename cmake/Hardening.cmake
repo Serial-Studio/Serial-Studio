@@ -122,11 +122,13 @@ if(ENABLE_HARDENING)
          add_compile_options(-fstack-clash-protection)
       endif()
 
-      # FORTIFY_SOURCE requires optimization
+      # FORTIFY_SOURCE requires optimization. -U first clears any value the toolchain
+      # already injected (GCC built with --enable-default-fortify-source defines it at
+      # <command-line> scope), which otherwise triggers a redefinition warning.
       if(PRODUCTION_OPTIMIZATION OR CMAKE_BUILD_TYPE STREQUAL "Release")
-         add_compile_options(-D_FORTIFY_SOURCE=2)
+         add_compile_options(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
       elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-         add_compile_options(-D_FORTIFY_SOURCE=2)
+         add_compile_options(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
       else()
          message(WARNING "FORTIFY_SOURCE disabled: requires optimization flags (-O1 or higher)")
       endif()

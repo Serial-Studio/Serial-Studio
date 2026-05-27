@@ -22,11 +22,16 @@
 
 #ifdef BUILD_COMMERCIAL
 
+// libsecret pulls in glib's gdbusintrospection.h, which has a struct member named
+// "signals" -- include it before any Qt header turns "signals" into a macro.
+#  if defined(HAVE_LIBSECRET)
+#    include <libsecret/secret.h>
+#  endif
+
 #  include "Platform/SecretStore.h"
 
 #  if defined(HAVE_LIBSECRET)
 
-#    include <libsecret/secret.h>
 #    include <QByteArray>
 
 //--------------------------------------------------------------------------------------------------
@@ -38,6 +43,8 @@
  */
 static const SecretSchema* schema()
 {
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wmissing-field-initializers"
   static const SecretSchema s = {
     "com.serial-studio.Secrets",
     SECRET_SCHEMA_NONE,
@@ -45,6 +52,7 @@ static const SecretSchema* schema()
       {"account", SECRET_SCHEMA_ATTRIBUTE_STRING},
       {nullptr, SECRET_SCHEMA_ATTRIBUTE_STRING}}
   };
+#    pragma GCC diagnostic pop
   return &s;
 }
 

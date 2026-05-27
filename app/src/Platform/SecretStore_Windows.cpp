@@ -22,9 +22,14 @@
 
 #ifdef BUILD_COMMERCIAL
 
-#  include <dpapi.h>
-#  include <wincrypt.h>
+// clang-format off
+#  ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
+#  endif
 #  include <windows.h>
+#  include <wincrypt.h>
+#  include <dpapi.h>
+// clang-format on
 
 #  include <QByteArray>
 #  include <QSettings>
