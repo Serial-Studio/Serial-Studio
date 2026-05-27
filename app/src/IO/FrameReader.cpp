@@ -21,8 +21,10 @@
 
 #include "FrameReader.h"
 
+#include <chrono>
 #include <utility>
 
+#include "DataModel/NotificationCenter.h"
 #include "IO/Checksum.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -39,6 +41,8 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_circularBuffer(1024 * 1024)
   , m_queue(65536)
+  , m_droppedFrames(0)
+  , m_lastDropNotify()
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -66,8 +70,11 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
 
   // Passthrough when no delimiters are configured
   if (m_operationMode == SerialStudio::ProjectFile
-      && m_frameDetectionMode == SerialStudio::NoDelimiters)
+      && m_frameDetectionMode == SerialStudio::NoDelimiters) {
     framesEnqueued = m_queue.try_enqueue(data);
+    if (!framesEnqueued) [[unlikely]]
+      noteDroppedFrame();
+  }
 
   // Delimiter-based processing
   else {
@@ -257,9 +264,35 @@ void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection m
 void IO::FrameReader::enqueueOrWarn(QByteArray&& frame, qsizetype frameEndPos)
 {
   if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
-    qWarning() << "[FrameReader] Frame queue full -- frame dropped";
+    noteDroppedFrame();
 
   consumeBytes(frameEndPos);
+}
+
+/**
+ * @brief Counts a dropped frame and posts a throttled saturation warning.
+ */
+void IO::FrameReader::noteDroppedFrame()
+{
+  ++m_droppedFrames;
+  qWarning() << "[FrameReader] Frame queue full -- frame dropped (total" << m_droppedFrames << ")";
+
+  // Throttle the user-facing notification; the log above already fires on every drop.
+  const auto now = CapturedData::SteadyClock::now();
+  if (now - m_lastDropNotify < std::chrono::seconds(5)) [[likely]]
+    return;
+
+  m_lastDropNotify = now;
+  QMetaObject::invokeMethod(
+    &DataModel::NotificationCenter::instance(),
+    "postWarning",
+    Qt::QueuedConnection,
+    Q_ARG(QString, QStringLiteral("FrameReader")),
+    Q_ARG(QString, tr("Frames dropped")),
+    Q_ARG(QString,
+          tr("Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) "
+             "have been dropped. Reduce the data rate or disable a heavy consumer.")
+            .arg(m_droppedFrames)));
 }
 
 /**

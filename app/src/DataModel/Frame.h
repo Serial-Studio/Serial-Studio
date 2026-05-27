@@ -155,6 +155,7 @@ inline constexpr KeyView WidgetSettings("widgetSettings");
 
 // Plot history keys
 inline constexpr KeyView PointCount("pointCount");
+inline constexpr KeyView PlotTimeRange("plotTimeRange");
 inline constexpr KeyView kActiveGroupSubKey("activeGroup");
 inline constexpr KeyView HiddenGroups("hiddenGroups");
 
@@ -372,13 +373,16 @@ struct alignas(8) AlarmBand {
 
 static_assert(sizeof(AlarmBand) % alignof(AlarmBand) == 0, "Unaligned AlarmBand struct");
 
+inline constexpr int kXAxisSamples = -1;
+inline constexpr int kXAxisTime    = -2;
+
 /**
  * @brief Represents a single unit of sensor data with optional metadata and
  * graphing. Fully aligned and stack-optimized.
  */
 struct alignas(8) Dataset {
-  int index             = 0;      ///< Frame offset index
-  int xAxisId           = -1;     ///< X-axis source: -1 = sample index, else dataset uniqueId
+  int index             = 0;           ///< Frame offset index
+  int xAxisId           = kXAxisTime;  ///< X-axis: -2 = time (default), else dataset uniqueId
   int waterfallYAxis    = 0;      ///< Y source for the waterfall -- 0 = Time, else dataset uniqueId
   int groupId           = 0;      ///< Owning group ID
   int sourceId          = 0;      ///< Source this dataset belongs to
@@ -1184,14 +1188,17 @@ inline void normalizeDatasetRanges(Dataset& d)
   if (obj.isEmpty())
     return false;
 
-  d.index             = ss_jsr(obj, Keys::Index, -1).toInt();
-  d.fft               = ss_jsr(obj, Keys::FFT, false).toBool();
-  d.led               = ss_jsr(obj, Keys::LED, false).toBool();
-  d.log               = ss_jsr(obj, Keys::Log, false).toBool();
-  d.plt               = ss_jsr(obj, Keys::Graph, false).toBool();
-  d.waterfall         = ss_jsr(obj, Keys::Waterfall, false).toBool();
-  d.waterfallYAxis    = ss_jsr(obj, Keys::WaterfallYAxis, 0).toInt();
-  d.xAxisId           = ss_jsr(obj, Keys::XAxis, -1).toInt();
+  d.index          = ss_jsr(obj, Keys::Index, -1).toInt();
+  d.fft            = ss_jsr(obj, Keys::FFT, false).toBool();
+  d.led            = ss_jsr(obj, Keys::LED, false).toBool();
+  d.log            = ss_jsr(obj, Keys::Log, false).toBool();
+  d.plt            = ss_jsr(obj, Keys::Graph, false).toBool();
+  d.waterfall      = ss_jsr(obj, Keys::Waterfall, false).toBool();
+  d.waterfallYAxis = ss_jsr(obj, Keys::WaterfallYAxis, 0).toInt();
+  d.xAxisId        = ss_jsr(obj, Keys::XAxis, kXAxisTime).toInt();
+  if (d.xAxisId == kXAxisSamples)
+    d.xAxisId = kXAxisTime;
+
   d.fftMin            = ss_jsr(obj, Keys::FFTMin, 0).toDouble();
   d.fftMax            = ss_jsr(obj, Keys::FFTMax, 0).toDouble();
   d.pltMin            = ss_jsr(obj, Keys::PltMin, 0).toDouble();

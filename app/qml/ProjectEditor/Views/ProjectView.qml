@@ -146,24 +146,50 @@ Widgets.Pane {
           }
 
           Label {
-            text: qsTr("Points:")
+            text: qsTr("Time Range:")
             Layout.alignment: Qt.AlignVCenter
           }
 
           SpinBox {
-            id: pointsField
+            id: timeRangeField
 
-            from: 1
-            to: 100000
+            readonly property var presets: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05,
+                                            0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 30, 60, 120, 300]
+
+            function nearestIndex(seconds) {
+              var best = 0
+              for (var i = 0; i < presets.length; ++i)
+                if (Math.abs(presets[i] - seconds) < Math.abs(presets[best] - seconds))
+                  best = i
+
+              return best
+            }
+
+            function formatSeconds(s) {
+              return s < 1 ? (Math.round(s * 1000) + " ms") : (parseFloat(s.toFixed(3)) + " s")
+            }
+
+            from: 0
+            to: presets.length - 1
             editable: true
             Layout.alignment: Qt.AlignVCenter
-            value: Cpp_JSON_ProjectModel.pointCount
-            onValueModified: Cpp_JSON_ProjectModel.setPointCount(value)
+            value: nearestIndex(Cpp_JSON_ProjectModel.plotTimeRange)
+            textFromValue: function(value, locale) { return timeRangeField.formatSeconds(presets[value]) }
+            valueFromText: function(text, locale) {
+              var t = String(text).toLowerCase()
+              var num = parseFloat(t.replace(/[^0-9.]/g, ""))
+              if (isNaN(num))
+                return timeRangeField.value
+
+              var secs = (t.indexOf("ms") >= 0) ? num / 1000 : num
+              return timeRangeField.nearestIndex(secs)
+            }
+            onValueModified: Cpp_JSON_ProjectModel.setPlotTimeRange(presets[value])
 
             Connections {
               target: Cpp_JSON_ProjectModel
-              function onPointCountChanged() {
-                pointsField.value = Cpp_JSON_ProjectModel.pointCount
+              function onPlotTimeRangeChanged() {
+                timeRangeField.value = timeRangeField.nearestIndex(Cpp_JSON_ProjectModel.plotTimeRange)
               }
             }
           }

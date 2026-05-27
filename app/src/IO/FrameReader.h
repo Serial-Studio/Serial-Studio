@@ -55,11 +55,15 @@ signals:
 public:
   explicit FrameReader(QObject* parent = nullptr);
 
+  inline void resetDroppedFrameCount() { m_droppedFrames = 0; }
+
   inline void resetOverflowCount() { m_circularBuffer.resetOverflowCount(); }
 
   inline qsizetype overflowCount() const { return m_circularBuffer.overflowCount(); }
 
   inline moodycamel::ReaderWriterQueue<IO::CapturedDataPtr>& queue() { return m_queue; }
+
+  [[nodiscard]] inline quint64 droppedFrameCount() const noexcept { return m_droppedFrames; }
 
 public slots:
   void processData(const IO::CapturedDataPtr& data);
@@ -87,6 +91,7 @@ private:
   void readStartEndDelimitedFrames();
 
   void enqueueOrWarn(QByteArray&& frame, qsizetype frameEndPos);
+  void noteDroppedFrame();
 
   ValidationStatus checksum(const QByteArray& frame, qsizetype crcPosition);
 
@@ -107,5 +112,8 @@ private:
   CircularBuffer<QByteArray, char> m_circularBuffer;
   std::deque<PendingChunk> m_pendingChunks;
   moodycamel::ReaderWriterQueue<IO::CapturedDataPtr> m_queue;
+
+  quint64 m_droppedFrames;
+  IO::CapturedData::SteadyTimePoint m_lastDropNotify;
 };
 }  // namespace IO

@@ -182,6 +182,7 @@ private slots:
   void updateData();
   void onThemeChanged();
   void onFontsChanged();
+  void syncHistoryToTimeRange();
 
 private:
   /**

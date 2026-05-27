@@ -61,6 +61,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_maxX(0)
   , m_minY(0)
   , m_maxY(0)
+  , m_timeAxis(false)
   , m_interpolationMode(SerialStudio::InterpolationLinear)
 {
   // Validate dashboard configuration
@@ -89,11 +90,19 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   if (!sharedUnit.isEmpty())
     m_yLabel += " (" + sharedUnit + ")";
 
+  // Resolve X-axis label (Quick Plot time preference or a Time-set dataset)
+  m_timeAxis = UI::Dashboard::instance().useTimeXAxisGroup(group);
+  m_xLabel   = m_timeAxis ? tr("Time (s)") : tr("Samples");
+
   // Resize data container to fit curves
   m_data.resize(group.datasets.size());
 
   // Connect to the dashboard signals
   connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
+  connect(&UI::Dashboard::instance(),
+          &UI::Dashboard::plotTimeRangeChanged,
+          this,
+          &MultiPlot::updateRange);
 
   // Connect to the theme manager to update the curve colors
   onThemeChanged();
@@ -200,6 +209,22 @@ SerialStudio::InterpolationMode Widgets::MultiPlot::interpolationMode() const no
 const QString& Widgets::MultiPlot::yLabel() const noexcept
 {
   return m_yLabel;
+}
+
+/**
+ * @brief Returns the X-axis label ("Samples" or "Time (s)").
+ */
+const QString& Widgets::MultiPlot::xLabel() const noexcept
+{
+  return m_xLabel;
+}
+
+/**
+ * @brief Returns true when this multiplot renders against a time (seconds-ago) X-axis.
+ */
+bool Widgets::MultiPlot::timeAxis() const noexcept
+{
+  return m_timeAxis;
 }
 
 /**
@@ -349,40 +374,54 @@ void Widgets::MultiPlot::updateData()
   // Share workspace data
   static thread_local DSP::DownsampleWorkspace ws;
 
-  // Stop if widget is disabled
-  if (!isEnabled())
+  // Stop if widget is disabled or invalid
+  if (!isEnabled() || !VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
-  // Only obtain data if widget data is still valid
-  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
-    // Fetch multiplot source data (shared X axis, multiple Y series)
-    const auto& data = UI::Dashboard::instance().multiplotData(m_index);
-    const auto& X    = *data.x;
-
-    // One QVector<QPointF> per series; resize only when count changes
-    const qsizetype plotCount = data.y.size();
-    if (m_data.size() != plotCount) {
-      // Squeeze only when shrinking by >20% to avoid thrashing
-      if (m_data.size() > plotCount && m_data.size() > plotCount * 1.2) {
-        m_data.clear();
-        m_data.squeeze();
-      }
+  // Time axis: read each curve's pre-binned min/max envelope (bounded, rate-agnostic)
+  if (m_timeAxis) {
+    const auto& curves        = UI::Dashboard::instance().multiplotBuckets(m_index);
+    const qsizetype plotCount = static_cast<qsizetype>(curves.size());
+    if (m_data.size() != plotCount)
       m_data.resize(plotCount);
-    }
 
-    // Populate data for each plot
     for (qsizetype i = 0; i < plotCount; ++i) {
-      // Skip if curve is not visible or out of bounds
       if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
         continue;
 
-      // Update data
-      DSP::downsampleMonotonic(X, data.y[i], m_dataW, m_dataH, m_data[i], &ws);
+      curves[static_cast<size_t>(i)].buildEnvelope(m_data[i]);
     }
 
-    // Calculate auto scale range
     calculateAutoScaleRange();
+    return;
   }
+
+  // Fetch multiplot source data (shared X axis, multiple Y series)
+  const auto& data = UI::Dashboard::instance().multiplotData(m_index);
+  const auto& X    = *data.x;
+
+  // One QVector<QPointF> per series; resize only when count changes
+  const qsizetype plotCount = data.y.size();
+  if (m_data.size() != plotCount) {
+    // Squeeze only when shrinking by >20% to avoid thrashing
+    if (m_data.size() > plotCount && m_data.size() > plotCount * 1.2) {
+      m_data.clear();
+      m_data.squeeze();
+    }
+    m_data.resize(plotCount);
+  }
+
+  // Populate data for each plot
+  for (qsizetype i = 0; i < plotCount; ++i) {
+    // Skip if curve is not visible or out of bounds
+    if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
+      continue;
+
+    DSP::downsampleMonotonic(X, data.y[i], m_dataW, m_dataH, m_data[i], &ws);
+  }
+
+  // Calculate auto scale range
+  calculateAutoScaleRange();
 }
 
 /**
@@ -400,8 +439,16 @@ void Widgets::MultiPlot::updateRange()
   m_data.squeeze();
   m_data.resize(data.y.size());
 
-  m_minX = 0;
-  m_maxX = UI::Dashboard::instance().points();
+  if (m_timeAxis) {
+    m_minX = -UI::Dashboard::instance().plotTimeRange();
+    m_maxX = 0;
+  }
+
+  else {
+    m_minX = 0;
+    m_maxX = UI::Dashboard::instance().points();
+  }
+
   Q_EMIT rangeChanged();
 }
 

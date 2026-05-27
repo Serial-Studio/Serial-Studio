@@ -50,10 +50,13 @@ public:
   /**
    * @brief Executes a single API command.
    */
-  grpc::Status ExecuteCommand(grpc::ServerContext* /*context*/,
+  grpc::Status ExecuteCommand(grpc::ServerContext* context,
                               const serialstudio::CommandRequest* request,
                               serialstudio::CommandResponse* response) override
   {
+    if (!authorize(context))
+      return unauthenticated();
+
     const auto params  = API::GRPC::ConversionUtils::toQJsonObject(request->params());
     const auto id      = QString::fromStdString(request->id());
     const auto command = QString::fromStdString(request->command());
@@ -82,10 +85,13 @@ public:
   /**
    * @brief Executes multiple commands in a batch.
    */
-  grpc::Status ExecuteBatch(grpc::ServerContext* /*context*/,
+  grpc::Status ExecuteBatch(grpc::ServerContext* context,
                             const serialstudio::BatchRequest* request,
                             serialstudio::BatchResponse* response) override
   {
+    if (!authorize(context))
+      return unauthenticated();
+
     response->set_id(request->id());
     bool all_success = true;
 
@@ -110,6 +116,9 @@ public:
                             const serialstudio::StreamRequest* /*request*/,
                             grpc::ServerWriter<serialstudio::FrameBatch>* writer) override
   {
+    if (!authorize(context))
+      return unauthenticated();
+
     auto ctx     = std::make_shared<API::GRPC::FrameStreamContext>();
     ctx->writer  = writer;
     ctx->context = context;
@@ -149,6 +158,9 @@ public:
                              const serialstudio::StreamRequest* /*request*/,
                              grpc::ServerWriter<serialstudio::RawBatch>* writer) override
   {
+    if (!authorize(context))
+      return unauthenticated();
+
     auto ctx     = std::make_shared<API::GRPC::RawStreamContext>();
     ctx->writer  = writer;
     ctx->context = context;
@@ -181,17 +193,28 @@ public:
   /**
    * @brief Sends raw data to the connected device.
    */
-  grpc::Status WriteRawData(grpc::ServerContext* /*context*/,
+  grpc::Status WriteRawData(grpc::ServerContext* context,
                             const serialstudio::RawDataRequest* request,
                             serialstudio::CommandResponse* response) override
   {
+    if (!authorize(context))
+      return unauthenticated();
+
     const auto& bytes = request->data();
     QByteArray data(bytes.data(), static_cast<int>(bytes.size()));
 
+    bool denied  = false;
     bool written = false;
     QMetaObject::invokeMethod(
       QCoreApplication::instance(),
-      [&]() { written = IO::ConnectionManager::instance().writeData(data) == data.size(); },
+      [&]() {
+        if (!API::Server::instance().authorizeDeviceWrite()) {
+          denied = true;
+          return;
+        }
+
+        written = IO::ConnectionManager::instance().writeData(data) == data.size();
+      },
       Qt::BlockingQueuedConnection);
 
     response->set_id(request->id());
@@ -199,8 +222,8 @@ public:
 
     if (!written) {
       auto* err = response->mutable_error();
-      err->set_code("WRITE_FAILED");
-      err->set_message("Failed to write data to device");
+      err->set_code(denied ? "WRITE_DENIED" : "WRITE_FAILED");
+      err->set_message(denied ? "Device write denied by user" : "Failed to write data to device");
     }
 
     return grpc::Status::OK;
@@ -209,10 +232,13 @@ public:
   /**
    * @brief Lists all available API commands.
    */
-  grpc::Status ListCommands(grpc::ServerContext* /*context*/,
+  grpc::Status ListCommands(grpc::ServerContext* context,
                             const google::protobuf::Empty* /*request*/,
                             serialstudio::CommandList* response) override
   {
+    if (!authorize(context))
+      return unauthenticated();
+
     const auto& commands = API::CommandRegistry::instance().commands();
     for (auto it = commands.begin(); it != commands.end(); ++it) {
       auto* info = response->add_commands();
@@ -227,6 +253,39 @@ public:
   }
 
 private:
+  /**
+   * @brief Authorizes a peer: loopback is auto-trusted, external peers must present the token.
+   */
+  static bool authorize(grpc::ServerContext* context)
+  {
+    // Internal call (e.g. ExecuteBatch -> ExecuteCommand); already authorized by the outer RPC.
+    if (context == nullptr)
+      return true;
+
+    // Loopback peers are auto-trusted, mirroring the TCP server's local-client policy.
+    const std::string peer = context->peer();
+    if (peer.find("127.0.0.1") != std::string::npos || peer.find("[::1]") != std::string::npos
+        || peer.rfind("unix:", 0) == 0)
+      return true;
+
+    // External peers must present the API token via request metadata.
+    const auto& md = context->client_metadata();
+    const auto it  = md.find("x-serial-studio-token");
+    if (it == md.end())
+      return false;
+
+    const QByteArray token(it->second.data(), static_cast<int>(it->second.size()));
+    return API::Server::instance().verifyToken(token);
+  }
+
+  /**
+   * @brief Builds the standard UNAUTHENTICATED status returned to rejected peers.
+   */
+  static grpc::Status unauthenticated()
+  {
+    return grpc::Status(grpc::StatusCode::UNAUTHENTICATED, "Authentication required");
+  }
+
   API::GRPC::GRPCServer* m_server;
 };
 

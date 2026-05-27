@@ -293,6 +293,7 @@ Item {
     curveColors: [root.color]
     xLabel: root.model.xLabel
     yLabel: root.model.yLabel
+    timeAxis: root.model.timeAxis
     mouseAreaEnabled: windowRoot.focused
     xAxis.tickInterval: plot.xTickInterval
     yAxis.tickInterval: plot.yTickInterval

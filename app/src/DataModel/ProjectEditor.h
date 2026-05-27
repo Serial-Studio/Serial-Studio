@@ -359,6 +359,7 @@ private slots:
 
 private:
   void addGeneralSection(CustomModel* model, const DataModel::Dataset& dataset);
+  void addDatasetRangeRows(CustomModel* model, const DataModel::Dataset& dataset);
   void addPlotSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addFFTSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addWidgetSection(CustomModel* model, const DataModel::Dataset& dataset);

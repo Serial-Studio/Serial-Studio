@@ -77,6 +77,10 @@ public:
 private:
   [[nodiscard]] static QString settingsKey(ProviderId provider);
 
+  [[nodiscard]] QString legacyKey(ProviderId provider) const;
+  void setLegacyKey(ProviderId provider, const QString& plaintext);
+  void clearLegacyKey(ProviderId provider) const;
+
 private:
   mutable QSettings m_settings;
   mutable Licensing::SimpleCrypt m_simpleCrypt;

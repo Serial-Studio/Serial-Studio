@@ -70,9 +70,6 @@ Item {
     if (s["colorMap"] !== undefined)
       model.colorMap = s["colorMap"]
 
-    if (s["historySize"] !== undefined)
-      model.historySize = s["historySize"]
-
     if (s["minDb"] !== undefined)
       model.minDb = s["minDb"]
 

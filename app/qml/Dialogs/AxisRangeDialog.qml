@@ -37,6 +37,7 @@ Widgets.SmartDialog {
   property real customYMax: 0
   property var dataModel: null
   property var plotWidget: null
+  property bool timeAxis: false
   property bool hasCustomRanges: false
 
   //
@@ -57,6 +58,7 @@ Widgets.SmartDialog {
   function openDialog(plot, model) {
     root.plotWidget = plot
     root.dataModel = model
+    root.timeAxis = (model !== null && model.timeAxis === true)
 
     if (plot) {
       customXMin = plot.xMin
@@ -76,8 +78,11 @@ Widgets.SmartDialog {
   //
   function updateFields() {
     if (plotWidget) {
-      xMinField.text = plotWidget.xMin.toFixed(4)
-      xMaxField.text = plotWidget.xMax.toFixed(4)
+      if (!root.timeAxis) {
+        xMinField.text = plotWidget.xMin.toFixed(4)
+        xMaxField.text = plotWidget.xMax.toFixed(4)
+      }
+
       yMinField.text = plotWidget.yMin.toFixed(4)
       yMaxField.text = plotWidget.yMax.toFixed(4)
     }
@@ -90,22 +95,23 @@ Widgets.SmartDialog {
     if (!plotWidget)
       return
 
-    const newXMin = parseFloat(xMinField.text)
-    const newXMax = parseFloat(xMaxField.text)
-    const newYMin = parseFloat(yMinField.text)
-    const newYMax = parseFloat(yMaxField.text)
-
-    if (!isNaN(newXMin) && !isNaN(newXMax) && newXMin < newXMax) {
-      plotWidget.xMin = newXMin
-      plotWidget.xMax = newXMax
-      customXMin = newXMin
-      customXMax = newXMax
-      hasCustomRanges = true
-    } else {
-      xMinField.text = plotWidget.xMin.toFixed(4)
-      xMaxField.text = plotWidget.xMax.toFixed(4)
+    if (!root.timeAxis) {
+      const newXMin = parseFloat(xMinField.text)
+      const newXMax = parseFloat(xMaxField.text)
+      if (!isNaN(newXMin) && !isNaN(newXMax) && newXMin < newXMax) {
+        plotWidget.xMin = newXMin
+        plotWidget.xMax = newXMax
+        customXMin = newXMin
+        customXMax = newXMax
+        hasCustomRanges = true
+      } else {
+        xMinField.text = plotWidget.xMin.toFixed(4)
+        xMaxField.text = plotWidget.xMax.toFixed(4)
+      }
     }
 
+    const newYMin = parseFloat(yMinField.text)
+    const newYMax = parseFloat(yMaxField.text)
     if (!isNaN(newYMin) && !isNaN(newYMax) && newYMin < newYMax) {
       plotWidget.yMin = newYMin
       plotWidget.yMax = newYMax
@@ -125,8 +131,11 @@ Widgets.SmartDialog {
     if (!plotWidget || !dataModel)
       return
 
-    plotWidget.xMin = Qt.binding(function() { return dataModel.minX })
-    plotWidget.xMax = Qt.binding(function() { return dataModel.maxX })
+    if (!root.timeAxis) {
+      plotWidget.xMin = Qt.binding(function() { return dataModel.minX })
+      plotWidget.xMax = Qt.binding(function() { return dataModel.maxX })
+    }
+
     plotWidget.yMin = Qt.binding(function() { return dataModel.minY })
     plotWidget.yMax = Qt.binding(function() { return dataModel.maxY })
 
@@ -158,6 +167,7 @@ Widgets.SmartDialog {
 
     Label {
       text: qsTr("X Axis")
+      visible: !root.timeAxis
       font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
       color: Cpp_ThemeManager.colors["pane_section_label"]
       Component.onCompleted: font.capitalization = Font.AllUppercase
@@ -165,6 +175,7 @@ Widgets.SmartDialog {
 
     GroupBox {
       Layout.fillWidth: true
+      visible: !root.timeAxis
 
       background: Rectangle {
         radius: 2

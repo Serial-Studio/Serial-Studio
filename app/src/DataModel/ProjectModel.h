@@ -69,6 +69,9 @@ class ProjectModel : public QObject {
   Q_PROPERTY(int pointCount
              READ pointCount
              NOTIFY pointCountChanged)
+  Q_PROPERTY(double plotTimeRange
+             READ plotTimeRange
+             NOTIFY plotTimeRangeChanged)
   Q_PROPERTY(int frameParserLanguage
              READ  frameParserLanguage
              WRITE setFrameParserLanguage
@@ -102,6 +105,7 @@ signals:
   void titleChanged();
   void saveStatusChanged();
   void pointCountChanged();
+  void plotTimeRangeChanged();
   void jsonFileChanged();
   void modifiedChanged();
   void groupsChanged();
@@ -188,6 +192,7 @@ public:
   [[nodiscard]] bool containsCommercialFeatures() const;
 
   [[nodiscard]] int pointCount() const noexcept;
+  [[nodiscard]] double plotTimeRange() const noexcept;
   [[nodiscard]] int groupCount() const noexcept;
   [[nodiscard]] int datasetCount() const;
   [[nodiscard]] int sourceCount() const noexcept;
@@ -244,6 +249,7 @@ public slots:
 
   void setTitle(const QString& title);
   void setPointCount(const int points);
+  void setPlotTimeRange(const double seconds);
   void clearJsonFilePath();
 
   Q_INVOKABLE QString addTable(const QString& name);
@@ -421,6 +427,7 @@ private:
   void resolveDatasetVirtualFlags();
   void loadWidgetSettingsAndWorkspaces(const QJsonObject& json);
   void loadPointCount(const QJsonObject& json);
+  void loadPlotTimeRange(const QJsonObject& json);
   void migrateLegacyLayoutKeys();
   void migrateLegacyDashboardLayout(const QJsonObject& json);
   bool migrateLegacySeparator(const QJsonObject& json);
@@ -466,6 +473,7 @@ private:
   SerialStudio::FrameDetection m_frameDetection;
 
   int m_pointCount;
+  double m_plotTimeRange;
   int m_nextUniqueId;
   bool m_modified;
   bool m_silentReload;

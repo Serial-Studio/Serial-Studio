@@ -297,6 +297,17 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
           &Misc::CommonFonts::fontsChanged,
           this,
           &Widgets::Waterfall::onFontsChanged);
+
+  // Time-history depth follows the dashboard/project Time Range (rows ~= range * fps)
+  connect(&UI::Dashboard::instance(),
+          &UI::Dashboard::plotTimeRangeChanged,
+          this,
+          &Widgets::Waterfall::syncHistoryToTimeRange);
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::fpsChanged,
+          this,
+          &Widgets::Waterfall::syncHistoryToTimeRange);
+  syncHistoryToTimeRange();
 }
 
 /**
@@ -466,6 +477,17 @@ void Widgets::Waterfall::setHistorySize(const int size)
   rebuildHistoryImage();
   Q_EMIT historySizeChanged();
   markAxisDirty();
+}
+
+/**
+ * @brief Sizes the time history to the dashboard/project Time Range (rows ~= range * fps).
+ */
+void Widgets::Waterfall::syncHistoryToTimeRange()
+{
+  static auto& timer = Misc::TimerEvents::instance();
+  const double fps   = timer.fps() > 0 ? timer.fps() : 24.0;
+  const double range = UI::Dashboard::instance().plotTimeRange();
+  setHistorySize(static_cast<int>(std::lround(range * fps)));
 }
 
 /**

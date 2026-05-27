@@ -34,12 +34,12 @@ Item {
   property real xMax: 1
   property real yMin: 0
   property real yMax: 1
+  property string xLabel: ""
   property alias graph: _graph
   property alias xAxis: _axisX
   property alias yAxis: _axisY
   property alias zoom: _axisX.zoom
   property alias yLabel: _yLabel.text
-  property alias xLabel: _xLabel.text
   property alias plotArea: _graph.plotArea
   property alias curveColors: _theme.seriesColors
 
@@ -176,6 +176,43 @@ Item {
     return (value / scaleFactor).toFixed(decimals) + suffix
   }
 
+  //
+  // Relative-time X axis: pick a friendly unit (s / ms / us) from the visible span so the
+  // ticks and axis title read in whole, human numbers regardless of the time range.
+  //
+  readonly property real timeSpanSeconds: Math.abs(xMax - xMin)
+  readonly property real timeUnitFactor: timeSpanSeconds >= 1 ? 1
+                                       : (timeSpanSeconds >= 1e-3 ? 1e3 : 1e6)
+  // code-verify off
+  readonly property string timeUnitName: timeSpanSeconds >= 1 ? "s"
+                                       : (timeSpanSeconds >= 1e-3 ? "ms" : "µs")
+  // code-verify on
+
+  //
+  // Tick formatter for the relative-time X axis: shows the magnitude (time ago) in the
+  // chosen unit, so the axis reads e.g. 10 8 6 4 2 0 with 0 = now on the right.
+  //
+  function secondsAgoFormat(value, tickInterval) {
+    if (!isFinite(value))
+      return ""
+
+    const scaled   = Math.abs(value) * root.timeUnitFactor
+    const scaledIv = tickInterval * root.timeUnitFactor
+    let decimals   = 0
+    if (scaledIv > 0 && scaledIv < 1)
+      decimals = Math.min(3, Math.ceil(-Math.log10(scaledIv) + 1e-9))
+
+    return scaled.toFixed(decimals)
+  }
+
+  //
+  // Cursor/readout formatter: absolute time-ago magnitude in the chosen unit (e.g. "12 ms").
+  //
+  function timeAgoLabel(worldX) {
+    const scaled = Math.abs(worldX) * root.timeUnitFactor
+    return scaled.toFixed(scaled >= 100 ? 0 : (scaled >= 1 ? 1 : 3)) + " " + root.timeUnitName
+  }
+
   function isPointVisible(worldX, worldY) {
     return worldX >= xVisibleMin && worldX <= xVisibleMax &&
            worldY >= yVisibleMin && worldY <= yVisibleMax
@@ -200,6 +237,7 @@ Item {
   //
   // Custom properties
   //
+  property bool timeAxis: false
   property bool xLabelVisible: true
   property bool yLabelVisible: true
   property bool showCrosshairs: false
@@ -574,7 +612,9 @@ Item {
           id: _xEngLabel
 
           anchors.centerIn: parent
-          text: root.engineeringFormat(parseFloat(_xLabelItem.text), root.xTickInterval)
+          text: root.timeAxis
+                ? root.secondsAgoFormat(parseFloat(_xLabelItem.text), root.xTickInterval)
+                : root.engineeringFormat(parseFloat(_xLabelItem.text), root.xTickInterval)
           color: Cpp_ThemeManager.colors["widget_text"]
           font: (Cpp_Misc_CommonFonts.widgetFontRevision,
                  Cpp_Misc_CommonFonts.widgetFont(0.83))
@@ -1037,9 +1077,9 @@ Item {
 
       padding: 4
       color: root.cursorATextColor
-      text: root.cursorAX.toFixed(root.xPrecision)
       visible: root.cursorMode && root.cursorAVisible && root.cursorAXInRange
       font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
+      text: root.timeAxis ? root.timeAgoLabel(root.cursorAX) : root.cursorAX.toFixed(root.xPrecision)
 
       background: Rectangle {
         radius: 3
@@ -1087,9 +1127,9 @@ Item {
 
       padding: 4
       color: root.cursorBTextColor
-      text: root.cursorBX.toFixed(root.xPrecision)
       visible: root.cursorMode && root.cursorBVisible && root.cursorBXInRange
       font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
+      text: root.timeAxis ? root.timeAgoLabel(root.cursorBX) : root.cursorBX.toFixed(root.xPrecision)
 
       background: Rectangle {
         radius: 3
@@ -1214,6 +1254,7 @@ Item {
         visible: root.xLabelVisible
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
+        text: root.timeAxis ? (qsTr("Time") + " (" + root.timeUnitName + ")") : root.xLabel
         color: Cpp_ThemeManager.colors["widget_text"]
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.91, true))
       }
@@ -1234,8 +1275,10 @@ Item {
         color: Cpp_ThemeManager.colors["widget_text"]
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85, false))
         text: {
-          if (root.cursorAVisible && root.cursorBVisible)
-            return qsTr("ΔX: %1  ΔY: %2 — Drag to move, right-click to clear").arg(root.deltaX.toFixed(root.xPrecision)).arg(root.deltaY.toFixed(root.yPrecision))
+          if (root.cursorAVisible && root.cursorBVisible) {
+            const dx = root.timeAxis ? root.timeAgoLabel(root.deltaX) : root.deltaX.toFixed(root.xPrecision)
+            return qsTr("ΔX: %1  ΔY: %2 — Drag to move, right-click to clear").arg(dx).arg(root.deltaY.toFixed(root.yPrecision))
+          }
           else if (!root.cursorAVisible)
             return qsTr("Click to place cursor")
           else

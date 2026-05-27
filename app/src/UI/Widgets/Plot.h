@@ -69,6 +69,9 @@ class Plot : public QQuickItem {
   Q_PROPERTY(QString xLabel
              READ xLabel
              CONSTANT)
+  Q_PROPERTY(bool timeAxis
+             READ timeAxis
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -96,6 +99,7 @@ public:
   [[nodiscard]] SerialStudio::InterpolationMode interpolationMode() const noexcept;
   [[nodiscard]] const QString& yLabel() const noexcept;
   [[nodiscard]] const QString& xLabel() const noexcept;
+  [[nodiscard]] bool timeAxis() const noexcept;
 
 public slots:
   void draw(QXYSeries* series);
@@ -111,6 +115,7 @@ private slots:
 
 private:
   void updateInterpolatedData();
+  void resolveXAxis(const DataModel::Dataset& yDataset);
 
   template<typename Extractor>
   bool computeMinMaxValues(double& min,
@@ -134,6 +139,7 @@ private:
   QString m_xLabel;
 
   bool m_monotonicData;
+  bool m_timeAxis;
   QList<QPointF> m_data;
   QList<QPointF> m_renderData;
   SerialStudio::InterpolationMode m_interpolationMode;

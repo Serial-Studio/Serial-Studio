@@ -276,6 +276,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_frameDecoder(SerialStudio::PlainText)
   , m_frameDetection(SerialStudio::EndDelimiterOnly)
   , m_pointCount(100)
+  , m_plotTimeRange(10.0)
   , m_nextUniqueId(1)
   , m_modified(false)
   , m_silentReload(false)
@@ -682,7 +683,7 @@ void DataModel::ProjectModel::migrateLegacyWorkspaceRefs()
  */
 void DataModel::ProjectModel::migrateLegacyXAxisIds()
 {
-  // Legacy xAxis held a 1-based frame index (0/absent = Samples); map index -> uniqueId
+  // Legacy xAxis held a 1-based frame index (0/absent = Samples, now Time); map index -> uniqueId
   QMap<int, QMap<int, int>> uidByIndex;
   for (const auto& group : m_groups)
     for (const auto& dataset : group.datasets)
@@ -690,11 +691,15 @@ void DataModel::ProjectModel::migrateLegacyXAxisIds()
 
   for (auto& group : m_groups) {
     const auto indexMap = uidByIndex.value(group.sourceId);
-    for (auto& dataset : group.datasets)
+    for (auto& dataset : group.datasets) {
+      if (dataset.xAxisId == kXAxisTime)
+        continue;
+
       if (dataset.xAxisId <= 0)
-        dataset.xAxisId = -1;
+        dataset.xAxisId = kXAxisTime;
       else
-        dataset.xAxisId = indexMap.value(dataset.xAxisId, -1);
+        dataset.xAxisId = indexMap.value(dataset.xAxisId, kXAxisTime);
+    }
   }
 }
 
@@ -759,12 +764,12 @@ int DataModel::ProjectModel::groupUniqueIdForGroupId(int groupId) const
 }
 
 /**
- * @brief Returns "Samples" plus every dataset label, sorted by uniqueId.
+ * @brief Returns "Time" plus every dataset label, sorted by uniqueId.
  */
 QStringList DataModel::ProjectModel::xDataSources() const
 {
   QStringList list;
-  list.append(tr("Samples"));
+  list.append(tr("Time"));
 
   // Sort by uniqueId so xDataSources() and xDataSourceUniqueIds() share an order.
   QMap<int, QString> datasets;
@@ -784,12 +789,12 @@ QStringList DataModel::ProjectModel::xDataSources() const
 
 /**
  * @brief Parallel to xDataSources(): the dataset uniqueId at each combo position
- *        (position 0 -> -1, the "Samples" sentinel).
+ *        (position 0 -> -2 "Time", then dataset uniqueIds).
  */
 QList<int> DataModel::ProjectModel::xDataSourceUniqueIds() const
 {
   QList<int> out;
-  out.append(-1);
+  out.append(kXAxisTime);
 
   QMap<int, bool> seen;
   for (const auto& group : m_groups) {
@@ -966,6 +971,14 @@ bool DataModel::ProjectModel::containsCommercialFeatures() const
 int DataModel::ProjectModel::pointCount() const noexcept
 {
   return m_pointCount;
+}
+
+/**
+ * @brief Returns the project's plot time range in seconds (visible window for time-axis plots).
+ */
+double DataModel::ProjectModel::plotTimeRange() const noexcept
+{
+  return m_plotTimeRange;
 }
 
 /**
@@ -1581,6 +1594,7 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   QJsonObject json;
   json.insert(Keys::Title, m_title);
   json.insert(Keys::PointCount, m_pointCount);
+  json.insert(Keys::PlotTimeRange, m_plotTimeRange);
   json.insert(Keys::HexadecimalDelimiters, m_hexadecimalDelimiters);
 
   // Schema + writer stamp; preserve original creator stamp when loaded from disk
@@ -1751,6 +1765,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_hexadecimalDelimiters   = false;
   m_title                   = tr("Untitled Project");
   m_pointCount              = 100;
+  m_plotTimeRange           = 10.0;
   m_nextUniqueId            = 1;
   m_frameDecoder            = SerialStudio::PlainText;
   m_frameDetection          = SerialStudio::EndDelimiterOnly;
@@ -1824,6 +1839,24 @@ void DataModel::ProjectModel::setPointCount(const int points)
 
   setModified(true);
   Q_EMIT pointCountChanged();
+}
+
+/**
+ * @brief Sets the project's plot time range (seconds) and syncs it to the Dashboard.
+ */
+void DataModel::ProjectModel::setPlotTimeRange(const double seconds)
+{
+  const double clamped = qMax(0.001, seconds);
+  if (qFuzzyCompare(m_plotTimeRange, clamped))
+    return;
+
+  m_plotTimeRange = clamped;
+
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    UI::Dashboard::instance().setPlotTimeRange(clamped);
+
+  setModified(true);
+  Q_EMIT plotTimeRangeChanged();
 }
 
 /**
@@ -2032,6 +2065,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   migrateLegacyWaterfallYAxisIds();
 
   loadPointCount(json);
+  loadPlotTimeRange(json);
   migrateLegacyLayoutKeys();
   migrateLegacyDashboardLayout(json);
 
@@ -2572,6 +2606,22 @@ void DataModel::ProjectModel::loadPointCount(const QJsonObject& json)
 
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
     UI::Dashboard::instance().setPoints(m_pointCount);
+}
+
+/**
+ * @brief Resolves the project plot time range (seconds) from JSON, syncing the dashboard.
+ */
+void DataModel::ProjectModel::loadPlotTimeRange(const QJsonObject& json)
+{
+  m_plotTimeRange = UI::Dashboard::instance().plotTimeRange();
+  if (json.contains(Keys::PlotTimeRange)) {
+    const double secs = json.value(Keys::PlotTimeRange).toDouble();
+    if (secs > 0)
+      m_plotTimeRange = secs;
+  }
+
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    UI::Dashboard::instance().setPlotTimeRange(m_plotTimeRange);
 }
 
 /**

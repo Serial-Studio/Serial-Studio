@@ -69,6 +69,12 @@ class MultiPlot : public QQuickItem {
   Q_PROPERTY(QString yLabel
              READ yLabel
              CONSTANT)
+  Q_PROPERTY(QString xLabel
+             READ xLabel
+             CONSTANT)
+  Q_PROPERTY(bool timeAxis
+             READ timeAxis
+             CONSTANT)
   Q_PROPERTY(QStringList labels
              READ labels
              CONSTANT)
@@ -112,6 +118,8 @@ public:
   [[nodiscard]] bool running() const noexcept;
   [[nodiscard]] SerialStudio::InterpolationMode interpolationMode() const noexcept;
   [[nodiscard]] const QString& yLabel() const noexcept;
+  [[nodiscard]] const QString& xLabel() const noexcept;
+  [[nodiscard]] bool timeAxis() const noexcept;
   [[nodiscard]] const QStringList& colors() const noexcept;
   [[nodiscard]] const QStringList& labels() const noexcept;
   [[nodiscard]] const QList<bool>& visibleCurves() const noexcept;
@@ -146,7 +154,9 @@ private:
   double m_maxX;
   double m_minY;
   double m_maxY;
+  bool m_timeAxis;
   QString m_yLabel;
+  QString m_xLabel;
   QStringList m_colors;
   QStringList m_labels;
   QList<int> m_drawOrders;

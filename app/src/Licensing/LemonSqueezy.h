@@ -131,6 +131,7 @@ private:
   void updateAppNameFromVariant(const QString& variantName);
   void applyValidatedLicense(const QJsonObject& json, const bool cachedResponse);
   [[nodiscard]] bool checkActivationRules(const QJsonObject& json);
+  [[nodiscard]] QDateTime monotonicNow();
 
 private:
   bool m_busy;

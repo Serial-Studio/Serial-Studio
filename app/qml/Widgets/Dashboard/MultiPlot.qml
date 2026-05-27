@@ -287,9 +287,10 @@ Item {
       yMin: root.model.minY
       yMax: root.model.maxY
       Layout.fillWidth: true
-      xLabel: qsTr("Samples")
       Layout.fillHeight: true
+      xLabel: root.model.xLabel
       yLabel: root.model.yLabel
+      timeAxis: root.model.timeAxis
       curveColors: root.model.colors
       mouseAreaEnabled: windowRoot.focused
       xAxis.tickInterval: plot.xTickInterval

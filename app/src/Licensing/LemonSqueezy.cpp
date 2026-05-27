@@ -382,11 +382,11 @@ void Licensing::LemonSqueezy::readSettings()
   m_license          = m_simpleCrypt.decryptToString(license);
   auto decryptedData = m_simpleCrypt.decryptToByteArray(data);
 
-  // Compute remaining offline grace period from last successful check
+  // Offline grace from last check; monotonicNow() floors the clock so rewinding can't extend it.
   m_gracePeriod = 0;
   if (!dt.isEmpty()) {
     auto dateTime  = m_simpleCrypt.decryptToString(dt);
-    auto currentDt = QDateTime::currentDateTime();
+    auto currentDt = monotonicNow();
     auto lastCheck = QDateTime::fromString(dateTime, Qt::RFC2822Date);
     if (lastCheck.isValid() && lastCheck < currentDt)
       m_gracePeriod = qMax(0, 30 - lastCheck.daysTo(currentDt));
@@ -421,6 +421,32 @@ void Licensing::LemonSqueezy::writeSettings()
     m_settings.setValue("lastCheck", "");
     m_settings.endGroup();
   }
+}
+
+/**
+ * @brief Returns now floored at the highest wall-clock ever observed (anti clock-rewind).
+ */
+QDateTime Licensing::LemonSqueezy::monotonicNow()
+{
+  auto effective = QDateTime::currentDateTime();
+
+  // A backward clock yields a stored high-watermark ahead of "now"; use the watermark instead.
+  m_settings.beginGroup("licensing");
+  const auto stored = m_settings.value("lastSeen", "").toString();
+  m_settings.endGroup();
+  if (!stored.isEmpty()) {
+    const auto seen = QDateTime::fromString(m_simpleCrypt.decryptToString(stored), Qt::RFC2822Date);
+    if (seen.isValid() && seen > effective)
+      effective = seen;
+  }
+
+  // Advance the high-watermark so it only ever moves forward.
+  const auto encoded = m_simpleCrypt.encryptToString(effective.toString(Qt::RFC2822Date));
+  m_settings.beginGroup("licensing");
+  m_settings.setValue("lastSeen", encoded);
+  m_settings.endGroup();
+
+  return effective;
 }
 
 /**

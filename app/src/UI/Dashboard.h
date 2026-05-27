@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <chrono>
 #include <QFont>
 #include <QHash>
 #include <QObject>
@@ -77,6 +78,10 @@ class Dashboard : public QObject {
              READ  autoHideToolbar
              WRITE setAutoHideToolbar
              NOTIFY autoHideToolbarChanged)
+  Q_PROPERTY(double plotTimeRange
+             READ  plotTimeRange
+             WRITE setPlotTimeRange
+             NOTIFY plotTimeRangeChanged)
   Q_PROPERTY(bool containsCommercialFeatures
              READ containsCommercialFeatures
              NOTIFY containsCommercialFeaturesChanged)
@@ -100,6 +105,7 @@ signals:
   void clockEnabledChanged();
   void stopwatchEnabledChanged();
   void autoHideToolbarChanged();
+  void plotTimeRangeChanged();
   void containsCommercialFeaturesChanged();
 
 private:
@@ -120,6 +126,7 @@ public:
   [[nodiscard]] bool clockEnabled() const noexcept;
   [[nodiscard]] bool stopwatchEnabled() const noexcept;
   [[nodiscard]] bool autoHideToolbar() const noexcept;
+  [[nodiscard]] double plotTimeRange() const noexcept;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool containsCommercialFeatures() const noexcept;
 
@@ -147,12 +154,17 @@ public:
   [[nodiscard]] const DataModel::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   // clang-format on
 
+  [[nodiscard]] bool useTimeXAxis(const DataModel::Dataset& dataset) const;
+  [[nodiscard]] bool useTimeXAxisGroup(const DataModel::Group& group) const;
+
   [[nodiscard]] const DataModel::Frame& rawFrame();
   [[nodiscard]] const DataModel::Frame& processedFrame();
   [[nodiscard]] const DSP::AxisData& fftData(const int index) const;
   [[nodiscard]] const DSP::GpsSeries& gpsSeries(const int index) const;
   [[nodiscard]] const DSP::LineSeries& plotData(const int index) const;
   [[nodiscard]] const DSP::MultiLineSeries& multiplotData(const int index) const;
+  [[nodiscard]] const DSP::TimeBucketSeries& plotBuckets(const int index) const;
+  [[nodiscard]] const std::vector<DSP::TimeBucketSeries>& multiplotBuckets(const int index) const;
 
 #ifdef BUILD_COMMERCIAL
   [[nodiscard]] const DSP::LineSeries3D& plotData3D(const int index) const;
@@ -176,6 +188,7 @@ public slots:
   void setClockEnabled(const bool enabled);
   void setStopwatchEnabled(const bool enabled);
   void setAutoHideToolbar(const bool enabled);
+  void setPlotTimeRange(const double seconds);
   void setSettingsPersistent(const bool persistent);
   void activateAction(const int index, const bool guiTrigger = false);
 
@@ -191,7 +204,8 @@ public slots:
 private:
   void updateDashboardData(const DataModel::Frame& frame);
   void reconfigureDashboard(const DataModel::Frame& frame);
-  void processDatasetIntoWidgetMaps(const DataModel::Dataset& dataset, DataModel::Group& ledPanel);
+  void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
+                                    DataModel::Group& ledPanel);
   void removeTerminalWidget();
   void removeNotificationLogWidget();
   void removeClockWidget();
@@ -238,6 +252,15 @@ private:
     const double* value;
   };
 
+  /**
+   * @brief Pre-resolved descriptor that folds one value into one time-bucket envelope.
+   */
+  struct BucketPush {
+    std::vector<LinePush::Consumer> consumers;
+    DSP::TimeBucketSeries* series;
+    const double* value;
+  };
+
   QSettings m_settings;
   int m_points;
   int m_widgetCount;
@@ -256,11 +279,22 @@ private:
 
   bool m_updateRetryInProgress;
 
+  bool m_plotTimeOriginSet;
+  int m_plotGroupCount;
+  double m_plotTimeRange;
+  double m_relativeFrameTimeSec;
+  double m_plotDisplayTimeSec;
+  double m_plotGroupStartSec;
+  double m_plotSamplePeriodSec;
+  std::chrono::steady_clock::time_point m_plotTimeOrigin;
+
   DSP::AxisData m_pltXAxis;
   DSP::AxisData m_multipltXAxis;
 
   QMap<int, DSP::AxisData> m_xAxisData;
   QMap<int, DSP::AxisData> m_yAxisData;
+  QMap<int, DSP::TimeBucketSeries> m_plotBuckets;
+  QMap<int, std::vector<DSP::TimeBucketSeries>> m_multiplotBuckets;
 
   QMap<int, bool> m_activePlots;
   QMap<int, bool> m_activeFFTPlots;
@@ -276,6 +310,7 @@ private:
 
   std::vector<LinePush> m_yLinePushes;
   std::vector<LinePush> m_xLinePushes;
+  std::vector<BucketPush> m_bucketPushes;
 #ifdef BUILD_COMMERCIAL
   QVector<DSP::LineSeries3D> m_plotData3D;
   QVector<DSP::AxisData> m_waterfallValues;

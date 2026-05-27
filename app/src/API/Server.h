@@ -121,7 +121,9 @@ public:
   [[nodiscard]] bool enabled() const noexcept;
   [[nodiscard]] int clientCount() const noexcept;
   [[nodiscard]] QString authToken() const;
+  [[nodiscard]] bool authorizeDeviceWrite();
   [[nodiscard]] bool externalConnections() const noexcept;
+  [[nodiscard]] bool verifyToken(const QByteArray& provided) const;
 
 public slots:
   void removeConnection();
@@ -156,6 +158,15 @@ private:
     int authAttempts   = 0;
   };
 
+  /**
+   * @brief Tri-state user consent for API-originated device writes.
+   */
+  enum class DeviceWriteConsent {
+    Unset,
+    Granted,
+    Denied
+  };
+
   void ensureAuthToken();
   void handleAuthHandshake(QTcpSocket* socket, ConnectionState& state, const QByteArray& data);
   [[nodiscard]] static bool constantTimeEquals(const QByteArray& a, const QByteArray& b);
@@ -184,6 +195,7 @@ private:
   bool m_enabled;
   bool m_externalConnections;
   QString m_authToken;
+  DeviceWriteConsent m_deviceWriteConsent;
   QTcpServer m_server;
   QHash<QTcpSocket*, ConnectionState> m_connections;
 };

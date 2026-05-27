@@ -3135,6 +3135,41 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
   unitsItem->setData(tr("Unit of measurement, such as volts or amps (optional)"),
                      ParameterDescription);
   model->appendRow(unitsItem);
+
+  addDatasetRangeRows(model, dataset);
+}
+
+/**
+ * @brief Appends the dataset value-range rows (base range for plots, widgets and FFT).
+ */
+void DataModel::ProjectEditor::addDatasetRangeRows(CustomModel* model,
+                                                   const DataModel::Dataset& dataset)
+{
+  auto* pltMin = new QStandardItem();
+  pltMin->setEditable(true);
+  pltMin->setData(true, Active);
+  pltMin->setData(0, PlaceholderValue);
+  pltMin->setData(FloatField, WidgetType);
+  pltMin->setData(dataset.pltMin, EditableValue);
+  pltMin->setData(kDatasetView_PltMin, ParameterType);
+  pltMin->setData(tr("Minimum Value"), ParameterName);
+  pltMin->setData(tr("Lower bound of the dataset value range; widgets and FFT fall back to it "
+                     "when their own range is left unset"),
+                  ParameterDescription);
+  model->appendRow(pltMin);
+
+  auto* pltMax = new QStandardItem();
+  pltMax->setEditable(true);
+  pltMax->setData(true, Active);
+  pltMax->setData(0, PlaceholderValue);
+  pltMax->setData(FloatField, WidgetType);
+  pltMax->setData(dataset.pltMax, EditableValue);
+  pltMax->setData(kDatasetView_PltMax, ParameterType);
+  pltMax->setData(tr("Maximum Value"), ParameterName);
+  pltMax->setData(tr("Upper bound of the dataset value range; widgets and FFT fall back to it "
+                     "when their own range is left unset"),
+                  ParameterDescription);
+  model->appendRow(pltMax);
 }
 
 /**
@@ -3173,7 +3208,7 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
   plotItem->setData(tr("Plot data in real-time"), ParameterDescription);
   model->appendRow(plotItem);
 
-  // X-axis source -- xAxisId stores a dataset uniqueId; translate via the parallel list.
+  // X-axis source -- xAxisId is -2 (time) or a dataset uniqueId, via the parallel list
   const auto xUids  = DataModel::ProjectModel::instance().xDataSourceUniqueIds();
   int xAxisComboPos = 0;
   for (int i = 0; i < xUids.size(); ++i) {
@@ -3191,31 +3226,9 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
   xAxisItem->setData(DataModel::ProjectModel::instance().xDataSources(), ComboBoxData);
   xAxisItem->setData(kDatasetView_xAxis, ParameterType);
   xAxisItem->setData(tr("X-Axis Source"), ParameterName);
-  xAxisItem->setData(tr("Choose which dataset to use for the X-Axis in plots"),
+  xAxisItem->setData(tr("Choose Time or a dataset to drive the X-Axis in plots"),
                      ParameterDescription);
   model->appendRow(xAxisItem);
-
-  auto* pltMin = new QStandardItem();
-  pltMin->setEditable(dataset.plt);
-  pltMin->setData(0, PlaceholderValue);
-  pltMin->setData(FloatField, WidgetType);
-  pltMin->setData(pltMin->isEditable(), Active);
-  pltMin->setData(dataset.pltMin, EditableValue);
-  pltMin->setData(kDatasetView_PltMin, ParameterType);
-  pltMin->setData(tr("Minimum Plot Value (optional)"), ParameterName);
-  pltMin->setData(tr("Lower bound for plot display range"), ParameterDescription);
-  model->appendRow(pltMin);
-
-  auto* pltMax = new QStandardItem();
-  pltMax->setEditable(dataset.plt);
-  pltMax->setData(0, PlaceholderValue);
-  pltMax->setData(FloatField, WidgetType);
-  pltMax->setData(pltMax->isEditable(), Active);
-  pltMax->setData(dataset.pltMax, EditableValue);
-  pltMax->setData(kDatasetView_PltMax, ParameterType);
-  pltMax->setData(tr("Maximum Plot Value (optional)"), ParameterName);
-  pltMax->setData(tr("Upper bound for plot display range"), ParameterDescription);
-  model->appendRow(pltMax);
 }
 
 /**
@@ -3325,8 +3338,10 @@ void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model,
   fftMin->setData(fftMin->isEditable(), Active);
   fftMin->setData(dataset.fftMin, EditableValue);
   fftMin->setData(kDatasetView_FFTMin, ParameterType);
-  fftMin->setData(tr("Minimum Value (recommended)"), ParameterName);
-  fftMin->setData(tr("Lower bound for data normalization"), ParameterDescription);
+  fftMin->setData(tr("Minimum Value (optional)"), ParameterName);
+  fftMin->setData(tr("Lower bound for data normalization; falls back to the dataset value "
+                     "range when left unset"),
+                  ParameterDescription);
   model->appendRow(fftMin);
 
   auto* fftMax = new QStandardItem();
@@ -3336,8 +3351,10 @@ void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model,
   fftMax->setData(fftMax->isEditable(), Active);
   fftMax->setData(dataset.fftMax, EditableValue);
   fftMax->setData(kDatasetView_FFTMax, ParameterType);
-  fftMax->setData(tr("Maximum Value (recommended)"), ParameterName);
-  fftMax->setData(tr("Upper bound for data normalization"), ParameterDescription);
+  fftMax->setData(tr("Maximum Value (optional)"), ParameterName);
+  fftMax->setData(tr("Upper bound for data normalization; falls back to the dataset value "
+                     "range when left unset"),
+                  ParameterDescription);
   model->appendRow(fftMax);
 }
 
@@ -3392,8 +3409,8 @@ void DataModel::ProjectEditor::addWidgetSection(CustomModel* model,
     showWidget
     && (dataset.widget == "bar" || dataset.widget == "gauge" || dataset.widget == "meter");
 
-  buildWidgetRangeRows(model, dataset, rangeEnabled);
   buildWidgetFormatRows(model, dataset, rangeEnabled);
+  buildWidgetRangeRows(model, dataset, rangeEnabled);
 }
 
 /**
@@ -3410,8 +3427,10 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
   wgtMin->setData(wgtMin->isEditable(), Active);
   wgtMin->setData(dataset.wgtMin, EditableValue);
   wgtMin->setData(kDatasetView_WgtMin, ParameterType);
-  wgtMin->setData(tr("Minimum Display Value (required)"), ParameterName);
-  wgtMin->setData(tr("Lower bound of the gauge or bar display range"), ParameterDescription);
+  wgtMin->setData(tr("Minimum Value (optional)"), ParameterName);
+  wgtMin->setData(tr("Lower bound of the gauge or bar range; falls back to the dataset value "
+                     "range when left unset"),
+                  ParameterDescription);
   model->appendRow(wgtMin);
 
   auto* wgtMax = new QStandardItem();
@@ -3421,8 +3440,10 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
   wgtMax->setData(wgtMax->isEditable(), Active);
   wgtMax->setData(dataset.wgtMax, EditableValue);
   wgtMax->setData(kDatasetView_WgtMax, ParameterType);
-  wgtMax->setData(tr("Maximum Display Value (required)"), ParameterName);
-  wgtMax->setData(tr("Upper bound of the gauge or bar display range"), ParameterDescription);
+  wgtMax->setData(tr("Maximum Value (optional)"), ParameterName);
+  wgtMax->setData(tr("Upper bound of the gauge or bar range; falls back to the dataset value "
+                     "range when left unset"),
+                  ParameterDescription);
   model->appendRow(wgtMax);
 }
 
@@ -4054,10 +4075,10 @@ void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
 
   switch (id) {
     case kDatasetView_xAxis: {
-      // Translate ComboBox position -> dataset uniqueId; -1 at position 0 = "Samples".
+      // Translate ComboBox position -> dataset uniqueId; -2 at position 0 = "Time".
       const auto xUids = DataModel::ProjectModel::instance().xDataSourceUniqueIds();
       const int pos    = value.toInt();
-      dataset.xAxisId  = (pos >= 0 && pos < xUids.size()) ? xUids.at(pos) : -1;
+      dataset.xAxisId  = (pos >= 0 && pos < xUids.size()) ? xUids.at(pos) : kXAxisTime;
       break;
     }
     case kDatasetView_PltMin:

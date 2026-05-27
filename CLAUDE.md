@@ -352,6 +352,42 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
 
 ### Other Subsystems
 
+- **Plot X-Axis (Time / Dataset)**: `Dataset::xAxisId` selects the plot X source — `kXAxisTime (-2)`,
+  the **default**, or a dataset `uniqueId (>=0)` (`Frame.h`). The old `kXAxisSamples (-1)` is **removed
+  as a user option** (kept only as a migration sentinel: deserialize maps `-1 -> -2`,
+  `migrateLegacyXAxisIds` maps legacy index/samples -> Time). Time is free; dataset-as-X stays
+  Pro/Trial-gated. **Time plots do NOT use the raw sample ring** — they use a fixed
+  `DSP::TimeBucketSeries` (`DSP.h`): `kDefaultPlotBuckets` (1024) min/max bins over the Time Range,
+  addressed by `floor(relSec / width)` so bin boundaries come from real timestamps (`fold()` is O(1),
+  no sample-rate assumption). Storage is `m_plotBuckets` / `m_multiplotBuckets` (keyed by widget index;
+  the multiplot one is a vector per curve). The hotpath folds `numericValue` at `m_plotDisplayTimeSec`
+  via `m_bucketPushes` (`updateLineSeries`) and the multiplot loop. The widget reads the envelope with
+  `buildEnvelope()` (`Plot`/`MultiPlot::updateData`); `m_pltValues` for a time plot is a placeholder.
+  This is why 10 s of 48 kHz audio works: ~480 samples fold into each ~10 ms bin as a min/max envelope,
+  bounded memory/CPU, axis fixed at `[-T, 0]` (zero wobble — never recompute the axis from raw extremes).
+  **Display clock** (`m_plotDisplayTimeSec`, `hotpathRxFrame`): sources without a cadence stamp many
+  frames at one coarse wall-clock tick (~15 ms on Windows), which would collapse small windows to one
+  bin; the display clock spreads same-timestamp frames by a smoothed per-sample period so sub-tick
+  windows still render. It is self-correcting (n samples over a gap fill it exactly) and display-only —
+  `m_relativeFrameTimeSec`/exported timestamps stay raw. Fine-timestamp sources (audio) hit the n==1
+  path and are unchanged. Ticks render the **magnitude** in an adaptive unit (`PlotWidget.qml`
+  `timeAxis` + `secondsAgoFormat` + `timeUnitFactor`/`timeUnitName`): the title and ticks switch between
+  `s` / `ms` / `µs` from the span, so e.g. a 10 ms window reads `Time (ms)` with `10 8 6 4 2 0`.
+  Dataset-X plots, FFT, GPS, 3D keep the raw-ring + downsample path.
+- **Plot Time Range**: `Dashboard::plotTimeRange` (seconds, default 10, **1 ms min**) is the bucket
+  window `T`; `setPlotTimeRange` re-bins the bucket series. **Per-project, mirroring `pointCount`**:
+  in ProjectFile it lives in the `.ssproj` (`ProjectModel::plotTimeRange` / `Keys::PlotTimeRange`,
+  edited in the project overview); elsewhere it's QSettings `Dashboard/PlotTimeRange` (edited in
+  Settings). Dashboard syncs `m_plotTimeRange` from the project on `operationModeChanged` and persists
+  to QSettings only outside ProjectFile. Both UI controls are an oscilloscope-style **editable**
+  SpinBox snapping typed input to a 1 ms..300 s ladder. The legacy `points` (`kDefaultPlotPoints =
+  1000`) now only sizes the raw rings for dataset-X / FFT / GPS / 3D; the "Points" controls were removed.
+- **Waterfall follows the Time Range** (Pro): `syncHistoryToTimeRange` sets `m_historySize =
+  round(plotTimeRange * fps)` (clamped 16..4096) on `plotTimeRangeChanged` / `fpsChanged` and at
+  construction, so its time axis (`historySize / fps`) reads the Time Range. fps is the row cadence
+  (one row per dashboard `updated` tick), not the sample rate; sub-second ranges clamp to 16 rows.
+- **AxisRangeDialog** hides its X section for time plots (`timeAxis` from the widget model); the manual
+  X min/max is meaningless when X is the Time Range. Y range stays editable.
 - **Output Widgets (Pro)** (`app/src/UI/Widgets/Output/`, QML in `app/qml/Widgets/Dashboard/Output/`):
   Button/Toggle/Slider/TextField/Panel sharing `Base`. User JS converts UI state → device
   bytes (`app/rcc/scripts/output/*.js`); `OutputCodeEditor` edits; `TransmitTestDialog`

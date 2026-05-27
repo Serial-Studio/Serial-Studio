@@ -88,6 +88,7 @@ jobs:
           libasound2-dev \
           libssl-dev \
           libudev-dev \
+          libsecret-1-dev \
           libzstd-dev \
           zlib1g-dev \
           libexpat1-dev \
@@ -242,11 +243,44 @@ jobs:
 
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
 
+    - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
+      env:
+        GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+        GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+        GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
+      run: |
+        set -euo pipefail
+        if [ -z "${GPG_KEY_ID:-}" ] || [ -z "${GPG_PRIVATE_KEY:-}" ]; then
+          echo "GPG signing secrets not set; skipping Linux signing."
+          exit 0
+        fi
+        printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
+        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
+        BIN="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64"
+        cp "build/app/${{env.UNIXNAME}}" "$BIN"
+        for f in "$APPIMAGE" "$BIN"; do
+          gpg --batch --yes --pinentry-mode loopback \
+            ${GPG_PASSPHRASE:+--passphrase "$GPG_PASSPHRASE"} \
+            --local-user "$GPG_KEY_ID" \
+            --detach-sign --armor --output "$f.asc" "$f"
+          gpg --verify "$f.asc" "$f"
+        done
+
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
+
+    - name: '📤 Upload artifact: signatures + signed binary (x64)'
+      uses: actions/upload-artifact@v5
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64-signed
+        if-no-files-found: ignore
+        path: |
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage.asc
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.asc
 
 #-------------------------------------------------------------------------------
 # GNU/Linux build (aarch64)
@@ -274,6 +308,7 @@ jobs:
           libasound2-dev \
           libssl-dev \
           libudev-dev \
+          libsecret-1-dev \
           libzstd-dev \
           zlib1g-dev \
           libexpat1-dev \
@@ -426,11 +461,44 @@ jobs:
 
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
+    - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
+      env:
+        GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+        GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+        GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
+      run: |
+        set -euo pipefail
+        if [ -z "${GPG_KEY_ID:-}" ] || [ -z "${GPG_PRIVATE_KEY:-}" ]; then
+          echo "GPG signing secrets not set; skipping Linux signing."
+          exit 0
+        fi
+        printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
+        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
+        BIN="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64"
+        cp "build/app/${{env.UNIXNAME}}" "$BIN"
+        for f in "$APPIMAGE" "$BIN"; do
+          gpg --batch --yes --pinentry-mode loopback \
+            ${GPG_PASSPHRASE:+--passphrase "$GPG_PASSPHRASE"} \
+            --local-user "$GPG_KEY_ID" \
+            --detach-sign --armor --output "$f.asc" "$f"
+          gpg --verify "$f.asc" "$f"
+        done
+
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
+
+    - name: '📤 Upload artifact: signatures + signed binary (arm64)'
+      uses: actions/upload-artifact@v5
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64-signed
+        if-no-files-found: ignore
+        path: |
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage.asc
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64
+          ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.asc
 
 #-------------------------------------------------------------------------------
 # macOS build (arm64)

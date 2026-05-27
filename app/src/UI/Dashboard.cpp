@@ -42,7 +42,8 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-constexpr int kDefaultPlotPoints = 100;
+constexpr int kDefaultPlotPoints  = 1000;
+constexpr int kDefaultPlotBuckets = 1024;
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -150,6 +151,13 @@ UI::Dashboard::Dashboard()
   , m_autoHideToolbar(false)
   , m_persistSettings(true)
   , m_updateRetryInProgress(false)
+  , m_plotTimeOriginSet(false)
+  , m_plotGroupCount(0)
+  , m_plotTimeRange(10.0)
+  , m_relativeFrameTimeSec(0)
+  , m_plotDisplayTimeSec(0)
+  , m_plotGroupStartSec(0)
+  , m_plotSamplePeriodSec(0)
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
 {
@@ -174,11 +182,22 @@ UI::Dashboard::Dashboard()
         m_points = project_pts;
         Q_EMIT pointsChanged();
       }
+
+      const double project_range = DataModel::ProjectModel::instance().plotTimeRange();
+      if (project_range > 0 && !qFuzzyCompare(m_plotTimeRange, project_range)) {
+        m_plotTimeRange = project_range;
+        Q_EMIT plotTimeRangeChanged();
+      }
     } else {
-      const int saved = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
-      if (m_points != saved) {
-        m_points = saved;
+      if (m_points != kDefaultPlotPoints) {
+        m_points = kDefaultPlotPoints;
         Q_EMIT pointsChanged();
+      }
+
+      const double saved = qMax(0.001, m_settings.value("Dashboard/PlotTimeRange", 10.0).toDouble());
+      if (!qFuzzyCompare(m_plotTimeRange, saved)) {
+        m_plotTimeRange = saved;
+        Q_EMIT plotTimeRangeChanged();
       }
     }
 
@@ -208,13 +227,13 @@ UI::Dashboard::Dashboard()
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
 
   // Load persisted settings
-  m_points          = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
-  m_autoHideToolbar = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
-  m_showActionPanel = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
-  m_terminalEnabled = m_settings.value("Dashboard/TerminalEnabled", false).toBool();
+  m_autoHideToolbar        = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
+  m_showActionPanel        = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
+  m_terminalEnabled        = m_settings.value("Dashboard/TerminalEnabled", false).toBool();
   m_notificationLogEnabled = m_settings.value("Dashboard/NotificationLogEnabled", false).toBool();
   m_clockEnabled           = m_settings.value("Dashboard/ClockEnabled", false).toBool();
   m_stopwatchEnabled       = m_settings.value("Dashboard/StopwatchEnabled", false).toBool();
+  m_plotTimeRange = qMax(0.001, m_settings.value("Dashboard/PlotTimeRange", 10.0).toDouble());
 }
 
 /**
@@ -273,6 +292,30 @@ bool UI::Dashboard::showActionPanel() const noexcept
 bool UI::Dashboard::autoHideToolbar() const noexcept
 {
   return m_autoHideToolbar;
+}
+
+/**
+ * @brief Returns the visible plot time window in seconds (newest sample at 0).
+ */
+double UI::Dashboard::plotTimeRange() const noexcept
+{
+  return m_plotTimeRange;
+}
+
+/**
+ * @brief Returns true when a plot dataset should render against time.
+ */
+bool UI::Dashboard::useTimeXAxis(const DataModel::Dataset& dataset) const
+{
+  return dataset.xAxisId == DataModel::kXAxisTime;
+}
+
+/**
+ * @brief Returns true when a multiplot group should render against time.
+ */
+bool UI::Dashboard::useTimeXAxisGroup(const DataModel::Group& group) const
+{
+  return !group.datasets.empty() && group.datasets.front().xAxisId == DataModel::kXAxisTime;
 }
 
 /**
@@ -664,6 +707,34 @@ const DSP::MultiLineSeries& UI::Dashboard::multiplotData(const int index) const
   return m_multipltValues[index];
 }
 
+/**
+ * @brief Returns the time-bucket envelope for a time-axis plot widget.
+ */
+const DSP::TimeBucketSeries& UI::Dashboard::plotBuckets(const int index) const
+{
+  const auto it = m_plotBuckets.find(index);
+  if (it == m_plotBuckets.end()) [[unlikely]] {
+    static const DSP::TimeBucketSeries kEmpty{};
+    return kEmpty;
+  }
+
+  return it.value();
+}
+
+/**
+ * @brief Returns the per-curve time-bucket envelopes for a time-axis multiplot widget.
+ */
+const std::vector<DSP::TimeBucketSeries>& UI::Dashboard::multiplotBuckets(const int index) const
+{
+  const auto it = m_multiplotBuckets.find(index);
+  if (it == m_multiplotBuckets.end()) [[unlikely]] {
+    static const std::vector<DSP::TimeBucketSeries> kEmpty{};
+    return kEmpty;
+  }
+
+  return it.value();
+}
+
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Returns the 3D trajectory data for a 3D plot widget.
@@ -768,13 +839,11 @@ void UI::Dashboard::setPoints(const int points)
  */
 void UI::Dashboard::resetData(const bool notify)
 {
-  // Restore saved point count when not in ProjectFile mode
-  if (AppState::instance().operationMode() != SerialStudio::ProjectFile) {
-    const int saved = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
-    if (m_points != saved) {
-      m_points = saved;
-      Q_EMIT pointsChanged();
-    }
+  // Restore default point count when not in ProjectFile mode
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile
+      && m_points != kDefaultPlotPoints) {
+    m_points = kDefaultPlotPoints;
+    Q_EMIT pointsChanged();
   }
 
   // Clear the widget registry (emits widgetDestroyed for each widget)
@@ -801,8 +870,10 @@ void UI::Dashboard::resetData(const bool notify)
   // Drop pre-resolved hotpath push tables (point into maps cleared below)
   m_yLinePushes.clear();
   m_xLinePushes.clear();
+  m_bucketPushes.clear();
   m_yLinePushes.shrink_to_fit();
   m_xLinePushes.shrink_to_fit();
+  m_bucketPushes.shrink_to_fit();
 
   // Clear data for 3D plots
 #ifdef BUILD_COMMERCIAL
@@ -819,6 +890,9 @@ void UI::Dashboard::resetData(const bool notify)
   // Clear X/Y axis arrays
   m_xAxisData.clear();
   m_yAxisData.clear();
+  m_plotBuckets.clear();
+  m_multiplotBuckets.clear();
+  m_plotTimeOriginSet = false;
 
   // Clear widget & action structures
   m_widgetCount = 0;
@@ -881,6 +955,16 @@ void UI::Dashboard::clearPlotData()
   for (auto it = m_xAxisData.begin(); it != m_xAxisData.end(); ++it)
     it.value().clear();
 
+  // Clear time-axis envelopes and restart the relative-time origin
+  for (auto it = m_plotBuckets.begin(); it != m_plotBuckets.end(); ++it)
+    it.value().configure(m_plotTimeRange, kDefaultPlotBuckets);
+
+  for (auto it = m_multiplotBuckets.begin(); it != m_multiplotBuckets.end(); ++it)
+    for (auto& curve : it.value())
+      curve.configure(m_plotTimeRange, kDefaultPlotBuckets);
+
+  m_plotTimeOriginSet = false;
+
   // Clear multiplot Y-axis data
   for (auto& multiSeries : m_multipltValues)
     for (auto& yAxis : multiSeries.y)
@@ -924,6 +1008,29 @@ void UI::Dashboard::setAutoHideToolbar(const bool enabled)
     m_settings.setValue("Dashboard/AutoHideToolbar", m_autoHideToolbar);
     Q_EMIT autoHideToolbarChanged();
   }
+}
+
+/**
+ * @brief Sets the visible plot time window in seconds and notifies time-axis plots.
+ */
+void UI::Dashboard::setPlotTimeRange(const double seconds)
+{
+  const double clamped = qMax(0.001, seconds);
+  if (qFuzzyCompare(m_plotTimeRange, clamped))
+    return;
+
+  m_plotTimeRange = clamped;
+
+  // Global default persists outside ProjectFile; inside a project the value lives in the .ssproj
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    m_settings.setValue("Dashboard/PlotTimeRange", m_plotTimeRange);
+
+  // Re-bin the time-bucket envelopes to the new window width
+  configureLineSeries();
+  configureMultiLineSeries();
+
+  m_updateRequired = true;
+  Q_EMIT plotTimeRangeChanged();
 }
 
 /**
@@ -1376,6 +1483,36 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
   if (payload.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
     return;
 
+  // Track elapsed seconds since the first frame for time-axis plots
+  if (!m_plotTimeOriginSet) [[unlikely]] {
+    m_plotTimeOrigin      = frame->timestamp;
+    m_plotTimeOriginSet   = true;
+    m_plotGroupCount      = 0;
+    m_plotGroupStartSec   = 0;
+    m_plotDisplayTimeSec  = 0;
+    m_plotSamplePeriodSec = 0;
+  }
+  m_relativeFrameTimeSec =
+    std::chrono::duration<double>(frame->timestamp - m_plotTimeOrigin).count();
+
+  // Spread same-timestamp frames by a smoothed per-sample period (display only, raw stamps kept)
+  ++m_plotGroupCount;
+  if (m_relativeFrameTimeSec > m_plotGroupStartSec) {
+    const int n      = (m_plotGroupCount > 1) ? (m_plotGroupCount - 1) : 1;
+    const double gap = m_relativeFrameTimeSec - m_plotGroupStartSec;
+
+    // Divide only for rare multi-sample coarse-clock groups; fine-timestamp sources hit n == 1
+    // code-verify off
+    const double period = (n > 1) ? (gap / n) : gap;
+    // code-verify on
+
+    m_plotSamplePeriodSec =
+      (m_plotSamplePeriodSec > 0) ? (0.8 * m_plotSamplePeriodSec + 0.2 * period) : period;
+    m_plotGroupStartSec = m_relativeFrameTimeSec;
+    m_plotGroupCount    = 1;
+  }
+  m_plotDisplayTimeSec = qMax(m_plotDisplayTimeSec + m_plotSamplePeriodSec, m_relativeFrameTimeSec);
+
   const int sid             = payload.sourceId;
   const bool hadProFeatures = containsCommercialFeatures();
 
@@ -1499,11 +1636,23 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 /**
  * @brief Registers a dataset's index and per-widget-key mappings.
  */
-void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& dataset,
+void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
                                                  DataModel::Group& ledPanel)
 {
-  Q_ASSERT(dataset.index >= 0);
-  Q_ASSERT(dataset.uniqueId >= 0);
+  Q_ASSERT(datasetIn.index >= 0);
+  Q_ASSERT(datasetIn.uniqueId >= 0);
+
+  // Widget/FFT display ranges fall back to the plot value range when left unset (min == max)
+  DataModel::Dataset dataset = datasetIn;
+  if (DSP::almostEqual(dataset.wgtMin, dataset.wgtMax)) {
+    dataset.wgtMin = dataset.pltMin;
+    dataset.wgtMax = dataset.pltMax;
+  }
+
+  if (DSP::almostEqual(dataset.fftMin, dataset.fftMax)) {
+    dataset.fftMin = dataset.pltMin;
+    dataset.fftMax = dataset.pltMax;
+  }
 
   // Keyed by uniqueId; sibling datasets sharing a frame index stay distinct.
   if (!m_datasets.contains(dataset.uniqueId)) {
@@ -1863,6 +2012,17 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     if (sourceId >= 0 && group.sourceId != sourceId)
       continue;
 
+    // Time multiplots fold each curve into its bucket envelope (value + real timestamp)
+    auto bIt = m_multiplotBuckets.find(i);
+    if (bIt != m_multiplotBuckets.end()) {
+      auto& curves = bIt.value();
+      for (size_t j = 0; j < group.datasets.size() && j < curves.size(); ++j)
+        curves[j].fold(group.datasets[j].numericValue, m_plotDisplayTimeSec);
+
+      continue;
+    }
+
+    // Sample/dataset multiplots push into the Y rings
     auto& multiSeries   = m_multipltValues[i];
     const size_t yCount = multiSeries.y.size();
     for (size_t j = 0; j < group.datasets.size() && j < yCount; ++j)
@@ -1987,6 +2147,19 @@ void UI::Dashboard::updateLineSeries(int sourceId)
 
   for (const auto& p : m_xLinePushes)
     fire(p);
+
+  // Time plots fold value + real timestamp into their bucket envelope
+  for (const auto& p : m_bucketPushes) {
+    for (const auto& c : p.consumers) {
+      if (sourceId >= 0 && c.sourceId != sourceId)
+        continue;
+
+      if (*c.activeFlag) {
+        p.series->fold(*p.value, m_plotDisplayTimeSec);
+        break;
+      }
+    }
+  }
 }
 
 /**
@@ -2116,11 +2289,13 @@ void UI::Dashboard::configureLineSeries()
   // Release existing plot buffers
   m_xAxisData.clear();
   m_yAxisData.clear();
+  m_plotBuckets.clear();
   m_pltValues.clear();
   m_pltValues.squeeze();
   m_activePlots.clear();
   m_yLinePushes.clear();
   m_xLinePushes.clear();
+  m_bucketPushes.clear();
 
   // Reset default X-axis data
   m_pltXAxis = DSP::AxisData(points() + 1);
@@ -2148,13 +2323,24 @@ void UI::Dashboard::configureLineSeries()
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
+    // Time X-axis: fixed time-bucket envelope; appended series is a placeholder
+    if (useTimeXAxis(yDataset)) {
+      DSP::TimeBucketSeries buckets;
+      buckets.configure(m_plotTimeRange, kDefaultPlotBuckets);
+      m_plotBuckets.insert(i, buckets);
+
+      DSP::LineSeries series;
+      series.x = &m_pltXAxis;
+      series.y = &m_yAxisData[yDataset.uniqueId];
+      m_pltValues.append(series);
+    }
     // Use custom X-axis source if available (Pro feature)
 #ifdef BUILD_COMMERCIAL
-    const auto& tk2 = Licensing::CommercialToken::current();
-    if (m_datasets.contains(yDataset.xAxisId) && tk2.isValid() && SS_LICENSE_GUARD()
-        && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
+    else if (const auto& tk2 = Licensing::CommercialToken::current();
+             m_datasets.contains(yDataset.xAxisId) && tk2.isValid() && SS_LICENSE_GUARD()
+             && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
 #else
-    if (false) {
+    else if (false) {
 #endif
       DSP::LineSeries series;
       series.x = &m_xAxisData[yDataset.xAxisId];
@@ -2180,6 +2366,20 @@ void UI::Dashboard::configureLineSeries()
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
     const LinePush::Consumer consumer{yDataset.sourceId, &m_activePlots[i]};
+
+    // Time plots fold into a bucket envelope instead of the raw Y/X rings
+    if (useTimeXAxis(yDataset)) {
+      auto bIt = m_plotBuckets.find(i);
+      if (bIt != m_plotBuckets.end()) {
+        BucketPush bp;
+        bp.consumers.push_back(consumer);
+        bp.series = &bIt.value();
+        bp.value  = &yDataset.numericValue;
+        m_bucketPushes.push_back(std::move(bp));
+      }
+
+      continue;
+    }
 
     // Y push entry -- one per uniqueId
     auto yIt = m_yAxisData.find(yDataset.uniqueId);
@@ -2254,6 +2454,7 @@ void UI::Dashboard::configureMultiLineSeries()
   m_multipltValues.clear();
   m_multipltValues.squeeze();
   m_activeMultiplots.clear();
+  m_multiplotBuckets.clear();
 
   // Reset default X-axis data
   m_multipltXAxis = DSP::AxisData(points() + 1);
@@ -2263,6 +2464,7 @@ void UI::Dashboard::configureMultiLineSeries()
   for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i) {
     const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
 
+    // Shared X is a placeholder for time multiplots (the widget reads multiplotBuckets(i))
     DSP::MultiLineSeries series;
     series.x = &m_multipltXAxis;
     for (size_t j = 0; j < group.datasets.size(); ++j)
@@ -2270,6 +2472,15 @@ void UI::Dashboard::configureMultiLineSeries()
 
     m_multipltValues.append(series);
     m_activeMultiplots.insert(i, true);
+
+    // Time multiplots fold each curve into its own bucket envelope (shared time grid)
+    if (useTimeXAxisGroup(group)) {
+      std::vector<DSP::TimeBucketSeries> curves(group.datasets.size());
+      for (auto& curve : curves)
+        curve.configure(m_plotTimeRange, kDefaultPlotBuckets);
+
+      m_multiplotBuckets.insert(i, std::move(curves));
+    }
   }
 }
 

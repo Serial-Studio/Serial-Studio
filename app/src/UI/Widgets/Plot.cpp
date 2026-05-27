@@ -45,6 +45,7 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_minY(0)
   , m_maxY(0)
   , m_monotonicData(true)
+  , m_timeAxis(false)
   , m_interpolationMode(SerialStudio::InterpolationLinear)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
@@ -53,37 +54,59 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
     m_minY = qMin(yDataset.pltMin, yDataset.pltMax);
     m_maxY = qMax(yDataset.pltMin, yDataset.pltMax);
 
-#ifdef BUILD_COMMERCIAL
-    const auto& tk = Licensing::CommercialToken::current();
-    const auto xAxisId =
-      (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist)
-        ? yDataset.xAxisId
-        : -1;
-#else
-    const auto xAxisId = -1;
-#endif
-    if (UI::Dashboard::instance().datasets().contains(xAxisId)) {
-      m_monotonicData      = false;
-      const auto& xDataset = UI::Dashboard::instance().datasets()[xAxisId];
-      m_xLabel             = xDataset.title;
-      if (!xDataset.units.isEmpty())
-        m_xLabel += " (" + xDataset.units + ")";
-    }
-
-    else {
-      m_monotonicData = true;
-      m_xLabel        = tr("Samples");
-    }
+    resolveXAxis(yDataset);
 
     m_yLabel = yDataset.title;
     if (!yDataset.units.isEmpty())
       m_yLabel += " (" + yDataset.units + ")";
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, &Plot::updateRange);
+    connect(
+      &UI::Dashboard::instance(), &UI::Dashboard::plotTimeRangeChanged, this, &Plot::updateRange);
 
     calculateAutoScaleRange();
     updateRange();
   }
+}
+
+/**
+ * @brief Resolves the X-axis mode, label, and monotonicity for the plot.
+ */
+void Widgets::Plot::resolveXAxis(const DataModel::Dataset& yDataset)
+{
+  // Time X-axis (free): relative seconds, monotonic like the sample index
+  if (UI::Dashboard::instance().useTimeXAxis(yDataset)) {
+    m_timeAxis      = true;
+    m_monotonicData = true;
+    m_xLabel        = tr("Time (s)");
+    return;
+  }
+
+#ifdef BUILD_COMMERCIAL
+  const auto& tk = Licensing::CommercialToken::current();
+  const auto xAxisId =
+    (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist)
+      ? yDataset.xAxisId
+      : -1;
+#else
+  const auto xAxisId = -1;
+#endif
+
+  // Custom dataset X-axis (Pro)
+  const auto& datasets = UI::Dashboard::instance().datasets();
+  if (datasets.contains(xAxisId)) {
+    m_monotonicData      = false;
+    const auto& xDataset = datasets[xAxisId];
+    m_xLabel             = xDataset.title;
+    if (!xDataset.units.isEmpty())
+      m_xLabel += " (" + xDataset.units + ")";
+
+    return;
+  }
+
+  // Default: sample index
+  m_monotonicData = true;
+  m_xLabel        = tr("Samples");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -180,6 +203,14 @@ const QString& Widgets::Plot::yLabel() const noexcept
 const QString& Widgets::Plot::xLabel() const noexcept
 {
   return m_xLabel;
+}
+
+/**
+ * @brief Returns true when this plot renders against a time (seconds-ago) X-axis.
+ */
+bool Widgets::Plot::timeAxis() const noexcept
+{
+  return m_timeAxis;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,6 +323,12 @@ void Widgets::Plot::updateData()
   if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
     return;
 
+  // Time axis: read the pre-binned min/max envelope (bounded, rate-agnostic)
+  if (m_timeAxis) {
+    UI::Dashboard::instance().plotBuckets(m_index).buildEnvelope(m_data);
+    return;
+  }
+
   // Obtain plot data
   const auto& plotData = UI::Dashboard::instance().plotData(m_index);
 
@@ -377,21 +414,29 @@ void Widgets::Plot::updateInterpolatedData()
  */
 void Widgets::Plot::updateRange()
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
-    const auto& yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
-    if (yD.xAxisId >= 0) {
-      const auto& datasets = UI::Dashboard::instance().datasets();
-      auto it              = datasets.find(yD.xAxisId);
-      if (it != datasets.end()) {
-        m_minX = it->pltMin;
-        m_maxX = it->pltMax;
-      }
-    }
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
+    Q_EMIT rangeChanged();
+    return;
+  }
 
-    else {
-      m_minX = 0;
-      m_maxX = UI::Dashboard::instance().points();
+  const auto& yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+  if (m_timeAxis) {
+    m_maxX = 0;
+    m_minX = -UI::Dashboard::instance().plotTimeRange();
+  }
+
+  else if (yD.xAxisId >= 0) {
+    const auto& datasets = UI::Dashboard::instance().datasets();
+    auto it              = datasets.find(yD.xAxisId);
+    if (it != datasets.end()) {
+      m_minX = it->pltMin;
+      m_maxX = it->pltMax;
     }
+  }
+
+  else {
+    m_minX = 0;
+    m_maxX = UI::Dashboard::instance().points();
   }
 
   Q_EMIT rangeChanged();
@@ -414,10 +459,10 @@ void Widgets::Plot::calculateAutoScaleRange()
   const auto& dy = GET_DATASET(SerialStudio::DashboardPlot, m_index);
   yChanged = computeMinMaxValues(m_minY, m_maxY, dy, true, [](const QPointF& p) { return p.y(); });
 
-  // Obtain range scale for X-axis
+  // Obtain range scale for X-axis (time mode is anchored in updateData)
 #ifdef BUILD_COMMERCIAL
-  const auto& tk2 = Licensing::CommercialToken::current();
-  if (tk2.isValid() && SS_LICENSE_GUARD()
+  if (const auto& tk2 = Licensing::CommercialToken::current();
+      !m_timeAxis && tk2.isValid() && SS_LICENSE_GUARD()
       && tk2.featureTier() >= Licensing::FeatureTier::Hobbyist) {
 #else
   if (false) {
@@ -430,7 +475,7 @@ void Widgets::Plot::calculateAutoScaleRange()
   }
 
   // X-axis data source set to samples, use [0, points] as range
-  else {
+  else if (!m_timeAxis) {
     const auto points = UI::Dashboard::instance().points();
 
     if (m_minX != 0 || m_maxX != points) {

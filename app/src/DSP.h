@@ -357,6 +357,99 @@ typedef struct {
   std::vector<AxisData> y;  ///< Y-axis data for each individual curve
 } MultiLineSeries;
 
+/**
+ * @brief Fixed-size, timestamp-binned min/max envelope over a sliding time window.
+ */
+struct TimeBucketSeries {
+  /**
+   * @brief One time bin: the value envelope plus its absolute bin index (-1 when unused).
+   */
+  struct Bin {
+    long long g;
+    float vmin;
+    float vmax;
+  };
+
+  int count;
+  bool hasData;
+  double width;
+  double newest;
+  long long currentG;
+  std::vector<Bin> bins;
+
+  /**
+   * @brief Configures the ring for `seconds` of history split into `buckets` bins.
+   */
+  void configure(double seconds, int buckets)
+  {
+    count    = (buckets > 1) ? buckets : 1;
+    width    = (seconds / count > 1e-9) ? seconds / count : 1e-9;
+    newest   = 0;
+    currentG = 0;
+    hasData  = false;
+    bins.assign(static_cast<std::size_t>(count), Bin{-1, 0.0f, 0.0f});
+  }
+
+  /**
+   * @brief Folds one sample into its time bin (O(1), no allocation).
+   */
+  void fold(double value, double relSec)
+  {
+    if (count <= 0) [[unlikely]]
+      return;
+
+    const long long g      = static_cast<long long>(std::floor(relSec / width));
+    const std::size_t slot = static_cast<std::size_t>(((g % count) + count) % count);
+    const float v          = static_cast<float>(value);
+
+    Bin& bin = bins[slot];
+    if (bin.g != g) {
+      bin.g    = g;
+      bin.vmin = v;
+      bin.vmax = v;
+    }
+
+    else {
+      if (v < bin.vmin)
+        bin.vmin = v;
+
+      if (v > bin.vmax)
+        bin.vmax = v;
+    }
+
+    if (!hasData || relSec >= newest) {
+      newest   = relSec;
+      currentG = g;
+      hasData  = true;
+    }
+  }
+
+  /**
+   * @brief Emits the envelope as a relative-time polyline ([-window, 0], newest near 0).
+   */
+  void buildEnvelope(QList<QPointF>& out) const
+  {
+    out.clear();
+    if (!hasData || count <= 0)
+      return;
+
+    out.reserve(count * 2);
+    for (long long g = currentG - count + 1; g <= currentG; ++g) {
+      if (g < 0)
+        continue;
+
+      const std::size_t slot = static_cast<std::size_t>(((g % count) + count) % count);
+      const Bin& bin         = bins[slot];
+      if (bin.g != g)
+        continue;
+
+      const double x = static_cast<double>(g) * width - newest;
+      out.append(QPointF(x, bin.vmin));
+      out.append(QPointF(x, bin.vmax));
+    }
+  }
+};
+
 #ifdef BUILD_COMMERCIAL
 /**
  * @typedef PlotData3D

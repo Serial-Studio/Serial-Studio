@@ -321,10 +321,15 @@ API::Server::Server()
   , m_clientCount(0)
   , m_enabled(false)
   , m_externalConnections(false)
+  , m_deviceWriteConsent(DeviceWriteConsent::Unset)
 {
   // Restore persisted settings
   m_externalConnections = m_settings.value("API/ExternalConnections", false).toBool();
   m_authToken           = m_settings.value("API/AuthToken").toString();
+
+  // A previously granted device-write consent is remembered; a denial never persists.
+  if (m_settings.value("API/DeviceWriteConsent", false).toBool())
+    m_deviceWriteConsent = DeviceWriteConsent::Granted;
 
   // A token must exist whenever external clients are allowed, or none could connect.
   if (m_externalConnections)
@@ -570,6 +575,45 @@ bool API::Server::constantTimeEquals(const QByteArray& a, const QByteArray& b)
 }
 
 /**
+ * @brief Constant-time check of a client-provided token against the configured one.
+ */
+bool API::Server::verifyToken(const QByteArray& provided) const
+{
+  return !m_authToken.isEmpty() && constantTimeEquals(provided, m_authToken.toUtf8());
+}
+
+/**
+ * @brief Gates API-originated device writes behind a one-time user consent prompt.
+ */
+bool API::Server::authorizeDeviceWrite()
+{
+  if (m_deviceWriteConsent == DeviceWriteConsent::Granted)
+    return true;
+
+  if (m_deviceWriteConsent == DeviceWriteConsent::Denied)
+    return false;
+
+  // First request this session: prompt once. A grant persists; a denial lasts only this run.
+  const auto answer = Misc::Utilities::showMessageBox(
+    tr("Allow API device control?"),
+    tr("A program using Serial Studio's local API is requesting to send data to the connected "
+       "device. Allow API clients to write to the device?"),
+    QMessageBox::Question,
+    tr("Serial Studio"),
+    QMessageBox::Yes | QMessageBox::No,
+    QMessageBox::No);
+
+  if (answer == QMessageBox::Yes) {
+    m_deviceWriteConsent = DeviceWriteConsent::Granted;
+    m_settings.setValue("API/DeviceWriteConsent", true);
+    return true;
+  }
+
+  m_deviceWriteConsent = DeviceWriteConsent::Denied;
+  return false;
+}
+
+/**
  * @brief Consumes the first line as a {"type":"auth","token":...} handshake before commands.
  */
 void API::Server::handleAuthHandshake(QTcpSocket* socket,
@@ -601,7 +645,7 @@ void API::Server::handleAuthHandshake(QTcpSocket* socket,
     const auto obj = doc.object();
     if (obj.value(QStringLiteral("type")).toString() == QStringLiteral("auth")) {
       const QByteArray provided = obj.value(QStringLiteral("token")).toString().toUtf8();
-      ok = !m_authToken.isEmpty() && constantTimeEquals(provided, m_authToken.toUtf8());
+      ok                        = verifyToken(provided);
     }
   }
 
@@ -926,6 +970,16 @@ void API::Server::processRawJsonCommand(QTcpSocket* socket,
     return;
   }
 
+  // Require user consent before letting an API client drive the device.
+  if (!authorizeDeviceWrite()) {
+    sendResponseToSocket(socket,
+                         CommandResponse::makeError(id,
+                                                    ErrorCode::ExecutionError,
+                                                    QStringLiteral("Device write denied by user"))
+                           .toJsonBytes());
+    return;
+  }
+
   // Write to device
   auto& manager = IO::ConnectionManager::instance();
   if (!manager.isConnected()) {
@@ -1088,6 +1142,16 @@ void API::Server::processRawLine(QTcpSocket* socket, ConnectionState& state, con
     auto* worker = static_cast<ServerWorker*>(m_worker);
     QMetaObject::invokeMethod(
       worker, "disconnectSocket", Qt::QueuedConnection, Q_ARG(QTcpSocket*, socket));
+    return;
+  }
+
+  // Require user consent before letting an API client drive the device.
+  if (!authorizeDeviceWrite()) {
+    sendResponseToSocket(socket,
+                         CommandResponse::makeError(QString(),
+                                                    ErrorCode::ExecutionError,
+                                                    QStringLiteral("Device write denied by user"))
+                           .toJsonBytes());
     return;
   }
 
