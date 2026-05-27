@@ -26,10 +26,7 @@
 #include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QObject>
-#include <QSettings>
 #include <QString>
-
-#include "Licensing/SimpleCrypt.h"
 
 namespace Licensing {
 /**
@@ -150,8 +147,6 @@ private:
 
   int m_gracePeriod;
 
-  QSettings m_settings;
-  SimpleCrypt m_simpleCrypt;
   QJsonObject m_licensingData;
   QNetworkAccessManager m_manager;
 };

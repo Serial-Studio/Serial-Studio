@@ -33,6 +33,7 @@
 #include "LemonSqueezy.h"
 #include "MachineID.h"
 #include "Misc/Utilities.h"
+#include "SecretStorage.h"
 
 /**
  * @brief Builds and installs a commercial token for an active trial.
@@ -73,10 +74,6 @@ Licensing::Trial::Trial()
 
   // Read server responses
   connect(&m_manager, &QNetworkAccessManager::finished, this, &Licensing::Trial::onServerReply);
-
-  // Configure data encryption
-  m_crypt.setKey(MachineID::instance().machineSpecificKey());
-  m_crypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
 
   // Restore cached trial state if no active license
   if (!Licensing::LemonSqueezy::instance().isActivated())
@@ -167,12 +164,10 @@ void Licensing::Trial::readSettings()
   m_trialEnabled = false;
   m_trialExpiry  = QDateTime::currentDateTimeUtc();
 
-  // Decrypt persisted trial data
-  m_settings.beginGroup("trial");
-  auto expStr = m_crypt.decryptToString(m_settings.value("expiry").toString());
-  auto enaStr = m_crypt.decryptToString(m_settings.value("enabled").toString());
-  auto regStr = m_crypt.decryptToString(m_settings.value("registd").toString());
-  m_settings.endGroup();
+  // Restore persisted trial data from the vault (or legacy fallback)
+  const auto expStr = SecretStorage::load("trial", "expiry");
+  const auto enaStr = SecretStorage::load("trial", "enabled");
+  const auto regStr = SecretStorage::load("trial", "registd");
 
   if (!expStr.isEmpty()) {
     QDateTime expiry = QDateTime::fromString(expStr, Qt::ISODate).toUTC();
@@ -202,15 +197,13 @@ void Licensing::Trial::readSettings()
  */
 void Licensing::Trial::writeSettings()
 {
-  QString enaStr = m_trialEnabled ? "true" : "false";
-  QString regStr = m_deviceRegistered ? "true" : "false";
-  QString expStr = m_trialExpiry.toString(Qt::ISODate);
+  const QString enaStr = m_trialEnabled ? "true" : "false";
+  const QString regStr = m_deviceRegistered ? "true" : "false";
+  const QString expStr = m_trialExpiry.toString(Qt::ISODate);
 
-  m_settings.beginGroup("trial");
-  m_settings.setValue("expiry", m_crypt.encryptToString(expStr));
-  m_settings.setValue("enabled", m_crypt.encryptToString(enaStr));
-  m_settings.setValue("registd", m_crypt.encryptToString(regStr));
-  m_settings.endGroup();
+  SecretStorage::save("trial", "expiry", expStr);
+  SecretStorage::save("trial", "enabled", enaStr);
+  SecretStorage::save("trial", "registd", regStr);
 }
 
 //--------------------------------------------------------------------------------------------------

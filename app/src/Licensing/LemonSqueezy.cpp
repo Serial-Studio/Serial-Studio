@@ -28,6 +28,7 @@
 #include "AppInfo.h"
 #include "Licensing/CommercialToken.h"
 #include "Licensing/MachineID.h"
+#include "Licensing/SecretStorage.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -76,10 +77,6 @@ Licensing::LemonSqueezy::LemonSqueezy()
   , m_silentValidation(true)
   , m_gracePeriod(0)
 {
-  // Configure data encryption
-  m_simpleCrypt.setKey(MachineID::instance().machineSpecificKey());
-  m_simpleCrypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
-
   // Read settings
   readSettings();
 }
@@ -367,33 +364,28 @@ void Licensing::LemonSqueezy::setLicense(const QString& license)
  */
 void Licensing::LemonSqueezy::readSettings()
 {
-  // Obtain encrypted JSON data
-  m_settings.beginGroup("licensing");
-  auto license = m_settings.value("license", "").toString();
-  auto data    = m_settings.value("data", "").toString();
-  auto dt      = m_settings.value("lastCheck", "").toString();
-  m_settings.endGroup();
+  // Obtain cached licensing data from the vault (or legacy fallback)
+  const auto license = SecretStorage::load("licensing", "license");
+  const auto data    = SecretStorage::load("licensing", "data");
+  const auto dt      = SecretStorage::load("licensing", "lastCheck");
 
   // Data is empty abort
   if (data.isEmpty() || license.isEmpty())
     return;
 
-  // Descrypt data
-  m_license          = m_simpleCrypt.decryptToString(license);
-  auto decryptedData = m_simpleCrypt.decryptToByteArray(data);
+  m_license = license;
 
   // Offline grace from last check; monotonicNow() floors the clock so rewinding can't extend it.
   m_gracePeriod = 0;
   if (!dt.isEmpty()) {
-    auto dateTime  = m_simpleCrypt.decryptToString(dt);
     auto currentDt = monotonicNow();
-    auto lastCheck = QDateTime::fromString(dateTime, Qt::RFC2822Date);
+    auto lastCheck = QDateTime::fromString(dt, Qt::RFC2822Date);
     if (lastCheck.isValid() && lastCheck < currentDt)
       m_gracePeriod = qMax(0, 30 - lastCheck.daysTo(currentDt));
   }
 
   // Parse data & validate it
-  readValidationResponse(decryptedData, true);
+  readValidationResponse(data.toUtf8(), true);
   Q_EMIT licenseChanged();
 }
 
@@ -405,21 +397,17 @@ void Licensing::LemonSqueezy::writeSettings()
   // Get JSON data
   auto json = QJsonDocument(m_licensingData).toJson(QJsonDocument::Compact);
 
-  // Write encrypted data if JSON is valid
+  // Write data if JSON is valid
   if (!json.isEmpty() && canActivate()) {
-    m_settings.beginGroup("licensing");
-    m_settings.setValue("license", m_simpleCrypt.encryptToString(m_license));
-    m_settings.setValue("data", m_simpleCrypt.encryptToString(json));
-    m_settings.endGroup();
+    SecretStorage::save("licensing", "license", m_license);
+    SecretStorage::save("licensing", "data", QString::fromUtf8(json));
   }
 
   // Data is empty
   else {
-    m_settings.beginGroup("licensing");
-    m_settings.setValue("data", "");
-    m_settings.setValue("license", "");
-    m_settings.setValue("lastCheck", "");
-    m_settings.endGroup();
+    SecretStorage::remove("licensing", "data");
+    SecretStorage::remove("licensing", "license");
+    SecretStorage::remove("licensing", "lastCheck");
   }
 }
 
@@ -431,20 +419,15 @@ QDateTime Licensing::LemonSqueezy::monotonicNow()
   auto effective = QDateTime::currentDateTime();
 
   // A backward clock yields a stored high-watermark ahead of "now"; use the watermark instead.
-  m_settings.beginGroup("licensing");
-  const auto stored = m_settings.value("lastSeen", "").toString();
-  m_settings.endGroup();
+  const auto stored = SecretStorage::load("licensing", "lastSeen");
   if (!stored.isEmpty()) {
-    const auto seen = QDateTime::fromString(m_simpleCrypt.decryptToString(stored), Qt::RFC2822Date);
+    const auto seen = QDateTime::fromString(stored, Qt::RFC2822Date);
     if (seen.isValid() && seen > effective)
       effective = seen;
   }
 
   // Advance the high-watermark so it only ever moves forward.
-  const auto encoded = m_simpleCrypt.encryptToString(effective.toString(Qt::RFC2822Date));
-  m_settings.beginGroup("licensing");
-  m_settings.setValue("lastSeen", encoded);
-  m_settings.endGroup();
+  SecretStorage::save("licensing", "lastSeen", effective.toString(Qt::RFC2822Date));
 
   return effective;
 }
@@ -653,12 +636,9 @@ void Licensing::LemonSqueezy::applyValidatedLicense(const QJsonObject& json,
   Q_EMIT busyChanged();
   Q_EMIT licenseDataChanged();
 
-  if (!cachedResponse) {
-    const auto dt = QDateTime::currentDateTime().toString(Qt::RFC2822Date);
-    m_settings.beginGroup("licensing");
-    m_settings.setValue("lastCheck", m_simpleCrypt.encryptToString(dt));
-    m_settings.endGroup();
-  }
+  if (!cachedResponse)
+    SecretStorage::save(
+      "licensing", "lastCheck", QDateTime::currentDateTime().toString(Qt::RFC2822Date));
 
   if (!m_silentValidation) {
     m_silentValidation = true;

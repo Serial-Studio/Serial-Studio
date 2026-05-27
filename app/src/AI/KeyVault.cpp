@@ -188,7 +188,7 @@ void AI::KeyVault::clearKey(ProviderId provider)
 void AI::KeyVault::clearLegacyKey(ProviderId provider) const
 {
   m_settings.beginGroup(QStringLiteral("ai/keys"));
-  m_settings.setValue(settingsKey(provider), QString());
+  m_settings.remove(settingsKey(provider));
   m_settings.endGroup();
 }
 

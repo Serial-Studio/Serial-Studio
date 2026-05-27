@@ -22,8 +22,7 @@
 
 #ifdef BUILD_COMMERCIAL
 
-// libsecret pulls in glib's gdbusintrospection.h, which has a struct member named
-// "signals" -- include it before any Qt header turns "signals" into a macro.
+// Include libsecret before any Qt header: glib's "signals" struct member clashes with Qt's macro.
 #  if defined(HAVE_LIBSECRET)
 #    include <libsecret/secret.h>
 #  endif

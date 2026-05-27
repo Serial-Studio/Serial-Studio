@@ -589,6 +589,7 @@ if(BUILD_COMMERCIAL)
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
+    src/Licensing/SecretStorage.h
     src/Licensing/CommercialToken.h
     src/Sessions/DatabaseManager.h
     src/Sessions/DatabaseWorker.h
@@ -679,6 +680,7 @@ if(BUILD_COMMERCIAL)
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp
+    src/Licensing/SecretStorage.cpp
     src/UI/Widgets/Output/Base.cpp
     src/UI/Widgets/Output/Button.cpp
     src/UI/Widgets/Output/Slider.cpp
