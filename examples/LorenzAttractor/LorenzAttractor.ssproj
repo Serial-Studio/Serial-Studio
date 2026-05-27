@@ -230,7 +230,7 @@
     ],
     "title": "Lorenz Attractor",
     "widgetSettings": {
-        "activeGroup": 1002,
+        "activeGroup": 1000,
         "layout:1000": {
             "data": {
                 "autoLayout": true,
@@ -278,48 +278,48 @@
         "layout:1002": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 477,
-                "canvasWidth": 974,
+                "canvasHeight": 557,
+                "canvasWidth": 1022,
                 "geometries": [
                     {
-                        "height": 235,
+                        "height": 275,
                         "id": 0,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 2,
-                        "width": 483,
+                        "width": 507,
                         "x": 4,
                         "y": 4
                     },
                     {
-                        "height": 235,
+                        "height": 275,
                         "id": 2,
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 483,
-                        "x": 486,
+                        "width": 507,
+                        "x": 510,
                         "y": 4
                     },
                     {
-                        "height": 235,
+                        "height": 275,
                         "id": 3,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 483,
+                        "width": 507,
                         "x": 4,
-                        "y": 238
+                        "y": 278
                     },
                     {
-                        "height": 235,
+                        "height": 275,
                         "id": 4,
                         "relativeIndex": 2,
                         "state": "normal",
                         "widgetType": 9,
-                        "width": 483,
-                        "x": 486,
-                        "y": 238
+                        "width": 507,
+                        "x": 510,
+                        "y": 278
                     }
                 ],
                 "userReordered": false,
