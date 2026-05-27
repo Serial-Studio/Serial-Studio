@@ -13,6 +13,9 @@
   intent before non-trivial work, and one or two sentences naming what
   changed (and what's next) when you stop. Skip both on trivial edits.
 - **Do not create markdown/doc files** unless asked. Share info conversationally.
+- **Don't build or run the app.** Never invoke `cmake`/`jom`/`clang`/the compiler — the
+  developer builds and runs it themselves. Verify changes by reading and with
+  `scripts/code-verify.py`; leave compilation and runtime testing to the user.
 - **Update CLAUDE.md** for any architectural change that future me would otherwise miss.
 - **`scripts/` is the style contract.** When in doubt, run it; don't restate it here.
 
