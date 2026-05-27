@@ -38,7 +38,6 @@ Findings are grouped by `kind`:
     ai-superlative         -- "blazing fast", "lightning", "world-class", ...
     ai-meta-reference      -- "in this guide", "this section will", ...
     style-shouting         -- trailing "!" in body prose
-    style-non-ascii        -- curly quotes, em-dash, en-dash, arrows
     style-emdash-density   -- > 8 em-dashes per file (rhythm tic)
     style-hr-separator     -- `---` / `***` / `___` horizontal rule used as section divider
 
@@ -346,27 +345,6 @@ _SHOUTING = re.compile(r"(?<![A-Z0-9!])!(?:\s|$|[)\]])")
 # upstream, so any HR seen here is a body-prose separator.
 _HR_SEPARATOR = re.compile(r"^\s{0,3}(?:(?:-\s*){3,}|(?:\*\s*){3,}|(?:_\s*){3,})\s*$")
 
-# Non-ASCII typography that should be ASCII in source: em dash, en dash,
-# horizontal ellipsis, smart quotes, arrows, micro / degree / multiply
-# / division glyphs, non-breaking space.
-_NON_ASCII_GLYPHS = {
-    "—": "em-dash (use --)",
-    "–": "en-dash (use - or numeric range)",
-    "…": "ellipsis (use ...)",
-    "“": 'left smart quote (use ")',
-    "”": 'right smart quote (use ")',
-    "‘": "left smart quote (use ')",
-    "’": "right smart quote (use ')",
-    "→": "right arrow (use -> or 'to')",
-    "←": "left arrow (use <- or 'from')",
-    "×": "multiplication sign (use x or *)",
-    "÷": "division sign (use /)",
-    "µ": "micro sign (use 'micro' or 'u')",
-    "°": "degree sign (use ' deg' or 'degrees')",
-    " ": "non-breaking space (use a normal space)",
-    " ": "narrow no-break space (use a normal space)",
-}
-
 # How many em-dashes in a single file before we flag the density itself.
 # A few are fine for parentheticals; ten or more is a rhythm tic.
 _EMDASH_DENSITY_THRESHOLD = 8
@@ -611,26 +589,6 @@ def scan_file(path: Path) -> list[Finding]:
                 )
             )
             break  # one per line
-
-        # Style: non-ASCII typography. Scan the *unmasked* line so
-        # glyphs inside `inline code` are skipped (those are wiped to
-        # spaces by _mask). But we want to skip code/URL spans, so
-        # iterate the masked-but-restored characters.
-        for col, ch in enumerate(raw):
-            if masked[col] == " " and ch != " ":
-                continue  # masked-out code or URL
-            if ch in _NON_ASCII_GLYPHS:
-                findings.append(
-                    Finding(
-                        path=path,
-                        line=lineno,
-                        col=col + 1,
-                        kind="style-non-ascii",
-                        message=_NON_ASCII_GLYPHS[ch],
-                        excerpt=raw.strip()[:140],
-                    )
-                )
-                break  # one per line
 
         prev_raw = raw
 

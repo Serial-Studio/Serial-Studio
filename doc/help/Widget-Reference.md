@@ -199,9 +199,9 @@ flowchart TD
 
 ## Alarm bands
 
-Bar, Gauge, and Meter widgets render one or more **alarm bands** behind the value indicator. Each band is a contiguous value range with a color and a severity tier — the gauge paints them as colored stripes (Bar) or arc segments (Gauge / Meter), and the needle / fill tints to the active band's color when the value enters it. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
+Bar, Gauge, and Meter widgets render one or more **alarm bands** behind the value indicator. Each band is a contiguous value range with a color and a severity tier. The gauge paints them as colored stripes (Bar) or arc segments (Gauge / Meter), and the needle / fill tints to the active band's color when the value enters it. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
 
-**Band schema** — under the dataset's `alarmBands` array, each entry is an object:
+**Band schema.** Under the dataset's `alarmBands` array, each entry is an object:
 
 | Field      | Type   | Required | Notes |
 |------------|--------|----------|-------|
@@ -215,11 +215,11 @@ Bands may have gaps (the dataset's default background shows through), may overla
 
 **Notifications.** When the value enters a band with severity ≥ Warning, the widget posts a notification (`Warning` or `Critical` level, with the band's `label` in the subtitle). A 3-second per-widget cooldown suppresses oscillation spam.
 
-**Legacy compatibility.** Project files written by Serial Studio 3.3 and earlier carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back — projects re-saved by 3.4+ carry only `alarmBands`. For painter scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
+**Legacy compatibility.** Project files written by Serial Studio 3.3 and earlier carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back; projects re-saved by 3.4+ carry only `alarmBands`. For painter scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
 
 ## Utility widgets
 
-Clock and Stopwatch are dashboard-level utility widgets. They are not attached to any group or dataset — toggle them from the **Start menu** (Dashboard pane) and they appear as overview entries in the taskbar alongside Terminal and Notifications. Enabled state persists in `QSettings` under `Dashboard/ClockEnabled` and `Dashboard/StopwatchEnabled`.
+Clock and Stopwatch are dashboard-level utility widgets. They are not attached to any group or dataset; toggle them from the **Start menu** (Dashboard pane) and they appear as overview entries in the taskbar alongside Terminal and Notifications. Enabled state persists in `QSettings` under `Dashboard/ClockEnabled` and `Dashboard/StopwatchEnabled`.
 
 ### Clock
 
@@ -249,13 +249,13 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 | 3D Plot       | Group   | `plot3d`       | 3            | x, y, z coords (Pro)                         |
 | Image View    | Group   | `image`        | 0            | binary stream (Pro)                          |
 | Painter       | Group   | `painter`      | 0+           | user `paint(ctx, w, h)` JS script (Pro)      |
-| Plot          | Dataset | auto           | —            | `graph: true`, `pltMin`/`pltMax`             |
-| FFT Plot      | Dataset | auto           | —            | `fft: true`, `fftSamples`, `fftSamplingRate` |
-| Waterfall     | Dataset | auto           | —            | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
-| Bar           | Dataset | `bar`          | —            | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
-| Gauge         | Dataset | `gauge`        | —            | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
-| Compass       | Dataset | `compass`      | —            | value 0-360                                  |
-| Meter         | Dataset | `meter`        | —            | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
+| Plot          | Dataset | auto           | n/a          | `graph: true`, `pltMin`/`pltMax`             |
+| FFT Plot      | Dataset | auto           | n/a          | `fft: true`, `fftSamples`, `fftSamplingRate` |
+| Waterfall     | Dataset | auto           | n/a          | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
+| Bar           | Dataset | `bar`          | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
+| Gauge         | Dataset | `gauge`        | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
+| Compass       | Dataset | `compass`      | n/a          | value 0-360                                  |
+| Meter         | Dataset | `meter`        | n/a          | `wgtMin`/`wgtMax`, `alarmBands[]`, swipe to digital page |
 | Clock         | Utility | (toggle)       | 0            | system-clock driven; swipe between analog face / digital readout |
 | Stopwatch     | Utility | (toggle)       | 0            | local Start/Stop/Lap/Reset with lap table    |
 
@@ -281,7 +281,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `wgtMin`           | double | 0       | Widget (bar/gauge/meter) minimum. |
 | `wgtMax`           | double | 100     | Widget (bar/gauge/meter) maximum. |
 | `ledHigh`          | double | 80      | LED activation threshold. |
-| `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets. Each entry: `{min, max, severity, color?, label?}` — see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from 3.3 and earlier are still read and migrated to bands on load, but no longer written. |
+| `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets. Each entry: `{min, max, severity, color?, label?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from 3.3 and earlier are still read and migrated to bands on load, but no longer written. |
 | `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 16384). |
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |
 | `fftMin`           | double | 0       | FFT frequency axis minimum. |
