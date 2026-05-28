@@ -139,6 +139,7 @@ QStringList AI::AnthropicProvider::availableModels() const
     QStringLiteral("claude-haiku-4-5"),
     QStringLiteral("claude-sonnet-4-6"),
     QStringLiteral("claude-opus-4-7"),
+    QStringLiteral("claude-opus-4-8"),
   };
 }
 
@@ -163,6 +164,9 @@ QString AI::AnthropicProvider::modelDisplayName(const QString& modelId) const
 
   if (modelId == QStringLiteral("claude-opus-4-7"))
     return QStringLiteral("Opus 4.7");
+
+  if (modelId == QStringLiteral("claude-opus-4-8"))
+    return QStringLiteral("Opus 4.8");
 
   return modelId;
 }

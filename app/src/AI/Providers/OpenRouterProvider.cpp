@@ -88,6 +88,7 @@ QStringList AI::OpenRouterProvider::availableModels() const
   return {
     QStringLiteral("anthropic/claude-haiku-4.5"),
     QStringLiteral("anthropic/claude-sonnet-4.6"),
+    QStringLiteral("anthropic/claude-opus-4.8"),
     QStringLiteral("openai/gpt-5-mini"),
     QStringLiteral("openai/gpt-5.2"),
     QStringLiteral("google/gemini-2.5-flash"),
@@ -117,6 +118,9 @@ QString AI::OpenRouterProvider::modelDisplayName(const QString& modelId) const
 
   if (modelId == QStringLiteral("anthropic/claude-sonnet-4.6"))
     return QStringLiteral("Claude Sonnet 4.6");
+
+  if (modelId == QStringLiteral("anthropic/claude-opus-4.8"))
+    return QStringLiteral("Claude Opus 4.8");
 
   if (modelId == QStringLiteral("openai/gpt-5-mini"))
     return QStringLiteral("GPT-5 mini");

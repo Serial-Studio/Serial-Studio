@@ -861,12 +861,12 @@ static QString frameParserDryRunCommand(const QJsonObject& args, QJsonObject& dr
     static const Keys::KeyView keys[] = {
       Keys::KeyView("inputBytes"),
       Keys::KeyView("inputBytesHex"),
-      Keys::DecoderMethod,
-      Keys::FrameDetection,
-      Keys::FrameStart,
-      Keys::FrameEnd,
-      Keys::HexadecimalDelimiters,
-      Keys::ChecksumAlgorithm,
+      Keys::KeyView("decoderMethod"),
+      Keys::KeyView("frameDetection"),
+      Keys::KeyView("frameStart"),
+      Keys::KeyView("frameEnd"),
+      Keys::KeyView("hexadecimalDelimiters"),
+      Keys::KeyView("checksumAlgorithm"),
       Keys::KeyView("operationMode"),
     };
     for (const auto& k : keys)
