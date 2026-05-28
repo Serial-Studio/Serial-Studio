@@ -27,6 +27,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QStandardPaths>
 #include <QTimer>
 
@@ -34,6 +35,15 @@
 
 static constexpr int kDebounceMs       = 5000;
 static constexpr int kRetentionDefault = 50;
+
+// Bump when the snapshot wrapper changes shape. Restore refuses snapshots with format > current.
+static constexpr int kSnapshotFormat = 1;
+
+/**
+ * @brief JSON key for the per-snapshot wrapper that disambiguates BackupManager output from a
+ *        regular .ssproj. Underscored so it never collides with a ProjectModel field.
+ */
+static const QLatin1StringView kBackupMetaKey("_backupMeta");
 
 /**
  * @brief Filesystem-safe ISO8601 timestamp (colons replaced with dashes).
@@ -109,28 +119,26 @@ QString Misc::BackupManager::snapshot(const QString& label)
   if (dir.isEmpty())
     return {};
 
-  const auto serialised = pm.serializeToJson();
+  auto serialised = pm.serializeToJson();
   if (serialised.isEmpty())
     return {};
 
-  const auto bytes   = QJsonDocument(serialised).toJson(QJsonDocument::Compact);
-  const auto newHash = QCryptographicHash::hash(bytes, QCryptographicHash::Sha1);
+  // Hash bare payload (no wrapper) so dedup ignores the always-changing takenAt.
+  const auto payloadBytes = QJsonDocument(serialised).toJson(QJsonDocument::Compact);
+  const auto newHash      = QCryptographicHash::hash(payloadBytes, QCryptographicHash::Sha1);
 
-  // First session snapshot: seed m_lastContentHash from newest on-disk snapshot to skip dup write.
-  if (m_lastContentHash.isEmpty()) {
-    QDir d(dir);
-    const auto entries = d.entryInfoList(QStringList{QStringLiteral("*.ssproj")},
-                                         QDir::Files | QDir::NoDotAndDotDot,
-                                         QDir::Time | QDir::Reversed);
-    if (!entries.isEmpty()) {
-      QFile previous(entries.first().absoluteFilePath());
-      if (previous.open(QIODevice::ReadOnly)) {
-        m_lastContentHash  = QCryptographicHash::hash(previous.readAll(), QCryptographicHash::Sha1);
-        m_lastSnapshotPath = entries.first().absoluteFilePath();
-        previous.close();
-      }
-    }
-  }
+  QJsonObject meta;
+  meta.insert(QStringLiteral("format"), kSnapshotFormat);
+  meta.insert(QStringLiteral("takenAt"), QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
+  meta.insert(QStringLiteral("label"), label);
+  meta.insert(QStringLiteral("sha1"), QString::fromLatin1(newHash.toHex()));
+  serialised.insert(kBackupMetaKey, meta);
+
+  const auto bytes = QJsonDocument(serialised).toJson(QJsonDocument::Compact);
+
+  // Seed dedup state from newest on-disk snapshot (bare-payload hash; see helper).
+  if (m_lastContentHash.isEmpty())
+    seedDedupFromNewest(dir);
 
   // Same content as the last snapshot? Return the existing path; do not write a duplicate.
   if (!m_lastContentHash.isEmpty() && newHash == m_lastContentHash)
@@ -183,13 +191,27 @@ bool Misc::BackupManager::restore(const QString& path)
   if (err.error != QJsonParseError::NoError || !doc.isObject())
     return false;
 
+  // Reject snapshots written by a newer format than this build understands.
+  auto obj = doc.object();
+  if (obj.contains(kBackupMetaKey)) {
+    const auto meta = obj.value(kBackupMetaKey).toObject();
+    const int fmt   = meta.value(QStringLiteral("format")).toInt(0);
+    if (fmt > kSnapshotFormat) {
+      qWarning() << "[BackupManager] Refusing snapshot with format" << fmt
+                 << "(this build understands up to" << kSnapshotFormat << ")";
+      return false;
+    }
+    obj.remove(kBackupMetaKey);
+  }
+  const QJsonDocument projectDoc(obj);
+
   auto& pm = DataModel::ProjectModel::instance();
 
   // Capture project file association before load: loadFromJsonDocument overwrites m_filePath.
   const auto originalPath = pm.jsonFilePath();
 
   pm.setSuppressMessageBoxes(true);
-  const bool ok = pm.loadFromJsonDocument(doc, originalPath);
+  const bool ok = pm.loadFromJsonDocument(projectDoc, originalPath);
   pm.setSuppressMessageBoxes(false);
 
   // Persist to disk so a crash before the next manual save can't leave stale content unmodified.
@@ -273,6 +295,11 @@ QVariantMap Misc::BackupManager::summarize(const QString& path) const
 
   const auto project = doc.object();
   out.insert(QStringLiteral("title"), project.value(QStringLiteral("title")).toString());
+
+  // Surface the wrapper so the AI / recovery dialog can warn on incompatible snapshots.
+  if (project.contains(kBackupMetaKey))
+    out.insert(QStringLiteral("backupMeta"),
+               project.value(kBackupMetaKey).toObject().toVariantMap());
 
   const auto groups = project.value(QStringLiteral("groups")).toArray();
   out.insert(QStringLiteral("groupCount"), groups.size());
@@ -410,6 +437,36 @@ QString Misc::BackupManager::resolveBackupDir(const QString& stem) const
     return {};
 
   return sub;
+}
+
+/**
+ * @brief Hash the newest snapshot's bare payload (stripping `_backupMeta`) so a wrapper-only
+ *        change does not defeat dedup on the next snapshot call.
+ */
+void Misc::BackupManager::seedDedupFromNewest(const QString& dir)
+{
+  QDir d(dir);
+  const auto entries = d.entryInfoList(QStringList{QStringLiteral("*.ssproj")},
+                                       QDir::Files | QDir::NoDotAndDotDot,
+                                       QDir::Time | QDir::Reversed);
+  if (entries.isEmpty())
+    return;
+
+  QFile previous(entries.first().absoluteFilePath());
+  if (!previous.open(QIODevice::ReadOnly))
+    return;
+
+  QJsonParseError seedErr{};
+  const auto seedDoc = QJsonDocument::fromJson(previous.readAll(), &seedErr);
+  previous.close();
+  if (seedErr.error != QJsonParseError::NoError || !seedDoc.isObject())
+    return;
+
+  auto seedObj = seedDoc.object();
+  seedObj.remove(kBackupMetaKey);
+  const auto seedBytes = QJsonDocument(seedObj).toJson(QJsonDocument::Compact);
+  m_lastContentHash    = QCryptographicHash::hash(seedBytes, QCryptographicHash::Sha1);
+  m_lastSnapshotPath   = entries.first().absoluteFilePath();
 }
 
 /**

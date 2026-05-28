@@ -44,18 +44,6 @@ without predictability gets disabled.
   done, re-read the diff and ask: is what I did *what was asked, and only
   that*? If you can't answer yes, say so before claiming completion.
 
-## Build
-
-```bash
-cmake -B build -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j$(nproc)
-
-# Debug + sanitizers
-cmake -B build -DDEBUG_SANITIZER=ON -DCMAKE_BUILD_TYPE=Debug
-```
-
-Flags: `ENABLE_HARDENING`, `ENABLE_PGO`, `ENABLE_GRPC`, `USE_SYSTEM_ZLIB`, `USE_SYSTEM_EXPAT`.
-
 ## Scripts
 
 All scripts in `scripts/` are CWD-independent and write LF endings on every platform. Safe
@@ -77,7 +65,7 @@ that means the existing codebase has baseline debt — new code should still cle
 
 ## Project Overview
 
-Serial Studio: cross-platform telemetry dashboard, Qt 6.9.2 + C++20. Data sources: UART,
+Serial Studio: cross-platform telemetry dashboard, Qt 6.11.1 + C++20. Data sources: UART,
 TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O. 15+
 visualization widgets, 6 output (control) widgets, 256 KHz+ target data rate. Frame parsers
 in JavaScript (`QJSEngine`) or Lua 5.4 (embedded `lua54`). Per-dataset value transforms in
@@ -218,17 +206,6 @@ ConsoleOnly (replaced DeviceSendsJSON, 2026-04) bypasses CircularBuffer + queue;
   must `Q_EMIT configurationChanged()` from their ctor.
 - Live drivers may have empty device lists. UART/Modbus call `refreshSerialDevices()` /
   `refreshSerialPorts()` in `open()` if empty.
-
-### BluetoothLE — Shared Static Discovery
-
-- Discovery state is **static** (`s_devices`, `s_discoveryAgent`, `s_adapterAvailable`),
-  shared via `s_instances`. Connection state is per-instance (`m_controller`, `m_service`).
-- Device list is **append-only** during rediscovery — indices stay stable.
-- `selectDevice(0)` is ignored when already selected/connected (combobox-rebuild guard).
-- Property access (`selectService`, characteristic select) on an instance without a
-  controller forwards to the one that has it.
-- `setDriverProperty()` writes raw values; `driverProperties()` returns raw internals — no
-  placeholder compensation.
 
 ### ProjectModel / ProjectEditor Split
 
@@ -545,7 +522,7 @@ logical block, only when not self-evident. **Forbidden**: inline EOL comments, m
 **Don't fake the em-dash.** Source and user-facing Markdown are ASCII-only, so the em-dash
 glyph (U+2014) is out — but the fix is to *rewrite the sentence*, not to swap in a spaced
 double-hyphen ` -- `. `--` as a sentence dash is a mechanical glyph trade that reads like a
-robot did the edit; recast with a comma, colon, period, or parentheses instead. The point of
+robot did the edit; recast with a comma, period, or parentheses instead. The point of
 the rule is human, considered prose, not one dash glyph for another. `code-verify.py` flags it
 in comments (`comment-dash-substitute`, advisory) and `documentation-verify.py` in docs
 (`style-dash-substitute`); `i--`, `--i`, and `//---` banners don't match (the rule needs a
@@ -613,10 +590,3 @@ Mission-critical telemetry. Hotpath violations are blockers.
    to a tag or invariant-checked `static_cast`.
 10. **Zero warnings.** `-Wall -Wextra -Wpedantic`, `ENABLE_HARDENING` for production. Fix
     root cause; never suppress without justification.
-
-## MCP / API Testing
-
-TCP port 7777, MCP (JSON-RPC 2.0) + legacy. Client: `cd "examples/MCP Client" && python3
-client.py`. ~290 commands across 25 handlers. v3.3 added `DataTablesHandler`,
-`SessionsHandler`, `WorkspacesHandler`. Full list in
-`API/CommandHandler::initializeHandlers()`.

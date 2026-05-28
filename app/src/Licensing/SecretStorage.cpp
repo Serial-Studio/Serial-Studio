@@ -25,10 +25,18 @@
 #ifdef BUILD_COMMERCIAL
 
 #  include <QSettings>
+#  include <QtGlobal>
 
 #  include "Licensing/MachineID.h"
 #  include "Licensing/SimpleCrypt.h"
 #  include "Platform/SecretStore.h"
+
+// Linux: libsecret / kwallet may be unavailable (headless, containers, SSH); use legacy store.
+#  if defined(Q_OS_LINUX)
+static constexpr bool kForceLegacyStore = true;
+#  else
+static constexpr bool kForceLegacyStore = false;
+#  endif
 
 //--------------------------------------------------------------------------------------------------
 // Internal helpers
@@ -126,7 +134,24 @@ QString Licensing::SecretStorage::load(const QString& group, const QString& key)
 {
   const auto account = vaultAccount(group, key);
 
-  // Preferred path: OS keystore (DPAPI / Keychain / libsecret).
+  // Linux: read legacy first; only touch the keystore to migrate one-shot back to legacy.
+  if constexpr (kForceLegacyStore) {
+    const auto plain = legacyLoad(group, key);
+    if (!plain.isEmpty())
+      return plain;
+
+    if (Platform::SecretStore::available()) {
+      if (const auto vault = Platform::SecretStore::retrieve(secretService(), account)) {
+        legacySave(group, key, *vault);
+        (void)Platform::SecretStore::remove(secretService(), account);
+        return *vault;
+      }
+    }
+
+    return {};
+  }
+
+  // Preferred path: OS keystore (DPAPI / Keychain).
   if (Platform::SecretStore::available()) {
     if (const auto secret = Platform::SecretStore::retrieve(secretService(), account))
       return *secret;
@@ -158,6 +183,15 @@ void Licensing::SecretStorage::save(const QString& group, const QString& key, co
   }
 
   const auto account = vaultAccount(group, key);
+
+  // Linux: write through legacy and scrub any keystore copy left from an older build.
+  if constexpr (kForceLegacyStore) {
+    legacySave(group, key, value);
+    if (Platform::SecretStore::available())
+      (void)Platform::SecretStore::remove(secretService(), account);
+
+    return;
+  }
 
   // Preferred path: OS keystore. Scrub any legacy blob so no weaker copy lingers.
   if (Platform::SecretStore::available()

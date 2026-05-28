@@ -30,7 +30,8 @@ class QTimer;
 namespace Misc {
 
 /**
- * @brief Rolling project snapshot manager. Writes gzipped .ssproj copies for recovery.
+ * @brief Rolling project snapshot manager. Writes .ssproj copies wrapped with a versioned
+ *        `_backupMeta` object so future builds can refuse incompatible snapshots.
  */
 class BackupManager : public QObject {
   Q_OBJECT
@@ -72,6 +73,7 @@ private:
   [[nodiscard]] QString currentProjectStem() const;
   [[nodiscard]] QString resolveBackupDir(const QString& stem) const;
   void enforceRetention(const QString& dir);
+  void seedDedupFromNewest(const QString& dir);
 
   bool m_enabled;
   QString m_lastSnapshotPath;

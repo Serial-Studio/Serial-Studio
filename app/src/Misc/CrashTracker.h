@@ -27,7 +27,7 @@
 
 namespace Misc {
 /**
- * @brief Detects abnormal terminations via a QSettings "running" flag and counts streaks.
+ * @brief Detects abnormal terminations via a local QSettings "running" flag (no telemetry).
  */
 class CrashTracker : public QObject {
   // clang-format off

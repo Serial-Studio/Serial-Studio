@@ -115,5 +115,6 @@ private:
 
   quint64 m_droppedFrames;
   IO::CapturedData::SteadyTimePoint m_lastDropNotify;
+  IO::CapturedData::SteadyTimePoint m_lastOverflowLog;
 };
 }  // namespace IO

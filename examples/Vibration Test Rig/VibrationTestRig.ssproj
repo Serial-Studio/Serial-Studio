@@ -6,10 +6,9 @@
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": true,
                     "fftMax": 3,
                     "fftMin": -3,
@@ -25,26 +24,27 @@
                     "plotMax": 3,
                     "plotMin": -3,
                     "title": "Vibration",
+                    "uniqueId": 0,
                     "units": "g",
                     "value": "",
                     "waterfall": true,
-                    "waterfallYAxis": 2,
+                    "waterfallYAxis": 40001,
                     "widget": "",
                     "widgetMax": 3,
                     "widgetMin": -3,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "Vibration (Campbell)",
+            "uniqueId": 40004,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 6,
                     "fftMin": -60,
@@ -60,18 +60,18 @@
                     "plotMax": 6,
                     "plotMin": -60,
                     "title": "Mic L",
+                    "uniqueId": 10000,
                     "units": "dB",
                     "value": "",
                     "widget": "",
                     "widgetMax": 6,
                     "widgetMin": -60,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 6,
                     "fftMin": -60,
@@ -87,25 +87,26 @@
                     "plotMax": 6,
                     "plotMin": -60,
                     "title": "Mic R",
+                    "uniqueId": 10001,
                     "units": "dB",
                     "value": "",
                     "widget": "",
                     "widgetMax": 6,
                     "widgetMin": -60,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "painterCode": "// Stereo VU meter -- broadcast console aesthetic, themed.\n// datasets[0] = left channel (dB FS), datasets[1] = right channel (dB FS).\n\nconst HOLD_MS   = 1400;\nconst FALL_DB_S = 18;       // peak-hold fall rate (dB per second)\nconst SEGMENTS  = 36;\nconst SEG_GAP   = 2;\n\n// dB scale and zone thresholds (relative to db_to_norm output)\nconst DB_LO = -60, DB_HI = 6;\nconst T_NOMINAL = 0.70;     // green up to here\nconst T_HOT     = 0.90;     // yellow up to here, red above\n\n// Marker dB positions\nconst TICKS_MAJOR = [-60, -40, -20, -10, -3, 0, 6];\nconst TICKS_MINOR = [-50, -30, -15, -6, 3];\n\nlet peakL = DB_LO, peakR = DB_LO;\nlet holdL = 0,     holdR = 0;\nlet lastTs = 0;\n\nfunction db_to_norm(db) {\n  return Math.max(0, Math.min(1, (db - DB_LO) / (DB_HI - DB_LO)));\n}\n\nfunction pickZoneColor(t) {\n  const palette = theme.widget_colors || [theme.widget_highlight];\n  const nominal = palette[5 % palette.length] || theme.widget_highlight;\n  const hot     = palette[2 % palette.length] || theme.accent;\n  if (t < T_NOMINAL) return nominal;\n  if (t < T_HOT)     return hot;\n  return theme.alarm;\n}\n\nfunction mixHex(a, b, t) {\n  const pa = parseInt(a.slice(1), 16);\n  const pb = parseInt(b.slice(1), 16);\n  const ar = (pa >> 16) & 0xff, ag = (pa >> 8) & 0xff, ab = pa & 0xff;\n  const br = (pb >> 16) & 0xff, bg = (pb >> 8) & 0xff, bb = pb & 0xff;\n  const r = Math.round(ar + (br - ar) * t);\n  const g = Math.round(ag + (bg - ag) * t);\n  const b2 = Math.round(ab + (bb - ab) * t);\n  return \"#\" + ((1 << 24) | (r << 16) | (g << 8) | b2).toString(16).slice(1);\n}\n\nfunction segment_color(t, lit) {\n  const lit_color = pickZoneColor(t);\n  if (lit) return lit_color;\n  return mixHex(lit_color, theme.widget_base, 0.78);\n}\n\nfunction onFrame() {\n  if (datasets.length < 2) return;\n\n  const now = Date.now();\n  const dt  = lastTs > 0 ? Math.max(0, (now - lastTs) * 1e-3) : 0;\n  lastTs    = now;\n\n  const l = datasets[0].value;\n  const r = datasets[1].value;\n\n  if (l > peakL) { peakL = l; holdL = now; }\n  else if (now - holdL > HOLD_MS) { peakL = Math.max(DB_LO, peakL - FALL_DB_S * dt); }\n\n  if (r > peakR) { peakR = r; holdR = now; }\n  else if (now - holdR > HOLD_MS) { peakR = Math.max(DB_LO, peakR - FALL_DB_S * dt); }\n}\n\nfunction draw_panel(ctx, x, y, w, h) {\n  ctx.fillStyle = theme.alternate_base || theme.widget_base;\n  ctx.fillRect(x, y, w, h);\n\n  ctx.fillStyle = mixHex(theme.alternate_base || theme.widget_base, theme.widget_text, 0.04);\n  ctx.fillRect(x + 1, y + 1, w - 2, 1);\n  ctx.fillStyle = mixHex(theme.widget_border, theme.widget_base, 0.4);\n  ctx.fillRect(x + 1, y + h - 2, w - 2, 1);\n\n  // Outer border -- matches the schematic's draw_card.\n  ctx.strokeStyle = theme.widget_border;\n  ctx.lineWidth = 1;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n}\n\nfunction draw_bar(ctx, x, y, w, h, level, peak) {\n  ctx.fillStyle = mixHex(theme.widget_base, theme.widget_border, 0.35);\n  ctx.fillRect(x, y, w, h);\n  ctx.fillStyle = theme.widget_border;\n  ctx.fillRect(x, y, w, 1);\n  ctx.fillStyle = theme.alternate_base || theme.widget_base;\n  ctx.fillRect(x, y + h - 1, w, 1);\n\n  const segW = (w - SEG_GAP * (SEGMENTS - 1)) / SEGMENTS;\n  for (let i = 0; i < SEGMENTS; ++i) {\n    const t   = (i + 0.5) / SEGMENTS;\n    const lit = t <= level;\n    ctx.fillStyle = segment_color(t, lit);\n    ctx.fillRect(x + i * (segW + SEG_GAP), y + 2, segW, h - 4);\n  }\n\n  if (peak > 0) {\n    const px = x + w * peak;\n    ctx.fillStyle = theme.widget_border;\n    ctx.fillRect(px - 2, y - 2, 1, h + 4);\n    ctx.fillRect(px + 2, y - 2, 1, h + 4);\n    ctx.fillStyle = theme.widget_text;\n    ctx.fillRect(px - 1, y - 3, 2, h + 6);\n  }\n\n  ctx.strokeStyle = theme.widget_border;\n  ctx.lineWidth = 1;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n}\n\nfunction draw_scale(ctx, x, y, w) {\n  ctx.fillStyle = theme.widget_border;\n  ctx.fillRect(x, y, w, 1);\n\n  for (let i = 0; i < TICKS_MINOR.length; ++i) {\n    const px = x + w * db_to_norm(TICKS_MINOR[i]);\n    ctx.fillRect(px, y, 1, 4);\n  }\n\n  ctx.font = \"bold 10px sans-serif\";\n  ctx.textAlign = \"center\";\n  for (let i = 0; i < TICKS_MAJOR.length; ++i) {\n    const v  = TICKS_MAJOR[i];\n    const px = x + w * db_to_norm(v);\n    const tickColor = (v >= 0) ? theme.alarm : theme.placeholder_text;\n    ctx.fillStyle = tickColor;\n    ctx.fillRect(px, y, 1, 6);\n    const label = (v > 0 ? \"+\" + v : \"\" + v);\n    ctx.fillStyle = (v >= 0) ? theme.alarm : theme.placeholder_text;\n    ctx.fillText(label, px, y + 18);\n  }\n\n  const palette = theme.widget_colors || [theme.widget_highlight];\n  ctx.fillStyle = palette[2 % palette.length] || theme.accent;\n  ctx.fillRect(x + w * T_NOMINAL, y - 2, 1, 3);\n  ctx.fillStyle = theme.alarm;\n  ctx.fillRect(x + w * T_HOT, y - 2, 1, 3);\n}\n\nfunction paint(ctx, w, h) {\n  ctx.fillStyle = theme.widget_base;\n  ctx.fillRect(0, 0, w, h);\n\n  if (datasets.length < 2) return;\n\n  const pad = 14;\n  draw_panel(ctx, pad, pad, w - pad * 2, h - pad * 2);\n\n  const headerY = pad + 10;\n  ctx.fillStyle = theme.widget_text;\n  ctx.font = \"bold 11px sans-serif\";\n  ctx.textAlign = \"start\";\n  ctx.fillText(\"STEREO  VU\", pad + 16, headerY + 4);\n\n  ctx.fillStyle = theme.placeholder_text;\n  ctx.font = \"9px sans-serif\";\n  ctx.textAlign = \"end\";\n  ctx.fillText(\"dB FS\", w - pad - 16, headerY + 4);\n\n  ctx.fillStyle = theme.widget_border;\n  ctx.fillRect(pad + 12, headerY + 12, w - (pad + 12) * 2, 1);\n\n  const channelLabelW = 22;\n  const valueLabelW   = 56;\n  const x  = pad + 12 + channelLabelW;\n  const bw = w - pad * 2 - 24 - channelLabelW - valueLabelW;\n  const bh = 16;\n\n  const bodyTop  = headerY + 24;\n  const bodyBot  = h - pad - 32;\n  const bodyMid  = (bodyTop + bodyBot) / 2;\n  const yL       = bodyMid - bh - 4;\n  const yR       = bodyMid + 4;\n\n  const lVal = datasets[0].value;\n  const rVal = datasets[1].value;\n\n  ctx.fillStyle = theme.widget_text;\n  ctx.font = \"bold 14px sans-serif\";\n  ctx.textAlign = \"center\";\n  ctx.fillText(\"L\", pad + 12 + channelLabelW * 0.5, yL + bh * 0.5 + 5);\n  ctx.fillText(\"R\", pad + 12 + channelLabelW * 0.5, yR + bh * 0.5 + 5);\n\n  draw_bar(ctx, x, yL, bw, bh, db_to_norm(lVal), db_to_norm(peakL));\n  draw_bar(ctx, x, yR, bw, bh, db_to_norm(rVal), db_to_norm(peakR));\n\n  ctx.fillStyle = theme.widget_text;\n  ctx.font = \"bold 12px sans-serif\";\n  ctx.textAlign = \"end\";\n  ctx.fillText(format_db(lVal), w - pad - 14, yL + bh * 0.5 + 4);\n  ctx.fillText(format_db(rVal), w - pad - 14, yR + bh * 0.5 + 4);\n\n  ctx.fillStyle = theme.placeholder_text;\n  ctx.font = \"9px sans-serif\";\n  ctx.fillText(\"pk \" + format_db(peakL), w - pad - 14, yL - 3);\n  ctx.fillText(\"pk \" + format_db(peakR), w - pad - 14, yR + bh + 11);\n\n  draw_scale(ctx, x, yR + bh + 18, bw);\n\n  ctx.textAlign = \"start\";\n}\n\nfunction format_db(v) {\n  if (v <= DB_LO + 0.5) return \"-INF\";\n  if (v >= 0)           return \"+\" + v.toFixed(1);\n  return v.toFixed(1);\n}\n",
             "title": "VU Meter",
+            "uniqueId": 40005,
             "widget": "painter"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 3,
                     "fftMin": 0,
@@ -123,24 +124,25 @@
                     "title": "Vibration (RMS)",
                     "transformCode": "-- Rolling RMS over last N samples\n-- Faster hot-path than JS for high-rate telemetry.\n\nlocal N = 1024\nlocal history = {}\nfor i = 1, N do history[i] = 0 end\n\nlocal idx = 1\nlocal count = 0\nlocal sumSq = 0\n\nfunction transform(value)\n  local v = tonumber(value) or 0\n  local sq = v * v\n\n  sumSq = sumSq - history[idx] + sq\n  history[idx] = sq\n\n  idx = idx + 1\n  if idx > N then idx = 1 end\n\n  if count < N then count = count + 1 end\n  if sumSq < 0 then sumSq = 0 end\n\n  return math.sqrt(sumSq / count)\nend\n",
                     "transformLanguage": 1,
+                    "uniqueId": 20000,
                     "units": "g",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 3,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "Vibration Gauge",
+            "uniqueId": 40006,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 5500,
                     "fftMin": 0,
@@ -156,24 +158,25 @@
                     "plotMax": 5500,
                     "plotMin": 0,
                     "title": "Motor RPM",
+                    "uniqueId": 30000,
                     "units": "rpm",
                     "value": "",
                     "widget": "gauge",
                     "widgetMax": 5500,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "title": "RPM trend",
+            "uniqueId": 40007,
             "widget": ""
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 3,
                     "fftMin": -3,
@@ -189,18 +192,18 @@
                     "plotMax": 3,
                     "plotMin": -3,
                     "title": "Vibration",
+                    "uniqueId": 40000,
                     "units": "g",
                     "value": "",
                     "widget": "",
                     "widgetMax": 3,
                     "widgetMin": -3,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 5500,
                     "fftMin": 0,
@@ -216,18 +219,18 @@
                     "plotMax": 5500,
                     "plotMin": 0,
                     "title": "Motor RPM",
+                    "uniqueId": 40001,
                     "units": "rpm",
                     "value": "",
                     "widget": "",
                     "widgetMax": 5500,
                     "widgetMin": 0,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 6,
                     "fftMin": -60,
@@ -243,18 +246,18 @@
                     "plotMax": 6,
                     "plotMin": -60,
                     "title": "Mic L",
+                    "uniqueId": 40002,
                     "units": "dB",
                     "value": "",
                     "widget": "",
                     "widgetMax": 6,
                     "widgetMin": -60,
-                    "xAxis": 0
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 0,
-                    "alarmLow": 0,
                     "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 6,
                     "fftMin": -60,
@@ -270,22 +273,47 @@
                     "plotMax": 6,
                     "plotMin": -60,
                     "title": "Mic R",
+                    "uniqueId": 40003,
                     "units": "dB",
                     "value": "",
                     "widget": "",
                     "widgetMax": 6,
                     "widgetMin": -60,
-                    "xAxis": 0
+                    "xAxis": -2
                 }
             ],
             "painterCode": "// Live system schematic for the Vibration Test Rig, themed.\n// Three stages, left to right: motor -> bracket + accelerometer -> mics.\n// Each stage is bound to live datasets:\n//\n//   datasets[0] = vibration   (g)\n//   datasets[1] = motor RPM\n//   datasets[2] = mic L       (dB FS)\n//   datasets[3] = mic R       (dB FS)\n\nconst TWO_PI = Math.PI * 2;\n\n// All colors derive from the active theme so the schematic follows\n// light/dark theme switches automatically.\nfunction palette() {\n  return theme.widget_colors || [theme.widget_highlight];\n}\n\nfunction pickColor(i) {\n  const p = palette();\n  return p[i % p.length];\n}\n\nfunction mixHex(a, b, t) {\n  const pa = parseInt(a.slice(1), 16);\n  const pb = parseInt(b.slice(1), 16);\n  const ar = (pa >> 16) & 0xff, ag = (pa >> 8) & 0xff, ab = pa & 0xff;\n  const br = (pb >> 16) & 0xff, bg = (pb >> 8) & 0xff, bb = pb & 0xff;\n  const r = Math.round(ar + (br - ar) * t);\n  const g = Math.round(ag + (bg - ag) * t);\n  const b2 = Math.round(ab + (bb - ab) * t);\n  return \"#\" + ((1 << 24) | (r << 16) | (g << 8) | b2).toString(16).slice(1);\n}\n\n// State\nlet rotorAngle = 0;\nlet lastTs     = 0;\nlet chase      = 0;\nlet tracePhase = 0;\n\nfunction db_to_intensity(db) {\n  return Math.max(0, Math.min(1, (db + 60) / 66));\n}\n\nfunction rpm_to_rad_per_s(rpm) {\n  return TWO_PI * rpm / 60.0;\n}\n\nfunction onFrame() {\n  const now = Date.now();\n  const dt  = lastTs > 0 ? Math.max(0, (now - lastTs) * 1e-3) : 0;\n  lastTs    = now;\n\n  if (datasets.length < 4) return;\n\n  // Spin rotor at the actual motor RPM, visually scaled so it doesn't\n  // strobe into invisibility.\n  const rpm = datasets[1].value;\n  rotorAngle = (rotorAngle + rpm_to_rad_per_s(rpm) * dt / 30) % TWO_PI;\n\n  // Trace scroll uses its own phase so the bracket itself stays still.\n  tracePhase = (tracePhase + dt * 12 * TWO_PI) % TWO_PI;\n\n  // Packet chase speed scales with audio activity.\n  const micAvg = (db_to_intensity(datasets[2].value) +\n                  db_to_intensity(datasets[3].value)) * 0.5;\n  const baseSpeed = 0.6;\n  const chaseSpeed = baseSpeed + micAvg * 1.4;\n  chase = (chase + dt * chaseSpeed) % 1;\n}\n\nfunction draw_card(ctx, x, y, w, h, label) {\n  // Soft drop shadow.\n  ctx.fillStyle = mixHex(theme.widget_border, theme.widget_base, 0.4);\n  ctx.fillRect(x + 2, y + 3, w, h);\n\n  ctx.fillStyle = theme.alternate_base || theme.widget_base;\n  ctx.fillRect(x, y, w, h);\n  ctx.strokeStyle = theme.widget_border;\n  ctx.lineWidth = 1;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n\n  // Label strip at the top.\n  ctx.fillStyle = mixHex(theme.alternate_base || theme.widget_base, theme.widget_text, 0.04);\n  ctx.fillRect(x + 1, y + 1, w - 2, 18);\n  ctx.fillStyle = theme.widget_border;\n  ctx.fillRect(x + 1, y + 19, w - 2, 1);\n\n  ctx.fillStyle = theme.widget_text;\n  ctx.font = \"bold 10px sans-serif\";\n  ctx.textAlign = \"start\";\n  ctx.fillText(label, x + 8, y + 13);\n}\n\nfunction draw_motor(ctx, cx, cy, radius, rpm) {\n  const motor_body = mixHex(theme.widget_text, theme.widget_base, 0.55);\n  const motor_cap  = mixHex(theme.widget_text, theme.widget_base, 0.35);\n  const rotor      = pickColor(2);\n  const rotor_hub  = theme.widget_text;\n  const bolt       = theme.widget_border;\n\n  // Motor body (cylinder seen from the end).\n  ctx.fillStyle = motor_body;\n  ctx.beginPath();\n  ctx.moveTo(cx + radius, cy);\n  ctx.arc(cx, cy, radius, 0, TWO_PI);\n  ctx.fill();\n\n  // Outer ring.\n  ctx.strokeStyle = motor_cap;\n  ctx.lineWidth = 3;\n  ctx.beginPath();\n  ctx.moveTo(cx + radius - 1, cy);\n  ctx.arc(cx, cy, radius - 1, 0, TWO_PI);\n  ctx.stroke();\n\n  // Bolt heads around the rim.\n  for (let i = 0; i < 8; ++i) {\n    const a = (i / 8) * TWO_PI;\n    const bx = cx + Math.cos(a) * (radius - 6);\n    const by = cy + Math.sin(a) * (radius - 6);\n    ctx.fillStyle = bolt;\n    ctx.beginPath();\n    ctx.moveTo(bx + 2, by);\n    ctx.arc(bx, by, 2, 0, TWO_PI);\n    ctx.fill();\n  }\n\n  // Spinning rotor (3-spoke).\n  ctx.save();\n  ctx.translate(cx, cy);\n  ctx.rotate(rotorAngle);\n  ctx.fillStyle = rotor;\n  for (let i = 0; i < 3; ++i) {\n    ctx.save();\n    ctx.rotate((i / 3) * TWO_PI);\n    ctx.fillRect(-3, -radius * 0.55, 6, radius * 0.55);\n    ctx.restore();\n  }\n  // Hub\n  ctx.fillStyle = rotor_hub;\n  ctx.beginPath();\n  ctx.moveTo(6, 0);\n  ctx.arc(0, 0, 6, 0, TWO_PI);\n  ctx.fill();\n  ctx.restore();\n\n  // RPM caption beneath -- never moves.\n  ctx.fillStyle = theme.widget_text;\n  ctx.font = \"bold 13px sans-serif\";\n  ctx.textAlign = \"center\";\n  ctx.fillText(rpm.toFixed(0), cx, cy + radius + 18);\n  ctx.fillStyle = theme.placeholder_text;\n  ctx.font = \"9px sans-serif\";\n  ctx.fillText(\"RPM\", cx, cy + radius + 30);\n}\n\nfunction draw_bracket(ctx, cx, cy, vib) {\n  const bracket   = theme.widget_border;\n  const sensor    = pickColor(5);\n  const sensor_dk = mixHex(sensor, theme.widget_text, 0.45);\n\n  // L-bracket\n  ctx.fillStyle = bracket;\n  ctx.fillRect(cx - 30, cy - 2, 60, 6);\n  ctx.fillRect(cx - 30, cy - 28, 6, 30);\n  ctx.strokeStyle = mixHex(bracket, theme.widget_text, 0.35);\n  ctx.lineWidth = 1;\n  ctx.strokeRect(cx - 30 + 0.5, cy - 2 + 0.5, 60, 6);\n  ctx.strokeRect(cx - 30 + 0.5, cy - 28 + 0.5, 6, 30);\n\n  // Mounted accelerometer (small PCB).\n  ctx.fillStyle = sensor;\n  ctx.fillRect(cx - 12, cy - 22, 24, 16);\n  ctx.strokeStyle = sensor_dk;\n  ctx.lineWidth = 1;\n  ctx.strokeRect(cx - 12 + 0.5, cy - 22 + 0.5, 24, 16);\n  // chip on top\n  ctx.fillStyle = theme.widget_text;\n  ctx.fillRect(cx - 5, cy - 18, 10, 8);\n  // led\n  ctx.fillStyle = pickColor(2);\n  ctx.beginPath();\n  ctx.moveTo(cx + 8, cy - 19);\n  ctx.arc(cx + 7, cy - 19, 1.5, 0, TWO_PI);\n  ctx.fill();\n\n  // Mini vibration trace beneath the bracket.\n  draw_vibration_trace(ctx, cx - 38, cy + 16, 76, 18, vib, sensor_dk);\n\n  // Caption -- stationary text.\n  ctx.fillStyle = theme.widget_text;\n  ctx.font = \"bold 13px sans-serif\";\n  ctx.textAlign = \"center\";\n  ctx.fillText(vib.toFixed(2) + \" g\", cx, cy + 50);\n  ctx.fillStyle = theme.placeholder_text;\n  ctx.font = \"9px sans-serif\";\n  ctx.fillText(\"ACCELEROMETER\", cx, cy + 62);\n}\n\n// Tiny scrolling vibration sparkline (cosmetic -- driven by trace phase\n// so it reads as motion even when vib is steady).\nconst traceBuf = [];\nconst TRACE_N = 64;\nfunction draw_vibration_trace(ctx, x, y, w, h, vib, traceColor) {\n  const sample = Math.sin(tracePhase * 1.7) * Math.min(3, Math.abs(vib));\n  traceBuf.push(sample);\n  if (traceBuf.length > TRACE_N) traceBuf.shift();\n\n  ctx.fillStyle = mixHex(theme.widget_base, theme.widget_border, 0.25);\n  ctx.fillRect(x, y, w, h);\n  ctx.strokeStyle = theme.widget_border;\n  ctx.lineWidth = 1;\n  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);\n\n  ctx.fillStyle = theme.widget_border;\n  ctx.fillRect(x + 2, y + h * 0.5, w - 4, 1);\n\n  if (traceBuf.length < 2) return;\n  ctx.strokeStyle = traceColor;\n  ctx.lineWidth = 1.5;\n  ctx.beginPath();\n  for (let i = 0; i < traceBuf.length; ++i) {\n    const px = x + 2 + (i / (TRACE_N - 1)) * (w - 4);\n    const py = y + h * 0.5 - (traceBuf[i] / 3) * (h * 0.42);\n    if (i === 0) ctx.moveTo(px, py);\n    else         ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nfunction draw_mic(ctx, cx, cy, label, db, maxR) {\n  const mic_body  = theme.widget_text;\n  const mic_ring  = pickColor(2);\n  const mic_ring2 = theme.alarm;\n  const mic_halo  = mixHex(mic_ring, theme.widget_base, 0.55);\n  const grille    = mixHex(theme.widget_text, theme.widget_base, 0.45);\n  const stand     = mixHex(theme.widget_text, theme.widget_base, 0.35);\n\n  const intensity = db_to_intensity(db);\n  const cap = Math.max(8, maxR);\n  const ringR = Math.min(cap, 14 + intensity * 4);\n  const ringColor = (db > 0) ? mic_ring2 : mic_ring;\n\n  // Halo\n  ctx.strokeStyle = mic_halo;\n  ctx.lineWidth = 3;\n  ctx.beginPath();\n  ctx.moveTo(cx + ringR + 2, cy);\n  ctx.arc(cx, cy, ringR + 2, 0, TWO_PI);\n  ctx.stroke();\n\n  ctx.strokeStyle = ringColor;\n  ctx.lineWidth = 2;\n  ctx.beginPath();\n  ctx.moveTo(cx + ringR, cy);\n  ctx.arc(cx, cy, ringR, 0, TWO_PI);\n  ctx.stroke();\n\n  // Mic body (capsule)\n  ctx.fillStyle = mic_body;\n  ctx.fillRect(cx - 7, cy - 14, 14, 24);\n  ctx.beginPath();\n  ctx.moveTo(cx + 7, cy - 14);\n  ctx.arc(cx, cy - 14, 7, 0, Math.PI, true);\n  ctx.fill();\n  ctx.beginPath();\n  ctx.moveTo(cx + 7, cy + 10);\n  ctx.arc(cx, cy + 10, 7, 0, Math.PI);\n  ctx.fill();\n\n  // Grille lines\n  ctx.strokeStyle = grille;\n  ctx.lineWidth = 1;\n  for (let i = -2; i <= 2; ++i) {\n    ctx.beginPath();\n    ctx.moveTo(cx - 6, cy + i * 4);\n    ctx.lineTo(cx + 6, cy + i * 4);\n    ctx.stroke();\n  }\n\n  // Stand\n  ctx.fillStyle = stand;\n  ctx.fillRect(cx - 1, cy + 16, 2, 10);\n  ctx.fillRect(cx - 8, cy + 26, 16, 3);\n\n  // Label & dB readout -- stationary text.\n  ctx.fillStyle = theme.widget_text;\n  ctx.font = \"bold 11px sans-serif\";\n  ctx.textAlign = \"center\";\n  ctx.fillText(label, cx, cy + 44);\n  ctx.fillStyle = theme.placeholder_text;\n  ctx.font = \"10px sans-serif\";\n  ctx.fillText(db.toFixed(1) + \" dB\", cx, cy + 56);\n}\n\nfunction draw_wire(ctx, x0, y0, x1, y1, hot) {\n  const wire_off = theme.widget_border;\n  const wire_on  = theme.widget_highlight;\n  ctx.strokeStyle = hot ? wire_on : wire_off;\n  ctx.lineWidth = hot ? 2 : 1.5;\n  ctx.beginPath();\n  ctx.moveTo(x0, y0);\n  ctx.lineTo(x1, y1);\n  ctx.stroke();\n\n  const dx = x1 - x0, dy = y1 - y0;\n  for (let i = 0; i < 3; ++i) {\n    const t = (chase + i / 3) % 1;\n    const px = x0 + dx * t;\n    const py = y0 + dy * t;\n    ctx.fillStyle = hot ? wire_on : wire_off;\n    ctx.beginPath();\n    ctx.moveTo(px + 2.5, py);\n    ctx.arc(px, py, 2.5, 0, TWO_PI);\n    ctx.fill();\n  }\n}\n\nfunction paint(ctx, w, h) {\n  ctx.fillStyle = theme.widget_base;\n  ctx.fillRect(0, 0, w, h);\n\n  if (datasets.length < 4) {\n    ctx.fillStyle = theme.placeholder_text;\n    ctx.font = \"12px sans-serif\";\n    ctx.textAlign = \"center\";\n    ctx.fillText(\"Waiting for vibration, RPM, mic L, mic R...\", w/2, h/2);\n    return;\n  }\n\n  // Header\n  ctx.fillStyle = theme.widget_text;\n  ctx.font = \"bold 12px sans-serif\";\n  ctx.textAlign = \"start\";\n  ctx.fillText(\"SYSTEM  SCHEMATIC\", 16, 20);\n  ctx.fillStyle = theme.placeholder_text;\n  ctx.font = \"10px sans-serif\";\n  ctx.textAlign = \"end\";\n  ctx.fillText(\"live data flow\", w - 16, 20);\n\n  ctx.fillStyle = theme.widget_border;\n  ctx.fillRect(16, 28, w - 32, 1);\n\n  // Layout: 3 stages distributed horizontally.\n  const top    = 44;\n  const bottom = h - 16;\n  const midY   = (top + bottom) / 2;\n\n  const colW   = (w - 40) / 3;\n  const cx0    = 20 + colW * 0.5;\n  const cx1    = 20 + colW * 1.5;\n  const cx2    = 20 + colW * 2.5;\n\n  const cardW = colW - 20;\n  const cardH = bottom - top;\n  draw_card(ctx, cx0 - cardW/2, top, cardW, cardH, \"MOTOR\");\n  draw_card(ctx, cx1 - cardW/2, top, cardW, cardH, \"BRACKET + ACCEL\");\n  draw_card(ctx, cx2 - cardW/2, top, cardW, cardH, \"ENCLOSURE MICS\");\n\n  // Wires connecting the cards' edges.\n  const wireY = midY;\n  draw_wire(ctx, cx0 + cardW/2, wireY, cx1 - cardW/2, wireY, true);\n  draw_wire(ctx, cx1 + cardW/2, wireY, cx2 - cardW/2, wireY, true);\n\n  // Stage 0 -- Motor\n  const motorR = Math.min(cardW, cardH) * 0.28;\n  draw_motor(ctx, cx0, midY - 8, motorR, datasets[1].value);\n\n  // Stage 1 -- Bracket + accelerometer (stationary)\n  draw_bracket(ctx, cx1, midY - 14, datasets[0].value);\n\n  // Stage 2 -- Two mics, side by side. Budget: each mic gets half the\n  // card width minus a small inner gap; the ring radius (with a 4 px halo\n  // margin) must fit inside that half-cell so it cannot overflow the card.\n  const innerW = cardW - 16;\n  const halfCell = innerW / 2;\n  const maxRingR = Math.max(8, halfCell - 6);\n  const micGap = Math.min(28, halfCell * 0.5);\n  draw_mic(ctx, cx2 - micGap, midY - 4, \"L\", datasets[2].value, maxRingR);\n  draw_mic(ctx, cx2 + micGap, midY - 4, \"R\", datasets[3].value, maxRingR);\n}\n",
             "title": "System Schematic",
+            "uniqueId": 40008,
             "widget": "painter"
         }
     ],
     "hexadecimalDelimiters": false,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 40009,
+    "plotTimeRange": 2,
     "pointCount": 1000,
-    "schemaVersion": 1,
+    "schemaVersion": 3,
     "sources": [
         {
             "busType": 1,
@@ -557,17 +585,17 @@
             "title": "Summary",
             "widgetRefs": [
                 {
-                    "groupId": 0,
+                    "groupId": 40004,
                     "relativeIndex": 0,
                     "widgetType": 17
                 },
                 {
-                    "groupId": 1,
+                    "groupId": 40005,
                     "relativeIndex": 0,
                     "widgetType": 18
                 },
                 {
-                    "groupId": 4,
+                    "groupId": 40008,
                     "relativeIndex": 1,
                     "widgetType": 18
                 }
@@ -578,32 +606,32 @@
             "title": "Detailed Information",
             "widgetRefs": [
                 {
-                    "groupId": 0,
+                    "groupId": 40004,
                     "relativeIndex": 0,
                     "widgetType": 9
                 },
                 {
-                    "groupId": 0,
+                    "groupId": 40004,
                     "relativeIndex": 0,
                     "widgetType": 7
                 },
                 {
-                    "groupId": 2,
+                    "groupId": 40006,
                     "relativeIndex": 0,
                     "widgetType": 11
                 },
                 {
-                    "groupId": 3,
+                    "groupId": 40007,
                     "relativeIndex": 1,
                     "widgetType": 11
                 },
                 {
-                    "groupId": 1,
+                    "groupId": 40005,
                     "relativeIndex": 1,
                     "widgetType": 9
                 },
                 {
-                    "groupId": 1,
+                    "groupId": 40005,
                     "relativeIndex": 2,
                     "widgetType": 9
                 }
@@ -614,22 +642,22 @@
             "title": "Overview",
             "widgetRefs": [
                 {
-                    "groupId": 4,
+                    "groupId": 40008,
                     "relativeIndex": 0,
                     "widgetType": 18
                 },
                 {
-                    "groupId": 2,
+                    "groupId": 40006,
                     "relativeIndex": 0,
                     "widgetType": 11
                 },
                 {
-                    "groupId": 3,
+                    "groupId": 40007,
                     "relativeIndex": 0,
                     "widgetType": 11
                 },
                 {
-                    "groupId": 1,
+                    "groupId": 40005,
                     "relativeIndex": 0,
                     "widgetType": 18
                 }

@@ -130,16 +130,19 @@ QString Misc::WorkspaceManager::remapLegacyPath(const QString& path) const
 }
 
 /**
- * @brief One-shot migration that renames {workspace}/JSON Projects to {workspace}/Projects.
+ * @brief Copy-with-marker migration from {workspace}/JSON Projects to {workspace}/Projects.
  */
 void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
 {
   static const QLatin1StringView kMigratedKey("Workspace/LegacyProjectsFolderMigrated");
+  static const QLatin1StringView kMarkerFileName(".migrated-from-json-projects");
+
   if (m_settings.value(kMigratedKey, false).toBool())
     return;
 
   const QString legacyDir = QStringLiteral("%1/JSON Projects").arg(m_path);
   const QString newDir    = QStringLiteral("%1/Projects").arg(m_path);
+  const QString marker    = QStringLiteral("%1/%2").arg(newDir, kMarkerFileName);
 
   QDir legacy(legacyDir);
   if (!legacy.exists()) {
@@ -147,26 +150,36 @@ void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
     return;
   }
 
-  QDir target(newDir);
-  if (!target.exists()) {
-    QDir parent(m_path);
-    if (parent.rename(QStringLiteral("JSON Projects"), QStringLiteral("Projects"))) {
-      m_settings.setValue(kMigratedKey, true);
-      return;
-    }
+  // A previous run wrote the marker; the migration is complete.
+  if (QFileInfo::exists(marker)) {
+    m_settings.setValue(kMigratedKey, true);
+    return;
+  }
 
-    if (!target.mkpath(".")) {
-      qWarning() << "Failed to create" << newDir << "for legacy projects migration";
-      return;
-    }
+  QDir target(newDir);
+  if (!target.exists() && !target.mkpath(QStringLiteral("."))) {
+    qWarning() << "Failed to create" << newDir << "for legacy projects migration";
+    return;
   }
 
   const auto entries =
     legacy.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+
+  bool allCopied = true;
   for (const auto& entry : entries) {
     const QString src = entry.absoluteFilePath();
     QString dst       = QStringLiteral("%1/%2").arg(newDir, entry.fileName());
 
+    // Skip identical-content targets left by a prior interrupted run.
+    if (entry.isFile() && QFileInfo::exists(dst)) {
+      QFile a(src);
+      QFile b(dst);
+      if (a.size() == b.size() && a.open(QIODevice::ReadOnly) && b.open(QIODevice::ReadOnly)
+          && a.readAll() == b.readAll())
+        continue;
+    }
+
+    // Different-content target gets a .legacy suffix so nothing is overwritten.
     if (QFileInfo::exists(dst)) {
       const QString base = entry.completeBaseName();
       const QString ext  = entry.suffix();
@@ -180,12 +193,37 @@ void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
       } while (QFileInfo::exists(dst) && n < 1000);
     }
 
-    if (!QFile::rename(src, dst))
-      qWarning() << "Failed to migrate" << src << "to" << dst;
+    // QFile::copy is non-destructive: legacy survives a crash mid-migration.
+    if (entry.isFile()) {
+      if (!QFile::copy(src, dst)) {
+        qWarning() << "Failed to copy" << src << "to" << dst;
+        allCopied = false;
+      }
+    } else {
+      // Legacy layout was flat; subdirectories are an unexpected shape, not recursed into.
+      qWarning() << "Skipping non-file entry in legacy projects folder:" << src;
+    }
   }
 
-  if (legacy.isEmpty())
-    QDir(m_path).rmdir(QStringLiteral("JSON Projects"));
+  if (!allCopied)
+    return;
+
+  // Marker written last; before this file exists, a future run re-attempts the copy.
+  QFile m(marker);
+  if (!m.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    qWarning() << "Failed to write migration marker" << marker;
+    return;
+  }
+
+  const QByteArray stamp = QStringLiteral("migrated\n").toUtf8();
+  if (m.write(stamp) != stamp.size()) {
+    m.close();
+    QFile::remove(marker);
+    qWarning() << "Short write on migration marker" << marker;
+    return;
+  }
+  m.flush();
+  m.close();
 
   m_settings.setValue(kMigratedKey, true);
 }

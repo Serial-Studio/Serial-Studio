@@ -43,6 +43,7 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_queue(65536)
   , m_droppedFrames(0)
   , m_lastDropNotify()
+  , m_lastOverflowLog()
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -81,8 +82,13 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
     appendChunk(data);
     const auto overflow = m_circularBuffer.overflowCount();
     if (overflow > 0) [[unlikely]] {
-      qWarning() << "[FrameReader] Buffer overflow:" << overflow
-                 << "bytes lost -- data rate exceeds processing capacity";
+      // Throttle: unbounded qWarning() in a 10 kHz overflow loop floods stderr and burns CPU.
+      const auto now = CapturedData::SteadyClock::now();
+      if (now - m_lastOverflowLog >= std::chrono::seconds(5)) {
+        m_lastOverflowLog = now;
+        qWarning() << "[FrameReader] Buffer overflow:" << overflow
+                   << "bytes lost -- data rate exceeds processing capacity";
+      }
       discardPendingBytes(overflow);
       m_circularBuffer.resetOverflowCount();
     }
@@ -275,14 +281,15 @@ void IO::FrameReader::enqueueOrWarn(QByteArray&& frame, qsizetype frameEndPos)
 void IO::FrameReader::noteDroppedFrame()
 {
   ++m_droppedFrames;
-  qWarning() << "[FrameReader] Frame queue full -- frame dropped (total" << m_droppedFrames << ")";
 
-  // Throttle the user-facing notification; the log above already fires on every drop.
+  // Throttle log + notification: per-frame qWarning() at 10 kHz costs string formatting on hotpath.
   const auto now = CapturedData::SteadyClock::now();
   if (now - m_lastDropNotify < std::chrono::seconds(5)) [[likely]]
     return;
 
   m_lastDropNotify = now;
+  qWarning() << "[FrameReader] Frame queue full -- frame dropped (total" << m_droppedFrames << ")";
+
   QMetaObject::invokeMethod(
     &DataModel::NotificationCenter::instance(),
     "postWarning",

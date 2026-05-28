@@ -392,3 +392,223 @@ def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
         "void hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data);"
         in sessions_h
     )
+
+
+# ----------------------------------------------------------------------------------
+# R1 -- license storage must never reach for libsecret on Linux
+# ----------------------------------------------------------------------------------
+
+
+def test_secret_storage_forces_legacy_path_on_linux():
+    """SecretStorage routes every Linux read/write through the encrypted-QSettings
+    store. Headless servers, slim containers, and SSH-only hosts often have no
+    running keyring daemon, and a license loss on those systems would regress
+    against the pre-keystore release."""
+    text = _read("app/src/Licensing/SecretStorage.cpp")
+
+    # Compile-time platform gate exists.
+    assert "#  if defined(Q_OS_LINUX)" in text
+    assert "static constexpr bool kForceLegacyStore = true;" in text
+    assert "static constexpr bool kForceLegacyStore = false;" in text
+
+    # load() has a Linux branch that prefers legacy and only touches the keystore
+    # to migrate any leftover entry back to the legacy store.
+    assert re.search(
+        r"if constexpr \(kForceLegacyStore\) \{\s*"
+        r"const auto plain = legacyLoad\(group, key\);\s*"
+        r"if \(!plain\.isEmpty\(\)\)\s*"
+        r"return plain;",
+        text,
+    ), "Linux load() must read the legacy store first"
+    assert re.search(
+        r"if constexpr \(kForceLegacyStore\) \{[\s\S]*?"
+        r"if \(Platform::SecretStore::available\(\)\) \{[\s\S]*?"
+        r"if \(const auto vault = Platform::SecretStore::retrieve\([\s\S]*?"
+        r"legacySave\(group, key, \*vault\);\s*"
+        r"\(void\)Platform::SecretStore::remove\(",
+        text,
+    ), "Linux load() must migrate any keystore entry back into the legacy store"
+
+    # save() writes through legacy on Linux and scrubs the keystore.
+    assert re.search(
+        r"if constexpr \(kForceLegacyStore\) \{\s*"
+        r"legacySave\(group, key, value\);\s*"
+        r"if \(Platform::SecretStore::available\(\)\)\s*"
+        r"\(void\)Platform::SecretStore::remove\(",
+        text,
+    ), "Linux save() must persist via legacySave and clear any keystore copy"
+
+
+# ----------------------------------------------------------------------------------
+# R6 -- hotpath logging is throttled, frame pool scan avoids per-slot atomic ops
+# ----------------------------------------------------------------------------------
+
+
+def test_frame_reader_dropped_frame_log_is_throttled():
+    """qWarning() inside the dropped-frame slot must sit behind the same 5 s gate
+    as the user notification. Previously it fired unconditionally on every drop
+    and flooded stderr at 10 kHz saturation."""
+    text = _read("app/src/IO/FrameReader.cpp")
+
+    # The throttle gate now precedes the qWarning. We assert order by requiring
+    # the gate to appear before the warning string in the noteDroppedFrame body.
+    body = re.search(
+        r"void IO::FrameReader::noteDroppedFrame\(\)\s*\{[\s\S]*?\n\}",
+        text,
+    )
+    assert body is not None, "noteDroppedFrame body must be present"
+    gate_pos = body.group(0).find("now - m_lastDropNotify < std::chrono::seconds(5)")
+    warn_pos = body.group(0).find('qWarning() << "[FrameReader] Frame queue full')
+    assert gate_pos != -1 and warn_pos != -1
+    assert gate_pos < warn_pos, "qWarning must sit AFTER the 5 s throttle gate"
+
+
+def test_frame_reader_buffer_overflow_log_is_throttled():
+    """Buffer-overflow qWarning() must also throttle (separate timer) so a saturated
+    ring buffer does not log per chunk."""
+    text = _read("app/src/IO/FrameReader.cpp")
+    header = _read("app/src/IO/FrameReader.h")
+
+    assert "IO::CapturedData::SteadyTimePoint m_lastOverflowLog;" in header
+    assert re.search(
+        r"if \(now - m_lastOverflowLog >= std::chrono::seconds\(5\)\) \{\s*"
+        r"m_lastOverflowLog = now;\s*"
+        r'qWarning\(\) << "\[FrameReader\] Buffer overflow:"',
+        text,
+    )
+
+
+def test_frame_builder_acquire_frame_scans_with_raw_pointers():
+    """acquireFrame previously copied the slot's shared_ptr inside the scan loop,
+    paying two atomic ops per iteration on miss. The shared_ptr must be captured
+    only on the successful-CAS path."""
+    text = _read("app/src/DataModel/FrameBuilder.cpp")
+
+    body = re.search(
+        r"DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame\("
+        r"\s*const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts\)"
+        r"\s*\{[\s\S]*?\n\}",
+        text,
+    )
+    assert body is not None, "acquireFrame body must be present"
+    snippet = body.group(0)
+
+    # Raw scan pointer must appear in the loop.
+    assert "auto* slotRaw    = m_framePool[idx].get();" in snippet
+    # shared_ptr copy must only appear after the successful CAS path returns
+    # the slot to the deleter -- never before the CAS.
+    cas_pos = snippet.find("compare_exchange_strong")
+    copy_pos = snippet.find("auto slotPtr = m_framePool[idx];")
+    assert cas_pos != -1 and copy_pos != -1
+    assert (
+        copy_pos > cas_pos
+    ), "shared_ptr copy must be on the success path, not in the scan"
+
+
+# ----------------------------------------------------------------------------------
+# R7 -- BackupManager snapshots carry a version stamp; CrashTracker stays local-only
+# ----------------------------------------------------------------------------------
+
+
+def test_backup_manager_writes_versioned_wrapper():
+    text = _read("app/src/Misc/BackupManager.cpp")
+
+    assert "static constexpr int kSnapshotFormat = 1;" in text
+    assert 'static const QLatin1StringView kBackupMetaKey("_backupMeta");' in text
+
+    # snapshot() injects a _backupMeta object with format/takenAt/label/sha1.
+    assert 'meta.insert(QStringLiteral("format"), kSnapshotFormat);' in text
+    assert 'meta.insert(QStringLiteral("takenAt"),' in text
+    assert 'meta.insert(QStringLiteral("label"), label);' in text
+    assert 'meta.insert(QStringLiteral("sha1"),' in text
+    assert "serialised.insert(kBackupMetaKey, meta);" in text
+
+
+def test_backup_manager_restore_refuses_newer_format():
+    text = _read("app/src/Misc/BackupManager.cpp")
+
+    # restore() reads _backupMeta and refuses snapshots written by a newer build.
+    assert re.search(
+        r"if \(obj\.contains\(kBackupMetaKey\)\) \{[\s\S]*?"
+        r'const int fmt   = meta\.value\(QStringLiteral\("format"\)\)\.toInt\(0\);[\s\S]*?'
+        r"if \(fmt > kSnapshotFormat\) \{[\s\S]*?return false;",
+        text,
+    )
+
+    # The wrapper must be stripped before handing the doc to ProjectModel so the
+    # wrapper is invisible to ProjectModel's loader.
+    assert "obj.remove(kBackupMetaKey);" in text
+    assert "pm.loadFromJsonDocument(projectDoc, originalPath);" in text
+
+
+def test_backup_manager_summarize_surfaces_wrapper():
+    text = _read("app/src/Misc/BackupManager.cpp")
+
+    assert "if (project.contains(kBackupMetaKey))" in text
+    assert (
+        'out.insert(QStringLiteral("backupMeta"), '
+        "project.value(kBackupMetaKey).toObject().toVariantMap());" in text
+    )
+
+
+def test_crash_tracker_documents_local_only_telemetry():
+    """The CrashTracker header @brief reminds reviewers that the class has no telemetry.
+    Adding a network sink here without re-reviewing the contract is the failure we want
+    to catch."""
+    text = _read("app/src/Misc/CrashTracker.h")
+
+    # @brief sentence carries the contract as a one-liner.
+    assert "(no telemetry)" in text
+
+    # No network / outbound transport headers exist in the cpp.
+    cpp = _read("app/src/Misc/CrashTracker.cpp")
+    for forbidden in ("QNetworkAccessManager", "QTcpSocket", "QUdpSocket", "curl_easy"):
+        assert (
+            forbidden not in cpp
+        ), f"CrashTracker.cpp introduced a network sink: {forbidden}"
+
+
+# ----------------------------------------------------------------------------------
+# R8 -- legacy "JSON Projects" migration is copy + marker, never destructive move
+# ----------------------------------------------------------------------------------
+
+
+def test_workspace_migration_copies_with_atomic_marker():
+    text = _read("app/src/Misc/WorkspaceManager.cpp")
+
+    # No destructive rename of the legacy folder.
+    assert (
+        'parent.rename(QStringLiteral("JSON Projects"), QStringLiteral("Projects"))'
+        not in text
+    )
+    # No QFile::rename of individual files in the migration body.
+    assert "QFile::rename(src, dst)" not in text
+    # No rmdir of the legacy folder.
+    assert 'QDir(m_path).rmdir(QStringLiteral("JSON Projects"))' not in text
+
+    # Files are copied, not moved.
+    assert "if (!QFile::copy(src, dst))" in text
+
+    # Marker file path matches the in-source constant.
+    assert (
+        'static const QLatin1StringView kMarkerFileName(".migrated-from-json-projects");'
+        in text
+    )
+
+    # The marker file is written AFTER every copy succeeded.
+    body = re.search(
+        r"void Misc::WorkspaceManager::migrateLegacyProjectsFolder\(\)[\s\S]*?\n\}",
+        text,
+    )
+    assert body is not None
+    snippet = body.group(0)
+    fail_pos = snippet.find("if (!allCopied)\n    return;")
+    marker_pos = snippet.find("QFile m(marker);")
+    flag_pos = snippet.rfind("m_settings.setValue(kMigratedKey, true);")
+    assert fail_pos != -1 and marker_pos != -1 and flag_pos != -1
+    assert (
+        fail_pos < marker_pos < flag_pos
+    ), "marker write must come after the all-copies check and before the settings flag"
+
+    # Re-entry skip: a present marker short-circuits the migration on next launch.
+    assert "if (QFileInfo::exists(marker)) {" in text

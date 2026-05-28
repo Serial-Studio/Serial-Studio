@@ -179,20 +179,22 @@ DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
   const size_t n    = m_framePool.size();
   const size_t hint = m_framePoolHint.load(std::memory_order_relaxed);
 
+  // Raw-pointer scan: copy the shared_ptr only on success so a miss skips its two atomic ops.
   for (size_t k = 0; k < n; ++k) {
     const size_t idx = (hint + k) % n;
-    auto slotPtr     = m_framePool[idx];
+    auto* slotRaw    = m_framePool[idx].get();
     bool expected    = false;
-    if (slotPtr->inUse.compare_exchange_strong(
+    if (slotRaw->inUse.compare_exchange_strong(
           expected, true, std::memory_order_acquire, std::memory_order_relaxed)) {
       m_framePoolHint.store(idx + 1, std::memory_order_relaxed);
 
       // In-place assignment reuses slot vector capacity; QStrings COW-bump only.
-      slotPtr->frame.data      = src;
-      slotPtr->frame.timestamp = ts;
+      slotRaw->frame.data      = src;
+      slotRaw->frame.timestamp = ts;
 
-      // Aliasing deleter
-      return TimestampedFramePtr(&slotPtr->frame, [slotPtr](TimestampedFrame*) noexcept {
+      // shared_ptr capture keeps the slot alive if a consumer outlives FrameBuilder.
+      auto slotPtr = m_framePool[idx];
+      return TimestampedFramePtr(&slotRaw->frame, [slotPtr](TimestampedFrame*) noexcept {
         slotPtr->inUse.store(false, std::memory_order_release);
       });
     }

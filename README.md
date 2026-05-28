@@ -195,7 +195,7 @@ First time using it? The [help center](https://serial-studio.com/help) covers tr
 
 Minimum:
 
-- **Qt 6.9 or later** (6.9.2 recommended). Required modules: QtCore, QtGui, QtWidgets, QtSerialPort, QtNetwork, QtCharts, QtSvg, QtBluetooth, QtQuick.
+- **Qt 6.9 or later** (6.11.1 recommended). Required modules: QtCore, QtGui, QtWidgets, QtSerialPort, QtNetwork, QtCharts, QtSvg, QtBluetooth, QtQuick.
 - **C++20 compiler:** GCC 10+ (Linux), Clang 12+ (macOS), or MSVC 2019+ (Windows).
 - **CMake 3.20 or later.**
 - Platform toolchain (see [Platform specifics](#platform-specifics)).
