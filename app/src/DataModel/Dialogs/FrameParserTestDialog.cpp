@@ -188,7 +188,6 @@ void DataModel::FrameParserTestDialog::buildPipelineGroup()
   m_startEdit      = new QLineEdit(this);
   m_finishEdit     = new QLineEdit(this);
   m_hexDelimiters  = new QCheckBox(this);
-  m_reloadButton   = new QPushButton(this);
 
   m_detectionCombo->addItem(QString(), int(SerialStudio::EndDelimiterOnly));
   m_detectionCombo->addItem(QString(), int(SerialStudio::StartAndEndDelimiter));
@@ -207,41 +206,18 @@ void DataModel::FrameParserTestDialog::buildPipelineGroup()
   pipelineForm->setHorizontalSpacing(8);
   pipelineForm->setVerticalSpacing(4);
 
-  // Trailing horizontal spacers stop the form layout from stretching field widgets.
-  auto* detectionRow = new QHBoxLayout;
-  detectionRow->addWidget(m_detectionCombo, 0);
-  detectionRow->addWidget(m_reloadButton, 0);
-  detectionRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
-  pipelineForm->addRow(m_detectionLabel, detectionRow);
-
+  // Start delimiter row: edit fills, 4 px gap, then the hex toggle hugs the right edge.
   auto* startRow = new QHBoxLayout;
-  startRow->addWidget(m_startEdit, 0);
+  startRow->setContentsMargins(0, 0, 0, 0);
+  startRow->setSpacing(4);
+  startRow->addWidget(m_startEdit, 1);
   startRow->addWidget(m_hexDelimiters, 0);
-  startRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
+
+  pipelineForm->addRow(m_detectionLabel, m_detectionCombo);
   pipelineForm->addRow(m_startLabel, startRow);
-
-  auto* finishRow = new QHBoxLayout;
-  finishRow->addWidget(m_finishEdit, 0);
-  finishRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
-  pipelineForm->addRow(m_finishLabel, finishRow);
-
-  auto* decoderRow = new QHBoxLayout;
-  decoderRow->addWidget(m_decoderCombo, 0);
-  decoderRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
-  pipelineForm->addRow(m_decoderLabel, decoderRow);
-
-  auto* checksumRow = new QHBoxLayout;
-  checksumRow->addWidget(m_checksumCombo, 0);
-  checksumRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
-  pipelineForm->addRow(m_checksumLabel, checksumRow);
-
-  // Pin the field minimum width so combos do not snap to fit the widest current label.
-  const int kFieldWidth = 220;
-  m_detectionCombo->setMinimumWidth(kFieldWidth);
-  m_decoderCombo->setMinimumWidth(kFieldWidth);
-  m_checksumCombo->setMinimumWidth(kFieldWidth);
-  m_startEdit->setMinimumWidth(kFieldWidth);
-  m_finishEdit->setMinimumWidth(kFieldWidth);
+  pipelineForm->addRow(m_finishLabel, m_finishEdit);
+  pipelineForm->addRow(m_decoderLabel, m_decoderCombo);
+  pipelineForm->addRow(m_checksumLabel, m_checksumCombo);
 }
 
 /**
@@ -318,7 +294,6 @@ void DataModel::FrameParserTestDialog::connectControls()
 {
   connect(m_parseButton, &QPushButton::clicked, this, &FrameParserTestDialog::parseData);
   connect(m_clearButton, &QPushButton::clicked, this, &FrameParserTestDialog::clear);
-  connect(m_reloadButton, &QPushButton::clicked, this, &FrameParserTestDialog::reloadFromSource);
   connect(
     m_hexCheckBox, &QCheckBox::checkStateChanged, this, &FrameParserTestDialog::onInputModeChanged);
   connect(m_userInput, &QLineEdit::returnPressed, this, &FrameParserTestDialog::parseData);
@@ -544,14 +519,6 @@ void DataModel::FrameParserTestDialog::onSourceChanged(int sourceId)
   refreshPipelineControls();
 }
 
-/**
- * @brief Reloads the dialog's pipeline controls from whatever is currently persisted.
- */
-void DataModel::FrameParserTestDialog::reloadFromSource()
-{
-  refreshPipelineControls();
-}
-
 //--------------------------------------------------------------------------------------------------
 // Pipeline-config private helpers
 //--------------------------------------------------------------------------------------------------
@@ -654,7 +621,6 @@ void DataModel::FrameParserTestDialog::onLanguageChanged()
   m_startLabel->setText(tr("Start Delimiter"));
   m_finishLabel->setText(tr("End Delimiter"));
   m_hexDelimiters->setText(tr("Hex Delimiters"));
-  m_reloadButton->setText(tr("Reload"));
 
   m_detectionCombo->setItemText(0, tr("End delimiter only"));
   m_detectionCombo->setItemText(1, tr("Start + end delimiters"));

@@ -63,7 +63,6 @@ private slots:
   void onFinishSequenceEdited();
   void onHexDelimitersToggled(Qt::CheckState state);
   void onSourceChanged(int sourceId);
-  void reloadFromSource();
 
 private:
   bool validateHexInput(const QString& text);
@@ -101,7 +100,6 @@ private:
   QLineEdit* m_startEdit;
   QLineEdit* m_finishEdit;
   QCheckBox* m_hexDelimiters;
-  QPushButton* m_reloadButton;
   QLabel* m_startLabel;
   QLabel* m_finishLabel;
   QLabel* m_detectionLabel;
