@@ -78,9 +78,9 @@ static QByteArray delimiterFromField(const QString& text, bool hex)
 static QString hexPreview(const QByteArray& bytes, qsizetype maxBytes = 64)
 {
   if (bytes.size() <= maxBytes)
-    return QString::fromLatin1(bytes.toHex(' '));
+    return QString::fromLatin1(bytes.toHex(' ')).toUpper();
 
-  return QString::fromLatin1(bytes.left(maxBytes).toHex(' '))
+  return QString::fromLatin1(bytes.left(maxBytes).toHex(' ')).toUpper()
        + QStringLiteral(" ... (+%1 bytes)").arg(bytes.size() - maxBytes);
 }
 
@@ -103,15 +103,21 @@ static void appendRowItem(QTreeWidgetItem* parent, int rowIndex, const QStringLi
 /**
  * @brief Renders one extracted frame (raw + decoder + rows) as a top-level tree node.
  */
-static void appendFrameItem(QTreeWidget* tree, int frameIndex, const DataModel::PipelineFrame& f)
+static void appendFrameItem(QTreeWidget* tree,
+                            int frameIndex,
+                            const DataModel::PipelineFrame& f,
+                            SerialStudio::DecoderMethod decoderMethod)
 {
   auto* frameItem = new QTreeWidgetItem(tree);
   frameItem->setText(0, QObject::tr("Frame %1").arg(frameIndex + 1));
   frameItem->setText(1, hexPreview(f.rawBytes));
 
+  // Uppercase hex-style decoder output (Hex / Binary modes); Base64 and PlainText stay verbatim.
+  const bool decoderIsHex =
+    (decoderMethod == SerialStudio::Hexadecimal || decoderMethod == SerialStudio::Binary);
   auto* decodedItem = new QTreeWidgetItem(frameItem);
   decodedItem->setText(0, QObject::tr("Decoder"));
-  decodedItem->setText(1, f.decoderOutput);
+  decodedItem->setText(1, decoderIsHex ? f.decoderOutput.toUpper() : f.decoderOutput);
 
   auto* rowsItem = new QTreeWidgetItem(frameItem);
   rowsItem->setText(0, QObject::tr("Rows"));
@@ -428,7 +434,7 @@ void DataModel::FrameParserTestDialog::parseData()
     item->setForeground(1, Qt::gray);
   } else {
     for (int i = 0; i < result.frames.size(); ++i)
-      appendFrameItem(m_results, i, result.frames[i]);
+      appendFrameItem(m_results, i, result.frames[i], spec.decoderMethod);
   }
 
   m_statsLabel->setText(tr("%1 frame(s) extracted | %2 byte(s) consumed | %3 byte(s) buffered | "
