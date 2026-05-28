@@ -45,8 +45,8 @@ directly to `setCode` to flip and replace in one call.
    - If disconnected: ask for a sample. Hex (`01 A2 FF`) is the
      binary-safe form; UTF-8 text is fine for ASCII / CSV protocols.
 3. **Compile-only**: `assistant.script.dryRun{kind:"frame_parser", code,
-   language}` routes to `project.frameParser.dryCompile` -- verifies
-   the script parses and `parse(frame)` is defined without executing.
+   language}` routes to `project.frameParser.dryCompile`. Verifies the
+   script parses and `parse(frame)` is defined without executing.
    Cheapest way to catch the wrong-language silent failure (Lua code
    with `language: 0`, or the reverse).
 4. **Dry-run (pipeline)**: `assistant.script.dryRun{kind:"frame_parser",
@@ -94,15 +94,15 @@ Common failure shapes and what they mean:
   and `hexadecimalDelimiters`; consider `frameDetection: 2`
   (NoDelimiters) for fixed-size or self-framing protocols (COBS,
   protobuf, length-prefixed).
-- `extractedCount > 0` but `rows: []` -- the parser ran and returned
+- `extractedCount > 0` but `rows: []`: the parser ran and returned
   nothing useful. Either `parse()` returned `nil` / non-array, or it
   threw an error (Lua's `pcall` wrapper would swallow it). Look at
   `decoderOutput`: if it's full of `U+FFFD` for a binary protocol, the
-  decoder is wrong (see below).
-- `remainingBytes > 0` -- bytes were left in the buffer because no
+  decoder is wrong (see the decoder table further down).
+- `remainingBytes > 0`: bytes were left in the buffer because no
   closing delimiter / checksum boundary was found. Either the test
   input is incomplete, or the delimiter is wrong.
-- `droppedFrames > 0` -- input was so large the FrameReader queue
+- `droppedFrames > 0`: input was so large the FrameReader queue
   saturated. Use a smaller test slice.
 
 ## How decoder + detection settings affect what `parse()` sees
@@ -134,22 +134,22 @@ and "shows garbage". Knowing the matrix below saves an iteration.
 |-----|------|------------------|-------------|
 | 0 | EndDelimiterOnly | Everything up to the next end delimiter. | Line-terminated text, CSV with `\n`, NMEA with `\r\n`. |
 | 1 | StartAndEndDelimiter | Everything between start and end delimiters; outside bytes are dropped. | Framed text protocols like `/* ... */`, `<...>`. |
-| 2 | NoDelimiters | The whole captured chunk -- the driver's chunk boundary IS the frame boundary. | Fixed-size binary, COBS (parser splits on `0x00`), protobuf over UDP, length-prefixed binary. |
+| 2 | NoDelimiters | The whole captured chunk (the driver's chunk boundary IS the frame boundary). | Fixed-size binary, COBS (parser splits on `0x00`), protobuf over UDP, length-prefixed binary. |
 | 3 | StartDelimiterOnly | Between this start marker and the next one. | Protocols that lead with a sync word but have no terminator. |
 
 When `frameDetection` requires a delimiter that's empty or missing,
 extraction silently downgrades to NoDelimiters. That's usually NOT
-what the user wants -- if you set `frameStart: ""` you almost always
+what the user wants: if you set `frameStart: ""` you almost always
 need to flip detection mode too.
 
 **Decoder method** (`decoderMethod`) decides what `parse()` receives:
 
 | Int | Decoder | Parser receives | Trap |
 |-----|---------|-----------------|------|
-| 0 | PlainText | `QString::fromUtf8(bytes)` -- a UTF-8 string. | **Binary bytes are corrupted.** Any non-UTF-8 byte (most of `0x80..0xFF`, every `0x00`) becomes `U+FFFD` and the original byte is lost. Picking PlainText for COBS / Modbus / protobuf is the #1 silent failure. |
+| 0 | PlainText | A UTF-8 string built by `QString::fromUtf8(bytes)`. | **Binary bytes are corrupted.** Any non-UTF-8 byte (most of `0x80..0xFF`, every `0x00`) becomes `U+FFFD` and the original byte is lost. Picking PlainText for COBS / Modbus / protobuf is the #1 silent failure. |
 | 1 | Hexadecimal | A hex string, no spaces (`48656C6C6F`). | Doubles the byte count; works on any input. Use when you want to read bytes from a string-only parser. |
 | 2 | Base64 | A Base64 string. | When the device already emits Base64; otherwise just a coding overhead. |
-| 3 | Binary | Raw bytes -- a 1-indexed byte table in Lua, a length-keyed object in JS. | The only decoder that round-trips arbitrary binary. Pick this for every non-text protocol. |
+| 3 | Binary | Raw bytes: a 1-indexed byte table in Lua, a length-keyed object in JS. | The only decoder that round-trips arbitrary binary. Pick this for every non-text protocol. |
 
 Rule of thumb: **if the user mentions COBS, Modbus, protobuf, CAN,
 audio, or "binary", `decoderMethod: 3` is right.** If they mention

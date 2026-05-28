@@ -326,7 +326,7 @@ detection too.
 
 Picking PlainText (0) for a binary protocol replaces every non-UTF-8
 byte with `U+FFFD` and loses the original. COBS, Modbus, protobuf,
-custom binary -- ALL need `decoderMethod: 3`. For ASCII / NMEA /
+custom binary: ALL need `decoderMethod: 3`. For ASCII / NMEA /
 CSV / AT-commands keep `decoderMethod: 0`. Hex and Base64 are
 narrow choices for devices that already emit encoded payloads.
 
