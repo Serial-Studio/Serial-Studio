@@ -21,7 +21,7 @@ Serial Studio uses three distinct types of delimiters:
 
 3. **CSV Field Delimiters** (data-level):
    - Separate individual values within a CSV frame
-   - Default: comma (,) - hard-coded in C++ parseCsvValues()
+   - Default: comma (,) - hard-coded in DataModel::splitQuickPlotChannels()
    - Custom delimiters (;, \\t, |) require JavaScript parser:
      Example: function parse(frame) { return frame.split(';'); }
    - Configured via: "frameParser" in project JSON

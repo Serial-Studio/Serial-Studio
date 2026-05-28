@@ -379,10 +379,10 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
     inner.insert(QStringLiteral("values"), defaults);
   }
 
-  // frame_parser without samples: fall back to dryCompile (syntax + parse() presence only).
+  // frame_parser without bytes: fall back to dryCompile (syntax + parse() presence only).
   QString effectiveDry = dryInner;
-  if (kind == QStringLiteral("frame_parser") && !inner.contains(QStringLiteral("sampleFrame"))
-      && !inner.contains(QStringLiteral("sampleFrames")))
+  if (kind == QStringLiteral("frame_parser") && !inner.contains(QStringLiteral("inputBytes"))
+      && !inner.contains(QStringLiteral("inputBytesHex")))
     effectiveDry = QStringLiteral("project.frameParser.dryCompile");
 
   QJsonArray steps;
@@ -404,9 +404,16 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
 
   // setCode endpoints don't accept dry-run-only fields; strip them before forwarding.
   QJsonObject setParams = inner;
-  setParams.remove(QStringLiteral("sampleFrame"));
-  setParams.remove(QStringLiteral("sampleFrames"));
   setParams.remove(QStringLiteral("values"));
+  setParams.remove(QStringLiteral("inputBytes"));
+  setParams.remove(QStringLiteral("inputBytesHex"));
+  setParams.remove(Keys::DecoderMethod);
+  setParams.remove(Keys::FrameDetection);
+  setParams.remove(Keys::FrameStart);
+  setParams.remove(Keys::FrameEnd);
+  setParams.remove(Keys::HexadecimalDelimiters);
+  setParams.remove(Keys::ChecksumAlgorithm);
+  setParams.remove(QStringLiteral("operationMode"));
 
   const auto setResp = forward(setInner, QStringLiteral("inner"), setParams);
   steps.append(toStep(QStringLiteral("setCode"), setResp));
@@ -1040,8 +1047,9 @@ void API::Handlers::AssistantHandler::registerEditCommands()
     QStringLiteral("Validate a script by kind without writing. Routes to "
                    "project.frameParser.dryRun, project.dataset.transform.dryRun, or "
                    "project.painter.dryRun based on `kind`. All other params are forwarded "
-                   "verbatim (code, language, sampleFrame / sampleFrames / values, "
-                   "groupId, etc.)."),
+                   "verbatim (code, language, values, plus for frame_parser the pipeline "
+                   "inputs inputBytesHex / decoderMethod / frameDetection / frameStart / "
+                   "frameEnd / hexadecimalDelimiters / checksumAlgorithm / operationMode)."),
     API::makeSchema(
       {
         {QStringLiteral("kind"),
@@ -1057,10 +1065,10 @@ void API::Handlers::AssistantHandler::registerEditCommands()
   registry.registerCommand(
     QStringLiteral("assistant.script.apply"),
     QStringLiteral("Dry-run a script then write it via the matching setCode endpoint. "
-                   "Skips the dry run for frame_parser when no sampleFrame(s) are provided, "
-                   "and defaults transform values to [0.0] so callers can apply without "
-                   "test inputs. Returns steps[] so the LLM can see exactly which stage "
-                   "ran. If the dry run fails, setCode is NOT called."),
+                   "Falls back to dryCompile for frame_parser when no inputBytes(Hex) is "
+                   "supplied, and defaults transform values to [0.0] so callers can apply "
+                   "without test inputs. Returns steps[] so the LLM can see exactly which "
+                   "stage ran. If the dry run fails, setCode is NOT called."),
     API::makeSchema(
       {
         {QStringLiteral("kind"),

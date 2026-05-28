@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -22,22 +22,21 @@
 #pragma once
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QStringList>
-#include <QTableWidget>
-#include <QVBoxLayout>
+#include <QTreeWidget>
 
 namespace DataModel {
 class FrameParser;
 
 /**
- * @brief Dialog for exercising a frame parser script against sample input.
+ * @brief Editor dialog that drives the FrameParserPipeline against user-supplied bytes.
  */
 class FrameParserTestDialog : public QDialog {
   Q_OBJECT
@@ -57,24 +56,63 @@ private slots:
   void onInputModeChanged(Qt::CheckState state);
   void onInputDataChanged(const QString& text);
 
+  void onDetectionChanged(int index);
+  void onDecoderChanged(int index);
+  void onChecksumChanged(const QString& text);
+  void onStartSequenceEdited();
+  void onFinishSequenceEdited();
+  void onHexDelimitersToggled(Qt::CheckState state);
+  void onSourceChanged(int sourceId);
+  void reloadFromSource();
+
 private:
   bool validateHexInput(const QString& text);
   QString formatHexInput(const QString& text);
-  void displayOutput(const QString& input, const QStringList& output);
+  void refreshPipelineControls();
+  void applyDelimitersToProject();
+  void updateStageVisibility();
+
+  void buildPipelineGroup();
+  void buildInputGroup();
+  void buildOutputGroup();
+  void connectControls();
 
 private:
   int m_sourceId;
+  bool m_suspendSync;
+  FrameParser* m_parser;
+
+  // Group boxes + titles
+  QLabel* m_pipelineTitle;
   QLabel* m_inputTitle;
   QLabel* m_outputTitle;
-  FrameParser* m_parser;
-  QTableWidget* m_table;
-  QLineEdit* m_userInput;
+  QGroupBox* m_pipelineGroup;
   QGroupBox* m_inputGroup;
   QGroupBox* m_outputGroup;
+
+  // Pipeline controls
+  QComboBox* m_detectionCombo;
+  QComboBox* m_decoderCombo;
+  QComboBox* m_checksumCombo;
+  QLineEdit* m_startEdit;
+  QLineEdit* m_finishEdit;
+  QCheckBox* m_hexDelimiters;
+  QPushButton* m_reloadButton;
+  QLabel* m_startLabel;
+  QLabel* m_finishLabel;
+  QLabel* m_detectionLabel;
+  QLabel* m_decoderLabel;
+  QLabel* m_checksumLabel;
+
+  // Input row
+  QLineEdit* m_userInput;
   QCheckBox* m_hexCheckBox;
-  QPushButton* m_parseButton;
   QPushButton* m_clearButton;
-  QPlainTextEdit* m_inputDisplay;
+  QPushButton* m_parseButton;
+
+  // Output area
+  QLabel* m_statsLabel;
+  QTreeWidget* m_results;
 };
 
 }  // namespace DataModel

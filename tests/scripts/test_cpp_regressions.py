@@ -545,9 +545,10 @@ def test_backup_manager_summarize_surfaces_wrapper():
     text = _read("app/src/Misc/BackupManager.cpp")
 
     assert "if (project.contains(kBackupMetaKey))" in text
-    assert (
-        'out.insert(QStringLiteral("backupMeta"), '
-        "project.value(kBackupMetaKey).toObject().toVariantMap());" in text
+    assert re.search(
+        r'out\.insert\(QStringLiteral\("backupMeta"\),\s*'
+        r"project\.value\(kBackupMetaKey\)\.toObject\(\)\.toVariantMap\(\)\);",
+        text,
     )
 
 
@@ -612,3 +613,265 @@ def test_workspace_migration_copies_with_atomic_marker():
 
     # Re-entry skip: a present marker short-circuits the migration on next launch.
     assert "if (QFileInfo::exists(marker)) {" in text
+
+
+# ----------------------------------------------------------------------------------
+# R9 -- FrameParserPipeline is the single bytes-to-channels seam (hotpath + dialog + dryRun)
+# ----------------------------------------------------------------------------------
+
+
+def test_frame_parser_pipeline_module_exists_with_shared_seam():
+    """The shared module exposes the decoder seam, the QuickPlot splitter, and the two
+    runners that the dialog and the dryRun call into. Anything else fragmenting that
+    surface re-introduces the divergence we just removed."""
+    header = _read("app/src/DataModel/Scripting/FrameParserPipeline.h")
+
+    # Two-overload decoder seam: live-parser (FrameParser&) and engine-override (IScriptEngine&).
+    assert (
+        "void decodeAndParseFrame(const QByteArray& rawFrame,\n"
+        "                         SerialStudio::DecoderMethod decoderMethod,\n"
+        "                         DataModel::FrameParser& parser,\n"
+        "                         int sourceId,\n"
+        "                         QList<QStringList>& outChannels);"
+    ) in header
+    assert (
+        "void decodeAndParseFrame(const QByteArray& rawFrame,\n"
+        "                         SerialStudio::DecoderMethod decoderMethod,\n"
+        "                         DataModel::IScriptEngine& engine,\n"
+        "                         QList<QStringList>& outChannels);"
+    ) in header
+
+    # QuickPlot CSV split lives here too -- the live FrameBuilder calls it.
+    assert (
+        "void splitQuickPlotChannels(const QByteArray& rawFrame, QList<QStringList>& outChannels);"
+        in header
+    )
+
+    # Two public runners (live engine for dialog, throwaway engine for dryRun).
+    assert "PipelineResult runFrameParserPipeline(" in header
+    assert "PipelineResult runFrameParserPipelineWithCode(" in header
+
+
+def test_frame_builder_uses_shared_seam_not_inline_decoder_switch():
+    """FrameBuilder::decodeProjectChannels must delegate to the shared decoder seam.
+    A re-inlined `case SerialStudio::Hexadecimal: parser.parseMultiFrame(...)` switch
+    here means the hotpath has drifted from the dialog/dryRun path again."""
+    text = _read("app/src/DataModel/FrameBuilder.cpp")
+
+    # Must include the pipeline header.
+    assert '#include "DataModel/Scripting/FrameParserPipeline.h"' in text
+
+    # decodeProjectChannels delegates to the seam.
+    body = re.search(
+        r"void DataModel::FrameBuilder::decodeProjectChannels\([\s\S]*?\n\}",
+        text,
+    )
+    assert body is not None
+    snippet = body.group(0)
+
+    assert (
+        "decodeAndParseFrame(" in snippet
+    ), "FrameBuilder must route through decodeAndParseFrame"
+    # No re-inlined per-decoder switch (which would have one of these case statements).
+    assert "case SerialStudio::Hexadecimal:" not in snippet
+    assert "case SerialStudio::Base64:" not in snippet
+    assert "case SerialStudio::Binary:" not in snippet
+
+    # Player short-circuit also goes through the shared QuickPlot helper.
+    assert (
+        "DataModel::splitQuickPlotChannels(data->data, outChannels);" in snippet
+    ), "Player playback must reuse the same comma split as QuickPlot."
+
+
+def test_frame_builder_quick_plot_uses_shared_splitter():
+    """parseQuickPlotFrame must rely on the shared splitter so dialog / dryRun split
+    bytes the same way the live QuickPlot mode does."""
+    text = _read("app/src/DataModel/FrameBuilder.cpp")
+
+    body = re.search(
+        r"void DataModel::FrameBuilder::parseQuickPlotFrame\(const IO::CapturedDataPtr& data\)"
+        r"[\s\S]*?\n\}",
+        text,
+    )
+    assert body is not None
+    snippet = body.group(0)
+
+    assert "DataModel::splitQuickPlotChannels(data->data, splitRows);" in snippet
+    # The retired inline helper must not have been added back.
+    assert "parseCsvValues" not in snippet
+    # And the retired helper itself must be gone from the file entirely.
+    assert "void parseCsvValues(" not in text
+
+
+def test_frame_parser_pipeline_dispatches_quick_plot_branch():
+    """Both runners must comma-split on QuickPlot and only invoke the parser
+    in non-QuickPlot modes."""
+    text = _read("app/src/DataModel/Scripting/FrameParserPipeline.cpp")
+
+    # The per-frame helper short-circuits QuickPlot to splitQuickPlotChannels.
+    helper = re.search(
+        r"DataModel::PipelineFrame buildPipelineFrame\([\s\S]*?\n\}",
+        text,
+    )
+    assert helper is not None
+    assert re.search(
+        r"if \(spec\.operationMode == SerialStudio::QuickPlot\) \{\s*"
+        r"DataModel::splitQuickPlotChannels\(frame\.rawBytes, frame\.rows\);",
+        helper.group(0),
+    )
+
+    # The dryRun runner skips engine compilation entirely for QuickPlot.
+    code_runner = re.search(
+        r"DataModel::PipelineResult DataModel::runFrameParserPipelineWithCode\([\s\S]*?\n\}",
+        text,
+    )
+    assert code_runner is not None
+    assert (
+        "const bool needsEngine = (spec.operationMode != SerialStudio::QuickPlot);"
+        in code_runner.group(0)
+    )
+
+
+# ----------------------------------------------------------------------------------
+# R10 -- dryRun + dispatcher require bytes; parser-only fallback is gone
+# ----------------------------------------------------------------------------------
+
+
+def test_frame_parser_dry_run_requires_input_bytes():
+    """project.frameParser.dryRun must reject calls without inputBytes / inputBytesHex
+    and must not silently fall back to sampleFrame/sampleFrames anymore."""
+    text = _read("app/src/API/Handlers/ProjectHandler.cpp")
+
+    body = re.search(
+        r"API::CommandResponse API::Handlers::ProjectHandler::frameParserDryRun"
+        r"\([\s\S]*?\n\}\n",
+        text,
+    )
+    assert body is not None
+    snippet = body.group(0)
+
+    # The required-param check for inputBytes / inputBytesHex is present.
+    assert re.search(
+        r'if \(!params\.contains\(QStringLiteral\("inputBytes"\)\)\s*'
+        r'&& !params\.contains\(QStringLiteral\("inputBytesHex"\)\)\)\s*'
+        r"return CommandResponse::makeError\(\s*id,\s*ErrorCode::MissingParam,",
+        snippet,
+    )
+
+    # Legacy sampleFrame / sampleFrames branches are gone.
+    assert "sampleFrame" not in snippet
+    assert "sampleFrames" not in snippet
+
+    # Drives the shared pipeline runner.
+    assert "DataModel::runFrameParserPipelineWithCode(" in snippet
+
+    # QuickPlot operationMode gets line-based defaults so the call still extracts frames.
+    assert (
+        "if (spec.operationMode == SerialStudio::QuickPlot && spec.finishSequences.isEmpty())"
+        in snippet
+    )
+
+
+def test_tool_dispatcher_routes_pipeline_inputs():
+    """ToolDispatcher.frameParserDryRunCommand must forward the pipeline keys when bytes
+    are supplied, and fall back to dryCompile when they aren't."""
+    text = _read("app/src/AI/ToolDispatcher.cpp")
+
+    body = re.search(
+        r"static QString frameParserDryRunCommand\([\s\S]*?\n\}",
+        text,
+    )
+    assert body is not None
+    snippet = body.group(0)
+
+    for k in (
+        '"inputBytes"',
+        '"inputBytesHex"',
+        '"decoderMethod"',
+        '"frameDetection"',
+        '"frameStart"',
+        '"frameEnd"',
+        '"hexadecimalDelimiters"',
+        '"checksumAlgorithm"',
+        '"operationMode"',
+    ):
+        assert k in snippet, f"pipeline key {k} must be forwarded"
+
+    # No more sampleFrame / sampleFrames routing through this command.
+    assert "sampleFrame" not in snippet
+    assert "sampleFrames" not in snippet
+
+    # The fallback for "no bytes" is dryCompile.
+    assert 'return QStringLiteral("project.frameParser.dryCompile");' in snippet
+
+
+def test_assistant_script_apply_strips_pipeline_keys():
+    """assistant.script.apply must strip the dryRun-only pipeline keys before
+    forwarding to setCode; otherwise setCode rejects them with InvalidParam."""
+    text = _read("app/src/API/Handlers/AssistantHandler.cpp")
+
+    # The fallback is keyed off inputBytes(Hex), not the old sampleFrame(s) check.
+    assert (
+        'if (kind == QStringLiteral("frame_parser") && !inner.contains(QStringLiteral("inputBytes"))'
+        in text
+    )
+    assert '&& !inner.contains(QStringLiteral("inputBytesHex")))' in text
+
+    # Either QStringLiteral("key") or Keys::SymbolName form is acceptable for the strip.
+    for literal, symbol in (
+        ('"inputBytes"', None),
+        ('"inputBytesHex"', None),
+        ('"decoderMethod"', "Keys::DecoderMethod"),
+        ('"frameDetection"', "Keys::FrameDetection"),
+        ('"frameStart"', "Keys::FrameStart"),
+        ('"frameEnd"', "Keys::FrameEnd"),
+        ('"hexadecimalDelimiters"', "Keys::HexadecimalDelimiters"),
+        ('"checksumAlgorithm"', "Keys::ChecksumAlgorithm"),
+        ('"operationMode"', None),
+    ):
+        ok = f"setParams.remove(QStringLiteral({literal}))" in text
+        if not ok and symbol:
+            ok = f"setParams.remove({symbol})" in text
+        assert ok, f"{literal} must be stripped before setCode"
+
+
+# ----------------------------------------------------------------------------------
+# R11 -- FrameParserTestDialog drives the shared pipeline and writes back to the source
+# ----------------------------------------------------------------------------------
+
+
+def test_dialog_runs_pipeline_and_writes_back_to_source():
+    """The dialog must call the shared pipeline runner and must write delimiter / decoder
+    / detection / checksum edits back to ProjectModel so the live driver reconfigures.
+    """
+    text = _read("app/src/DataModel/Dialogs/FrameParserTestDialog.cpp")
+
+    assert '#include "DataModel/Scripting/FrameParserPipeline.h"' in text
+
+    # Pipeline runner is called from parseData.
+    assert (
+        "const auto result = runFrameParserPipeline(input, spec, m_sourceId);" in text
+    )
+
+    # All five pipeline slots write back through updateSource.
+    for slot in (
+        "onDetectionChanged",
+        "onDecoderChanged",
+        "onChecksumChanged",
+        "applyDelimitersToProject",
+    ):
+        body = re.search(
+            r"void DataModel::FrameParserTestDialog::" + slot + r"\([\s\S]*?\n\}",
+            text,
+        )
+        assert body is not None, f"{slot} body must exist"
+        assert (
+            "DataModel::ProjectModel::instance().updateSource(m_sourceId, src);"
+            in body.group(0)
+        ), f"{slot} must persist edits via updateSource"
+
+    # Dialog reacts to live source mutations so it stays in sync with external edits.
+    assert (
+        "&DataModel::ProjectModel::sourceChanged" in text
+        and "&FrameParserTestDialog::onSourceChanged" in text
+    )

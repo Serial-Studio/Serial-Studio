@@ -42,6 +42,7 @@
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "DataModel/Scripting/FrameParserPipeline.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/ConnectionManager.h"
@@ -63,42 +64,6 @@
 #ifdef ENABLE_GRPC
 #  include "API/GRPC/GRPCServer.h"
 #endif
-
-/**
- * @brief Hotpath CSV split -- comma delimiter only; users needing other delimiters write a custom
- * parser.
- */
-void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveHint)
-{
-  out.clear();
-  if (reserveHint > 0)
-    out.reserve(reserveHint);
-  else
-    out.reserve(64);
-
-  const char* raw      = data.constData();
-  const int dataLength = data.size();
-  int start            = 0;
-  for (int i = 0; i <= dataLength; ++i) {
-    if (i == dataLength || raw[i] == ',') {
-      int s = start;
-      int e = i;
-      while (s < e && (raw[s] == ' ' || raw[s] == '\t' || raw[s] == '\r' || raw[s] == '\n'))
-        ++s;
-      while (
-        e > s
-        && (raw[e - 1] == ' ' || raw[e - 1] == '\t' || raw[e - 1] == '\r' || raw[e - 1] == '\n'))
-        --e;
-
-      if (e > s)
-        out.append(QString::fromUtf8(raw + s, e - s));
-      else
-        out.append(QString());
-
-      start = i + 1;
-    }
-  }
-}
 
 /**
  * @brief Returns the per-frame cadence carried by a captured chunk, clamped to >=1 ns.
@@ -676,31 +641,18 @@ void DataModel::FrameBuilder::decodeProjectChannels(int sourceId,
                                                     const IO::CapturedDataPtr& data,
                                                     QList<QStringList>& outChannels)
 {
+  // Player playback: replayed rows arrive pre-CSV; reuse the QuickPlot comma split.
   if (SerialStudio::isAnyPlayerOpen()) [[unlikely]] {
-    auto& channels = m_channelScratch;
-    parseCsvValues(data->data, channels, 64);
-    outChannels.append(channels);
+    DataModel::splitQuickPlotChannels(data->data, outChannels);
     return;
   }
 
-  auto& parser             = DataModel::FrameParser::instance();
-  const auto decoderMethod = resolveDecoderMethod(sourceId, applyPerSourceOverride);
-
-  switch (decoderMethod) {
-    case SerialStudio::Hexadecimal:
-      outChannels = parser.parseMultiFrame(QString::fromLatin1(data->data.toHex()), sourceId);
-      break;
-    case SerialStudio::Base64:
-      outChannels = parser.parseMultiFrame(QString::fromLatin1(data->data.toBase64()), sourceId);
-      break;
-    case SerialStudio::Binary:
-      outChannels = parser.parseMultiFrame(data->data, sourceId);
-      break;
-    case SerialStudio::PlainText:
-    default:
-      outChannels = parser.parseMultiFrame(QString::fromUtf8(data->data), sourceId);
-      break;
-  }
+  // Shared decoder seam (DataModel::decodeAndParseFrame).
+  decodeAndParseFrame(data->data,
+                      resolveDecoderMethod(sourceId, applyPerSourceOverride),
+                      DataModel::FrameParser::instance(),
+                      sourceId,
+                      outChannels);
 }
 
 /**
@@ -856,9 +808,14 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
   Q_ASSERT(!data->data.isEmpty());
   Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
 
-  auto& channels        = m_channelScratch;
-  const int reserveHint = (m_quickPlotChannels > 0) ? m_quickPlotChannels : 64;
-  parseCsvValues(data->data, channels, reserveHint);
+  // Shared QuickPlot split (DataModel::splitQuickPlotChannels).
+  QList<QStringList> splitRows;
+  DataModel::splitQuickPlotChannels(data->data, splitRows);
+
+  auto& channels = m_channelScratch;
+  channels.clear();
+  if (!splitRows.isEmpty())
+    channels = splitRows.first();
 
   const int channelCount = channels.size();
   if (channelCount <= 0)

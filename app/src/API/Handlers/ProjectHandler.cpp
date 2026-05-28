@@ -42,6 +42,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "DataModel/Scripting/FrameParserPipeline.h"
 #include "DataModel/Scripting/JsScriptEngine.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "IO/ConnectionManager.h"
@@ -4156,25 +4157,56 @@ void API::Handlers::ProjectHandler::registerDryRunCommands()
 
   registry.registerCommand(
     QStringLiteral("project.frameParser.dryRun"),
-    QStringLiteral("Compile and execute frame parser code against one or more sample "
-                   "frames WITHOUT touching the live project. Returns parsed values "
-                   "per frame, or compile/runtime errors. Pass either sampleFrame "
-                   "(single string) or sampleFrames (array of strings) -- the array "
-                   "form runs sequentially through one engine, so stateful parsers "
-                   "(top-level closures, EMA-style state) reveal their behavior. Use "
-                   "this to iterate before project.frameParser.setCode."),
+    QStringLiteral(
+      "Compile and execute frame parser code against raw stream bytes WITHOUT touching the live "
+      "project. Drives the full pipeline: extraction (delimiters / detection) -> decoder switch "
+      "-> parse(). Identical code path to the live FrameBuilder and the FrameParserTestDialog. "
+      "Required: code, language, inputBytesHex (preferred; binary-safe) or inputBytes (UTF-8 "
+      "text). Recommended: decoderMethod + frameDetection + frameStart / frameEnd + "
+      "checksumAlgorithm, otherwise sensible defaults apply (PlainText, EndDelimiterOnly, no "
+      "delimiters, no checksum). Returns per-frame raw / decoder / rows plus extractedCount / "
+      "consumedBytes / remainingBytes / droppedFrames. For binary protocols (COBS, Modbus, "
+      "custom binary) pick decoderMethod=3 (Binary); the text decoders run through "
+      "QString::fromUtf8 and corrupt non-ASCII bytes."),
     makeSchema({
-      {       QStringLiteral("code"),QStringLiteral("string"),      QStringLiteral("Frame parser source")                          },
-      {   QStringLiteral("language"),
+      {              QStringLiteral("code"),QStringLiteral("string"),QStringLiteral("Frame parser source")                          },
+      {          QStringLiteral("language"),
        QStringLiteral("integer"),
-       QStringLiteral("0 = JavaScript, 1 = Lua")                                               },
-      {QStringLiteral("sampleFrame"),
+       QStringLiteral("0 = JavaScript, 1 = Lua")                                  },
+      {        QStringLiteral("inputBytes"),
        QStringLiteral("string"),
-       QStringLiteral("Single frame body (without delimiters). Use sampleFrames for an array.")},
-      typedArrayProp(
-        QStringLiteral("sampleFrames"),
-        QStringLiteral("Array of frame bodies; runs sequentially in one engine instance."),
-        QStringLiteral("string"))
+       QStringLiteral("Raw stream bytes as UTF-8 text. Lossy for binary payloads -- prefer "
+       "inputBytesHex for COBS / Modbus / non-ASCII.")                            },
+      {     QStringLiteral("inputBytesHex"),
+       QStringLiteral("string"),
+       QStringLiteral("Raw stream bytes as a hex string (space-tolerant). Binary-safe; use "
+       "this for COBS or any non-ASCII protocol.")                                },
+      {        QString(Keys::DecoderMethod),
+       QStringLiteral("integer"),
+       QStringLiteral("0=PlainText (UTF-8 -> QString, mojibakes binary), 1=Hexadecimal "
+       "(toHex -> QString), 2=Base64 (toBase64 -> QString), 3=Binary (raw "
+       "QByteArray, only mode that's safe for binary protocols).")                },
+      {       QString(Keys::FrameDetection),
+       QStringLiteral("integer"),
+       QStringLiteral("0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, "
+       "3=StartDelimiterOnly.")                                                   },
+      {           QString(Keys::FrameStart),
+       QStringLiteral("string"),
+       QStringLiteral("Start delimiter. Hex when hexadecimalDelimiters is true.") },
+      {             QString(Keys::FrameEnd),
+       QStringLiteral("string"),
+       QStringLiteral("End delimiter. Hex when hexadecimalDelimiters is true.")   },
+      {QString(Keys::HexadecimalDelimiters),
+       QStringLiteral("boolean"),
+       QStringLiteral("When true, frameStart / frameEnd are parsed as hex bytes.")},
+      {    QString(Keys::ChecksumAlgorithm),
+       QStringLiteral("string"),
+       QStringLiteral("Checksum name to validate trailing bytes. Empty = none.")  },
+      {     QStringLiteral("operationMode"),
+       QStringLiteral("integer"),
+       QStringLiteral("0=ProjectFile (default; runs decoder + parser), 2=QuickPlot (line "
+       "extractor, comma-split, parser is bypassed). 1=ConsoleOnly is invalid "
+       "for dryRun.")                                                             }
   }),
     &frameParserDryRun);
 
@@ -5473,7 +5505,62 @@ static std::unique_ptr<DataModel::IScriptEngine> makeScriptEngine(int language)
 }
 
 /**
- * @brief Frame parser dry-run: compile + parse a sample frame.
+ * @brief Parses a delimiter field (frameStart / frameEnd) honoring the hexadecimalDelimiters flag.
+ */
+static QByteArray dryRunDelimiter(const QJsonObject& params, const QString& key, bool hex)
+{
+  const auto raw = params.value(key).toString();
+  if (raw.isEmpty())
+    return {};
+
+  if (hex) {
+    const auto resolved = SerialStudio::resolveEscapeSequences(raw);
+    return QByteArray::fromHex(QString(resolved).remove(' ').toUtf8());
+  }
+
+  return SerialStudio::resolveEscapeSequences(raw).toUtf8();
+}
+
+/**
+ * @brief Decodes the caller-supplied raw stream bytes (inputBytesHex preferred over inputBytes).
+ */
+static QByteArray dryRunInputBytes(const QJsonObject& params)
+{
+  if (params.contains(QStringLiteral("inputBytesHex")))
+    return SerialStudio::hexToBytes(params.value(QStringLiteral("inputBytesHex")).toString());
+
+  if (params.contains(QStringLiteral("inputBytes")))
+    return params.value(QStringLiteral("inputBytes")).toString().toUtf8();
+
+  return {};
+}
+
+/**
+ * @brief Serializes a single pipeline frame into the dryRun response shape.
+ */
+static QJsonObject dryRunSerializeFrame(const DataModel::PipelineFrame& frame)
+{
+  QJsonArray rows;
+  for (const auto& row : frame.rows) {
+    QJsonArray cells;
+    for (const auto& cell : row)
+      cells.append(cell);
+
+    rows.append(cells);
+  }
+
+  QJsonObject obj;
+  obj[QStringLiteral("rawHex")]          = QString::fromLatin1(frame.rawBytes.toHex(' '));
+  obj[QStringLiteral("rawByteCount")]    = static_cast<int>(frame.rawBytes.size());
+  obj[QStringLiteral("decoderOutput")]   = frame.decoderOutput;
+  obj[QStringLiteral("decoderIsBinary")] = frame.decoderProducedBinary;
+  obj[QStringLiteral("rows")]            = rows;
+  obj[QStringLiteral("rowCount")]        = rows.size();
+  return obj;
+}
+
+/**
+ * @brief Frame parser dry-run: drives extraction + decoder + parser against caller bytes.
  */
 API::CommandResponse API::Handlers::ProjectHandler::frameParserDryRun(const QString& id,
                                                                       const QJsonObject& params)
@@ -5486,69 +5573,74 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserDryRun(const QStr
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: language"));
 
-  const bool hasFrame  = params.contains(QStringLiteral("sampleFrame"));
-  const bool hasFrames = params.contains(QStringLiteral("sampleFrames"));
-  if (!hasFrame && !hasFrames)
+  if (!params.contains(QStringLiteral("inputBytes"))
+      && !params.contains(QStringLiteral("inputBytesHex")))
     return CommandResponse::makeError(
       id,
       ErrorCode::MissingParam,
-      QStringLiteral("Missing required parameter: sampleFrame (string) or sampleFrames (array)"));
+      QStringLiteral("Missing required parameter: inputBytesHex (preferred, binary-safe) or "
+                     "inputBytes (UTF-8 text)."));
+
+  const auto bytes = dryRunInputBytes(params);
+  if (bytes.isEmpty())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("inputBytes / inputBytesHex were provided but decoded to zero bytes."));
 
   const auto code     = params.value(QStringLiteral("code")).toString();
   const auto language = params.value(QStringLiteral("language")).toInt();
 
-  // Collect frame samples in execution order
-  QStringList frames;
-  if (hasFrames)
-    for (const auto& v : params.value(QStringLiteral("sampleFrames")).toArray())
-      frames.append(v.toString());
-  else
-    frames.append(params.value(QStringLiteral("sampleFrame")).toString());
+  DataModel::PipelineSpec spec;
+  spec.operationMode = static_cast<SerialStudio::OperationMode>(
+    params.value(QStringLiteral("operationMode")).toInt(int(SerialStudio::ProjectFile)));
+  spec.frameDetection = static_cast<SerialStudio::FrameDetection>(
+    params.value(Keys::FrameDetection).toInt(int(SerialStudio::EndDelimiterOnly)));
+  spec.decoderMethod = static_cast<SerialStudio::DecoderMethod>(
+    params.value(Keys::DecoderMethod).toInt(int(SerialStudio::PlainText)));
+  spec.checksumAlgorithm = params.value(Keys::ChecksumAlgorithm).toString();
 
-  auto engine = makeScriptEngine(language);
-  if (!engine->loadScript(code, /*sourceId=*/0, /*showMessageBoxes=*/false))
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::ExecutionError,
-      QStringLiteral("Frame parser failed to compile or define parse(frame)"));
+  const bool hexDelims = params.value(Keys::HexadecimalDelimiters).toBool(false);
+  const auto start     = dryRunDelimiter(params, QString(Keys::FrameStart), hexDelims);
+  const auto end       = dryRunDelimiter(params, QString(Keys::FrameEnd), hexDelims);
+  if (!start.isEmpty())
+    spec.startSequences.append(start);
 
-  // Run all frames sequentially through the same engine to expose stateful parsers
+  if (!end.isEmpty())
+    spec.finishSequences.append(end);
+
+  // QuickPlot defaults to line-based extraction so the caller may omit framing fields.
+  if (spec.operationMode == SerialStudio::QuickPlot && spec.finishSequences.isEmpty()) {
+    spec.finishSequences = {QByteArray("\n"), QByteArray("\r\n"), QByteArray("\r")};
+    spec.frameDetection  = SerialStudio::EndDelimiterOnly;
+  }
+
+  const auto run = DataModel::runFrameParserPipelineWithCode(bytes, spec, code, language);
+  if (!run.stageError.isEmpty())
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError, run.stageError);
+
   QJsonArray frameResults;
   int totalRows = 0;
-  for (const auto& sample : frames) {
-    const auto parsed = engine->parseString(sample);
-
-    QJsonArray rows;
-    for (const auto& row : parsed) {
-      QJsonArray cells;
-      for (const auto& cell : row)
-        cells.append(cell);
-
-      rows.append(cells);
-    }
-
-    QJsonObject perFrame;
-    perFrame[QStringLiteral("rows")]     = rows;
-    perFrame[QStringLiteral("rowCount")] = rows.size();
-    frameResults.append(perFrame);
-    totalRows += rows.size();
+  for (const auto& f : run.frames) {
+    frameResults.append(dryRunSerializeFrame(f));
+    totalRows += f.rows.size();
   }
 
   QJsonObject result;
-  result[QStringLiteral("ok")]         = true;
-  result[QStringLiteral("frames")]     = frameResults;
-  result[QStringLiteral("frameCount")] = frameResults.size();
-  result[QStringLiteral("totalRows")]  = totalRows;
+  result[QStringLiteral("ok")]             = true;
+  result[QStringLiteral("frames")]         = frameResults;
+  result[QStringLiteral("frameCount")]     = frameResults.size();
+  result[QStringLiteral("extractedCount")] = run.extractedCount;
+  result[QStringLiteral("consumedBytes")]  = static_cast<int>(run.consumedBytes);
+  result[QStringLiteral("remainingBytes")] = static_cast<int>(run.remainingBytes);
+  result[QStringLiteral("droppedFrames")]  = static_cast<qint64>(run.droppedFrames);
+  result[QStringLiteral("totalRows")]      = totalRows;
+  result[QStringLiteral("hint")]           = QStringLiteral(
+    "Bytes flow through extraction (delimiters / detection) -> decoder method -> parser, the "
+              "same path the live FrameBuilder uses. Pick the Binary decoder for non-text streams "
+              "(COBS, Modbus, custom binary) -- PlainText / Hex / Base64 route through "
+              "QString::fromUtf8 and mojibake non-ASCII bytes.");
 
-  // Back-compat: when caller used sampleFrame (string), also return flat rows[]
-  if (hasFrame && !hasFrames && !frameResults.isEmpty()) {
-    result[QStringLiteral("rows")]     = frameResults.first().toObject().value("rows");
-    result[QStringLiteral("rowCount")] = frameResults.first().toObject().value("rowCount");
-  }
-
-  result[QStringLiteral("hint")] =
-    QStringLiteral("Frames run sequentially through one engine instance, exposing state in "
-                   "stateful parsers. row[i] in the live builder maps to dataset.index = i+1.");
   return CommandResponse::makeSuccess(id, result);
 }
 

@@ -2,7 +2,7 @@
  * Serial Studio
  * https://serial-studio.com/
  *
- * Copyright (C) 2020–2025 Alex Spataru
+ * Copyright (C) 2020-2025 Alex Spataru
  *
  * This file is dual-licensed:
  *
@@ -21,101 +21,300 @@
 
 #include "DataModel/Dialogs/FrameParserTestDialog.h"
 
-#include <QGroupBox>
+#include <QFormLayout>
+#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QVBoxLayout>
 
+#include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "DataModel/Scripting/FrameParserPipeline.h"
+#include "IO/Checksum.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
-// Constructor function
+// Internal helpers (file-local)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the frame-parser test dialog bound to @p parser.
+ * @brief Resolves an active source by id from ProjectModel, or returns a defaulted Source.
+ */
+static DataModel::Source sourceById(int sourceId)
+{
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  for (const auto& s : sources)
+    if (s.sourceId == sourceId)
+      return s;
+
+  return {};
+}
+
+/**
+ * @brief Returns the bytes encoded by either the FrameStart / FrameEnd field, honoring hex mode.
+ */
+static QByteArray delimiterFromField(const QString& text, bool hex)
+{
+  if (text.isEmpty())
+    return {};
+
+  if (hex) {
+    const auto resolved = SerialStudio::resolveEscapeSequences(text);
+    return QByteArray::fromHex(QString(resolved).remove(' ').toUtf8());
+  }
+
+  return SerialStudio::resolveEscapeSequences(text).toUtf8();
+}
+
+/**
+ * @brief Truncates a printable hex preview to 64 bytes so the tree stays readable.
+ */
+static QString hexPreview(const QByteArray& bytes, qsizetype maxBytes = 64)
+{
+  if (bytes.size() <= maxBytes)
+    return QString::fromLatin1(bytes.toHex(' '));
+
+  return QString::fromLatin1(bytes.left(maxBytes).toHex(' '))
+       + QStringLiteral(" ... (+%1 bytes)").arg(bytes.size() - maxBytes);
+}
+
+/**
+ * @brief Renders one parsed row (and its per-cell children) under @p parent.
+ */
+static void appendRowItem(QTreeWidgetItem* parent, int rowIndex, const QStringList& row)
+{
+  auto* rowItem = new QTreeWidgetItem(parent);
+  rowItem->setText(0, QObject::tr("Row %1").arg(rowIndex + 1));
+  rowItem->setText(1, row.join(QStringLiteral(", ")));
+
+  for (int c = 0; c < row.size(); ++c) {
+    auto* cellItem = new QTreeWidgetItem(rowItem);
+    cellItem->setText(0, QObject::tr("[%1]").arg(c + 1));
+    cellItem->setText(1, row[c]);
+  }
+}
+
+/**
+ * @brief Renders one extracted frame (raw + decoder + rows) as a top-level tree node.
+ */
+static void appendFrameItem(QTreeWidget* tree, int frameIndex, const DataModel::PipelineFrame& f)
+{
+  auto* frameItem = new QTreeWidgetItem(tree);
+  frameItem->setText(0, QObject::tr("Frame %1").arg(frameIndex + 1));
+  frameItem->setText(1, hexPreview(f.rawBytes));
+
+  auto* decodedItem = new QTreeWidgetItem(frameItem);
+  decodedItem->setText(0, QObject::tr("Decoder"));
+  decodedItem->setText(1, f.decoderOutput);
+
+  auto* rowsItem = new QTreeWidgetItem(frameItem);
+  rowsItem->setText(0, QObject::tr("Rows"));
+  rowsItem->setText(1, QObject::tr("%1 row(s)").arg(f.rows.size()));
+
+  for (int r = 0; r < f.rows.size(); ++r)
+    appendRowItem(rowsItem, r, f.rows[r]);
+
+  frameItem->setExpanded(true);
+  rowsItem->setExpanded(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Constructor
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Builds the dialog, wires controls, and binds to ProjectModel for live source sync.
  */
 DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWidget* parent)
-  : QDialog(parent), m_sourceId(0), m_parser(parser)
+  : QDialog(parent), m_sourceId(0), m_suspendSync(false), m_parser(parser)
 {
-  // Configure window dimensions
-  resize(640, 480);
-  setMinimumSize(640, 480);
+  resize(720, 560);
+  setMinimumSize(720, 560);
 
-  auto* commonFonts = &Misc::CommonFonts::instance();
+  buildPipelineGroup();
+  buildInputGroup();
+  buildOutputGroup();
 
-  // Create widgets
-  m_inputTitle   = new QLabel(this);
-  m_outputTitle  = new QLabel(this);
-  m_table        = new QTableWidget(this);
-  m_userInput    = new QLineEdit(this);
-  m_inputGroup   = new QGroupBox(this);
-  m_outputGroup  = new QGroupBox(this);
-  m_hexCheckBox  = new QCheckBox(this);
-  m_clearButton  = new QPushButton(this);
-  m_parseButton  = new QPushButton(this);
-  m_inputDisplay = new QPlainTextEdit(this);
+  // Section title font shared by all three titles
+  auto titleFont = Misc::CommonFonts::instance().customUiFont(0.8, true);
+  titleFont.setCapitalization(QFont::AllUppercase);
+  m_pipelineTitle->setFont(titleFont);
+  m_inputTitle->setFont(titleFont);
+  m_outputTitle->setFont(titleFont);
 
-  // Create layouts
-  auto* mainLayout   = new QVBoxLayout(this);
-  auto* inputLayout  = new QHBoxLayout(m_inputGroup);
-  auto* outputLayout = new QVBoxLayout(m_outputGroup);
+  // Main layout
+  auto* mainLayout = new QVBoxLayout(this);
+  mainLayout->setSpacing(4);
+  mainLayout->addWidget(m_pipelineTitle);
+  mainLayout->addWidget(m_pipelineGroup);
+  mainLayout->addSpacing(2);
+  mainLayout->addWidget(m_inputTitle);
+  mainLayout->addWidget(m_inputGroup);
+  mainLayout->addSpacing(2);
+  mainLayout->addWidget(m_outputTitle);
+  mainLayout->addWidget(m_outputGroup);
 
-  // Configure buttons and table
+  connectControls();
+
+  onThemeChanged();
+  onLanguageChanged();
+  refreshPipelineControls();
+
+  setWindowFlag(Qt::WindowStaysOnTopHint, true);
+}
+
+/**
+ * @brief Builds the pipeline-config group (detection / start / end / decoder / checksum + reload).
+ */
+void DataModel::FrameParserTestDialog::buildPipelineGroup()
+{
+  m_pipelineTitle  = new QLabel(this);
+  m_pipelineGroup  = new QGroupBox(this);
+  m_detectionLabel = new QLabel(this);
+  m_decoderLabel   = new QLabel(this);
+  m_checksumLabel  = new QLabel(this);
+  m_startLabel     = new QLabel(this);
+  m_finishLabel    = new QLabel(this);
+  m_detectionCombo = new QComboBox(this);
+  m_decoderCombo   = new QComboBox(this);
+  m_checksumCombo  = new QComboBox(this);
+  m_startEdit      = new QLineEdit(this);
+  m_finishEdit     = new QLineEdit(this);
+  m_hexDelimiters  = new QCheckBox(this);
+  m_reloadButton   = new QPushButton(this);
+
+  m_detectionCombo->addItem(QString(), int(SerialStudio::EndDelimiterOnly));
+  m_detectionCombo->addItem(QString(), int(SerialStudio::StartAndEndDelimiter));
+  m_detectionCombo->addItem(QString(), int(SerialStudio::StartDelimiterOnly));
+  m_detectionCombo->addItem(QString(), int(SerialStudio::NoDelimiters));
+
+  m_decoderCombo->addItem(QString(), int(SerialStudio::PlainText));
+  m_decoderCombo->addItem(QString(), int(SerialStudio::Hexadecimal));
+  m_decoderCombo->addItem(QString(), int(SerialStudio::Base64));
+  m_decoderCombo->addItem(QString(), int(SerialStudio::Binary));
+
+  m_checksumCombo->addItems(IO::availableChecksums());
+
+  auto* pipelineForm = new QFormLayout(m_pipelineGroup);
+  pipelineForm->setLabelAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  pipelineForm->setHorizontalSpacing(8);
+  pipelineForm->setVerticalSpacing(4);
+
+  auto* detectionRow = new QHBoxLayout;
+  detectionRow->addWidget(m_detectionCombo, 1);
+  detectionRow->addWidget(m_reloadButton);
+  pipelineForm->addRow(m_detectionLabel, detectionRow);
+
+  auto* startRow = new QHBoxLayout;
+  startRow->addWidget(m_startEdit, 1);
+  startRow->addWidget(m_hexDelimiters);
+  pipelineForm->addRow(m_startLabel, startRow);
+
+  pipelineForm->addRow(m_finishLabel, m_finishEdit);
+  pipelineForm->addRow(m_decoderLabel, m_decoderCombo);
+  pipelineForm->addRow(m_checksumLabel, m_checksumCombo);
+}
+
+/**
+ * @brief Builds the input row (text / hex toggle + clear / evaluate buttons).
+ */
+void DataModel::FrameParserTestDialog::buildInputGroup()
+{
+  m_inputTitle  = new QLabel(this);
+  m_inputGroup  = new QGroupBox(this);
+  m_userInput   = new QLineEdit(this);
+  m_hexCheckBox = new QCheckBox(this);
+  m_clearButton = new QPushButton(this);
+  m_parseButton = new QPushButton(this);
+
   m_parseButton->setDefault(true);
   m_clearButton->setIcon(QIcon(":/icons/buttons/clear.svg"));
   m_parseButton->setIcon(QIcon(":/icons/buttons/media-play.svg"));
 
-  m_table->setColumnCount(2);
-  m_table->verticalHeader()->hide();
-  m_table->setAlternatingRowColors(true);
-  m_table->setFont(commonFonts->monoFont());
-  m_table->horizontalHeader()->setDefaultSectionSize(156);
-  m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
-  m_table->horizontalHeader()->setFont(commonFonts->boldUiFont());
-  m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-  m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-  m_inputDisplay->setReadOnly(true);
-
-  // Configure title fonts
-  auto titleFont = commonFonts->customUiFont(0.8, true);
-  titleFont.setCapitalization(QFont::AllUppercase);
-  m_inputTitle->setFont(titleFont);
-  m_outputTitle->setFont(titleFont);
-
-  // Assemble layouts
+  auto* inputLayout = new QHBoxLayout(m_inputGroup);
   inputLayout->addWidget(m_userInput);
   inputLayout->addWidget(m_hexCheckBox);
   inputLayout->addWidget(m_clearButton);
   inputLayout->addWidget(m_parseButton);
-  outputLayout->addWidget(m_inputDisplay);
-  outputLayout->addWidget(m_table);
+}
 
-  outputLayout->setStretch(0, 1);
-  outputLayout->setStretch(1, 2);
+/**
+ * @brief Builds the output area (stats label + per-frame results tree).
+ */
+void DataModel::FrameParserTestDialog::buildOutputGroup()
+{
+  auto* commonFonts = &Misc::CommonFonts::instance();
 
-  // Build main layout
-  mainLayout->setSpacing(4);
-  mainLayout->addWidget(m_inputTitle);
-  mainLayout->addWidget(m_inputGroup);
-  mainLayout->addSpacing(4);
-  mainLayout->addWidget(m_outputTitle);
-  mainLayout->addWidget(m_outputGroup);
+  m_outputTitle = new QLabel(this);
+  m_outputGroup = new QGroupBox(this);
+  m_statsLabel  = new QLabel(this);
+  m_results     = new QTreeWidget(this);
 
-  // Connect widget signals
+  m_results->setColumnCount(2);
+  m_results->setUniformRowHeights(true);
+  m_results->setAlternatingRowColors(true);
+  m_results->setFont(commonFonts->monoFont());
+  m_results->setRootIsDecorated(true);
+  m_results->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  m_results->setSelectionBehavior(QAbstractItemView::SelectRows);
+  m_results->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+  m_results->header()->setSectionResizeMode(1, QHeaderView::Stretch);
+  m_results->header()->setFont(commonFonts->boldUiFont());
+
+  m_statsLabel->setFont(commonFonts->customUiFont(0.9, false));
+
+  auto* outputLayout = new QVBoxLayout(m_outputGroup);
+  outputLayout->setSpacing(4);
+  outputLayout->addWidget(m_statsLabel);
+  outputLayout->addWidget(m_results);
+}
+
+/**
+ * @brief Wires all widget signals + the live ProjectModel/theme/language subscriptions.
+ */
+void DataModel::FrameParserTestDialog::connectControls()
+{
   connect(m_parseButton, &QPushButton::clicked, this, &FrameParserTestDialog::parseData);
   connect(m_clearButton, &QPushButton::clicked, this, &FrameParserTestDialog::clear);
+  connect(m_reloadButton, &QPushButton::clicked, this, &FrameParserTestDialog::reloadFromSource);
   connect(
     m_hexCheckBox, &QCheckBox::checkStateChanged, this, &FrameParserTestDialog::onInputModeChanged);
   connect(m_userInput, &QLineEdit::returnPressed, this, &FrameParserTestDialog::parseData);
   connect(m_userInput, &QLineEdit::textChanged, this, &FrameParserTestDialog::onInputDataChanged);
 
-  // Connect theme and language change signals
+  connect(m_detectionCombo,
+          QOverload<int>::of(&QComboBox::currentIndexChanged),
+          this,
+          &FrameParserTestDialog::onDetectionChanged);
+  connect(m_decoderCombo,
+          QOverload<int>::of(&QComboBox::currentIndexChanged),
+          this,
+          &FrameParserTestDialog::onDecoderChanged);
+  connect(m_checksumCombo,
+          &QComboBox::currentTextChanged,
+          this,
+          &FrameParserTestDialog::onChecksumChanged);
+  connect(
+    m_startEdit, &QLineEdit::editingFinished, this, &FrameParserTestDialog::onStartSequenceEdited);
+  connect(m_finishEdit,
+          &QLineEdit::editingFinished,
+          this,
+          &FrameParserTestDialog::onFinishSequenceEdited);
+  connect(m_hexDelimiters,
+          &QCheckBox::checkStateChanged,
+          this,
+          &FrameParserTestDialog::onHexDelimitersToggled);
+
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::sourceChanged,
+          this,
+          &FrameParserTestDialog::onSourceChanged);
+
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
           this,
@@ -124,13 +323,6 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
           &Misc::Translator::languageChanged,
           this,
           &FrameParserTestDialog::onLanguageChanged);
-
-  // Apply initial theme and translations
-  onThemeChanged();
-  onLanguageChanged();
-
-  // Make window stay on top
-  setWindowFlag(Qt::WindowStaysOnTopHint, true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -138,11 +330,12 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sets the source ID used when executing the parser.
+ * @brief Sets the active source id and re-syncs pipeline controls from the matching source.
  */
 void DataModel::FrameParserTestDialog::setSourceId(int sourceId)
 {
   m_sourceId = sourceId;
+  refreshPipelineControls();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,127 +343,333 @@ void DataModel::FrameParserTestDialog::setSourceId(int sourceId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Clears the input, output table, and parser execution context.
+ * @brief Clears the input field, results tree, and parser scratch context.
  */
 void DataModel::FrameParserTestDialog::clear()
 {
   m_userInput->clear();
-  m_table->setRowCount(0);
-  m_inputDisplay->clear();
+  m_results->clear();
+  m_statsLabel->clear();
   m_parser->clearContext();
-  m_inputDisplay->setFont(Misc::CommonFonts::instance().uiFont());
 }
 
 /**
- * @brief Runs the parser on the current input and displays the results.
+ * @brief Runs the full pipeline (extraction + decoder + parser) against the current input.
  */
 void DataModel::FrameParserTestDialog::parseData()
 {
-  const auto input = m_userInput->text();
-  if (input.isEmpty())
+  const auto text = m_userInput->text();
+  if (text.isEmpty())
     return;
 
-  if (m_hexCheckBox->isChecked() && !validateHexInput(input)) {
+  if (m_hexCheckBox->isChecked() && !validateHexInput(text)) {
     QMessageBox::warning(this,
                          tr("Invalid Hex Input"),
                          tr("Please enter valid hexadecimal bytes.\n\nValid format: 01 A2 FF 3C"));
     return;
   }
 
-  // Pick up uncommitted edits to shared tables
+  // Pick up uncommitted edits to shared tables before the pipeline runs.
   DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
 
-  QStringList result;
-  if (m_hexCheckBox->isChecked()) {
-    const auto frames = m_parser->parseMultiFrame(SerialStudio::hexToBytes(input), m_sourceId);
-    if (!frames.isEmpty())
-      result = frames.first();
+  // Build pipeline spec from the (now project-backed) controls.
+  PipelineSpec spec;
+  spec.operationMode = SerialStudio::ProjectFile;
+  spec.frameDetection =
+    static_cast<SerialStudio::FrameDetection>(m_detectionCombo->currentData().toInt());
+  spec.decoderMethod =
+    static_cast<SerialStudio::DecoderMethod>(m_decoderCombo->currentData().toInt());
+  spec.checksumAlgorithm = m_checksumCombo->currentText();
+
+  const bool hex   = m_hexDelimiters->isChecked();
+  const auto start = delimiterFromField(m_startEdit->text(), hex);
+  const auto end   = delimiterFromField(m_finishEdit->text(), hex);
+  if (!start.isEmpty())
+    spec.startSequences.append(start);
+
+  if (!end.isEmpty())
+    spec.finishSequences.append(end);
+
+  const QByteArray input =
+    m_hexCheckBox->isChecked() ? SerialStudio::hexToBytes(text) : text.toUtf8();
+
+  const auto result = runFrameParserPipeline(input, spec, m_sourceId);
+
+  // Populate results tree
+  m_results->clear();
+  if (result.extractedCount == 0) {
+    auto* item = new QTreeWidgetItem(m_results);
+    item->setText(0, tr("(no frames)"));
+    item->setText(1,
+                  tr("Extraction did not produce a complete frame. "
+                     "Check the start / end delimiters and the detection mode."));
+    item->setForeground(1, Qt::gray);
   } else {
-    const auto frames = m_parser->parseMultiFrame(input, m_sourceId);
-    if (!frames.isEmpty())
-      result = frames.first();
+    for (int i = 0; i < result.frames.size(); ++i)
+      appendFrameItem(m_results, i, result.frames[i]);
   }
 
-  displayOutput(input, result);
+  m_statsLabel->setText(tr("%1 frame(s) extracted | %2 byte(s) consumed | %3 byte(s) buffered | "
+                           "%4 dropped")
+                          .arg(result.extractedCount)
+                          .arg(result.consumedBytes)
+                          .arg(result.remainingBytes)
+                          .arg(result.droppedFrames));
+
   m_userInput->clear();
   m_userInput->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
-// Singleton module slot functions
+// Pipeline-config slots (write through to ProjectModel)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the dialog palette when the application theme changes.
+ * @brief Persists detection mode to the source so the live driver reconfigures.
+ */
+void DataModel::FrameParserTestDialog::onDetectionChanged(int index)
+{
+  if (m_suspendSync || index < 0)
+    return;
+
+  auto src           = sourceById(m_sourceId);
+  src.frameDetection = m_detectionCombo->itemData(index).toInt();
+  DataModel::ProjectModel::instance().updateSource(m_sourceId, src);
+  updateStageVisibility();
+}
+
+/**
+ * @brief Persists decoder choice; the live FrameBuilder picks it up via the same source field.
+ */
+void DataModel::FrameParserTestDialog::onDecoderChanged(int index)
+{
+  if (m_suspendSync || index < 0)
+    return;
+
+  auto src          = sourceById(m_sourceId);
+  src.decoderMethod = m_decoderCombo->itemData(index).toInt();
+  DataModel::ProjectModel::instance().updateSource(m_sourceId, src);
+}
+
+/**
+ * @brief Persists the checksum algorithm name; empty string disables checksum validation.
+ */
+void DataModel::FrameParserTestDialog::onChecksumChanged(const QString& text)
+{
+  if (m_suspendSync)
+    return;
+
+  auto src              = sourceById(m_sourceId);
+  src.checksumAlgorithm = text;
+  DataModel::ProjectModel::instance().updateSource(m_sourceId, src);
+}
+
+/**
+ * @brief Pushes the start delimiter (raw or hex) to the project source.
+ */
+void DataModel::FrameParserTestDialog::onStartSequenceEdited()
+{
+  if (m_suspendSync)
+    return;
+
+  applyDelimitersToProject();
+}
+
+/**
+ * @brief Pushes the end delimiter (raw or hex) to the project source.
+ */
+void DataModel::FrameParserTestDialog::onFinishSequenceEdited()
+{
+  if (m_suspendSync)
+    return;
+
+  applyDelimitersToProject();
+}
+
+/**
+ * @brief Hex-delimiter toggle: triggers a re-encode of both fields into the source.
+ */
+void DataModel::FrameParserTestDialog::onHexDelimitersToggled(Qt::CheckState)
+{
+  if (m_suspendSync)
+    return;
+
+  applyDelimitersToProject();
+}
+
+/**
+ * @brief Re-pulls pipeline controls when ProjectModel reports the active source has changed.
+ */
+void DataModel::FrameParserTestDialog::onSourceChanged(int sourceId)
+{
+  if (sourceId != m_sourceId)
+    return;
+
+  refreshPipelineControls();
+}
+
+/**
+ * @brief Reloads the dialog's pipeline controls from whatever is currently persisted.
+ */
+void DataModel::FrameParserTestDialog::reloadFromSource()
+{
+  refreshPipelineControls();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Pipeline-config private helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reads source[m_sourceId] and updates every pipeline control without re-emitting writes.
+ */
+void DataModel::FrameParserTestDialog::refreshPipelineControls()
+{
+  m_suspendSync = true;
+
+  const auto src = sourceById(m_sourceId);
+
+  const int detIdx = m_detectionCombo->findData(src.frameDetection);
+  m_detectionCombo->setCurrentIndex(detIdx >= 0 ? detIdx : 0);
+
+  const int decIdx = m_decoderCombo->findData(src.decoderMethod);
+  m_decoderCombo->setCurrentIndex(decIdx >= 0 ? decIdx : 0);
+
+  const int chkIdx = m_checksumCombo->findText(src.checksumAlgorithm);
+  m_checksumCombo->setCurrentIndex(chkIdx >= 0 ? chkIdx : 0);
+
+  m_hexDelimiters->setChecked(src.hexadecimalDelimiters);
+  m_startEdit->setText(src.frameStart);
+  m_finishEdit->setText(src.frameEnd);
+
+  m_suspendSync = false;
+
+  updateStageVisibility();
+}
+
+/**
+ * @brief Pushes the current delimiter / hex-mode trio into the source's frameStart/frameEnd.
+ */
+void DataModel::FrameParserTestDialog::applyDelimitersToProject()
+{
+  auto src                  = sourceById(m_sourceId);
+  src.frameStart            = m_startEdit->text();
+  src.frameEnd              = m_finishEdit->text();
+  src.hexadecimalDelimiters = m_hexDelimiters->isChecked();
+  DataModel::ProjectModel::instance().updateSource(m_sourceId, src);
+}
+
+/**
+ * @brief Hides delimiter rows that the current detection mode doesn't consult.
+ */
+void DataModel::FrameParserTestDialog::updateStageVisibility()
+{
+  const auto mode =
+    static_cast<SerialStudio::FrameDetection>(m_detectionCombo->currentData().toInt());
+
+  const bool needsStart =
+    (mode == SerialStudio::StartDelimiterOnly || mode == SerialStudio::StartAndEndDelimiter);
+  const bool needsEnd =
+    (mode == SerialStudio::EndDelimiterOnly || mode == SerialStudio::StartAndEndDelimiter);
+
+  m_startLabel->setVisible(needsStart);
+  m_startEdit->setVisible(needsStart);
+  m_finishLabel->setVisible(needsEnd);
+  m_finishEdit->setVisible(needsEnd);
+  m_hexDelimiters->setVisible(needsStart || needsEnd);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Theme + language slots
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reapplies palette + group-box styling when the application theme changes.
  */
 void DataModel::FrameParserTestDialog::onThemeChanged()
 {
-  // Apply palette and sync input mode
   setPalette(Misc::ThemeManager::instance().palette());
   onInputModeChanged(m_hexCheckBox->checkState());
 
-  // Style groupboxes
   const auto* tm = &Misc::ThemeManager::instance();
   const auto groupBoxStyle =
     QStringLiteral(
       "QGroupBox {  border: 1px solid %1;  border-radius: 2px;  background-color: %2;}")
       .arg(tm->getColor("groupbox_border").name())
       .arg(tm->getColor("groupbox_background").name());
+
+  m_pipelineGroup->setStyleSheet(groupBoxStyle);
   m_inputGroup->setStyleSheet(groupBoxStyle);
   m_outputGroup->setStyleSheet(groupBoxStyle);
 }
 
 /**
- * @brief Retranslates all UI text when the application language changes.
+ * @brief Re-translates every label/button when the language changes.
  */
 void DataModel::FrameParserTestDialog::onLanguageChanged()
 {
+  m_pipelineTitle->setText(tr("Pipeline Configuration"));
+  m_inputTitle->setText(tr("Frame Data Input"));
+  m_outputTitle->setText(tr("Pipeline Results"));
+
+  m_detectionLabel->setText(tr("Detection"));
+  m_decoderLabel->setText(tr("Decoder"));
+  m_checksumLabel->setText(tr("Checksum"));
+  m_startLabel->setText(tr("Start Delimiter"));
+  m_finishLabel->setText(tr("End Delimiter"));
+  m_hexDelimiters->setText(tr("Hex Delimiters"));
+  m_reloadButton->setText(tr("Reload"));
+
+  m_detectionCombo->setItemText(0, tr("End delimiter only"));
+  m_detectionCombo->setItemText(1, tr("Start + end delimiters"));
+  m_detectionCombo->setItemText(2, tr("Start delimiter only"));
+  m_detectionCombo->setItemText(3, tr("No delimiters (whole chunk)"));
+
+  m_decoderCombo->setItemText(0, tr("Plain text (UTF-8)"));
+  m_decoderCombo->setItemText(1, tr("Hexadecimal"));
+  m_decoderCombo->setItemText(2, tr("Base64"));
+  m_decoderCombo->setItemText(3, tr("Binary (raw bytes)"));
+
   m_hexCheckBox->setText(tr("HEX"));
   m_clearButton->setText(tr("Clear"));
   m_parseButton->setText(tr("Evaluate"));
-  m_inputTitle->setText(tr("Frame Data Input"));
-  m_outputTitle->setText(tr("Frame Parser Results"));
-  m_userInput->setPlaceholderText(tr("Enter frame data here…"));
-  m_table->setHorizontalHeaderLabels({tr("Dataset Index"), tr("Value")});
-  m_inputDisplay->setPlaceholderText(tr(
-    "Enter frame data above, enable HEX mode if needed, then click \"Evaluate\" to run the frame parser.\n\nExample (Text): a,b,c,d,e,f\nExample (HEX):  48 65 6C 6C 6F"));
+  m_userInput->setPlaceholderText(tr("Enter raw stream bytes here..."));
+  m_results->setHeaderLabels({tr("Stage"), tr("Value")});
 
   onInputModeChanged(m_hexCheckBox->checkState());
-  if (m_table->rowCount() > 0)
+
+  if (m_results->topLevelItemCount() > 0)
     parseData();
 
   setWindowTitle(tr("Test Frame Parser"));
 }
 
 //--------------------------------------------------------------------------------------------------
-// Widget slot functions
+// Input-mode + validation slots
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates placeholder text and formatting when hex mode toggles.
+ * @brief Updates placeholder text and formatting when HEX input mode toggles.
  */
 void DataModel::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
 {
   if (state == Qt::Checked) {
     m_userInput->setPlaceholderText(tr("Enter hex bytes (e.g., 01 A2 FF)"));
     if (!m_userInput->text().isEmpty()) {
-      QString formatted = formatHexInput(m_userInput->text());
+      const auto formatted = formatHexInput(m_userInput->text());
       m_userInput->setText(formatted);
     }
-  }
-
-  else {
-    m_userInput->setPlaceholderText(tr("Enter frame data here…"));
+  } else {
+    m_userInput->setPlaceholderText(tr("Enter raw stream bytes here..."));
     m_userInput->setPalette(QPalette());
   }
 }
 
 /**
- * @brief Formats and validates the input when hex mode is active.
+ * @brief Formats and validates the input as space-separated hex pairs when HEX mode is on.
  */
 void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
 {
-  // Format and validate hex input
   if (m_hexCheckBox->isChecked()) {
     m_userInput->blockSignals(true);
     const auto fmt     = formatHexInput(t);
@@ -283,7 +682,6 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
       m_userInput->setCursorPosition(pos + diff);
     }
 
-    // Highlight invalid hex in red
     auto palette = m_userInput->palette();
     if (isValid || fmt.isEmpty())
       palette.setColor(QPalette::Text, Qt::black);
@@ -292,14 +690,13 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
 
     m_userInput->setPalette(palette);
     m_userInput->blockSignals(false);
-  }
-
-  else
+  } else {
     m_userInput->setPalette(QPalette());
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
-// HEX string validation & formatting functions
+// HEX string validation + formatting
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -307,7 +704,6 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
  */
 QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
 {
-  // Strip non-hex characters and uppercase
   QString cleaned;
   for (const QChar& c : text)
     if (c.isLetterOrNumber())
@@ -324,7 +720,7 @@ QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
 }
 
 /**
- * @brief Returns true if the text is empty or forms valid complete hex bytes.
+ * @brief Returns true if @p text is empty or forms valid complete hex bytes.
  */
 bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
 {
@@ -339,47 +735,4 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
       return false;
 
   return cleaned.length() % 2 == 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Script output display function
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Populates the results table with the parsed frame output.
- */
-void DataModel::FrameParserTestDialog::displayOutput(const QString& input,
-                                                     const QStringList& output)
-{
-  // Clear previous results
-  m_table->setRowCount(0);
-  m_inputDisplay->setPlainText(input);
-  if (input.isEmpty())
-    m_inputDisplay->setFont(Misc::CommonFonts::instance().uiFont());
-  else
-    m_inputDisplay->setFont(Misc::CommonFonts::instance().monoFont());
-
-  if (output.isEmpty()) {
-    m_table->insertRow(0);
-    m_table->setItem(0, 0, new QTableWidgetItem(tr("(empty)")));
-    m_table->setItem(0, 1, new QTableWidgetItem(tr("No data returned")));
-    m_table->item(0, 1)->setForeground(Qt::gray);
-  }
-
-  else {
-    for (int i = 0; i < output.size(); ++i) {
-      int row = m_table->rowCount();
-      m_table->insertRow(row);
-      if (i == 0) {
-        auto* inputItem = new QTableWidgetItem(input);
-        inputItem->setData(Qt::UserRole, output.size());
-        m_table->setItem(row, 0, inputItem);
-      }
-
-      m_table->setItem(row, 0, new QTableWidgetItem(QString::number(i + 1)));
-      m_table->setItem(row, 1, new QTableWidgetItem(output[i]));
-    }
-  }
-
-  m_table->scrollToBottom();
 }

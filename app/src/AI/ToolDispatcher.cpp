@@ -229,10 +229,39 @@ static QJsonObject scriptPropsBag()
     makeProperty(QStringLiteral("integer"), QStringLiteral("0 = JavaScript, 1 = Lua."));
   props[Keys::SourceId] =
     makeProperty(QStringLiteral("integer"), QStringLiteral("Optional source id, default 0."));
-  props[QStringLiteral("sampleFrame")] =
-    makeProperty(QStringLiteral("string"), QStringLiteral("Single frame body for parser tests."));
-  props[QStringLiteral("sampleFrames")] = makeProperty(
-    QStringLiteral("array"), QStringLiteral("Multiple frame bodies for parser tests."));
+  props[QStringLiteral("inputBytes")] =
+    makeProperty(QStringLiteral("string"),
+                 QStringLiteral("[frame_parser] Raw stream bytes as UTF-8 text. Lossy "
+                                "for binary -- prefer inputBytesHex."));
+  props[QStringLiteral("inputBytesHex")] =
+    makeProperty(QStringLiteral("string"),
+                 QStringLiteral("[frame_parser, recommended] Raw stream bytes as a hex "
+                                "string. Binary-safe; required for COBS / Modbus / "
+                                "any non-ASCII protocol."));
+  props[QStringLiteral("decoderMethod")] =
+    makeProperty(QStringLiteral("integer"),
+                 QStringLiteral("[frame_parser] 0=PlainText, 1=Hexadecimal, 2=Base64, "
+                                "3=Binary. Binary is the only decoder safe for non-text."));
+  props[QStringLiteral("frameDetection")] =
+    makeProperty(QStringLiteral("integer"),
+                 QStringLiteral("[frame_parser] 0=EndDelimiterOnly, 1=StartAndEnd, "
+                                "2=NoDelimiters, 3=StartDelimiterOnly."));
+  props[QStringLiteral("frameStart")] =
+    makeProperty(QStringLiteral("string"), QStringLiteral("[frame_parser] Start delimiter."));
+  props[QStringLiteral("frameEnd")] =
+    makeProperty(QStringLiteral("string"), QStringLiteral("[frame_parser] End delimiter."));
+  props[QStringLiteral("hexadecimalDelimiters")] =
+    makeProperty(QStringLiteral("boolean"),
+                 QStringLiteral("[frame_parser] Treat frameStart / frameEnd as hex bytes."));
+  props[QStringLiteral("checksumAlgorithm")] = makeProperty(
+    QStringLiteral("string"), QStringLiteral("[frame_parser] Checksum name (or empty for none)."));
+  props[QStringLiteral("operationMode")] = makeProperty(
+    QStringLiteral("integer"), QStringLiteral("[frame_parser] 0=ProjectFile, 2=QuickPlot."));
+  props[QStringLiteral("sampleFrame")] = makeProperty(
+    QStringLiteral("string"), QStringLiteral("[end_to_end only] Single pre-extracted frame body."));
+  props[QStringLiteral("sampleFrames")] =
+    makeProperty(QStringLiteral("array"),
+                 QStringLiteral("[end_to_end only] Multiple pre-extracted frame bodies."));
   props[QStringLiteral("values")] =
     makeProperty(QStringLiteral("array"), QStringLiteral("Sample values for transform tests."));
   props[QStringLiteral("groupId")] = makeProperty(
@@ -822,18 +851,35 @@ static QJsonObject scriptTargetDataset(const QJsonObject& args)
 
 /**
  * @brief Picks the frame-parser dry-run command and seeds its inputs.
+ *
+ *        Routes to project.frameParser.dryRun when raw stream bytes are present (the only
+ *        dryRun mode now); otherwise falls back to project.frameParser.dryCompile so the AI
+ *        gets at least a syntax check.
  */
 static QString frameParserDryRunCommand(const QJsonObject& args, QJsonObject& dryArgs, int language)
 {
   dryArgs[QStringLiteral("language")] = language;
-  if (args.contains(QStringLiteral("sampleFrames"))) {
-    dryArgs[QStringLiteral("sampleFrames")] = args.value(QStringLiteral("sampleFrames")).toArray();
+
+  if (args.contains(QStringLiteral("inputBytes"))
+      || args.contains(QStringLiteral("inputBytesHex"))) {
+    static const QString keys[] = {
+      QStringLiteral("inputBytes"),
+      QStringLiteral("inputBytesHex"),
+      QStringLiteral("decoderMethod"),
+      QStringLiteral("frameDetection"),
+      QStringLiteral("frameStart"),
+      QStringLiteral("frameEnd"),
+      QStringLiteral("hexadecimalDelimiters"),
+      QStringLiteral("checksumAlgorithm"),
+      QStringLiteral("operationMode"),
+    };
+    for (const auto& k : keys)
+      if (args.contains(k))
+        dryArgs[k] = args.value(k);
+
     return QStringLiteral("project.frameParser.dryRun");
   }
-  if (args.contains(QStringLiteral("sampleFrame"))) {
-    dryArgs[QStringLiteral("sampleFrame")] = args.value(QStringLiteral("sampleFrame")).toString();
-    return QStringLiteral("project.frameParser.dryRun");
-  }
+
   return QStringLiteral("project.frameParser.dryCompile");
 }
 

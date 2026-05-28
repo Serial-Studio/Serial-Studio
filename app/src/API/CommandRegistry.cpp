@@ -355,9 +355,12 @@ QString API::CommandRegistry::dryRunHintForScriptCommand(const QString& commandN
 
   if (commandName == QStringLiteral("project.frameParser.setCode"))
     return QStringLiteral("Re-validate with project.frameParser.dryRun{code, language, "
-                          "sampleFrame} -- or project.frameParser.dryCompile for a "
-                          "syntax-only check -- before setCode. Mismatched language is the "
-                          "most common silent compile failure. Fetch the API surface with "
+                          "inputBytesHex, decoderMethod, frameDetection, frameStart, "
+                          "frameEnd} -- or project.frameParser.dryCompile for a syntax-only "
+                          "check -- before setCode. dryRun drives the full pipeline "
+                          "(extraction + decoder + parser) so you see what the live "
+                          "FrameBuilder would actually emit. Mismatched language is the most "
+                          "common silent compile failure. Fetch the API surface with "
                           "meta.fetchScriptingDocs{kind:'frame_parser_lua'} or "
                           "{kind:'frame_parser_js'}.");
 

@@ -274,6 +274,7 @@ set(SOURCES
   src/IO/FileTransmission/ZMODEM.cpp
   src/IO/FrameReader.cpp
   src/DataModel/Scripting/FrameParser.cpp
+  src/DataModel/Scripting/FrameParserPipeline.cpp
   src/DataModel/Scripting/JsScriptEngine.cpp
   src/DataModel/Scripting/JsWatchdog.cpp
   src/DataModel/Scripting/JsWatchdogThread.cpp
@@ -390,6 +391,7 @@ set(HEADERS
   src/IO/FileTransmission/ZMODEM.h
   src/IO/FrameReader.h
   src/DataModel/Scripting/FrameParser.h
+  src/DataModel/Scripting/FrameParserPipeline.h
   src/DataModel/Scripting/IScriptEngine.h
   src/DataModel/Scripting/JsScriptEngine.h
   src/DataModel/Scripting/JsWatchdog.h
