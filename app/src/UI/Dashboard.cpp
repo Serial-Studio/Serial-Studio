@@ -844,8 +844,16 @@ void UI::Dashboard::setPoints(const int points)
     if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
       m_settings.setValue("Dashboard/Points", m_points);
 
+    // Snapshot to keep time-axis history across the raw-sample ring resize.
+    auto savedPlotRings      = snapshotPlotTimeRings();
+    auto savedMultiplotRings = snapshotMultiplotTimeRings();
+
     configureLineSeries();
     configureMultiLineSeries();
+
+    restorePlotTimeRings(savedPlotRings);
+    restoreMultiplotTimeRings(savedMultiplotRings);
+
     Q_EMIT pointsChanged();
   }
 }
@@ -1043,9 +1051,16 @@ void UI::Dashboard::setPlotTimeRange(const double seconds)
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     m_settings.setValue("Dashboard/PlotTimeRange", m_plotTimeRange);
 
+  // Snapshot rings; restore replays through appendDecimated to rebin to the new interval.
+  auto savedPlotRings      = snapshotPlotTimeRings();
+  auto savedMultiplotRings = snapshotMultiplotTimeRings();
+
   // Re-bin the time-bucket envelopes to the new window width
   configureLineSeries();
   configureMultiLineSeries();
+
+  restorePlotTimeRings(savedPlotRings);
+  restoreMultiplotTimeRings(savedMultiplotRings);
 
   m_updateRequired = true;
   Q_EMIT plotTimeRangeChanged();
@@ -1716,6 +1731,10 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   // Save per-source cache before reset so multi-source merging still works
   auto savedSourceFrames = m_sourceRawFrames;
 
+  // Snapshot rings so cosmetic project edits don't erase in-flight plot history.
+  auto savedPlotRings      = snapshotPlotTimeRings();
+  auto savedMultiplotRings = snapshotMultiplotTimeRings();
+
   // Reset all dashboard state without notifying the UI
   resetData(false);
 
@@ -1783,6 +1802,10 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   // Initialize data series & update actions
   updateDataSeries();
   configureActions(frame);
+
+  // Splice in-flight rings back where the same dataset / group still maps to a slot.
+  restorePlotTimeRings(savedPlotRings);
+  restoreMultiplotTimeRings(savedMultiplotRings);
 
   // Update user interface
   Q_EMIT widgetCountChanged();
@@ -2287,6 +2310,123 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
   // Unfilled so the XY ring grows from empty; no seeded (0,0) point draws a false first line.
   DSP::AxisData xAxis(points() + 1);
   m_xAxisData.insert(xSource, xAxis);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Time-ring snapshot / restore
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Snapshots plot time-ring contents keyed by dataset uniqueId.
+ */
+QHash<int, DSP::TimeRing> UI::Dashboard::snapshotPlotTimeRings() const
+{
+  QHash<int, DSP::TimeRing> out;
+  const int n = widgetCount(SerialStudio::DashboardPlot);
+  for (int i = 0; i < n; ++i) {
+    const auto it = m_plotTimeRings.find(i);
+    if (it == m_plotTimeRings.end())
+      continue;
+
+    const auto& d = getDatasetWidget(SerialStudio::DashboardPlot, i);
+    out.insert(d.uniqueId, it.value());
+  }
+
+  return out;
+}
+
+/**
+ * @brief Snapshots multiplot time-ring contents keyed by group uniqueId.
+ */
+QHash<int, std::vector<DSP::TimeRing>> UI::Dashboard::snapshotMultiplotTimeRings() const
+{
+  QHash<int, std::vector<DSP::TimeRing>> out;
+  const int n = widgetCount(SerialStudio::DashboardMultiPlot);
+  for (int i = 0; i < n; ++i) {
+    const auto it = m_multiplotTimeRings.find(i);
+    if (it == m_multiplotTimeRings.end())
+      continue;
+
+    const auto& g = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+    out.insert(g.uniqueId, it.value());
+  }
+
+  return out;
+}
+
+/**
+ * @brief Replays a saved ring's samples into @p target via appendDecimated. Used when
+ *        the new ring has a different capacity / interval than the saved one.
+ */
+static void replayTimeRing(const DSP::TimeRing& saved, DSP::TimeRing& target)
+{
+  const std::size_t n = saved.time.size();
+  for (std::size_t k = 0; k < n; ++k)
+    target.appendDecimated(saved.time[k], saved.value[k]);
+}
+
+/**
+ * @brief Restores saved plot rings into the currently configured widget slots. Splices when
+ *        the new ring shape matches the saved one, replays through appendDecimated otherwise.
+ */
+void UI::Dashboard::restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot)
+{
+  if (snapshot.isEmpty())
+    return;
+
+  const int n = widgetCount(SerialStudio::DashboardPlot);
+  for (int i = 0; i < n; ++i) {
+    auto ringIt = m_plotTimeRings.find(i);
+    if (ringIt == m_plotTimeRings.end())
+      continue;
+
+    const auto& d = getDatasetWidget(SerialStudio::DashboardPlot, i);
+    auto savedIt  = snapshot.find(d.uniqueId);
+    if (savedIt == snapshot.end())
+      continue;
+
+    auto& live = ringIt.value();
+    auto& kept = savedIt.value();
+
+    // Same capacity AND interval: splice. Otherwise replay through the new decimator.
+    if (live.time.capacity() == kept.time.capacity() && qFuzzyCompare(live.interval, kept.interval))
+      live = std::move(kept);
+    else
+      replayTimeRing(kept, live);
+  }
+}
+
+/**
+ * @brief Restores saved multiplot rings; matches by group uniqueId and per-curve shape.
+ */
+void UI::Dashboard::restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRing>>& snapshot)
+{
+  if (snapshot.isEmpty())
+    return;
+
+  const int n = widgetCount(SerialStudio::DashboardMultiPlot);
+  for (int i = 0; i < n; ++i) {
+    auto ringIt = m_multiplotTimeRings.find(i);
+    if (ringIt == m_multiplotTimeRings.end())
+      continue;
+
+    const auto& g = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+    auto savedIt  = snapshot.find(g.uniqueId);
+    if (savedIt == snapshot.end())
+      continue;
+
+    auto& live = ringIt.value();
+    auto& kept = savedIt.value();
+
+    // Walk paired curves; per-curve splice when shape matches, replay otherwise.
+    const std::size_t count = std::min(live.size(), kept.size());
+    for (std::size_t j = 0; j < count; ++j)
+      if (live[j].time.capacity() == kept[j].time.capacity()
+          && qFuzzyCompare(live[j].interval, kept[j].interval))
+        live[j] = std::move(kept[j]);
+      else
+        replayTimeRing(kept[j], live[j]);
+  }
 }
 
 /**

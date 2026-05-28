@@ -784,18 +784,22 @@ def test_tool_dispatcher_routes_pipeline_inputs():
     assert body is not None
     snippet = body.group(0)
 
-    for k in (
-        '"inputBytes"',
-        '"inputBytesHex"',
-        '"decoderMethod"',
-        '"frameDetection"',
-        '"frameStart"',
-        '"frameEnd"',
-        '"hexadecimalDelimiters"',
-        '"checksumAlgorithm"',
-        '"operationMode"',
+    # Either KeyView("foo") / "foo" literal or Keys::Symbol is acceptable.
+    for literal, symbol in (
+        ('"inputBytes"', None),
+        ('"inputBytesHex"', None),
+        ('"decoderMethod"', "Keys::DecoderMethod"),
+        ('"frameDetection"', "Keys::FrameDetection"),
+        ('"frameStart"', "Keys::FrameStart"),
+        ('"frameEnd"', "Keys::FrameEnd"),
+        ('"hexadecimalDelimiters"', "Keys::HexadecimalDelimiters"),
+        ('"checksumAlgorithm"', "Keys::ChecksumAlgorithm"),
+        ('"operationMode"', None),
     ):
-        assert k in snippet, f"pipeline key {k} must be forwarded"
+        ok = literal in snippet
+        if not ok and symbol:
+            ok = symbol in snippet
+        assert ok, f"pipeline key {literal} must be forwarded"
 
     # No more sampleFrame / sampleFrames routing through this command.
     assert "sampleFrame" not in snippet
@@ -937,3 +941,99 @@ def test_protobuf_example_embedded_parser_was_repaired():
     assert "p > endPos then break end\\n  end\\nend\\n\\n-- Dispatch table" in text
     # scoreDispatcher's legitimate local endP must still be there.
     assert "local endP = bufLen + 1" in text
+
+
+# ----------------------------------------------------------------------------------
+# R13 -- Dashboard preserves in-flight time-ring data across project mutations
+# ----------------------------------------------------------------------------------
+
+
+def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
+    """Project mutations (frame detection change, dataset rename, plot min/max edit,
+    etc.) used to wipe plots until reconnect because reconfigureDashboard runs
+    resetData(false), which cleared every TimeRing. The snapshot/restore pair now
+    preserves per-uniqueId ring contents across reconfigures."""
+    text = _read("app/src/UI/Dashboard.cpp")
+    header = _read("app/src/UI/Dashboard.h")
+
+    # The four helpers must be declared and defined.
+    for sig in (
+        "QHash<int, DSP::TimeRing> snapshotPlotTimeRings() const;",
+        "QHash<int, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;",
+        "void restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot);",
+        "void restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRing>>& snapshot);",
+    ):
+        assert sig in header, f"missing in Dashboard.h: {sig}"
+
+    # restorePlotTimeRings handles both same-shape splice and different-shape replay.
+    plot_restore = re.search(
+        r"void UI::Dashboard::restorePlotTimeRings\([\s\S]*?\n\}",
+        text,
+    )
+    assert plot_restore is not None
+    snippet = plot_restore.group(0)
+    assert "live.time.capacity() == kept.time.capacity()" in snippet
+    assert "qFuzzyCompare(live.interval, kept.interval)" in snippet
+    assert "live = std::move(kept);" in snippet
+    assert "replayTimeRing(kept, live);" in snippet
+
+    # Same for the multiplot variant (per-curve splice/replay).
+    multi_restore = re.search(
+        r"void UI::Dashboard::restoreMultiplotTimeRings\([\s\S]*?\n\}",
+        text,
+    )
+    assert multi_restore is not None
+    multi_snippet = multi_restore.group(0)
+    assert "live[j].time.capacity() == kept[j].time.capacity()" in multi_snippet
+    assert "qFuzzyCompare(live[j].interval, kept[j].interval)" in multi_snippet
+    assert "live[j] = std::move(kept[j]);" in multi_snippet
+    assert "replayTimeRing(kept[j], live[j]);" in multi_snippet
+
+
+def test_dashboard_snapshots_around_every_clearing_trigger():
+    """The three sites that previously dropped time-ring data on a project edit must
+    snapshot before the rebuild and restore after."""
+    text = _read("app/src/UI/Dashboard.cpp")
+
+    # reconfigureDashboard: snapshot before resetData, restore after updateDataSeries.
+    body = re.search(
+        r"void UI::Dashboard::reconfigureDashboard[\s\S]*?\n\}",
+        text,
+    )
+    assert body is not None
+    snippet = body.group(0)
+    snap_pos = snippet.find("auto savedPlotRings      = snapshotPlotTimeRings();")
+    reset_pos = snippet.find("resetData(false);")
+    update_pos = snippet.find("updateDataSeries();")
+    restore_pos = snippet.find("restorePlotTimeRings(savedPlotRings);")
+    assert snap_pos != -1 and reset_pos != -1
+    assert update_pos != -1 and restore_pos != -1
+    assert (
+        snap_pos < reset_pos < update_pos < restore_pos
+    ), "reconfigureDashboard must snapshot before resetData and restore after updateDataSeries"
+
+    # setPlotTimeRange: snapshot around configureLineSeries / configureMultiLineSeries.
+    range_body = re.search(
+        r"void UI::Dashboard::setPlotTimeRange[\s\S]*?\n\}",
+        text,
+    )
+    assert range_body is not None
+    range_snippet = range_body.group(0)
+    assert "auto savedPlotRings      = snapshotPlotTimeRings();" in range_snippet
+    assert "restorePlotTimeRings(savedPlotRings);" in range_snippet
+    assert range_snippet.index("snapshotPlotTimeRings") < range_snippet.index(
+        "configureLineSeries"
+    )
+    assert range_snippet.index("configureMultiLineSeries") < range_snippet.index(
+        "restorePlotTimeRings"
+    )
+
+    # setPoints: same shape.
+    pts_body = re.search(
+        r"void UI::Dashboard::setPoints[\s\S]*?\n  \}\n\}",
+        text,
+    )
+    assert pts_body is not None
+    pts_snippet = pts_body.group(0)
+    assert "auto savedPlotRings      = snapshotPlotTimeRings();" in pts_snippet
+    assert "restorePlotTimeRings(savedPlotRings);" in pts_snippet

@@ -229,6 +229,11 @@ private:
   void configureMultiLineSeries();
   void buildMultiplotPushes();
   void configureActions(const DataModel::Frame& frame);
+
+  [[nodiscard]] QHash<int, DSP::TimeRing> snapshotPlotTimeRings() const;
+  [[nodiscard]] QHash<int, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;
+  void restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot);
+  void restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRing>>& snapshot);
 #ifdef BUILD_COMMERCIAL
   void configureWaterfallSeries();
 #endif
