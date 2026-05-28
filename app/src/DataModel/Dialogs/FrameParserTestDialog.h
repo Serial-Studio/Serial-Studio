@@ -71,11 +71,15 @@ private:
   void refreshPipelineControls();
   void applyDelimitersToProject();
   void updateStageVisibility();
+  void populateChecksumCombo();
 
   void buildPipelineGroup();
   void buildInputGroup();
   void buildOutputGroup();
   void connectControls();
+
+protected:
+  void closeEvent(QCloseEvent* event) override;
 
 private:
   int m_sourceId;

@@ -21,10 +21,12 @@
 
 #include "DataModel/Dialogs/FrameParserTestDialog.h"
 
+#include <QCloseEvent>
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QSpacerItem>
 #include <QVBoxLayout>
 
 #include "DataModel/Frame.h"
@@ -198,26 +200,61 @@ void DataModel::FrameParserTestDialog::buildPipelineGroup()
   m_decoderCombo->addItem(QString(), int(SerialStudio::Base64));
   m_decoderCombo->addItem(QString(), int(SerialStudio::Binary));
 
-  m_checksumCombo->addItems(IO::availableChecksums());
+  populateChecksumCombo();
 
   auto* pipelineForm = new QFormLayout(m_pipelineGroup);
   pipelineForm->setLabelAlignment(Qt::AlignRight | Qt::AlignVCenter);
   pipelineForm->setHorizontalSpacing(8);
   pipelineForm->setVerticalSpacing(4);
 
+  // Trailing horizontal spacers stop the form layout from stretching field widgets.
   auto* detectionRow = new QHBoxLayout;
-  detectionRow->addWidget(m_detectionCombo, 1);
-  detectionRow->addWidget(m_reloadButton);
+  detectionRow->addWidget(m_detectionCombo, 0);
+  detectionRow->addWidget(m_reloadButton, 0);
+  detectionRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
   pipelineForm->addRow(m_detectionLabel, detectionRow);
 
   auto* startRow = new QHBoxLayout;
-  startRow->addWidget(m_startEdit, 1);
-  startRow->addWidget(m_hexDelimiters);
+  startRow->addWidget(m_startEdit, 0);
+  startRow->addWidget(m_hexDelimiters, 0);
+  startRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
   pipelineForm->addRow(m_startLabel, startRow);
 
-  pipelineForm->addRow(m_finishLabel, m_finishEdit);
-  pipelineForm->addRow(m_decoderLabel, m_decoderCombo);
-  pipelineForm->addRow(m_checksumLabel, m_checksumCombo);
+  auto* finishRow = new QHBoxLayout;
+  finishRow->addWidget(m_finishEdit, 0);
+  finishRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
+  pipelineForm->addRow(m_finishLabel, finishRow);
+
+  auto* decoderRow = new QHBoxLayout;
+  decoderRow->addWidget(m_decoderCombo, 0);
+  decoderRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
+  pipelineForm->addRow(m_decoderLabel, decoderRow);
+
+  auto* checksumRow = new QHBoxLayout;
+  checksumRow->addWidget(m_checksumCombo, 0);
+  checksumRow->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
+  pipelineForm->addRow(m_checksumLabel, checksumRow);
+
+  // Pin the field minimum width so combos do not snap to fit the widest current label.
+  const int kFieldWidth = 220;
+  m_detectionCombo->setMinimumWidth(kFieldWidth);
+  m_decoderCombo->setMinimumWidth(kFieldWidth);
+  m_checksumCombo->setMinimumWidth(kFieldWidth);
+  m_startEdit->setMinimumWidth(kFieldWidth);
+  m_finishEdit->setMinimumWidth(kFieldWidth);
+}
+
+/**
+ * @brief Populates the checksum combo, mapping the empty algorithm name to a "None" label
+ *        so the dropdown reads cleanly while the underlying value stays "" on the wire.
+ */
+void DataModel::FrameParserTestDialog::populateChecksumCombo()
+{
+  m_checksumCombo->clear();
+  for (const auto& name : IO::availableChecksums()) {
+    const auto label = name.isEmpty() ? tr("None") : name;
+    m_checksumCombo->addItem(label, name);
+  }
 }
 
 /**
@@ -295,10 +332,9 @@ void DataModel::FrameParserTestDialog::connectControls()
           QOverload<int>::of(&QComboBox::currentIndexChanged),
           this,
           &FrameParserTestDialog::onDecoderChanged);
-  connect(m_checksumCombo,
-          &QComboBox::currentTextChanged,
-          this,
-          &FrameParserTestDialog::onChecksumChanged);
+  connect(m_checksumCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int) {
+    onChecksumChanged(m_checksumCombo->currentData().toString());
+  });
   connect(
     m_startEdit, &QLineEdit::editingFinished, this, &FrameParserTestDialog::onStartSequenceEdited);
   connect(m_finishEdit,
@@ -379,7 +415,7 @@ void DataModel::FrameParserTestDialog::parseData()
     static_cast<SerialStudio::FrameDetection>(m_detectionCombo->currentData().toInt());
   spec.decoderMethod =
     static_cast<SerialStudio::DecoderMethod>(m_decoderCombo->currentData().toInt());
-  spec.checksumAlgorithm = m_checksumCombo->currentText();
+  spec.checksumAlgorithm = m_checksumCombo->currentData().toString();
 
   const bool hex   = m_hexDelimiters->isChecked();
   const auto start = delimiterFromField(m_startEdit->text(), hex);
@@ -535,7 +571,7 @@ void DataModel::FrameParserTestDialog::refreshPipelineControls()
   const int decIdx = m_decoderCombo->findData(src.decoderMethod);
   m_decoderCombo->setCurrentIndex(decIdx >= 0 ? decIdx : 0);
 
-  const int chkIdx = m_checksumCombo->findText(src.checksumAlgorithm);
+  const int chkIdx = m_checksumCombo->findData(src.checksumAlgorithm);
   m_checksumCombo->setCurrentIndex(chkIdx >= 0 ? chkIdx : 0);
 
   m_hexDelimiters->setChecked(src.hexadecimalDelimiters);
@@ -735,4 +771,19 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
       return false;
 
   return cleaned.length() % 2 == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Close handling
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Accepts only OS-spontaneous closes; programmatic closes from signal fan-out are ignored.
+ */
+void DataModel::FrameParserTestDialog::closeEvent(QCloseEvent* event)
+{
+  if (event->spontaneous())
+    QDialog::closeEvent(event);
+  else
+    event->ignore();
 }
