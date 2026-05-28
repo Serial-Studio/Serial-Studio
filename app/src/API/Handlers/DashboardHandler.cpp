@@ -43,7 +43,7 @@
 void API::Handlers::DashboardHandler::registerCommands()
 {
   registerModeAndFpsCommands();
-  registerPointsCommands();
+  registerTimeRangeCommands();
   registerQueryCommands();
 }
 
@@ -107,9 +107,9 @@ void API::Handlers::DashboardHandler::registerModeAndFpsCommands()
 }
 
 /**
- * @brief Register plot-points get/set commands.
+ * @brief Register plot time-range get/set commands.
  */
-void API::Handlers::DashboardHandler::registerPointsCommands()
+void API::Handlers::DashboardHandler::registerTimeRangeCommands()
 {
   auto& registry = CommandRegistry::instance();
 
@@ -117,42 +117,42 @@ void API::Handlers::DashboardHandler::registerPointsCommands()
   emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
   emptySchema.insert(QStringLiteral("properties"), QJsonObject());
 
-  QJsonObject pointsProps;
-  QJsonObject pointsProp;
-  pointsProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
-  pointsProp.insert(QStringLiteral("description"),
-                    QStringLiteral("Number of data points per plot (1-100000)"));
-  pointsProps.insert(QStringLiteral("points"), pointsProp);
+  QJsonObject rangeProps;
+  QJsonObject rangeProp;
+  rangeProp.insert(QStringLiteral("type"), QStringLiteral("number"));
+  rangeProp.insert(QStringLiteral("description"),
+                   QStringLiteral("Visible plot time window in seconds (0.001-300)"));
+  rangeProps.insert(QStringLiteral("seconds"), rangeProp);
 
-  QJsonObject setPointsSchema;
-  setPointsSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  setPointsSchema.insert(QStringLiteral("properties"), pointsProps);
-  setPointsSchema.insert(QStringLiteral("required"), QJsonArray{QStringLiteral("points")});
+  QJsonObject setRangeSchema;
+  setRangeSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  setRangeSchema.insert(QStringLiteral("properties"), rangeProps);
+  setRangeSchema.insert(QStringLiteral("required"), QJsonArray{QStringLiteral("seconds")});
 
   registry.registerCommand(
-    QStringLiteral("dashboard.setPoints"),
-    QStringLiteral("Set the number of data points per plot (params: points)"),
-    setPointsSchema,
-    &setPoints);
+    QStringLiteral("dashboard.setTimeRange"),
+    QStringLiteral("Set the visible plot time window (params: seconds - 0.001-300)"),
+    setRangeSchema,
+    &setTimeRange);
 
-  registry.registerCommand(QStringLiteral("dashboard.getPoints"),
-                           QStringLiteral("Get the current number of data points per plot"),
+  registry.registerCommand(QStringLiteral("dashboard.getTimeRange"),
+                           QStringLiteral("Get the current visible plot time window in seconds"),
                            emptySchema,
-                           &getPoints);
+                           &getTimeRange);
 
-  // Aliases under project.*: the points value is per-project (saved/restored on load)
+  // Aliases under project.*: the range is per-project (saved/restored on load)
   registry.registerCommand(
-    QStringLiteral("project.dashboard.setPoints"),
-    QStringLiteral("Set the number of data points per plot (alias of dashboard.setPoints; "
+    QStringLiteral("project.dashboard.setTimeRange"),
+    QStringLiteral("Set the visible plot time window (alias of dashboard.setTimeRange; "
                    "the value is per-project and survives project reload)."),
-    setPointsSchema,
-    &setPoints);
+    setRangeSchema,
+    &setTimeRange);
 
   registry.registerCommand(
-    QStringLiteral("project.dashboard.getPoints"),
-    QStringLiteral("Get the number of data points per plot (alias of dashboard.getPoints)."),
+    QStringLiteral("project.dashboard.getTimeRange"),
+    QStringLiteral("Get the visible plot time window (alias of dashboard.getTimeRange)."),
     emptySchema,
-    &getPoints);
+    &getTimeRange);
 }
 
 /**
@@ -325,45 +325,45 @@ API::CommandResponse API::Handlers::DashboardHandler::getFPS(const QString& id,
 }
 
 /**
- * @brief Set the number of data points per plot
+ * @brief Set the visible plot time window in seconds
  */
-API::CommandResponse API::Handlers::DashboardHandler::setPoints(const QString& id,
-                                                                const QJsonObject& params)
+API::CommandResponse API::Handlers::DashboardHandler::setTimeRange(const QString& id,
+                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("points"))) {
+  if (!params.contains(QStringLiteral("seconds"))) {
     return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: points"));
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: seconds"));
   }
 
-  const int points = params.value(QStringLiteral("points")).toInt();
+  const double seconds = params.value(QStringLiteral("seconds")).toDouble();
 
-  if (points < 1 || points > 100000) {
+  if (seconds < 0.001 || seconds > 300.0) {
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
-      QStringLiteral("Invalid points: %1. Valid range: 1-100000").arg(points));
+      QStringLiteral("Invalid seconds: %1. Valid range: 0.001-300").arg(seconds));
   }
 
-  UI::Dashboard::instance().setPoints(points);
+  UI::Dashboard::instance().setPlotTimeRange(seconds);
 
   QJsonObject result;
-  result[QStringLiteral("points")] = points;
+  result[QStringLiteral("seconds")] = UI::Dashboard::instance().plotTimeRange();
 
   return CommandResponse::makeSuccess(id, result);
 }
 
 /**
- * @brief Get the current number of data points per plot
+ * @brief Get the current visible plot time window in seconds
  */
-API::CommandResponse API::Handlers::DashboardHandler::getPoints(const QString& id,
-                                                                const QJsonObject& params)
+API::CommandResponse API::Handlers::DashboardHandler::getTimeRange(const QString& id,
+                                                                   const QJsonObject& params)
 {
   Q_UNUSED(params)
 
-  const int points = UI::Dashboard::instance().points();
+  const double seconds = UI::Dashboard::instance().plotTimeRange();
 
   QJsonObject result;
-  result[QStringLiteral("points")] = points;
+  result[QStringLiteral("seconds")] = seconds;
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -376,13 +376,13 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
 {
   Q_UNUSED(params)
 
-  const auto mode      = AppState::instance().operationMode();
-  const int modeIndex  = static_cast<int>(mode);
-  const int fps        = Misc::TimerEvents::instance().fps();
-  const int points     = UI::Dashboard::instance().points();
-  const int widgetCnt  = UI::Dashboard::instance().totalWidgetCount();
-  const int datasetCnt = static_cast<int>(UI::Dashboard::instance().datasets().size());
-  const bool running   = UI::Dashboard::instance().streamAvailable();
+  const auto mode        = AppState::instance().operationMode();
+  const int modeIndex    = static_cast<int>(mode);
+  const int fps          = Misc::TimerEvents::instance().fps();
+  const double timeRange = UI::Dashboard::instance().plotTimeRange();
+  const int widgetCnt    = UI::Dashboard::instance().totalWidgetCount();
+  const int datasetCnt   = static_cast<int>(UI::Dashboard::instance().datasets().size());
+  const bool running     = UI::Dashboard::instance().streamAvailable();
 
   QJsonObject result;
   result[QStringLiteral("operationMode")]      = modeIndex;
@@ -396,21 +396,21 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
                                                 ? kModeNames[modeIndex]
                                                 : QStringLiteral("Unknown");
   result[QStringLiteral("fps")]               = fps;
-  result[QStringLiteral("points")]            = points;
+  result[QStringLiteral("timeRange")]         = timeRange;
   result[QStringLiteral("widgetCount")]       = widgetCnt;
   result[QStringLiteral("datasetCount")]      = datasetCnt;
   result[QStringLiteral("running")]           = running;
 
   result[QStringLiteral("_summary")] =
     QStringLiteral("Dashboard mode: %1. %2 widget%3 visible across %4 dataset%5, "
-                   "rendering at %6 fps with %7 points retained per series.")
+                   "rendering at %6 fps over a %7 s plot window.")
       .arg(API::EnumLabels::operationModeLabel(modeIndex))
       .arg(widgetCnt)
       .arg(widgetCnt == 1 ? QString() : QStringLiteral("s"))
       .arg(datasetCnt)
       .arg(datasetCnt == 1 ? QString() : QStringLiteral("s"))
       .arg(fps)
-      .arg(points);
+      .arg(timeRange);
 
   return CommandResponse::makeSuccess(id, result);
 }

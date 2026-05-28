@@ -33,15 +33,15 @@ public:
 
 private:
   static void registerModeAndFpsCommands();
-  static void registerPointsCommands();
+  static void registerTimeRangeCommands();
   static void registerQueryCommands();
 
   static CommandResponse setOperationMode(const QString& id, const QJsonObject& params);
   static CommandResponse getOperationMode(const QString& id, const QJsonObject& params);
   static CommandResponse setFPS(const QString& id, const QJsonObject& params);
   static CommandResponse getFPS(const QString& id, const QJsonObject& params);
-  static CommandResponse setPoints(const QString& id, const QJsonObject& params);
-  static CommandResponse getPoints(const QString& id, const QJsonObject& params);
+  static CommandResponse setTimeRange(const QString& id, const QJsonObject& params);
+  static CommandResponse getTimeRange(const QString& id, const QJsonObject& params);
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
   static CommandResponse getData(const QString& id, const QJsonObject& params);
   static CommandResponse tailFrames(const QString& id, const QJsonObject& params);

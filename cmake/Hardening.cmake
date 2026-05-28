@@ -174,7 +174,6 @@ if(ENABLE_HARDENING)
       elseif(APPLE)
          add_compile_options(
             -fPIC                        # Position Independent Executable
-            -fno-plt                     # Avoid PLT for better performance
          )
       endif()
    endif()

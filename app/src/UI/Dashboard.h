@@ -163,8 +163,8 @@ public:
   [[nodiscard]] const DSP::GpsSeries& gpsSeries(const int index) const;
   [[nodiscard]] const DSP::LineSeries& plotData(const int index) const;
   [[nodiscard]] const DSP::MultiLineSeries& multiplotData(const int index) const;
-  [[nodiscard]] const DSP::TimeBucketSeries& plotBuckets(const int index) const;
-  [[nodiscard]] const std::vector<DSP::TimeBucketSeries>& multiplotBuckets(const int index) const;
+  [[nodiscard]] const DSP::TimeRing& plotTimeRing(const int index) const;
+  [[nodiscard]] const std::vector<DSP::TimeRing>& multiplotTimeRings(const int index) const;
 
 #ifdef BUILD_COMMERCIAL
   [[nodiscard]] const DSP::LineSeries3D& plotData3D(const int index) const;
@@ -227,6 +227,7 @@ private:
   void configureLineSeries();
   void configurePlot3DSeries();
   void configureMultiLineSeries();
+  void buildMultiplotPushes();
   void configureActions(const DataModel::Frame& frame);
 #ifdef BUILD_COMMERCIAL
   void configureWaterfallSeries();
@@ -253,12 +254,27 @@ private:
   };
 
   /**
-   * @brief Pre-resolved descriptor that folds one value into one time-bucket envelope.
+   * @brief Pre-resolved descriptor that appends one (time, value) into a decimating ring.
    */
-  struct BucketPush {
+  struct TimePush {
     std::vector<LinePush::Consumer> consumers;
-    DSP::TimeBucketSeries* series;
+    DSP::TimeRing* ring;
     const double* value;
+  };
+
+  /**
+   * @brief Pre-resolved descriptor for one multiplot, time-ring or sample mode.
+   */
+  struct MultiPush {
+    struct TimeCurve {
+      DSP::TimeRing* ring;
+      const double* value;
+    };
+
+    int sourceId;
+    const bool* activeFlag;
+    std::vector<TimeCurve> timeCurves;
+    std::vector<std::pair<DSP::AxisData*, const double*>> samples;
   };
 
   QSettings m_settings;
@@ -293,8 +309,8 @@ private:
 
   QMap<int, DSP::AxisData> m_xAxisData;
   QMap<int, DSP::AxisData> m_yAxisData;
-  QMap<int, DSP::TimeBucketSeries> m_plotBuckets;
-  QMap<int, std::vector<DSP::TimeBucketSeries>> m_multiplotBuckets;
+  QMap<int, DSP::TimeRing> m_plotTimeRings;
+  QMap<int, std::vector<DSP::TimeRing>> m_multiplotTimeRings;
 
   QMap<int, bool> m_activePlots;
   QMap<int, bool> m_activeFFTPlots;
@@ -310,7 +326,8 @@ private:
 
   std::vector<LinePush> m_yLinePushes;
   std::vector<LinePush> m_xLinePushes;
-  std::vector<BucketPush> m_bucketPushes;
+  std::vector<TimePush> m_timePushes;
+  std::vector<MultiPush> m_multiplotPushes;
 #ifdef BUILD_COMMERCIAL
   QVector<DSP::LineSeries3D> m_plotData3D;
   QVector<DSP::AxisData> m_waterfallValues;

@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <concepts>
 #include <cstddef>
@@ -358,94 +359,60 @@ typedef struct {
 } MultiLineSeries;
 
 /**
- * @brief Fixed-size, timestamp-binned min/max envelope over a sliding time window.
+ * @brief Bounded (time, value) ring that decimates on ingest to span a fixed window.
  */
-struct TimeBucketSeries {
-  /**
-   * @brief One time bin: the value envelope plus its absolute bin index (-1 when unused).
-   */
-  struct Bin {
-    long long g;
-    float vmin;
-    float vmax;
-  };
-
-  int count;
-  bool hasData;
-  double width;
-  double newest;
-  long long currentG;
-  std::vector<Bin> bins;
+struct TimeRing {
+  AxisData time;
+  AxisData value;
+  double interval;
+  double lastEmit;
+  double accExtreme;
+  double accTime;
+  bool accValid;
 
   /**
-   * @brief Configures the ring for `seconds` of history split into `buckets` bins.
+   * @brief Constructs the ring with `capacity` slots covering `windowSec` seconds.
    */
-  void configure(double seconds, int buckets)
+  explicit TimeRing(int capacity = 1, double windowSec = 1.0)
+    : time(static_cast<std::size_t>(capacity < 1 ? 1 : capacity))
+    , value(static_cast<std::size_t>(capacity < 1 ? 1 : capacity))
+    , interval(windowSec / std::max(1, capacity))
+    , lastEmit(0.0)
+    , accExtreme(0.0)
+    , accTime(0.0)
+    , accValid(false)
+  {}
+
+  /**
+   * @brief Clears retained samples and the decimation accumulator.
+   */
+  void clear()
   {
-    count    = (buckets > 1) ? buckets : 1;
-    width    = (seconds / count > 1e-9) ? seconds / count : 1e-9;
-    newest   = 0;
-    currentG = 0;
-    hasData  = false;
-    bins.assign(static_cast<std::size_t>(count), Bin{-1, 0.0f, 0.0f});
+    time.clear();
+    value.clear();
+    accValid = false;
+    lastEmit = 0.0;
   }
 
   /**
-   * @brief Folds one sample into its time bin (O(1), no allocation).
+   * @brief Appends one (time, value), decimating to one peak-preserving slot per interval.
    */
-  void fold(double value, double relSec)
+  void appendDecimated(double t, double v)
   {
-    if (count <= 0) [[unlikely]]
-      return;
-
-    const long long g      = static_cast<long long>(std::floor(relSec / width));
-    const std::size_t slot = static_cast<std::size_t>(((g % count) + count) % count);
-    const float v          = static_cast<float>(value);
-
-    Bin& bin = bins[slot];
-    if (bin.g != g) {
-      bin.g    = g;
-      bin.vmin = v;
-      bin.vmax = v;
+    // Track the larger-magnitude sample so transients survive the decimation
+    if (!accValid || std::abs(v) > std::abs(accExtreme)) {
+      accExtreme = v;
+      accTime    = t;
     }
 
-    else {
-      if (v < bin.vmin)
-        bin.vmin = v;
+    accValid = true;
 
-      if (v > bin.vmax)
-        bin.vmax = v;
-    }
-
-    if (!hasData || relSec >= newest) {
-      newest   = relSec;
-      currentG = g;
-      hasData  = true;
-    }
-  }
-
-  /**
-   * @brief Emits the envelope as a relative-time polyline ([-window, 0], newest near 0).
-   */
-  void buildEnvelope(QList<QPointF>& out) const
-  {
-    out.clear();
-    if (!hasData || count <= 0)
-      return;
-
-    out.reserve(count * 2);
-    for (long long g = currentG - count + 1; g <= currentG; ++g) {
-      if (g < 0)
-        continue;
-
-      const std::size_t slot = static_cast<std::size_t>(((g % count) + count) % count);
-      const Bin& bin         = bins[slot];
-      if (bin.g != g)
-        continue;
-
-      const double x = static_cast<double>(g) * width - newest;
-      out.append(QPointF(x, bin.vmin));
-      out.append(QPointF(x, bin.vmax));
+    // Emit one representative point once an interval has elapsed
+    if (time.size() == 0 || (t - lastEmit) >= interval) {
+      time.push(accTime);
+      value.push(accExtreme);
+      lastEmit = t;
+      accValid = false;
     }
   }
 };
@@ -773,6 +740,87 @@ inline bool downsampleMonotonic(
   const LineSeries& in, int width, int height, QList<QPointF>& out, DownsampleWorkspace* ws)
 {
   return downsampleMonotonic(*in.x, *in.y, width, height, out, ws);
+}
+
+/**
+ * @brief Decimate the visible [xLo, xHi] slice of a monotonic time ring to render columns.
+ */
+inline bool downsampleTimeWindow(const AxisData& timeX,
+                                 const AxisData& valueY,
+                                 ssfp_t xLo,
+                                 ssfp_t xHi,
+                                 int w,
+                                 int h,
+                                 QList<QPointF>& out,
+                                 DownsampleWorkspace* ws)
+{
+  out.clear();
+  const std::size_t n = std::min<std::size_t>(timeX.size(), valueY.size());
+  if (n == 0 || w <= 0 || h <= 0 || !(xLo < xHi))
+    return true;
+
+  std::size_t xn0, xn1, yn0, yn1;
+  const ssfp_t *xp0, *xp1, *yp0, *yp1;
+  spanFromFixedQueue(timeX, xp0, xn0, xp1, xn1);
+  spanFromFixedQueue(valueY, yp0, yn0, yp1, yn1);
+
+  auto xAbs = [&](std::size_t i) -> ssfp_t {
+    return (i < xn0) ? xp0[i] : xp1[i - xn0];
+  };
+  auto yAt = [&](std::size_t i) -> ssfp_t {
+    return (i < yn0) ? yp0[i] : yp1[i - yn0];
+  };
+
+  // Rebase absolute ring time so the newest sample sits at 0 and the axis is [-T, 0]
+  const ssfp_t newest = xAbs(n - 1);
+  auto tRel           = [&](std::size_t i) -> ssfp_t {
+    return xAbs(i) - newest;
+  };
+
+  // Locate the visible index span; the time ring is monotonic non-decreasing
+  std::size_t lo = 0;
+  while (lo < n && tRel(lo) < xLo)
+    ++lo;
+
+  std::size_t hi = lo;
+  while (hi < n && tRel(hi) <= xHi)
+    ++hi;
+
+  const std::size_t visible = (hi > lo) ? (hi - lo) : 0;
+  if (visible == 0)
+    return true;
+
+  // Re-base the accessors onto the visible slice so helpers see [0, visible)
+  auto xWin = [&](std::size_t i) -> ssfp_t {
+    return tRel(lo + i);
+  };
+  auto yWin = [&](std::size_t i) -> ssfp_t {
+    return yAt(lo + i);
+  };
+
+  const std::size_t C = std::size_t(w);
+  ws->reset(C);
+
+  // Columns are bound to the viewport, not the data extent, so zoom maps 1:1
+  const ssfp_t span        = std::max<ssfp_t>(1e-12, xHi - xLo);
+  const auto scaleX        = static_cast<ssfp_t>(w - 1) / span;
+  const DownsampleBounds b = dsScanFiniteRange(visible, xWin, yWin);
+  if (b.firstFinite == visible)
+    return false;
+
+  const auto scaleY = static_cast<ssfp_t>(h) / std::max<ssfp_t>(1e-12, b.ymax - b.ymin);
+
+  dsAccumulateBuckets(visible, w, xLo, scaleX, xWin, yWin, ws);
+
+  out.reserve(w * 3 / 2 + 8);
+  for (std::size_t c = 0; c < C; ++c) {
+    if (ws->cnt[c] == 0)
+      continue;
+
+    dsEmitColumnPoints(c, scaleY, ws, xWin, yWin, out);
+  }
+
+  return true;
 }
 
 /**

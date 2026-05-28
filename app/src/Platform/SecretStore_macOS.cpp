@@ -51,8 +51,11 @@ static CFStringRef toCFString(const QString& value)
 static CFMutableDictionaryRef baseQuery(const QString& service, const QString& account)
 {
   auto query = CFDictionaryCreateMutable(
-    kCFAllocatorDefault, 4, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    kCFAllocatorDefault, 5, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
   CFDictionarySetValue(query, kSecClass, kSecClassGenericPassword);
+
+  // Data-protection keychain: no per-item ACL, so no prompt across rebuilds
+  CFDictionarySetValue(query, kSecUseDataProtectionKeychain, kCFBooleanTrue);
 
   const auto svc = toCFString(service);
   const auto acc = toCFString(account);
@@ -89,12 +92,18 @@ bool Platform::SecretStore::store(const QString& service,
   auto query = baseQuery(service, account);
   CFDictionarySetValue(query, kSecValueData, value);
 
+  // Device-local, readable after first unlock: no iCloud sync, no read prompt
+  CFDictionarySetValue(query, kSecAttrAccessible, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly);
+
   auto status = SecItemAdd(query, nullptr);
   if (status == errSecDuplicateItem) {
     CFDictionaryRemoveValue(query, kSecValueData);
+    CFDictionaryRemoveValue(query, kSecAttrAccessible);
     auto update = CFDictionaryCreateMutable(
-      kCFAllocatorDefault, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+      kCFAllocatorDefault, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     CFDictionarySetValue(update, kSecValueData, value);
+    CFDictionarySetValue(
+      update, kSecAttrAccessible, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly);
     status = SecItemUpdate(query, update);
     CFRelease(update);
   }

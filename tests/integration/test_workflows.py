@@ -120,21 +120,21 @@ def test_dashboard_configuration_workflow(api_client, clean_state):
     status = api_client.get_dashboard_status()
     assert status["fps"] == 30
 
-    # Set number of data points visible in plots
-    api_client.set_dashboard_points(500)
+    # Set the visible plot time window
+    api_client.set_dashboard_time_range(5.0)
     time.sleep(0.1)
 
     status = api_client.get_dashboard_status()
-    assert status["points"] == 500
+    assert status["timeRange"] == 5.0
 
-    # Update to higher rendering rate and more plot points
+    # Update to higher rendering rate and a wider plot window
     api_client.set_dashboard_fps(60)
-    api_client.set_dashboard_points(1000)
+    api_client.set_dashboard_time_range(10.0)
     time.sleep(0.1)
 
     status = api_client.get_dashboard_status()
     assert status["fps"] == 60
-    assert status["points"] == 1000
+    assert status["timeRange"] == 10.0
 
 
 def test_pause_resume_workflow(api_client, device_simulator, clean_state):

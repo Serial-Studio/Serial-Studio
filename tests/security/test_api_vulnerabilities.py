@@ -470,7 +470,7 @@ def test_parameter_validation(tester):
             {"command": "dashboard.setFps", "params": {"fps": "not_a_number"}},
             {"command": "dashboard.setFps", "params": {"fps": -1}},
             {"command": "dashboard.setFps", "params": {"fps": 999999}},
-            {"command": "dashboard.setPoints", "params": {"points": [1, 2, 3]}},
+            {"command": "dashboard.setTimeRange", "params": {"seconds": [1, 2, 3]}},
             {"command": "project.setTitle", "params": {"title": 12345}},
             {"command": "project.setTitle", "params": {"title": None}},
             {"command": "project.setTitle", "params": {"title": {"nested": "obj"}}},

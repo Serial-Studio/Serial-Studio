@@ -323,9 +323,11 @@ void Widgets::Plot::updateData()
   if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
     return;
 
-  // Time axis: read the pre-binned min/max envelope (bounded, rate-agnostic)
+  // Time axis: decimate the visible window of the time ring to render columns
   if (m_timeAxis) {
-    UI::Dashboard::instance().plotBuckets(m_index).buildEnvelope(m_data);
+    const auto& ring = UI::Dashboard::instance().plotTimeRing(m_index);
+    (void)DSP::downsampleTimeWindow(
+      ring.time, ring.value, m_minX, m_maxX, m_dataW, m_dataH, m_data, &ws);
     return;
   }
 

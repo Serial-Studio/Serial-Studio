@@ -378,10 +378,10 @@ void Widgets::MultiPlot::updateData()
   if (!isEnabled() || !VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
-  // Time axis: read each curve's pre-binned min/max envelope (bounded, rate-agnostic)
+  // Time axis: decimate each curve's visible window from its decimating ring
   if (m_timeAxis) {
-    const auto& curves        = UI::Dashboard::instance().multiplotBuckets(m_index);
-    const qsizetype plotCount = static_cast<qsizetype>(curves.size());
+    const auto& rings         = UI::Dashboard::instance().multiplotTimeRings(m_index);
+    const qsizetype plotCount = static_cast<qsizetype>(rings.size());
     if (m_data.size() != plotCount)
       m_data.resize(plotCount);
 
@@ -389,7 +389,9 @@ void Widgets::MultiPlot::updateData()
       if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
         continue;
 
-      curves[static_cast<size_t>(i)].buildEnvelope(m_data[i]);
+      const auto& ring = rings[static_cast<size_t>(i)];
+      (void)DSP::downsampleTimeWindow(
+        ring.time, ring.value, m_minX, m_maxX, m_dataW, m_dataH, m_data[i], &ws);
     }
 
     calculateAutoScaleRange();

@@ -63,7 +63,7 @@ TARGET_COMMANDS = [
     ("io.setBusType", ["busType"]),
     ("io.setPaused", ["paused"]),
     ("dashboard.setFps", ["fps"]),
-    ("dashboard.setPoints", ["points"]),
+    ("dashboard.setTimeRange", ["seconds"]),
     ("dashboard.setOperationMode", ["mode"]),
     ("io.network.setTcpPort", ["port"]),
     ("io.network.setRemoteAddress", ["address"]),

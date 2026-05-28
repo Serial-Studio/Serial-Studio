@@ -1,10 +1,10 @@
 """
 Dashboard Configuration Integration Tests
 
-Tests for dashboard FPS, data-point count, operation mode switching, and
+Tests for dashboard FPS, plot time range, operation mode switching, and
 data/status queries. Covers commands:
   - dashboard.setFps / dashboard.getFps
-  - dashboard.setPoints / dashboard.getPoints
+  - dashboard.setTimeRange / dashboard.getTimeRange
   - dashboard.setOperationMode / dashboard.getOperationMode
   - dashboard.getStatus
   - dashboard.getData
@@ -58,40 +58,40 @@ def test_dashboard_fps_invalid(api_client, clean_state):
 
 
 @pytest.mark.integration
-def test_dashboard_points_set_and_get(api_client, clean_state):
-    """Verify data-point count can be set and read back via getPoints."""
-    for points in [100, 500, 1000, 5000]:
-        api_client.command("dashboard.setPoints", {"points": points})
+def test_dashboard_time_range_set_and_get(api_client, clean_state):
+    """Verify plot time range can be set and read back via getTimeRange."""
+    for seconds in [0.5, 5.0, 10.0, 60.0]:
+        api_client.command("dashboard.setTimeRange", {"seconds": seconds})
         time.sleep(0.1)
 
-        result = api_client.command("dashboard.getPoints")
-        assert result.get("points") == points
+        result = api_client.command("dashboard.getTimeRange")
+        assert result.get("seconds") == seconds
 
 
 @pytest.mark.integration
-def test_dashboard_points_boundary_values(api_client, clean_state):
-    """Verify data-point count accepts boundary values 1 and 100000."""
-    api_client.command("dashboard.setPoints", {"points": 1})
+def test_dashboard_time_range_boundary_values(api_client, clean_state):
+    """Verify plot time range accepts boundary values 0.001 and 300."""
+    api_client.command("dashboard.setTimeRange", {"seconds": 0.001})
     time.sleep(0.1)
-    result = api_client.command("dashboard.getPoints")
-    assert result.get("points") == 1
+    result = api_client.command("dashboard.getTimeRange")
+    assert result.get("seconds") == 0.001
 
-    api_client.command("dashboard.setPoints", {"points": 100000})
+    api_client.command("dashboard.setTimeRange", {"seconds": 300})
     time.sleep(0.1)
-    result = api_client.command("dashboard.getPoints")
-    assert result.get("points") == 100000
+    result = api_client.command("dashboard.getTimeRange")
+    assert result.get("seconds") == 300
 
 
 @pytest.mark.integration
-def test_dashboard_points_invalid(api_client, clean_state):
-    """Verify out-of-range data-point values are rejected."""
+def test_dashboard_time_range_invalid(api_client, clean_state):
+    """Verify out-of-range plot time range values are rejected."""
     from utils.api_client import APIError
 
     with pytest.raises(APIError):
-        api_client.command("dashboard.setPoints", {"points": 0})
+        api_client.command("dashboard.setTimeRange", {"seconds": 0})
 
     with pytest.raises(APIError):
-        api_client.command("dashboard.setPoints", {"points": 100001})
+        api_client.command("dashboard.setTimeRange", {"seconds": 300.001})
 
 
 @pytest.mark.integration
@@ -129,7 +129,7 @@ def test_dashboard_get_status_fields(api_client, clean_state):
         "operationMode",
         "operationModeName",
         "fps",
-        "points",
+        "timeRange",
         "widgetCount",
         "datasetCount",
     ]
@@ -140,14 +140,14 @@ def test_dashboard_get_status_fields(api_client, clean_state):
 
 @pytest.mark.integration
 def test_dashboard_get_status_reflects_changes(api_client, clean_state):
-    """Verify dashboard.getStatus reflects FPS and points updates."""
+    """Verify dashboard.getStatus reflects FPS and time range updates."""
     api_client.command("dashboard.setFps", {"fps": 25})
-    api_client.command("dashboard.setPoints", {"points": 750})
+    api_client.command("dashboard.setTimeRange", {"seconds": 7.5})
     time.sleep(0.2)
 
     status = api_client.command("dashboard.getStatus")
     assert status["fps"] == 25
-    assert status["points"] == 750
+    assert status["timeRange"] == 7.5
 
 
 @pytest.mark.integration

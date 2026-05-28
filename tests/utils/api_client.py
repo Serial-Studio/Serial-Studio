@@ -335,14 +335,20 @@ class SerialStudioClient:
         """
         self.command("dashboard.setFps", {"fps": fps})
 
-    def set_dashboard_points(self, points: int) -> None:
+    def set_dashboard_time_range(self, seconds: float) -> None:
         """
-        Set maximum data points visible in plot widgets.
+        Set the visible plot time window.
 
         Args:
-            points: Number of data points to display (e.g., 500, 1000)
+            seconds: Width of the plot time window (e.g., 5.0, 10.0).
+                     Valid range is 0.001-300 seconds.
         """
-        self.command("dashboard.setPoints", {"points": points})
+        self.command("dashboard.setTimeRange", {"seconds": seconds})
+
+    def get_dashboard_time_range(self) -> float:
+        """Get the visible plot time window in seconds."""
+        result = self.command("dashboard.getTimeRange")
+        return result.get("seconds")
 
     def get_dashboard_status(self) -> dict:
         """Get dashboard configuration."""

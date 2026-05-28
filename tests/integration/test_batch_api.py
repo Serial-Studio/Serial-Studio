@@ -41,7 +41,7 @@ def test_batch_mixed_read_write(api_client, clean_state):
     """Verify a batch that sets and then reads values returns consistent state."""
     commands = [
         {"command": "dashboard.setFps", "params": {"fps": 20}},
-        {"command": "dashboard.setPoints", "params": {"points": 600}},
+        {"command": "dashboard.setTimeRange", "params": {"seconds": 6.0}},
         {"command": "dashboard.getStatus"},
     ]
 
@@ -56,7 +56,7 @@ def test_batch_mixed_read_write(api_client, clean_state):
     # getStatus result is the third
     status = results[2].get("result", {})
     assert status.get("fps") == 20
-    assert status.get("points") == 600
+    assert status.get("timeRange") == 6.0
 
 
 @pytest.mark.integration

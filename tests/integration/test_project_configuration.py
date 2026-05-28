@@ -360,7 +360,6 @@ def test_full_project_configuration_workflow(api_client, device_simulator, clean
 
     # 2. Configure dashboard
     api_client.set_dashboard_fps(30)
-    api_client.set_dashboard_points(500)
     time.sleep(0.2)
 
     # 3. Configure network connection
@@ -386,7 +385,6 @@ def test_full_project_configuration_workflow(api_client, device_simulator, clean
 
     status = api_client.get_dashboard_status()
     assert status["fps"] == 30
-    assert status["points"] == 500
 
     # 7. Cleanup
     api_client.disconnect_device()

@@ -45,6 +45,22 @@
 constexpr int kDefaultPlotPoints  = 1000;
 constexpr int kDefaultPlotBuckets = 1024;
 
+// Per-curve raw retention for time-axis plots: bounded ring decimated to the viewport
+constexpr int kMaxTimeRingSamples  = 262144;
+constexpr double kAssumedMaxRateHz = 50000.0;
+
+/**
+ * @brief Time-ring capacity for a window: enough for the assumed max rate, capped.
+ */
+static int timeRingCapacity(const double plotTimeRangeSec)
+{
+  const double want = plotTimeRangeSec * kAssumedMaxRateHz;
+  if (want >= static_cast<double>(kMaxTimeRingSamples))
+    return kMaxTimeRingSamples;
+
+  return std::max(kDefaultPlotBuckets, static_cast<int>(want));
+}
+
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
 //--------------------------------------------------------------------------------------------------
@@ -708,13 +724,13 @@ const DSP::MultiLineSeries& UI::Dashboard::multiplotData(const int index) const
 }
 
 /**
- * @brief Returns the time-bucket envelope for a time-axis plot widget.
+ * @brief Returns the decimating time ring for a time-axis plot widget.
  */
-const DSP::TimeBucketSeries& UI::Dashboard::plotBuckets(const int index) const
+const DSP::TimeRing& UI::Dashboard::plotTimeRing(const int index) const
 {
-  const auto it = m_plotBuckets.find(index);
-  if (it == m_plotBuckets.end()) [[unlikely]] {
-    static const DSP::TimeBucketSeries kEmpty{};
+  const auto it = m_plotTimeRings.find(index);
+  if (it == m_plotTimeRings.end()) [[unlikely]] {
+    static const DSP::TimeRing kEmpty{};
     return kEmpty;
   }
 
@@ -722,13 +738,13 @@ const DSP::TimeBucketSeries& UI::Dashboard::plotBuckets(const int index) const
 }
 
 /**
- * @brief Returns the per-curve time-bucket envelopes for a time-axis multiplot widget.
+ * @brief Returns the per-curve decimating time rings for a time-axis multiplot widget.
  */
-const std::vector<DSP::TimeBucketSeries>& UI::Dashboard::multiplotBuckets(const int index) const
+const std::vector<DSP::TimeRing>& UI::Dashboard::multiplotTimeRings(const int index) const
 {
-  const auto it = m_multiplotBuckets.find(index);
-  if (it == m_multiplotBuckets.end()) [[unlikely]] {
-    static const std::vector<DSP::TimeBucketSeries> kEmpty{};
+  const auto it = m_multiplotTimeRings.find(index);
+  if (it == m_multiplotTimeRings.end()) [[unlikely]] {
+    static const std::vector<DSP::TimeRing> kEmpty{};
     return kEmpty;
   }
 
@@ -870,10 +886,12 @@ void UI::Dashboard::resetData(const bool notify)
   // Drop pre-resolved hotpath push tables (point into maps cleared below)
   m_yLinePushes.clear();
   m_xLinePushes.clear();
-  m_bucketPushes.clear();
+  m_timePushes.clear();
+  m_multiplotPushes.clear();
   m_yLinePushes.shrink_to_fit();
   m_xLinePushes.shrink_to_fit();
-  m_bucketPushes.shrink_to_fit();
+  m_timePushes.shrink_to_fit();
+  m_multiplotPushes.shrink_to_fit();
 
   // Clear data for 3D plots
 #ifdef BUILD_COMMERCIAL
@@ -890,8 +908,8 @@ void UI::Dashboard::resetData(const bool notify)
   // Clear X/Y axis arrays
   m_xAxisData.clear();
   m_yAxisData.clear();
-  m_plotBuckets.clear();
-  m_multiplotBuckets.clear();
+  m_plotTimeRings.clear();
+  m_multiplotTimeRings.clear();
   m_plotTimeOriginSet = false;
 
   // Clear widget & action structures
@@ -955,13 +973,13 @@ void UI::Dashboard::clearPlotData()
   for (auto it = m_xAxisData.begin(); it != m_xAxisData.end(); ++it)
     it.value().clear();
 
-  // Clear time-axis envelopes and restart the relative-time origin
-  for (auto it = m_plotBuckets.begin(); it != m_plotBuckets.end(); ++it)
-    it.value().configure(m_plotTimeRange, kDefaultPlotBuckets);
+  // Clear time-axis rings and restart the relative-time origin
+  for (auto it = m_plotTimeRings.begin(); it != m_plotTimeRings.end(); ++it)
+    it.value().clear();
 
-  for (auto it = m_multiplotBuckets.begin(); it != m_multiplotBuckets.end(); ++it)
-    for (auto& curve : it.value())
-      curve.configure(m_plotTimeRange, kDefaultPlotBuckets);
+  for (auto it = m_multiplotTimeRings.begin(); it != m_multiplotTimeRings.end(); ++it)
+    for (auto& ring : it.value())
+      ring.clear();
 
   m_plotTimeOriginSet = false;
 
@@ -2003,30 +2021,22 @@ void UI::Dashboard::updateDataSeries(int sourceId)
   updateWaterfallSeries(sourceId);
 #endif
 
-  // Update multi-plots
-  for (int i = 0; i < multiCount; ++i) {
-    if (!m_activeMultiplots[i])
+  // Update multi-plots from the pre-resolved push table (no map lookups)
+  Q_ASSERT(static_cast<int>(m_multiplotPushes.size()) == multiCount);
+  for (const auto& p : m_multiplotPushes) {
+    if (!*p.activeFlag)
       continue;
 
-    const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-    if (sourceId >= 0 && group.sourceId != sourceId)
+    if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    // Time multiplots fold each curve into its bucket envelope (value + real timestamp)
-    auto bIt = m_multiplotBuckets.find(i);
-    if (bIt != m_multiplotBuckets.end()) {
-      auto& curves = bIt.value();
-      for (size_t j = 0; j < group.datasets.size() && j < curves.size(); ++j)
-        curves[j].fold(group.datasets[j].numericValue, m_plotDisplayTimeSec);
-
-      continue;
-    }
+    // Time multiplots append (display time, value) into each curve's decimating ring
+    for (const auto& tc : p.timeCurves)
+      tc.ring->appendDecimated(m_plotDisplayTimeSec, *tc.value);
 
     // Sample/dataset multiplots push into the Y rings
-    auto& multiSeries   = m_multipltValues[i];
-    const size_t yCount = multiSeries.y.size();
-    for (size_t j = 0; j < group.datasets.size() && j < yCount; ++j)
-      multiSeries.y[j].push(group.datasets[j].numericValue);
+    for (const auto& s : p.samples)
+      s.first->push(*s.second);
   }
 
   // Update 3D plots
@@ -2148,14 +2158,14 @@ void UI::Dashboard::updateLineSeries(int sourceId)
   for (const auto& p : m_xLinePushes)
     fire(p);
 
-  // Time plots fold value + real timestamp into their bucket envelope
-  for (const auto& p : m_bucketPushes) {
+  // Time plots append (display time, value) into their decimating ring
+  for (const auto& p : m_timePushes) {
     for (const auto& c : p.consumers) {
       if (sourceId >= 0 && c.sourceId != sourceId)
         continue;
 
       if (*c.activeFlag) {
-        p.series->fold(*p.value, m_plotDisplayTimeSec);
+        p.ring->appendDecimated(m_plotDisplayTimeSec, *p.value);
         break;
       }
     }
@@ -2289,13 +2299,13 @@ void UI::Dashboard::configureLineSeries()
   // Release existing plot buffers
   m_xAxisData.clear();
   m_yAxisData.clear();
-  m_plotBuckets.clear();
+  m_plotTimeRings.clear();
   m_pltValues.clear();
   m_pltValues.squeeze();
   m_activePlots.clear();
   m_yLinePushes.clear();
   m_xLinePushes.clear();
-  m_bucketPushes.clear();
+  m_timePushes.clear();
 
   // Reset default X-axis data
   m_pltXAxis = DSP::AxisData(points() + 1);
@@ -2323,11 +2333,10 @@ void UI::Dashboard::configureLineSeries()
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
-    // Time X-axis: fixed time-bucket envelope; appended series is a placeholder
+    // Time X-axis: decimating ring spanning the window, viewport-decimated at render
     if (useTimeXAxis(yDataset)) {
-      DSP::TimeBucketSeries buckets;
-      buckets.configure(m_plotTimeRange, kDefaultPlotBuckets);
-      m_plotBuckets.insert(i, buckets);
+      const int cap = timeRingCapacity(m_plotTimeRange);
+      m_plotTimeRings.insert(i, DSP::TimeRing(cap, m_plotTimeRange));
 
       DSP::LineSeries series;
       series.x = &m_pltXAxis;
@@ -2367,15 +2376,15 @@ void UI::Dashboard::configureLineSeries()
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
     const LinePush::Consumer consumer{yDataset.sourceId, &m_activePlots[i]};
 
-    // Time plots fold into a bucket envelope instead of the raw Y/X rings
+    // Time plots append (display time, value) into their decimating ring
     if (useTimeXAxis(yDataset)) {
-      auto bIt = m_plotBuckets.find(i);
-      if (bIt != m_plotBuckets.end()) {
-        BucketPush bp;
-        bp.consumers.push_back(consumer);
-        bp.series = &bIt.value();
-        bp.value  = &yDataset.numericValue;
-        m_bucketPushes.push_back(std::move(bp));
+      auto rIt = m_plotTimeRings.find(i);
+      if (rIt != m_plotTimeRings.end()) {
+        TimePush tp;
+        tp.consumers.push_back(consumer);
+        tp.ring  = &rIt.value();
+        tp.value = &yDataset.numericValue;
+        m_timePushes.push_back(std::move(tp));
       }
 
       continue;
@@ -2454,7 +2463,7 @@ void UI::Dashboard::configureMultiLineSeries()
   m_multipltValues.clear();
   m_multipltValues.squeeze();
   m_activeMultiplots.clear();
-  m_multiplotBuckets.clear();
+  m_multiplotTimeRings.clear();
 
   // Reset default X-axis data
   m_multipltXAxis = DSP::AxisData(points() + 1);
@@ -2464,7 +2473,7 @@ void UI::Dashboard::configureMultiLineSeries()
   for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i) {
     const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
 
-    // Shared X is a placeholder for time multiplots (the widget reads multiplotBuckets(i))
+    // Shared X is a placeholder for time multiplots (the widget reads the time rings)
     DSP::MultiLineSeries series;
     series.x = &m_multipltXAxis;
     for (size_t j = 0; j < group.datasets.size(); ++j)
@@ -2473,14 +2482,59 @@ void UI::Dashboard::configureMultiLineSeries()
     m_multipltValues.append(series);
     m_activeMultiplots.insert(i, true);
 
-    // Time multiplots fold each curve into its own bucket envelope (shared time grid)
+    // Time multiplots retain a decimating ring per curve
     if (useTimeXAxisGroup(group)) {
-      std::vector<DSP::TimeBucketSeries> curves(group.datasets.size());
-      for (auto& curve : curves)
-        curve.configure(m_plotTimeRange, kDefaultPlotBuckets);
+      const int cap = timeRingCapacity(m_plotTimeRange);
+      std::vector<DSP::TimeRing> rings;
+      rings.reserve(group.datasets.size());
+      for (size_t j = 0; j < group.datasets.size(); ++j)
+        rings.emplace_back(cap, m_plotTimeRange);
 
-      m_multiplotBuckets.insert(i, std::move(curves));
+      m_multiplotTimeRings.insert(i, std::move(rings));
     }
+  }
+
+  // Build the pre-resolved push table consumed on the hotpath
+  buildMultiplotPushes();
+}
+
+/**
+ * @brief Resolves the per-tick multiplot push table from the configured buffers.
+ */
+void UI::Dashboard::buildMultiplotPushes()
+{
+  m_multiplotPushes.clear();
+  m_multiplotPushes.shrink_to_fit();
+
+  const int multiCount = widgetCount(SerialStudio::DashboardMultiPlot);
+  m_multiplotPushes.reserve(static_cast<std::size_t>(multiCount));
+
+  for (int i = 0; i < multiCount; ++i) {
+    const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+
+    MultiPush push;
+    push.sourceId   = group.sourceId;
+    push.activeFlag = &m_activeMultiplots[i];
+
+    // Time multiplots append (display time, value) into each curve's decimating ring
+    auto rIt = m_multiplotTimeRings.find(i);
+    if (rIt != m_multiplotTimeRings.end()) {
+      auto& rings        = rIt.value();
+      const size_t count = std::min(group.datasets.size(), rings.size());
+      for (size_t j = 0; j < count; ++j)
+        push.timeCurves.push_back({&rings[j], &group.datasets[j].numericValue});
+    }
+
+    // Sample/dataset multiplots push each curve value into its Y ring
+    else {
+      auto& multiSeries   = m_multipltValues[i];
+      const size_t yCount = multiSeries.y.size();
+      const size_t count  = std::min(group.datasets.size(), yCount);
+      for (size_t j = 0; j < count; ++j)
+        push.samples.emplace_back(&multiSeries.y[j], &group.datasets[j].numericValue);
+    }
+
+    m_multiplotPushes.push_back(std::move(push));
   }
 }
 

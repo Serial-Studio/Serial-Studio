@@ -181,7 +181,7 @@ def test_dashboard_status_has_required_fields(api_client, clean_state):
         "operationMode",
         "operationModeName",
         "fps",
-        "points",
+        "timeRange",
         "widgetCount",
         "datasetCount",
     }

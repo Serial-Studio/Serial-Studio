@@ -1139,9 +1139,8 @@ class TestIntegerTruncation:
     - Wrap-around in loop counters
     - Massive memory allocation (no upper bound)
 
-    KNOWN VULNERABILITY: Dashboard::setPoints() has NO upper bound check.
-    Setting points to INT32_MAX causes allocation of ~8 GB vectors.
-    The API handler only checks `points < 1`.
+    The dashboard time range drives the plot bucket-series width, so an
+    out-of-range value must be rejected before it reaches the re-bin path.
     """
 
     TRUNCATION_VALUES = [
@@ -1168,10 +1167,9 @@ class TestIntegerTruncation:
     # Any value outside this range MUST be rejected.
     FPS_MAX_VALID = 240
 
-    # Points has NO upper bound in C++ code (only `points < 1`).
-    # A sane upper bound would be ~100,000. Values above that cause
-    # massive memory allocation and UI freeze.
-    POINTS_SANE_MAX = 100000
+    # Time range valid window is 0.001-300 seconds (enforced by API handler).
+    # Any value outside this range MUST be rejected.
+    TIME_RANGE_MAX_VALID = 300
 
     @pytest.mark.parametrize(
         "value,name",
@@ -1216,49 +1214,50 @@ class TestIntegerTruncation:
         TRUNCATION_VALUES,
         ids=[v[1] for v in TRUNCATION_VALUES],
     )
-    def test_integer_truncation_in_points(
+    def test_integer_truncation_in_time_range(
         self, value, name, security_client, check_server_alive
     ):
         """
-        Set plot points to values that cause truncation.
+        Set the plot time range to values that cause truncation.
 
-        KNOWN VULNERABILITY: DashboardHandler::setPoints() only checks
-        `points < 1` with NO upper bound. Setting points to INT32_MAX
-        causes Dashboard::setPoints() to allocate vectors with billions
-        of entries, causing memory exhaustion and UI freeze.
+        The time range drives the bucket-series width. An out-of-range value
+        that slipped past validation would re-bin the plot envelopes against a
+        nonsensical window.
 
-        Expected: Server should reject points > 100,000 (or some sane max).
+        Expected: Server must reject values outside the 0.001-300 s window.
         """
         rejected = False
         try:
-            result = security_client.command("dashboard.setPoints", {"points": value})
-            accepted_points = result.get("points", None)
-            if accepted_points is not None and accepted_points > self.POINTS_SANE_MAX:
+            result = security_client.command(
+                "dashboard.setTimeRange", {"seconds": value}
+            )
+            accepted = result.get("seconds", None)
+            if accepted is not None and (
+                accepted < 0.001 or accepted > self.TIME_RANGE_MAX_VALID
+            ):
                 # Restore before failing so we don't leave the app broken
                 try:
-                    security_client.command("dashboard.setPoints", {"points": 100})
+                    security_client.command("dashboard.setTimeRange", {"seconds": 10})
                 except Exception:
                     pass
 
                 pytest.fail(
-                    f"VULNERABILITY: Server accepted points={accepted_points} "
-                    f"(input: {value}). No upper bound enforced! "
-                    f"DashboardHandler.cpp:209 only checks `points < 1`. "
-                    f"This causes allocation of {accepted_points * 8 / 1e9:.1f} GB "
-                    f"in plot vectors, freezing the application."
+                    f"VULNERABILITY: Server accepted timeRange={accepted} s "
+                    f"(input: {value}). Valid window is 0.001-"
+                    f"{self.TIME_RANGE_MAX_VALID} s."
                 )
         except Exception:
             rejected = True
 
-        # Always restore points to a sane value
+        # Always restore the time range to a sane value
         try:
-            security_client.command("dashboard.setPoints", {"points": 100})
+            security_client.command("dashboard.setTimeRange", {"seconds": 10})
         except Exception:
             pass
 
         assert check_server_alive(
             wait_time=3.0
-        ), f"Server crashed on points={value} ({name})"
+        ), f"Server crashed on timeRange={value} ({name})"
 
     def test_negative_port_numbers(self, security_client, check_server_alive):
         """

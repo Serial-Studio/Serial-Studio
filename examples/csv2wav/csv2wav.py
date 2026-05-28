@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import re
 import csv
 import wave
 import argparse
@@ -9,23 +10,47 @@ import numpy as np
 DEFAULT_SAMPLE_RATE = 44100
 INPUT_FORMATS = ["float32", "int16", "uint8", "int24", "int32"]
 
+# Matches an audio channel column in any Serial Studio header layout: the bare
+# legacy "Audio Input/Channel 1", the newer "<Group>/Channel 1", and the full
+# "<Device>/<Group>/Channel 1". The case-insensitive trailing "Channel <n>" is
+# the stable part across versions.
+CHANNEL_RE = re.compile(r"channel\s*\d+\s*$", re.IGNORECASE)
+
+# Serial Studio always emits the relative timestamp as the first column.
+TIME_HEADER = "Elapsed (s)"
+
+
+def is_channel_header(header):
+    return CHANNEL_RE.search(header.strip()) is not None
+
+
+def find_audio_columns(headers):
+    return [i for i, h in enumerate(headers) if is_channel_header(h)]
+
 
 def read_csv_audio(file_path):
-    with open(file_path, "r", newline="") as f:
+    # utf-8-sig transparently strips the UTF-8 BOM that Serial Studio writes on
+    # the first column header; without it the BOM corrupts the first match.
+    with open(file_path, "r", newline="", encoding="utf-8-sig") as f:
         reader = csv.reader(f)
         headers = next(reader)
 
-        audio_cols = [
-            i for i, h in enumerate(headers) if h.startswith("Audio Input/Channel")
-        ]
+        audio_cols = find_audio_columns(headers)
         if not audio_cols:
             raise ValueError("No audio channels found in CSV headers")
 
+        time_col = None
+        if headers and headers[0].strip() == TIME_HEADER:
+            time_col = 0
+
         rows = []
+        times = []
         for row in reader:
             try:
                 vals = [float(row[i]) for i in audio_cols]
                 rows.append(vals)
+                if time_col is not None:
+                    times.append(float(row[time_col]))
             except Exception:
                 continue
 
@@ -33,7 +58,20 @@ def read_csv_audio(file_path):
     if audio.ndim == 1:
         audio = audio[:, None]
     audio = np.nan_to_num(audio, nan=0.0, posinf=0.0, neginf=0.0)
-    return audio
+    return audio, times
+
+
+def sample_rate_from_times(times):
+    # Derive the capture rate from the Elapsed (s) column so the user does not
+    # have to know it up front. Needs at least two samples and a positive span.
+    if len(times) < 2:
+        return None
+
+    span = times[-1] - times[0]
+    if span <= 0.0:
+        return None
+
+    return int(round((len(times) - 1) / span))
 
 
 def decode_input_to_float(audio, in_format):
@@ -99,7 +137,7 @@ def write_wav(audio_float, sample_rate, output_path, dither=False):
 def convert_csv_to_wav(
     csv_path,
     wav_path=None,
-    sample_rate=DEFAULT_SAMPLE_RATE,
+    sample_rate=None,
     in_format="float32",
     dither=False,
 ):
@@ -108,8 +146,19 @@ def convert_csv_to_wav(
             f"Unsupported input format '{in_format}'. Supported: {', '.join(INPUT_FORMATS)}"
         )
 
-    raw = read_csv_audio(csv_path)
+    raw, times = read_csv_audio(csv_path)
     audio_float = decode_input_to_float(raw, in_format)
+
+    # An explicit --rate always wins; otherwise prefer the rate implied by the
+    # Elapsed (s) column, and fall back to the default for time-less CSVs.
+    if sample_rate is None:
+        detected = sample_rate_from_times(times)
+        if detected:
+            sample_rate = detected
+            print(f"Detected sample rate from timestamps: {sample_rate} Hz")
+        else:
+            sample_rate = DEFAULT_SAMPLE_RATE
+            print(f"No usable timestamps; using default {sample_rate} Hz")
 
     if wav_path is None:
         base = os.path.splitext(csv_path)[0]
@@ -126,8 +175,11 @@ def main():
     parser.add_argument(
         "--rate",
         type=int,
-        default=DEFAULT_SAMPLE_RATE,
-        help=f"Sample rate in Hz (default: {DEFAULT_SAMPLE_RATE})",
+        default=None,
+        help=(
+            "Sample rate in Hz. When omitted, it is derived from the "
+            f"'{TIME_HEADER}' column, falling back to {DEFAULT_SAMPLE_RATE}."
+        ),
     )
     parser.add_argument(
         "--in_format",

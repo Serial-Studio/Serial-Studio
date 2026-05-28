@@ -229,14 +229,14 @@ scopes because they're dashboard-wide preferences, not project state:
 
 | Setting                       | Command                                                                  |
 |-------------------------------|--------------------------------------------------------------------------|
-| Plot point count (rolling history per series) | `dashboard.setPoints{points}` (alias: `project.dashboard.setPoints`) |
+| Plot time range (visible window per series) | `dashboard.setTimeRange{seconds}` (alias: `project.dashboard.setTimeRange`) |
 | Theme                         | `ui.theme.*` / `--theme` flag                                             |
 | Operation mode                | `dashboard.setOperationMode`                                              |
 | Console terminal display      | `console.set*`                                                            |
 
-If the user asks for "more points on the plot" or "longer plot
-history", call `dashboard.setPoints` (or its `project.dashboard.setPoints`
-alias; they delegate to the same handler). The points value is
+If the user asks for "more history on the plot" or "a longer plot
+window", call `dashboard.setTimeRange` (or its `project.dashboard.setTimeRange`
+alias; they delegate to the same handler). The seconds value is
 saved per-project and restored on load.
 
 ## Glossary: terms that look interchangeable but aren't

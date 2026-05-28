@@ -24,8 +24,128 @@
 
 #include <QApplication>
 #include <QCryptographicHash>
+#include <QFileInfo>
 #include <QProcess>
 #include <QtCore/qendian.h>
+
+//--------------------------------------------------------------------------------------------------
+// Executable path resolution
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Resolves a system tool to an absolute path, falling back to its bare name.
+ */
+static QString resolveSystemTool(const QStringList& candidates, const QString& fallbackName)
+{
+  for (const auto& path : candidates) {
+    QFileInfo info(path);
+    if (info.exists() && info.isExecutable())
+      return path;
+  }
+
+  return fallbackName;
+}
+
+/**
+ * @brief Gathers the raw, platform-specific machine identifier and OS label.
+ */
+static QString readPlatformId(QString& os)
+{
+  QString id;
+  QProcess process;
+
+// Obtain machine ID in GNU/Linux
+#if defined(Q_OS_LINUX)
+  os                 = QStringLiteral("Linux");
+  const auto catTool = resolveSystemTool({"/bin/cat", "/usr/bin/cat"}, "cat");
+  process.start(catTool, {"/var/lib/dbus/machine-id"});
+  process.waitForFinished();
+  id = process.readAllStandardOutput().trimmed();
+
+  if (id.isEmpty()) {
+    process.start(catTool, {"/etc/machine-id"});
+    process.waitForFinished();
+    id = process.readAllStandardOutput().trimmed();
+  }
+#endif
+
+// Obtain machine ID in macOS
+#if defined(Q_OS_MAC)
+  os                   = QStringLiteral("macOS");
+  const auto ioregTool = resolveSystemTool({"/usr/sbin/ioreg"}, "ioreg");
+  process.start(ioregTool, {"-rd1", "-c", "IOPlatformExpertDevice"});
+  process.waitForFinished();
+  QString output = process.readAllStandardOutput();
+
+  QStringList lines = output.split("\n");
+  for (const QString& line : std::as_const(lines)) {
+    if (line.contains("IOPlatformUUID")) {
+      id = line.split("=").last().trimmed();
+      id.remove("\"");
+      break;
+    }
+  }
+#endif
+
+// Obtain machine ID in Windows
+#if defined(Q_OS_WIN)
+  os = QStringLiteral("Windows");
+  QString machineGuid, uuid;
+
+  // Resolve system tools under the real Windows directory
+  auto systemRoot = qEnvironmentVariable("SystemRoot");
+  if (systemRoot.isEmpty())
+    systemRoot = QStringLiteral("C:\\Windows");
+
+  const auto system32 = systemRoot + QStringLiteral("\\System32\\");
+  const auto regTool  = resolveSystemTool({system32 + "reg.exe"}, "reg");
+  const auto psTool =
+    resolveSystemTool({system32 + "WindowsPowerShell\\v1.0\\powershell.exe"}, "powershell");
+
+  // Read MachineGuid from the registry
+  process.start(
+    regTool,
+    {"query", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography", "/v", "MachineGuid"});
+  process.waitForFinished();
+  QString output    = process.readAllStandardOutput();
+  QStringList lines = output.split("\n");
+  for (const QString& line : std::as_const(lines)) {
+    if (line.contains("MachineGuid")) {
+      machineGuid = line.split(" ").last().trimmed();
+      break;
+    }
+  }
+
+  // Read system UUID via PowerShell
+  process.start(psTool,
+                {"-ExecutionPolicy",
+                 "Bypass",
+                 "-command",
+                 "(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"});
+  process.waitForFinished();
+  uuid = process.readAllStandardOutput().trimmed();
+
+  id = machineGuid + uuid;
+#endif
+
+// Obtain machine ID in OpenBSD
+#if defined(Q_OS_BSD)
+  os                  = QStringLiteral("BSD");
+  const auto catTool  = resolveSystemTool({"/bin/cat", "/usr/bin/cat"}, "cat");
+  const auto kenvTool = resolveSystemTool({"/sbin/kenv", "/usr/sbin/kenv"}, "kenv");
+  process.start(catTool, {"/etc/hostid"});
+  process.waitForFinished();
+  id = process.readAllStandardOutput().trimmed();
+
+  if (id.isEmpty()) {
+    process.start(kenvTool, {"-q", "smbios.system.uuid"});
+    process.waitForFinished();
+    id = process.readAllStandardOutput().trimmed();
+  }
+#endif
+
+  return id;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -85,84 +205,8 @@ quint64 Licensing::MachineID::machineSpecificKey() const noexcept
  */
 void Licensing::MachineID::readInformation()
 {
-  QString id;
   QString os;
-  QProcess process;
-
-// Obtain machine ID in GNU/Linux
-#if defined(Q_OS_LINUX)
-  os = QStringLiteral("Linux");
-  process.start("cat", {"/var/lib/dbus/machine-id"});
-  process.waitForFinished();
-  id = process.readAllStandardOutput().trimmed();
-
-  if (id.isEmpty()) {
-    process.start("cat", {"/etc/machine-id"});
-    process.waitForFinished();
-    id = process.readAllStandardOutput().trimmed();
-  }
-#endif
-
-// Obtain machine ID in macOS
-#if defined(Q_OS_MAC)
-  os = QStringLiteral("macOS");
-  process.start("ioreg", {"-rd1", "-c", "IOPlatformExpertDevice"});
-  process.waitForFinished();
-  QString output = process.readAllStandardOutput();
-
-  QStringList lines = output.split("\n");
-  for (const QString& line : std::as_const(lines)) {
-    if (line.contains("IOPlatformUUID")) {
-      id = line.split("=").last().trimmed();
-      id.remove("\"");
-      break;
-    }
-  }
-#endif
-
-// Obtain machine ID in Windows
-#if defined(Q_OS_WIN)
-  os = QStringLiteral("Windows");
-  QString machineGuid, uuid;
-
-  // Read MachineGuid from the registry
-  process.start(
-    "reg", {"query", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography", "/v", "MachineGuid"});
-  process.waitForFinished();
-  QString output    = process.readAllStandardOutput();
-  QStringList lines = output.split("\n");
-  for (const QString& line : std::as_const(lines)) {
-    if (line.contains("MachineGuid")) {
-      machineGuid = line.split(" ").last().trimmed();
-      break;
-    }
-  }
-
-  // Read system UUID via PowerShell
-  process.start("powershell",
-                {"-ExecutionPolicy",
-                 "Bypass",
-                 "-command",
-                 "(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"});
-  process.waitForFinished();
-  uuid = process.readAllStandardOutput().trimmed();
-
-  id = machineGuid + uuid;
-#endif
-
-// Obtain machine ID in OpenBSD
-#if defined(Q_OS_BSD)
-  os = QStringLiteral("BSD");
-  process.start("cat", {"/etc/hostid"});
-  process.waitForFinished();
-  id = process.readAllStandardOutput().trimmed();
-
-  if (id.isEmpty()) {
-    process.start("kenv", {"-q", "smbios.system.uuid"});
-    process.waitForFinished();
-    id = process.readAllStandardOutput().trimmed();
-  }
-#endif
+  const QString id = readPlatformId(os);
 
   // Warn when every platform fallback returned empty; derivation still proceeds
   if (id.isEmpty()) [[unlikely]]
