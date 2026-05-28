@@ -55,11 +55,17 @@ the live project:
   parser. Cheapest way to catch the "wrong-language" silent failure
   (e.g. Lua code passed with `language: 0`). Use this first when
   authoring; promote to dryRun once it compiles.
-- `project.frameParser.dryRun{code, language, sampleFrame}`: compiles
-  AND runs `parse(sample)` once, returns the rows or compile/runtime
-  errors. For stateful parsers (top-level closures, EMA-style state),
-  pass `sampleFrames: ["...","...",...]` to run several frames
-  sequentially through one engine instance and reveal state.
+- `project.frameParser.dryRun{code, language, inputBytesHex,
+  decoderMethod, frameDetection, frameStart, frameEnd,
+  hexadecimalDelimiters, checksumAlgorithm}`: drives the full
+  pipeline (extraction, decoder, parser) and returns
+  per-frame `rawHex` + `decoderOutput` + `rows`, plus
+  `extractedCount` / `consumedBytes` / `remainingBytes` /
+  `droppedFrames`. Stateful parsers run sequentially through one
+  engine, so EMAs / frame-assembly buffers reveal their behavior.
+  When debugging "the dashboard shows the wrong value", read
+  `decoderOutput` BEFORE the rows: if it's UTF-8 garbage / `U+FFFD`
+  for a binary protocol, the decoder is wrong, not the parser.
 - `project.dataset.transform.dryRun{code, language, values}`: runs
   `transform(v)` against an array of inputs. Returns per-input outputs.
 - `project.painter.dryRun{code}`: verifies compile + that
@@ -108,11 +114,33 @@ made the calls. Don't pretend a recall tool exists.
 ### "My script won't compile"
 
 1. dryRun returns compile error. Read it carefully.
-2. Common cause for parsers: returning an object instead of array.
+2. Common cause for parsers: returning an object instead of array,
+   or a Lua parser that runs but only fills the first dataset --
+   suspect a runtime error swallowed by `pcall`. The pipeline dryRun
+   surfaces this: `rows[0]` will be partial and subsequent rows empty.
 3. Common cause for transforms: missing `function transform(value) {}`
    wrapping (the IIFE handles isolation but `transform` must exist).
 4. Common cause for painters: function name `draw` instead of `paint`,
    or `bootstrap` (doesn't exist; top-level is bootstrap).
+
+### "Pipeline dryRun returns zero frames"
+
+The user passed bytes but `extractedCount: 0` came back. Walk through
+the framing config in this order:
+
+1. Is `frameDetection` matching what the device sends? For COBS /
+   protobuf / fixed-size binary, you almost always want
+   `frameDetection: 2` (NoDelimiters), where the driver chunk IS the
+   frame.
+2. If `frameDetection` is 0/1/3, are `frameStart` / `frameEnd`
+   correct? When `hexadecimalDelimiters: true`, they're parsed as
+   hex bytes (`"0A"` -> `\n`); otherwise they're escape-resolved
+   text (`"\\n"` -> `\n`).
+3. Is the test slice long enough to contain at least one complete
+   frame? `remainingBytes > 0` with `extractedCount: 0` means the
+   reader is still waiting for the delimiter / checksum tail.
+4. Is `checksumAlgorithm` non-empty when the test bytes don't carry
+   a checksum? Validation would reject every frame silently.
 
 ### "tableGet returns 0 / nothing in my transform"
 

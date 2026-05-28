@@ -875,3 +875,65 @@ def test_dialog_runs_pipeline_and_writes_back_to_source():
         "&DataModel::ProjectModel::sourceChanged" in text
         and "&FrameParserTestDialog::onSourceChanged" in text
     )
+
+
+# ----------------------------------------------------------------------------------
+# R12 -- ProtoImporter parseMsg uses the correct endPos parameter, not a stray endP
+# ----------------------------------------------------------------------------------
+
+
+def test_proto_importer_parse_msg_uses_endpos_not_endp():
+    """parseMsg's outer loop ran its post-iteration guard against an undefined `endP`
+    instead of its `endPos` parameter. Lua raised on the very first comparison and
+    the pcall in parse() swallowed the error, so the script only ever populated the
+    first field of any frame -- which surfaces as 'the dashboard only shows one
+    value per sensor message' in the Protobuf example.
+
+    The fix is a one-character rename. This test pins the loop guard to endPos.
+    scoreDispatcher is a separate function with its OWN local endP, so we make
+    sure we did not accidentally rename that one too."""
+    text = _read("app/src/DataModel/Importers/ProtoImporter.cpp")
+
+    # emitDecoderParseMsg uses endPos for the loop guard.
+    parse_msg = re.search(
+        r"void DataModel::ProtoImporter::emitDecoderParseMsg\(QString& code\)"
+        r"[\s\S]*?\n\}",
+        text,
+    )
+    assert parse_msg is not None
+    snippet = parse_msg.group(0)
+    assert (
+        'code += QStringLiteral("    if p <= before or p > endPos then break end\\n");'
+        in snippet
+    ), "parseMsg loop guard must use endPos (not endP)"
+    assert (
+        'code += QStringLiteral("    if p <= before or p > endP then break end\\n");'
+        not in snippet
+    ), "parseMsg must not regress to the broken endP name"
+
+    # emitScoreDispatcher legitimately declares its own local endP -- keep that as-is.
+    score = re.search(
+        r"void DataModel::ProtoImporter::emitScoreDispatcher\(QString& code\)"
+        r"[\s\S]*?\n\}",
+        text,
+    )
+    assert score is not None
+    score_snippet = score.group(0)
+    assert "local endP = bufLen + 1" in score_snippet
+    assert "while p < endP do" in score_snippet
+    assert "if p <= before or p > endP then break end" in score_snippet
+
+
+def test_protobuf_example_embedded_parser_was_repaired():
+    """The shipped Protobuf example carries a regenerated parser script in its
+    .ssproj. Confirm the same endPos fix is applied there so users running the
+    example out-of-the-box see all datasets light up, not just the first field."""
+    text = _read("examples/Protobuf Example/Protobuf Example.ssproj")
+
+    # The buggy form must be gone from parseMsg (it appeared inside a "\\n"-escaped
+    # Lua string, after the closing "end" of the float branch).
+    assert "p > endP then break end\\n  end\\nend\\n\\n-- Dispatch table" not in text
+    # The repaired guard must be present.
+    assert "p > endPos then break end\\n  end\\nend\\n\\n-- Dispatch table" in text
+    # scoreDispatcher's legitimate local endP must still be there.
+    assert "local endP = bufLen + 1" in text

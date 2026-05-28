@@ -36,6 +36,7 @@
 #include <QTextDocument>
 #include <QUrl>
 
+#include "DataModel/Dialogs/FrameParserTestDialog.h"
 #include "DataModel/Editors/CodeFormatter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
@@ -49,11 +50,7 @@
  * @brief Constructs the QML-side frame parser code editor.
  */
 DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent)
-  , m_sourceId(0)
-  , m_language(0)
-  , m_readingCode(false)
-  , m_testDialog(&DataModel::FrameParser::instance(), nullptr)
+  : QQuickPaintedItem(parent), m_sourceId(0), m_language(0), m_readingCode(false)
 {
   setMipmap(false);
   setAntialiasing(false);
@@ -517,9 +514,12 @@ void DataModel::JsCodeEditor::testWithSampleData()
 {
   auto& parser = DataModel::FrameParser::instance();
   if (parser.loadScript(m_sourceId, text(), true)) {
-    m_testDialog.setSourceId(m_sourceId);
-    m_testDialog.clear();
-    m_testDialog.showNormal();
+    auto& dialog = FrameParserTestDialog::instance();
+    dialog.setSourceId(m_sourceId);
+    dialog.clear();
+    dialog.showNormal();
+    dialog.raise();
+    dialog.activateWindow();
   }
 }
 

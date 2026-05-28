@@ -305,18 +305,34 @@ verify-after-update rule, and full recipes.
 ```
 0 = EndDelimiterOnly      most common; e.g. line-based `\n`
 1 = StartAndEndDelimiter  bracketed frames; e.g. `$...;`
-2 = NoDelimiters          fixed-length packets (binary protocols)
-3 = StartDelimiterOnly    start marker, length follows
+2 = NoDelimiters          driver chunk = frame; for COBS / protobuf /
+                           fixed-size or self-framing binary
+3 = StartDelimiterOnly    sync word at the head; next sync ends the frame
 ```
+
+When the required delimiter for the chosen mode is empty, extraction
+silently downgrades to NoDelimiters. Setting `frameStart: ""` while
+leaving `frameDetection` at 1 or 3 is almost always wrong; flip
+detection too.
 
 ### Decoder method enum (`decoderMethod` / `decoder` field)
 
 ```
-0 = PlainText     UTF-8 text frames
-1 = Hexadecimal   "DEADBEEF" hex-encoded bytes
-2 = Base64        base64-encoded binary
-3 = Binary        raw bytes, no decoding
+0 = PlainText     UTF-8 text frames -- parse() receives QString::fromUtf8(bytes)
+1 = Hexadecimal   hex-encoded string of the bytes
+2 = Base64        base64-encoded string of the bytes
+3 = Binary        raw bytes -- 1-indexed table in Lua, length-keyed in JS
 ```
+
+Picking PlainText (0) for a binary protocol replaces every non-UTF-8
+byte with `U+FFFD` and loses the original. COBS, Modbus, protobuf,
+custom binary -- ALL need `decoderMethod: 3`. For ASCII / NMEA /
+CSV / AT-commands keep `decoderMethod: 0`. Hex and Base64 are
+narrow choices for devices that already emit encoded payloads.
+
+See the `frame_parsers` skill for the full pipeline picture and the
+`project.frameParser.dryRun` shape that lets you exercise extraction
++ decoder + parser end-to-end before pushing code.
 
 ### Constant vs Computed registers (data tables)
 

@@ -5,10 +5,9 @@
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -24,18 +23,18 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "x",
+                    "uniqueId": 0,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -51,18 +50,18 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "y",
+                    "uniqueId": 1,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -78,24 +77,25 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "z",
+                    "uniqueId": 2,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "Vec3",
+            "uniqueId": 30003,
             "widget": "multiplot"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -111,18 +111,18 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "temperature",
+                    "uniqueId": 10000,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -138,18 +138,18 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "humidity",
+                    "uniqueId": 10001,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -165,18 +165,18 @@
                     "plotMax": 100,
                     "plotMin": 0,
                     "title": "status",
+                    "uniqueId": 10002,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -192,24 +192,25 @@
                     "plotMax": 100,
                     "plotMin": 0,
                     "title": "note",
+                    "uniqueId": 10003,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": 0,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "Sensor",
+            "uniqueId": 30004,
             "widget": "datagrid"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -225,18 +226,18 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "x",
+                    "uniqueId": 20000,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -252,18 +253,18 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "y",
+                    "uniqueId": 20001,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -279,24 +280,25 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "z",
+                    "uniqueId": 20002,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "accel",
+            "uniqueId": 30005,
             "widget": "multiplot"
         },
         {
             "datasets": [
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -312,18 +314,18 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "x",
+                    "uniqueId": 30000,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -339,18 +341,18 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "y",
+                    "uniqueId": 30001,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 },
                 {
-                    "alarmEnabled": false,
-                    "alarmHigh": 80,
-                    "alarmLow": 20,
                     "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": -100,
@@ -366,31 +368,63 @@
                     "plotMax": 100,
                     "plotMin": -100,
                     "title": "z",
+                    "uniqueId": 30002,
                     "units": "",
                     "value": "",
                     "widget": "",
                     "widgetMax": 100,
                     "widgetMin": -100,
-                    "xAxis": -1
+                    "xAxis": -2
                 }
             ],
             "title": "gyro",
+            "uniqueId": 30006,
             "widget": "multiplot"
         }
     ],
     "hexadecimalDelimiters": false,
-    "pointCount": 100,
-    "schemaVersion": 2,
+    "mqttPublisher": {
+        "cleanSession": true,
+        "customClientId": false,
+        "enabled": false,
+        "hostname": "127.0.0.1",
+        "keepAlive": 60,
+        "mode": 0,
+        "mqttVersion": 2,
+        "notificationTopic": "",
+        "peerVerifyDepth": 10,
+        "peerVerifyMode": 3,
+        "port": 1883,
+        "publishFrequency": 10,
+        "publishNotifications": false,
+        "scriptCode": "",
+        "scriptLanguage": 0,
+        "scriptTopic": "",
+        "sslEnabled": false,
+        "sslProtocol": 5,
+        "topicBase": ""
+    },
+    "nextUniqueId": 30007,
+    "plotTimeRange": 5,
+    "pointCount": 10000,
+    "schemaVersion": 3,
     "sources": [
         {
-            "busType": 9,
+            "busType": 1,
             "checksum": "",
             "checksumAlgorithm": "",
+            "connection": {
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 7878,
+                "udpMulticast": false,
+                "udpRemotePort": 7878
+            },
             "decoder": 3,
             "decoderMethod": 3,
             "frameDetection": 2,
             "frameEnd": "",
-            "frameParserCode": "--\n-- Protobuf Frame Parser\n--\n-- Auto-generated from: sensor.proto\n-- Total fields:        13\n--\n-- The parser auto-detects which top-level message each incoming frame\n-- represents by scoring it against every dispatch table using field tag\n-- + wire-type signatures. Matching slots are updated; slots belonging to\n-- other messages keep their previous values (protobuf's default).\n-- Re-import the .proto file to regenerate this script.\n--\n\nlocal N_DATASETS = 13\nlocal values = {}\nfor i = 1, N_DATASETS do values[i] = 0 end\n\n-- Wire-format decoder helpers.\n-- `frame` arrives as a 1-indexed table of bytes (each 0..255).\n-- Positions below are also 1-indexed; sub-ranges use [start, end)\n-- where end is one past the last byte.\n\nlocal function readVarint(buf, p, bufLen)\n  local v = 0\n  local mul = 1\n  for _ = 1, 10 do\n    if p > bufLen then return v, p end\n    local b = buf[p]\n    if b == nil then return v, p end\n    p = p + 1\n    v = v + (b & 0x7f) * mul\n    if (b & 0x80) == 0 then return v, p end\n    mul = mul * 128\n  end\n  return v, p\nend\n\nlocal function zigzag(n)\n  if (n & 1) == 0 then return n // 2 end\n  return -((n + 1) // 2)\nend\n\nlocal function signed32(n)\n  if n >= 0x80000000 then return n - 0x100000000 end\n  return n\nend\n\nlocal function signed64(n)\n  if n >= 0x8000000000000000 then return n - 0x10000000000000000 end\n  return n\nend\n\nlocal function bytesToString(buf, p, n, bufLen)\n  if n <= 0 or p < 1 then return \"\" end\n  local available = bufLen - p + 1\n  if available <= 0 then return \"\" end\n  if n > available then n = available end\n  local t = {}\n  for i = 1, n do\n    local b = buf[p + i - 1]\n    if b == nil then break end\n    t[i] = string.char(b & 0xff)\n  end\n  return table.concat(t)\nend\n\nlocal function readFixed32(buf, p, bufLen)\n  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n  return string.unpack(\"<I4\", bytesToString(buf, p, 4, bufLen)), p + 4\nend\n\nlocal function readSFixed32(buf, p, bufLen)\n  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n  return string.unpack(\"<i4\", bytesToString(buf, p, 4, bufLen)), p + 4\nend\n\nlocal function readFloat32(buf, p, bufLen)\n  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n  return string.unpack(\"<f\", bytesToString(buf, p, 4, bufLen)), p + 4\nend\n\nlocal function readFixed64(buf, p, bufLen)\n  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n  return string.unpack(\"<I8\", bytesToString(buf, p, 8, bufLen)), p + 8\nend\n\nlocal function readSFixed64(buf, p, bufLen)\n  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n  return string.unpack(\"<i8\", bytesToString(buf, p, 8, bufLen)), p + 8\nend\n\nlocal function readFloat64(buf, p, bufLen)\n  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n  return string.unpack(\"<d\", bytesToString(buf, p, 8, bufLen)), p + 8\nend\n\nlocal function readString(buf, p, bufLen)\n  local len, np = readVarint(buf, p, bufLen)\n  if len < 0 then return \"\", np end\n  local available = bufLen - np + 1\n  if available < 0 then available = 0 end\n  if len > available then len = available end\n  return bytesToString(buf, np, len, bufLen), np + len\nend\n\nlocal function skipWire(buf, p, wt, bufLen)\n  if wt == 0 then\n    local _, np = readVarint(buf, p, bufLen) return np\n  elseif wt == 1 then return p + 8\n  elseif wt == 2 then\n    local len, np = readVarint(buf, p, bufLen)\n    if len < 0 then return bufLen + 1 end\n    local target = np + len\n    if target < np or target > bufLen + 1 then return bufLen + 1 end\n    return target\n  elseif wt == 5 then return p + 4\n  end\n  return bufLen + 1\nend\n\nlocal parseMsg\nparseMsg = function(buf, startPos, endPos, tbl, bufLen, depth)\n  if depth > 8 then return end\n  if startPos < 1 then return end\n  local maxEnd = bufLen + 1\n  if endPos > maxEnd then endPos = maxEnd end\n  if endPos <= startPos then return end\n  local p = startPos\n  local iter = 0\n  while p < endPos do\n    iter = iter + 1\n    if iter > 8192 then break end\n    local before = p\n    local tag, np = readVarint(buf, p, bufLen)\n    if np == p then break end\n    p = np\n    local fieldNum = tag >> 3\n    local wt = tag & 7\n    local e = tbl[fieldNum]\n    if e == nil or e.wire ~= wt then\n      p = skipWire(buf, p, wt, bufLen)\n    else\n      local t = e.type\n      if t == 'message' then\n        local len, lp = readVarint(buf, p, bufLen)\n        if len < 0 then break end\n        local target = lp + len\n        if target < lp or target > maxEnd then target = maxEnd end\n        parseMsg(buf, lp, target, e.table, bufLen, depth + 1) p = target\n      elseif t == 'string' or t == 'bytes' then\n        local v, npp = readString(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'bool' or t == 'enum' or t == 'varint_u32' or t == 'varint_u64' then\n        local v, npp = readVarint(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'varint_s32' then\n        local v, npp = readVarint(buf, p, bufLen) p = npp values[e.out] = signed32(v)\n      elseif t == 'varint_s64' then\n        local v, npp = readVarint(buf, p, bufLen) p = npp values[e.out] = signed64(v)\n      elseif t == 'sint32' or t == 'sint64' then\n        local v, npp = readVarint(buf, p, bufLen) p = npp values[e.out] = zigzag(v)\n      elseif t == 'fixed32' then\n        local v, npp = readFixed32(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'sfixed32' then\n        local v, npp = readSFixed32(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'float' then\n        local v, npp = readFloat32(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'fixed64' then\n        local v, npp = readFixed64(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'sfixed64' then\n        local v, npp = readSFixed64(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'double' then\n        local v, npp = readFloat64(buf, p, bufLen) p = npp values[e.out] = v\n      else\n        p = skipWire(buf, p, wt, bufLen)\n      end\n    end\n    if p <= before or p > endP then break end\n  end\nend\n\n-- Dispatch table for Vec3\nlocal dispatch_sub_3 = { [1] = { type = 'float', wire = 5, out = 11 }, [2] = { type = 'float', wire = 5, out = 12 }, [3] = { type = 'float', wire = 5, out = 13 } }\n\n-- Dispatch table for Vec3\nlocal dispatch_sub_2 = { [1] = { type = 'float', wire = 5, out = 8 }, [2] = { type = 'float', wire = 5, out = 9 }, [3] = { type = 'float', wire = 5, out = 10 } }\n\n-- Dispatch table for Sensor\nlocal dispatch_Sensor = { [1] = { type = 'float', wire = 5, out = 4 }, [2] = { type = 'float', wire = 5, out = 5 }, [3] = { type = 'message', wire = 2, table = dispatch_sub_2 }, [4] = { type = 'message', wire = 2, table = dispatch_sub_3 }, [5] = { type = 'varint_u32', wire = 0, out = 6 }, [6] = { type = 'string', wire = 2, out = 7 } }\n\n-- Dispatch table for Vec3\nlocal dispatch_Vec3 = { [1] = { type = 'float', wire = 5, out = 1 }, [2] = { type = 'float', wire = 5, out = 2 }, [3] = { type = 'float', wire = 5, out = 3 } }\n\nlocal topDispatchers = {\n  { name = \"Vec3\", tbl = dispatch_Vec3 },\n  { name = \"Sensor\", tbl = dispatch_Sensor },\n}\n\nlocal function scoreDispatcher(buf, tbl, bufLen)\n  local p = 1\n  local endP = bufLen + 1\n  local good = 0\n  local bad = 0\n  local iter = 0\n  while p < endP do\n    iter = iter + 1\n    if iter > 4096 then break end\n    local before = p\n    local tag, np = readVarint(buf, p, bufLen)\n    if np == p then return -1 end\n    p = np\n    local fieldNum = tag >> 3\n    local wt = tag & 7\n    local e = tbl[fieldNum]\n    if e ~= nil then\n      if e.wire == wt then good = good + 1\n      else bad = bad + 1 end\n    end\n    p = skipWire(buf, p, wt, bufLen)\n    if p <= before or p > endP then break end\n  end\n  return good - bad\nend\n\nfunction parse(frame)\n  if type(frame) ~= 'table' then return values end\n  local bufLen = #frame\n  if bufLen <= 0 then return values end\n  pcall(function()\n    local best = nil\n    local bestScore = 0\n    for _, d in ipairs(topDispatchers) do\n      local s = scoreDispatcher(frame, d.tbl, bufLen)\n      if s > bestScore then\n        bestScore = s\n        best = d.tbl\n      end\n    end\n    if best ~= nil then\n      parseMsg(frame, 1, bufLen + 1, best, bufLen, 0)\n    end\n  end)\n  return values\nend\n",
+            "frameParserCode": "--\n-- Protobuf Frame Parser\n--\n-- Auto-generated from: sensor.proto\n-- Total fields:        13\n--\n-- The parser auto-detects which top-level message each incoming frame\n-- represents by scoring it against every dispatch table using field tag\n-- + wire-type signatures. Matching slots are updated; slots belonging to\n-- other messages keep their previous values (protobuf's default).\n-- Re-import the .proto file to regenerate this script.\n--\n\nlocal N_DATASETS = 13\nlocal values = {}\nfor i = 1, N_DATASETS do values[i] = 0 end\n\n-- Wire-format decoder helpers.\n-- `frame` arrives as a 1-indexed table of bytes (each 0..255).\n-- Positions below are also 1-indexed; sub-ranges use [start, end)\n-- where end is one past the last byte.\n\nlocal function readVarint(buf, p, bufLen)\n  local v = 0\n  local mul = 1\n  for _ = 1, 10 do\n    if p > bufLen then return v, p end\n    local b = buf[p]\n    if b == nil then return v, p end\n    p = p + 1\n    v = v + (b & 0x7f) * mul\n    if (b & 0x80) == 0 then return v, p end\n    mul = mul * 128\n  end\n  return v, p\nend\n\nlocal function zigzag(n)\n  if (n & 1) == 0 then return n // 2 end\n  return -((n + 1) // 2)\nend\n\nlocal function signed32(n)\n  if n >= 0x80000000 then return n - 0x100000000 end\n  return n\nend\n\nlocal function signed64(n)\n  if n >= 0x8000000000000000 then return n - 0x10000000000000000 end\n  return n\nend\n\nlocal function bytesToString(buf, p, n, bufLen)\n  if n <= 0 or p < 1 then return \"\" end\n  local available = bufLen - p + 1\n  if available <= 0 then return \"\" end\n  if n > available then n = available end\n  local t = {}\n  for i = 1, n do\n    local b = buf[p + i - 1]\n    if b == nil then break end\n    t[i] = string.char(b & 0xff)\n  end\n  return table.concat(t)\nend\n\nlocal function readFixed32(buf, p, bufLen)\n  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n  return string.unpack(\"<I4\", bytesToString(buf, p, 4, bufLen)), p + 4\nend\n\nlocal function readSFixed32(buf, p, bufLen)\n  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n  return string.unpack(\"<i4\", bytesToString(buf, p, 4, bufLen)), p + 4\nend\n\nlocal function readFloat32(buf, p, bufLen)\n  if p < 1 or p + 3 > bufLen then return 0, p + 4 end\n  return string.unpack(\"<f\", bytesToString(buf, p, 4, bufLen)), p + 4\nend\n\nlocal function readFixed64(buf, p, bufLen)\n  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n  return string.unpack(\"<I8\", bytesToString(buf, p, 8, bufLen)), p + 8\nend\n\nlocal function readSFixed64(buf, p, bufLen)\n  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n  return string.unpack(\"<i8\", bytesToString(buf, p, 8, bufLen)), p + 8\nend\n\nlocal function readFloat64(buf, p, bufLen)\n  if p < 1 or p + 7 > bufLen then return 0, p + 8 end\n  return string.unpack(\"<d\", bytesToString(buf, p, 8, bufLen)), p + 8\nend\n\nlocal function readString(buf, p, bufLen)\n  local len, np = readVarint(buf, p, bufLen)\n  if len < 0 then return \"\", np end\n  local available = bufLen - np + 1\n  if available < 0 then available = 0 end\n  if len > available then len = available end\n  return bytesToString(buf, np, len, bufLen), np + len\nend\n\nlocal function skipWire(buf, p, wt, bufLen)\n  if wt == 0 then\n    local _, np = readVarint(buf, p, bufLen) return np\n  elseif wt == 1 then return p + 8\n  elseif wt == 2 then\n    local len, np = readVarint(buf, p, bufLen)\n    if len < 0 then return bufLen + 1 end\n    local target = np + len\n    if target < np or target > bufLen + 1 then return bufLen + 1 end\n    return target\n  elseif wt == 5 then return p + 4\n  end\n  return bufLen + 1\nend\n\nlocal parseMsg\nparseMsg = function(buf, startPos, endPos, tbl, bufLen, depth)\n  if depth > 8 then return end\n  if startPos < 1 then return end\n  local maxEnd = bufLen + 1\n  if endPos > maxEnd then endPos = maxEnd end\n  if endPos <= startPos then return end\n  local p = startPos\n  local iter = 0\n  while p < endPos do\n    iter = iter + 1\n    if iter > 8192 then break end\n    local before = p\n    local tag, np = readVarint(buf, p, bufLen)\n    if np == p then break end\n    p = np\n    local fieldNum = tag >> 3\n    local wt = tag & 7\n    local e = tbl[fieldNum]\n    if e == nil or e.wire ~= wt then\n      p = skipWire(buf, p, wt, bufLen)\n    else\n      local t = e.type\n      if t == 'message' then\n        local len, lp = readVarint(buf, p, bufLen)\n        if len < 0 then break end\n        local target = lp + len\n        if target < lp or target > maxEnd then target = maxEnd end\n        parseMsg(buf, lp, target, e.table, bufLen, depth + 1) p = target\n      elseif t == 'string' or t == 'bytes' then\n        local v, npp = readString(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'bool' or t == 'enum' or t == 'varint_u32' or t == 'varint_u64' then\n        local v, npp = readVarint(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'varint_s32' then\n        local v, npp = readVarint(buf, p, bufLen) p = npp values[e.out] = signed32(v)\n      elseif t == 'varint_s64' then\n        local v, npp = readVarint(buf, p, bufLen) p = npp values[e.out] = signed64(v)\n      elseif t == 'sint32' or t == 'sint64' then\n        local v, npp = readVarint(buf, p, bufLen) p = npp values[e.out] = zigzag(v)\n      elseif t == 'fixed32' then\n        local v, npp = readFixed32(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'sfixed32' then\n        local v, npp = readSFixed32(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'float' then\n        local v, npp = readFloat32(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'fixed64' then\n        local v, npp = readFixed64(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'sfixed64' then\n        local v, npp = readSFixed64(buf, p, bufLen) p = npp values[e.out] = v\n      elseif t == 'double' then\n        local v, npp = readFloat64(buf, p, bufLen) p = npp values[e.out] = v\n      else\n        p = skipWire(buf, p, wt, bufLen)\n      end\n    end\n    if p <= before or p > endPos then break end\n  end\nend\n\n-- Dispatch table for Vec3\nlocal dispatch_sub_3 = { [1] = { type = 'float', wire = 5, out = 11 }, [2] = { type = 'float', wire = 5, out = 12 }, [3] = { type = 'float', wire = 5, out = 13 } }\n\n-- Dispatch table for Vec3\nlocal dispatch_sub_2 = { [1] = { type = 'float', wire = 5, out = 8 }, [2] = { type = 'float', wire = 5, out = 9 }, [3] = { type = 'float', wire = 5, out = 10 } }\n\n-- Dispatch table for Sensor\nlocal dispatch_Sensor = { [1] = { type = 'float', wire = 5, out = 4 }, [2] = { type = 'float', wire = 5, out = 5 }, [3] = { type = 'message', wire = 2, table = dispatch_sub_2 }, [4] = { type = 'message', wire = 2, table = dispatch_sub_3 }, [5] = { type = 'varint_u32', wire = 0, out = 6 }, [6] = { type = 'string', wire = 2, out = 7 } }\n\n-- Dispatch table for Vec3\nlocal dispatch_Vec3 = { [1] = { type = 'float', wire = 5, out = 1 }, [2] = { type = 'float', wire = 5, out = 2 }, [3] = { type = 'float', wire = 5, out = 3 } }\n\nlocal topDispatchers = {\n  { name = \"Vec3\", tbl = dispatch_Vec3 },\n  { name = \"Sensor\", tbl = dispatch_Sensor },\n}\n\nlocal function scoreDispatcher(buf, tbl, bufLen)\n  local p = 1\n  local endP = bufLen + 1\n  local good = 0\n  local bad = 0\n  local iter = 0\n  while p < endP do\n    iter = iter + 1\n    if iter > 4096 then break end\n    local before = p\n    local tag, np = readVarint(buf, p, bufLen)\n    if np == p then return -1 end\n    p = np\n    local fieldNum = tag >> 3\n    local wt = tag & 7\n    local e = tbl[fieldNum]\n    if e ~= nil then\n      if e.wire == wt then good = good + 1\n      else bad = bad + 1 end\n    end\n    p = skipWire(buf, p, wt, bufLen)\n    if p <= before or p > endP then break end\n  end\n  return good - bad\nend\n\nfunction parse(frame)\n  if type(frame) ~= 'table' then return values end\n  local bufLen = #frame\n  if bufLen <= 0 then return values end\n  pcall(function()\n    local best = nil\n    local bestScore = 0\n    for _, d in ipairs(topDispatchers) do\n      local s = scoreDispatcher(frame, d.tbl, bufLen)\n      if s > bestScore then\n        bestScore = s\n        best = d.tbl\n      end\n    end\n    if best ~= nil then\n      parseMsg(frame, 1, bufLen + 1, best, bufLen, 0)\n    end\n  end)\n  return values\nend\n",
             "frameParserLanguage": 1,
             "frameStart": "",
             "hexadecimalDelimiters": false,
@@ -398,7 +432,7 @@
             "title": "Protobuf"
         }
     ],
-    "title": "Protobuf Example",
+    "title": "sensor",
     "writerVersion": "3.2.7",
     "writerVersionAtCreation": "3.2.7"
 }

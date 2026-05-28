@@ -4153,6 +4153,15 @@ void API::Handlers::ProjectHandler::registerUpdateCommands()
  */
 void API::Handlers::ProjectHandler::registerDryRunCommands()
 {
+  registerFrameParserDryRunCommands();
+  registerScriptDryRunCommands();
+}
+
+/**
+ * @brief Register frame-parser dryRun + dryCompile endpoints.
+ */
+void API::Handlers::ProjectHandler::registerFrameParserDryRunCommands()
+{
   auto& registry = CommandRegistry::instance();
 
   registry.registerCommand(
@@ -4223,6 +4232,14 @@ void API::Handlers::ProjectHandler::registerDryRunCommands()
        QStringLiteral("0 = JavaScript, 1 = Lua")}
   }),
     &frameParserDryCompile);
+}
+
+/**
+ * @brief Register dataset-transform and painter dryRun endpoints.
+ */
+void API::Handlers::ProjectHandler::registerScriptDryRunCommands()
+{
+  auto& registry = CommandRegistry::instance();
 
   registry.registerCommand(
     QStringLiteral("project.dataset.transform.dryRun"),

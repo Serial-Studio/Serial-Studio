@@ -62,6 +62,8 @@ private:
   static void registerEntityUpdateCommands();
   static void registerBatchCommand();
   static void registerDryRunCommands();
+  static void registerFrameParserDryRunCommands();
+  static void registerScriptDryRunCommands();
   static void registerEndToEndDryRunCommand();
   static void registerListCommands();
   static void registerResolverCommands();

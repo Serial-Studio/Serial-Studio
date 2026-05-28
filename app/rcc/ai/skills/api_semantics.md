@@ -397,6 +397,11 @@ that matter:
 - `connection_lost`: ask the user to reconnect; don't retry.
 - `script_compile_failed`: iterate via `frameParser.dryCompile` (compile
   only) or `frameParser.dryRun` / `transform.dryRun` (compile + execute).
+  `frameParser.dryRun` now drives the full pipeline (extraction, decoder,
+  parser) and requires raw stream bytes: `inputBytesHex` is recommended,
+  `inputBytes` is fine for ASCII. There is no parser-only `sampleFrame`
+  shortcut anymore; the legacy fallback hid extraction and decoder bugs
+  from the dryRun response.
 - `bus_busy`: brief retry, then surface.
 - `permission_denied`: OS-level (filesystem, network) refusal.
 - `hardware_write_blocked`: the runtime refuses io.* / console.send

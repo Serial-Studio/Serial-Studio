@@ -27,8 +27,6 @@
 #include <QQuickPaintedItem>
 #include <QSyntaxStyle>
 
-#include "DataModel/Dialogs/FrameParserTestDialog.h"
-
 namespace DataModel {
 
 /**
@@ -126,7 +124,6 @@ private:
   QPixmap m_pixmap;
   QSyntaxStyle m_style;
   QCodeEditor m_widget;
-  FrameParserTestDialog m_testDialog;
 };
 
 }  // namespace DataModel

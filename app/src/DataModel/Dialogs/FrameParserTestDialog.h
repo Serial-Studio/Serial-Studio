@@ -36,13 +36,20 @@ namespace DataModel {
 class FrameParser;
 
 /**
- * @brief Editor dialog that drives the FrameParserPipeline against user-supplied bytes.
+ * @brief Singleton dialog that drives the FrameParserPipeline against user-supplied bytes.
  */
 class FrameParserTestDialog : public QDialog {
   Q_OBJECT
 
+private:
+  FrameParserTestDialog();
+  FrameParserTestDialog(FrameParserTestDialog&&)                 = delete;
+  FrameParserTestDialog(const FrameParserTestDialog&)            = delete;
+  FrameParserTestDialog& operator=(FrameParserTestDialog&&)      = delete;
+  FrameParserTestDialog& operator=(const FrameParserTestDialog&) = delete;
+
 public:
-  explicit FrameParserTestDialog(FrameParser* parser, QWidget* parent = nullptr);
+  [[nodiscard]] static FrameParserTestDialog& instance();
 
   void setSourceId(int sourceId);
 
@@ -76,9 +83,6 @@ private:
   void buildInputGroup();
   void buildOutputGroup();
   void connectControls();
-
-protected:
-  void closeEvent(QCloseEvent* event) override;
 
 private:
   int m_sourceId;

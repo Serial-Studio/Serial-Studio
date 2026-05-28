@@ -40,24 +40,122 @@ directly to `setCode` to flip and replace in one call.
 1. Get the current parser: `project.frameParser.getCode{sourceId}`.
 2. Get a sample of what the device emits:
    - If connected: `dashboard.tailFrames{count: 4}` to see recent
-     parsed values, then ask the user to paste an example raw frame.
-   - If disconnected: ask for a sample.
+     parsed values, then ask the user to paste an example raw frame
+     (raw stream bytes, not pre-extracted).
+   - If disconnected: ask for a sample. Hex (`01 A2 FF`) is the
+     binary-safe form; UTF-8 text is fine for ASCII / CSV protocols.
 3. **Compile-only**: `assistant.script.dryRun{kind:"frame_parser", code,
-   language}` routes to `project.frameParser.dryCompile`
-   verifies the script parses and `parse(frame)` is defined, without
-   executing. Cheapest way to catch the wrong-language silent failure
-   (Lua code with `language: 0`, or the reverse).
-4. **Dry-run**: `assistant.script.dryRun{kind:"frame_parser", code,
-   language, sampleFrame}`
-   compiles the script and runs `parse(sample)` in a throwaway engine.
-   Returns the rows or compile/runtime errors. For STATEFUL parsers
-   (top-level closures, EMA-style state, frame-assembly buffers), pass
-   `sampleFrames: ["...","...",...]` to feed several frames sequentially
-   through one engine instance and see how state evolves.
+   language}` routes to `project.frameParser.dryCompile` -- verifies
+   the script parses and `parse(frame)` is defined without executing.
+   Cheapest way to catch the wrong-language silent failure (Lua code
+   with `language: 0`, or the reverse).
+4. **Dry-run (pipeline)**: `assistant.script.dryRun{kind:"frame_parser",
+   code, language, inputBytesHex, decoderMethod, frameDetection,
+   frameStart, frameEnd, hexadecimalDelimiters, checksumAlgorithm}`.
+   The bytes are driven through the same FrameReader + decoder switch
+   the live FrameBuilder uses, then handed to `parse()`. Returns
+   per-frame `rawHex` + `decoderOutput` + `rows`, plus
+   `extractedCount` / `consumedBytes` / `remainingBytes` /
+   `droppedFrames`. Stateful parsers (top-level closures, EMA, frame
+   assembly buffers) run sequentially through one engine, so state
+   evolves frame-by-frame.
+
+   This is the ONLY dryRun mode now. There is no `sampleFrame` /
+   `sampleFrames` fallback; passing pre-extracted frames cannot be
+   distinguished from a real byte stream, and that ambiguity hid every
+   extraction / decoder bug from past iterations.
 5. Push: `assistant.script.apply{kind:"frame_parser", code, language,
-   sourceId, sampleFrame}`. It dry-runs first, then calls
-   `project.frameParser.setCode`.
+   sourceId, inputBytesHex, decoderMethod, ...}`. It dry-runs first,
+   then calls `project.frameParser.setCode`. Without bytes, apply
+   falls back to dryCompile (syntax only).
 6. Auto-save will write to disk within ~1s.
+
+## Read the stage outputs, not just the rows
+
+The pipeline response is structured intentionally:
+
+```json
+{
+  "extractedCount":  2,
+  "consumedBytes":   24,
+  "remainingBytes":  3,
+  "droppedFrames":   0,
+  "frames": [
+    { "rawHex": "...", "decoderOutput": "...", "rows": [["1.23"]] },
+    { "rawHex": "...", "decoderOutput": "...", "rows": [[]] }
+  ]
+}
+```
+
+Common failure shapes and what they mean:
+
+- `extractedCount == 0` -- delimiters / detection mode never matched.
+  The bytes never reached the parser. Check `frameStart` / `frameEnd`
+  and `hexadecimalDelimiters`; consider `frameDetection: 2`
+  (NoDelimiters) for fixed-size or self-framing protocols (COBS,
+  protobuf, length-prefixed).
+- `extractedCount > 0` but `rows: []` -- the parser ran and returned
+  nothing useful. Either `parse()` returned `nil` / non-array, or it
+  threw an error (Lua's `pcall` wrapper would swallow it). Look at
+  `decoderOutput`: if it's full of `U+FFFD` for a binary protocol, the
+  decoder is wrong (see below).
+- `remainingBytes > 0` -- bytes were left in the buffer because no
+  closing delimiter / checksum boundary was found. Either the test
+  input is incomplete, or the delimiter is wrong.
+- `droppedFrames > 0` -- input was so large the FrameReader queue
+  saturated. Use a smaller test slice.
+
+## How decoder + detection settings affect what `parse()` sees
+
+The dryRun pipeline runs in two stages before `parse()` is called:
+
+```
+   raw stream bytes
+         |
+         v
+   FrameReader (frame detection + delimiters + checksum)
+         |
+         v
+   one extracted frame's bytes
+         |
+         v
+   decoder method
+         |
+         v
+   parse(frame)
+```
+
+Getting either stage wrong is the difference between "shows nothing"
+and "shows garbage". Knowing the matrix below saves an iteration.
+
+**Frame detection** (`frameDetection`) slices the byte stream:
+
+| Int | Mode | Frame body is... | Pick it for |
+|-----|------|------------------|-------------|
+| 0 | EndDelimiterOnly | Everything up to the next end delimiter. | Line-terminated text, CSV with `\n`, NMEA with `\r\n`. |
+| 1 | StartAndEndDelimiter | Everything between start and end delimiters; outside bytes are dropped. | Framed text protocols like `/* ... */`, `<...>`. |
+| 2 | NoDelimiters | The whole captured chunk -- the driver's chunk boundary IS the frame boundary. | Fixed-size binary, COBS (parser splits on `0x00`), protobuf over UDP, length-prefixed binary. |
+| 3 | StartDelimiterOnly | Between this start marker and the next one. | Protocols that lead with a sync word but have no terminator. |
+
+When `frameDetection` requires a delimiter that's empty or missing,
+extraction silently downgrades to NoDelimiters. That's usually NOT
+what the user wants -- if you set `frameStart: ""` you almost always
+need to flip detection mode too.
+
+**Decoder method** (`decoderMethod`) decides what `parse()` receives:
+
+| Int | Decoder | Parser receives | Trap |
+|-----|---------|-----------------|------|
+| 0 | PlainText | `QString::fromUtf8(bytes)` -- a UTF-8 string. | **Binary bytes are corrupted.** Any non-UTF-8 byte (most of `0x80..0xFF`, every `0x00`) becomes `U+FFFD` and the original byte is lost. Picking PlainText for COBS / Modbus / protobuf is the #1 silent failure. |
+| 1 | Hexadecimal | A hex string, no spaces (`48656C6C6F`). | Doubles the byte count; works on any input. Use when you want to read bytes from a string-only parser. |
+| 2 | Base64 | A Base64 string. | When the device already emits Base64; otherwise just a coding overhead. |
+| 3 | Binary | Raw bytes -- a 1-indexed byte table in Lua, a length-keyed object in JS. | The only decoder that round-trips arbitrary binary. Pick this for every non-text protocol. |
+
+Rule of thumb: **if the user mentions COBS, Modbus, protobuf, CAN,
+audio, or "binary", `decoderMethod: 3` is right.** If they mention
+NMEA, AT-commands, CSV, line-based, or "text", `decoderMethod: 0` is
+right. Hex and Base64 are niche choices for cases where the device
+itself ships an encoded payload.
 
 ## Common patterns
 
@@ -92,15 +190,23 @@ reference parsers for these patterns. Adapt the closest match.
 
 ## Gotchas
 
-- `parse()` must return an **array**. Returning an object silently fails;
-  the dashboard sees zero datasets.
+- `parse()` must return an **array** (JS) or **table** (Lua). Returning
+  an object / map / `nil` silently fails; the dashboard sees zero
+  datasets.
 - Each return-array index `i` maps to the dataset whose `index` is
   `i + 1`. Off-by-one errors are common; verify with a dryRun first.
-- Strings are UTF-8 by default. For binary protocols, set
-  `console.setDataMode = 1` (Hex) on the user's request, but the parser
-  still receives the decoded bytes as a string in JS.
-- Top-level `var` persists across calls; that's how you keep buffers,
-  state, EMAs across frames.
+- The string vs binary distinction is set by `decoderMethod`, NOT by
+  the console display mode. `console.setDataMode` only changes how the
+  terminal renders bytes; the parser keeps receiving whatever
+  `decoderMethod` produced. For binary protocols, set
+  `decoderMethod: 3` (Binary) on the source.
+- Lua `pcall` inside `parse()` will silently swallow runtime errors and
+  return a partial result. If a Lua parser populates only the first
+  dataset of an N-dataset frame, suspect an exception mid-body
+  (typos, nil arithmetic, off-by-one indexing). Run dryRun and
+  scrutinize `decoderOutput` vs the rows it produced.
+- Top-level `var` / `local` persists across calls; that's how you keep
+  buffers, state, EMAs across frames.
 
 ## Closed-loop control: `deviceWrite()` and `actionFire()`
 

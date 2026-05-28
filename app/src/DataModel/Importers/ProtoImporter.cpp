@@ -1658,7 +1658,7 @@ void DataModel::ProtoImporter::emitDecoderParseMsg(QString& code)
   code += QStringLiteral("        p = skipWire(buf, p, wt, bufLen)\n");
   code += QStringLiteral("      end\n");
   code += QStringLiteral("    end\n");
-  code += QStringLiteral("    if p <= before or p > endP then break end\n");
+  code += QStringLiteral("    if p <= before or p > endPos then break end\n");
   code += QStringLiteral("  end\n");
   code += QStringLiteral("end\n\n");
 }

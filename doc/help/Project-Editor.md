@@ -277,6 +277,47 @@ function parse(frame)
 end
 ```
 
+### Step 7b: test the pipeline with the Test dialog
+
+The **Evaluate** button on the parser toolbar opens the **Test Frame Parser** dialog. It runs the same byte-to-channels pipeline the live dashboard uses, so what you see here is what the dashboard would see for the same input.
+
+The dialog has three sections:
+
+1. **Pipeline configuration.** Detection mode, start / end delimiter, hex-delimiter toggle, decoder method, and checksum algorithm. These are wired to the active source: editing them in the dialog rewrites the project source immediately, and the live frame reader picks up the change. There is no separate "Apply" step.
+2. **Frame data input.** A line edit for the raw stream bytes you want to test. Tick **HEX** to type bytes as space-separated hex pairs (`01 A2 FF 3C`) - the safe way to feed binary protocols. Plain text mode reads the field as UTF-8.
+3. **Pipeline results.** A stats line shows `frames extracted | bytes consumed | bytes buffered | dropped`. Below it, a tree expands each extracted frame into its raw bytes (hex), its decoder output (what the parser actually receives), and the parsed rows with one node per channel.
+
+Reading the tree top-down tells you exactly which stage failed:
+
+- **Zero frames extracted.** The delimiters / detection mode did not match the input. Re-check the start / end fields.
+- **Frames extracted but empty rows.** The parser ran but returned no array - usually a `parse()` that returned `nil`, `undefined`, or a non-array value.
+- **Rows present but the wrong count.** Index mapping in `parse()` is off; compare row indices to the **Frame Index** field on each dataset.
+- **Rows present and correct in the dialog but missing on the dashboard.** A transform on the dataset is rejecting the value (returns `nil` / `NaN`) or a widget min/max is clipping it.
+
+### How the decoder + detection settings affect the parser
+
+Picking the right pair matters; the wrong combination silently mojibakes binary data or never produces a frame.
+
+**Frame detection** decides how the byte stream is sliced into frames *before* the parser runs:
+
+| Mode | Behavior |
+|------|----------|
+| End Delimiter Only | The most common choice. Frames are everything up to the next end delimiter (`\n`, `*/`, a custom hex byte). |
+| Start and End Delimiter | Frames are everything between a start marker and an end marker. Bytes outside the markers are discarded. |
+| Start Delimiter Only | Frames begin at a start marker; the next start marker terminates the previous one. Good for protocols that lead with a sync word. |
+| No Delimiters | The whole captured chunk is one frame. Use this for fixed-size binary, COBS (where the parser itself splits on `0x00`), length-prefixed packets, or protobuf over UDP. |
+
+**Decoder method** decides what `parse(frame)` receives:
+
+| Decoder | What the parser sees | When to pick it |
+|---------|---------------------|-----------------|
+| Plain Text (UTF-8) | A string built by `QString::fromUtf8(bytes)`. | Text / CSV / NMEA / AT-command protocols. |
+| Hexadecimal | A hex-encoded string (no spaces, e.g. `48656C6C6F`). | When you want to operate on bytes from a string parser without dealing with binary glyphs. |
+| Base64 | A Base64-encoded string. | When the device already emits Base64-encoded payloads. |
+| Binary Direct (Pro) | The raw byte buffer - a 1-indexed table in Lua, a length-keyed object in JavaScript. | Binary protocols: COBS, Modbus, custom packed structs, protobuf. |
+
+The trap to remember: **Plain Text routes through `QString::fromUtf8`**. Any byte sequence that is not valid UTF-8 (most binary payloads contain `0x00` or values above `0x7F`) gets replaced with the Unicode replacement character `U+FFFD`, and the original bytes are lost. For anything non-text, pick **Binary Direct**.
+
 ## Frame index mapping
 
 Your device sends a sequence of values. The frame parser (or the default comma splitter) produces an array. Each dataset's Frame Index tells Serial Studio which array position to read:

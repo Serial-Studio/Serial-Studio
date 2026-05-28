@@ -21,7 +21,6 @@
 
 #include "DataModel/Dialogs/FrameParserTestDialog.h"
 
-#include <QCloseEvent>
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -130,10 +129,22 @@ static void appendFrameItem(QTreeWidget* tree, int frameIndex, const DataModel::
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns the singleton dialog -- it outlives the QML editor pane that triggers it.
+ */
+DataModel::FrameParserTestDialog& DataModel::FrameParserTestDialog::instance()
+{
+  static FrameParserTestDialog singleton;
+  return singleton;
+}
+
+/**
  * @brief Builds the dialog, wires controls, and binds to ProjectModel for live source sync.
  */
-DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWidget* parent)
-  : QDialog(parent), m_sourceId(0), m_suspendSync(false), m_parser(parser)
+DataModel::FrameParserTestDialog::FrameParserTestDialog()
+  : QDialog(nullptr)
+  , m_sourceId(0)
+  , m_suspendSync(false)
+  , m_parser(&DataModel::FrameParser::instance())
 {
   resize(720, 560);
   setMinimumSize(720, 560);
@@ -737,19 +748,4 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
       return false;
 
   return cleaned.length() % 2 == 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Close handling
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Accepts only OS-spontaneous closes; programmatic closes from signal fan-out are ignored.
- */
-void DataModel::FrameParserTestDialog::closeEvent(QCloseEvent* event)
-{
-  if (event->spontaneous())
-    QDialog::closeEvent(event);
-  else
-    event->ignore();
 }
