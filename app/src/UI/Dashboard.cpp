@@ -1550,7 +1550,8 @@ void UI::Dashboard::setPlotSweep(const int index,
                                  const double level,
                                  const int edge,
                                  const int mode,
-                                 const double holdoff)
+                                 const double holdoff,
+                                 const double timebase)
 {
   auto it = m_plotSweep.find(index);
   if (it == m_plotSweep.end())
@@ -1566,6 +1567,7 @@ void UI::Dashboard::setPlotSweep(const int index,
 
   auto& engine = it.value();
   engine.setTrigger(level, edge, mode, holdoff, 0);
+  engine.setTimebase(timebase);
   if (engine.enabled != ok) {
     engine.enabled = ok;
     engine.resetState();
@@ -1581,7 +1583,8 @@ void UI::Dashboard::setMultiplotSweep(const int index,
                                       const int edge,
                                       const int mode,
                                       const double holdoff,
-                                      const int triggerCurve)
+                                      const int triggerCurve,
+                                      const double timebase)
 {
   auto it = m_multiplotSweep.find(index);
   if (it == m_multiplotSweep.end())
@@ -1597,6 +1600,7 @@ void UI::Dashboard::setMultiplotSweep(const int index,
 
   auto& engine = it.value();
   engine.setTrigger(level, edge, mode, holdoff, triggerCurve);
+  engine.setTimebase(timebase);
   if (engine.enabled != ok) {
     engine.enabled = ok;
     engine.resetState();
@@ -2607,6 +2611,7 @@ void UI::Dashboard::restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& sa
 
     const auto& src = it.value();
     live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
+    live->setTimebase(src.timebaseSec);
     live->enabled = src.enabled;
   }
 }
@@ -2623,6 +2628,7 @@ void UI::Dashboard::restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine
 
     const auto& src = it.value();
     live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
+    live->setTimebase(src.timebaseSec);
     live->enabled = src.enabled;
   }
 }

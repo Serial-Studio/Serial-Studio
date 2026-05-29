@@ -66,6 +66,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_sweepEnabled(false)
   , m_triggerLevel(0)
   , m_holdoffMs(0)
+  , m_timebaseMs(0)
   , m_triggerSource(0)
   , m_sweepMode(SerialStudio::SweepAuto)
   , m_triggerEdge(SerialStudio::TriggerRising)
@@ -286,6 +287,14 @@ double Widgets::MultiPlot::holdoff() const noexcept
 }
 
 /**
+ * @brief Returns the per-sweep timebase in milliseconds; 0 means match time range.
+ */
+double Widgets::MultiPlot::sweepTimebase() const noexcept
+{
+  return m_timebaseMs;
+}
+
+/**
  * @brief Returns the curve index used as the trigger source.
  */
 int Widgets::MultiPlot::triggerSource() const noexcept
@@ -466,6 +475,21 @@ void Widgets::MultiPlot::setHoldoff(const double milliseconds)
 }
 
 /**
+ * @brief Updates the per-sweep timebase in milliseconds and reflows the X-axis.
+ */
+void Widgets::MultiPlot::setSweepTimebase(const double milliseconds)
+{
+  const double clamped = milliseconds < 0 ? 0 : milliseconds;
+  if (qFuzzyCompare(m_timebaseMs, clamped))
+    return;
+
+  m_timebaseMs = clamped;
+  pushSweepConfig();
+  updateRange();
+  Q_EMIT sweepChanged();
+}
+
+/**
  * @brief Selects which curve drives the trigger.
  */
 void Widgets::MultiPlot::setTriggerSource(const int curve)
@@ -524,7 +548,8 @@ void Widgets::MultiPlot::pushSweepConfig()
                                               static_cast<int>(m_triggerEdge),
                                               static_cast<int>(m_sweepMode),
                                               m_holdoffMs * 0.001,
-                                              m_triggerSource);
+                                              m_triggerSource,
+                                              m_timebaseMs * 0.001);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -627,8 +652,10 @@ void Widgets::MultiPlot::updateRange()
   m_data.resize(data.y.size());
 
   if (m_timeAxis && m_sweepEnabled) {
-    m_minX = 0;
-    m_maxX = UI::Dashboard::instance().plotTimeRange();
+    const double range    = UI::Dashboard::instance().plotTimeRange();
+    const double timebase = m_timebaseMs * 0.001;
+    m_minX                = 0;
+    m_maxX                = (timebase > 0 && timebase < range) ? timebase : range;
   }
 
   else if (m_timeAxis) {

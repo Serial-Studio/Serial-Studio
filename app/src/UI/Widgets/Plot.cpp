@@ -50,6 +50,7 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_sweepEnabled(false)
   , m_triggerLevel(0)
   , m_holdoffMs(0)
+  , m_timebaseMs(0)
   , m_sweepMode(SerialStudio::SweepAuto)
   , m_triggerEdge(SerialStudio::TriggerRising)
 {
@@ -247,6 +248,14 @@ double Widgets::Plot::holdoff() const noexcept
 }
 
 /**
+ * @brief Returns the per-sweep timebase in milliseconds; 0 means match time range.
+ */
+double Widgets::Plot::sweepTimebase() const noexcept
+{
+  return m_timebaseMs;
+}
+
+/**
  * @brief Returns the active sweep mode (auto/normal/single).
  */
 SerialStudio::SweepMode Widgets::Plot::sweepMode() const noexcept
@@ -398,6 +407,21 @@ void Widgets::Plot::setHoldoff(const double milliseconds)
 }
 
 /**
+ * @brief Updates the per-sweep timebase in milliseconds and reflows the X-axis.
+ */
+void Widgets::Plot::setSweepTimebase(const double milliseconds)
+{
+  const double clamped = milliseconds < 0 ? 0 : milliseconds;
+  if (qFuzzyCompare(m_timebaseMs, clamped))
+    return;
+
+  m_timebaseMs = clamped;
+  pushSweepConfig();
+  updateRange();
+  Q_EMIT sweepChanged();
+}
+
+/**
  * @brief Updates the sweep mode (auto/normal/single).
  */
 void Widgets::Plot::setSweepMode(const SerialStudio::SweepMode mode)
@@ -441,7 +465,8 @@ void Widgets::Plot::pushSweepConfig()
                                          m_triggerLevel,
                                          static_cast<int>(m_triggerEdge),
                                          static_cast<int>(m_sweepMode),
-                                         m_holdoffMs * 0.001);
+                                         m_holdoffMs * 0.001,
+                                         m_timebaseMs * 0.001);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -570,11 +595,13 @@ void Widgets::Plot::updateRange()
     return;
   }
 
-  // Time axis: sweep mode spans [0, T], rolling mode spans [-T, 0]
+  // Time axis: sweep mode spans [0, timebase], rolling mode spans [-T, 0]
   if (m_timeAxis) {
-    const double range = UI::Dashboard::instance().plotTimeRange();
-    m_minX             = m_sweepEnabled ? 0 : -range;
-    m_maxX             = m_sweepEnabled ? range : 0;
+    const double range    = UI::Dashboard::instance().plotTimeRange();
+    const double timebase = m_timebaseMs * 0.001;
+    const double window   = (timebase > 0 && timebase < range) ? timebase : range;
+    m_minX                = m_sweepEnabled ? 0 : -range;
+    m_maxX                = m_sweepEnabled ? window : 0;
     Q_EMIT rangeChanged();
     return;
   }

@@ -8,6 +8,7 @@
   { "id": "actions", "title": "Actions", "section": "Configuration", "file": "Actions.md" },
   { "id": "notifications", "title": "Notifications", "section": "Configuration", "file": "Notifications.md" },
   { "id": "widget-reference", "title": "Widget Reference", "section": "Configuration", "file": "Widget-Reference.md" },
+  { "id": "plots", "title": "Plots", "section": "Configuration", "file": "Plots.md" },
   { "id": "painter-widget", "title": "Painter Widget", "section": "Configuration", "file": "Painter-Widget.md" },
   { "id": "output-controls", "title": "Output Controls", "section": "Configuration", "file": "Output-Controls.md" },
   { "id": "javascript-api", "title": "Frame Parser Scripting", "section": "Scripting & Data Logic", "file": "JavaScript-API.md" },

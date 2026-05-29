@@ -84,6 +84,10 @@ class Plot : public QQuickItem {
              READ holdoff
              WRITE setHoldoff
              NOTIFY sweepChanged)
+  Q_PROPERTY(double sweepTimebase
+             READ sweepTimebase
+             WRITE setSweepTimebase
+             NOTIFY sweepChanged)
   Q_PROPERTY(SerialStudio::SweepMode sweepMode
              READ sweepMode
              WRITE setSweepMode
@@ -124,6 +128,7 @@ public:
   [[nodiscard]] bool sweepEnabled() const noexcept;
   [[nodiscard]] double triggerLevel() const noexcept;
   [[nodiscard]] double holdoff() const noexcept;
+  [[nodiscard]] double sweepTimebase() const noexcept;
   [[nodiscard]] SerialStudio::SweepMode sweepMode() const noexcept;
   [[nodiscard]] SerialStudio::TriggerEdge triggerEdge() const noexcept;
 
@@ -138,6 +143,7 @@ public slots:
   void setSweepEnabled(const bool enabled);
   void setTriggerLevel(const double level);
   void setHoldoff(const double milliseconds);
+  void setSweepTimebase(const double milliseconds);
   void setSweepMode(const SerialStudio::SweepMode mode);
   void setTriggerEdge(const SerialStudio::TriggerEdge edge);
 
@@ -181,6 +187,7 @@ private:
   bool m_sweepEnabled;
   double m_triggerLevel;
   double m_holdoffMs;
+  double m_timebaseMs;
   SerialStudio::SweepMode m_sweepMode;
   SerialStudio::TriggerEdge m_triggerEdge;
 };
