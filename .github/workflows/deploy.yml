@@ -69,6 +69,9 @@ jobs:
   build-linux:
     runs-on: ubuntu-24.04
     name: '🐧 Linux'
+    permissions:
+      contents: read
+      security-events: write
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -214,6 +217,20 @@ jobs:
     - name: '🚧 Build application'
       run: cmake --build build --config Release -j 16
 
+    - name: '🔎 Scan binaries with deglyph'
+      uses: deglyph-re/cli@v0.0.1
+      with:
+        path: build/app
+        sarif: deglyph.sarif
+        fail-on: never
+
+    - name: '🛡 Upload deglyph SARIF'
+      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: deglyph.sarif
+        category: deglyph-linux-x64
+
     - name: '📦 Create AppImage'
       run: |
         cd "build/app"
@@ -289,6 +306,9 @@ jobs:
   build-linux-arm64:
     runs-on: ubuntu-24.04-arm
     name: '🐧 Linux (arm64)'
+    permissions:
+      contents: read
+      security-events: write
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -432,6 +452,20 @@ jobs:
     - name: '🚧 Build application'
       run: cmake --build build --config Release -j 16
 
+    - name: '🔎 Scan binaries with deglyph'
+      uses: deglyph-re/cli@v0.0.1
+      with:
+        path: build/app
+        sarif: deglyph.sarif
+        fail-on: never
+
+    - name: '🛡 Upload deglyph SARIF'
+      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: deglyph.sarif
+        category: deglyph-linux-arm64
+
     - name: '📦 Create AppImage'
       run: |
         cd "build/app"
@@ -507,6 +541,9 @@ jobs:
   build-macos:
     runs-on: macos-latest
     name: '🍎 macOS (universal)'
+    permissions:
+      contents: read
+      security-events: write
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -598,6 +635,20 @@ jobs:
     - name: '🚧 Build application'
       run: cmake --build build --config Release -j 16
 
+    - name: '🔎 Scan binaries with deglyph'
+      uses: deglyph-re/cli@v0.0.1
+      with:
+        path: build/app
+        sarif: deglyph.sarif
+        fail-on: never
+
+    - name: '🛡 Upload deglyph SARIF'
+      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: deglyph.sarif
+        category: deglyph-macos
+
     - name: '📦 Package application'
       run: |
         cd build
@@ -665,6 +716,9 @@ jobs:
   build-windows:
     runs-on: windows-latest
     name: '🧊 Windows'
+    permissions:
+      contents: read
+      security-events: write
     steps:
     - run: git config --global core.autocrlf input
     - name: '🧰 Checkout'
@@ -757,6 +811,20 @@ jobs:
 
     - name: '🚧 Build application'
       run: cmake --build build --config Release -j 16
+
+    - name: '🔎 Scan binaries with deglyph'
+      uses: deglyph-re/cli@v0.0.1
+      with:
+        path: build/app
+        sarif: deglyph.sarif
+        fail-on: never
+
+    - name: '🛡 Upload deglyph SARIF'
+      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: deglyph.sarif
+        category: deglyph-windows
 
     - name: '⚙️ Add msbuild to PATH'
       uses: microsoft/setup-msbuild@v3

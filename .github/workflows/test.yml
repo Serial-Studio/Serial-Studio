@@ -58,6 +58,9 @@ jobs:
   test-linux:
     runs-on: ubuntu-24.04
     name: '🧪 Tests (Linux)'
+    permissions:
+      contents: read
+      security-events: write
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -213,6 +216,20 @@ jobs:
 
     - name: '🚧 Build application'
       run: cmake --build build --config Release -j$(nproc)
+
+    - name: '🔎 Scan binaries with deglyph'
+      uses: deglyph-re/cli@v0.0.1
+      with:
+        path: build/app
+        sarif: deglyph.sarif
+        fail-on: never
+
+    - name: '🛡 Upload deglyph SARIF'
+      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: deglyph.sarif
+        category: deglyph-test-linux
 
     - name: '🔑 Activate Serial Studio license'
       env:
