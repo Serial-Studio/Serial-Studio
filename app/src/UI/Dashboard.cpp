@@ -755,6 +755,34 @@ const std::vector<DSP::TimeRing>& UI::Dashboard::multiplotTimeRings(const int in
   return it.value();
 }
 
+/**
+ * @brief Returns the sweep/trigger engine for a time-axis plot widget.
+ */
+const DSP::SweepEngine& UI::Dashboard::plotSweep(const int index) const
+{
+  const auto it = m_plotSweep.find(index);
+  if (it == m_plotSweep.end()) [[unlikely]] {
+    static const DSP::SweepEngine kEmpty{};
+    return kEmpty;
+  }
+
+  return it.value();
+}
+
+/**
+ * @brief Returns the sweep/trigger engine for a time-axis multiplot widget.
+ */
+const DSP::SweepEngine& UI::Dashboard::multiplotSweep(const int index) const
+{
+  const auto it = m_multiplotSweep.find(index);
+  if (it == m_multiplotSweep.end()) [[unlikely]] {
+    static const DSP::SweepEngine kEmpty{};
+    return kEmpty;
+  }
+
+  return it.value();
+}
+
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Returns the 3D trajectory data for a 3D plot widget.
@@ -922,6 +950,8 @@ void UI::Dashboard::resetData(const bool notify)
   m_yAxisData.clear();
   m_plotTimeRings.clear();
   m_multiplotTimeRings.clear();
+  m_plotSweep.clear();
+  m_multiplotSweep.clear();
   m_plotTimeOriginSet = false;
 
   // Clear widget & action structures
@@ -993,6 +1023,13 @@ void UI::Dashboard::clearPlotData()
     for (auto& ring : it.value())
       ring.clear();
 
+  // Restart sweep acquisition alongside the time rings
+  for (auto it = m_plotSweep.begin(); it != m_plotSweep.end(); ++it)
+    it.value().resetState();
+
+  for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it)
+    it.value().resetState();
+
   m_plotTimeOriginSet = false;
 
   // Clear multiplot Y-axis data
@@ -1056,8 +1093,10 @@ void UI::Dashboard::setPlotTimeRange(const double seconds)
     m_settings.setValue("Dashboard/PlotTimeRange", m_plotTimeRange);
 
   // Snapshot rings; restore replays through appendDecimated to rebin to the new interval.
-  auto savedPlotRings      = snapshotPlotTimeRings();
-  auto savedMultiplotRings = snapshotMultiplotTimeRings();
+  auto savedPlotRings            = snapshotPlotTimeRings();
+  auto savedMultiplotRings       = snapshotMultiplotTimeRings();
+  const auto savedPlotSweep      = m_plotSweep;
+  const auto savedMultiplotSweep = m_multiplotSweep;
 
   // Re-bin the time-bucket envelopes to the new window width
   configureLineSeries();
@@ -1065,6 +1104,8 @@ void UI::Dashboard::setPlotTimeRange(const double seconds)
 
   restorePlotTimeRings(savedPlotRings);
   restoreMultiplotTimeRings(savedMultiplotRings);
+  restorePlotSweepConfig(savedPlotSweep);
+  restoreMultiplotSweepConfig(savedMultiplotSweep);
 
   m_updateRequired = true;
   Q_EMIT plotTimeRangeChanged();
@@ -1500,6 +1541,87 @@ void UI::Dashboard::setWaterfallRunning(const int index, const bool enabled)
     m_activeWaterfalls[index] = enabled;
 }
 #endif
+
+/**
+ * @brief Configures sweep/trigger mode for a plot; gated to commercial tiers.
+ */
+void UI::Dashboard::setPlotSweep(const int index,
+                                 const bool enabled,
+                                 const double level,
+                                 const int edge,
+                                 const int mode,
+                                 const double holdoff)
+{
+  auto it = m_plotSweep.find(index);
+  if (it == m_plotSweep.end())
+    return;
+
+#ifdef BUILD_COMMERCIAL
+  const auto& tk = Licensing::CommercialToken::current();
+  const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD()
+               && tk.featureTier() >= Licensing::FeatureTier::Trial;
+#else
+  const bool ok = false;
+#endif
+
+  auto& engine = it.value();
+  engine.setTrigger(level, edge, mode, holdoff, 0);
+  if (engine.enabled != ok) {
+    engine.enabled = ok;
+    engine.resetState();
+  }
+}
+
+/**
+ * @brief Configures sweep/trigger mode for a multiplot; gated to commercial tiers.
+ */
+void UI::Dashboard::setMultiplotSweep(const int index,
+                                      const bool enabled,
+                                      const double level,
+                                      const int edge,
+                                      const int mode,
+                                      const double holdoff,
+                                      const int triggerCurve)
+{
+  auto it = m_multiplotSweep.find(index);
+  if (it == m_multiplotSweep.end())
+    return;
+
+#ifdef BUILD_COMMERCIAL
+  const auto& tk = Licensing::CommercialToken::current();
+  const bool ok  = enabled && tk.isValid() && SS_LICENSE_GUARD()
+               && tk.featureTier() >= Licensing::FeatureTier::Trial;
+#else
+  const bool ok = false;
+#endif
+
+  auto& engine = it.value();
+  engine.setTrigger(level, edge, mode, holdoff, triggerCurve);
+  if (engine.enabled != ok) {
+    engine.enabled = ok;
+    engine.resetState();
+  }
+}
+
+/**
+ * @brief Re-arms a single-shot plot sweep capture.
+ */
+void UI::Dashboard::armPlotSweep(const int index)
+{
+  auto it = m_plotSweep.find(index);
+  if (it != m_plotSweep.end())
+    it.value().arm();
+}
+
+/**
+ * @brief Re-arms a single-shot multiplot sweep capture.
+ */
+void UI::Dashboard::armMultiplotSweep(const int index)
+{
+  auto it = m_multiplotSweep.find(index);
+  if (it != m_multiplotSweep.end())
+    it.value().arm();
+}
 
 //--------------------------------------------------------------------------------------------------
 // Frame processing
@@ -2059,6 +2181,22 @@ void UI::Dashboard::updateDataSeries(int sourceId)
   updateWaterfallSeries(sourceId);
 #endif
 
+  // Sweep mode: every curve shares one window aligned to the trigger-source curve
+  auto feedMultiSweep = [this](const MultiPush& p) {
+    if (!p.sweep || !p.sweep->enabled || p.timeCurves.empty())
+      return;
+
+    const int last  = static_cast<int>(p.timeCurves.size()) - 1;
+    const int tc    = qBound(0, p.sweep->triggerCurve, last);
+    const double st = p.sweep->advance(m_plotDisplayTimeSec, *p.timeCurves[tc].value);
+    if (st < 0)
+      return;
+
+    const std::size_t n = std::min(p.sweep->back.size(), p.timeCurves.size());
+    for (std::size_t j = 0; j < n; ++j)
+      p.sweep->back[j].appendDecimated(st, *p.timeCurves[j].value);
+  };
+
   // Update multi-plots from the pre-resolved push table (no map lookups)
   Q_ASSERT(static_cast<int>(m_multiplotPushes.size()) == multiCount);
   for (const auto& p : m_multiplotPushes) {
@@ -2071,6 +2209,8 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     // Time multiplots append (display time, value) into each curve's decimating ring
     for (const auto& tc : p.timeCurves)
       tc.ring->appendDecimated(m_plotDisplayTimeSec, *tc.value);
+
+    feedMultiSweep(p);
 
     // Sample/dataset multiplots push into the Y rings
     for (const auto& s : p.samples)
@@ -2196,6 +2336,16 @@ void UI::Dashboard::updateLineSeries(int sourceId)
   for (const auto& p : m_xLinePushes)
     fire(p);
 
+  // Sweep mode triggers on the plotted value itself
+  auto feedSweep = [this](const TimePush& p) {
+    if (!p.sweep || !p.sweep->enabled || p.sweep->back.empty())
+      return;
+
+    const double st = p.sweep->advance(m_plotDisplayTimeSec, *p.value);
+    if (st >= 0)
+      p.sweep->back[0].appendDecimated(st, *p.value);
+  };
+
   // Time plots append (display time, value) into their decimating ring
   for (const auto& p : m_timePushes) {
     for (const auto& c : p.consumers) {
@@ -2204,6 +2354,7 @@ void UI::Dashboard::updateLineSeries(int sourceId)
 
       if (*c.activeFlag) {
         p.ring->appendDecimated(m_plotDisplayTimeSec, *p.value);
+        feedSweep(p);
         break;
       }
     }
@@ -2445,6 +2596,38 @@ void UI::Dashboard::restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRi
 }
 
 /**
+ * @brief Re-applies saved sweep trigger settings onto freshly configured plot engines.
+ */
+void UI::Dashboard::restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& saved)
+{
+  for (auto it = saved.begin(); it != saved.end(); ++it) {
+    auto live = m_plotSweep.find(it.key());
+    if (live == m_plotSweep.end())
+      continue;
+
+    const auto& src = it.value();
+    live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
+    live->enabled = src.enabled;
+  }
+}
+
+/**
+ * @brief Re-applies saved sweep trigger settings onto freshly configured multiplot engines.
+ */
+void UI::Dashboard::restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine>& saved)
+{
+  for (auto it = saved.begin(); it != saved.end(); ++it) {
+    auto live = m_multiplotSweep.find(it.key());
+    if (live == m_multiplotSweep.end())
+      continue;
+
+    const auto& src = it.value();
+    live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
+    live->enabled = src.enabled;
+  }
+}
+
+/**
  * @brief Configures the line series data structures for all dashboard plots.
  */
 void UI::Dashboard::configureLineSeries()
@@ -2455,6 +2638,7 @@ void UI::Dashboard::configureLineSeries()
   m_xAxisData.clear();
   m_yAxisData.clear();
   m_plotTimeRings.clear();
+  m_plotSweep.clear();
   m_pltValues.clear();
   m_pltValues.squeeze();
   m_activePlots.clear();
@@ -2492,6 +2676,10 @@ void UI::Dashboard::configureLineSeries()
     if (useTimeXAxis(yDataset)) {
       const int cap = timeRingCapacity(m_plotTimeRange);
       m_plotTimeRings.insert(i, DSP::TimeRing(cap, m_plotTimeRange));
+
+      DSP::SweepEngine sweep;
+      sweep.configure(1, cap, m_plotTimeRange);
+      m_plotSweep.insert(i, std::move(sweep));
 
       DSP::LineSeries series;
       series.x = &m_pltXAxis;
@@ -2535,10 +2723,12 @@ void UI::Dashboard::configureLineSeries()
     if (useTimeXAxis(yDataset)) {
       auto rIt = m_plotTimeRings.find(i);
       if (rIt != m_plotTimeRings.end()) {
+        auto sIt = m_plotSweep.find(i);
         TimePush tp;
         tp.consumers.push_back(consumer);
         tp.ring  = &rIt.value();
         tp.value = &yDataset.numericValue;
+        tp.sweep = (sIt != m_plotSweep.end()) ? &sIt.value() : nullptr;
         m_timePushes.push_back(std::move(tp));
       }
 
@@ -2619,6 +2809,7 @@ void UI::Dashboard::configureMultiLineSeries()
   m_multipltValues.squeeze();
   m_activeMultiplots.clear();
   m_multiplotTimeRings.clear();
+  m_multiplotSweep.clear();
 
   // Reset default X-axis data
   m_multipltXAxis = DSP::AxisData(points() + 1);
@@ -2646,6 +2837,10 @@ void UI::Dashboard::configureMultiLineSeries()
         rings.emplace_back(cap, m_plotTimeRange);
 
       m_multiplotTimeRings.insert(i, std::move(rings));
+
+      DSP::SweepEngine sweep;
+      sweep.configure(static_cast<int>(group.datasets.size()), cap, m_plotTimeRange);
+      m_multiplotSweep.insert(i, std::move(sweep));
     }
   }
 
@@ -2670,6 +2865,9 @@ void UI::Dashboard::buildMultiplotPushes()
     MultiPush push;
     push.sourceId   = group.sourceId;
     push.activeFlag = &m_activeMultiplots[i];
+
+    auto swIt  = m_multiplotSweep.find(i);
+    push.sweep = (swIt != m_multiplotSweep.end()) ? &swIt.value() : nullptr;
 
     // Time multiplots append (display time, value) into each curve's decimating ring
     auto rIt = m_multiplotTimeRings.find(i);

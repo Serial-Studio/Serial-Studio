@@ -59,6 +59,13 @@ Item {
   property bool userShowXLabel: true
   property bool userShowYLabel: true
 
+  //
+  // Sweep/trigger mode is a time-axis-only Pro feature
+  //
+  readonly property bool sweepAllowed: root.model && root.model.timeAxis && Cpp_CommercialBuild
+                                       && (Cpp_Licensing_LemonSqueezy.isActivated
+                                           || Cpp_Licensing_Trial.trialEnabled)
+
   PlotCommon {
     id: plotCommon
   }
@@ -92,6 +99,40 @@ Item {
 
     if (s["userShowYLabel"] !== undefined)
       root.userShowYLabel = s["userShowYLabel"]
+
+    if (s["sweepMode"] !== undefined)
+      root.model.sweepMode = s["sweepMode"]
+
+    if (s["triggerEdge"] !== undefined)
+      root.model.triggerEdge = s["triggerEdge"]
+
+    if (s["triggerLevel"] !== undefined)
+      root.model.triggerLevel = s["triggerLevel"]
+
+    if (s["holdoff"] !== undefined)
+      root.model.holdoff = s["holdoff"]
+
+    if (root.sweepAllowed && s["sweepEnabled"] !== undefined)
+      root.model.sweepEnabled = s["sweepEnabled"]
+  }
+
+  //
+  // Persist trigger settings whenever they change
+  //
+  function saveSweepSettings() {
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepMode", root.model.sweepMode)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "triggerEdge", root.model.triggerEdge)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "triggerLevel", root.model.triggerLevel)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "holdoff", root.model.holdoff)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepEnabled", root.model.sweepEnabled)
+  }
+
+  Connections {
+    target: root.model
+
+    function onSweepChanged() {
+      root.saveSweepSettings()
+    }
   }
 
   //
@@ -115,6 +156,13 @@ Item {
   //
   Dialogs.AxisRangeDialog {
     id: axisRangeDialog
+  }
+
+  //
+  // Trigger configuration dialog
+  //
+  Dialogs.TriggerDialog {
+    id: triggerDialog
   }
 
   //
@@ -244,6 +292,30 @@ Item {
       onClicked: model.running = !model.running
     }
 
+    Rectangle {
+      visible: root.sweepAllowed
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
+    DashboardToolButton {
+      visible: root.sweepAllowed
+      checked: root.model.sweepEnabled
+      ToolTip.text: qsTr("Sweep / Trigger Mode")
+      icon.source: "qrc:/icons/dashboard-buttons/sweep.svg"
+      onClicked: root.model.sweepEnabled = !root.model.sweepEnabled
+    }
+
+    DashboardToolButton {
+      visible: root.sweepAllowed
+      opacity: enabled ? 1 : 0.5
+      enabled: root.model.sweepEnabled
+      ToolTip.text: qsTr("Trigger Settings")
+      icon.source: "qrc:/icons/dashboard-buttons/trigger.svg"
+      onClicked: triggerDialog.openDialog(root.model, false)
+    }
+
     DashboardToolButton {
       onClicked: {
         plot.xAxis.pan = 0
@@ -294,6 +366,8 @@ Item {
     xLabel: root.model.xLabel
     yLabel: root.model.yLabel
     timeAxis: root.model.timeAxis
+    sweepMode: root.model.sweepEnabled
+    triggerLevel: root.model.triggerLevel
     mouseAreaEnabled: windowRoot.focused
     xAxis.tickInterval: plot.xTickInterval
     yAxis.tickInterval: plot.yTickInterval

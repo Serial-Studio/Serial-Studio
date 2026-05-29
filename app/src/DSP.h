@@ -417,6 +417,225 @@ struct TimeRing {
   }
 };
 
+/**
+ * @brief Oscilloscope-style sweep/trigger engine with a front/back ring per curve.
+ */
+struct SweepEngine {
+  static constexpr int kAuto    = 0;
+  static constexpr int kNormal  = 1;
+  static constexpr int kSingle  = 2;
+  static constexpr int kRising  = 0;
+  static constexpr int kFalling = 1;
+
+  std::vector<TimeRing> front;
+  std::vector<TimeRing> back;
+
+  double windowSec;
+  double level;
+  double holdoffSec;
+  int edge;
+  int mode;
+  int triggerCurve;
+  bool enabled;
+
+  double t0;
+  double prevValue;
+  double prevTime;
+  double lastTriggerSec;
+  double lastSweepSec;
+  bool prevValid;
+  bool sweeping;
+  bool armed;
+  bool hasFront;
+
+  /**
+   * @brief Constructs an idle, disabled sweep engine with no curves.
+   */
+  SweepEngine()
+    : windowSec(1.0)
+    , level(0.0)
+    , holdoffSec(0.0)
+    , edge(kRising)
+    , mode(kAuto)
+    , triggerCurve(0)
+    , enabled(false)
+    , t0(0.0)
+    , prevValue(0.0)
+    , prevTime(0.0)
+    , lastTriggerSec(-1.0)
+    , lastSweepSec(0.0)
+    , prevValid(false)
+    , sweeping(false)
+    , armed(true)
+    , hasFront(false)
+  {}
+
+  /**
+   * @brief Allocates `curveCount` front/back rings of `capacity` over `window` seconds.
+   */
+  void configure(int curveCount, int capacity, double window)
+  {
+    windowSec = window > 0 ? window : 1.0;
+    front.assign(static_cast<std::size_t>(curveCount < 0 ? 0 : curveCount),
+                 TimeRing(capacity, windowSec));
+    back.assign(static_cast<std::size_t>(curveCount < 0 ? 0 : curveCount),
+                TimeRing(capacity, windowSec));
+    resetState();
+  }
+
+  /**
+   * @brief Updates trigger parameters and re-arms a single-shot capture.
+   */
+  void setTrigger(double lvl, int edgeMode, int sweepMode, double holdoff, int curve)
+  {
+    level        = lvl;
+    edge         = (edgeMode == kFalling) ? kFalling : kRising;
+    mode         = (sweepMode == kNormal) ? kNormal : (sweepMode == kSingle ? kSingle : kAuto);
+    holdoffSec   = holdoff > 0 ? holdoff : 0.0;
+    triggerCurve = curve < 0 ? 0 : curve;
+    armed        = true;
+  }
+
+  /**
+   * @brief Re-arms a single-shot capture without touching retained data.
+   */
+  void arm() { armed = true; }
+
+  /**
+   * @brief Clears the decimation state and disarms an in-progress sweep.
+   */
+  void resetState()
+  {
+    for (auto& r : front)
+      r.clear();
+
+    for (auto& r : back)
+      r.clear();
+
+    t0             = 0.0;
+    prevValue      = 0.0;
+    prevTime       = 0.0;
+    lastTriggerSec = -1.0;
+    lastSweepSec   = 0.0;
+    prevValid      = false;
+    sweeping       = false;
+    hasFront       = false;
+    armed          = true;
+  }
+
+  /**
+   * @brief Returns the displayed (completed) sweep ring for a curve.
+   */
+  [[nodiscard]] const TimeRing& display(std::size_t curve) const
+  {
+    static const TimeRing kEmpty{};
+    if (curve >= front.size())
+      return kEmpty;
+
+    return front[curve];
+  }
+
+  /**
+   * @brief Steps the trigger state with one trigger-source sample; returns the
+   *        sweep time to append at, or a negative sentinel to skip this sample.
+   */
+  double advance(double now, double trigValue)
+  {
+    double sweepTime = -1.0;
+
+    // Already filling: append until the window elapses, then publish the sweep
+    if (sweeping) {
+      const double st = now - t0;
+      if (st > windowSec)
+        completeSweep(now);
+      else
+        sweepTime = st < 0 ? 0.0 : st;
+    }
+
+    // Idle: decide whether a trigger (or auto free-run) starts a new sweep
+    else if (shouldStart(now, trigValue)) {
+      t0           = triggerOrigin(now, trigValue);
+      lastSweepSec = now;
+      if (edgeDetected(trigValue))
+        lastTriggerSec = now;
+
+      for (auto& r : back)
+        r.clear();
+
+      sweeping  = true;
+      sweepTime = (now - t0) < 0 ? 0.0 : (now - t0);
+    }
+
+    prevValue = trigValue;
+    prevTime  = now;
+    prevValid = true;
+    return sweepTime;
+  }
+
+private:
+  /**
+   * @brief Returns true when the trigger source crossed the level in the armed direction.
+   */
+  [[nodiscard]] bool edgeDetected(double value) const
+  {
+    if (!prevValid)
+      return false;
+
+    if (edge == kFalling)
+      return prevValue > level && value <= level;
+
+    return prevValue < level && value >= level;
+  }
+
+  /**
+   * @brief Decides whether an idle engine should begin a new sweep this sample.
+   */
+  [[nodiscard]] bool shouldStart(double now, double value)
+  {
+    const bool edgeOk =
+      edgeDetected(value) && (lastTriggerSec < 0 || (now - lastTriggerSec) >= holdoffSec);
+
+    if (mode == kSingle)
+      return armed && edgeOk;
+
+    if (mode == kNormal)
+      return edgeOk;
+
+    // Auto: trigger when possible, otherwise free-run after a quiet window
+    return edgeOk || (now - lastSweepSec) >= windowSec;
+  }
+
+  /**
+   * @brief Computes the sweep origin, interpolating the exact level crossing on an edge.
+   */
+  [[nodiscard]] double triggerOrigin(double now, double value) const
+  {
+    if (!edgeDetected(value))
+      return now;
+
+    const double denom = value - prevValue;
+    double frac        = (std::abs(denom) > 1e-12) ? (level - prevValue) / denom : 0.0;
+    frac               = std::clamp(frac, 0.0, 1.0);
+    return prevTime + frac * (now - prevTime);
+  }
+
+  /**
+   * @brief Publishes the filled sweep to `front` and ends the acquisition.
+   */
+  void completeSweep(double now)
+  {
+    const std::size_t n = std::min(front.size(), back.size());
+    for (std::size_t i = 0; i < n; ++i)
+      std::swap(front[i], back[i]);
+
+    hasFront     = true;
+    sweeping     = false;
+    lastSweepSec = now;
+    if (mode == kSingle)
+      armed = false;
+  }
+};
+
 #ifdef BUILD_COMMERCIAL
 /**
  * @typedef PlotData3D
@@ -802,6 +1021,79 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
   ws->reset(C);
 
   // Columns are bound to the viewport, not the data extent, so zoom maps 1:1
+  const ssfp_t span        = std::max<ssfp_t>(1e-12, xHi - xLo);
+  const auto scaleX        = static_cast<ssfp_t>(w - 1) / span;
+  const DownsampleBounds b = dsScanFiniteRange(visible, xWin, yWin);
+  if (b.firstFinite == visible)
+    return false;
+
+  const auto scaleY = static_cast<ssfp_t>(h) / std::max<ssfp_t>(1e-12, b.ymax - b.ymin);
+
+  dsAccumulateBuckets(visible, w, xLo, scaleX, xWin, yWin, ws);
+
+  out.reserve(w * 3 / 2 + 8);
+  for (std::size_t c = 0; c < C; ++c) {
+    if (ws->cnt[c] == 0)
+      continue;
+
+    dsEmitColumnPoints(c, scaleY, ws, xWin, yWin, out);
+  }
+
+  return true;
+}
+
+/**
+ * @brief Decimate the [xLo, xHi] slice of a ring whose times are already window-relative.
+ */
+inline bool downsampleWindowAbsolute(const AxisData& timeX,
+                                     const AxisData& valueY,
+                                     ssfp_t xLo,
+                                     ssfp_t xHi,
+                                     int w,
+                                     int h,
+                                     QList<QPointF>& out,
+                                     DownsampleWorkspace* ws)
+{
+  out.clear();
+  const std::size_t n = std::min<std::size_t>(timeX.size(), valueY.size());
+  if (n == 0 || w <= 0 || h <= 0 || !(xLo < xHi))
+    return true;
+
+  std::size_t xn0, xn1, yn0, yn1;
+  const ssfp_t *xp0, *xp1, *yp0, *yp1;
+  spanFromFixedQueue(timeX, xp0, xn0, xp1, xn1);
+  spanFromFixedQueue(valueY, yp0, yn0, yp1, yn1);
+
+  auto xAbs = [&](std::size_t i) -> ssfp_t {
+    return (i < xn0) ? xp0[i] : xp1[i - xn0];
+  };
+  auto yAt = [&](std::size_t i) -> ssfp_t {
+    return (i < yn0) ? yp0[i] : yp1[i - yn0];
+  };
+
+  // Locate the visible index span; sweep time is monotonic non-decreasing
+  std::size_t lo = 0;
+  while (lo < n && xAbs(lo) < xLo)
+    ++lo;
+
+  std::size_t hi = lo;
+  while (hi < n && xAbs(hi) <= xHi)
+    ++hi;
+
+  const std::size_t visible = (hi > lo) ? (hi - lo) : 0;
+  if (visible == 0)
+    return true;
+
+  auto xWin = [&](std::size_t i) -> ssfp_t {
+    return xAbs(lo + i);
+  };
+  auto yWin = [&](std::size_t i) -> ssfp_t {
+    return yAt(lo + i);
+  };
+
+  const std::size_t C = std::size_t(w);
+  ws->reset(C);
+
   const ssfp_t span        = std::max<ssfp_t>(1e-12, xHi - xLo);
   const auto scaleX        = static_cast<ssfp_t>(w - 1) / span;
   const DownsampleBounds b = dsScanFiniteRange(visible, xWin, yWin);

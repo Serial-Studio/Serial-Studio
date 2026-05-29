@@ -38,6 +38,8 @@ Item {
   property alias graph: _graph
   property alias xAxis: _axisX
   property alias yAxis: _axisY
+  property real triggerLevel: 0
+  property bool sweepMode: false
   property alias zoom: _axisX.zoom
   property alias yLabel: _yLabel.text
   property alias plotArea: _graph.plotArea
@@ -1303,5 +1305,35 @@ Item {
     x: _graph.x + _graph.plotArea.x
     y: _graph.y + _graph.plotArea.y
     border.color: Cpp_ThemeManager.colors["widget_border"]
+  }
+
+  //
+  // Sweep-mode trigger indicators: level line and t=0 marker
+  //
+  Item {
+    clip: true
+    visible: root.sweepMode
+    width: _graph.plotArea.width
+    height: _graph.plotArea.height
+    x: _graph.x + _graph.plotArea.x
+    y: _graph.y + _graph.plotArea.y
+
+    Rectangle {
+      height: 1
+      opacity: 0.6
+      width: parent.width
+      color: Cpp_ThemeManager.colors["highlight"]
+      y: root.worldToPixelY(root.triggerLevel)
+      visible: root.triggerLevel >= root.yVisibleMin && root.triggerLevel <= root.yVisibleMax
+    }
+
+    Rectangle {
+      width: 1
+      opacity: 0.6
+      height: parent.height
+      color: Cpp_ThemeManager.colors["highlight"]
+      x: root.worldToPixelX(0)
+      visible: 0 >= root.xVisibleMin && 0 <= root.xVisibleMax
+    }
   }
 }

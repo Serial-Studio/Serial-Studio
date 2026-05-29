@@ -63,6 +63,12 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_maxY(0)
   , m_timeAxis(false)
   , m_interpolationMode(SerialStudio::InterpolationLinear)
+  , m_sweepEnabled(false)
+  , m_triggerLevel(0)
+  , m_holdoffMs(0)
+  , m_triggerSource(0)
+  , m_sweepMode(SerialStudio::SweepAuto)
+  , m_triggerEdge(SerialStudio::TriggerRising)
 {
   // Validate dashboard configuration
   if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
@@ -252,6 +258,58 @@ const QList<bool>& Widgets::MultiPlot::visibleCurves() const noexcept
 }
 
 //--------------------------------------------------------------------------------------------------
+// Sweep / trigger getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns whether sweep/trigger mode is active.
+ */
+bool Widgets::MultiPlot::sweepEnabled() const noexcept
+{
+  return m_sweepEnabled;
+}
+
+/**
+ * @brief Returns the trigger level on the trigger-source curve.
+ */
+double Widgets::MultiPlot::triggerLevel() const noexcept
+{
+  return m_triggerLevel;
+}
+
+/**
+ * @brief Returns the trigger holdoff in milliseconds.
+ */
+double Widgets::MultiPlot::holdoff() const noexcept
+{
+  return m_holdoffMs;
+}
+
+/**
+ * @brief Returns the curve index used as the trigger source.
+ */
+int Widgets::MultiPlot::triggerSource() const noexcept
+{
+  return m_triggerSource;
+}
+
+/**
+ * @brief Returns the active sweep mode (auto/normal/single).
+ */
+SerialStudio::SweepMode Widgets::MultiPlot::sweepMode() const noexcept
+{
+  return m_sweepMode;
+}
+
+/**
+ * @brief Returns the trigger edge polarity.
+ */
+SerialStudio::TriggerEdge Widgets::MultiPlot::triggerEdge() const noexcept
+{
+  return m_triggerEdge;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------------------------
 
@@ -363,6 +421,113 @@ void Widgets::MultiPlot::setInterpolationMode(SerialStudio::InterpolationMode mo
 }
 
 //--------------------------------------------------------------------------------------------------
+// Sweep / trigger setters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Enables or disables sweep/trigger mode and flips the X-axis window.
+ */
+void Widgets::MultiPlot::setSweepEnabled(const bool enabled)
+{
+  if (m_sweepEnabled == enabled)
+    return;
+
+  m_sweepEnabled = enabled;
+  pushSweepConfig();
+  updateRange();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger level.
+ */
+void Widgets::MultiPlot::setTriggerLevel(const double level)
+{
+  if (qFuzzyCompare(m_triggerLevel, level))
+    return;
+
+  m_triggerLevel = level;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger holdoff in milliseconds.
+ */
+void Widgets::MultiPlot::setHoldoff(const double milliseconds)
+{
+  const double clamped = milliseconds < 0 ? 0 : milliseconds;
+  if (qFuzzyCompare(m_holdoffMs, clamped))
+    return;
+
+  m_holdoffMs = clamped;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Selects which curve drives the trigger.
+ */
+void Widgets::MultiPlot::setTriggerSource(const int curve)
+{
+  const int clamped = (curve < 0) ? 0 : (curve >= count() ? count() - 1 : curve);
+  if (m_triggerSource == clamped)
+    return;
+
+  m_triggerSource = clamped;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the sweep mode (auto/normal/single).
+ */
+void Widgets::MultiPlot::setSweepMode(const SerialStudio::SweepMode mode)
+{
+  if (m_sweepMode == mode)
+    return;
+
+  m_sweepMode = mode;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger edge polarity.
+ */
+void Widgets::MultiPlot::setTriggerEdge(const SerialStudio::TriggerEdge edge)
+{
+  if (m_triggerEdge == edge)
+    return;
+
+  m_triggerEdge = edge;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Re-arms a single-shot capture.
+ */
+void Widgets::MultiPlot::armSweep()
+{
+  UI::Dashboard::instance().armMultiplotSweep(m_index);
+}
+
+/**
+ * @brief Pushes the current trigger configuration into the Dashboard engine.
+ */
+void Widgets::MultiPlot::pushSweepConfig()
+{
+  UI::Dashboard::instance().setMultiplotSweep(m_index,
+                                              m_sweepEnabled,
+                                              m_triggerLevel,
+                                              static_cast<int>(m_triggerEdge),
+                                              static_cast<int>(m_sweepMode),
+                                              m_holdoffMs * 0.001,
+                                              m_triggerSource);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Data updates
 //--------------------------------------------------------------------------------------------------
 
@@ -377,6 +542,26 @@ void Widgets::MultiPlot::updateData()
   // Stop if widget is disabled or invalid
   if (!isEnabled() || !VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
+
+  // Sweep mode: decimate each curve's held sweep over the shared [0, T] window
+  if (m_timeAxis && m_sweepEnabled) {
+    const auto& engine        = UI::Dashboard::instance().multiplotSweep(m_index);
+    const qsizetype plotCount = static_cast<qsizetype>(engine.front.size());
+    if (m_data.size() != plotCount)
+      m_data.resize(plotCount);
+
+    for (qsizetype i = 0; i < plotCount; ++i) {
+      if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
+        continue;
+
+      const auto& ring = engine.display(static_cast<size_t>(i));
+      (void)DSP::downsampleWindowAbsolute(
+        ring.time, ring.value, m_minX, m_maxX, m_dataW, m_dataH, m_data[i], &ws);
+    }
+
+    calculateAutoScaleRange();
+    return;
+  }
 
   // Time axis: decimate each curve's visible window from its decimating ring
   if (m_timeAxis) {
@@ -441,7 +626,12 @@ void Widgets::MultiPlot::updateRange()
   m_data.squeeze();
   m_data.resize(data.y.size());
 
-  if (m_timeAxis) {
+  if (m_timeAxis && m_sweepEnabled) {
+    m_minX = 0;
+    m_maxX = UI::Dashboard::instance().plotTimeRange();
+  }
+
+  else if (m_timeAxis) {
     m_minX = -UI::Dashboard::instance().plotTimeRange();
     m_maxX = 0;
   }

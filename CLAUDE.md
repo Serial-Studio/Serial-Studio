@@ -375,6 +375,19 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   (one row per dashboard `updated` tick), not the sample rate; sub-second ranges clamp to 16 rows.
 - **AxisRangeDialog** hides its X section for time plots (`timeAxis` from the widget model); the manual
   X min/max is meaningless when X is the Time Range. Y range stays editable.
+- **Plot Sweep / Trigger mode (Pro)**: oscilloscope sweep for **time-axis** Plot/MultiPlot. `DSP::SweepEngine`
+  (`DSP.h`) owns a front/back decimating `TimeRing` per curve; `advance(now, trigValue)` runs on the hotpath
+  (alloc-free), detects a level+edge crossing (interpolated `t0`), honors holdoff + Auto/Normal/Single, and
+  swaps `back`->`front` when `sweepTime > windowSec`. The Dashboard holds `m_plotSweep`/`m_multiplotSweep`
+  (keyed by widget index), fed from `TimePush::sweep`/`MultiPush::sweep` in `updateLineSeries`/`updateDataSeries`
+  via the `feedSweep`/`feedMultiSweep` lambdas; engines are created in `configureLineSeries`/`configureMultiLineSeries`
+  for time plots and the config survives a Time-Range rebuild via `restorePlotSweepConfig`/`restoreMultiplotSweepConfig`.
+  When enabled the widget axis is `[0, T]` (vs rolling `[-T, 0]`) and `updateData` renders the held sweep through
+  `DSP::downsampleWindowAbsolute` (no newest-rebase). Config lives per-widget in `widgetSettings`
+  (`sweepEnabled`/`sweepMode`/`triggerEdge`/`triggerLevel`/`holdoff`(+`triggerSource` for MultiPlot)); QML wiring is
+  a Pro-gated toolbar toggle + `TriggerDialog.qml`, with the trigger-level line and `t=0` marker drawn in
+  `PlotWidget.qml` (`sweepMode`/`triggerLevel`). Setters are runtime-gated to `FeatureTier >= Trial`. `SweepMode`/
+  `TriggerEdge` enums live in `SerialStudio.h`.
 - **Output Widgets (Pro)** (`app/src/UI/Widgets/Output/`, QML in `app/qml/Widgets/Dashboard/Output/`):
   Button/Toggle/Slider/TextField/Panel sharing `Base`. User JS converts UI state → device
   bytes (`app/rcc/scripts/output/*.js`); `OutputCodeEditor` edits; `TransmitTestDialog`

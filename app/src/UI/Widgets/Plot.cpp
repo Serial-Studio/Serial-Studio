@@ -47,6 +47,11 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_monotonicData(true)
   , m_timeAxis(false)
   , m_interpolationMode(SerialStudio::InterpolationLinear)
+  , m_sweepEnabled(false)
+  , m_triggerLevel(0)
+  , m_holdoffMs(0)
+  , m_sweepMode(SerialStudio::SweepAuto)
+  , m_triggerEdge(SerialStudio::TriggerRising)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
     const auto& yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
@@ -214,6 +219,50 @@ bool Widgets::Plot::timeAxis() const noexcept
 }
 
 //--------------------------------------------------------------------------------------------------
+// Sweep / trigger getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns whether sweep/trigger mode is active.
+ */
+bool Widgets::Plot::sweepEnabled() const noexcept
+{
+  return m_sweepEnabled;
+}
+
+/**
+ * @brief Returns the trigger level on the plotted value.
+ */
+double Widgets::Plot::triggerLevel() const noexcept
+{
+  return m_triggerLevel;
+}
+
+/**
+ * @brief Returns the trigger holdoff in milliseconds.
+ */
+double Widgets::Plot::holdoff() const noexcept
+{
+  return m_holdoffMs;
+}
+
+/**
+ * @brief Returns the active sweep mode (auto/normal/single).
+ */
+SerialStudio::SweepMode Widgets::Plot::sweepMode() const noexcept
+{
+  return m_sweepMode;
+}
+
+/**
+ * @brief Returns the trigger edge polarity.
+ */
+SerialStudio::TriggerEdge Widgets::Plot::triggerEdge() const noexcept
+{
+  return m_triggerEdge;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------------------------
 
@@ -304,6 +353,98 @@ void Widgets::Plot::setInterpolationMode(SerialStudio::InterpolationMode mode)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Sweep / trigger setters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Enables or disables sweep/trigger mode and flips the X-axis window.
+ */
+void Widgets::Plot::setSweepEnabled(const bool enabled)
+{
+  if (m_sweepEnabled == enabled)
+    return;
+
+  m_sweepEnabled = enabled;
+  pushSweepConfig();
+  updateRange();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger level.
+ */
+void Widgets::Plot::setTriggerLevel(const double level)
+{
+  if (qFuzzyCompare(m_triggerLevel, level))
+    return;
+
+  m_triggerLevel = level;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger holdoff in milliseconds.
+ */
+void Widgets::Plot::setHoldoff(const double milliseconds)
+{
+  const double clamped = milliseconds < 0 ? 0 : milliseconds;
+  if (qFuzzyCompare(m_holdoffMs, clamped))
+    return;
+
+  m_holdoffMs = clamped;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the sweep mode (auto/normal/single).
+ */
+void Widgets::Plot::setSweepMode(const SerialStudio::SweepMode mode)
+{
+  if (m_sweepMode == mode)
+    return;
+
+  m_sweepMode = mode;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger edge polarity.
+ */
+void Widgets::Plot::setTriggerEdge(const SerialStudio::TriggerEdge edge)
+{
+  if (m_triggerEdge == edge)
+    return;
+
+  m_triggerEdge = edge;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Re-arms a single-shot capture.
+ */
+void Widgets::Plot::armSweep()
+{
+  UI::Dashboard::instance().armPlotSweep(m_index);
+}
+
+/**
+ * @brief Pushes the current trigger configuration into the Dashboard engine.
+ */
+void Widgets::Plot::pushSweepConfig()
+{
+  UI::Dashboard::instance().setPlotSweep(m_index,
+                                         m_sweepEnabled,
+                                         m_triggerLevel,
+                                         static_cast<int>(m_triggerEdge),
+                                         static_cast<int>(m_sweepMode),
+                                         m_holdoffMs * 0.001);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Data updates
 //--------------------------------------------------------------------------------------------------
 
@@ -322,6 +463,14 @@ void Widgets::Plot::updateData()
   // Only obtain data if widget data is still valid
   if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
     return;
+
+  // Sweep mode: decimate the held sweep over the [0, T] window
+  if (m_timeAxis && m_sweepEnabled) {
+    const auto& ring = UI::Dashboard::instance().plotSweep(m_index).display(0);
+    (void)DSP::downsampleWindowAbsolute(
+      ring.time, ring.value, m_minX, m_maxX, m_dataW, m_dataH, m_data, &ws);
+    return;
+  }
 
   // Time axis: decimate the visible window of the time ring to render columns
   if (m_timeAxis) {
@@ -421,13 +570,17 @@ void Widgets::Plot::updateRange()
     return;
   }
 
-  const auto& yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+  // Time axis: sweep mode spans [0, T], rolling mode spans [-T, 0]
   if (m_timeAxis) {
-    m_maxX = 0;
-    m_minX = -UI::Dashboard::instance().plotTimeRange();
+    const double range = UI::Dashboard::instance().plotTimeRange();
+    m_minX             = m_sweepEnabled ? 0 : -range;
+    m_maxX             = m_sweepEnabled ? range : 0;
+    Q_EMIT rangeChanged();
+    return;
   }
 
-  else if (yD.xAxisId >= 0) {
+  const auto& yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+  if (yD.xAxisId >= 0) {
     const auto& datasets = UI::Dashboard::instance().datasets();
     auto it              = datasets.find(yD.xAxisId);
     if (it != datasets.end()) {

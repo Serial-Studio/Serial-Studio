@@ -72,10 +72,31 @@ class Plot : public QQuickItem {
   Q_PROPERTY(bool timeAxis
              READ timeAxis
              CONSTANT)
+  Q_PROPERTY(bool sweepEnabled
+             READ sweepEnabled
+             WRITE setSweepEnabled
+             NOTIFY sweepChanged)
+  Q_PROPERTY(double triggerLevel
+             READ triggerLevel
+             WRITE setTriggerLevel
+             NOTIFY sweepChanged)
+  Q_PROPERTY(double holdoff
+             READ holdoff
+             WRITE setHoldoff
+             NOTIFY sweepChanged)
+  Q_PROPERTY(SerialStudio::SweepMode sweepMode
+             READ sweepMode
+             WRITE setSweepMode
+             NOTIFY sweepChanged)
+  Q_PROPERTY(SerialStudio::TriggerEdge triggerEdge
+             READ triggerEdge
+             WRITE setTriggerEdge
+             NOTIFY sweepChanged)
   // clang-format on
 
 signals:
   void rangeChanged();
+  void sweepChanged();
   void runningChanged();
   void dataSizeChanged();
   void interpolationModeChanged();
@@ -100,6 +121,11 @@ public:
   [[nodiscard]] const QString& yLabel() const noexcept;
   [[nodiscard]] const QString& xLabel() const noexcept;
   [[nodiscard]] bool timeAxis() const noexcept;
+  [[nodiscard]] bool sweepEnabled() const noexcept;
+  [[nodiscard]] double triggerLevel() const noexcept;
+  [[nodiscard]] double holdoff() const noexcept;
+  [[nodiscard]] SerialStudio::SweepMode sweepMode() const noexcept;
+  [[nodiscard]] SerialStudio::TriggerEdge triggerEdge() const noexcept;
 
 public slots:
   void draw(QXYSeries* series);
@@ -108,12 +134,20 @@ public slots:
   void setRunning(const bool enabled);
   void setInterpolationMode(SerialStudio::InterpolationMode mode);
 
+  void armSweep();
+  void setSweepEnabled(const bool enabled);
+  void setTriggerLevel(const double level);
+  void setHoldoff(const double milliseconds);
+  void setSweepMode(const SerialStudio::SweepMode mode);
+  void setTriggerEdge(const SerialStudio::TriggerEdge edge);
+
 private slots:
   void updateData();
   void updateRange();
   void calculateAutoScaleRange();
 
 private:
+  void pushSweepConfig();
   void updateInterpolatedData();
   void resolveXAxis(const DataModel::Dataset& yDataset);
 
@@ -143,5 +177,11 @@ private:
   QList<QPointF> m_data;
   QList<QPointF> m_renderData;
   SerialStudio::InterpolationMode m_interpolationMode;
+
+  bool m_sweepEnabled;
+  double m_triggerLevel;
+  double m_holdoffMs;
+  SerialStudio::SweepMode m_sweepMode;
+  SerialStudio::TriggerEdge m_triggerEdge;
 };
 }  // namespace Widgets

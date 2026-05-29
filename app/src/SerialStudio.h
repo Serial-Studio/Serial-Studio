@@ -105,6 +105,25 @@ public:
   Q_ENUM(InterpolationMode)
 
   /**
+   * @brief Sweep (oscilloscope) trigger modes for time-axis plots.
+   */
+  enum SweepMode {
+    SweepAuto,
+    SweepNormal,
+    SweepSingle,
+  };
+  Q_ENUM(SweepMode)
+
+  /**
+   * @brief Trigger edge polarity used to start a sweep.
+   */
+  enum TriggerEdge {
+    TriggerRising,
+    TriggerFalling,
+  };
+  Q_ENUM(TriggerEdge)
+
+  /**
    * @brief Available data-source bus types.
    */
   enum class BusType {

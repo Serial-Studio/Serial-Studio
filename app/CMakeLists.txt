@@ -438,6 +438,7 @@ set(QML_SOURCES
   qml/Dialogs/Acknowledgements.qml
   qml/Dialogs/AccelerometerConfigDialog.qml
   qml/Dialogs/AxisRangeDialog.qml
+  qml/Dialogs/TriggerDialog.qml
   qml/Dialogs/BackupRecovery.qml
   qml/Dialogs/CrashRecovery.qml
   qml/Dialogs/CsvPlayer.qml

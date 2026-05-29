@@ -84,11 +84,36 @@ class MultiPlot : public QQuickItem {
   Q_PROPERTY(QList<bool> visibleCurves
              READ visibleCurves
              NOTIFY curvesChanged)
+  Q_PROPERTY(bool sweepEnabled
+             READ sweepEnabled
+             WRITE setSweepEnabled
+             NOTIFY sweepChanged)
+  Q_PROPERTY(double triggerLevel
+             READ triggerLevel
+             WRITE setTriggerLevel
+             NOTIFY sweepChanged)
+  Q_PROPERTY(double holdoff
+             READ holdoff
+             WRITE setHoldoff
+             NOTIFY sweepChanged)
+  Q_PROPERTY(int triggerSource
+             READ triggerSource
+             WRITE setTriggerSource
+             NOTIFY sweepChanged)
+  Q_PROPERTY(SerialStudio::SweepMode sweepMode
+             READ sweepMode
+             WRITE setSweepMode
+             NOTIFY sweepChanged)
+  Q_PROPERTY(SerialStudio::TriggerEdge triggerEdge
+             READ triggerEdge
+             WRITE setTriggerEdge
+             NOTIFY sweepChanged)
   // clang-format on
 
 signals:
   void rangeChanged();
   void themeChanged();
+  void sweepChanged();
   void curvesChanged();
   void runningChanged();
   void dataSizeChanged();
@@ -123,6 +148,12 @@ public:
   [[nodiscard]] const QStringList& colors() const noexcept;
   [[nodiscard]] const QStringList& labels() const noexcept;
   [[nodiscard]] const QList<bool>& visibleCurves() const noexcept;
+  [[nodiscard]] bool sweepEnabled() const noexcept;
+  [[nodiscard]] double triggerLevel() const noexcept;
+  [[nodiscard]] double holdoff() const noexcept;
+  [[nodiscard]] int triggerSource() const noexcept;
+  [[nodiscard]] SerialStudio::SweepMode sweepMode() const noexcept;
+  [[nodiscard]] SerialStudio::TriggerEdge triggerEdge() const noexcept;
 
 public slots:
   void draw(QXYSeries* series, const int index);
@@ -131,6 +162,14 @@ public slots:
   void setDataH(const int height);
   void setRunning(const bool enabled);
   void setInterpolationMode(SerialStudio::InterpolationMode mode);
+
+  void armSweep();
+  void setSweepEnabled(const bool enabled);
+  void setTriggerLevel(const double level);
+  void setHoldoff(const double milliseconds);
+  void setTriggerSource(const int curve);
+  void setSweepMode(const SerialStudio::SweepMode mode);
+  void setTriggerEdge(const SerialStudio::TriggerEdge edge);
 
   void updateData();
   void updateRange();
@@ -141,6 +180,7 @@ private slots:
   void onThemeChanged();
 
 private:
+  void pushSweepConfig();
   [[nodiscard]] bool computeRangeFromDatasets();
   void scanCurvesForRange();
   void padDerivedRange();
@@ -164,5 +204,12 @@ private:
   QList<QList<QPointF>> m_data;
   QList<QPointF> m_renderData;
   SerialStudio::InterpolationMode m_interpolationMode;
+
+  bool m_sweepEnabled;
+  double m_triggerLevel;
+  double m_holdoffMs;
+  int m_triggerSource;
+  SerialStudio::SweepMode m_sweepMode;
+  SerialStudio::TriggerEdge m_triggerEdge;
 };
 }  // namespace Widgets

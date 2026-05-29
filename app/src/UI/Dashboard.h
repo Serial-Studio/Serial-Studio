@@ -165,6 +165,8 @@ public:
   [[nodiscard]] const DSP::MultiLineSeries& multiplotData(const int index) const;
   [[nodiscard]] const DSP::TimeRing& plotTimeRing(const int index) const;
   [[nodiscard]] const std::vector<DSP::TimeRing>& multiplotTimeRings(const int index) const;
+  [[nodiscard]] const DSP::SweepEngine& plotSweep(const int index) const;
+  [[nodiscard]] const DSP::SweepEngine& multiplotSweep(const int index) const;
 
 #ifdef BUILD_COMMERCIAL
   [[nodiscard]] const DSP::LineSeries3D& plotData3D(const int index) const;
@@ -198,6 +200,22 @@ public slots:
 #ifdef BUILD_COMMERCIAL
   void setWaterfallRunning(const int index, const bool enabled);
 #endif
+
+  void setPlotSweep(const int index,
+                    const bool enabled,
+                    const double level,
+                    const int edge,
+                    const int mode,
+                    const double holdoff);
+  void setMultiplotSweep(const int index,
+                         const bool enabled,
+                         const double level,
+                         const int edge,
+                         const int mode,
+                         const double holdoff,
+                         const int triggerCurve);
+  void armPlotSweep(const int index);
+  void armMultiplotSweep(const int index);
 
   void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);
 
@@ -234,6 +252,8 @@ private:
   [[nodiscard]] QHash<int, std::vector<DSP::TimeRing>> snapshotMultiplotTimeRings() const;
   void restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot);
   void restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRing>>& snapshot);
+  void restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
+  void restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
 #ifdef BUILD_COMMERCIAL
   void configureWaterfallSeries();
 #endif
@@ -265,6 +285,7 @@ private:
     std::vector<LinePush::Consumer> consumers;
     DSP::TimeRing* ring;
     const double* value;
+    DSP::SweepEngine* sweep;
   };
 
   /**
@@ -278,6 +299,7 @@ private:
 
     int sourceId;
     const bool* activeFlag;
+    DSP::SweepEngine* sweep;
     std::vector<TimeCurve> timeCurves;
     std::vector<std::pair<DSP::AxisData*, const double*>> samples;
   };
@@ -316,6 +338,8 @@ private:
   QMap<int, DSP::AxisData> m_yAxisData;
   QMap<int, DSP::TimeRing> m_plotTimeRings;
   QMap<int, std::vector<DSP::TimeRing>> m_multiplotTimeRings;
+  QMap<int, DSP::SweepEngine> m_plotSweep;
+  QMap<int, DSP::SweepEngine> m_multiplotSweep;
 
   QMap<int, bool> m_activePlots;
   QMap<int, bool> m_activeFFTPlots;
