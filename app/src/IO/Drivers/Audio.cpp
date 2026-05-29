@@ -33,6 +33,9 @@
 // SPSC queue depth for audio in/out buffers; sized for ~24Hz drain vs ~10ms produce
 static constexpr std::size_t kAudioQueueCapacity = 1024;
 
+// Continuous-clock resync bound: jitter under this is absorbed, drift over it snaps to wall time
+static constexpr std::chrono::milliseconds kAudioClockResync{50};
+
 //--------------------------------------------------------------------------------------------------
 // Utility functions
 //--------------------------------------------------------------------------------------------------
@@ -282,6 +285,7 @@ IO::Drivers::Audio::Audio()
   , m_inputQueue(kAudioQueueCapacity)
   , m_outputQueue(kAudioQueueCapacity)
   , m_inputWorkerTimer(nullptr)
+  , m_sampleClockValid(false)
 {
   // Manually select backend for each operating system
 #if defined(Q_OS_WIN)
@@ -381,6 +385,9 @@ void IO::Drivers::Audio::closeDevice()
     while (m_outputQueue.try_dequeue(dropped)) {
     }
   }
+
+  // Invalidate the sample clock so the next open reseeds from wall time
+  m_sampleClockValid = false;
 
   m_isOpen = false;
 }
@@ -1139,8 +1146,17 @@ void IO::Drivers::Audio::processInputBuffer()
     std::max(std::chrono::nanoseconds(1),
              std::chrono::duration_cast<std::chrono::nanoseconds>(
                std::chrono::duration<double>(1.0 / static_cast<double>(m_config.sampleRate))));
+
+  // Continuous sample clock: advance by frameStep * totalFrames so jitter never shifts the timeline
   const auto now       = IO::CapturedData::SteadyClock::now();
-  const auto timestamp = now - (frameStep * std::max(0, totalFrames - 1));
+  const auto wallFirst = now - (frameStep * std::max(0, totalFrames - 1));
+  if (!m_sampleClockValid || std::chrono::abs(m_nextSampleTime - wallFirst) > kAudioClockResync) {
+    m_nextSampleTime   = wallFirst;
+    m_sampleClockValid = true;
+  }
+
+  const auto timestamp  = m_nextSampleTime;
+  m_nextSampleTime     += frameStep * totalFrames;
   publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
 }
 

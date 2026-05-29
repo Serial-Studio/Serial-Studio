@@ -25,6 +25,9 @@ faker>=19.0.0
 pandas>=2.0.0
 jsonschema>=4.19.0
 
+# Audio-pipeline round-trip analysis (WAV reconstruction, correlation/SNR scoring)
+numpy>=1.24.0
+
 # Performance monitoring
 psutil>=5.9.0
 memory-profiler>=0.61.0

@@ -229,6 +229,9 @@ private:
   QTimer* m_inputWorkerTimer;
   QThread m_inputWorkerThread;
 
+  bool m_sampleClockValid;
+  CapturedData::SteadyTimePoint m_nextSampleTime;
+
   QVector<AudioDeviceInfo> m_inputCapabilities;
   QVector<AudioDeviceInfo> m_outputCapabilities;
 };

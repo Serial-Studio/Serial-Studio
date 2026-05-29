@@ -263,6 +263,19 @@ jobs:
           sleep 1
         done
 
+    # Virtual microphone for the audio-pipeline loopback test. snd-aloop is a
+    # kernel loopback: audio written to one PCM is readable from the paired
+    # PCM, so aplay can feed a known WAV into a capture device the app sees.
+    # Best-effort: if the module or alsa-utils is unavailable the audio test
+    # self-skips, so nothing here may fail the job. Must run BEFORE the app
+    # starts so miniaudio enumerates the loopback at launch.
+    - name: '🎙 Set up ALSA loopback (virtual microphone)'
+      run: |
+        sudo apt-get install -y alsa-utils "linux-modules-extra-$(uname -r)" || \
+          sudo apt-get install -y alsa-utils || true
+        sudo modprobe snd-aloop || true
+        aplay -l || true
+
     - name: '🚀 Start Serial Studio (headless)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -285,11 +298,32 @@ jobs:
       continue-on-error: true
       run: |
         pytest tests/ \
-          -m "not destructive and not dos" \
+          -m "not destructive and not dos and not audio" \
           -v \
           --tb=short \
           --timeout=60 \
           --junit-xml=test-results.xml
+
+    # Audio-pipeline loopback round-trip. Non-blocking: it depends on the
+    # snd-aloop kernel module and the exact ALSA device wiring of the runner,
+    # which can vary. If the loopback is not present the test self-skips. The
+    # playback target subdevice (Loopback,1 vs Loopback,0) may need flipping
+    # on a given runner; the test reports which capture device it matched.
+    - name: '🎙 Run audio loopback tests (non-blocking)'
+      continue-on-error: true
+      env:
+        QT_QPA_PLATFORM: offscreen
+        SS_AUDIO_LOOPBACK_PLAYBACK: plughw:Loopback,1,0
+        SS_AUDIO_CAPTURE_MATCH: loopback
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        pytest tests/integration/test_audio_loopback.py \
+          -m audio \
+          -v \
+          --tb=short \
+          --timeout=120 \
+          --junit-xml=audio-test-results.xml
 
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
@@ -319,4 +353,5 @@ jobs:
         name: pytest-results
         path: |
           test-results.xml
+          audio-test-results.xml
           tests/**/*.log

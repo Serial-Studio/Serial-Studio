@@ -12,6 +12,12 @@ from .device_simulator import DeviceSimulator
 from .data_generator import DataGenerator, ChecksumType
 from .validators import validate_csv_export, validate_frame_structure
 from .virtual_serial import VirtualSerialPort, DualSerialPorts, PTY_AVAILABLE
+from .audio_tools import (
+    generate_chirp_wav,
+    read_wav_mono,
+    align_and_score,
+    analyze_cadence,
+)
 
 __all__ = [
     "SerialStudioClient",
@@ -24,4 +30,8 @@ __all__ = [
     "VirtualSerialPort",
     "DualSerialPorts",
     "PTY_AVAILABLE",
+    "generate_chirp_wav",
+    "read_wav_mono",
+    "align_and_score",
+    "analyze_cadence",
 ]

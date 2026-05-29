@@ -49,6 +49,10 @@ constexpr int kDefaultPlotBuckets = 1024;
 constexpr int kMaxTimeRingSamples  = 262144;
 constexpr double kAssumedMaxRateHz = 50000.0;
 
+// Display-clock jitter rejection: only smooth sub-ms-cadence sources, and only small wobble
+constexpr double kSmoothMaxPeriodSec  = 0.002;
+constexpr double kSmoothMaxForwardSec = 0.050;
+
 /**
  * @brief Time-ring capacity for a window: enough for the assumed max rate, capped.
  */
@@ -1544,7 +1548,18 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
     m_plotGroupStartSec = m_relativeFrameTimeSec;
     m_plotGroupCount    = 1;
   }
-  m_plotDisplayTimeSec = qMax(m_plotDisplayTimeSec + m_plotSamplePeriodSec, m_relativeFrameTimeSec);
+  const double expected = m_plotDisplayTimeSec + m_plotSamplePeriodSec;
+
+  // Never run the display clock backwards; default to snapping up to real arrival time
+  double displayNext = qMax(expected, m_relativeFrameTimeSec);
+
+  // High-rate sources absorb tiny forward jitter; low-rate sources and large gaps still snap
+  const double forwardError = m_relativeFrameTimeSec - expected;
+  if (m_plotSamplePeriodSec > 0 && m_plotSamplePeriodSec < kSmoothMaxPeriodSec && forwardError > 0
+      && forwardError < kSmoothMaxForwardSec)
+    displayNext = expected;
+
+  m_plotDisplayTimeSec = displayNext;
 
   const int sid             = payload.sourceId;
   const bool hadProFeatures = containsCommercialFeatures();
