@@ -15,9 +15,20 @@
 #    pragma GCC diagnostic ignored "-Wstringop-overflow"
 #  endif
 
+// Suppress C4996 from gRPC's own tls_certificate_provider.h, which still
+// references the deprecated grpc::experimental::IdentityKeyCertPair type.
+#  if defined(_MSC_VER)
+#    pragma warning(push)
+#    pragma warning(disable : 4996)
+#  endif
+
 #  include "API/GRPC/GRPCServer.h"
 
 #  include <grpcpp/grpcpp.h>
+
+#  if defined(_MSC_VER)
+#    pragma warning(pop)
+#  endif
 #  include <QCoreApplication>
 #  include <QFile>
 #  include <QFileDialog>

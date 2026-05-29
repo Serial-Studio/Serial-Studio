@@ -177,22 +177,22 @@
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="413"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="424"/>
         <source>Export Protobuf File</source>
         <translation>Eksportuj Plik Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="415"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="426"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (*.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="464"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="475"/>
         <source>Unable to start gRPC server</source>
         <translation>Nie można uruchomić serwera GRPC</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="465"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="476"/>
         <source>Failed to bind to %1</source>
         <translation>Nie udało się powiązać z %1</translation>
     </message>
@@ -11069,7 +11069,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation type="vanished">Interpoluj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="230"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="234"/>
         <source>Interpolation: %1</source>
         <translation>Interpolacja: %1</translation>
     </message>
@@ -11078,47 +11078,47 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation type="vanished">Pokaż Legendy</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="252"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="256"/>
         <source>Show X Axis Label</source>
         <translation>Pokaż Etykietę Osi X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="263"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="267"/>
         <source>Show Y Axis Label</source>
         <translation>Pokaż Etykietę Osi Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="275"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="279"/>
         <source>Show Crosshair</source>
         <translation>Pokaż Celownik</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="282"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="286"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="282"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="286"/>
         <source>Resume</source>
         <translation>Wznów</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="299"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="303"/>
         <source>Sweep / Trigger Mode</source>
         <translation>Tryb Sweep / Wyzwalania</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="308"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="312"/>
         <source>Trigger Settings</source>
         <translation>Ustawienia Wyzwalania</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="325"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="336"/>
         <source>Reset View</source>
         <translation>Resetuj Widok</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="331"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="342"/>
         <source>Axis Range Settings</source>
         <translation>Ustawienia Zakresu Osi</translation>
     </message>
@@ -11546,57 +11546,57 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation type="vanished">Interpoluj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="227"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="231"/>
         <source>Interpolation: %1</source>
         <translation>Interpolacja: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="244"/>
         <source>Show Area Under Plot</source>
         <translation>Pokaż Obszar Pod Wykresem</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="258"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="262"/>
         <source>Show X Axis Label</source>
         <translation>Pokaż Etykietę Osi X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="269"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="273"/>
         <source>Show Y Axis Label</source>
         <translation>Pokaż Etykietę Osi Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="281"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="285"/>
         <source>Show Crosshair</source>
         <translation>Pokaż Celownik</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="288"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="292"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="288"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="292"/>
         <source>Resume</source>
         <translation>Wznów</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="305"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="309"/>
         <source>Sweep / Trigger Mode</source>
         <translation>Tryb Sweep / Wyzwalania</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="314"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="318"/>
         <source>Trigger Settings</source>
         <translation>Ustawienia Wyzwalania</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="331"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="342"/>
         <source>Reset View</source>
         <translation>Resetuj Widok</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="337"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="348"/>
         <source>Axis Range Settings</source>
         <translation>Ustawienia Zakresu Osi</translation>
     </message>
@@ -16110,77 +16110,132 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation>Ustawienia Wyzwalania</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="90"/>
         <source>Hold the waveform stationary by aligning each sweep to a trigger event.</source>
-        <translation>Utrzymuj przebieg nieruchomy, wyrównując każdy sweep do zdarzenia wyzwalającego.</translation>
+        <translation type="vanished">Utrzymuj przebieg nieruchomy, wyrównując każdy sweep do zdarzenia wyzwalającego.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="114"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="93"/>
+        <source>Lock a repeating signal in place, like the Auto button on an oscilloscope. Each sweep starts at the same point on the waveform, so it holds still instead of scrolling past.</source>
+        <translation>Zablokuj powtarzający się sygnał w miejscu, jak przycisk Auto na oscyloskopie. Każde przejście zaczyna się w tym samym punkcie przebiegu, więc pozostaje nieruchomy zamiast przewijać się.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="106"/>
+        <source>Trigger</source>
+        <translation>Wyzwalacz</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="129"/>
         <source>Mode:</source>
         <translation>Tryb:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="138"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="138"/>
         <source>Normal</source>
         <translation>Normalny</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="138"/>
         <source>Single</source>
         <translation>Pojedynczy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="132"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="148"/>
+        <source>Signal:</source>
+        <translation>Sygnał:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="179"/>
+        <source>Value to cross</source>
+        <translation>Wartość do przekroczenia</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="187"/>
         <source>Edge:</source>
         <translation>Zbocze:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="141"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="196"/>
         <source>Rising</source>
         <translation>Narastające</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="205"/>
         <source>Falling</source>
         <translation>Opadające</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="160"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="223"/>
+        <source>A new sweep begins each time the signal crosses the level in the chosen direction. Auto also free-runs when no crossing is found.</source>
+        <translation>Nowe przejście rozpoczyna się za każdym razem, gdy sygnał przekroczy poziom w wybranym kierunku. Auto również działa swobodnie, gdy nie zostanie znalezione przekroczenie.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="235"/>
+        <source>Timing</source>
+        <translation>Synchronizacja</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
+        <source>Timebase (ms):</source>
+        <translation>Podstawa czasu (ms):</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="270"/>
+        <source>Match time range</source>
+        <translation>Dopasuj zakres czasu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="294"/>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="310"/>
+        <source>Timebase sets how much time one sweep shows; leave it empty to use the plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each one.</source>
+        <translation>Podstawa czasu określa, ile czasu pokazuje jedno przejście; pozostaw puste, aby użyć zakresu czasu wykresu. Zmniejsz, aby powiększyć szybki sygnał. Holdoff ignoruje nowe wyzwalacze przez chwilę po każdym z nich.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="324"/>
+        <source>Capture Next</source>
+        <translation>Przechwyć Następny</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="326"/>
+        <source>Arm for one more single-shot capture</source>
+        <translation>Uzbrój dla Jednego Kolejnego Przechwycenia Pojedynczego</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="167"/>
         <source>Level:</source>
         <translation>Poziom:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="172"/>
         <source>Trigger level</source>
-        <translation>Poziom wyzwalania</translation>
+        <translation type="vanished">Poziom wyzwalania</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="180"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="282"/>
         <source>Holdoff (ms):</source>
         <translation>Blokada (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="192"/>
         <source>Holdoff time</source>
-        <translation>Czas blokady</translation>
+        <translation type="vanished">Czas blokady</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="201"/>
         <source>Source:</source>
-        <translation>Źródło:</translation>
+        <translation type="vanished">Źródło:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="230"/>
         <source>Re-arm</source>
-        <translation>Ponowne Uzbrojenie</translation>
+        <translation type="vanished">Ponowne Uzbrojenie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="244"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="339"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
@@ -16232,36 +16287,36 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
     <name>UI::Dashboard</name>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1178"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1888"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1892"/>
         <source>Console</source>
         <translation>Konsola</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1259"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1900"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1904"/>
         <source>Notifications</source>
         <translation>Powiadomienia</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1339"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1912"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1916"/>
         <source>Clock</source>
         <translation>Zegar</translation>
     </message>
     <message>
         <location filename="../../src/UI/Dashboard.cpp" line="1418"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1923"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1927"/>
         <source>Stopwatch</source>
         <translation>Stoper</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1976"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1992"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1980"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1996"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Awaryjny)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2018"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2022"/>
         <source>LED Panel (%1)</source>
         <translation>Panel LED (%1)</translation>
     </message>
@@ -16824,12 +16879,12 @@ Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować 
 <context>
     <name>Widgets::MultiPlot</name>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="101"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="102"/>
         <source>Time (s)</source>
         <translation>Czas (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="101"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="102"/>
         <source>Samples</source>
         <translation>Próbki</translation>
     </message>
@@ -16850,12 +16905,12 @@ Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować 
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="86"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="87"/>
         <source>Time (s)</source>
         <translation>Czas (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="114"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="115"/>
         <source>Samples</source>
         <translation>Próbki</translation>
     </message>
