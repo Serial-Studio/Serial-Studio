@@ -218,9 +218,9 @@ jobs:
       run: cmake --build build --config Release -j 16
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@v0.0.1
+      uses: deglyph-re/cli@main
       with:
-        path: build/app
+        path: build/app/${{env.UNIXNAME}}
         sarif: deglyph.sarif
         fail-on: never
 
@@ -453,9 +453,9 @@ jobs:
       run: cmake --build build --config Release -j 16
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@v0.0.1
+      uses: deglyph-re/cli@main
       with:
-        path: build/app
+        path: build/app/${{env.UNIXNAME}}
         sarif: deglyph.sarif
         fail-on: never
 
@@ -636,9 +636,9 @@ jobs:
       run: cmake --build build --config Release -j 16
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@v0.0.1
+      uses: deglyph-re/cli@main
       with:
-        path: build/app
+        path: build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}
         sarif: deglyph.sarif
         fail-on: never
 
@@ -813,9 +813,9 @@ jobs:
       run: cmake --build build --config Release -j 16
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@v0.0.1
+      uses: deglyph-re/cli@main
       with:
-        path: build/app
+        path: build/app/Release/${{env.EXECUTABLE}}.exe
         sarif: deglyph.sarif
         fail-on: never
 

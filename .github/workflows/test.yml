@@ -218,9 +218,9 @@ jobs:
       run: cmake --build build --config Release -j$(nproc)
 
     - name: '🔎 Scan binaries with deglyph'
-      uses: deglyph-re/cli@v0.0.1
+      uses: deglyph-re/cli@main
       with:
-        path: build/app
+        path: build/app/${{env.UNIXNAME}}
         sarif: deglyph.sarif
         fail-on: never
 
