@@ -276,16 +276,24 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
 - **Plot Sweep / Trigger mode (Pro)**: oscilloscope sweep for **time-axis** Plot/MultiPlot. `DSP::SweepEngine`
   (`DSP.h`) owns a front/back decimating `TimeRing` per curve; `advance(now, trigValue)` runs on the hotpath
   (alloc-free), detects a level+edge crossing (interpolated `t0`), honors holdoff + Auto/Normal/Single, and
-  swaps `back`->`front` when `sweepTime > windowSec`. `display(curve)` returns the live `back` ring while
-  `sweeping` (so the trace grows left-to-right in real time and never visually freezes on long time ranges),
-  falling back to the completed `front` only between sweeps. The Dashboard holds `m_plotSweep`/`m_multiplotSweep`
-  (keyed by widget index), fed from `TimePush::sweep`/`MultiPush::sweep` in `updateLineSeries`/`updateDataSeries`
-  via the `feedSweep`/`feedMultiSweep` lambdas; engines are created in `configureLineSeries`/`configureMultiLineSeries`
-  for time plots and the config survives a Time-Range rebuild via `restorePlotSweepConfig`/`restoreMultiplotSweepConfig`.
-  When enabled the widget axis is `[0, T]` (vs rolling `[-T, 0]`) and `updateData` renders the held sweep through
-  `DSP::downsampleWindowAbsolute` (no newest-rebase). Config lives per-widget in `widgetSettings`
-  (`sweepEnabled`/`sweepMode`/`triggerEdge`/`triggerLevel`/`holdoff`(+`triggerSource` for MultiPlot)); QML wiring is
-  a Pro-gated toolbar toggle + `TriggerDialog.qml`, with the trigger-level line drawn in
+  swaps `back`->`front` when `sweepTime > activeWindow()`. The capture width is `activeWindow()` =
+  `timebaseSec` when set (0 < it < `windowSec`) else the full `windowSec`. Completion re-arms and falls
+  through in the same `advance` call so the next trigger starts immediately, refreshing continuously rather
+  than stalling a full window; in Auto, the free-run timeout is `activeWindow()` (not `windowSec`). Each sweep
+  is phase-locked to its interpolated `t0`, so successive completed sweeps overlay as a stationary trace.
+  `display(curve)` is threshold-gated on `kLiveWindowSec` (0.1s): short windows return the completed `front`
+  (frozen, phase-locked overlay), but windows wider than the threshold return the live `back` while `sweeping`
+  so long ranges grow left-to-right in real time instead of stalling a multi-second hold; before the first
+  completion it always returns `back`. The Dashboard holds `m_plotSweep`/`m_multiplotSweep` (keyed by widget index),
+  fed from `TimePush::sweep`/`MultiPush::sweep` in `updateLineSeries`/`updateDataSeries` via the
+  `feedSweep`/`feedMultiSweep` lambdas; engines are created in `configureLineSeries`/`configureMultiLineSeries`
+  for time plots and the config (including `timebaseSec`) survives a Time-Range rebuild via
+  `restorePlotSweepConfig`/`restoreMultiplotSweepConfig`. When enabled the widget axis is `[0, activeWindow]`
+  (vs rolling `[-T, 0]`) and `updateData` renders the held sweep through `DSP::downsampleWindowAbsolute`
+  (no newest-rebase). Config lives per-widget in `widgetSettings`
+  (`sweepEnabled`/`sweepMode`/`triggerEdge`/`triggerLevel`/`holdoff`/`sweepTimebase`(+`triggerSource` for
+  MultiPlot); `sweepTimebase` is ms, 0 = match time range). QML wiring is a Pro-gated toolbar toggle +
+  `TriggerDialog.qml` (with the optional "Timebase (ms)" field), and the trigger-level line drawn in
   `PlotWidget.qml` (`sweepMode`/`triggerLevel`). Setters are runtime-gated to `FeatureTier >= Trial`. `SweepMode`/
   `TriggerEdge` enums live in `SerialStudio.h`.
 - **Output Widgets (Pro)** (`app/src/UI/Widgets/Output/`, QML in `app/qml/Widgets/Dashboard/Output/`):

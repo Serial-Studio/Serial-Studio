@@ -119,6 +119,9 @@ Item {
     if (s["holdoff"] !== undefined)
       root.model.holdoff = s["holdoff"]
 
+    if (s["sweepTimebase"] !== undefined)
+      root.model.sweepTimebase = s["sweepTimebase"]
+
     if (root.sweepAllowed && s["sweepEnabled"] !== undefined)
       root.model.sweepEnabled = s["sweepEnabled"]
   }
@@ -132,6 +135,7 @@ Item {
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "triggerLevel", root.model.triggerLevel)
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "triggerSource", root.model.triggerSource)
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "holdoff", root.model.holdoff)
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepTimebase", root.model.sweepTimebase)
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepEnabled", root.model.sweepEnabled)
   }
 
@@ -308,6 +312,13 @@ Item {
       ToolTip.text: qsTr("Trigger Settings")
       icon.source: "qrc:/icons/dashboard-buttons/trigger.svg"
       onClicked: triggerDialog.openDialog(root.model, true)
+    }
+
+    Rectangle {
+      visible: root.sweepAllowed
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
     }
 
     DashboardToolButton {

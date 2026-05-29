@@ -65,6 +65,9 @@ Widgets.SmartDialog {
     if (root.model) {
       levelField.text = root.model.triggerLevel.toFixed(4)
       holdoffField.text = root.model.holdoff.toFixed(0)
+      timebaseField.text = root.model.sweepTimebase > 0
+                           ? root.model.sweepTimebase.toFixed(0)
+                           : ""
     }
 
     root.show()
@@ -84,14 +87,26 @@ Widgets.SmartDialog {
       opacity: 0.7
       Layout.fillWidth: true
       wrapMode: Text.WordWrap
-      Layout.minimumWidth: 356
+      Layout.minimumWidth: 380
       color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.9)
-      text: qsTr("Hold the waveform stationary by aligning each sweep to a trigger event.")
+      text: qsTr("Lock a repeating signal in place, like the Auto button on an oscilloscope. "
+                 + "Each sweep starts at the same point on the waveform, so it holds still "
+                 + "instead of scrolling past.")
     }
 
     Item {
       implicitHeight: 4
+    }
+
+    //
+    // Trigger section: what starts each sweep
+    //
+    Label {
+      text: qsTr("Trigger")
+      font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+      color: Cpp_ThemeManager.colors["pane_section_label"]
+      Component.onCompleted: font.capitalization = Font.AllUppercase
     }
 
     GroupBox {
@@ -119,12 +134,52 @@ Widgets.SmartDialog {
           id: modeBox
 
           Layout.fillWidth: true
-          Layout.minimumWidth: 160
+          Layout.minimumWidth: 180
           model: [qsTr("Auto"), qsTr("Normal"), qsTr("Single")]
           currentIndex: root.model ? root.model.sweepMode : 0
           onActivated: {
             if (root.model)
               root.model.sweepMode = root.modeValues[currentIndex]
+          }
+        }
+
+        Label {
+          visible: root.isMultiPlot
+          text: qsTr("Signal:")
+          color: Cpp_ThemeManager.colors["text"]
+        }
+
+        ComboBox {
+          id: sourceBox
+
+          visible: root.isMultiPlot
+          Layout.fillWidth: true
+          Layout.minimumWidth: 180
+          model: root.model ? root.model.labels : []
+          currentIndex: root.model ? root.model.triggerSource : 0
+          onActivated: {
+            if (root.model)
+              root.model.triggerSource = currentIndex
+          }
+        }
+
+        Label {
+          text: qsTr("Level:")
+          color: Cpp_ThemeManager.colors["text"]
+        }
+
+        Widgets.LineField {
+          id: levelField
+
+          selectByMouse: true
+          Layout.fillWidth: true
+          Layout.minimumWidth: 180
+          validator: DoubleValidator {}
+          font: Cpp_Misc_CommonFonts.monoFont
+          placeholderText: qsTr("Value to cross")
+          onTextChanged: {
+            if (activeFocus && acceptableInput && root.model)
+              Qt.callLater(function() { root.model.triggerLevel = parseFloat(levelField.text) })
           }
         }
 
@@ -155,24 +210,71 @@ Widgets.SmartDialog {
             }
           }
         }
+      }
+    }
+
+    Label {
+      opacity: 0.6
+      Layout.fillWidth: true
+      wrapMode: Text.WordWrap
+      Layout.minimumWidth: 380
+      color: Cpp_ThemeManager.colors["text"]
+      font: Cpp_Misc_CommonFonts.customUiFont(0.8)
+      text: qsTr("A new sweep begins each time the signal crosses the level in the chosen "
+                 + "direction. Auto also free-runs when no crossing is found.")
+    }
+
+    Item {
+      implicitHeight: 4
+    }
+
+    //
+    // Timing section: how wide each sweep is and how often it repeats
+    //
+    Label {
+      text: qsTr("Timing")
+      font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+      color: Cpp_ThemeManager.colors["pane_section_label"]
+      Component.onCompleted: font.capitalization = Font.AllUppercase
+    }
+
+    GroupBox {
+      Layout.fillWidth: true
+
+      background: Rectangle {
+        radius: 2
+        border.width: 1
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+      }
+
+      GridLayout {
+        columns: 2
+        rowSpacing: 6
+        columnSpacing: 8
+        anchors.fill: parent
 
         Label {
-          text: qsTr("Level:")
+          text: qsTr("Timebase (ms):")
           color: Cpp_ThemeManager.colors["text"]
         }
 
         Widgets.LineField {
-          id: levelField
+          id: timebaseField
 
           selectByMouse: true
           Layout.fillWidth: true
-          Layout.minimumWidth: 160
-          validator: DoubleValidator {}
+          Layout.minimumWidth: 180
+          validator: DoubleValidator { bottom: 0 }
           font: Cpp_Misc_CommonFonts.monoFont
-          placeholderText: qsTr("Trigger level")
+          placeholderText: qsTr("Match time range")
           onTextChanged: {
-            if (activeFocus && acceptableInput && root.model)
-              Qt.callLater(function() { root.model.triggerLevel = parseFloat(levelField.text) })
+            if (activeFocus && root.model)
+              Qt.callLater(function() {
+                root.model.sweepTimebase = timebaseField.text.length > 0
+                                           ? parseFloat(timebaseField.text)
+                                           : 0
+              })
           }
         }
 
@@ -186,36 +288,28 @@ Widgets.SmartDialog {
 
           selectByMouse: true
           Layout.fillWidth: true
-          Layout.minimumWidth: 160
+          Layout.minimumWidth: 180
           validator: DoubleValidator { bottom: 0 }
           font: Cpp_Misc_CommonFonts.monoFont
-          placeholderText: qsTr("Holdoff time")
+          placeholderText: qsTr("0")
           onTextChanged: {
             if (activeFocus && acceptableInput && root.model)
               Qt.callLater(function() { root.model.holdoff = parseFloat(holdoffField.text) })
           }
         }
-
-        Label {
-          visible: root.isMultiPlot
-          text: qsTr("Source:")
-          color: Cpp_ThemeManager.colors["text"]
-        }
-
-        ComboBox {
-          id: sourceBox
-
-          visible: root.isMultiPlot
-          Layout.fillWidth: true
-          Layout.minimumWidth: 160
-          model: root.model ? root.model.labels : []
-          currentIndex: root.model ? root.model.triggerSource : 0
-          onActivated: {
-            if (root.model)
-              root.model.triggerSource = currentIndex
-          }
-        }
       }
+    }
+
+    Label {
+      opacity: 0.6
+      Layout.fillWidth: true
+      wrapMode: Text.WordWrap
+      Layout.minimumWidth: 380
+      color: Cpp_ThemeManager.colors["text"]
+      font: Cpp_Misc_CommonFonts.customUiFont(0.8)
+      text: qsTr("Timebase sets how much time one sweep shows; leave it empty to use the "
+                 + "plot's time range. Lower it to zoom in on a fast signal. Holdoff ignores "
+                 + "new triggers for a moment after each one.")
     }
 
     Item {
@@ -227,8 +321,9 @@ Widgets.SmartDialog {
       Layout.alignment: Qt.AlignRight
 
       Widgets.IconButton {
-        text: qsTr("Re-arm")
+        text: qsTr("Capture Next")
         icon.source: "qrc:/icons/buttons/refresh.svg"
+        ToolTip.text: qsTr("Arm for one more single-shot capture")
         visible: root.model && root.model.sweepMode === SerialStudio.SweepSingle
         onClicked: {
           if (root.model)

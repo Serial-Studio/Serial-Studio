@@ -427,10 +427,14 @@ struct SweepEngine {
   static constexpr int kRising  = 0;
   static constexpr int kFalling = 1;
 
+  // Windows wider than this draw the live partial trace instead of freezing
+  static constexpr double kLiveWindowSec = 0.1;
+
   std::vector<TimeRing> front;
   std::vector<TimeRing> back;
 
   double windowSec;
+  double timebaseSec;
   double level;
   double holdoffSec;
   int edge;
@@ -453,6 +457,7 @@ struct SweepEngine {
    */
   SweepEngine()
     : windowSec(1.0)
+    , timebaseSec(0.0)
     , level(0.0)
     , holdoffSec(0.0)
     , edge(kRising)
@@ -484,6 +489,14 @@ struct SweepEngine {
   }
 
   /**
+   * @brief Width of one captured sweep: the timebase override, else the full window.
+   */
+  [[nodiscard]] double activeWindow() const noexcept
+  {
+    return (timebaseSec > 0 && timebaseSec < windowSec) ? timebaseSec : windowSec;
+  }
+
+  /**
    * @brief Updates trigger parameters and re-arms a single-shot capture.
    */
   void setTrigger(double lvl, int edgeMode, int sweepMode, double holdoff, int curve)
@@ -495,6 +508,11 @@ struct SweepEngine {
     triggerCurve = curve < 0 ? 0 : curve;
     armed        = true;
   }
+
+  /**
+   * @brief Sets the per-sweep timebase in seconds; 0 or >= window means full window.
+   */
+  void setTimebase(double seconds) { timebaseSec = seconds > 0 ? seconds : 0.0; }
 
   /**
    * @brief Re-arms a single-shot capture without touching retained data.
@@ -524,8 +542,9 @@ struct SweepEngine {
   }
 
   /**
-   * @brief Returns the ring to render: the live trace while acquiring, else the
-   *        last completed sweep. Lets the trace grow in real time like a scope.
+   * @brief Returns the ring to render. Short windows show the frozen, phase-locked
+   *        completed sweep; long windows show the live partial trace so they grow
+   *        in real time. Falls back to the live ring before the first completion.
    */
   [[nodiscard]] const TimeRing& display(std::size_t curve) const
   {
@@ -533,7 +552,9 @@ struct SweepEngine {
     if (curve >= front.size())
       return kEmpty;
 
-    if (sweeping && curve < back.size())
+    // Live partial trace before the first completion or whenever the window is long
+    const bool live = !hasFront || activeWindow() > kLiveWindowSec;
+    if (live && sweeping && curve < back.size())
       return back[curve];
 
     return front[curve];
@@ -547,17 +568,22 @@ struct SweepEngine {
   {
     double sweepTime = -1.0;
 
-    // Already filling: append until the window elapses, then publish the sweep
+    // Filling: append until the timebase elapses, then complete and fall through
     if (sweeping) {
       const double st = now - t0;
-      if (st > windowSec)
+      if (st > activeWindow())
         completeSweep(now);
-      else
+      else {
         sweepTime = st < 0 ? 0.0 : st;
+        prevValue = trigValue;
+        prevTime  = now;
+        prevValid = true;
+        return sweepTime;
+      }
     }
 
     // Idle: decide whether a trigger (or auto free-run) starts a new sweep
-    else if (shouldStart(now, trigValue)) {
+    if (!sweeping && shouldStart(now, trigValue)) {
       t0           = triggerOrigin(now, trigValue);
       lastSweepSec = now;
       if (edgeDetected(trigValue))
@@ -605,8 +631,8 @@ private:
     if (mode == kNormal)
       return edgeOk;
 
-    // Auto: trigger when possible, otherwise free-run after a quiet window
-    return edgeOk || (now - lastSweepSec) >= windowSec;
+    // Auto: trigger when possible, otherwise free-run after a quiet timebase
+    return edgeOk || (now - lastSweepSec) >= activeWindow();
   }
 
   /**

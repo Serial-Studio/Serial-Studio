@@ -206,14 +206,16 @@ public slots:
                     const double level,
                     const int edge,
                     const int mode,
-                    const double holdoff);
+                    const double holdoff,
+                    const double timebase);
   void setMultiplotSweep(const int index,
                          const bool enabled,
                          const double level,
                          const int edge,
                          const int mode,
                          const double holdoff,
-                         const int triggerCurve);
+                         const int triggerCurve,
+                         const double timebase);
   void armPlotSweep(const int index);
   void armMultiplotSweep(const int index);
 
