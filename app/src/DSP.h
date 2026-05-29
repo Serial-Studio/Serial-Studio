@@ -524,13 +524,17 @@ struct SweepEngine {
   }
 
   /**
-   * @brief Returns the displayed (completed) sweep ring for a curve.
+   * @brief Returns the ring to render: the live trace while acquiring, else the
+   *        last completed sweep. Lets the trace grow in real time like a scope.
    */
   [[nodiscard]] const TimeRing& display(std::size_t curve) const
   {
     static const TimeRing kEmpty{};
     if (curve >= front.size())
       return kEmpty;
+
+    if (sweeping && curve < back.size())
+      return back[curve];
 
     return front[curve];
   }

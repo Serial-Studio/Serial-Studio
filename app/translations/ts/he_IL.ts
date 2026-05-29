@@ -6822,67 +6822,67 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="757"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="764"/>
         <source>channels</source>
         <translation>ערוצים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="810"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="817"/>
         <source> channels</source>
         <translation>ערוצים</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="958"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="965"/>
         <source>Unsigned 8-bit</source>
         <translation>ללא סימן 8 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="959"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="966"/>
         <source>Signed 16-bit</source>
         <translation>עם סימן 16 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="960"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="967"/>
         <source>Signed 24-bit</source>
         <translation>עם סימן 24 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="961"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="968"/>
         <source>Signed 32-bit</source>
         <translation>עם סימן 32 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="969"/>
         <source>Float 32-bit</source>
         <translation>נקודה צפה 32 סיביות</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="965"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="972"/>
         <source>Mono</source>
         <translation>מונו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="966"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="973"/>
         <source>Stereo</source>
         <translation>סטריאו</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1359"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1375"/>
         <source>Input Device</source>
         <translation>התקן קלט</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1367"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1383"/>
         <source>Sample Rate</source>
         <translation>קצב דגימה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1375"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1391"/>
         <source>Sample Format</source>
         <translation>פורמט דגימה</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1383"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1399"/>
         <source>Channels</source>
         <translation>ערוצים</translation>
     </message>
@@ -10559,7 +10559,7 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="178"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="230"/>
         <source>Interpolation: %1</source>
         <translation>אינטרפולציה: %1</translation>
     </message>
@@ -10568,37 +10568,47 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">הצג מקרא</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="200"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="252"/>
         <source>Show X Axis Label</source>
         <translation>הצג תווית ציר X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="211"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="263"/>
         <source>Show Y Axis Label</source>
         <translation>הצג תווית ציר Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="223"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="275"/>
         <source>Show Crosshair</source>
         <translation>הצג כוונת</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="230"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="282"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="230"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="282"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="249"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="299"/>
+        <source>Sweep / Trigger Mode</source>
+        <translation>מצב סריקה / טריגר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="308"/>
+        <source>Trigger Settings</source>
+        <translation>הגדרות טריגר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="325"/>
         <source>Reset View</source>
         <translation>אפס תצוגה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="255"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="331"/>
         <source>Axis Range Settings</source>
         <translation>הגדרות טווח צירים</translation>
     </message>
@@ -11018,47 +11028,57 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Plot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="179"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="227"/>
         <source>Interpolation: %1</source>
         <translation>אינטרפולציה: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="192"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
         <source>Show Area Under Plot</source>
         <translation>הצג שטח מתחת לגרף</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="210"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="258"/>
         <source>Show X Axis Label</source>
         <translation>הצג תווית ציר X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="221"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="269"/>
         <source>Show Y Axis Label</source>
         <translation>הצג תווית ציר Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="233"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="281"/>
         <source>Show Crosshair</source>
         <translation>הצג כוונת</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="288"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="288"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="259"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="305"/>
+        <source>Sweep / Trigger Mode</source>
+        <translation>מצב סריקה / טריגר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="314"/>
+        <source>Trigger Settings</source>
+        <translation>הגדרות טריגר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="331"/>
         <source>Reset View</source>
         <translation>אפס תצוגה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="337"/>
         <source>Axis Range Settings</source>
         <translation>הגדרות טווח צירים</translation>
     </message>
@@ -11142,22 +11162,22 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1257"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1259"/>
         <source>Time</source>
         <translation>זמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1280"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1282"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — גרור להזזה, לחץ ימני לניקוי</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1283"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1285"/>
         <source>Click to place cursor</source>
         <translation>לחץ למיקום סמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1285"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1287"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>לחץ למיקום סמן שני — גרור להזזה</translation>
     </message>
@@ -14978,52 +14998,52 @@ function parse(%1) { ... }
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="945"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="949"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: מחובר אל %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="946"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="950"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: לא מחובר</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="970"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="974"/>
         <source>MQTT Publisher</source>
         <translation>מפרסם MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="980"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="984"/>
         <source>Status:</source>
         <translation>מצב:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="988"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="992"/>
         <source>Connected</source>
         <translation>מחובר</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="993"/>
         <source>Disconnected</source>
         <translation>מנותק</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="996"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1000"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1009"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1013"/>
         <source>Mode:</source>
         <translation>מצב:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1022"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1026"/>
         <source>Messages sent:</source>
         <translation>הודעות שנשלחו:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1036"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1040"/>
         <source>Open MQTT Settings</source>
         <translation>פתח הגדרות MQTT</translation>
     </message>
@@ -15403,6 +15423,89 @@ function parse(%1) { ... }
     </message>
 </context>
 <context>
+    <name>TriggerDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="50"/>
+        <source>Trigger Settings</source>
+        <translation>הגדרות טריגר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="90"/>
+        <source>Hold the waveform stationary by aligning each sweep to a trigger event.</source>
+        <translation>החזקת צורת הגל במצב נייח על ידי יישור כל סריקה לאירוע טריגר.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="114"/>
+        <source>Mode:</source>
+        <translation>מצב:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <source>Auto</source>
+        <translation>אוטומטי</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <source>Normal</source>
+        <translation>רגיל</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <source>Single</source>
+        <translation>בודד</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="132"/>
+        <source>Edge:</source>
+        <translation>קצה:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="141"/>
+        <source>Rising</source>
+        <translation>עולה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <source>Falling</source>
+        <translation>יורד</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="160"/>
+        <source>Level:</source>
+        <translation>רמה:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="172"/>
+        <source>Trigger level</source>
+        <translation>רמת טריגר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="180"/>
+        <source>Holdoff (ms):</source>
+        <translation>זמן החזקה (ms):</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="192"/>
+        <source>Holdoff time</source>
+        <translation>זמן החזקה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="201"/>
+        <source>Source:</source>
+        <translation>מקור:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="230"/>
+        <source>Re-arm</source>
+        <translation>חימוש מחדש</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="244"/>
+        <source>Close</source>
+        <translation>סגור</translation>
+    </message>
+</context>
+<context>
     <name>UART</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="52"/>
@@ -15448,37 +15551,37 @@ function parse(%1) { ... }
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1133"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1751"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1178"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1888"/>
         <source>Console</source>
         <translation>קונסול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1214"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1763"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1259"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1900"/>
         <source>Notifications</source>
         <translation>התראות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1294"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1775"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1339"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1912"/>
         <source>Clock</source>
         <translation>שעון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1373"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1786"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1418"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1923"/>
         <source>Stopwatch</source>
         <translation>שעון עצר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1839"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1855"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1976"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1992"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (גיבוי)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1881"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2018"/>
         <source>LED Panel (%1)</source>
         <translation>לוח LED (%1)</translation>
     </message>
@@ -16029,12 +16132,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::MultiPlot</name>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="95"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="101"/>
         <source>Time (s)</source>
         <translation>זמן (שניות)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="95"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="101"/>
         <source>Samples</source>
         <translation>דגימות</translation>
     </message>
@@ -16055,12 +16158,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="81"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="86"/>
         <source>Time (s)</source>
         <translation>זמן (שניות)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="109"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="114"/>
         <source>Samples</source>
         <translation>דגימות</translation>
     </message>

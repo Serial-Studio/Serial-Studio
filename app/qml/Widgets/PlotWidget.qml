@@ -1308,7 +1308,7 @@ Item {
   }
 
   //
-  // Sweep-mode trigger indicators: level line and t=0 marker
+  // Sweep-mode trigger indicator: trigger-level line
   //
   Item {
     clip: true
@@ -1325,15 +1325,6 @@ Item {
       color: Cpp_ThemeManager.colors["highlight"]
       y: root.worldToPixelY(root.triggerLevel)
       visible: root.triggerLevel >= root.yVisibleMin && root.triggerLevel <= root.yVisibleMax
-    }
-
-    Rectangle {
-      width: 1
-      opacity: 0.6
-      height: parent.height
-      color: Cpp_ThemeManager.colors["highlight"]
-      x: root.worldToPixelX(0)
-      visible: 0 >= root.xVisibleMin && 0 <= root.xVisibleMax
     }
   }
 }

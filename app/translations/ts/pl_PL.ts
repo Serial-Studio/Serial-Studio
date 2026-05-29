@@ -6922,67 +6922,67 @@ Prawidłowy format: 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="757"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="764"/>
         <source>channels</source>
         <translation>kanały</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="810"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="817"/>
         <source> channels</source>
         <translation>kanały</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="958"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="965"/>
         <source>Unsigned 8-bit</source>
         <translation>Bez Znaku 8-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="959"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="966"/>
         <source>Signed 16-bit</source>
         <translation>Ze Znakiem 16-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="960"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="967"/>
         <source>Signed 24-bit</source>
         <translation>Ze Znakiem 24-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="961"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="968"/>
         <source>Signed 32-bit</source>
         <translation>Ze Znakiem 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="969"/>
         <source>Float 32-bit</source>
         <translation>Zmiennoprzecinkowy 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="965"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="972"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="966"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="973"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1359"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1375"/>
         <source>Input Device</source>
         <translation>Urządzenie Wejściowe</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1367"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1383"/>
         <source>Sample Rate</source>
         <translation>Częstotliwość Próbkowania</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1375"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1391"/>
         <source>Sample Format</source>
         <translation>Format Próbki</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1383"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1399"/>
         <source>Channels</source>
         <translation>Kanały</translation>
     </message>
@@ -11069,7 +11069,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation type="vanished">Interpoluj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="178"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="230"/>
         <source>Interpolation: %1</source>
         <translation>Interpolacja: %1</translation>
     </message>
@@ -11078,37 +11078,47 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation type="vanished">Pokaż Legendy</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="200"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="252"/>
         <source>Show X Axis Label</source>
         <translation>Pokaż Etykietę Osi X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="211"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="263"/>
         <source>Show Y Axis Label</source>
         <translation>Pokaż Etykietę Osi Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="223"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="275"/>
         <source>Show Crosshair</source>
         <translation>Pokaż Celownik</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="230"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="282"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="230"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="282"/>
         <source>Resume</source>
         <translation>Wznów</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="249"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="299"/>
+        <source>Sweep / Trigger Mode</source>
+        <translation>Tryb Sweep / Wyzwalania</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="308"/>
+        <source>Trigger Settings</source>
+        <translation>Ustawienia Wyzwalania</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="325"/>
         <source>Reset View</source>
         <translation>Resetuj Widok</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="255"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="331"/>
         <source>Axis Range Settings</source>
         <translation>Ustawienia Zakresu Osi</translation>
     </message>
@@ -11536,47 +11546,57 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation type="vanished">Interpoluj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="179"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="227"/>
         <source>Interpolation: %1</source>
         <translation>Interpolacja: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="192"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
         <source>Show Area Under Plot</source>
         <translation>Pokaż Obszar Pod Wykresem</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="210"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="258"/>
         <source>Show X Axis Label</source>
         <translation>Pokaż Etykietę Osi X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="221"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="269"/>
         <source>Show Y Axis Label</source>
         <translation>Pokaż Etykietę Osi Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="233"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="281"/>
         <source>Show Crosshair</source>
         <translation>Pokaż Celownik</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="288"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="240"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="288"/>
         <source>Resume</source>
         <translation>Wznów</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="259"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="305"/>
+        <source>Sweep / Trigger Mode</source>
+        <translation>Tryb Sweep / Wyzwalania</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="314"/>
+        <source>Trigger Settings</source>
+        <translation>Ustawienia Wyzwalania</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="331"/>
         <source>Reset View</source>
         <translation>Resetuj Widok</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="337"/>
         <source>Axis Range Settings</source>
         <translation>Ustawienia Zakresu Osi</translation>
     </message>
@@ -11660,22 +11680,22 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1257"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1259"/>
         <source>Time</source>
         <translation>Czas</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1280"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1282"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — Przeciągnij, aby przesunąć, kliknij prawym, aby wyczyścić</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1283"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1285"/>
         <source>Click to place cursor</source>
         <translation>Kliknij, aby umieścić kursor</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1285"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1287"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Kliknij, aby umieścić drugi kursor — Przeciągnij, aby przesunąć</translation>
     </message>
@@ -15621,52 +15641,52 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation>Wstrzymaj</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="945"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="949"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Połączono z %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="946"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="950"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Brak połączenia</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="970"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="974"/>
         <source>MQTT Publisher</source>
         <translation>Wydawca MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="980"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="984"/>
         <source>Status:</source>
         <translation>Status:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="988"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="992"/>
         <source>Connected</source>
         <translation>Połączono</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="993"/>
         <source>Disconnected</source>
         <translation>Rozłączono</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="996"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1000"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1009"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1013"/>
         <source>Mode:</source>
         <translation>Tryb:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1022"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1026"/>
         <source>Messages sent:</source>
         <translation>Wysłane komunikaty:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1036"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1040"/>
         <source>Open MQTT Settings</source>
         <translation>Otwórz Ustawienia MQTT</translation>
     </message>
@@ -16083,6 +16103,89 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
     </message>
 </context>
 <context>
+    <name>TriggerDialog</name>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="50"/>
+        <source>Trigger Settings</source>
+        <translation>Ustawienia Wyzwalania</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="90"/>
+        <source>Hold the waveform stationary by aligning each sweep to a trigger event.</source>
+        <translation>Utrzymuj przebieg nieruchomy, wyrównując każdy sweep do zdarzenia wyzwalającego.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="114"/>
+        <source>Mode:</source>
+        <translation>Tryb:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <source>Auto</source>
+        <translation>Auto</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <source>Normal</source>
+        <translation>Normalny</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="123"/>
+        <source>Single</source>
+        <translation>Pojedynczy</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="132"/>
+        <source>Edge:</source>
+        <translation>Zbocze:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="141"/>
+        <source>Rising</source>
+        <translation>Narastające</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <source>Falling</source>
+        <translation>Opadające</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="160"/>
+        <source>Level:</source>
+        <translation>Poziom:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="172"/>
+        <source>Trigger level</source>
+        <translation>Poziom wyzwalania</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="180"/>
+        <source>Holdoff (ms):</source>
+        <translation>Blokada (ms):</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="192"/>
+        <source>Holdoff time</source>
+        <translation>Czas blokady</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="201"/>
+        <source>Source:</source>
+        <translation>Źródło:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="230"/>
+        <source>Re-arm</source>
+        <translation>Ponowne Uzbrojenie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="244"/>
+        <source>Close</source>
+        <translation>Zamknij</translation>
+    </message>
+</context>
+<context>
     <name>UART</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="52"/>
@@ -16128,37 +16231,37 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1133"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1751"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1178"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1888"/>
         <source>Console</source>
         <translation>Konsola</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1214"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1763"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1259"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1900"/>
         <source>Notifications</source>
         <translation>Powiadomienia</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1294"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1775"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1339"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1912"/>
         <source>Clock</source>
         <translation>Zegar</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1373"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1786"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1418"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1923"/>
         <source>Stopwatch</source>
         <translation>Stoper</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1839"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1855"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1976"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1992"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Awaryjny)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1881"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2018"/>
         <source>LED Panel (%1)</source>
         <translation>Panel LED (%1)</translation>
     </message>
@@ -16721,12 +16824,12 @@ Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować 
 <context>
     <name>Widgets::MultiPlot</name>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="95"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="101"/>
         <source>Time (s)</source>
         <translation>Czas (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="95"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="101"/>
         <source>Samples</source>
         <translation>Próbki</translation>
     </message>
@@ -16747,12 +16850,12 @@ Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować 
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="81"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="86"/>
         <source>Time (s)</source>
         <translation>Czas (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="109"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="114"/>
         <source>Samples</source>
         <translation>Próbki</translation>
     </message>

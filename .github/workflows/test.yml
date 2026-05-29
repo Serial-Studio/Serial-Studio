@@ -40,6 +40,8 @@ on:
 
 env:
   QT_VERSION_LINUX: 6.11.1
+  GRPC_VERSION: 1.81.0
+  GRPC_REPO: alex-spataru/gRPC-Builds
   UNIXNAME: "serial-studio-pro"
   INSTALL_QT_LINUX_INTEL: false
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
@@ -139,11 +141,11 @@ jobs:
           mosquitto-clients \
     - name: '⚙️ Download prebuilt gRPC'
       run: |
-        gh release download v1.78.1 \
-          -R alex-spataru/gRPC-Builds \
-          -p "grpc-1.78.1-linux-x86_64.tar.gz"
+        gh release download v${{env.GRPC_VERSION}} \
+          -R ${{env.GRPC_REPO}} \
+          -p "grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz"
         mkdir -p ${{github.workspace}}/grpc-prefix
-        tar -xzf grpc-1.78.1-linux-x86_64.tar.gz -C ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz -C ${{github.workspace}}/grpc-prefix
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 

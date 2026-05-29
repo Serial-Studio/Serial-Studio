@@ -43,6 +43,8 @@ env:
   QT_VERSION_LINUX: 6.11.1
   QT_VERSION_MACOS: 6.11.1
   QT_VERSION_WINDOWS: 6.11.1
+  GRPC_VERSION: 1.81.0
+  GRPC_REPO: alex-spataru/gRPC-Builds
   EXECUTABLE: "Serial-Studio-Pro"
   APPLICATION: "Serial Studio Pro"
   UNIXNAME: "serial-studio-pro"
@@ -137,13 +139,14 @@ jobs:
           gstreamer1.0-alsa \
           gstreamer1.0-pulseaudio \
           gstreamer1.0-gl \
+          
     - name: '⚙️ Download prebuilt gRPC'
       run: |
-        gh release download v1.78.1 \
-          -R alex-spataru/gRPC-Builds \
-          -p "grpc-1.78.1-linux-x86_64.tar.gz"
+        gh release download v${{env.GRPC_VERSION}} \
+          -R ${{env.GRPC_REPO}} \
+          -p "grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz"
         mkdir -p ${{github.workspace}}/grpc-prefix
-        tar -xzf grpc-1.78.1-linux-x86_64.tar.gz -C ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz -C ${{github.workspace}}/grpc-prefix
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -374,13 +377,14 @@ jobs:
           gstreamer1.0-alsa \
           gstreamer1.0-pulseaudio \
           gstreamer1.0-gl \
+          
     - name: '⚙️ Download prebuilt gRPC'
       run: |
-        gh release download v1.78.1 \
-          -R alex-spataru/gRPC-Builds \
-          -p "grpc-1.78.1-linux-aarch64.tar.gz"
+        gh release download v${{env.GRPC_VERSION}} \
+          -R ${{env.GRPC_REPO}} \
+          -p "grpc-${{env.GRPC_VERSION}}-linux-aarch64.tar.gz"
         mkdir -p ${{github.workspace}}/grpc-prefix
-        tar -xzf grpc-1.78.1-linux-aarch64.tar.gz -C ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-${{env.GRPC_VERSION}}-linux-aarch64.tar.gz -C ${{github.workspace}}/grpc-prefix
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -552,11 +556,11 @@ jobs:
 
     - name: '⚙️ Download prebuilt gRPC (universal)'
       run: |
-        gh release download v1.78.1 \
-          -R alex-spataru/gRPC-Builds \
-          -p "grpc-1.78.1-macos-universal.tar.gz"
+        gh release download v${{env.GRPC_VERSION}} \
+          -R ${{env.GRPC_REPO}} \
+          -p "grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz"
         mkdir -p ${{github.workspace}}/grpc-prefix
-        tar -xzf grpc-1.78.1-macos-universal.tar.gz -C ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz -C ${{github.workspace}}/grpc-prefix
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -783,11 +787,11 @@ jobs:
 
     - name: '⚙️ Download prebuilt gRPC'
       run: |
-        gh release download v1.78.1 `
-          -R alex-spataru/gRPC-Builds `
-          -p "grpc-1.78.1-windows-x86_64.zip"
+        gh release download v${{env.GRPC_VERSION}} `
+          -R ${{env.GRPC_REPO}} `
+          -p "grpc-${{env.GRPC_VERSION}}-windows-x86_64.zip"
         mkdir "${{github.workspace}}\grpc-prefix"
-        7z x grpc-1.78.1-windows-x86_64.zip -o"${{github.workspace}}\grpc-prefix"
+        7z x grpc-${{env.GRPC_VERSION}}-windows-x86_64.zip -o"${{github.workspace}}\grpc-prefix"
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
