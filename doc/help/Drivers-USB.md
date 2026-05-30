@@ -108,7 +108,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Raw USB section](Protoco
 
 ## Further reading
 
-- [Beyond Logic: USB primer](https://www.beyondlogic.org/usbnutshell/usb1.shtml): comprehensive introduction to USB.
+- [Beyond Logic: USB primer](https://www.beyondlogic.org/usbnutshell/usb1.shtml): introduction to USB.
 - [USB Endpoint Types (Beyond Logic Chapter 4)](https://www.beyondlogic.org/usbnutshell/usb4.shtml)
 - [USB Descriptors (Beyond Logic Chapter 5)](https://www.beyondlogic.org/usbnutshell/usb5.shtml)
 - [libusb-1.0 API Reference](https://libusb.sourceforge.io/api-1.0/)

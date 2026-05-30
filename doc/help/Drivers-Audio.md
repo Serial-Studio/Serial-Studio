@@ -1,8 +1,8 @@
 # Audio Driver (Pro)
 
-The Audio driver lets Serial Studio treat any OS-level audio input device as a high-rate analog data source: microphones, line-in, audio interfaces, USB DACs, virtual loopback devices — anything the OS can record from.
+The Audio driver lets Serial Studio treat any OS-level audio input device as an analog data source: microphones, line-in, audio interfaces, USB DACs, virtual loopback devices, anything the OS can record from.
 
-It also serves as a fast way to feed any analog signal into Serial Studio when no dedicated driver fits. A vibration sensor through a microphone preamp, or a current shunt through a line input, both work as well as a real microphone.
+It can also feed an analog signal into Serial Studio when no dedicated driver fits. A vibration sensor through a microphone preamp, or a current shunt through a line input, both work the same as a real microphone.
 
 ## What is digital audio?
 

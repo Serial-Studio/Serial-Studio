@@ -196,7 +196,7 @@ Modbus is an industrial communication protocol for reading and writing registers
 
 ### CAN Bus
 
-Controller Area Network (CAN) is a robust vehicle and industrial bus standard. Serial Studio Pro reads and writes CAN frames through the host platform's CAN interface layer.
+Controller Area Network (CAN) is a vehicle and industrial bus standard. Serial Studio Pro reads and writes CAN frames through the host platform's CAN interface layer.
 
 **When to use it:**
 

@@ -1,14 +1,14 @@
 # Support Serial Studio
 
-Serial Studio started as a passion project and is now used by thousands of developers, engineers, educators, and makers around the world. It's still maintained by a single developer, with no corporate funding or venture capital behind it.
+Serial Studio is used by developers, engineers, educators, and makers around the world. It is maintained by a single developer, with no corporate funding or venture capital behind it.
 
-Any form of support directly funds development, testing on real hardware, documentation, and faster releases.
+Support of any kind funds development, testing on real hardware, documentation, and releases.
 
 ## Ways to help
 
 ### Buy a Pro license
 
-The most direct way to support the project. A Pro license unlocks MQTT, Modbus, CAN Bus, MDF4 export, 3D visualization, and other advanced features, and it funds ongoing development. If you use Serial Studio at work, your purchasing or IT department can handle the transaction.
+The most direct way to support the project. A Pro license unlocks MQTT, Modbus, CAN Bus, MDF4 export, 3D visualization, and other features, and it funds ongoing development. If you use Serial Studio at work, your purchasing or IT department can handle the transaction.
 
 Store: <https://store.serial-studio.com/>
 
@@ -40,7 +40,7 @@ Pull requests for bug fixes, features, translations, or documentation are all we
 
 ### Share your projects
 
-Show off what you've built with Serial Studio. Real-world use cases inspire other people and help the community grow.
+Share what you've built with Serial Studio. Real-world use cases help other users and grow the community.
 
 ### Write about it
 
@@ -48,7 +48,7 @@ Blog posts, tutorials, YouTube videos, and conference talks help reach new users
 
 ## Why it matters
 
-Serial Studio is real software, built during unpaid hours because it needs to exist. No marketing tricks, no tracking, no gimmicks. Whether you're a student or a company, your support helps keep practical, privacy-respecting tools alive.
+Serial Studio is built during unpaid hours and includes no tracking or telemetry. Whether you're a student or a company, your support helps keep the project maintained.
 
 ## See also
 

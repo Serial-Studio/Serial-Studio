@@ -2,9 +2,9 @@
 
 If you write tutorials, make videos, blog, or run a social account, you can earn money by helping more people find Serial Studio. The affiliate program is for content creators, educators, publishers, and community builders who want to recommend the app and earn a commission on successful referrals.
 
-#### Why promote Serial Studio?
+#### How the program works
 
-Affiliate partnerships are one of the simplest ways to monetize useful content. You send customers our way, and we pay you when those referrals turn into sales.
+Affiliate partnerships let you monetize content. You refer customers, and we pay a commission when those referrals turn into sales.
 
 #### How do I make money?
 

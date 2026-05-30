@@ -6,7 +6,7 @@ The DBC and Modbus importers live in the **Setup Panel** of the relevant driver.
 
 ## Why this exists
 
-Hand-configuring an industrial protocol is the slow part of using Serial Studio. A typical PLC has dozens of holding registers, each with a name, data type, scale factor, and units. A typical automotive ECU has hundreds of CAN signals across multiple message IDs. Typing those into the Project Editor one at a time is tedious and error-prone work that takes a full afternoon.
+Hand-configuring an industrial protocol is the slow part of using Serial Studio. A typical PLC has dozens of holding registers, each with a name, data type, scale factor, and units. A typical automotive ECU has hundreds of CAN signals across multiple message IDs. Typing those into the Project Editor one at a time is tedious and error-prone.
 
 The shortcut is to start from the file the vendor already wrote. CAN networks are documented in `.dbc` files. Modbus devices are documented in register tables. Serial Studio reads those directly.
 
@@ -19,7 +19,7 @@ Both importers produce the same shape of output:
 - A generated **Lua frame parser** that decodes each frame into the right datasets without any user code.
 - For Modbus, the **register groups** are also pushed into the live Modbus driver so it polls the right addresses immediately.
 
-You get a project that's already wired up. From there you arrange widgets in workspaces, tweak titles, and connect.
+The result is a project that is already wired up. From there you arrange widgets in workspaces, adjust titles, and connect.
 
 ## At a glance
 
@@ -155,7 +155,7 @@ Build the project by hand when:
 
 ## Editing after import
 
-The generated project is a project like any other. Once it's open in the Project Editor, everything is editable: rename datasets, regroup them, swap widgets, edit the parser (Lua for DBC/Modbus, JavaScript for Protobuf), add transforms, attach datasets to workspaces. The importer's job is to get you to a working dashboard fast, not to lock you into a layout.
+The generated project is a project like any other. Once it's open in the Project Editor, everything is editable: rename datasets, regroup them, swap widgets, edit the parser (Lua for DBC/Modbus, JavaScript for Protobuf), add transforms, attach datasets to workspaces. The importer produces a starting layout, not a fixed one.
 
 If you need to re-import (the vendor published a new DBC, you added a register, the protobuf schema gained a field), the safest path is to import again as a new project and copy over your dashboard customizations, rather than trying to merge by hand.
 

@@ -622,7 +622,8 @@ Common issues:
    - The official binary includes Pro features (locked behind license)
 
 4. **Check trial status:**
-   - Trial is 14 days, one-time only
+   - Trial is 14 days, one trial per version per hardware
+   - A new Serial Studio release starts a fresh trial
    - Based on hardware ID (can't reset by reinstalling)
 
 ## Performance Issues

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Output controls are interactive dashboard widgets that send data back to a connected device. While standard widgets visualize incoming telemetry, output controls let you transmit commands, setpoints, and parameters, giving you full bidirectional communication from the Serial Studio dashboard.
+Output controls are interactive dashboard widgets that send data back to a connected device. While standard widgets visualize incoming telemetry, output controls transmit commands, setpoints, and parameters from the Serial Studio dashboard, so the dashboard can both read from and write to the device.
 
 Each output control uses a user-defined JavaScript `transmit(value)` function that converts widget interactions (button clicks, slider drags, text input) into the exact bytes your device expects. That makes output controls protocol-agnostic: the same slider widget can drive a plain-text serial command, a JSON payload, or a binary packet, just by changing the transmit function.
 

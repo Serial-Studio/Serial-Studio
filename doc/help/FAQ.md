@@ -17,9 +17,9 @@ Answers to common questions about Serial Studio, from installation to advanced u
 
 ### What is Serial Studio?
 
-Serial Studio is an open source tool that lets you see data from devices in real time. You can monitor sensors, debug hardware, and build custom dashboards without writing code.
+Serial Studio is an open source tool for visualizing data from devices in real time. You can monitor sensors, debug hardware, and build custom dashboards without writing code.
 
-Think of it as a universal dashboard for any device that sends data via serial port, Bluetooth, MQTT, Modbus TCP/RTU, CAN Bus, or the network.
+It works with any device that sends data via serial port, Bluetooth, MQTT, Modbus TCP/RTU, CAN Bus, or the network.
 
 ### Is Serial Studio open source?
 
@@ -517,12 +517,15 @@ The ARM64 AppImage needs Ubuntu 24.04+ (glibc 2.38+). Upgrade the OS or use the 
 
 ### How much does Pro cost?
 
-Check current pricing at [serial-studio.com](https://serial-studio.com). Typical numbers:
+Check current pricing at [serial-studio.com](https://serial-studio.com). Pro
+is sold as monthly, yearly, or lifetime licenses, each in three seat tiers:
 
-- **Individual license:** around $9.99/month, or $179.00 one-time.
-- **Team and enterprise licenses:** discounts available.
+- **Pro:** for individuals, 5 device activations.
+- **Small Business:** for small teams, 20 device activations.
+- **Enterprise:** for large teams, 100 device activations.
 
-The official binary includes a 14-day free trial.
+Monthly and yearly plans renew until cancelled; the lifetime plan is a
+one-time perpetual purchase. The official binary includes a 14-day free trial.
 
 ### Can I try Pro features before buying?
 

@@ -7,7 +7,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 - All standard widgets and visualization.
 - Full project editor and dashboard customization.
 - CSV export and playback.
-- A good fit for hobbyists, students, and open source projects.
+- Intended for personal, educational, and open source projects.
 
 **Pro version:**
 - Everything in the free version, plus:
@@ -99,7 +99,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
 **What it is:** Lightweight publish/subscribe messaging protocol for IoT applications.
 
-**Why you need it:**
+**Used for:**
 - Monitor remote sensors over the internet
 - Cloud-connected IoT deployments
 - Multi-user dashboards (multiple subscribers to same topic)
@@ -117,7 +117,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
 **What it is:** Industrial communication protocol for PLCs and SCADA systems.
 
-**Why you need it:**
+**Used for:**
 - Connect to industrial PLCs (Siemens, Allen-Bradley, Schneider, etc.)
 - Monitor SCADA systems
 - Read/write Modbus registers
@@ -135,7 +135,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
 **What it is:** Automotive and industrial multi-master bus protocol with DBC file import.
 
-**Why you need it:**
+**Used for:**
 - Automotive diagnostics (OBD-II)
 - Vehicle telemetry and data logging
 - Race car telemetry
@@ -154,7 +154,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
 **What it is:** Capture and visualize audio signals from microphone or line-in.
 
-**Why you need it:**
+**Used for:**
 - Audio spectrum analysis (FFT)
 - Vibration monitoring via audio-coupled sensors
 - Acoustic measurements
@@ -171,13 +171,12 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
 ### Binary (Direct) Mode
 
-**What it is:** High-performance decoder mode that passes raw binary data directly to JavaScript parser as byte array (values 0-255), without string conversion.
+**What it is:** Decoder mode that passes raw binary data directly to the JavaScript parser as a byte array (values 0-255), without string conversion.
 
 **Why it matters:**
-- **Performance:** No encoding/decoding overhead
-- **Precision:** Lossless binary protocol handling
-- **Efficiency:** Direct byte-level access
-- **Speed:** Lower latency for high-frequency data
+- **No conversion overhead:** bytes reach the parser without encoding/decoding
+- **Lossless:** binary protocols are handled byte for byte
+- **Lower latency:** suited to high-frequency data
 
 **When you need it:**
 - Custom binary protocols
@@ -203,7 +202,7 @@ function parse(frame) {
 
 **What it is:** Real-time 3D scatter or line plot for visualizing X, Y, Z coordinates in 3D space.
 
-**Why you need it:**
+**Used for:**
 - Visualize 3D trajectories
 - Spatial data visualization
 - Complex mathematical visualizations (Lorenz attractor, phase space)
@@ -223,7 +222,7 @@ function parse(frame) {
 
 **What it is:** 2D scatter plot displaying Y values against X values (instead of time).
 
-**Why you need it:**
+**Used for:**
 - Correlation analysis between two variables
 - Phase portraits (control systems)
 - Lissajous curves
@@ -279,7 +278,7 @@ function parse(frame) {
 
 **What it is:** Direct bulk, control, and isochronous USB access via libusb, bypassing OS serial/HID abstraction layers.
 
-**Why you need it:**
+**Used for:**
 - Custom USB firmware with bulk endpoints (STM32, TinyUSB, etc.)
 - High-bandwidth sensors that exceed Serial/UART throughput
 - Devices requiring vendor-specific control transfers
@@ -296,7 +295,7 @@ function parse(frame) {
 
 **What it is:** Cross-platform Human Interface Device access via hidapi (gamepads, custom USB HIDs, sensors).
 
-**Why you need it:**
+**Used for:**
 - Connect gamepads, joysticks, or custom HID firmware without writing drivers
 - Access USB sensors that register as HID devices
 - Monitor force gauges, measurement devices, or custom controllers
@@ -312,7 +311,7 @@ function parse(frame) {
 
 **What it is:** Spawn a child process and read its stdout as a data source, or connect to a named pipe/FIFO from an external process.
 
-**Why you need it:**
+**Used for:**
 - Feed data from Python, Node.js, or any script directly into Serial Studio dashboards
 - Bridge proprietary protocols to CSV format via a translator program
 - Test dashboards with synthetic data generators without physical hardware
@@ -328,7 +327,7 @@ function parse(frame) {
 
 **What it is:** Live JPEG/PNG/BMP/WebP camera or image feed displayed directly on the dashboard alongside other telemetry widgets.
 
-**Why you need it:**
+**Used for:**
 - Display live camera video from ESP32-CAM, Raspberry Pi Camera, or UAV downlinks
 - Correlate visual data with sensor telemetry on the same dashboard
 - Industrial machine vision or inspection cameras
@@ -348,13 +347,13 @@ function parse(frame) {
 
 ### MDF4 File Support
 
-**What it is:** Industry-standard binary format for measurement data (MDF4/MF4), commonly used in automotive testing.
+**What it is:** Standard binary format for measurement data (MDF4/MF4), commonly used in automotive testing.
 
 **Why it matters:**
-- **Compact:** Binary format is smaller than CSV
-- **Fast:** Optimized for high-frequency data
-- **Standard:** Compatible with Vector CANape, NI DIAdem, MATLAB Vehicle Network Toolbox
-- **Automotive:** Standard format for CAN bus data logging
+- **Compact:** the binary format is smaller than CSV
+- **High-frequency:** suited to high sample rates
+- **Interoperable:** read by Vector CANape, NI DIAdem, and the MATLAB Vehicle Network Toolbox
+- **Automotive:** common format for CAN bus data logging
 
 **Features:**
 - **Export:** Save sessions in MDF4 format
@@ -388,78 +387,69 @@ function parse(frame) {
 
 ## Which version do I need?
 
-### Choose Free (GPLv3) if:
+### Free (GPLv3) covers:
 
-- ✅ You're a student, educator, or hobbyist.
-- ✅ You're working on personal or educational projects.
-- ✅ You're doing open source software development.
-- ✅ You only need basic protocols (Serial, TCP/UDP, BLE).
-- ✅ Standard widgets cover your needs.
-- ✅ Your use is non-commercial.
+- Student, educator, and hobbyist use.
+- Personal and educational projects.
+- Open source software development.
+- The core protocols (Serial, TCP/UDP, BLE).
+- Non-commercial use where the standard widgets are sufficient.
 
-**A good fit for:**
-- Arduino projects.
-- ESP32/ESP8266 development.
-- Learning embedded systems.
-- University research (non-commercial).
-- Home automation.
+Common cases: Arduino projects, ESP32/ESP8266 development, learning embedded
+systems, non-commercial university research, and home automation.
 
-### Choose Pro if:
+### Pro adds:
 
-- ✅ Commercial or business use.
-- ✅ You need MQTT, Modbus, CAN Bus, or Audio Input.
-- ✅ You need raw USB (bulk/isochronous via libusb), HID, or Process I/O.
-- ✅ You're doing industrial automation.
-- ✅ You're doing automotive diagnostics or telemetry.
-- ✅ You need 3D/XY plots, Waterfall (spectrogram), or live Image View (camera feeds).
-- ✅ You want MDF4 export and playback.
-- ✅ You need Binary Direct mode for performance.
-- ✅ You want email support.
+- Commercial and business use rights.
+- MQTT, Modbus, CAN Bus, and Audio Input.
+- Raw USB (bulk/isochronous via libusb), HID, and Process I/O.
+- 3D and XY plots, Waterfall (spectrogram), and live Image View (camera feeds).
+- MDF4 export and playback.
+- Binary Direct mode.
+- Email support.
 
-**A good fit for:**
-- Professional engineers.
-- Industrial applications.
-- Automotive development.
-- Commercial products.
-- Enterprise deployments.
+Common cases: industrial automation, automotive diagnostics and telemetry,
+commercial products, and enterprise deployments.
 
 ## Pricing
 
 **Serial Studio Pro**
 - Visit [serial-studio.com](https://serial-studio.com) for current pricing
-- One-time purchase (perpetual license)
-- Volume discounts available
+- Choose monthly, yearly, or lifetime billing
+- Three seat tiers per plan: Pro (5 device activations), Small Business
+  (20 device activations), and Enterprise (100 device activations)
+- Monthly and yearly licenses renew until cancelled; the lifetime license
+  is a one-time perpetual purchase (currently offered for individual use)
 - Educational discounts available (.edu email required)
 
 **Free Trial:**
 - 14-day trial included with official binary download
 - Full Pro features unlocked during trial
-- One-time per hardware (cannot reset by reinstalling)
+- One trial per version, per hardware (cannot reset by reinstalling)
+- A new trial unlocks when a new Serial Studio version is released
 - No credit card required
 
 ## Upgrading from Free to Pro
 
-### Easy Activation Process
+### Activation steps
 
-1. **Purchase license** from [serial-studio.com](https://serial-studio.com)
-2. **Download official binary** (if using GPL build)
-3. **Open Serial Studio**
-4. **Help → Activate License**
-5. **Enter license key**
-6. **Pro features unlock immediately**
+1. Purchase a license from [serial-studio.com](https://serial-studio.com).
+2. Download the official binary (if you were using a GPL build).
+3. Open Serial Studio.
+4. Go to **Help -> Activate License**.
+5. Enter the license key.
 
-### Your Projects Are Safe
+Pro features unlock once the key is accepted.
 
-- Project files are 100% compatible
-- No migration needed
-- Data remains accessible
-- Continue where you left off
+### Project files
 
-### Offline Use
+Project files are unchanged between editions. Free projects open in Pro and
+vice versa, with no migration step.
 
-- Internet required for initial activation only
-- After activation, works fully offline
-- License tied to hardware ID
+### Offline use
+
+A network connection is needed only for the initial activation. After that the
+license is tied to the hardware ID and works offline.
 
 ## Educational Discounts
 
@@ -475,9 +465,9 @@ Students and educators can get discounted Pro licenses:
 - Include: .edu email, institution name, use case
 - Response within 2 business days
 
-## Can't Afford Pro? Earn a License!
+## Earning a license through contributions
 
-Contribute to the Serial Studio project and earn a free Pro license:
+Contributors to the Serial Studio project can receive a free Pro license.
 
 **Ways to contribute:**
 - Write tutorials or blog posts
@@ -500,14 +490,19 @@ Contribute to the Serial Studio project and earn a free Pro license:
 Pro features become locked. You can:
 - Purchase a Pro license to unlock them
 - Continue using Free features (Serial, TCP/UDP, BLE, standard widgets)
+- Wait for the next Serial Studio release, which starts a fresh 14-day trial
 
 ### Can I transfer my Pro license to another computer?
 
-**Yes.** Deactivate on one machine (Help → Deactivate License), then activate on another. You can transfer as needed, but only one active installation per license.
+**Yes.** Deactivate on one machine (Help → Deactivate License), then activate on another. You can transfer activations as needed, up to your plan's activation limit (5, 20, or 100 depending on the tier).
 
 ### Is there a subscription?
 
-**No.** Pro is a one-time purchase (perpetual license). Buy once, use forever. All updates included.
+Pro is offered as monthly, yearly, or lifetime licenses. The monthly and
+yearly plans renew until cancelled; the lifetime plan is a one-time perpetual
+purchase. Each plan comes in three seat tiers (Pro, Small Business,
+Enterprise) with different device-activation counts. Updates are included on
+every plan.
 
 ### Do I get updates with Pro?
 
@@ -519,11 +514,16 @@ Pro features become locked. You can:
 
 ### What if I need more licenses for my team?
 
-Contact alex@serial-studio.com for volume pricing. Discounts available for 5+ licenses.
+Pick the seat tier that fits the team size: Pro covers 5 device activations,
+Small Business covers 20, and Enterprise covers 100. For larger deployments,
+contact alex@serial-studio.com.
 
 ### Can I use Pro on multiple computers?
 
-One license = one active installation. For multiple computers, purchase multiple licenses or contact us for team pricing.
+Each plan includes a fixed number of device activations (5, 20, or 100
+depending on the tier). You can run Pro on that many machines at once and move
+activations between computers as needed (Help -> Deactivate License, then
+activate elsewhere).
 
 ### Is the source code available for Pro features?
 
@@ -605,12 +605,12 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 | **Support** | Community | Email + Community |
 | **Cost** | Free | One-time purchase |
 
-## Still Have Questions?
+## More information
 
-- **Compare features:** See [Feature Comparison Table](#complete-feature-comparison) above
-- **Try before buying:** [Download official binary](https://serial-studio.com) for 14-day trial
-- **Earn free license:** [Contribute to the project](Earn-Pro-License.md)
-- **Contact sales:** alex@serial-studio.com
+- **Feature list:** see the [feature comparison table](#complete-feature-comparison) above.
+- **Trial:** the [official binary](https://serial-studio.com) includes a 14-day trial.
+- **Earn a license:** [contribute to the project](Earn-Pro-License.md).
+- **Contact:** alex@serial-studio.com
 
 ## See Also
 
@@ -620,4 +620,4 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 - [Getting Started](Getting-Started.md) - First-time setup
 - [Earn a Pro License](Earn-Pro-License.md) - Contribute for free access
 
-**Ready to go Pro?** [Purchase Now](https://serial-studio.com) | [Try Free Trial](https://serial-studio.com)
+Pricing and the trial download are at [serial-studio.com](https://serial-studio.com).

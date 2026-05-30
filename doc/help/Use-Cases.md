@@ -42,7 +42,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 
 **Hardware:** Arduino Mega + servo controllers
 **Data Format:** Comma-separated values at 50 Hz
-**Key Benefit:** No custom software needed. Connect, set the baud rate, and visualize.
+**Note:** No custom software needed. Connect, set the baud rate, and visualize.
 
 ### Competition Robotics (FIRST, VEX)
 **Problem:** Teams need to debug sensor fusion algorithms, PID controllers, and autonomous routines during practice sessions.
@@ -102,8 +102,8 @@ Real-world applications of Serial Studio across industries, education, and hobby
 **Problem:** Students build Arduino-based weather stations and need to present data visually.
 
 **Solution:** Serial Studio Quick Plot mode:
-- Students write simple Arduino code sending temp, humidity, pressure
-- Instant visualization without learning complex software
+- Students write Arduino code sending temp, humidity, pressure
+- Visualization without writing additional software
 - Each group customizes dashboard with Project Editor
 - Final presentation uses exported CSV charts
 
@@ -285,7 +285,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 
 **Hardware:** PEAK PCAN-USB, Vector VN1630, SocketCAN interface, or virtual CAN for testing
 **Data Protocol:** CAN Bus with DBC file for signal database
-**Key Benefit:** CAN Bus monitoring without expensive Vector/PEAK software
+**Note:** CAN Bus monitoring without dedicated Vector/PEAK software
 **Example:** Monitor engine ECU during test drive, recording 50+ signals at 100 Hz
 
 ### MDF4 File Analysis
@@ -300,7 +300,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 
 **Hardware:** None required (file playback only)
 **Supported Formats:** MDF4 (ASAM standard), MF4
-**Key Benefit:** Free alternative to expensive Vector/ETAS tools for post-processing
+**Note:** An alternative to Vector/ETAS tools for post-processing
 **Example:** Analyze brake test data recorded from CAN Bus, comparing pedal force vs. deceleration
 
 ### Dynamometer (Dyno) Testing
@@ -442,7 +442,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 
 **Hardware:** Industrial PLC (Siemens, Allen-Bradley, Schneider Electric, etc.) + Ethernet/RS485 connection
 **Data Protocol:** Modbus TCP (Ethernet) or Modbus RTU (RS485 serial)
-**Key Benefit:** Industry-standard protocol support without custom programming
+**Note:** Standard Modbus support without custom programming
 **Example:** Monitor a water treatment plant with 5 PLCs controlling pumps, valves, and sensors
 
 ### CNC Machine Monitor

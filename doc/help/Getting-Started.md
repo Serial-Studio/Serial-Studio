@@ -12,7 +12,7 @@ Serial Studio is a cross-platform telemetry dashboard for visualizing real-time 
 - **Performance.** Built with Qt 6 and C++20, aimed at 256 KHz+ data rates.
 - **Three operation modes.** Console Only for inspecting the raw stream, Quick Plot for instant CSV visualization, and Project File for fully customized dashboards.
 
-Whether you're reading temperature from an Arduino, monitoring a CAN Bus in a vehicle, or building a ground station for a rocket, Serial Studio handles the visualization layer so you can focus on your hardware and firmware.
+It handles the visualization layer for a range of cases: reading temperature from an Arduino, monitoring a CAN Bus in a vehicle, or building a ground station for a rocket.
 
 ## First connection workflow
 

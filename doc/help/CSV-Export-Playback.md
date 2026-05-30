@@ -1,6 +1,6 @@
 # CSV export and playback
 
-Serial Studio can export incoming telemetry to CSV during a live session and replay saved CSV files through the same data pipeline. This page covers both workflows and the file format. For high-rate binary logging with per-channel sample rates and rich metadata, see [MDF4 Export & Playback](MDF4.md) — Serial Studio Pro supports both formats and you can run them side by side.
+Serial Studio can export incoming telemetry to CSV during a live session and replay saved CSV files through the same data pipeline. This page covers both workflows and the file format. For high-rate binary logging with per-channel sample rates and channel metadata, see [MDF4 Export & Playback](MDF4.md). Serial Studio Pro supports both formats and you can run them side by side.
 
 ## Export and playback pipeline
 
@@ -122,7 +122,7 @@ For per-channel sample rates, channel-level units and metadata, or smaller files
 
 ## See also
 
-- [MDF4 Export & Playback](MDF4.md): binary logging with per-channel sample rates and rich metadata (Pro).
+- [MDF4 Export & Playback](MDF4.md): binary logging with per-channel sample rates and channel metadata (Pro).
 - [Session Database](Session-Database.md): SQLite-backed project archive with built-in replay (Pro).
 - [Getting Started](Getting-Started.md): initial setup and first connection.
 - [Operation Modes](Operation-Modes.md): Quick Plot vs Project File mode.

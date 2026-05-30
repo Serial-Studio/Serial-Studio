@@ -8,7 +8,7 @@
 
 **Serial Studio** turns data from your hardware into a live dashboard.
 
-Connect an Arduino, ESP32, STM32, Raspberry Pi, Teensy, or anything else that speaks serial, Bluetooth, a network protocol, or an industrial bus. Describe the data format once in a project file. Serial Studio draws the plots, gauges, maps, and 3D views around it. Send commands back with buttons, sliders, and knobs. Record a session, replay it, export it as a PDF. No more scrolling terminal streams, and no more custom dashboards to maintain.
+Connect an Arduino, ESP32, STM32, Raspberry Pi, Teensy, or anything else that speaks serial, Bluetooth, a network protocol, or an industrial bus. Describe the data format once in a project file. Serial Studio draws the plots, gauges, maps, and 3D views around it. Send commands back with buttons, sliders, and knobs. Record a session, replay it, export it as a PDF.
 
 Runs on Windows, macOS, Linux, and Raspberry Pi.
 
@@ -18,7 +18,7 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Connect to a device.** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, audio input, raw USB (libusb), HID (hidapi), and Process I/O are Pro. Multiple devices in one project is also Pro.
 
-**Visualize data.** 15+ widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, and Meter each render as a two-page swipe view — page 0 is the analog face, page 1 is a large digital readout — so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), and the Painter widget. Painter is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
+**Visualize data.** 15+ widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), and the Painter widget. Painter is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
 
 **Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Or skip the project file: print CSV from your device and Quick Plot draws it. Workspaces split big projects into tabs with a searchable taskbar.
 
@@ -43,7 +43,7 @@ Serial Studio is available as source code and as official precompiled binaries f
 
 ### Windows
 
-Requires the [Microsoft Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). On first launch Windows may warn about an unknown developer. Click _"More Info → Run Anyway"_ to continue.
+Requires the [Microsoft Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). On first launch Windows may warn about an unknown developer. Click _"More Info"_, then _"Run Anyway"_ to continue.
 
 ### macOS
 
@@ -94,10 +94,10 @@ An ARM64 AppImage is available for Raspberry Pi and similar boards. Performance 
 ### At a glance
 
 - **Protocols:** Serial/UART, Bluetooth LE, and TCP/UDP in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, Audio, raw USB (libusb), HID (hidapi), and Process I/O are Pro.
-- **Visualization:** 15+ widgets — line plots, gauges, bar charts, meters, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, live camera feed, plus Clock and Stopwatch utility widgets (some Pro). Bar, Gauge, and Meter each include a swipeable digital readout page alongside the analog face.
+- **Visualization:** 15+ widgets, including line plots, gauges, bar charts, meters, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, live camera feed, plus Clock and Stopwatch utility widgets (some Pro). Bar, Gauge, and Meter each include a swipeable digital readout page alongside the analog face.
 - **Painter widget (Pro):** scriptable Canvas2D-style canvas driven by a JS `paint(ctx, w, h)` callback. Watchdog-protected QJSEngine, persistent script state across frames, ~17 ready-to-use templates (oscilloscope, polar plot, artificial horizon, audio VU meter, dial gauge, heatmap, LED matrix, sparklines, vector field, XY scope, and more).
 - **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
-- **Custom parsing:** JavaScript or Lua 5.4 frame parsers, plus 20+ templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, …).
+- **Custom parsing:** JavaScript or Lua 5.4 frame parsers, plus 20+ templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and more).
 - **Per-dataset transforms:** short JS or Lua snippets to filter, scale, calibrate, or derive values every frame.
 - **Data Tables:** shared bus for system datasets, user-defined constants and computed registers, and virtual datasets built entirely from transforms.
 - **Workspaces:** split large projects into focused dashboard tabs, with a taskbar search.
@@ -113,12 +113,12 @@ An ARM64 AppImage is available for Raspberry Pi and similar boards. Performance 
 - **TCP API on port 7777:** 320+ commands for programmatic control (see the [API client example](./examples/API%20Test)).
 - **AI Assistant (Pro):** in-app chat panel that edits the project (sources, datasets, parsers, transforms, output widgets, workspaces) by calling the project-editing API. Bring-your-own-key for Anthropic, OpenAI, Gemini, DeepSeek, or a local OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM); the local option runs fully offline. Mutating commands require explicit approval; connection control and device writes are permanently blocked. Hidden in operator deployments.
 - **MCP integration:** external AI clients (Claude Desktop, custom MCP hosts) can call the full TCP API, including connection control and device writes, over the Model Context Protocol (see [MCP Client](./examples/MCP%20Client)).
-- **Fast and cross-platform:** 60 FPS, under 50 ms latency, on Windows 10/11, macOS 11+ (Intel and Apple Silicon), Linux x64, and Raspberry Pi ARM64.
+- **Cross-platform:** 60 FPS, under 50 ms latency, on Windows 10/11, macOS 11+ (Intel and Apple Silicon), Linux x64, and Raspberry Pi ARM64.
 - **Dual licensed:** open source GPL-3.0 core with proprietary Pro features (see [LICENSE.md](LICENSE.md)).
 
 ## Quick start
 
-You can be up and running in about five minutes.
+A first connection takes about five minutes.
 
 ### 1. Download and install
 

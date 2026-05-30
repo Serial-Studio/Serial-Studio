@@ -88,7 +88,7 @@ Data tables, output widgets, and workspaces are drawn alongside as their own car
 The diagram is interactive:
 
 - **Double-click any block** to jump into the matching configuration form. Double-clicking a source card opens that source's settings; a group card opens the group form; a dataset pill opens the dataset form; a frame-parser card opens the script editor; an action card opens the action form; a data-table card opens the table editor; an output-widget card opens the output editor.
-- **Right-click any block** for a context menu tailored to that node: add a sibling group, add a dataset to that group, duplicate, delete, change widget type, attach to a workspace, and so on. Right-clicking empty background opens the "add source / add table / add action" shortcuts. This is the fastest way to grow a project once the high-level shape is in place; you do not have to walk back through the tree on the left.
+- **Right-click any block** for a context menu tailored to that node: add a sibling group, add a dataset to that group, duplicate, delete, change widget type, attach to a workspace, and so on. Right-clicking empty background opens the "add source / add table / add action" shortcuts. This lets you grow a project once the high-level shape is in place without walking back through the tree on the left.
 - **Scroll wheel** zooms the diagram in and out. The toolbar has a reset-zoom button.
 
 The overview is useful as a sanity check ("does my group widget have the three datasets it needs?") and as a navigation surface once a project gets too large to keep entirely in the tree.

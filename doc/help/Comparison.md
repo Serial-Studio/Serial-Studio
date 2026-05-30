@@ -96,7 +96,7 @@ MATLAB is industry-standard software for numerical computing and data analysis.
 
 - **MATLAB:** $2,150+ per year (commercial) or $149+ per year (academic).
 - **Serial Studio GPL:** free forever.
-- **Serial Studio Pro:** one-time payment (check current pricing at [serial-studio.com](https://serial-studio.com)).
+- **Serial Studio Pro:** monthly, yearly, or lifetime licenses (check current pricing at [serial-studio.com](https://serial-studio.com)).
 
 **Real-time capability.** Serial Studio updates at 60 FPS with no scripting. MATLAB requires writing data acquisition code and periodic plot updates.
 
@@ -130,7 +130,7 @@ Python with libraries like PySerial, Matplotlib, and Plotly is a popular DIY app
 | CSV export              | 10-20 minutes | Built-in, one click       |
 | Multi-panel dashboard   | 1-2 hours     | 5-10 minutes (Project Editor) |
 
-**Hybrid approach.** Use Serial Studio for real-time monitoring, export CSV, then analyze in Python. Best of both.
+**Hybrid approach.** Use Serial Studio for real-time monitoring, export CSV, then analyze in Python.
 
 ### Serial Studio vs LabVIEW
 
@@ -206,7 +206,7 @@ TeraTerm and PuTTY are terminal emulators, mainly for text-based communication.
 - You're monitoring structured telemetry, not just text.
 - You want CSV data logging.
 - You need multiple simultaneous data streams.
-- You want a dashboard-quality presentation.
+- You want plots and gauges rather than a text console.
 
 ### Serial Studio vs CoolTerm
 
@@ -225,7 +225,7 @@ CoolTerm is a serial port terminal with basic plotting.
 - You need data sources beyond serial.
 - You want project-based dashboard configurations.
 - You need custom frame parsing in JavaScript.
-- You want professional presentation quality.
+- You want a dashboard-style presentation rather than a raw terminal.
 
 ### Serial Studio vs a custom web dashboard (Node.js + Chart.js)
 
@@ -240,9 +240,9 @@ Some teams build custom dashboards with web tech.
 
 **Use Serial Studio instead when:**
 
-- You want to ship faster (hours vs weeks).
+- You want a shorter setup (hours vs weeks).
 - You don't have web development expertise.
-- You'd prefer a desktop app, no server to maintain.
+- You'd prefer a desktop app, with no server to maintain.
 - Your telemetry needs are already covered by existing widgets.
 
 ### Serial Studio vs Plotly Dash
@@ -269,7 +269,7 @@ Plotly Dash is a Python framework for building web-based analytical dashboards.
 
 - You need real-time telemetry dashboards without coding.
 - Your data comes from serial, BLE, MQTT, or network sockets.
-- You want professional visualization with minimal setup time.
+- You want ready-made visualization widgets with little setup.
 - Your team includes non-programmers who need access.
 - You need CSV export.
 - Your budget is limited.
@@ -352,7 +352,7 @@ If you were using Processing just for visualization, replace the sketch with a S
 
 - Define your dashboard layout in the GUI.
 - No code to maintain.
-- Faster development.
+- Less setup for standard telemetry.
 
 If you need custom algorithms, keep Processing for custom visualizations but consider Serial Studio for standard telemetry dashboards.
 
@@ -362,8 +362,8 @@ If you were using Python just for serial plotting, Serial Studio removes the nee
 
 - No script to maintain.
 - Built-in CSV export (then analyze in Python).
-- Faster real-time visualization.
+- Real-time visualization without writing plotting code.
 
-If you need custom analysis, use Serial Studio for real-time monitoring, export CSV, and run Python scripts for the analysis. Best of both.
+If you need custom analysis, use Serial Studio for real-time monitoring, export CSV, and run Python scripts for the analysis.
 
 Questions, or want to talk about a specific use case? Open an issue on [GitHub](https://github.com/Serial-Studio/Serial-Studio/issues) or email alex@serial-studio.com.

@@ -104,7 +104,7 @@ The first line sets channel labels. Later lines are plotted in real time.
 
 ### When to use it
 
-Quick Plot is the fastest way to visualize data. Use it when you want to check that a device is transmitting correctly, prototype a new sensor, or demonstrate real-time plotting in a classroom.
+Quick Plot visualizes data without any configuration. Use it when you want to check that a device is transmitting correctly, prototype a new sensor, or demonstrate real-time plotting in a classroom.
 
 ## Project File mode
 

@@ -150,7 +150,7 @@ All settings are saved automatically and restored between sessions.
 
 ## Tips
 
-- **Picking a protocol.** Use ZMODEM when you can. It's the fastest and most robust. Fall back to XMODEM/YMODEM only if the receiver doesn't support ZMODEM.
+- **Picking a protocol.** Use ZMODEM when the receiver supports it: streaming transfers give higher throughput, and CRC-32 plus crash recovery handle unreliable links. Fall back to XMODEM/YMODEM if the receiver doesn't support ZMODEM.
 - **Slow receivers.** Raise the transmission interval (Plain Text / Raw Binary) or the timeout (protocol modes) if the device can't keep up.
 - **Noisy links.** Use smaller block sizes to cut the cost of retransmissions. For ZMODEM, 256 or 512 bytes is a good starting point on unreliable connections.
 - **Large files.** XMODEM-1K, YMODEM, or ZMODEM all reduce per-block overhead compared to standard XMODEM.
