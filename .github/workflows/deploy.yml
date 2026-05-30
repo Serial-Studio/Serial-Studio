@@ -50,7 +50,7 @@ env:
   UNIXNAME: "serial-studio-pro"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
-  INSTALL_QT_MACOS: false
+  INSTALL_QT_MACOS: true
   INSTALL_QT_WINDOWS: false
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
@@ -571,7 +571,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}
 
     - name: '⚙️ Install Qt'
       shell: bash
@@ -593,7 +593,7 @@ jobs:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}
 
     - name: '⚙️ Add Qt to PATH'
       shell: bash
