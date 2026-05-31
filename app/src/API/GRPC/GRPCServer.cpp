@@ -15,8 +15,7 @@
 #    pragma GCC diagnostic ignored "-Wstringop-overflow"
 #  endif
 
-// Suppress C4996 from gRPC's own tls_certificate_provider.h, which still
-// references the deprecated grpc::experimental::IdentityKeyCertPair type.
+// Suppress C4996 from gRPC's tls_certificate_provider.h (deprecated IdentityKeyCertPair)
 #  if defined(_MSC_VER)
 #    pragma warning(push)
 #    pragma warning(disable : 4996)
