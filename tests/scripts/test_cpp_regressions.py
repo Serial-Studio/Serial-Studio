@@ -395,48 +395,41 @@ def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
 
 
 # ----------------------------------------------------------------------------------
-# R1 -- license storage must never reach for libsecret on Linux
+# R1 -- license storage stays on encrypted QSettings, never an OS keystore
 # ----------------------------------------------------------------------------------
 
 
-def test_secret_storage_forces_legacy_path_on_linux():
-    """SecretStorage routes every Linux read/write through the encrypted-QSettings
-    store. Headless servers, slim containers, and SSH-only hosts often have no
-    running keyring daemon, and a license loss on those systems would regress
-    against the pre-keystore release."""
-    text = _read("app/src/Licensing/SecretStorage.cpp")
+def test_license_storage_uses_simplecrypt_qsettings_not_keystore():
+    """The OS-keystore experiment was reverted (f8c02f83): license and trial secrets
+    persist through SimpleCrypt-encrypted QSettings. Headless servers, slim
+    containers, and SSH-only hosts often have no running keyring daemon, and a
+    license loss on those systems would regress against the pre-keystore release.
+    Guard that the revert stays reverted -- no keystore on the licensing path, and
+    the encrypted-QSettings round trip remains in place."""
+    trial = _read("app/src/Licensing/Trial.cpp")
+    lemon = _read("app/src/Licensing/LemonSqueezy.cpp")
 
-    # Compile-time platform gate exists.
-    assert "#  if defined(Q_OS_LINUX)" in text
-    assert "static constexpr bool kForceLegacyStore = true;" in text
-    assert "static constexpr bool kForceLegacyStore = false;" in text
+    # The reverted keystore class is gone for good.
+    assert not (
+        ROOT / "app/src/Licensing/SecretStorage.cpp"
+    ).exists(), "SecretStorage.cpp was reverted; it must not return"
+    assert not (ROOT / "app/src/Licensing/SecretStorage.h").exists()
 
-    # load() has a Linux branch that prefers legacy and only touches the keystore
-    # to migrate any leftover entry back to the legacy store.
-    assert re.search(
-        r"if constexpr \(kForceLegacyStore\) \{\s*"
-        r"const auto plain = legacyLoad\(group, key\);\s*"
-        r"if \(!plain\.isEmpty\(\)\)\s*"
-        r"return plain;",
-        text,
-    ), "Linux load() must read the legacy store first"
-    assert re.search(
-        r"if constexpr \(kForceLegacyStore\) \{[\s\S]*?"
-        r"if \(Platform::SecretStore::available\(\)\) \{[\s\S]*?"
-        r"if \(const auto vault = Platform::SecretStore::retrieve\([\s\S]*?"
-        r"legacySave\(group, key, \*vault\);\s*"
-        r"\(void\)Platform::SecretStore::remove\(",
-        text,
-    ), "Linux load() must migrate any keystore entry back into the legacy store"
+    # Neither licensing path may reach for the OS keystore.
+    for name, text in (("Trial.cpp", trial), ("LemonSqueezy.cpp", lemon)):
+        assert "SecretStore" not in text, f"{name} must not use the OS keystore"
+        assert "SecretStorage" not in text, f"{name} must not use SecretStorage"
 
-    # save() writes through legacy on Linux and scrubs the keystore.
-    assert re.search(
-        r"if constexpr \(kForceLegacyStore\) \{\s*"
-        r"legacySave\(group, key, value\);\s*"
-        r"if \(Platform::SecretStore::available\(\)\)\s*"
-        r"\(void\)Platform::SecretStore::remove\(",
-        text,
-    ), "Linux save() must persist via legacySave and clear any keystore copy"
+    # Trial secrets round-trip through SimpleCrypt + QSettings.
+    assert "m_crypt.encryptToString(" in trial
+    assert "m_crypt.decryptToString(" in trial
+    assert 'm_settings.setValue("expiry", m_crypt.encryptToString(' in trial
+    assert 'm_settings.beginGroup("trial");' in trial
+
+    # License key + metadata round-trip through SimpleCrypt + QSettings.
+    assert "m_simpleCrypt.encryptToString(" in lemon
+    assert 'm_settings.setValue("license", m_simpleCrypt.encryptToString(' in lemon
+    assert 'm_settings.beginGroup("licensing");' in lemon
 
 
 # ----------------------------------------------------------------------------------
@@ -990,6 +983,12 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
     assert "replayTimeRing(kept[j], live[j]);" in multi_snippet
 
 
+# Matches the snapshot declaration regardless of clang-format's alignment padding.
+# The `=` aligns to the widest declarator in its block, so the gap varies per site
+# (setPlotTimeRange also snapshots the sweep configs, widening the column).
+_SNAPSHOT_DECL = re.compile(r"auto savedPlotRings += snapshotPlotTimeRings\(\);")
+
+
 def test_dashboard_snapshots_around_every_clearing_trigger():
     """The three sites that previously dropped time-ring data on a project edit must
     snapshot before the rebuild and restore after."""
@@ -1002,7 +1001,8 @@ def test_dashboard_snapshots_around_every_clearing_trigger():
     )
     assert body is not None
     snippet = body.group(0)
-    snap_pos = snippet.find("auto savedPlotRings      = snapshotPlotTimeRings();")
+    snap_match = _SNAPSHOT_DECL.search(snippet)
+    snap_pos = snap_match.start() if snap_match else -1
     reset_pos = snippet.find("resetData(false);")
     update_pos = snippet.find("updateDataSeries();")
     restore_pos = snippet.find("restorePlotTimeRings(savedPlotRings);")
@@ -1019,7 +1019,7 @@ def test_dashboard_snapshots_around_every_clearing_trigger():
     )
     assert range_body is not None
     range_snippet = range_body.group(0)
-    assert "auto savedPlotRings      = snapshotPlotTimeRings();" in range_snippet
+    assert _SNAPSHOT_DECL.search(range_snippet) is not None
     assert "restorePlotTimeRings(savedPlotRings);" in range_snippet
     assert range_snippet.index("snapshotPlotTimeRings") < range_snippet.index(
         "configureLineSeries"
@@ -1035,5 +1035,5 @@ def test_dashboard_snapshots_around_every_clearing_trigger():
     )
     assert pts_body is not None
     pts_snippet = pts_body.group(0)
-    assert "auto savedPlotRings      = snapshotPlotTimeRings();" in pts_snippet
+    assert _SNAPSHOT_DECL.search(pts_snippet) is not None
     assert "restorePlotTimeRings(savedPlotRings);" in pts_snippet
