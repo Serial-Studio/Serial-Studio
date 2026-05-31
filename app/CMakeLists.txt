@@ -592,7 +592,6 @@ if(BUILD_COMMERCIAL)
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
-    src/Licensing/SecretStorage.h
     src/Licensing/CommercialToken.h
     src/Sessions/DatabaseManager.h
     src/Sessions/DatabaseWorker.h
@@ -612,7 +611,6 @@ if(BUILD_COMMERCIAL)
     src/Misc/ShortcutGenerator.h
     src/AI/Logging.h
     src/AI/KeyVault.h
-    src/Platform/SecretStore.h
     src/AI/CommandRegistry.h
     src/AI/ToolDispatcher.h
     src/AI/Assistant.h
@@ -683,7 +681,6 @@ if(BUILD_COMMERCIAL)
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp
-    src/Licensing/SecretStorage.cpp
     src/UI/Widgets/Output/Base.cpp
     src/UI/Widgets/Output/Button.cpp
     src/UI/Widgets/Output/Slider.cpp
@@ -717,29 +714,10 @@ if(BUILD_COMMERCIAL)
 
   if(WIN32)
     list(APPEND SOURCES src/Misc/ShortcutGenerator_Windows.cpp)
-    list(APPEND SOURCES src/Platform/SecretStore_Windows.cpp)
-    set_source_files_properties(src/Platform/SecretStore_Windows.cpp
-      PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
   elseif(APPLE)
     list(APPEND SOURCES src/Misc/ShortcutGenerator_macOS.cpp)
-    list(APPEND SOURCES src/Platform/SecretStore_macOS.cpp)
-    set_source_files_properties(src/Platform/SecretStore_macOS.cpp
-      PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
   elseif(UNIX)
     list(APPEND SOURCES src/Misc/ShortcutGenerator_Linux.cpp)
-    list(APPEND SOURCES src/Platform/SecretStore_Linux.cpp)
-    set_source_files_properties(src/Platform/SecretStore_Linux.cpp
-      PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
-    # OS keystore for AI key vault; falls back to encrypted QSettings if absent.
-    find_package(PkgConfig QUIET)
-    if(PkgConfig_FOUND)
-      pkg_check_modules(LIBSECRET QUIET libsecret-1)
-    endif()
-    if(LIBSECRET_FOUND)
-      message(STATUS "libsecret found -- AI key vault uses the OS Secret Service")
-    else()
-      message(STATUS "libsecret NOT found -- AI key vault falls back to encrypted QSettings")
-    endif()
   endif()
   set(QML_SOURCES
     ${QML_SOURCES}
@@ -1052,20 +1030,6 @@ if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC QuaZip::QuaZip)
-
-  # Platform::SecretStore backends (OS keystore for the AI key vault)
-  if(WIN32)
-    target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Crypt32)
-  elseif(APPLE)
-    target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE
-      "-framework Security"
-      "-framework CoreFoundation"
-    )
-  elseif(UNIX AND LIBSECRET_FOUND)
-    target_include_directories(${PROJECT_EXECUTABLE} PRIVATE ${LIBSECRET_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE ${LIBSECRET_LIBRARIES})
-    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE HAVE_LIBSECRET)
-  endif()
 endif()
 
 if(ENABLE_GRPC)

@@ -25,6 +25,9 @@
 #include <QDateTime>
 #include <QNetworkAccessManager>
 #include <QObject>
+#include <QSettings>
+
+#include "SimpleCrypt.h"
 
 namespace Licensing {
 /**
@@ -90,6 +93,8 @@ private:
   bool m_trialEnabled;
   bool m_deviceRegistered;
 
+  SimpleCrypt m_crypt;
+  QSettings m_settings;
   QDateTime m_trialExpiry;
   QNetworkAccessManager m_manager;
 };
