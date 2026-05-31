@@ -177,22 +177,22 @@
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="424"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="423"/>
         <source>Export Protobuf File</source>
         <translation>Protobuf फ़ाइल एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="426"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="425"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (*.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="475"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="474"/>
         <source>Unable to start gRPC server</source>
         <translation>GRPC सर्वर प्रारंभ करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="476"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="475"/>
         <source>Failed to bind to %1</source>
         <translation>%1 से बाइंड करने में विफल</translation>
     </message>
@@ -9037,129 +9037,129 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="514"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
         <source>There was an issue validating your license.</source>
         <translation>आपके लाइसेंस को मान्य करने में समस्या आई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="532"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="710"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="835"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="549"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="730"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>आपके द्वारा प्रदान की गई लाइसेंस कुंजी Serial Studio से संबंधित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="533"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="550"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>कृपया दोबारा जाँचें कि आपने अपना लाइसेंस आधिकारिक Serial Studio स्टोर से खरीदा है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="719"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="739"/>
         <source>This license key was activated on a different device.</source>
         <translation>यह लाइसेंस कुंजी किसी अन्य डिवाइस पर सक्रिय की गई थी।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="720"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="562"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="740"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>पहले उसे वहाँ निष्क्रिय करें या सहायता के लिए समर्थन से संपर्क करें।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="556"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="730"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
         <source>This license is not currently active.</source>
         <translation>यह लाइसेंस वर्तमान में सक्रिय नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>यह समाप्त हो गया होगा या निष्क्रिय कर दिया गया होगा (स्थिति: %1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="567"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="584"/>
         <source>Something went wrong on the server.</source>
         <translation>सर्वर पर कुछ गड़बड़ हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="568"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
         <source>No activation ID was returned.</source>
         <translation>कोई सक्रियण ID नहीं मिला।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
         <source>Could not validate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस सत्यापित नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="579"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="770"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="866"/>
         <source>Try again later.</source>
         <translation>बाद में पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="711"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>दोबारा जाँचें कि आपने अपना लाइसेंस आधिकारिक Serial Studio स्टोर से खरीदा है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="740"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="760"/>
         <source>Something went wrong on the server…</source>
         <translation>सर्वर पर कुछ गड़बड़ हुई…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="614"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="616"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="647"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="667"/>
         <source>Your license has been successfully activated.</source>
         <translation>आपका लाइसेंस सफलतापूर्वक सक्रिय हो गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="648"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="668"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Serial Studio का समर्थन करने के लिए धन्यवाद!
 अब आपके पास सभी प्रीमियम सुविधाओं तक पहुंच है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="702"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="722"/>
         <source>There was an issue activating your license.</source>
         <translation>आपका लाइसेंस सक्रिय करने में समस्या हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="749"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
         <source>Could not activate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस सक्रिय नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="826"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
         <source>There was an issue deactivating your license.</source>
         <translation>आपका लाइसेंस निष्क्रिय करने में समस्या आई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="865"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस निष्क्रिय नहीं किया जा सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="876"/>
         <source>Your license has been deactivated.</source>
         <translation>आपका लाइसेंस निष्क्रिय कर दिया गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="857"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="877"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro फीचर्स की एक्सेस हटा दी गई है।
@@ -12578,34 +12578,34 @@ Click Refresh to update the list.</source>
         <translation>स्वागत टेक्स्ट लोड करने में विफल :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="256"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="263"/>
         <source>Network error</source>
         <translation>नेटवर्क त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="259"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="276"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="309"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="266"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="283"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="316"/>
         <source>Trial Activation Error</source>
         <translation>ट्रायल एक्टिवेशन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="273"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="280"/>
         <source>Invalid server response</source>
         <translation>अमान्य सर्वर रिस्पॉन्स</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="274"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="281"/>
         <source>The server returned malformed data: %1</source>
         <translation>सर्वर ने विकृत डेटा भेजा: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="306"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="313"/>
         <source>Unexpected server response</source>
         <translation>अप्रत्याशित सर्वर रिस्पॉन्स</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="307"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
         <source>The server response is missing required fields.</source>
         <translation>सर्वर प्रतिक्रिया में आवश्यक फ़ील्ड गायब हैं।</translation>
     </message>

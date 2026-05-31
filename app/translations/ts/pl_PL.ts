@@ -177,22 +177,22 @@
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="424"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="423"/>
         <source>Export Protobuf File</source>
         <translation>Eksportuj Plik Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="426"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="425"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (*.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="475"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="474"/>
         <source>Unable to start gRPC server</source>
         <translation>Nie można uruchomić serwera GRPC</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="476"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="475"/>
         <source>Failed to bind to %1</source>
         <translation>Nie udało się powiązać z %1</translation>
     </message>
@@ -9037,129 +9037,129 @@ Plany obejmują opcje Miesięczne, Roczne i Dożywotnie.</translation>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="514"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
         <source>There was an issue validating your license.</source>
         <translation>Wystąpił problem z walidacją licencji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="532"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="710"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="835"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="549"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="730"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Podany klucz licencyjny nie należy do Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="533"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="550"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Sprawdź, czy licencja została zakupiona w oficjalnym sklepie Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="719"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="739"/>
         <source>This license key was activated on a different device.</source>
         <translation>Ten klucz licencyjny został aktywowany na innym urządzeniu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="720"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="562"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="740"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Dezaktywuj go tam najpierw lub skontaktuj się z pomocą techniczną.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="556"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="730"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
         <source>This license is not currently active.</source>
         <translation>Ta licencja nie jest obecnie aktywna.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Mogła wygasnąć lub zostać dezaktywowana (status: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="567"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="584"/>
         <source>Something went wrong on the server.</source>
         <translation>Coś poszło nie tak na serwerze.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="568"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="741"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
         <source>No activation ID was returned.</source>
         <translation>Nie zwrócono ID aktywacji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="578"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
         <source>Could not validate your license at this time.</source>
         <translation>Nie można zwalidować licencji w tym momencie.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="579"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="770"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="866"/>
         <source>Try again later.</source>
         <translation>Spróbuj ponownie później.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="711"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Upewnij się, że licencja została zakupiona w oficjalnym sklepie Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="740"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="760"/>
         <source>Something went wrong on the server…</source>
         <translation>Coś poszło nie tak na serwerze…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="614"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="616"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="647"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="667"/>
         <source>Your license has been successfully activated.</source>
         <translation>Twoja licencja została pomyślnie aktywowana.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="648"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="668"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Dziękujemy za wspieranie Serial Studio!
 Masz teraz dostęp do wszystkich funkcji premium.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="702"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="722"/>
         <source>There was an issue activating your license.</source>
         <translation>Wystąpił problem z aktywacją licencji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="749"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
         <source>Could not activate your license at this time.</source>
         <translation>Nie można teraz aktywować licencji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="826"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Wystąpił problem z dezaktywacją licencji.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="845"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="865"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Nie udało się dezaktywować licencji w tym momencie.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="876"/>
         <source>Your license has been deactivated.</source>
         <translation>Twoja licencja została dezaktywowana.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="857"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="877"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Dostęp do funkcji Pro został usunięty.
@@ -12578,34 +12578,34 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Nie udało się załadować tekstu powitalnego :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="256"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="263"/>
         <source>Network error</source>
         <translation>Błąd sieci</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="259"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="276"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="309"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="266"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="283"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="316"/>
         <source>Trial Activation Error</source>
         <translation>Błąd Aktywacji Wersji Próbnej</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="273"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="280"/>
         <source>Invalid server response</source>
         <translation>Nieprawidłowa odpowiedź serwera</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="274"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="281"/>
         <source>The server returned malformed data: %1</source>
         <translation>Serwer zwrócił nieprawidłowe dane: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="306"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="313"/>
         <source>Unexpected server response</source>
         <translation>Nieoczekiwana odpowiedź serwera</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="307"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
         <source>The server response is missing required fields.</source>
         <translation>W odpowiedzi serwera brakuje wymaganych pól.</translation>
     </message>
