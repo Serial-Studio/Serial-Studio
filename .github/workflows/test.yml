@@ -40,7 +40,7 @@ on:
 
 env:
   QT_VERSION_LINUX: 6.11.1
-  GRPC_VERSION: 1.81.0
+  GRPC_VERSION: 1.78.1
   GRPC_REPO: alex-spataru/gRPC-Builds
   UNIXNAME: "serial-studio-pro"
   INSTALL_QT_LINUX_INTEL: false
