@@ -42,6 +42,15 @@ public:
   [[nodiscard]] virtual QList<QStringList> parseString(const QString& frame)    = 0;
   [[nodiscard]] virtual QList<QStringList> parseBinary(const QByteArray& frame) = 0;
 
+  /**
+   * @brief Parses a text frame from raw UTF-8 bytes. Engines that store text as UTF-16 (JS) just
+   * transcode; byte-string engines (Lua) override this to skip the QString round-trip.
+   */
+  [[nodiscard]] virtual QList<QStringList> parseUtf8(const QByteArray& frame)
+  {
+    return parseString(QString::fromUtf8(frame));
+  }
+
   [[nodiscard]] virtual bool isLoaded() const noexcept = 0;
 
   virtual void collectGarbage() = 0;

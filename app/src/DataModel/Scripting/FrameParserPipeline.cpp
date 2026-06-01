@@ -125,7 +125,7 @@ void DataModel::decodeAndParseFrame(const QByteArray& rawFrame,
       break;
     case SerialStudio::PlainText:
     default:
-      outChannels = parser.parseMultiFrame(QString::fromUtf8(rawFrame), sourceId);
+      outChannels = parser.parseMultiFrameUtf8(rawFrame, sourceId);
       break;
   }
 }
@@ -154,7 +154,7 @@ void DataModel::decodeAndParseFrame(const QByteArray& rawFrame,
       break;
     case SerialStudio::PlainText:
     default:
-      outChannels = engine.parseString(QString::fromUtf8(rawFrame));
+      outChannels = engine.parseUtf8(rawFrame);
       break;
   }
 }

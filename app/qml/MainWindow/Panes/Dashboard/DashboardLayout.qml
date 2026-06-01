@@ -220,13 +220,14 @@ Widgets.Pane {
     anchors.leftMargin: zeroBottom ? -14 : -9
     anchors.rightMargin: zeroBottom ? -14 : -9
     anchors.bottomMargin: zeroBottom ? -14 : -9
-    anchors.topMargin: (zeroBottom ? -18 : -16) + (operatorMode ? 1 : 0)
+    anchors.topMargin: headerVisible || zeroBottom ? -15 : -9
 
     //
     // Default background
     //
     Rectangle {
       anchors.fill: parent
+      anchors.topMargin: -16
       color: Cpp_ThemeManager.colors["dashboard_background"]
     }
 
@@ -323,16 +324,14 @@ Widgets.Pane {
       Item {
         id: _taskbarHost
 
+        clip: true
+        visible: !hidden
         Layout.fillWidth: true
         Layout.preferredHeight: hidden ? 0 : (revealed ? _taskbar.implicitHeight : 0)
-        //
-        // Slide the layout slot open/closed
-        //
+
         Behavior on Layout.preferredHeight {
           NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
         }
-        clip: true
-        visible: !hidden
 
         property bool hovered: false
         property bool revealed: !autohide

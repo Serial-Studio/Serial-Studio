@@ -42,6 +42,7 @@ public:
                                 bool showMessageBoxes) override;
 
   [[nodiscard]] QList<QStringList> parseString(const QString& frame) override;
+  [[nodiscard]] QList<QStringList> parseUtf8(const QByteArray& frame) override;
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override;
 
   [[nodiscard]] bool isLoaded() const noexcept override;
@@ -57,6 +58,7 @@ private:
   [[nodiscard]] bool ensureParseFunction(int sourceId, bool showMessageBoxes);
   [[nodiscard]] bool probeParseFunction(int sourceId, bool showMessageBoxes);
 
+  [[nodiscard]] QList<QStringList> parseLuaText(const char* data, qsizetype len);
   [[nodiscard]] QList<QStringList> convertResult();
   [[nodiscard]] QList<QStringList> classifyTable(int len);
   [[nodiscard]] QList<QStringList> unzipMixedTable(int len);
@@ -82,6 +84,7 @@ private:
   bool m_loaded;
   bool m_disabled;
   int m_sourceId;
+  int m_parseRef;
   int m_consecutiveTimeouts;
   QDeadlineTimer m_deadline;
 };

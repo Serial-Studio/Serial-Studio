@@ -104,8 +104,7 @@ Item {
       right: parent.right
       bottom: parent.bottom
       topMargin: commercialNotification.visible ? -1 : 0
-      top: commercialNotification.visible ? commercialNotification.bottom :
-                                            parent.top
+      top: commercialNotification.visible ? commercialNotification.bottom : parent.top
     }
 
     //

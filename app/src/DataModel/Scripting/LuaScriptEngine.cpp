@@ -123,6 +123,7 @@ DataModel::LuaScriptEngine::LuaScriptEngine()
   , m_loaded(false)
   , m_disabled(false)
   , m_sourceId(0)
+  , m_parseRef(LUA_NOREF)
   , m_consecutiveTimeouts(0)
   , m_deadline(QDeadlineTimer::Forever)
 {
@@ -188,6 +189,7 @@ void DataModel::LuaScriptEngine::createState()
   m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
   m_loaded              = false;
   m_disabled            = false;
+  m_parseRef            = LUA_NOREF;
   m_consecutiveTimeouts = 0;
 }
 
@@ -334,6 +336,10 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
   if (sourceId == 0 && !probeParseFunction(sourceId, showMessageBoxes))
     return false;
 
+  // Cache parse() in the registry so the hotpath skips a global lookup on every frame.
+  lua_getglobal(m_state, "parse");
+  m_parseRef = luaL_ref(m_state, LUA_REGISTRYINDEX);
+
   m_loaded = true;
   return true;
 }
@@ -457,21 +463,20 @@ bool DataModel::LuaScriptEngine::probeParseFunction(int sourceId, bool showMessa
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Runs the Lua parse function over a text frame.
+ * @brief Shared driver: invokes the cached parse() over a raw byte buffer and converts the result.
  */
-QList<QStringList> DataModel::LuaScriptEngine::parseString(const QString& frame)
+QList<QStringList> DataModel::LuaScriptEngine::parseLuaText(const char* data, qsizetype len)
 {
-  Q_ASSERT(!frame.isEmpty());
   Q_ASSERT(m_state != nullptr);
+  Q_ASSERT(data != nullptr);
 
   if (!m_loaded || m_disabled)
     return {};
 
   // C++-boundary exception guard: a thrown Lua error must not crash the host
   try {
-    lua_getglobal(m_state, "parse");
-    const QByteArray utf8 = frame.toUtf8();
-    lua_pushlstring(m_state, utf8.constData(), utf8.size());
+    lua_rawgeti(m_state, LUA_REGISTRYINDEX, m_parseRef);
+    lua_pushlstring(m_state, data, static_cast<size_t>(len));
 
     m_deadline.setRemainingTime(kRuntimeWatchdogMs);
     const int status = guardedPcall(m_state, 1, 1, 0);
@@ -490,14 +495,37 @@ QList<QStringList> DataModel::LuaScriptEngine::parseString(const QString& frame)
     resetTimeoutCounter();
     return convertResult();
   } catch (const std::exception& e) {
-    qWarning() << "[LuaScriptEngine] parseString uncaught exception:" << e.what();
+    qWarning() << "[LuaScriptEngine] parse uncaught exception:" << e.what();
   } catch (...) {
-    qWarning() << "[LuaScriptEngine] parseString uncaught non-std exception";
+    qWarning() << "[LuaScriptEngine] parse uncaught non-std exception";
   }
 
   m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
   lua_settop(m_state, 0);
   return {};
+}
+
+/**
+ * @brief Runs the Lua parse function over a text frame (transcodes UTF-16 to UTF-8 bytes).
+ */
+QList<QStringList> DataModel::LuaScriptEngine::parseString(const QString& frame)
+{
+  Q_ASSERT(!frame.isEmpty());
+  Q_ASSERT(m_state != nullptr);
+
+  const QByteArray utf8 = frame.toUtf8();
+  return parseLuaText(utf8.constData(), utf8.size());
+}
+
+/**
+ * @brief Runs the Lua parse function over a raw UTF-8 byte frame (no QString round-trip).
+ */
+QList<QStringList> DataModel::LuaScriptEngine::parseUtf8(const QByteArray& frame)
+{
+  Q_ASSERT(!frame.isEmpty());
+  Q_ASSERT(m_state != nullptr);
+
+  return parseLuaText(frame.constData(), frame.size());
 }
 
 /**
@@ -513,7 +541,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
 
   // C++-boundary exception guard: a thrown Lua error must not crash the host
   try {
-    lua_getglobal(m_state, "parse");
+    lua_rawgeti(m_state, LUA_REGISTRYINDEX, m_parseRef);
 
     lua_createtable(m_state, frame.size(), 0);
     const auto* data = reinterpret_cast<const quint8*>(frame.constData());

@@ -58,6 +58,7 @@ public:
 
   [[nodiscard]] QList<QStringList> parseMultiFrame(const QString& frame, int sourceId);
   [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray& frame, int sourceId);
+  [[nodiscard]] QList<QStringList> parseMultiFrameUtf8(const QByteArray& frame, int sourceId);
 
   [[nodiscard]] bool loadScript(int sourceId, const QString& script, bool showMessageBoxes = true);
 

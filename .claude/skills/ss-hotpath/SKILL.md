@@ -42,16 +42,25 @@ Dashboard / CSV / MDF4 / API / Sessions`
 ## Measure, don't guess
 
 The documented "256 kHz data rate" is a CI gate, not a slogan. To check throughput locally
-after a change, build the app and run the in-process extraction benchmark:
+after a change, build the app and run the in-process end-to-end pipeline benchmark:
 
 ```
 serial-studio-pro --headless --benchmark-hotpath --min-fps 256000
 ```
 
-It drives the real `FrameReader` + `CircularBuffer` path and exits non-zero below `--min-fps`
-(default 256000). `--benchmark-frames N` sets the workload size. Source:
+It loads a project via `ProjectModel::loadFromJsonDocument` and drives the path —
+`FrameReader` extraction → `FrameBuilder` → frame parser → per-dataset transforms → Dashboard.
+It runs a **Lua** pipeline (gated; this exit code is the release gate), an ungated **JS** pipeline,
+and an ungated **Lua + all exporters** pipeline (CSV/MDF4/Sessions/API/gRPC) that prints the
+exporter slowdown (`hotpath: exporters cost N.NNx throughput`) and trains the export hot paths. The
+gated runs disable the parse-budget guard (an interactive throttle a 100%-duty benchmark would trip
+every window) and run no exporters, so the gate is pure parse capacity; the exporter phase is not
+gated (workers can't keep up with a flat-out producer, so the pool exhausts into heap fallback — that
+penalty is the readout). Throughput = `FrameBuilder::parsedFrameCount()` / elapsed.
+`--benchmark-frames N` sets the minimum workload; `--benchmark-seconds N` sets the minimum wall-clock
+window (default 10) — each run lasts until both floors are met. Source:
 `app/src/Misc/HotpathBenchmark.cpp`. CI runs this on every PR (`test.yml`) and as a hard
-release gate on the shipped PGO binary (`deploy.yml`). **Do not regress the extraction hotpath.**
+release gate on the shipped PGO binary (`deploy.yml`). **Do not regress the parse hotpath.**
 
 After any change here, re-read the diff against these rules before handing off, and run
 `python scripts/code-verify.py --check <files>` (hotpath violations are blockers, not advisories).

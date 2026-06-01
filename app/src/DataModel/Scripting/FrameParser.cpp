@@ -314,6 +314,28 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
   return it->second->parseBinary(frame);
 }
 
+/**
+ * @brief Runs the source's engine over a UTF-8 text frame, skipping the QString round-trip.
+ */
+QList<QStringList> DataModel::FrameParser::parseMultiFrameUtf8(const QByteArray& frame, int sourceId)
+{
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(!frame.isEmpty());
+
+  if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
+    return {};
+
+  auto it = m_engines.find(sourceId);
+  if (it == m_engines.end() || !it->second->isLoaded()) {
+    if (sourceId == 0)
+      return {};
+
+    return parseMultiFrameUtf8(frame, 0);
+  }
+
+  return it->second->parseUtf8(frame);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Script loading
 //--------------------------------------------------------------------------------------------------

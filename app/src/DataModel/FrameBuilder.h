@@ -72,6 +72,11 @@ public:
   [[nodiscard]] const DataModel::Frame& quickPlotFrame() const noexcept;
   [[nodiscard]] const DataModel::DataTableStore& tableStore() const noexcept;
 
+  void resetFrameCounters() noexcept;
+  void setParseBudgetEnabled(bool enabled) noexcept;
+  [[nodiscard]] quint64 parsedFrameCount() const noexcept;
+  [[nodiscard]] quint64 skippedFrameCount() const noexcept;
+
   void injectTableApiLua(lua_State* L);
   void injectTableApiJS(QJSEngine* js);
   void refreshTableStoreFromProjectModel();
@@ -142,9 +147,13 @@ private:
   bool m_quickPlotHasHeader;
   bool m_parseBudgetSkipping;
   bool m_parseBudgetWarned;
+  bool m_parseBudgetEnabled;
   bool m_lastConnectedState;
   qint64 m_parseBudgetUsedNs;
   BudgetClock::time_point m_parseBudgetWindowStart;
+
+  quint64 m_parsedFrameCount;
+  quint64 m_skippedFrameCount;
 
   bool m_jsTransformTimedOut;
   QStringList m_channelScratch;

@@ -111,10 +111,20 @@ The rules most likely to cause silent breakage. Full detail in
   workers (use `monotonicFrameNs(...)` as the safety net only).
 - **JS scripts**: always `IScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
-- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Misc::HotpathBenchmark`) drives
-  the real `FrameReader` + `CircularBuffer` extraction path in-process and exits nonzero below
-  `--min-fps` (default 256000). `test.yml` runs it on every PR; `deploy.yml` runs it as a hard gate
-  on the shipped PGO binary (sub-256 kHz blocks the release). Don't regress the extraction hotpath.
+- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Misc::HotpathBenchmark`) drives the
+  real parse pipeline in-process — `FrameReader` extraction → `FrameBuilder` → the **Lua** frame parser
+  → per-dataset transforms → Dashboard — against a project loaded programmatically via
+  `ProjectModel::loadFromJsonDocument`. It exits nonzero when the **Lua** run sustains below `--min-fps`
+  (default 256000), then runs an ungated **JS** pipeline and an ungated **Lua + all exporters live**
+  pipeline (CSV/MDF4/Sessions/API/gRPC) for PGO training + an exporter-slowdown readout. The gated runs
+  disable the `FrameBuilder` parse-budget guard (an interactive 80%-duty throttle that a 100%-duty
+  benchmark would trip every window) via `setParseBudgetEnabled(false)` and run **no** exporters, so the
+  gate measures pure parse capacity; the exporter phase is deliberately *not* gated (its `FrameConsumer`
+  worker threads can't drain faster than a flat-out producer, so the 1024-slot pool exhausts into the
+  heap-fallback path — that penalty is the point of the readout). Each run lasts until both the
+  `--benchmark-frames` floor (default 1M) and the `--benchmark-seconds` window (default 10) are met.
+  Throughput = `FrameBuilder::parsedFrameCount()` / elapsed. `test.yml` runs it per PR; `deploy.yml`
+  gates the shipped PGO binary on it. Don't regress the parse hotpath.
 
 ## Code Style — Essentials
 

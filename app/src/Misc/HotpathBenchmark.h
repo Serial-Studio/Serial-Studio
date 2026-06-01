@@ -21,12 +21,14 @@
 
 #pragma once
 
+#include <QByteArray>
+#include <QJsonObject>
 #include <QtGlobal>
 
 namespace Misc {
 
 /**
- * @brief In-process throughput benchmark for the frame-extraction hotpath.
+ * @brief End-to-end throughput benchmark for the frame parse pipeline.
  */
 class HotpathBenchmark {
 public:
@@ -35,17 +37,24 @@ public:
    */
   struct Result {
     bool passed;
+    int language;
     double minFps;
     double framesPerSecond;
     double elapsedSeconds;
-    quint64 framesProcessed;
+    quint64 framesParsed;
+    quint64 framesSkipped;
   };
 
-  [[nodiscard]] static Result run(quint64 targetFrames, double minFps);
-  [[nodiscard]] static int runAndReport(quint64 targetFrames, double minFps);
+  [[nodiscard]] static Result run(quint64 targetFrames, double minFps, double minSeconds,
+                                  int language, bool withExporters);
+  [[nodiscard]] static int runAndReport(quint64 targetFrames, double minFps, double minSeconds);
 
 private:
-  [[nodiscard]] static QByteArray buildChunk(int frames);
+  static void enableConsumers();
+  static void disableConsumers();
+  static void setupProject(int language, int channels);
+  [[nodiscard]] static QByteArray buildChunk(int frames, int channels);
+  [[nodiscard]] static QJsonObject buildProjectJson(int language, int channels);
 };
 
 }  // namespace Misc

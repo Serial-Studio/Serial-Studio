@@ -93,6 +93,7 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.benchmarkHotpathOpt);
   m_parser.addOption(m_opts.minFpsOpt);
   m_parser.addOption(m_opts.benchmarkFramesOpt);
+  m_parser.addOption(m_opts.benchmarkSecondsOpt);
 #ifdef BUILD_COMMERCIAL
   m_parser.addOption(m_opts.noToolbarOpt);
   m_parser.addOption(m_opts.runtimeOpt);
@@ -179,6 +180,7 @@ bool CLI::isBenchmarkRequested(int argc, char** argv)
 {
   return argvHasFlag(argc, argv, "--benchmark-hotpath")
          || argvHasFlag(argc, argv, "--benchmark-frames")
+         || argvHasFlag(argc, argv, "--benchmark-seconds")
          || argvHasFlag(argc, argv, "--min-fps");
 }
 
@@ -206,7 +208,7 @@ CLI::ProcessResult CLI::process(QApplication& app)
   }
 
   if (m_parser.isSet(m_opts.benchmarkHotpathOpt) || m_parser.isSet(m_opts.benchmarkFramesOpt)
-      || m_parser.isSet(m_opts.minFpsOpt))
+      || m_parser.isSet(m_opts.benchmarkSecondsOpt) || m_parser.isSet(m_opts.minFpsOpt))
     return runHotpathBenchmark();
 
 #ifdef BUILD_COMMERCIAL
@@ -232,6 +234,7 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
 {
   quint64 frames = 1'000'000;
   double minFps  = 256'000.0;
+  double seconds = 10.0;
 
   if (m_parser.isSet(m_opts.benchmarkFramesOpt)) {
     bool ok           = false;
@@ -247,7 +250,14 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
       minFps = val;
   }
 
-  const int rc = Misc::HotpathBenchmark::runAndReport(frames, minFps);
+  if (m_parser.isSet(m_opts.benchmarkSecondsOpt)) {
+    bool ok          = false;
+    const double val = m_parser.value(m_opts.benchmarkSecondsOpt).toDouble(&ok);
+    if (ok && val >= 0.0)
+      seconds = val;
+  }
+
+  const int rc = Misc::HotpathBenchmark::runAndReport(frames, minFps, seconds);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
 

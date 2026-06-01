@@ -229,17 +229,26 @@ public:
   }
 
   /**
+   * @brief Flushes and stops the worker thread. Idempotent; call before QApplication teardown.
+   */
+  void stopWorker()
+  {
+    if (!m_worker || !m_workerThread.isRunning())
+      return;
+
+    QMetaObject::invokeMethod(
+      m_worker, &FrameConsumerWorkerBase::close, Qt::BlockingQueuedConnection);
+
+    m_workerThread.quit();
+    m_workerThread.wait();
+  }
+
+  /**
    * @brief Destructor ensures all data is flushed before shutdown.
    */
   virtual ~FrameConsumer()
   {
-    if (m_worker) {
-      QMetaObject::invokeMethod(
-        m_worker, &FrameConsumerWorkerBase::close, Qt::BlockingQueuedConnection);
-
-      m_workerThread.quit();
-      m_workerThread.wait();
-    }
+    stopWorker();
   }
 
   /**

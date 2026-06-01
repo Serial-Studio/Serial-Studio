@@ -88,9 +88,12 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_quickPlotHasHeader(false)
   , m_parseBudgetSkipping(false)
   , m_parseBudgetWarned(false)
+  , m_parseBudgetEnabled(true)
   , m_lastConnectedState(false)
   , m_parseBudgetUsedNs(0)
   , m_parseBudgetWindowStart(BudgetClock::time_point{})
+  , m_parsedFrameCount(0)
+  , m_skippedFrameCount(0)
   , m_jsTransformTimedOut(false)
   , m_engineCacheSourceId(-1)
   , m_luaEngineForSource(nullptr)
@@ -204,6 +207,39 @@ DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(const DataM
 const DataModel::Frame& DataModel::FrameBuilder::frame() const noexcept
 {
   return m_frame;
+}
+
+/**
+ * @brief Returns the number of project frames published since the last counter reset.
+ */
+quint64 DataModel::FrameBuilder::parsedFrameCount() const noexcept
+{
+  return m_parsedFrameCount;
+}
+
+/**
+ * @brief Returns the number of frames dropped by the parse-load budget since the last reset.
+ */
+quint64 DataModel::FrameBuilder::skippedFrameCount() const noexcept
+{
+  return m_skippedFrameCount;
+}
+
+/**
+ * @brief Zeroes the parsed/skipped frame counters (used by the throughput benchmark).
+ */
+void DataModel::FrameBuilder::resetFrameCounters() noexcept
+{
+  m_parsedFrameCount  = 0;
+  m_skippedFrameCount = 0;
+}
+
+/**
+ * @brief Enables/disables the parse-load budget guard (disabled by the throughput benchmark).
+ */
+void DataModel::FrameBuilder::setParseBudgetEnabled(bool enabled) noexcept
+{
+  m_parseBudgetEnabled = enabled;
 }
 
 /**
@@ -497,6 +533,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
     applyDatasetValues(m_frame, channels, info);
     // Pooled fan-out: one TimestampedFramePtr per parsed frame, slot recycled by deleter.
     hotpathTxFrame(acquireFrame(m_frame, frameTs));
+    ++m_parsedFrameCount;
   }
 
   parseBudgetAccount(t0);
@@ -549,6 +586,10 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
  */
 bool DataModel::FrameBuilder::parseBudgetSkipFrame()
 {
+  // Disabled by the throughput benchmark: a 100%-duty run would trip this interactive throttle.
+  if (!m_parseBudgetEnabled) [[unlikely]]
+    return false;
+
   const auto now = BudgetClock::now();
 
   // Lazily start the window on the first call.
@@ -568,6 +609,9 @@ bool DataModel::FrameBuilder::parseBudgetSkipFrame()
     m_parseBudgetSkipping    = false;
   }
 
+  if (m_parseBudgetSkipping)
+    ++m_skippedFrameCount;
+
   return m_parseBudgetSkipping;
 }
 
@@ -576,6 +620,9 @@ bool DataModel::FrameBuilder::parseBudgetSkipFrame()
  */
 void DataModel::FrameBuilder::parseBudgetAccount(BudgetClock::time_point startedAt)
 {
+  if (!m_parseBudgetEnabled) [[unlikely]]
+    return;
+
   const auto elapsed =
     std::chrono::duration_cast<std::chrono::nanoseconds>(BudgetClock::now() - startedAt).count();
   m_parseBudgetUsedNs += elapsed;
@@ -1672,7 +1719,6 @@ void DataModel::FrameBuilder::initializeTableStore()
  */
 void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
 {
-  // Let Project Editor test dialogs see in-flight edits to shared tables
   const auto& pm = DataModel::ProjectModel::instance();
   DataModel::Frame scratch;
   scratch.title  = pm.title();
