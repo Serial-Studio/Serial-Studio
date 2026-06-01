@@ -771,6 +771,7 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
+          -DLLVM_PROFDATA=$(xcrun -f llvm-profdata) \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64" \
@@ -989,7 +990,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build `
+        cmake -B build -G Ninja `
           -DCMAKE_CXX_COMPILER=cl `
           -DCMAKE_C_COMPILER=cl `
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix" `
@@ -999,7 +1000,6 @@ jobs:
           -DENABLE_PGO=ON `
           -DPGO_STAGE=GENERATE `
           -DCMAKE_BUILD_TYPE=Release `
-          -DCMAKE_CONFIGURATION_TYPES=Release `
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
 
@@ -1012,7 +1012,7 @@ jobs:
     # launched with '&', so without this the .pgc data is not flushed before the merge.
     - name: '🏋️ PGO training run (hotpath)'
       run: |
-        $p = Start-Process -FilePath "build/app/Release/${{env.EXECUTABLE}}.exe" `
+        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1','--benchmark-frames','8000000' `
           -NoNewWindow -Wait -PassThru
         exit $p.ExitCode
@@ -1031,7 +1031,7 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build `
+        cmake -B build -G Ninja `
           -DCMAKE_CXX_COMPILER=cl `
           -DCMAKE_C_COMPILER=cl `
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix" `
@@ -1041,7 +1041,6 @@ jobs:
           -DENABLE_PGO=ON `
           -DPGO_STAGE=USE `
           -DCMAKE_BUILD_TYPE=Release `
-          -DCMAKE_CONFIGURATION_TYPES=Release `
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
 
@@ -1053,7 +1052,7 @@ jobs:
     # not block '&'; exiting with its code fails the job (and the release) below threshold.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       run: |
-        $p = Start-Process -FilePath "build/app/Release/${{env.EXECUTABLE}}.exe" `
+        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
           -NoNewWindow -Wait -PassThru
         exit $p.ExitCode
@@ -1061,7 +1060,7 @@ jobs:
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
       with:
-        path: build/app/Release/${{env.EXECUTABLE}}.exe
+        path: build/app/${{env.EXECUTABLE}}.exe
         sarif: deglyph.sarif
         fail-on: never
         cve: "true"
