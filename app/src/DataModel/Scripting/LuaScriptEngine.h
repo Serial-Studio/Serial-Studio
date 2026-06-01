@@ -62,6 +62,7 @@ private:
   [[nodiscard]] QList<QStringList> convertResult();
   [[nodiscard]] QList<QStringList> classifyTable(int len);
   [[nodiscard]] QList<QStringList> unzipMixedTable(int len);
+  [[nodiscard]] QString luaValueToString();
   [[nodiscard]] QStringList tableToStringList(int tableIndex);
   [[nodiscard]] QStringList scalarToStringList();
   void appendMixedElement(QStringList& scalars,

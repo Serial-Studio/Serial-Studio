@@ -582,6 +582,30 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Converts the Lua value at stack top to a QString without coercing numeric strings.
+ */
+QString DataModel::LuaScriptEngine::luaValueToString()
+{
+  Q_ASSERT(m_state != nullptr);
+
+  // Strings pass through verbatim (no strtod/reformat), matching JS; only real numbers format.
+  switch (lua_type(m_state, -1)) {
+    case LUA_TSTRING:
+      return QString::fromUtf8(lua_tostring(m_state, -1));
+    case LUA_TNUMBER:
+      if (lua_isinteger(m_state, -1))
+        return QString::number(lua_tointeger(m_state, -1));
+
+      return QString::number(lua_tonumber(m_state, -1), 'g', 15);
+    default:
+      break;
+  }
+
+  const char* coerced = lua_tostring(m_state, -1);
+  return coerced ? QString::fromUtf8(coerced) : QString();
+}
+
+/**
  * @brief Converts the Lua table at tableIndex to a QStringList.
  */
 QStringList DataModel::LuaScriptEngine::tableToStringList(int tableIndex)
@@ -594,14 +618,7 @@ QStringList DataModel::LuaScriptEngine::tableToStringList(int tableIndex)
 
   for (int i = 1; i <= qMin(len, kMaxElements); ++i) {
     lua_rawgeti(m_state, tableIndex, i);
-
-    if (lua_isinteger(m_state, -1))
-      result.append(QString::number(lua_tointeger(m_state, -1)));
-    else if (lua_isnumber(m_state, -1))
-      result.append(QString::number(lua_tonumber(m_state, -1), 'g', 15));
-    else
-      result.append(QString::fromUtf8(lua_tostring(m_state, -1)));
-
+    result.append(luaValueToString());
     lua_pop(m_state, 1);
   }
 
@@ -613,19 +630,12 @@ QStringList DataModel::LuaScriptEngine::tableToStringList(int tableIndex)
  */
 QStringList DataModel::LuaScriptEngine::scalarToStringList()
 {
+  Q_ASSERT(m_state != nullptr);
+
   QStringList frame;
-  if (lua_isinteger(m_state, -1)) {
-    frame.append(QString::number(lua_tointeger(m_state, -1)));
-    return frame;
-  }
-
-  if (lua_isnumber(m_state, -1)) {
-    frame.append(QString::number(lua_tonumber(m_state, -1), 'g', 15));
-    return frame;
-  }
-
-  if (lua_isstring(m_state, -1))
-    frame.append(QString::fromUtf8(lua_tostring(m_state, -1)));
+  const int type = lua_type(m_state, -1);
+  if (type == LUA_TSTRING || type == LUA_TNUMBER)
+    frame.append(luaValueToString());
 
   return frame;
 }
@@ -646,17 +656,7 @@ void DataModel::LuaScriptEngine::appendMixedElement(QStringList& scalars,
     return;
   }
 
-  if (lua_isinteger(m_state, -1)) {
-    scalars.append(QString::number(lua_tointeger(m_state, -1)));
-    return;
-  }
-
-  if (lua_isnumber(m_state, -1)) {
-    scalars.append(QString::number(lua_tonumber(m_state, -1), 'g', 15));
-    return;
-  }
-
-  scalars.append(QString::fromUtf8(lua_tostring(m_state, -1)));
+  scalars.append(luaValueToString());
 }
 
 /**
