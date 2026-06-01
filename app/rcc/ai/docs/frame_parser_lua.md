@@ -28,6 +28,13 @@ against Lua 5.1/5.2 conventions still work:
 - `bit32`: full library (band, bor, bxor, bnot, lshift, rshift, arshift,
   rrotate, lrotate, extract, replace).
 - `unpack(t)`: alias for `table.unpack(t)`.
+- `string.split(s, sep)`: **native** split on the literal separator `sep`,
+  keeping empty fields (`"a,,b"` -> `{"a", "", "b"}`) — same semantics as
+  JavaScript's `String.split`. Runs in C; prefer it over a hand-written
+  `gmatch`/`find` loop for delimited frames (it is the fast path for CSV-style
+  data). `sep` is a literal, not a Lua pattern, so `"|"`, `"."`, etc. are safe.
+- `string.trim(s)`, `string.startswith(s, p)`, `string.endswith(s, p)`,
+  and `string.gfind` (alias for `string.gmatch`).
 
 ## Sandbox
 
@@ -38,9 +45,12 @@ against Lua 5.1/5.2 conventions still work:
 
 ## Performance
 
-Native Lua is fast. Avoid building full string tables when an in-place
-loop will do; avoid `string.format` in the hot path; precompute regex
-patterns at script-top-level (they capture as upvalues).
+Native Lua is fast, but a hand-written split loop runs as interpreted
+bytecode. For delimited frames use the native `frame:split(sep)` (see the
+compatibility shim) instead of a `gmatch`/`find` loop — it does the whole
+scan in C and matches JavaScript's native `split`. Avoid `string.format` in
+the hot path; precompute regex patterns at script-top-level (they capture as
+upvalues).
 
 ## Examples
 
@@ -48,11 +58,7 @@ patterns at script-top-level (they capture as upvalues).
 
 ```lua
 function parse(frame, separator)
-  local out = {}
-  for value in string.gmatch(frame, "([^" .. separator .. "]+)") do
-    out[#out + 1] = tonumber(value) or value
-  end
-  return out
+  return frame:split(separator)
 end
 ```
 

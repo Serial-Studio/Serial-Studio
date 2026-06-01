@@ -19,7 +19,10 @@ Frame parsers turn one logical frame (the bytes between `frameStart` and
   per-call overhead is lower, and at high frame rates (audio at
   48 kHz, multi-channel UART at 1 kHz+) that compounds. We ship a
   `LuaCompat` shim so 5.1/5.2-era idioms (`math.log10`, `math.pow`,
-  `bit32`, `unpack`) keep working.
+  `bit32`, `unpack`) keep working, plus a native `string.split(s, sep)`
+  (literal separator, keeps empty fields — like JS `String.split`) so the
+  default `return frame:split(sep)` parser runs at native speed instead of an
+  interpreted loop.
 - **JS** (language=0): use only when you need a JS-specific feature
   (regex flavors, JSON.stringify, etc.). QJSEngine + ConsoleExtension,
   watchdog protected.

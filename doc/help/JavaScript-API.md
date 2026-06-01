@@ -83,15 +83,16 @@ Return an empty table `{}` (Lua) or `[]` (JavaScript) for invalid or incomplete 
 **Lua:**
 ```lua
 function parse(frame)
-  local result = {}
-  for field in frame:gmatch("([^,]+)") do
-    result[#result + 1] = field
-  end
-  return result
+  return frame:split(",")
 end
 -- Input:  "23.5,1013,45.2"
 -- Output: {"23.5", "1013", "45.2"}  (one frame, three datasets)
 ```
+
+`string.split` is a native, Serial Studio-provided helper: it splits on the
+literal separator and keeps empty fields (`"1,,3"` -> `{"1", "", "3"}`), exactly
+like JavaScript's `String.split`. Prefer it over a `gmatch`/`find` loop for
+delimited frames — it runs in C and is the fast path.
 
 **JavaScript:**
 ```javascript
@@ -162,6 +163,13 @@ The Lua engine loads a safe subset of the standard library. The following module
 | **table** | `table.concat`, `table.insert`, `table.remove`, `table.sort`, `table.move`, `table.pack`, `table.unpack` |
 | **math** | `math.abs`, `math.ceil`, `math.floor`, `math.max`, `math.min`, `math.sqrt`, `math.sin`, `math.cos`, `math.tan`, `math.pi`, `math.huge`, `math.log`, `math.exp`, `math.random` |
 | **utf8** | `utf8.char`, `utf8.codes`, `utf8.codepoint`, `utf8.len`, `utf8.offset` |
+
+**Serial Studio extensions** (added on top of the standard library):
+`string.split(s, sep)` (native — splits on the literal separator, keeps empty
+fields, like JavaScript's `String.split`), `string.trim`, `string.startswith`,
+`string.endswith`, `string.gfind` (alias for `string.gmatch`), plus the Lua
+5.1/5.2 compatibility names `math.log10`, `math.pow`, `math.atan2`, `bit32.*`,
+and `unpack`.
 
 **Not available** (sandboxed): `io`, `os`, `debug`, `package`, `require`, `dofile`, `loadfile`, `load`.
 
