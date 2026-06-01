@@ -14,9 +14,11 @@
 .AppleDesktop
 .apdisk
 
-# AI stuff
-.claude/*
-!.claude/skills
+# AI stuff — ignore every .claude except the committed repo skills at the repo root
+.claude/
+!/.claude/
+/.claude/*
+!/.claude/skills/
 .code-report
 .doc-report
 
