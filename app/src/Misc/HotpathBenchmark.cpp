@@ -185,8 +185,7 @@ void HotpathBenchmark::disableConsumers()
   API::GRPC::GRPCServer::instance().setEnabled(false);
 #endif
 
-  // Stop the FrameConsumer worker threads while QApplication lives (gRPC joins its own above).
-  // MQTT is never enabled, but hotpathTxFrame still constructs it, starting its worker in the ctor.
+  // Stop consumer workers while QApplication lives (incl. MQTT, which hotpathTxFrame constructs).
   CSV::Export::instance().stopWorker();
   API::Server::instance().stopWorker();
 #ifdef BUILD_COMMERCIAL
