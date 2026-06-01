@@ -194,7 +194,6 @@ You can modify `test_ansi_colors.py` to:
 
 Serial Studio's ANSI color implementation:
 
-- **Performance**: Lock-free data paths with zero-copy dashboard updates
 - **Color accuracy**: Full 24-bit RGB support (16.7M colors)
 - **Standards compliance**: VT-100/ANSI X3.64 escape sequences
 - **Background rendering**: Separate passes for backgrounds and text to prevent overlap
