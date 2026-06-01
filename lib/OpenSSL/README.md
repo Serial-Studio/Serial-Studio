@@ -6,7 +6,7 @@ OpenSSL is descended from the SSLeay library developed by Eric A. Young and Tim 
 
 The official Home Page of the OpenSSL Project is [www.openssl.org](www.openssl.org).
 
-This repo uses prebuilt binaries from [https://github.com/alex-spataru/OpenSSL-Builder](https://github.com/alex-spataru/OpenSSL-Builder), which automates fetching, building, and packaging OpenSSL via CI. 
+This project links prebuilt binaries from [https://github.com/alex-spataru/OpenSSL-Builder](https://github.com/alex-spataru/OpenSSL-Builder), which automates fetching, building, and packaging OpenSSL via CI. The Windows and macOS archives are downloaded at configure time with CMake `FetchContent` (see `CMakeLists.txt`) rather than vendored in this directory; Linux links the distribution's OpenSSL through `pkg-config`.
 
 ## Overview
 

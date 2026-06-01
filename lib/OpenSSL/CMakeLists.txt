@@ -22,48 +22,76 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-function(target_link_openssl TARGET BASE_DIR)
-  if(WIN32)
-    target_include_directories(${TARGET} PRIVATE ${BASE_DIR}/include)
-    target_compile_definitions(${TARGET} PRIVATE OPENSSL_USE_STATIC_LIBS)
+include(FetchContent)
 
-    if(MSVC)
-      target_link_libraries(${TARGET} PRIVATE
-        ws2_32
-        gdi32
-        advapi32
-        crypt32
-        user32
-        ${BASE_DIR}/dll/Windows/msvc/libssl.lib
-        ${BASE_DIR}/dll/Windows/msvc/libcrypto.lib
-      )
-    elseif(MINGW)
-      target_link_libraries(${TARGET} PRIVATE
-        ws2_32
-        gdi32
-        advapi32
-        crypt32
-        user32
-        ${BASE_DIR}/dll/Windows/mingw/libssl.a
-        ${BASE_DIR}/dll/Windows/mingw/libcrypto.a
-      )
-    else()
-      message(FATAL_ERROR "Unsupported Windows compiler — only MSVC and MinGW are handled.")
-    endif()
+# Prebuilt OpenSSL 4.0.0 from https://github.com/alex-spataru/OpenSSL-Builder.
+# Windows (MSVC/MinGW) and macOS download the matching static archive from the
+# release at configure time; Linux links the distro OpenSSL via pkg-config.
+function(target_link_openssl TARGET)
+  set(VERSION "4.0.0")
+  set(BASE_URL "https://github.com/alex-spataru/OpenSSL-Builder/releases/download/${VERSION}")
 
-  elseif(APPLE)
-    target_include_directories(${TARGET} PRIVATE ${BASE_DIR}/include)
-    target_compile_definitions(${TARGET} PRIVATE OPENSSL_USE_STATIC_LIBS)
-    target_link_libraries(${TARGET} PRIVATE
-      ${BASE_DIR}/dll/macOS/libssl.a
-      ${BASE_DIR}/dll/macOS/libcrypto.a
-    )
-
-  elseif(UNIX)
+  if(UNIX AND NOT APPLE)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(OPENSSL REQUIRED openssl)
     target_link_libraries(${TARGET} PRIVATE ${OPENSSL_LIBRARIES})
     target_include_directories(${TARGET} PRIVATE ${OPENSSL_INCLUDE_DIRS})
     target_compile_options(${TARGET} PRIVATE ${OPENSSL_CFLAGS_OTHER})
+    return()
+  endif()
+
+  if(WIN32 AND MSVC)
+    set(ASSET "OpenSSL-${VERSION}-Windows-MSVC-amd64.zip")
+  elseif(WIN32 AND MINGW)
+    set(ASSET "OpenSSL-${VERSION}-Windows-MinGW-amd64.zip")
+  elseif(APPLE)
+    set(ASSET "OpenSSL-${VERSION}-macOS-Universal.zip")
+  else()
+    message(FATAL_ERROR "target_link_openssl: unsupported platform/toolchain.")
+  endif()
+
+  FetchContent_Declare(openssl_prebuilt URL ${BASE_URL}/${ASSET})
+  FetchContent_MakeAvailable(openssl_prebuilt)
+
+  # The MSVC archive has no openssl-out/ prefix; the Unix-zipped ones do. MinGW
+  # installs into lib64/, every other archive into lib/.
+  set(ROOT "${openssl_prebuilt_SOURCE_DIR}")
+  if(EXISTS "${ROOT}/openssl-out")
+    set(ROOT "${ROOT}/openssl-out")
+  endif()
+
+  set(LIBDIR "${ROOT}/lib")
+  if(EXISTS "${ROOT}/lib64")
+    set(LIBDIR "${ROOT}/lib64")
+  endif()
+
+  if(WIN32 AND MSVC)
+    set(SSL_LIB "${LIBDIR}/libssl.lib")
+    set(CRYPTO_LIB "${LIBDIR}/libcrypto.lib")
+  else()
+    set(SSL_LIB "${LIBDIR}/libssl.a")
+    set(CRYPTO_LIB "${LIBDIR}/libcrypto.a")
+  endif()
+
+  if(NOT EXISTS "${SSL_LIB}" OR NOT EXISTS "${CRYPTO_LIB}")
+    message(FATAL_ERROR "target_link_openssl: prebuilt OpenSSL not found in ${LIBDIR}.")
+  endif()
+
+  target_include_directories(${TARGET} PRIVATE "${ROOT}/include")
+  target_compile_definitions(${TARGET} PRIVATE OPENSSL_USE_STATIC_LIBS)
+
+  # libssl precedes libcrypto so GNU ld resolves the dependency left-to-right.
+  if(WIN32)
+    target_link_libraries(${TARGET} PRIVATE
+      ws2_32
+      gdi32
+      advapi32
+      crypt32
+      user32
+      "${SSL_LIB}"
+      "${CRYPTO_LIB}"
+    )
+  else()
+    target_link_libraries(${TARGET} PRIVATE "${SSL_LIB}" "${CRYPTO_LIB}")
   endif()
 endfunction()
