@@ -27,6 +27,7 @@
 #include <new>
 #include <QDebug>
 #include <QObject>
+#include <QCoreApplication>
 #include <QThread>
 #include <QTimer>
 #include <stdexcept>
@@ -99,8 +100,6 @@ public:
     if (!m_enabled->load(std::memory_order_relaxed))
       return;
 
-    m_writeBuffer.clear();
-
     T item;
     size_t dequeued = 0;
     // code-verify off: m_writeBuffer is pre-reserved to kMaxItemsPerBatch in the constructor
@@ -132,6 +131,9 @@ public:
 
     if (wasOpen != isOpen)
       Q_EMIT resourceOpenChanged();
+
+    // Release the pooled-frame refs now that they are written, not at the next drain cycle.
+    m_writeBuffer.clear();
   }
 
   /**
@@ -236,8 +238,10 @@ public:
     if (!m_worker || !m_workerThread.isRunning())
       return;
 
-    QMetaObject::invokeMethod(
-      m_worker, &FrameConsumerWorkerBase::close, Qt::BlockingQueuedConnection);
+    // The blocking flush spins a QEventLoop, which needs a live QCoreApplication; skip it at exit.
+    if (QCoreApplication::instance())
+      QMetaObject::invokeMethod(
+        m_worker, &FrameConsumerWorkerBase::close, Qt::BlockingQueuedConnection);
 
     m_workerThread.quit();
     m_workerThread.wait();

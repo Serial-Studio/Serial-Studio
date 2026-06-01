@@ -278,11 +278,11 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames, double minF
  */
 int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double minSeconds)
 {
-  // Gated run: clean Lua pipeline (worst-case parser). This exit code is the release gate.
+  // Gated run: clean Lua pipeline (worst-case parser). Part of the release gate.
   const Result lua = run(targetFrames, minFps, minSeconds, SerialStudio::Lua, false);
 
-  // Training run: clean JS pipeline. Not a gate (min-fps 1 always passes).
-  const Result js = run(targetFrames, 1.0, minSeconds, SerialStudio::JavaScript, false);
+  // Gated run: clean JS pipeline, threshold pinned at half the Lua gate (Lua must stay >= 2x JS).
+  const Result js = run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::JavaScript, false);
 
   // Diagnostic + training run: Lua with every exporter live. Ungated; shows the exporter slowdown.
   const Result luaX = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, true);
@@ -311,19 +311,20 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
   std::fprintf(stdout, "hotpath: exporters cost %.2fx throughput\n", slowdown);
 
   std::fprintf(stdout,
-               "HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_PASS=%d "
-               "HOTPATH_JS_FPS=%.0f HOTPATH_EXPORTER_FPS=%.0f\n",
+               "HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
+               "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f\n",
                lua.framesPerSecond,
                lua.minFps,
-               lua.passed ? 1 : 0,
                js.framesPerSecond,
+               js.minFps,
+               (lua.passed && js.passed) ? 1 : 0,
                luaX.framesPerSecond);
   std::fflush(stdout);
 
   // Stop the JS watchdog thread while QApplication is alive (its aboutToQuit hook never fires here).
   DataModel::JsWatchdogThread::instance().shutdown();
 
-  return lua.passed ? EXIT_SUCCESS : EXIT_FAILURE;
+  return (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 }  // namespace Misc
