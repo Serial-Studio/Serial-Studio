@@ -1052,8 +1052,12 @@ jobs:
     # Runs under bash, not PowerShell: bash blocks on the GUI-subsystem exe (so the .pgc
     # flushes before the merge) and hands it the step's stdout pipe directly, which the app
     # binds via attachToConsole(). PowerShell returns immediately and needed Start-Process.
+    # QT_QPA_PLATFORM_PLUGIN_PATH: --headless runs offscreen, but the build-tree exe does not
+    # search Qt's prefix for qoffscreen.dll; point it at the install's platforms dir.
     - name: '🏋️ PGO training run (hotpath)'
       shell: bash
+      env:
+        QT_QPA_PLATFORM_PLUGIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/msvc2022_64/plugins/platforms
       run: |
         ./build/app/${{env.EXECUTABLE}}.exe --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
@@ -1092,6 +1096,8 @@ jobs:
     # the step, and `set -eo pipefail` fails the job (and the release) on a nonzero exit.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       shell: bash
+      env:
+        QT_QPA_PLATFORM_PLUGIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/msvc2022_64/plugins/platforms
       run: |
         ./build/app/${{env.EXECUTABLE}}.exe --headless --benchmark-hotpath --min-fps 256000
 
