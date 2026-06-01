@@ -184,7 +184,7 @@ private:
     std::atomic<bool> inUse;
   };
 
-  static constexpr int kFramePoolSize = 1024;
+  static constexpr int kFramePoolSize = 8192;
   std::vector<std::shared_ptr<PooledFrameSlot>> m_framePool;
   std::atomic<size_t> m_framePoolHint;
 

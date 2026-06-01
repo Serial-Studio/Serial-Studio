@@ -224,7 +224,6 @@ jobs:
     # FrameReader + CircularBuffer hotpath and fails the job if it cannot
     # sustain >= 256 kHz, keeping the documented data rate honest on every PR.
     - name: '🚦 Hotpath throughput benchmark (256 kHz)'
-      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         LD_LIBRARY_PATH: >-

@@ -265,7 +265,6 @@ jobs:
     # frame-extraction hotpath. A nonzero exit fails this job, so the `upload`
     # job (needs: build-linux) is skipped and no release is published.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         LD_LIBRARY_PATH: >-
@@ -549,7 +548,6 @@ jobs:
 
     # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the hotpath.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         LD_LIBRARY_PATH: >-
@@ -786,7 +784,6 @@ jobs:
 
     # Hard gate: the arm64 slice must sustain >= 256 kHz (native on this runner).
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
@@ -1095,7 +1092,6 @@ jobs:
     # Start-Process -Wait -PassThru is required because the GUI-subsystem exe does
     # not block '&'; exiting with its code fails the job (and the release) below threshold.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      continue-on-error: true
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
