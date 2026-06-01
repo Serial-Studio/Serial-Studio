@@ -138,7 +138,26 @@ if(ENABLE_HARDENING)
       # - ARM64 Linux:  Clang CFI (Control Flow Integrity) via -fsanitize=cfi
       # Note: ARM64 CFI requires LTO and is only available with upstream LLVM Clang
       # Note: AppleClang does not support -fsanitize=cfi or -fcf-protection, skip on macOS
-      if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
+      # -mbranch-protection=standard (PAC/BTI) is AArch64-only. Resolve the
+      # effective target arch from CMAKE_OSX_ARCHITECTURES on Apple — in a
+      # cross / universal build it differs from the host CMAKE_SYSTEM_PROCESSOR
+      # (an arm64 runner cross-building x86_64 still reports arm64 there). Only
+      # add the flag when every target slice is arm64; an x86_64 slice rejects
+      # it ("unsupported option '-mbranch-protection='").
+      set(_hardening_arches "${CMAKE_SYSTEM_PROCESSOR}")
+      if(APPLE AND CMAKE_OSX_ARCHITECTURES)
+         set(_hardening_arches "${CMAKE_OSX_ARCHITECTURES}")
+      endif()
+      set(_hardening_arm OFF)
+      set(_hardening_x86 OFF)
+      foreach(_arch IN LISTS _hardening_arches)
+         if(_arch MATCHES "^(aarch64|arm64|ARM64)$")
+            set(_hardening_arm ON)
+         elseif(_arch MATCHES "^(x86_64|amd64|AMD64)$")
+            set(_hardening_x86 ON)
+         endif()
+      endforeach()
+      if(_hardening_arm AND NOT _hardening_x86)
          add_compile_options(-mbranch-protection=standard)
       endif()
 
