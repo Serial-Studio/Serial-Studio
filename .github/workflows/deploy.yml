@@ -283,7 +283,7 @@ jobs:
 
     - name: '🛡 Upload deglyph SARIF'
       if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: deglyph.sarif
         category: deglyph-linux-x64
@@ -567,7 +567,7 @@ jobs:
 
     - name: '🛡 Upload deglyph SARIF'
       if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: deglyph.sarif
         category: deglyph-linux-arm64
@@ -878,7 +878,7 @@ jobs:
 
     - name: '🛡 Upload deglyph SARIF'
       if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: deglyph.sarif
         category: deglyph-macos
@@ -1112,7 +1112,7 @@ jobs:
 
     - name: '🛡 Upload deglyph SARIF'
       if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: deglyph.sarif
         category: deglyph-windows
