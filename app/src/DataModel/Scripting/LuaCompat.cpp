@@ -24,6 +24,7 @@
 #include <lauxlib.h>
 #include <lua.h>
 
+#include <cstring>
 #include <QDebug>
 
 //--------------------------------------------------------------------------------------------------
@@ -62,16 +63,8 @@ if table.maxn == nil then table.maxn = function(t)
 end end
 if table.getn == nil then table.getn = function(t) return #t end end
 
--- string: legacy + commonly-expected helpers
+-- string: legacy + commonly-expected helpers (string.split is installed natively below)
 if string.gfind == nil then string.gfind = string.gmatch end
-if string.split == nil then string.split = function(s, sep)
-  if sep == nil or sep == "" then sep = "%s" end
-  local out, i = {}, 1
-  for piece in string.gmatch(s, "([^" .. sep .. "]+)") do
-    out[i] = piece; i = i + 1
-  end
-  return out
-end end
 if string.trim == nil then string.trim = function(s)
   return (s:gsub("^%s+", ""):gsub("%s+$", ""))
 end end
@@ -190,7 +183,51 @@ end
 )LUA";
 
 /**
- * @brief Loads the Lua compatibility shim into the given state.
+ * @brief Native string.split: splits on each literal occurrence of sep, keeping empty fields.
+ */
+static int luaStringSplit(lua_State* L)
+{
+  Q_ASSERT(L != nullptr);
+
+  size_t slen     = 0;
+  const char* s   = luaL_checklstring(L, 1, &slen);
+  size_t seplen   = 0;
+  const char* sep = luaL_optlstring(L, 2, "", &seplen);
+  Q_ASSERT(s != nullptr);
+
+  lua_newtable(L);
+
+  // Empty separator: return the whole string as a single element.
+  if (seplen == 0) {
+    lua_pushlstring(L, s, slen);
+    lua_rawseti(L, -2, 1);
+    return 1;
+  }
+
+  int idx      = 1;
+  size_t start = 0;
+  size_t i     = 0;
+  // code-verify off  (bounded walk: i advances by >= 1 each step until i + seplen > slen)
+  while (i + seplen <= slen) {
+    if (std::memcmp(s + i, sep, seplen) == 0) {
+      lua_pushlstring(L, s + start, i - start);
+      lua_rawseti(L, -2, idx++);
+      i += seplen;
+      start = i;
+    } else {
+      ++i;
+    }
+  }
+  // code-verify on
+
+  // Trailing field (the remainder after the last separator; the whole string if none matched).
+  lua_pushlstring(L, s + start, slen - start);
+  lua_rawseti(L, -2, idx);
+  return 1;
+}
+
+/**
+ * @brief Loads the Lua compatibility shim and installs the native string.split into the state.
  */
 void DataModel::installLuaCompat(lua_State* L)
 {
@@ -200,4 +237,13 @@ void DataModel::installLuaCompat(lua_State* L)
     qWarning() << "[LuaCompat] Failed to install compatibility shim:" << lua_tostring(L, -1);
     lua_pop(L, 1);
   }
+
+  // Native, JS-compatible split (literal separator, keeps empties) for fast default CSV parsing.
+  lua_getglobal(L, "string");
+  if (lua_istable(L, -1)) {
+    lua_pushcfunction(L, luaStringSplit);
+    lua_setfield(L, -2, "split");
+  }
+
+  lua_pop(L, 1);
 }

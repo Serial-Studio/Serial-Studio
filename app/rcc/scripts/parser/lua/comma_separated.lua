@@ -10,16 +10,5 @@
 --
 
 function parse(frame)
-  local result = {}
-  local start = 1
-  while true do
-    local sep = frame:find(",", start, true)
-    if sep then
-      result[#result + 1] = frame:sub(start, sep - 1)
-      start = sep + 1
-    else
-      result[#result + 1] = frame:sub(start)
-      return result
-    end
-  end
+  return frame:split(",")
 end
