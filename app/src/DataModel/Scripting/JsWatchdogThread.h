@@ -67,12 +67,13 @@ public:
 
   void interruptExpired();
 
+  void shutdown();
+
 private:
   JsWatchdogThread();
   ~JsWatchdogThread();
 
   void ensureStarted();
-  void shutdown();
 
 private:
   QThread* m_thread;

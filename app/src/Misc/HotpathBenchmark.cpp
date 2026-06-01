@@ -37,6 +37,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "DataModel/Scripting/JsWatchdogThread.h"
 
 #include "CSV/Export.h"
 #include "API/Server.h"
@@ -316,6 +317,9 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
                js.framesPerSecond,
                luaX.framesPerSecond);
   std::fflush(stdout);
+
+  // Stop the JS watchdog thread while QApplication is alive (its aboutToQuit hook never fires here).
+  DataModel::JsWatchdogThread::instance().shutdown();
 
   return lua.passed ? EXIT_SUCCESS : EXIT_FAILURE;
 }
