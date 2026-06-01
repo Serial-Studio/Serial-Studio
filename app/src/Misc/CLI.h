@@ -150,6 +150,7 @@ public:
   static bool argvHasFlag(int argc, char** argv, const char* flag);
   static QString argvValueFor(int argc, char** argv, const char* flag);
   static bool isCliEarlyExit(int argc, char** argv);
+  static bool isBenchmarkRequested(int argc, char** argv);
 
   ProcessResult process(QApplication& app);
 

@@ -105,8 +105,10 @@ int main(int argc, char** argv)
   if (!cliEarlyExit)
     Misc::CrashTracker::instance().markStartup();
 
-  const bool headless = Misc::CLI::argvHasFlag(argc, argv, "--headless");
-  if (headless)
+  // The hotpath benchmark is display-independent; force offscreen so it runs on headless boxes.
+  const bool benchmark = Misc::CLI::isBenchmarkRequested(argc, argv);
+  const bool headless  = Misc::CLI::argvHasFlag(argc, argv, "--headless");
+  if (headless || benchmark)
     argv = Platform::AppPlatform::injectPlatformArg(argc, argv, "offscreen");
 
   const QString shortcutPath = Misc::CLI::argvValueFor(argc, argv, "--shortcut-path");

@@ -163,14 +163,23 @@ bool CLI::isCliEarlyExit(int argc, char** argv)
                                        "-r",
                                        "--reset",
                                        "--activate",
-                                       "--deactivate",
-                                       "--benchmark-hotpath"};
+                                       "--deactivate"};
 
   for (const char* flag : kFlags)
     if (argvHasFlag(argc, argv, flag))
       return true;
 
-  return false;
+  return isBenchmarkRequested(argc, argv);
+}
+
+/**
+ * @brief True if argv requests the hotpath benchmark via any of its flags.
+ */
+bool CLI::isBenchmarkRequested(int argc, char** argv)
+{
+  return argvHasFlag(argc, argv, "--benchmark-hotpath")
+         || argvHasFlag(argc, argv, "--benchmark-frames")
+         || argvHasFlag(argc, argv, "--min-fps");
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -196,7 +205,8 @@ CLI::ProcessResult CLI::process(QApplication& app)
     return ProcessResult::ExitSuccess;
   }
 
-  if (m_parser.isSet(m_opts.benchmarkHotpathOpt))
+  if (m_parser.isSet(m_opts.benchmarkHotpathOpt) || m_parser.isSet(m_opts.benchmarkFramesOpt)
+      || m_parser.isSet(m_opts.minFpsOpt))
     return runHotpathBenchmark();
 
 #ifdef BUILD_COMMERCIAL
