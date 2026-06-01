@@ -236,7 +236,7 @@ jobs:
         LD_LIBRARY_PATH: >-
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
       run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # PGO stage 3 (USE): rebuild the same tree consuming the profile data.
     - name: '🚧 Reconfigure with CMake (PGO use)'
@@ -521,7 +521,7 @@ jobs:
         LD_LIBRARY_PATH: >-
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
       run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # PGO stage 3 (USE): rebuild consuming the profile data.
     - name: '🚧 Reconfigure with CMake (PGO use)'
@@ -755,7 +755,7 @@ jobs:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
-        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
+        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # PGO stage 3 (USE): rebuild arm64 consuming the merged profile data
     # (the USE configure runs llvm-profdata; it must be on PATH).
@@ -827,7 +827,7 @@ jobs:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
-        arch -x86_64 ./build-x86_64/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
+        arch -x86_64 ./build-x86_64/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # PGO stage 3 (USE): rebuild x86_64 consuming the merged profile data
     # (the USE configure runs llvm-profdata; it must be on PATH).
@@ -1049,13 +1049,18 @@ jobs:
 
     # PGO training workload. --min-fps 1 (smoke, not a gate): the authoritative
     # 256 kHz hard gate runs on the Linux x86_64 reference build.
-    # Start-Process -Wait: the GUI-subsystem exe does not block the shell when
-    # launched with '&', so without this the .pgc data is not flushed before the merge.
+    # The GUI-subsystem exe does not block the shell when launched with '&', so
+    # Start-Process -Wait is required to flush the .pgc data before the merge. stdout/stderr
+    # are redirected to files (never -NoNewWindow): sharing the runner console deadlocks
+    # -Wait against the long-lived runner process, and the app's AttachConsole path would
+    # send the benchmark report to CONOUT$, which the pipe-captured Actions log never sees.
     - name: '🏋️ PGO training run (hotpath)'
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
-          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1' `
-          -NoNewWindow -Wait -PassThru
+          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1','--benchmark-frames','8000000' `
+          -RedirectStandardOutput 'pgo-train.out.txt' -RedirectStandardError 'pgo-train.err.txt' `
+          -Wait -PassThru
+        Get-Content 'pgo-train.out.txt','pgo-train.err.txt' -ErrorAction SilentlyContinue
         exit $p.ExitCode
 
     # Merge instrumentation counts (.pgc) into the .pgd the USE link reads.
@@ -1089,13 +1094,17 @@ jobs:
       run: cmake --build build --config Release -j 16
 
     # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the hotpath.
-    # Start-Process -Wait -PassThru is required because the GUI-subsystem exe does
-    # not block '&'; exiting with its code fails the job (and the release) below threshold.
+    # Start-Process -Wait -PassThru is required because the GUI-subsystem exe does not block
+    # '&'; exiting with its code fails the job (and the release) below threshold. Output is
+    # redirected to files (never -NoNewWindow) for the same reasons as the training run above:
+    # avoid the console-sharing -Wait deadlock and the CONOUT$ swallowing the report.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
-          -NoNewWindow -Wait -PassThru
+          -RedirectStandardOutput 'pgo-gate.out.txt' -RedirectStandardError 'pgo-gate.err.txt' `
+          -Wait -PassThru
+        Get-Content 'pgo-gate.out.txt','pgo-gate.err.txt' -ErrorAction SilentlyContinue
         exit $p.ExitCode
 
     - name: '🔎 Scan binaries with deglyph'

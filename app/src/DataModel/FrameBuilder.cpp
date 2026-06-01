@@ -267,6 +267,7 @@ const DataModel::DataTableStore& DataModel::FrameBuilder::tableStore() const noe
  */
 void DataModel::FrameBuilder::setupExternalConnections()
 {
+  // Handle connection/disconnection events
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::connectedChanged,
           this,
@@ -431,8 +432,9 @@ void DataModel::FrameBuilder::publishSourceTemplateFrame(const DataModel::Source
   hotpathTxFrame(acquireFrame(srcFrame));
 }
 
-/** @brief Handles connect/disconnect transitions: recompiles transforms, reloads parser, fires
- * auto-actions. */
+/**
+ * @brief Handles connection transitions: recompiles transforms, reloads parser, fires auto-actions.
+ */
 void DataModel::FrameBuilder::onConnectedChanged()
 {
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
@@ -443,9 +445,8 @@ void DataModel::FrameBuilder::onConnectedChanged()
   if (nowConnected == m_lastConnectedState)
     return;
 
-  m_lastConnectedState = nowConnected;
-
   // Reset quick-plot channel count
+  m_lastConnectedState = nowConnected;
   m_quickPlotChannels = -1;
 
   // Re-arm the parser-load circuit breaker
@@ -460,6 +461,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
     return;
   }
 
+  // Not in project mode, dont fire actions or configure frame parser
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
 
@@ -469,6 +471,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   compileTransforms();
   initializeTableStore();
 
+  // Execute actions
   const auto& actions = m_frame.actions;
   for (const auto& action : actions)
     if (action.autoExecuteOnConnect) {
@@ -493,6 +496,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
          return g.widget == QLatin1String("image");
        });
 
+  // Reead first frame for image data
   if (allImageGroups)
     hotpathTxFrame(acquireFrame(m_frame));
 }
@@ -516,7 +520,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
   const auto t0 = BudgetClock::now();
 
   QList<QStringList> multiChannels;
-  decodeProjectChannels(0, /*applyPerSourceOverride=*/false, data, multiChannels);
+  decodeProjectChannels(0, false, data, multiChannels);
 
   const auto step = capturedFrameStep(data);
   for (int i = 0; i < multiChannels.size(); ++i) {
@@ -530,8 +534,8 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
     info.frameNumber = ++m_sourceFrameCounters[0];
     info.timestampMs =
       std::chrono::duration_cast<std::chrono::milliseconds>(frameTs.time_since_epoch()).count();
+
     applyDatasetValues(m_frame, channels, info);
-    // Pooled fan-out: one TimestampedFramePtr per parsed frame, slot recycled by deleter.
     hotpathTxFrame(acquireFrame(m_frame, frameTs));
     ++m_parsedFrameCount;
   }
@@ -634,13 +638,11 @@ void DataModel::FrameBuilder::parseBudgetAccount(BudgetClock::time_point started
   if (m_parseBudgetUsedNs <= limitNs)
     return;
 
-  // Over 80% of wall-clock window spent in parsing
   m_parseBudgetSkipping = true;
   qWarning() << "[FrameBuilder] Parser load exceeded budget (" << m_parseBudgetUsedNs / 1'000'000LL
              << "ms /" << kParseBudgetWindowMs << "ms)"
              << "...dropping frames until the next window rolls.";
 
-  // Warn the user
   if (!m_parseBudgetWarned) {
     m_parseBudgetWarned = true;
     Misc::Utilities::showMessageBox(
@@ -733,7 +735,6 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
                                                 const TransformFrameInfo& info,
                                                 const std::unordered_map<int, int>* replayColumns)
 {
-  // Final-value replay: read recorded export columns by uniqueId, not parser index (virtual too).
   if (replayColumns) [[unlikely]] {
     const auto it = replayColumns->find(dataset.uniqueId);
     const int col = (it != replayColumns->end()) ? it->second : -1;
@@ -791,6 +792,7 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
                                                  const QStringList& channels,
                                                  const TransformFrameInfo& info)
 {
+  // Obtain number of channels
   const auto* channelData = channels.data();
   const int channelCount  = channels.size();
 
@@ -855,7 +857,6 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
   Q_ASSERT(!data->data.isEmpty());
   Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
 
-  // Shared QuickPlot split (DataModel::splitQuickPlotChannels).
   QList<QStringList> splitRows;
   DataModel::splitQuickPlotChannels(data->data, splitRows);
 
@@ -1015,11 +1016,12 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
   if (!audioPtr)
     return;
 
-  // Derive value range from the audio sample format
+  // Obtain the audio sample format
   const auto& audio     = *audioPtr;
   const auto format     = audio.config().capture.format;
   const auto sampleRate = audio.config().sampleRate;
 
+  // Derive value range from the audio sample format
   double maxValue = 1.0;
   double minValue = 0.0;
   switch (format) {
@@ -1117,6 +1119,7 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
   Q_ASSERT(!frame->data.groups.empty());
   Q_ASSERT(!frame->data.title.isEmpty());
 
+  // Obtain references to export subsystems
   static auto& csvExport     = CSV::Export::instance();
   static auto& mdf4Export    = MDF4::Export::instance();
   static auto& dashboard     = UI::Dashboard::instance();
@@ -1141,20 +1144,22 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
   anyAsync = anyAsync || grpcServer.enabled();
 #endif
 
+  // No export enabled, do not detach frame
   if (!anyAsync)
     return;
 
+  // Generate export frame
   const auto detached
     = std::make_shared<DataModel::TimestampedFrame>(frame->data, frame->timestamp);
+
+  // Distribute export frame to data export subsystems
   csvExport.hotpathTxFrame(detached);
   mdf4Export.hotpathTxFrame(detached);
   pluginsServer.hotpathTxFrame(detached);
-
 #ifdef BUILD_COMMERCIAL
   sqliteExport.hotpathTxFrame(detached);
   mqttPublisher.hotpathTxFrame(detached);
 #endif
-
 #ifdef ENABLE_GRPC
   grpcServer.hotpathTxFrame(detached);
 #endif
@@ -1179,6 +1184,7 @@ static void openSafeLibsForTransform(lua_State* L)
     {    nullptr,           nullptr}
   };
 
+  // Load safe libraries
   for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
     luaL_requiref(L, lib->name, lib->func, 1);
     lua_pop(L, 1);
@@ -1270,7 +1276,6 @@ void DataModel::FrameBuilder::compileTransforms()
 
   // Compile one engine per (source, language) key
   for (auto& [key, entries] : byKey) {
-    // Insert before compile: the Lua watchdog captures &engine by pointer
     auto [it, inserted] = m_transformEngines.emplace(key, TransformEngine{});
     Q_ASSERT(inserted);
     TransformEngine& engine = it->second;
@@ -1280,7 +1285,6 @@ void DataModel::FrameBuilder::compileTransforms()
     else
       compileTransformsJS(engine, key.sourceId, entries);
 
-    // Drop empty entries when compilation produced nothing usable
     if (!engine.luaState && !engine.jsEngine)
       m_transformEngines.erase(it);
   }

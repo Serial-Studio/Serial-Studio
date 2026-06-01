@@ -26,11 +26,14 @@
 #  endif
 #  include <windows.h>
 #  include <shlobj.h>
+#  include <io.h>
+#  include <fcntl.h>
 #endif
 // clang-format on
 
 #include "Platform/AppPlatform.h"
 
+#include <cstdio>
 #include <cstdlib>
 #include <QApplication>
 #include <QCoreApplication>
@@ -151,10 +154,61 @@ static void redrawConsolePromptAtExit()
 }
 
 /**
+ * @brief True when a std handle is wired to a pipe or disk file (redirection, not a console).
+ */
+static bool handleIsRedirected(DWORD stdHandle)
+{
+  const HANDLE h = GetStdHandle(stdHandle);
+  if (h == nullptr || h == INVALID_HANDLE_VALUE)
+    return false;
+
+  const DWORD type = GetFileType(h) & ~static_cast<DWORD>(FILE_TYPE_REMOTE);
+  return type == FILE_TYPE_DISK || type == FILE_TYPE_PIPE;
+}
+
+/**
+ * @brief Wires a CRT stream to the inherited std handle so a GUI-subsystem build honors redirection.
+ */
+static void bindStreamToStdHandle(DWORD stdHandle, FILE* stream)
+{
+  Q_ASSERT(stream != nullptr);
+
+  const HANDLE src = GetStdHandle(stdHandle);
+  if (src == nullptr || src == INVALID_HANDLE_VALUE)
+    return;
+
+  // Duplicate first: the CRT fd takes ownership, and closing it must not close the process handle.
+  const HANDLE self = GetCurrentProcess();
+  HANDLE dup        = nullptr;
+  if (!DuplicateHandle(self, src, self, &dup, 0, FALSE, DUPLICATE_SAME_ACCESS))
+    return;
+
+  const int fd = _open_osfhandle(reinterpret_cast<intptr_t>(dup), _O_TEXT);
+  if (fd == -1) {
+    CloseHandle(dup);
+    return;
+  }
+
+  if (_dup2(fd, _fileno(stream)) == 0) {
+    clearerr(stream);
+    (void)setvbuf(stream, nullptr, _IONBF, 0);
+  }
+
+  (void)_close(fd);
+}
+
+/**
  * @brief Attaches the application to the parent console and redirects stdout/stderr.
  */
 static void attachToConsole()
 {
+  // Redirected stdio: a GUI-subsystem CRT leaves streams unbound, so wire them, not CONOUT$.
+  if (handleIsRedirected(STD_OUTPUT_HANDLE)) {
+    bindStreamToStdHandle(STD_OUTPUT_HANDLE, stdout);
+    bindStreamToStdHandle(STD_ERROR_HANDLE, stderr);
+    return;
+  }
+
   if (AttachConsole(ATTACH_PARENT_PROCESS)) {
     FILE* fp = nullptr;
     (void)freopen_s(&fp, "CONOUT$", "w", stdout);
