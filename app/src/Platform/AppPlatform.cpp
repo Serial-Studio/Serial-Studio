@@ -35,6 +35,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <QApplication>
 #include <QCoreApplication>
 #include <QCryptographicHash>
@@ -256,20 +257,29 @@ static void enableWindowsPerformanceMode()
  */
 static char** adjustArgumentsForFreeType(int& argc, char** argv)
 {
-  const char* platformArgument = "-platform";
-  const char* platformOption   = "windows:fontengine=freetype";
+  // Skip the override if a -platform is already set (offscreen for --headless/--benchmark, or an
+  // explicit choice): Qt takes the last -platform, so appending here would defeat it.
+  bool hasPlatform = false;
+  for (int i = 0; i < argc; ++i)
+    if (std::strcmp(argv[i], "-platform") == 0) {
+      hasPlatform = true;
+      break;
+    }
 
-  char** newArgv = static_cast<char**>(malloc(sizeof(char*) * (argc + 2)));
+  const int extra = hasPlatform ? 0 : 2;
+  char** newArgv  = static_cast<char**>(malloc(sizeof(char*) * (argc + extra)));
   if (!newArgv)
     return argv;
 
   for (int i = 0; i < argc; ++i)
     newArgv[i] = _strdup(argv[i]);
 
-  newArgv[argc]     = _strdup(platformArgument);
-  newArgv[argc + 1] = _strdup(platformOption);
+  if (!hasPlatform) {
+    newArgv[argc]     = _strdup("-platform");
+    newArgv[argc + 1] = _strdup("windows:fontengine=freetype");
+    argc             += 2;
+  }
 
-  argc += 2;
   return newArgv;
 }
 

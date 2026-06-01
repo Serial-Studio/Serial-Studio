@@ -236,7 +236,7 @@ jobs:
         LD_LIBRARY_PATH: >-
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
       run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # PGO stage 3 (USE): rebuild the same tree consuming the profile data.
     - name: '🚧 Reconfigure with CMake (PGO use)'
@@ -521,7 +521,7 @@ jobs:
         LD_LIBRARY_PATH: >-
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
       run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # PGO stage 3 (USE): rebuild consuming the profile data.
     - name: '🚧 Reconfigure with CMake (PGO use)'
@@ -755,7 +755,7 @@ jobs:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
-        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
+        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # PGO stage 3 (USE): rebuild arm64 consuming the merged profile data
     # (the USE configure runs llvm-profdata; it must be on PATH).
@@ -827,7 +827,7 @@ jobs:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
-        arch -x86_64 ./build-x86_64/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
+        arch -x86_64 ./build-x86_64/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # PGO stage 3 (USE): rebuild x86_64 consuming the merged profile data
     # (the USE configure runs llvm-profdata; it must be on PATH).
@@ -1055,7 +1055,7 @@ jobs:
     - name: '🏋️ PGO training run (hotpath)'
       shell: bash
       run: |
-        ./build/app/${{env.EXECUTABLE}}.exe --headless --benchmark-hotpath --min-fps 1
+        ./build/app/${{env.EXECUTABLE}}.exe --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # Merge instrumentation counts (.pgc) into the .pgd the USE link reads.
     - name: '🧮 Merge PGO profile data'
