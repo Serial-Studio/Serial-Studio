@@ -1022,10 +1022,7 @@ target_link_libraries(
   mdf
 )
 
-target_link_openssl(
-  ${PROJECT_EXECUTABLE}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../lib/OpenSSL
-)
+target_link_openssl(${PROJECT_EXECUTABLE})
 
 if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)

@@ -342,10 +342,11 @@ endif()
 # Builds local third-party libraries from lib/ subdirectories:
 #
 # OpenSSL (lib/OpenSSL/):
-#   - Precompiled static OpenSSL libraries for Windows, macOS, Linux
+#   - target_link_openssl() downloads prebuilt static OpenSSL 4.0.0 from the
+#     alex-spataru/OpenSSL-Builder release (Windows MSVC/MinGW, macOS universal)
+#   - Linux links the distro OpenSSL via pkg-config (no download)
 #   - Provides: libssl.a, libcrypto.a (or .lib on Windows)
 #   - Used for: HTTPS, SSL/TLS, license validation, MQTT encryption
-#   - Platform-specific builds for each architecture
 #
 # KissFFT (lib/KissFFT/):
 #   - Fast Fourier Transform library for FFT plot widget
@@ -527,7 +528,7 @@ endif()
 #   hidapi         - HID device driver (static, commercial builds only)
 #
 # Not applied to:
-#   OpenSSL - Uses precompiled binaries (no compilation flags needed)
+#   OpenSSL - Uses prebuilt binaries fetched at configure time (no compilation flags needed)
 #   ZLIB    - Flags applied during FetchContent configuration
 #   EXPAT   - Flags applied during FetchContent configuration
 #

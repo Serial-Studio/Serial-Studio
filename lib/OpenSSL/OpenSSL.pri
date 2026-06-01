@@ -27,15 +27,6 @@ linux:!android {
     LIBS += -lcrypto
 }
 
-macx* {
-    INCLUDEPATH += $$PWD/include
-    LIBS += $$PWD/dll/macOS/libssl.a
-    LIBS += $$PWD/dll/macOS/libcrypto.a
-}
-
-win32* {
-    INCLUDEPATH += $$PWD/include
-    LIBS += -lws2_32 -lgdi32 -ladvapi32 -lcrypt32 -luser32
-    LIBS += $$PWD/dll/Windows/libssl.lib
-    LIBS += $$PWD/dll/Windows/libcrypto.lib
-}
+# macOS and Windows no longer vendor the static OpenSSL archives in-tree; the
+# CMake build downloads them from https://github.com/alex-spataru/OpenSSL-Builder
+# (see CMakeLists.txt). This qmake .pri only covers the Linux system-OpenSSL path.
