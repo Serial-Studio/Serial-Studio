@@ -167,7 +167,7 @@ function parse(frame) {
 
 - **Parsing overhead.** Single JavaScript call per packet.
 - **Memory.** One allocation for the multi-frame list.
-- **Dashboard updates.** Zero-copy via const reference (preserved).
+- **Dashboard updates.** Zero-copy via const reference.
 - **Throughput.** Tested with 120 samples/packet at 10 Hz = 1200 frames/sec.
 
 ## License
