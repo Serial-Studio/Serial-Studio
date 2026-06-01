@@ -1121,23 +1121,42 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
   static auto& mdf4Export    = MDF4::Export::instance();
   static auto& dashboard     = UI::Dashboard::instance();
   static auto& pluginsServer = API::Server::instance();
+#ifdef BUILD_COMMERCIAL
+  static auto& sqliteExport  = Sessions::Export::instance();
+  static auto& mqttPublisher = MQTT::Publisher::instance();
+#endif
+#ifdef ENABLE_GRPC
+  static auto& grpcServer = API::GRPC::GRPCServer::instance();
+#endif
 
+  // Dashboard keeps only the latest frame, so its pooled slot recycles fast regardless of sinks.
   dashboard.hotpathRxFrame(frame);
-  csvExport.hotpathTxFrame(frame);
-  mdf4Export.hotpathTxFrame(frame);
-  pluginsServer.hotpathTxFrame(frame);
+
+  // Async sinks get a detached heap copy so their slow-I/O backlog can't pin the Dashboard pool.
+  bool anyAsync = csvExport.exportEnabled() || mdf4Export.exportEnabled() || pluginsServer.enabled();
+#ifdef BUILD_COMMERCIAL
+  anyAsync = anyAsync || sqliteExport.exportEnabled() || mqttPublisher.enabled();
+#endif
+#ifdef ENABLE_GRPC
+  anyAsync = anyAsync || grpcServer.enabled();
+#endif
+
+  if (!anyAsync)
+    return;
+
+  const auto detached
+    = std::make_shared<DataModel::TimestampedFrame>(frame->data, frame->timestamp);
+  csvExport.hotpathTxFrame(detached);
+  mdf4Export.hotpathTxFrame(detached);
+  pluginsServer.hotpathTxFrame(detached);
 
 #ifdef BUILD_COMMERCIAL
-  static auto& sqliteExport = Sessions::Export::instance();
-  sqliteExport.hotpathTxFrame(frame);
-
-  static auto& mqttPublisher = MQTT::Publisher::instance();
-  mqttPublisher.hotpathTxFrame(frame);
+  sqliteExport.hotpathTxFrame(detached);
+  mqttPublisher.hotpathTxFrame(detached);
 #endif
 
 #ifdef ENABLE_GRPC
-  static auto& grpcServer = API::GRPC::GRPCServer::instance();
-  grpcServer.hotpathTxFrame(frame);
+  grpcServer.hotpathTxFrame(detached);
 #endif
 }
 

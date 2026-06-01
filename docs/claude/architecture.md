@@ -23,9 +23,10 @@ ConnectionManager::onFrameReady  (main)
   ▼
 FrameBuilder  (main)
   │ parse → apply per-dataset transforms → mutate m_frame / m_sourceFrames
-  │ one TimestampedFramePtr per parsed frame, shared with every consumer
+  │ Dashboard gets the pooled TimestampedFramePtr (acquireFrame slot, fast recycle);
+  │ async sinks get one detached make_shared copy (their backlog can't pin the pool)
   ▼
-Dashboard / CSV / MDF4 / API / gRPC / Sessions  (shared parsed frame)
+Dashboard (pooled)   |   CSV / MDF4 / API / gRPC / Sessions / MQTT (detached copy)
 ```
 
 ## Timestamp Ownership — Source Owns Time
@@ -60,7 +61,7 @@ export or report workers.
 | `FrameReader` | **Main thread.** Config set once before construction; recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()`. **Never add mutexes.** Single-delimiter uses KMP; multi uses `CircularBuffer::findFirstOfPatterns()` (single-pass, stack array ≤8). Preserves driver timing via `PendingChunk` spans. (Historical: threaded extraction removed in beeda4c0; if it returns, `DeviceManager::frameReady` / `rawDataReceived` go back to `Qt::QueuedConnection`.) |
 | `CircularBuffer` | **SPSC only.** Driver writes from whatever thread emitted `dataReceived`; reader is FrameReader on main. Never MPMC. |
 | `Dashboard` | **Main thread only.** Reads the shared `TimestampedFramePtr`. |
-| Export workers | Lock-free enqueue from main; batch on worker thread. Consume the shared frame published by FrameBuilder. |
+| Export workers | Lock-free enqueue from main; batch on worker thread. Consume a detached `make_shared` copy of the frame (NOT the Dashboard's pooled slot), so a slow worker's backlog can't pin the pool. |
 
 **Hotpath signal hops must be `Qt::DirectConnection`.** A queued connection between two
 main-thread objects costs a `QMetaCallEvent` alloc + event-queue insertion per emit; at

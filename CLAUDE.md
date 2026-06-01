@@ -99,14 +99,18 @@ The rules most likely to cause silent breakage. Full detail in
 [docs/claude/architecture.md](docs/claude/architecture.md).
 
 - **Data flow**: Driver → `FrameReader::processData` (main) → `DeviceManager::onReadyRead`
-  → `ConnectionManager::onFrameReady` → `FrameBuilder` → shared `TimestampedFramePtr` to
-  Dashboard / CSV / MDF4 / API / Sessions.
+  → `ConnectionManager::onFrameReady` → `FrameBuilder`. In `hotpathTxFrame` the **Dashboard** gets
+  the pooled `TimestampedFramePtr` (fast recycle); the **async sinks** (CSV / MDF4 / API / Sessions
+  / MQTT / gRPC) get a single **detached `make_shared` copy** so their slow-I/O backlog can never pin
+  the slot pool. The detach is skipped when no sink is enabled.
 - **`FrameReader` and `CircularBuffer` are main-thread / SPSC. Never add mutexes.** Recreate
   via `resetFrameReader()` / `reconfigure()`.
 - **Hotpath signal hops must be `Qt::DirectConnection`.** Queued between two main-thread
   objects fills the 4096-slot queue at 10+ kHz and drops frames.
-- **No allocation, no Frame copy on the dashboard path.** Draw frames from
-  `FrameBuilder::acquireFrame()` (slot pool) — never direct `make_shared<TimestampedFrame>`.
+- **No allocation, no Frame copy on the dashboard path.** Draw the Dashboard frame from
+  `FrameBuilder::acquireFrame()` (slot pool) — never direct `make_shared<TimestampedFrame>` on the
+  Dashboard path. (The async-sink fan-out in `hotpathTxFrame` *does* make one detached copy, on
+  purpose — that's the slow export path, not the Dashboard path, and it's gated on a sink being on.)
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
   workers (use `monotonicFrameNs(...)` as the safety net only).
 - **JS scripts**: always `IScriptEngine::guardedCall()`, never `parseFunction.call()`.
