@@ -20,6 +20,40 @@
 #  include "DataModel/Scripting/LuaCompat.h"
 
 /**
+ * @brief Loads a sandboxed library set into a fresh Lua state.
+ */
+static void openSafeLibs(lua_State* L)
+{
+  static const luaL_Reg kSafeLibs[] = {
+    {    "_G",   luaopen_base},
+    { "table",  luaopen_table},
+    {"string", luaopen_string},
+    {  "math",   luaopen_math},
+    { nullptr,        nullptr}
+  };
+
+  for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
+    luaL_requiref(L, lib->name, lib->func, 1);
+    lua_pop(L, 1);
+  }
+
+  // Strip filesystem loaders: dofile/loadfile/load run arbitrary code off disk
+  static const char* const kUnsafe[] = {"dofile", "loadfile", "load"};
+  for (const char* name : kUnsafe) {
+    lua_pushnil(L);
+    lua_setglobal(L, name);
+  }
+
+  // Strip string.dump: bytecode exfiltration vector pairs with unsafe loaders
+  lua_getglobal(L, "string");
+  if (lua_istable(L, -1)) {
+    lua_pushnil(L);
+    lua_setfield(L, -2, "dump");
+  }
+  lua_pop(L, 1);
+}
+
+/**
  * @brief Constructs the script with no language loaded.
  */
 MQTT::PublisherScript::PublisherScript()
@@ -58,20 +92,7 @@ bool MQTT::PublisherScript::compile(const QString& source, int language, QString
       return false;
     }
 
-    static const luaL_Reg kSafeLibs[] = {
-      {    "_G",   luaopen_base},
-      { "table",  luaopen_table},
-      {"string", luaopen_string},
-      {  "math",   luaopen_math},
-      {    "os",     luaopen_os},
-      { nullptr,        nullptr}
-    };
-
-    for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
-      luaL_requiref(m_luaState, lib->name, lib->func, 1);
-      lua_pop(m_luaState, 1);
-    }
-
+    openSafeLibs(m_luaState);
     DataModel::installLuaCompat(m_luaState);
 
     const QByteArray utf8 = source.toUtf8();
