@@ -22,6 +22,7 @@
 #include "Misc/ExtensionManager.h"
 
 #include <QApplication>
+#include <QDebug>
 #include <QDesktopServices>
 #include <QDir>
 #include <QFile>
@@ -36,6 +37,7 @@
 #include <QTimer>
 
 #include "API/Server.h"
+#include "Misc/JsonValidator.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "UI/Dashboard.h"
@@ -738,8 +740,14 @@ void Misc::ExtensionManager::autoUpdateExtensions()
  */
 void Misc::ExtensionManager::parseManifest(QNetworkReply* reply)
 {
-  const auto doc     = QJsonDocument::fromJson(reply->readAll());
-  const auto root    = doc.object();
+  // manifest.json is untrusted remote input: bound depth/size before walking it.
+  const auto parsed = Misc::JsonValidator::parseAndValidate(reply->readAll());
+  if (!parsed.valid || !parsed.document.isObject()) {
+    qWarning() << "[ExtensionManager] Rejected manifest JSON:" << parsed.errorMessage;
+    return;
+  }
+
+  const auto root    = parsed.document.object();
   const auto addons  = root.value("extensions").toArray();
   const auto repoUrl = reply->property("repoUrl").toString();
   const auto baseUrl = repoUrl.left(repoUrl.lastIndexOf('/') + 1);
@@ -808,8 +816,9 @@ void Misc::ExtensionManager::onExtensionMetaReply()
 
   // Only append entries that parse to a non-empty object with a valid id
   if (reply->error() == QNetworkReply::NoError) {
-    const auto doc = QJsonDocument::fromJson(reply->readAll());
-    auto obj       = doc.object();
+    // info.json is untrusted remote input: bound depth/size before processing.
+    const auto parsed = Misc::JsonValidator::parseAndValidate(reply->readAll());
+    auto obj          = parsed.valid ? parsed.document.object() : QJsonObject();
     if (!obj.isEmpty() && !obj.value("id").toString().isEmpty()) {
       const auto addonBase = reply->property("addonBase").toString();
       obj.insert("_repoBase", addonBase);

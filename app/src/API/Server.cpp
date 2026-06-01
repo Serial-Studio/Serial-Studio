@@ -1210,8 +1210,12 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
       return;
     }
 
-    // Extract and consume one line
-    const QByteArray line = buffer.left(newlineIndex + 1);
+    // Strip only the \n/\r delimiter, not all whitespace: the raw path forwards bytes verbatim.
+    int bodyLen = newlineIndex;
+    if (bodyLen > 0 && buffer.at(bodyLen - 1) == '\r')
+      --bodyLen;
+
+    const QByteArray line = buffer.left(bodyLen);
     buffer.remove(0, newlineIndex + 1);
 
     const auto trimmedLine = line.trimmed();
@@ -1225,9 +1229,14 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
       processRawLine(socket, state, line);
   }
 
-  if (bufferIterations >= kMaxBufferIterations) [[unlikely]]
+  // Cap reached with data still buffered means a message flood: disconnect, don't drop.
+  if (bufferIterations >= kMaxBufferIterations && !buffer.isEmpty()) [[unlikely]] {
     qWarning() << "[API] Buffer processing iteration limit reached:" << state.peerAddress << ":"
-               << state.peerPort;
+               << state.peerPort << "- Disconnecting client";
+
+    disconnectClient(
+      socket, state, ErrorCode::ExecutionError, QStringLiteral("API message flood limit exceeded"));
+  }
 }
 
 /**
@@ -1264,8 +1273,8 @@ void API::Server::acceptConnection()
     return;
   }
 
+  // Disconnect cleanup is worker-owned; a second lambda here would race deleteLater().
   connect(socket, &QTcpSocket::errorOccurred, this, &Server::onErrorOccurred);
-  connect(socket, &QTcpSocket::disconnected, this, [=, this]() { onSocketDisconnected(); });
 
   ConnectionState state;
   state.sessionId   = QString::number(s_nextSessionId.fetchAndAddRelaxed(1));
@@ -1292,28 +1301,6 @@ void API::Server::acceptConnection()
 void API::Server::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
   qWarning() << socketError;
-}
-
-/**
- * @brief Clears socket buffers on disconnect, using cached peer info (post-disconnect peer is
- * unsafe).
- */
-void API::Server::onSocketDisconnected()
-{
-  // Resolve the disconnected socket from the signal sender
-  auto* socket = qobject_cast<QTcpSocket*>(sender());
-  if (!socket)
-    return;
-
-  // Clean up MCP session and remove connection state
-  if (m_connections.contains(socket)) {
-    const auto& state = m_connections[socket];
-    MCPHandler::instance().clearSession(state.sessionId);
-    qInfo() << "[API] Client disconnected (via signal):" << state.peerAddress << ":"
-            << state.peerPort << "- Remaining clients:" << (m_connections.size() - 1);
-  }
-
-  m_connections.remove(socket);
 }
 
 /**

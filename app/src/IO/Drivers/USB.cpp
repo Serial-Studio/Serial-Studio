@@ -101,7 +101,7 @@ IO::Drivers::USB::USB()
 
   // Start the event thread only if libusb_init succeeded
   if (m_ctx) {
-    m_eventLoopRunning = true;
+    m_eventLoopRunning.store(true, std::memory_order_release);
     connect(&m_eventThread, &QThread::started, this, &USB::eventLoop, Qt::DirectConnection);
     m_eventThread.start();
   }
@@ -126,7 +126,7 @@ IO::Drivers::USB::~USB()
     libusb_cancel_transfer(t);
 
   // Join the event thread before touching hotplug or libusb context state
-  m_eventLoopRunning = false;
+  m_eventLoopRunning.store(false, std::memory_order_release);
   if (m_eventThread.isRunning()) {
     if (!m_eventThread.wait(2000))
       m_eventThread.terminate();
@@ -587,8 +587,8 @@ void IO::Drivers::USB::setIsoPacketSize(const int size)
 void IO::Drivers::USB::setupExternalConnections()
 {
   connect(qApp, &QApplication::aboutToQuit, this, [this] {
-    m_running          = false;
-    m_eventLoopRunning = false;
+    m_running = false;
+    m_eventLoopRunning.store(false, std::memory_order_release);
 
     // Deregister hotplug first to wake the event loop out of its poll
     if (m_ctx && m_hotplugHandle) {
@@ -888,7 +888,7 @@ void IO::Drivers::USB::buildEndpointLists()
  */
 void IO::Drivers::USB::eventLoop()
 {
-  while (m_eventLoopRunning.load(std::memory_order_relaxed)) {
+  while (m_eventLoopRunning.load(std::memory_order_acquire)) {
     struct timeval tv = {0, 100000};
     libusb_handle_events_timeout(m_ctx, &tv);
   }

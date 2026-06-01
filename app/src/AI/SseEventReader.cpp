@@ -31,8 +31,11 @@ AI::SseEventReader::SseEventReader(QObject* parent) : QObject(parent) {}
  */
 void AI::SseEventReader::feed(const QByteArray& chunk)
 {
-  if (chunk.isEmpty())
+  // Empty chunk is the end-of-stream flush: drain any frames left buffered by a prior call.
+  if (chunk.isEmpty()) {
+    drainFrames();
     return;
+  }
 
   if (m_buffer.size() + chunk.size() > kMaxBufferBytes) {
     qCWarning(serialStudioAI) << "SSE buffer would exceed" << kMaxBufferBytes
@@ -71,8 +74,9 @@ qsizetype AI::SseEventReader::bufferedBytes() const noexcept
  */
 void AI::SseEventReader::drainFrames()
 {
-  // Bounded loop: each iteration consumes >=2 bytes (NASA P10 rule 2)
-  for (int safety = 0; safety < 1024; ++safety) {
+  // Each iteration removes >=2 bytes, so buffer size bounds the loop (P10) with no data-loss cliff.
+  const qsizetype maxIterations = m_buffer.size();
+  for (qsizetype safety = 0; safety < maxIterations; ++safety) {
     const auto end = m_buffer.indexOf("\n\n");
     if (end < 0)
       return;
@@ -89,10 +93,6 @@ void AI::SseEventReader::drainFrames()
 
     emitFrame(eventName, dataPayload);
   }
-
-  qCWarning(serialStudioAI) << "SSE drain hit safety limit; resetting buffer";
-  Q_EMIT parseError(QStringLiteral("drain_safety_limit"));
-  reset();
 }
 
 /**

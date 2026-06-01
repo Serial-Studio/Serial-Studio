@@ -225,6 +225,7 @@ jobs:
         path: build/app/${{env.UNIXNAME}}
         sarif: deglyph.sarif
         fail-on: never
+        cve: "true"
 
     - name: '🛡 Upload deglyph SARIF'
       if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}

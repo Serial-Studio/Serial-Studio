@@ -22,6 +22,7 @@
 
 #include "IO/Drivers/Modbus.h"
 
+#include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -31,6 +32,7 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QTimer>
+#include <stdexcept>
 
 #include "AppState.h"
 #include "DataModel/Frame.h"
@@ -1301,7 +1303,10 @@ void IO::Drivers::Modbus::onReadReady()
 
   try {
     publishReceivedData(buildRtuFrame(unit));
+  } catch (const std::exception& e) {
+    qWarning() << "Modbus frame build failed:" << e.what();
   } catch (...) {
+    qWarning() << "Modbus frame build failed: unknown exception";
   }
 
   reply->deleteLater();

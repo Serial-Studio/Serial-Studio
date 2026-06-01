@@ -24,6 +24,7 @@
 
 #include <QCanBus>
 #include <QLoggingCategory>
+#include <stdexcept>
 
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
@@ -184,7 +185,12 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
       Q_EMIT dataSent(data);
       return data.length();
     }
+
+    qWarning() << "CAN write failed:" << m_device->errorString();
+  } catch (const std::exception& e) {
+    qWarning() << "CAN write failed:" << e.what();
   } catch (...) {
+    qWarning() << "CAN write failed: unknown exception";
   }
 
   return 0;

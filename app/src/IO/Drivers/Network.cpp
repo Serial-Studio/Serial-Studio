@@ -62,10 +62,12 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
     this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::configurationChanged);
 
   // Update state when sockets change
-  connect(
-    &m_tcpSocket, &QUdpSocket::stateChanged, this, [=, this] { Q_EMIT configurationChanged(); });
-  connect(
-    &m_udpSocket, &QUdpSocket::stateChanged, this, [=, this] { Q_EMIT configurationChanged(); });
+  connect(&m_tcpSocket, &QAbstractSocket::stateChanged, this, [=, this] {
+    Q_EMIT configurationChanged();
+  });
+  connect(&m_udpSocket, &QAbstractSocket::stateChanged, this, [=, this] {
+    Q_EMIT configurationChanged();
+  });
 
   // Handle socket errors
   connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
@@ -459,17 +461,15 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 {
   // Mark lookup as finished and check results
   m_lookupActive = false;
+  Q_EMIT lookupActiveChanged();
 
   if (info.error() == QHostInfo::NoError) {
     auto addresses = info.addresses();
     if (addresses.count() >= 1) {
       m_hostExists = true;
       Q_EMIT addressChanged();
-      return;
     }
   }
-
-  Q_EMIT lookupActiveChanged();
 }
 
 /**

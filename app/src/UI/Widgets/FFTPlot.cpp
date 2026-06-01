@@ -77,7 +77,7 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
     const auto& dataset                 = GET_DATASET(SerialStudio::DashboardFFT, m_index);
     const int clampedSamples            = qBound(8, dataset.fftSamples, kMaxFftSamples);
     m_size                              = 1 << static_cast<int>(std::log2(clampedSamples));
-    m_samplingRate                      = dataset.fftSamplingRate;
+    m_samplingRate                      = qMax(1, dataset.fftSamplingRate);
     m_minX                              = 0;
     m_maxY                              = 0;
     m_minY                              = -100;

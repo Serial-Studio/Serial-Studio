@@ -51,7 +51,9 @@ class Conversation : public QObject {
   // clang-format on
 
 public:
-  static constexpr int kMaxToolCalls = 25;
+  static constexpr int kMaxToolCalls     = 25;
+  static constexpr int kMaxHistoryItems  = 400;
+  static constexpr int kMaxUiMessageRows = 600;
 
   /**
    * @brief Status pill rendered by QML for each tool-call card.
@@ -105,6 +107,8 @@ private slots:
 private:
   void issueRequest();
   void ageHistoryToolResults();
+  void pruneHistory();
+  [[nodiscard]] int firstFreshUserTurnAt(int start) const;
   void reconcileHistoryToolPairs();
   bool reconcileHistoryToolPairsAt(int& i);
   void fetchHelpPage(const QString& callId, const QString& path);
@@ -144,6 +148,7 @@ private:
   void runMetaLoadSkill(const QString& callId, const QString& name, const QJsonObject& arguments);
   void runMetaSearchDocs(const QString& callId, const QString& name, const QJsonObject& arguments);
   void resumeAfterToolBatch();
+  void releaseOutstandingToolResult();
   void teardownReply();
 
   [[nodiscard]] static QString rewriteHelpLinks(const QString& text);

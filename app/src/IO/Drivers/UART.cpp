@@ -221,8 +221,15 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
 
     // Create serial port handler for native ports
     if (m_deviceNames.contains(name)) {
+      // Re-check against the live enumeration: cached m_deviceNames may list an unplugged port.
+      const auto live = validPorts();
+      if (portId - 1 >= live.count()) {
+        close();
+        return false;
+      }
+
       m_usingCustomSerialPort = false;
-      m_port                  = new QSerialPort(validPorts().at(portId - 1));
+      m_port                  = new QSerialPort(live.at(portId - 1));
     }
 
     // Create serial port handler for custom device paths

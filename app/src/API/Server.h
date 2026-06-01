@@ -139,7 +139,6 @@ protected:
 
 private slots:
   void acceptConnection();
-  void onSocketDisconnected();
   void onClientCountChanged(int count);
   void onSocketDisconnected(QTcpSocket* socket);
   void onDataReceived(QTcpSocket* socket, const QByteArray& data);

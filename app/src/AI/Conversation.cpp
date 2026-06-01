@@ -259,7 +259,7 @@ void AI::Conversation::denyToolCall(const QString& callId)
   recordToolResult(callId, pending.name, denial);
   updateToolCallCard(callId, CallStatus::Denied);
 
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
   if (m_outstandingToolResults == 0 && m_awaitingConfirm.isEmpty())
     resumeAfterToolBatch();
 }
@@ -554,7 +554,7 @@ void AI::Conversation::runMetaListCategories(const QString& callId,
   const auto reply = m_dispatcher->listCategories();
   recordToolResult(callId, name, reply);
   updateToolCallCard(callId, CallStatus::Done, reply);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 }
 
 /**
@@ -570,7 +570,7 @@ void AI::Conversation::runMetaSnapshot(const QString& callId,
   reply[QStringLiteral("snapshot")] = m_dispatcher->getSnapshot();
   recordToolResult(callId, name, reply);
   updateToolCallCard(callId, CallStatus::Done, reply);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 }
 
 /**
@@ -585,7 +585,7 @@ void AI::Conversation::runMetaListCommands(const QString& callId,
   const auto reply  = m_dispatcher->listCommands(prefix);
   recordToolResult(callId, name, reply);
   updateToolCallCard(callId, CallStatus::Done, reply);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 }
 
 /**
@@ -605,7 +605,7 @@ void AI::Conversation::runMetaExecuteCommand(const QString& callId,
     appendToolCallCard(callId, name, arguments, CallStatus::Error);
     recordToolResult(callId, name, err);
     updateToolCallCard(callId, CallStatus::Error, err);
-    --m_outstandingToolResults;
+    releaseOutstandingToolResult();
     return;
   }
 
@@ -641,7 +641,7 @@ void AI::Conversation::runMetaLoadSkill(const QString& callId,
     recordToolResult(callId, name, reply);
     updateToolCallCard(callId, CallStatus::Done, reply);
   }
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 }
 
 /**
@@ -682,7 +682,7 @@ void AI::Conversation::runMetaSearchDocs(const QString& callId,
 
   recordToolResult(callId, name, reply);
   updateToolCallCard(callId, CallStatus::Done, reply);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 }
 
 /**
@@ -755,7 +755,7 @@ void AI::Conversation::runMetaDescribe(const QString& callId,
                      reply.value(QStringLiteral("ok")).toBool() ? CallStatus::Done
                                                                 : CallStatus::Error,
                      reply);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 }
 
 /**
@@ -786,7 +786,7 @@ void AI::Conversation::runMetaScriptingDocs(const QString& callId,
   }
 
   recordToolResult(callId, name, result);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 }
 
 /**
@@ -815,7 +815,7 @@ void AI::Conversation::runMetaHowTo(const QString& callId,
   }
 
   recordToolResult(callId, name, result);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 }
 
 /**
@@ -835,7 +835,7 @@ void AI::Conversation::dispatchByCallSafety(const QString& callId,
     appendToolCallCard(callId, name, arguments, CallStatus::Blocked);
     recordToolResult(callId, name, denial);
     updateToolCallCard(callId, CallStatus::Blocked, denial);
-    --m_outstandingToolResults;
+    releaseOutstandingToolResult();
     return;
   }
 
@@ -999,6 +999,9 @@ void AI::Conversation::issueRequest()
 
   // Compact older tool_result blocks before serializing
   ageHistoryToolResults();
+
+  // Bound history + UI growth before adding this turn's assistant message
+  pruneHistory();
 
   beginAssistantMessage();
 
@@ -1246,6 +1249,58 @@ void AI::Conversation::ageHistoryToolResults()
 }
 
 /**
+ * @brief Index of the first fresh user turn at or after start, or -1 if none.
+ */
+int AI::Conversation::firstFreshUserTurnAt(int start) const
+{
+  // A fresh user turn carries a text block, so cutting there never orphans a tool_result.
+  for (int i = start; i < m_history.size(); ++i) {
+    const auto msg = m_history.at(i).toObject();
+    if (msg.value(QStringLiteral("role")).toString() != QStringLiteral("user"))
+      continue;
+
+    const auto blocks = msg.value(QStringLiteral("content")).toArray();
+    bool fresh        = false;
+    for (const auto& bv : blocks)
+      fresh =
+        fresh || bv.toObject().value(QStringLiteral("type")).toString() == QStringLiteral("text");
+
+    if (fresh)
+      return i;
+  }
+
+  return -1;
+}
+
+/**
+ * @brief Caps unbounded history/UI growth so a long session cannot exhaust memory.
+ */
+void AI::Conversation::pruneHistory()
+{
+  // ageHistoryToolResults only elides content, never drops entries, so history leaks to OOM.
+  if (m_history.size() > kMaxHistoryItems) {
+    const int cut = firstFreshUserTurnAt(m_history.size() - kMaxHistoryItems);
+    if (cut > 0) {
+      QJsonArray pruned;
+      for (int i = cut; i < m_history.size(); ++i)
+        pruned.append(m_history.at(i));
+
+      m_history = pruned;
+    }
+  }
+
+  // UI rows are display-only; dropping the oldest keeps the view bounded and responsive.
+  if (m_uiMessages.size() > kMaxUiMessageRows) {
+    const int drop = m_uiMessages.size() - kMaxUiMessageRows;
+    m_uiMessages.erase(m_uiMessages.begin(), m_uiMessages.begin() + drop);
+    if (m_assistantIndex >= 0)
+      m_assistantIndex -= drop;
+
+    Q_EMIT messagesChanged();
+  }
+}
+
+/**
  * @brief Fetches a Serial Studio help page asynchronously and feeds the result back via
  * recordToolResult + resumeAfterToolBatch.
  */
@@ -1284,7 +1339,7 @@ void AI::Conversation::fetchHelpPage(const QString& callId, const QString& path)
     err[QStringLiteral("url")]   = url.toString();
     recordToolResult(callId, QStringLiteral("meta.fetchHelp"), err);
     updateToolCallCard(callId, CallStatus::Error, err);
-    --m_outstandingToolResults;
+    releaseOutstandingToolResult();
     if (m_outstandingToolResults == 0 && m_awaitingConfirm.isEmpty()
         && (!m_reply || m_reply == nullptr))
       resumeAfterToolBatch();
@@ -1361,7 +1416,7 @@ void AI::Conversation::completeHelpFetch(const QString& callId,
                      result.value(QStringLiteral("ok")).toBool() ? CallStatus::Done
                                                                  : CallStatus::Error,
                      result);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 
   if (m_outstandingToolResults == 0 && m_awaitingConfirm.isEmpty() && !m_reply)
     resumeAfterToolBatch();
@@ -1416,7 +1471,7 @@ void AI::Conversation::fetchHelpIndex(const QString& callId, const QUrl& missedU
                        result.value(QStringLiteral("ok")).toBool() ? CallStatus::Done
                                                                    : CallStatus::Error,
                        result);
-    --m_outstandingToolResults;
+    releaseOutstandingToolResult();
 
     if (m_outstandingToolResults == 0 && m_awaitingConfirm.isEmpty() && !m_reply)
       resumeAfterToolBatch();
@@ -1576,7 +1631,7 @@ void AI::Conversation::runToolCall(const QString& callId,
 
   recordToolResult(callId, name, reply);
   updateToolCallCard(callId, ok ? CallStatus::Done : CallStatus::Error, reply);
-  --m_outstandingToolResults;
+  releaseOutstandingToolResult();
 
   // Auto-save after mutating tool calls
   const bool isMeta = name.startsWith(QStringLiteral("meta."));
@@ -1633,6 +1688,16 @@ void AI::Conversation::recordToolResult(const QString& callId,
     block[QStringLiteral("_tool_name")] = name;
 
   m_pendingToolResultBlocks.append(block);
+}
+
+/**
+ * @brief Decrements the outstanding tool-result counter without underflowing past zero.
+ */
+void AI::Conversation::releaseOutstandingToolResult()
+{
+  // Guarded so a decrement after onReplyError() resets to 0 cannot go negative and wedge resume.
+  if (m_outstandingToolResults > 0)
+    --m_outstandingToolResults;
 }
 
 /**
@@ -2218,6 +2283,9 @@ void AI::Conversation::restoreFromDisk()
       m_uiMessages[i] = map;
     }
   }
+
+  // A previously-bloated persisted file must be bounded on load, not just going forward
+  pruneHistory();
 
   Q_EMIT messagesChanged();
 }

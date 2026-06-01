@@ -47,6 +47,19 @@ static QString resolveSystemTool(const QStringList& candidates, const QString& f
 }
 
 /**
+ * @brief Waits for a fingerprint helper with a hard timeout, killing it if it wedges.
+ */
+static void awaitTool(QProcess& process)
+{
+  // Runs before the event loop, so a hung tool must not block launch for Qt's 30s default.
+  static constexpr int kToolTimeoutMs = 3000;
+  if (!process.waitForFinished(kToolTimeoutMs)) {
+    process.kill();
+    process.waitForFinished(500);
+  }
+}
+
+/**
  * @brief Gathers the raw, platform-specific machine identifier and OS label.
  */
 static QString readPlatformId(QString& os)
@@ -59,12 +72,12 @@ static QString readPlatformId(QString& os)
   os                 = QStringLiteral("Linux");
   const auto catTool = resolveSystemTool({"/bin/cat", "/usr/bin/cat"}, "cat");
   process.start(catTool, {"/var/lib/dbus/machine-id"});
-  process.waitForFinished();
+  awaitTool(process);
   id = process.readAllStandardOutput().trimmed();
 
   if (id.isEmpty()) {
     process.start(catTool, {"/etc/machine-id"});
-    process.waitForFinished();
+    awaitTool(process);
     id = process.readAllStandardOutput().trimmed();
   }
 #endif
@@ -74,14 +87,18 @@ static QString readPlatformId(QString& os)
   os                   = QStringLiteral("macOS");
   const auto ioregTool = resolveSystemTool({"/usr/sbin/ioreg"}, "ioreg");
   process.start(ioregTool, {"-rd1", "-c", "IOPlatformExpertDevice"});
-  process.waitForFinished();
+  awaitTool(process);
   QString output = process.readAllStandardOutput();
 
   QStringList lines = output.split("\n");
   for (const QString& line : std::as_const(lines)) {
     if (line.contains("IOPlatformUUID")) {
-      id = line.split("=").last().trimmed();
-      id.remove("\"");
+      // Only accept the `key = "value"` shape; never build an ID from a line lacking '='.
+      const auto parts = line.split("=");
+      if (parts.size() >= 2) {
+        id = parts.last().trimmed();
+        id.remove("\"");
+      }
       break;
     }
   }
@@ -106,7 +123,7 @@ static QString readPlatformId(QString& os)
   process.start(
     regTool,
     {"query", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography", "/v", "MachineGuid"});
-  process.waitForFinished();
+  awaitTool(process);
   QString output    = process.readAllStandardOutput();
   QStringList lines = output.split("\n");
   for (const QString& line : std::as_const(lines)) {
@@ -122,7 +139,7 @@ static QString readPlatformId(QString& os)
                  "Bypass",
                  "-command",
                  "(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"});
-  process.waitForFinished();
+  awaitTool(process);
   uuid = process.readAllStandardOutput().trimmed();
 
   id = machineGuid + uuid;
@@ -134,12 +151,12 @@ static QString readPlatformId(QString& os)
   const auto catTool  = resolveSystemTool({"/bin/cat", "/usr/bin/cat"}, "cat");
   const auto kenvTool = resolveSystemTool({"/sbin/kenv", "/usr/sbin/kenv"}, "kenv");
   process.start(catTool, {"/etc/hostid"});
-  process.waitForFinished();
+  awaitTool(process);
   id = process.readAllStandardOutput().trimmed();
 
   if (id.isEmpty()) {
     process.start(kenvTool, {"-q", "smbios.system.uuid"});
-    process.waitForFinished();
+    awaitTool(process);
     id = process.readAllStandardOutput().trimmed();
   }
 #endif

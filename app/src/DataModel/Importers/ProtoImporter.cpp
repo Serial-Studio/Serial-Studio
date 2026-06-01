@@ -333,12 +333,19 @@ private:
   void skipBlock();
   void skipOptionList();
 
-  bool parseMessage(const QString& parentQualified, DataModel::ProtoMessage& out, ParseError& err);
+  bool parseMessage(const QString& parentQualified,
+                    DataModel::ProtoMessage& out,
+                    ParseError& err,
+                    int depth);
   bool parseField(DataModel::ProtoMessage& msg, ParseError& err);
   bool parseOneof(DataModel::ProtoMessage& msg, ParseError& err);
   bool parseMap(DataModel::ProtoMessage& msg, ParseError& err);
   bool parseEnumBody(ParseError& err);
-  int tryParseMessageBodyKeyword(DataModel::ProtoMessage& out, ParseError& err);
+  bool parseFieldTag(int& tag, ParseError& err);
+  int tryParseMessageBodyKeyword(DataModel::ProtoMessage& out, ParseError& err, int depth);
+
+  static constexpr int kMaxMessageNestingDepth = 64;
+  static constexpr int kMaxProtoFieldTag       = 536870911;
 
   Lexer m_lexer;
   Token m_cur;
@@ -460,6 +467,25 @@ bool Parser::parseOneof(DataModel::ProtoMessage& msg, ParseError& err)
 }
 
 /**
+ * @brief Reads the current IntLit token as a protobuf field tag and validates its range.
+ */
+bool Parser::parseFieldTag(int& tag, ParseError& err)
+{
+  // An out-of-spec tag corrupts the dispatch table (colliding/skipped fields); reject it.
+  bool ok        = false;
+  const int next = m_cur.text.toInt(&ok);
+  if (!ok || next < 1 || next > kMaxProtoFieldTag) {
+    err = {m_cur.line,
+           QObject::tr("Field tag '%1' out of range (1..%2)")
+             .arg(m_cur.text, QString::number(kMaxProtoFieldTag))};
+    return false;
+  }
+
+  tag = next;
+  return true;
+}
+
+/**
  * @brief Parses a `map<K,V> name = tag;` declaration as a single MessageRef-like field.
  */
 bool Parser::parseMap(DataModel::ProtoMessage& msg, ParseError& err)
@@ -499,7 +525,9 @@ bool Parser::parseMap(DataModel::ProtoMessage& msg, ParseError& err)
     err = {m_cur.line, QObject::tr("Expected map field tag")};
     return false;
   }
-  f.tag = m_cur.text.toInt();
+  if (!parseFieldTag(f.tag, err))
+    return false;
+
   advance();
   if (m_cur.type == Tok::LBracket)
     skipBlock();
@@ -559,7 +587,9 @@ bool Parser::parseField(DataModel::ProtoMessage& msg, ParseError& err)
     err = {m_cur.line, QObject::tr("Expected field tag number")};
     return false;
   }
-  f.tag = m_cur.text.toInt();
+  if (!parseFieldTag(f.tag, err))
+    return false;
+
   advance();
 
   skipOptionList();
@@ -596,8 +626,16 @@ void Parser::skipOptionList()
  */
 bool Parser::parseMessage(const QString& parentQualified,
                           DataModel::ProtoMessage& out,
-                          ParseError& err)
+                          ParseError& err,
+                          int depth)
 {
+  // Bound recursion: a crafted .proto with deep nesting would otherwise overflow the stack.
+  if (depth > kMaxMessageNestingDepth) {
+    err = {m_cur.line,
+           QObject::tr("Message nesting too deep (limit %1)").arg(kMaxMessageNestingDepth)};
+    return false;
+  }
+
   if (m_cur.type != Tok::Ident) {
     err = {m_cur.line, QObject::tr("Expected message name")};
     return false;
@@ -616,7 +654,7 @@ bool Parser::parseMessage(const QString& parentQualified,
       continue;
     }
 
-    const int kw = tryParseMessageBodyKeyword(out, err);
+    const int kw = tryParseMessageBodyKeyword(out, err, depth);
     if (kw < 0)
       return false;
 
@@ -634,7 +672,7 @@ bool Parser::parseMessage(const QString& parentQualified,
  * @brief Returns 1 if the current token started a known body keyword, -1 on parse error, 0
  * otherwise.
  */
-int Parser::tryParseMessageBodyKeyword(DataModel::ProtoMessage& out, ParseError& err)
+int Parser::tryParseMessageBodyKeyword(DataModel::ProtoMessage& out, ParseError& err, int depth)
 {
   if (m_cur.type != Tok::Ident)
     return 0;
@@ -660,7 +698,7 @@ int Parser::tryParseMessageBodyKeyword(DataModel::ProtoMessage& out, ParseError&
   if (kw == QLatin1String("message")) {
     advance();
     DataModel::ProtoMessage nested;
-    if (!parseMessage(out.qualifiedName, nested, err))
+    if (!parseMessage(out.qualifiedName, nested, err, depth + 1))
       return -1;
 
     out.nested.append(nested);
@@ -720,7 +758,7 @@ bool Parser::parseFile(ParseError& err)
     if (kw == QLatin1String("message")) {
       advance();
       DataModel::ProtoMessage msg;
-      if (!parseMessage(m_packageOut, msg, err))
+      if (!parseMessage(m_packageOut, msg, err, 1))
         return false;
 
       m_messages.append(msg);
