@@ -43,6 +43,7 @@
 #include "API/Server.h"
 #ifdef BUILD_COMMERCIAL
 #  include "MDF4/Export.h"
+#  include "MQTT/Publisher.h"
 #  include "Sessions/Export.h"
 #endif
 #ifdef ENABLE_GRPC
@@ -185,11 +186,13 @@ void HotpathBenchmark::disableConsumers()
 #endif
 
   // Stop the FrameConsumer worker threads while QApplication lives (gRPC joins its own above).
+  // MQTT is never enabled, but hotpathTxFrame still constructs it, starting its worker in the ctor.
   CSV::Export::instance().stopWorker();
   API::Server::instance().stopWorker();
 #ifdef BUILD_COMMERCIAL
   MDF4::Export::instance().stopWorker();
   Sessions::Export::instance().stopWorker();
+  MQTT::Publisher::instance().stopWorker();
 #endif
 }
 
