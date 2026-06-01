@@ -1049,19 +1049,13 @@ jobs:
 
     # PGO training workload. --min-fps 1 (smoke, not a gate): the authoritative
     # 256 kHz hard gate runs on the Linux x86_64 reference build.
-    # The GUI-subsystem exe does not block the shell when launched with '&', so
-    # Start-Process -Wait is required to flush the .pgc data before the merge. stdout/stderr
-    # are redirected to files (never -NoNewWindow): sharing the runner console deadlocks
-    # -Wait against the long-lived runner process, and the app's AttachConsole path would
-    # send the benchmark report to CONOUT$, which the pipe-captured Actions log never sees.
+    # Runs under bash, not PowerShell: bash blocks on the GUI-subsystem exe (so the .pgc
+    # flushes before the merge) and hands it the step's stdout pipe directly, which the app
+    # binds via attachToConsole(). PowerShell returns immediately and needed Start-Process.
     - name: '🏋️ PGO training run (hotpath)'
+      shell: bash
       run: |
-        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
-          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1','--benchmark-frames','8000000' `
-          -RedirectStandardOutput 'pgo-train.out.txt' -RedirectStandardError 'pgo-train.err.txt' `
-          -Wait -PassThru
-        Get-Content 'pgo-train.out.txt','pgo-train.err.txt' -ErrorAction SilentlyContinue
-        exit $p.ExitCode
+        ./build/app/${{env.EXECUTABLE}}.exe --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # Merge instrumentation counts (.pgc) into the .pgd the USE link reads.
     - name: '🧮 Merge PGO profile data'
@@ -1093,19 +1087,13 @@ jobs:
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j 16
 
-    # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the hotpath.
-    # Start-Process -Wait -PassThru is required because the GUI-subsystem exe does not block
-    # '&'; exiting with its code fails the job (and the release) below threshold. Output is
-    # redirected to files (never -NoNewWindow) for the same reasons as the training run above:
-    # avoid the console-sharing -Wait deadlock and the CONOUT$ swallowing the report.
+    # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the hotpath. Runs under bash
+    # (see the training run above): bash blocks on the GUI-subsystem exe and pipes its output to
+    # the step, and `set -eo pipefail` fails the job (and the release) on a nonzero exit.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
+      shell: bash
       run: |
-        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
-          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
-          -RedirectStandardOutput 'pgo-gate.out.txt' -RedirectStandardError 'pgo-gate.err.txt' `
-          -Wait -PassThru
-        Get-Content 'pgo-gate.out.txt','pgo-gate.err.txt' -ErrorAction SilentlyContinue
-        exit $p.ExitCode
+        ./build/app/${{env.EXECUTABLE}}.exe --headless --benchmark-hotpath --min-fps 256000
 
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
