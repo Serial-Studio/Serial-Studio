@@ -219,6 +219,17 @@ jobs:
     - name: '🚧 Build application'
       run: cmake --build build --config Release -j$(nproc)
 
+    # In-process frame-extraction throughput gate. Drives the real
+    # FrameReader + CircularBuffer hotpath and fails the job if it cannot
+    # sustain >= 256 kHz, keeping the documented data rate honest on every PR.
+    - name: '🚦 Hotpath throughput benchmark (256 kHz)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
+
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
       with:

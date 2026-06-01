@@ -32,6 +32,7 @@
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
+#include "Misc/HotpathBenchmark.h"
 #include "Misc/TimerEvents.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
@@ -89,6 +90,9 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.udpOpt);
   m_parser.addOption(m_opts.udpRemoteOpt);
   m_parser.addOption(m_opts.udpMulticastOpt);
+  m_parser.addOption(m_opts.benchmarkHotpathOpt);
+  m_parser.addOption(m_opts.minFpsOpt);
+  m_parser.addOption(m_opts.benchmarkFramesOpt);
 #ifdef BUILD_COMMERCIAL
   m_parser.addOption(m_opts.noToolbarOpt);
   m_parser.addOption(m_opts.runtimeOpt);
@@ -147,6 +151,28 @@ QString CLI::argvValueFor(int argc, char** argv, const char* flag)
   return QString();
 }
 
+/**
+ * @brief True if argv requests a CLI command that prints and exits (no GUI session).
+ */
+bool CLI::isCliEarlyExit(int argc, char** argv)
+{
+  static const char* const kFlags[] = {"-v",
+                                       "--version",
+                                       "-h",
+                                       "--help",
+                                       "-r",
+                                       "--reset",
+                                       "--activate",
+                                       "--deactivate",
+                                       "--benchmark-hotpath"};
+
+  for (const char* flag : kFlags)
+    if (argvHasFlag(argc, argv, flag))
+      return true;
+
+  return false;
+}
+
 //---------------------------------------------------------------------------------------------------
 // Top-level processing
 //---------------------------------------------------------------------------------------------------
@@ -170,6 +196,9 @@ CLI::ProcessResult CLI::process(QApplication& app)
     return ProcessResult::ExitSuccess;
   }
 
+  if (m_parser.isSet(m_opts.benchmarkHotpathOpt))
+    return runHotpathBenchmark();
+
 #ifdef BUILD_COMMERCIAL
   if (m_parser.isSet(m_opts.activateOpt)) {
     return activateLicense(app, m_parser.value(m_opts.activateOpt)) == EXIT_SUCCESS
@@ -184,6 +213,32 @@ CLI::ProcessResult CLI::process(QApplication& app)
 #endif
 
   return ProcessResult::Continue;
+}
+
+/**
+ * @brief Runs the frame-extraction throughput benchmark and maps the result to an exit code.
+ */
+CLI::ProcessResult CLI::runHotpathBenchmark()
+{
+  quint64 frames = 1'000'000;
+  double minFps  = 256'000.0;
+
+  if (m_parser.isSet(m_opts.benchmarkFramesOpt)) {
+    bool ok           = false;
+    const quint64 val = m_parser.value(m_opts.benchmarkFramesOpt).toULongLong(&ok);
+    if (ok && val > 0)
+      frames = val;
+  }
+
+  if (m_parser.isSet(m_opts.minFpsOpt)) {
+    bool ok          = false;
+    const double val = m_parser.value(m_opts.minFpsOpt).toDouble(&ok);
+    if (ok && val > 0.0)
+      minFps = val;
+  }
+
+  const int rc = Misc::HotpathBenchmark::runAndReport(frames, minFps);
+  return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
 
 //---------------------------------------------------------------------------------------------------

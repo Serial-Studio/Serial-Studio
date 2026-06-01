@@ -216,6 +216,7 @@ set(SOURCES
   src/Misc/CrashTracker.cpp
   src/Misc/BackupManager.cpp
   src/Misc/CLI.cpp
+  src/Misc/HotpathBenchmark.cpp
   src/Platform/AppPlatform.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp

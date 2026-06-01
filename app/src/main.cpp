@@ -100,7 +100,10 @@ int main(int argc, char** argv)
 {
   setupQtApplicationMetadata();
 
-  Misc::CrashTracker::instance().markStartup();
+  // CLI early-exit commands are not GUI sessions; skip crash tracking so they never trip it.
+  const bool cliEarlyExit = Misc::CLI::isCliEarlyExit(argc, argv);
+  if (!cliEarlyExit)
+    Misc::CrashTracker::instance().markStartup();
 
   const bool headless = Misc::CLI::argvHasFlag(argc, argv, "--headless");
   if (headless)

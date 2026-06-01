@@ -71,6 +71,12 @@ struct CliOptions {
   QCommandLineOption udpRemoteOpt{
     "udp-remote", "Specifies UDP remote target (e.g., 192.168.1.100:8080)", "host:port"};
   QCommandLineOption udpMulticastOpt{"udp-multicast", "Enables multicast mode for UDP"};
+  QCommandLineOption benchmarkHotpathOpt{
+    "benchmark-hotpath", "Run the in-process frame-extraction throughput benchmark and exit"};
+  QCommandLineOption minFpsOpt{
+    "min-fps", "Minimum frames/sec the hotpath benchmark must sustain (default: 256000)", "fps"};
+  QCommandLineOption benchmarkFramesOpt{
+    "benchmark-frames", "Frames to push through the hotpath benchmark (default: 1000000)", "count"};
 #ifdef BUILD_COMMERCIAL
   QCommandLineOption noToolbarOpt{"no-toolbar", "Hides the main window toolbar at startup (Pro)"};
   QCommandLineOption runtimeOpt{"runtime",
@@ -143,6 +149,7 @@ public:
 
   static bool argvHasFlag(int argc, char** argv, const char* flag);
   static QString argvValueFor(int argc, char** argv, const char* flag);
+  static bool isCliEarlyExit(int argc, char** argv);
 
   ProcessResult process(QApplication& app);
 
@@ -167,6 +174,8 @@ public:
 
 private:
   void registerOptions();
+
+  ProcessResult runHotpathBenchmark();
 
   void setupUartConnection();
   void setupTcpConnection(const QString& tcpAddress);

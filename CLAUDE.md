@@ -59,11 +59,23 @@ code-review trigger — fix root cause when possible.
 `.code-report` and `.doc-report` are the cleanup checklists. If a rule appears as advisory,
 that means the existing codebase has baseline debt — new code should still clear it.
 
+## Repo Skills (Claude Code)
+
+Project-scoped Agent Skills live in `.claude/skills/` and load automatically for anyone running
+Claude Code in this repo (committed to git, no install step). Invoke with `/<name>` or let them
+auto-trigger. Keep them current when the workflows they encode change.
+
+| Skill | Use it when |
+|-------|-------------|
+| `ss-hotpath` | Editing/reviewing the data hotpath (`FrameReader`, `CircularBuffer`, `FrameBuilder`, `Dashboard` draw). Auto-activates on those paths. Encodes the SPSC/DirectConnection/slot-pool rules and the `--benchmark-hotpath` 256 kHz check. |
+| `ss-new-driver` | Adding a new I/O driver / data source under `app/src/IO/Drivers/`. Encodes the `BluetoothLE` reference pattern and every registration touch-point. |
+| `ss-verify` | Before committing, or any "lint / check conventions / sanitize" request. Wraps `code-verify.py` + `sanitize-commit.py`. |
+
 ## Project Overview
 
 Serial Studio: cross-platform telemetry dashboard, Qt 6.11.1 + C++20. Data sources: UART,
 TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O. 15+
-visualization widgets, 6 output (control) widgets, 256 KHz+ target data rate. Frame parsers
+visualization widgets, 5 output (control) widgets, 256 KHz+ data rate (CI-gated; see below). Frame parsers
 in JavaScript (`QJSEngine`) or Lua 5.4 (embedded `lua54`). Per-dataset value transforms in
 either language. Pro features: Output widgets, Modbus, CAN Bus, MDF4, 3D, ImageView,
 Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer, Session Database.
@@ -99,6 +111,10 @@ The rules most likely to cause silent breakage. Full detail in
   workers (use `monotonicFrameNs(...)` as the safety net only).
 - **JS scripts**: always `IScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
+- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Misc::HotpathBenchmark`) drives
+  the real `FrameReader` + `CircularBuffer` extraction path in-process and exits nonzero below
+  `--min-fps` (default 256000). `test.yml` runs it on every PR; `deploy.yml` runs it as a hard gate
+  on the shipped PGO binary (sub-256 kHz blocks the release). Don't regress the extraction hotpath.
 
 ## Code Style — Essentials
 

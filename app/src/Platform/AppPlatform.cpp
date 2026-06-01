@@ -31,6 +31,7 @@
 
 #include "Platform/AppPlatform.h"
 
+#include <cstdlib>
 #include <QApplication>
 #include <QCoreApplication>
 #include <QCryptographicHash>
@@ -128,6 +129,28 @@ bool TrackpadScrollFilter::eventFilter(QObject* obj, QEvent* event)
 #ifdef Q_OS_WIN
 
 /**
+ * @brief Posts a synthetic Enter so the shell redraws its prompt after the process exits.
+ */
+static void redrawConsolePromptAtExit()
+{
+  const HANDLE in = GetStdHandle(STD_INPUT_HANDLE);
+  if (in == nullptr || in == INVALID_HANDLE_VALUE)
+    return;
+
+  INPUT_RECORD records[2]                     = {};
+  records[0].EventType                        = KEY_EVENT;
+  records[0].Event.KeyEvent.bKeyDown          = TRUE;
+  records[0].Event.KeyEvent.wRepeatCount      = 1;
+  records[0].Event.KeyEvent.wVirtualKeyCode   = VK_RETURN;
+  records[0].Event.KeyEvent.uChar.UnicodeChar = L'\r';
+  records[1]                                  = records[0];
+  records[1].Event.KeyEvent.bKeyDown          = FALSE;
+
+  DWORD written = 0;
+  (void)WriteConsoleInput(in, records, 2, &written);
+}
+
+/**
  * @brief Attaches the application to the parent console and redirects stdout/stderr.
  */
 static void attachToConsole()
@@ -139,6 +162,9 @@ static void attachToConsole()
     // code-verify off  -- raw stdio is the only path before Qt is up
     printf("\n");
     // code-verify on
+
+    // GUI-subsystem apps hand the prompt back before finishing; nudge it on every exit path.
+    std::atexit(redrawConsolePromptAtExit);
   }
 }
 

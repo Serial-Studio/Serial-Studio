@@ -15,7 +15,8 @@
 .apdisk
 
 # AI stuff
-.claude
+.claude/*
+!.claude/skills
 .code-report
 .doc-report
 
