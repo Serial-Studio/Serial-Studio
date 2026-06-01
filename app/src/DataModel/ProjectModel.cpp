@@ -4417,8 +4417,11 @@ void DataModel::ProjectModel::setModified(const bool modified)
 {
   // Keep a truly empty project clean; user-edit flags count as a real edit
   if (modified && m_groups.empty() && m_actions.empty() && m_tables.empty() && m_workspaces.empty()
-      && !m_customizeWorkspaces && !m_locked && m_hiddenGroupIds.isEmpty())
+      && !m_customizeWorkspaces && !m_locked && m_hiddenGroupIds.isEmpty()) {
+    // Stay clean for the dirty-flag UX, but nudge the backup layer (snapshot hash decides).
+    Q_EMIT contentTouched();
     return;
+  }
 
   m_modified = modified;
   Q_EMIT modifiedChanged();

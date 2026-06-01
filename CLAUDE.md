@@ -21,28 +21,24 @@
 
 ## Trust Contract
 
-These rules govern the human-agent relationship in this repo. They are about
-predictability, not productivity — the difference between a tool the user
-has to re-audit every time and a collaborator they can rely on. Capability
-without predictability gets disabled.
+These rules are about predictability, not productivity — the difference
+between a tool the user re-audits every time and a collaborator they rely
+on. Capability without predictability gets disabled.
 
-- **Stay in your lane.** Every file you touch outside the explicit ask costs
-  the reviewer an audit pass. If you spot an adjacent fix, *name it in chat*
-  ("noticed X — want it in this pass?") instead of slipping it into the
-  diff. Bundled scope creep — even when each individual change is correct
-  — erodes trust in every diff that follows.
-- **Show the why, not the what.** Code shows *what*. A short comment, the
-  chat reply, or the commit message shows *why* — but only when the choice
-  was non-obvious (picked one of two reasonable approaches, worked around a
-  known bug, satisfied a hidden invariant). One sentence is enough. When
-  the choice was obvious, say nothing — silence is the default.
+- **Stay in your lane.** Every file touched outside the explicit ask costs
+  the reviewer an audit pass. Spot an adjacent fix? *Name it in chat*
+  ("noticed X — want it in this pass?") rather than slipping it into the
+  diff. Bundled scope creep erodes trust in every diff that follows.
+- **Show the why, not the what.** Code shows *what*; a comment, chat reply,
+  or commit message shows *why* — but only when the choice was non-obvious
+  (one of two reasonable approaches, a workaround, a hidden invariant). One
+  sentence. When the choice was obvious, say nothing.
 - **State the plan before non-trivial work.** Not just multi-file: any
-  change where a reasonable reviewer could prefer a different approach.
-  State the plan, get a nod, then execute. "Plan visible before execution"
-  is the contract — a summary *after* the fact is not a substitute.
+  change where a reasonable reviewer could prefer a different approach. Plan
+  visible *before* execution is the contract — a summary after is not.
 - **Self-review before handoff.** Before declaring a non-trivial change
-  done, re-read the diff and ask: is what I did *what was asked, and only
-  that*? If you can't answer yes, say so before claiming completion.
+  done, re-read the diff: is this *what was asked, and only that*? If you
+  can't answer yes, say so before claiming completion.
 
 ## Scripts
 
@@ -126,18 +122,10 @@ need *before* writing:
   inline EOL comments, no AI narration. Don't fake the em-dash with ` -- ` — rewrite the sentence.
 - **QML**: Christmas-tree property order (`id` first); enums via `SerialStudio.BusType` /
   `ProjectModel.SomeEnum`, never integers; `font: Cpp_Misc_CommonFonts.uiFont`.
-- **Naming**:
-
-| Kind | Convention | Example |
-|------|------------|---------|
-| Classes / Enums | `CamelCase` | `FrameReader`, `BusType` |
-| Functions | `camelCase` | `hotpathRxFrame` |
-| Locals / params | `lower_case` | `frame_data` |
-| Static vars | `s_lower_case` | `s_devices` |
-| Private members | `m_camelCase` | `m_deviceIndex` |
-| Public/protected members | `lower_case` | `sourceId` |
-| Constants / constexpr | `kCamelCase` | `kMaxBufferSize` |
-| Macros | `UPPER_CASE` | `BUILD_COMMERCIAL` |
+- **Naming**: `CamelCase` types/enums, `camelCase` functions, `lower_case`
+  locals + public/protected members, `s_lower_case` statics, `m_camelCase`
+  private members, `kCamelCase` constants/constexpr, `UPPER_CASE` macros.
+  Full table → [docs/claude/code-style.md](docs/claude/code-style.md).
 
 - **Safety-critical (NASA Power of Ten)** — hotpath violations are blockers; full list in the
   sub-doc. The ones that bite: no allocation/Frame-copy on the dashboard path (use

@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QStandardPaths>
@@ -98,6 +99,8 @@ void Misc::BackupManager::setupExternalConnections()
     &pm, &DataModel::ProjectModel::jsonFileChanged, this, &BackupManager::onProjectFileChanged);
   connect(
     &pm, &DataModel::ProjectModel::modifiedChanged, this, &BackupManager::onProjectModifiedChanged);
+  connect(
+    &pm, &DataModel::ProjectModel::contentTouched, this, &BackupManager::onProjectContentTouched);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -273,6 +276,24 @@ QString Misc::BackupManager::backupDirectory() const
 }
 
 /**
+ * @brief Hashes the per-source frame parser code so two summaries can be compared for a
+ *        parser-only change; empty when no sources carry parser code.
+ */
+static QString parserSignature(const QJsonArray& sources)
+{
+  QByteArray acc;
+  for (const auto& sv : sources) {
+    acc.append(sv.toObject().value(Keys::FrameParserCode).toString().toUtf8());
+    acc.append('\n');
+  }
+
+  if (acc.isEmpty())
+    return {};
+
+  return QString::fromLatin1(QCryptographicHash::hash(acc, QCryptographicHash::Sha1).toHex());
+}
+
+/**
  * @brief Returns a structural summary of a snapshot file (title, counts, group titles).
  */
 QVariantMap Misc::BackupManager::summarize(const QString& path) const
@@ -316,6 +337,7 @@ QVariantMap Misc::BackupManager::summarize(const QString& path) const
 
   const auto sources = project.value(QStringLiteral("sources")).toArray();
   out.insert(QStringLiteral("sourceCount"), sources.isEmpty() ? 1 : sources.size());
+  out.insert(QStringLiteral("parserHash"), parserSignature(sources));
   return out;
 }
 
@@ -337,6 +359,10 @@ QVariantMap Misc::BackupManager::currentSummary() const
     groupTitles.append(g.title);
 
   out.insert(QStringLiteral("groupTitles"), groupTitles);
+
+  // Same signature as summarize() so the recovery dialog can flag a parser-only restore.
+  const auto sources = pm.serializeToJson().value(QStringLiteral("sources")).toArray();
+  out.insert(QStringLiteral("parserHash"), parserSignature(sources));
   return out;
 }
 
@@ -388,6 +414,18 @@ void Misc::BackupManager::onProjectModifiedChanged()
     return;
 
   if (!DataModel::ProjectModel::instance().modified())
+    return;
+
+  m_debounceTimer->start();
+}
+
+/**
+ * @brief Debounce a snapshot for an edit the dirty flag suppresses (e.g. parser-only changes on a
+ *        structurally empty project); the snapshot hash still decides whether anything is written.
+ */
+void Misc::BackupManager::onProjectContentTouched()
+{
+  if (!m_enabled)
     return;
 
   m_debounceTimer->start();

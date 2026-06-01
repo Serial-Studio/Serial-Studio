@@ -65,6 +65,7 @@ public:
 public slots:
   void onProjectFileChanged();
   void onProjectModifiedChanged();
+  void onProjectContentTouched();
 
 private slots:
   void flushDebounced();

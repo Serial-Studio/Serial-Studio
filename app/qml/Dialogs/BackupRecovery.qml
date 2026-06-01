@@ -42,6 +42,7 @@ Widgets.SmartDialog {
   property var snapshotSummary: ({})
   property var addedGroups: []
   property var removedGroups: []
+  property bool parserChanged: false
 
   onVisibleChanged: if (visible) refresh()
   onSelectedIndexChanged: refreshDiff()
@@ -59,6 +60,7 @@ Widgets.SmartDialog {
       snapshotSummary = {}
       addedGroups = []
       removedGroups = []
+      parserChanged = false
       return
     }
 
@@ -67,6 +69,7 @@ Widgets.SmartDialog {
     const snap = snapshotSummary.groupTitles || []
     addedGroups   = snap.filter(t => cur.indexOf(t) < 0)
     removedGroups = cur.filter(t => snap.indexOf(t) < 0)
+    parserChanged = (currentSummary.parserHash || "") !== (snapshotSummary.parserHash || "")
   }
 
   //
@@ -152,12 +155,18 @@ Widgets.SmartDialog {
     const titleChanged = (snapshotSummary.title || "") !== (currentSummary.title || "")
     const removed      = removedGroups
     const added        = addedGroups
+    const parserNote   = parserChanged
+                       ? qsTr(" The frame parser code also differs and will be replaced.")
+                       : ""
 
     if (removed.length === 0 && added.length === 0) {
       if (titleChanged)
         return qsTr("Title changes from “%1” to “%2”. Group structure unchanged.")
                 .arg(currentSummary.title || qsTr("Untitled"))
-                .arg(snapshotSummary.title || qsTr("Untitled"))
+                .arg(snapshotSummary.title || qsTr("Untitled")) + parserNote
+
+      if (parserChanged)
+        return qsTr("Same groups and datasets, but the frame parser code differs — restoring will replace it.")
 
       return qsTr("Same groups and datasets as your current project. Restoring may still revert field-level edits.")
     }
@@ -166,12 +175,12 @@ Widgets.SmartDialog {
     const addStr = formatGroupList(added)
 
     if (removed.length > 0 && added.length > 0)
-      return qsTr("Restoring removes %1 and brings back %2.").arg(rmStr).arg(addStr)
+      return qsTr("Restoring removes %1 and brings back %2.").arg(rmStr).arg(addStr) + parserNote
 
     if (removed.length > 0)
-      return qsTr("Restoring removes %1.").arg(rmStr)
+      return qsTr("Restoring removes %1.").arg(rmStr) + parserNote
 
-    return qsTr("Restoring brings back %1.").arg(addStr)
+    return qsTr("Restoring brings back %1.").arg(addStr) + parserNote
   }
 
   function restoreSelected() {

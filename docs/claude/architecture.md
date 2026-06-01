@@ -116,6 +116,17 @@ ConsoleOnly (replaced DeviceSendsJSON, 2026-04) bypasses CircularBuffer + queue;
 - Title edits update the tree item in-place via `m_*Items` — never call a mutating
   `ProjectModel` function on every keystroke.
 
+## Rolling Backups — `BackupManager`
+
+- Auto-snapshots the project on a 5s debounce. The **whole-project SHA-1** over
+  `serializeToJson()` is the sole write arbiter: identical content never duplicates a snapshot,
+  any byte difference (incl. `frameParserCode`) does. Restore round-trips parser code + engines.
+- Trigger is **decoupled from the dirty flag**. `setModified()` suppresses the flag for a
+  structurally empty project (no groups/actions/tables/workspaces), but still emits
+  `contentTouched` so parser-only edits on an empty project reach the snapshot path. Wire any new
+  "edit that should back up but not dirty the project" through `contentTouched`, not a forced
+  `modifiedChanged`.
+
 ## Multi-Source Architecture
 
 - `DataModel::Source` entries in `Frame.h`. `FrameBuilder::hotpathRxSourceFrame(sourceId, data)`

@@ -108,6 +108,7 @@ signals:
   void plotTimeRangeChanged();
   void jsonFileChanged();
   void modifiedChanged();
+  void contentTouched();
   void groupsChanged();
   void groupDataChanged();
   void actionsChanged();

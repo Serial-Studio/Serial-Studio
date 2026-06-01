@@ -545,6 +545,44 @@ def test_backup_manager_summarize_surfaces_wrapper():
     )
 
 
+def test_backup_manager_snapshots_parser_only_edits_on_empty_project():
+    """A parser-only edit on a structurally empty project (no groups/datasets) must still
+    reach the snapshot path. setModified() suppresses the dirty flag there, so it emits
+    contentTouched instead, and BackupManager arms the debounce off that signal. The whole-
+    project hash in snapshot() is the sole arbiter of whether anything is actually written.
+    """
+    model_h = _read("app/src/DataModel/ProjectModel.h")
+    model_cpp = _read("app/src/DataModel/ProjectModel.cpp")
+
+    # The decoupling signal exists and fires from the empty-project branch of setModified().
+    assert "void contentTouched();" in model_h
+    setmod = re.search(
+        r"void DataModel::ProjectModel::setModified\(const bool modified\)[\s\S]*?\n\}",
+        model_cpp,
+    )
+    assert setmod is not None
+    body = setmod.group(0)
+    # contentTouched is emitted inside the suppressed branch, before the early return.
+    assert re.search(
+        r"if \(modified && m_groups\.empty\(\)[\s\S]*?"
+        r"Q_EMIT contentTouched\(\);[\s\S]*?return;",
+        body,
+    ), "setModified must emit contentTouched in the empty-project branch"
+
+    # BackupManager listens to it and arms the debounce (hash-only decision in flushDebounced).
+    backup_cpp = _read("app/src/Misc/BackupManager.cpp")
+    assert (
+        "&DataModel::ProjectModel::contentTouched, this, "
+        "&BackupManager::onProjectContentTouched" in backup_cpp
+    )
+    slot = re.search(
+        r"void Misc::BackupManager::onProjectContentTouched\(\)[\s\S]*?\n\}",
+        backup_cpp,
+    )
+    assert slot is not None
+    assert "m_debounceTimer->start();" in slot.group(0)
+
+
 def test_crash_tracker_documents_local_only_telemetry():
     """The CrashTracker header @brief reminds reviewers that the class has no telemetry.
     Adding a network sink here without re-reviewing the contract is the failure we want
