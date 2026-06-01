@@ -299,10 +299,18 @@ if(BUILD_COMMERCIAL)
             "Response: ${LS_RESPONSE}")
     endif()
 
-    string(RANDOM LENGTH 18 ALPHABET "123456789" _SALT_FIRST)
-    string(SUBSTRING "${_SALT_FIRST}" 0 1 _SALT_FIRST)
-    string(RANDOM LENGTH 17 ALPHABET "0123456789" _SALT_REST)
-    set(COMMERCIAL_BUILD_SALT "${_SALT_FIRST}${_SALT_REST}" CACHE INTERNAL "")
+    # Generate the salt once per build tree and reuse the cached value on every
+    # re-configure. This keeps the generated license guards byte-identical
+    # between the PGO GENERATE and USE passes (both reconfigure the same tree),
+    # so the profile collected from the instrumented build matches the optimized
+    # build and GCC's -Wmissing-profile stays silent. A fresh build tree — every
+    # release — still draws a new salt, preserving per-binary guard uniqueness.
+    if(NOT DEFINED COMMERCIAL_BUILD_SALT)
+        string(RANDOM LENGTH 18 ALPHABET "123456789" _SALT_FIRST)
+        string(SUBSTRING "${_SALT_FIRST}" 0 1 _SALT_FIRST)
+        string(RANDOM LENGTH 17 ALPHABET "0123456789" _SALT_REST)
+        set(COMMERCIAL_BUILD_SALT "${_SALT_FIRST}${_SALT_REST}" CACHE INTERNAL "")
+    endif()
     add_compile_definitions(COMMERCIAL_BUILD_SALT=${COMMERCIAL_BUILD_SALT}ULL)
 
     message(STATUS "License validation succeeded, building with commercial features")
