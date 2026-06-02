@@ -17,7 +17,6 @@
 # For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
 #
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-#
 
 #---------------------------------------------------------------------------------------------------
 # Application module setup
@@ -95,7 +94,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #
 #---------------------------------------------------------------------------------------------------
 
-# Specify required modules for FOSS version
 set(QT_MODULES
   Svg
   Gui
@@ -112,7 +110,6 @@ set(QT_MODULES
   QuickControls2
 )
 
-# Specify required libraries for FOSS version
 set(QT_LIBS
   Qt6::Core
   Qt6::Svg
@@ -128,13 +125,11 @@ set(QT_LIBS
   Qt6::QuickControls2
 )
 
-# WebEngine -- gated by WITH_WEBENGINE so Linux builds can opt out
 if(WITH_WEBENGINE)
   list(APPEND QT_MODULES WebEngineQuick)
   list(APPEND QT_LIBS Qt6::WebEngineQuick)
 endif()
 
-# Add required modules for Pro version if needed
 if(BUILD_COMMERCIAL)
   set(QT_MODULES
     ${QT_MODULES}
@@ -150,14 +145,12 @@ if(BUILD_COMMERCIAL)
   )
 endif()
 
-# Find the Qt package and its modules
 find_package(
   Qt6 REQUIRED
   COMPONENTS
   ${QT_MODULES}
 )
 
-# Qt project setup & policies
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0002 NEW)
@@ -198,7 +191,6 @@ if(BUILD_COMMERCIAL AND LICENSE_GUARDS_INCLUDE_DIR)
   include_directories(${LICENSE_GUARDS_INCLUDE_DIR})
 endif()
 
-# Specify required sources for FOSS version
 set(SOURCES
   src/Misc/ThemeManager.cpp
   src/Misc/CommonFonts.cpp
@@ -308,7 +300,6 @@ set(SOURCES
   src/SerialStudio.cpp
 )
 
-# Specify required headers for FOSS version
 set(HEADERS
   src/Misc/ModuleManager.h
   src/Misc/Utilities.h
@@ -432,7 +423,6 @@ set(HEADERS
   src/SerialStudio.h
 )
 
-# Specify required QML files for FOSS version
 set(QML_SOURCES
   qml/AI/ProUpgradeNotice.qml
   qml/Dialogs/About.qml
@@ -549,7 +539,6 @@ if(WITH_WEBENGINE)
   list(APPEND QML_SOURCES qml/Widgets/MarkdownWebView.qml)
 endif()
 
-# Add commercial source files
 if(BUILD_COMMERCIAL)
   set(HEADERS
     ${HEADERS}
@@ -972,7 +961,7 @@ qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.q
 #   Qt modules: Core, Gui, Widgets, Qml, Quick, Graphs, SerialPort, etc.
 #   Vendored (static):
 #     - kissfft: Fast Fourier Transform (FFT plot calculations)
-#     - OpenSSL: Cryptography, SSL/TLS (for MQTT, secure connections)
+#     - OpenSSL: Cryptography/SSL/TLS, prebuilt (skipped when ENABLE_GRPC=ON -- gRPC's BoringSSL)
 #     - libusb, hidapi: USB/HID device drivers (Pro only)
 #     - gRPC, protobuf: gRPC server (when ENABLE_GRPC=ON)
 #   Bundled:
@@ -1067,10 +1056,10 @@ endif()
 if(ENABLE_HARDENING AND UNIX AND NOT APPLE)
   target_link_options(
     ${PROJECT_EXECUTABLE} PRIVATE
-    -Wl,-z,relro                 # Relocation Read-Only
-    -Wl,-z,now                   # Resolve all symbols at load time
-    -Wl,-z,noexecstack           # Non-executable stack
-    -pie                         # Position Independent Executable
+    -Wl,-z,relro
+    -Wl,-z,now
+    -Wl,-z,noexecstack
+    -pie
   )
 endif()
 

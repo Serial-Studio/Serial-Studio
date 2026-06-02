@@ -11,35 +11,20 @@
 #   any Pro functionality.
 #
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-#
-# serial_studio_sign(<target>) signs the just-built artifact as a POST_BUILD
-# step. No-op unless ENABLE_CODE_SIGNING=ON and the platform's cache vars are
-# set. For real distributions also sign every bundled Qt/3rd-party DLL/dylib
-# and the installer/package; the release CI is the authoritative signer for
-# AppImages and notarized .dmgs.
-#
-# Status (2026-05): Windows signing is DEFERRED (cert decision pending). macOS
-# is signed/notarized in CI already. Linux GPG signing is free and is the one
-# enabled here.
-#
 
 include_guard(GLOBAL)
 
 option(ENABLE_CODE_SIGNING "Run platform code signing as a POST_BUILD step" OFF)
 
-# Windows signing (signtool). Provide ONE of SHA1 (cert thumbprint in the
-# user/Machine store) or a PFX file + password, plus an RFC-3161 timestamp URL.
 set(WINDOWS_SIGN_SHA1     "" CACHE STRING "Code-signing cert SHA1 thumbprint (Windows cert store)")
 set(WINDOWS_SIGN_PFX      "" CACHE STRING "Path to .pfx code-signing certificate")
 set(WINDOWS_SIGN_PFX_PASS "" CACHE STRING "Password for the .pfx (prefer an env var in CI)")
 set(WINDOWS_SIGN_TS_URL   "http://timestamp.digicert.com" CACHE STRING "RFC-3161 timestamp URL")
 
-# macOS signing + notarization.
 set(MACOS_SIGN_IDENTITY   "" CACHE STRING "e.g. 'Developer ID Application: Alex Spataru (TEAMID)'")
 set(MACOS_NOTARY_PROFILE  "" CACHE STRING "notarytool keychain profile (xcrun notarytool store-credentials)")
 set(MACOS_ENTITLEMENTS    "" CACHE STRING "Path to hardened-runtime entitlements .plist (optional)")
 
-# Linux detached signing.
 set(LINUX_SIGN_GPG_KEY    "" CACHE STRING "GPG key id/email for a detached .asc of the binary")
 
 #---------------------------------------------------------------------------------------------------
@@ -55,7 +40,6 @@ function(serial_studio_sign _tgt)
     return()
   endif()
 
-  #-- Windows: signtool ------------------------------------------------------------------------
   if(WIN32 AND MSVC)
     find_program(SIGNTOOL_EXECUTABLE signtool)
     if(NOT SIGNTOOL_EXECUTABLE)
@@ -79,7 +63,6 @@ function(serial_studio_sign _tgt)
       COMMENT "Authenticode-signing $<TARGET_FILE_NAME:${_tgt}>"
       VERBATIM)
 
-  #-- macOS: codesign (hardened runtime) + optional notarize -----------------------------------
   elseif(APPLE)
     if(NOT MACOS_SIGN_IDENTITY)
       message(WARNING "MACOS_SIGN_IDENTITY not set; skipping macOS signing")
@@ -103,7 +86,6 @@ function(serial_studio_sign _tgt)
         VERBATIM)
     endif()
 
-  #-- Linux: detached GPG signature ------------------------------------------------------------
   elseif(UNIX)
     if(NOT LINUX_SIGN_GPG_KEY)
       message(WARNING "LINUX_SIGN_GPG_KEY not set; skipping Linux signing")

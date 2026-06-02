@@ -11,12 +11,6 @@
 #   any Pro functionality.
 #
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-#
-# Extracted verbatim from the root CMakeLists.txt. include() this module in
-# place of the old inline blocks; include() preserves directory scope, so the
-# directory-level add_compile_options/add_link_options behave exactly as before.
-# Requires the PRODUCTION_OPTIMIZATION and ENABLE_PGO options to be declared.
-#
 
 include_guard(GLOBAL)
 
@@ -24,45 +18,38 @@ include_guard(GLOBAL)
 # Production optimization flags
 #---------------------------------------------------------------------------------------------------
 #
-# High-performance compilation flags for release builds:
+# PRODUCTION_OPTIMIZATION=ON applies aggressive, per-toolchain release flags. Exactly one branch
+# runs per build:
 #
-# When PRODUCTION_OPTIMIZATION=ON is enabled, the build system applies
-# aggressive optimization flags tailored to each compiler and platform:
+#   clang-cl (Windows, MSVC ABI)  /O2 /Oi /Ot /fp:precise /DNDEBUG; link /OPT:REF /OPT:ICF. Preferred
+#                                 over cl.exe for faster scalar parse-hotpath codegen while still
+#                                 linking the prebuilt MSVC Qt. No /GL or /LTCG (those are cl.exe
+#                                 only). clang-cl reports MSVC=ON, so this branch precedes cl.exe.
+#   MSVC cl.exe (Windows)         /permissive- /Zc:* /MP /O2 /Ot /Oi /Ob3 /fp:precise /Gw /Gy, plus
+#                                 /GL and /LTCG whole-program codegen unless LTO is disabled.
+#   GCC/Clang (Linux), AppleClang (macOS), Clang/GCC MinGW, IntelLLVM
+#                                 -O3 -funroll-loops -fomit-frame-pointer, IEEE math (-fno-fast-math,
+#                                 -fno-unsafe-math-optimizations), -ffunction-sections/-fdata-sections
+#                                 paired with --gc-sections (-dead_strip on macOS), and -flto=auto
+#                                 unless disabled. -fno-semantic-interposition on GCC/IntelLLVM only.
 #
-# Common optimizations across all platforms:
-#   -O3                    - Maximum optimization level
-#   -ftree-vectorize       - Auto-vectorization (SIMD)
-#   -funroll-loops         - Loop unrolling for better IPC
-#   -fomit-frame-pointer   - Eliminate frame pointer overhead
-#   -fno-fast-math         - IEEE 754 compliance (no unsafe math)
-#   -finline-functions     - Aggressive function inlining
-#   -ffunction-sections    - Separate sections per function
-#   -fdata-sections        - Separate sections per data item
-#   -flto=auto             - Link-Time Optimization (LTO) with parallelization
-#   -Wl,--gc-sections      - Remove unused code/data at link time
+# Both Windows branches first strip CMake's injected /Ob2 (the *_RELEASE* flags) and /W3 (base
+# flags) so our inlining and per-target /W4 win without a flood of D9025 "overriding" diagnostics.
 #
-# Architecture-specific flags:
-#   x86-64: -march=x86-64-v2 (SSE4.2, SSSE3, modern CPUs from 2012+)
-#   ARM64:  -march=armv8-a (ARMv8 baseline for aarch64)
-#   ARMv7:  -march=armv7-a -mfpu=neon (NEON SIMD for 32-bit ARM)
+# Non-MSVC builds force -fexceptions + -funwind-tables + -fasynchronous-unwind-tables on every TU:
+# Lua is compiled as C++ and throws across the VM stack on any runtime error, so every linked object
+# must carry unwind metadata, or --gc-sections/-dead_strip + LTO can drop a personality routine and
+# turn a routine Lua type error into a std::terminate. macOS also keeps -Wl,-keep_dwarf_unwind.
 #
-# Compiler-specific optimizations:
-#   GCC:   -frename-registers, -fstack-reuse=all
-#   MSVC:  /GL (whole program optimization), /Gw (COMDAT sections), /Qpar
-#   Intel: Same as GCC/Clang with additional Intel-specific opts
+# Architecture baselines: x86-64 -> -march=x86-64-v2 (SSE4.2, 2012+ CPUs); aarch64 -> armv8-a (plus
+# -latomic); armv7l -> armv7-a -mfpu=neon -mfloat-abi=hard (hardfloat pinned so a soft-float
+# toolchain cannot silently emit an ABI-mismatched binary).
 #
-# Sandboxed builds (Flathub):
-#   - Detects FLATPAK_BUILD environment
-#   - Disables LTO (causes issues in sandboxed environments)
-#   - Auto-enables ENABLE_HARDENING for security compliance
-#
-# Expected performance gain: 20-40% compared to -O2 without LTO
-# Build time impact: +50-100% due to LTO (can be disabled if needed)
+# Sandboxed builds (Flatpak/Flathub, detected via FLATPAK_ID) disable LTO and auto-enable hardening.
 #
 #---------------------------------------------------------------------------------------------------
 
 if(PRODUCTION_OPTIMIZATION)
-   # Detect sandboxed build environments (Flathub) and enable hardening
    if(DEFINED ENV{FLATPAK_ID} OR FLATPAK_BUILD)
       set(DISABLE_LTO ON)
       set(ENABLE_HARDENING ON CACHE BOOL "Auto-enabled hardening for sandboxed builds" FORCE)
@@ -71,93 +58,69 @@ if(PRODUCTION_OPTIMIZATION)
       set(DISABLE_LTO OFF)
    endif()
 
-   # Print status
    message("Enabling production optimization flags...")
 
-   # Add NDEBUG definition for all configurations
    add_compile_definitions(NDEBUG)
 
-   # Force unwind tables on every translation unit, regardless of optimization
-   # level. Lua-as-C++ throws lua_longjmp* across the VM call stack on every
-   # runtime error; if the parent project applies -ffunction-sections +
-   # -dead_strip / --gc-sections + LTO without preserving unwind metadata for
-   # functions that only appear on a thrown-exception path, the unwinder hits
-   # a missing personality routine and aborts via std::terminate. The crash
-   # symptom is __cxa_throw -> demangling_terminate_handler -> abort even
-   # though the underlying error is a routine Lua-level type mismatch like
-   # "string expected, got table". The flags below ensure every C/C++ object
-   # we link carries enough unwind data for the C++ runtime to walk through
-   # it cleanly.
    if(NOT MSVC)
       add_compile_options(
-         -fexceptions                    # Enable C++ exceptions in all TUs
-         -funwind-tables                 # Emit unwind tables for every function
-         -fasynchronous-unwind-tables    # ... including async-safe ones
+         -fexceptions
+         -funwind-tables
+         -fasynchronous-unwind-tables
       )
       if(APPLE)
-         # macOS: prevent the linker from discarding compact unwind data when
-         # paired with -dead_strip + LTO. Without this, throws across stripped
-         # functions hit _Unwind_Resume -> terminate.
          add_link_options(-Wl,-keep_dwarf_unwind)
       endif()
    endif()
 
-   # LLVM (MinGW) on Windows
    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MINGW)
       message(STATUS "Production branch: Clang/MinGW (Windows)")
       add_compile_options(
-         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
-         -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
-         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
-         -fomit-frame-pointer            # Free up RBP for the register allocator
-         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
-         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -ffunction-sections             # Pair with --gc-sections for dead-code stripping
-         -fdata-sections                 # Pair with --gc-sections for dead-data stripping
+         -O3
+         -march=x86-64-v2
+         -funroll-loops
+         -fomit-frame-pointer
+         -fno-fast-math
+         -fno-unsafe-math-optimizations
+         -ffunction-sections
+         -fdata-sections
       )
       if(NOT DISABLE_LTO)
-         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+         add_compile_options(-flto=auto)
       endif()
       add_link_options(
-         -Wl,--gc-sections               # Remove unused functions/data from final binary
+         -Wl,--gc-sections
       )
       if(NOT DISABLE_LTO)
-         add_link_options(-flto=auto)    # Enable LTO at link time
+         add_link_options(-flto=auto)
       endif()
 
-   # GCC (MinGW) on Windows
    elseif(WIN32 AND MINGW)
       message(STATUS "Production branch: GCC/MinGW (Windows)")
       add_compile_options(
-         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
-         -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
-         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
-         -fomit-frame-pointer            # Free up RBP for the register allocator
-         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
-         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -fno-semantic-interposition     # Allow inlining/devirt of own symbols (PIC perf win)
-         -ffunction-sections             # Pair with --gc-sections for dead-code stripping
-         -fdata-sections                 # Pair with --gc-sections for dead-data stripping
+         -O3
+         -march=x86-64-v2
+         -funroll-loops
+         -fomit-frame-pointer
+         -fno-fast-math
+         -fno-unsafe-math-optimizations
+         -fno-semantic-interposition
+         -ffunction-sections
+         -fdata-sections
       )
       if(NOT DISABLE_LTO)
-         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+         add_compile_options(-flto=auto)
       endif()
       add_link_options(
-         -Wl,--gc-sections               # Remove unused code/data at link time
+         -Wl,--gc-sections
       )
       if(NOT DISABLE_LTO)
-         add_link_options(-flto=auto)    # Enable LTO at link time
+         add_link_options(-flto=auto)
       endif()
 
-   # clang-cl (Clang with the MSVC driver + ABI). Generates markedly faster code than cl.exe on the
-   # scalar parse hotpath while still linking against the prebuilt MSVC Qt. clang-cl has MSVC=ON, so
-   # this branch must precede the cl.exe branch below. No /GL or /LTCG (MSVC-only) -- ThinLTO would
-   # need lld-link; PGO (handled in the Clang branch of the PGO section) is the main win here.
    elseif(WIN32 AND MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
       message(STATUS "Production branch: clang-cl (Windows, MSVC ABI)")
 
-      # CMake injects /Ob2 in *_FLAGS_RELEASE* and /W3 in *_FLAGS; strip them so our /O2 + the
-      # per-target /W4 win without a flood of D9025 "overriding" diagnostics.
       foreach(_lang CXX C)
          string(REGEX REPLACE "[/-]W[0-9]" ""
             CMAKE_${_lang}_FLAGS "${CMAKE_${_lang}_FLAGS}")
@@ -170,24 +133,20 @@ if(PRODUCTION_OPTIMIZATION)
       endforeach()
 
       add_compile_options(
-         /O2                             # clang -O2: aggressive optimization + auto-vectorization
-         /Oi                             # Enable intrinsic functions
-         /Ot                             # Favor fast code over small code
-         /fp:precise                     # IEEE-accurate floating point (telemetry correctness)
-         /DNDEBUG                        # Disable assertions
+         /O2
+         /Oi
+         /Ot
+         /fp:precise
+         /DNDEBUG
       )
       add_link_options(
-         /OPT:REF                        # Remove unreferenced functions/data
-         /OPT:ICF                        # Merge identical code/data blocks
+         /OPT:REF
+         /OPT:ICF
       )
 
-   # MSVC (Visual Studio)
    elseif(WIN32 AND MSVC)
       message(STATUS "Production branch: MSVC (Windows)")
 
-      # CMake injects /Ob2 in *_FLAGS_RELEASE / *_FLAGS_RELWITHDEBINFO and /W3
-      # in the unsuffixed *_FLAGS. Stripping them lets us force /Ob3 globally
-      # and /W4 per-target without 500+ "warning D9025: overriding" messages.
       foreach(_lang CXX C)
          string(REGEX REPLACE "[/-]W[0-9]" ""
             CMAKE_${_lang}_FLAGS "${CMAKE_${_lang}_FLAGS}")
@@ -200,107 +159,101 @@ if(PRODUCTION_OPTIMIZATION)
       endforeach()
 
       add_compile_options(
-         /permissive-                    # Enforce strict ISO C++ conformance
-         /Zc:__cplusplus                 # Set __cplusplus to actual version value
-         /Zc:preprocessor                # Standards-compliant preprocessor
-         /MP                             # Enable multi-core compilation
-         /O2                             # Optimize for speed
-         /Ot                             # Favor fast code over small code
-         /Oi                             # Enable intrinsic functions
-         /Ob3                            # Aggressive inlining (VS2019 16.3+, forced over CMake's /Ob2)
-         /fp:precise                     # IEEE-accurate floating-point math
-         /Gw                             # Put functions/data into separate COMDATs
-         /Gy                             # Function-level linking (pairs with /OPT:REF)
-         /DNDEBUG                        # Disable assertions
+         /permissive-
+         /Zc:__cplusplus
+         /Zc:preprocessor
+         /MP
+         /O2
+         /Ot
+         /Oi
+         /Ob3
+         /fp:precise
+         /Gw
+         /Gy
+         /DNDEBUG
       )
-      # /W4 is applied per-target on PROJECT_EXECUTABLE in app/CMakeLists.txt
-      # so third-party libs in lib/ (which use /w) don't trigger D9025 overrides.
       if(NOT DISABLE_LTO)
-         add_compile_options(/GL)        # Enable whole program optimization
+         add_compile_options(/GL)
       endif()
       add_link_options(
-         /OPT:REF                        # Remove unreferenced functions/data
-         /OPT:ICF                        # Merge identical code/data blocks
+         /OPT:REF
+         /OPT:ICF
       )
       if(NOT DISABLE_LTO)
-         add_link_options(/LTCG)         # Link-time optimization
+         add_link_options(/LTCG)
       endif()
 
-   # macOS (Clang/AppleClang)
    elseif(APPLE)
       message(STATUS "Production branch: AppleClang (macOS)")
       add_compile_options(
-         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
-         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
-         -fomit-frame-pointer            # Free up RBP/X29 for the register allocator
-         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
-         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -ffunction-sections             # Pair with -dead_strip for dead-code stripping
-         -fdata-sections                 # Pair with -dead_strip for dead-data stripping
+         -O3
+         -funroll-loops
+         -fomit-frame-pointer
+         -fno-fast-math
+         -fno-unsafe-math-optimizations
+         -ffunction-sections
+         -fdata-sections
       )
       if(NOT DISABLE_LTO)
-         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+         add_compile_options(-flto=auto)
       endif()
       add_link_options(
-         -Wl,-dead_strip                 # Remove unused functions/data from final binary
+         -Wl,-dead_strip
       )
       if(NOT DISABLE_LTO)
-         add_link_options(-flto=auto)    # Enable Link-Time Optimization
+         add_link_options(-flto=auto)
       endif()
 
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
          add_compile_options(-march=x86-64-v2)
       endif()
 
-   # Intel LLVM Compiler (Linux or Windows)
    elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
       message(STATUS "Production branch: IntelLLVM")
       add_compile_options(
-         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
-         -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
-         -static                         # Include Intel dependencies
-         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
-         -fomit-frame-pointer            # Free up RBP for the register allocator
-         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
-         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -fno-semantic-interposition     # Allow inlining/devirt of own symbols (PIC perf win)
-         -ffunction-sections             # Pair with --gc-sections for dead-code stripping
-         -fdata-sections                 # Pair with --gc-sections for dead-data stripping
+         -O3
+         -march=x86-64-v2
+         -static
+         -funroll-loops
+         -fomit-frame-pointer
+         -fno-fast-math
+         -fno-unsafe-math-optimizations
+         -fno-semantic-interposition
+         -ffunction-sections
+         -fdata-sections
       )
       if(NOT DISABLE_LTO)
-         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+         add_compile_options(-flto=auto)
       endif()
       add_link_options(
-         -Wl,--gc-sections               # Discard unused code sections at link time
+         -Wl,--gc-sections
       )
       if(NOT DISABLE_LTO)
-         add_link_options(-flto=auto)    # Enable LTO at link time
+         add_link_options(-flto=auto)
       endif()
 
-   # Generic Linux (GCC or Clang)
    elseif(UNIX)
       message(STATUS "Production branch: ${CMAKE_CXX_COMPILER_ID} (Linux/${CMAKE_SYSTEM_PROCESSOR})")
       add_compile_options(
-         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
-         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
-         -fomit-frame-pointer            # Free up RBP/X29 for the register allocator
-         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
-         -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -ffunction-sections             # Pair with --gc-sections for dead-code stripping
-         -fdata-sections                 # Pair with --gc-sections for dead-data stripping
+         -O3
+         -funroll-loops
+         -fomit-frame-pointer
+         -fno-fast-math
+         -fno-unsafe-math-optimizations
+         -ffunction-sections
+         -fdata-sections
       )
-      # GCC-only: -fno-semantic-interposition is silently rejected by Clang on some versions
       if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
          add_compile_options(-fno-semantic-interposition)
       endif()
       if(NOT DISABLE_LTO)
-         add_compile_options(-flto=auto) # Link-time optimization with parallelization
+         add_compile_options(-flto=auto)
       endif()
       add_link_options(
-         -Wl,--gc-sections               # Strip unused functions/data
+         -Wl,--gc-sections
       )
       if(NOT DISABLE_LTO)
-         add_link_options(-flto=auto)    # Enable LTO at link time
+         add_link_options(-flto=auto)
       endif()
 
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
@@ -309,14 +262,11 @@ if(PRODUCTION_OPTIMIZATION)
          add_compile_options(-march=armv8-a)
          add_link_options(-latomic)
       elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
-         # Pin hardfloat ABI explicitly so a soft-float toolchain can't silently
-         # produce an ABI-mismatched binary that runs but corrupts FP registers.
          add_compile_options(-march=armv7-a -mfpu=neon -mfloat-abi=hard)
          add_link_options(-latomic)
       endif()
    endif()
 
-   # Effective LTO state (after Flatpak/sandboxed override)
    if(DISABLE_LTO)
       message(STATUS "LTO: DISABLED (sandboxed build)")
    else()
@@ -330,26 +280,10 @@ endif()
 # Platform-specific SIMD instructions
 #---------------------------------------------------------------------------------------------------
 #
-# Enables SIMD (Single Instruction Multiple Data) optimizations for x86-64:
-#
-# SSE4.1 support:
-#   - Enabled on x86-64 processors (Intel/AMD 64-bit)
-#   - Provides vectorized operations for DSP, graphics, data processing
-#   - Required by some Qt 6 modules and KissFFT optimizations
-#
-# Why SSE4.1?
-#   - Widely available (Intel since Core 2, AMD since Bulldozer)
-#   - Safe baseline for modern systems (2008+ CPUs)
-#   - Significantly faster than SSE2 for floating-point operations
-#
-# Platform notes:
-#   - MSVC x64: SSE2 is always enabled (x64 ABI requirement), no flag needed
-#   - GCC/Clang: Must explicitly enable SSE4.1 with -msse4.1
-#   - ARM: SIMD handled separately via NEON (see PRODUCTION_OPTIMIZATION)
-#
-# Impact:
-#   - ~20-30% performance boost for FFT calculations
-#   - ~10-15% improvement in signal processing pipelines
+# On non-MSVC x86-64 toolchains (GCC/Clang/AppleClang/IntelLLVM) an explicit -msse4.1 is added for
+# vectorized DSP/FFT work. MSVC and clang-cl are skipped: the x64 ABI already guarantees an SSE2
+# baseline and neither is handed an explicit SSE4.1 flag here. ARM SIMD (NEON) comes from the
+# -march flags in the production-optimization section above.
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -362,21 +296,22 @@ endif()
 # Profile-Guided Optimization (PGO)
 #---------------------------------------------------------------------------------------------------
 #
-# PGO is a two-stage optimization process:
+# Two stages, selected by PGO_STAGE (GENERATE | USE); profile data lives in PGO_PROFILE_DIR
+# (default ${CMAKE_BINARY_DIR}/pgo-profiles):
 #
-# Stage 1 - GENERATE (build with instrumentation):
-#   cmake .. -DENABLE_PGO=ON -DPGO_STAGE=GENERATE -DCMAKE_BUILD_TYPE=Release
-#   cmake --build . -j$(nproc)
+#   GENERATE  Build instrumented, then run the binary on a representative workload (in CI the
+#             --headless --benchmark-hotpath run) to emit profile data.
+#   USE       Rebuild consuming that data.
 #
-# Stage 2 - PROFILE (run the application with typical workloads):
-#   ./Serial-Studio-GPL3  # Use the app normally to generate profile data
-#   # Profile data (.gcda files for GCC, .profraw for Clang) is written to build dir
+# Instrumentation and data format are per compiler:
+#   MSVC cl.exe                 /GL + /LTCG /GENPROFILE -> profile.pgd, consumed with /USEPROFILE.
+#   Clang / clang-cl / AppleClang  -fprofile-generate -> *.profraw, merged by llvm-profdata into
+#                               merged.profdata, consumed with -fprofile-use.
+#   GCC                         -fprofile-generate -> *.gcda, consumed with -fprofile-use plus
+#                               -fprofile-correction.
 #
-# Stage 3 - USE (rebuild with profile data):
-#   cmake .. -DENABLE_PGO=ON -DPGO_STAGE=USE -DCMAKE_BUILD_TYPE=Release
-#   cmake --build . -j$(nproc)
+# Requires PRODUCTION_OPTIMIZATION=ON for meaningful results.
 #
-# Expected performance gain: 10-20% for typical workloads
 #---------------------------------------------------------------------------------------------------
 
 set(PGO_STAGE "GENERATE" CACHE STRING "PGO stage: GENERATE or USE")
@@ -387,7 +322,6 @@ if(ENABLE_PGO)
       message(WARNING "PGO requires PRODUCTION_OPTIMIZATION=ON for best results")
    endif()
 
-   # Create profile directory if it doesn't exist
    file(MAKE_DIRECTORY ${PGO_PROFILE_DIR})
 
    if(PGO_STAGE STREQUAL "GENERATE")
@@ -396,27 +330,27 @@ if(ENABLE_PGO)
       message(STATUS "PGO: After running the app, rebuild with -DPGO_STAGE=USE")
 
       if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-         add_compile_options(/GL)                           # Whole program optimization
+         add_compile_options(/GL)
          add_link_options(
-            /LTCG                                           # Link-time code generation
-            /GENPROFILE                                     # Generate profile data
-            /PGD:${PGO_PROFILE_DIR}/profile.pgd             # Profile database location
+            /LTCG
+            /GENPROFILE
+            /PGD:${PGO_PROFILE_DIR}/profile.pgd
          )
       elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
          add_compile_options(
-            -fprofile-generate=${PGO_PROFILE_DIR}          # Generate profile data (Clang)
+            -fprofile-generate=${PGO_PROFILE_DIR}
          )
          add_link_options(
-            -fprofile-generate=${PGO_PROFILE_DIR}          # Link with profiling
+            -fprofile-generate=${PGO_PROFILE_DIR}
          )
       elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
          add_compile_options(
-            -fprofile-generate                             # Generate profile data (GCC)
-            -fprofile-dir=${PGO_PROFILE_DIR}               # Profile data directory
+            -fprofile-generate
+            -fprofile-dir=${PGO_PROFILE_DIR}
          )
          add_link_options(
-            -fprofile-generate                             # Link with profiling
-            -fprofile-dir=${PGO_PROFILE_DIR}               # Profile data directory
+            -fprofile-generate
+            -fprofile-dir=${PGO_PROFILE_DIR}
          )
       else()
          message(FATAL_ERROR "PGO not supported for compiler: ${CMAKE_CXX_COMPILER_ID}")
@@ -426,19 +360,16 @@ if(ENABLE_PGO)
       message(STATUS "PGO: USE stage - building with profile optimization")
       message(STATUS "PGO: Using profile data from: ${PGO_PROFILE_DIR}")
 
-      # Check if profile data exists
       if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
          if(NOT EXISTS "${PGO_PROFILE_DIR}/profile.pgd")
             message(FATAL_ERROR "PGO profile data not found at ${PGO_PROFILE_DIR}/profile.pgd\nRun with -DPGO_STAGE=GENERATE first")
          endif()
       elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
-         # Clang stores .profraw files that need to be merged into .profdata
          file(GLOB PROFRAW_FILES "${PGO_PROFILE_DIR}/*.profraw")
          if(NOT PROFRAW_FILES)
             message(FATAL_ERROR "No .profraw files found in ${PGO_PROFILE_DIR}\nRun the instrumented binary first")
          endif()
 
-         # Merge profile data
          find_program(LLVM_PROFDATA llvm-profdata)
          if(NOT LLVM_PROFDATA)
             message(FATAL_ERROR "llvm-profdata not found. Install LLVM tools to use PGO with Clang")
@@ -463,27 +394,27 @@ if(ENABLE_PGO)
       endif()
 
       if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-         add_compile_options(/GL)                           # Whole program optimization
+         add_compile_options(/GL)
          add_link_options(
-            /LTCG                                           # Link-time code generation
-            /USEPROFILE:PGD=${PGO_PROFILE_DIR}/profile.pgd  # Use profile data
+            /LTCG
+            /USEPROFILE:PGD=${PGO_PROFILE_DIR}/profile.pgd
          )
       elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
          add_compile_options(
-            -fprofile-use=${PROFDATA_FILE}                 # Use merged profile data
+            -fprofile-use=${PROFDATA_FILE}
          )
          add_link_options(
-            -fprofile-use=${PROFDATA_FILE}                 # Link with profile optimization
+            -fprofile-use=${PROFDATA_FILE}
          )
       elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
          add_compile_options(
-            -fprofile-use                                  # Use profile data (GCC)
-            -fprofile-dir=${PGO_PROFILE_DIR}               # Profile data directory
-            -fprofile-correction                           # Handle profile inconsistencies
+            -fprofile-use
+            -fprofile-dir=${PGO_PROFILE_DIR}
+            -fprofile-correction
          )
          add_link_options(
-            -fprofile-use                                  # Link with profile optimization
-            -fprofile-dir=${PGO_PROFILE_DIR}               # Profile data directory
+            -fprofile-use
+            -fprofile-dir=${PGO_PROFILE_DIR}
          )
       endif()
 

@@ -17,7 +17,6 @@
 # For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
 #
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-#
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -70,8 +69,9 @@ find_package(
 # Networking:
 #   ENABLE_GRPC=ON (default) - Enable gRPC server on port 8888
 #
-# Dependencies (zlib, expat, OpenSSL, KissFFT, libusb, hidapi) are vendored
-# in lib/ or fetched via FetchContent. gRPC/protobuf are found via
+# Dependencies (zlib, expat, KissFFT, libusb, hidapi) are vendored in lib/ or fetched via
+# FetchContent. OpenSSL is fetched as a prebuilt at configure time, and skipped entirely when
+# ENABLE_GRPC=ON (gRPC's bundled BoringSSL supplies the crypto). gRPC/protobuf are found via
 # find_package when ENABLE_GRPC=ON (install via system package manager).
 #
 #---------------------------------------------------------------------------------------------------
@@ -299,12 +299,6 @@ if(BUILD_COMMERCIAL)
             "Response: ${LS_RESPONSE}")
     endif()
 
-    # Generate the salt once per build tree and reuse the cached value on every
-    # re-configure. This keeps the generated license guards byte-identical
-    # between the PGO GENERATE and USE passes (both reconfigure the same tree),
-    # so the profile collected from the instrumented build matches the optimized
-    # build and GCC's -Wmissing-profile stays silent. A fresh build tree — every
-    # release — still draws a new salt, preserving per-binary guard uniqueness.
     if(NOT DEFINED COMMERCIAL_BUILD_SALT)
         string(RANDOM LENGTH 18 ALPHABET "123456789" _SALT_FIRST)
         string(SUBSTRING "${_SALT_FIRST}" 0 1 _SALT_FIRST)
@@ -366,39 +360,38 @@ endif()
 # Compiler warnings configuration
 #---------------------------------------------------------------------------------------------------
 #
-# Configures compiler warnings to catch potential bugs while avoiding noise:
+# Per-toolchain warning/conformance switches (one branch runs):
 #
-# MSVC (Visual Studio):
-#   /wd4324 - Disable C4324 (structure padding)
-#             Triggered by alignment attributes, not actionable
-#   /wd4267 - Disable C4267 (size_t to int conversion)
-#             Common in Qt code, usually safe in practice
+#   clang-cl (Windows, MSVC ABI)  /wd4324 /wd4267 + /Zc:inline. The cl.exe-only conformance switches
+#                                 /Zc:lambda and /Zc:throwingNew are dropped: clang-cl ignores them
+#                                 and warns "argument unused during compilation".
+#   MSVC cl.exe (Windows)         /wd4324 (C4324 alignment padding) /wd4267 (C4267 size_t->int) plus
+#                                 /Zc:inline /Zc:lambda /Zc:throwingNew conformance switches.
+#   GCC/Clang/MinGW               -Wall -Wextra -pedantic.
 #
-# GCC/Clang/MinGW:
-#   -Wall     - Enable all common warning categories
-#               (uninitialized variables, implicit conversions, etc.)
-#   -Wextra   - Enable additional warnings beyond -Wall
-#               (unused parameters, sign comparison, etc.)
-#   -pedantic - Enforce strict ISO C++ conformance
-#               (reject non-standard compiler extensions)
-#
-# Note: Third-party libraries in lib/ use -w to suppress all warnings
+# Third-party libraries in lib/ build with -w (or /w), so these are effectively app-only.
 #
 #---------------------------------------------------------------------------------------------------
 
-if(MSVC)
+if(MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   add_compile_options(
-    /wd4324                        # Structure padding warning
-    /wd4267                        # size_t to int conversion warning
-    /Zc:inline                     # Remove unreferenced COMDAT (smaller binary)
-    /Zc:lambda                     # Conformant lambda processor
-    /Zc:throwingNew                # Assume operator new throws on OOM
+    /wd4324
+    /wd4267
+    /Zc:inline
+  )
+elseif(MSVC)
+  add_compile_options(
+    /wd4324
+    /wd4267
+    /Zc:inline
+    /Zc:lambda
+    /Zc:throwingNew
   )
 else()
   add_compile_options(
-    -Wall                          # Enable common warning messages
-    -Wextra                        # Enable extra warnings
-    -pedantic                      # Enforce strict ISO C++ conformance
+    -Wall
+    -Wextra
+    -pedantic
   )
 endif()
 
@@ -506,4 +499,3 @@ message(STATUS "LIB Compile Options: ${SUBDIRECTORY_COMPILE_OPTIONS}")
 
 get_directory_property(SUBDIRECTORY_COMPILE_OPTIONS DIRECTORY app COMPILE_OPTIONS)
 message(STATUS "APP Compile Options: ${SUBDIRECTORY_COMPILE_OPTIONS}")
-

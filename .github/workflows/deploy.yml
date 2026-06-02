@@ -73,10 +73,10 @@ env:
   # Qt cache management
   #
   INSTALL_QT_WINDOWS: false
-  INSTALL_QT_MACOS_ARM64: false
-  INSTALL_QT_MACOS_INTEL: false
-  INSTALL_QT_LINUX_INTEL: false
-  INSTALL_QT_LINUX_ARM64: false
+  INSTALL_QT_MACOS_ARM64: true
+  INSTALL_QT_MACOS_INTEL: true
+  INSTALL_QT_LINUX_INTEL: true
+  INSTALL_QT_LINUX_ARM64: true
   
   #
   # Excluded AppImage libraries
@@ -880,7 +880,7 @@ jobs:
     - name: '⚙️ Ensure Rosetta 2'
       run: softwareupdate --install-rosetta --agree-to-license
 
-    - name: '🚧 Configure with CMake (PGO generate, x86_64)'
+    - name: '🚧 Configure with CMake (production, x86_64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
@@ -890,8 +890,6 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
-          -DENABLE_PGO=ON \
-          -DPGO_STAGE=GENERATE \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
           -DCMAKE_OSX_ARCHITECTURES="x86_64" \
@@ -899,42 +897,10 @@ jobs:
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
-    - name: '🚧 Build application (instrumented, x86_64)'
+    - name: '🚧 Build application (x86_64)'
       run: cmake --build build --config Release -j 16
 
-    - name: '🏋️ PGO training run (hotpath, x86_64 / Rosetta)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
-      run: |
-        arch -x86_64 ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
-
-    - name: '🚧 Reconfigure with CMake (PGO use, x86_64)'
-      env:
-        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
-        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
-        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
-      run: |
-        cmake -B build \
-          -DPRODUCTION_OPTIMIZATION=ON \
-          -DENABLE_HARDENING=ON \
-          -DENABLE_GRPC=ON \
-          -DENABLE_PGO=ON \
-          -DPGO_STAGE=USE \
-          -DLLVM_PROFDATA=$(xcrun -f llvm-profdata) \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
-          -DCMAKE_OSX_ARCHITECTURES="x86_64" \
-          -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
-          -DBUILD_COMMERCIAL=ON \
-          -DBUILD_GPL3=OFF
-
-    - name: '🚧 Build application (PGO optimized, x86_64)'
-      run: cmake --build build --config Release -j 16
-
-    # Gate the optimized x86_64 slice too, but non-blocking: it runs under Rosetta on the arm64
-    # runner, so its throughput is not representative -- this is for visibility, not a hard gate.
-    - name: '🚦 Hotpath throughput gate (256 kHz, x86_64 / Rosetta)'
+    - name: '🚦 Hotpath throughput (x86_64 / Rosetta, informational)'
       continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1135,7 +1101,6 @@ jobs:
       with:
         arch: x64
 
-    # clang-cl + llvm-profdata for the Clang-PGO build; LLVM ships preinstalled on the runner.
     - name: '🛠 Add LLVM (clang-cl) to PATH'
       shell: bash
       run: echo "C:\Program Files\LLVM\bin" >> "$GITHUB_PATH"
@@ -1178,9 +1143,6 @@ jobs:
         cp build/app/${{env.EXECUTABLE}}.exe build/app/bench.exe
         MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
         ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 1
-
-    # clang-cl PGO: the USE reconfigure below runs llvm-profdata on the .profraw files automatically
-    # (see the Clang branch in cmake/Optimization.cmake), so no separate MSVC pgomgr merge is needed.
 
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:

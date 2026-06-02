@@ -11,23 +11,30 @@
 #   any Pro functionality.
 #
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-#
-# The frame-parse hotpath allocates many small QString / QByteArray / Lua buffers per frame. On the
-# MSVC CRT heap that is markedly slower than glibc (Linux) or the macOS allocator, which is why the
-# Windows hotpath benchmark lagged the other platforms (~256 kHz vs ~400 kHz). On Windows mimalloc's
-# redirect DLL patches the process-wide malloc at load time; on Linux libmimalloc.so interposes
-# malloc/free via ELF symbol resolution. Either way every allocation — including those inside the
-# Qt libraries — is served by mimalloc instead of the system heap.
-#
-# Windows/MSVC and Linux only; macOS opts out (good system allocator, fragile DYLD interposing).
-#
-# Must be include()d BEFORE Optimization.cmake so mimalloc builds with its own flags and is not
-# swept into the application's whole-program-optimization / PGO passes.
-#
-# Usage: call target_link_mimalloc(<target>) on the executable.
-#
 
 include_guard(GLOBAL)
+
+#---------------------------------------------------------------------------------------------------
+# mimalloc allocator override
+#---------------------------------------------------------------------------------------------------
+#
+# The frame-parse hotpath allocates many small QString/QByteArray/Lua buffers per frame, which the
+# system heap (the MSVC CRT on Windows, glibc on Linux) serves more slowly than mimalloc; glibc also
+# thrashes its per-thread arenas under the cross-thread alloc/free pattern (main thread allocates,
+# exporter workers free). This module FetchContent-builds mimalloc and wires a process-wide override:
+#
+#   Windows/MSVC (incl. clang-cl)  shared mimalloc.dll + mimalloc-redirect.dll, which patches malloc
+#                                  at load time across the whole process, the prebuilt Qt DLLs
+#                                  included. clang-cl builds mimalloc as C++ (MI_USE_CXX) to avoid a
+#                                  C-atomics miscompile in segment-map.c.
+#   Linux                          shared libmimalloc.so linked with -Wl,--no-as-needed so its
+#                                  malloc/free interpose over glibc via ELF symbol resolution.
+#   macOS                          opts out (good system allocator, fragile DYLD interposing).
+#
+# mimalloc's own warnings are silenced (third-party). Include BEFORE Optimization.cmake so it is not
+# swept into LTO/PGO. Call target_link_mimalloc(<target>) on the executable.
+#
+#---------------------------------------------------------------------------------------------------
 
 set(SS_MIMALLOC_PLATFORM FALSE)
 if((WIN32 AND MSVC) OR (UNIX AND NOT APPLE))

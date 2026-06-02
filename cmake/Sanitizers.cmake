@@ -11,12 +11,6 @@
 #   any Pro functionality.
 #
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-#
-# DEBUG_SANITIZER (ASan + UBSan) extracted verbatim from the root
-# CMakeLists.txt. ENABLE_TSAN is new: it proves the lock-free SPSC
-# CircularBuffer / Qt::DirectConnection hotpath contract. ASan and TSan cannot
-# coexist, so TSan is its own build.
-#
 
 include_guard(GLOBAL)
 
@@ -55,14 +49,14 @@ option(ENABLE_TSAN "ThreadSanitizer build (mutually exclusive with DEBUG_SANITIZ
 
 if(DEBUG_SANITIZER)
    add_compile_options(
-      -fsanitize=address                # Enable AddressSanitizer
-      -fsanitize=undefined              # Enable UndefinedBehaviorSanitizer
-      -g                                # Generate debug symbols
-      -fno-omit-frame-pointer           # Preserve frame pointers
+      -fsanitize=address
+      -fsanitize=undefined
+      -g
+      -fno-omit-frame-pointer
    )
    add_link_options(
-      -fsanitize=address                # Link AddressSanitizer
-      -fsanitize=undefined              # Link UndefinedBehaviorSanitizer
+      -fsanitize=address
+      -fsanitize=undefined
    )
 endif()
 
@@ -88,13 +82,13 @@ if(ENABLE_TSAN)
       message(FATAL_ERROR "ThreadSanitizer is not supported under MSVC. Use a Clang/GCC build.")
    endif()
    add_compile_options(
-      -fsanitize=thread                 # Enable ThreadSanitizer
-      -g                                # Generate debug symbols
-      -fno-omit-frame-pointer           # Preserve frame pointers
-      -O1                               # Light optimization keeps TSan usable
+      -fsanitize=thread
+      -g
+      -fno-omit-frame-pointer
+      -O1
    )
    add_link_options(
-      -fsanitize=thread                 # Link ThreadSanitizer
+      -fsanitize=thread
    )
    message(STATUS "ThreadSanitizer ENABLED")
 endif()

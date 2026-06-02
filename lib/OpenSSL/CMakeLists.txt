@@ -24,7 +24,6 @@ cmake_minimum_required(VERSION 3.20)
 
 include(FetchContent)
 
-
 function(target_link_openssl TARGET)
   if(ENABLE_GRPC)
     return()
@@ -52,7 +51,7 @@ function(target_link_openssl TARGET)
     message(FATAL_ERROR "target_link_openssl: unsupported platform/toolchain.")
   endif()
 
-  FetchContent_Declare(openssl_prebuilt URL ${BASE_URL}/${ASSET})
+  FetchContent_Declare(openssl_prebuilt URL ${BASE_URL}/${ASSET} DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
   FetchContent_MakeAvailable(openssl_prebuilt)
 
   set(ROOT "${openssl_prebuilt_SOURCE_DIR}")

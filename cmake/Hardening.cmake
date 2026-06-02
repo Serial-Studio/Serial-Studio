@@ -11,18 +11,6 @@
 #   any Pro functionality.
 #
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-#
-# Two layers:
-#   1. The directory-level ENABLE_HARDENING block, extracted verbatim from the
-#      root CMakeLists.txt. Applies to every target (incl. lib/), as before.
-#   2. serial_studio_harden(<target>): the per-target (PRIVATE) deltas the
-#      shipped binary was missing. Per-target so lib/ static libraries built
-#      with /w or -w are unaffected. Call it on the executable in app/.
-#
-# include() this module AFTER Optimization.cmake (which may FORCE
-# ENABLE_HARDENING ON for sandboxed builds) and after ENABLE_HARDENING is
-# declared.
-#
 
 include_guard(GLOBAL)
 
@@ -93,6 +81,10 @@ endif()
 #
 # Note: Some flags require optimization (-O1 or higher) to be effective
 #
+# clang-cl (Windows, MSVC ABI) takes the same /GS /guard:cf plus link /GUARD:CF /DYNAMICBASE
+# /CETCOMPAT as cl.exe. The per-target /Qspectre /sdl /ZH:SHA_256 added in serial_studio_harden are
+# skipped for clang-cl (it rejects them); /NXCOMPAT is likewise applied there, not in this block.
+#
 #---------------------------------------------------------------------------------------------------
 
 if(ENABLE_HARDENING)
@@ -100,30 +92,26 @@ if(ENABLE_HARDENING)
 
    if(MSVC)
       add_compile_options(
-         /GS                            # Buffer security check
-         /guard:cf                      # Control Flow Guard (clang-cl supports this too)
+         /GS
+         /guard:cf
       )
       add_link_options(
-         /GUARD:CF                      # Control Flow Guard at link time
-         /DYNAMICBASE                   # ASLR
-         /CETCOMPAT                     # Enable Intel CET hardware shadow stack
+         /GUARD:CF
+         /DYNAMICBASE
+         /CETCOMPAT
       )
    else()
       add_compile_options(
-         -fstack-protector-strong       # Stack canary protection
-         -Wformat                       # Format string warnings
-         -Wformat-security              # Format security warnings
-         -Werror=format-security        # Make format security errors
+         -fstack-protector-strong
+         -Wformat
+         -Wformat-security
+         -Werror=format-security
       )
 
-      # Stack clash protection (GCC 8+ and Clang 6+, not supported on macOS)
       if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND NOT APPLE)
          add_compile_options(-fstack-clash-protection)
       endif()
 
-      # FORTIFY_SOURCE requires optimization. -U first clears any value the toolchain
-      # already injected (GCC built with --enable-default-fortify-source defines it at
-      # <command-line> scope), which otherwise triggers a redefinition warning.
       if(PRODUCTION_OPTIMIZATION OR CMAKE_BUILD_TYPE STREQUAL "Release")
          add_compile_options(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
       elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
@@ -132,17 +120,6 @@ if(ENABLE_HARDENING)
          message(WARNING "FORTIFY_SOURCE disabled: requires optimization flags (-O1 or higher)")
       endif()
 
-      # Control-flow integrity (platform-specific):
-      # - x86-64 Linux: Intel CET (Control-flow Enforcement Technology) via -fcf-protection
-      # - ARM64 Linux:  Clang CFI (Control Flow Integrity) via -fsanitize=cfi
-      # Note: ARM64 CFI requires LTO and is only available with upstream LLVM Clang
-      # Note: AppleClang does not support -fsanitize=cfi or -fcf-protection, skip on macOS
-      # -mbranch-protection=standard (PAC/BTI) is AArch64-only. Resolve the
-      # effective target arch from CMAKE_OSX_ARCHITECTURES on Apple — in a
-      # cross / universal build it differs from the host CMAKE_SYSTEM_PROCESSOR
-      # (an arm64 runner cross-building x86_64 still reports arm64 there). Only
-      # add the flag when every target slice is arm64; an x86_64 slice rejects
-      # it ("unsupported option '-mbranch-protection='").
       set(_hardening_arches "${CMAKE_SYSTEM_PROCESSOR}")
       if(APPLE AND CMAKE_OSX_ARCHITECTURES)
          set(_hardening_arches "${CMAKE_OSX_ARCHITECTURES}")
@@ -163,16 +140,16 @@ if(ENABLE_HARDENING)
       if(NOT APPLE)
          if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
             add_compile_options(
-               -fcf-protection=full        # Control-flow protection (Intel CET)
+               -fcf-protection=full
             )
          elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
             if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND NOT DISABLE_LTO)
                add_compile_options(
-                  -fsanitize=cfi            # Control Flow Integrity for ARM64
-                  -fvisibility=hidden       # Required for CFI (symbols must be hidden)
+                  -fsanitize=cfi
+                  -fvisibility=hidden
                )
                add_link_options(
-                  -fsanitize=cfi            # Link with CFI support
+                  -fsanitize=cfi
                )
             endif()
          endif()
@@ -180,18 +157,18 @@ if(ENABLE_HARDENING)
 
       if(UNIX AND NOT APPLE)
          add_compile_options(
-            -fPIC                        # Position Independent Code
-            -fno-plt                     # Avoid PLT for better performance with PIC
+            -fPIC
+            -fno-plt
          )
          add_link_options(
-            -Wl,-z,relro                 # Make relocation sections read-only after relocation
-            -Wl,-z,now                   # Resolve all symbols at startup (full RELRO)
-            -Wl,-z,noexecstack           # Mark stack as non-executable
-            -Wl,-z,separate-code         # Separate code segments for better security
+            -Wl,-z,relro
+            -Wl,-z,now
+            -Wl,-z,noexecstack
+            -Wl,-z,separate-code
          )
       elseif(APPLE)
          add_compile_options(
-            -fPIC                        # Position Independent Executable
+            -fPIC
          )
       endif()
    endif()
@@ -238,56 +215,38 @@ function(serial_studio_harden _tgt)
   endif()
 
   if(MSVC)
-    # NOTE: /guard:ehcont (EH continuation guard) is intentionally NOT used. The link-time form
-    # requires EVERY linked module to carry EHCONT metadata, but the vendored static libs in lib/
-    # (lua54, mdf, QCodeEditor, QSimpleUpdater, libusb, hidapi, zlib, expat) are not built with it,
-    # so linking fails with LNK1386 (and /force:guardehcont only emits conservative metadata while
-    # leaving ~100 LNK4291 warnings). Revisit only if every dependency is rebuilt with /guard:ehcont.
-    #-- cl.exe-only compile deltas: /Qspectre, /sdl and /ZH have no clang-cl equivalent. clang-cl
-    #-- already gets /GS + /guard:cf above, matching the Spectre posture of the other platforms.
     if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
       target_compile_options(${_tgt} PRIVATE
-        /Qspectre            # Spectre v1 (load-hardening) mitigations
-        /sdl                 # Additional security dev-lifecycle checks + warnings
-        /ZH:SHA_256          # SHA-256 source hashing in the PDB (integrity of symbol mapping)
+        /Qspectre
+        /sdl
+        /ZH:SHA_256
       )
     endif()
-    #-- MSVC link deltas (shared by cl.exe and clang-cl) --------------------------------------
     target_link_options(${_tgt} PRIVATE
-      /HIGHENTROPYVA       # 64-bit high-entropy ASLR (explicit; default-on but pin it)
-      /NXCOMPAT            # DEP (explicit)
+      /HIGHENTROPYVA
+      /NXCOMPAT
     )
     if(ENABLE_INTEGRITY_CHECK)
-      # Forces the loader to verify the Authenticode signature of the image AND its dependent
-      # DLLs. The binary will FAIL TO LOAD if unsigned or tampered. Only turn on once signing
-      # is wired up end-to-end.
       target_link_options(${_tgt} PRIVATE /INTEGRITYCHECK)
       message(STATUS "${_tgt}: /INTEGRITYCHECK ON (binary MUST be signed)")
     endif()
 
   elseif(APPLE)
-    #-- AppleClang (libc++) -------------------------------------------------------------------
     target_compile_options(${_tgt} PRIVATE
       -fstack-protector-strong
     )
-    # libc++ hardened mode (libc++ 18+); harmless on older libc++.
     target_compile_definitions(${_tgt} PRIVATE
       _LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST
     )
     _ss_add_auto_var_init(${_tgt})
 
   else()
-    #-- GCC / Clang on Linux ------------------------------------------------------------------
-    # Upgrade FORTIFY 2 -> 3 (better object-size coverage), but only where the block above
-    # actually set =2 (optimized builds) -- bumping it without -O1+ just emits a warning.
-    # -U first avoids a redefinition warning against the =2 set above.
     if(PRODUCTION_OPTIMIZATION
        OR CMAKE_BUILD_TYPE STREQUAL "Release"
        OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
       target_compile_options(${_tgt} PRIVATE -U_FORTIFY_SOURCE)
       target_compile_definitions(${_tgt} PRIVATE _FORTIFY_SOURCE=3)
     endif()
-    # Hardened libstdc++ (bounds checks in std containers/iterators; low overhead).
     target_compile_definitions(${_tgt} PRIVATE _GLIBCXX_ASSERTIONS)
     _ss_add_auto_var_init(${_tgt})
   endif()

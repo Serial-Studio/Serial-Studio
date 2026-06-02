@@ -17,7 +17,6 @@
 # For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
 #
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
-#
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -118,25 +117,25 @@ endif()
 
 if(MSVC)
   set(LIB_FLAGS
-    /w                          # Suppress all warnings
-    /Zc:inline                  # Remove unreferenced inline functions
-    /Gy                         # Enable function-level linking
+    /w
+    /Zc:inline
+    /Gy
   )
   if(ENABLE_HARDENING)
-    list(APPEND LIB_FLAGS /GS)  # Buffer security check
+    list(APPEND LIB_FLAGS /GS)
   endif()
 else()
   set(LIB_FLAGS
-    -w                          # Suppress all warnings
-    -fvisibility=hidden         # Hide all symbols
-    -fvisibility-inlines-hidden # Hide C++ inline function symbols
+    -w
+    -fvisibility=hidden
+    -fvisibility-inlines-hidden
   )
 
   if(ENABLE_HARDENING)
     list(APPEND LIB_FLAGS -fstack-protector-strong)
   endif()
   set(LIB_LINK_FLAGS
-    -fvisibility=hidden         # Hide all symbols at link time
+    -fvisibility=hidden
   )
 endif()
 
@@ -330,10 +329,11 @@ endif()
 # Builds local third-party libraries from lib/ subdirectories:
 #
 # OpenSSL (lib/OpenSSL/):
-#   - target_link_openssl() downloads prebuilt static OpenSSL 4.0.0 from the
-#     alex-spataru/OpenSSL-Builder release (Windows MSVC/MinGW, macOS universal)
-#   - Linux links the distro OpenSSL via pkg-config (no download)
-#   - Provides: libssl.a, libcrypto.a (or .lib on Windows)
+#   - target_link_openssl() is a no-op when ENABLE_GRPC=ON: gRPC bundles BoringSSL, which already
+#     exports the OpenSSL-compatible crypto/SSL symbols (linking both duplicates them, a hard error
+#     under clang-cl's lld-link).
+#   - Otherwise Windows MSVC/MinGW and macOS download prebuilt static OpenSSL 4.0.0 from the
+#     alex-spataru/OpenSSL-Builder release; Linux links the distro OpenSSL via pkg-config.
 #   - Used for: HTTPS, SSL/TLS, license validation, MQTT encryption
 #
 # KissFFT (lib/KissFFT/):
