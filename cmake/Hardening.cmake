@@ -101,8 +101,7 @@ if(ENABLE_HARDENING)
    if(MSVC)
       add_compile_options(
          /GS                            # Buffer security check
-         /guard:cf                      # Control Flow Guard
-         /DYNAMICBASE                   # Address Space Layout Randomization
+         /guard:cf                      # Control Flow Guard (clang-cl supports this too)
       )
       add_link_options(
          /GUARD:CF                      # Control Flow Guard at link time
@@ -244,13 +243,16 @@ function(serial_studio_harden _tgt)
     # (lua54, mdf, QCodeEditor, QSimpleUpdater, libusb, hidapi, zlib, expat) are not built with it,
     # so linking fails with LNK1386 (and /force:guardehcont only emits conservative metadata while
     # leaving ~100 LNK4291 warnings). Revisit only if every dependency is rebuilt with /guard:ehcont.
-    #-- MSVC compile deltas -------------------------------------------------------------------
-    target_compile_options(${_tgt} PRIVATE
-      /Qspectre            # Spectre v1 (load-hardening) mitigations
-      /sdl                 # Additional security dev-lifecycle checks + warnings
-      /ZH:SHA_256          # SHA-256 source hashing in the PDB (integrity of symbol mapping)
-    )
-    #-- MSVC link deltas ----------------------------------------------------------------------
+    #-- cl.exe-only compile deltas: /Qspectre, /sdl and /ZH have no clang-cl equivalent. clang-cl
+    #-- already gets /GS + /guard:cf above, matching the Spectre posture of the other platforms.
+    if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+      target_compile_options(${_tgt} PRIVATE
+        /Qspectre            # Spectre v1 (load-hardening) mitigations
+        /sdl                 # Additional security dev-lifecycle checks + warnings
+        /ZH:SHA_256          # SHA-256 source hashing in the PDB (integrity of symbol mapping)
+      )
+    endif()
+    #-- MSVC link deltas (shared by cl.exe and clang-cl) --------------------------------------
     target_link_options(${_tgt} PRIVATE
       /HIGHENTROPYVA       # 64-bit high-entropy ASLR (explicit; default-on but pin it)
       /NXCOMPAT            # DEP (explicit)

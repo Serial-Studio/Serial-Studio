@@ -545,8 +545,6 @@ set(QML_SOURCES
   qml/main.qml
 )
 
-# WebEngine-only QML -- skipped when WITH_WEBENGINE=OFF so the QtWebEngine
-# import never has to resolve at QML-cache build time.
 if(WITH_WEBENGINE)
   list(APPEND QML_SOURCES qml/Widgets/MarkdownWebView.qml)
 endif()
@@ -756,9 +754,6 @@ if(BUILD_COMMERCIAL)
     qml/AI/ToolCallCard.qml
   )
 
-  # WebEngine-backed chat transcript -- only registered when WebEngine is
-  # available so the QtWebEngine import never has to resolve on Linux builds
-  # that opted out of WITH_WEBENGINE.
   if(WITH_WEBENGINE)
     list(APPEND QML_SOURCES qml/AI/MessageWebView.qml)
   endif()
@@ -787,11 +782,7 @@ if(ENABLE_GRPC)
   find_package(Protobuf CONFIG REQUIRED)
   find_package(gRPC CONFIG REQUIRED)
 
-  # Locate the gRPC C++ plugin for protoc
   get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
-
-  # The runtime .proto uses generic Struct-based messages (same for GPL and Pro).
-  # The typed per-command protos in doc/grpc/ are exported at runtime via Settings.
   set(PROTO_FILE "${CMAKE_SOURCE_DIR}/doc/grpc/serialstudio.proto")
   set(PROTO_OUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/proto")
   file(MAKE_DIRECTORY ${PROTO_OUT_DIR})
@@ -805,7 +796,6 @@ if(ENABLE_GRPC)
     "${PROTO_OUT_DIR}/serialstudio.grpc.pb.h"
   )
 
-  # Get protobuf include dir from the imported target
   get_target_property(PROTOBUF_INCLUDE_DIR protobuf::libprotobuf INTERFACE_INCLUDE_DIRECTORIES)
 
   add_custom_command(
@@ -824,7 +814,6 @@ if(ENABLE_GRPC)
 
   include_directories(${PROTO_OUT_DIR})
 
-  # Suppress warnings in auto-generated protobuf/gRPC code
   if(MSVC)
     set_source_files_properties(${PROTO_GENERATED_SRCS}
       PROPERTIES COMPILE_FLAGS "/w"
@@ -1023,8 +1012,6 @@ target_link_libraries(
 )
 
 target_link_openssl(${PROJECT_EXECUTABLE})
-
-# mimalloc allocator override (Windows/MSVC only; no-op elsewhere) — speeds the alloc-heavy hotpath.
 serial_studio_link_mimalloc(${PROJECT_EXECUTABLE})
 
 if(BUILD_COMMERCIAL)
@@ -1192,9 +1179,6 @@ if (BUILD_COMMERCIAL)
     MA_NO_NULL
   )
 
-  # Scope unused-function warnings to miniaudio.cpp only — the rest of the
-  # codebase still flags real unused functions. C4505 is MSVC's equivalent
-  # of -Wno-unused-function for static functions with internal linkage.
   if(MSVC)
     set_source_files_properties(src/ThirdParty/miniaudio.cpp
       PROPERTIES COMPILE_OPTIONS "/wd4505"
@@ -1311,7 +1295,7 @@ if(BUILD_COMMERCIAL AND PRODUCTION_OPTIMIZATION)
     )
   elseif(WIN32)
     target_link_options(${PROJECT_EXECUTABLE} PRIVATE
-      $<$<CXX_COMPILER_ID:MSVC>:/DEBUG:NONE>
+      $<$<BOOL:${MSVC}>:/DEBUG:NONE>
     )
   endif()
 endif()

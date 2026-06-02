@@ -73,8 +73,8 @@ env:
   # Qt cache management
   #
   INSTALL_QT_WINDOWS: false
-  INSTALL_QT_MACOS_ARM64: true
-  INSTALL_QT_MACOS_INTEL: true
+  INSTALL_QT_MACOS_ARM64: false
+  INSTALL_QT_MACOS_INTEL: false
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
   
@@ -934,6 +934,16 @@ jobs:
     - name: '🚧 Build application (PGO optimized, x86_64)'
       run: cmake --build build --config Release -j 16
 
+    # Gate the optimized x86_64 slice too, but non-blocking: it runs under Rosetta on the arm64
+    # runner, so its throughput is not representative -- this is for visibility, not a hard gate.
+    - name: '🚦 Hotpath throughput gate (256 kHz, x86_64 / Rosetta)'
+      continue-on-error: true
+      env:
+        QT_QPA_PLATFORM: offscreen
+        DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
+      run: |
+        arch -x86_64 ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 256000
+
     - name: '📤 Upload artifact: x86_64 executable'
       run: cp "build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" "${{env.EXECUTABLE}}-x86_64"
 
@@ -1127,6 +1137,11 @@ jobs:
       with:
         arch: x64
 
+    # clang-cl + llvm-profdata for the Clang-PGO build; LLVM ships preinstalled on the runner.
+    - name: '🛠 Add LLVM (clang-cl) to PATH'
+      shell: bash
+      run: echo "C:\Program Files\LLVM\bin" >> "$GITHUB_PATH"
+
     - name: '⚙️ Download prebuilt gRPC'
       run: |
         gh release download v${{env.GRPC_VERSION}} `
@@ -1144,8 +1159,8 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja `
-          -DCMAKE_CXX_COMPILER=cl `
-          -DCMAKE_C_COMPILER=cl `
+          -DCMAKE_CXX_COMPILER=clang-cl `
+          -DCMAKE_C_COMPILER=clang-cl `
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix" `
           -DPRODUCTION_OPTIMIZATION=ON `
           -DENABLE_HARDENING=ON `
@@ -1166,11 +1181,8 @@ jobs:
         MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
         ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 1
 
-    - name: '🧮 Merge PGO profile data'
-      run: |
-        $pgc = Get-ChildItem -Path build/pgo-profiles -Filter *.pgc -ErrorAction SilentlyContinue
-        if ($pgc) { pgomgr /merge build/pgo-profiles/*.pgc build/pgo-profiles/profile.pgd }
-        else { Write-Output 'No .pgc produced; USE stage relies on existing profile.pgd' }
+    # clang-cl PGO: the USE reconfigure below runs llvm-profdata on the .profraw files automatically
+    # (see the Clang branch in cmake/Optimization.cmake), so no separate MSVC pgomgr merge is needed.
 
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
@@ -1179,8 +1191,8 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja `
-          -DCMAKE_CXX_COMPILER=cl `
-          -DCMAKE_C_COMPILER=cl `
+          -DCMAKE_CXX_COMPILER=clang-cl `
+          -DCMAKE_C_COMPILER=clang-cl `
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix" `
           -DPRODUCTION_OPTIMIZATION=ON `
           -DENABLE_HARDENING=ON `

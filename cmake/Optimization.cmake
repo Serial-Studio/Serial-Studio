@@ -149,6 +149,38 @@ if(PRODUCTION_OPTIMIZATION)
          add_link_options(-flto=auto)    # Enable LTO at link time
       endif()
 
+   # clang-cl (Clang with the MSVC driver + ABI). Generates markedly faster code than cl.exe on the
+   # scalar parse hotpath while still linking against the prebuilt MSVC Qt. clang-cl has MSVC=ON, so
+   # this branch must precede the cl.exe branch below. No /GL or /LTCG (MSVC-only) -- ThinLTO would
+   # need lld-link; PGO (handled in the Clang branch of the PGO section) is the main win here.
+   elseif(WIN32 AND MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+      message(STATUS "Production branch: clang-cl (Windows, MSVC ABI)")
+
+      # CMake injects /Ob2 in *_FLAGS_RELEASE* and /W3 in *_FLAGS; strip them so our /O2 + the
+      # per-target /W4 win without a flood of D9025 "overriding" diagnostics.
+      foreach(_lang CXX C)
+         string(REGEX REPLACE "[/-]W[0-9]" ""
+            CMAKE_${_lang}_FLAGS "${CMAKE_${_lang}_FLAGS}")
+         foreach(_cfg RELEASE RELWITHDEBINFO MINSIZEREL)
+            string(REGEX REPLACE "[/-]Ob[0-9]" ""
+               CMAKE_${_lang}_FLAGS_${_cfg} "${CMAKE_${_lang}_FLAGS_${_cfg}}")
+            string(REGEX REPLACE "[/-]W[0-9]" ""
+               CMAKE_${_lang}_FLAGS_${_cfg} "${CMAKE_${_lang}_FLAGS_${_cfg}}")
+         endforeach()
+      endforeach()
+
+      add_compile_options(
+         /O2                             # clang -O2: aggressive optimization + auto-vectorization
+         /Oi                             # Enable intrinsic functions
+         /Ot                             # Favor fast code over small code
+         /fp:precise                     # IEEE-accurate floating point (telemetry correctness)
+         /DNDEBUG                        # Disable assertions
+      )
+      add_link_options(
+         /OPT:REF                        # Remove unreferenced functions/data
+         /OPT:ICF                        # Merge identical code/data blocks
+      )
+
    # MSVC (Visual Studio)
    elseif(WIN32 AND MSVC)
       message(STATUS "Production branch: MSVC (Windows)")
@@ -363,7 +395,7 @@ if(ENABLE_PGO)
       message(STATUS "PGO: Profile data will be written to: ${PGO_PROFILE_DIR}")
       message(STATUS "PGO: After running the app, rebuild with -DPGO_STAGE=USE")
 
-      if(MSVC)
+      if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
          add_compile_options(/GL)                           # Whole program optimization
          add_link_options(
             /LTCG                                           # Link-time code generation
@@ -395,7 +427,7 @@ if(ENABLE_PGO)
       message(STATUS "PGO: Using profile data from: ${PGO_PROFILE_DIR}")
 
       # Check if profile data exists
-      if(MSVC)
+      if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
          if(NOT EXISTS "${PGO_PROFILE_DIR}/profile.pgd")
             message(FATAL_ERROR "PGO profile data not found at ${PGO_PROFILE_DIR}/profile.pgd\nRun with -DPGO_STAGE=GENERATE first")
          endif()
@@ -430,7 +462,7 @@ if(ENABLE_PGO)
          endif()
       endif()
 
-      if(MSVC)
+      if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
          add_compile_options(/GL)                           # Whole program optimization
          add_link_options(
             /LTCG                                           # Link-time code generation
