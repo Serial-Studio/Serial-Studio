@@ -22,15 +22,20 @@ include_guard(GLOBAL)
 # runs per build:
 #
 #   clang-cl (Windows, MSVC ABI)  /O2 /Oi /Ot /Gy /Gw /clang:-march=x86-64-v2 /fp:precise /DNDEBUG;
-#                                 link /OPT:REF /OPT:ICF. Unless LTO is disabled, adds ThinLTO via
-#                                 /clang:-flto=thin on both compile and link, forces -fuse-ld=lld (the
-#                                 default link.exe does not do ThinLTO), and points /lldltocache at an
-#                                 incremental cache. /Gy /Gw give per-function/per-data sections so
-#                                 /OPT:REF and ThinLTO can dead-strip. -march=x86-64-v2 (SSE4.2) matches
-#                                 the conservative baseline of the other x86-64 branches. /fp:precise is
-#                                 kept (no fast-math) so telemetry output is bit-stable. No /GL or /LTCG
-#                                 (those are cl.exe only). clang-cl reports MSVC=ON, so this branch
-#                                 precedes cl.exe.
+#                                 link /OPT:REF /OPT:ICF. Unless LTO is disabled, enables ThinLTO by
+#                                 passing /clang:-flto=thin on the compile step only: that makes clang-cl
+#                                 emit LLVM bitcode .obj files, and lld-link (which CMake already invokes
+#                                 directly to link this target) auto-detects bitcode and runs the ThinLTO
+#                                 backend with no extra link flag. The only link-side LTO flag is the
+#                                 native lld-link /lldltocache:<dir> incremental cache. Driver-style link
+#                                 flags (-fuse-ld=lld, -flto=thin) are NOT passed here: CMake links via
+#                                 lld-link directly, not through the clang-cl driver, so lld-link would
+#                                 reject /clang:-flto=thin as a bogus input file. /Gy /Gw give
+#                                 per-function/per-data sections so /OPT:REF and ThinLTO can dead-strip.
+#                                 -march=x86-64-v2 (SSE4.2) matches the conservative baseline of the
+#                                 other x86-64 branches. /fp:precise is kept (no fast-math) so telemetry
+#                                 output is bit-stable. No /GL or /LTCG (those are cl.exe only). clang-cl
+#                                 reports MSVC=ON, so this branch precedes cl.exe.
 #   MSVC cl.exe (Windows)         /permissive- /Zc:* /MP /O2 /Ot /Oi /Ob3 /fp:precise /Gw /Gy, plus
 #                                 /GL and /LTCG whole-program codegen unless LTO is disabled.
 #   GCC/Clang (Linux), AppleClang (macOS), Clang/GCC MinGW, IntelLLVM
@@ -155,11 +160,7 @@ if(PRODUCTION_OPTIMIZATION)
 
       if(NOT DISABLE_LTO)
          add_compile_options(/clang:-flto=thin)
-         add_link_options(
-            -fuse-ld=lld
-            /clang:-flto=thin
-            /lldltocache:${CMAKE_BINARY_DIR}/lto.cache
-         )
+         add_link_options(/lldltocache:${CMAKE_BINARY_DIR}/lto.cache)
       endif()
 
    elseif(WIN32 AND MSVC)
