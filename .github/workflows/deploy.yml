@@ -1049,13 +1049,16 @@ jobs:
 
     # PGO training workload. --min-fps 1 (smoke, not a gate): the authoritative
     # 256 kHz hard gate runs on the Linux x86_64 reference build.
-    # Runs under bash, not PowerShell: bash blocks on the GUI-subsystem exe (so the .pgc
-    # flushes before the merge) and hands it the step's stdout pipe directly, which the app
-    # binds via attachToConsole(). PowerShell returns immediately and needed Start-Process.
+    # A /SUBSYSTEM:WINDOWS (GUI) exe detaches from the shell's console on launch, so no shell waits
+    # for it and its stdout is unwired. editbin flips a throwaway copy to /SUBSYSTEM:CONSOLE, which
+    # stays attached: bash waits on it (so the .pgc flushes before the merge) and captures its stdout.
+    # The shipped exe is left untouched so it never flashes a console for end users.
     - name: '🏋️ PGO training run (hotpath)'
       shell: bash
       run: |
-        ./build/app/${{env.EXECUTABLE}}.exe --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
+        cp build/app/${{env.EXECUTABLE}}.exe build/app/bench.exe
+        MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
+        ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 1 --benchmark-frames 8000000
 
     # Merge instrumentation counts (.pgc) into the .pgd the USE link reads.
     - name: '🧮 Merge PGO profile data'
@@ -1087,13 +1090,15 @@ jobs:
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j 16
 
-    # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the hotpath. Runs under bash
-    # (see the training run above): bash blocks on the GUI-subsystem exe and pipes its output to
-    # the step, and `set -eo pipefail` fails the job (and the release) on a nonzero exit.
+    # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the hotpath. Benchmarked through a
+    # /SUBSYSTEM:CONSOLE copy (see the training run); the shipped exe stays /SUBSYSTEM:WINDOWS so it
+    # never flashes a console. `set -eo pipefail` fails the job (and the release) on a sub-threshold exit.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       shell: bash
       run: |
-        ./build/app/${{env.EXECUTABLE}}.exe --headless --benchmark-hotpath --min-fps 256000
+        cp build/app/${{env.EXECUTABLE}}.exe build/app/bench.exe
+        MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
+        ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 256000
 
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
