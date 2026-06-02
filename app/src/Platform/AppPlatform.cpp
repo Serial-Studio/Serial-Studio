@@ -168,7 +168,8 @@ static bool handleIsRedirected(DWORD stdHandle)
 }
 
 /**
- * @brief Wires a CRT stream to the inherited std handle so a GUI-subsystem build honors redirection.
+ * @brief Wires a CRT stream to the inherited std handle so a GUI-subsystem build honors
+ * redirection.
  */
 static void bindStreamToStdHandle(DWORD stdHandle, FILE* stream)
 {
@@ -275,9 +276,9 @@ static char** adjustArgumentsForFreeType(int& argc, char** argv)
     newArgv[i] = _strdup(argv[i]);
 
   if (!hasPlatform) {
-    newArgv[argc]     = _strdup("-platform");
-    newArgv[argc + 1] = _strdup("windows:fontengine=freetype");
-    argc             += 2;
+    newArgv[argc]      = _strdup("-platform");
+    newArgv[argc + 1]  = _strdup("windows:fontengine=freetype");
+    argc              += 2;
   }
 
   return newArgv;

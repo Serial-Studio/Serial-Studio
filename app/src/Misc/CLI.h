@@ -78,7 +78,8 @@ struct CliOptions {
   QCommandLineOption benchmarkFramesOpt{
     "benchmark-frames", "Frames to push through the hotpath benchmark (default: 1000000)", "count"};
   QCommandLineOption benchmarkSecondsOpt{
-    "benchmark-seconds", "Wall-clock seconds the hotpath benchmark must sustain (default: 10)",
+    "benchmark-seconds",
+    "Wall-clock seconds the hotpath benchmark must sustain (default: 10)",
     "seconds"};
 #ifdef BUILD_COMMERCIAL
   QCommandLineOption noToolbarOpt{"no-toolbar", "Hides the main window toolbar at startup (Pro)"};

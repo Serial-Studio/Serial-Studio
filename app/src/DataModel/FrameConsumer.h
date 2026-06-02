@@ -25,9 +25,9 @@
 #include <chrono>
 #include <cstddef>
 #include <new>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QObject>
-#include <QCoreApplication>
 #include <QThread>
 #include <QTimer>
 #include <stdexcept>
@@ -250,10 +250,7 @@ public:
   /**
    * @brief Destructor ensures all data is flushed before shutdown.
    */
-  virtual ~FrameConsumer()
-  {
-    stopWorker();
-  }
+  virtual ~FrameConsumer() { stopWorker(); }
 
   /**
    * @brief Checks if the consumer is currently enabled.

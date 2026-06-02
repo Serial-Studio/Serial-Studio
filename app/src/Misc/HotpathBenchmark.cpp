@@ -29,18 +29,17 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "API/Server.h"
 #include "AppState.h"
-#include "SerialStudio.h"
-#include "IO/FrameReader.h"
-#include "IO/HAL_Driver.h"
+#include "CSV/Export.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/JsWatchdogThread.h"
-
-#include "CSV/Export.h"
-#include "API/Server.h"
+#include "IO/FrameReader.h"
+#include "IO/HAL_Driver.h"
+#include "SerialStudio.h"
 #ifdef BUILD_COMMERCIAL
 #  include "MDF4/Export.h"
 #  include "MQTT/Publisher.h"
@@ -202,8 +201,8 @@ void HotpathBenchmark::disableConsumers()
 /**
  * @brief Drives FrameReader -> FrameBuilder -> consumers end-to-end and measures parsed frames/sec.
  */
-HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames, double minFps,
-                                               double minSeconds, int language, bool withExporters)
+HotpathBenchmark::Result HotpathBenchmark::run(
+  quint64 targetFrames, double minFps, double minSeconds, int language, bool withExporters)
 {
   Q_ASSERT(targetFrames > 0);
   Q_ASSERT(minFps > 0.0);
@@ -249,8 +248,8 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames, double minF
       builder.hotpathRxFrame(drained);
     // code-verify on
 
-    fed += kFramesPerChunk;
-    seconds = std::chrono::duration<double>(Clock::now() - start).count();
+    fed     += kFramesPerChunk;
+    seconds  = std::chrono::duration<double>(Clock::now() - start).count();
   }
 
   const quint64 parsed  = builder.parsedFrameCount();
@@ -321,7 +320,7 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
                luaX.framesPerSecond);
   std::fflush(stdout);
 
-  // Stop the JS watchdog thread while QApplication is alive (its aboutToQuit hook never fires here).
+  // Stop the JS watchdog here too; idempotent, and the caller's aboutToQuit spin also covers it.
   DataModel::JsWatchdogThread::instance().shutdown();
 
   return (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;

@@ -212,8 +212,8 @@ static int luaStringSplit(lua_State* L)
     if (std::memcmp(s + i, sep, seplen) == 0) {
       lua_pushlstring(L, s + start, i - start);
       lua_rawseti(L, -2, idx++);
-      i += seplen;
-      start = i;
+      i     += seplen;
+      start  = i;
     } else {
       ++i;
     }

@@ -157,14 +157,8 @@ QString CLI::argvValueFor(int argc, char** argv, const char* flag)
  */
 bool CLI::isCliEarlyExit(int argc, char** argv)
 {
-  static const char* const kFlags[] = {"-v",
-                                       "--version",
-                                       "-h",
-                                       "--help",
-                                       "-r",
-                                       "--reset",
-                                       "--activate",
-                                       "--deactivate"};
+  static const char* const kFlags[] = {
+    "-v", "--version", "-h", "--help", "-r", "--reset", "--activate", "--deactivate"};
 
   for (const char* flag : kFlags)
     if (argvHasFlag(argc, argv, flag))
@@ -179,9 +173,8 @@ bool CLI::isCliEarlyExit(int argc, char** argv)
 bool CLI::isBenchmarkRequested(int argc, char** argv)
 {
   return argvHasFlag(argc, argv, "--benchmark-hotpath")
-         || argvHasFlag(argc, argv, "--benchmark-frames")
-         || argvHasFlag(argc, argv, "--benchmark-seconds")
-         || argvHasFlag(argc, argv, "--min-fps");
+      || argvHasFlag(argc, argv, "--benchmark-frames")
+      || argvHasFlag(argc, argv, "--benchmark-seconds") || argvHasFlag(argc, argv, "--min-fps");
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -258,6 +251,11 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
   }
 
   const int rc = Misc::HotpathBenchmark::runAndReport(frames, minFps, seconds);
+
+  // Spin a one-shot loop so quit() fires aboutToQuit teardown while QApplication is alive
+  QTimer::singleShot(0, qApp, &QCoreApplication::quit);
+  qApp->exec();
+
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
 

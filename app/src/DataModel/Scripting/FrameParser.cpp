@@ -317,7 +317,8 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
 /**
  * @brief Runs the source's engine over a UTF-8 text frame, skipping the QString round-trip.
  */
-QList<QStringList> DataModel::FrameParser::parseMultiFrameUtf8(const QByteArray& frame, int sourceId)
+QList<QStringList> DataModel::FrameParser::parseMultiFrameUtf8(const QByteArray& frame,
+                                                               int sourceId)
 {
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!frame.isEmpty());

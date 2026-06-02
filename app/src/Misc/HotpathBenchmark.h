@@ -45,8 +45,8 @@ public:
     quint64 framesSkipped;
   };
 
-  [[nodiscard]] static Result run(quint64 targetFrames, double minFps, double minSeconds,
-                                  int language, bool withExporters);
+  [[nodiscard]] static Result run(
+    quint64 targetFrames, double minFps, double minSeconds, int language, bool withExporters);
   [[nodiscard]] static int runAndReport(quint64 targetFrames, double minFps, double minSeconds);
 
 private:

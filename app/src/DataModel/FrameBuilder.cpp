@@ -447,7 +447,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
 
   // Reset quick-plot channel count
   m_lastConnectedState = nowConnected;
-  m_quickPlotChannels = -1;
+  m_quickPlotChannels  = -1;
 
   // Re-arm the parser-load circuit breaker
   parseBudgetReset();
@@ -1136,7 +1136,8 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
   dashboard.hotpathRxFrame(frame);
 
   // Async sinks get a detached heap copy so their slow-I/O backlog can't pin the Dashboard pool.
-  bool anyAsync = csvExport.exportEnabled() || mdf4Export.exportEnabled() || pluginsServer.enabled();
+  bool anyAsync =
+    csvExport.exportEnabled() || mdf4Export.exportEnabled() || pluginsServer.enabled();
 #ifdef BUILD_COMMERCIAL
   anyAsync = anyAsync || sqliteExport.exportEnabled() || mqttPublisher.enabled();
 #endif
@@ -1149,8 +1150,8 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
     return;
 
   // Generate export frame
-  const auto detached
-    = std::make_shared<DataModel::TimestampedFrame>(frame->data, frame->timestamp);
+  const auto detached =
+    std::make_shared<DataModel::TimestampedFrame>(frame->data, frame->timestamp);
 
   // Distribute export frame to data export subsystems
   csvExport.hotpathTxFrame(detached);
