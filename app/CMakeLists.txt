@@ -1003,12 +1003,12 @@ target_link_libraries(
 target_link_openssl(${PROJECT_EXECUTABLE})
 target_link_mimalloc(${PROJECT_EXECUTABLE})
 
-if(WIN32 AND MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if(WIN32 AND MSVC)
   add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
     COMMAND mt.exe -nologo
             -manifest "${CMAKE_CURRENT_SOURCE_DIR}/deploy/windows/serial-studio.manifest"
             "-outputresource:$<TARGET_FILE:${PROJECT_EXECUTABLE}>;#1"
-    COMMENT "Fixing clang-cl application manifest (side-by-side)"
+    COMMENT "Embedding the Serial Studio application manifest"
     VERBATIM)
 endif()
 

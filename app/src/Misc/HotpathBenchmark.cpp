@@ -253,9 +253,9 @@ HotpathBenchmark::Result HotpathBenchmark::run(
   auto& queue = reader.queue();
   IO::CapturedDataPtr drained;
 
-  using Clock              = std::chrono::steady_clock;
-  .const quint64 maxFrames = targetFrames + static_cast<quint64>(minSeconds * 1.0e9);
-  const quint64 maxChunks  = maxFrames / kFramesPerChunk + 1;
+  using Clock             = std::chrono::steady_clock;
+  const quint64 maxFrames = targetFrames + static_cast<quint64>(minSeconds * 1.0e9);
+  const quint64 maxChunks = maxFrames / kFramesPerChunk + 1;
 
   quint64 fed      = 0;
   double seconds   = 0.0;

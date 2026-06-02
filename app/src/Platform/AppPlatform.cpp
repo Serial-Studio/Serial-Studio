@@ -241,6 +241,9 @@ static void setWindowsAppUserModelId(const QString& shortcutPath)
  */
 static void enableWindowsPerformanceMode()
 {
+  // HIGH priority needs no privilege; REALTIME is avoided (admin-only, can starve input/IO).
+  SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+
 #  if defined(PROCESS_POWER_THROTTLING_CURRENT_VERSION)
   PROCESS_POWER_THROTTLING_STATE state = {};
   state.Version                        = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
