@@ -79,6 +79,14 @@ function(target_link_mimalloc target)
     return()
   endif()
 
+  # Skip the allocator override under ASan/UBSan/TSan: mimalloc interposes
+  # malloc/free, which collides with the sanitizer's own allocator and
+  # produces shadow-memory corruption, bogus reports, or a pre-main crash.
+  if(DEBUG_SANITIZER OR ENABLE_TSAN)
+    message(STATUS "mimalloc disabled for sanitizer build (${target})")
+    return()
+  endif()
+
   if(WIN32 AND MSVC)
     target_link_libraries(${target} PRIVATE mimalloc)
     target_link_options(${target} PRIVATE "/INCLUDE:mi_version")

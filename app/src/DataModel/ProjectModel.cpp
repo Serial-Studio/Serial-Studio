@@ -1131,8 +1131,10 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
   obj.insert(key, newValue);
   m_widgetSettings.insert(widgetId, obj);
 
-  // Mark the project dirty and notify listeners
-  setModified(true);
+  // Dirty the project only in ProjectFile mode; QuickPlot/ConsoleOnly view state is transient
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    setModified(true);
+
   Q_EMIT widgetSettingsChanged();
 }
 
@@ -1146,9 +1148,11 @@ void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJs
   if (m_widgetSettings.value(key).toObject() == state)
     return;
 
-  // Update in-memory store and mark the project dirty
+  // Update in-memory store; dirty the project only in ProjectFile mode
   m_widgetSettings.insert(key, state);
-  setModified(true);
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    setModified(true);
+
   Q_EMIT widgetSettingsChanged();
 }
 

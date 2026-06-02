@@ -42,6 +42,7 @@ Item {
   property bool sweepMode: false
   property alias zoom: _axisX.zoom
   property alias yLabel: _yLabel.text
+  property bool triggerEditing: false
   property alias plotArea: _graph.plotArea
   property alias curveColors: _theme.seriesColors
 
@@ -1308,23 +1309,113 @@ Item {
   }
 
   //
-  // Sweep-mode trigger indicator: trigger-level line
+  // Sweep-mode trigger indicator: dashed cursor-B-styled level line
   //
   Item {
+    id: _triggerLine
+
     clip: true
-    visible: root.sweepMode
     width: _graph.plotArea.width
     height: _graph.plotArea.height
     x: _graph.x + _graph.plotArea.x
     y: _graph.y + _graph.plotArea.y
+    visible: root.sweepMode && root.triggerEditing
 
-    Rectangle {
-      height: 1
-      opacity: 0.6
-      width: parent.width
-      color: Cpp_ThemeManager.colors["highlight"]
-      y: root.worldToPixelY(root.triggerLevel)
-      visible: root.triggerLevel >= root.yVisibleMin && root.triggerLevel <= root.yVisibleMax
+    readonly property color lineColor: Cpp_ThemeManager.colors["plot_cursor_b"]
+    readonly property real lineY: root.worldToPixelY(root.triggerLevel)
+    readonly property bool inRange: root.triggerLevel >= root.yVisibleMin
+                                    && root.triggerLevel <= root.yVisibleMax
+
+    //
+    // Restart the fade; only meaningful while the dialog is editing
+    //
+    function flash() {
+      if (!root.sweepMode || !root.triggerEditing)
+        return
+
+      _fade.stop()
+      _triggerContent.opacity = 1
+      _fade.start()
+    }
+
+    onVisibleChanged: {
+      if (visible)
+        flash()
+    }
+
+    Connections {
+      target: root
+      enabled: root.triggerEditing
+      function onTriggerLevelChanged() { _triggerLine.flash() }
+    }
+
+    Item {
+      id: _triggerContent
+
+      anchors.fill: parent
+      visible: _triggerLine.inRange
+
+      SequentialAnimation {
+        id: _fade
+
+        PauseAnimation { duration: 2500 }
+        NumberAnimation {
+          to: 0
+          duration: 750
+          property: "opacity"
+          target: _triggerContent
+          easing.type: Easing.InOutQuad
+        }
+      }
+
+      Canvas {
+        id: _triggerCanvas
+
+        x: 0
+        height: 2
+        width: parent.width
+        y: _triggerLine.lineY - 1
+
+        onPaint: {
+          var ctx = getContext("2d")
+          ctx.clearRect(0, 0, width, height)
+          ctx.strokeStyle = _triggerLine.lineColor
+          ctx.lineWidth = 2
+          ctx.setLineDash([8, 4, 2, 4])
+          ctx.lineDashOffset = 0
+
+          ctx.beginPath()
+          ctx.moveTo(0, 1)
+          ctx.lineTo(width, 1)
+          ctx.stroke()
+        }
+
+        onWidthChanged: requestPaint()
+
+        Connections {
+          target: _triggerLine
+          function onLineColorChanged() { _triggerCanvas.requestPaint() }
+        }
+      }
+
+      Label {
+        text: "T"
+        padding: 4
+        color: Cpp_ThemeManager.colors["widget_base"]
+        font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+               Cpp_Misc_CommonFonts.widgetFont(0.9, true))
+        background: Rectangle {
+          radius: 3
+          opacity: 0.9
+          color: _triggerLine.lineColor
+        }
+        anchors {
+          rightMargin: 5
+          right: parent.right
+          verticalCenter: parent.top
+          verticalCenterOffset: _triggerLine.lineY
+        }
+      }
     }
   }
 }

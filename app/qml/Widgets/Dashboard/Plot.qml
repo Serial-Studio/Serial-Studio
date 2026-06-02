@@ -379,6 +379,7 @@ Item {
     timeAxis: root.model.timeAxis
     sweepMode: root.model.sweepEnabled
     triggerLevel: root.model.triggerLevel
+    triggerEditing: triggerDialog.visible
     mouseAreaEnabled: windowRoot.focused
     xAxis.tickInterval: plot.xTickInterval
     yAxis.tickInterval: plot.yTickInterval

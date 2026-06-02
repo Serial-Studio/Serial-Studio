@@ -140,6 +140,7 @@
         <file>icons/buttons/dropdown.svg</file>
         <file>icons/buttons/expand.svg</file>
         <file>icons/buttons/export-csv.svg</file>
+        <file>icons/buttons/falling-edge.svg</file>
         <file>icons/buttons/forward.svg</file>
         <file>icons/buttons/html.svg</file>
         <file>icons/buttons/info.svg</file>
@@ -158,6 +159,7 @@
         <file>icons/buttons/plus.svg</file>
         <file>icons/buttons/print.svg</file>
         <file>icons/buttons/refresh.svg</file>
+        <file>icons/buttons/rising-edge.svg</file>
         <file>icons/buttons/report.svg</file>
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/search.svg</file>

@@ -73,16 +73,13 @@ env:
   # Qt cache management
   #
   INSTALL_QT_WINDOWS: false
-  INSTALL_QT_MACOS_ARM64: false
+  INSTALL_QT_MACOS_ARM64: true
   INSTALL_QT_MACOS_INTEL: false
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
 
   #
-  # Test gating (rides on the test job's pytest continue-on-error): true fails the test job on a
-  # failing cross-platform test; false runs the tests as a non-blocking smoke check. Note: the
-  # release now publishes before tests run (tests download from the release), so this no longer
-  # blocks the release itself, only the test job's own status.
+  # Test gating
   #
   REQUIRE_TESTS_TO_PUBLISH: false
   
@@ -1386,8 +1383,7 @@ jobs:
         if-no-files-found: ignore
 
 #-------------------------------------------------------------------------------
-# Integration tests against each platform's published release asset (downloaded from the
-# continuous release; runs after the upload job, gated by REQUIRE_TESTS_TO_PUBLISH)
+# Integration tests
 #-------------------------------------------------------------------------------
 
   test:

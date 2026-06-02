@@ -382,6 +382,7 @@ Item {
       sweepMode: root.model.sweepEnabled
       mouseAreaEnabled: windowRoot.focused
       triggerLevel: root.model.triggerLevel
+      triggerEditing: triggerDialog.visible
       xAxis.tickInterval: plot.xTickInterval
       yAxis.tickInterval: plot.yTickInterval
 

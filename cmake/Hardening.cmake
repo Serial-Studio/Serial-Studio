@@ -143,7 +143,7 @@ if(ENABLE_HARDENING)
                -fcf-protection=full
             )
          elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
-            if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND NOT DISABLE_LTO)
+            if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND PRODUCTION_OPTIMIZATION AND NOT DISABLE_LTO)
                add_compile_options(
                   -fsanitize=cfi
                   -fvisibility=hidden
