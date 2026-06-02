@@ -104,7 +104,6 @@ jobs:
           libegl1 \
           libgl1-mesa-dev \
           libasound2-dev \
-          libssl-dev \
           libudev-dev \
           libzstd-dev \
           zlib1g-dev \

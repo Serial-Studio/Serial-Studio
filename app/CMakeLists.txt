@@ -1012,7 +1012,7 @@ target_link_libraries(
 )
 
 target_link_openssl(${PROJECT_EXECUTABLE})
-serial_studio_link_mimalloc(${PROJECT_EXECUTABLE})
+target_link_mimalloc(${PROJECT_EXECUTABLE})
 
 if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)

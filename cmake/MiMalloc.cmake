@@ -1,5 +1,5 @@
 #
-# Serial Studio — mimalloc allocator override (Windows / MSVC only)
+# Serial Studio — mimalloc allocator override (Windows/MSVC + Linux)
 # https://serial-studio.com/
 #
 # Copyright (C) 2020–2025 Alex Spataru
@@ -14,34 +14,36 @@
 #
 # The frame-parse hotpath allocates many small QString / QByteArray / Lua buffers per frame. On the
 # MSVC CRT heap that is markedly slower than glibc (Linux) or the macOS allocator, which is why the
-# Windows hotpath benchmark lagged the other platforms (~256 kHz vs ~400 kHz). mimalloc's redirect
-# DLL patches the process-wide malloc at load time, so every allocation — including those made
-# inside the prebuilt Qt DLLs — is served by mimalloc instead of the CRT heap.
+# Windows hotpath benchmark lagged the other platforms (~256 kHz vs ~400 kHz). On Windows mimalloc's
+# redirect DLL patches the process-wide malloc at load time; on Linux libmimalloc.so interposes
+# malloc/free via ELF symbol resolution. Either way every allocation — including those inside the
+# Qt libraries — is served by mimalloc instead of the system heap.
 #
-# Windows/MSVC only; every other platform already clears the gate, so this is a no-op there.
+# Windows/MSVC and Linux only; macOS opts out (good system allocator, fragile DYLD interposing).
 #
 # Must be include()d BEFORE Optimization.cmake so mimalloc builds with its own flags and is not
 # swept into the application's whole-program-optimization / PGO passes.
 #
-# Usage: call serial_studio_link_mimalloc(<target>) on the executable.
+# Usage: call target_link_mimalloc(<target>) on the executable.
 #
 
 include_guard(GLOBAL)
 
-if(WIN32 AND MSVC)
+set(SS_MIMALLOC_PLATFORM FALSE)
+if((WIN32 AND MSVC) OR (UNIX AND NOT APPLE))
+  set(SS_MIMALLOC_PLATFORM TRUE)
+endif()
+
+if(SS_MIMALLOC_PLATFORM)
   include(FetchContent)
 
-  # Build only the override shared DLL; skip the static/object libs and the test executables.
   set(MI_OVERRIDE     ON  CACHE BOOL "" FORCE)
   set(MI_BUILD_SHARED ON  CACHE BOOL "" FORCE)
   set(MI_BUILD_STATIC OFF CACHE BOOL "" FORCE)
   set(MI_BUILD_OBJECT OFF CACHE BOOL "" FORCE)
   set(MI_BUILD_TESTS  OFF CACHE BOOL "" FORCE)
 
-  # clang-cl miscompiles mimalloc's C atomic-pointer macros (segment-map.c references the
-  # type-taking mi_atomic_*_ptr_* helpers that only the C++ atomic path defines). Building the
-  # library as C++ takes that path; MSVC-proper keeps the default C build untouched.
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  if(MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(MI_USE_CXX ON CACHE BOOL "" FORCE)
   endif()
 
@@ -53,34 +55,36 @@ if(WIN32 AND MSVC)
   )
   FetchContent_MakeAvailable(mimalloc)
 
-  # Cache the redirect-DLL path so the link helper (called from a different scope) can find it.
-  set(SS_MIMALLOC_REDIRECT_DLL "${mimalloc_SOURCE_DIR}/bin/mimalloc-redirect.dll"
-      CACHE INTERNAL "Path to the prebuilt mimalloc-redirect.dll")
+  if(MSVC)
+    target_compile_options(mimalloc PRIVATE /w)
+  else()
+    target_compile_options(mimalloc PRIVATE -w)
+  endif()
+
+  if(WIN32 AND MSVC)
+    set(SS_MIMALLOC_REDIRECT_DLL "${mimalloc_SOURCE_DIR}/bin/mimalloc-redirect.dll"
+        CACHE INTERNAL "Path to the prebuilt mimalloc-redirect.dll")
+  endif()
 endif()
 
-#
-# @brief Links mimalloc into <target> and deploys its two DLLs next to the executable.
-#
-function(serial_studio_link_mimalloc target)
-  if(NOT (WIN32 AND MSVC))
+function(target_link_mimalloc target)
+  if(NOT ((WIN32 AND MSVC) OR (UNIX AND NOT APPLE)))
     return()
   endif()
 
-  target_link_libraries(${target} PRIVATE mimalloc)
+  if(WIN32 AND MSVC)
+    target_link_libraries(${target} PRIVATE mimalloc)
+    target_link_options(${target} PRIVATE "/INCLUDE:mi_version")
+    add_custom_command(TARGET ${target} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+              $<TARGET_FILE:mimalloc> $<TARGET_FILE_DIR:${target}>
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+              "${SS_MIMALLOC_REDIRECT_DLL}" $<TARGET_FILE_DIR:${target}>
+      VERBATIM)
 
-  # Force the linker to keep the mimalloc import so mimalloc.dll loads at process start; only then
-  # can mimalloc-redirect.dll patch the CRT before the first allocation happens.
-  target_link_options(${target} PRIVATE "/INCLUDE:mi_version")
+    install(FILES $<TARGET_FILE:mimalloc> "${SS_MIMALLOC_REDIRECT_DLL}" DESTINATION bin)
+    return()
+  endif()
 
-  # Copy mimalloc.dll (built) + mimalloc-redirect.dll (shipped in the repo's bin/) into the build
-  # output so build-tree runs — like the CI hotpath benchmark — pick them up automatically.
-  add_custom_command(TARGET ${target} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:mimalloc> $<TARGET_FILE_DIR:${target}>
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${SS_MIMALLOC_REDIRECT_DLL}" $<TARGET_FILE_DIR:${target}>
-    VERBATIM)
-
-  # Ship both DLLs in the installer alongside the executable.
-  install(FILES $<TARGET_FILE:mimalloc> "${SS_MIMALLOC_REDIRECT_DLL}" DESTINATION bin)
+  target_link_libraries(${target} PRIVATE "-Wl,--no-as-needed" mimalloc)
 endfunction()

@@ -24,10 +24,12 @@ cmake_minimum_required(VERSION 3.20)
 
 include(FetchContent)
 
-# Prebuilt OpenSSL 4.0.0 from https://github.com/alex-spataru/OpenSSL-Builder.
-# Windows (MSVC/MinGW) and macOS download the matching static archive from the
-# release at configure time; Linux links the distro OpenSSL via pkg-config.
+
 function(target_link_openssl TARGET)
+  if(ENABLE_GRPC)
+    return()
+  endif()
+
   set(VERSION "4.0.0")
   set(BASE_URL "https://github.com/alex-spataru/OpenSSL-Builder/releases/download/${VERSION}")
 
@@ -53,8 +55,6 @@ function(target_link_openssl TARGET)
   FetchContent_Declare(openssl_prebuilt URL ${BASE_URL}/${ASSET})
   FetchContent_MakeAvailable(openssl_prebuilt)
 
-  # The MSVC archive has no openssl-out/ prefix; the Unix-zipped ones do. MinGW
-  # installs into lib64/, every other archive into lib/.
   set(ROOT "${openssl_prebuilt_SOURCE_DIR}")
   if(EXISTS "${ROOT}/openssl-out")
     set(ROOT "${ROOT}/openssl-out")
@@ -80,7 +80,6 @@ function(target_link_openssl TARGET)
   target_include_directories(${TARGET} PRIVATE "${ROOT}/include")
   target_compile_definitions(${TARGET} PRIVATE OPENSSL_USE_STATIC_LIBS)
 
-  # libssl precedes libcrypto so GNU ld resolves the dependency left-to-right.
   if(WIN32)
     target_link_libraries(${TARGET} PRIVATE
       ws2_32

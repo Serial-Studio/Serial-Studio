@@ -202,18 +202,6 @@ else()
 
   FetchContent_MakeAvailable(zlib)
 
-  # zlib 1.3.1's CMakeLists unconditionally declares both zlibstatic and a
-  # shared zlib target — BUILD_SHARED_LIBS=OFF only flips the dependent
-  # default, it doesn't suppress the SHARED target itself. We never link
-  # the shared one, and shipping it next to the executable is actively
-  # harmful: Qt frameworks (QtSvg, QtGui) are linked against libz.1.dylib
-  # and dyld picks up our build-tree libz.1.dylib via rpath before the
-  # system one — if anything is off about its exports (e.g. visibility
-  # flags), Qt aborts at launch with "Symbol not found: _inflate".
-  #
-  # Mark the shared target EXCLUDE_FROM_ALL so it's not built unless
-  # something explicitly depends on it (nothing does). zlibstatic is the
-  # only target we ever link.
   if(TARGET zlib)
     set_target_properties(zlib PROPERTIES EXCLUDE_FROM_ALL TRUE)
   endif()
