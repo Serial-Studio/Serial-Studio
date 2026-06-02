@@ -21,10 +21,16 @@ include_guard(GLOBAL)
 # PRODUCTION_OPTIMIZATION=ON applies aggressive, per-toolchain release flags. Exactly one branch
 # runs per build:
 #
-#   clang-cl (Windows, MSVC ABI)  /O2 /Oi /Ot /fp:precise /DNDEBUG; link /OPT:REF /OPT:ICF. Preferred
-#                                 over cl.exe for faster scalar parse-hotpath codegen while still
-#                                 linking the prebuilt MSVC Qt. No /GL or /LTCG (those are cl.exe
-#                                 only). clang-cl reports MSVC=ON, so this branch precedes cl.exe.
+#   clang-cl (Windows, MSVC ABI)  /O2 /Oi /Ot /Gy /Gw /clang:-march=x86-64-v2 /fp:precise /DNDEBUG;
+#                                 link /OPT:REF /OPT:ICF. Unless LTO is disabled, adds ThinLTO via
+#                                 /clang:-flto=thin on both compile and link, forces -fuse-ld=lld (the
+#                                 default link.exe does not do ThinLTO), and points /lldltocache at an
+#                                 incremental cache. /Gy /Gw give per-function/per-data sections so
+#                                 /OPT:REF and ThinLTO can dead-strip. -march=x86-64-v2 (SSE4.2) matches
+#                                 the conservative baseline of the other x86-64 branches. /fp:precise is
+#                                 kept (no fast-math) so telemetry output is bit-stable. No /GL or /LTCG
+#                                 (those are cl.exe only). clang-cl reports MSVC=ON, so this branch
+#                                 precedes cl.exe.
 #   MSVC cl.exe (Windows)         /permissive- /Zc:* /MP /O2 /Ot /Oi /Ob3 /fp:precise /Gw /Gy, plus
 #                                 /GL and /LTCG whole-program codegen unless LTO is disabled.
 #   GCC/Clang (Linux), AppleClang (macOS), Clang/GCC MinGW, IntelLLVM
@@ -136,6 +142,9 @@ if(PRODUCTION_OPTIMIZATION)
          /O2
          /Oi
          /Ot
+         /Gy
+         /Gw
+         /clang:-march=x86-64-v2
          /fp:precise
          /DNDEBUG
       )
@@ -143,6 +152,15 @@ if(PRODUCTION_OPTIMIZATION)
          /OPT:REF
          /OPT:ICF
       )
+
+      if(NOT DISABLE_LTO)
+         add_compile_options(/clang:-flto=thin)
+         add_link_options(
+            -fuse-ld=lld
+            /clang:-flto=thin
+            /lldltocache:${CMAKE_BINARY_DIR}/lto.cache
+         )
+      endif()
 
    elseif(WIN32 AND MSVC)
       message(STATUS "Production branch: MSVC (Windows)")

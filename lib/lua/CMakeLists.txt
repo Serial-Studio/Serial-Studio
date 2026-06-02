@@ -92,3 +92,26 @@ endif()
 set_target_properties(lua54 PROPERTIES
   INTERPROCEDURAL_OPTIMIZATION FALSE
 )
+
+# Lua's VM dispatch loop (luaV_execute in lvm.c) picks computed-goto
+# (labels-as-values, ~30% faster) over a plain switch only when __GNUC__ is
+# defined. clang-cl supports computed goto but does NOT define __GNUC__ in its
+# MSVC-compatibility mode, so on Windows/clang-cl Lua silently falls back to the
+# slow switch dispatch. Force the fast path for every compiler that supports
+# labels-as-values (GCC, Clang, AppleClang, and clang-cl), and leave it OFF for
+# real MSVC (cl.exe), which has no labels-as-values support and would fail to
+# compile.
+#
+# These sources are compiled as C++ (LANGUAGE CXX above), so the frontend that
+# sees them is the CXX compiler — key the guard off CMAKE_CXX_COMPILER_ID.
+# clang-cl reports id "Clang" (the MSVC-ness is in the *frontend variant*, which
+# we intentionally ignore here), so it is covered by the Clang branch. We do not
+# override a LUA_USE_JUMPTABLE that is already defined elsewhere.
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
+  target_compile_definitions(lua54 PRIVATE LUA_USE_JUMPTABLE=1)
+  message(STATUS "Lua VM dispatch: computed-goto (jumptable) "
+                 "[CXX=${CMAKE_CXX_COMPILER_ID}]")
+else()
+  message(STATUS "Lua VM dispatch: switch "
+                 "[CXX=${CMAKE_CXX_COMPILER_ID}]")
+endif()

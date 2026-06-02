@@ -43,6 +43,16 @@
 #endif
 #endif
 
+/* Serial Studio: canary so a misrouted LUA_USE_JUMPTABLE define is visible at
+** build time. The build sets LUA_USE_JUMPTABLE=1 for clang-cl (which supports
+** computed goto but omits __GNUC__), so confirm the fast path actually reaches
+** this TU. Works under both cl and clang-cl. Local edit to a vendored file. */
+#if LUA_USE_JUMPTABLE
+#pragma message("Lua VM: computed-goto (jumptable) dispatch")
+#else
+#pragma message("Lua VM: switch dispatch")
+#endif
+
 
 
 /* limit for table tag-method chains (to avoid infinite loops) */
