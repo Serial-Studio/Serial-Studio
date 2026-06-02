@@ -73,10 +73,10 @@ env:
   # Qt cache management
   #
   INSTALL_QT_WINDOWS: false
-  INSTALL_QT_MACOS_ARM64: true
-  INSTALL_QT_MACOS_INTEL: true
-  INSTALL_QT_LINUX_INTEL: true
-  INSTALL_QT_LINUX_ARM64: true
+  INSTALL_QT_MACOS_ARM64: false
+  INSTALL_QT_MACOS_INTEL: false
+  INSTALL_QT_LINUX_INTEL: false
+  INSTALL_QT_LINUX_ARM64: false
   
   #
   # Excluded AppImage libraries
