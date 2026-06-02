@@ -324,8 +324,17 @@ endif()
 #
 # Instrumentation and data format are per compiler:
 #   MSVC cl.exe                 /GL + /LTCG /GENPROFILE -> profile.pgd, consumed with /USEPROFILE.
-#   Clang / clang-cl / AppleClang  -fprofile-generate -> *.profraw, merged by llvm-profdata into
-#                               merged.profdata, consumed with -fprofile-use.
+#   Clang (Linux) / AppleClang  -fprofile-generate -> *.profraw, merged by llvm-profdata into
+#                               merged.profdata, consumed with -fprofile-use. These link through the
+#                               clang driver, so the -fprofile-* flags go on BOTH compile and link
+#                               (the driver links clang_rt.profile and feeds the profile into LTO).
+#   clang-cl (Windows)          Same *.profraw -> merged.profdata flow, but the flag is the clang-cl
+#                               passthrough /clang:-fprofile-generate= / /clang:-fprofile-use= and it
+#                               goes on the COMPILE step ONLY. CMake links via lld-link directly, not
+#                               the clang-cl driver, so a -fprofile-* link flag would be rejected as an
+#                               unknown argument; the instrumented objects embed a /INCLUDE: directive
+#                               that pulls in clang_rt.profile automatically, and -fprofile-use shapes
+#                               codegen entirely at compile time, so the link step needs no PGO flag.
 #   GCC                         -fprofile-generate -> *.gcda, consumed with -fprofile-use plus
 #                               -fprofile-correction.
 #
@@ -357,6 +366,8 @@ if(ENABLE_PGO)
             /GENPROFILE
             /PGD:${PGO_PROFILE_DIR}/profile.pgd
          )
+      elseif(MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+         add_compile_options(/clang:-fprofile-generate=${PGO_PROFILE_DIR})
       elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
          add_compile_options(
             -fprofile-generate=${PGO_PROFILE_DIR}
@@ -420,6 +431,8 @@ if(ENABLE_PGO)
             /LTCG
             /USEPROFILE:PGD=${PGO_PROFILE_DIR}/profile.pgd
          )
+      elseif(MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+         add_compile_options(/clang:-fprofile-use=${PROFDATA_FILE})
       elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
          add_compile_options(
             -fprofile-use=${PROFDATA_FILE}
