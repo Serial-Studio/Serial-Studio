@@ -1024,6 +1024,9 @@ target_link_libraries(
 
 target_link_openssl(${PROJECT_EXECUTABLE})
 
+# mimalloc allocator override (Windows/MSVC only; no-op elsewhere) — speeds the alloc-heavy hotpath.
+serial_studio_link_mimalloc(${PROJECT_EXECUTABLE})
+
 if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)

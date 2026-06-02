@@ -412,6 +412,10 @@ endif()
 #
 #---------------------------------------------------------------------------------------------------
 
+# mimalloc first: it FetchContent-builds an allocator override DLL (Windows/MSVC only) that must
+# NOT inherit the application's PGO / whole-program-optimization flags applied just below.
+include(${CMAKE_SOURCE_DIR}/cmake/MiMalloc.cmake)
+
 include(${CMAKE_SOURCE_DIR}/cmake/Optimization.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitizers.cmake)
 

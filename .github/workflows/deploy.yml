@@ -26,37 +26,63 @@
 name: Deploy
 
 on:
-  push:               # Run on push
-    paths-ignore:     # File patterns to ignore
-    - '**.md'         # Ignore changes to *.md files
+  push:             
+    paths-ignore:     
+    - '**.md'        
 
-  pull_request:       # Run on pull-request
-    paths-ignore:     # File-patterns to ignore
-    - '**.md'         # Ignore changes to *.md files
+  pull_request:       
+    paths-ignore:   
+    - '**.md'         
 
 #-------------------------------------------------------------------------------
 # Define application name & version
 #-------------------------------------------------------------------------------
 
 env:
+
+  #
+  # Application information
+  #
   VERSION: "3.2.7"
+  PUBLISHER: "Alex Spataru"
+  UNIXNAME: "serial-studio-pro"
+  EXECUTABLE: "Serial-Studio-Pro"
+  APPLICATION: "Serial Studio Pro"
+  DESCRIPTION: "Multi-purpose serial data visualization & processing program"
+
+  #
+  # QML location (for windeployqt/macdeployqt)
+  #
+  QML_DIR: "../../app/qml"
+
+  #
+  # Qt version selection
+  #
   QT_VERSION_LINUX: 6.11.1
   QT_VERSION_MACOS: 6.11.1
   QT_VERSION_WINDOWS: 6.11.1
+  QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
+
+  #
+  # gRPC selection
+  #
   GRPC_VERSION: 1.78.1
   GRPC_REPO: alex-spataru/gRPC-Builds
-  EXECUTABLE: "Serial-Studio-Pro"
-  APPLICATION: "Serial Studio Pro"
-  UNIXNAME: "serial-studio-pro"
-  QML_DIR: "../../app/qml"
-  PUBLISHER: "Alex Spataru"
-  INSTALL_QT_MACOS: false
+
+  #
+  # Qt cache management
+  #
   INSTALL_QT_WINDOWS: false
+  INSTALL_QT_MACOS_ARM64: true
+  INSTALL_QT_MACOS_INTEL: true
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
-  QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
+  
+  #
+  # Excluded AppImage libraries
+  #
   LINUXDEPLOY_EXCLUDED_LIBRARIES: "libmysqlclient.so*;libqsqlmimer.so;libqsqlmysql.so;libqsqlodbc.so;libqsqlpsql.so;libqsqloci.so;libqsqldb2.so;libqsqlibase.so"
-  DESCRIPTION: "Multi-purpose serial data visualization & processing program"
+
 
 #-------------------------------------------------------------------------------
 # Begin workflow jobs definition
@@ -201,9 +227,6 @@ jobs:
       with:
         useLocalCache: true
 
-    # PGO stage 1 (GENERATE): instrumented build. The instrumented binary is
-    # slower; it exists only to emit profile data during the training run below.
-    # We never ship it and never gate on its throughput.
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -226,10 +249,6 @@ jobs:
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j 16
 
-    # PGO training workload. Drives the frame-extraction hotpath hard so the
-    # instrumented binary writes representative profile data (.gcda for GCC).
-    # --min-fps 1 keeps this step green regardless of instrumented overhead;
-    # the real 256 kHz threshold is enforced on the optimized binary below.
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -238,7 +257,6 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
 
-    # PGO stage 3 (USE): rebuild the same tree consuming the profile data.
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -261,9 +279,6 @@ jobs:
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j 16
 
-    # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the
-    # frame-extraction hotpath. A nonzero exit fails this job, so the `upload`
-    # job (needs: build-linux) is skipped and no release is published.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -490,7 +505,6 @@ jobs:
       with:
         useLocalCache: true
 
-    # PGO stage 1 (GENERATE): instrumented build (see build-linux for rationale).
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -513,8 +527,6 @@ jobs:
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j 16
 
-    # PGO training workload. --min-fps 1 (smoke, not a gate): the authoritative
-    # 256 kHz hard gate runs on the x86_64 reference build, not per-platform.
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -523,7 +535,6 @@ jobs:
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
 
-    # PGO stage 3 (USE): rebuild consuming the profile data.
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -546,7 +557,6 @@ jobs:
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j 16
 
-    # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the hotpath.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -639,18 +649,14 @@ jobs:
           ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.asc
 
 #-------------------------------------------------------------------------------
-# macOS universal build (arm64 + x86_64, both PGO-trained, lipo'd into one binary).
-# Both slices are built on the arm64 runner; the Intel runner (macos-13) is gone.
-# arm64 trains natively; x86_64 trains its instrumented slice under Rosetta 2. The
-# 256 kHz hard gate stays arm64-only -- Rosetta throughput isn't representative.
+# macOS arm64 slice
 #-------------------------------------------------------------------------------
 
-  build-macos:
+  build-macos-arm64:
     runs-on: macos-latest
-    name: '🍎 macOS (universal)'
+    name: '🍎 macOS (arm64)'
     permissions:
       contents: read
-      security-events: write
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
@@ -669,16 +675,16 @@ jobs:
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
-      if: env.INSTALL_QT_MACOS == 'false'
+      if: env.INSTALL_QT_MACOS_ARM64 == 'false'
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
 
     - name: '⚙️ Install Qt'
       shell: bash
-      if: env.INSTALL_QT_MACOS == 'true'
+      if: env.INSTALL_QT_MACOS_ARM64 == 'true'
       env:
         QT_VERSION: ${{env.QT_VERSION_MACOS}}
         QT_ARCH: x64
@@ -690,13 +696,13 @@ jobs:
         ./scripts/install-qt.sh
 
     - name: '⚙️ Save Qt Cache'
-      if: env.INSTALL_QT_MACOS == 'true'
+      if: env.INSTALL_QT_MACOS_ARM64 == 'true'
       uses: actions/cache/save@v5
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
 
     - name: '⚙️ Add Qt to PATH'
       shell: bash
@@ -717,15 +723,6 @@ jobs:
       with:
         useLocalCache: true
 
-    - name: '⚙️ Install Node'
-      uses: actions/setup-node@v6
-      with:
-        node-version: 22
-
-    # macOS ships a universal binary. PGO must be trained on a native runner, so
-    # only the arm64 slice (built + trained here) is PGO-optimized; the x86_64
-    # slice is cross-built without PGO below and lipo'd in.
-    # PGO stage 1 (GENERATE): instrumented arm64 build.
     - name: '🚧 Configure with CMake (PGO generate, arm64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -748,8 +745,6 @@ jobs:
     - name: '🚧 Build application (instrumented, arm64)'
       run: cmake --build build --config Release -j 16
 
-    # PGO training workload. --min-fps 1 (smoke, not a gate): the authoritative
-    # 256 kHz hard gate runs on the Linux x86_64 reference build.
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -757,8 +752,6 @@ jobs:
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
 
-    # PGO stage 3 (USE): rebuild arm64 consuming the merged profile data
-    # (the USE configure runs llvm-profdata; it must be on PATH).
     - name: '🚧 Reconfigure with CMake (PGO use, arm64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -782,7 +775,6 @@ jobs:
     - name: '🚧 Build application (PGO optimized, arm64)'
       run: cmake --build build --config Release -j 16
 
-    # Hard gate: the arm64 slice must sustain >= 256 kHz (native on this runner).
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -790,16 +782,113 @@ jobs:
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 256000
 
-    # x86_64 slice: cross-built on this arm64 host and PGO-trained under Rosetta 2.
-    # Built into a separate tree (its own pgo-profiles dir); only its Mach-O is used.
-    # PGO stage 1 (GENERATE): instrumented x86_64 build.
+    - name: '📦 Package application'
+      run: |
+        cd build
+        cpack --verbose
+
+    - name: '💿 Mount DMG and copy application'
+      run: |
+        VOLUME=$(yes | hdiutil attach ./build/*.dmg -nobrowse | grep "Volumes" | awk '{print $3}')
+        cp -a "$VOLUME/${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
+        hdiutil detach "$VOLUME"
+
+    - name: '🗜 Archive deployed .app'
+      run: |
+        COPYFILE_DISABLE=1 tar -czf macos-arm64-app.tar.gz "${{env.APPLICATION}}.app"
+
+    - name: '📤 Upload artifact: arm64 deployed .app'
+      uses: actions/upload-artifact@v5
+      with:
+        name: macos-arm64-app
+        path: macos-arm64-app.tar.gz
+        retention-days: 1
+
+#-------------------------------------------------------------------------------
+# macOS x86_64
+#-------------------------------------------------------------------------------
+
+  build-macos-intel:
+    runs-on: macos-latest
+    name: '🍎 macOS (x86_64 / Rosetta)'
+    permissions:
+      contents: read
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v5
+      with:
+        submodules: 'recursive'
+
+    - name: '⚙️ Download prebuilt gRPC (universal)'
+      run: |
+        gh release download v${{env.GRPC_VERSION}} \
+          -R ${{env.GRPC_REPO}} \
+          -p "grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz"
+        mkdir -p ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz -C ${{github.workspace}}/grpc-prefix
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: '⚙️ Restore Qt Cache'
+      uses: actions/cache/restore@v5
+      if: env.INSTALL_QT_MACOS_INTEL == 'false'
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
+
+    - name: '⚙️ Install Qt'
+      shell: bash
+      if: env.INSTALL_QT_MACOS_INTEL == 'true'
+      env:
+        QT_VERSION: ${{env.QT_VERSION_MACOS}}
+        QT_ARCH: x64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+      run: |
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+
+    - name: '⚙️ Save Qt Cache'
+      if: env.INSTALL_QT_MACOS_INTEL == 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_MACOS}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@latest
+      with:
+        useLocalCache: true
+
+    - name: '⚙️ Ensure Rosetta 2'
+      run: softwareupdate --install-rosetta --agree-to-license
+
     - name: '🚧 Configure with CMake (PGO generate, x86_64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build-x86_64 \
+        cmake -B build \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -813,31 +902,22 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (instrumented, x86_64)'
-      run: cmake --build build-x86_64 --config Release -j 16
+      run: cmake --build build --config Release -j 16
 
-    # Rosetta 2 lets this arm64 host execute the instrumented x86_64 binary so it can
-    # emit .profraw. The install is idempotent and a no-op when already present.
-    - name: '⚙️ Ensure Rosetta 2'
-      run: softwareupdate --install-rosetta --agree-to-license
-
-    # PGO training workload (x86_64 under Rosetta). --min-fps 1 (smoke, not a gate):
-    # the authoritative 256 kHz hard gate runs on the Linux x86_64 reference build.
     - name: '🏋️ PGO training run (hotpath, x86_64 / Rosetta)'
       env:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
-        arch -x86_64 ./build-x86_64/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
+        arch -x86_64 ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
 
-    # PGO stage 3 (USE): rebuild x86_64 consuming the merged profile data
-    # (the USE configure runs llvm-profdata; it must be on PATH).
     - name: '🚧 Reconfigure with CMake (PGO use, x86_64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
-        cmake -B build-x86_64 \
+        cmake -B build \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -852,23 +932,69 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (PGO optimized, x86_64)'
-      run: cmake --build build-x86_64 --config Release -j 16
+      run: cmake --build build --config Release -j 16
 
-    # Splice the PGO arm64 slice and the non-PGO x86_64 slice into one universal
-    # Mach-O, in place in the build tree, so cpack/macdeployqt bundles it.
+    - name: '📤 Upload artifact: x86_64 executable'
+      run: cp "build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" "${{env.EXECUTABLE}}-x86_64"
+
+    - name: '📤 Upload artifact: x86_64 slice'
+      uses: actions/upload-artifact@v5
+      with:
+        name: macos-intel-exe
+        path: ${{env.EXECUTABLE}}-x86_64
+        retention-days: 1
+
+#-------------------------------------------------------------------------------
+# macOS universal merge + sign + notarize.
+#-------------------------------------------------------------------------------
+
+  build-macos:
+    runs-on: macos-latest
+    name: '🍎 macOS (universal)'
+    needs:
+      - build-macos-arm64
+      - build-macos-intel
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v5
+
+    - name: '⚙️ Install Node'
+      uses: actions/setup-node@v6
+      with:
+        node-version: 22
+
+    - name: '📥 Download arm64 deployed .app'
+      uses: actions/download-artifact@v5
+      with:
+        name: macos-arm64-app
+        path: .
+
+    - name: '📥 Download x86_64 slice'
+      uses: actions/download-artifact@v5
+      with:
+        name: macos-intel-exe
+        path: ./intel-slice
+
+    - name: '🗜 Unpack deployed .app'
+      run: tar -xzf macos-arm64-app.tar.gz
+
     - name: '🔗 Lipo arm64 + x86_64 into a universal binary'
       run: |
-        APP_EXE="build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}"
-        X64_EXE="build-x86_64/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}"
+        APP_EXE="${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}"
+        X64_EXE="intel-slice/${{env.EXECUTABLE}}-x86_64"
         lipo -create "$APP_EXE" "$X64_EXE" -output "$APP_EXE.universal"
         mv "$APP_EXE.universal" "$APP_EXE"
+        chmod +x "$APP_EXE"
         lipo -info "$APP_EXE"
         lipo -info "$APP_EXE" | grep -q "arm64" && lipo -info "$APP_EXE" | grep -q "x86_64"
 
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
       with:
-        path: build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}
+        path: ${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}
         sarif: deglyph.sarif
         fail-on: never
         cve: "true"
@@ -880,22 +1006,11 @@ jobs:
         sarif_file: deglyph.sarif
         category: deglyph-macos
 
-    - name: '📦 Package application'
-      run: |
-        cd build
-        cpack --verbose
-
     - name: '🪪 Import Certificates'
       uses: apple-actions/import-codesign-certs@v6
       with:
         p12-file-base64: ${{secrets.APPLE_CERTIFICATES_P12}}
         p12-password: ${{secrets.APPLE_CERTIFICATES_P12_PASSWORD}}
-
-    - name: '💿 Mount DMG and copy application'
-      run: |
-        VOLUME=$(yes | hdiutil attach ./build/*.dmg -nobrowse | grep "Volumes" | awk '{print $3}')
-        cp -a "$VOLUME/${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
-        hdiutil detach "$VOLUME"
 
     - name: '✍🏻 Sign Application with Entitlements'
       run: |
@@ -1022,9 +1137,6 @@ jobs:
       env:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    # PGO stage 1 (GENERATE): instrumented MSVC build. The instrumented exe
-    # needs pgort140.dll at runtime (provided by the MSVC dev env on PATH) and
-    # writes .pgc profile data that is merged into profile.pgd before the USE link.
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1047,12 +1159,6 @@ jobs:
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j 16
 
-    # PGO training workload. --min-fps 1 (smoke, not a gate): the authoritative
-    # 256 kHz hard gate runs on the Linux x86_64 reference build.
-    # A /SUBSYSTEM:WINDOWS (GUI) exe detaches from the shell's console on launch, so no shell waits
-    # for it and its stdout is unwired. editbin flips a throwaway copy to /SUBSYSTEM:CONSOLE, which
-    # stays attached: bash waits on it (so the .pgc flushes before the merge) and captures its stdout.
-    # The shipped exe is left untouched so it never flashes a console for end users.
     - name: '🏋️ PGO training run (hotpath)'
       shell: bash
       run: |
@@ -1060,14 +1166,12 @@ jobs:
         MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
         ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 1
 
-    # Merge instrumentation counts (.pgc) into the .pgd the USE link reads.
     - name: '🧮 Merge PGO profile data'
       run: |
         $pgc = Get-ChildItem -Path build/pgo-profiles -Filter *.pgc -ErrorAction SilentlyContinue
         if ($pgc) { pgomgr /merge build/pgo-profiles/*.pgc build/pgo-profiles/profile.pgd }
         else { Write-Output 'No .pgc produced; USE stage relies on existing profile.pgd' }
 
-    # PGO stage 3 (USE): rebuild consuming profile.pgd.
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1090,9 +1194,6 @@ jobs:
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j 16
 
-    # Hard gate: the shipped PGO binary must sustain >= 256 kHz on the hotpath. Benchmarked through a
-    # /SUBSYSTEM:CONSOLE copy (see the training run); the shipped exe stays /SUBSYSTEM:WINDOWS so it
-    # never flashes a console. `set -eo pipefail` fails the job (and the release) on a sub-threshold exit.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       shell: bash
       run: |
