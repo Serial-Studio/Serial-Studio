@@ -1137,13 +1137,16 @@ jobs:
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j 16
 
+    # The app is a GUI-subsystem binary and cannot write to the parent console, so it reports into
+    # benchmark.txt (see HotpathBenchmark). Start-Process -Wait captures the real exit code without
+    # the old editbin/bench.exe subsystem hack; Get-Content surfaces the result in the log.
     - name: '🏋️ PGO training run (hotpath)'
-      shell: bash
       run: |
-        cp build/app/${{env.EXECUTABLE}}.exe build/app/bench.exe
-        MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
-        chmod +x build/app/bench.exe
-        ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 1
+        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
+          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1' `
+          -WorkingDirectory $PWD -Wait -PassThru -NoNewWindow
+        if (Test-Path benchmark.txt) { Get-Content benchmark.txt }
+        exit $p.ExitCode
 
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
@@ -1168,12 +1171,12 @@ jobs:
       run: cmake --build build --config Release -j 16
 
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      shell: bash
       run: |
-        cp build/app/${{env.EXECUTABLE}}.exe build/app/bench.exe
-        MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
-        chmod +x build/app/bench.exe
-        ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 256000
+        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
+          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
+          -WorkingDirectory $PWD -Wait -PassThru -NoNewWindow
+        if (Test-Path benchmark.txt) { Get-Content benchmark.txt }
+        exit $p.ExitCode
 
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
@@ -1301,3 +1304,193 @@ jobs:
             artifacts/*.dmg
             artifacts/*.msi
             artifacts/*.zip
+
+#-------------------------------------------------------------------------------
+# Static analysis (fail-fast, no build)
+#-------------------------------------------------------------------------------
+
+  lint:
+    runs-on: ubuntu-24.04
+    name: '🔬 Lint'
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v5
+
+    - name: '🐍 Set up Python'
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: '🐍 Install Python dependencies'
+      run: pip install -r tests/requirements.txt
+
+    - name: '🔬 Verify code conventions'
+      run: python3 scripts/code-verify.py --check
+
+    - name: '📤 Upload code-verify report'
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: code-verify-report
+        path: .code-report
+        if-no-files-found: ignore
+
+#-------------------------------------------------------------------------------
+# Integration tests against the released binary (platform-swappable)
+#-------------------------------------------------------------------------------
+
+  test:
+    name: '🧪 Test (${{ matrix.label }})'
+    needs: [upload]
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: Linux
+            runs-on: ubuntu-24.04
+            asset: Linux-x64.AppImage
+            broker: true
+            marker_expr: "not destructive and not dos and not audio"
+          - label: macOS
+            runs-on: macos-latest
+            asset: macOS.dmg
+            broker: true
+            marker_expr: "not destructive and not dos and not audio"
+          - label: Windows
+            runs-on: windows-latest
+            asset: Windows-Portable
+            broker: false
+            marker_expr: "not destructive and not dos and not audio and not requires_broker"
+    runs-on: ${{ matrix.runs-on }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v5
+
+    - name: '🧮 Resolve artifact name'
+      run: echo "ARTIFACT=${{env.EXECUTABLE}}-${{env.VERSION}}-${{matrix.asset}}" >> "$GITHUB_ENV"
+
+    - name: '🐍 Set up Python'
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: '🐍 Install Python dependencies'
+      run: pip install -r tests/requirements.txt
+
+    - name: '📥 Download released binary'
+      uses: actions/download-artifact@v5
+      with:
+        name: ${{env.ARTIFACT}}
+
+    - name: '📦 Prepare binary (Linux AppImage)'
+      if: matrix.label == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libegl1 libgl1 libopengl0 libasound2-dev fontconfig \
+          mosquitto mosquitto-clients alsa-utils
+        chmod +x "$ARTIFACT"
+        ./"$ARTIFACT" --appimage-extract >/dev/null
+        echo "SS_RUN=$PWD/squashfs-root/AppRun" >> "$GITHUB_ENV"
+
+    - name: '📦 Prepare binary (macOS .app)'
+      if: matrix.label == 'macOS'
+      run: |
+        hdiutil attach "$ARTIFACT" -nobrowse -mountpoint /tmp/ssdmg
+        cp -R "/tmp/ssdmg/${{env.APPLICATION}}.app" .
+        hdiutil detach /tmp/ssdmg
+        echo "SS_RUN=$PWD/${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}" >> "$GITHUB_ENV"
+
+    - name: '📦 Prepare binary (Windows portable)'
+      if: matrix.label == 'Windows'
+      run: |
+        7z x "${ARTIFACT}.zip" -oapp_win >/dev/null
+        EXE=$(find app_win -name "${{env.EXECUTABLE}}.exe" | head -1)
+        echo "SS_RUN=$PWD/$EXE" >> "$GITHUB_ENV"
+
+    - name: '🦟 Start Mosquitto (Linux)'
+      if: matrix.label == 'Linux'
+      run: |
+        sudo systemctl stop mosquitto || true
+        printf 'listener 1883 127.0.0.1\nallow_anonymous true\npersistence false\n' > /tmp/mosq.conf
+        mosquitto -d -c /tmp/mosq.conf
+        for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
+
+    - name: '🦟 Start Mosquitto (macOS)'
+      if: matrix.label == 'macOS'
+      run: |
+        brew install mosquitto
+        printf 'listener 1883 127.0.0.1\nallow_anonymous true\npersistence false\n' > /tmp/mosq.conf
+        "$(brew --prefix mosquitto)/sbin/mosquitto" -d -c /tmp/mosq.conf
+        for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
+
+    - name: '🎙 Set up ALSA loopback (Linux)'
+      if: matrix.label == 'Linux'
+      run: |
+        sudo apt-get install -y "linux-modules-extra-$(uname -r)" || true
+        sudo modprobe snd-aloop || true
+        aplay -l || true
+
+    - name: '🔑 Activate Serial Studio license'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: '"$SS_RUN" --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}"'
+
+    - name: '🚀 Start Serial Studio (headless)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: |
+        "$SS_RUN" --headless --api-server &
+        echo $! > ss_pid.txt
+        for i in $(seq 1 30); do
+          (echo > /dev/tcp/127.0.0.1/7777) >/dev/null 2>&1 && { echo "API server ready ($i)"; break; }
+          sleep 1
+        done
+
+    - name: '🧪 Run tests'
+      continue-on-error: true
+      run: |
+        pytest tests/ \
+          -m "${{ matrix.marker_expr }}" \
+          -v --tb=short --timeout=60 --junit-xml=test-results.xml
+
+    - name: '🎙 Run audio loopback tests (Linux, non-blocking)'
+      if: matrix.label == 'Linux'
+      continue-on-error: true
+      env:
+        QT_QPA_PLATFORM: offscreen
+        SS_AUDIO_LOOPBACK_PLAYBACK: plughw:Loopback,1,0
+        SS_AUDIO_CAPTURE_MATCH: loopback
+      run: |
+        pytest tests/integration/test_audio_loopback.py \
+          -m audio -v --tb=short --timeout=120 --junit-xml=audio-test-results.xml
+
+    - name: '🔑 Deactivate Serial Studio license'
+      if: always()
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: '"$SS_RUN" --deactivate || true'
+
+    - name: '🛑 Stop Serial Studio'
+      if: always()
+      run: '[ -f ss_pid.txt ] && kill $(cat ss_pid.txt) || true'
+
+    - name: '🦟 Stop Mosquitto'
+      if: always() && matrix.broker
+      run: pkill -f "mosquitto -d -c /tmp/mosq.conf" || true
+
+    - name: '📤 Upload test results'
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: pytest-results-${{ matrix.label }}
+        path: |
+          test-results.xml
+          audio-test-results.xml
+          tests/**/*.log

@@ -295,19 +295,26 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
   // Diagnostic + training run: Lua with every exporter live. Ungated; shows the exporter slowdown.
   const Result luaX = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, true);
 
-  const auto report = [](const char* tag, const Result& r) {
-    std::fprintf(stdout,
-                 "hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
-                 tag,
-                 static_cast<unsigned long long>(r.framesParsed),
-                 static_cast<unsigned long long>(r.framesSkipped),
-                 r.elapsedSeconds);
-    std::fprintf(stdout,
-                 "hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
-                 tag,
-                 r.framesPerSecond,
-                 r.minFps,
-                 r.passed ? "PASS" : "FAIL");
+  // Tee the report to stdout + benchmark.txt: GUI-subsystem Windows binaries can't write stdout.
+  std::FILE* file     = std::fopen("benchmark.txt", "w");
+  std::FILE* sinks[2] = {stdout, file};
+  const auto emit = [&](const char* fmt, auto... args) {
+    for (std::FILE* s : sinks)
+      if (s)
+        std::fprintf(s, fmt, args...);
+  };
+
+  const auto report = [&](const char* tag, const Result& r) {
+    emit("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
+         tag,
+         static_cast<unsigned long long>(r.framesParsed),
+         static_cast<unsigned long long>(r.framesSkipped),
+         r.elapsedSeconds);
+    emit("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
+         tag,
+         r.framesPerSecond,
+         r.minFps,
+         r.passed ? "PASS" : "FAIL");
   };
 
   report("lua", lua);
@@ -316,18 +323,23 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
 
   const double slowdown =
     luaX.framesPerSecond > 0.0 ? lua.framesPerSecond / luaX.framesPerSecond : 0.0;
-  std::fprintf(stdout, "hotpath: exporters cost %.2fx throughput\n", slowdown);
+  emit("hotpath: exporters cost %.2fx throughput\n", slowdown);
 
-  std::fprintf(stdout,
-               "HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
-               "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f\n",
-               lua.framesPerSecond,
-               lua.minFps,
-               js.framesPerSecond,
-               js.minFps,
-               (lua.passed && js.passed) ? 1 : 0,
-               luaX.framesPerSecond);
+  emit("HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
+       "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f\n",
+       lua.framesPerSecond,
+       lua.minFps,
+       js.framesPerSecond,
+       js.minFps,
+       (lua.passed && js.passed) ? 1 : 0,
+       luaX.framesPerSecond);
+
   std::fflush(stdout);
+  if (file)
+  {
+    std::fflush(file);
+    std::fclose(file);
+  }
 
   // Stop the JS watchdog thread while QApplication is alive (its aboutToQuit hook never fires).
   DataModel::JsWatchdogThread::instance().shutdown();
