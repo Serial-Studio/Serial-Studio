@@ -104,11 +104,13 @@ When you launch Serial Studio, the main window splits into four areas.
 
 The toolbar runs along the top of the window:
 
-- **Project controls.** Open, save, and edit project files. The wrench icon opens the Project Editor.
-- **I/O interface selector.** Choose between Serial Port, Network Socket, Bluetooth LE, and in Pro: MQTT, Modbus, CAN Bus, Audio, USB, HID, or Process.
+- **Project controls.** Open and edit project files. The **Project Editor** button opens the [Project Editor](Project-Editor.md).
+- **I/O interface selector.** Choose between Serial Port, Network Socket, Bluetooth LE, and in Pro: Modbus, CAN Bus, Audio, USB, HID, or Process.
 - **Connect/Disconnect button.** Starts or stops the data connection.
 - **Examples browser.** Load example projects bundled with Serial Studio to see working configurations.
-- **CSV playback controls.** Replay previously recorded sessions.
+- **CSV / MDF4 playback.** Replay previously recorded sessions.
+
+For a button-by-button map of the toolbar, the Setup panel, the dashboard taskbar, and every widget toolbar, see the [Toolbar & Button Reference](Toolbar-Reference.md).
 
 ### 2. Console (center, default view)
 
@@ -188,7 +190,7 @@ Project File mode provides full control over how Serial Studio interprets your d
 
 ### Step 1: open the Project Editor
 
-Click the wrench icon in the toolbar, or pick **Project Editor** from the menu. That opens a separate editor window.
+Click the **Project Editor** button in the toolbar. That opens a separate editor window.
 
 ### Step 2: create a project
 

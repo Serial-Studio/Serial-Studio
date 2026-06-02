@@ -110,7 +110,7 @@ Quick Plot visualizes data without any configuration. Use it when you want to ch
 
 ### Selection
 
-Pick the "Parse via JSON Project File" radio button in the Setup panel. Then load or create a project file in the Project Editor (wrench icon in the toolbar).
+Pick the "Parse via JSON Project File" radio button in the Setup panel. Then load or create a project file in the Project Editor (the **Project Editor** button in the toolbar).
 
 ### How it works
 

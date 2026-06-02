@@ -67,7 +67,7 @@ find_package(
 #   DEBUG_SANITIZER=OFF (default) - AddressSanitizer + UBSan for debug builds
 #
 # Networking:
-#   ENABLE_GRPC=ON (default) - Enable gRPC server on port 8888
+#   ENABLE_GRPC=OFF (default) - Enable gRPC server on port 8888
 #
 # Dependencies (zlib, expat, KissFFT, libusb, hidapi) are vendored in lib/ or fetched via
 # FetchContent. OpenSSL is fetched as a prebuilt at configure time, and skipped entirely when

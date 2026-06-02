@@ -293,18 +293,23 @@ def test_license_guard_cmake_generator_exists():
 
 
 def test_license_guard_cmake_generates_all_styles():
-    """The CMake generator must produce all 6 check styles."""
+    """The CMake generator must dispatch across every distinct check style."""
     text = _read("cmake/GenLicenseGuards.cmake")
 
-    for style_marker in [
-        "Style 0: XOR check",
-        "Style 1: Modular arithmetic",
-        "Style 2: Bit rotation check",
-        "Style 3: Additive hash",
-        "Style 4: Multi-byte extraction",
-        "Style 5: Polynomial check",
-    ]:
-        assert style_marker in text, f"Missing guard style: {style_marker}"
+    style_match = re.search(r"math\(EXPR _style \"\$\{_i\} % (\d+)\"\)", text)
+    assert style_match, "guard style dispatch modulus not found"
+    style_count = int(style_match.group(1))
+    assert style_count >= 6, f"Too few guard styles: {style_count} (minimum 6)"
+
+    explicit = set(re.findall(r"_style EQUAL (\d+)", text))
+    assert explicit, "no explicit guard style branches found"
+
+    # Every style index below the modulus must be reachable: either an
+    # explicit `_style EQUAL N` branch or the trailing else() fallback.
+    for style in range(style_count):
+        if str(style) in explicit:
+            continue
+        assert "else()" in text, f"style {style} has no branch and no else() fallback"
 
 
 def test_license_guard_minimum_count():

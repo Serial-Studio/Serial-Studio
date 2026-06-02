@@ -560,6 +560,7 @@ function transmit(value) {
 
 - [Actions](Actions.md): simple command buttons with timer support.
 - [Project Editor](Project-Editor.md): full guide to creating and configuring projects.
+- [Toolbar & Button Reference](Toolbar-Reference.md): the Project Editor's add-control buttons and the rest of the app's chrome.
 - [Widget Reference](Widget-Reference.md): all input and visualization widget types.
 - [Frame Parser Scripting](JavaScript-API.md): Lua and JavaScript parser reference.
 - [Data Sources](Data-Sources.md): configuring device connections.

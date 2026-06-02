@@ -45,7 +45,7 @@ When a plot is large enough to show its toolbar, these controls appear left to r
 | **Reset View**   | Returns pan and zoom to the default view.                          |
 | **Axis Range**   | Sets fixed minimum and maximum values for the axes.                |
 
-Drag inside the plot to pan and scroll to zoom; **Reset View** undoes both.
+Drag inside the plot to pan and scroll to zoom; **Reset View** undoes both. These buttons and the toolbars of every other widget are catalogued in the [Toolbar & Button Reference](Toolbar-Reference.md#plot-and-multiplot).
 
 ## Sweep / Trigger mode (Pro)
 

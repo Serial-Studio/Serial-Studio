@@ -2,6 +2,7 @@
   { "id": "getting-started", "title": "Getting Started", "section": "Basics", "file": "Getting-Started.md" },
   { "id": "operation-modes", "title": "Operation Modes", "section": "Basics", "file": "Operation-Modes.md" },
   { "id": "data-sources", "title": "Data Sources", "section": "Basics", "file": "Data-Sources.md" },
+  { "id": "toolbar-reference", "title": "Toolbar & Button Reference", "section": "Basics", "file": "Toolbar-Reference.md" },
   { "id": "project-editor", "title": "Project Editor", "section": "Configuration", "file": "Project-Editor.md" },
   { "id": "project-lock", "title": "Project Lock", "section": "Configuration", "file": "Project-Lock.md" },
   { "id": "operator-deployments", "title": "Operator Deployments", "section": "Configuration", "file": "Operator-Deployments.md" },

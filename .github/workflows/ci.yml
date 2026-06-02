@@ -73,7 +73,7 @@ env:
   # Qt cache management
   #
   INSTALL_QT_WINDOWS: false
-  INSTALL_QT_MACOS_ARM64: true
+  INSTALL_QT_MACOS_ARM64: false
   INSTALL_QT_MACOS_INTEL: false
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
@@ -1201,7 +1201,7 @@ jobs:
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
-    - name: '🚦 Hotpath throughput gate (256 kHz)'
+    - name: '🚦 Hotpath throughput (Windows, informational)'
       continue-on-error: true
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `

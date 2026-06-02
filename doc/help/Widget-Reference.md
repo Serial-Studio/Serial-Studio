@@ -300,6 +300,8 @@ Every dataset in a project file supports these visualization-related fields:
 - The Actions panel (if the project defines actions) shows up as a horizontal bar above the widgets.
 - Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Clock, Stopwatch, ImageView, OutputPanel, NotificationLog, Waterfall, Painter.
 
+Most widgets carry a small toolbar of icon buttons along their top edge that appears once the widget is large enough to fit it. Every button on every widget toolbar is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#dashboard-widget-toolbars).
+
 ## Picking the right widget
 
 | Data type                        | Recommended widget                  |
@@ -322,5 +324,6 @@ Every dataset in a project file supports these visualization-related fields:
 ## See also
 
 - [Project Editor](Project-Editor.md): how to configure widgets in your project.
+- [Toolbar & Button Reference](Toolbar-Reference.md): every button on every widget toolbar and across the app.
 - [Operation Modes](Operation-Modes.md): dashboard modes and frame detection.
 - [Data Flow](Data-Flow.md): how data reaches widgets from drivers through the pipeline.
