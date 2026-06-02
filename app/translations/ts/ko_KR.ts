@@ -85,7 +85,7 @@
         <translation>이번 턴의 도구 호출 한도에 도달했습니다. 더 이상 도구가 실행되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1660"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1725"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>이번 턴의 도구 호출 한도에 도달했습니다. 더 이상 도구를 요청하지 마십시오. 지금까지 찾은 내용을 요약하고, 작업이 완료되지 않았다면 남은 단계를 알려 사용자가 계속 진행하도록 할 수 있습니다.</translation>
     </message>
@@ -99,12 +99,12 @@
         <translation>(모델이 빈 응답을 반환했습니다. 다른 표현으로 다시 시도하거나, 다른 모델로 전환하거나, 제공업체의 안전 필터에서 요청이 허용되는지 확인하십시오.)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1006"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1009"/>
         <source>Sending request to %1...</source>
         <translation>%1에 요청 전송 중...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1018"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1021"/>
         <source>Provider returned no reply</source>
         <translation>제공업체가 응답을 반환하지 않음</translation>
     </message>
@@ -239,12 +239,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1246"/>
+        <location filename="../../src/API/Server.cpp" line="1255"/>
         <source>API server</source>
         <translation>API 서버</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1246"/>
+        <location filename="../../src/API/Server.cpp" line="1255"/>
         <source>Invalid pending connection</source>
         <translation>잘못된 대기 중인 연결</translation>
     </message>
@@ -1250,163 +1250,173 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>백업 복구</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="91"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="159"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="160"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="94"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="165"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
         <source>Untitled</source>
         <translation>제목 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="94"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="97"/>
         <source>Project Loaded</source>
         <translation>프로젝트 로드됨</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="95"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="98"/>
         <source>Auto-save</source>
         <translation>자동 저장</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="96"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
         <source>Before Restore</source>
         <translation>복원 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="97"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
         <source>Before Delete Dataset</source>
         <translation>데이터셋 삭제 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="98"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
         <source>Before Delete Group</source>
         <translation>그룹 삭제 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
         <source>Before New Project</source>
         <translation>새 프로젝트 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
         <source>Before Open Project</source>
         <translation>프로젝트 열기 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
         <source>Before Load JSON</source>
         <translation>JSON 로드 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
         <source>Before Apply Template</source>
         <translation>템플릿 적용 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
         <source>Before Delete Action</source>
         <translation>액션 삭제 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
         <source>Before Delete Output Widget</source>
         <translation>출력 위젯 삭제 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
         <source>Before Move Dataset</source>
         <translation>데이터셋 이동 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
         <source>Before Move Group</source>
         <translation>그룹 이동 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
         <source>Before Delete Workspace</source>
         <translation>작업 공간 삭제 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
         <source>Before Clear All Workspaces</source>
         <translation>모든 작업 공간 지우기 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
         <source>Before Remove Widget</source>
         <translation>위젯 제거 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
         <source>Before Reorder Workspaces</source>
         <translation>작업 공간 재정렬 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
         <source>Before Batch Operation</source>
         <translation>일괄 작업 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
         <source>Before Add Tile</source>
         <translation>타일 추가 전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="139"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="142"/>
         <source>%1 (and %2 more)</source>
         <translation>%1 (외 %2개)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="158"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="159"/>
+        <source> The frame parser code also differs and will be replaced.</source>
+        <translation>프레임 파서 코드도 다르므로 교체됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
         <translation>제목이 "%1"에서 "%2"(으)로 변경됩니다. 그룹 구조는 변경되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="162"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
+        <source>Same groups and datasets, but the frame parser code differs — restoring will replace it.</source>
+        <translation>그룹과 데이터셋은 동일하지만 프레임 파서 코드가 다릅니다 — 복원 시 교체됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
         <source>Same groups and datasets as your current project. Restoring may still revert field-level edits.</source>
         <translation>현재 프로젝트와 동일한 그룹 및 데이터셋입니다. 복원 시 필드 수준 편집 내용이 되돌려질 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="178"/>
         <source>Restoring removes %1 and brings back %2.</source>
         <translation>복원 시 %1이(가) 제거되고 %2이(가) 복구됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="172"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="181"/>
         <source>Restoring removes %1.</source>
         <translation>복원 시 %1이(가) 제거됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="174"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
         <source>Restoring brings back %1.</source>
         <translation>복원 시 %1이(가) 복구됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="200"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="209"/>
         <source>Pick a backup to restore. The current project is saved automatically first, so the restore is reversible.</source>
         <translation>복원할 백업을 선택하세요. 현재 프로젝트는 자동으로 먼저 저장되므로 복원을 되돌릴 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="283"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="292"/>
         <source>No backups for this project yet. Edit or save the project to start the rolling backup.</source>
         <translation>이 프로젝트의 백업이 아직 없습니다. 프로젝트를 편집하거나 저장하면 롤링 백업이 시작됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="311"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="320"/>
         <source>Open Folder</source>
         <translation>폴더 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="319"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="328"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="325"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="334"/>
         <source>Restore</source>
         <translation>복원</translation>
     </message>
@@ -2094,17 +2104,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>대체 위젯이 활성화되었습니다. 전체 기능을 사용하려면 라이선스를 구매하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="208"/>
         <source>Empty Workspace</source>
         <translation>빈 작업 공간</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="222"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>검색 바를 사용하여 위젯을 찾아 추가하거나, 다른 작업 공간의 위젯을 마우스 오른쪽 버튼으로 클릭하여 여기에 추가하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="237"/>
         <source>Search Widgets</source>
         <translation>위젯 검색</translation>
     </message>
@@ -2586,54 +2596,54 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="917"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1034"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="965"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1083"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1046"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1095"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="926"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1051"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="974"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1100"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="789"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="838"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript 변환 예산 초과</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="790"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="839"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>데이터셋 변환이 %1ms 이상 소요되어, 프레임의 나머지 데이터셋은 다음 프레임까지 원시 값으로 대체되었습니다. 변환 코드를 프로파일링하거나 단순화하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="179"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="182"/>
         <source>Frame pool exhausted</source>
         <translation>프레임 풀 소진</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="181"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="184"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>다운스트림 소비자(대시보드, CSV/MDF4 내보내기, 세션 DB, API 구독자)가 프레임을 충분히 빠르게 처리하지 못하고 있습니다. Serial Studio가 백로그가 해소될 때까지 프레임별 할당으로 전환합니다. 무거운 소비자를 비활성화하거나 데이터 속도를 줄이세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="880"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="928"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="933"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="981"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="945"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="993"/>
         <source>Multiple Plots</source>
         <translation>다중 플롯</translation>
     </message>
@@ -4789,164 +4799,164 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4598"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4601"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
         <source>Workspace</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4764"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4767"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
         <source>Shared Table</source>
         <translation>공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4849"/>
         <source>register</source>
         <translation>레지스터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
         <source>New Shared Table</source>
         <translation>새 공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5008"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5032"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5059"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5078"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5101"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5124"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5515"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4992"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5011"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5035"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5062"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5081"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5104"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5127"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5518"/>
         <source>Name:</source>
         <translation>이름:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4992"/>
         <source>Rename Table</source>
         <translation>테이블 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5008"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5011"/>
         <source>Rename Group</source>
         <translation>그룹 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5032"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5035"/>
         <source>Rename Dataset</source>
         <translation>데이터셋 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5059"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5062"/>
         <source>Rename Data Source</source>
         <translation>데이터 소스 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5078"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5081"/>
         <source>Rename Action</source>
         <translation>액션 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5100"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5103"/>
         <source>New Register</source>
         <translation>새 레지스터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5124"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5127"/>
         <source>Rename Register</source>
         <translation>레지스터 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5163"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5188"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6042"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5166"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5191"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6045"/>
         <source>This action cannot be undone.</source>
         <translation>이 작업은 취소할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5164"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5167"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>테이블과 함께 %1개의 레지스터가 제거됩니다. 이 작업은 취소할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5167"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5187"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6041"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5190"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6044"/>
         <source>Delete "%1"?</source>
         <translation>"%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
         <source>Delete Table</source>
         <translation>테이블 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5190"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5193"/>
         <source>Delete Register</source>
         <translation>레지스터 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5214"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5217"/>
         <source>Export Table</source>
         <translation>테이블 내보내기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5216"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5260"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5263"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 파일 (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5258"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5261"/>
         <source>Import Table</source>
         <translation>테이블 가져오기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
         <source>New Workspace</source>
         <translation>새 작업 공간</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5515"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5518"/>
         <source>Rename Workspace</source>
         <translation>작업 공간 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5604"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5607"/>
         <source>Overview</source>
         <translation>개요</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5614"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5617"/>
         <source>All Data</source>
         <translation>모든 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5801"/>
         <source>Discard workspace customisations?</source>
         <translation>작업 공간 사용자 지정을 취소하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5799"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5802"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>사용자 지정을 끄면 편집 내용이 삭제되고 프로젝트의 그룹에서 작업 공간 목록이 다시 생성됩니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5802"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5805"/>
         <source>Customize Workspaces</source>
         <translation>작업 공간 사용자 지정</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6044"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6047"/>
         <source>Delete Workspace</source>
         <translation>작업 공간 삭제</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2160"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6358"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6361"/>
         <source>File open error</source>
         <translation>파일 열기 오류</translation>
     </message>
@@ -4954,53 +4964,53 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProtoImporter</name>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="869"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="907"/>
         <source>Import Protocol Buffers File</source>
         <translation>Protocol Buffers 파일 가져오기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="871"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="909"/>
         <source>Proto Files (*.proto);;All Files (*)</source>
         <translation>Proto 파일 (*.proto);;모든 파일 (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="906"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="944"/>
         <source>Failed to open proto file: %1</source>
         <translation>proto 파일을 열지 못했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="907"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="945"/>
         <source>Verify the file path and read permissions, then try again.</source>
         <translation>파일 경로와 읽기 권한을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="909"/>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="927"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="947"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="965"/>
         <source>Protobuf Import Error</source>
         <translation>Protobuf 가져오기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="924"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="962"/>
         <source>Failed to parse proto file at line %1: %2</source>
         <translation>%1번 줄에서 proto 파일 파싱 실패: %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="925"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="963"/>
         <source>Only proto3 syntax is supported. Verify the file format and try again.</source>
         <translation>proto3 구문만 지원됩니다. 파일 형식을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="932"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="970"/>
         <source>Proto file contains no message definitions</source>
         <translation>Proto 파일에 메시지 정의가 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="933"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="971"/>
         <source>The selected file has no `message` blocks to import.</source>
         <translation>선택한 파일에 가져올 `message` 블록이 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="935"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="973"/>
         <source>Protobuf Import Warning</source>
         <translation>Protobuf 가져오기 경고</translation>
     </message>
@@ -5013,22 +5023,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">생성된 프로젝트 JSON을 로드할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="973"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1011"/>
         <source>Successfully imported %1 message(s) and %2 field(s) from the proto file.</source>
         <translation>proto 파일에서 %1개의 메시지와 %2개의 필드를 성공적으로 가져왔습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="976"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1014"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="978"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1016"/>
         <source>Protobuf Import Complete</source>
         <translation>Protobuf 가져오기 완료</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1013"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1051"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
@@ -7063,15 +7073,15 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="255"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="261"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="267"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="272"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="273"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="278"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="268"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -7080,37 +7090,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 macOS의 CAN bus 지원은 제한적이며 타사 하드웨어 드라이버가 필요할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="273"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="279"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>이 플랫폼에서는 CAN bus 플러그인을 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="285"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="291"/>
         <source>Invalid CAN Configuration</source>
         <translation>잘못된 CAN 구성</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="293"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
         <source>Invalid Selection</source>
         <translation>잘못된 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="308"/>
         <source>No Devices Available</source>
         <translation>사용 가능한 장치 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="218"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="224"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN 장치 생성 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="236"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="242"/>
         <source>CAN Connection Failed</source>
         <translation>CAN 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="256"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="262"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -7119,7 +7129,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Linux에서는 SOCKETCAN 커널 모듈이 로드되었는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="262"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="268"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -7128,113 +7138,113 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Windows에서는 CAN 하드웨어 드라이버(PEAK, VECTOR 등)를 설치하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="286"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="292"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN 버스 구성이 불완전합니다. 유효한 플러그인과 인터페이스를 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="294"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="300"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>선택한 플러그인 또는 인터페이스를 더 이상 사용할 수 없습니다. 목록을 새로 고침하고 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="309"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>플러그인 또는 인터페이스 목록이 비어 있습니다. 목록을 새로 고침하고 CAN 하드웨어가 연결되어 있는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="219"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="225"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>CAN 버스 장치를 생성할 수 없습니다. 하드웨어와 드라이버를 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="238"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="244"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>CAN 버스 장치에 연결할 수 없습니다. 하드웨어 연결 및 설정을 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="576"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="582"/>
         <source>CAN Bus Error</source>
         <translation>CAN Bus 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="583"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>오류가 발생했지만 CAN 장치를 더 이상 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="584"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="590"/>
         <source>Error code: %1</source>
         <translation>오류 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="587"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="593"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN Bus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="642"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="648"/>
         <source>No CAN driver selected</source>
         <translation>CAN 드라이버가 선택되지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="603"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="609"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>먼저 SOCKETCAN 커널 모듈을 로드하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="606"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="612"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>먼저 가상 CAN 인터페이스를 설정하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="608"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="628"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="614"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="634"/>
         <source>No interfaces found for %1</source>
         <translation>%1에 대한 인터페이스를 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="612"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="618"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="622"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="620"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="626"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN 드라이버&lt;/a&gt; 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="629"/>
         <source>Install %1 drivers</source>
         <translation>%1 드라이버 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="626"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="632"/>
         <source>Install %1 drivers for macOS</source>
         <translation>macOS용 %1 드라이버 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="723"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
         <source>Plugin</source>
         <translation>플러그인</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <source>Interface</source>
         <translation>인터페이스</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="739"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
         <source>Bitrate</source>
         <translation>비트레이트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="754"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
@@ -7547,99 +7557,99 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="369"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="371"/>
         <source>Invalid Serial Port</source>
         <translation>잘못된 시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="414"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="416"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus 초기화 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="440"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="442"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="370"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="372"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>선택한 시리얼 포트 "%1"을(를) 더 이상 사용할 수 없습니다. 포트 목록을 새로 고침하고 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="415"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="417"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Modbus 장치를 생성할 수 없습니다. 시스템 구성을 확인하고 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="444"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>"%1"에 연결할 수 없습니다. 연결 설정을 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="443"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="445"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="564"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="566"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="565"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="567"/>
         <source>Even</source>
         <translation>짝수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="566"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="568"/>
         <source>Odd</source>
         <translation>홀수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="567"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="569"/>
         <source>Space</source>
         <translation>스페이스</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="568"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="570"/>
         <source>Mark</source>
         <translation>마크</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="620"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="622"/>
         <source>Holding Registers (0x03)</source>
         <translation>홀딩 레지스터 (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="621"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="623"/>
         <source>Input Registers (0x04)</source>
         <translation>입력 레지스터 (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="622"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="624"/>
         <source>Coils (0x01)</source>
         <translation>코일 (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="625"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>이산 입력 (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="811"/>
         <source>No register groups configured</source>
         <translation>레지스터 그룹이 구성되지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="810"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="812"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>프로젝트를 생성하기 전에 하나 이상의 레지스터 그룹을 추가하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="812"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="825"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="814"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="827"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="852"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus 프로젝트 생성기</translation>
     </message>
@@ -7652,137 +7662,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">임시 디렉터리에 대한 쓰기 권한을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="822"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="824"/>
         <source>Failed to load generated project</source>
         <translation>생성된 프로젝트 로드 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="823"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="825"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>생성된 프로젝트 JSON을 로드할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="845"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="847"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1개 그룹과 %2개 데이터셋으로 프로젝트를 성공적으로 생성했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="850"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="864"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="866"/>
         <source>Modbus Project</source>
         <translation>Modbus 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="870"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="872"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
         <source>Holding Registers</source>
         <translation>Holding Register</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
         <source>Input Registers</source>
         <translation>입력 레지스터</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
         <source>Coils</source>
         <translation>코일</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
         <source>Discrete Inputs</source>
         <translation>이산 입력</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="912"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="925"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="927"/>
         <source>Register %1</source>
         <translation>레지스터 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="935"/>
         <source>Coil %1</source>
         <translation>코일 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="935"/>
         <source>Discrete %1</source>
         <translation>이산 %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1349"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1354"/>
         <source>Error code: %1</source>
         <translation>오류 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1352"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1357"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1365"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1370"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1522"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1527"/>
         <source>Protocol</source>
         <translation>프로토콜</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1530"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1535"/>
         <source>Slave Address</source>
         <translation>슬레이브 주소</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1539"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1544"/>
         <source>Poll Interval (ms)</source>
         <translation>폴링 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1580"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1585"/>
         <source>Host / IP</source>
         <translation>호스트 / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1587"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1592"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1602"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1607"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1610"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1615"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1618"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1623"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1626"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1631"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1634"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1639"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
@@ -7929,169 +7939,169 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="72"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="73"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="388"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="427"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="345"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="352"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="752"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="389"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
         <source>Even</source>
         <translation>짝수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="390"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
         <source>Odd</source>
         <translation>홀수</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="391"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="398"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="392"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="399"/>
         <source>Mark</source>
         <translation>Mark</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="428"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="435"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="429"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="436"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="572"/>
         <source>"%1" is not a valid path</source>
         <translation>"%1"은(는) 유효한 경로가 아닙니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="566"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="573"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>사용자 정의 시리얼 장치를 등록하려면 다른 경로를 입력하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="845"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="852"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>지정한 장치를 찾을 수 없습니다. 연결을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="852"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="859"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>알 수 없는 오류가 발생했습니다. 장치를 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="854"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="861"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>장치가 열려 있지 않습니다. 이 작업을 시도하기 전에 장치를 여십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="256"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>시리얼 포트 "%1"에 연결하지 못했습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="820"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="827"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="821"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="828"/>
         <source>Critical error on serial port "%1"</source>
         <translation>시리얼 포트 "%1"에서 치명적 오류 발생</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="822"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="844"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="851"/>
         <source>No error occurred.</source>
         <translation>오류가 발생하지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="846"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="853"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>권한이 거부되었습니다. 애플리케이션이 장치에 대한 필요한 액세스 권한을 가지고 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="847"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="854"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>장치를 열지 못했습니다. 이미 사용 중이거나 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="855"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>장치에 데이터를 쓰는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="849"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="856"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>장치에서 데이터를 읽는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="857"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>치명적인 리소스 오류가 발생했습니다. 장치가 연결 해제되었거나 더 이상 액세스할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="851"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="858"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>요청한 작업은 이 장치에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="853"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="860"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>작업 시간이 초과되었습니다. 장치가 응답하지 않을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1022"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1029"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1037"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1038"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1045"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1046"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1053"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1054"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1061"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1062"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1069"/>
         <source>Flow Control</source>
         <translation>흐름 제어</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1070"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1077"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1077"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1084"/>
         <source>Auto-Reconnect</source>
         <translation>자동 재연결</translation>
     </message>
@@ -10306,85 +10316,85 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::ExtensionManager</name>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="242"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="244"/>
         <source>Theme</source>
         <translation>테마</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="245"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="247"/>
         <source>Frame Parser</source>
         <translation>프레임 파서</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="248"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="250"/>
         <source>Project Template</source>
         <translation>프로젝트 템플릿</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="251"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="253"/>
         <source>Plugin</source>
         <translation>플러그인</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="254"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="256"/>
         <source>All Types</source>
         <translation>모든 유형</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="482"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="484"/>
         <source>Reset Extensions</source>
         <translation>확장 기능 재설정</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="483"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="485"/>
         <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>모든 확장 기능을 제거하고, 모든 사용자 저장소를 삭제하며, 기본 설정을 복원합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="526"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="528"/>
         <source>Select Extension Repository Folder</source>
         <translation>확장 기능 저장소 폴더 선택</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1052"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1061"/>
         <source>Installed (repository no longer available)</source>
         <translation>설치됨 (저장소를 더 이상 사용할 수 없음)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1366"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1376"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1397"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1419"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1463"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1473"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1375"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1385"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1406"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1472"/>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1482"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
         <source>Plugin Error</source>
         <translation>플러그인 오류</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1366"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1375"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>플러그인 "%1"이(가) 설치되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1377"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1386"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>확장 기능 "%1"은(는) 플러그인이 아닙니다 (유형: %2).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1398"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1407"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>플러그인 메타데이터 파일을 읽을 수 없음:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1420"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1429"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>플러그인 "%1"은(는) GRPC가 필요하지만 이 빌드에는 GRPC 지원이 포함되어 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1429"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -10393,34 +10403,34 @@ Would you like to enable it now?</source>
 지금 활성화하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1435"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1444"/>
         <source>API Server Required</source>
         <translation>API 서버 필요</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1464"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1473"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>플러그인 "%1"의 info.json에 'entry' 필드가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1474"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1483"/>
         <source>Entry point not found:
 %1</source>
         <translation>진입점을 찾을 수 없음:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1483"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1492"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>플러그인 "%1"의 진입점 경로가 유효하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1526"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1535"/>
         <source>Missing Dependency</source>
         <translation>종속성 누락</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1527"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1536"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -10429,7 +10439,7 @@ Would you like to open the download page?</source>
 다운로드 페이지를 여시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1432"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1441"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>플러그인이 Serial Studio와 통신하려면 API 서버가 필요합니다. 지금 활성화하시겠습니까?</translation>
     </message>
@@ -12640,13 +12650,13 @@ Click Refresh to update the list.</source>
         <translation>일반 I/O 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>Frame Parser Disabled</source>
         <translation>프레임 파서 비활성화됨</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="274"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -12655,12 +12665,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 가장 가능성 높은 원인: 스크립트 본문의 무한 루프 또는 매우 느린 작업. 스크립트를 수정하고 프로젝트를 다시 로드하여 파싱을 재활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="319"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="321"/>
         <source>Lua Syntax Error</source>
         <translation>Lua 구문 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="320"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="322"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -12669,12 +12679,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="356"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="362"/>
         <source>Lua Runtime Error</source>
         <translation>Lua 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="357"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="363"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -12683,13 +12693,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="378"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="384"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
         <source>Missing Parse Function</source>
         <translation>Parse 함수 누락</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="379"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="385"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -12700,13 +12710,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="441"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="447"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="533"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse 함수 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="442"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="448"/>
         <source>The parse function contains an error:
 
 %1
@@ -12872,12 +12882,12 @@ function parse(%1) { ... }
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="449"/>
+        <location filename="../../src/Misc/CLI.cpp" line="522"/>
         <source>Project file not found</source>
         <translation>프로젝트 파일을 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="450"/>
+        <location filename="../../src/Misc/CLI.cpp" line="523"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -12886,17 +12896,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="453"/>
+        <location filename="../../src/Misc/CLI.cpp" line="526"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>이 바로 가기를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="457"/>
+        <location filename="../../src/Misc/CLI.cpp" line="530"/>
         <source>Delete Shortcut</source>
         <translation>바로 가기 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="459"/>
+        <location filename="../../src/Misc/CLI.cpp" line="532"/>
         <source>Quit</source>
         <translation>종료</translation>
     </message>
@@ -12956,77 +12966,87 @@ function parse(%1) { ... }
         <translation>Groq API 키가 설정되지 않았습니다. 키 관리를 열어 추가하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="600"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="649"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>프레임 파서가 CPU 시간의 %1% 이상을 사용하고 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="602"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="651"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio가 애플리케이션 응답성을 유지하기 위해 프레임을 드롭하고 있습니다. 프레임 파서 스크립트를 단순화하거나 최적화하여 작업 부하를 줄이십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="381"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="388"/>
         <source>Expected %1, got '%2'</source>
         <translation>%1이(가) 예상되었으나 '%2'을(를) 받았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="430"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="437"/>
         <source>Expected enum name after 'enum'</source>
         <translation>'enum' 뒤에 열거형 이름이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="444"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="451"/>
         <source>Expected oneof name</source>
         <translation>oneof 이름이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="471"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="479"/>
+        <source>Field tag '%1' out of range (1..%2)</source>
+        <translation>필드 태그 '%1'이(가) 범위를 벗어났습니다 (1..%2)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="497"/>
         <source>Expected key type in map&lt;&gt;</source>
         <translation>map&lt;&gt;에 키 타입이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="479"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="505"/>
         <source>Expected value type in map&lt;&gt;</source>
         <translation>map&lt;&gt;에 값 타입이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="487"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="513"/>
         <source>Expected map field name</source>
         <translation>맵 필드 이름이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="499"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="525"/>
         <source>Expected map field tag</source>
         <translation>맵 필드 태그가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="529"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="557"/>
         <source>Expected field type, got '%1'</source>
         <translation>필드 타입이 필요하지만 '%1'을(를) 받았습니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="549"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="577"/>
         <source>Expected field name after type</source>
         <translation>타입 뒤에 필드 이름이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="559"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="587"/>
         <source>Expected field tag number</source>
         <translation>필드 태그 번호가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="602"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="635"/>
+        <source>Message nesting too deep (limit %1)</source>
+        <translation>메시지 중첩이 너무 깊습니다 (제한 %1)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="640"/>
         <source>Expected message name</source>
         <translation>메시지 이름이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="684"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="722"/>
         <source>Unexpected token '%1' at file scope</source>
         <translation>파일 범위에서 예기치 않은 토큰 '%1'</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="730"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="768"/>
         <source>Unsupported top-level keyword '%1'</source>
         <translation>지원되지 않는 최상위 키워드 '%1'</translation>
     </message>

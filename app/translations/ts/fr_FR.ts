@@ -85,7 +85,7 @@
         <translation>Budget d'appels d'outils atteint pour ce tour ; aucun autre outil ne sera exécuté.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1660"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1725"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Vous avez atteint le budget d'appels d'outils pour ce tour. Ne demandez plus d'outils. Résumez ce que vous avez trouvé jusqu'à présent, et si la tâche est incomplète, indiquez les étapes restantes afin que l'utilisateur puisse vous demander de continuer.</translation>
     </message>
@@ -99,12 +99,12 @@
         <translation>(Le modèle a retourné une réponse vide. Essayez de reformuler, de changer de modèle ou de vérifier que la requête est autorisée par les filtres de sécurité du fournisseur.)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1006"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1009"/>
         <source>Sending request to %1...</source>
         <translation>Envoi de la requête à %1…</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1018"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1021"/>
         <source>Provider returned no reply</source>
         <translation>Le fournisseur n'a retourné aucune réponse</translation>
     </message>
@@ -239,12 +239,12 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1246"/>
+        <location filename="../../src/API/Server.cpp" line="1255"/>
         <source>API server</source>
         <translation>Serveur API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1246"/>
+        <location filename="../../src/API/Server.cpp" line="1255"/>
         <source>Invalid pending connection</source>
         <translation>Connexion en attente non valide</translation>
     </message>
@@ -1250,163 +1250,173 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
         <translation>Récupérer la Sauvegarde</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="91"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="159"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="160"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="94"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="165"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
         <source>Untitled</source>
         <translation>Sans Titre</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="94"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="97"/>
         <source>Project Loaded</source>
         <translation>Projet Chargé</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="95"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="98"/>
         <source>Auto-save</source>
         <translation>Sauvegarde Automatique</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="96"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
         <source>Before Restore</source>
         <translation>Avant Restauration</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="97"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
         <source>Before Delete Dataset</source>
         <translation>Avant Suppression de Jeu de Données</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="98"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
         <source>Before Delete Group</source>
         <translation>Avant Suppression de Groupe</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
         <source>Before New Project</source>
         <translation>Avant Nouveau Projet</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
         <source>Before Open Project</source>
         <translation>Avant Ouverture de Projet</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
         <source>Before Load JSON</source>
         <translation>Avant Chargement JSON</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
         <source>Before Apply Template</source>
         <translation>Avant Application de Modèle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
         <source>Before Delete Action</source>
         <translation>Avant Suppression D'action</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
         <source>Before Delete Output Widget</source>
         <translation>Avant Suppression de Widget de Sortie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
         <source>Before Move Dataset</source>
         <translation>Avant Déplacement du Jeu de Données</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
         <source>Before Move Group</source>
         <translation>Avant Déplacement du Groupe</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
         <source>Before Delete Workspace</source>
         <translation>Avant Suppression de L'espace de Travail</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
         <source>Before Clear All Workspaces</source>
         <translation>Avant Effacement de Tous les Espaces de Travail</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
         <source>Before Remove Widget</source>
         <translation>Avant Retrait du Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
         <source>Before Reorder Workspaces</source>
         <translation>Avant Réorganisation des Espaces de Travail</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
         <source>Before Batch Operation</source>
         <translation>Avant Opération par Lot</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
         <source>Before Add Tile</source>
         <translation>Avant Ajout de Tuile</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="139"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="142"/>
         <source>%1 (and %2 more)</source>
         <translation>%1 (et %2 de plus)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="158"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="159"/>
+        <source> The frame parser code also differs and will be replaced.</source>
+        <translation>Le code de l'analyseur de trames diffère également et sera remplacé.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
         <translation>Le titre passe de « %1 » à « %2 ». Structure du groupe inchangée.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="162"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
+        <source>Same groups and datasets, but the frame parser code differs — restoring will replace it.</source>
+        <translation>Mêmes groupes et jeux de données, mais le code de l'analyseur de trames diffère — la restauration le remplacera.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
         <source>Same groups and datasets as your current project. Restoring may still revert field-level edits.</source>
         <translation>Mêmes groupes et jeux de données que votre projet actuel. La restauration peut tout de même annuler des modifications au niveau des champs.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="178"/>
         <source>Restoring removes %1 and brings back %2.</source>
         <translation>La restauration supprime %1 et rétablit %2.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="172"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="181"/>
         <source>Restoring removes %1.</source>
         <translation>La restauration supprime %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="174"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
         <source>Restoring brings back %1.</source>
         <translation>La restauration rétablit %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="200"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="209"/>
         <source>Pick a backup to restore. The current project is saved automatically first, so the restore is reversible.</source>
         <translation>Choisissez une sauvegarde à restaurer. Le projet actuel est automatiquement sauvegardé d'abord, la restauration est donc réversible.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="283"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="292"/>
         <source>No backups for this project yet. Edit or save the project to start the rolling backup.</source>
         <translation>Aucune sauvegarde pour ce projet pour l'instant. Modifiez ou enregistrez le projet pour démarrer la sauvegarde rotative.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="311"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="320"/>
         <source>Open Folder</source>
         <translation>Ouvrir le Dossier</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="319"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="328"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="325"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="334"/>
         <source>Restore</source>
         <translation>Restaurer</translation>
     </message>
@@ -2094,17 +2104,17 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
         <translation>Widgets de secours actifs. Achetez une licence pour bénéficier de toutes les fonctionnalités.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="208"/>
         <source>Empty Workspace</source>
         <translation>Espace de Travail Vide</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="222"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Utilisez la barre de recherche pour trouver et ajouter des widgets, ou faites un clic droit sur un widget dans un autre espace de travail pour l'ajouter ici.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="237"/>
         <source>Search Widgets</source>
         <translation>Rechercher des Widgets</translation>
     </message>
@@ -2586,54 +2596,54 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="917"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1034"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="965"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1083"/>
         <source>Channel %1</source>
         <translation>Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1046"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1095"/>
         <source>Audio Input</source>
         <translation>Entrée Audio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="926"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1051"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="974"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1100"/>
         <source>Quick Plot</source>
         <translation>Tracé Rapide</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="789"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="838"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Transformation JavaScript hors budget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="790"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="839"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Une transformation de jeu de données a pris plus de %1 ms ; les jeux de données restants dans la trame sont revenus aux valeurs brutes jusqu’à la prochaine trame. Analysez ou simplifiez le code de transformation.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="179"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="182"/>
         <source>Frame pool exhausted</source>
         <translation>Pool de trames épuisé</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="181"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="184"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Un consommateur en aval (tableau de bord, export CSV/MDF4, base de données de session ou abonné API) ne vide pas les trames assez rapidement. Serial Studio utilise des allocations par trame jusqu’à ce que le retard soit résorbé. Désactivez un consommateur lourd ou réduisez le débit de données.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="880"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="928"/>
         <source>Device A</source>
         <translation>Appareil A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="933"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="981"/>
         <source>Quick Plot Data</source>
         <translation>Données de Tracé Rapide</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="945"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="993"/>
         <source>Multiple Plots</source>
         <translation>Graphiques Multiples</translation>
     </message>
@@ -4789,164 +4799,164 @@ Ajouter %4 jeu(x) de données en utilisant les valeurs par défaut du modèle ?<
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4598"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4601"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
         <source>Workspace</source>
         <translation>Espace de Travail</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4764"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4767"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
         <source>Shared Table</source>
         <translation>Table Partagée</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4849"/>
         <source>register</source>
         <translation>registre</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
         <source>New Shared Table</source>
         <translation>Nouvelle Table Partagée</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5008"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5032"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5059"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5078"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5101"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5124"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5515"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4992"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5011"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5035"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5062"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5081"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5104"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5127"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5518"/>
         <source>Name:</source>
         <translation>Nom :</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4992"/>
         <source>Rename Table</source>
         <translation>Renommer la Table</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5008"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5011"/>
         <source>Rename Group</source>
         <translation>Renommer le Groupe</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5032"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5035"/>
         <source>Rename Dataset</source>
         <translation>Renommer le Jeu de Données</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5059"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5062"/>
         <source>Rename Data Source</source>
         <translation>Renommer la Source de Données</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5078"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5081"/>
         <source>Rename Action</source>
         <translation>Renommer L'action</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5100"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5103"/>
         <source>New Register</source>
         <translation>Nouveau Registre</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5124"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5127"/>
         <source>Rename Register</source>
         <translation>Renommer le Registre</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5163"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5188"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6042"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5166"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5191"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6045"/>
         <source>This action cannot be undone.</source>
         <translation>Cette action ne peut pas être annulée.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5164"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5167"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Cela supprime %1 registre(s) ainsi que la table. Cette action ne peut pas être annulée.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5167"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5187"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6041"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5190"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6044"/>
         <source>Delete "%1"?</source>
         <translation>Supprimer « %1 » ?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
         <source>Delete Table</source>
         <translation>Supprimer la Table</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5190"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5193"/>
         <source>Delete Register</source>
         <translation>Supprimer le Registre</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5214"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5217"/>
         <source>Export Table</source>
         <translation>Exporter la Table</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5216"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5260"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5263"/>
         <source>CSV files (*.csv)</source>
         <translation>Fichiers CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5258"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5261"/>
         <source>Import Table</source>
         <translation>Importer la Table</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
         <source>New Workspace</source>
         <translation>Nouvel Espace de Travail</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5515"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5518"/>
         <source>Rename Workspace</source>
         <translation>Renommer L'espace de Travail</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5604"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5607"/>
         <source>Overview</source>
         <translation>Aperçu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5614"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5617"/>
         <source>All Data</source>
         <translation>Toutes les Données</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5801"/>
         <source>Discard workspace customisations?</source>
         <translation>Abandonner les personnalisations d'espace de travail ?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5799"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5802"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Désactiver Personnaliser abandonne vos modifications et reconstruit la liste des espaces de travail à partir des groupes du projet.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5802"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5805"/>
         <source>Customize Workspaces</source>
         <translation>Personnaliser les Espaces de Travail</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6044"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6047"/>
         <source>Delete Workspace</source>
         <translation>Supprimer L'espace de Travail</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="2160"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6358"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6361"/>
         <source>File open error</source>
         <translation>Erreur d'ouverture de fichier</translation>
     </message>
@@ -4954,53 +4964,53 @@ Ajouter %4 jeu(x) de données en utilisant les valeurs par défaut du modèle ?<
 <context>
     <name>DataModel::ProtoImporter</name>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="869"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="907"/>
         <source>Import Protocol Buffers File</source>
         <translation>Importer un Fichier Protocol Buffers</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="871"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="909"/>
         <source>Proto Files (*.proto);;All Files (*)</source>
         <translation>Fichiers Proto (*.proto);;Tous les Fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="906"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="944"/>
         <source>Failed to open proto file: %1</source>
         <translation>Échec de l'ouverture du fichier proto : %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="907"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="945"/>
         <source>Verify the file path and read permissions, then try again.</source>
         <translation>Vérifier le chemin du fichier et les permissions de lecture, puis réessayer.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="909"/>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="927"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="947"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="965"/>
         <source>Protobuf Import Error</source>
         <translation>Erreur D'importation Protobuf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="924"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="962"/>
         <source>Failed to parse proto file at line %1: %2</source>
         <translation>Échec de l'analyse du fichier proto à la ligne %1 : %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="925"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="963"/>
         <source>Only proto3 syntax is supported. Verify the file format and try again.</source>
         <translation>Seule la syntaxe proto3 est prise en charge. Vérifier le format du fichier et réessayer.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="932"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="970"/>
         <source>Proto file contains no message definitions</source>
         <translation>Le fichier proto ne contient aucune définition de message</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="933"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="971"/>
         <source>The selected file has no `message` blocks to import.</source>
         <translation>Le fichier sélectionné ne contient aucun bloc `message` à importer.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="935"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="973"/>
         <source>Protobuf Import Warning</source>
         <translation>Avertissement D'importation Protobuf</translation>
     </message>
@@ -5013,22 +5023,22 @@ Ajouter %4 jeu(x) de données en utilisant les valeurs par défaut du modèle ?<
         <translation type="vanished">Le JSON du projet généré n'a pas pu être chargé.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="973"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1011"/>
         <source>Successfully imported %1 message(s) and %2 field(s) from the proto file.</source>
         <translation>Importation réussie de %1 message(s) et %2 champ(s) depuis le fichier proto.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="976"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1014"/>
         <source>The project editor is now open for customization.</source>
         <translation>L'éditeur de projet est maintenant ouvert pour personnalisation.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="978"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1016"/>
         <source>Protobuf Import Complete</source>
         <translation>Importation Protobuf Terminée</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1013"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1051"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
@@ -7063,15 +7073,15 @@ Format valide : 01 A2 FF 3C</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="255"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="261"/>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="267"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="272"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="273"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="278"/>
         <source>CAN Bus Not Available</source>
         <translation>Bus CAN Non Disponible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="268"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -7080,37 +7090,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 La prise en charge du bus CAN sur macOS est limitée et peut nécessiter des pilotes matériels tiers.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="273"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="279"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Aucun plugin de bus CAN n'est disponible sur cette plateforme.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="285"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="291"/>
         <source>Invalid CAN Configuration</source>
         <translation>Configuration CAN Invalide</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="293"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
         <source>Invalid Selection</source>
         <translation>Sélection Invalide</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="308"/>
         <source>No Devices Available</source>
         <translation>Aucun Périphérique Disponible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="218"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="224"/>
         <source>CAN Device Creation Failed</source>
         <translation>Échec de la Création du Périphérique CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="236"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="242"/>
         <source>CAN Connection Failed</source>
         <translation>Échec de la Connexion CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="256"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="262"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -7119,7 +7129,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Sous Linux, assurez-vous que les modules noyau SOCKETCAN sont chargés.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="262"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="268"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -7128,113 +7138,113 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Sous Windows, installez les pilotes matériels CAN (PEAK, VECTOR, etc.).</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="286"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="292"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>La configuration du bus CAN est incomplète. Sélectionnez un plugin et une interface valides.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="294"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="300"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Le plugin ou l'interface sélectionné n'est plus disponible. Actualisez les listes et réessayez.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="309"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>La liste des plugins ou des interfaces est vide. Actualisez les listes et assurez-vous que votre matériel CAN est connecté.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="219"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="225"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Impossible de créer le périphérique de bus CAN. Vérifiez votre matériel et vos pilotes.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="238"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="244"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Impossible de se connecter au périphérique de bus CAN. Vérifiez votre connexion matérielle et vos paramètres.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="576"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="582"/>
         <source>CAN Bus Error</source>
         <translation>Erreur de Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="583"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>Une erreur s'est produite mais le périphérique CAN n'est plus disponible.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="584"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="590"/>
         <source>Error code: %1</source>
         <translation>Code d'erreur : %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="587"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="593"/>
         <source>CAN Bus Communication Error</source>
         <translation>Erreur de Communication du Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="642"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="648"/>
         <source>No CAN driver selected</source>
         <translation>Aucun pilote CAN sélectionné</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="603"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="609"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Charger d'abord les modules noyau SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="606"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="612"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Configurer d'abord une interface CAN virtuelle</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="608"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="628"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="614"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="634"/>
         <source>No interfaces found for %1</source>
         <translation>Aucune interface trouvée pour %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="612"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="618"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Installer les &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;pilotes PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="616"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="622"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Installer les &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;pilotes VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="620"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="626"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Installer les &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;pilotes CAN SysTec&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="629"/>
         <source>Install %1 drivers</source>
         <translation>Installer les pilotes %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="626"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="632"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Installer les pilotes %1 pour macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="723"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="731"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="739"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
         <source>Bitrate</source>
         <translation>Débit Binaire</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="748"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="754"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
@@ -7547,99 +7557,99 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="369"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="371"/>
         <source>Invalid Serial Port</source>
         <translation>Port Série Non Valide</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="414"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="416"/>
         <source>Modbus Initialization Failed</source>
         <translation>Échec de L'initialisation Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="440"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="442"/>
         <source>Modbus Connection Failed</source>
         <translation>Échec de la Connexion Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="370"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="372"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>Le port série sélectionné « %1 » n'est plus disponible. Actualiser la liste des ports et réessayer.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="415"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="417"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Impossible de créer le périphérique Modbus. Vérifier la configuration système et réessayer.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="444"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>Impossible de se connecter à « %1 ». Vérifier les paramètres de connexion.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="443"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="445"/>
         <source>"%1": %2</source>
         <translation>"%1" : %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="564"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="566"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="565"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="567"/>
         <source>Even</source>
         <translation>Paire</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="566"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="568"/>
         <source>Odd</source>
         <translation>Impaire</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="567"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="569"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="568"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="570"/>
         <source>Mark</source>
         <translation>Mark</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="620"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="622"/>
         <source>Holding Registers (0x03)</source>
         <translation>Registres de Maintien (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="621"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="623"/>
         <source>Input Registers (0x04)</source>
         <translation>Registres d'Entrée (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="622"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="624"/>
         <source>Coils (0x01)</source>
         <translation>Bobines (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="625"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Entrées Discrètes (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="811"/>
         <source>No register groups configured</source>
         <translation>Aucun groupe de registres configuré</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="810"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="812"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Ajoutez au moins un groupe de registres avant de générer un projet.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="812"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="825"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="814"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="827"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="852"/>
         <source>Modbus Project Generator</source>
         <translation>Générateur de Projet Modbus</translation>
     </message>
@@ -7652,137 +7662,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Vérifiez les permissions d'écriture dans le répertoire temporaire.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="822"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="824"/>
         <source>Failed to load generated project</source>
         <translation>Échec du chargement du projet généré</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="823"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="825"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Le JSON du projet généré n'a pas pu être chargé.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="845"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="847"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Projet généré avec succès : %1 groupes et %2 jeux de données.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="850"/>
         <source>The project editor is now open for customization.</source>
         <translation>L'éditeur de projet est maintenant ouvert pour personnalisation.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="864"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="866"/>
         <source>Modbus Project</source>
         <translation>Projet Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="870"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="872"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
         <source>Holding Registers</source>
         <translation>Registres de Maintien</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
         <source>Input Registers</source>
         <translation>Registres D'entrée</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
         <source>Coils</source>
         <translation>Bobines</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
         <source>Discrete Inputs</source>
         <translation>Entrées Discrètes</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="912"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="925"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="927"/>
         <source>Register %1</source>
         <translation>Registre %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="935"/>
         <source>Coil %1</source>
         <translation>Bobine %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="933"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="935"/>
         <source>Discrete %1</source>
         <translation>Discrète %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1349"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1354"/>
         <source>Error code: %1</source>
         <translation>Code d'erreur : %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1352"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1357"/>
         <source>Modbus Communication Error</source>
         <translation>Erreur de Communication Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1365"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1370"/>
         <source>Select Port</source>
         <translation>Sélectionner le Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1522"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1527"/>
         <source>Protocol</source>
         <translation>Protocole</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1530"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1535"/>
         <source>Slave Address</source>
         <translation>Adresse Esclave</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1539"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1544"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalle d'Interrogation (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1580"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1585"/>
         <source>Host / IP</source>
         <translation>Hôte / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1587"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1592"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1602"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1607"/>
         <source>Serial Port</source>
         <translation>Port Série</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1610"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1615"/>
         <source>Baud Rate</source>
         <translation>Débit en Bauds</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1618"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1623"/>
         <source>Parity</source>
         <translation>Parité</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1626"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1631"/>
         <source>Data Bits</source>
         <translation>Bits de Données</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1634"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1639"/>
         <source>Stop Bits</source>
         <translation>Bits D'arrêt</translation>
     </message>
@@ -7929,169 +7939,169 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     <message>
         <location filename="../../src/IO/Drivers/UART.cpp" line="72"/>
         <location filename="../../src/IO/Drivers/UART.cpp" line="73"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="388"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="427"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="345"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="352"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="752"/>
         <source>Select Port</source>
         <translation>Sélectionner le Port</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="389"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
         <source>Even</source>
         <translation>Pair</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="390"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
         <source>Odd</source>
         <translation>Impair</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="391"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="398"/>
         <source>Space</source>
         <translation>Espace</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="392"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="399"/>
         <source>Mark</source>
         <translation>Marque</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="428"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="435"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="429"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="436"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="572"/>
         <source>"%1" is not a valid path</source>
         <translation>"%1" n'est pas un chemin valide</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="566"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="573"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Saisir un autre chemin pour enregistrer un périphérique série personnalisé</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="845"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="852"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Le périphérique spécifié est introuvable. Vérifier la connexion et réessayer.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="852"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="859"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Une erreur inconnue s'est produite. Vérifier le périphérique et réessayer.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="854"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="861"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Le périphérique n'est pas ouvert. Ouvrir le périphérique avant de tenter cette opération.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="256"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>Échec de la connexion au port série "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="820"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="827"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="821"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="828"/>
         <source>Critical error on serial port "%1"</source>
         <translation>Erreur critique sur le port série « %1 »</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="822"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
         <source>Unknown error</source>
         <translation>Erreur inconnue</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="844"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="851"/>
         <source>No error occurred.</source>
         <translation>Aucune erreur détectée.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="846"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="853"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Permission refusée. Vérifier que l'application dispose des droits d'accès nécessaires au périphérique.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="847"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="854"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Échec d'ouverture du périphérique. Il est peut-être déjà utilisé ou indisponible.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="848"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="855"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Erreur lors de l'écriture des données vers le périphérique.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="849"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="856"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Erreur lors de la lecture des données depuis le périphérique.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="857"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Erreur critique de ressource. Le périphérique a peut-être été déconnecté ou n'est plus accessible.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="851"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="858"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>L'opération demandée n'est pas prise en charge sur ce périphérique.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="853"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="860"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>L'opération a expiré. Le périphérique ne répond peut-être pas.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1022"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1029"/>
         <source>Serial Port</source>
         <translation>Port Série</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1030"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1037"/>
         <source>Baud Rate</source>
         <translation>Débit en Bauds</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1038"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1045"/>
         <source>Parity</source>
         <translation>Parité</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1046"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1053"/>
         <source>Data Bits</source>
         <translation>Bits de Données</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1054"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1061"/>
         <source>Stop Bits</source>
         <translation>Bits D'arrêt</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1062"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1069"/>
         <source>Flow Control</source>
         <translation>Contrôle de Flux</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1070"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1077"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1077"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1084"/>
         <source>Auto-Reconnect</source>
         <translation>Reconnexion Automatique</translation>
     </message>
@@ -10306,85 +10316,85 @@ Veuillez fournir les identifiants nécessaires.</translation>
 <context>
     <name>Misc::ExtensionManager</name>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="242"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="244"/>
         <source>Theme</source>
         <translation>Thème</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="245"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="247"/>
         <source>Frame Parser</source>
         <translation>Analyseur de Trames</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="248"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="250"/>
         <source>Project Template</source>
         <translation>Modèle de Projet</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="251"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="253"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="254"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="256"/>
         <source>All Types</source>
         <translation>Tous les Types</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="482"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="484"/>
         <source>Reset Extensions</source>
         <translation>Réinitialiser les Extensions</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="483"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="485"/>
         <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>Ceci désinstalle toutes les extensions, supprime tous les dépôts personnalisés et restaure les paramètres par défaut. Continuer ?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="526"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="528"/>
         <source>Select Extension Repository Folder</source>
         <translation>Sélectionner le Dossier du Dépôt D'extensions</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1052"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1061"/>
         <source>Installed (repository no longer available)</source>
         <translation>Installé (dépôt non disponible)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1366"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1376"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1397"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1419"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1463"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1473"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1375"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1385"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1406"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1472"/>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1482"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
         <source>Plugin Error</source>
         <translation>Erreur de Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1366"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1375"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>Le plugin « %1 » n'est pas installé.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1377"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1386"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>L'extension « %1 » n'est pas un plugin (type : %2).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1398"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1407"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>Impossible de lire le fichier de métadonnées du plugin :
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1420"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1429"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>Le plugin « %1 » nécessite GRPC mais cette version ne prend pas en charge GRPC.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1429"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -10393,34 +10403,34 @@ Would you like to enable it now?</source>
 Souhaitez-vous l'activer maintenant ?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1435"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1444"/>
         <source>API Server Required</source>
         <translation>Serveur API Requis</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1464"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1473"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>Le plugin « %1 » n'a pas de champ 'entry' dans info.json.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1474"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1483"/>
         <source>Entry point not found:
 %1</source>
         <translation>Point d'entrée introuvable :
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1483"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1492"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>Le plugin « %1 » a un chemin de point d'entrée invalide.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1526"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1535"/>
         <source>Missing Dependency</source>
         <translation>Dépendance Manquante</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1527"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1536"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -10429,7 +10439,7 @@ Would you like to open the download page?</source>
 Souhaitez-vous ouvrir la page de téléchargement ?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1432"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1441"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>Les plugins nécessitent le serveur API pour communiquer avec Serial Studio. Souhaitez-vous l'activer maintenant ?</translation>
     </message>
@@ -12640,13 +12650,13 @@ Cliquez sur Actualiser pour mettre à jour la liste.</translation>
         <translation>Erreur d'E/S générale</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>Frame Parser Disabled</source>
         <translation>Analyseur de Trames Désactivé</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="274"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -12655,12 +12665,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Cause la plus probable : une boucle infinie ou une opération extrêmement lente dans le corps du script. Corrigez le script et rechargez le projet pour réactiver l'analyse.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="319"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="321"/>
         <source>Lua Syntax Error</source>
         <translation>Erreur de Syntaxe Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="320"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="322"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -12669,12 +12679,12 @@ Cause la plus probable : une boucle infinie ou une opération extrêmement lente
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="356"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="362"/>
         <source>Lua Runtime Error</source>
         <translation>Erreur D'exécution Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="357"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="363"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -12683,13 +12693,13 @@ Cause la plus probable : une boucle infinie ou une opération extrêmement lente
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="378"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="384"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
         <source>Missing Parse Function</source>
         <translation>Fonction Parse Manquante</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="379"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="385"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -12700,13 +12710,13 @@ Assurez-vous que votre code inclut :
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="441"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="447"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="533"/>
         <source>Parse Function Runtime Error</source>
         <translation>Erreur D'exécution de la Fonction D'analyse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="442"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="448"/>
         <source>The parse function contains an error:
 
 %1
@@ -12872,12 +12882,12 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="449"/>
+        <location filename="../../src/Misc/CLI.cpp" line="522"/>
         <source>Project file not found</source>
         <translation>Fichier de projet introuvable</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="450"/>
+        <location filename="../../src/Misc/CLI.cpp" line="523"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -12886,17 +12896,17 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="453"/>
+        <location filename="../../src/Misc/CLI.cpp" line="526"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Voulez-vous supprimer ce raccourci ?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="457"/>
+        <location filename="../../src/Misc/CLI.cpp" line="530"/>
         <source>Delete Shortcut</source>
         <translation>Supprimer le Raccourci</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="459"/>
+        <location filename="../../src/Misc/CLI.cpp" line="532"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
@@ -12956,77 +12966,87 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Aucune clé API Groq définie. Ouvrez Gérer les Clés pour en ajouter une.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="600"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="649"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>L'analyseur de trames utilise plus de %1% du temps CPU.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="602"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="651"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio abandonne des trames pour maintenir l'application réactive. Veuillez simplifier ou optimiser le script d'analyse de trames pour réduire sa charge de travail.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="381"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="388"/>
         <source>Expected %1, got '%2'</source>
         <translation>Attendu %1, reçu '%2'</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="430"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="437"/>
         <source>Expected enum name after 'enum'</source>
         <translation>Nom d'énumération attendu après 'enum'</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="444"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="451"/>
         <source>Expected oneof name</source>
         <translation>Nom oneof attendu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="471"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="479"/>
+        <source>Field tag '%1' out of range (1..%2)</source>
+        <translation>Balise de champ '%1' hors plage (1..%2)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="497"/>
         <source>Expected key type in map&lt;&gt;</source>
         <translation>Type de clé attendu dans map&lt;&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="479"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="505"/>
         <source>Expected value type in map&lt;&gt;</source>
         <translation>Type de valeur attendu dans map&lt;&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="487"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="513"/>
         <source>Expected map field name</source>
         <translation>Nom de champ map attendu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="499"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="525"/>
         <source>Expected map field tag</source>
         <translation>Balise de champ map attendue</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="529"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="557"/>
         <source>Expected field type, got '%1'</source>
         <translation>Type de champ attendu, reçu '%1'</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="549"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="577"/>
         <source>Expected field name after type</source>
         <translation>Nom de champ attendu après le type</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="559"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="587"/>
         <source>Expected field tag number</source>
         <translation>Numéro de balise de champ attendu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="602"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="635"/>
+        <source>Message nesting too deep (limit %1)</source>
+        <translation>Imbrication de messages trop profonde (limite %1)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="640"/>
         <source>Expected message name</source>
         <translation>Nom de message attendu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="684"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="722"/>
         <source>Unexpected token '%1' at file scope</source>
         <translation>Jeton inattendu '%1' dans la portée du fichier</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="730"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="768"/>
         <source>Unsupported top-level keyword '%1'</source>
         <translation>Mot-clé de niveau supérieur non pris en charge '%1'</translation>
     </message>
