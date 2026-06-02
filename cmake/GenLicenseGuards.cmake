@@ -1,16 +1,23 @@
 #
 # Serial Studio — Build-time license guard generator
 #
-# Generates LicenseGuards.generated.h with N unique guard functions.
-# Each function validates a different mathematical transform of the
-# build salt against a compile-time expected value. The function names,
-# check logic, and constants change on every build, so no static patch
-# can survive across releases.
+# SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
+#
+
+#---------------------------------------------------------------------------------------------------
+# Build-time license guard generator
+#---------------------------------------------------------------------------------------------------
+#
+# Generates ${CMAKE_BINARY_DIR}/generated/LicenseGuards.generated.h: 24 guard functions whose names
+# (verb + noun + suffix), check arithmetic, and expected constants are all derived from hashes of
+# COMMERCIAL_BUILD_SALT, so they differ on every build. Each function recomputes a transform of the
+# salt at runtime and compares it to a compile-time-expected value; a generated self-test compiles
+# the header first so an invalid emission fails the configure rather than the shipped binary. Runs
+# only for BUILD_COMMERCIAL with a salt set.
 #
 # Usage: include() after COMMERCIAL_BUILD_SALT is set.
 #
-# SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
-#
+#---------------------------------------------------------------------------------------------------
 
 if(NOT BUILD_COMMERCIAL OR NOT COMMERCIAL_BUILD_SALT)
   return()

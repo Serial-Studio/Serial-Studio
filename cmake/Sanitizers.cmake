@@ -64,10 +64,9 @@ endif()
 # ThreadSanitizer (separate build)
 #---------------------------------------------------------------------------------------------------
 #
-# The hotpath is intentionally lock-free (driver thread -> main via SPSC
-# CircularBuffer) and uses Qt::DirectConnection across threads in places. TSan
-# is the only tool that proves those invariants hold under load. It cannot
-# coexist with ASan, so it is its own build.
+# The hotpath is intentionally lock-free (driver thread -> main via SPSC CircularBuffer) and uses
+# Qt::DirectConnection across threads in places. TSan is the only tool that proves those invariants
+# hold under load. It cannot coexist with ASan, so it is its own build.
 #
 # Usage:
 #   cmake .. -DENABLE_TSAN=ON -DCMAKE_BUILD_TYPE=Debug   # GCC/Clang only

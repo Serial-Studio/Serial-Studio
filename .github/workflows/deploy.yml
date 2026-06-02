@@ -734,7 +734,7 @@ jobs:
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
           -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64" \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
@@ -764,7 +764,7 @@ jobs:
           -DPGO_STAGE=USE \
           -DLLVM_PROFDATA=$(xcrun -f llvm-profdata) \
           -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64" \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
@@ -891,7 +891,7 @@ jobs:
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
           -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
           -DCMAKE_OSX_ARCHITECTURES="x86_64" \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
@@ -1142,6 +1142,7 @@ jobs:
       run: |
         cp build/app/${{env.EXECUTABLE}}.exe build/app/bench.exe
         MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
+        chmod +x build/app/bench.exe
         ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 1
 
     - name: '🚧 Reconfigure with CMake (PGO use)'
@@ -1171,6 +1172,7 @@ jobs:
       run: |
         cp build/app/${{env.EXECUTABLE}}.exe build/app/bench.exe
         MSYS2_ARG_CONV_EXCL='*' editbin /SUBSYSTEM:CONSOLE build/app/bench.exe
+        chmod +x build/app/bench.exe
         ./build/app/bench.exe --headless --benchmark-hotpath --min-fps 256000
 
     - name: '🔎 Scan binaries with deglyph'

@@ -14,6 +14,25 @@
 
 include_guard(GLOBAL)
 
+#---------------------------------------------------------------------------------------------------
+# Code signing
+#---------------------------------------------------------------------------------------------------
+#
+# serial_studio_sign(<target>) attaches a platform-native code signature as a POST_BUILD step,
+# gated behind ENABLE_CODE_SIGNING (OFF by default; each platform no-ops with a warning when its
+# credentials are unset):
+#
+#   Windows   signtool Authenticode (SHA-256 + RFC-3161 timestamp); cert by SHA1 thumbprint or .pfx.
+#   macOS     codesign with the hardened runtime, then optional notarytool submit + stapler staple.
+#   Linux     gpg detached --armor signature next to the binary (<binary>.asc).
+#
+# Why: shipped binaries must be signed for the OS to trust them -- Windows SmartScreen/UAC and macOS
+# Gatekeeper warn on or block unsigned apps, and macOS distribution outside the App Store requires
+# notarization. Running it as a POST_BUILD step keeps signing in the build graph (CI signs every
+# artifact automatically) instead of leaving it a manual, forgettable afterthought.
+#
+#---------------------------------------------------------------------------------------------------
+
 option(ENABLE_CODE_SIGNING "Run platform code signing as a POST_BUILD step" OFF)
 
 set(WINDOWS_SIGN_SHA1     "" CACHE STRING "Code-signing cert SHA1 thumbprint (Windows cert store)")
