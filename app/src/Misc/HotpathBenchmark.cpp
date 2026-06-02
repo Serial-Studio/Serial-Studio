@@ -37,6 +37,7 @@
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/JsWatchdogThread.h"
+#include "IO/ConnectionManager.h"
 #include "IO/FrameReader.h"
 #include "IO/HAL_Driver.h"
 #include "SerialStudio.h"
@@ -330,6 +331,9 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
 
   // Stop the JS watchdog thread while QApplication is alive (its aboutToQuit hook never fires).
   DataModel::JsWatchdogThread::instance().shutdown();
+
+  // Destroy IO drivers now so the USB libusb event thread joins before static destruction.
+  IO::ConnectionManager::instance().shutdownDrivers();
 
   return (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

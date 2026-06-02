@@ -808,6 +808,28 @@ void IO::ConnectionManager::disconnectAllDevices()
 }
 
 /**
+ * @brief Destroys the UI drivers now so their worker threads join while QApplication is alive.
+ */
+void IO::ConnectionManager::shutdownDrivers()
+{
+  disconnectAllDevices();
+  m_devices.clear();
+
+  m_uartUi.reset();
+  m_networkUi.reset();
+  m_bluetoothLEUi.reset();
+#ifdef BUILD_COMMERCIAL
+  m_audioUi.reset();
+  m_canBusUi.reset();
+  m_hidUi.reset();
+  m_mqttUi.reset();
+  m_modbusUi.reset();
+  m_processUi.reset();
+  m_usbUi.reset();
+#endif
+}
+
+/**
  * @brief Connects the device with the given @p deviceId.
  */
 void IO::ConnectionManager::connectDevice(int deviceId)
