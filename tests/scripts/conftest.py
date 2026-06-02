@@ -43,11 +43,15 @@ def run_parser(script_name: str, frame_input) -> list:
 var _result = parse({json.dumps(frame_input)});
 console.log(JSON.stringify(_result));
 """
+    # Feed the program over stdin ("node -") instead of "node -e <src>": passing a
+    # large script as an argv string trips the Windows 32767-char command-line limit
+    # (subprocess surfaces it as "environment variable is longer than 32767").
     result = subprocess.run(
-        ["node", "-e", runner],
+        ["node", "-"],
+        input=runner,
         capture_output=True,
         text=True,
-        timeout=10,
+        timeout=30,
     )
 
     if result.returncode != 0:

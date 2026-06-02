@@ -2891,27 +2891,27 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::ModbusMapImporter</name>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="289"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="290"/>
         <source>Import Modbus Register Map</source>
         <translation>Импорт Карты Регистров Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="293"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="294"/>
         <source>Modbus Register Maps (*.csv *.xml *.json);;CSV Files (*.csv);;XML Files (*.xml);;JSON Files (*.json);;All Files (*)</source>
         <translation>Карты регистров Modbus (*.CSV *.XML *.JSON);;Файлы CSV (*.CSV);;Файлы XML (*.XML);;Файлы JSON (*.JSON);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="331"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="332"/>
         <source>No registers found</source>
         <translation>Регистры не найдены</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="332"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="333"/>
         <source>The file could not be parsed or contains no register definitions.</source>
         <translation>Не удалось разобрать файл или он не содержит определений регистров.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="334"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="335"/>
         <source>Modbus Import</source>
         <translation>Импорт Modbus</translation>
     </message>
@@ -2932,22 +2932,22 @@ Any unsaved changes are lost. Continue?</source>
         <translation type="vanished">Проверьте права на запись во временный каталог.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="380"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="381"/>
         <source>Successfully imported %1 registers in %2 groups.</source>
         <translation>Успешно импортировано регистров: %1 в группах: %2.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="382"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="383"/>
         <source>The project editor is now open for customization.</source>
         <translation>Редактор проекта открыт для настройки.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="384"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="385"/>
         <source>Modbus Import Complete</source>
         <translation>Импорт Modbus Завершён</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="695"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="702"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
@@ -4379,53 +4379,53 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="525"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="534"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="526"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="535"/>
         <source>Lock Project</source>
         <translation>Заблокировать Проект</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="526"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="527"/>
         <source>Choose a password to lock the project:</source>
         <translation>Выберите пароль для блокировки проекта:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="534"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="535"/>
         <source>Confirm the password:</source>
         <translation>Подтвердите пароль:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="539"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="540"/>
         <source>Passwords do not match</source>
         <translation>Пароли не совпадают</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="540"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="541"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>Введённые пароли не совпадают. Проект не был заблокирован.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="574"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="575"/>
         <source>Unlock Project</source>
         <translation>Разблокировать Проект</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="575"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="576"/>
         <source>Enter the project password:</source>
         <translation>Введите пароль проекта:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="585"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="586"/>
         <source>Incorrect password</source>
         <translation>Неверный пароль</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>Введённый пароль не совпадает с паролем, сохранённым в файле проекта.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="618"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="619"/>
         <source>New Project</source>
         <translation>Новый Проект</translation>
     </message>
@@ -4434,17 +4434,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Образцы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1164"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1165"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Несколько источников данных требуют лицензию Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1165"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1166"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro позволяет подключаться к нескольким устройствам одновременно. Обновитесь, чтобы разблокировать эту функцию.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1178"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1179"/>
         <source>Device %1</source>
         <translation>Устройство %1</translation>
     </message>
@@ -4453,187 +4453,187 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">(Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1462"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1463"/>
         <source>Do you want to save your changes?</source>
         <translation>Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1463"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1464"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>В этом проекте есть несохранённые изменения!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="394"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="404"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="418"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="395"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="405"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="419"/>
         <source>Project error</source>
         <translation>Ошибка проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="394"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="395"/>
         <source>Project title cannot be empty!</source>
         <translation>Название проекта не может быть пустым!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="404"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="405"/>
         <source>You need to add at least one group!</source>
         <translation>Необходимо добавить хотя бы одну группу!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="418"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="419"/>
         <source>You need to add at least one dataset!</source>
         <translation>Необходимо добавить хотя бы один набор данных!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="466"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="467"/>
         <source>Your project needs a title</source>
         <translation>Проекту требуется название</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="468"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="469"/>
         <source>Add a group to get started</source>
         <translation>Добавить группу для начала работы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="470"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="471"/>
         <source>Add a dataset to a group</source>
         <translation>Добавить набор данных в группу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="485"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Откройте представление Проекта в верхней части дерева и введите имя. Переименовать проект можно в любой момент.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="487"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="488"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Группы организуют наборы данных в виджеты панели. Используйте кнопку Группа на панели инструментов выше, чтобы создать группу, затем добавьте в неё наборы данных.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="491"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="492"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Наборы данных — это значения, отображаемые на панели управления. Выберите группу в дереве и используйте кнопку «Набор данных» на панели инструментов, чтобы добавить набор.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="772"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="820"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="773"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="821"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1214"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1215"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>Удалить источник данных "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1215"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1216"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>Группы, использующие этот источник, будут перемещены к источнику по умолчанию. Это действие нельзя отменить.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1502"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1503"/>
         <source>Save Serial Studio Project</source>
         <translation>Сохранить Проект Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1504"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2125"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1505"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2122"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Файлы Проектов Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1526"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1766"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2116"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1527"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2113"/>
         <source>Untitled Project</source>
         <translation>Проект Без Названия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1776"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2277"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1773"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2274"/>
         <source>Device A</source>
         <translation>Устройство A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1951"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1948"/>
         <source>Select Project File</source>
         <translation>Выберите Файл Проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1953"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1950"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Файлы Проектов (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2002"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1999"/>
         <source>JSON validation error</source>
         <translation>Ошибка валидации JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2091"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2088"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>Проект обновлён с более раннего формата файла</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2092"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2089"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>Этот проект был сохранён с версией схемы %1; текущая версия — %2. Для новых полей применены значения по умолчанию. Сохраните проект, чтобы зафиксировать обновление.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2123"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2120"/>
         <source>Save Imported Project</source>
         <translation>Сохранить Импортированный Проект</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2322"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2319"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Проекты с несколькими источниками требуют лицензию Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2323"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2320"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Этот проект содержит несколько источников данных. Загружен только первый источник. Для использования проектов с несколькими источниками требуется лицензия Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2557"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2554"/>
         <source>Workspace IDs remapped on load</source>
         <translation>Идентификаторы рабочих областей были переназначены при загрузке</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2555"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 пользовательских идентификаторов рабочих пространств пересеклись с новым зарезервированным автоматическим диапазоном и были перемещены в пользовательский диапазон. Сохраните проект, чтобы сделать переназначение постоянным.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2703"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2700"/>
         <source>Legacy frame parser function updated</source>
         <translation>Устаревшая функция парсера фреймов обновлена</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2704"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2701"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Ваш проект использовал устаревшую функцию парсера кадров с аргументом 'separator'. Она была автоматически перенесена в новый формат.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2906"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2899"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Удалить группу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2907"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2958"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2993"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3760"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2900"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2951"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2986"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3753"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Это действие невозможно отменить. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2957"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2950"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Удалить действие "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2992"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2985"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Удалить набор данных "%1"?</translation>
     </message>
@@ -4642,78 +4642,78 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">%1 (Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3668"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3707"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3661"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3700"/>
         <source>Output Controls</source>
         <translation>Элементы Управления Выводом</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3720"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3713"/>
         <source>New Button</source>
         <translation>Новая Кнопка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3723"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3716"/>
         <source>New Slider</source>
         <translation>Новый Ползунок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3726"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3719"/>
         <source>New Toggle</source>
         <translation>Новый Переключатель</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3729"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3722"/>
         <source>New Text Field</source>
         <translation>Новое Текстовое Поле</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3732"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3725"/>
         <source>New Knob</source>
         <translation>Новая Ручка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3759"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3752"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Удалить виджет вывода "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3932"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3925"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3951"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3944"/>
         <source>New Dataset</source>
         <translation>Новый Набор Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3954"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3947"/>
         <source>New Plot</source>
         <translation>Новый График</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3958"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3951"/>
         <source>New FFT Plot</source>
         <translation>Новый График FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3962"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3955"/>
         <source>New Level Indicator</source>
         <translation>Новый Индикатор Уровня</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3966"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3959"/>
         <source>New Gauge</source>
         <translation>Новый Датчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3970"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3963"/>
         <source>New Compass</source>
         <translation>Новый Компас</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3976"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3969"/>
         <source>New Meter</source>
         <translation>Новый Измеритель</translation>
     </message>
@@ -4722,241 +4722,245 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Новый Термометр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3980"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3973"/>
         <source>New LED Indicator</source>
         <translation>Новый Светодиодный Индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3984"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3977"/>
         <source>New Waterfall</source>
         <translation>Новый Водопад</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4054"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4047"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4127"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4120"/>
         <source>New Action</source>
         <translation>Новое Действие</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4270"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4263"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Вы уверены, что хотите изменить виджет уровня группы?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4272"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4265"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Существующие наборы данных для этой группы будут удалены</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4336"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4337"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4338"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4329"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4331"/>
         <source>Accelerometer %1</source>
         <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4353"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4353"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4353"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4346"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4346"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4346"/>
         <source>Gyro %1</source>
         <translation>Гироскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4368"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4361"/>
         <source>Latitude</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4368"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4361"/>
         <source>Longitude</source>
         <translation>Долгота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4368"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4361"/>
         <source>Altitude</source>
         <translation>Высота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4383"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4376"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4390"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4383"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4376"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4390"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4383"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4376"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4390"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4601"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4594"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5490"/>
         <source>Workspace</source>
         <translation>Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4767"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4760"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4967"/>
         <source>Shared Table</source>
         <translation>Общая Таблица</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4849"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4842"/>
         <source>register</source>
         <translation>регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4967"/>
         <source>New Shared Table</source>
         <translation>Новая Общая Таблица</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4974"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4992"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5011"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5035"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5062"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5081"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5104"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5127"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5518"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4967"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4985"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5004"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5028"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5055"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5074"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5097"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5120"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5490"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5511"/>
         <source>Name:</source>
         <translation>Название:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4992"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4985"/>
         <source>Rename Table</source>
         <translation>Переименовать Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5011"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5004"/>
         <source>Rename Group</source>
         <translation>Переименовать Группу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5035"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5028"/>
         <source>Rename Dataset</source>
         <translation>Переименовать Набор Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5062"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5055"/>
         <source>Rename Data Source</source>
         <translation>Переименовать Источник Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5081"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5074"/>
         <source>Rename Action</source>
         <translation>Переименовать Действие</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5103"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5096"/>
         <source>New Register</source>
         <translation>Новый Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5127"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5120"/>
         <source>Rename Register</source>
         <translation>Переименовать Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5166"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5191"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6045"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5159"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5184"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6038"/>
         <source>This action cannot be undone.</source>
         <translation>Это действие нельзя отменить.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5167"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5160"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Это удалит %1 регистр(ов) вместе с таблицей. Это действие нельзя отменить.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5170"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5190"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6044"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5163"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6037"/>
         <source>Delete "%1"?</source>
         <translation>Удалить "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5166"/>
         <source>Delete Table</source>
         <translation>Удалить Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5193"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5186"/>
         <source>Delete Register</source>
         <translation>Удалить Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5217"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5210"/>
         <source>Export Table</source>
         <translation>Экспортировать Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5219"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5263"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5212"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5256"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5261"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5254"/>
         <source>Import Table</source>
         <translation>Импортировать Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5497"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5490"/>
         <source>New Workspace</source>
         <translation>Новое Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5518"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5511"/>
         <source>Rename Workspace</source>
         <translation>Переименовать Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5607"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5600"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5617"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5610"/>
         <source>All Data</source>
         <translation>Все Данные</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5801"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5794"/>
         <source>Discard workspace customisations?</source>
         <translation>Отменить настройки рабочих пространств?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5802"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5795"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Отключение настройки отменяет ваши изменения и перестраивает список рабочих пространств из групп проекта.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5805"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5798"/>
         <source>Customize Workspaces</source>
         <translation>Настроить Рабочие Пространства</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6047"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6040"/>
         <source>Delete Workspace</source>
         <translation>Удалить Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2160"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6381"/>
+        <source>File save error</source>
+        <translation>Ошибка сохранения файла</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2157"/>
         <source>File open error</source>
         <translation>Ошибка открытия файла</translation>
     </message>
@@ -7025,47 +7029,47 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Ошибка при настройке службы BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="676"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="677"/>
         <source>Operation error</source>
         <translation>Ошибка операции</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="679"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="680"/>
         <source>Characteristic write error</source>
         <translation>Ошибка записи характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="682"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
         <source>Descriptor write error</source>
         <translation>Ошибка записи дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="685"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="686"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="688"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="689"/>
         <source>Characteristic read error</source>
         <translation>Ошибка Чтения Характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="691"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="692"/>
         <source>Descriptor read error</source>
         <translation>Ошибка Чтения Дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="941"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="942"/>
         <source>BLE Device</source>
         <translation>Устройство BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="949"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="950"/>
         <source>Service</source>
         <translation>Служба</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="968"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="969"/>
         <source>Characteristic</source>
         <translation>Характеристика</translation>
     </message>
@@ -9047,129 +9051,129 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="531"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="546"/>
         <source>There was an issue validating your license.</source>
         <translation>Возникла проблема при проверке вашей лицензии.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="549"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="730"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="855"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="564"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="745"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="870"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Предоставленный лицензионный ключ не принадлежит Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="550"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Пожалуйста, убедитесь, что вы приобрели лицензию в официальном магазине Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="561"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="739"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
         <source>This license key was activated on a different device.</source>
         <translation>Этот лицензионный ключ был активирован на другом устройстве.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="562"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="740"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Сначала деактивируйте его там или обратитесь в службу поддержки.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="573"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="750"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="588"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
         <source>This license is not currently active.</source>
         <translation>Эта лицензия в настоящее время не активна.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="751"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="589"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Возможно, срок её действия истёк или она была деактивирована (статус: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="584"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
         <source>Something went wrong on the server.</source>
         <translation>Произошла ошибка на сервере.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="585"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="761"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="776"/>
         <source>No activation ID was returned.</source>
         <translation>Идентификатор активации не был возвращён.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="595"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
         <source>Could not validate your license at this time.</source>
         <translation>Не удалось проверить вашу лицензию в данный момент.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="596"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="770"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="866"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="611"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="785"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
         <source>Try again later.</source>
         <translation>Повторите попытку позже.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="731"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="856"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="746"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Убедитесь, что лицензия приобретена в официальном магазине Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="760"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="775"/>
         <source>Something went wrong on the server…</source>
         <translation>Что-то пошло не так на сервере…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="614"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="616"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="631"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="667"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="682"/>
         <source>Your license has been successfully activated.</source>
         <translation>Ваша лицензия успешно активирована.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="668"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="683"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Спасибо за поддержку Serial Studio!
 Теперь вам доступны все премиум-функции.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="722"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
         <source>There was an issue activating your license.</source>
         <translation>Возникла проблема при активации лицензии.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="784"/>
         <source>Could not activate your license at this time.</source>
         <translation>Не удалось активировать лицензию в данный момент.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="846"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="861"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Возникла проблема при деактивации лицензии.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="865"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Не удалось деактивировать вашу лицензию в данный момент.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="876"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
         <source>Your license has been deactivated.</source>
         <translation>Ваша лицензия деактивирована.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="877"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Доступ к функциям Pro удалён.
@@ -10308,7 +10312,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::Examples</name>
     <message>
-        <location filename="../../src/Misc/Examples.cpp" line="291"/>
+        <location filename="../../src/Misc/Examples.cpp" line="294"/>
         <source>Failed to load README: %1</source>
         <translation>Не удалось загрузить README: %1</translation>
     </message>
@@ -10316,85 +10320,85 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::ExtensionManager</name>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="244"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="247"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="247"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="250"/>
         <source>Frame Parser</source>
         <translation>Парсер Кадров</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="250"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="253"/>
         <source>Project Template</source>
         <translation>Шаблон Проекта</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="253"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="256"/>
         <source>Plugin</source>
         <translation>Плагин</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="256"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="259"/>
         <source>All Types</source>
         <translation>Все Типы</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="484"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="487"/>
         <source>Reset Extensions</source>
         <translation>Сбросить Расширения</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="485"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="488"/>
         <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>Это удалит все расширения, удалит все пользовательские репозитории и восстановит настройки по умолчанию. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="528"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="531"/>
         <source>Select Extension Repository Folder</source>
         <translation>Выберите Папку Репозитория Расширений</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1061"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1064"/>
         <source>Installed (repository no longer available)</source>
         <translation>Установлено (репозиторий больше недоступен)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1375"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1385"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1406"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1472"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1482"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1491"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1378"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1388"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1409"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1431"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1475"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1485"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1494"/>
         <source>Plugin Error</source>
         <translation>Ошибка Плагина</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1375"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1378"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>Плагин «%1» не установлен.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1386"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1389"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>Расширение «%1» не является плагином (тип: %2).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1407"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1410"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>Невозможно прочитать файл метаданных плагина:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1429"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1432"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>Плагин «%1» требует GRPC, но эта сборка не включает поддержку GRPC.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1441"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -10403,34 +10407,34 @@ Would you like to enable it now?</source>
 Включить его сейчас?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1444"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
         <source>API Server Required</source>
         <translation>Требуется API-Сервер</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1473"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1476"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>Плагин "%1" не содержит поле 'entry' в info.json.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1483"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1486"/>
         <source>Entry point not found:
 %1</source>
         <translation>Точка входа не найдена:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1492"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1495"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>Плагин "%1" имеет недопустимый путь к точке входа.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1535"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1538"/>
         <source>Missing Dependency</source>
         <translation>Отсутствует Зависимость</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1536"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1539"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -10439,7 +10443,7 @@ Would you like to open the download page?</source>
 Открыть страницу загрузки?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1441"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1444"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>Плагинам необходим API-сервер для связи с Serial Studio. Включить его сейчас?</translation>
     </message>
@@ -10460,7 +10464,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::HelpCenter</name>
     <message>
-        <location filename="../../src/Misc/HelpCenter.cpp" line="317"/>
+        <location filename="../../src/Misc/HelpCenter.cpp" line="320"/>
         <source>Failed to load page: %1</source>
         <translation>Не удалось загрузить страницу: %1</translation>
     </message>
@@ -10468,12 +10472,12 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::IconEngine</name>
     <message>
-        <location filename="../../src/Misc/IconEngine.cpp" line="150"/>
+        <location filename="../../src/Misc/IconEngine.cpp" line="154"/>
         <source>Invalid icon identifier</source>
         <translation>Недопустимый идентификатор значка</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/IconEngine.cpp" line="224"/>
+        <location filename="../../src/Misc/IconEngine.cpp" line="228"/>
         <source>Empty SVG data received</source>
         <translation>Получены пустые данные SVG</translation>
     </message>
@@ -12588,34 +12592,34 @@ Click Refresh to update the list.</source>
         <translation>Не удалось загрузить приветственный текст :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="263"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="264"/>
         <source>Network error</source>
         <translation>Ошибка сети</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="266"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="283"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="316"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="267"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="284"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="317"/>
         <source>Trial Activation Error</source>
         <translation>Ошибка Активации Пробной Версии</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="280"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="281"/>
         <source>Invalid server response</source>
         <translation>Неверный ответ сервера</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="281"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="282"/>
         <source>The server returned malformed data: %1</source>
         <translation>Сервер вернул некорректные данные: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="313"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
         <source>Unexpected server response</source>
         <translation>Неожиданный ответ сервера</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="315"/>
         <source>The server response is missing required fields.</source>
         <translation>В ответе сервера отсутствуют обязательные поля.</translation>
     </message>
@@ -12630,22 +12634,22 @@ Click Refresh to update the list.</source>
         <translation>Невозможно открыть файл для записи!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="805"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Недействительный адаптер Bluetooth!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="807"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="808"/>
         <source>Unsuported platform or operating system</source>
         <translation>Неподдерживаемая платформа или операционная система</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="810"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="811"/>
         <source>Unsupported discovery method</source>
         <translation>Неподдерживаемый метод обнаружения</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="813"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="814"/>
         <source>General I/O error</source>
         <translation>Общая ошибка ввода-вывода</translation>
     </message>
@@ -12882,12 +12886,12 @@ function parse(%1) { ... }
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="522"/>
+        <location filename="../../src/Misc/CLI.cpp" line="525"/>
         <source>Project file not found</source>
         <translation>Файл проекта не найден</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="523"/>
+        <location filename="../../src/Misc/CLI.cpp" line="526"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -12896,17 +12900,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="526"/>
+        <location filename="../../src/Misc/CLI.cpp" line="529"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Удалить этот ярлык?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="530"/>
+        <location filename="../../src/Misc/CLI.cpp" line="533"/>
         <source>Delete Shortcut</source>
         <translation>Удалить Ярлык</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="532"/>
+        <location filename="../../src/Misc/CLI.cpp" line="535"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
@@ -16306,37 +16310,37 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1178"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1892"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1181"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1916"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1259"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1904"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1268"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1928"/>
         <source>Notifications</source>
         <translation>Уведомления</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1339"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1916"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1354"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1940"/>
         <source>Clock</source>
         <translation>Часы</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1418"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1927"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1439"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1951"/>
         <source>Stopwatch</source>
         <translation>Секундомер</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1980"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1996"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2004"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2020"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Резервный)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2022"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2046"/>
         <source>LED Panel (%1)</source>
         <translation>Панель Светодиодов (%1)</translation>
     </message>

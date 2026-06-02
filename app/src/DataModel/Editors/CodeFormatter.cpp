@@ -479,7 +479,7 @@ static QString reformatOne(const QString& raw,
                            int depthAtStart,
                            int indentSpaces)
 {
-  const QString trimmed = rtrim(raw);
+  QString trimmed = rtrim(raw);
 
   // Preserve leading whitespace for lines inside a multiline string/comment.
   if (info.startsInsideMultiline)

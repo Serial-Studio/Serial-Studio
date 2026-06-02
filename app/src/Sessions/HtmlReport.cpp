@@ -753,7 +753,7 @@ QString Sessions::HtmlReport::buildPrintFooterRight() const
   };
 
   // English fallback as a safe default if the translation is malformed
-  const QString fallback = QStringLiteral("\"Page \" counter(page) \" of \" counter(pages)");
+  QString fallback = QStringLiteral("\"Page \" counter(page) \" of \" counter(pages)");
 
   const QString tmpl = tr("Page %1 of %2");
   const int p1       = tmpl.indexOf(QLatin1String("%1"));

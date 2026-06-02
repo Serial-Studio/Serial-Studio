@@ -47,6 +47,9 @@ static const QString kBase = QStringLiteral("https://raw.githubusercontent.com/%
  */
 Misc::HelpCenter::HelpCenter() : m_loading(false), m_currentIndex(-1), m_pendingPreloads(0)
 {
+  // Bound every fetch so a stalled connection cannot pin the loading state
+  m_nam.setTransferTimeout(15 * 1000);
+
   // Build initial theme colors JSON and react to theme changes
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),

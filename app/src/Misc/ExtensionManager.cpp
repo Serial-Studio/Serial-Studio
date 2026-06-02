@@ -88,6 +88,9 @@ Misc::ExtensionManager::ExtensionManager()
   , m_pendingExtensionMetas(0)
   , m_dashboardWasAvailable(false)
 {
+  // Bound every fetch so a stalled connection cannot pin the busy state
+  m_nam.setTransferTimeout(15 * 1000);
+
   // Load repository list from settings, default to community repo
   const auto saved = m_settings.value("ExtensionRepositories").toStringList();
   if (saved.isEmpty())

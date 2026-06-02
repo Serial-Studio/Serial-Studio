@@ -34,6 +34,7 @@
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QRegularExpression>
+#include <QSaveFile>
 #include <QTimer>
 
 #include "AppInfo.h"
@@ -1692,12 +1693,8 @@ void DataModel::ProjectModel::setupExternalConnections()
 
     m_pointCount = points;
 
-    QFile file(m_filePath);
-    if (!file.open(QFile::WriteOnly))
+    if (!writeProjectFile(m_filePath))
       return;
-
-    file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
-    file.close();
 
     Q_EMIT pointCountChanged();
   });
@@ -2747,12 +2744,8 @@ void DataModel::ProjectModel::emitProjectLoadedSignals()
 void DataModel::ProjectModel::persistLegacyMigration()
 {
   qInfo() << "[ProjectModel] Migrating legacy project to current schema, saving...";
-  QFile f(m_filePath);
-  if (!f.open(QFile::WriteOnly))
-    return;
-
-  f.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
-  f.close();
+  if (!writeProjectFile(m_filePath))
+    qWarning() << "[ProjectModel] Legacy-migration save failed";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -6308,15 +6301,11 @@ void DataModel::ProjectModel::autoSave()
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
 
-  QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly)) {
-    qWarning() << "[ProjectModel] Auto-save failed:" << file.errorString();
+  // Keep the dirty flag set on failure so the next autosave retries
+  if (!writeProjectFile(m_filePath)) {
+    qWarning() << "[ProjectModel] Auto-save failed";
     return;
   }
-
-  const QJsonObject json = serializeToJson();
-  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
-  file.close();
 
   setModified(false);
 }
@@ -6347,30 +6336,52 @@ void DataModel::ProjectModel::setAutoSaveSuspended(bool suspend)
 }
 
 /**
+ * @brief Atomically serializes the current project to @p path.
+ */
+bool DataModel::ProjectModel::writeProjectFile(const QString& path)
+{
+  Q_ASSERT(!path.isEmpty());
+
+  // Stage into a temporary file; commit() renames atomically on full success
+  QSaveFile file(path);
+  if (!file.open(QFile::WriteOnly)) {
+    qWarning() << "[ProjectModel] File open error:" << file.errorString();
+    return false;
+  }
+
+  // Abort the staged write unless every byte lands
+  const QByteArray payload = QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented);
+  if (file.write(payload) != payload.size()) {
+    qWarning() << "[ProjectModel] Short write:" << file.errorString();
+    file.cancelWriting();
+    return false;
+  }
+
+  // commit() flushes, fsyncs, and renames; false means the file is untouched
+  if (!file.commit()) {
+    qWarning() << "[ProjectModel] Commit failed:" << file.errorString();
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * @brief Writes the current project to m_filePath and reloads it.
  */
 bool DataModel::ProjectModel::finalizeProjectSave()
 {
-  // Open the file for writing
-  QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly)) {
-    if (m_suppressMessageBoxes)
-      qWarning() << "[ProjectModel] File open error:" << file.errorString();
-    else
-      Misc::Utilities::showMessageBox(
-        tr("File open error"), file.errorString(), QMessageBox::Critical);
-
-    return false;
-  }
-
   // Auto-detect virtual datasets and resolve unset transform languages before save
   resolveDatasetTransformLanguages();
   resolveDatasetVirtualFlags();
 
-  // Serialize and write
-  const QJsonObject json = serializeToJson();
-  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
-  file.close();
+  // Abort the mode switch and dirty-flag clear if the write did not land
+  if (!writeProjectFile(m_filePath)) {
+    if (!m_suppressMessageBoxes)
+      Misc::Utilities::showMessageBox(tr("File save error"), m_filePath, QMessageBox::Critical);
+
+    return false;
+  }
 
   // Switch to project-file mode and notify listeners
   AppState::instance().setOperationMode(SerialStudio::ProjectFile);

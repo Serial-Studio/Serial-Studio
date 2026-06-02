@@ -311,7 +311,7 @@ void IO::Drivers::HID::enumerateDevices()
   });
 
   QStringList newLabels;
-  QList<QString> newPaths;
+  QStringList newPaths;
   QList<uint16_t> newUsagePages;
   QList<uint16_t> newUsages;
   composeHidDeviceLists(entries, newLabels, newPaths, newUsagePages, newUsages);
@@ -398,7 +398,7 @@ QList<IO::Drivers::HID::DeviceEntry> IO::Drivers::HID::collectHidDeviceEntries()
  */
 void IO::Drivers::HID::composeHidDeviceLists(const QList<DeviceEntry>& entries,
                                              QStringList& labels,
-                                             QList<QString>& paths,
+                                             QStringList& paths,
                                              QList<uint16_t>& usagePages,
                                              QList<uint16_t>& usages) const
 {

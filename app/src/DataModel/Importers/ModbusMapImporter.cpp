@@ -37,6 +37,7 @@
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/Modbus.h"
+#include "Misc/JsonValidator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
 
@@ -588,13 +589,19 @@ bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     return false;
 
-  const auto doc = QJsonDocument::fromJson(file.readAll());
+  // Route untrusted map files through the shared size/depth/array caps
+  const auto result = Misc::JsonValidator::parseAndValidate(file.readAll());
   file.close();
 
-  if (!doc.isObject())
+  if (!result.valid) {
+    qWarning() << "[ModbusMapImporter] Invalid JSON map:" << result.errorMessage;
+    return false;
+  }
+
+  if (!result.document.isObject())
     return false;
 
-  const auto root = doc.object();
+  const auto root = result.document.object();
 
   // Flat format: {"registers": [...]}
   if (root.contains(QStringLiteral("registers"))) {

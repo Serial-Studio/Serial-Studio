@@ -415,6 +415,7 @@ private:
   bool finalizeProjectSave();
   void clearTransientState();
   void autoSave();
+  [[nodiscard]] bool writeProjectFile(const QString& path);
 
   bool confirmGroupWidgetChange(DataModel::Group& grp, SerialStudio::GroupWidget widget);
   bool applyGroupWidget(DataModel::Group& grp, SerialStudio::GroupWidget widget);

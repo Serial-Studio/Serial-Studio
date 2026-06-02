@@ -79,8 +79,10 @@ env:
   INSTALL_QT_LINUX_ARM64: false
 
   #
-  # Release gating (rides on the test job's pytest continue-on-error): true blocks the continuous
-  # release on a failing cross-platform test; false runs the tests as a non-blocking smoke check.
+  # Test gating (rides on the test job's pytest continue-on-error): true fails the test job on a
+  # failing cross-platform test; false runs the tests as a non-blocking smoke check. Note: the
+  # release now publishes before tests run (tests download from the release), so this no longer
+  # blocks the release itself, only the test job's own status.
   #
   REQUIRE_TESTS_TO_PUBLISH: false
   
@@ -327,6 +329,14 @@ jobs:
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
         else
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
+        fi
+
+        # linuxdeploy bundles only xcb/wayland; add offscreen for headless CI tests
+        mkdir -p AppDir/usr/plugins/platforms
+        if [ -f "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" ]; then
+          cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" AppDir/usr/plugins/platforms/
+        else
+          echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
         fi
 
         ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
@@ -606,6 +616,14 @@ jobs:
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
         fi
 
+        # linuxdeploy bundles only xcb/wayland; add offscreen for headless CI tests
+        mkdir -p AppDir/usr/plugins/platforms
+        if [ -f "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" ]; then
+          cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" AppDir/usr/plugins/platforms/
+        else
+          echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
+        fi
+
         ./linuxdeploy-aarch64.AppImage --appdir AppDir --output appimage
 
         rm linuxdeploy-aarch64.AppImage
@@ -796,6 +814,17 @@ jobs:
         VOLUME=$(yes | hdiutil attach ./build/*.dmg -nobrowse | grep "Volumes" | awk '{print $3}')
         cp -a "$VOLUME/${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
         hdiutil detach "$VOLUME"
+
+    - name: '🧩 Bundle offscreen platform plugin (headless CI tests)'
+      run: |
+        QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/plugins"
+        DEST="${{env.APPLICATION}}.app/Contents/PlugIns/platforms"
+        mkdir -p "$DEST"
+        if [ -f "$QT_PLUGINS_PATH/platforms/libqoffscreen.dylib" ]; then
+          cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.dylib" "$DEST/"
+        else
+          echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
+        fi
 
     - name: '🗜 Archive deployed .app'
       run: |
@@ -1228,6 +1257,20 @@ jobs:
         echo $DIRNAME > dirname.txt
         cp ../app/deploy/windows/license.rtf ./License.rtf
 
+    - name: '🧩 Bundle offscreen platform plugin (headless CI tests)'
+      shell: bash
+      run: |
+        cd build
+        DIRNAME=$(cat dirname.txt)
+        QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/msvc2022_64/plugins"
+        DEST="$DIRNAME/bin/platforms"
+        mkdir -p "$DEST"
+        if [ -f "$QT_PLUGINS_PATH/platforms/qoffscreen.dll" ]; then
+          cp "$QT_PLUGINS_PATH/platforms/qoffscreen.dll" "$DEST/"
+        else
+          echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
+        fi
+
     - name: '📝 Create Windows batch launcher'
       shell: bash
       run: |
@@ -1267,7 +1310,6 @@ jobs:
       - build-linux
       - build-windows
       - build-linux-arm64
-      - test
 
     permissions:
       contents: write
@@ -1344,12 +1386,13 @@ jobs:
         if-no-files-found: ignore
 
 #-------------------------------------------------------------------------------
-# Integration tests against each platform's built binary (gated by REQUIRE_TESTS_TO_PUBLISH)
+# Integration tests against each platform's published release asset (downloaded from the
+# continuous release; runs after the upload job, gated by REQUIRE_TESTS_TO_PUBLISH)
 #-------------------------------------------------------------------------------
 
   test:
     name: '🧪 Test (${{ matrix.label }})'
-    needs: [build-linux, build-linux-arm64, build-macos, build-windows]
+    needs: [upload]
     permissions:
       contents: read
     strategy:
@@ -1389,7 +1432,9 @@ jobs:
       uses: actions/checkout@v5
 
     - name: '🧮 Resolve artifact name'
-      run: echo "ARTIFACT=${{env.EXECUTABLE}}-${{env.VERSION}}-${{matrix.asset}}" >> "$GITHUB_ENV"
+      run: |
+        echo "ARTIFACT=${{env.EXECUTABLE}}-${{env.VERSION}}-${{matrix.asset}}" >> "$GITHUB_ENV"
+        echo "RELEASE_TAG=${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.ref_name || 'continuous' }}" >> "$GITHUB_ENV"
 
     - name: '🐍 Set up Python'
       uses: actions/setup-python@v6
@@ -1401,9 +1446,15 @@ jobs:
       run: pip install -r tests/requirements.txt
 
     - name: '📥 Download released binary'
-      uses: actions/download-artifact@v5
-      with:
-        name: ${{env.ARTIFACT}}
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      run: |
+        case "${{matrix.os}}" in
+          windows) PATTERN="${ARTIFACT}.zip" ;;
+          *)       PATTERN="$ARTIFACT" ;;
+        esac
+        gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" \
+          --pattern "$PATTERN" --clobber
 
     - name: '📦 Prepare binary (Linux AppImage)'
       if: matrix.os == 'linux'

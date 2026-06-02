@@ -584,8 +584,9 @@ void IO::Drivers::BluetoothLE::configureCharacteristics()
   // Reset and rebuild characteristics list
   m_characteristics.clear();
   m_characteristicNames.clear();
-  m_selectedCharacteristic = -1;
-  foreach (const QLowEnergyCharacteristic& c, m_service->characteristics()) {
+  m_selectedCharacteristic   = -1;
+  const auto characteristics = m_service->characteristics();
+  for (const auto& c : characteristics) {
     if (!c.isValid())
       continue;
 

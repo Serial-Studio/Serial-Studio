@@ -37,7 +37,11 @@
 /**
  * @brief Constructs the IconEngine singleton.
  */
-Misc::IconEngine::IconEngine() : m_busy(false) {}
+Misc::IconEngine::IconEngine() : m_busy(false)
+{
+  // Bound every fetch so a stalled connection cannot pin the busy state
+  m_manager.setTransferTimeout(15 * 1000);
+}
 
 /**
  * @brief Returns the global IconEngine instance.

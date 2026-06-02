@@ -757,7 +757,7 @@ QString IO::Drivers::Process::resolveExecutable(const QString& name)
     return name;
 
   // Search the system PATH
-  const QString found = QStandardPaths::findExecutable(name);
+  QString found = QStandardPaths::findExecutable(name);
   if (!found.isEmpty())
     return found;
 

@@ -116,7 +116,7 @@ private:
   [[nodiscard]] QList<DeviceEntry> collectHidDeviceEntries() const;
   void composeHidDeviceLists(const QList<DeviceEntry>& entries,
                              QStringList& labels,
-                             QList<QString>& paths,
+                             QStringList& paths,
                              QList<uint16_t>& usagePages,
                              QList<uint16_t>& usages) const;
   [[nodiscard]] int restoreHidSelectionIndex(const QString& prevPath);
@@ -136,7 +136,7 @@ private:
   QString m_usage;
 
   QStringList m_deviceLabels;
-  QList<QString> m_devicePaths;
+  QStringList m_devicePaths;
   QList<uint16_t> m_deviceUsagePages;
   QList<uint16_t> m_deviceUsages;
 };

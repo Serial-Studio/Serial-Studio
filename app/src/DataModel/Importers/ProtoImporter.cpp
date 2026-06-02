@@ -1376,9 +1376,9 @@ QString DataModel::ProtoImporter::formatDispatchEntry(const ProtoField& field,
       (childCursor < rec.childRecordIndex.size()) ? rec.childRecordIndex.at(childCursor) : -1;
     ++childCursor;
     if (childRecIdx < 0) {
-      const QString entry = QStringLiteral("[%1] = { type = 'bytes', wire = 2, out = %2 }")
-                              .arg(field.tag)
-                              .arg(datasetIdx);
+      QString entry = QStringLiteral("[%1] = { type = 'bytes', wire = 2, out = %2 }")
+                        .arg(field.tag)
+                        .arg(datasetIdx);
       ++datasetIdx;
       return entry;
     }
@@ -1392,11 +1392,11 @@ QString DataModel::ProtoImporter::formatDispatchEntry(const ProtoField& field,
   if (!emittable)
     return QString();
 
-  const QString entry = QStringLiteral("[%1] = { type = '%2', wire = %3, out = %4 }")
-                          .arg(field.tag)
-                          .arg(luaTypeTagForScalar(field.scalar))
-                          .arg(wireTypeFor(field.scalar))
-                          .arg(datasetIdx);
+  QString entry = QStringLiteral("[%1] = { type = '%2', wire = %3, out = %4 }")
+                    .arg(field.tag)
+                    .arg(luaTypeTagForScalar(field.scalar))
+                    .arg(wireTypeFor(field.scalar))
+                    .arg(datasetIdx);
   ++datasetIdx;
   return entry;
 }

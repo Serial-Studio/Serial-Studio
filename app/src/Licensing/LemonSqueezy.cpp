@@ -243,13 +243,18 @@ void Licensing::LemonSqueezy::activate()
 
   // Setup network request
   QNetworkRequest req(url);
+  req.setTransferTimeout(15 * 1000);
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
   // Send the activation request
   auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-    readActivationResponse(reply->readAll());
+    if (reply->error() != QNetworkReply::NoError)
+      qWarning() << "[LemonSqueezy] Activation network error:" << reply->errorString();
+
+    readActivationResponse(reply->error() == QNetworkReply::NoError ? reply->readAll()
+                                                                    : QByteArray());
     reply->deleteLater();
   });
 }
@@ -282,13 +287,18 @@ void Licensing::LemonSqueezy::validate()
 
   // Setup network request
   QNetworkRequest req(url);
+  req.setTransferTimeout(15 * 1000);
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
   // Send the activation request
   auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-    readValidationResponse(reply->readAll(), false);
+    if (reply->error() != QNetworkReply::NoError)
+      qWarning() << "[LemonSqueezy] Validation network error:" << reply->errorString();
+
+    readValidationResponse(
+      reply->error() == QNetworkReply::NoError ? reply->readAll() : QByteArray(), false);
     reply->deleteLater();
 
     writeSettings();
@@ -323,13 +333,18 @@ void Licensing::LemonSqueezy::deactivate()
 
   // Setup network request
   QNetworkRequest req(url);
+  req.setTransferTimeout(15 * 1000);
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
   // Send the activation request
   auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-    readDeactivationResponse(reply->readAll());
+    if (reply->error() != QNetworkReply::NoError)
+      qWarning() << "[LemonSqueezy] Deactivation network error:" << reply->errorString();
+
+    readDeactivationResponse(reply->error() == QNetworkReply::NoError ? reply->readAll()
+                                                                      : QByteArray());
     reply->deleteLater();
 
     writeSettings();

@@ -765,7 +765,10 @@ void CSV::Player::convertColumnToDateTime(int columnIndex)
     if (!dateTime.isValid())
       dateTime = QDateTime::currentDateTime();
 
-    m_csvData[i].remove(columnIndex);
+    // Guard against jagged rows shorter than the header
+    if (columnIndex < m_csvData[i].size())
+      m_csvData[i].remove(columnIndex);
+
     m_csvData[i].prepend(dateTime.toString(format));
   }
 }

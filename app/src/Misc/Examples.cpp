@@ -59,7 +59,10 @@ Misc::Examples::Examples()
   , m_downloadProgress(0)
   , m_pendingDownloads(0)
   , m_totalDownloads(0)
-{}
+{
+  // Bound every fetch so a stalled connection cannot pin the busy state
+  m_nam.setTransferTimeout(15 * 1000);
+}
 
 /**
  * @brief Returns the singleton instance of the Examples class.

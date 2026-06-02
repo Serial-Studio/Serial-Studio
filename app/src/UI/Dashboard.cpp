@@ -1146,6 +1146,9 @@ void UI::Dashboard::removeTerminalWidget()
     for (int j = 0; j < count; ++j)
       m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
+
+  // erase above shifted m_lastFrame.groups, dangling stored dataset pointers
+  rebuildDatasetReferences();
 }
 
 /**
@@ -1186,6 +1189,9 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
       m_terminalWidgetId = registry.createWidget(
         SerialStudio::DashboardTerminal, terminal.title, terminal.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardTerminal, 0));
+
+      // push_back above may have reallocated m_lastFrame.groups
+      rebuildDatasetReferences();
     } else {
       removeTerminalWidget();
     }
@@ -1234,6 +1240,9 @@ void UI::Dashboard::removeNotificationLogWidget()
     for (int j = 0; j < count; ++j)
       m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
+
+  // erase above shifted m_lastFrame.groups, dangling stored dataset pointers
+  rebuildDatasetReferences();
 #endif
 }
 
@@ -1266,6 +1275,9 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
       m_notificationLogWidgetId = registry.createWidget(
         SerialStudio::DashboardNotificationLog, notif.title, notif.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardNotificationLog, 0));
+
+      // push_back above may have reallocated m_lastFrame.groups
+      rebuildDatasetReferences();
     } else {
       removeNotificationLogWidget();
     }
@@ -1316,6 +1328,9 @@ void UI::Dashboard::removeClockWidget()
     for (int j = 0; j < count; ++j)
       m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
+
+  // erase above shifted m_lastFrame.groups, dangling stored dataset pointers
+  rebuildDatasetReferences();
 }
 
 /**
@@ -1346,6 +1361,9 @@ void UI::Dashboard::setClockEnabled(const bool enabled)
       m_clockWidgetId =
         registry.createWidget(SerialStudio::DashboardClock, clock.title, clock.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardClock, 0));
+
+      // push_back above may have reallocated m_lastFrame.groups
+      rebuildDatasetReferences();
     } else {
       removeClockWidget();
     }
@@ -1395,6 +1413,9 @@ void UI::Dashboard::removeStopwatchWidget()
     for (int j = 0; j < count; ++j)
       m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
+
+  // erase above shifted m_lastFrame.groups, dangling stored dataset pointers
+  rebuildDatasetReferences();
 }
 
 /**
@@ -1425,6 +1446,9 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
       m_stopwatchWidgetId = registry.createWidget(
         SerialStudio::DashboardStopwatch, stopwatch.title, stopwatch.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardStopwatch, 0));
+
+      // push_back above may have reallocated m_lastFrame.groups
+      rebuildDatasetReferences();
     } else {
       removeStopwatchWidget();
     }
@@ -2137,6 +2161,21 @@ void UI::Dashboard::buildDatasetReferences()
         list.append(&dataset);
     }
   }
+}
+
+/**
+ * @brief Rebuilds the dataset reference map after the frame layout has changed.
+ */
+void UI::Dashboard::rebuildDatasetReferences()
+{
+  // A push_back/erase on m_lastFrame.groups dangles stored &dataset pointers
+  m_datasetReferences.clear();
+
+  // buildDatasetReferences() asserts on an empty frame; nothing to map then
+  if (m_lastFrame.groups.empty())
+    return;
+
+  buildDatasetReferences();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -244,6 +244,7 @@ void Licensing::Trial::fetchTrialState()
   // Send activation request to backend
   const QUrl url(QStringLiteral("https://cloud.serial-studio.com/trial"));
   QNetworkRequest request(url);
+  request.setTransferTimeout(15 * 1000);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
   (void)m_manager.post(request, payloadData);

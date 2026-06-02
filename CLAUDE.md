@@ -70,6 +70,9 @@ auto-trigger. Keep them current when the workflows they encode change.
 | `ss-hotpath` | Editing/reviewing the data hotpath (`FrameReader`, `CircularBuffer`, `FrameBuilder`, `Dashboard` draw). Auto-activates on those paths. Encodes the SPSC/DirectConnection/slot-pool rules and the `--benchmark-hotpath` 256 kHz check. |
 | `ss-new-driver` | Adding a new I/O driver / data source under `app/src/IO/Drivers/`. Encodes the `BluetoothLE` reference pattern and every registration touch-point. |
 | `ss-verify` | Before committing, or any "lint / check conventions / sanitize" request. Wraps `code-verify.py` + `sanitize-commit.py`. |
+| `qt-cpp-review` | Reviewing/auditing C++ (or "before I commit"). Runs `code-verify.py` as phase 1, then six parallel read-only agents (model contracts, ownership, thread-safety + hotpath, API correctness, error handling, perf). Adapted from The Qt Company's `qt-cpp-review`; read-only. |
+| `ss-cpp-modern` | Authoring/refactoring non-trivial C++ and you want the idiomatic modern-C++20 shape (smart-pointer choice, RAII wrapper, concept-constrained template, atomics). Adapted from jeffallan's `cpp-pro`; defers style/build/sanitize to the scripts and the other skills. |
+| `cpp-compiler-flags` | Reading/changing the cmake flag modules (`Optimization`/`Hardening`/`Sanitizers`/`MiMalloc`), tuning `-O`/`-march`/LTO/PGO, adding a per-toolchain branch, or explaining a flag. Encodes the repo's real flag layout + invariants (IEEE-stable math, Lua unwind tables, x86-64-v2, two-stage PGO) and a cross-compiler flag catalog. Read-only on the build; never invokes cmake. |
 
 ## Project Overview
 
@@ -95,70 +98,48 @@ not a substitute.
 
 ## Threading & Hotpath — Non-Negotiable
 
-The rules most likely to cause silent breakage. Full detail in
-[docs/claude/architecture.md](docs/claude/architecture.md).
+The rules most likely to cause silent breakage. Full detail (data flow, threading table,
+benchmark mechanics) in [docs/claude/architecture.md](docs/claude/architecture.md); the
+`ss-hotpath` skill auto-activates on these paths and re-states them.
 
-- **Data flow**: Driver → `FrameReader::processData` (main) → `DeviceManager::onReadyRead`
-  → `ConnectionManager::onFrameReady` → `FrameBuilder`. In `hotpathTxFrame` the **Dashboard** gets
-  the pooled `TimestampedFramePtr` (fast recycle); the **async sinks** (CSV / MDF4 / API / Sessions
-  / MQTT / gRPC) get a single **detached `make_shared` copy** so their slow-I/O backlog can never pin
-  the slot pool. The detach is skipped when no sink is enabled.
 - **`FrameReader` and `CircularBuffer` are main-thread / SPSC. Never add mutexes.** Recreate
   via `resetFrameReader()` / `reconfigure()`.
 - **Hotpath signal hops must be `Qt::DirectConnection`.** Queued between two main-thread
   objects fills the 4096-slot queue at 10+ kHz and drops frames.
 - **No allocation, no Frame copy on the dashboard path.** Draw the Dashboard frame from
-  `FrameBuilder::acquireFrame()` (slot pool) — never direct `make_shared<TimestampedFrame>` on the
-  Dashboard path. (The async-sink fan-out in `hotpathTxFrame` *does* make one detached copy, on
-  purpose — that's the slow export path, not the Dashboard path, and it's gated on a sink being on.)
+  `FrameBuilder::acquireFrame()` (slot pool), never a direct `make_shared<TimestampedFrame>`.
+  The async-sink fan-out in `hotpathTxFrame` makes one detached copy on purpose (slow export
+  path, gated on a sink being on) so a backlog can't pin the pool.
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
   workers (use `monotonicFrameNs(...)` as the safety net only).
 - **JS scripts**: always `IScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
-- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Misc::HotpathBenchmark`) drives the
-  real parse pipeline in-process — `FrameReader` extraction → `FrameBuilder` → the **Lua** frame parser
-  → per-dataset transforms → Dashboard — against a project loaded programmatically via
-  `ProjectModel::loadFromJsonDocument`. It exits nonzero when the **Lua** run sustains below `--min-fps`
-  (default 256000), then runs an ungated **JS** pipeline and an ungated **Lua + all exporters live**
-  pipeline (CSV/MDF4/Sessions/API/gRPC) for PGO training + an exporter-slowdown readout. The gated runs
-  disable the `FrameBuilder` parse-budget guard (an interactive 80%-duty throttle that a 100%-duty
-  benchmark would trip every window) via `setParseBudgetEnabled(false)` and run **no** exporters, so the
-  gate measures pure parse capacity; the exporter phase is deliberately *not* gated (its `FrameConsumer`
-  worker threads can't drain faster than a flat-out producer, so the 1024-slot pool exhausts into the
-  heap-fallback path — that penalty is the point of the readout). Each run lasts until both the
-  `--benchmark-frames` floor (default 1M) and the `--benchmark-seconds` window (default 10) are met.
-  Throughput = `FrameBuilder::parsedFrameCount()` / elapsed. `test.yml` runs it per PR; `deploy.yml`
-  gates the shipped PGO binary on it. Don't regress the parse hotpath.
+- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Misc::HotpathBenchmark`)
+  drives the real Lua parse pipeline against `--min-fps` (default 256000); `test.yml` runs it
+  per PR, `deploy.yml` gates the shipped PGO binary. Don't regress it.
 
 ## Code Style — Essentials
 
-`scripts/code-verify.py` enforces this — read its `--check` output, don't re-derive the rules.
-Full spec (formatting, headers, comments/Doxygen, QML, performance, licensing) and the NASA
-Power of Ten in [docs/claude/code-style.md](docs/claude/code-style.md). The hard rules you
-need *before* writing:
+`scripts/code-verify.py` is the contract — read its `--check` output, don't re-derive the
+rules. Full spec (formatting, header order, comments/Doxygen, QML, performance, licensing,
+naming table) and the NASA Power of Ten live in
+[docs/claude/code-style.md](docs/claude/code-style.md). The handful you need *before* typing,
+because they shape the code you write (not just how the linter rewrites it):
 
-- **Format**: 100-col, 2-space indent, LF, pointer/ref binds to type (`int* p`). Run
-  `clang-format`. No braces on single-statement bodies; blank line after a brace-free body.
-- **Control flow**: max 3 nesting levels (guard clauses, early return/continue). Functions
-  40-80 lines, hard limit 100.
-- **Headers (.h)**: order `Q_OBJECT` → `Q_PROPERTY` → `signals:` → ctor/deleted copy → `public:`
-  (`instance()` first) → `public slots:` → `private slots:` → `private:`. `[[nodiscard]]` on every
-  non-void return. **Never `Q_INVOKABLE void`** (use `public slots:`). **No in-header member
-  init** — use the ctor init list. Christmas-tree (shortest-line-first) within each block.
-- **Signals**: `Q_EMIT` not `emit`; lowercase `signals:`/`public slots:`. Never `SIGNAL()`/`SLOT()`.
-  Never `disconnect(nullptr)` as the slot — capture and disconnect the `QMetaObject::Connection`.
-- **Comments**: code is the spec; label, don't narrate. `.h` allows only the SPDX banner and a
-  one-line `/** @brief */` per type. `.cpp` gets a one-line `@brief` per function definition. No
-  inline EOL comments, no AI narration. Don't fake the em-dash with ` -- ` — rewrite the sentence.
-- **QML**: Christmas-tree property order (`id` first); enums via `SerialStudio.BusType` /
-  `ProjectModel.SomeEnum`, never integers; `font: Cpp_Misc_CommonFonts.uiFont`.
-- **Naming**: `CamelCase` types/enums, `camelCase` functions, `lower_case`
-  locals + public/protected members, `s_lower_case` statics, `m_camelCase`
-  private members, `kCamelCase` constants/constexpr, `UPPER_CASE` macros.
-  Full table → [docs/claude/code-style.md](docs/claude/code-style.md).
-
-- **Safety-critical (NASA Power of Ten)** — hotpath violations are blockers; full list in the
-  sub-doc. The ones that bite: no allocation/Frame-copy on the dashboard path (use
-  `FrameBuilder::acquireFrame()` slot pool); fixed loop bounds + capped recursion; assertion
-  density ≥2 per function; `[[nodiscard]]` + return checks at every system boundary; zero
-  warnings; no `reinterpret_cast`/`dynamic_cast` on the hotpath; SPDX header on every file.
+- **Format**: 100-col, 2-space indent, LF, pointer/ref binds to type (`int* p`). No braces on
+  single-statement bodies; blank line after a brace-free body. Max 3 nesting levels (guard
+  clauses); functions 40-80 lines, hard limit 100. Run `clang-format`.
+- **Headers (.h)**: `Q_OBJECT` → `Q_PROPERTY` → `signals:` → ctor/deleted copy → `public:`
+  (`instance()` first) → `public slots:` → `private slots:` → `private:`, Christmas-tree in
+  each block. `[[nodiscard]]` on every non-void return. **Never `Q_INVOKABLE void`** (use
+  `public slots:`). **No in-header member init** — ctor init list only.
+- **Signals**: `Q_EMIT` not `emit`; lowercase `signals:`/`public slots:`; never
+  `SIGNAL()`/`SLOT()`. Never `disconnect(nullptr)` as the slot — capture the `Connection`.
+- **Comments**: code is the spec; label, don't narrate. No inline EOL comments, no AI
+  narration. Don't fake the em-dash with ` -- ` — rewrite the sentence.
+- **Naming**: `CamelCase` types, `camelCase` functions, `lower_case` locals + public members,
+  `s_`/`m_`/`k`/`UPPER_CASE` for static/private/constexpr/macro (full table in the sub-doc).
+- **Safety-critical (NASA Power of Ten)** — hotpath violations are blockers. The ones that
+  bite: no alloc/Frame-copy on the dashboard path; fixed loop bounds + capped recursion;
+  assertion density ≥2/function; `[[nodiscard]]` + return checks at every system boundary;
+  zero warnings; no `reinterpret_cast`/`dynamic_cast` on the hotpath; SPDX header per file.
