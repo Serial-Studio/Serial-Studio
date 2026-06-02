@@ -38,6 +38,13 @@ if(WIN32 AND MSVC)
   set(MI_BUILD_OBJECT OFF CACHE BOOL "" FORCE)
   set(MI_BUILD_TESTS  OFF CACHE BOOL "" FORCE)
 
+  # clang-cl miscompiles mimalloc's C atomic-pointer macros (segment-map.c references the
+  # type-taking mi_atomic_*_ptr_* helpers that only the C++ atomic path defines). Building the
+  # library as C++ takes that path; MSVC-proper keeps the default C build untouched.
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(MI_USE_CXX ON CACHE BOOL "" FORCE)
+  endif()
+
   FetchContent_Declare(
     mimalloc
     GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
