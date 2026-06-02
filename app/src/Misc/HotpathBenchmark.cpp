@@ -298,19 +298,19 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
   // Tee the report to stdout + benchmark.txt: GUI-subsystem Windows binaries can't write stdout.
   std::FILE* file     = std::fopen("benchmark.txt", "w");
   std::FILE* sinks[2] = {stdout, file};
-  const auto emit = [&](const char* fmt, auto... args) {
+  const auto printData = [&](const char* fmt, auto... args) {
     for (std::FILE* s : sinks)
       if (s)
         std::fprintf(s, fmt, args...);
   };
 
   const auto report = [&](const char* tag, const Result& r) {
-    emit("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
+    printData("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
          tag,
          static_cast<unsigned long long>(r.framesParsed),
          static_cast<unsigned long long>(r.framesSkipped),
          r.elapsedSeconds);
-    emit("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
+    printData("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
          tag,
          r.framesPerSecond,
          r.minFps,
@@ -323,9 +323,9 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
 
   const double slowdown =
     luaX.framesPerSecond > 0.0 ? lua.framesPerSecond / luaX.framesPerSecond : 0.0;
-  emit("hotpath: exporters cost %.2fx throughput\n", slowdown);
+  printData("hotpath: exporters cost %.2fx throughput\n", slowdown);
 
-  emit("HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
+  printData("HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
        "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f\n",
        lua.framesPerSecond,
        lua.minFps,
