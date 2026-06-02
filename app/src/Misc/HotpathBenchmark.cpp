@@ -54,12 +54,11 @@
 
 // The benchmark hard-exits (skipping atexit), so PGO-instrumented builds flush the profile here.
 #ifdef SS_PGO_INSTRUMENT
-extern "C"
-{
+extern "C" {
 #  if defined(__clang__)
-  int __llvm_profile_write_file(void);
+int __llvm_profile_write_file(void);
 #  elif defined(__GNUC__)
-  void __gcov_dump(void);
+void __gcov_dump(void);
 #  endif
 }
 #endif
@@ -172,7 +171,6 @@ void HotpathBenchmark::setupProject(int language, int channels)
  */
 void HotpathBenchmark::enableConsumers()
 {
-  // MQTT is omitted: it needs a live broker and would just spin reconnects.
   CSV::Export::instance().setExportEnabled(true);
   API::Server::instance().setEnabled(true);
 #ifdef BUILD_COMMERCIAL
@@ -199,7 +197,6 @@ void HotpathBenchmark::disableConsumers()
   API::GRPC::GRPCServer::instance().setEnabled(false);
 #endif
 
-  // Stop consumer workers while QApplication lives (incl. MQTT, which hotpathTxFrame constructs).
   CSV::Export::instance().stopWorker();
   API::Server::instance().stopWorker();
 #ifdef BUILD_COMMERCIAL
@@ -207,7 +204,6 @@ void HotpathBenchmark::disableConsumers()
   Sessions::Export::instance().stopWorker();
   MQTT::Publisher::instance().stopWorker();
 
-  // Join Sessions Player + DatabaseManager threads here (mirrors onQuit) so they stop under qApp.
   Sessions::Player::instance().closeFile();
   Sessions::Player::instance().shutdown();
   Sessions::DatabaseManager::instance().closeDatabase(false);
@@ -242,7 +238,6 @@ HotpathBenchmark::Result HotpathBenchmark::run(
   reader.setOperationMode(SerialStudio::QuickPlot);
   reader.setFinishSequences({QByteArrayLiteral("\n")});
 
-  // Measure raw pipeline capacity: the budget guard is an interactive throttle, not a hot path.
   auto& builder = DataModel::FrameBuilder::instance();
   builder.setParseBudgetEnabled(false);
   builder.resetFrameCounters();
@@ -250,17 +245,13 @@ HotpathBenchmark::Result HotpathBenchmark::run(
   auto& queue = reader.queue();
   IO::CapturedDataPtr drained;
 
-  using Clock = std::chrono::steady_clock;
-
-  // Hard chunk bound so a stalled pipeline can never spin forever (1e9 fps is far above any CPU).
-  const quint64 maxFrames = targetFrames + static_cast<quint64>(minSeconds * 1.0e9);
-  const quint64 maxChunks = maxFrames / kFramesPerChunk + 1;
+  using Clock              = std::chrono::steady_clock;
+  .const quint64 maxFrames = targetFrames + static_cast<quint64>(minSeconds * 1.0e9);
+  const quint64 maxChunks  = maxFrames / kFramesPerChunk + 1;
 
   quint64 fed      = 0;
   double seconds   = 0.0;
   const auto start = Clock::now();
-
-  // Run until both the frame target and the wall-clock floor are met, whichever takes longer.
   for (quint64 c = 0; c < maxChunks && (fed < targetFrames || seconds < minSeconds); ++c) {
     reader.processData(IO::makeCapturedData(chunk));
 
@@ -298,18 +289,12 @@ HotpathBenchmark::Result HotpathBenchmark::run(
  */
 int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double minSeconds)
 {
-  // Gated run: clean Lua pipeline (worst-case parser). Part of the release gate.
-  const Result lua = run(targetFrames, minFps, minSeconds, SerialStudio::Lua, false);
-
-  // Gated run: clean JS pipeline, threshold pinned at half the Lua gate (Lua must stay >= 2x JS).
-  const Result js = run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::JavaScript, false);
-
-  // Diagnostic + training run: Lua with every exporter live. Ungated; shows the exporter slowdown.
+  const Result lua  = run(targetFrames, minFps, minSeconds, SerialStudio::Lua, false);
+  const Result js   = run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::JavaScript, false);
   const Result luaX = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, true);
 
-  // Tee the report to stdout + benchmark.txt: GUI-subsystem Windows binaries can't write stdout.
-  std::FILE* file     = std::fopen("benchmark.txt", "w");
-  std::FILE* sinks[2] = {stdout, file};
+  std::FILE* file      = std::fopen("benchmark.txt", "w");
+  std::FILE* sinks[2]  = {stdout, file};
   const auto printData = [&](const char* fmt, auto... args) {
     for (std::FILE* s : sinks)
       if (s)
@@ -318,15 +303,15 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
 
   const auto report = [&](const char* tag, const Result& r) {
     printData("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
-         tag,
-         static_cast<unsigned long long>(r.framesParsed),
-         static_cast<unsigned long long>(r.framesSkipped),
-         r.elapsedSeconds);
+              tag,
+              static_cast<unsigned long long>(r.framesParsed),
+              static_cast<unsigned long long>(r.framesSkipped),
+              r.elapsedSeconds);
     printData("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
-         tag,
-         r.framesPerSecond,
-         r.minFps,
-         r.passed ? "PASS" : "FAIL");
+              tag,
+              r.framesPerSecond,
+              r.minFps,
+              r.passed ? "PASS" : "FAIL");
   };
 
   report("lua", lua);
@@ -338,24 +323,22 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
   printData("hotpath: exporters cost %.2fx throughput\n", slowdown);
 
   printData("HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
-       "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f\n",
-       lua.framesPerSecond,
-       lua.minFps,
-       js.framesPerSecond,
-       js.minFps,
-       (lua.passed && js.passed) ? 1 : 0,
-       luaX.framesPerSecond);
+            "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f\n",
+            lua.framesPerSecond,
+            lua.minFps,
+            js.framesPerSecond,
+            js.minFps,
+            (lua.passed && js.passed) ? 1 : 0,
+            luaX.framesPerSecond);
 
   std::fflush(stdout);
-  if (file)
-  {
+  if (file) {
     std::fflush(file);
     std::fclose(file);
   }
 
   const int code = (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;
 
-  // Skip the Qt/driver teardown (hangs on Windows, throws on Linux): flush the PGO profile, _Exit.
 #ifdef SS_PGO_INSTRUMENT
 #  if defined(__clang__)
   (void)__llvm_profile_write_file();
