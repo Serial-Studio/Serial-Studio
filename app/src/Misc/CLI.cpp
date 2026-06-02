@@ -251,11 +251,6 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
   }
 
   const int rc = Misc::HotpathBenchmark::runAndReport(frames, minFps, seconds);
-
-  // Spin a one-shot loop so quit() fires aboutToQuit teardown while QApplication is alive
-  QTimer::singleShot(0, qApp, &QCoreApplication::quit);
-  qApp->exec();
-
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
 

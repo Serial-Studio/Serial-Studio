@@ -43,7 +43,9 @@
 #ifdef BUILD_COMMERCIAL
 #  include "MDF4/Export.h"
 #  include "MQTT/Publisher.h"
+#  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
+#  include "Sessions/Player.h"
 #endif
 #ifdef ENABLE_GRPC
 #  include "API/GRPC/GRPCServer.h"
@@ -191,6 +193,12 @@ void HotpathBenchmark::disableConsumers()
   MDF4::Export::instance().stopWorker();
   Sessions::Export::instance().stopWorker();
   MQTT::Publisher::instance().stopWorker();
+
+  // Join Sessions Player + DatabaseManager threads here (mirrors onQuit) so they stop under qApp.
+  Sessions::Player::instance().closeFile();
+  Sessions::Player::instance().shutdown();
+  Sessions::DatabaseManager::instance().closeDatabase(false);
+  Sessions::DatabaseManager::instance().shutdown();
 #endif
 }
 
@@ -320,7 +328,7 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
                luaX.framesPerSecond);
   std::fflush(stdout);
 
-  // Stop the JS watchdog here too; idempotent, and the caller's aboutToQuit spin also covers it.
+  // Stop the JS watchdog thread while QApplication is alive (its aboutToQuit hook never fires).
   DataModel::JsWatchdogThread::instance().shutdown();
 
   return (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;
