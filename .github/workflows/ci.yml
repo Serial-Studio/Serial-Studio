@@ -1107,6 +1107,13 @@ jobs:
       with:
         arch: x64
 
+    - name: '🛠 Use Microsoft (VS-bundled) clang-cl'
+      run: |
+        $clangDir = Join-Path $env:VCINSTALLDIR 'Tools\Llvm\x64\bin'
+        if (-not (Test-Path (Join-Path $clangDir 'clang-cl.exe'))) { throw "VS clang-cl not found at $clangDir" }
+        Add-Content -Path $env:GITHUB_PATH -Value $clangDir
+        & (Join-Path $clangDir 'clang-cl.exe') --version
+
     - name: '⚙️ Download prebuilt gRPC'
       run: |
         gh release download v${{env.GRPC_VERSION}} `
@@ -1139,36 +1146,8 @@ jobs:
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
-    # Diagnostics for the side-by-side startup failure: which clang-cl was picked (the runner has
-    # several LLVM installs) and the exe's direct DLL imports. The exe + its build-tree DLLs are
-    # uploaded as a workflow artifact (not a release asset) for local dependency/sxstrace analysis.
-    - name: '🔬 Inspect instrumented binary (debug)'
-      continue-on-error: true
-      run: |
-        Write-Host "clang-cl resolved to: $((Get-Command clang-cl).Source)"
-        clang-cl --version
-        Write-Host "--- dumpbin /dependents ---"
-        dumpbin /dependents "build/app/${{env.EXECUTABLE}}.exe"
-        Write-Host "--- embedded manifest (side-by-side dependencies) ---"
-        mt.exe -nologo -inputresource:"build/app/${{env.EXECUTABLE}}.exe;#1" -out:app.manifest
-        if (Test-Path app.manifest) { Get-Content app.manifest } else { Write-Host "(no embedded manifest)" }
-
-    - name: '📤 Upload instrumented exe (debug, not released)'
-      uses: actions/upload-artifact@v5
-      with:
-        name: windows-instrumented-debug
-        retention-days: 3
-        path: |
-          build/app/${{env.EXECUTABLE}}.exe
-          build/app/*.dll
-
-    # The GUI-subsystem exe can't write to the console, so the benchmark reports into benchmark.txt
-    # and hard-exits after flushing it + the PGO profile (skipping a teardown that hangs on Windows).
-    # windeployqt bundles Qt + the MSVC runtime next to the bare build-tree exe so it actually starts
-    # (fixes the side-by-side error); the WaitForExit timeout is a runaway guard.
     - name: '🏋️ PGO training run (hotpath)'
       run: |
-        windeployqt --compiler-runtime --no-translations "build/app/${{env.EXECUTABLE}}.exe"
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow
@@ -1197,11 +1176,8 @@ jobs:
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
-    # Gate on HOTPATH_PASS in benchmark.txt (written before the hard exit) rather than the process
-    # exit code, so a residual teardown hang that the timeout kills still yields a verdict.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       run: |
-        windeployqt --compiler-runtime --no-translations "build/app/${{env.EXECUTABLE}}.exe"
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow
@@ -1374,7 +1350,7 @@ jobs:
 
   test:
     name: '🧪 Test (${{ matrix.label }})'
-    needs: [build-linux, build-macos, build-windows]
+    needs: [build-linux, build-linux-arm64, build-macos, build-windows]
     permissions:
       contents: read
     strategy:
@@ -1382,16 +1358,25 @@ jobs:
       matrix:
         include:
           - label: Linux
+            os: linux
             runs-on: ubuntu-24.04
             asset: Linux-x64.AppImage
             broker: true
             marker_expr: "not destructive and not dos and not audio"
+          - label: Linux-arm64
+            os: linux
+            runs-on: ubuntu-24.04-arm
+            asset: Linux-arm64.AppImage
+            broker: true
+            marker_expr: "not destructive and not dos and not audio"
           - label: macOS
+            os: macos
             runs-on: macos-latest
             asset: macOS.dmg
             broker: true
             marker_expr: "not destructive and not dos and not audio"
           - label: Windows
+            os: windows
             runs-on: windows-latest
             asset: Windows-Portable
             broker: false
@@ -1422,7 +1407,7 @@ jobs:
         name: ${{env.ARTIFACT}}
 
     - name: '📦 Prepare binary (Linux AppImage)'
-      if: matrix.label == 'Linux'
+      if: matrix.os == 'linux'
       run: |
         sudo apt-get update
         sudo apt-get install -y libegl1 libgl1 libopengl0 libasound2-dev fontconfig \
@@ -1432,7 +1417,7 @@ jobs:
         echo "SS_RUN=$PWD/squashfs-root/AppRun" >> "$GITHUB_ENV"
 
     - name: '📦 Prepare binary (macOS .app)'
-      if: matrix.label == 'macOS'
+      if: matrix.os == 'macos'
       run: |
         hdiutil attach "$ARTIFACT" -nobrowse -mountpoint /tmp/ssdmg
         cp -R "/tmp/ssdmg/${{env.APPLICATION}}.app" .
@@ -1440,14 +1425,14 @@ jobs:
         echo "SS_RUN=$PWD/${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}" >> "$GITHUB_ENV"
 
     - name: '📦 Prepare binary (Windows portable)'
-      if: matrix.label == 'Windows'
+      if: matrix.os == 'windows'
       run: |
         7z x "${ARTIFACT}.zip" -oapp_win >/dev/null
         EXE=$(find app_win -name "${{env.EXECUTABLE}}.exe" | head -1)
         echo "SS_RUN=$PWD/$EXE" >> "$GITHUB_ENV"
 
     - name: '🦟 Start Mosquitto (Linux)'
-      if: matrix.label == 'Linux'
+      if: matrix.os == 'linux'
       run: |
         sudo systemctl stop mosquitto || true
         printf 'listener 1883 127.0.0.1\nallow_anonymous true\npersistence false\n' > /tmp/mosq.conf
@@ -1455,7 +1440,7 @@ jobs:
         for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
 
     - name: '🦟 Start Mosquitto (macOS)'
-      if: matrix.label == 'macOS'
+      if: matrix.os == 'macos'
       run: |
         brew install mosquitto
         printf 'listener 1883 127.0.0.1\nallow_anonymous true\npersistence false\n' > /tmp/mosq.conf
@@ -1463,7 +1448,7 @@ jobs:
         for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
 
     - name: '🎙 Set up ALSA loopback (Linux)'
-      if: matrix.label == 'Linux'
+      if: matrix.os == 'linux'
       run: |
         sudo apt-get install -y "linux-modules-extra-$(uname -r)" || true
         sudo modprobe snd-aloop || true
@@ -1493,7 +1478,7 @@ jobs:
           -v --tb=short --timeout=60 --junit-xml=test-results.xml
 
     - name: '🎙 Run audio loopback tests (Linux, non-blocking)'
-      if: matrix.label == 'Linux'
+      if: matrix.os == 'linux'
       continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
