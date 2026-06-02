@@ -23,7 +23,7 @@
 # Workflow configuration
 #-------------------------------------------------------------------------------
 
-name: Deploy
+name: CI
 
 on:
   push:             
@@ -77,6 +77,12 @@ env:
   INSTALL_QT_MACOS_INTEL: false
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
+
+  #
+  # Release gating (rides on the test job's pytest continue-on-error): true blocks the continuous
+  # release on a failing cross-platform test; false runs the tests as a non-blocking smoke check.
+  #
+  REQUIRE_TESTS_TO_PUBLISH: false
   
   #
   # Excluded AppImage libraries
@@ -96,7 +102,7 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-24.04
-    name: '🐧 Linux'
+    name: '🐧 Linux Build (x86_64)'
     permissions:
       contents: read
       security-events: write
@@ -246,7 +252,7 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (instrumented)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
     - name: '🏋️ PGO training run (hotpath)'
       env:
@@ -276,7 +282,7 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (PGO optimized)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
@@ -375,7 +381,7 @@ jobs:
 
   build-linux-arm64:
     runs-on: ubuntu-24.04-arm
-    name: '🐧 Linux (arm64)'
+    name: '🐧 Linux Build (arm64)'
     permissions:
       contents: read
       security-events: write
@@ -523,7 +529,7 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (instrumented)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
     - name: '🏋️ PGO training run (hotpath)'
       env:
@@ -553,7 +559,7 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (PGO optimized)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
@@ -652,7 +658,7 @@ jobs:
 
   build-macos-arm64:
     runs-on: macos-latest
-    name: '🍎 macOS (arm64)'
+    name: '🍎 macOS Build (arm64)'
     permissions:
       contents: read
     steps:
@@ -741,7 +747,7 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (instrumented, arm64)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
     - name: '🏋️ PGO training run (hotpath)'
       env:
@@ -771,7 +777,7 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (PGO optimized, arm64)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       env:
@@ -808,7 +814,7 @@ jobs:
 
   build-macos-intel:
     runs-on: macos-latest
-    name: '🍎 macOS (x86_64 / Rosetta)'
+    name: '🍎 macOS Build (x86_64, Rosetta)'
     permissions:
       contents: read
     steps:
@@ -898,7 +904,7 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (x86_64)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
     - name: '🚦 Hotpath throughput (x86_64 / Rosetta, informational)'
       continue-on-error: true
@@ -924,7 +930,7 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
-    name: '🍎 macOS (universal)'
+    name: '🍎 macOS Build (universal)'
     needs:
       - build-macos-arm64
       - build-macos-intel
@@ -1035,7 +1041,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
-    name: '🧊 Windows'
+    name: '🧊 Windows Build (x86_64)'
     permissions:
       contents: read
       security-events: write
@@ -1101,10 +1107,6 @@ jobs:
       with:
         arch: x64
 
-    - name: '🛠 Add LLVM (clang-cl) to PATH'
-      shell: bash
-      run: echo "C:\Program Files\LLVM\bin" >> "$GITHUB_PATH"
-
     - name: '⚙️ Download prebuilt gRPC'
       run: |
         gh release download v${{env.GRPC_VERSION}} `
@@ -1135,18 +1137,43 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (instrumented)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
-    # The app is a GUI-subsystem binary and cannot write to the parent console, so it reports into
-    # benchmark.txt (see HotpathBenchmark). Start-Process -Wait captures the real exit code without
-    # the old editbin/bench.exe subsystem hack; Get-Content surfaces the result in the log.
+    # Diagnostics for the side-by-side startup failure: which clang-cl was picked (the runner has
+    # several LLVM installs) and the exe's direct DLL imports. The exe + its build-tree DLLs are
+    # uploaded as a workflow artifact (not a release asset) for local dependency/sxstrace analysis.
+    - name: '🔬 Inspect instrumented binary (debug)'
+      continue-on-error: true
+      run: |
+        Write-Host "clang-cl resolved to: $((Get-Command clang-cl).Source)"
+        clang-cl --version
+        Write-Host "--- dumpbin /dependents ---"
+        dumpbin /dependents "build/app/${{env.EXECUTABLE}}.exe"
+        Write-Host "--- embedded manifest (side-by-side dependencies) ---"
+        mt.exe -nologo -inputresource:"build/app/${{env.EXECUTABLE}}.exe;#1" -out:app.manifest
+        if (Test-Path app.manifest) { Get-Content app.manifest } else { Write-Host "(no embedded manifest)" }
+
+    - name: '📤 Upload instrumented exe (debug, not released)'
+      uses: actions/upload-artifact@v5
+      with:
+        name: windows-instrumented-debug
+        retention-days: 3
+        path: |
+          build/app/${{env.EXECUTABLE}}.exe
+          build/app/*.dll
+
+    # The GUI-subsystem exe can't write to the console, so the benchmark reports into benchmark.txt
+    # and hard-exits after flushing it + the PGO profile (skipping a teardown that hangs on Windows).
+    # windeployqt bundles Qt + the MSVC runtime next to the bare build-tree exe so it actually starts
+    # (fixes the side-by-side error); the WaitForExit timeout is a runaway guard.
     - name: '🏋️ PGO training run (hotpath)'
       run: |
+        windeployqt --compiler-runtime --no-translations "build/app/${{env.EXECUTABLE}}.exe"
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1' `
-          -WorkingDirectory $PWD -Wait -PassThru -NoNewWindow
+          -WorkingDirectory $PWD -PassThru -NoNewWindow
+        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out (no PGO profile)' }
         if (Test-Path benchmark.txt) { Get-Content benchmark.txt }
-        exit $p.ExitCode
 
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
@@ -1168,15 +1195,19 @@ jobs:
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application (PGO optimized)'
-      run: cmake --build build --config Release -j 16
+      run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
+    # Gate on HOTPATH_PASS in benchmark.txt (written before the hard exit) rather than the process
+    # exit code, so a residual teardown hang that the timeout kills still yields a verdict.
     - name: '🚦 Hotpath throughput gate (256 kHz)'
       run: |
+        windeployqt --compiler-runtime --no-translations "build/app/${{env.EXECUTABLE}}.exe"
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
-          -WorkingDirectory $PWD -Wait -PassThru -NoNewWindow
+          -WorkingDirectory $PWD -PassThru -NoNewWindow
+        if (-not $p.WaitForExit(300000)) { $p.Kill() }
         if (Test-Path benchmark.txt) { Get-Content benchmark.txt }
-        exit $p.ExitCode
+        if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
 
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
@@ -1255,12 +1286,13 @@ jobs:
 #-------------------------------------------------------------------------------
 
   upload:
-    name: '🗂 Create release and upload artifacts'
+    name: '🗂 Publish (continuous)'
     needs:
       - build-macos
       - build-linux
       - build-windows
       - build-linux-arm64
+      - test
 
     permissions:
       contents: write
@@ -1337,12 +1369,12 @@ jobs:
         if-no-files-found: ignore
 
 #-------------------------------------------------------------------------------
-# Integration tests against the released binary (platform-swappable)
+# Integration tests against each platform's built binary (gated by REQUIRE_TESTS_TO_PUBLISH)
 #-------------------------------------------------------------------------------
 
   test:
     name: '🧪 Test (${{ matrix.label }})'
-    needs: [upload]
+    needs: [build-linux, build-macos, build-windows]
     permissions:
       contents: read
     strategy:
@@ -1454,7 +1486,7 @@ jobs:
         done
 
     - name: '🧪 Run tests'
-      continue-on-error: true
+      continue-on-error: ${{ env.REQUIRE_TESTS_TO_PUBLISH != 'true' }}
       run: |
         pytest tests/ \
           -m "${{ matrix.marker_expr }}" \

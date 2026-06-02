@@ -329,6 +329,8 @@ if(ENABLE_PGO)
       message(STATUS "PGO: Profile data will be written to: ${PGO_PROFILE_DIR}")
       message(STATUS "PGO: After running the app, rebuild with -DPGO_STAGE=USE")
 
+      add_compile_definitions(SS_PGO_INSTRUMENT)
+
       if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
          add_compile_options(/GL)
          add_link_options(

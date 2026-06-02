@@ -52,6 +52,18 @@
 #  include "API/GRPC/GRPCServer.h"
 #endif
 
+// The benchmark hard-exits (skipping atexit), so PGO-instrumented builds flush the profile here.
+#ifdef SS_PGO_INSTRUMENT
+extern "C"
+{
+#  if defined(__clang__)
+  int __llvm_profile_write_file(void);
+#  elif defined(__GNUC__)
+  void __gcov_dump(void);
+#  endif
+}
+#endif
+
 namespace Misc {
 
 //--------------------------------------------------------------------------------------------------
@@ -341,13 +353,17 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
     std::fclose(file);
   }
 
-  // Stop the JS watchdog thread while QApplication is alive (its aboutToQuit hook never fires).
-  DataModel::JsWatchdogThread::instance().shutdown();
+  const int code = (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;
 
-  // Destroy IO drivers now so the USB libusb event thread joins before static destruction.
-  IO::ConnectionManager::instance().shutdownDrivers();
-
-  return (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;
+  // Skip the Qt/driver teardown (hangs on Windows, throws on Linux): flush the PGO profile, _Exit.
+#ifdef SS_PGO_INSTRUMENT
+#  if defined(__clang__)
+  (void)__llvm_profile_write_file();
+#  elif defined(__GNUC__)
+  __gcov_dump();
+#  endif
+#endif
+  std::_Exit(code);
 }
 
 }  // namespace Misc
