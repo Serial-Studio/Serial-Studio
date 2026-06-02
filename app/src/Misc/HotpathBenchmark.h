@@ -23,6 +23,7 @@
 
 #include <QByteArray>
 #include <QJsonObject>
+#include <QString>
 #include <QtGlobal>
 
 namespace Misc {
@@ -47,7 +48,11 @@ public:
 
   [[nodiscard]] static Result run(
     quint64 targetFrames, double minFps, double minSeconds, int language, bool withExporters);
-  [[nodiscard]] static int runAndReport(quint64 targetFrames, double minFps, double minSeconds);
+  [[nodiscard]] static int runAndReport(
+    quint64 targetFrames,
+    double minFps,
+    double minSeconds,
+    const QString& outputFile = QStringLiteral("benchmark.txt"));
 
 private:
   static void enableConsumers();

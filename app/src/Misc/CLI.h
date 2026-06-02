@@ -81,6 +81,10 @@ struct CliOptions {
     "benchmark-seconds",
     "Wall-clock seconds the hotpath benchmark must sustain (default: 10)",
     "seconds"};
+  QCommandLineOption benchmarkOutputOpt{
+    "benchmark-output",
+    "File to write the hotpath benchmark report to (default: benchmark.txt)",
+    "file"};
 #ifdef BUILD_COMMERCIAL
   QCommandLineOption noToolbarOpt{"no-toolbar", "Hides the main window toolbar at startup (Pro)"};
   QCommandLineOption runtimeOpt{"runtime",

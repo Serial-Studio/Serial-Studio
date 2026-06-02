@@ -1152,7 +1152,6 @@ jobs:
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out (no PGO profile)' }
-        if (Test-Path benchmark.txt) { Get-Content benchmark.txt }
 
     - name: '🚧 Reconfigure with CMake (PGO use)'
       env:
@@ -1182,7 +1181,6 @@ jobs:
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow
         if (-not $p.WaitForExit(300000)) { $p.Kill() }
-        if (Test-Path benchmark.txt) { Get-Content benchmark.txt }
         if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
 
     - name: '🔎 Scan binaries with deglyph'

@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <QByteArray>
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -61,6 +62,13 @@ int __llvm_profile_write_file(void);
 void __gcov_dump(void);
 #  endif
 }
+#endif
+
+// SS_NO_PGO excludes runAndReport from PGO: its body differs between the GENERATE and USE builds.
+#if defined(__GNUC__) || defined(__clang__)
+#  define SS_NO_PGO __attribute__((no_profile_instrument_function))
+#else
+#  define SS_NO_PGO
 #endif
 
 namespace Misc {
@@ -287,18 +295,23 @@ HotpathBenchmark::Result HotpathBenchmark::run(
 /**
  * @brief Runs the gated Lua, training-only JS, and exporters-on diagnostic pipelines; returns code.
  */
-int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double minSeconds)
+SS_NO_PGO
+int HotpathBenchmark::runAndReport(quint64 targetFrames,
+                                   double minFps,
+                                   double minSeconds,
+                                   const QString& outputFile)
 {
   const Result lua  = run(targetFrames, minFps, minSeconds, SerialStudio::Lua, false);
   const Result js   = run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::JavaScript, false);
   const Result luaX = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, true);
 
-  std::FILE* file      = std::fopen("benchmark.txt", "w");
-  std::FILE* sinks[2]  = {stdout, file};
+  QFile file(outputFile);
+  const bool fileOpen  = file.open(QIODevice::WriteOnly | QIODevice::Text);
   const auto printData = [&](const char* fmt, auto... args) {
-    for (std::FILE* s : sinks)
-      if (s)
-        std::fprintf(s, fmt, args...);
+    const QByteArray line = QString::asprintf(fmt, args...).toUtf8();
+    std::fputs(line.constData(), stdout);
+    if (fileOpen)
+      file.write(line);
   };
 
   const auto report = [&](const char* tag, const Result& r) {
@@ -332,9 +345,9 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames, double minFps, double m
             luaX.framesPerSecond);
 
   std::fflush(stdout);
-  if (file) {
-    std::fflush(file);
-    std::fclose(file);
+  if (fileOpen) {
+    file.flush();
+    file.close();
   }
 
   const int code = (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;

@@ -94,6 +94,7 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.minFpsOpt);
   m_parser.addOption(m_opts.benchmarkFramesOpt);
   m_parser.addOption(m_opts.benchmarkSecondsOpt);
+  m_parser.addOption(m_opts.benchmarkOutputOpt);
 #ifdef BUILD_COMMERCIAL
   m_parser.addOption(m_opts.noToolbarOpt);
   m_parser.addOption(m_opts.runtimeOpt);
@@ -250,7 +251,14 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
       seconds = val;
   }
 
-  const int rc = Misc::HotpathBenchmark::runAndReport(frames, minFps, seconds);
+  QString output = QStringLiteral("benchmark.txt");
+  if (m_parser.isSet(m_opts.benchmarkOutputOpt)) {
+    const QString val = m_parser.value(m_opts.benchmarkOutputOpt).trimmed();
+    if (!val.isEmpty())
+      output = val;
+  }
+
+  const int rc = Misc::HotpathBenchmark::runAndReport(frames, minFps, seconds, output);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
 
