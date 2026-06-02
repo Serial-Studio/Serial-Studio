@@ -20,11 +20,17 @@
  */
 
 #include <QApplication>
+#include <QEvent>
 #include <QIcon>
 #include <QLoggingCategory>
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QStyleFactory>
+
+#ifdef Q_OS_LINUX
+#  include <typeinfo>
+#  include <QThread>
+#endif
 
 #include "AppInfo.h"
 #include "Misc/CLI.h"
@@ -94,6 +100,46 @@ static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
 }
 
 /**
+ * @brief QApplication that logs any exception escaping an event handler (Linux teardown diagnostic).
+ */
+class SerialStudioApplication : public QApplication
+{
+public:
+  /**
+   * @brief Forwards construction to QApplication.
+   */
+  SerialStudioApplication(int& argc, char** argv)
+    : QApplication(argc, argv)
+  {
+  }
+
+  /**
+   * @brief Wraps event delivery so a stray exception is reported with type/thread/receiver context.
+   */
+  bool notify(QObject* receiver, QEvent* event) override
+  {
+#ifdef Q_OS_LINUX
+    try {
+      return QApplication::notify(receiver, event);
+    } catch (const std::exception& e) {
+      qCritical("event-handler exception: %s [%s] thread=%p receiver=%s",
+                e.what(),
+                typeid(e).name(),
+                static_cast<void*>(QThread::currentThread()),
+                receiver ? receiver->metaObject()->className() : "null");
+      throw;
+    } catch (...) {
+      qCritical("event-handler exception: unknown type thread=%p",
+                static_cast<void*>(QThread::currentThread()));
+      throw;
+    }
+#else
+    return QApplication::notify(receiver, event);
+#endif
+  }
+};
+
+/**
  * @brief Application entry-point: bootstraps Qt, parses CLI flags, and runs the event loop.
  */
 int main(int argc, char** argv)
@@ -118,7 +164,7 @@ int main(int argc, char** argv)
   Misc::GraphicsBackend::applyConfiguredBackend();
 
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("qapplication-construct"));
-  QApplication app(argc, argv);
+  SerialStudioApplication app(argc, argv);
 
   Platform::FileOpenEventFilter fileOpenFilter;
   app.installEventFilter(&fileOpenFilter);
