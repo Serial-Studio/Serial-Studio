@@ -1434,67 +1434,67 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Kıyaslama</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="61"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="62"/>
         <source>%1 frames/s</source>
         <translation>%1 frame/s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="65"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="66"/>
         <source>%1 s</source>
         <translation>%1 s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="70"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="71"/>
         <source>n/a</source>
         <translation>yok</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="72"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="73"/>
         <source>Pass</source>
         <translation>Başarılı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="72"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="73"/>
         <source>Fail</source>
         <translation>Başarısız</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="93"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Hotpath Benchmark</source>
         <translation>Hotpath Kıyaslaması</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="104"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="105"/>
         <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Bu bilgisayarın Serial Studio veri hattı üzerinden frame'leri ne hızda çıkarabileceğini, ayrıştırabileceğini ve görselleştirebileceğini ölçer.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="142"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="143"/>
         <source>The interface will freeze while running</source>
         <translation>Çalışırken arayüz donacak</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="153"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="154"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Her aşama ana iş parçacığında kesintisiz çalışır, bu nedenle pencere bitene kadar yanıt vermez. Mevcut projeniz kıyaslama sona erdiğinde otomatik olarak yeniden yüklenir.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="172"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="173"/>
         <source>Frames per phase:</source>
         <translation>Aşama başına çerçeve:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="186"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="187"/>
         <source>Minimum duration:</source>
         <translation>Minimum süre:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="224"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="225"/>
         <source>Running %1...</source>
         <translation>%1 Çalıştırılıyor...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="226"/>
         <source>Preparing...</source>
         <translation>Hazırlanıyor...</translation>
     </message>
@@ -1504,22 +1504,22 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Boru Hattı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="281"/>
         <source>Throughput</source>
         <translation>Verim</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="290"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="293"/>
         <source>Time</source>
         <translation>Zaman</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="301"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
         <source>Result</source>
         <translation>Sonuç</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="387"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
         <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline 1024 K frames/s; numeric: Lua 256 K, JavaScript 128 K; mixed: Lua 128 K, JavaScript 64 K). The export and dashboard phases are informational.</source>
         <translation>Başarılı/Başarısız, veri hattı ve ayrıştırıcı aşamaları için geçerlidir (veri hattı 1024 K çerçeve/s; sayısal: Lua 256 K, JavaScript 128 K; karışık: Lua 128 K, JavaScript 64 K). Dışa aktarma ve gösterge paneli aşamaları bilgilendirme amaçlıdır.</translation>
     </message>
@@ -1528,22 +1528,22 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation type="vanished">Başarılı/Başarısız yalnızca ayrıştırıcı aşamaları için geçerlidir (Lua hedef 256 K çerçeve/s, JavaScript 128 K). Dışa aktarma ve gösterge paneli aşamaları bilgilendirme amaçlıdır.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="401"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="412"/>
         <source>Clear</source>
         <translation>Temizle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="421"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="420"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="431"/>
         <source>Running...</source>
         <translation>Çalışıyor...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="420"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="431"/>
         <source>Run Benchmark</source>
         <translation>Kıyaslamayı Çalıştır</translation>
     </message>
@@ -1551,7 +1551,7 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
 <context>
     <name>BenchmarkRunner</name>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="181"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
         <source>Data pipeline</source>
         <translation>Veri hattı</translation>
     </message>
@@ -1572,72 +1572,72 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation type="vanished">Lua + gösterge paneli</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
         <source>Lua parser (numeric)</source>
         <translation>Lua ayrıştırıcı (sayısal)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
         <source>JavaScript parser (numeric)</source>
         <translation>JavaScript ayrıştırıcı (sayısal)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="185"/>
         <source>Lua parser (mixed)</source>
         <translation>Lua ayrıştırıcı (karışık)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="185"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="186"/>
         <source>JavaScript parser (mixed)</source>
         <translation>JavaScript ayrıştırıcı (karışık)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="186"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="187"/>
         <source>Lua + data export (mixed)</source>
         <translation>Lua + veri dışa aktarma (karışık)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="187"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
         <source>Lua + dashboard (numeric)</source>
         <translation>Lua + gösterge paneli (sayısal)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
         <source>100 K frames</source>
         <translation>100 K çerçeve</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
         <source>250 K frames</source>
         <translation>250 K frame</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
         <source>500 K frames</source>
         <translation>500 K frame</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
         <source>1 M frames</source>
         <translation>1 M frame</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>1 second</source>
         <translation>1 saniye</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>2 seconds</source>
         <translation>2 saniye</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>5 seconds</source>
         <translation>5 saniye</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>10 seconds</source>
         <translation>10 saniye</translation>
     </message>
@@ -5408,7 +5408,7 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>Girişler</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="269"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="274"/>
         <source>No shared tables.</source>
         <translation>Paylaşımlı tablo yok.</translation>
     </message>
@@ -10795,8 +10795,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist yazılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows kısayol yazıcısı bu platformda kullanılamıyor.</translation>
     </message>
@@ -10827,8 +10827,8 @@ Would you like to open the download page?</source>
         <translation>.lnk dosyası kaydedilemedi (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS kısayol yazıcısı bu platformda kullanılamıyor.</translation>
     </message>
@@ -12058,69 +12058,69 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
 <context>
     <name>ProcessPicker</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="55"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="60"/>
         <source>Select Running Process</source>
         <translation>Çalışan İşlemi Seç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="211"/>
         <source>Select a running process to derive a named-pipe path suggestion.</source>
         <translation>Adlandırılmış kanal yolu önerisi türetmek için çalışan bir işlem seçin.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="217"/>
         <source>Filter Processes</source>
         <translation>İşlemleri Filtrele</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="231"/>
         <source>Type to filter by name…</source>
         <translation>Ada göre filtrelemek için yazın…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="235"/>
         <source>Refresh</source>
         <translation>Yenile</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="243"/>
         <source>Running Processes</source>
         <translation>Çalışan İşlemler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="281"/>
         <source>Process</source>
         <translation>İşlem</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="282"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="288"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="383"/>
         <source>No processes match the filter.</source>
         <translation>Filtreyle eşleşen işlem yok.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="384"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>Çalışan işlem bulunamadı.
 Listeyi güncellemek için Yenile'ye tıklayın.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="400"/>
         <source>%1 process(es)</source>
         <translation>%1 işlem</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="396"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="404"/>
         <source>Select</source>
         <translation>Seç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="402"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="410"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
@@ -12879,8 +12879,8 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
         <translation>Genel G/Ç hatası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Ayrıştırıcı Devre Dışı</translation>
     </message>
@@ -12894,12 +12894,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Muhtemel neden: betik gövdesinde sonsuz döngü veya son derece yavaş işlem. Ayrıştırmayı yeniden etkinleştirmek için betiği düzeltin ve projeyi yeniden yükleyin.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="321"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="324"/>
         <source>Lua Syntax Error</source>
         <translation>Lua Sözdizimi Hatası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="322"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="325"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -12908,12 +12908,12 @@ Muhtemel neden: betik gövdesinde sonsuz döngü veya son derece yavaş işlem. 
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="362"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="375"/>
         <source>Lua Runtime Error</source>
         <translation>Lua Çalışma Zamanı Hatası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="363"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="376"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -12922,13 +12922,13 @@ Muhtemel neden: betik gövdesinde sonsuz döngü veya son derece yavaş işlem. 
 %1</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="397"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="384"/>
         <source>Missing Parse Function</source>
         <translation>Eksik Parse Fonksiyonu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="385"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="398"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -12939,13 +12939,13 @@ Lütfen kodunuzun şunu içerdiğinden emin olun:
 function parse(frame) ... end</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="460"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="533"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="447"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse Fonksiyonu Çalışma Zamanı Hatası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="448"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="461"/>
         <source>The parse function contains an error:
 
 %1
@@ -15691,43 +15691,43 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
 <context>
     <name>Stopwatch</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="200"/>
         <source>Stop</source>
         <translation>Durdur</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="200"/>
         <source>Start</source>
         <translation>Başlat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="205"/>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="279"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="210"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="288"/>
         <source>Lap</source>
         <translation>Tur</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="221"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="226"/>
         <source>Reset</source>
         <translation>Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="271"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="279"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="288"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="297"/>
         <source>Total</source>
         <translation>Toplam</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="380"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="393"/>
         <source>No laps recorded</source>
         <translation>Kayıtlı tur yok</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="388"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="401"/>
         <source>Press Lap while the stopwatch is running</source>
         <translation>Kronometre çalışırken Tur'a basın</translation>
     </message>

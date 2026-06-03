@@ -33,6 +33,11 @@ Item {
   implicitHeight: 320
 
   //
+  // Mirror the lap table when the active language is right-to-left
+  //
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
+
+  //
   // Widget data inputs (unused; Stopwatch has no project-bound model)
   //
   property var color
@@ -262,12 +267,15 @@ Item {
           anchors.fill: parent
           anchors.leftMargin: 10
           anchors.rightMargin: 10
+          LayoutMirroring.enabled: root.rtl
+          LayoutMirroring.childrenInherit: true
 
           Label {
             Layout.preferredWidth: 48
             font: Cpp_Misc_CommonFonts.boldUiFont
             color: Cpp_ThemeManager.colors["text"]
             verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
             text: qsTr("#")
           }
 
@@ -276,6 +284,7 @@ Item {
             font: Cpp_Misc_CommonFonts.boldUiFont
             color: Cpp_ThemeManager.colors["text"]
             verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
             text: qsTr("Lap")
           }
 
@@ -284,7 +293,7 @@ Item {
             font: Cpp_Misc_CommonFonts.boldUiFont
             color: Cpp_ThemeManager.colors["text"]
             verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
             text: qsTr("Total")
           }
         }
@@ -338,12 +347,15 @@ Item {
             anchors.fill: parent
             anchors.leftMargin: 10
             anchors.rightMargin: 10
+            LayoutMirroring.enabled: root.rtl
+            LayoutMirroring.childrenInherit: true
 
             Label {
               Layout.preferredWidth: 48
               font: Cpp_Misc_CommonFonts.uiFont
               color: Cpp_ThemeManager.colors["placeholder_text"]
               verticalAlignment: Text.AlignVCenter
+              horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
               text: "#" + lapRow.model.n
             }
 
@@ -352,6 +364,7 @@ Item {
               font: Cpp_Misc_CommonFonts.customMonoFont(1.0, false)
               color: Cpp_ThemeManager.colors["text"]
               verticalAlignment: Text.AlignVCenter
+              horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
               text: root.formatMs(lapRow.model.lapMs)
             }
 
@@ -360,7 +373,7 @@ Item {
               font: Cpp_Misc_CommonFonts.customMonoFont(1.0, false)
               color: Cpp_ThemeManager.colors["placeholder_text"]
               verticalAlignment: Text.AlignVCenter
-              horizontalAlignment: Text.AlignRight
+              horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
               text: root.formatMs(lapRow.model.totalMs)
             }
           }

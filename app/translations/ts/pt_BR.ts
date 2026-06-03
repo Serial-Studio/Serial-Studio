@@ -1434,67 +1434,67 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="61"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="62"/>
         <source>%1 frames/s</source>
         <translation>%1 frames/s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="65"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="66"/>
         <source>%1 s</source>
         <translation>%1 s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="70"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="71"/>
         <source>n/a</source>
         <translation>n/d</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="72"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="73"/>
         <source>Pass</source>
         <translation>Aprovado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="72"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="73"/>
         <source>Fail</source>
         <translation>Reprovado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="93"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Hotpath Benchmark</source>
         <translation>Benchmark de Hotpath</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="104"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="105"/>
         <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Mede a velocidade com que este computador pode extrair, analisar e visualizar frames através do pipeline de dados do Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="142"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="143"/>
         <source>The interface will freeze while running</source>
         <translation>A interface congelará durante a execução</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="153"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="154"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Cada fase executa continuamente na thread principal, então a janela para de responder até que termine. Seu projeto atual é recarregado automaticamente quando o benchmark termina.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="172"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="173"/>
         <source>Frames per phase:</source>
         <translation>Frames por fase:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="186"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="187"/>
         <source>Minimum duration:</source>
         <translation>Duração mínima:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="224"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="225"/>
         <source>Running %1...</source>
         <translation>Executando %1...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="226"/>
         <source>Preparing...</source>
         <translation>Preparando...</translation>
     </message>
@@ -1504,22 +1504,22 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="281"/>
         <source>Throughput</source>
         <translation>Taxa de Transferência</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="290"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="293"/>
         <source>Time</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="301"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
         <source>Result</source>
         <translation>Resultado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="387"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
         <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline 1024 K frames/s; numeric: Lua 256 K, JavaScript 128 K; mixed: Lua 128 K, JavaScript 64 K). The export and dashboard phases are informational.</source>
         <translation>Aprovado/Reprovado aplica-se às fases de pipeline de dados e analisador (pipeline de dados 1024 K frames/s; numérico: Lua 256 K, JavaScript 128 K; misto: Lua 128 K, JavaScript 64 K). As fases de exportação e dashboard são informativas.</translation>
     </message>
@@ -1528,22 +1528,22 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation type="vanished">Aprovado/Reprovado aplica-se apenas às fases do analisador (meta Lua 256 K frames/s, JavaScript 128 K). As fases de exportação e dashboard são informativas.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="401"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="412"/>
         <source>Clear</source>
         <translation>Limpar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="421"/>
         <source>Close</source>
         <translation>Fechar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="420"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="431"/>
         <source>Running...</source>
         <translation>Executando...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="420"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="431"/>
         <source>Run Benchmark</source>
         <translation>Executar Benchmark</translation>
     </message>
@@ -1551,7 +1551,7 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
 <context>
     <name>BenchmarkRunner</name>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="181"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
         <source>Data pipeline</source>
         <translation>Pipeline de dados</translation>
     </message>
@@ -1572,72 +1572,72 @@ Habilite apenas em redes confiáveis. Clientes não confiáveis podem ler dados 
         <translation type="vanished">Lua + painel</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
         <source>Lua parser (numeric)</source>
         <translation>Analisador Lua (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
         <source>JavaScript parser (numeric)</source>
         <translation>Analisador JavaScript (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="185"/>
         <source>Lua parser (mixed)</source>
         <translation>Analisador Lua (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="185"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="186"/>
         <source>JavaScript parser (mixed)</source>
         <translation>Analisador JavaScript (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="186"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="187"/>
         <source>Lua + data export (mixed)</source>
         <translation>Lua + exportação de dados (misto)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="187"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
         <source>Lua + dashboard (numeric)</source>
         <translation>Lua + dashboard (numérico)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
         <source>100 K frames</source>
         <translation>100 K frames</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
         <source>250 K frames</source>
         <translation>250 K frames</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
         <source>500 K frames</source>
         <translation>500 K frames</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
         <source>1 M frames</source>
         <translation>1 M frames</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>1 second</source>
         <translation>1 segundo</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>2 seconds</source>
         <translation>2 segundos</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>5 seconds</source>
         <translation>5 segundos</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>10 seconds</source>
         <translation>10 segundos</translation>
     </message>
@@ -5408,7 +5408,7 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation>Entradas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="269"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="274"/>
         <source>No shared tables.</source>
         <translation>Nenhuma tabela compartilhada.</translation>
     </message>
@@ -10795,8 +10795,8 @@ Deseja abrir a página de download?</translation>
         <translation>Não foi possível gravar Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>O gravador de atalhos do Windows não está disponível nesta plataforma.</translation>
     </message>
@@ -10827,8 +10827,8 @@ Deseja abrir a página de download?</translation>
         <translation>Falha ao salvar o arquivo .lnk (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>O gravador de atalhos do macOS não está disponível nesta plataforma.</translation>
     </message>
@@ -12058,69 +12058,69 @@ Adicione grupos acima para consultar múltiplos tipos de registradores.</transla
 <context>
     <name>ProcessPicker</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="55"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="60"/>
         <source>Select Running Process</source>
         <translation>Selecionar Processo em Execução</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="211"/>
         <source>Select a running process to derive a named-pipe path suggestion.</source>
         <translation>Selecione um processo em execução para derivar uma sugestão de caminho de pipe nomeado.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="217"/>
         <source>Filter Processes</source>
         <translation>Filtrar Processos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="231"/>
         <source>Type to filter by name…</source>
         <translation>Digite para filtrar por nome…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="235"/>
         <source>Refresh</source>
         <translation>Atualizar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="243"/>
         <source>Running Processes</source>
         <translation>Processos em Execução</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="281"/>
         <source>Process</source>
         <translation>Processo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="282"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="288"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="383"/>
         <source>No processes match the filter.</source>
         <translation>Nenhum processo corresponde ao filtro.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="384"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>Nenhum processo em execução encontrado.
 Clique em Atualizar para atualizar a lista.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="400"/>
         <source>%1 process(es)</source>
         <translation>%1 processo(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="396"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="404"/>
         <source>Select</source>
         <translation>Selecionar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="402"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="410"/>
         <source>Close</source>
         <translation>Fechar</translation>
     </message>
@@ -12879,8 +12879,8 @@ Clique em Atualizar para atualizar a lista.</translation>
         <translation>Erro geral de E/S</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>Frame Parser Disabled</source>
         <translation>Analisador de Frames Desabilitado</translation>
     </message>
@@ -12894,12 +12894,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Causa mais provável: um loop infinito ou operação extremamente lenta no corpo do script. Corrija o script e recarregue o projeto para reabilitar a análise.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="321"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="324"/>
         <source>Lua Syntax Error</source>
         <translation>Erro de Sintaxe Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="322"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="325"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -12908,12 +12908,12 @@ Causa mais provável: um loop infinito ou operação extremamente lenta no corpo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="362"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="375"/>
         <source>Lua Runtime Error</source>
         <translation>Erro de Execução Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="363"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="376"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -12922,13 +12922,13 @@ Causa mais provável: um loop infinito ou operação extremamente lenta no corpo
 %1</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="397"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="384"/>
         <source>Missing Parse Function</source>
         <translation>Função Parse Ausente</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="385"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="398"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -12939,13 +12939,13 @@ Certifique-se de que seu código inclui:
 function parse(frame) ... end</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="460"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="533"/>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="447"/>
         <source>Parse Function Runtime Error</source>
         <translation>Erro de Execução da Função de Análise</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="448"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="461"/>
         <source>The parse function contains an error:
 
 %1
@@ -15691,43 +15691,43 @@ Ative Incorporar Projeto para incluir o projeto no atalho, para que continue fun
 <context>
     <name>Stopwatch</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="200"/>
         <source>Stop</source>
         <translation>Parar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="195"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="200"/>
         <source>Start</source>
         <translation>Iniciar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="205"/>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="279"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="210"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="288"/>
         <source>Lap</source>
         <translation>Volta</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="221"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="226"/>
         <source>Reset</source>
         <translation>Redefinir</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="271"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="279"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="288"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="297"/>
         <source>Total</source>
         <translation>Total</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="380"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="393"/>
         <source>No laps recorded</source>
         <translation>Nenhuma volta registrada</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="388"/>
+        <location filename="../../qml/Widgets/Dashboard/Stopwatch.qml" line="401"/>
         <source>Press Lap while the stopwatch is running</source>
         <translation>Pressione Volta enquanto o cronômetro estiver em execução</translation>
     </message>

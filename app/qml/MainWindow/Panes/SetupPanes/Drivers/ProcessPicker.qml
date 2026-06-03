@@ -39,6 +39,11 @@ Window {
   property int titlebarHeight: 0
 
   //
+  // Keep the PID column on its trailing edge when mirrored for RTL
+  //
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
+
+  //
   // The full "Name [PID]" string selected by the user
   //
   property string selectedProcessName: ""
@@ -276,6 +281,7 @@ Window {
                 text: qsTr("Process")
                 Layout.fillWidth: true
                 font: Cpp_Misc_CommonFonts.boldUiFont
+                horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
               }
 
               Label {
@@ -283,6 +289,7 @@ Window {
                 color: palette.text
                 Layout.preferredWidth: 60
                 font: Cpp_Misc_CommonFonts.boldUiFont
+                horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
               }
             }
           }
@@ -324,6 +331,7 @@ Window {
                          ? palette.highlightedText
                          : palette.text
                   font: Cpp_Misc_CommonFonts.monoFont
+                  horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
 
                   //
                   // Show only the name part before " ["
@@ -337,7 +345,7 @@ Window {
 
                 Label {
                   Layout.preferredWidth: 60
-                  horizontalAlignment: Text.AlignRight
+                  horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
                   color: processList.currentIndex === index
                          ? palette.highlightedText
                          : palette.text

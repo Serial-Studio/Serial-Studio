@@ -214,13 +214,15 @@ Widgets.Pane {
               LayoutMirroring.childrenInherit: true
 
               Label {
-                leftPadding: 8
                 text: modelData.name
                 elide: Text.ElideRight
                 color: rowDel.textColor
                 Layout.preferredWidth: 220
+                leftPadding: root.rtl ? 0 : 8
+                rightPadding: root.rtl ? 8 : 0
                 Layout.alignment: Qt.AlignVCenter
                 font: Cpp_Misc_CommonFonts.monoFont
+                horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
               }
 
               Rectangle {
@@ -231,12 +233,14 @@ Widgets.Pane {
 
               Label {
                 opacity: 0.75
-                leftPadding: 8
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 color: rowDel.textColor
                 text: modelData.description
+                leftPadding: root.rtl ? 0 : 8
+                rightPadding: root.rtl ? 8 : 0
                 Layout.alignment: Qt.AlignVCenter
+                horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
               }
 
               Rectangle {
@@ -246,13 +250,14 @@ Widgets.Pane {
               }
 
               Label {
-                rightPadding: 8
                 color: rowDel.textColor
                 Layout.preferredWidth: 100
                 text: modelData.entryCount
+                leftPadding: root.rtl ? 8 : 0
+                rightPadding: root.rtl ? 0 : 8
                 Layout.alignment: Qt.AlignVCenter
                 font: Cpp_Misc_CommonFonts.monoFont
-                horizontalAlignment: Text.AlignRight
+                horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
               }
             }
           }

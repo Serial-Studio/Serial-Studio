@@ -41,6 +41,7 @@ Widgets.SmartDialog {
   readonly property var results: runner.results
   readonly property bool running: runner.running
   readonly property var runner: Cpp_Benchmark_Runner
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
 
   //
   // Reset the results table when the dialog is dismissed (same as the Clear button)
@@ -264,45 +265,50 @@ Widgets.SmartDialog {
 
           Label {
             topPadding: 8
-            leftPadding: 10
             bottomPadding: 8
             text: qsTr("Pipeline")
             Layout.fillWidth: true
+            leftPadding: root.rtl ? 0 : 10
+            rightPadding: root.rtl ? 10 : 0
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.9, true)
+            horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
           }
 
           Label {
             topPadding: 8
             bottomPadding: 8
-            rightPadding: 10
             text: qsTr("Throughput")
             Layout.preferredWidth: 150
-            horizontalAlignment: Text.AlignRight
+            leftPadding: root.rtl ? 10 : 0
+            rightPadding: root.rtl ? 0 : 10
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.9, true)
+            horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
           }
 
           Label {
             topPadding: 8
             bottomPadding: 8
-            rightPadding: 10
             text: qsTr("Time")
             Layout.preferredWidth: 70
-            horizontalAlignment: Text.AlignRight
+            leftPadding: root.rtl ? 10 : 0
+            rightPadding: root.rtl ? 0 : 10
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.9, true)
+            horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
           }
 
           Label {
             topPadding: 8
             bottomPadding: 8
-            rightPadding: 10
             text: qsTr("Result")
             Layout.preferredWidth: 60
-            horizontalAlignment: Text.AlignRight
+            leftPadding: root.rtl ? 10 : 0
+            rightPadding: root.rtl ? 0 : 10
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.9, true)
+            horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
           }
         }
 
@@ -328,45 +334,50 @@ Widgets.SmartDialog {
 
             Label {
               Layout.fillWidth: true
-              leftPadding: 10
               topPadding: 6
               bottomPadding: 6
               elide: Text.ElideRight
+              leftPadding: root.rtl ? 0 : 10
+              rightPadding: root.rtl ? 10 : 0
               text: resultRow.modelData.label
               color: Cpp_ThemeManager.colors["text"]
+              horizontalAlignment: root.rtl ? Text.AlignRight : Text.AlignLeft
             }
 
             Label {
-              Layout.preferredWidth: 150
-              rightPadding: 10
               topPadding: 6
               bottomPadding: 6
-              horizontalAlignment: Text.AlignRight
+              Layout.preferredWidth: 150
+              leftPadding: root.rtl ? 10 : 0
+              rightPadding: root.rtl ? 0 : 10
               color: Cpp_ThemeManager.colors["text"]
               text: root.fmtFps(resultRow.modelData.fps)
               font: Cpp_Misc_CommonFonts.customMonoFont(0.9, false)
+              horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
             }
 
             Label {
-              Layout.preferredWidth: 70
-              rightPadding: 10
               topPadding: 6
               bottomPadding: 6
-              horizontalAlignment: Text.AlignRight
+              Layout.preferredWidth: 70
+              leftPadding: root.rtl ? 10 : 0
+              rightPadding: root.rtl ? 0 : 10
               color: Cpp_ThemeManager.colors["text"]
               text: root.fmtSeconds(resultRow.modelData.seconds)
               font: Cpp_Misc_CommonFonts.customMonoFont(0.9, false)
+              horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
             }
 
             Label {
               topPadding: 6
-              rightPadding: 10
               bottomPadding: 6
               Layout.preferredWidth: 60
-              horizontalAlignment: Text.AlignRight
+              leftPadding: root.rtl ? 10 : 0
+              rightPadding: root.rtl ? 0 : 10
               text: root.resultText(resultRow.modelData)
               color: root.resultColor(resultRow.modelData)
               font: Cpp_Misc_CommonFonts.customUiFont(0.9, true)
+              horizontalAlignment: root.rtl ? Text.AlignLeft : Text.AlignRight
             }
           }
         }
