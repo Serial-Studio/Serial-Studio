@@ -15,7 +15,7 @@ import time
 
 import pytest
 
-from utils import ChecksumType, DataGenerator
+from utils import APIError, ChecksumType, DataGenerator
 
 
 def test_quickplot_comma_csv_parsing(api_client, device_simulator, clean_state):
@@ -67,14 +67,13 @@ def test_quickplot_comma_csv_parsing(api_client, device_simulator, clean_state):
     ], "Device should remain connected after receiving QuickPlot data"
 
 
-def test_csv_parsing_with_javascript_semicolon(
-    api_client, device_simulator, clean_state
-):
+def test_csv_parsing_with_lua_semicolon(api_client, device_simulator, clean_state):
     """
-    Test CSV parsing with semicolon delimiter using JavaScript parser.
+    Test CSV parsing with semicolon delimiter using a Lua parser.
 
-    This verifies that custom JavaScript parsers can correctly split
-    semicolon-separated values.
+    Exercises the native frame:split(sep) helper (string.split installed by
+    LuaCompat: literal separator, keeps empty fields) on semicolon-separated
+    values.
     """
     # Create new project via API
     api_client.create_new_project()
@@ -89,9 +88,10 @@ def test_csv_parsing_with_javascript_semicolon(
         api_client.command("project.dataset.add", {"groupId": 0, "options": 0})
         time.sleep(0.1)
 
-    # Set JavaScript parser for semicolon delimiter
-    parser_code = "function parse(frame) { return frame.split(';'); }"
-    api_client.command("project.frameParser.setCode", {"code": parser_code})
+    # Set Lua parser for semicolon delimiter via the native frame:split helper
+    # (language=1 = Lua, which is also the new-project default)
+    parser_code = "function parse(frame) return frame:split(';') end"
+    api_client.set_frame_parser_code(parser_code, language=1)
     time.sleep(0.2)
 
     # Configure frame delimiters for ProjectFile mode
@@ -142,12 +142,11 @@ def test_csv_parsing_with_javascript_semicolon(
     assert project_status["datasetCount"] >= 3, "Should have at least 3 datasets"
 
 
-def test_csv_parsing_with_javascript_tab(api_client, device_simulator, clean_state):
+def test_csv_parsing_with_lua_tab(api_client, device_simulator, clean_state):
     """
-    Test CSV parsing with tab delimiter using JavaScript parser.
+    Test CSV parsing with tab delimiter using a Lua parser.
 
-    This verifies that custom JavaScript parsers can correctly split
-    tab-separated values.
+    Exercises the native frame:split(sep) helper on tab-separated values.
     """
     # Create new project via API
     api_client.create_new_project()
@@ -162,9 +161,10 @@ def test_csv_parsing_with_javascript_tab(api_client, device_simulator, clean_sta
         api_client.command("project.dataset.add", {"groupId": 0, "options": 0})
         time.sleep(0.1)
 
-    # Set JavaScript parser for tab delimiter
-    parser_code = "function parse(frame) { return frame.split('\\t'); }"
-    api_client.command("project.frameParser.setCode", {"code": parser_code})
+    # Set Lua parser for tab delimiter via the native frame:split helper
+    # (language=1 = Lua, which is also the new-project default)
+    parser_code = "function parse(frame) return frame:split('\\t') end"
+    api_client.set_frame_parser_code(parser_code, language=1)
     time.sleep(0.2)
 
     # Configure frame delimiters for ProjectFile mode
@@ -215,12 +215,11 @@ def test_csv_parsing_with_javascript_tab(api_client, device_simulator, clean_sta
     assert project_status["datasetCount"] >= 4, "Should have at least 4 datasets"
 
 
-def test_csv_parsing_with_javascript_pipe(api_client, device_simulator, clean_state):
+def test_csv_parsing_with_lua_pipe(api_client, device_simulator, clean_state):
     """
-    Test CSV parsing with pipe delimiter using JavaScript parser.
+    Test CSV parsing with pipe delimiter using a Lua parser.
 
-    This verifies that custom JavaScript parsers can correctly split
-    pipe-separated values.
+    Exercises the native frame:split(sep) helper on pipe-separated values.
     """
     # Create new project via API
     api_client.create_new_project()
@@ -235,9 +234,10 @@ def test_csv_parsing_with_javascript_pipe(api_client, device_simulator, clean_st
         api_client.command("project.dataset.add", {"groupId": 0, "options": 0})
         time.sleep(0.1)
 
-    # Set JavaScript parser for pipe delimiter
-    parser_code = "function parse(frame) { return frame.split('|'); }"
-    api_client.command("project.frameParser.setCode", {"code": parser_code})
+    # Set Lua parser for pipe delimiter via the native frame:split helper
+    # (language=1 = Lua, which is also the new-project default)
+    parser_code = "function parse(frame) return frame:split('|') end"
+    api_client.set_frame_parser_code(parser_code, language=1)
     time.sleep(0.2)
 
     # Configure frame delimiters for ProjectFile mode
@@ -286,3 +286,59 @@ def test_csv_parsing_with_javascript_pipe(api_client, device_simulator, clean_st
 
     project_status = api_client.get_project_status()
     assert project_status["datasetCount"] >= 5, "Should have at least 5 datasets"
+
+
+def test_frame_parser_language_mismatch_does_not_crash(api_client, clean_state):
+    """
+    Regression: a frame-parser language mismatch must never crash the app.
+
+    New projects default the frame-parser language to Lua. Loading JavaScript
+    source into the Lua engine makes luaL_loadbuffer raise a syntax error;
+    because Lua is built as C++ the error propagates as a thrown lua_longjmp*.
+    On macOS (Xcode 26 ld dropped DWARF unwind under -dead_strip + -flto) that
+    throw escaped Lua's own catch and aborted the process. The fix wraps the
+    Lua load path in a C++ try/catch so the mismatch becomes a clean load
+    failure. This test feeds the mismatch on purpose and asserts the app
+    stays alive and responsive afterwards.
+
+    The mismatch is sent via the raw setCode command WITHOUT a language key,
+    so the JS code lands in the default Lua engine exactly as the original
+    crash did. Both flip directions are exercised.
+    """
+
+    def feed_mismatch(code: str) -> None:
+        # The handler may reject (APIError) or accept and fail to compile;
+        # either is fine. A dropped socket (ConnectionError) means a crash.
+        try:
+            api_client.command("project.frameParser.setCode", {"code": code})
+        except APIError:
+            pass
+        except ConnectionError as exc:
+            raise AssertionError(
+                f"App crashed loading mismatched parser code: {code!r}"
+            ) from exc
+
+    # JavaScript source into the default Lua engine (the original crash trigger)
+    api_client.create_new_project()
+    time.sleep(0.2)
+    feed_mismatch("function parse(frame) { return frame.split(';'); }")
+    time.sleep(0.2)
+
+    # App must still answer commands
+    status = api_client.command("io.getStatus")
+    assert (
+        "isConnected" in status
+    ), "App should remain responsive after JS->Lua mismatch"
+
+    # Now the reverse: Lua source into a JS engine (flip the language first)
+    api_client.create_new_project()
+    time.sleep(0.2)
+    api_client.set_frame_parser_language(0)
+    time.sleep(0.1)
+    feed_mismatch("function parse(frame) return frame:split(';') end")
+    time.sleep(0.2)
+
+    status = api_client.command("io.getStatus")
+    assert (
+        "isConnected" in status
+    ), "App should remain responsive after Lua->JS mismatch"

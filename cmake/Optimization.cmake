@@ -50,7 +50,10 @@ include_guard(GLOBAL)
 # Non-MSVC builds force -fexceptions + -funwind-tables + -fasynchronous-unwind-tables on every TU:
 # Lua is compiled as C++ and throws across the VM stack on any runtime error, so every linked object
 # must carry unwind metadata, or --gc-sections/-dead_strip + LTO can drop a personality routine and
-# turn a routine Lua type error into a std::terminate. macOS also keeps -Wl,-keep_dwarf_unwind.
+# turn a routine Lua type error into a std::terminate. The macOS belt was -Wl,-keep_dwarf_unwind,
+# but Xcode 26's ld (ld-1267) made it obsolete (no-op), so DWARF unwind can again be stripped under
+# -dead_strip + -flto (llvm/llvm-project#135888). The real guard is per-TU unwind tables here plus a
+# C++ try/catch around every Lua entry; the Lua target itself opts out of LTO and emits DWARF unwind.
 #
 # Architecture baselines: x86-64 -> -march=x86-64-v2 (SSE4.2, 2012+ CPUs); aarch64 -> armv8-a (plus
 # -latomic); armv7l -> armv7-a -mfpu=neon -mfloat-abi=hard (hardfloat pinned so a soft-float
@@ -79,9 +82,6 @@ if(PRODUCTION_OPTIMIZATION)
          -funwind-tables
          -fasynchronous-unwind-tables
       )
-      if(APPLE)
-         add_link_options(-Wl,-keep_dwarf_unwind)
-      endif()
    endif()
 
    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MINGW)

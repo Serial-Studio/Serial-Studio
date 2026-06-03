@@ -310,38 +310,51 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
   m_sourceId = sourceId;
   createState();
 
-  const QByteArray utf8 = script.toUtf8();
-  const auto fileName   = QStringLiteral("parser_%1.lua").arg(sourceId).toUtf8();
-  const int status = luaL_loadbuffer(m_state, utf8.constData(), utf8.size(), fileName.constData());
-  if (status != LUA_OK) {
-    const QString errorMsg = QString::fromUtf8(lua_tostring(m_state, -1));
-    lua_pop(m_state, 1);
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        QObject::tr("Lua Syntax Error"),
-        QObject::tr("The parser code contains an error:\n\n%1").arg(errorMsg),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[LuaScriptEngine] Source" << sourceId << "syntax error:" << errorMsg;
+  // C++-boundary exception guard: a thrown Lua error during load must not crash the host
+  try {
+    const QByteArray utf8 = script.toUtf8();
+    const auto fileName   = QStringLiteral("parser_%1.lua").arg(sourceId).toUtf8();
+    const int status =
+      luaL_loadbuffer(m_state, utf8.constData(), utf8.size(), fileName.constData());
+    if (status != LUA_OK) {
+      const QString errorMsg = QString::fromUtf8(lua_tostring(m_state, -1));
+      lua_pop(m_state, 1);
+      if (showMessageBoxes) {
+        Misc::Utilities::showMessageBox(
+          QObject::tr("Lua Syntax Error"),
+          QObject::tr("The parser code contains an error:\n\n%1").arg(errorMsg),
+          QMessageBox::Critical);
+      } else {
+        qWarning() << "[LuaScriptEngine] Source" << sourceId << "syntax error:" << errorMsg;
+      }
+      return false;
     }
-    return false;
+
+    if (!runLoadedChunk(sourceId, showMessageBoxes))
+      return false;
+
+    if (!ensureParseFunction(sourceId, showMessageBoxes))
+      return false;
+
+    if (sourceId == 0 && !probeParseFunction(sourceId, showMessageBoxes))
+      return false;
+
+    // Cache parse() in the registry so the hotpath skips a global lookup on every frame.
+    lua_getglobal(m_state, "parse");
+    m_parseRef = luaL_ref(m_state, LUA_REGISTRYINDEX);
+
+    m_loaded = true;
+    return true;
+  } catch (const std::exception& e) {
+    qWarning() << "[LuaScriptEngine] Source" << sourceId << "load uncaught exception:" << e.what();
+  } catch (...) {
+    qWarning() << "[LuaScriptEngine] Source" << sourceId << "load uncaught non-std exception";
   }
 
-  if (!runLoadedChunk(sourceId, showMessageBoxes))
-    return false;
-
-  if (!ensureParseFunction(sourceId, showMessageBoxes))
-    return false;
-
-  if (sourceId == 0 && !probeParseFunction(sourceId, showMessageBoxes))
-    return false;
-
-  // Cache parse() in the registry so the hotpath skips a global lookup on every frame.
-  lua_getglobal(m_state, "parse");
-  m_parseRef = luaL_ref(m_state, LUA_REGISTRYINDEX);
-
-  m_loaded = true;
-  return true;
+  // Escaped Lua/C++ error: drop the half-built state and report a clean load failure
+  destroyState();
+  createState();
+  return false;
 }
 
 /**
