@@ -15,6 +15,7 @@
 
 #  include "Sessions/DatabaseWorker.h"
 
+#  include <QCoreApplication>
 #  include <QDateTime>
 #  include <QFile>
 #  include <QFileInfo>
@@ -122,16 +123,19 @@ void Sessions::DatabaseWorker::closeDatabase()
   m_passwordHash.clear();
   m_locked = false;
 
-  if (m_db.isOpen()) {
-    QSqlQuery checkpoint(m_db);
-    checkpoint.exec("PRAGMA wal_checkpoint(RESTART)");
-    m_db.close();
-  }
+  // No live qApp means static destruction at exit(); QtSql is half-finalized, OS reclaims the file
+  if (QCoreApplication::instance()) {
+    if (m_db.isOpen()) {
+      QSqlQuery checkpoint(m_db);
+      checkpoint.exec("PRAGMA wal_checkpoint(RESTART)");
+      m_db.close();
+    }
 
-  const QString conn = m_connectionName;
-  m_db               = QSqlDatabase();
-  if (!conn.isEmpty())
-    QSqlDatabase::removeDatabase(conn);
+    const QString conn = m_connectionName;
+    m_db               = QSqlDatabase();
+    if (!conn.isEmpty())
+      QSqlDatabase::removeDatabase(conn);
+  }
 
   m_filePath.clear();
   m_connectionName.clear();

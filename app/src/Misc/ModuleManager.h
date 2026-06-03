@@ -73,6 +73,7 @@ private:
 
 private:
   bool m_headless;
+  bool m_quitHandled;
   QSettings m_settings;
   bool m_automaticUpdates;
   NativeWindow m_nativeWindow;

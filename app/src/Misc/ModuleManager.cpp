@@ -27,6 +27,7 @@
 // qDebug message handler, so routing through qDebug here would recurse.
 #include <iostream>
 // code-verify on
+#include <QCoreApplication>
 #include <QQmlContext>
 
 #include "API/Server.h"
@@ -197,13 +198,18 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
  * @brief Constructs the ModuleManager singleton.
  */
 Misc::ModuleManager::ModuleManager()
-  : m_headless(false), m_automaticUpdates(m_settings.value("App/CheckForUpdates", true).toBool())
+  : m_headless(false)
+  , m_quitHandled(false)
+  , m_automaticUpdates(m_settings.value("App/CheckForUpdates", true).toBool())
 {
   // Init translator
   (void)Misc::Translator::instance();
 
   // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this, &Misc::ModuleManager::onQuit);
+
+  // Also catch macOS Cmd-Q / Dock-quit, which bypass the QML engine's quit signal
+  connect(qApp, &QCoreApplication::aboutToQuit, this, &Misc::ModuleManager::onQuit);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -271,6 +277,12 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
  */
 void Misc::ModuleManager::onQuit()
 {
+  // Wired to both QML quit and qApp::aboutToQuit; run the teardown exactly once
+  if (m_quitHandled)
+    return;
+
+  m_quitHandled = true;
+
   // Restore default handler so late qWarning() during static destruction is safe
   qInstallMessageHandler(nullptr);
 

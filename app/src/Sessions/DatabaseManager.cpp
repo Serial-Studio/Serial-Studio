@@ -180,7 +180,8 @@ void Sessions::DatabaseManager::shutdown()
   if (m_worker)
     m_worker->requestCancel();
 
-  if (m_thread->isRunning() && m_worker) {
+  // No live qApp: worker loop is dead, BlockingQueuedConnection cannot deliver; fall to delete
+  if (QCoreApplication::instance() && m_thread->isRunning() && m_worker) {
     QMetaObject::invokeMethod(m_worker, "closeDatabase", Qt::BlockingQueuedConnection);
     m_thread->quit();
     m_thread->wait(5000);
