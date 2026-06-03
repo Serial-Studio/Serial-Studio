@@ -31,6 +31,7 @@
 #include <QtMath>
 #include <QUrl>
 
+#include "SerialStudio.h"
 #include "UI/Dashboard.h"
 #include "UI/Taskbar.h"
 #include "UI/UISessionRegistry.h"
@@ -721,10 +722,10 @@ void UI::WindowManager::applySavedGeometries(const QJsonObject& layout,
     if (id < 0)
       continue;
 
-    const int x = static_cast<int>(winGeom["x"].toDouble(0));
-    const int y = static_cast<int>(winGeom["y"].toDouble(0));
-    const int w = static_cast<int>(winGeom["width"].toDouble(200));
-    const int h = static_cast<int>(winGeom["height"].toDouble(150));
+    const int x = static_cast<int>(SerialStudio::toDouble(winGeom["x"], 0.0));
+    const int y = static_cast<int>(SerialStudio::toDouble(winGeom["y"], 0.0));
+    const int w = static_cast<int>(SerialStudio::toDouble(winGeom["width"], 200.0));
+    const int h = static_cast<int>(SerialStudio::toDouble(winGeom["height"], 150.0));
     const QRect geom(x, y, w, h);
     const QMargins margins = manualMarginsForGeometry(geom, marginCanvasW, marginCanvasH);
     const QRect anchored   = anchoredGeometry(geom, margins, canvasW, canvasH);
@@ -831,10 +832,10 @@ void UI::WindowManager::preloadPendingGeometries(const QJsonObject& layout)
     if (id < 0)
       continue;
 
-    const int x = static_cast<int>(winGeom["x"].toDouble(0));
-    const int y = static_cast<int>(winGeom["y"].toDouble(0));
-    const int w = static_cast<int>(winGeom["width"].toDouble(200));
-    const int h = static_cast<int>(winGeom["height"].toDouble(150));
+    const int x = static_cast<int>(SerialStudio::toDouble(winGeom["x"], 0.0));
+    const int y = static_cast<int>(SerialStudio::toDouble(winGeom["y"], 0.0));
+    const int w = static_cast<int>(SerialStudio::toDouble(winGeom["width"], 200.0));
+    const int h = static_cast<int>(SerialStudio::toDouble(winGeom["height"], 150.0));
     const QRect geom(x, y, w, h);
     const QMargins margins = manualMarginsForGeometry(geom, marginCanvasW, marginCanvasH);
     const QRect anchored   = anchoredGeometry(geom, margins, canvasW, canvasH);

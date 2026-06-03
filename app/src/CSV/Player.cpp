@@ -799,7 +799,7 @@ QDateTime CSV::Player::getDateTime(const QString& cell)
 {
   // Skip numeric strings (handled by getTimestampSeconds)
   bool isNumber = false;
-  cell.toDouble(&isNumber);
+  (void)SerialStudio::toDouble(cell, &isNumber);
   if (isNumber)
     return QDateTime();
 
@@ -843,7 +843,7 @@ double CSV::Player::getTimestampSeconds(const QString& cell)
 {
   // Accept only non-negative numeric values as valid timestamps
   bool ok          = false;
-  double timestamp = cell.toDouble(&ok);
+  double timestamp = SerialStudio::toDouble(cell, &ok);
 
   if (ok && timestamp >= 0.0)
     return timestamp;

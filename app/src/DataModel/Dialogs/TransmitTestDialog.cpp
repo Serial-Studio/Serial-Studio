@@ -194,7 +194,7 @@ void DataModel::TransmitTestDialog::evaluate()
     jsValue          = engine.toScriptValue(QString::fromLatin1(bytes));
   } else {
     bool ok;
-    double num = input.toDouble(&ok);
+    double num = SerialStudio::toDouble(input, &ok);
     if (ok)
       jsValue = engine.toScriptValue(num);
     else

@@ -182,7 +182,7 @@ static void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
   if (text.isEmpty())
     return fallback;
 
-  return text.toDouble();
+  return SerialStudio::toDouble(text);
 }
 
 /**
@@ -513,10 +513,10 @@ static bool parseXmlRegisterElement(QXmlStreamReader& xml,
   entry.name     = attrs.value("name").toString();
   entry.dataType = attrs.value("dataType").toString().toLower();
   entry.units    = attrs.value("units").toString();
-  entry.min      = attrs.value("min").toDouble();
-  entry.max      = attrs.value("max").isEmpty() ? 65535 : attrs.value("max").toDouble();
-  entry.scale    = attrs.value("scale").isEmpty() ? 1.0 : attrs.value("scale").toDouble();
-  entry.offset   = attrs.value("offset").toDouble();
+  entry.min      = SerialStudio::toDouble(attrs.value("min"));
+  entry.max   = attrs.value("max").isEmpty() ? 65535 : SerialStudio::toDouble(attrs.value("max"));
+  entry.scale = attrs.value("scale").isEmpty() ? 1.0 : SerialStudio::toDouble(attrs.value("scale"));
+  entry.offset = SerialStudio::toDouble(attrs.value("offset"));
 
   if (attrs.hasAttribute("type"))
     entry.registerType =
@@ -958,11 +958,11 @@ bool DataModel::ModbusMapImporter::parseRegisterEntry(const QJsonObject& obj,
 
   entry.units =
     obj.value(QStringLiteral("units")).toString(obj.value(QStringLiteral("unit")).toString());
-  entry.min = obj.value(QStringLiteral("min")).toDouble(0);
-  entry.max =
-    obj.value(QStringLiteral("max")).toDouble(entry.dataType == QLatin1String("bool") ? 1 : 65535);
-  entry.scale  = obj.value(QStringLiteral("scale")).toDouble(1.0);
-  entry.offset = obj.value(QStringLiteral("offset")).toDouble(0.0);
+  entry.min    = SerialStudio::toDouble(obj.value(QStringLiteral("min")), 0.0);
+  entry.max    = SerialStudio::toDouble(obj.value(QStringLiteral("max")),
+                                     entry.dataType == QLatin1String("bool") ? 1.0 : 65535.0);
+  entry.scale  = SerialStudio::toDouble(obj.value(QStringLiteral("scale")), 1.0);
+  entry.offset = SerialStudio::toDouble(obj.value(QStringLiteral("offset")), 0.0);
 
   return true;
 }

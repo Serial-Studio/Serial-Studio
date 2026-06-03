@@ -33,7 +33,7 @@ from pathlib import Path
 SCRIPT_PATH = Path(__file__).resolve()
 SOURCE_DIRS = ("app", "doc", "examples")
 SOURCE_EXTS = (".cpp", ".h", ".c")
-SOURCE_SKIP = {"miniaudio.h"}
+SOURCE_SKIP = {"miniaudio.h", "fast_float.h"}
 PYTHON_DIRS = ("app", "examples", "tests", "scripts")
 COMMIT_PATTERN = re.compile(
     r"^(feat|fix|chore|docs|style|refactor|perf|test)(\(.+\))?: .+"

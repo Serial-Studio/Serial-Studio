@@ -51,6 +51,7 @@ namespace Benchmark {
 struct PhaseSpec {
   int language;
   bool exporters;
+  bool strings;
   bool dashboard;
   bool dataPipeline;
   double minFps;
@@ -59,11 +60,13 @@ struct PhaseSpec {
 // clang-format off
 // code-verify off
 static const PhaseSpec kPhases[] = {
-  {                       -1, false, false,  true,      1.0}, // Data pipeline
-  {        SerialStudio::Lua, false, false, false, 256000.0}, // Lua parser
-  { SerialStudio::JavaScript, false, false, false, 128000.0}, // Javascript parser
-  {        SerialStudio::Lua,  true, false, false,      1.0}, // Lua + data export
-  {        SerialStudio::Lua, false,  true, false,      1.0}, // Lua + dashboard
+  {                       -1, false, false, false,  true, 1024000.0}, // Data pipeline
+  {        SerialStudio::Lua, false, false, false, false,  256000.0}, // Lua parser (numeric)
+  { SerialStudio::JavaScript, false, false, false, false,  128000.0}, // Javascript parser (numeric)
+  {        SerialStudio::Lua, false,  true, false, false,  128000.0}, // Lua parser (mixed)
+  { SerialStudio::JavaScript, false,  true, false, false,   64000.0}, // Javascript parser (mixed)
+  {        SerialStudio::Lua,  true,  true, false, false,       1.0}, // Lua + data export (mixed)
+  {        SerialStudio::Lua, false, false,  true, false,       1.0}, // Lua + dashboard (numeric)
 };
 // code-verify on
 // clang-format off
@@ -176,10 +179,12 @@ QStringList BenchmarkRunner::secondsOptions() const
 void BenchmarkRunner::retranslate()
 {
   m_phaseLabels    = {tr("Data pipeline"),
-                      tr("Lua parser"),
-                      tr("JavaScript parser"),
-                      tr("Lua + data export"),
-                      tr("Lua + dashboard")};
+                      tr("Lua parser (numeric)"),
+                      tr("JavaScript parser (numeric)"),
+                      tr("Lua parser (mixed)"),
+                      tr("JavaScript parser (mixed)"),
+                      tr("Lua + data export (mixed)"),
+                      tr("Lua + dashboard (numeric)")};
   m_frameOptions   = {tr("100 K frames"), tr("250 K frames"), tr("500 K frames"), tr("1 M frames")};
   m_secondsOptions = {tr("1 second"), tr("2 seconds"), tr("5 seconds"), tr("10 seconds")};
 
@@ -338,10 +343,14 @@ void BenchmarkRunner::executePhase(int index)
 
   const PhaseSpec& spec = kPhases[index];
   const HotpathBenchmark::Result r =
-    spec.dataPipeline
-      ? HotpathBenchmark::runDataPipeline(m_frames, m_seconds)
-      : HotpathBenchmark::run(
-          m_frames, spec.minFps, m_seconds, spec.language, spec.exporters, spec.dashboard);
+    spec.dataPipeline ? HotpathBenchmark::runDataPipeline(m_frames, spec.minFps, m_seconds)
+                      : HotpathBenchmark::run(m_frames,
+                                              spec.minFps,
+                                              m_seconds,
+                                              spec.language,
+                                              spec.exporters,
+                                              spec.strings,
+                                              spec.dashboard);
 
   QVariantMap row;
   row.insert(QStringLiteral("label"), m_phaseLabels.value(index));

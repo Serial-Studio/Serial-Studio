@@ -27,6 +27,7 @@
 #  include <QVariantMap>
 
 #  include "DSP.h"
+#  include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -136,10 +137,10 @@ static bool loadNumericAggregates(QSqlDatabase& db,
       continue;
 
     it->numericSamples  = aggQ.value(1).toLongLong();
-    it->minValue        = aggQ.value(2).toDouble();
-    it->maxValue        = aggQ.value(3).toDouble();
-    it->mean            = aggQ.value(4).toDouble();
-    const double meanSq = aggQ.value(5).toDouble();
+    it->minValue        = SerialStudio::toDouble(aggQ.value(2));
+    it->maxValue        = SerialStudio::toDouble(aggQ.value(3));
+    it->mean            = SerialStudio::toDouble(aggQ.value(4));
+    const double meanSq = SerialStudio::toDouble(aggQ.value(5));
     const double var    = std::max(0.0, meanSq - it->mean * it->mean);
     it->stddev          = std::sqrt(var);
   }
@@ -196,9 +197,9 @@ static void loadEdgeValues(QSqlDatabase& db,
       continue;
 
     if (first)
-      it->firstValue = q.value(1).toDouble();
+      it->firstValue = SerialStudio::toDouble(q.value(1));
     else
-      it->lastValue = q.value(1).toDouble();
+      it->lastValue = SerialStudio::toDouble(q.value(1));
   }
 }
 
@@ -301,7 +302,7 @@ static std::size_t readAxisData(QSqlQuery& rows,
 
   constexpr double kInvNs = 1.0 / 1.0e9;
   while (rows.next()) {
-    const double val = rows.value(1).toDouble();
+    const double val = SerialStudio::toDouble(rows.value(1));
     if (!std::isfinite(val))
       continue;
 

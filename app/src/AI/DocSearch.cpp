@@ -17,6 +17,7 @@
 #include <QSet>
 
 #include "AI/Logging.h"
+#include "SerialStudio.h"
 
 /**
  * @brief English stopwords skipped during query tokenization.
@@ -109,13 +110,13 @@ void AI::DocSearch::load()
   }
 
   const auto root = doc.object();
-  m_k1            = root.value(QStringLiteral("k1")).toDouble(1.5);
-  m_b             = root.value(QStringLiteral("b")).toDouble(0.75);
-  m_avgdl         = root.value(QStringLiteral("avgdl")).toDouble(1.0);
+  m_k1            = SerialStudio::toDouble(root.value(QStringLiteral("k1")), 1.5);
+  m_b             = SerialStudio::toDouble(root.value(QStringLiteral("b")), 0.75);
+  m_avgdl         = SerialStudio::toDouble(root.value(QStringLiteral("avgdl")), 1.0);
 
   const auto idf = root.value(QStringLiteral("idf")).toObject();
   for (auto it = idf.constBegin(); it != idf.constEnd(); ++it)
-    m_idf.insert(it.key(), it.value().toDouble());
+    m_idf.insert(it.key(), SerialStudio::toDouble(it.value()));
 
   const auto docs = root.value(QStringLiteral("docs")).toArray();
   m_docs.reserve(docs.size());

@@ -415,6 +415,7 @@ set(HEADERS
   src/MDF4/Player.h
   src/MDF4/Export.h
   src/ThirdParty/atomicops.h
+  src/ThirdParty/fast_float.h
   src/ThirdParty/readerwriterqueue.h
   src/ThirdParty/readerwritercircularbuffer.h
   src/AppInfo.h

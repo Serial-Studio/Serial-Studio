@@ -4522,22 +4522,22 @@ static QString applyDatasetNumericFields(DataModel::Dataset& d,
     d.fftSamplingRate = params.value(QStringLiteral("fftSamplingRate")).toInt();
 
   if (takeParam(params, consumed, QStringLiteral("fftMin")))
-    d.fftMin = params.value(QStringLiteral("fftMin")).toDouble();
+    d.fftMin = SerialStudio::toDouble(params.value(QStringLiteral("fftMin")));
 
   if (takeParam(params, consumed, QStringLiteral("fftMax")))
-    d.fftMax = params.value(QStringLiteral("fftMax")).toDouble();
+    d.fftMax = SerialStudio::toDouble(params.value(QStringLiteral("fftMax")));
 
   if (takeParam(params, consumed, QStringLiteral("pltMin")))
-    d.pltMin = params.value(QStringLiteral("pltMin")).toDouble();
+    d.pltMin = SerialStudio::toDouble(params.value(QStringLiteral("pltMin")));
 
   if (takeParam(params, consumed, QStringLiteral("pltMax")))
-    d.pltMax = params.value(QStringLiteral("pltMax")).toDouble();
+    d.pltMax = SerialStudio::toDouble(params.value(QStringLiteral("pltMax")));
 
   if (takeParam(params, consumed, QStringLiteral("wgtMin")))
-    d.wgtMin = params.value(QStringLiteral("wgtMin")).toDouble();
+    d.wgtMin = SerialStudio::toDouble(params.value(QStringLiteral("wgtMin")));
 
   if (takeParam(params, consumed, QStringLiteral("wgtMax")))
-    d.wgtMax = params.value(QStringLiteral("wgtMax")).toDouble();
+    d.wgtMax = SerialStudio::toDouble(params.value(QStringLiteral("wgtMax")));
 
   const bool hasAlarmBands = takeParam(params, consumed, Keys::AlarmBands);
   const bool hasAlarmLow   = takeParam(params, consumed, QStringLiteral("alarmLow"));
@@ -4563,10 +4563,10 @@ static QString applyDatasetNumericFields(DataModel::Dataset& d,
       en = params.value(QStringLiteral("alarmEnabled")).toBool();
 
     if (hasAlarmLow)
-      lo = params.value(QStringLiteral("alarmLow")).toDouble();
+      lo = SerialStudio::toDouble(params.value(QStringLiteral("alarmLow")));
 
     if (hasAlarmHigh)
-      hi = params.value(QStringLiteral("alarmHigh")).toDouble();
+      hi = SerialStudio::toDouble(params.value(QStringLiteral("alarmHigh")));
 
     applySimpleAlarmFields(d, en, lo, hi);
   }
@@ -4578,7 +4578,7 @@ static QString applyDatasetNumericFields(DataModel::Dataset& d,
     d.displayFormat = params.value(Keys::DisplayFormat).toString();
 
   if (takeParam(params, consumed, QStringLiteral("ledHigh")))
-    d.ledHigh = params.value(QStringLiteral("ledHigh")).toDouble();
+    d.ledHigh = SerialStudio::toDouble(params.value(QStringLiteral("ledHigh")));
 
   return QString();
 }
@@ -4843,16 +4843,16 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetUpdate(const QSt
   }
 
   if (take(QStringLiteral("minValue")))
-    w.minValue = params.value(QStringLiteral("minValue")).toDouble();
+    w.minValue = SerialStudio::toDouble(params.value(QStringLiteral("minValue")));
 
   if (take(QStringLiteral("maxValue")))
-    w.maxValue = params.value(QStringLiteral("maxValue")).toDouble();
+    w.maxValue = SerialStudio::toDouble(params.value(QStringLiteral("maxValue")));
 
   if (take(QStringLiteral("stepSize")))
-    w.stepSize = params.value(QStringLiteral("stepSize")).toDouble();
+    w.stepSize = SerialStudio::toDouble(params.value(QStringLiteral("stepSize")));
 
   if (take(QStringLiteral("initialValue")))
-    w.initialValue = params.value(QStringLiteral("initialValue")).toDouble();
+    w.initialValue = SerialStudio::toDouble(params.value(QStringLiteral("initialValue")));
 
   project.updateGroup(groupId, g, rebuildTree);
 
@@ -5757,7 +5757,7 @@ API::CommandResponse API::Handlers::ProjectHandler::transformDryRun(const QStrin
   for (const auto& v : values) {
     QString sample;
     if (v.isDouble())
-      sample = QString::number(v.toDouble(), 'g', 17);
+      sample = QString::number(SerialStudio::toDouble(v), 'g', 17);
     else
       sample = v.toString();
 
@@ -5769,7 +5769,7 @@ API::CommandResponse API::Handlers::ProjectHandler::transformDryRun(const QStrin
 
     const auto cell = rows.first().first();
     bool isNum      = false;
-    const auto num  = cell.toDouble(&isNum);
+    const auto num  = SerialStudio::toDouble(cell, &isNum);
     if (isNum)
       outputs.append(num);
     else
@@ -5907,7 +5907,7 @@ static QJsonValue applyTransformForDryRun(
 
   const auto cell = rows.first().first();
   bool isNum      = false;
-  const auto num  = cell.toDouble(&isNum);
+  const auto num  = SerialStudio::toDouble(cell, &isNum);
   if (isNum)
     return num;
 
@@ -5950,7 +5950,7 @@ static QJsonObject buildDryRunDatasetEntry(
   }
 
   bool isNum                                = false;
-  const auto num                            = rawCell.toDouble(&isNum);
+  const auto num                            = SerialStudio::toDouble(rawCell, &isNum);
   entry[QStringLiteral("final")]            = isNum ? QJsonValue(num) : QJsonValue(rawCell);
   entry[QStringLiteral("transformApplied")] = false;
   return entry;

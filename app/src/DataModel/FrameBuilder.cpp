@@ -740,7 +740,7 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
     const int col = (it != replayColumns->end()) ? it->second : -1;
     if (col >= 0 && col < channelCount) {
       dataset.value        = channelData[col];
-      dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+      dataset.numericValue = SerialStudio::toDouble(dataset.value, &dataset.isNumeric);
     } else {
       dataset.numericValue = 0.0;
       dataset.value.clear();
@@ -756,7 +756,7 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
       return;
 
     dataset.value        = channelData[idx - 1];
-    dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+    dataset.numericValue = SerialStudio::toDouble(dataset.value, &dataset.isNumeric);
   }
 
   dataset.rawNumericValue = dataset.numericValue;
@@ -771,7 +771,7 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
     const auto result = applyTransform(dataset.transformLanguage, dataset.uniqueId, input, info);
 
     if (result.typeId() == QMetaType::Double) {
-      dataset.numericValue = result.toDouble();
+      dataset.numericValue = SerialStudio::toDouble(result);
       dataset.value        = QString::number(dataset.numericValue, 'g', 15);
       dataset.isNumeric    = true;
     } else {
@@ -873,7 +873,7 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
     bool allNonNumeric = true;
     for (const auto& channel : std::as_const(channels)) {
       bool isNumeric = false;
-      channel.toDouble(&isNumeric);
+      (void)SerialStudio::toDouble(channel, &isNumeric);
       if (!isNumeric)
         continue;
 
@@ -903,7 +903,7 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
       const int idx = dataset.index;
       if (idx > 0 && idx <= channelCount) [[likely]] {
         dataset.value           = channelData[idx - 1];
-        dataset.numericValue    = dataset.value.toDouble(&dataset.isNumeric);
+        dataset.numericValue    = SerialStudio::toDouble(dataset.value, &dataset.isNumeric);
         dataset.rawValue        = dataset.value;
         dataset.rawNumericValue = dataset.numericValue;
       }
@@ -964,7 +964,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
     else
       dataset.title = tr("Channel %1").arg(idx);
 
-    dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+    dataset.numericValue = SerialStudio::toDouble(dataset.value, &dataset.isNumeric);
     datasets.push_back(dataset);
 
     ++idx;
@@ -1082,7 +1082,7 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
     else
       dataset.title = tr("Channel %1").arg(index);
 
-    dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+    dataset.numericValue = SerialStudio::toDouble(dataset.value, &dataset.isNumeric);
     datasets.push_back(dataset);
     ++index;
   }
@@ -1601,7 +1601,7 @@ QVariant DataModel::FrameBuilder::applyTransformLua(TransformEngine& engine,
   try {
     lua_rawgeti(L, LUA_REGISTRYINDEX, transform.ref);
     if (rawValue.typeId() == QMetaType::Double) {
-      lua_pushnumber(L, rawValue.toDouble());
+      lua_pushnumber(L, SerialStudio::toDouble(rawValue));
     } else {
       const auto utf8 = rawValue.toString().toUtf8();
       lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
@@ -1686,7 +1686,7 @@ QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
   // Watchdog is armed once per frame in applyDatasetValues, not per call.
   QJSValueList args;
   if (rawValue.typeId() == QMetaType::Double)
-    args << QJSValue(rawValue.toDouble());
+    args << QJSValue(SerialStudio::toDouble(rawValue));
   else
     args << QJSValue(rawValue.toString());
 

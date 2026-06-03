@@ -256,13 +256,8 @@ QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset) const
   if (dataset.value.isEmpty())
     return QString();
 
-  // Numeric path goes through the dashboard's locale-aware formatter
-  QString value  = dataset.value;
-  bool isNumber  = false;
-  const double n = value.toDouble(&isNumber);
-  if (isNumber)
-    value = FMT_VAL(n, dataset);
-
+  // The hotpath already parsed the value; isNumeric/numericValue arrive with the string
+  QString value = dataset.isNumeric ? FMT_VAL(dataset.numericValue, dataset) : dataset.value;
   if (!dataset.units.isEmpty())
     value += QStringLiteral(" ") + dataset.units;
 

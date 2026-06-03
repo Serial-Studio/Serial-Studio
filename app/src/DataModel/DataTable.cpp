@@ -23,6 +23,8 @@
 
 #include <QDebug>
 
+#include "SerialStudio.h"
+
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Publisher.h"
 #endif
@@ -72,15 +74,11 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
     regNames.reserve(table.registers.size());
 
     for (const auto& reg : table.registers) {
-      // Build default RegisterValue from definition
+      // Numeric-looking string defaults become numeric registers (matches Lua tableSet coercion)
       RegisterValue defVal;
-      if (reg.defaultValue.typeId() == QMetaType::Double) {
-        defVal.numericValue = reg.defaultValue.toDouble();
-        defVal.isNumeric    = true;
-      } else {
+      defVal.numericValue = SerialStudio::toDouble(reg.defaultValue, &defVal.isNumeric);
+      if (!defVal.isNumeric)
         defVal.stringValue = reg.defaultValue.toString();
-        defVal.isNumeric   = false;
-      }
 
       addRegister(table.name, reg.name, defVal, reg.type);
       regNames.push_back(reg.name);
@@ -464,14 +462,11 @@ void DataModel::TableApiBridge::tableSet(const QString& t, const QString& r, con
 {
   Q_ASSERT(store);
 
+  // Numeric-looking strings become numeric registers (matches Lua tableSet coercion)
   DataModel::RegisterValue rv;
-  if (v.typeId() == QMetaType::Double) {
-    rv.numericValue = v.toDouble();
-    rv.isNumeric    = true;
-  } else {
+  rv.numericValue = SerialStudio::toDouble(v, &rv.isNumeric);
+  if (!rv.isNumeric)
     rv.stringValue = v.toString();
-    rv.isNumeric   = false;
-  }
 
   store->set(t, r, rv);
 }

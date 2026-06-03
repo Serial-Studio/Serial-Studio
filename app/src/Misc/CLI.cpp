@@ -239,14 +239,14 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
 
   if (m_parser.isSet(m_opts.minFpsOpt)) {
     bool ok          = false;
-    const double val = m_parser.value(m_opts.minFpsOpt).toDouble(&ok);
+    const double val = SerialStudio::toDouble(m_parser.value(m_opts.minFpsOpt), &ok);
     if (ok && val > 0.0)
       minFps = val;
   }
 
   if (m_parser.isSet(m_opts.benchmarkSecondsOpt)) {
     bool ok          = false;
-    const double val = m_parser.value(m_opts.benchmarkSecondsOpt).toDouble(&ok);
+    const double val = SerialStudio::toDouble(m_parser.value(m_opts.benchmarkSecondsOpt), &ok);
     if (ok && val >= 0.0)
       seconds = val;
   }

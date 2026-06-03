@@ -22,6 +22,7 @@
 #pragma once
 
 #include "DataModel/Frame.h"
+#include "ThirdParty/fast_float.h"
 
 /**
  * @brief Central utility class with the shared enums and helpers used by the
@@ -292,4 +293,136 @@ public:
   Q_INVOKABLE [[nodiscard]] static QByteArray encodeText(const QString& text, SerialStudio::TextEncoding enc);
   Q_INVOKABLE [[nodiscard]] static QString decodeText(QByteArrayView bytes, SerialStudio::TextEncoding enc);
   // clang-format on
+
+  /**
+   * @brief Locale-independent QString::toDouble() replacement built on fast_float.
+   */
+  [[nodiscard]] static Q_ALWAYS_INLINE double toDouble(QStringView text,
+                                                       bool* ok = nullptr) noexcept
+  {
+    const char16_t* first = text.utf16();
+    const char16_t* last  = first + text.size();
+
+    for (; first < last && QChar::isSpace(*first); ++first)
+      continue;
+
+    for (; last > first && QChar::isSpace(*(last - 1)); --last)
+      continue;
+
+    constexpr auto format =
+      fast_float::chars_format::general | fast_float::chars_format::allow_leading_plus;
+
+    double value      = 0.0;
+    const auto result = fast_float::from_chars(first, last, value, format);
+    const bool good   = (result.ec == std::errc()) && (result.ptr == last);
+    if (ok)
+      *ok = good;
+
+    return good ? value : 0.0;
+  }
+
+  /**
+   * @brief Byte-level toDouble() for QByteArray / raw char data (same grammar as above).
+   */
+  [[nodiscard]] static Q_ALWAYS_INLINE double toDouble(QByteArrayView text,
+                                                       bool* ok = nullptr) noexcept
+  {
+    const char* first = text.data();
+    const char* last  = first + text.size();
+
+    for (; first < last && QChar::isSpace(char32_t(uchar(*first))); ++first)
+      continue;
+
+    for (; last > first && QChar::isSpace(char32_t(uchar(*(last - 1)))); --last)
+      continue;
+
+    constexpr auto format =
+      fast_float::chars_format::general | fast_float::chars_format::allow_leading_plus;
+
+    double value      = 0.0;
+    const auto result = fast_float::from_chars(first, last, value, format);
+    const bool good   = (result.ec == std::errc()) && (result.ptr == last);
+    if (ok)
+      *ok = good;
+
+    return good ? value : 0.0;
+  }
+
+  /**
+   * @brief Exact-match QString overload (avoids QVariant/QJsonValue conversion ambiguity).
+   */
+  [[nodiscard]] static Q_ALWAYS_INLINE double toDouble(const QString& text,
+                                                       bool* ok = nullptr) noexcept
+  {
+    return toDouble(QStringView(text), ok);
+  }
+
+  /**
+   * @brief Exact-match QByteArray overload (avoids QVariant conversion ambiguity).
+   */
+  [[nodiscard]] static Q_ALWAYS_INLINE double toDouble(const QByteArray& text,
+                                                       bool* ok = nullptr) noexcept
+  {
+    return toDouble(QByteArrayView(text), ok);
+  }
+
+  /**
+   * @brief Null-safe C-string convenience overload.
+   */
+  [[nodiscard]] static Q_ALWAYS_INLINE double toDouble(const char* text,
+                                                       bool* ok = nullptr) noexcept
+  {
+    return toDouble(QByteArrayView(text, qstrlen(text)), ok);
+  }
+
+  /**
+   * @brief QVariant::toDouble() replacement: string payloads parse through fast_float.
+   */
+  [[nodiscard]] static Q_ALWAYS_INLINE double toDouble(const QVariant& value,
+                                                       bool* ok = nullptr) noexcept
+  {
+    switch (value.typeId()) {
+      case QMetaType::QString:
+        return toDouble(value.toString(), ok);
+      case QMetaType::QByteArray:
+        return toDouble(value.toByteArray(), ok);
+      case QMetaType::QJsonValue:
+        return toDouble(value.toJsonValue(), ok);
+      default:
+        return value.toDouble(ok);
+    }
+  }
+
+  /**
+   * @brief QJsonValue::toDouble() replacement: JSON numbers pass through, strings parse.
+   */
+  [[nodiscard]] static Q_ALWAYS_INLINE double toDouble(const QJsonValue& value,
+                                                       bool* ok = nullptr) noexcept
+  {
+    if (value.isDouble()) {
+      if (ok)
+        *ok = true;
+
+      return value.toDouble();
+    }
+
+    if (value.isString())
+      return toDouble(value.toString(), ok);
+
+    if (ok)
+      *ok = false;
+
+    return 0.0;
+  }
+
+  /**
+   * @brief Default-value convenience mirroring QJsonValue::toDouble(double).
+   */
+  [[nodiscard]] static Q_ALWAYS_INLINE double toDouble(const QJsonValue& value,
+                                                       double defaultValue) noexcept
+  {
+    bool ok             = false;
+    const double parsed = toDouble(value, &ok);
+    return ok ? parsed : defaultValue;
+  }
 };

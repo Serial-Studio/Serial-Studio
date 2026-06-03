@@ -25,6 +25,7 @@
 #  include <QTextStream>
 #  include <QThread>
 
+#  include "SerialStudio.h"
 #  include "Sessions/DatabaseManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -613,7 +614,7 @@ bool Sessions::DatabaseWorker::streamCsvRows(QSqlQuery& readQ,
     const bool isNumeric = readQ.value(4).toInt() != 0;
     const int col        = colIt.value();
     if (isNumeric)
-      row[col] = QString::number(readQ.value(2).toDouble(), 'g', 17);
+      row[col] = QString::number(SerialStudio::toDouble(readQ.value(2)), 'g', 17);
     else
       row[col] = readQ.value(3).toString();
 

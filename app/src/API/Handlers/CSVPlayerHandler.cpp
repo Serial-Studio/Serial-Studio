@@ -26,6 +26,7 @@
 #include "API/CommandRegistry.h"
 #include "API/PathPolicy.h"
 #include "CSV/Player.h"
+#include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -266,7 +267,7 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::setProgress(const QString&
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: progress"));
   }
 
-  const double progress = params.value(QStringLiteral("progress")).toDouble();
+  const double progress = SerialStudio::toDouble(params.value(QStringLiteral("progress")));
   if (progress < 0.0 || progress > 1.0) {
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("progress must be between 0.0 and 1.0"));

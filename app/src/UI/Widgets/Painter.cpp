@@ -271,8 +271,8 @@ static void readBandsFromVariantList(const QVariantList& list,
   for (const auto& b : list) {
     const auto m = b.toMap();
     DataModel::AlarmBand band;
-    band.min   = m.value(QStringLiteral("min")).toDouble();
-    band.max   = m.value(QStringLiteral("max")).toDouble();
+    band.min   = SerialStudio::toDouble(m.value(QStringLiteral("min")));
+    band.max   = SerialStudio::toDouble(m.value(QStringLiteral("max")));
     band.color = m.value(QStringLiteral("color")).toString();
     band.label = m.value(QStringLiteral("label")).toString();
     const int sev =
@@ -289,8 +289,8 @@ static void readBandsFromVariantList(const QVariantList& list,
  */
 static void synthesizeLegacyAlarmBands(const QVariantMap& entry, DataModel::Dataset& ds)
 {
-  const double lo       = entry.value(QStringLiteral("alarmLow"), ds.wgtMin).toDouble();
-  const double hi       = entry.value(QStringLiteral("alarmHigh"), ds.wgtMax).toDouble();
+  const double lo = SerialStudio::toDouble(entry.value(QStringLiteral("alarmLow"), ds.wgtMin));
+  const double hi = SerialStudio::toDouble(entry.value(QStringLiteral("alarmHigh"), ds.wgtMax));
   const double rangeMin = qMin(ds.wgtMin, ds.wgtMax);
   const double rangeMax = qMax(ds.wgtMin, ds.wgtMax);
   if (lo > rangeMin && lo < rangeMax) {
@@ -326,12 +326,13 @@ void Widgets::Painter::setSimulatedDatasets(const QVariantList& datasets)
     ds.uniqueId = i + 1;
     ds.title = entry.value(QStringLiteral("title"), QStringLiteral("DS%1").arg(i + 1)).toString();
     ds.units = entry.value(QStringLiteral("units")).toString();
-    ds.numericValue    = entry.value(QStringLiteral("value"), 0.0).toDouble();
-    ds.rawNumericValue = entry.value(QStringLiteral("rawValue"), ds.numericValue).toDouble();
-    ds.value           = QString::number(ds.numericValue);
-    ds.rawValue        = QString::number(ds.rawNumericValue);
-    ds.wgtMin          = entry.value(QStringLiteral("min"), 0.0).toDouble();
-    ds.wgtMax          = entry.value(QStringLiteral("max"), 100.0).toDouble();
+    ds.numericValue = SerialStudio::toDouble(entry.value(QStringLiteral("value"), 0.0));
+    ds.rawNumericValue =
+      SerialStudio::toDouble(entry.value(QStringLiteral("rawValue"), ds.numericValue));
+    ds.value    = QString::number(ds.numericValue);
+    ds.rawValue = QString::number(ds.rawNumericValue);
+    ds.wgtMin   = SerialStudio::toDouble(entry.value(QStringLiteral("min"), 0.0));
+    ds.wgtMax   = SerialStudio::toDouble(entry.value(QStringLiteral("max"), 100.0));
 
     // Accept bands explicitly; otherwise synthesise from legacy alarmLow/alarmHigh entries.
     const auto bandsVar = entry.value(QStringLiteral("alarmBands"));

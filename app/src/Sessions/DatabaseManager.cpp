@@ -807,7 +807,7 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   opts.includeStats        = options.value("includeStats", true).toBool();
   opts.includeCharts       = options.value("includeCharts", true).toBool();
   opts.includeStatsOverlay = options.value("includeStatsOverlay", true).toBool();
-  opts.lineWidth           = options.value("lineWidth", 1.4).toDouble();
+  opts.lineWidth           = SerialStudio::toDouble(options.value("lineWidth", 1.4));
   opts.lineStyle           = options.value("lineStyle", QStringLiteral("solid")).toString();
 
   const QString fmtStr = options.value("outputFormat", QStringLiteral("pdf")).toString().toLower();

@@ -115,8 +115,9 @@ benchmark mechanics) in [doc/claude/architecture.md](doc/claude/architecture.md)
 - **JS scripts**: always `IScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
 - **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`)
-  drives the real Lua parse pipeline against `--min-fps` (default 256000); `test.yml` runs it
-  per PR, `deploy.yml` gates the shipped PGO binary. Don't regress it.
+  drives the real parse pipeline with five gates tiered off `--min-fps` (default 256000): data
+  pipeline 1.024 MHz (4x), Lua numeric 256 kHz, JS numeric + Lua mixed 128 kHz, JS mixed 64 kHz;
+  `test.yml` runs it per PR, `deploy.yml` gates the shipped PGO binary. Don't regress it.
 
 ## Code Style — Essentials
 

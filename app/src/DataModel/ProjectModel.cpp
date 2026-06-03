@@ -2622,7 +2622,7 @@ void DataModel::ProjectModel::loadPlotTimeRange(const QJsonObject& json)
 {
   m_plotTimeRange = UI::Dashboard::instance().plotTimeRange();
   if (json.contains(Keys::PlotTimeRange)) {
-    const double secs = json.value(Keys::PlotTimeRange).toDouble();
+    const double secs = SerialStudio::toDouble(json.value(Keys::PlotTimeRange));
     if (secs > 0)
       m_plotTimeRange = secs;
   }
@@ -4056,8 +4056,8 @@ void DataModel::ProjectModel::ensurePainterDatasets(int groupId, const QVariantL
     ds.uniqueId  = allocateUniqueId();
     ds.title     = map.value(QStringLiteral("title"), tr("Channel %1").arg(i + 1)).toString();
     ds.units     = map.value(QStringLiteral("units")).toString();
-    ds.wgtMin    = map.value(QStringLiteral("min"), 0.0).toDouble();
-    ds.wgtMax    = map.value(QStringLiteral("max"), 100.0).toDouble();
+    ds.wgtMin    = SerialStudio::toDouble(map.value(QStringLiteral("min"), 0.0));
+    ds.wgtMax    = SerialStudio::toDouble(map.value(QStringLiteral("max"), 100.0));
     grp.datasets.push_back(std::move(ds));
     changed = true;
   }
@@ -5310,7 +5310,7 @@ void DataModel::ProjectModel::importTableFromCsv(const QString& tableName)
 
     // Determine if the value is numeric
     bool isNumeric              = false;
-    const double dval           = valStr.toDouble(&isNumeric);
+    const double dval           = SerialStudio::toDouble(valStr, &isNumeric);
     const QVariant defaultValue = isNumeric ? QVariant(dval) : QVariant(valStr);
 
     auto regIt = std::find_if(it->registers.begin(),

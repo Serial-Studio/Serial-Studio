@@ -51,8 +51,12 @@ public:
                                   double minSeconds,
                                   int language,
                                   bool withExporters,
-                                  bool withDashboard = false);
-  [[nodiscard]] static Result runDataPipeline(quint64 targetFrames, double minSeconds);
+                                  bool withStrings     = true,
+                                  bool withDashboard   = false,
+                                  bool dashboardIngest = true);
+  [[nodiscard]] static Result runDataPipeline(quint64 targetFrames,
+                                              double minFps,
+                                              double minSeconds);
   [[nodiscard]] static int runAndReport(quint64 targetFrames,
                                         double minFps,
                                         double minSeconds,
@@ -62,12 +66,13 @@ public:
   static void setActive(bool active) noexcept;
 
 private:
+  [[nodiscard]] static bool printReport(const Result* results, const QString& outputFile);
   static void enableConsumers();
   static void disableConsumers();
-  static void setupProject(int language, int channels, bool dashboard);
+  static void setupProject(int language, int channels, bool withStrings, bool dashboard);
   static void activateDashboardWidgets();
   [[nodiscard]] static QByteArray buildChunk(int frames, int channels, int stringColumns = 0);
-  [[nodiscard]] static QJsonObject buildProjectJson(int language, int channels);
+  [[nodiscard]] static QJsonObject buildProjectJson(int language, int channels, bool withStrings);
   [[nodiscard]] static QJsonObject buildDashboardProjectJson(int language);
 };
 

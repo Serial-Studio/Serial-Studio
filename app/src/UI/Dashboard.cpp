@@ -37,6 +37,8 @@
 #  include "Sessions/Player.h"
 #endif
 
+#include <limits>
+#include <QSet>
 #include <QTimer>
 
 //--------------------------------------------------------------------------------------------------
@@ -89,41 +91,12 @@ static void tickRepeatTimer(int index, QMap<int, QTimer*>& timers, QMap<int, int
   counters.erase(it);
 }
 
+// Pre-resolved push fallbacks for GPS / 3D groups missing an axis dataset
+static constexpr double kNoGpsFix   = std::numeric_limits<double>::quiet_NaN();
+static constexpr bool kNeverNumeric = false;
 #ifdef BUILD_COMMERCIAL
-/**
- * @brief Routes a 3D-plot dataset value into the matching X/Y/Z component of point.
- */
-static inline void readPlot3DAxis(const DataModel::Dataset& dataset, QVector3D& point)
-{
-  const QString& id = dataset.widget;
-  if (id == "x" || id == "X")
-    point.setX(dataset.numericValue);
-  else if (id == "y" || id == "Y")
-    point.setY(dataset.numericValue);
-  else if (id == "z" || id == "Z")
-    point.setZ(dataset.numericValue);
-}
+static constexpr double kZeroAxisSource = 0.0;
 #endif
-
-/**
- * @brief Routes a numeric GPS dataset value into the lat/lon/alt accumulator.
- */
-static inline void readGpsField(const DataModel::Dataset& dataset,
-                                double& lat,
-                                double& lon,
-                                double& alt)
-{
-  if (!dataset.isNumeric)
-    return;
-
-  const QString& id = dataset.widget;
-  if (id == "lat")
-    lat = dataset.numericValue;
-  else if (id == "lon")
-    lon = dataset.numericValue;
-  else if (id == "alt")
-    alt = dataset.numericValue;
-}
 
 /**
  * @brief Applies a non-RepeatNTimes timer mode to an action's QTimer.
@@ -195,6 +168,7 @@ UI::Dashboard::Dashboard()
   connect(&DataModel::FrameBuilder::instance(), &DataModel::FrameBuilder::jsonFileMapChanged, this, [this] {
     m_sourceRawFrames.clear();
     m_datasetReferences.clear();
+    m_valuePushes.clear();
   }, Qt::QueuedConnection);
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [=, this] {
     const auto mode = AppState::instance().operationMode();
@@ -216,7 +190,8 @@ UI::Dashboard::Dashboard()
         Q_EMIT pointsChanged();
       }
 
-      const double saved = qMax(0.001, m_settings.value("Dashboard/PlotTimeRange", 10.0).toDouble());
+      const double saved
+        = qMax(0.001, SerialStudio::toDouble(m_settings.value("Dashboard/PlotTimeRange", 10.0)));
       if (!qFuzzyCompare(m_plotTimeRange, saved)) {
         m_plotTimeRange = saved;
         Q_EMIT plotTimeRangeChanged();
@@ -255,7 +230,8 @@ UI::Dashboard::Dashboard()
   m_notificationLogEnabled = m_settings.value("Dashboard/NotificationLogEnabled", false).toBool();
   m_clockEnabled           = m_settings.value("Dashboard/ClockEnabled", false).toBool();
   m_stopwatchEnabled       = m_settings.value("Dashboard/StopwatchEnabled", false).toBool();
-  m_plotTimeRange = qMax(0.001, m_settings.value("Dashboard/PlotTimeRange", 10.0).toDouble());
+  m_plotTimeRange =
+    qMax(0.001, SerialStudio::toDouble(m_settings.value("Dashboard/PlotTimeRange", 10.0)));
 }
 
 /**
@@ -800,7 +776,18 @@ const DSP::LineSeries3D& UI::Dashboard::plotData3D(const int index) const
     return kEmpty;
   }
 
-  return m_plotData3D[index];
+  Q_ASSERT(index < m_plot3DRings.size());
+
+  // Materialize the ring into the ordered snapshot at read (render) cadence, off the hotpath
+  const auto& ring = m_plot3DRings[index];
+  auto& snapshot   = m_plotData3D[index];
+
+  const std::size_t count = ring.size();
+  snapshot.resize(count);
+  for (std::size_t k = 0; k < count; ++k)
+    snapshot[k] = ring[k];
+
+  return snapshot;
 }
 
 /**
@@ -897,6 +884,32 @@ void UI::Dashboard::setPoints(const int points)
 }
 
 /**
+ * @brief Drops every pre-resolved hotpath push table (their pointers follow the layout).
+ */
+void UI::Dashboard::clearPushTables()
+{
+  m_yLinePushes.clear();
+  m_xLinePushes.clear();
+  m_timePushes.clear();
+  m_fftPushes.clear();
+  m_gpsPushes.clear();
+  m_valuePushes.clear();
+  m_multiplotPushes.clear();
+  m_yLinePushes.shrink_to_fit();
+  m_xLinePushes.shrink_to_fit();
+  m_timePushes.shrink_to_fit();
+  m_fftPushes.shrink_to_fit();
+  m_gpsPushes.shrink_to_fit();
+  m_multiplotPushes.shrink_to_fit();
+#ifdef BUILD_COMMERCIAL
+  m_waterfallPushes.clear();
+  m_plot3DPushes.clear();
+  m_waterfallPushes.shrink_to_fit();
+  m_plot3DPushes.shrink_to_fit();
+#endif
+}
+
+/**
  * @brief Resets all data in the dashboard, including plot values, widget structures, and actions.
  */
 void UI::Dashboard::resetData(const bool notify)
@@ -933,19 +946,14 @@ void UI::Dashboard::resetData(const bool notify)
   m_layoutValid = false;
 
   // Drop pre-resolved hotpath push tables (point into maps cleared below)
-  m_yLinePushes.clear();
-  m_xLinePushes.clear();
-  m_timePushes.clear();
-  m_multiplotPushes.clear();
-  m_yLinePushes.shrink_to_fit();
-  m_xLinePushes.shrink_to_fit();
-  m_timePushes.shrink_to_fit();
-  m_multiplotPushes.shrink_to_fit();
+  clearPushTables();
 
   // Clear data for 3D plots
 #ifdef BUILD_COMMERCIAL
   m_plotData3D.clear();
   m_plotData3D.squeeze();
+  m_plot3DRings.clear();
+  m_plot3DRings.squeeze();
   m_waterfallValues.clear();
   m_waterfallValues.squeeze();
 #endif
@@ -1054,7 +1062,10 @@ void UI::Dashboard::clearPlotData()
   }
 
 #ifdef BUILD_COMMERCIAL
-  // Clear 3D plot data
+  // Clear 3D plot data (live rings and the materialized snapshots)
+  for (auto& ring : m_plot3DRings)
+    ring.clear();
+
   for (auto& plot3d : m_plotData3D)
     plot3d.clear();
 #endif
@@ -1818,25 +1829,35 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
   if (!m_layoutValid) [[unlikely]]
     return;
 
-  // Propagate new values to all dataset references
+  // Walk the pre-resolved propagation table for this source instead of hashing every uniqueId
+  const auto pit = m_valuePushes.constFind(frame.sourceId);
+  if (pit == m_valuePushes.cend()) [[unlikely]] {
+    handleMissingDataset(frame);
+    return;
+  }
+
+  const auto& table         = pit.value();
+  const std::size_t entries = table.size();
+
+  std::size_t i = 0;
   for (const auto& group : frame.groups) {
     for (const auto& dataset : group.datasets) {
-      const auto uid = dataset.uniqueId;
-      const auto it  = m_datasetReferences.find(uid);
-
-      // Cannot find dataset UID; regenerate model and retry (once)
-      if (it == m_datasetReferences.end()) [[unlikely]] {
+      // Layout drifted since the table was built; regenerate the model and retry (once)
+      if (i >= entries || table[i].uniqueId != dataset.uniqueId) [[unlikely]] {
         handleMissingDataset(frame);
         return;
       }
 
-      // Update all datasets for the given UID
-      const auto& datasets = it.value();
-      for (auto* ptr : datasets) {
-        ptr->value        = dataset.value;
+      const auto& push = table[i++];
+      for (auto* ptr : push.targets) {
         ptr->isNumeric    = dataset.isNumeric;
         ptr->numericValue = dataset.numericValue;
       }
+
+      // Numeric values skip the string copy except where the string is observable
+      const auto& string_targets = dataset.isNumeric ? push.stringTargets : push.targets;
+      for (auto* ptr : string_targets)
+        ptr->value = dataset.value;
     }
   }
 
@@ -1974,8 +1995,9 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   // Register all widgets with the dashboard registry
   registerWidgets();
 
-  // Build dataset reference maps for value propagation
+  // Build dataset reference maps and the pre-resolved propagation tables
   buildDatasetReferences();
+  buildValuePushes();
 
   // Initialize data series & update actions
   updateDataSeries();
@@ -2186,12 +2208,73 @@ void UI::Dashboard::rebuildDatasetReferences()
 {
   // A push_back/erase on m_lastFrame.groups dangles stored &dataset pointers
   m_datasetReferences.clear();
+  m_valuePushes.clear();
 
   // buildDatasetReferences() asserts on an empty frame; nothing to map then
   if (m_lastFrame.groups.empty())
     return;
 
   buildDatasetReferences();
+  buildValuePushes();
+}
+
+/**
+ * @brief Resolves one dataset's propagation targets from m_datasetReferences.
+ */
+UI::Dashboard::ValuePush UI::Dashboard::makeValuePush(
+  const DataModel::Dataset& dataset, const QSet<const DataModel::Dataset*>& stringTargets) const
+{
+  Q_ASSERT(!m_datasetReferences.isEmpty());
+
+  ValuePush push;
+  push.uniqueId = dataset.uniqueId;
+
+  // Poisoned id keeps the old per-frame handleMissingDataset trigger for unmapped UIDs
+  const auto ref_it = m_datasetReferences.constFind(dataset.uniqueId);
+  if (ref_it == m_datasetReferences.cend()) {
+    push.uniqueId = std::numeric_limits<int>::min();
+    return push;
+  }
+
+  for (auto* target : ref_it.value()) {
+    push.targets.push_back(target);
+    if (stringTargets.contains(target))
+      push.stringTargets.push_back(target);
+  }
+
+  return push;
+}
+
+/**
+ * @brief Pre-resolves the per-source value-propagation tables from m_datasetReferences.
+ */
+void UI::Dashboard::buildValuePushes()
+{
+  Q_ASSERT(!m_datasetReferences.isEmpty());
+  Q_ASSERT(!m_lastFrame.groups.empty());
+
+  m_valuePushes.clear();
+
+  // String values are observable in DataGrid rows and in m_lastFrame (serialized by the API)
+  QSet<const DataModel::Dataset*> string_targets;
+  for (auto& group : m_lastFrame.groups)
+    for (auto& dataset : group.datasets)
+      string_targets.insert(&dataset);
+
+  const auto grid_it = m_widgetGroups.constFind(SerialStudio::DashboardDataGrid);
+  if (grid_it != m_widgetGroups.cend()) {
+    for (const auto& group : grid_it.value())
+      for (const auto& dataset : group.datasets)
+        string_targets.insert(&dataset);
+  }
+
+  // One table per source, row-major (group, dataset), mirroring updateDashboardData's frame walk
+  for (auto it = m_sourceRawFrames.cbegin(); it != m_sourceRawFrames.cend(); ++it) {
+    auto& table = m_valuePushes[it.key()];
+    for (const auto& group : it.value().groups)
+      for (const auto& dataset : group.datasets)
+        table.push_back(makeValuePush(dataset, string_targets));
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2287,19 +2370,18 @@ void UI::Dashboard::updateDataSeries(int sourceId)
  */
 void UI::Dashboard::updateFftSeries(int sourceId)
 {
-  const int fftCount = widgetCount(SerialStudio::DashboardFFT);
-  Q_ASSERT(m_fftValues.size() == fftCount);
-  Q_ASSERT(m_activeFFTPlots.size() == fftCount);
+  Q_ASSERT(static_cast<int>(m_fftPushes.size()) == m_fftValues.size());
+  Q_ASSERT(m_activeFFTPlots.size() == m_fftValues.size());
 
-  for (int i = 0; i < fftCount; ++i) {
-    if (!m_activeFFTPlots[i])
+  // Hotpath: walk the pre-resolved push table (no map lookups)
+  for (const auto& p : m_fftPushes) {
+    if (!*p.activeFlag)
       continue;
 
-    const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    if (sourceId >= 0 && dataset.sourceId != sourceId)
+    if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    m_fftValues[i].push(dataset.numericValue);
+    p.buf->push(*p.value);
   }
 }
 
@@ -2308,26 +2390,22 @@ void UI::Dashboard::updateFftSeries(int sourceId)
  */
 void UI::Dashboard::updateGpsSeries(int sourceId)
 {
-  const int gpsCount = widgetCount(SerialStudio::DashboardGPS);
-  Q_ASSERT(m_gpsValues.size() == gpsCount);
-  Q_ASSERT(m_widgetGroups.contains(SerialStudio::DashboardGPS) || gpsCount == 0);
+  Q_ASSERT(static_cast<int>(m_gpsPushes.size()) == m_gpsValues.size());
+  Q_ASSERT(m_widgetGroups.contains(SerialStudio::DashboardGPS) || m_gpsPushes.empty());
 
-  for (int i = 0; i < gpsCount; ++i) {
-    const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
-    if (sourceId >= 0 && group.sourceId != sourceId)
+  // Hotpath: walk the pre-resolved push table (no map lookups, no field-name scans)
+  for (const auto& p : m_gpsPushes) {
+    if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    auto& series = m_gpsValues[i];
+    // Non-numeric samples degrade to NaN, mirroring the old per-dataset field scan
+    const double lat = *p.lat.numeric ? *p.lat.value : kNoGpsFix;
+    const double lon = *p.lon.numeric ? *p.lon.value : kNoGpsFix;
+    const double alt = *p.alt.numeric ? *p.alt.value : kNoGpsFix;
 
-    // Extract lat/lon/alt from the group's datasets
-    double lat = std::nan(""), lon = std::nan(""), alt = std::nan("");
-    for (const auto& dataset : group.datasets)
-      readGpsField(dataset, lat, lon, alt);
-
-    // Append coordinates to the trajectory ring buffers
-    series.latitudes.push(lat);
-    series.longitudes.push(lon);
-    series.altitudes.push(alt);
+    p.series->latitudes.push(lat);
+    p.series->longitudes.push(lon);
+    p.series->altitudes.push(alt);
   }
 }
 
@@ -2337,31 +2415,21 @@ void UI::Dashboard::updateGpsSeries(int sourceId)
 void UI::Dashboard::updatePlot3DSeries(int sourceId)
 {
 #ifdef BUILD_COMMERCIAL
-  const int plot3DCount = widgetCount(SerialStudio::DashboardPlot3D);
-  Q_ASSERT(m_plotData3D.size() == plot3DCount);
+  Q_ASSERT(static_cast<int>(m_plot3DPushes.size()) == m_plot3DRings.size());
   Q_ASSERT(m_points > 0);
 
-  for (int i = 0; i < plot3DCount; ++i) {
-    const auto& group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
-    if (sourceId >= 0 && group.sourceId != sourceId)
+  // Hotpath: O(1) ring overwrite, replacing the per-frame O(points) erase-front vector shift
+  const auto maxPoints = static_cast<std::size_t>(points());
+  for (const auto& p : m_plot3DPushes) {
+    if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    auto& plotData = m_plotData3D[i];
+    // Track live point-count changes the way the old self-sizing vector did
+    if (p.ring->capacity() != maxPoints) [[unlikely]]
+      p.ring->resize(maxPoints);
 
-    // Extract X/Y/Z components
-    QVector3D point;
-    for (const auto& dataset : group.datasets)
-      readPlot3DAxis(dataset, point);
-
-    // Pre-reserve to keep the 10kHz+ hotpath alloc-free
-    const size_t maxPoints = static_cast<size_t>(points());
-    if (plotData.capacity() < maxPoints) [[unlikely]]
-      plotData.reserve(maxPoints);
-
-    if (plotData.size() >= maxPoints) [[likely]]
-      plotData.erase(plotData.begin());
-
-    plotData.push_back(point);
+    p.ring->push(
+      QVector3D(static_cast<float>(*p.x), static_cast<float>(*p.y), static_cast<float>(*p.z)));
   }
 #else
   (void)sourceId;
@@ -2428,9 +2496,12 @@ void UI::Dashboard::configureGpsSeries()
   // Release existing GPS buffers
   m_gpsValues.clear();
   m_gpsValues.squeeze();
+  m_gpsPushes.clear();
+  m_gpsPushes.shrink_to_fit();
 
   // Allocate and pre-fill series for each GPS widget
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardGPS); ++i) {
+  const int gpsCount = widgetCount(SerialStudio::DashboardGPS);
+  for (int i = 0; i < gpsCount; ++i) {
     DSP::GpsSeries series;
     const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
     const QMap<QString, DSP::FixedQueue<double>*> fieldMap = {
@@ -2450,6 +2521,33 @@ void UI::Dashboard::configureGpsSeries()
 
     m_gpsValues.append(series);
   }
+
+  // Buffer addresses are stable only once m_gpsValues stops growing; resolve in a second pass
+  m_gpsPushes.reserve(static_cast<std::size_t>(gpsCount));
+  for (int i = 0; i < gpsCount; ++i) {
+    const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
+
+    GpsPush push;
+    push.sourceId = group.sourceId;
+    push.series   = &m_gpsValues[i];
+    push.lat      = {&kNoGpsFix, &kNeverNumeric};
+    push.lon      = {&kNoGpsFix, &kNeverNumeric};
+    push.alt      = {&kNoGpsFix, &kNeverNumeric};
+
+    for (const auto& dataset : group.datasets) {
+      const GpsPush::Field field{&dataset.numericValue, &dataset.isNumeric};
+      if (dataset.widget == QStringLiteral("lat"))
+        push.lat = field;
+
+      if (dataset.widget == QStringLiteral("lon"))
+        push.lon = field;
+
+      if (dataset.widget == QStringLiteral("alt"))
+        push.alt = field;
+    }
+
+    m_gpsPushes.push_back(push);
+  }
 }
 
 /**
@@ -2461,12 +2559,28 @@ void UI::Dashboard::configureFftSeries()
   m_fftValues.clear();
   m_fftValues.squeeze();
   m_activeFFTPlots.clear();
+  m_fftPushes.clear();
+  m_fftPushes.shrink_to_fit();
 
   // Allocate ring buffers sized to each dataset's FFT sample count
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i) {
+  const int fftCount = widgetCount(SerialStudio::DashboardFFT);
+  for (int i = 0; i < fftCount; ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     m_fftValues.append(DSP::AxisData(dataset.fftSamples));
     m_activeFFTPlots.insert(i, true);
+  }
+
+  // Buffer addresses are stable only once m_fftValues stops growing; resolve in a second pass
+  m_fftPushes.reserve(static_cast<std::size_t>(fftCount));
+  for (int i = 0; i < fftCount; ++i) {
+    const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
+
+    SeriesPush push;
+    push.sourceId   = dataset.sourceId;
+    push.activeFlag = &m_activeFFTPlots[i];
+    push.buf        = &m_fftValues[i];
+    push.value      = &dataset.numericValue;
+    m_fftPushes.push_back(push);
   }
 }
 
@@ -2476,19 +2590,18 @@ void UI::Dashboard::configureFftSeries()
  */
 void UI::Dashboard::updateWaterfallSeries(int sourceId)
 {
-  const int waterfallCount = widgetCount(SerialStudio::DashboardWaterfall);
-  Q_ASSERT(m_waterfallValues.size() == waterfallCount);
-  Q_ASSERT(m_activeWaterfalls.size() == waterfallCount);
+  Q_ASSERT(static_cast<int>(m_waterfallPushes.size()) == m_waterfallValues.size());
+  Q_ASSERT(m_activeWaterfalls.size() == m_waterfallValues.size());
 
-  for (int i = 0; i < waterfallCount; ++i) {
-    if (!m_activeWaterfalls[i])
+  // Hotpath: walk the pre-resolved push table (no map lookups)
+  for (const auto& p : m_waterfallPushes) {
+    if (!*p.activeFlag)
       continue;
 
-    const auto& dataset = getDatasetWidget(SerialStudio::DashboardWaterfall, i);
-    if (sourceId >= 0 && dataset.sourceId != sourceId)
+    if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    m_waterfallValues[i].push(dataset.numericValue);
+    p.buf->push(*p.value);
   }
 }
 
@@ -2501,12 +2614,28 @@ void UI::Dashboard::configureWaterfallSeries()
   m_waterfallValues.clear();
   m_waterfallValues.squeeze();
   m_activeWaterfalls.clear();
+  m_waterfallPushes.clear();
+  m_waterfallPushes.shrink_to_fit();
 
   // Allocate ring buffers sized to each dataset's FFT sample count
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardWaterfall); ++i) {
+  const int waterfallCount = widgetCount(SerialStudio::DashboardWaterfall);
+  for (int i = 0; i < waterfallCount; ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardWaterfall, i);
     m_waterfallValues.append(DSP::AxisData(dataset.fftSamples));
     m_activeWaterfalls.insert(i, true);
+  }
+
+  // Buffer addresses are stable only once m_waterfallValues stops growing; second pass
+  m_waterfallPushes.reserve(static_cast<std::size_t>(waterfallCount));
+  for (int i = 0; i < waterfallCount; ++i) {
+    const auto& dataset = getDatasetWidget(SerialStudio::DashboardWaterfall, i);
+
+    SeriesPush push;
+    push.sourceId   = dataset.sourceId;
+    push.activeFlag = &m_activeWaterfalls[i];
+    push.buf        = &m_waterfallValues[i];
+    push.value      = &dataset.numericValue;
+    m_waterfallPushes.push_back(push);
   }
 }
 #endif
@@ -2848,12 +2977,52 @@ void UI::Dashboard::configureLineSeries()
  */
 void UI::Dashboard::configurePlot3DSeries()
 {
+  Q_ASSERT(m_points > 0);
+
+  const int plot3DCount = widgetCount(SerialStudio::DashboardPlot3D);
+
+  // Snapshot vectors handed to the widgets; capacity primed so read-time fills never reallocate
   m_plotData3D.clear();
   m_plotData3D.squeeze();
-  m_plotData3D.resize(widgetCount(SerialStudio::DashboardPlot3D));
-  for (int i = 0; i < m_plotData3D.count(); ++i) {
-    m_plotData3D[i].clear();
-    m_plotData3D[i].shrink_to_fit();
+  m_plotData3D.resize(plot3DCount);
+
+  // O(1) overwrite rings consumed by the hotpath
+  m_plot3DRings.clear();
+  m_plot3DRings.squeeze();
+  m_plot3DPushes.clear();
+  m_plot3DPushes.shrink_to_fit();
+
+  m_plot3DRings.reserve(plot3DCount);
+  for (int i = 0; i < plot3DCount; ++i) {
+    m_plot3DRings.append(DSP::FixedQueue<QVector3D>(static_cast<std::size_t>(points())));
+    m_plotData3D[i].reserve(static_cast<std::size_t>(points()));
+  }
+
+  // Buffer addresses are stable only once m_plot3DRings stops growing; second pass
+  m_plot3DPushes.reserve(static_cast<std::size_t>(plot3DCount));
+  for (int i = 0; i < plot3DCount; ++i) {
+    const auto& group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
+
+    Plot3DPush push;
+    push.sourceId = group.sourceId;
+    push.ring     = &m_plot3DRings[i];
+    push.x        = &kZeroAxisSource;
+    push.y        = &kZeroAxisSource;
+    push.z        = &kZeroAxisSource;
+
+    for (const auto& dataset : group.datasets) {
+      const QString& id = dataset.widget;
+      if (id == QStringLiteral("x") || id == QStringLiteral("X"))
+        push.x = &dataset.numericValue;
+
+      if (id == QStringLiteral("y") || id == QStringLiteral("Y"))
+        push.y = &dataset.numericValue;
+
+      if (id == QStringLiteral("z") || id == QStringLiteral("Z"))
+        push.z = &dataset.numericValue;
+    }
+
+    m_plot3DPushes.push_back(push);
   }
 }
 #endif

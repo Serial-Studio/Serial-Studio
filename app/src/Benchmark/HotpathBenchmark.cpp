@@ -103,9 +103,9 @@ void HotpathBenchmark::setActive(bool active) noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds a comma-decoded N-channel source plus a trailing string datagrid group.
+ * @brief Builds a comma-decoded N-channel source, optionally plus a trailing string datagrid group.
  */
-QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels)
+QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels, bool withStrings)
 {
   Q_ASSERT(channels > 0);
   Q_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua);
@@ -126,18 +126,22 @@ QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels)
   group.insert(Keys::Widget, QStringLiteral("multiplot"));
   group.insert(Keys::Datasets, datasets);
 
-  QJsonArray stringDatasets;
-  for (int i = 0; i < kStringChannels; ++i) {
-    QJsonObject ds;
-    ds.insert(Keys::Title, QStringLiteral("STR%1").arg(i + 1));
-    ds.insert(Keys::Index, channels + i + 1);
-    stringDatasets.append(ds);
-  }
+  QJsonArray groups{group};
+  if (withStrings) {
+    QJsonArray stringDatasets;
+    for (int i = 0; i < kStringChannels; ++i) {
+      QJsonObject ds;
+      ds.insert(Keys::Title, QStringLiteral("STR%1").arg(i + 1));
+      ds.insert(Keys::Index, channels + i + 1);
+      stringDatasets.append(ds);
+    }
 
-  QJsonObject stringGroup;
-  stringGroup.insert(Keys::Title, QStringLiteral("Status"));
-  stringGroup.insert(Keys::Widget, QStringLiteral("datagrid"));
-  stringGroup.insert(Keys::Datasets, stringDatasets);
+    QJsonObject stringGroup;
+    stringGroup.insert(Keys::Title, QStringLiteral("Status"));
+    stringGroup.insert(Keys::Widget, QStringLiteral("datagrid"));
+    stringGroup.insert(Keys::Datasets, stringDatasets);
+    groups.append(stringGroup);
+  }
 
   QJsonObject source;
   source.insert(Keys::SourceId, 0);
@@ -153,7 +157,7 @@ QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels)
   QJsonObject root;
   root.insert(Keys::Title, QStringLiteral("Hotpath Benchmark"));
   root.insert(Keys::Decoder, static_cast<int>(SerialStudio::PlainText));
-  root.insert(Keys::Groups, QJsonArray{group, stringGroup});
+  root.insert(Keys::Groups, groups);
   root.insert(Keys::Sources, QJsonArray{source});
   root.insert(Keys::Actions, QJsonArray{});
   return root;
@@ -297,7 +301,7 @@ QByteArray HotpathBenchmark::buildChunk(int frames, int channels, int stringColu
 /**
  * @brief Loads the synthetic project and activates the parse pipeline for the given language.
  */
-void HotpathBenchmark::setupProject(int language, int channels, bool dashboard)
+void HotpathBenchmark::setupProject(int language, int channels, bool withStrings, bool dashboard)
 {
   Q_ASSERT(channels > 0);
 
@@ -306,9 +310,9 @@ void HotpathBenchmark::setupProject(int language, int channels, bool dashboard)
 
   AppState::instance().setOperationMode(SerialStudio::ProjectFile);
 
-  const QJsonObject root =
-    dashboard ? buildDashboardProjectJson(language) : buildProjectJson(language, channels);
-  const bool loaded = project.loadFromJsonDocument(QJsonDocument(root));
+  const QJsonObject root = dashboard ? buildDashboardProjectJson(language)
+                                     : buildProjectJson(language, channels, withStrings);
+  const bool loaded      = project.loadFromJsonDocument(QJsonDocument(root));
   Q_ASSERT(loaded);
   Q_UNUSED(loaded);
 
@@ -398,9 +402,12 @@ void HotpathBenchmark::activateDashboardWidgets()
 /**
  * @brief Measures raw FrameReader extraction throughput (the driver pipeline, no parse).
  */
-HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames, double minSeconds)
+HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
+                                                           double minFps,
+                                                           double minSeconds)
 {
   Q_ASSERT(targetFrames > 0);
+  Q_ASSERT(minFps > 0.0);
   Q_ASSERT(minSeconds >= 0.0);
 
   constexpr int kChannels       = 8;
@@ -439,9 +446,9 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
   const double fps = seconds > 0.0 ? static_cast<double>(extracted) / seconds : 0.0;
 
   Result result;
-  result.passed          = true;
+  result.passed          = fps >= minFps;
   result.language        = -1;
-  result.minFps          = 1.0;
+  result.minFps          = minFps;
   result.framesPerSecond = fps;
   result.elapsedSeconds  = seconds;
   result.framesParsed    = extracted;
@@ -457,7 +464,9 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
                                                double minSeconds,
                                                int language,
                                                bool withExporters,
-                                               bool withDashboard)
+                                               bool withStrings,
+                                               bool withDashboard,
+                                               bool dashboardIngest)
 {
   Q_ASSERT(targetFrames > 0);
   Q_ASSERT(minFps > 0.0);
@@ -466,15 +475,18 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   constexpr int kChannels       = 8;
   constexpr int kFramesPerChunk = 1000;
 
+  // Ingest-off keeps the all-widget project but leaves the Dashboard inactive (early-return)
+  const bool activateDashboard = withDashboard && dashboardIngest;
+
   const int channels = withDashboard ? kDashboardChannels : kChannels;
-  setupProject(language, channels, withDashboard);
+  setupProject(language, channels, withStrings, withDashboard);
   if (withExporters)
     enableConsumers();
 
-  if (withDashboard)
+  if (activateDashboard)
     setActive(true);
 
-  const int stringColumns = withDashboard ? 0 : kStringChannels;
+  const int stringColumns = (withStrings && !withDashboard) ? kStringChannels : 0;
   const QByteArray chunk  = buildChunk(kFramesPerChunk, channels, stringColumns);
 
   IO::FrameReader reader;
@@ -487,7 +499,7 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   auto& queue = reader.queue();
   IO::CapturedDataPtr drained;
 
-  if (withDashboard) {
+  if (activateDashboard) {
     reader.processData(IO::makeCapturedData(chunk));
 
     // code-verify off
@@ -534,7 +546,7 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   if (withExporters)
     disableConsumers();
 
-  if (withDashboard)
+  if (activateDashboard)
     setActive(false);
 
   Result result;
@@ -548,20 +560,34 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   return result;
 }
 
+// Canonical run order shared by runAndReport() and printReport().
+enum ReportIndex {
+  kReportData,
+  kReportLua,
+  kReportJs,
+  kReportLuaMix,
+  kReportJsMix,
+  kReportLuaX,
+  kReportLuaD,
+  kReportLuaDoff,
+  kReportCount
+};
+
+static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
+                                                          "lua(numeric)",
+                                                          "js(numeric)",
+                                                          "lua(mixed)",
+                                                          "js(mixed)",
+                                                          "lua+exporters",
+                                                          "lua+dashboard",
+                                                          "lua+dashboard(off)"};
+
 /**
- * @brief Runs the gated Lua, JS, exporters-on, and dashboard-on pipelines; returns the exit code.
+ * @brief Prints the per-run, ratio, and machine-readable readouts; true when every gate passed.
  */
-SS_NO_PGO
-int HotpathBenchmark::runAndReport(quint64 targetFrames,
-                                   double minFps,
-                                   double minSeconds,
-                                   const QString& outputFile)
+bool HotpathBenchmark::printReport(const Result* results, const QString& outputFile)
 {
-  const Result data = runDataPipeline(targetFrames, minSeconds);
-  const Result lua  = run(targetFrames, minFps, minSeconds, SerialStudio::Lua, false);
-  const Result js   = run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::JavaScript, false);
-  const Result luaX = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, true);
-  const Result luaD = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, false, true);
+  Q_ASSERT(results != nullptr);
 
   QFile file(outputFile);
   const bool fileOpen  = !outputFile.isEmpty() && file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -572,44 +598,67 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
       file.write(line);
   };
 
-  const auto report = [&](const char* tag, const Result& r) {
+  for (int i = 0; i < kReportCount; ++i) {
+    const Result& r = results[i];
     printData("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
-              tag,
+              kReportTags[i],
               static_cast<unsigned long long>(r.framesParsed),
               static_cast<unsigned long long>(r.framesSkipped),
               r.elapsedSeconds);
     printData("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
-              tag,
+              kReportTags[i],
               r.framesPerSecond,
               r.minFps,
               r.passed ? "PASS" : "FAIL");
-  };
+  }
 
-  report("data-pipeline", data);
-  report("lua", lua);
-  report("js", js);
-  report("lua+exporters", luaX);
-  report("lua+dashboard", luaD);
+  const Result& data    = results[kReportData];
+  const Result& lua     = results[kReportLua];
+  const Result& js      = results[kReportJs];
+  const Result& luaMix  = results[kReportLuaMix];
+  const Result& jsMix   = results[kReportJsMix];
+  const Result& luaX    = results[kReportLuaX];
+  const Result& luaD    = results[kReportLuaD];
+  const Result& luaDoff = results[kReportLuaDoff];
 
+  // The exporter run keeps the mixed workload, so compare it against the mixed baseline.
   const double slowdown =
-    luaX.framesPerSecond > 0.0 ? lua.framesPerSecond / luaX.framesPerSecond : 0.0;
+    luaX.framesPerSecond > 0.0 ? luaMix.framesPerSecond / luaX.framesPerSecond : 0.0;
   printData("hotpath: exporters cost %.2fx throughput\n", slowdown);
 
+  // Cross-project upper bound (different baseline project): kept for historical continuity.
   const double dashSlowdown =
     luaD.framesPerSecond > 0.0 ? lua.framesPerSecond / luaD.framesPerSecond : 0.0;
   printData("hotpath: dashboard costs %.2fx throughput\n", dashSlowdown);
 
+  // Same-project isolation of pure ingest cost (the number to optimize against).
+  const double dashIngest =
+    luaD.framesPerSecond > 0.0 ? luaDoff.framesPerSecond / luaD.framesPerSecond : 0.0;
+  printData("hotpath: dashboard ingest costs %.2fx throughput (same project, ingest on vs off)\n",
+            dashIngest);
+
+  const bool allPassed = data.passed && lua.passed && js.passed && luaMix.passed && jsMix.passed;
   printData("HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
             "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f HOTPATH_DASHBOARD_FPS=%.0f "
-            "HOTPATH_DATA_FPS=%.0f\n",
+            "HOTPATH_DATA_FPS=%.0f HOTPATH_DATA_TARGET=%.0f\n",
             lua.framesPerSecond,
             lua.minFps,
             js.framesPerSecond,
             js.minFps,
-            (lua.passed && js.passed) ? 1 : 0,
+            allPassed ? 1 : 0,
             luaX.framesPerSecond,
             luaD.framesPerSecond,
-            data.framesPerSecond);
+            data.framesPerSecond,
+            data.minFps);
+  printData("HOTPATH_LUA_MIXED_FPS=%.0f HOTPATH_LUA_MIXED_TARGET=%.0f "
+            "HOTPATH_JS_MIXED_FPS=%.0f HOTPATH_JS_MIXED_TARGET=%.0f\n",
+            luaMix.framesPerSecond,
+            luaMix.minFps,
+            jsMix.framesPerSecond,
+            jsMix.minFps);
+  printData("HOTPATH_DASHBOARD_OFF_FPS=%.0f HOTPATH_DASHBOARD_INGEST_COST=%.2f\n",
+            luaDoff.framesPerSecond,
+            dashIngest);
 
   std::fflush(stdout);
   if (fileOpen) {
@@ -617,7 +666,38 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
     file.close();
   }
 
-  const int code = (lua.passed && js.passed) ? EXIT_SUCCESS : EXIT_FAILURE;
+  return allPassed;
+}
+
+/**
+ * @brief Runs the gated data, Lua/JS numeric + mixed, exporter, and dashboard pipelines.
+ */
+SS_NO_PGO
+int HotpathBenchmark::runAndReport(quint64 targetFrames,
+                                   double minFps,
+                                   double minSeconds,
+                                   const QString& outputFile)
+{
+  Q_ASSERT(targetFrames > 0);
+  Q_ASSERT(minFps > 0.0);
+
+  // Tiers scale off minFps (so --min-fps 1 stays ungated): data 4x, JS half of its Lua peer
+  Result results[kReportCount] = {};
+  results[kReportData]         = runDataPipeline(targetFrames, minFps * 4.0, minSeconds);
+  results[kReportLua] = run(targetFrames, minFps, minSeconds, SerialStudio::Lua, false, false);
+  results[kReportJs] =
+    run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::JavaScript, false, false);
+  results[kReportLuaMix] = run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::Lua, false);
+  results[kReportJsMix] =
+    run(targetFrames, minFps * 0.25, minSeconds, SerialStudio::JavaScript, false);
+  results[kReportLuaX] = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, true);
+  results[kReportLuaD] = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, false, false, true);
+
+  // Same project as luaD with ingest off: isolates ingest cost (as luaX/luaMix do exporters)
+  results[kReportLuaDoff] =
+    run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, false, false, true, false);
+
+  const int code = printReport(results, outputFile) ? EXIT_SUCCESS : EXIT_FAILURE;
 
 #ifdef SS_PGO_INSTRUMENT
 #  if defined(__clang__)

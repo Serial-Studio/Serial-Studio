@@ -50,11 +50,15 @@ serial-studio-pro --headless --benchmark-hotpath --min-fps 256000
 
 It loads a project via `ProjectModel::loadFromJsonDocument` and drives the path —
 `FrameReader` extraction → `FrameBuilder` → frame parser → per-dataset transforms → Dashboard.
-It first runs an ungated **data-pipeline** pass (`FrameReader` extraction only, no parse) that
-reports raw driver throughput in the MHz range (`HOTPATH_DATA_FPS`), then a **Lua** pipeline
-(gated; this exit code is the release gate), an ungated **JS** pipeline,
-an ungated **Lua + all exporters** pipeline (CSV/MDF4/Sessions/API/gRPC) that prints the
-exporter slowdown (`hotpath: exporters cost N.NNx throughput`) and trains the export hot paths,
+**Five gated runs**, all tiered off `--min-fps` (so a `--min-fps 1` PGO training run stays
+effectively ungated): a **data-pipeline** pass (`FrameReader` extraction only, no parse;
+`HOTPATH_DATA_FPS`) at 4x (1.024 MHz), Lua numeric at `min-fps` (256 kHz), JS numeric and Lua mixed
+(numeric + string columns) at half (128 kHz), JS mixed at a quarter (64 kHz); the exit code (the
+release gate) fails if any tier is missed. The synthetic chunk — string columns included — is
+built once before the timed loop, so chunk/string construction never sits in the measurement.
+Then an ungated **Lua + all exporters** pipeline (CSV/MDF4/Sessions/API/gRPC, mixed workload) that
+prints the exporter slowdown vs the Lua-mixed baseline (`hotpath: exporters cost N.NNx
+throughput`) and trains the export hot paths,
 and an ungated **Lua + dashboard** pipeline that loads an all-widget-types project, flips
 `Benchmark::HotpathBenchmark::active()` so `Dashboard::streamAvailable()` accepts headless frames, arms
 every plot/FFT/multiplot/waterfall/GPS/3D widget, and trains the per-frame dashboard sub-hotpaths

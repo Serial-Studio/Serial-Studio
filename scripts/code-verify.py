@@ -1632,6 +1632,47 @@ def find_interrupt_guard_violations(
     return violations
 
 
+# Every string-to-number parse goes through the SerialStudio::toDouble()
+# overload set (fast_float-backed). Qt's QString/QVariant toDouble() walks the
+# full locale + double-conversion pipeline even for plainly non-numeric text
+# (a measured >2x frame-parse throughput loss with string columns), and
+# QJsonValue::toDouble() silently drops string-typed numbers. SerialStudio.h
+# hosts the canonical implementation, so its internal Qt fallback is the one
+# allowed call site.
+_TODOUBLE_RE = re.compile(r"(?:\.|->)\s*toDouble\s*\(")
+_TODOUBLE_ALLOWED = "SerialStudio.h"
+_TODOUBLE_SUFFIXES = (".cpp", ".h", ".c", ".mm")
+
+
+def find_todouble_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag direct Qt `.toDouble()` / `->toDouble()` calls outside
+    SerialStudio.h. SerialStudio::toDouble() is the project-wide numeric
+    parse: fast_float-backed, string-payload aware, and total (never fails)."""
+    if path.name == _TODOUBLE_ALLOWED or path.suffix not in _TODOUBLE_SUFFIXES:
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if _TODOUBLE_RE.search(line):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "qt-todouble-direct",
+                    "direct Qt .toDouble() call -- use the SerialStudio::toDouble() "
+                    "overload set (QStringView / QByteArrayView / QVariant / "
+                    "QJsonValue; fast_float-backed, parses string payloads, never "
+                    "fails). Deliberate locale-aware parsing belongs behind a "
+                    "`// code-verify off` fence.",
+                )
+            )
+    return violations
+
+
 def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
     # Read as bytes first so CRLF detection isn't masked by Python's universal
     # newline translation in text mode — read_text() silently rewrites \r\n
@@ -1672,6 +1713,7 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
             find_qml_underscore_property_violations(raw_lines, path, fence_mask)
         )
         violations.extend(find_interrupt_guard_violations(raw_lines, path, fence_mask))
+        violations.extend(find_todouble_violations(raw_lines, path, fence_mask))
 
         # Static-analysis rules (Qt/C++ semantic checks + QML conventions).
         # The rules module degrades gracefully when tree-sitter is missing.

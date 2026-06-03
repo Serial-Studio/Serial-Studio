@@ -384,8 +384,9 @@ Widgets.SmartDialog {
       visible: root.results.length > 0
       color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
-      text: qsTr("Pass/Fail applies to the parser phases only (Lua target 256 K frames/s, " +
-                 "JavaScript 128 K). The export and dashboard phases are informational.")
+      text: qsTr("Pass/Fail applies to the data-pipeline and parser phases (data pipeline " +
+                 "1024 K frames/s; numeric: Lua 256 K, JavaScript 128 K; mixed: Lua 128 K, " +
+                 "JavaScript 64 K). The export and dashboard phases are informational.")
     }
 
     //

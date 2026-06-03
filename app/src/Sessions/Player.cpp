@@ -920,7 +920,7 @@ QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
 
     const bool isNumeric = m_frameQuery->value(3).toInt() != 0;
     if (isNumeric) {
-      const double v = m_frameQuery->value(1).toDouble();
+      const double v = SerialStudio::toDouble(m_frameQuery->value(1));
       uidValues[uid] = QString::number(v, 'g', 17);
     } else {
       uidValues[uid] = m_frameQuery->value(2).toString();

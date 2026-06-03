@@ -72,17 +72,53 @@ trips `Frame queue full — frame dropped`. Known direct sites:
 - `DeviceManager::rawDataReceived → ConnectionManager::onRawDataReceived`
 - `FrameReader::readyRead → DeviceManager::onReadyRead` (AutoConnection resolves Direct)
 
+## Dashboard Ingest — Pre-resolved Push Tables
+
+`Dashboard::hotpathRxFrame` does no per-frame container lookups; everything is resolved at
+reconfigure and the per-frame walk is pointer-only.
+
+- **Value propagation** (`m_valuePushes`, built by `buildValuePushes` per source in row-major
+  group/dataset order from `m_datasetReferences`): `updateDashboardData` walks it positionally
+  and validates each entry's `uniqueId` against the incoming dataset (mismatch or unmapped UID →
+  `handleMissingDataset`, the same reconfigure-and-retry-once semantics the old per-dataset
+  `QHash::find` provided).
+- **String values are written only where observable.** Numeric datasets copy `Dataset::value`
+  (a QString COW bump per target) only into `stringTargets`: DataGrid-group copies and the
+  `m_lastFrame` copies (`dashboard.getData` serializes that frame, incl. `Keys::Value`).
+  Non-numeric datasets write the string to every target. **A new widget that displays
+  `Dataset::value` must be registered in `buildValuePushes`' `string_targets` set** or its
+  tiles silently read stale strings.
+- **FFT / waterfall / GPS / 3D mirror the line-plot push tables** (`m_fftPushes`,
+  `m_waterfallPushes`, `m_gpsPushes`, `m_plot3DPushes`): raw `sourceId` / value / buffer
+  pointers resolved in the matching `configure*` (second pass, after the buffers stop growing),
+  dropped by `clearPushTables()` on reset, and sharing the `m_layoutValid` staleness contract
+  with `LinePush`. GPS keeps the per-axis `isNumeric` gate via pointer (`GpsPush::Field`).
+- **3D plots ingest into `DSP::FixedQueue<QVector3D>` rings** (`m_plot3DRings`, O(1)
+  overwrite — the old `erase(begin())` was an O(points) memmove per frame); `plotData3D()`
+  materializes the ordered snapshot (`m_plotData3D`, mutable) at read/render cadence. A live
+  `points()` change is absorbed by an `[[unlikely]]` `ring->resize()` in `updatePlot3DSeries`.
+- **Benchmark**: `runAndReport` adds a same-project isolation pass — `lua+dashboard(off)` runs
+  the all-widget project with `dashboardIngest=false` (Dashboard early-returns) and prints
+  `dashboard ingest costs N.NNx` / `HOTPATH_DASHBOARD_INGEST_COST`. Optimize against that
+  number; the historical `dashboard costs N.NNx` line compares two different projects.
+
 ## Hotpath Benchmark — The 256 kHz CI Gate
 
 256 kHz is a CI gate, not a slogan. `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`) drives the
-real parse pipeline in-process — `FrameReader` extraction → `FrameBuilder` → the **Lua** frame
-parser → per-dataset transforms → Dashboard — against a project loaded programmatically via
-`ProjectModel::loadFromJsonDocument`. It first runs an ungated **data-pipeline** pass
-(`runDataPipeline` — `FrameReader` extraction only, no parse) that reports raw driver throughput in
-the MHz range (`HOTPATH_DATA_FPS`). It exits nonzero when the **Lua** run sustains below
-`--min-fps` (default 256000), then runs an ungated **JS** pipeline, an ungated **Lua + all
-exporters live** pipeline (CSV/MDF4/Sessions/API/gRPC) for PGO training + an exporter-slowdown
-readout, and an ungated **Lua + dashboard** pipeline that loads an all-widget-types project, sets
+real parse pipeline in-process — `FrameReader` extraction → `FrameBuilder` → frame parser →
+per-dataset transforms → Dashboard — against a project loaded programmatically via
+`ProjectModel::loadFromJsonDocument`. Five runs are gated, all tiered off `--min-fps` (default
+256000) so a `--min-fps 1` PGO training run stays effectively ungated: **data-pipeline** at 4x
+(1.024 MHz; `runDataPipeline` — `FrameReader` extraction only, no parse; `HOTPATH_DATA_FPS`),
+**Lua numeric** at `min-fps` (256 kHz), **JS numeric** at half (128 kHz), **Lua mixed**
+(numeric + string columns) at half (128 kHz), **JS mixed** at a quarter (64 kHz).
+Numeric runs drop both the 3 string chunk columns and the string datagrid group from the project;
+mixed runs keep them. The synthetic chunk is built once *before* the timed loop (string columns
+included), so chunk/string construction never contaminates the measurement. The exit code (and
+`HOTPATH_PASS`) is nonzero if *any* gated run misses its tier. It then runs an ungated **Lua +
+all exporters live** pipeline (CSV/MDF4/Sessions/API/gRPC, mixed workload — the
+exporter-slowdown readout compares against the Lua-mixed baseline) for PGO
+training, and an ungated **Lua + dashboard** pipeline that loads an all-widget-types project, sets
 `HotpathBenchmark::active()` (which `Dashboard::streamAvailable()` honors so headless frames are
 accepted with no live device), arms every plot/FFT/multiplot/waterfall/GPS/3D widget, and trains
 the per-frame dashboard sub-hotpaths + a dashboard-slowdown readout. The gated runs disable the

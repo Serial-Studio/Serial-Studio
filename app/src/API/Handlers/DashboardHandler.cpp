@@ -335,7 +335,7 @@ API::CommandResponse API::Handlers::DashboardHandler::setTimeRange(const QString
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: seconds"));
   }
 
-  const double seconds = params.value(QStringLiteral("seconds")).toDouble();
+  const double seconds = SerialStudio::toDouble(params.value(QStringLiteral("seconds")));
 
   if (seconds < 0.001 || seconds > 300.0) {
     return CommandResponse::makeError(

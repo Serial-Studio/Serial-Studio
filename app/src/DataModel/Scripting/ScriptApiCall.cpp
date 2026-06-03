@@ -42,6 +42,7 @@
 #include "API/CommandHandler.h"
 #include "API/CommandProtocol.h"
 #include "API/CommandRegistry.h"
+#include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // Sandbox policy: default-deny allow-list plus per-source rate limit and body cap
@@ -343,7 +344,7 @@ static void jsonValueToLua(lua_State* L, const QJsonValue& v, int depth)
       lua_pushboolean(L, v.toBool() ? 1 : 0);
       break;
     case QJsonValue::Double:
-      pushJsonNumber(L, v.toDouble());
+      pushJsonNumber(L, SerialStudio::toDouble(v));
       break;
     case QJsonValue::String: {
       const QByteArray s = v.toString().toUtf8();

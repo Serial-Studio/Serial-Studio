@@ -4082,16 +4082,16 @@ void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
       break;
     }
     case kDatasetView_PltMin:
-      dataset.pltMin = value.toDouble();
+      dataset.pltMin = SerialStudio::toDouble(value);
       break;
     case kDatasetView_PltMax:
-      dataset.pltMax = value.toDouble();
+      dataset.pltMax = SerialStudio::toDouble(value);
       break;
     case kDatasetView_WgtMin:
-      dataset.wgtMin = value.toDouble();
+      dataset.wgtMin = SerialStudio::toDouble(value);
       break;
     case kDatasetView_WgtMax:
-      dataset.wgtMax = value.toDouble();
+      dataset.wgtMax = SerialStudio::toDouble(value);
       break;
     case kDatasetView_DisplayTickCount:
       dataset.displayTickCount = qMax(0, value.toInt());
@@ -4112,10 +4112,10 @@ void DataModel::ProjectEditor::onDatasetFftItemChanged(QStandardItem* item,
 
   switch (id) {
     case kDatasetView_FFTMin:
-      dataset.fftMin = value.toDouble();
+      dataset.fftMin = SerialStudio::toDouble(value);
       break;
     case kDatasetView_FFTMax:
-      dataset.fftMax = value.toDouble();
+      dataset.fftMax = SerialStudio::toDouble(value);
       break;
     case kDatasetView_WaterfallYAxis: {
       // Translate ComboBox position -> dataset uniqueId; 0 at position 0 = "Time".
@@ -4163,7 +4163,7 @@ void DataModel::ProjectEditor::onDatasetFlagItemChanged(QStandardItem* item,
       buildDatasetModel(dataset);
       break;
     case kDatasetView_LED_High:
-      dataset.ledHigh = value.toDouble();
+      dataset.ledHigh = SerialStudio::toDouble(value);
       break;
     case kDatasetView_HideOnDashboard:
       dataset.hideOnDashboard = value.toBool();
@@ -4183,8 +4183,8 @@ void DataModel::ProjectEditor::commitAlarmBands(const QVariantList& bands)
   for (const auto& v : bands) {
     const auto m = v.toMap();
     DataModel::AlarmBand band;
-    band.min   = m.value(QStringLiteral("min")).toDouble();
-    band.max   = m.value(QStringLiteral("max")).toDouble();
+    band.min   = SerialStudio::toDouble(m.value(QStringLiteral("min")));
+    band.max   = SerialStudio::toDouble(m.value(QStringLiteral("max")));
     band.color = m.value(QStringLiteral("color")).toString().simplified();
     band.label = m.value(QStringLiteral("label")).toString().simplified();
     const int sev =
@@ -4819,16 +4819,16 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
       break;
     }
     case kOutputWidget_MinValue:
-      m_selectedOutputWidget.minValue = value.toDouble();
+      m_selectedOutputWidget.minValue = SerialStudio::toDouble(value);
       break;
     case kOutputWidget_MaxValue:
-      m_selectedOutputWidget.maxValue = value.toDouble();
+      m_selectedOutputWidget.maxValue = SerialStudio::toDouble(value);
       break;
     case kOutputWidget_StepSize:
-      m_selectedOutputWidget.stepSize = value.toDouble();
+      m_selectedOutputWidget.stepSize = SerialStudio::toDouble(value);
       break;
     case kOutputWidget_InitialValue:
-      m_selectedOutputWidget.initialValue = value.toDouble();
+      m_selectedOutputWidget.initialValue = SerialStudio::toDouble(value);
       break;
     case kOutputWidget_TransmitFunction:
       m_selectedOutputWidget.transmitFunction = value.toString();

@@ -28,6 +28,7 @@
 #include "API/SchemaBuilder.h"
 #include "DataModel/Frame.h"
 #include "DataModel/ProjectModel.h"
+#include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // Local helpers
@@ -51,7 +52,7 @@
 [[nodiscard]] static QVariant jsonToVariant(const QJsonValue& v)
 {
   if (v.isDouble())
-    return QVariant(v.toDouble());
+    return QVariant(SerialStudio::toDouble(v));
 
   if (v.isBool())
     return QVariant(v.toBool() ? 1.0 : 0.0);

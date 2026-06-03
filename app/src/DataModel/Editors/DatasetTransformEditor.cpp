@@ -308,7 +308,7 @@ void DataModel::DatasetTransformEditor::onTest()
   }
 
   bool ok               = false;
-  const double inputVal = inputStr.toDouble(&ok);
+  const double inputVal = SerialStudio::toDouble(inputStr, &ok);
   if (!ok) {
     m_testOutput->setText(tr("Invalid number"));
     return;

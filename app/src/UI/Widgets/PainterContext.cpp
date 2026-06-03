@@ -31,6 +31,7 @@
 #  include <QStringList>
 
 #  include "Misc/CommonFonts.h"
+#  include "SerialStudio.h"
 
 /**
  * @brief Maps Canvas2D line-cap names to Qt::PenCapStyle.
@@ -1561,7 +1562,7 @@ QFont Widgets::PainterContext::parseFontSpec(const QString& spec) const
 
   const auto sizeMatch = sizeRe.match(spec);
   if (sizeMatch.hasMatch())
-    size = sizeMatch.captured(1).toDouble();
+    size = SerialStudio::toDouble(sizeMatch.captured(1));
 
   const QString lower = spec.toLower();
   if (lower.contains(QLatin1String("italic")))

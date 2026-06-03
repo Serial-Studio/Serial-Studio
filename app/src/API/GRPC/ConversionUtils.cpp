@@ -11,6 +11,8 @@
 
 #  include "API/GRPC/ConversionUtils.h"
 
+#  include "SerialStudio.h"
+
 //--------------------------------------------------------------------------------------------------
 // QJsonObject -> google.protobuf.Struct
 //--------------------------------------------------------------------------------------------------
@@ -58,7 +60,7 @@ google::protobuf::Value API::GRPC::ConversionUtils::toProtoValue(const QJsonValu
       break;
 
     case QJsonValue::Double:
-      result.set_number_value(json.toDouble());
+      result.set_number_value(SerialStudio::toDouble(json));
       break;
 
     case QJsonValue::String:

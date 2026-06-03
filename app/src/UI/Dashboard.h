@@ -25,6 +25,7 @@
 #include <QFont>
 #include <QHash>
 #include <QObject>
+#include <QSet>
 #include <QSettings>
 
 #include "DSP.h"
@@ -264,6 +265,8 @@ private:
   void registerWidgets();
   void buildDatasetReferences();
   void rebuildDatasetReferences();
+  void buildValuePushes();
+  void clearPushTables();
   void relabelGroupAsMultiplotFallback(int groupId, const QString& newTitle);
 
 private:
@@ -306,6 +309,59 @@ private:
     std::vector<TimeCurve> timeCurves;
     std::vector<std::pair<DSP::AxisData*, const double*>> samples;
   };
+
+  /**
+   * @brief Pre-resolved value-propagation entry: one incoming dataset to its widget copies.
+   *        stringTargets is the subset whose string value is observable (DataGrid rows and the
+   *        API-serialized m_lastFrame); the rest only ever consume the numeric fields.
+   */
+  struct ValuePush {
+    std::vector<DataModel::Dataset*> targets;
+    std::vector<DataModel::Dataset*> stringTargets;
+    int uniqueId;
+  };
+
+  [[nodiscard]] ValuePush makeValuePush(const DataModel::Dataset& dataset,
+                                        const QSet<const DataModel::Dataset*>& stringTargets) const;
+
+  /**
+   * @brief Pre-resolved descriptor that pushes one dataset value into one sample ring.
+   */
+  struct SeriesPush {
+    int sourceId;
+    const bool* activeFlag;
+    DSP::AxisData* buf;
+    const double* value;
+  };
+
+  /**
+   * @brief Pre-resolved GPS coordinate sources: numeric gate + value pointer per axis.
+   */
+  struct GpsPush {
+    struct Field {
+      const double* value;
+      const bool* numeric;
+    };
+
+    int sourceId;
+    DSP::GpsSeries* series;
+    Field lat;
+    Field lon;
+    Field alt;
+  };
+
+#ifdef BUILD_COMMERCIAL
+  /**
+   * @brief Pre-resolved 3D trajectory sources feeding an O(1) overwrite ring.
+   */
+  struct Plot3DPush {
+    int sourceId;
+    DSP::FixedQueue<QVector3D>* ring;
+    const double* x;
+    const double* y;
+    const double* z;
+  };
+#endif
 
   QSettings m_settings;
   int m_points;
@@ -363,8 +419,15 @@ private:
   std::vector<LinePush> m_xLinePushes;
   std::vector<TimePush> m_timePushes;
   std::vector<MultiPush> m_multiplotPushes;
+  std::vector<SeriesPush> m_fftPushes;
+  std::vector<GpsPush> m_gpsPushes;
 #ifdef BUILD_COMMERCIAL
-  QVector<DSP::LineSeries3D> m_plotData3D;
+  std::vector<SeriesPush> m_waterfallPushes;
+  std::vector<Plot3DPush> m_plot3DPushes;
+  QVector<DSP::FixedQueue<QVector3D>> m_plot3DRings;
+
+  // Ordered snapshot materialized from the ring at read (render) cadence, off the hotpath
+  mutable QVector<DSP::LineSeries3D> m_plotData3D;
   QVector<DSP::AxisData> m_waterfallValues;
 #endif
 
@@ -375,6 +438,7 @@ private:
   QMap<int, DataModel::Dataset> m_datasets;
 
   QHash<int, QVector<DataModel::Dataset*>> m_datasetReferences;
+  QHash<int, std::vector<ValuePush>> m_valuePushes;
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>> m_widgetGroups;
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> m_widgetDatasets;
 
