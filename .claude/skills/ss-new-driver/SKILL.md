@@ -36,7 +36,7 @@ see [ss-hotpath]). Never re-stamp downstream.
 ## Rules
 
 - This is a multi-file change (>3 files): state the plan and get confirmation before executing.
-- Follow `docs/claude/code-style.md` (header ordering, `[[nodiscard]]`, no in-header member init,
+- Follow `doc/claude/code-style.md` (header ordering, `[[nodiscard]]`, no in-header member init,
   `Q_EMIT` not `emit`, Christmas-tree ordering).
 - Run `python scripts/code-verify.py --check` on the new files before handoff.
 - Do not build or run the app — leave compilation and runtime testing to the developer.

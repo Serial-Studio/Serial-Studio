@@ -18,7 +18,7 @@ paths:
 # Serial Studio — data hotpath
 
 You are touching the highest-risk code in the repo. Read the target file **in full** first
-(`docs/claude/architecture.md` has the full data-flow and threading model). These rules are
+(`doc/claude/architecture.md` has the full data-flow and threading model). These rules are
 non-negotiable; violating them causes silent frame drops, not compile errors.
 
 ## Data flow

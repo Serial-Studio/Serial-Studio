@@ -140,7 +140,7 @@ rules. The canonical driver lifecycle reference is `app/src/IO/Drivers/Bluetooth
 ### Agent 3: Thread Safety & the Data Hotpath
 
 **Scope**: cross-thread `QObject` access, connection types, and Serial Studio's
-non-negotiable hotpath rules. Read [[ss-hotpath]] and `docs/claude/architecture.md` before
+non-negotiable hotpath rules. Read [[ss-hotpath]] and `doc/claude/architecture.md` before
 judging anything on the `Driver -> FrameReader -> FrameBuilder -> Dashboard` path.
 
 **Check for** (general Qt):

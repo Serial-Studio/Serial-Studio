@@ -85,21 +85,21 @@ Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer, Session Da
 
 ## Sub-Documentation
 
-Deep subsystem detail and the silent-breakage lookup live in `docs/claude/`. Read the
+Deep subsystem detail and the silent-breakage lookup live in `doc/claude/`. Read the
 relevant doc in full before working in that area — the inline summary below is a pointer,
 not a substitute.
 
 | Document | When to read it |
 |----------|-----------------|
-| [docs/claude/architecture.md](docs/claude/architecture.md) | Before touching any subsystem: full data flow, timestamp ownership, threading rules, AppState, operation modes, IO/driver model, ProjectModel-Editor split, multi-source, JSON `Keys::`, frame parser (JS+Lua), value transforms, data tables, export/Sessions DB, and all plot/time-ring/sweep/waterfall/output-widget internals. |
-| [docs/claude/common-mistakes.md](docs/claude/common-mistakes.md) | The silent-breakage lookup table — gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, scope creep, macOS file-dialog reentrancy, etc.). |
-| [docs/claude/code-style.md](docs/claude/code-style.md) | Full style spec + NASA Power of Ten: formatting, naming, control flow, C++ headers, signals/connections, comments & Doxygen, QML, performance, licensing. The Code Style block below is the inline essentials — read this for the complete rules. |
-| [docs/claude/directory-map.md](docs/claude/directory-map.md) | The `app/src` / `app/qml` / `lib` tree with one-line role notes per subsystem. |
+| [doc/claude/architecture.md](doc/claude/architecture.md) | Before touching any subsystem: full data flow, timestamp ownership, threading rules, AppState, operation modes, IO/driver model, ProjectModel-Editor split, multi-source, JSON `Keys::`, frame parser (JS+Lua), value transforms, data tables, export/Sessions DB, and all plot/time-ring/sweep/waterfall/output-widget internals. |
+| [doc/claude/common-mistakes.md](doc/claude/common-mistakes.md) | The silent-breakage lookup table — gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, scope creep, macOS file-dialog reentrancy, etc.). |
+| [doc/claude/code-style.md](doc/claude/code-style.md) | Full style spec + NASA Power of Ten: formatting, naming, control flow, C++ headers, signals/connections, comments & Doxygen, QML, performance, licensing. The Code Style block below is the inline essentials — read this for the complete rules. |
+| [doc/claude/directory-map.md](doc/claude/directory-map.md) | The `app/src` / `app/qml` / `lib` tree with one-line role notes per subsystem. |
 
 ## Threading & Hotpath — Non-Negotiable
 
 The rules most likely to cause silent breakage. Full detail (data flow, threading table,
-benchmark mechanics) in [docs/claude/architecture.md](docs/claude/architecture.md); the
+benchmark mechanics) in [doc/claude/architecture.md](doc/claude/architecture.md); the
 `ss-hotpath` skill auto-activates on these paths and re-states them.
 
 - **`FrameReader` and `CircularBuffer` are main-thread / SPSC. Never add mutexes.** Recreate
@@ -123,7 +123,7 @@ benchmark mechanics) in [docs/claude/architecture.md](docs/claude/architecture.m
 `scripts/code-verify.py` is the contract — read its `--check` output, don't re-derive the
 rules. Full spec (formatting, header order, comments/Doxygen, QML, performance, licensing,
 naming table) and the NASA Power of Ten live in
-[docs/claude/code-style.md](docs/claude/code-style.md). The handful you need *before* typing,
+[doc/claude/code-style.md](doc/claude/code-style.md). The handful you need *before* typing,
 because they shape the code you write (not just how the linter rewrites it):
 
 - **Format**: 100-col, 2-space indent, LF, pointer/ref binds to type (`int* p`). No braces on

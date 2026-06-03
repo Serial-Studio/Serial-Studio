@@ -2,7 +2,7 @@
 
 Repo-specific invariants expressed as review rules. These are the things `code-verify.py`
 cannot mechanically check and that a generic Qt reviewer would miss. They take precedence over
-the generic Qt checklist where they overlap. Full detail lives in `docs/claude/`,
+the generic Qt checklist where they overlap. Full detail lives in `doc/claude/`,
 `CLAUDE.md`, and the [[ss-hotpath]] / [[ss-verify]] skills — read those for the *why*; this is
 the review-time *what*.
 
