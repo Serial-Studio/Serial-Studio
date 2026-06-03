@@ -25,9 +25,39 @@
 #include <QFileInfo>
 #include <QStringList>
 
+#ifdef Q_OS_WIN
+#  include <windows.h>
+#endif
+
 //--------------------------------------------------------------------------------------------------
 // Path validation
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Expand a Windows 8.3 short path (e.g. RUNNER~1) to its long form.
+ */
+static QString expandShortPath(const QString& path)
+{
+#ifdef Q_OS_WIN
+  if (path.isEmpty())
+    return path;
+
+  const std::wstring input = path.toStdWString();
+  const DWORD needed       = GetLongPathNameW(input.c_str(), nullptr, 0);
+  if (needed == 0)
+    return path;
+
+  std::wstring buffer(needed, L'\0');
+  const DWORD written = GetLongPathNameW(input.c_str(), buffer.data(), needed);
+  if (written == 0 || written >= needed)
+    return path;
+
+  buffer.resize(written);
+  return QDir::cleanPath(QString::fromStdWString(buffer));
+#else
+  return path;
+#endif
+}
 
 /**
  * @brief Returns a canonical absolute path, optionally permitting non-existent files.
@@ -36,7 +66,7 @@ static QString normalizedPath(const QString& path, bool allowNonexistent)
 {
   QFileInfo info(path);
   if (info.exists())
-    return QDir::cleanPath(info.canonicalFilePath());
+    return expandShortPath(QDir::cleanPath(info.canonicalFilePath()));
 
   if (!allowNonexistent)
     return QString();
@@ -50,12 +80,12 @@ static QString normalizedPath(const QString& path, bool allowNonexistent)
   for (int i = 0; i < kMaxDepth && !ancestor.exists() && !ancestor.isRoot(); ++i) {
     tail.prepend(ancestor.dirName());
     if (!ancestor.cdUp())
-      return absolute;
+      return expandShortPath(absolute);
   }
 
   const QString canonicalRoot = ancestor.canonicalPath();
   if (canonicalRoot.isEmpty())
-    return absolute;
+    return expandShortPath(absolute);
 
   tail.prepend(canonicalRoot);
   return QDir::cleanPath(tail.join(QDir::separator()));
