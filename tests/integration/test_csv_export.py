@@ -129,7 +129,12 @@ def test_csv_export_high_frequency(api_client, device_simulator, clean_state):
     device_simulator.send_frames(frames, interval_seconds=0.01)
     duration = time.time() - start_time
 
-    assert duration < 10.0, f"Sending 500 frames took too long: {duration:.2f}s"
+    # 500 frames at a 0.01s send interval put a ~5s floor under this loop by design;
+    # the assertion only guards against a hard stall, not a throughput SLA. The
+    # ceiling is generous because shared macOS CI runners pace the simulator far
+    # slower than a developer machine (observed ~33s under load), so a tight bound
+    # flakes without catching any real regression.
+    assert duration < 60.0, f"Sending 500 frames took too long: {duration:.2f}s"
 
     time.sleep(1.0)
 

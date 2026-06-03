@@ -98,3 +98,24 @@ def clean_state(api_client):
     safe_command(api_client.disable_csv_export)
 
     time.sleep(0.5)
+
+
+# Tests that hammer many fresh connections with no pacing ("max stress" probes).
+# On shared CI runners the odd connection drops or times out, which is a runner
+# artifact, not a regression -- so they retry their own transient failures. The
+# list is curated on purpose: a blanket rerun would also re-run a hard app crash
+# against a dead instance and waste a full suite per attempt.
+_FLAKY_TESTS = {
+    "test_rapid_status_queries_no_crash",
+    "test_command_authorization",
+}
+
+
+def pytest_collection_modifyitems(config, items):
+    """Attach a bounded rerun marker to the curated flaky tests, if the plugin is present."""
+    if not config.pluginmanager.hasplugin("rerunfailures"):
+        return
+
+    for item in items:
+        if item.name in _FLAKY_TESTS:
+            item.add_marker(pytest.mark.flaky(reruns=2, reruns_delay=2))

@@ -67,6 +67,26 @@ def _db_path_for(api_client, title: str) -> Path:
     return Path(result["path"])
 
 
+def _safe_unlink(path: Path) -> None:
+    """
+    Delete a session DB, tolerating a briefly-held handle.
+
+    On Windows an open SQLite file cannot be removed (WinError 32), and the app
+    releases the handle a beat after sessions.close returns. Retry a few times so
+    the cleanup doesn't flake while the recorder finishes letting go.
+    """
+    for attempt in range(10):
+        try:
+            path.unlink()
+            return
+        except FileNotFoundError:
+            return
+        except PermissionError:
+            if attempt == 9:
+                raise
+            time.sleep(0.3)
+
+
 def _sqlite_tables(path: Path) -> set[str]:
     if not path.exists():
         return set()
@@ -166,8 +186,7 @@ def test_session_records_project_file_frames(
 
     # Pre-compute the expected DB path and ensure we start clean
     db_path = _db_path_for(api_client, title)
-    if db_path.exists():
-        db_path.unlink()
+    _safe_unlink(db_path)
 
     # Enable session recording, then sync project + connect
     _enable_export(api_client, True)
@@ -211,8 +230,7 @@ def test_session_records_project_file_frames(
     ), "columns table is empty — replay would fail with 'missing column definitions'"
 
     # Cleanup so we don't leak test artifacts
-    if db_path.exists():
-        db_path.unlink()
+    _safe_unlink(db_path)
     _enable_export(api_client, False)
 
 
@@ -251,8 +269,7 @@ def test_quickplot_session_writes_column_rows(
     time.sleep(0.2)
 
     db_path = _db_path_for(api_client, QUICK_PLOT_TITLE)
-    if db_path.exists():
-        db_path.unlink()
+    _safe_unlink(db_path)
 
     _enable_export(api_client, True)
 
@@ -290,8 +307,7 @@ def test_quickplot_session_writes_column_rows(
         ).fetchone()[0]
     assert nulls == 0, "columns.source_title must never be NULL"
 
-    if db_path.exists():
-        db_path.unlink()
+    _safe_unlink(db_path)
     _enable_export(api_client, False)
 
 
@@ -311,8 +327,7 @@ def test_quickplot_session_loads_for_replay(
     time.sleep(0.2)
 
     db_path = _db_path_for(api_client, QUICK_PLOT_TITLE)
-    if db_path.exists():
-        db_path.unlink()
+    _safe_unlink(db_path)
 
     _enable_export(api_client, True)
     api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
@@ -342,8 +357,7 @@ def test_quickplot_session_loads_for_replay(
         f"The replay path won't be able to map them back to dataset metadata."
     )
 
-    if db_path.exists():
-        db_path.unlink()
+    _safe_unlink(db_path)
     _enable_export(api_client, False)
 
 
@@ -367,9 +381,7 @@ def test_quickplot_session_project_json_embeds_source(
 
     db_path = _db_path_for(api_client, QUICK_PLOT_TITLE)
     for suffix in ("", "-wal", "-shm"):
-        sibling = db_path.with_name(db_path.name + suffix)
-        if sibling.exists():
-            sibling.unlink()
+        _safe_unlink(db_path.with_name(db_path.name + suffix))
 
     _enable_export(api_client, True)
     api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
@@ -409,8 +421,7 @@ def test_quickplot_session_project_json_embeds_source(
     titles = [s.get("title", "") for s in sources]
     assert all(titles), f"a stored source has an empty title: {titles}"
 
-    if db_path.exists():
-        db_path.unlink()
+    _safe_unlink(db_path)
 
 
 # ---------------------------------------------------------------------------

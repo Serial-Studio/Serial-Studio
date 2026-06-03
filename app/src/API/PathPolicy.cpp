@@ -23,6 +23,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QStringList>
 
 //--------------------------------------------------------------------------------------------------
 // Path validation
@@ -37,10 +38,27 @@ static QString normalizedPath(const QString& path, bool allowNonexistent)
   if (info.exists())
     return QDir::cleanPath(info.canonicalFilePath());
 
-  if (allowNonexistent)
-    return QDir::cleanPath(info.absoluteFilePath());
+  if (!allowNonexistent)
+    return QString();
 
-  return QString();
+  // Canonicalize the nearest existing ancestor so an 8.3 short path resolves.
+  const QString absolute = QDir::cleanPath(info.absoluteFilePath());
+
+  QDir ancestor(absolute);
+  QStringList tail;
+  constexpr int kMaxDepth = 64;
+  for (int i = 0; i < kMaxDepth && !ancestor.exists() && !ancestor.isRoot(); ++i) {
+    tail.prepend(ancestor.dirName());
+    if (!ancestor.cdUp())
+      return absolute;
+  }
+
+  const QString canonicalRoot = ancestor.canonicalPath();
+  if (canonicalRoot.isEmpty())
+    return absolute;
+
+  tail.prepend(canonicalRoot);
+  return QDir::cleanPath(tail.join(QDir::separator()));
 }
 
 /**

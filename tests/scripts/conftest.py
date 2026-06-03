@@ -46,11 +46,17 @@ console.log(JSON.stringify(_result));
     # Feed the program over stdin ("node -") instead of "node -e <src>": passing a
     # large script as an argv string trips the Windows 32767-char command-line limit
     # (subprocess surfaces it as "environment variable is longer than 32767").
+    #
+    # Pin encoding="utf-8": the parser scripts carry non-ASCII characters (e.g. the
+    # U+2192 arrow in comments). Without this, text mode decodes/encodes with the
+    # locale codec, which is cp1252 on the Windows runners and raises
+    # UnicodeEncodeError when the script source crosses the subprocess boundary.
     result = subprocess.run(
         ["node", "-"],
         input=runner,
         capture_output=True,
         text=True,
+        encoding="utf-8",
         timeout=30,
     )
 

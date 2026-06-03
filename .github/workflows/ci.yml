@@ -1518,7 +1518,17 @@ jobs:
 
     - name: '🧪 Run tests'
       continue-on-error: ${{ env.REQUIRE_TESTS_TO_PUBLISH != 'true' }}
+      env:
+        # Force UTF-8 stdio so non-ASCII parser-script content (e.g. the U+2192
+        # arrow in comments) survives the subprocess boundary on the cp1252
+        # Windows runners instead of raising UnicodeEncodeError.
+        PYTHONIOENCODING: utf-8
+        PYTHONUTF8: '1'
       run: |
+        # Tests carrying @pytest.mark.flaky retry their own transient connect
+        # flakes; everything else fails on the first run. We deliberately do NOT
+        # blanket-rerun, so a hard app crash fails fast instead of re-running the
+        # whole suite against a dead instance.
         pytest tests/ \
           -m "${{ matrix.marker_expr }}" \
           -v --tb=short --timeout=60 --junit-xml=test-results.xml
