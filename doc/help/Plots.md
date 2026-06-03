@@ -33,19 +33,19 @@ The Y axis auto-scales to fit the data by default. Pin it to a fixed range with 
 
 When a plot is large enough to show its toolbar, these controls appear left to right:
 
-| Control          | What it does                                                        |
-|------------------|---------------------------------------------------------------------|
-| **Interpolation**| Cycles line smoothing: none (raw points), linear, or stepped.       |
-| **Area**         | Fills the region under the curve. Available with line interpolation.|
-| **X / Y label**  | Shows or hides each axis label.                                     |
-| **Crosshair**    | Shows a tracking crosshair that follows the cursor.                |
-| **Pause**        | Freezes the plot without stopping data collection.                 |
-| **Sweep**        | Turns Sweep / Trigger mode on or off (Pro).                        |
-| **Trigger**      | Opens the trigger settings (Pro). Enabled only while Sweep is on.  |
-| **Reset View**   | Returns pan and zoom to the default view.                          |
-| **Axis Range**   | Sets fixed minimum and maximum values for the axes.                |
+| Control | Icon | What it does |
+|---------|------|--------------|
+| **Interpolation** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-on.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-off.svg" width="16" height="16"> | Cycles line smoothing: none (raw points), linear, or stepped. |
+| **Area** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/area.svg" width="16" height="16"> | Fills the region under the curve. Available with line interpolation. Plot only. |
+| **X / Y label** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/x.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/y.svg" width="16" height="16"> | Shows or hides each axis label. |
+| **Crosshair** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/crosshair.svg" width="16" height="16"> | Shows a tracking crosshair that follows the cursor. |
+| **Pause** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/pause.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/resume.svg" width="16" height="16"> | Freezes the plot without stopping data collection. |
+| **Sweep** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/sweep.svg" width="16" height="16"> | Turns Sweep / Trigger mode on or off (Pro). |
+| **Trigger** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/trigger.svg" width="16" height="16"> | Opens the trigger settings (Pro). Enabled only while Sweep is on. |
+| **Reset View** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/return.svg" width="16" height="16"> | Returns pan and zoom to the default view. |
+| **Axis Range** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/toolbar/settings.svg" width="16" height="16"> | Sets fixed minimum and maximum values for the axes. |
 
-Drag inside the plot to pan and scroll to zoom; **Reset View** undoes both. These buttons and the toolbars of every other widget are catalogued in the [Toolbar & Button Reference](Toolbar-Reference.md#plot-and-multiplot).
+Drag inside the plot to pan and scroll to zoom; **Reset View** undoes both. These buttons and the toolbars of every other widget are catalogued in the [Toolbar & Button Reference](Toolbar-Reference.md#plot).
 
 ## Sweep / Trigger mode (Pro)
 
