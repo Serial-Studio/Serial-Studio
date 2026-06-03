@@ -140,6 +140,9 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
 
     if (msg.contains("Invalid path data; path truncated."))
       return;
+
+    if (msg.contains("QSocketNotifier::Exception is not supported on iOS"))
+      return;
   }
 
   // Add function to string

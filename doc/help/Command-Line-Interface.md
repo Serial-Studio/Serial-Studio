@@ -42,7 +42,7 @@ Options marked **(Pro)** are available only in commercial builds.
 | `--min-fps` | `fps` | Minimum frames/sec the benchmark must sustain (default 256000). |
 | `--benchmark-frames` | `count` | Frames to push through the benchmark (default 1000000). |
 | `--benchmark-seconds` | `seconds` | Wall-clock seconds the benchmark must sustain (default 10). |
-| `--benchmark-output` | `file` | File the benchmark report is written to (default `benchmark.txt`). |
+| `--benchmark-output` | `file` | File the benchmark report is written to (default: stdout only, no file). |
 
 This is the headless form used in CI and deployment gating. For the interactive version with a
 per-phase results table, run it from the GUI via **About > Benchmark**; see the
