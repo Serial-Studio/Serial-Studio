@@ -46,6 +46,7 @@
   { "id": "data-hotpath", "title": "The Data Hotpath", "section": "Architecture", "file": "Data-Hotpath.md" },
   { "id": "identity-model", "title": "Dataset Identity Model", "section": "Architecture", "file": "Identity-Model.md" },
   { "id": "threading-and-timing", "title": "Threading and Timing Guarantees", "section": "Architecture", "file": "Threading-and-Timing.md" },
+  { "id": "benchmark", "title": "Benchmark Dialog", "section": "Architecture", "file": "Benchmark.md" },
   { "id": "about", "title": "About Serial Studio", "section": "Support", "file": "About.md" },
   { "id": "faq", "title": "FAQ", "section": "Support", "file": "FAQ.md" },
   { "id": "troubleshooting", "title": "Troubleshooting Guide", "section": "Support", "file": "Troubleshooting.md" },

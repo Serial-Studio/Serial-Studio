@@ -186,6 +186,12 @@ The cost per frame is dominated by:
   60 Hz, configurable from 1 Hz to 240 Hz). Every frame is still parsed and exported; only
   the visual refresh is throttled.
 
+To measure this pipeline end-to-end on your own hardware, the [Benchmark Dialog](Benchmark.md)
+(About > Benchmark) drives the real `FrameReader` -> `FrameBuilder` -> consumer chain and
+reports sustained frames/second per stage and per parser language, gated against the targets
+above. The same engine runs headless for CI; see
+[Command-Line Interface](Command-Line-Interface.md#hotpath-benchmark).
+
 ## Where the parser and transforms fit
 
 The parser and transforms are the user-visible parts of the hotpath. Everything else is
@@ -257,6 +263,8 @@ and `BluetoothLE.cpp` as the canonical reference) and keep these invariants inta
 - [Data Tables](Data-Tables.md): shared constants and computed registers used by transforms.
 - [Operation Modes](Operation-Modes.md): how Project File, Quick Plot, and Console-Only modes
   shape the hotpath.
+- [Benchmark Dialog](Benchmark.md): the interactive tool that drives this exact pipeline and
+  reports its sustained throughput against the 256 kHz gates.
 - [Communication Protocols](Communication-Protocols.md): protocol comparison and per-driver
   setup.
 - [API Reference](API-Reference.md): how the API server consumes the same shared frame

@@ -44,6 +44,11 @@ Options marked **(Pro)** are available only in commercial builds.
 | `--benchmark-seconds` | `seconds` | Wall-clock seconds the benchmark must sustain (default 10). |
 | `--benchmark-output` | `file` | File the benchmark report is written to (default `benchmark.txt`). |
 
+This is the headless form used in CI and deployment gating. For the interactive version with a
+per-phase results table, run it from the GUI via **About > Benchmark**; see the
+[Benchmark Dialog](Benchmark.md). Both run the same `HotpathBenchmark` engine over the same
+pipeline.
+
 ## Operator & Export (Pro)
 
 | Option | Argument | Description |

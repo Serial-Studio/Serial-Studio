@@ -880,4 +880,5 @@ Output appears in Serial Studio's console/terminal panel.
 - [Data Flow](Data-Flow.md): how data moves from device through parsing to the dashboard.
 - [Project Editor](Project-Editor.md): where you write and configure parser code.
 - [Operation Modes](Operation-Modes.md): when Project File mode (and thus custom parsers) applies.
+- [Benchmark Dialog](Benchmark.md): measures `parse()` throughput per language (Lua vs JavaScript, numeric vs mixed) on your hardware.
 - [Troubleshooting](Troubleshooting.md): common parser issues and fixes.
