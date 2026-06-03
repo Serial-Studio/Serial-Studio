@@ -12,6 +12,8 @@ Copyright (C) 2020-2025 Alex Spataru
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
 """
 
+import sys
+
 import pytest
 import time
 
@@ -704,6 +706,10 @@ def test_canbus_driver_comprehensive(api_client, clean_state):
 
 @pytest.mark.integration
 @pytest.mark.pro
+@pytest.mark.skipif(
+    sys.platform.startswith("win"),
+    reason="Windows CI runners have no audio hardware; channel-config range is empty",
+)
 def test_audio_driver_comprehensive(api_client, clean_state):
     """
     Comprehensive test of all Audio driver API commands (Pro feature).

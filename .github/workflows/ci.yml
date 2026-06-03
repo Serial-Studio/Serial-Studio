@@ -1625,7 +1625,7 @@ jobs:
       run: |
         pytest tests/ \
           -m "${{ matrix.marker_expr }}" \
-          -v --tb=short --timeout=60 --junit-xml=test-results.xml
+          -q --tb=line --timeout=60 --junit-xml=test-results.xml
 
     - name: '🎙 Run audio loopback tests (Linux, non-blocking)'
       if: matrix.os == 'linux'
@@ -1636,7 +1636,7 @@ jobs:
         SS_AUDIO_CAPTURE_MATCH: loopback
       run: |
         pytest tests/integration/test_audio_loopback.py \
-          -m audio -v --tb=short --timeout=120 --junit-xml=audio-test-results.xml
+          -m audio -q --tb=line --timeout=120 --junit-xml=audio-test-results.xml
 
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
