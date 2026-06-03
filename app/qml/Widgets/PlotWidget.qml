@@ -47,6 +47,12 @@ Item {
   property alias curveColors: _theme.seriesColors
 
   //
+  // Emitted when the user drags the trigger-level line; the parent writes the
+  // new level back into the data model (triggerLevel is a one-way binding).
+  //
+  signal triggerLevelChangeRequested(real level)
+
+  //
   // TextMetrics for estimating label sizes
   //
   TextMetrics {
@@ -268,6 +274,11 @@ Item {
   // Cursor mode replaces crosshairs when enabled
   //
   readonly property bool cursorMode: showCrosshairs
+
+  //
+  // The trigger-level line is draggable while it is shown (sweep mode + editing)
+  //
+  readonly property bool triggerDraggable: sweepMode && triggerEditing
 
   //
   // Reset cursor states when cursor mode is toggled off
@@ -651,8 +662,9 @@ Item {
       hoverEnabled: root.mouseAreaEnabled
 
       cursorShape: dragging ? Qt.ClosedHandCursor :
+                   (draggingTrigger || overTrigger ? Qt.SizeVerCursor :
                    (draggedCursor !== null ? Qt.SizeAllCursor :
-                   (root.cursorMode ? Qt.CrossCursor : Qt.ArrowCursor))
+                   (root.cursorMode ? Qt.CrossCursor : Qt.ArrowCursor)))
 
       //
       // Custom properties for drag handling
@@ -662,9 +674,21 @@ Item {
       property real dragStartX: 0
       property real dragStartY: 0
       property bool didDrag: false
+      property bool overTrigger: false
       property var draggedCursor: null
+      property bool draggingTrigger: false
       property int pressedButton: Qt.NoButton
-      readonly property bool dragging: containsPress && _axisX.zoom > 1 && draggedCursor === null
+      readonly property bool dragging: containsPress && _axisX.zoom > 1
+                                       && draggedCursor === null && !draggingTrigger
+
+      //
+      // Flash the trigger line when the pointer moves over it, so a faded line
+      // becomes visible before the user grabs it.
+      //
+      onOverTriggerChanged: {
+        if (overTrigger)
+          _triggerLine.flash()
+      }
 
       function getNearestCursor(mouseX, mouseY) {
         const threshold = 10
@@ -689,6 +713,18 @@ Item {
       }
 
       //
+      // Vertical hit-test for the trigger-level line (sweep mode + editing only)
+      //
+      function nearTriggerLine(mouseY) {
+        if (!root.triggerDraggable)
+          return false
+
+        const threshold = 8
+        const linePixelY = root.worldToPixelY(root.triggerLevel)
+        return Math.abs(mouseY - linePixelY) <= threshold
+      }
+
+      //
       // Drag state handling
       //
       onPressed: (mouse) => {
@@ -698,6 +734,13 @@ Item {
         dragStartY = mouse.y
         didDrag = false
         pressedButton = mouse.button
+
+        // Grab the trigger line if the press lands on it (vertical drag only)
+        if (mouse.button === Qt.LeftButton && nearTriggerLine(mouse.y)) {
+          draggingTrigger = true
+          mouse.accepted = true
+          return
+        }
 
         // Handle cursor interactions when in cursor mode
         if (root.cursorMode) {
@@ -727,6 +770,15 @@ Item {
       }
 
       onReleased: (mouse) => {
+        // Trigger drag consumes the gesture; no cursor placement on release
+        if (draggingTrigger) {
+          draggingTrigger = false
+          pressedButton = Qt.NoButton
+          didDrag = false
+          overTrigger = nearTriggerLine(mouse.y)
+          return
+        }
+
         // Handle cursor placement on release (only if no drag occurred)
         if (root.cursorMode && pressedButton === Qt.LeftButton && !didDrag && draggedCursor === null) {
           const worldX = root.pixelToWorldX(mouse.x)
@@ -796,6 +848,20 @@ Item {
         // Abort if not mouse is not in plot
         if (!containsMouse) {
           mouse.accepted = false
+          overTrigger = false
+          return
+        }
+
+        // Track hover over the trigger line so the cursor can hint a vertical drag
+        if (!containsPress)
+          overTrigger = nearTriggerLine(mouse.y)
+
+        // Drag the trigger level vertically and push it back to the model
+        if (draggingTrigger) {
+          const worldY = root.pixelToWorldY(mouse.y)
+          const clampedY = Math.min(Math.max(worldY, root.yVisibleMin), root.yVisibleMax)
+          root.triggerLevelChangeRequested(clampedY)
+          mouse.accepted = true
           return
         }
 

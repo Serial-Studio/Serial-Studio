@@ -131,6 +131,20 @@ Item {
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepEnabled", root.model.sweepEnabled)
   }
 
+  //
+  // Reset trigger/sweep settings to defaults when sweep mode is toggled
+  //
+  function resetSweepSettings() {
+    if (!root.model)
+      return
+
+    root.model.sweepMode = SerialStudio.SweepAuto
+    root.model.triggerEdge = SerialStudio.TriggerRising
+    root.model.triggerLevel = 0
+    root.model.holdoff = 0
+    root.model.sweepTimebase = 0
+  }
+
   Connections {
     target: root.model
 
@@ -308,7 +322,10 @@ Item {
       checked: root.model.sweepEnabled
       ToolTip.text: qsTr("Sweep / Trigger Mode")
       icon.source: "qrc:/icons/dashboard-buttons/sweep.svg"
-      onClicked: root.model.sweepEnabled = !root.model.sweepEnabled
+      onClicked: {
+        root.model.sweepEnabled = !root.model.sweepEnabled
+        root.resetSweepSettings()
+      }
     }
 
     DashboardToolButton {
@@ -387,6 +404,10 @@ Item {
     onZoomChanged: plotCommon.setDownsampleFactor(plot, model)
     onWidthChanged: plotCommon.setDownsampleFactor(plot, model)
     onHeightChanged: plotCommon.setDownsampleFactor(plot, model)
+    onTriggerLevelChangeRequested: (level) => {
+      if (root.model)
+        root.model.triggerLevel = level
+    }
 
     Connections {
       target: root.windowRoot

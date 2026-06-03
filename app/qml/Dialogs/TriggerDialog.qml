@@ -81,6 +81,20 @@ Widgets.SmartDialog {
   readonly property int controlColumn: 184
 
   //
+  // Reflect external trigger-level changes (e.g. dragging the level line on the
+  // plot) into the field, unless the user is currently editing it.
+  //
+  Connections {
+    target: root.model
+    enabled: root.model !== null && root.visible
+
+    function onSweepChanged() {
+      if (!levelField.activeFocus)
+        levelField.text = root.model.triggerLevel.toFixed(4)
+    }
+  }
+
+  //
   // Dialog controls
   //
   dialogContent: ColumnLayout {
