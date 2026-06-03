@@ -224,6 +224,7 @@ Item {
       examplesBrowser.close()
       extensionManager.close()
       acknowledgementsDialog.close()
+      benchmarkDialog.close()
       shortcutGeneratorDialog.close()
       runtimeReconfigureDialog.close()
       fileTransmissionDialog.close()
@@ -300,6 +301,15 @@ Item {
       id: acknowledgementsDialog
 
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/Acknowledgements.qml"
+    }
+
+    //
+    // Hotpath benchmark (gated to author mode)
+    //
+    DialogLoader {
+      id: benchmarkDialog
+
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/Benchmark.qml"
     }
 
     //
@@ -530,6 +540,14 @@ Item {
   function showAcknowledgements() {
     if (!app.runtimeMode)
       acknowledgementsDialog.activate()
+  }
+
+  //
+  // Hotpath benchmark: author-only
+  //
+  function showBenchmarkDialog() {
+    if (!app.runtimeMode)
+      benchmarkDialog.activate()
   }
 
   //

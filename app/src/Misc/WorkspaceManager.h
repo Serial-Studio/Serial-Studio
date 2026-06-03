@@ -60,6 +60,9 @@ public:
 
   [[nodiscard]] QString remapLegacyPath(const QString& path) const;
 
+  void setTemporaryPath(const QString& path);
+  void clearTemporaryPath();
+
 public slots:
   void reset();
   void selectPath();
@@ -68,7 +71,9 @@ private:
   void migrateLegacyProjectsFolder();
 
 private:
+  bool m_temporaryActive;
   QString m_path;
+  QString m_savedPath;
   QSettings m_settings;
 };
 }  // namespace Misc

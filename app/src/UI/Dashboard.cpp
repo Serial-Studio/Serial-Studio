@@ -22,6 +22,7 @@
 #include "UI/Dashboard.h"
 
 #include "AppState.h"
+#include "Benchmark/HotpathBenchmark.h"
 #include "CSV/Player.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
@@ -344,6 +345,10 @@ bool UI::Dashboard::useTimeXAxisGroup(const DataModel::Group& group) const
  */
 bool UI::Dashboard::streamAvailable() const
 {
+  // Headless benchmark feeds frames with no live device; let them reach the dashboard.
+  if (Benchmark::HotpathBenchmark::active()) [[unlikely]]
+    return true;
+
   static auto& manager   = IO::ConnectionManager::instance();
   static auto& csvPlayer = CSV::Player::instance();
   static auto& mf4Player = MDF4::Player::instance();

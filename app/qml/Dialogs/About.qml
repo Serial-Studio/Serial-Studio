@@ -243,6 +243,15 @@ SmartDialog {
       }
 
       //
+      // Hotpath benchmark
+      //
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("Benchmark")
+        onClicked: app.showBenchmarkDialog()
+      }
+
+      //
       // Website
       //
       Button {

@@ -37,6 +37,8 @@
  */
 Misc::WorkspaceManager::WorkspaceManager()
 {
+  m_temporaryActive = false;
+
   auto def =
     QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                          QStringLiteral("Serial Studio"));
@@ -100,6 +102,35 @@ QString Misc::WorkspaceManager::path(const QString& subdirectory) const
 //--------------------------------------------------------------------------------------------------
 // Path management
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Redirects the workspace to a transient path without persisting it (benchmark use).
+ */
+void Misc::WorkspaceManager::setTemporaryPath(const QString& path)
+{
+  Q_ASSERT(!path.isEmpty());
+  if (m_temporaryActive)
+    return;
+
+  m_savedPath       = m_path;
+  m_path            = path;
+  m_temporaryActive = true;
+  Q_EMIT pathChanged();
+}
+
+/**
+ * @brief Restores the workspace path saved by setTemporaryPath().
+ */
+void Misc::WorkspaceManager::clearTemporaryPath()
+{
+  if (!m_temporaryActive)
+    return;
+
+  m_path            = m_savedPath;
+  m_temporaryActive = false;
+  m_savedPath.clear();
+  Q_EMIT pathChanged();
+}
 
 /**
  * @brief Resets the workspace path to the default location.

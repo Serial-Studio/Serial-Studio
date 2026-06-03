@@ -49,8 +49,6 @@ void DataModel::finalize_frame(DataModel::Frame& frame)
   for (auto& group : frame.groups) {
     for (auto& dataset : group.datasets) {
       dataset.sourceId = group.sourceId;
-
-      // Persisted uniqueId wins; legacy files fall back to the legacy formula once.
       if (dataset.uniqueId < 0)
         dataset.uniqueId = dataset_unique_id(group.sourceId, dataset.groupId, dataset.datasetId);
     }

@@ -32,6 +32,7 @@
 #include "API/Server.h"
 #include "AppInfo.h"
 #include "AppState.h"
+#include "Benchmark/BenchmarkRunner.h"
 #include "Console/Export.h"
 #include "Console/Handler.h"
 #include "CSV/Export.h"
@@ -123,6 +124,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   if (type == QtInfoMsg && msg.startsWith("OpenType support missing"))
     return;
 
+  // Filter out noisy/unfixable Qt diagnostic messages
   if (type == QtWarningMsg) {
     if (msg.startsWith("Qt was built without Direct3D 12 support"))
       return;
@@ -131,6 +133,12 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
       return;
 
     if (msg.contains("The following paths were searched for Qt WebEngine locales"))
+      return;
+
+    if (msg.contains("attempting to set invalid range for value axis:"))
+      return;
+
+    if (msg.contains("Invalid path data; path truncated."))
       return;
   }
 
@@ -513,6 +521,7 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_Misc_GraphicsBackend", &Misc::GraphicsBackend::instance());
   ctx->setContextProperty("Cpp_Misc_CrashTracker", &Misc::CrashTracker::instance());
   ctx->setContextProperty("Cpp_Misc_BackupManager", &Misc::BackupManager::instance());
+  ctx->setContextProperty("Cpp_Benchmark_Runner", &Benchmark::BenchmarkRunner::instance());
 }
 
 #ifdef BUILD_COMMERCIAL

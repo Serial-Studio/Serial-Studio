@@ -98,7 +98,8 @@ bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
     if (targetPath.compare(rootPath, sensitivity) == 0)
       return true;
 
-    const QString prefix = rootPath + QDir::separator();
+    // Canonical paths use '/'; QDir::separator() ('\' on Windows) would never match.
+    const QString prefix = rootPath + QLatin1Char('/');
     if (targetPath.startsWith(prefix, sensitivity))
       return true;
   }

@@ -322,12 +322,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>אישורים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="249"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <source>Benchmark</source>
+        <translation>מדד ביצועים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="258"/>
         <source>Website</source>
         <translation>אתר אינטרנט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="265"/>
+        <location filename="../../qml/Dialogs/About.qml" line="274"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
@@ -1407,6 +1412,196 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/Dialogs/BackupRecovery.qml" line="334"/>
         <source>Restore</source>
         <translation>שחזור</translation>
+    </message>
+</context>
+<context>
+    <name>Benchmark</name>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="32"/>
+        <source>Benchmark</source>
+        <translation>מדד ביצועים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="61"/>
+        <source>%1 frames/s</source>
+        <translation>%1 מסגרות/שנייה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="65"/>
+        <source>%1 s</source>
+        <translation>%1 שניות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="70"/>
+        <source>n/a</source>
+        <translation>לא זמין</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="72"/>
+        <source>Pass</source>
+        <translation>עבר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="72"/>
+        <source>Fail</source>
+        <translation>נכשל</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="93"/>
+        <source>Hotpath Benchmark</source>
+        <translation>מדד ביצועים נתיב קריטי</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="104"/>
+        <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
+        <translation>מודד כמה מהר המחשב יכול לחלץ, לנתח ולהציג מסגרות דרך צינור הנתונים של Serial Studio.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="142"/>
+        <source>The interface will freeze while running</source>
+        <translation>הממשק יקפא במהלך הריצה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="153"/>
+        <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
+        <translation>כל שלב רץ במלוא העוצמה בחוט הראשי, כך שהחלון מפסיק להגיב עד לסיומו. הפרויקט הנוכחי שלך נטען מחדש אוטומטית כאשר הבנצ'מרק מסתיים.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="172"/>
+        <source>Frames per phase:</source>
+        <translation>מסגרות לכל שלב:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="186"/>
+        <source>Minimum duration:</source>
+        <translation>משך מינימלי:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="224"/>
+        <source>Running %1...</source>
+        <translation>מריץ %1...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="225"/>
+        <source>Preparing...</source>
+        <translation>מכין...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="269"/>
+        <source>Pipeline</source>
+        <translation>צינור</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="279"/>
+        <source>Throughput</source>
+        <translation>תפוקה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="290"/>
+        <source>Time</source>
+        <translation>זמן</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="301"/>
+        <source>Result</source>
+        <translation>תוצאה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="387"/>
+        <source>Pass/Fail applies to the parser phases only (Lua target 256 K frames/s, JavaScript 128 K). The export and dashboard phases are informational.</source>
+        <translation>עבר/נכשל חל רק על שלבי המפענח (יעד Lua 256 K מסגרות/שנייה, JavaScript 128 K). שלבי הייצוא ולוח הבקרה הם אינפורמטיביים.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="400"/>
+        <source>Clear</source>
+        <translation>נקה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="409"/>
+        <source>Close</source>
+        <translation>סגור</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="419"/>
+        <source>Running...</source>
+        <translation>מריץ...</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="419"/>
+        <source>Run Benchmark</source>
+        <translation>הרץ מדד ביצועים</translation>
+    </message>
+</context>
+<context>
+    <name>BenchmarkRunner</name>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="178"/>
+        <source>Data pipeline</source>
+        <translation>צינור נתונים</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="179"/>
+        <source>Lua parser</source>
+        <translation>מנתח Lua</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="180"/>
+        <source>JavaScript parser</source>
+        <translation>מנתח JavaScript</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="181"/>
+        <source>Lua + data export</source>
+        <translation>Lua + ייצוא נתונים</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
+        <source>Lua + dashboard</source>
+        <translation>Lua + לוח בקרה</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
+        <source>100 K frames</source>
+        <translation>100 אלף פריימים</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
+        <source>250 K frames</source>
+        <translation>250 אלף מסגרות</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
+        <source>500 K frames</source>
+        <translation>500 אלף מסגרות</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
+        <source>1 M frames</source>
+        <translation>מיליון מסגרות</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
+        <source>1 second</source>
+        <translation>שנייה אחת</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
+        <source>2 seconds</source>
+        <translation>שתי שניות</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
+        <source>5 seconds</source>
+        <translation>5 שניות</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
+        <source>10 seconds</source>
+        <translation>10 שניות</translation>
+    </message>
+    <message>
+        <source>Showing dashboard...</source>
+        <translation type="vanished">מציג לוח בקרה...</translation>
     </message>
 </context>
 <context>
@@ -4441,20 +4636,20 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1509"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2126"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2132"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>קבצי פרויקט Serial Studio (*.ssproj)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1767"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2117"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2123"/>
         <source>Untitled Project</source>
         <translation>פרויקט ללא שם</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="1777"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2278"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2284"/>
         <source>Device A</source>
         <translation>התקן A</translation>
     </message>
@@ -4474,70 +4669,70 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>שגיאת אימות JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2092"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2098"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>הפרויקט שודרג מתבנית קובץ ישנה יותר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2093"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2099"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>פרויקט זה נשמר עם גרסת סכימה %1; הגרסה הנוכחית היא %2. ערכי ברירת מחדל הוחלו על שדות חדשים. שמור את הפרויקט כדי לנעול את השדרוג.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2124"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2130"/>
         <source>Save Imported Project</source>
         <translation>שמירת פרויקט מיובא</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2323"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2329"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>פרויקטים רב-מקוריים דורשים רישיון Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2324"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2330"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>פרויקט זה מכיל מספר מקורות נתונים. רק המקור הראשון נטען. נדרש רישיון Serial Studio Pro לשימוש בפרויקטים רב-מקוריים.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2558"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2564"/>
         <source>Workspace IDs remapped on load</source>
         <translation>מזהי ה-Workspace הותאמו מחדש בעת הטעינה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2559"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2565"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>‏%1 מזהי סביבות עבודה מותאמות חפפו את הטווח האוטומטי החדש והועברו לטווח המשתמש. שמור את הפרויקט כדי להפוך את המיפוי לקבוע.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2704"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
         <source>Legacy frame parser function updated</source>
         <translation>פונקציית מנתח מסגרות מדור קודם עודכנה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2705"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>הפרויקט שלך השתמש בפונקציית מנתח מסגרות מדור קודם עם ארגומנט 'separator'. היא הומרה אוטומטית לפורמט החדש.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2903"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2909"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>למחוק את הקבוצה "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2904"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2955"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2990"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3757"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2910"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2961"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2996"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3763"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>לא ניתן לבטל פעולה זו. להמשיך?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2954"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2960"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>למחוק את הפעולה "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2989"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2995"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>למחוק את מערך הנתונים "%1"?</translation>
     </message>
@@ -4546,78 +4741,78 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">%1 (עותק)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3665"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3704"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3671"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3710"/>
         <source>Output Controls</source>
         <translation>בקרות פלט</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3717"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3723"/>
         <source>New Button</source>
         <translation>כפתור חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3720"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3726"/>
         <source>New Slider</source>
         <translation>מחוון חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3723"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3729"/>
         <source>New Toggle</source>
         <translation>מתג חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3726"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3732"/>
         <source>New Text Field</source>
         <translation>שדה טקסט חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3729"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3735"/>
         <source>New Knob</source>
         <translation>כפתור סיבוב חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3756"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3762"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>למחוק את וידג'ט הפלט "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3929"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3935"/>
         <source>Group</source>
         <translation>קבוצה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3948"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3954"/>
         <source>New Dataset</source>
         <translation>מערך נתונים חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3951"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3957"/>
         <source>New Plot</source>
         <translation>גרף חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3955"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3961"/>
         <source>New FFT Plot</source>
         <translation>תרשים FFT חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3959"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3965"/>
         <source>New Level Indicator</source>
         <translation>מחוון רמה חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3963"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3969"/>
         <source>New Gauge</source>
         <translation>מד חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3967"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3973"/>
         <source>New Compass</source>
         <translation>מצפן חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3973"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3979"/>
         <source>New Meter</source>
         <translation>מד חדש</translation>
     </message>
@@ -4626,245 +4821,245 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">מדחום חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3977"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3983"/>
         <source>New LED Indicator</source>
         <translation>מחוון LED חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3981"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3987"/>
         <source>New Waterfall</source>
         <translation>תרשים מפל חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4057"/>
         <source>Channel %1</source>
         <translation>ערוץ %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4124"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4130"/>
         <source>New Action</source>
         <translation>פעולה חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4267"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4273"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>האם לשנות את הווידג'ט ברמת הקבוצה?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4269"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4275"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>מערכי הנתונים הקיימים של קבוצה זו יימחקו</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4333"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4334"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4335"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4339"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4340"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4341"/>
         <source>Accelerometer %1</source>
         <translation>מד תאוצה %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4350"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4350"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4350"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4356"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4356"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4356"/>
         <source>Gyro %1</source>
         <translation>ג'ירוסקופ %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4371"/>
         <source>Latitude</source>
         <translation>קו רוחב</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4371"/>
         <source>Longitude</source>
         <translation>קו אורך</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4371"/>
         <source>Altitude</source>
         <translation>גובה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4380"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4394"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4386"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4400"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4380"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4394"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4386"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4400"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4380"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4394"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4386"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4400"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4598"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4604"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5500"/>
         <source>Workspace</source>
         <translation>סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4764"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4770"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4977"/>
         <source>Shared Table</source>
         <translation>טבלה משותפת</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4846"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4852"/>
         <source>register</source>
         <translation>רגיסטר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4977"/>
         <source>New Shared Table</source>
         <translation>טבלה משותפת חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4971"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5008"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5032"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5059"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5078"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5101"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5124"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5515"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4977"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4995"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5014"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5038"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5065"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5084"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5107"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5500"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5521"/>
         <source>Name:</source>
         <translation>שם:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4995"/>
         <source>Rename Table</source>
         <translation>שינוי שם טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5008"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5014"/>
         <source>Rename Group</source>
         <translation>שינוי שם קבוצה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5032"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5038"/>
         <source>Rename Dataset</source>
         <translation>שינוי שם מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5059"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5065"/>
         <source>Rename Data Source</source>
         <translation>שינוי שם מקור נתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5078"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5084"/>
         <source>Rename Action</source>
         <translation>שינוי שם פעולה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5100"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5106"/>
         <source>New Register</source>
         <translation>רגיסטר חדש</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5124"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
         <source>Rename Register</source>
         <translation>שינוי שם רגיסטר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5163"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5188"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6042"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5169"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5194"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6048"/>
         <source>This action cannot be undone.</source>
         <translation>לא ניתן לבטל פעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5164"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5170"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>פעולה זו תסיר %1 רגיסטר(ים) יחד עם הטבלה. לא ניתן לבטל פעולה זו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5167"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5187"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6041"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5193"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6047"/>
         <source>Delete "%1"?</source>
         <translation>למחוק את "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5176"/>
         <source>Delete Table</source>
         <translation>מחק טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5190"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5196"/>
         <source>Delete Register</source>
         <translation>מחק רגיסטר</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5214"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5220"/>
         <source>Export Table</source>
         <translation>ייצא טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5216"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5260"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5222"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5266"/>
         <source>CSV files (*.csv)</source>
         <translation>קבצי CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5258"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5264"/>
         <source>Import Table</source>
         <translation>ייבא טבלה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5494"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5500"/>
         <source>New Workspace</source>
         <translation>סביבת עבודה חדשה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5515"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5521"/>
         <source>Rename Workspace</source>
         <translation>שנה שם סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5604"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5610"/>
         <source>Overview</source>
         <translation>סקירה כללית</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5614"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5620"/>
         <source>All Data</source>
         <translation>כל הנתונים</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5804"/>
         <source>Discard workspace customisations?</source>
         <translation>לבטל התאמות אישיות של סביבת עבודה?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5799"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5805"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>כיבוי התאמה אישית מבטל את העריכות ובונה מחדש את רשימת סביבות העבודה מקבוצות הפרויקט.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5802"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5808"/>
         <source>Customize Workspaces</source>
         <translation>התאמה אישית של סביבות עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6044"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6050"/>
         <source>Delete Workspace</source>
         <translation>מחיקת סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6385"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6391"/>
         <source>File save error</source>
         <translation>שגיאת שמירת קובץ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2161"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2167"/>
         <source>File open error</source>
         <translation>שגיאת פתיחת קובץ</translation>
     </message>
@@ -9588,17 +9783,17 @@ Thank you again for supporting Serial Studio!</source>
         <translation>פרויקט ריק</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="659"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="683"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="667"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="691"/>
         <source>Waiting for data…</source>
         <translation>ממתין לנתונים…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="668"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="692"/>
         <source>Connecting to device…</source>
         <translation>מתחבר להתקן…</translation>
     </message>
@@ -10072,8 +10267,8 @@ Would you like to open the download page?</source>
         <translation>לא ניתן ליצור את מבנה התיקיות של bundle מסוג .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>כותב קיצורי דרך של Windows אינו זמין בפלטפורמה זו.</translation>
     </message>
@@ -10104,8 +10299,8 @@ Would you like to open the download page?</source>
         <translation>שמירת קובץ .lnk נכשלה (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>כותב קיצורי דרך של macOS אינו זמין בפלטפורמה זו.</translation>
     </message>
@@ -10229,7 +10424,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::WorkspaceManager</name>
     <message>
-        <location filename="../../src/Misc/WorkspaceManager.cpp" line="236"/>
+        <location filename="../../src/Misc/WorkspaceManager.cpp" line="267"/>
         <source>Select Workspace Location</source>
         <translation>בחר מיקום סביבת עבודה</translation>
     </message>
@@ -10573,7 +10768,7 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="234"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="249"/>
         <source>Interpolation: %1</source>
         <translation>אינטרפולציה: %1</translation>
     </message>
@@ -10582,47 +10777,47 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">הצג מקרא</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="256"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="271"/>
         <source>Show X Axis Label</source>
         <translation>הצג תווית ציר X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="267"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="282"/>
         <source>Show Y Axis Label</source>
         <translation>הצג תווית ציר Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="279"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="294"/>
         <source>Show Crosshair</source>
         <translation>הצג כוונת</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="286"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="301"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="286"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="301"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="303"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="318"/>
         <source>Sweep / Trigger Mode</source>
         <translation>מצב סריקה / טריגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="312"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="330"/>
         <source>Trigger Settings</source>
         <translation>הגדרות טריגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="336"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="354"/>
         <source>Reset View</source>
         <translation>אפס תצוגה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="342"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="360"/>
         <source>Axis Range Settings</source>
         <translation>הגדרות טווח צירים</translation>
     </message>
@@ -11042,57 +11237,57 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Plot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="245"/>
         <source>Interpolation: %1</source>
         <translation>אינטרפולציה: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="244"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="258"/>
         <source>Show Area Under Plot</source>
         <translation>הצג שטח מתחת לגרף</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="262"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="276"/>
         <source>Show X Axis Label</source>
         <translation>הצג תווית ציר X</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="273"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="287"/>
         <source>Show Y Axis Label</source>
         <translation>הצג תווית ציר Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="285"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="299"/>
         <source>Show Crosshair</source>
         <translation>הצג כוונת</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="292"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="306"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="292"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="306"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="309"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="323"/>
         <source>Sweep / Trigger Mode</source>
         <translation>מצב סריקה / טריגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="318"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="335"/>
         <source>Trigger Settings</source>
         <translation>הגדרות טריגר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="342"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="359"/>
         <source>Reset View</source>
         <translation>אפס תצוגה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="348"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="365"/>
         <source>Axis Range Settings</source>
         <translation>הגדרות טווח צירים</translation>
     </message>
@@ -11176,22 +11371,22 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1260"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1326"/>
         <source>Time</source>
         <translation>זמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1283"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1349"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — גרור להזזה, לחץ ימני לניקוי</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1286"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1352"/>
         <source>Click to place cursor</source>
         <translation>לחץ למיקום סמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1288"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1354"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>לחץ למיקום סמן שני — גרור להזזה</translation>
     </message>
@@ -12066,22 +12261,22 @@ Click Refresh to update the list.</source>
         <translation>טעינת טקסט הפתיחה נכשלה :(</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="170"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="178"/>
         <source>Critical</source>
         <translation>קריטי</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="170"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="178"/>
         <source>Warning</source>
         <translation>אזהרה</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="525"/>
+        <location filename="../../src/Misc/CLI.cpp" line="523"/>
         <source>Project file not found</source>
         <translation>קובץ הפרויקט לא נמצא</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="526"/>
+        <location filename="../../src/Misc/CLI.cpp" line="524"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -12090,17 +12285,17 @@ Click Refresh to update the list.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="529"/>
+        <location filename="../../src/Misc/CLI.cpp" line="527"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>האם למחוק את קיצור הדרך?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="533"/>
+        <location filename="../../src/Misc/CLI.cpp" line="531"/>
         <source>Delete Shortcut</source>
         <translation>מחק קיצור דרך</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="535"/>
+        <location filename="../../src/Misc/CLI.cpp" line="533"/>
         <source>Quit</source>
         <translation>יציאה</translation>
     </message>
@@ -12222,8 +12417,8 @@ Click Refresh to update the list.</source>
         <translation>Serial Studio משמיט מסגרות כדי לשמור על היענות האפליקציה. יש לפשט או לייעל את סקריפט מנתח המסגרות כדי להפחית את עומס העבודה שלו.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
         <source>Frame Parser Disabled</source>
         <translation>מנתח מסגרות מושבת</translation>
     </message>
@@ -12265,8 +12460,8 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="384"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="384"/>
         <source>Missing Parse Function</source>
         <translation>פונקציית Parse חסרה</translation>
     </message>
@@ -12282,8 +12477,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="447"/>
         <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="533"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="447"/>
         <source>Parse Function Runtime Error</source>
         <translation>שגיאת זמן ריצה בפונקציית Parse</translation>
     </message>
@@ -15462,7 +15657,7 @@ function parse(%1) { ... }
         <translation type="vanished">נעילת אות חוזר במקום, כמו כפתור Auto באוסילוסקופ. כל סריקה מתחילה באותה נקודה בצורת הגל, כך שהיא נשארת במקום במקום לגלול הלאה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
         <source>Trigger</source>
         <translation>טריגר</translation>
     </message>
@@ -15471,57 +15666,57 @@ function parse(%1) { ... }
         <translation type="vanished">מצב:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="96"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="110"/>
         <source>Mode</source>
         <translation>מצב</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="121"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
         <source>Auto</source>
         <translation>אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="121"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
         <source>Normal</source>
         <translation>רגיל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="121"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
         <source>Single</source>
         <translation>בודד</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="144"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="158"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>Auto רץ חופשי כאשר שום דבר לא חוצה את הרמה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="145"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="159"/>
         <source>Normal waits for a crossing.</source>
         <translation>Normal ממתין לחציה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="146"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="160"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>Single לוכד סריקה אחת ואז עוצר.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="224"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="238"/>
         <source>Slope:</source>
         <translation>שיפוע:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="256"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="270"/>
         <source>Trigger on a downward crossing</source>
         <translation>טריגר על חציה יורדת</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="302"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="316"/>
         <source>Timebase:</source>
         <translation>בסיס זמן:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="367"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="381"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>השאר בסיס זמן ריק כדי להשתמש בטווח הזמן של הגרף; הקטן אותו כדי להתקרב לאות מהיר. Holdoff מתעלם מטריגרים חדשים לרגע אחרי כל אחד.</translation>
     </message>
@@ -15530,7 +15725,7 @@ function parse(%1) { ... }
         <translation type="vanished">אות:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="216"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="230"/>
         <source>Value to cross</source>
         <translation>ערך לחציה</translation>
     </message>
@@ -15539,17 +15734,17 @@ function parse(%1) { ... }
         <translation type="vanished">קצה:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="237"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="251"/>
         <source>Rising</source>
         <translation>עולה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="241"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="255"/>
         <source>Trigger on an upward crossing</source>
         <translation>טריגר על חציה עולה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="252"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="266"/>
         <source>Falling</source>
         <translation>יורד</translation>
     </message>
@@ -15558,7 +15753,7 @@ function parse(%1) { ... }
         <translation type="vanished">סריקה חדשה מתחילה בכל פעם שהאות חוצה את הרמה בכיוון הנבחר. Auto גם רץ חופשי כאשר לא נמצאת חציה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="275"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="289"/>
         <source>Timing</source>
         <translation>תזמון</translation>
     </message>
@@ -15567,23 +15762,23 @@ function parse(%1) { ... }
         <translation type="vanished">בסיס זמן (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="315"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="329"/>
         <source>Match time range</source>
         <translation>התאמה לטווח זמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="327"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="354"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="341"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="368"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="333"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="347"/>
         <source>Holdoff:</source>
         <translation>Holdoff:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="346"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="360"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -15592,17 +15787,17 @@ function parse(%1) { ... }
         <translation type="vanished">בסיס זמן קובע כמה זמן מציגה סריקה אחת; השאר ריק כדי להשתמש בטווח הזמן של הגרף. הקטן אותו כדי להתקרב לאות מהיר. Holdoff מתעלם מטריגרים חדשים לרגע אחרי כל אחד.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="382"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="396"/>
         <source>Capture Next</source>
         <translation>לכידת הבא</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="384"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="398"/>
         <source>Arm for one more single-shot capture</source>
         <translation>חימוש ללכידה חד-פעמית נוספת</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="203"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="217"/>
         <source>Level:</source>
         <translation>רמה:</translation>
     </message>
@@ -15619,7 +15814,7 @@ function parse(%1) { ... }
         <translation type="vanished">זמן החזקה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="183"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="197"/>
         <source>Source:</source>
         <translation>מקור:</translation>
     </message>
@@ -15628,7 +15823,7 @@ function parse(%1) { ... }
         <translation type="vanished">חימוש מחדש</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="397"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="411"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
@@ -15679,37 +15874,37 @@ function parse(%1) { ... }
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1181"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1916"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1190"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1929"/>
         <source>Console</source>
         <translation>קונסול</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1268"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1928"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1277"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1941"/>
         <source>Notifications</source>
         <translation>התראות</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1354"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1940"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1363"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1953"/>
         <source>Clock</source>
         <translation>שעון</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1439"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1951"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1448"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1964"/>
         <source>Stopwatch</source>
         <translation>שעון עצר</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2004"/>
         <location filename="../../src/UI/Dashboard.cpp" line="2020"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2036"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (גיבוי)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2046"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2062"/>
         <source>LED Panel (%1)</source>
         <translation>לוח LED (%1)</translation>
     </message>
@@ -16102,7 +16297,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WidgetDelegate</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="331"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="335"/>
         <source>Device Disconnected</source>
         <translation>התקן מנותק</translation>
     </message>

@@ -74,20 +74,26 @@ trips `Frame queue full — frame dropped`. Known direct sites:
 
 ## Hotpath Benchmark — The 256 kHz CI Gate
 
-256 kHz is a CI gate, not a slogan. `--benchmark-hotpath` (`Misc::HotpathBenchmark`) drives the
+256 kHz is a CI gate, not a slogan. `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`) drives the
 real parse pipeline in-process — `FrameReader` extraction → `FrameBuilder` → the **Lua** frame
 parser → per-dataset transforms → Dashboard — against a project loaded programmatically via
-`ProjectModel::loadFromJsonDocument`. It exits nonzero when the **Lua** run sustains below
-`--min-fps` (default 256000), then runs an ungated **JS** pipeline and an ungated **Lua + all
+`ProjectModel::loadFromJsonDocument`. It first runs an ungated **data-pipeline** pass
+(`runDataPipeline` — `FrameReader` extraction only, no parse) that reports raw driver throughput in
+the MHz range (`HOTPATH_DATA_FPS`). It exits nonzero when the **Lua** run sustains below
+`--min-fps` (default 256000), then runs an ungated **JS** pipeline, an ungated **Lua + all
 exporters live** pipeline (CSV/MDF4/Sessions/API/gRPC) for PGO training + an exporter-slowdown
-readout. The gated runs disable the `FrameBuilder` parse-budget guard (an interactive 80%-duty
-throttle that a 100%-duty benchmark would trip every window) via `setParseBudgetEnabled(false)`
-and run **no** exporters, so the gate measures pure parse capacity; the exporter phase is
-deliberately *not* gated (its `FrameConsumer` worker threads can't drain faster than a flat-out
-producer, so the 1024-slot pool exhausts into the heap-fallback path — that penalty is the point
-of the readout). Each run lasts until both the `--benchmark-frames` floor (default 1M) and the
-`--benchmark-seconds` window (default 10) are met. Throughput =
-`FrameBuilder::parsedFrameCount()` / elapsed. `test.yml` runs it per PR; `deploy.yml` gates the
+readout, and an ungated **Lua + dashboard** pipeline that loads an all-widget-types project, sets
+`HotpathBenchmark::active()` (which `Dashboard::streamAvailable()` honors so headless frames are
+accepted with no live device), arms every plot/FFT/multiplot/waterfall/GPS/3D widget, and trains
+the per-frame dashboard sub-hotpaths + a dashboard-slowdown readout. The gated runs disable the
+`FrameBuilder` parse-budget guard (an interactive 80%-duty throttle that a 100%-duty benchmark
+would trip every window) via `setParseBudgetEnabled(false)` and run **no** exporters or dashboard,
+so the gate measures pure parse capacity; the exporter and dashboard phases are deliberately *not*
+gated (their consumers can't drain faster than a flat-out producer, so the 1024-slot pool exhausts
+into the heap-fallback path — that penalty is the point of the readout). Each run lasts until both
+the `--benchmark-frames` floor (default 1M) and the `--benchmark-seconds` window (default 10) are
+met. Throughput = `FrameBuilder::parsedFrameCount()` / elapsed; `--benchmark-output FILE` mirrors
+the report to a file (default: stdout only). `test.yml` runs it per PR; `deploy.yml` gates the
 shipped PGO binary on it. Don't regress the parse hotpath. (The `ss-hotpath` skill auto-activates
 on hotpath edits and re-states this check.)
 

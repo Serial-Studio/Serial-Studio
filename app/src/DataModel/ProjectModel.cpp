@@ -2018,6 +2018,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
 bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document,
                                                    const QString& sourcePath)
 {
+  // Validate document
   if (document.isEmpty())
     return false;
 
@@ -2056,6 +2057,12 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   seedNextUniqueIdFromGroups();
   loadWidgetSettingsAndWorkspaces(json);
 
+  // Migrated projects can carry stale workspace refs that blank the dashboard; force auto layout.
+  if (olderSchema) {
+    m_customizeWorkspaces = false;
+    m_workspaces.clear();
+  }
+
   // Legacy refs were positional/index-based: translate now that uids are seeded.
   if (legacyUniqueIds) {
     migrateLegacyWorkspaceRefs();
@@ -2078,7 +2085,6 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
     return true;
 
   m_autoSnapshot = buildAutoWorkspaces();
-
   emitProjectLoadedSignals();
 
   // Auto-save any pre-uniqueId migration to lock in the new schema; skip in-memory loads

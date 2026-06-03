@@ -729,7 +729,10 @@ def test_audio_driver_comprehensive(api_client, clean_state):
         sample_rates_result = api_client.command("io.audio.listSampleRates")
         sample_rates = sample_rates_result.get("sampleRates", [])
         assert isinstance(sample_rates, list)
-        assert len(sample_rates) > 0
+        # Sample rates derive from the selected input device; CI runners with no
+        # audio hardware legitimately report an empty list.
+        if input_devices or output_devices:
+            assert len(sample_rates) > 0
 
         input_formats_result = api_client.command("io.audio.listInputFormats")
         input_formats = input_formats_result.get("formats", [])

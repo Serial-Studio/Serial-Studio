@@ -67,6 +67,7 @@ public:
 public slots:
   virtual void processData() = 0;
   virtual void close()       = 0;
+  virtual void flush()       = 0;
 
 private:
   qint64 m_lastFrameNs;
@@ -93,47 +94,14 @@ public:
   ~FrameConsumerWorker() override = default;
 
   /**
-   * @brief Processes all pending frames from the queue.
+   * @brief Processes one batch of pending frames from the queue (timer-driven).
    */
   void processData() override
   {
     if (!m_enabled->load(std::memory_order_relaxed))
       return;
 
-    T item;
-    size_t dequeued = 0;
-    // code-verify off: m_writeBuffer is pre-reserved to kMaxItemsPerBatch in the constructor
-    while (dequeued < kMaxItemsPerBatch && m_queue->try_dequeue(item)) {
-      m_writeBuffer.push_back(std::move(item));
-      ++dequeued;
-    }
-    // code-verify on
-
-    if (dequeued >= kMaxItemsPerBatch) [[unlikely]]
-      qWarning() << "[FrameConsumer] Batch size limit reached -- remaining items deferred";
-
-    const auto count = m_writeBuffer.size();
-    if (count == 0)
-      return;
-
-    m_queueSize->fetch_sub(count, std::memory_order_relaxed);
-
-    const bool wasOpen = isResourceOpen();
-    try {
-      processItems(m_writeBuffer);
-    } catch (const std::exception& e) {
-      qWarning() << "[FrameConsumer] Exception in processItems:" << e.what();
-    } catch (...) {
-      qWarning() << "[FrameConsumer] Unknown exception in processItems";
-    }
-
-    const bool isOpen = isResourceOpen();
-
-    if (wasOpen != isOpen)
-      Q_EMIT resourceOpenChanged();
-
-    // Release the pooled-frame refs now that they are written, not at the next drain cycle.
-    m_writeBuffer.clear();
+    drainBatch();
   }
 
   /**
@@ -154,6 +122,24 @@ public:
     Q_EMIT resourceOpenChanged();
   }
 
+  /**
+   * @brief Drains every pending frame without closing resources; keeps the worker reusable.
+   */
+  void flush() override
+  {
+    // Ignores the enabled flag so a just-disabled consumer can still write out its backlog.
+    try {
+      // code-verify off: bounded queue drain; each drainBatch() consumes items or returns 0
+      while (drainBatch() > 0) {
+      }
+      // code-verify on
+    } catch (const std::exception& e) {
+      qWarning() << "[FrameConsumer] Exception during flush:" << e.what();
+    } catch (...) {
+      qWarning() << "[FrameConsumer] Unknown exception during flush";
+    }
+  }
+
 protected:
   virtual void processItems(const std::vector<T>& items) = 0;
   virtual void closeResources()                          = 0;
@@ -168,6 +154,47 @@ protected:
   }
 
 private:
+  /**
+   * @brief Dequeues and writes up to one batch; returns the number of frames processed.
+   */
+  size_t drainBatch()
+  {
+    T item;
+    size_t dequeued = 0;
+    // code-verify off: m_writeBuffer is pre-reserved to kMaxItemsPerBatch in the constructor
+    while (dequeued < kMaxItemsPerBatch && m_queue->try_dequeue(item)) {
+      m_writeBuffer.push_back(std::move(item));
+      ++dequeued;
+    }
+    // code-verify on
+
+    if (dequeued >= kMaxItemsPerBatch) [[unlikely]]
+      qWarning() << "[FrameConsumer] Batch size limit reached -- remaining items deferred";
+
+    const auto count = m_writeBuffer.size();
+    if (count == 0)
+      return 0;
+
+    m_queueSize->fetch_sub(count, std::memory_order_relaxed);
+
+    const bool wasOpen = isResourceOpen();
+    try {
+      processItems(m_writeBuffer);
+    } catch (const std::exception& e) {
+      qWarning() << "[FrameConsumer] Exception in processItems:" << e.what();
+    } catch (...) {
+      qWarning() << "[FrameConsumer] Unknown exception in processItems";
+    }
+
+    const bool isOpen = isResourceOpen();
+    if (wasOpen != isOpen)
+      Q_EMIT resourceOpenChanged();
+
+    // Release the pooled-frame refs now that they are written, not at the next drain cycle.
+    m_writeBuffer.clear();
+    return count;
+  }
+
   static constexpr size_t kMaxItemsPerBatch = 10000;
   std::vector<T> m_writeBuffer;
   moodycamel::ReaderWriterQueue<T>* m_queue;
@@ -228,6 +255,20 @@ public:
     QTimer* timer = m_timer;
     QMetaObject::invokeMethod(
       m_timer, [timer, ms] { timer->setInterval(ms); }, Qt::QueuedConnection);
+  }
+
+  /**
+   * @brief Drains the worker's backlog without stopping it; the worker stays reusable.
+   */
+  void flushWorker()
+  {
+    if (!m_worker || !m_workerThread.isRunning())
+      return;
+
+    // BlockingQueuedConnection needs a live event loop on both ends; skip it at exit.
+    if (QCoreApplication::instance())
+      QMetaObject::invokeMethod(
+        m_worker, &FrameConsumerWorkerBase::flush, Qt::BlockingQueuedConnection);
   }
 
   /**

@@ -18,7 +18,14 @@ import pytest
 from utils import ChecksumType, DataGenerator
 
 
-@pytest.mark.parametrize("malformed_json", DataGenerator.generate_malformed_json())
+@pytest.mark.parametrize(
+    "malformed_json",
+    DataGenerator.generate_malformed_json(),
+    # Cap the generated id length: a "very_long" payload (~100 KB) would
+    # otherwise overflow Windows' 32767-char env-var limit when pytest writes
+    # the node id into PYTEST_CURRENT_TEST, erroring the test at setup.
+    ids=lambda s: f"{s[:20]!r}-len{len(s)}",
+)
 def test_malformed_json_resilience(
     api_client, device_simulator, clean_state, malformed_json
 ):

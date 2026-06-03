@@ -228,11 +228,15 @@ Widgets.MiniWindow {
   readonly property bool replayActive: SerialStudio.isAnyPlayerOpen()
   function _refreshSourceConnection() {
     sourceDisconnected = !replayActive
+                         && !Cpp_Benchmark_Runner.running
                          && !Cpp_IO_Manager.isDeviceConnected(root.deviceIndex)
   }
   Component.onCompleted: _refreshSourceConnection()
   onDeviceIndexChanged: _refreshSourceConnection()
   Connections {
+    target: Cpp_Benchmark_Runner
+    function onRunningChanged() { root._refreshSourceConnection() }
+  } Connections {
     target: Cpp_IO_Manager
     function onConnectedChanged() { root._refreshSourceConnection() }
   } Connections {

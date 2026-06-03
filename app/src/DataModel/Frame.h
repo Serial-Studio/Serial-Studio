@@ -1225,7 +1225,6 @@ inline void normalizeDatasetRanges(Dataset& d)
   if (!d.value.isEmpty())
     d.numericValue = d.value.toDouble(&d.isNumeric);
 
-  // Legacy fallback: pre-3.x projects used a shared min/max for FFT/plot/widget.
   if (!obj.contains(Keys::FFTMin) || !obj.contains(Keys::FFTMax)) {
     d.fftMin = ss_jsr(obj, Keys::Min, 0).toDouble();
     d.fftMax = ss_jsr(obj, Keys::Max, 0).toDouble();

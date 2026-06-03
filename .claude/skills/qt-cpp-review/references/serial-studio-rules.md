@@ -29,7 +29,7 @@ sinks`. A violation here causes silent frame drops, not a compile error.
   export/report worker. `monotonicFrameNs(...)` is the safety net only.
 - **SS-HOT-5**: JS frame-parser / transform calls go through `IScriptEngine::guardedCall()` —
   never a raw `parseFunction.call()`. `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
-- **SS-HOT-6**: 256 kHz is a CI gate (`--benchmark-hotpath`, `Misc::HotpathBenchmark`), not a
+- **SS-HOT-6**: 256 kHz is a CI gate (`--benchmark-hotpath`, `Benchmark::HotpathBenchmark`), not a
   slogan. Any change that adds work per frame on the gated Lua/JS path is a regression risk —
   flag it for benchmarking. Don't regress the parse hotpath.
 

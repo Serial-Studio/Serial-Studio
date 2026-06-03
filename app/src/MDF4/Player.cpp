@@ -1037,7 +1037,7 @@ void MDF4::Player::buildReplayLayout()
 {
   m_sourceChannelsByIndex.clear();
 
-  // Mirror the exporter's layout (skips image groups) so sorted datasets match file channels 1:1.
+  // Declaration order matches the file's channel-group order; do not sort by uniqueId.
   struct ChMeta {
     int uid;
     int sourceId;
@@ -1051,8 +1051,6 @@ void MDF4::Player::buildReplayLayout()
     for (const auto& d : g.datasets)
       chs.append({d.uniqueId, g.sourceId});
   }
-
-  std::sort(chs.begin(), chs.end(), [](const ChMeta& a, const ChMeta& b) { return a.uid < b.uid; });
 
   // Count distinct sources to decide single- vs multi-source playback
   std::unordered_map<int, int> localCounter;
@@ -1070,7 +1068,7 @@ void MDF4::Player::buildReplayLayout()
       replay[0][chs[ch].uid] = ch;
   }
 
-  // Multi-source: each source receives its own channels in file (uniqueId) order
+  // Multi-source: each source receives its own channels in file (declaration) order
   else {
     for (auto& kv : localCounter)
       kv.second = 0;

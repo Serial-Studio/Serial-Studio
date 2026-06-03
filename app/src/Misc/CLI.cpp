@@ -29,10 +29,10 @@
 #include "API/Server.h"
 #include "AppInfo.h"
 #include "AppState.h"
+#include "Benchmark/HotpathBenchmark.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
-#include "Misc/HotpathBenchmark.h"
 #include "Misc/TimerEvents.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
@@ -251,14 +251,12 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
       seconds = val;
   }
 
-  QString output = QStringLiteral("benchmark.txt");
-  if (m_parser.isSet(m_opts.benchmarkOutputOpt)) {
-    const QString val = m_parser.value(m_opts.benchmarkOutputOpt).trimmed();
-    if (!val.isEmpty())
-      output = val;
-  }
+  // No default file: the report is only written when --benchmark-output names one.
+  QString output;
+  if (m_parser.isSet(m_opts.benchmarkOutputOpt))
+    output = m_parser.value(m_opts.benchmarkOutputOpt).trimmed();
 
-  const int rc = Misc::HotpathBenchmark::runAndReport(frames, minFps, seconds, output);
+  const int rc = Benchmark::HotpathBenchmark::runAndReport(frames, minFps, seconds, output);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
 

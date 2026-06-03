@@ -83,7 +83,7 @@ struct CliOptions {
     "seconds"};
   QCommandLineOption benchmarkOutputOpt{
     "benchmark-output",
-    "File to write the hotpath benchmark report to (default: benchmark.txt)",
+    "File to write the hotpath benchmark report to (default: stdout only, no file)",
     "file"};
 #ifdef BUILD_COMMERCIAL
   QCommandLineOption noToolbarOpt{"no-toolbar", "Hides the main window toolbar at startup (Pro)"};

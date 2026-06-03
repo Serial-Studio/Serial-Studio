@@ -26,7 +26,7 @@
 #include <QString>
 #include <QtGlobal>
 
-namespace Misc {
+namespace Benchmark {
 
 /**
  * @brief End-to-end throughput benchmark for the frame parse pipeline.
@@ -46,20 +46,29 @@ public:
     quint64 framesSkipped;
   };
 
-  [[nodiscard]] static Result run(
-    quint64 targetFrames, double minFps, double minSeconds, int language, bool withExporters);
-  [[nodiscard]] static int runAndReport(
-    quint64 targetFrames,
-    double minFps,
-    double minSeconds,
-    const QString& outputFile = QStringLiteral("benchmark.txt"));
+  [[nodiscard]] static Result run(quint64 targetFrames,
+                                  double minFps,
+                                  double minSeconds,
+                                  int language,
+                                  bool withExporters,
+                                  bool withDashboard = false);
+  [[nodiscard]] static Result runDataPipeline(quint64 targetFrames, double minSeconds);
+  [[nodiscard]] static int runAndReport(quint64 targetFrames,
+                                        double minFps,
+                                        double minSeconds,
+                                        const QString& outputFile = QString());
+
+  [[nodiscard]] static bool active() noexcept;
+  static void setActive(bool active) noexcept;
 
 private:
   static void enableConsumers();
   static void disableConsumers();
-  static void setupProject(int language, int channels);
-  [[nodiscard]] static QByteArray buildChunk(int frames, int channels);
+  static void setupProject(int language, int channels, bool dashboard);
+  static void activateDashboardWidgets();
+  [[nodiscard]] static QByteArray buildChunk(int frames, int channels, int stringColumns = 0);
   [[nodiscard]] static QJsonObject buildProjectJson(int language, int channels);
+  [[nodiscard]] static QJsonObject buildDashboardProjectJson(int language);
 };
 
-}  // namespace Misc
+}  // namespace Benchmark

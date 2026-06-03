@@ -208,7 +208,8 @@ set(SOURCES
   src/Misc/CrashTracker.cpp
   src/Misc/BackupManager.cpp
   src/Misc/CLI.cpp
-  src/Misc/HotpathBenchmark.cpp
+  src/Benchmark/HotpathBenchmark.cpp
+  src/Benchmark/BenchmarkRunner.cpp
   src/Platform/AppPlatform.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
@@ -429,6 +430,7 @@ set(QML_SOURCES
   qml/Dialogs/Acknowledgements.qml
   qml/Dialogs/AccelerometerConfigDialog.qml
   qml/Dialogs/AxisRangeDialog.qml
+  qml/Dialogs/Benchmark.qml
   qml/Dialogs/TriggerDialog.qml
   qml/Dialogs/BackupRecovery.qml
   qml/Dialogs/CrashRecovery.qml

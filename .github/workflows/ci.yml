@@ -72,11 +72,11 @@ env:
   #
   # Qt cache management
   #
-  INSTALL_QT_WINDOWS: true
+  INSTALL_QT_WINDOWS: false
   INSTALL_QT_MACOS_ARM64: false
-  INSTALL_QT_MACOS_INTEL: true
-  INSTALL_QT_LINUX_INTEL: true
-  INSTALL_QT_LINUX_ARM64: true
+  INSTALL_QT_MACOS_INTEL: false
+  INSTALL_QT_LINUX_INTEL: false
+  INSTALL_QT_LINUX_ARM64: false
 
   #
   # Test gating
@@ -253,6 +253,14 @@ jobs:
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
+
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -290,6 +298,15 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
+
+    - name: '🔑 Deactivate Serial Studio license'
+      if: always()
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --deactivate || true
 
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
@@ -538,6 +555,14 @@ jobs:
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
+
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -575,6 +600,15 @@ jobs:
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
       run: |
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000
+
+    - name: '🔑 Deactivate Serial Studio license'
+      if: always()
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --deactivate || true
 
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
@@ -764,6 +798,13 @@ jobs:
     - name: '🚧 Build application (instrumented, arm64)'
       run: cmake --build build --config Release -j$(getconf _NPROCESSORS_ONLN)
 
+    - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
+      run: |
+        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" || true
+
     - name: '🏋️ PGO training run (hotpath)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -800,6 +841,14 @@ jobs:
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
         ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 256000
+
+    - name: '🔑 Deactivate Serial Studio license'
+      if: always()
+      env:
+        QT_QPA_PLATFORM: offscreen
+        DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
+      run: |
+        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --deactivate || true
 
     - name: '📦 Package application'
       run: |
@@ -1172,6 +1221,19 @@ jobs:
     - name: '🚧 Build application (instrumented)'
       run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
+    - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
+      run: |
+        try {
+          $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
+            -ArgumentList '--activate',"${{secrets.SERIAL_STUDIO_LICENSE_KEY}}" `
+            -WorkingDirectory $PWD -PassThru -NoNewWindow
+          if (-not $p.WaitForExit(120000)) { $p.Kill() }
+          if ($p.ExitCode -ne 0) { Write-Host "Activation failed (exit $($p.ExitCode)); training without Pro widgets" }
+        } catch {
+          Write-Host "License activation error: $_"
+        }
+        exit 0
+
     - name: '🏋️ PGO training run (hotpath)'
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
@@ -1205,10 +1267,23 @@ jobs:
       continue-on-error: true
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
-          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000' `
+          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000','--benchmark-output','benchmark.txt' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow
         if (-not $p.WaitForExit(300000)) { $p.Kill() }
         if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
+
+    - name: '🔑 Deactivate Serial Studio license'
+      if: always()
+      run: |
+        try {
+          $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
+            -ArgumentList '--deactivate' `
+            -WorkingDirectory $PWD -PassThru -NoNewWindow
+          if (-not $p.WaitForExit(120000)) { $p.Kill() }
+        } catch {
+          Write-Host "License deactivation error: $_"
+        }
+        exit 0
 
     - name: '🔎 Scan binaries with deglyph'
       uses: deglyph-re/cli@main
@@ -1500,6 +1575,31 @@ jobs:
         sudo modprobe snd-aloop || true
         aplay -l || true
 
+    - name: '🧯 Enable crash capture'
+      continue-on-error: true
+      run: |
+        case "${{ matrix.os }}" in
+          linux)
+            mkdir -p "$GITHUB_WORKSPACE/cores"
+            chmod 777 "$GITHUB_WORKSPACE/cores"
+            echo "$GITHUB_WORKSPACE/cores/core.%e.%p.%t" | sudo tee /proc/sys/kernel/core_pattern >/dev/null
+            sudo systemctl stop apport.service 2>/dev/null || true
+            ;;
+          macos)
+            mkdir -p "$HOME/Library/Logs/DiagnosticReports"
+            sudo sysctl -w kern.coredump=1 >/dev/null 2>&1 || true
+            sudo chmod 1777 /cores 2>/dev/null || true
+            ;;
+          windows)
+            mkdir -p "$GITHUB_WORKSPACE/crash-dumps"
+            DUMP_DIR="$(cygpath -w "$GITHUB_WORKSPACE/crash-dumps")"
+            KEY='HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps'
+            reg add "$KEY" //v DumpFolder //t REG_EXPAND_SZ //d "$DUMP_DIR" //f
+            reg add "$KEY" //v DumpType   //t REG_DWORD      //d 2          //f
+            reg add "$KEY" //v DumpCount  //t REG_DWORD      //d 10         //f
+            ;;
+        esac
+
     - name: '🔑 Activate Serial Studio license'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1509,6 +1609,7 @@ jobs:
       env:
         QT_QPA_PLATFORM: offscreen
       run: |
+        [ "${{ matrix.os }}" = "windows" ] || ulimit -c unlimited
         "$SS_RUN" --headless --api-server &
         echo $! > ss_pid.txt
         for i in $(seq 1 30); do
@@ -1519,16 +1620,9 @@ jobs:
     - name: '🧪 Run tests'
       continue-on-error: ${{ env.REQUIRE_TESTS_TO_PUBLISH != 'true' }}
       env:
-        # Force UTF-8 stdio so non-ASCII parser-script content (e.g. the U+2192
-        # arrow in comments) survives the subprocess boundary on the cp1252
-        # Windows runners instead of raising UnicodeEncodeError.
         PYTHONIOENCODING: utf-8
         PYTHONUTF8: '1'
       run: |
-        # Tests carrying @pytest.mark.flaky retry their own transient connect
-        # flakes; everything else fails on the first run. We deliberately do NOT
-        # blanket-rerun, so a hard app crash fails fast instead of re-running the
-        # whole suite against a dead instance.
         pytest tests/ \
           -m "${{ matrix.marker_expr }}" \
           -v --tb=short --timeout=60 --junit-xml=test-results.xml
@@ -1554,6 +1648,42 @@ jobs:
       if: always()
       run: '[ -f ss_pid.txt ] && kill $(cat ss_pid.txt) || true'
 
+    - name: '🩹 Collect crash reports'
+      if: always()
+      run: |
+        set +e
+        mkdir -p crash-reports
+        case "${{ matrix.os }}" in
+          linux)
+            cp -v cores/core.* crash-reports/ 2>/dev/null
+            if ls cores/core.* >/dev/null 2>&1; then
+              BIN=$(find "$PWD/squashfs-root" -type f \( -name "$UNIXNAME" -o -name "$EXECUTABLE" \) 2>/dev/null | head -1)
+              [ -z "$BIN" ] && BIN="$SS_RUN"
+              cp -v "$BIN" crash-reports/ 2>/dev/null
+              command -v gdb >/dev/null 2>&1 || sudo apt-get install -y gdb >/dev/null 2>&1
+              for c in cores/core.*; do
+                gdb -batch -ex "thread apply all bt full" "$BIN" "$c" \
+                  > "crash-reports/$(basename "$c").backtrace.txt" 2>&1 || true
+              done
+            fi
+            ;;
+          macos)
+            for i in $(seq 1 8); do
+              ls "$HOME/Library/Logs/DiagnosticReports/${EXECUTABLE}"*.ips >/dev/null 2>&1 && break
+              sleep 1
+            done
+            cp -v "$HOME/Library/Logs/DiagnosticReports/${EXECUTABLE}"*.ips   crash-reports/ 2>/dev/null
+            cp -v "$HOME/Library/Logs/DiagnosticReports/${EXECUTABLE}"*.crash crash-reports/ 2>/dev/null
+            sudo cp -v "/Library/Logs/DiagnosticReports/${EXECUTABLE}"*.ips    crash-reports/ 2>/dev/null
+            cp -v /cores/core.* crash-reports/ 2>/dev/null
+            ;;
+          windows)
+            cp -v crash-dumps/*.dmp crash-reports/ 2>/dev/null
+            ;;
+        esac
+        echo '--- crash-reports ---'
+        ls -la crash-reports 2>/dev/null || true
+
     - name: '🦟 Stop Mosquitto'
       if: always() && matrix.broker
       run: pkill -f "mosquitto -d -c /tmp/mosq.conf" || true
@@ -1567,3 +1697,11 @@ jobs:
           test-results.xml
           audio-test-results.xml
           tests/**/*.log
+
+    - name: '📤 Upload crash reports'
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: crash-reports-${{ matrix.label }}
+        path: crash-reports/**
+        if-no-files-found: ignore

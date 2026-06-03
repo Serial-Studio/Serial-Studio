@@ -287,6 +287,30 @@ Widgets.SmartWindow {
   }
 
   //
+  // Show the dashboard while the benchmark exercises it; reset to console when it ends so
+  // repeated runs stay deterministic (no live stream drives the normal onUpdated auto-switch).
+  //
+  Connections {
+    target: Cpp_Benchmark_Runner
+
+    function onDashboardPreviewActive(active) {
+      if (app.runtimeMode)
+        return
+
+      if (active) {
+        root.showDashboardNow()
+        if (root.dashboard)
+          root.dashboard.loadLayout()
+      }
+
+      else {
+        root.showConsole()
+        root.firstValidFrame = false
+      }
+    }
+  }
+
+  //
   // Handle platform-specific window initialization code
   //
   onVisibilityChanged: {
