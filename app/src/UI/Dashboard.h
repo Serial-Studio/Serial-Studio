@@ -325,6 +325,9 @@ private:
 
   bool m_updateRetryInProgress;
 
+  // False while cached Dataset*/ring pointers are stale (post-reset, pre-reconfigure)
+  bool m_layoutValid;
+
   bool m_plotTimeOriginSet;
   int m_plotGroupCount;
   double m_plotTimeRange;

@@ -171,6 +171,7 @@ UI::Dashboard::Dashboard()
   , m_autoHideToolbar(false)
   , m_persistSettings(true)
   , m_updateRetryInProgress(false)
+  , m_layoutValid(false)
   , m_plotTimeOriginSet(false)
   , m_plotGroupCount(0)
   , m_plotTimeRange(10.0)
@@ -922,6 +923,9 @@ void UI::Dashboard::resetData(const bool notify)
   m_fftValues.squeeze();
   m_pltValues.squeeze();
   m_multipltValues.squeeze();
+
+  // Cached Dataset*/ring/flag pointers die with the containers freed below
+  m_layoutValid = false;
 
   // Drop pre-resolved hotpath push tables (point into maps cleared below)
   m_yLinePushes.clear();
@@ -1805,6 +1809,10 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
   Q_ASSERT(!frame.groups.empty());
   Q_ASSERT(!m_datasetReferences.isEmpty());
 
+  // Fail safe in Release: a queued resetData() can leave cached pointers dangling
+  if (!m_layoutValid) [[unlikely]]
+    return;
+
   // Propagate new values to all dataset references
   for (const auto& group : frame.groups) {
     for (const auto& dataset : group.datasets) {
@@ -1971,6 +1979,9 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   // Splice in-flight rings back where the same dataset / group still maps to a slot.
   restorePlotTimeRings(savedPlotRings);
   restoreMultiplotTimeRings(savedMultiplotRings);
+
+  // Caches now point into freshly-built containers; consumers may dereference again
+  m_layoutValid = true;
 
   // Update user interface
   Q_EMIT widgetCountChanged();
