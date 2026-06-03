@@ -30,6 +30,7 @@
 #include "CSV/Export.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/FrameParser.h"
 #include "Misc/Translator.h"
 #include "Misc/WorkspaceManager.h"
 #include "SerialStudio.h"
@@ -301,6 +302,10 @@ void BenchmarkRunner::endSession()
 #ifdef ENABLE_GRPC
   API::GRPC::GRPCServer::instance().setEnabled(m_savedGrpcServer);
 #endif
+
+  // Drop setupProject()'s headless API mode before the reload so a failed reload is not silent.
+  DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
+  DataModel::FrameParser::instance().setSuppressMessageBoxes(false);
 
   // Reload the user's project, or fall back to the prior mode with a clean dashboard.
   if (!m_savedProjectPath.isEmpty()) {
