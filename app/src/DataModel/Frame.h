@@ -683,10 +683,12 @@ inline void clear_frame(Frame& frame) noexcept
 }
 
 /**
- * @brief Copies only dataset values from source to destination frame.
+ * @brief Copies per-frame volatile state (source id + dataset values) into a structure-matched dst.
  */
 inline void copy_frame_values(Frame& dst, const Frame& src) noexcept
 {
+  dst.sourceId = src.sourceId;
+
   const size_t groupCount = src.groups.size();
   for (size_t g = 0; g < groupCount; ++g) {
     const auto& srcGroup      = src.groups[g];

@@ -1741,19 +1741,17 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 
   if (structureChanged) [[unlikely]] {
     m_sourceRawFrames[sid] = payload;
-
-    // Build a combined frame from all known sources for reconfigureDashboard
     DataModel::Frame combined;
     combined.title   = payload.title;
     combined.actions = payload.actions;
+
+    // code-verify off
     for (const auto& sf : std::as_const(m_sourceRawFrames)) {
       combined.containsCommercialFeatures |= sf.containsCommercialFeatures;
       for (const auto& g : sf.groups)
-        // reconfigure path; not per-frame
-        // code-verify off
         combined.groups.push_back(g);
-      // code-verify on
     }
+    // code-verify on
 
     reconfigureDashboard(combined);
 
@@ -1825,11 +1823,9 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
   Q_ASSERT(!frame.groups.empty());
   Q_ASSERT(!m_datasetReferences.isEmpty());
 
-  // Fail safe in Release: a queued resetData() can leave cached pointers dangling
   if (!m_layoutValid) [[unlikely]]
     return;
 
-  // Walk the pre-resolved propagation table for this source instead of hashing every uniqueId
   const auto pit = m_valuePushes.constFind(frame.sourceId);
   if (pit == m_valuePushes.cend()) [[unlikely]] {
     handleMissingDataset(frame);
@@ -1842,7 +1838,6 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
   std::size_t i = 0;
   for (const auto& group : frame.groups) {
     for (const auto& dataset : group.datasets) {
-      // Layout drifted since the table was built; regenerate the model and retry (once)
       if (i >= entries || table[i].uniqueId != dataset.uniqueId) [[unlikely]] {
         handleMissingDataset(frame);
         return;
@@ -1854,14 +1849,12 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
         ptr->numericValue = dataset.numericValue;
       }
 
-      // Numeric values skip the string copy except where the string is observable
       const auto& string_targets = dataset.isNumeric ? push.stringTargets : push.targets;
       for (auto* ptr : string_targets)
         ptr->value = dataset.value;
     }
   }
 
-  // Update plots & time-series widgets (only for this source)
   updateDataSeries(frame.sourceId);
 }
 
@@ -1874,13 +1867,14 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
   Q_ASSERT(datasetIn.index >= 0);
   Q_ASSERT(datasetIn.uniqueId >= 0);
 
-  // Widget/FFT display ranges fall back to the plot value range when left unset (min == max)
+  // Widget display ranges fall back to the plot value range when left unset (min == max)
   DataModel::Dataset dataset = datasetIn;
   if (DSP::almostEqual(dataset.wgtMin, dataset.wgtMax)) {
     dataset.wgtMin = dataset.pltMin;
     dataset.wgtMax = dataset.pltMax;
   }
 
+  // FFT display ranges fall back to the plot value range when left unset (min == max)
   if (DSP::almostEqual(dataset.fftMin, dataset.fftMax)) {
     dataset.fftMin = dataset.pltMin;
     dataset.fftMax = dataset.pltMax;
