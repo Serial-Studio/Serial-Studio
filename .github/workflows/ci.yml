@@ -1263,13 +1263,12 @@ jobs:
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
 
-    - name: '🚦 Hotpath throughput (Windows, informational)'
-      continue-on-error: true
+    - name: '🚦 Hotpath throughput gate (256 kHz)'
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000','--benchmark-output','benchmark.txt' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow
-        if (-not $p.WaitForExit(300000)) { $p.Kill() }
+        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
         if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
 
     - name: '🔑 Deactivate Serial Studio license'
