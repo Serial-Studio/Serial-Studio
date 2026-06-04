@@ -55,11 +55,11 @@ Widgets.SmartDialog {
   // Number formatting helpers for the results table
   //
   function fmtInt(value) {
-    return Math.round(value).toLocaleString(Qt.locale())
+    return root.runner.formatCount(value)
   }
 
   function fmtFps(value) {
-    return qsTr("%1 frames/s").arg(Math.round(value).toLocaleString(Qt.locale()))
+    return qsTr("%1 frames/s").arg(root.runner.formatCount(value))
   }
 
   function fmtSeconds(value) {
