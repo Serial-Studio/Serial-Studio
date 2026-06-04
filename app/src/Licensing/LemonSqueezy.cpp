@@ -51,9 +51,7 @@ static Licensing::FeatureTier tierFromVariant(const QString& variant)
   if (lower.startsWith("pro") || lower.startsWith("team"))
     return Licensing::FeatureTier::Pro;
 
-  if (lower.startsWith("hobbyist"))
-    return Licensing::FeatureTier::Hobbyist;
-
+  // Legacy "Hobbyist" variants fall through to Pro on purpose: any valid token = full feature set
   if (!lower.isEmpty())
     return Licensing::FeatureTier::Pro;
 

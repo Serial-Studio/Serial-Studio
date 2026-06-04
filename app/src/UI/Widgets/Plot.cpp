@@ -91,7 +91,7 @@ void Widgets::Plot::resolveXAxis(const DataModel::Dataset& yDataset)
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
   const auto xAxisId =
-    (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist)
+    (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial)
       ? yDataset.xAxisId
       : -1;
 #else
@@ -645,7 +645,7 @@ void Widgets::Plot::calculateAutoScaleRange()
 #ifdef BUILD_COMMERCIAL
   if (const auto& tk2 = Licensing::CommercialToken::current();
       !m_timeAxis && tk2.isValid() && SS_LICENSE_GUARD()
-      && tk2.featureTier() >= Licensing::FeatureTier::Hobbyist) {
+      && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
 #else
   if (false) {
 #endif

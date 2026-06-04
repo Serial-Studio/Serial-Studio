@@ -116,7 +116,7 @@ void Console::ExportWorker::createFile(int deviceId)
   // Require a valid license for export
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
-      || token.featureTier() < Licensing::FeatureTier::Hobbyist)
+      || token.featureTier() < Licensing::FeatureTier::Trial)
     return;
 
   // Close any existing file for this device
@@ -313,7 +313,7 @@ void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
-  if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist) {
+  if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial) {
     if (!enabled && isOpen())
       closeFile();
 

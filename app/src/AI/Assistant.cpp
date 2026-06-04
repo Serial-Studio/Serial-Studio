@@ -105,12 +105,12 @@ bool AI::Assistant::hasAnyKey() const
 }
 
 /**
- * @brief Returns true when the running build holds a valid Pro license token.
+ * @brief Returns true when the AI Assistant is available: build-integrity gated only, with no
+ *        license tier required, since the user supplies the API key for their chosen provider.
  */
 bool AI::Assistant::isProAvailable() const
 {
-  const auto& tk = Licensing::CommercialToken::current();
-  return tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial;
+  return SS_LICENSE_GUARD();
 }
 
 /**
@@ -377,12 +377,12 @@ void AI::Assistant::clearKey(int providerIdx)
 }
 
 /**
- * @brief Forwards a user message to the active conversation after Pro gate.
+ * @brief Forwards a user message to the active conversation after the availability gate.
  */
 void AI::Assistant::sendMessage(const QString& userText)
 {
   if (!isProAvailable()) {
-    Q_EMIT errorOccurred(tr("AI Assistant requires a Pro license"));
+    Q_EMIT errorOccurred(tr("AI Assistant is not available in this build"));
     return;
   }
 

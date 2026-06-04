@@ -1464,8 +1464,7 @@ std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
 #ifdef BUILD_COMMERCIAL
     case SerialStudio::BusType::Audio: {
       const auto& tk = Licensing::CommercialToken::current();
-      if (!tk.isValid() || !SS_LICENSE_GUARD()
-          || tk.featureTier() < Licensing::FeatureTier::Hobbyist)
+      if (!tk.isValid() || !SS_LICENSE_GUARD() || tk.featureTier() < Licensing::FeatureTier::Trial)
         return nullptr;
 
       return std::make_unique<IO::Drivers::Audio>();
@@ -1507,8 +1506,7 @@ std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
     }
     case SerialStudio::BusType::Mqtt: {
       const auto& tk = Licensing::CommercialToken::current();
-      if (!tk.isValid() || !SS_LICENSE_GUARD()
-          || tk.featureTier() < Licensing::FeatureTier::Hobbyist)
+      if (!tk.isValid() || !SS_LICENSE_GUARD() || tk.featureTier() < Licensing::FeatureTier::Trial)
         return nullptr;
 
       return std::make_unique<IO::Drivers::MQTT>();

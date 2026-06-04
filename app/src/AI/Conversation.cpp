@@ -152,7 +152,7 @@ QString AI::Conversation::lastError() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sends a new user message after gating on Pro and idle state.
+ * @brief Sends a new user message after gating on build availability and idle state.
  */
 void AI::Conversation::start(const QString& userText)
 {
@@ -160,10 +160,9 @@ void AI::Conversation::start(const QString& userText)
   if (trimmed.isEmpty())
     return;
 
-  // Pro/Trial tier guard
-  const auto& tk = Licensing::CommercialToken::current();
-  if (!tk.isValid() || !SS_LICENSE_GUARD() || tk.featureTier() < Licensing::FeatureTier::Trial) {
-    setLastError(tr("AI Assistant requires a Pro license"));
+  // Build-integrity guard; the assistant is not license-tier gated (user brings the API key)
+  if (!SS_LICENSE_GUARD()) {
+    setLastError(tr("AI Assistant is not available in this build"));
     Q_EMIT errorOccurred(m_lastError);
     return;
   }

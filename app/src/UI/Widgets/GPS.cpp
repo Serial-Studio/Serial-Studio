@@ -400,7 +400,7 @@ void Widgets::GPS::setMapType(const int type)
 #ifdef BUILD_COMMERCIAL
     const auto& tk = Licensing::CommercialToken::current();
     const bool proMaps =
-      tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist;
+      tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial;
 #else
     const bool proMaps = false;
 #endif
