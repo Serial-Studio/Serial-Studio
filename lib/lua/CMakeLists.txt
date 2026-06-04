@@ -86,14 +86,6 @@ if(NOT MSVC)
   )
 endif()
 
-# Xcode 26's ld (ld-1267) made -Wl,-keep_dwarf_unwind a no-op, and -dead_strip + -flto can drop a
-# function's DWARF (__eh_frame) unwind when it falls back from compact unwind (llvm-project#135888).
-# Lua's VM throws cross-TU on any error, so force DWARF unwind to always be emitted on this target;
-# combined with INTERPROCEDURAL_OPTIMIZATION FALSE below, the LTO-link path cannot strip it.
-if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|AppleClang)$")
-  target_compile_options(lua54 PRIVATE -femit-dwarf-unwind=no-compact-unwind)
-endif()
-
 # Disable LTO for Lua specifically — interprocedural inlining across the
 # C++-exception throw path has a track record of dropping unwind info
 # when paired with macOS ld's -dead_strip.
