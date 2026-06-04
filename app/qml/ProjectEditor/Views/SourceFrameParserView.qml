@@ -206,6 +206,7 @@ Widgets.Pane {
       anchors.bottomMargin: -9
 
       Rectangle {
+        visible: !root.nativeMode
         Layout.fillWidth: true
         Layout.maximumHeight: Layout.minimumHeight
         color: Cpp_ThemeManager.colors["groupbox_background"]
@@ -228,22 +229,15 @@ Widgets.Pane {
             text: qsTr("Reset")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
+            onClicked: frameParser.reload(true)
             icon.source: "qrc:/icons/code-editor/reload.svg"
-            ToolTip.text: root.nativeMode ? qsTr("Reset template parameters to their defaults")
-                                          : qsTr("Reset to the default parsing script")
-            onClicked: {
-              if (root.nativeMode)
-                nativePane.editor.resetToDefaults()
-              else
-                frameParser.reload(true)
-            }
+            ToolTip.text: qsTr("Reset to the default parsing script")
           }
 
           Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Open")
             toolbarButton: false
-            visible: !root.nativeMode
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/open.svg"
@@ -254,7 +248,6 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Undo")
             toolbarButton: false
-            visible: !root.nativeMode
             onClicked: frameParser.undo()
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.undoAvailable
@@ -266,7 +259,6 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Redo")
             toolbarButton: false
-            visible: !root.nativeMode
             onClicked: frameParser.redo()
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.redoAvailable
@@ -278,7 +270,6 @@ Widgets.Pane {
             implicitWidth: 1
             Layout.fillHeight: true
             Layout.maximumHeight: 48
-            visible: !root.nativeMode
             Layout.alignment: Qt.AlignVCenter
             color: Cpp_ThemeManager.colors["groupbox_border"]
           }
@@ -287,7 +278,6 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Cut")
             toolbarButton: false
-            visible: !root.nativeMode
             onClicked: frameParser.cut()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/cut.svg"
@@ -298,7 +288,6 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Copy")
             toolbarButton: false
-            visible: !root.nativeMode
             onClicked: frameParser.copy()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/copy.svg"
@@ -309,7 +298,6 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Paste")
             toolbarButton: false
-            visible: !root.nativeMode
             onClicked: frameParser.paste()
             Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Paste code from clipboard")
@@ -343,6 +331,7 @@ Widgets.Pane {
       Rectangle {
         implicitHeight: 1
         Layout.fillWidth: true
+        visible: !root.nativeMode
         color: Cpp_ThemeManager.colors["groupbox_border"]
       }
 
@@ -366,7 +355,8 @@ Widgets.Pane {
             width >= languageLabel.implicitWidth + languageSelector.implicitWidth
                      + templateLabel.implicitWidth
                      + Math.max(templateCombo.implicitWidth, 220)
-                     + testButton.implicitWidth + 5 * spacing
+                     + templateHelpButton.implicitWidth
+                     + testButton.implicitWidth + 6 * spacing
 
           spacing: 4
 
@@ -437,6 +427,17 @@ Widgets.Pane {
                 return nativePane.editor.templateIndex
               })
             }
+          }
+
+          Widgets.IconButton {
+            id: templateHelpButton
+
+            text: qsTr("Help")
+            horizontalPadding: 12
+            visible: root.nativeMode
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/icons/code-editor/help.svg"
+            onClicked: app.showHelpCenter("javascript-api")
           }
 
           Widgets.IconButton {
