@@ -176,18 +176,22 @@ private:
   bool m_compilePending;
 
   /**
-   * @brief Recyclable pool slot holding one TimestampedFrame and its in-use flag.
+   * @brief Recyclable pool slot holding one TimestampedFrame, its in-use flag, and the template
+   *        generation that last full-assigned it.
    */
   struct PooledFrameSlot {
     PooledFrameSlot();
     DataModel::TimestampedFrame frame;
+    quint64 generation;
     std::atomic<bool> inUse;
   };
 
   static constexpr int kFramePoolSize = 8192;
   std::vector<std::shared_ptr<PooledFrameSlot>> m_framePool;
   std::atomic<size_t> m_framePoolHint;
+  quint64 m_framePoolGeneration;
 
+  void invalidateFramePool() noexcept;
   [[nodiscard]] DataModel::TimestampedFramePtr acquireFrame(const DataModel::Frame& src);
   [[nodiscard]] DataModel::TimestampedFramePtr acquireFrame(
     const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts);

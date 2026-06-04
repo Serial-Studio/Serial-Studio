@@ -101,6 +101,7 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_compileGuard(0)
   , m_compilePending(false)
   , m_framePoolHint(0)
+  , m_framePoolGeneration(1)
 {
   // Pre-allocate frame pool: reused across sub-frames so steady-state publishing won't malloc.
   m_framePool.reserve(kFramePoolSize);
@@ -133,9 +134,18 @@ DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Default-constructs a pool slot with inUse = false.
+ * @brief Default-constructs a pool slot with inUse = false and no template generation.
  */
-DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : inUse(false) {}
+DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : generation(0), inUse(false) {}
+
+/**
+ * @brief Bumps the pool generation after a template rebuild so stale slots full-assign on reuse
+ *        instead of leaking old identity fields through the structure-match fast path.
+ */
+void DataModel::FrameBuilder::invalidateFramePool() noexcept
+{
+  ++m_framePoolGeneration;
+}
 
 /**
  * @brief Claims a pool slot, copies @p src + @p ts into it, and returns a shared_ptr whose
@@ -157,12 +167,14 @@ DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
           expected, true, std::memory_order_acquire, std::memory_order_relaxed)) {
       m_framePoolHint.store(idx + 1, std::memory_order_relaxed);
 
-      // Structure-matched slot refreshes only value fields
-      if (compare_frames(slotRaw->frame.data, src)) [[likely]] {
+      // Structure-matched slot from the current template generation refreshes only value fields
+      if (slotRaw->generation == m_framePoolGeneration && compare_frames(slotRaw->frame.data, src))
+        [[likely]] {
         Q_ASSERT(slotRaw->frame.data.title == src.title);
         copy_frame_values(slotRaw->frame.data, src);
       } else {
         slotRaw->frame.data = src;
+        slotRaw->generation = m_framePoolGeneration;
       }
 
       slotRaw->frame.timestamp = ts;
@@ -334,6 +346,7 @@ void DataModel::FrameBuilder::syncFromProjectModel()
   m_frame.sources = pm.sources();
 
   finalize_frame(m_frame);
+  invalidateFramePool();
   compileTransforms();
   initializeTableStore();
   parseBudgetReset();
@@ -945,6 +958,9 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 {
   Q_ASSERT(!channels.isEmpty());
   Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
+
+  // Covers the audio variant too: this is its only call site
+  invalidateFramePool();
 
 #ifdef BUILD_COMMERCIAL
   const auto busType = IO::ConnectionManager::instance().busType();
