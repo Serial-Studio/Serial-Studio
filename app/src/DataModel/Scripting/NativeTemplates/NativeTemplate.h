@@ -24,6 +24,7 @@
 #include <memory>
 #include <QByteArray>
 #include <QByteArrayView>
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
@@ -33,7 +34,7 @@
 namespace DataModel {
 
 /**
- * @brief Value type of a single native parser template parameter.
+ * @brief Parameter value type; Json params carry machine-managed structured data.
  */
 enum class NativeParamType : quint8 {
   String,
@@ -42,6 +43,7 @@ enum class NativeParamType : quint8 {
   Float,
   Bool,
   Enum,
+  Json,
 };
 
 /**
@@ -140,6 +142,7 @@ public:
 
 [[nodiscard]] QList<const INativeTemplate*> textNativeTemplates();
 [[nodiscard]] QList<const INativeTemplate*> binaryNativeTemplates();
+[[nodiscard]] QList<const INativeTemplate*> mapNativeTemplates();
 [[nodiscard]] QList<const INativeTemplate*> multiFrameNativeTemplates();
 
 [[nodiscard]] QJsonObject nativeTemplateDefaults(const INativeTemplate& tmpl);
@@ -152,6 +155,7 @@ public:
 [[nodiscard]] QStringList nativeKeyList(const QJsonObject& params,
                                         const QString& key,
                                         const QString& fallbackCsv);
+[[nodiscard]] QJsonArray nativeParamArray(const QJsonObject& params, const QString& key);
 [[nodiscard]] QString nativeParamString(const QJsonObject& params,
                                         const QString& key,
                                         const QString& fallback);

@@ -52,6 +52,8 @@ static QString paramTypeName(DataModel::NativeParamType type)
       return QStringLiteral("bool");
     case DataModel::NativeParamType::Enum:
       return QStringLiteral("enum");
+    case DataModel::NativeParamType::Json:
+      return QStringLiteral("json");
     case DataModel::NativeParamType::String:
     default:
       return QStringLiteral("string");

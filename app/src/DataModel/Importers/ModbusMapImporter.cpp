@@ -707,8 +707,10 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
   source[Keys::FrameDetection]        = static_cast<int>(SerialStudio::NoDelimiters);
   source[Keys::Decoder]               = static_cast<int>(SerialStudio::Binary);
   source[Keys::HexadecimalDelimiters] = false;
-  source[Keys::FrameParserCode]       = buildFrameParser(blocks);
-  source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Lua);
+  source[Keys::FrameParserCode]       = QString();
+  source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Native);
+  source[Keys::FrameParserTemplate]   = QStringLiteral("modbus_register_map");
+  source[Keys::FrameParserParams]     = buildNativeParserParams(blocks);
 
   // Embed register groups in connection settings
   QJsonArray reg_groups;
@@ -782,90 +784,33 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
 }
 
 /**
- * @brief Generates the Lua frame parser with typed extraction and scaling.
+ * @brief Builds the native modbus_register_map template params from the register blocks.
  */
-QString DataModel::ModbusMapImporter::buildFrameParser(const QVector<RegisterBlock>& blocks) const
+QJsonObject DataModel::ModbusMapImporter::buildNativeParserParams(
+  const QVector<RegisterBlock>& blocks)
 {
-  int total_datasets = 0;
-  for (const auto& block : blocks)
-    total_datasets += block.entries.count();
-
-  const int group_count = blocks.count();
-
-  QString code;
-
-  // Emit header comment
-  code += QStringLiteral("--\n");
-  code += QStringLiteral("-- Modbus Register Map Parser\n");
-  code += QStringLiteral("-- Auto-generated from: %1\n").arg(QFileInfo(m_filePath).fileName());
-  code += QStringLiteral("--\n");
-  code += QStringLiteral("-- Groups: %1, Datasets: %2\n")
-            .arg(QString::number(group_count), QString::number(total_datasets));
-  code += QStringLiteral("-- Frame: {slaveAddr, funcCode, byteCount, ...data}\n");
-  code += QStringLiteral("--\n\n");
-
-  // Emit global state and helpers
-  code += QStringLiteral("local values = {}\n");
-  code += QStringLiteral("for i = 1, %1 do values[i] = 0 end\n").arg(total_datasets);
-  code += QStringLiteral("local currentGroup = 0\n\n");
-
-  bool needs_float = false;
-  for (const auto& block : blocks)
-    for (const auto& entry : block.entries)
-      if (entry.dataType == QLatin1String("float32"))
-        needs_float = true;
-
-  if (needs_float) {
-    code += QStringLiteral("local function toFloat32(b0, b1, b2, b3)\n");
-    code += QStringLiteral("  local sign = (b0 & 0x80) ~= 0 and -1 or 1\n");
-    code += QStringLiteral("  local exp  = ((b0 & 0x7F) << 1) | (b1 >> 7)\n");
-    code += QStringLiteral("  local mant = ((b1 & 0x7F) << 16) | (b2 << 8) | b3\n");
-    code += QStringLiteral("  if exp == 0 then return sign * mant * 2.0^(-149) end\n");
-    code +=
-      QStringLiteral("  if exp == 0xFF then return mant ~= 0 and (0/0) or sign * math.huge end\n");
-    code += QStringLiteral("  return sign * (mant | 0x800000) * 2.0^(exp - 150)\n");
-    code += QStringLiteral("end\n\n");
-  }
-
-  // Emit main parse function with group dispatch
-  code += QStringLiteral("function parse(frame)\n");
-  code += QStringLiteral("  if #frame < 3 then return values end\n\n");
-  code += QStringLiteral("  -- Extract data payload (skip slave addr, func code, byte count)\n");
-  code += QStringLiteral("  local data = {}\n");
-  code += QStringLiteral("  for i = 4, #frame do data[#data + 1] = frame[i] end\n\n");
-
-  int ds_offset = 0;
-  for (int g = 0; g < group_count; ++g) {
-    const auto& block = blocks[g];
-
-    code += QStringLiteral("  -- %1 @ %2\n")
-              .arg(registerTypeName(block.registerType))
-              .arg(block.startAddress);
-    if (g == 0)
-      code += QStringLiteral("  if currentGroup == %1 then\n").arg(g);
-    else
-      code += QStringLiteral("  elseif currentGroup == %1 then\n").arg(g);
-
-    for (int e = 0; e < block.entries.count(); ++e) {
-      if (e > 0)
-        code += QStringLiteral("\n");
-
-      code += emitParserEntry(block.entries[e], block, ds_offset + e + 1);
+  QJsonArray blocks_json;
+  for (const auto& block : blocks) {
+    QJsonArray entries;
+    for (const auto& entry : block.entries) {
+      QJsonObject entry_json;
+      entry_json.insert(QStringLiteral("address"), entry.address);
+      entry_json.insert(QStringLiteral("dataType"), entry.dataType);
+      entry_json.insert(QStringLiteral("scale"), entry.scale);
+      entry_json.insert(QStringLiteral("offset"), entry.offset);
+      entries.append(entry_json);
     }
 
-    ds_offset += block.entries.count();
+    QJsonObject block_json;
+    block_json.insert(QStringLiteral("type"), block.registerType);
+    block_json.insert(QStringLiteral("start"), block.startAddress);
+    block_json.insert(QStringLiteral("entries"), entries);
+    blocks_json.append(block_json);
   }
 
-  if (group_count > 0)
-    code += QStringLiteral("  end\n\n");
-
-  code += QStringLiteral("  currentGroup = (currentGroup + 1) %1 %2\n")
-            .arg(QLatin1Char('%'))
-            .arg(group_count);
-  code += QStringLiteral("  return values\n");
-  code += QStringLiteral("end\n");
-
-  return code;
+  QJsonObject params;
+  params.insert(QStringLiteral("blocks"), blocks_json);
+  return params;
 }
 
 /**
@@ -1004,82 +949,4 @@ QString DataModel::ModbusMapImporter::selectDatasetWidget(const RegisterEntry& e
     return QStringLiteral("gauge");
 
   return QString();
-}
-
-/**
- * @brief Emits the Lua extraction snippet for a single register entry.
- */
-QString DataModel::ModbusMapImporter::emitParserEntry(const RegisterEntry& entry,
-                                                      const RegisterBlock& block,
-                                                      int datasetIndex)
-{
-  const bool is_bit  = (block.registerType >= 2);
-  const int reg_off  = entry.address - block.startAddress;
-  const int idx      = datasetIndex;
-  const int byte_off = reg_off * 2 + 1;
-  const bool scaled  = (entry.scale != 1.0 || entry.offset != 0.0);
-
-  QString out;
-  out += QStringLiteral("    -- %1\n").arg(entry.name);
-
-  if (is_bit) {
-    const int byte_idx  = reg_off / 8 + 1;
-    const int bit_idx   = reg_off % 8;
-    out                += QStringLiteral("    values[%1] = (data[%2] >> %3) & 1\n")
-             .arg(QString::number(idx), QString::number(byte_idx), QString::number(bit_idx));
-    return out;
-  }
-
-  if (entry.dataType == QLatin1String("float32")) {
-    if (scaled)
-      out += QStringLiteral("    values[%1] = toFloat32(data[%2], data[%3], data[%4], "
-                            "data[%5]) * %6 + %7\n")
-               .arg(idx)
-               .arg(byte_off)
-               .arg(byte_off + 1)
-               .arg(byte_off + 2)
-               .arg(byte_off + 3)
-               .arg(entry.scale)
-               .arg(entry.offset);
-    else
-      out += QStringLiteral("    values[%1] = toFloat32(data[%2], data[%3], data[%4], data[%5])\n")
-               .arg(idx)
-               .arg(byte_off)
-               .arg(byte_off + 1)
-               .arg(byte_off + 2)
-               .arg(byte_off + 3);
-
-    return out;
-  }
-
-  if (entry.dataType == QLatin1String("int16")) {
-    out += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
-             .arg(idx)
-             .arg(byte_off)
-             .arg(byte_off + 1);
-    out += QStringLiteral("    if values[%1] > 32767 then values[%1] = values[%1] - 65536 end\n")
-             .arg(idx);
-    if (scaled)
-      out += QStringLiteral("    values[%1] = values[%1] * %2 + %3\n")
-               .arg(idx)
-               .arg(entry.scale)
-               .arg(entry.offset);
-
-    return out;
-  }
-
-  if (scaled)
-    out += QStringLiteral("    values[%1] = ((data[%2] << 8) | data[%3]) * %4 + %5\n")
-             .arg(idx)
-             .arg(byte_off)
-             .arg(byte_off + 1)
-             .arg(entry.scale)
-             .arg(entry.offset);
-  else
-    out += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
-             .arg(idx)
-             .arg(byte_off)
-             .arg(byte_off + 1);
-
-  return out;
 }

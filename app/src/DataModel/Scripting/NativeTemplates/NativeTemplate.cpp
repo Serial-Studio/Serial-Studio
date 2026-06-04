@@ -146,6 +146,20 @@ QStringList DataModel::nativeKeyList(const QJsonObject& params,
 }
 
 /**
+ * @brief Reads a structured array param, returning an empty array when absent or mistyped.
+ */
+QJsonArray DataModel::nativeParamArray(const QJsonObject& params, const QString& key)
+{
+  Q_ASSERT(!key.isEmpty());
+
+  const auto value = params.value(key);
+  if (!value.isArray())
+    return QJsonArray();
+
+  return value.toArray();
+}
+
+/**
  * @brief Reads a string param, falling back when absent or not a string.
  */
 QString DataModel::nativeParamString(const QJsonObject& params,
