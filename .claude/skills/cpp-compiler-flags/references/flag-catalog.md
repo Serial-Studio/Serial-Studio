@@ -131,7 +131,7 @@ a second pass), and sampling: `-fprofile-sample-use=` / `-fauto-profile=`. MSVC 
 | Stack-clash | `-fstack-clash-protection` | -- |
 | FORTIFY runtime checks | `-D_FORTIFY_SOURCE=2` or `=3` (needs `-O1`+) | (CRT-provided) |
 | Control-flow integrity | `-fcf-protection=full` (x86 CET), `-fsanitize=cfi` (needs LTO) | `/guard:cf` + link `/GUARD:CF` |
-| ARM pointer auth / BTI | `-mbranch-protection=standard` | -- |
+| ARM pointer auth / BTI | `-mbranch-protection=standard` (Linux aarch64 only -- on macOS arm64 it breaks C++ unwinding: compact unwind can't encode RA signing, the system unwinder fails on the signed LR, and any throw aborts; Apple's pointer-auth ABI is arm64e) | -- |
 | ASLR | `-fPIC` (+ PIE link) | link `/DYNAMICBASE` (+ `/HIGHENTROPYVA` for 64-bit) |
 | DEP / non-exec stack | `-Wl,-z,noexecstack` | link `/NXCOMPAT` |
 | Full RELRO | `-Wl,-z,relro -Wl,-z,now` | -- |

@@ -119,7 +119,7 @@ link:    /GUARD:CF /DYNAMICBASE /CETCOMPAT
 -fstack-protector-strong -Wformat -Wformat-security -Werror=format-security
 -fstack-clash-protection                      # GNU/Clang, non-Apple
 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2         # needs -O1+; warns + skips on unoptimized Debug
--mbranch-protection=standard                  # ARM-only (aarch64/arm64), not when x86 also present
+-mbranch-protection=standard                  # ARM-only (aarch64/arm64), not when x86 also present, NOT Apple
 -fcf-protection=full                          # x86-64 Linux (Intel CET)
 -fsanitize=cfi -fvisibility=hidden (+link -fsanitize=cfi)   # aarch64 Linux, Clang, requires LTO
 -fPIC -fno-plt + link -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code  # Linux
@@ -179,6 +179,10 @@ Included **before** Optimization.cmake so it isn't swept into LTO/PGO. Call
 - **Unwind tables everywhere** -> Lua (compiled as C++) throws across the VM stack on any
   runtime error; without unwind metadata, `--gc-sections`/`-dead_strip` + LTO can strip a
   personality routine and a routine Lua type error becomes `std::terminate`.
+- **No pac-ret on Apple ARM** -> `-mbranch-protection` signs LR with PACIASP; macOS compact
+  unwind can't encode RA signing (arm64e-only), so every function falls back to DWARF and
+  the system unwinder fails to authenticate the signed return addresses during a throw --
+  the same Lua error then aborts even though all unwind metadata is present and valid.
 - **x86-64-v2 baseline** -> runs on 2012+ CPUs; `v3`/`v4`/`native` would SIGILL on older
   hardware that the shipped binary must support.
 - **Hardening auto-on for optimized configs** -> can't accidentally ship an unhardened release.
