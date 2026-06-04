@@ -30,6 +30,7 @@
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "Misc/Utilities.h"
+#include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // Multi-frame parsing helper functions
@@ -278,6 +279,14 @@ void DataModel::JsScriptEngine::resetTimeoutCounter() noexcept
 bool DataModel::JsScriptEngine::isLoaded() const noexcept
 {
   return m_parseFunction.isCallable();
+}
+
+/**
+ * @brief Returns the ScriptLanguage implemented by this engine.
+ */
+int DataModel::JsScriptEngine::language() const noexcept
+{
+  return SerialStudio::JavaScript;
 }
 
 /**

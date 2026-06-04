@@ -692,7 +692,6 @@ QVector<int> UI::WindowManager::resolveSavedOrder(const QJsonObject& layout,
     seen.insert(id);
   }
 
-  // Append live windows not mentioned in the save (newly added widgets)
   for (int id : std::as_const(m_windowOrder)) {
     if (!seen.contains(id)) {
       newOrder.append(id);

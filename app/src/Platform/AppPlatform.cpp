@@ -25,9 +25,25 @@
 #    define WIN32_LEAN_AND_MEAN
 #  endif
 #  include <windows.h>
+#  include <avrt.h>
 #  include <shlobj.h>
 #  include <io.h>
 #  include <fcntl.h>
+#endif
+
+#ifdef __linux__
+#  include <cstdint>
+#  include <sys/syscall.h>
+#  include <unistd.h>
+#endif
+
+#ifdef __APPLE__
+#  include <pthread.h>
+#  include <pthread/qos.h>
+#endif
+
+#if defined(__linux__) || defined(__APPLE__)
+#  include <sys/mman.h>
 #endif
 // clang-format on
 
@@ -237,11 +253,29 @@ static void setWindowsAppUserModelId(const QString& shortcutPath)
 }
 
 /**
+ * @brief Enables SeIncreaseWorkingSetPrivilege (present in every user token) so the minimum
+ *        working set can grow enough for VirtualLock to pin the acquisition buffers.
+ */
+static void enableWorkingSetPrivilege()
+{
+  HANDLE token = nullptr;
+  if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &token))
+    return;
+
+  TOKEN_PRIVILEGES tp         = {};
+  tp.PrivilegeCount           = 1;
+  tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+  if (LookupPrivilegeValueW(nullptr, SE_INC_WORKING_SET_NAME, &tp.Privileges[0].Luid))
+    (void)AdjustTokenPrivileges(token, FALSE, &tp, 0, nullptr, nullptr);
+
+  CloseHandle(token);
+}
+
+/**
  * @brief Opts the process out of EcoQoS throttling and prevents idle sleep.
  */
 static void enableWindowsPerformanceMode()
 {
-  // HIGH priority needs no privilege; REALTIME is avoided (admin-only, can starve input/IO).
   SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
 #  if defined(PROCESS_POWER_THROTTLING_CURRENT_VERSION)
@@ -253,6 +287,9 @@ static void enableWindowsPerformanceMode()
 #  endif
 
   SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
+  enableWorkingSetPrivilege();
+
+  // MMCSS is deferred to registerIngestThreadWithMmcss(): its warning filter must install first
 }
 
 // code-verify off  (cold argv setup before QApplication exists; C malloc is intentional)
@@ -288,6 +325,66 @@ static char** adjustArgumentsForFreeType(int& argc, char** argv)
 }
 
 // code-verify on
+#endif
+
+//---------------------------------------------------------------------------------------------------
+// Linux-only helpers
+//---------------------------------------------------------------------------------------------------
+
+#ifdef Q_OS_LINUX
+
+/**
+ * @brief Linux analog of the Windows EcoQoS opt-out: raises the scheduler utilization clamp so
+ *        EAS places the main thread on a big core. Unprivileged (>= 5.3); failures ignored.
+ */
+static void enableLinuxPerformanceMode()
+{
+#  ifdef SYS_sched_setattr
+  // Mirrors the kernel's struct sched_attr through the raw syscall (no glibc wrapper exists)
+  struct SchedAttr {
+    uint32_t size;
+    uint32_t sched_policy;
+    uint64_t sched_flags;
+    int32_t sched_nice;
+    uint32_t sched_priority;
+    uint64_t sched_runtime;
+    uint64_t sched_deadline;
+    uint64_t sched_period;
+    uint32_t sched_util_min;
+    uint32_t sched_util_max;
+  };
+
+  constexpr uint64_t kKeepPolicy   = 0x08;  // SCHED_FLAG_KEEP_POLICY
+  constexpr uint64_t kKeepParams   = 0x10;  // SCHED_FLAG_KEEP_PARAMS
+  constexpr uint64_t kUtilClampMin = 0x20;  // SCHED_FLAG_UTIL_CLAMP_MIN
+
+  SchedAttr attr      = {};
+  attr.size           = sizeof(attr);
+  attr.sched_flags    = kKeepPolicy | kKeepParams | kUtilClampMin;
+  attr.sched_util_min = 1024;  // SCHED_CAPACITY_SCALE: full-capacity placement hint
+
+  // Child threads inherit the clamp, so setting it on main covers the workers too
+  (void)syscall(SYS_sched_setattr, 0, &attr, 0);
+#  endif
+}
+
+#endif
+
+//---------------------------------------------------------------------------------------------------
+// macOS-only helpers
+//---------------------------------------------------------------------------------------------------
+
+#ifdef Q_OS_MACOS
+
+/**
+ * @brief macOS analog of the Windows EcoQoS opt-out: pins the main thread's QoS class to
+ *        user-interactive so the scheduler prefers performance cores on Apple silicon.
+ */
+static void enableMacPerformanceMode()
+{
+  (void)pthread_set_qos_class_self_np(QOS_CLASS_USER_INTERACTIVE, 0);
+}
+
 #endif
 
 namespace AppPlatform {
@@ -343,6 +440,11 @@ void prepareEnvironment(int& argc, char**& argv, const QString& shortcutPath)
   Q_UNUSED(argc);
   Q_UNUSED(argv);
   Q_UNUSED(shortcutPath);
+#  if defined(Q_OS_LINUX)
+  enableLinuxPerformanceMode();
+#  elif defined(Q_OS_MACOS)
+  enableMacPerformanceMode();
+#  endif
 #endif
 
   auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
@@ -421,6 +523,102 @@ void releaseAdjustedArgv(int argc, char** argv)
 }
 
 // code-verify on
+
+/**
+ * @brief Pins @p len bytes at @p ptr into physical memory (best effort): page-fault stalls on
+ *        the frame-scan buffers become latency spikes at rate. Returns true when pinned.
+ */
+bool lockMemoryResident(const void* ptr, size_t len)
+{
+  Q_ASSERT(ptr != nullptr);
+  Q_ASSERT(len > 0);
+
+  if (!ptr || len == 0) [[unlikely]]
+    return false;
+
+#if defined(Q_OS_WIN)
+  void* base = const_cast<void*>(ptr);
+  if (VirtualLock(base, len))
+    return true;
+
+  // Default minimum working set is too small for MiB-scale locks; grow once and retry
+  SIZE_T minWs = 0;
+  SIZE_T maxWs = 0;
+  if (!GetProcessWorkingSetSize(GetCurrentProcess(), &minWs, &maxWs))
+    return false;
+
+  const SIZE_T slack  = 2u * 1024u * 1024u;
+  const SIZE_T newMin = minWs + len + slack;
+  const SIZE_T newMax = (maxWs > newMin + slack) ? maxWs : (newMin + slack);
+  if (!SetProcessWorkingSetSize(GetCurrentProcess(), newMin, newMax))
+    return false;
+
+  return VirtualLock(base, len) != 0;
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+  // Unprivileged RLIMIT_MEMLOCK (8 MiB on modern systemd) covers the 1 MiB scan buffers
+  return mlock(ptr, len) == 0;
+#else
+  Q_UNUSED(ptr);
+  Q_UNUSED(len);
+  return false;
+#endif
+}
+
+/**
+ * @brief Registers the calling (ingest/main) thread with MMCSS "Pro Audio"; call only after the
+ *        Qt message handler is installed (common-mistakes.md: benign InheritPriority warning).
+ */
+void registerIngestThreadWithMmcss()
+{
+#if defined(Q_OS_WIN)
+  static bool registered = false;
+  if (registered)
+    return;
+
+  registered = true;
+
+  using SetCharacteristicsFn = HANDLE(WINAPI*)(LPCWSTR, LPDWORD);
+  using SetPriorityFn        = BOOL(WINAPI*)(HANDLE, AVRT_PRIORITY);
+
+  const HMODULE avrt = LoadLibraryW(L"avrt.dll");
+  if (!avrt)
+    return;
+
+  const auto setCharacteristics =
+    reinterpret_cast<SetCharacteristicsFn>(GetProcAddress(avrt, "AvSetMmThreadCharacteristicsW"));
+  const auto setPriority =
+    reinterpret_cast<SetPriorityFn>(GetProcAddress(avrt, "AvSetMmThreadPriority"));
+  if (!setCharacteristics)
+    return;
+
+  DWORD taskIndex    = 0;
+  const HANDLE mmcss = setCharacteristics(L"Pro Audio", &taskIndex);
+  if (mmcss && setPriority)
+    (void)setPriority(mmcss, AVRT_PRIORITY_HIGH);
+#endif
+}
+
+/**
+ * @brief Releases a lockMemoryResident() pin so the lock quota is returned before the
+ *        underlying allocation is freed or recycled.
+ */
+void unlockMemoryResident(const void* ptr, size_t len)
+{
+  Q_ASSERT(ptr != nullptr);
+  Q_ASSERT(len > 0);
+
+  if (!ptr || len == 0) [[unlikely]]
+    return;
+
+#if defined(Q_OS_WIN)
+  (void)VirtualUnlock(const_cast<void*>(ptr), len);
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+  (void)munlock(ptr, len);
+#else
+  Q_UNUSED(ptr);
+  Q_UNUSED(len);
+#endif
+}
 
 }  // namespace AppPlatform
 

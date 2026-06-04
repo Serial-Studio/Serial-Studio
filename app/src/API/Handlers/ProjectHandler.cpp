@@ -41,10 +41,12 @@
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/CFrameParser.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/FrameParserPipeline.h"
 #include "DataModel/Scripting/JsScriptEngine.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
+#include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/BackupManager.h"
 #include "SerialStudio.h"
@@ -1027,6 +1029,7 @@ void API::Handlers::ProjectHandler::registerOutputWidgetCommands()
 void API::Handlers::ProjectHandler::registerParserCommands()
 {
   registerParserCodeCommands();
+  registerParserTemplateCommands();
   registerParserConfigCommands();
 }
 
@@ -1041,16 +1044,17 @@ void API::Handlers::ProjectHandler::registerParserCodeCommands()
     {
       {QStringLiteral("code"),
        QStringLiteral("string"),
-       QStringLiteral("Frame parser script code (JS or Lua)")}
+       QStringLiteral("Frame parser script code (JS or Lua), or for the Built-In language the "
+                      "JSON descriptor {\"template\": id, \"params\": {...}}")}
   },
     {{QString(Keys::SourceId),
       QStringLiteral("integer"),
       QStringLiteral("Source index (default 0)")},
      {QStringLiteral("language"),
       QStringLiteral("integer"),
-      QStringLiteral("Optional: 0 = JavaScript, 1 = Lua. When supplied, the source language "
-                     "is flipped before the code is validated and script errors are returned "
-                     "as API errors.")}});
+      QStringLiteral("Optional: 0 = JavaScript, 1 = Lua, 2 = Built-In (parametrized C++ "
+                     "template). When supplied, the source language is flipped before the "
+                     "code is validated and script errors are returned as API errors.")}});
 
   registry.registerCommand(QStringLiteral("project.frameParser.setCode"),
                            QStringLiteral("Set frame parser code (params: code, "
@@ -1067,13 +1071,17 @@ void API::Handlers::ProjectHandler::registerParserCodeCommands()
                                           "setCode. **Call meta.fetchScriptingDocs{kind: "
                                           "'frame_parser_lua' | 'frame_parser_js'} first** "
                                           "for the parse() signature, return-shape rules, "
-                                          "and the tableGet/tableSet API."),
+                                          "and the tableGet/tableSet API. For Built-In (2), "
+                                          "prefer project.frameParser.setTemplate; passing "
+                                          "the JSON descriptor as `code` also works."),
                            setCodeSchema,
                            &parserSetCode);
 
   registry.registerCommand(QStringLiteral("project.frameParser.getCode"),
                            QStringLiteral("Read the current frame parser source for a "
-                                          "given data source. Returns {code, language}. "
+                                          "given data source. Returns {code, language}; "
+                                          "Built-In sources also return {template, params} "
+                                          "and `code` carries the JSON descriptor. "
                                           "Always read BEFORE rewriting -- preserve the "
                                           "user's existing structure where reasonable."),
                            makeSchema(
@@ -1085,18 +1093,22 @@ void API::Handlers::ProjectHandler::registerParserCodeCommands()
                            &parserGetCode);
 
   registry.registerCommand(QStringLiteral("project.frameParser.setLanguage"),
-                           QStringLiteral("Switch a source between JavaScript and Lua frame "
-                                          "parsers. WARNING: this WIPES any existing "
-                                          "frameParser code for that source -- the loaded "
-                                          "default template for the new language replaces "
-                                          "it. If you want to preserve+translate, "
+                           QStringLiteral("Switch a source between JavaScript, Lua and Built-In "
+                                          "frame parsers. WARNING: for JS/Lua this WIPES any "
+                                          "existing frameParser code for that source -- the "
+                                          "loaded default template for the new language "
+                                          "replaces it. If you want to preserve+translate, "
                                           "frameParser.getCode first, switch, then "
-                                          "frameParser.setCode with the translated source."),
+                                          "frameParser.setCode with the translated source. "
+                                          "Switching to Built-In (2) seeds the default "
+                                          "'delimited' template and leaves JS/Lua code "
+                                          "intact for round-trips."),
                            makeSchema(
                              {
                                {QStringLiteral("language"),
                                 QStringLiteral("integer"),
-                                QStringLiteral("Script language: 0 = JavaScript, 1 = Lua")}
+                                QStringLiteral("Script language: 0 = JavaScript, 1 = Lua, "
+                                               "2 = Built-In (parametrized C++ template)")}
   },
                              {{QString(Keys::SourceId),
                                QStringLiteral("integer"),
@@ -1113,6 +1125,72 @@ void API::Handlers::ProjectHandler::registerParserCodeCommands()
         QStringLiteral("integer"),
         QStringLiteral("Source identifier (default 0)")}}),
     &parserGetLanguage);
+}
+
+/**
+ * @brief Register Native frame-parser template discovery / configuration commands.
+ */
+void API::Handlers::ProjectHandler::registerParserTemplateCommands()
+{
+  auto& registry = CommandRegistry::instance();
+
+  registry.registerCommand(
+    QStringLiteral("project.frameParser.listTemplates"),
+    QStringLiteral("List the Built-In (C++) frame parser templates. Returns {templates: "
+                   "[{id, name, description}], count}. Built-In templates parse without "
+                   "user code and are the fastest option; configure one with "
+                   "project.frameParser.setTemplate after inspecting its parameters via "
+                   "project.frameParser.getTemplateSchema."),
+    emptySchema(),
+    &parserListTemplates);
+
+  registry.registerCommand(
+    QStringLiteral("project.frameParser.getTemplateSchema"),
+    QStringLiteral("Get the parameter schema of a Built-In frame parser template. Returns "
+                   "{id, name, description, params: [{key, type, label, description, "
+                   "default, options?, min?, max?}]}. Param types: string, char, int, "
+                   "float, bool, enum (enum values come from options[].value)."),
+    makeSchema({
+      {QStringLiteral("template"),
+       QStringLiteral("string"),
+       QStringLiteral("Template id from project.frameParser.listTemplates")}
+  }),
+    &parserGetTemplateSchema);
+
+  registry.registerCommand(
+    QStringLiteral("project.frameParser.getTemplate"),
+    QStringLiteral("Get the Built-In frame parser configuration for a source. Returns "
+                   "{sourceId, language, template, params}; template is empty when the "
+                   "source never used the Built-In language."),
+    makeSchema(
+      {
+  },
+      {{QString(Keys::SourceId),
+        QStringLiteral("integer"),
+        QStringLiteral("Source index (default 0)")}}),
+    &parserGetTemplate);
+
+  registry.registerCommand(
+    QStringLiteral("project.frameParser.setTemplate"),
+    QStringLiteral("Select a Built-In frame parser template for a source and switch the "
+                   "source to the Built-In language. Params are validated against the "
+                   "template schema; omitted params use the schema defaults. Use "
+                   "project.frameParser.dryRun (language 2, descriptor as code) to "
+                   "preview the output before or after applying."),
+    makeSchema(
+      {
+        {QStringLiteral("template"),
+         QStringLiteral("string"),
+         QStringLiteral("Template id from project.frameParser.listTemplates")}
+  },
+      {{QString(Keys::SourceId),
+        QStringLiteral("integer"),
+        QStringLiteral("Source index (default 0)")},
+       {QStringLiteral("params"),
+        QStringLiteral("object"),
+        QStringLiteral("Template parameters (see getTemplateSchema); omitted keys use "
+                       "schema defaults")}}),
+    &parserSetTemplate);
 }
 
 /**
@@ -2369,11 +2447,15 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
 
     updated.transformLanguage = lang;
   } else if (!code.isEmpty() && updated.transformLanguage < 0) {
-    // No explicit language with non-empty code: resolve immediately from owning source
+    // Resolve from the owning source; Native parser sources inherit Lua (no native transforms)
     const auto& srcs = pm.sources();
     const auto sit   = std::find_if(
       srcs.begin(), srcs.end(), [&](const auto& s) { return s.sourceId == updated.sourceId; });
-    updated.transformLanguage = (sit != srcs.end()) ? sit->frameParserLanguage : 0;
+    int inherited = (sit != srcs.end()) ? sit->frameParserLanguage : 0;
+    if (inherited == SerialStudio::Native)
+      inherited = SerialStudio::Lua;
+
+    updated.transformLanguage = inherited;
     languageInherited         = true;
   }
 
@@ -2743,6 +2825,84 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetGet(const QStrin
 }
 
 /**
+ * @brief Validates a native template + params pair against the registry.
+ */
+static bool validateNativeTemplate(const QString& templateId,
+                                   const QJsonObject& templateParams,
+                                   QString& error)
+{
+  const auto* tmpl = DataModel::nativeTemplateById(templateId);
+  if (!tmpl) {
+    error = QStringLiteral("Unknown native parser template: \"%1\" (see "
+                           "project.frameParser.listTemplates)")
+              .arg(templateId);
+    return false;
+  }
+
+  const auto parser = tmpl->makeParser(templateParams, error);
+  return parser != nullptr;
+}
+
+/**
+ * @brief Persists a validated native template config and flips the source to Native.
+ */
+static void applyNativeTemplate(int sourceId,
+                                const QString& templateId,
+                                const QJsonObject& templateParams)
+{
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(!templateId.isEmpty());
+
+  // Callers validate first, so the lookup cannot fail; guard anyway for release builds
+  const auto* tmpl = DataModel::nativeTemplateById(templateId);
+  if (!tmpl)
+    return;
+
+  const auto params =
+    templateParams.isEmpty() ? DataModel::nativeTemplateDefaults(*tmpl) : templateParams;
+
+  // Language first so the param/template change signals reload the native engine
+  auto& model = DataModel::ProjectModel::instance();
+  model.updateSourceFrameParserLanguage(sourceId, SerialStudio::Native);
+  model.updateSourceFrameParserParams(sourceId, params);
+  model.updateSourceFrameParserTemplate(sourceId, templateId);
+}
+
+/**
+ * @brief Handles parserSetCode for the Native language: code carries the JSON descriptor.
+ */
+static API::CommandResponse setNativeParserFromDescriptor(const QString& id,
+                                                          int sourceId,
+                                                          const QString& code)
+{
+  const auto doc = QJsonDocument::fromJson(code.toUtf8());
+  if (!doc.isObject())
+    return API::CommandResponse::makeError(
+      id,
+      API::ErrorCode::InvalidParam,
+      QStringLiteral("Built-In parser code must be the JSON descriptor "
+                     "{\"template\": id, \"params\": {...}}"));
+
+  const auto descriptor      = doc.object();
+  const QString template_id  = descriptor.value(QStringLiteral("template")).toString();
+  const auto template_params = descriptor.value(QStringLiteral("params")).toObject();
+
+  QString error;
+  if (!validateNativeTemplate(template_id, template_params, error))
+    return API::CommandResponse::makeError(id, API::ErrorCode::InvalidParam, error);
+
+  applyNativeTemplate(sourceId, template_id, template_params);
+
+  QJsonObject result;
+  result[Keys::SourceId]             = sourceId;
+  result[QStringLiteral("language")] = static_cast<int>(SerialStudio::Native);
+  result[QStringLiteral("template")] = template_id;
+  result[QStringLiteral("params")] =
+    DataModel::ProjectModel::instance().frameParserParams(sourceId);
+  return API::CommandResponse::makeSuccess(id, result);
+}
+
+/**
  * @brief Set frame parser code for a source.
  */
 API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString& id,
@@ -2769,11 +2929,16 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
   int savedLanguage      = 0;
   if (hasLanguage) {
     const int language = params.value(QStringLiteral("language")).toInt();
-    if (language != SerialStudio::JavaScript && language != SerialStudio::Lua)
+    if (language != SerialStudio::JavaScript && language != SerialStudio::Lua
+        && language != SerialStudio::Native)
       return CommandResponse::makeError(
         id,
         ErrorCode::InvalidParam,
-        QStringLiteral("Invalid language: must be 0 (JavaScript) or 1 (Lua)"));
+        QStringLiteral("Invalid language: must be 0 (JavaScript), 1 (Lua) or 2 (Built-In)"));
+
+    // Native: the code payload is the template descriptor, persisted as template + params
+    if (language == SerialStudio::Native)
+      return setNativeParserFromDescriptor(id, sourceId, code);
 
     // Snapshot prior language for rollback on validation failure.
     savedLanguage = model.frameParserLanguage(sourceId);
@@ -2839,11 +3004,30 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString&
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Invalid sourceId"));
 
-  const QString code =
+  QString code =
     sourceId == 0 ? model.frameParserCode() : model.sources()[sourceId].frameParserCode;
 
   QJsonObject result;
-  result[Keys::SourceId]               = sourceId;
+  result[Keys::SourceId]             = sourceId;
+  result[QStringLiteral("language")] = model.frameParserLanguage(sourceId);
+
+  // Native sources are configured by template + params; code carries the JSON descriptor
+  if (model.frameParserLanguage(sourceId) == SerialStudio::Native) {
+    QString template_id = model.frameParserTemplate(sourceId);
+    if (template_id.isEmpty())
+      template_id = DataModel::defaultNativeTemplateId();
+
+    QJsonObject template_params = model.frameParserParams(sourceId);
+    if (template_params.isEmpty()) {
+      if (const auto* tmpl = DataModel::nativeTemplateById(template_id))
+        template_params = DataModel::nativeTemplateDefaults(*tmpl);
+    }
+
+    code = DataModel::CFrameParser::buildDescriptor(template_id, template_params);
+    result[QStringLiteral("template")] = template_id;
+    result[QStringLiteral("params")]   = template_params;
+  }
+
   result[QStringLiteral("code")]       = code;
   result[QStringLiteral("codeLength")] = code.length();
   return CommandResponse::makeSuccess(id, result);
@@ -2865,11 +3049,12 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
 
   // Validate language value against the SerialStudio::ScriptLanguage enum
   const int language = params.value(QStringLiteral("language")).toInt();
-  if (language != SerialStudio::JavaScript && language != SerialStudio::Lua)
+  if (language != SerialStudio::JavaScript && language != SerialStudio::Lua
+      && language != SerialStudio::Native)
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
-      QStringLiteral("Invalid language: must be 0 (JavaScript) or 1 (Lua)"));
+      QStringLiteral("Invalid language: must be 0 (JavaScript), 1 (Lua) or 2 (Built-In)"));
 
   // Locate the source by logical ID (not by vector index)
   auto& model         = DataModel::ProjectModel::instance();
@@ -2886,8 +3071,11 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
 
   model.updateSourceFrameParserLanguage(sourceId, language);
 
-  // Reset parser code to the default template for the new language.
-  DataModel::FrameParser::instance().loadDefaultTemplate(sourceId, true);
+  // Reset to the default template; Native keeps an existing template selection intact
+  if (language != SerialStudio::Native || model.frameParserTemplate(sourceId).isEmpty())
+    DataModel::FrameParser::instance().loadDefaultTemplate(sourceId, true);
+  else
+    DataModel::FrameParser::instance().readCode();
 
   QJsonObject result;
   result[Keys::SourceId]             = sourceId;
@@ -2920,6 +3108,111 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetLanguage(const QStr
   QJsonObject result;
   result[Keys::SourceId]             = sourceId;
   result[QStringLiteral("language")] = it->frameParserLanguage;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief List the available Native frame parser templates.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::parserListTemplates(const QString& id,
+                                                                        const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  const auto catalog = DataModel::CFrameParser::templateCatalog();
+
+  QJsonObject result;
+  result[QStringLiteral("templates")] = catalog;
+  result[QStringLiteral("count")]     = catalog.size();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Get the parameter schema of a Native frame parser template.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::parserGetTemplateSchema(
+  const QString& id, const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("template")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: template"));
+
+  const QString template_id = params.value(QStringLiteral("template")).toString();
+  const auto schema         = DataModel::CFrameParser::templateSchema(template_id);
+  if (schema.isEmpty())
+    return CommandResponse::makeError(id,
+                                      ErrorCode::InvalidParam,
+                                      QStringLiteral("Unknown native parser template: \"%1\" (see "
+                                                     "project.frameParser.listTemplates)")
+                                        .arg(template_id));
+
+  return CommandResponse::makeSuccess(id, schema);
+}
+
+/**
+ * @brief Get the Native frame parser configuration for a source.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::parserGetTemplate(const QString& id,
+                                                                      const QJsonObject& params)
+{
+  // Resolve sourceId (logical, default 0) and verify the source exists
+  const int sourceId  = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
+  const auto& model   = DataModel::ProjectModel::instance();
+  const auto& sources = model.sources();
+  const auto it =
+    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
+      return s.sourceId == sourceId;
+    });
+
+  if (it == sources.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
+
+  QJsonObject result;
+  result[Keys::SourceId]             = sourceId;
+  result[QStringLiteral("language")] = it->frameParserLanguage;
+  result[QStringLiteral("template")] = it->frameParserTemplate;
+  result[QStringLiteral("params")]   = it->frameParserParams;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Select a Native frame parser template (and flip the source to Native).
+ */
+API::CommandResponse API::Handlers::ProjectHandler::parserSetTemplate(const QString& id,
+                                                                      const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("template")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: template"));
+
+  // Resolve sourceId (logical, default 0) and verify the source exists
+  const int sourceId  = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  const auto it =
+    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
+      return s.sourceId == sourceId;
+    });
+
+  if (it == sources.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
+
+  const QString template_id  = params.value(QStringLiteral("template")).toString();
+  const auto template_params = params.value(QStringLiteral("params")).toObject();
+
+  QString error;
+  if (!validateNativeTemplate(template_id, template_params, error))
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
+
+  applyNativeTemplate(sourceId, template_id, template_params);
+
+  const auto& model = DataModel::ProjectModel::instance();
+  QJsonObject result;
+  result[Keys::SourceId]             = sourceId;
+  result[QStringLiteral("language")] = static_cast<int>(SerialStudio::Native);
+  result[QStringLiteral("template")] = template_id;
+  result[QStringLiteral("params")]   = model.frameParserParams(sourceId);
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -4169,7 +4462,8 @@ void API::Handlers::ProjectHandler::registerFrameParserDryRunCommands()
     QStringLiteral(
       "Compile and execute frame parser code against raw stream bytes WITHOUT touching the live "
       "project. Drives the full pipeline: extraction (delimiters / detection) -> decoder switch "
-      "-> parse(). Identical code path to the live FrameBuilder and the FrameParserTestDialog. "
+      "-> parse(). Identical code path to the live FrameBuilder and the frame parser test "
+      "dialog. "
       "Required: code, language, inputBytesHex (preferred; binary-safe) or inputBytes (UTF-8 "
       "text). Recommended: decoderMethod + frameDetection + frameStart / frameEnd + "
       "checksumAlgorithm, otherwise sensible defaults apply (PlainText, EndDelimiterOnly, no "
@@ -5511,11 +5805,14 @@ API::CommandResponse API::Handlers::ProjectHandler::validate(const QString& id,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds the right script engine for a language tag (0=JS, 1=Lua).
+ * @brief Builds the right script engine for a language tag (0=JS, 1=Lua, 2=Native).
  */
 static std::unique_ptr<DataModel::IScriptEngine> makeScriptEngine(int language)
 {
-  if (language == 1)
+  if (language == SerialStudio::Native)
+    return std::make_unique<DataModel::CFrameParser>();
+
+  if (language == SerialStudio::Lua)
     return std::make_unique<DataModel::LuaScriptEngine>();
 
   return std::make_unique<DataModel::JsScriptEngine>();
@@ -5678,28 +5975,39 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserDryCompile(const 
   const auto code     = params.value(QStringLiteral("code")).toString();
   const auto language = params.value(QStringLiteral("language")).toInt();
 
-  if (language != 0 && language != 1)
+  if (language != SerialStudio::JavaScript && language != SerialStudio::Lua
+      && language != SerialStudio::Native)
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
-      QStringLiteral("Invalid language: must be 0 (JavaScript) or 1 (Lua)"));
+      QStringLiteral("Invalid language: must be 0 (JavaScript), 1 (Lua) or 2 (Built-In)"));
 
   auto engine   = makeScriptEngine(language);
   const bool ok = engine->loadScript(code, /*sourceId=*/0, /*showMessageBoxes=*/false);
 
   QJsonObject result;
   result[QStringLiteral("ok")] = ok;
-  result[QStringLiteral("language")] =
-    (language == 1 ? QStringLiteral("lua") : QStringLiteral("javascript"));
+  if (language == SerialStudio::Native)
+    result[QStringLiteral("language")] = QStringLiteral("native");
+  else
+    result[QStringLiteral("language")] =
+      (language == SerialStudio::Lua ? QStringLiteral("lua") : QStringLiteral("javascript"));
 
   if (!ok) {
-    result[QStringLiteral("error")] =
-      QStringLiteral("Compile failed or parse(frame) is not defined.");
+    if (language == SerialStudio::Native)
+      result[QStringLiteral("error")] = QStringLiteral(
+        "Invalid native parser descriptor: expected {\"template\": id, \"params\": {...}} "
+        "with a known template id and valid params.");
+    else
+      result[QStringLiteral("error")] =
+        QStringLiteral("Compile failed or parse(frame) is not defined.");
 
-    // Surface a heuristic language-mismatch nudge when applicable
-    const auto warning = detectLanguageMismatch(code, language);
-    if (!warning.isEmpty())
-      result[QStringLiteral("warning")] = warning;
+    // Surface a heuristic language-mismatch nudge when applicable (script languages only)
+    if (language != SerialStudio::Native) {
+      const auto warning = detectLanguageMismatch(code, language);
+      if (!warning.isEmpty())
+        result[QStringLiteral("warning")] = warning;
+    }
   }
 
   return CommandResponse::makeSuccess(id, result);

@@ -221,8 +221,10 @@ public slots:
   void armMultiplotSweep(const int index);
 
   void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);
+  void updateStreamAvailable();
 
 private:
+  void connectStreamAvailableInputs();
   void updateDashboardData(const DataModel::Frame& frame);
   void reconfigureDashboard(const DataModel::Frame& frame);
   void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
@@ -383,6 +385,7 @@ private:
 
   // False while cached Dataset*/ring pointers are stale (post-reset, pre-reconfigure)
   bool m_layoutValid;
+  bool m_streamAvailable;
 
   bool m_plotTimeOriginSet;
   int m_plotGroupCount;

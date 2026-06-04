@@ -271,10 +271,10 @@ function parse(frame) {
 # Tests: Lua-equivalent end-to-end coverage
 # ---------------------------------------------------------------------------
 #
-# New projects default to Lua, so these tests run the same source configure /
-# setProperty flow as the JS tests above but install a Lua parser that
-# splits a CSV payload (Lua's standard library has no JSON decoder, so the
-# wire format intentionally avoids JSON).
+# These tests run the same source configure / setProperty flow as the JS
+# tests above but install a Lua parser that splits a CSV payload (Lua's
+# standard library has no JSON decoder, so the wire format intentionally
+# avoids JSON).
 # ---------------------------------------------------------------------------
 
 

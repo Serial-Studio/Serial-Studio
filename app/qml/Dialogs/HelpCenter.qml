@@ -252,14 +252,16 @@ SmartDialog {
         }
 
         //
-        // Rendered markdown: WebEngine when available, plain rich-text otherwise.
+        // Rendered markdown: WebEngine when available, plain rich-text otherwise. Fades via
+        // opacity (never visible: false) so the view keeps its layout slot and loads eagerly.
         //
         Loader {
           id: contentLoader
 
           anchors.margins: 2
           anchors.fill: parent
-          visible: Cpp_HelpCenter.pageContent !== ""
+          enabled: Cpp_HelpCenter.pageContent !== ""
+          opacity: Cpp_HelpCenter.pageContent !== "" ? 1 : 0
 
           Component.onCompleted: {
             contentLoader.setSource(

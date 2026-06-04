@@ -278,7 +278,14 @@ set(SOURCES
   src/DataModel/Scripting/DeviceWriteApi.cpp
   src/DataModel/Scripting/ScriptApiCall.cpp
   src/DataModel/Scripting/ScriptTemplates.cpp
+  src/DataModel/Scripting/CFrameParser.cpp
+  src/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+  src/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
+  src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
+  src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+  src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
+  src/DataModel/Editors/NativeParserEditor.cpp
   src/DataModel/Editors/CodeFormatter.cpp
   src/DataModel/Editors/OutputCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
@@ -290,7 +297,6 @@ set(SOURCES
   src/DataModel/DataTable.cpp
   src/DataModel/Editors/DatasetTransformEditor.cpp
   src/DataModel/NotificationCenter.cpp
-  src/DataModel/Dialogs/FrameParserTestDialog.cpp
   src/DataModel/Dialogs/TransmitTestDialog.cpp
   src/CSV/Player.cpp
   src/CSV/Export.cpp
@@ -395,7 +401,10 @@ set(HEADERS
   src/DataModel/Scripting/DeviceWriteApi.h
   src/DataModel/Scripting/ScriptApiCall.h
   src/DataModel/Scripting/ScriptTemplates.h
+  src/DataModel/Scripting/CFrameParser.h
+  src/DataModel/Scripting/NativeTemplates/NativeTemplate.h
   src/DataModel/Editors/JsCodeEditor.h
+  src/DataModel/Editors/NativeParserEditor.h
   src/DataModel/Editors/CodeFormatter.h
   src/DataModel/Editors/OutputCodeEditor.h
   src/DataModel/ProjectModel.h
@@ -408,7 +417,6 @@ set(HEADERS
   src/DataModel/ExportSchema.h
   src/DataModel/Editors/DatasetTransformEditor.h
   src/DataModel/NotificationCenter.h
-  src/DataModel/Dialogs/FrameParserTestDialog.h
   src/DataModel/Dialogs/TransmitTestDialog.h
   src/CSV/Export.h
   src/CSV/Player.h
@@ -445,6 +453,7 @@ set(QML_SOURCES
   qml/DatabaseExplorer/ReportProgressDialog.qml
   qml/Dialogs/Donate.qml
   qml/Dialogs/FileTransmission.qml
+  qml/Dialogs/FrameParserTest.qml
   qml/Dialogs/IconPicker.qml
   qml/Dialogs/OnlineIconPicker.qml
   qml/Dialogs/Settings.qml
@@ -480,7 +489,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/AddWidgetDialog.qml
   qml/ProjectEditor/Views/ConstantsLibraryDialog.qml
   qml/ProjectEditor/Views/FlowDiagram.qml
-  qml/ProjectEditor/Views/FrameParserView.qml
+  qml/ProjectEditor/Views/NativeParserPane.qml
   qml/ProjectEditor/Views/GroupView.qml
   qml/ProjectEditor/Views/ProjectView.qml
   qml/ProjectEditor/Views/SourceView.qml

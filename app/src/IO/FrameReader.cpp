@@ -26,6 +26,7 @@
 
 #include "DataModel/NotificationCenter.h"
 #include "IO/Checksum.h"
+#include "Platform/AppPlatform.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -41,10 +42,25 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_circularBuffer(1024 * 1024)
   , m_queue(65536)
+  , m_bufferPinned(false)
   , m_droppedFrames(0)
   , m_lastDropNotify()
   , m_lastOverflowLog()
-{}
+{
+  // Best-effort pin: a page-fault stall on the scan buffer is a latency spike at rate
+  m_bufferPinned = Platform::AppPlatform::lockMemoryResident(
+    m_circularBuffer.storage(), static_cast<size_t>(m_circularBuffer.capacity()));
+}
+
+/**
+ * @brief Releases the scan-buffer pin so the lock quota returns before the buffer is freed.
+ */
+IO::FrameReader::~FrameReader()
+{
+  if (m_bufferPinned)
+    Platform::AppPlatform::unlockMemoryResident(m_circularBuffer.storage(),
+                                                static_cast<size_t>(m_circularBuffer.capacity()));
+}
 
 //--------------------------------------------------------------------------------------------------
 // Data entry point

@@ -46,6 +46,18 @@ public:
     quint64 framesSkipped;
   };
 
+  /**
+   * @brief Per-stage attribution (ns/frame) for the native numeric run, measured by composition
+   *        (extraction-only and tokenize-only loops) so the hotpath carries no instrumentation.
+   */
+  struct StageBreakdown {
+    bool valid;
+    double extractNs;
+    double tokenizeNs;
+    double datasetsPublishNs;
+    double totalNs;
+  };
+
   [[nodiscard]] static Result run(quint64 targetFrames,
                                   double minFps,
                                   double minSeconds,
@@ -66,7 +78,10 @@ public:
   static void setActive(bool active) noexcept;
 
 private:
-  [[nodiscard]] static bool printReport(const Result* results, const QString& outputFile);
+  [[nodiscard]] static bool printReport(const Result* results,
+                                        const StageBreakdown& stages,
+                                        const QString& outputFile);
+  [[nodiscard]] static StageBreakdown measureNativeStages(const Result& data, const Result& native);
   static void enableConsumers();
   static void disableConsumers();
   static void setupProject(int language, int channels, bool withStrings, bool dashboard);

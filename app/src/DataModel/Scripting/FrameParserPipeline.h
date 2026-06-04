@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QByteArray>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 #include <QStringList>
@@ -100,12 +101,21 @@ void splitQuickPlotChannels(const QByteArray& rawFrame, QList<QStringList>& outC
                                                     int sourceId);
 
 /**
- * @brief Extraction + decoder + parser with a throwaway engine (dryRun).
+ * @brief Extraction + decoder + parser with a throwaway engine (dryRun). For the Native
+ *        language, @p parserCode carries the JSON descriptor {"template": ..., "params": ...}.
  */
 [[nodiscard]] PipelineResult runFrameParserPipelineWithCode(const QByteArray& input,
                                                             const PipelineSpec& spec,
                                                             const QString& parserCode,
                                                             int parserLanguage);
+
+/**
+ * @brief Extraction + decoder + a throwaway native template engine (live preview / dryRun).
+ */
+[[nodiscard]] PipelineResult runNativeTemplatePipeline(const QByteArray& input,
+                                                       const PipelineSpec& spec,
+                                                       const QString& templateId,
+                                                       const QJsonObject& params);
 
 /**
  * @brief Returns the decoder-side representation the parser would receive for @p raw.

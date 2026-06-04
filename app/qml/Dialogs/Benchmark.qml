@@ -396,8 +396,9 @@ Widgets.SmartDialog {
       color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
       text: qsTr("Pass/Fail applies to the data-pipeline and parser phases (data pipeline " +
-                 "1024 K frames/s; numeric: Lua 256 K, JavaScript 128 K; mixed: Lua 128 K, " +
-                 "JavaScript 64 K). The export and dashboard phases are informational.")
+                 "and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric " +
+                 "256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). " +
+                 "The export and dashboard phases are informational.")
     }
 
     //
@@ -407,6 +408,13 @@ Widgets.SmartDialog {
       spacing: 8
       Layout.topMargin: 6
       Layout.fillWidth: true
+
+      Widgets.IconButton {
+        text: qsTr("Copy")
+        onClicked: root.runner.copyResults()
+        icon.source: "qrc:/icons/buttons/copy.svg"
+        enabled: !root.running && root.results.length > 0
+      }
 
       Widgets.IconButton {
         text: qsTr("Clear")

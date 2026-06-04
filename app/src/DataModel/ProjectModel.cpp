@@ -44,6 +44,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
@@ -927,6 +928,52 @@ int DataModel::ProjectModel::frameParserLanguage(int sourceId) const
 }
 
 /**
+ * @brief Returns the native parser template id for the global frame parser (source 0).
+ */
+QString DataModel::ProjectModel::frameParserTemplate() const
+{
+  if (m_sources.empty())
+    return QString();
+
+  return m_sources[0].frameParserTemplate;
+}
+
+/**
+ * @brief Returns the native parser template id for the source, or source 0's.
+ */
+QString DataModel::ProjectModel::frameParserTemplate(int sourceId) const
+{
+  for (const auto& src : m_sources)
+    if (src.sourceId == sourceId)
+      return src.frameParserTemplate;
+
+  return frameParserTemplate();
+}
+
+/**
+ * @brief Returns the native parser template params for the global frame parser (source 0).
+ */
+QJsonObject DataModel::ProjectModel::frameParserParams() const
+{
+  if (m_sources.empty())
+    return QJsonObject();
+
+  return m_sources[0].frameParserParams;
+}
+
+/**
+ * @brief Returns the native parser template params for the source, or source 0's.
+ */
+QJsonObject DataModel::ProjectModel::frameParserParams(int sourceId) const
+{
+  for (const auto& src : m_sources)
+    if (src.sourceId == sourceId)
+      return src.frameParserParams;
+
+  return frameParserParams();
+}
+
+/**
  * @brief Returns the active group ID for the dashboard tab bar, or -1.
  */
 int DataModel::ProjectModel::activeGroupId() const
@@ -1157,6 +1204,21 @@ void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJs
 }
 
 /**
+ * @brief Seeds a source with the default parser: the Native CSV (delimited/comma) template.
+ * Switching to a scripting language converts the template via the equivalence mapping.
+ */
+static void seedDefaultFrameParser(DataModel::Source& source)
+{
+  source.frameParserLanguage = static_cast<int>(SerialStudio::Native);
+  source.frameParserTemplate = DataModel::defaultNativeTemplateId();
+
+  const auto* tmpl = DataModel::nativeTemplateById(source.frameParserTemplate);
+  Q_ASSERT(tmpl != nullptr);
+  if (tmpl)
+    source.frameParserParams = DataModel::nativeTemplateDefaults(*tmpl);
+}
+
+/**
  * @brief Adds a new source to the project (GPL: capped to one source).
  */
 void DataModel::ProjectModel::addSource()
@@ -1188,8 +1250,7 @@ void DataModel::ProjectModel::addSource()
   source.frameDetection        = static_cast<int>(m_frameDetection);
   source.decoderMethod         = static_cast<int>(m_frameDecoder);
   source.hexadecimalDelimiters = m_hexadecimalDelimiters;
-  source.frameParserLanguage   = static_cast<int>(SerialStudio::Lua);
-  source.frameParserCode       = FrameParser::defaultTemplateCode(SerialStudio::Lua);
+  seedDefaultFrameParser(source);
 
   // Append and notify
   m_sources.push_back(source);
@@ -1782,8 +1843,7 @@ void DataModel::ProjectModel::newJsonFile()
   defaultSource.frameDetection        = static_cast<int>(m_frameDetection);
   defaultSource.decoderMethod         = static_cast<int>(m_frameDecoder);
   defaultSource.hexadecimalDelimiters = m_hexadecimalDelimiters;
-  defaultSource.frameParserLanguage   = static_cast<int>(SerialStudio::Lua);
-  defaultSource.frameParserCode       = FrameParser::defaultTemplateCode(SerialStudio::Lua);
+  seedDefaultFrameParser(defaultSource);
   m_sources.push_back(defaultSource);
 
   // Clear file path and notify all listeners
@@ -2341,10 +2401,12 @@ void DataModel::ProjectModel::enforceGplSingleSource()
  */
 void DataModel::ProjectModel::resolveDatasetTransformLanguages()
 {
+  // Transforms have no Native engine, so Native parser sources inherit Lua transforms
   const auto languageForSource = [&](int sourceId) {
     for (const auto& src : m_sources)
       if (src.sourceId == sourceId)
-        return src.frameParserLanguage;
+        return src.frameParserLanguage == SerialStudio::Native ? static_cast<int>(SerialStudio::Lua)
+                                                               : src.frameParserLanguage;
 
     return 0;
   };
@@ -2854,12 +2916,14 @@ void DataModel::ProjectModel::updateDataset(const int groupId,
   if (datasetId < 0 || static_cast<size_t>(datasetId) >= m_groups[groupId].datasets.size())
     return;
 
-  // Resolve any unset transform language (-1) to the source's parser language
+  // Resolve unset transform language (-1) from the source; Native parsers inherit Lua
   DataModel::Dataset resolved = dataset;
   if (resolved.transformLanguage < 0 && !resolved.transformCode.isEmpty()) {
     for (const auto& src : m_sources)
       if (src.sourceId == resolved.sourceId) {
-        resolved.transformLanguage = src.frameParserLanguage;
+        resolved.transformLanguage = src.frameParserLanguage == SerialStudio::Native
+                                     ? static_cast<int>(SerialStudio::Lua)
+                                     : src.frameParserLanguage;
         break;
       }
 
@@ -4487,6 +4551,77 @@ void DataModel::ProjectModel::updateSourceFrameParserLanguage(int sourceId, int 
 
   // Per-source signal so JsCodeEditor only reacts to its own source
   Q_EMIT sourceFrameParserLanguageChanged(sourceId);
+}
+
+/**
+ * @brief Sets the native parser template id for the global frame parser (source 0).
+ */
+void DataModel::ProjectModel::setFrameParserTemplate(const QString& templateId)
+{
+  if (m_sources.empty())
+    return;
+
+  updateSourceFrameParserTemplate(m_sources[0].sourceId, templateId);
+}
+
+/**
+ * @brief Sets the native parser template params for the global frame parser (source 0).
+ */
+void DataModel::ProjectModel::setFrameParserParams(const QJsonObject& params)
+{
+  if (m_sources.empty())
+    return;
+
+  updateSourceFrameParserParams(m_sources[0].sourceId, params);
+}
+
+/**
+ * @brief Sets the native parser template id for the source with the given sourceId.
+ */
+void DataModel::ProjectModel::updateSourceFrameParserTemplate(int sourceId,
+                                                              const QString& templateId)
+{
+  auto it =
+    std::find_if(m_sources.begin(), m_sources.end(), [sourceId](const DataModel::Source& src) {
+      return src.sourceId == sourceId;
+    });
+
+  if (it == m_sources.end() || it->frameParserTemplate == templateId)
+    return;
+
+  it->frameParserTemplate = templateId;
+  setModified(true);
+
+  // Source 0 is also exposed via the Q_PROPERTY; emit for QML bindings
+  if (sourceId == 0)
+    Q_EMIT frameParserTemplateChanged();
+
+  // Per-source signal so the native parser editor only reacts to its own source
+  Q_EMIT sourceFrameParserTemplateChanged(sourceId);
+}
+
+/**
+ * @brief Sets the native parser template params for the source with the given sourceId.
+ */
+void DataModel::ProjectModel::updateSourceFrameParserParams(int sourceId, const QJsonObject& params)
+{
+  auto it =
+    std::find_if(m_sources.begin(), m_sources.end(), [sourceId](const DataModel::Source& src) {
+      return src.sourceId == sourceId;
+    });
+
+  if (it == m_sources.end() || it->frameParserParams == params)
+    return;
+
+  it->frameParserParams = params;
+  setModified(true);
+
+  // Source 0 is also exposed via the Q_PROPERTY; emit for QML bindings
+  if (sourceId == 0)
+    Q_EMIT frameParserParamsChanged();
+
+  // Per-source signal so the native parser editor only reacts to its own source
+  Q_EMIT sourceFrameParserParamsChanged(sourceId);
 }
 
 /**

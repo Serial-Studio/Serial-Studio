@@ -76,6 +76,14 @@ class ProjectModel : public QObject {
              READ  frameParserLanguage
              WRITE setFrameParserLanguage
              NOTIFY frameParserLanguageChanged)
+  Q_PROPERTY(QString frameParserTemplate
+             READ  frameParserTemplate
+             WRITE setFrameParserTemplate
+             NOTIFY frameParserTemplateChanged)
+  Q_PROPERTY(QJsonObject frameParserParams
+             READ  frameParserParams
+             WRITE setFrameParserParams
+             NOTIFY frameParserParamsChanged)
   Q_PROPERTY(int tableCount
              READ tableCount
              NOTIFY tablesChanged)
@@ -119,6 +127,10 @@ signals:
   void frameParserLanguageChanged();
   void sourceFrameParserCodeChanged(int sourceId);
   void sourceFrameParserLanguageChanged(int sourceId);
+  void frameParserTemplateChanged();
+  void frameParserParamsChanged();
+  void sourceFrameParserTemplateChanged(int sourceId);
+  void sourceFrameParserParamsChanged(int sourceId);
   void activeGroupIdChanged();
   void widgetSettingsChanged();
   void editorWorkspacesChanged();
@@ -184,6 +196,10 @@ public:
   [[nodiscard]] int frameParserLanguage() const;
   [[nodiscard]] int frameParserLanguage(int sourceId) const;
   [[nodiscard]] QString frameParserCode() const;
+  [[nodiscard]] QString frameParserTemplate() const;
+  [[nodiscard]] QString frameParserTemplate(int sourceId) const;
+  [[nodiscard]] QJsonObject frameParserParams() const;
+  [[nodiscard]] QJsonObject frameParserParams(int sourceId) const;
 
   [[nodiscard]] bool suppressMessageBoxes() const noexcept;
 
@@ -334,6 +350,10 @@ public slots:
   void setFrameParserLanguage(int language);
   void updateSourceFrameParserLanguage(int sourceId, int language);
   void storeFrameParserCode(int sourceId, const QString& code);
+  void setFrameParserTemplate(const QString& templateId);
+  void setFrameParserParams(const QJsonObject& params);
+  void updateSourceFrameParserTemplate(int sourceId, const QString& templateId);
+  void updateSourceFrameParserParams(int sourceId, const QJsonObject& params);
   void setActiveGroupId(const int groupId);
   void setGroupLayout(const int groupId, const QJsonObject& layout);
   void setDecoderMethod(const SerialStudio::DecoderMethod method);

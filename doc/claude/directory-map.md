@@ -12,7 +12,7 @@ app/src/
 │   ├── Editors/     JsCodeEditor, OutputCodeEditor, PainterCodeEditor,
 │   │                DatasetTransformEditor, CodeFormatter
 │   ├── Importers/   DBCImporter, ModbusMapImporter, ProtoImporter
-│   └── Dialogs/     FrameParserTestDialog, TransmitTestDialog
+│   └── Dialogs/     TransmitTestDialog
 ├── UI/              Dashboard, Taskbar (workspaces), visualization + output widget types
 │   └── Widgets/Output/  Button, Toggle, Slider, TextField, Panel (+ PanelLayout), Base
 ├── API/             TCP server port 7777 (MCP + legacy JSON-RPC), 25 handlers

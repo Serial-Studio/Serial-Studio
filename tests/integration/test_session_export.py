@@ -423,6 +423,16 @@ def test_quickplot_session_project_json_embeds_source(
     titles = [s.get("title", "") for s in sources]
     assert all(titles), f"a stored source has an empty title: {titles}"
 
+    # The synthetic source must carry the Native CSV parser so the stored
+    # project replays (and re-activates) with the same comma-split semantics
+    # QuickPlot used while recording.
+    src = sources[0]
+    assert (
+        src.get("frameParserLanguage") == 2
+    ), f"stored source should use the Native parser, got {src.get('frameParserLanguage')}"
+    assert src.get("frameParserTemplate") == "delimited"
+    assert src.get("frameParserParams", {}).get("separator") == ","
+
     _safe_unlink(db_path)
 
 

@@ -39,6 +39,7 @@
 #include <vector>
 
 #include "Concepts.h"
+#include "Platform/AppPlatform.h"
 
 namespace DSP {
 //--------------------------------------------------------------------------------------------------
@@ -78,7 +79,7 @@ public:
     : m_capacity(capacity < 1 ? 1 : capacity)
     , m_storageCapacity(roundUpToPowerOfTwo(capacity < 1 ? 1 : capacity))
     , m_storageMask(m_storageCapacity - 1)
-    , m_data(std::shared_ptr<T[]>(new T[m_storageCapacity]))
+    , m_data(makeStorage(m_storageCapacity))
     , m_start(0)
     , m_size(0)
   {}
@@ -273,8 +274,8 @@ public:
       return;
 
     const std::size_t newStorage = roundUpToPowerOfTwo(newCapacity);
-    std::shared_ptr<T[]> newData(new T[newStorage]);
-    std::size_t elementsToCopy = std::min(m_size, newCapacity);
+    std::shared_ptr<T[]> newData = makeStorage(newStorage);
+    std::size_t elementsToCopy   = std::min(m_size, newCapacity);
     for (std::size_t i = 0; i < elementsToCopy; ++i)
       newData[i] = std::move((*this)[m_size - elementsToCopy + i]);
 
@@ -287,6 +288,29 @@ public:
   }
 
 private:
+  // Plot-scale buffers are written per frame; smaller ones would waste page-locked quota
+  static constexpr std::size_t kPinThresholdBytes = 64 * 1024;
+
+  /**
+   * @brief Allocates the backing array, pinning plot-scale buffers into physical memory. The
+   *        deleter owns the unpin, so shared copies / snapshots / resize stay leak-free.
+   */
+  [[nodiscard]] static std::shared_ptr<T[]> makeStorage(std::size_t n)
+  {
+    Q_ASSERT(n > 0);
+
+    T* data                 = new T[n];
+    const std::size_t bytes = n * sizeof(T);
+    if (bytes >= kPinThresholdBytes && Platform::AppPlatform::lockMemoryResident(data, bytes)) {
+      return std::shared_ptr<T[]>(data, [bytes](T* p) {
+        Platform::AppPlatform::unlockMemoryResident(p, bytes);
+        delete[] p;
+      });
+    }
+
+    return std::shared_ptr<T[]>(data);
+  }
+
   /**
    * @brief Computes the storage index where the next element will be inserted.
    */
@@ -476,15 +500,23 @@ struct SweepEngine {
   {}
 
   /**
-   * @brief Allocates `curveCount` front/back rings of `capacity` over `window` seconds.
+   * @brief Allocates `curveCount` front/back rings, each constructed individually: FixedQueue
+   *        copies share their backing array, so a copy-fill would alias every curve.
    */
   void configure(int curveCount, int capacity, double window)
   {
-    windowSec = window > 0 ? window : 1.0;
-    front.assign(static_cast<std::size_t>(curveCount < 0 ? 0 : curveCount),
-                 TimeRing(capacity, windowSec));
-    back.assign(static_cast<std::size_t>(curveCount < 0 ? 0 : curveCount),
-                TimeRing(capacity, windowSec));
+    windowSec                = window > 0 ? window : 1.0;
+    const std::size_t curves = static_cast<std::size_t>(curveCount < 0 ? 0 : curveCount);
+
+    front.clear();
+    back.clear();
+    front.reserve(curves);
+    back.reserve(curves);
+    for (std::size_t i = 0; i < curves; ++i) {
+      front.emplace_back(capacity, windowSec);
+      back.emplace_back(capacity, windowSec);
+    }
+
     resetState();
   }
 

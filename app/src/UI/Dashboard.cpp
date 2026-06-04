@@ -146,6 +146,7 @@ UI::Dashboard::Dashboard()
   , m_persistSettings(true)
   , m_updateRetryInProgress(false)
   , m_layoutValid(false)
+  , m_streamAvailable(false)
   , m_plotTimeOriginSet(false)
   , m_plotGroupCount(0)
   , m_plotTimeRange(10.0)
@@ -213,6 +214,8 @@ UI::Dashboard::Dashboard()
     Qt::QueuedConnection);
 #endif
 
+  connectStreamAvailableInputs();
+
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this, [=, this] {
     if (m_updateRequired) {
       m_updateRequired = false;
@@ -222,6 +225,9 @@ UI::Dashboard::Dashboard()
 
   // Update action items when frame format changes
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
+
+  // Seed the cached stream flag in case a data source predates this singleton
+  updateStreamAvailable();
 
   // Load persisted settings
   m_autoHideToolbar        = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
@@ -339,6 +345,45 @@ bool UI::Dashboard::streamAvailable() const
   return devOpen || csvOpen || mf4Open || sessOpen;
 #else
   return devOpen || csvOpen || mf4Open;
+#endif
+}
+
+/**
+ * @brief Refreshes the cached stream flag read by hotpathRxFrame; wired to every input that
+ *        streamAvailable() derives from (connection, players, benchmark activation).
+ */
+void UI::Dashboard::updateStreamAvailable()
+{
+  m_streamAvailable = streamAvailable();
+}
+
+/**
+ * @brief Wires every streamAvailable() input to the cache refresh. Direct connections keep the
+ *        cached flag valid for frames arriving in the same event-loop turn.
+ */
+void UI::Dashboard::connectStreamAvailableInputs()
+{
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::connectedChanged,
+          this,
+          &UI::Dashboard::updateStreamAvailable,
+          Qt::DirectConnection);
+  connect(&CSV::Player::instance(),
+          &CSV::Player::openChanged,
+          this,
+          &UI::Dashboard::updateStreamAvailable,
+          Qt::DirectConnection);
+  connect(&MDF4::Player::instance(),
+          &MDF4::Player::openChanged,
+          this,
+          &UI::Dashboard::updateStreamAvailable,
+          Qt::DirectConnection);
+#ifdef BUILD_COMMERCIAL
+  connect(&Sessions::Player::instance(),
+          &Sessions::Player::openChanged,
+          this,
+          &UI::Dashboard::updateStreamAvailable,
+          Qt::DirectConnection);
 #endif
 }
 
@@ -1686,8 +1731,8 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 
   const auto& payload = frame->data;
 
-  // Validate frame
-  if (payload.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
+  // Validate frame against the cached stream flag (refreshed on every input transition)
+  if (payload.groups.size() <= 0 || !m_streamAvailable) [[unlikely]]
     return;
 
   // Track elapsed seconds since the first frame for time-axis plots

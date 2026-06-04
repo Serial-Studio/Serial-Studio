@@ -526,6 +526,7 @@
         <file>images/shortcut.ico</file>
         <file>images/shortcut.svg</file>
         <file>images/spinner.svg</file>
+        <file>images/tip.svg</file>
         <file>images/usb.svg</file>
         <file>instruments/attitude_crosshair.svg</file>
         <file>instruments/attitude_dial.svg</file>
@@ -700,6 +701,31 @@
         <file>scripts/parser/lua/url_encoded.lua</file>
         <file>scripts/parser/lua/xml_data.lua</file>
         <file>scripts/parser/lua/yaml_data.lua</file>
+        <file>scripts/native/at_commands.md</file>
+        <file>scripts/native/base64_encoded.md</file>
+        <file>scripts/native/batched_sensor_data.md</file>
+        <file>scripts/native/binary_tlv.md</file>
+        <file>scripts/native/cobs_encoded.md</file>
+        <file>scripts/native/delimited.md</file>
+        <file>scripts/native/fixed_width.md</file>
+        <file>scripts/native/hexadecimal_bytes.md</file>
+        <file>scripts/native/ini_config.md</file>
+        <file>scripts/native/json_data.md</file>
+        <file>scripts/native/key_value.md</file>
+        <file>scripts/native/mavlink.md</file>
+        <file>scripts/native/messagepack.md</file>
+        <file>scripts/native/modbus.md</file>
+        <file>scripts/native/nmea_0183.md</file>
+        <file>scripts/native/nmea_2000.md</file>
+        <file>scripts/native/raw_bytes.md</file>
+        <file>scripts/native/rtcm_corrections.md</file>
+        <file>scripts/native/sirf_binary.md</file>
+        <file>scripts/native/slip_encoded.md</file>
+        <file>scripts/native/time_series_2d.md</file>
+        <file>scripts/native/ubx_ublox.md</file>
+        <file>scripts/native/url_encoded.md</file>
+        <file>scripts/native/xml_data.md</file>
+        <file>scripts/native/yaml_data.md</file>
         <file>scripts/parser/templates.json</file>
         <file>scripts/transforms/js/absolute_value.js</file>
         <file>scripts/transforms/js/accumulator.js</file>

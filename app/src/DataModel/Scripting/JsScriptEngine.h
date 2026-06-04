@@ -45,6 +45,7 @@ public:
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override;
 
   [[nodiscard]] bool isLoaded() const noexcept override;
+  [[nodiscard]] int language() const noexcept override;
 
   void collectGarbage() override;
   void reset() override;

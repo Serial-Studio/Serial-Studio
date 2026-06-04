@@ -21,17 +21,21 @@
 
 #include "Benchmark/HotpathBenchmark.h"
 
+#include <algorithm>
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <QByteArray>
+#include <QByteArrayView>
 #include <QCoreApplication>
 #include <QEventLoop>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <vector>
 
 #include "API/Server.h"
 #include "AppState.h"
@@ -44,6 +48,7 @@
 #include "IO/ConnectionManager.h"
 #include "IO/FrameReader.h"
 #include "IO/HAL_Driver.h"
+#include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
 #ifdef BUILD_COMMERCIAL
@@ -96,6 +101,9 @@ bool HotpathBenchmark::active() noexcept
 void HotpathBenchmark::setActive(bool active) noexcept
 {
   s_benchmarkActive = active;
+
+  // The Dashboard caches streamAvailable(); benchmark activation is one of its inputs
+  UI::Dashboard::instance().updateStreamAvailable();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -108,7 +116,8 @@ void HotpathBenchmark::setActive(bool active) noexcept
 QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels, bool withStrings)
 {
   Q_ASSERT(channels > 0);
-  Q_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua);
+  Q_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua
+           || language == SerialStudio::Native);
 
   QJsonArray datasets;
   for (int i = 0; i < channels; ++i) {
@@ -152,7 +161,12 @@ QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels, bool 
   source.insert(Keys::Decoder, static_cast<int>(SerialStudio::PlainText));
   source.insert(Keys::DecoderMethod, static_cast<int>(SerialStudio::PlainText));
   source.insert(Keys::FrameParserLanguage, language);
-  source.insert(Keys::FrameParserCode, DataModel::FrameParser::defaultTemplateCode(language));
+
+  // Native sources select a template + params; script languages carry parser code
+  if (language == SerialStudio::Native)
+    source.insert(Keys::FrameParserTemplate, QStringLiteral("delimited"));
+  else
+    source.insert(Keys::FrameParserCode, DataModel::FrameParser::defaultTemplateCode(language));
 
   QJsonObject root;
   root.insert(Keys::Title, QStringLiteral("Hotpath Benchmark"));
@@ -560,9 +574,80 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   return result;
 }
 
+/**
+ * @brief Attributes the native numeric cost by composition (extraction run + tokenize-only loop,
+ *        publish derived), so the hotpath itself carries no instrumentation.
+ */
+HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Result& data,
+                                                                       const Result& native)
+{
+  Q_ASSERT(data.framesParsed > 0);
+
+  StageBreakdown stages = {};
+  if (data.framesPerSecond <= 0.0 || native.framesPerSecond <= 0.0) [[unlikely]]
+    return stages;
+
+  constexpr int kChannels        = 8;
+  constexpr int kFramesPerChunk  = 1000;
+  constexpr size_t kSampleFrames = 100000;
+  constexpr int kTimingPasses    = 5;
+
+  // Pre-extract the same chunk shape the gated runs use; extraction stays untimed here
+  const QByteArray chunk = buildChunk(kFramesPerChunk, kChannels);
+
+  IO::FrameReader reader;
+  reader.setOperationMode(SerialStudio::QuickPlot);
+  reader.setFinishSequences({QByteArrayLiteral("\n")});
+
+  std::vector<IO::CapturedDataPtr> frames;
+  frames.reserve(kSampleFrames);
+
+  auto& queue = reader.queue();
+  IO::CapturedDataPtr drained;
+  while (frames.size() < kSampleFrames) {
+    reader.processData(IO::makeCapturedData(chunk));
+
+    // code-verify off
+    while (queue.try_dequeue(drained) && frames.size() < kSampleFrames)
+      frames.push_back(drained);
+    // code-verify on
+  }
+
+  // Tokenize-only loop against the live native engine (the run() project is still loaded)
+  auto& parser = DataModel::FrameParser::instance();
+  std::array<QByteArrayView, 64> spans;
+
+  using Clock    = std::chrono::steady_clock;
+  quint64 tokens = 0;
+  const auto t0  = Clock::now();
+  for (int pass = 0; pass < kTimingPasses; ++pass) {
+    for (const auto& f : frames) {
+      const qsizetype n = parser.parseSpansUtf8(f->data, 0, spans.data(), 64);
+      if (n < 0) [[unlikely]]
+        return stages;
+
+      tokens += static_cast<quint64>(n);
+    }
+  }
+
+  const double seconds = std::chrono::duration<double>(Clock::now() - t0).count();
+  const double calls   = static_cast<double>(frames.size()) * kTimingPasses;
+  if (calls <= 0.0 || tokens == 0) [[unlikely]]
+    return stages;
+
+  stages.tokenizeNs        = seconds * 1.0e9 / calls;
+  stages.extractNs         = 1.0e9 / data.framesPerSecond;
+  stages.totalNs           = 1.0e9 / native.framesPerSecond;
+  stages.datasetsPublishNs = std::max(0.0, stages.totalNs - stages.extractNs - stages.tokenizeNs);
+  stages.valid             = true;
+  return stages;
+}
+
 // Canonical run order shared by runAndReport() and printReport().
 enum ReportIndex {
   kReportData,
+  kReportNative,
+  kReportNativeMix,
   kReportLua,
   kReportJs,
   kReportLuaMix,
@@ -574,6 +659,8 @@ enum ReportIndex {
 };
 
 static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
+                                                          "native(numeric)",
+                                                          "native(mixed)",
                                                           "lua(numeric)",
                                                           "js(numeric)",
                                                           "lua(mixed)",
@@ -583,9 +670,35 @@ static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
                                                           "lua+dashboard(off)"};
 
 /**
- * @brief Prints the per-run, ratio, and machine-readable readouts; true when every gate passed.
+ * @brief Prints the per-run throughput rows through the shared stdout + file sink.
  */
-bool HotpathBenchmark::printReport(const Result* results, const QString& outputFile)
+template<typename PrintFn>
+static void printRunRows(const HotpathBenchmark::Result* results, const PrintFn& printData)
+{
+  Q_ASSERT(results != nullptr);
+
+  for (int i = 0; i < kReportCount; ++i) {
+    const auto& r = results[i];
+    printData("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
+              kReportTags[i],
+              static_cast<unsigned long long>(r.framesParsed),
+              static_cast<unsigned long long>(r.framesSkipped),
+              r.elapsedSeconds);
+    printData("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
+              kReportTags[i],
+              r.framesPerSecond,
+              r.minFps,
+              r.passed ? "PASS" : "FAIL");
+  }
+}
+
+/**
+ * @brief Prints the per-run, stage, ratio, and machine-readable readouts; true when every gate
+ *        passed.
+ */
+bool HotpathBenchmark::printReport(const Result* results,
+                                   const StageBreakdown& stages,
+                                   const QString& outputFile)
 {
   Q_ASSERT(results != nullptr);
 
@@ -598,28 +711,28 @@ bool HotpathBenchmark::printReport(const Result* results, const QString& outputF
       file.write(line);
   };
 
-  for (int i = 0; i < kReportCount; ++i) {
-    const Result& r = results[i];
-    printData("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
-              kReportTags[i],
-              static_cast<unsigned long long>(r.framesParsed),
-              static_cast<unsigned long long>(r.framesSkipped),
-              r.elapsedSeconds);
-    printData("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
-              kReportTags[i],
-              r.framesPerSecond,
-              r.minFps,
-              r.passed ? "PASS" : "FAIL");
-  }
+  printRunRows(results, printData);
 
-  const Result& data    = results[kReportData];
-  const Result& lua     = results[kReportLua];
-  const Result& js      = results[kReportJs];
-  const Result& luaMix  = results[kReportLuaMix];
-  const Result& jsMix   = results[kReportJsMix];
-  const Result& luaX    = results[kReportLuaX];
-  const Result& luaD    = results[kReportLuaD];
-  const Result& luaDoff = results[kReportLuaDoff];
+  const Result& data      = results[kReportData];
+  const Result& native    = results[kReportNative];
+  const Result& nativeMix = results[kReportNativeMix];
+  const Result& lua       = results[kReportLua];
+  const Result& js        = results[kReportJs];
+  const Result& luaMix    = results[kReportLuaMix];
+  const Result& jsMix     = results[kReportJsMix];
+  const Result& luaX      = results[kReportLuaX];
+  const Result& luaD      = results[kReportLuaD];
+  const Result& luaDoff   = results[kReportLuaDoff];
+
+  // Stage attribution for the native numeric run (composition-measured, ns per frame)
+  if (stages.valid) {
+    printData("hotpath-stage[native]: extract %.0f ns, tokenize %.0f ns, datasets+publish %.0f ns "
+              "(total %.0f ns/frame)\n",
+              stages.extractNs,
+              stages.tokenizeNs,
+              stages.datasetsPublishNs,
+              stages.totalNs);
+  }
 
   // The exporter run keeps the mixed workload, so compare it against the mixed baseline.
   const double slowdown =
@@ -637,7 +750,8 @@ bool HotpathBenchmark::printReport(const Result* results, const QString& outputF
   printData("hotpath: dashboard ingest costs %.2fx throughput (same project, ingest on vs off)\n",
             dashIngest);
 
-  const bool allPassed = data.passed && lua.passed && js.passed && luaMix.passed && jsMix.passed;
+  const bool allPassed = data.passed && native.passed && nativeMix.passed && lua.passed && js.passed
+                      && luaMix.passed && jsMix.passed;
   printData("HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
             "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f HOTPATH_DASHBOARD_FPS=%.0f "
             "HOTPATH_DATA_FPS=%.0f HOTPATH_DATA_TARGET=%.0f\n",
@@ -659,6 +773,18 @@ bool HotpathBenchmark::printReport(const Result* results, const QString& outputF
   printData("HOTPATH_DASHBOARD_OFF_FPS=%.0f HOTPATH_DASHBOARD_INGEST_COST=%.2f\n",
             luaDoff.framesPerSecond,
             dashIngest);
+  printData("HOTPATH_NATIVE_FPS=%.0f HOTPATH_NATIVE_TARGET=%.0f "
+            "HOTPATH_NATIVE_MIXED_FPS=%.0f HOTPATH_NATIVE_MIXED_TARGET=%.0f\n",
+            native.framesPerSecond,
+            native.minFps,
+            nativeMix.framesPerSecond,
+            nativeMix.minFps);
+  if (stages.valid)
+    printData("HOTPATH_STAGE_EXTRACT_NS=%.0f HOTPATH_STAGE_TOKENIZE_NS=%.0f "
+              "HOTPATH_STAGE_PUBLISH_NS=%.0f\n",
+              stages.extractNs,
+              stages.tokenizeNs,
+              stages.datasetsPublishNs);
 
   std::fflush(stdout);
   if (fileOpen) {
@@ -681,9 +807,20 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
   Q_ASSERT(targetFrames > 0);
   Q_ASSERT(minFps > 0.0);
 
-  // Tiers scale off minFps (so --min-fps 1 stays ungated): data 4x, JS half of its Lua peer
+  // Headless runs skip the QML init that registers MMCSS; the gate must measure the boost too
+  Platform::AppPlatform::registerIngestThreadWithMmcss();
+
+  // Tiers scale off minFps (ungated at --min-fps 1): data/native 4x, native-mix 2x, JS half Lua
   Result results[kReportCount] = {};
   results[kReportData]         = runDataPipeline(targetFrames, minFps * 4.0, minSeconds);
+  results[kReportNative] =
+    run(targetFrames, minFps * 4.0, minSeconds, SerialStudio::Native, false, false);
+
+  // Stage attribution runs while the native numeric project is still the loaded one
+  const StageBreakdown stages = measureNativeStages(results[kReportData], results[kReportNative]);
+
+  results[kReportNativeMix] =
+    run(targetFrames, minFps * 2.0, minSeconds, SerialStudio::Native, false);
   results[kReportLua] = run(targetFrames, minFps, minSeconds, SerialStudio::Lua, false, false);
   results[kReportJs] =
     run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::JavaScript, false, false);
@@ -697,7 +834,7 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
   results[kReportLuaDoff] =
     run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, false, false, true, false);
 
-  const int code = printReport(results, outputFile) ? EXIT_SUCCESS : EXIT_FAILURE;
+  const int code = printReport(results, stages, outputFile) ? EXIT_SUCCESS : EXIT_FAILURE;
 
 #ifdef SS_PGO_INSTRUMENT
 #  if defined(__clang__)

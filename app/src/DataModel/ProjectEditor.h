@@ -170,7 +170,6 @@ public:
     ProjectView,
     GroupView,
     DatasetView,
-    FrameParserView,
     ActionView,
     SourceView,
     SourceFrameParserView,
@@ -227,6 +226,9 @@ public:
     TreeItemParentId = Qt::UserRole + 19,
 
     TreeViewWorkspaceStale = Qt::UserRole + 20,
+
+    MinValue = Qt::UserRole + 21,
+    MaxValue = Qt::UserRole + 22,
   };
   Q_ENUM(CustomRoles)
 
@@ -566,6 +568,8 @@ public:
     names.insert(ProjectEditor::TreeItemId,           BAL("treeItemId"));
     names.insert(ProjectEditor::TreeItemParentId,     BAL("treeItemParentId"));
     names.insert(ProjectEditor::TreeViewWorkspaceStale, BAL("treeViewWorkspaceStale"));
+    names.insert(ProjectEditor::MinValue,             BAL("minValue"));
+    names.insert(ProjectEditor::MaxValue,             BAL("maxValue"));
 #undef BAL
     // clang-format on
 

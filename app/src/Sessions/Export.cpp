@@ -27,6 +27,7 @@
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/ProjectModel.h"
 #  include "DataModel/Scripting/FrameParser.h"
+#  include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #  include "IO/ConnectionManager.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "MDF4/Player.h"
@@ -445,14 +446,7 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
   json.insert(Keys::Groups, groupsArray);
   json.insert(Keys::Actions, QJsonArray());
 
-  // Build a default source with a working parser (prefer Lua, fall back to JS)
-  int parserLanguage = static_cast<int>(SerialStudio::Lua);
-  QString parserCode = DataModel::FrameParser::defaultTemplateCode(SerialStudio::Lua);
-  if (parserCode.isEmpty()) {
-    parserLanguage = static_cast<int>(SerialStudio::JavaScript);
-    parserCode     = DataModel::FrameParser::defaultTemplateCode(SerialStudio::JavaScript);
-  }
-
+  // Default source: Native delimited/comma template (QuickPlot's wire format is CSV)
   QJsonObject source;
   source.insert(Keys::Title, QStringLiteral("Device A"));
   source.insert(Keys::SourceId, 0);
@@ -461,8 +455,12 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
   source.insert(Keys::FrameStart, QString());
   source.insert(Keys::FrameEnd, QStringLiteral("\\n"));
   source.insert(Keys::Decoder, static_cast<int>(SerialStudio::PlainText));
-  source.insert(Keys::FrameParserLanguage, parserLanguage);
-  source.insert(Keys::FrameParserCode, parserCode);
+  source.insert(Keys::FrameParserLanguage, static_cast<int>(SerialStudio::Native));
+
+  const QString templateId = DataModel::defaultNativeTemplateId();
+  source.insert(Keys::FrameParserTemplate, templateId);
+  if (const auto* tmpl = DataModel::nativeTemplateById(templateId))
+    source.insert(Keys::FrameParserParams, DataModel::nativeTemplateDefaults(*tmpl));
 
   QJsonArray sourcesArray;
   sourcesArray.append(source);
@@ -681,6 +679,24 @@ void Sessions::Export::setupExternalConnections()
     &pm, &DataModel::ProjectModel::tablesChanged, this, &Sessions::Export::refreshProjectSnapshot);
   connect(&pm,
           &DataModel::ProjectModel::editorWorkspacesChanged,
+          this,
+          &Sessions::Export::refreshProjectSnapshot);
+
+  // Parser-config edits (code, language, native template + params) must reach project_json too
+  connect(&pm,
+          &DataModel::ProjectModel::sourceFrameParserCodeChanged,
+          this,
+          &Sessions::Export::refreshProjectSnapshot);
+  connect(&pm,
+          &DataModel::ProjectModel::sourceFrameParserLanguageChanged,
+          this,
+          &Sessions::Export::refreshProjectSnapshot);
+  connect(&pm,
+          &DataModel::ProjectModel::sourceFrameParserTemplateChanged,
+          this,
+          &Sessions::Export::refreshProjectSnapshot);
+  connect(&pm,
+          &DataModel::ProjectModel::sourceFrameParserParamsChanged,
           this,
           &Sessions::Export::refreshProjectSnapshot);
 

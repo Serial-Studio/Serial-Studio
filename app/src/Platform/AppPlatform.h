@@ -61,6 +61,11 @@ void registerFileAssociation();
 void releaseAdjustedArgv(int argc, char** argv);
 char** injectPlatformArg(int& argc, char** argv, const char* platform);
 QString shortcutIdentityHash(const QString& shortcutPath);
+
+[[nodiscard]] bool lockMemoryResident(const void* ptr, size_t len);
+void unlockMemoryResident(const void* ptr, size_t len);
+
+void registerIngestThreadWithMmcss();
 }  // namespace AppPlatform
 
 }  // namespace Platform

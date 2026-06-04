@@ -317,16 +317,18 @@ Widgets.SmartDialog {
         }
 
         //
-        // Active state: framed message transcript
+        // Active state: framed message transcript. Fades via opacity (never visible: false)
+        // so the WebEngine transcript pre-loads and keeps its layout slot.
         //
         Rectangle {
           id: chatFrame
 
           radius: 2
           border.width: 1
-          visible: !root.conversationEmpty
           anchors.fill: parent
           color: Cpp_ThemeManager.colors["groupbox_background"]
+          enabled: !root.conversationEmpty
+          opacity: root.conversationEmpty ? 0 : 1
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
           //

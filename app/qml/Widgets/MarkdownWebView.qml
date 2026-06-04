@@ -21,6 +21,7 @@
 
 import QtQuick
 import QtWebEngine
+import QtQuick.Controls
 
 //
 // Chromium-backed markdown viewer. Loaded only when Cpp_HasWebEngine is true,
@@ -70,6 +71,16 @@ Item {
     }
   }
 
+  //
+  // Spinner shown until Chromium finishes loading the viewer page. The view fades via
+  // opacity (never visible: false) so layout constraints hold and the page loads eagerly.
+  //
+  BusyIndicator {
+    running: !root.ready
+    visible: !root.ready
+    anchors.centerIn: parent
+  }
+
   WebEngineView {
     id: view
 
@@ -77,6 +88,14 @@ Item {
     backgroundColor: "transparent"
     url: "qrc:/markdown-viewer.html"
     settings.localContentCanAccessRemoteUrls: true
+
+    opacity: root.ready ? 1 : 0
+
+    Behavior on opacity {
+      NumberAnimation {
+        duration: 150
+      }
+    }
 
     onLoadingChanged: function(loadRequest) {
       if (loadRequest.status === WebEngineView.LoadSucceededStatus) {

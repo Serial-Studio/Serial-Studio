@@ -16,6 +16,7 @@
 import QtQuick
 import QtWebEngine
 import QtWebChannel
+import QtQuick.Controls
 
 //
 // Chromium-backed transcript; HTML-to-QML IPC via QWebChannel.
@@ -142,6 +143,16 @@ Item {
     registeredObjects: [aiBridge]
   }
 
+  //
+  // Spinner shown until Chromium finishes loading the viewer page. The view fades via
+  // opacity (never visible: false) so layout constraints hold and the page loads eagerly.
+  //
+  BusyIndicator {
+    running: !root.ready
+    visible: !root.ready
+    anchors.centerIn: parent
+  }
+
   WebEngineView {
     id: view
 
@@ -150,6 +161,14 @@ Item {
     url: "qrc:/chat-viewer.html"
     backgroundColor: "transparent"
     settings.localContentCanAccessRemoteUrls: true
+
+    opacity: root.ready ? 1 : 0
+
+    Behavior on opacity {
+      NumberAnimation {
+        duration: 150
+      }
+    }
 
     onLoadingChanged: function(loadRequest) {
       if (loadRequest.status === WebEngineView.LoadSucceededStatus) {

@@ -28,6 +28,7 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QJavascriptHighlighter>
+#include <QJsonObject>
 #include <QLineNumberArea>
 #include <QLuaCompleter>
 #include <QLuaHighlighter>
@@ -36,7 +37,6 @@
 #include <QTextDocument>
 #include <QUrl>
 
-#include "DataModel/Dialogs/FrameParserTestDialog.h"
 #include "DataModel/Editors/CodeFormatter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
@@ -45,6 +45,7 @@
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
+#include "SerialStudio.h"
 
 /**
  * @brief Constructs the QML-side frame parser code editor.
@@ -202,6 +203,12 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
   if (m_language == language)
     return;
 
+  // Native transitions preserve the JS/Lua code, so they skip the unsaved-changes warning
+  if (language == SerialStudio::Native || m_language == SerialStudio::Native) {
+    switchNativeLanguage(language);
+    return;
+  }
+
   // Warn user if the editor has been modified
   if (isModified()) {
     const auto answer = Misc::Utilities::showMessageBox(
@@ -229,6 +236,48 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
   // Load the matching template, or the default if the code matches none.
   if (tmplIdx >= 0)
     parser.setTemplateIdx(m_sourceId, tmplIdx);
+  else
+    parser.loadDefaultTemplate(m_sourceId, true);
+}
+
+/**
+ * @brief Switches into/out of Native, converting the template to its equivalent both ways.
+ */
+void DataModel::JsCodeEditor::switchNativeLanguage(const int language)
+{
+  Q_ASSERT(language == SerialStudio::Native || m_language == SerialStudio::Native);
+
+  auto& model  = DataModel::ProjectModel::instance();
+  auto& parser = DataModel::FrameParser::instance();
+
+  if (language == SerialStudio::Native) {
+    // Map the current script template onto its native equivalent before switching
+    const int tmplIdx = parser.detectTemplate(text());
+    model.updateSourceFrameParserLanguage(m_sourceId, language);
+
+    QString template_id;
+    QJsonObject template_params;
+    if (tmplIdx >= 0
+        && DataModel::FrameParser::nativeEquivalentForFile(
+          parser.templateFiles().at(tmplIdx), template_id, template_params)) {
+      model.updateSourceFrameParserParams(m_sourceId, template_params);
+      model.updateSourceFrameParserTemplate(m_sourceId, template_id);
+    } else if (model.frameParserTemplate(m_sourceId).isEmpty()) {
+      parser.loadDefaultTemplate(m_sourceId, true);
+    }
+
+    parser.readCode();
+    return;
+  }
+
+  // Leaving Native: load the equivalent script template in the target language
+  const QString file = DataModel::FrameParser::fileForNativeTemplate(
+    model.frameParserTemplate(m_sourceId), model.frameParserParams(m_sourceId));
+  model.updateSourceFrameParserLanguage(m_sourceId, language);
+
+  const int idx = static_cast<int>(parser.templateFiles().indexOf(file));
+  if (idx >= 0)
+    parser.setTemplateIdx(m_sourceId, idx);
   else
     parser.loadDefaultTemplate(m_sourceId, true);
 }
@@ -508,19 +557,12 @@ void DataModel::JsCodeEditor::selectTemplate()
 }
 
 /**
- * @brief Validates the current script and opens the test dialog on success.
+ * @brief Loads the current script into the live engine; true when the test dialog may open.
  */
-void DataModel::JsCodeEditor::testWithSampleData()
+bool DataModel::JsCodeEditor::prepareParserTest()
 {
   auto& parser = DataModel::FrameParser::instance();
-  if (parser.loadScript(m_sourceId, text(), true)) {
-    auto& dialog = FrameParserTestDialog::instance();
-    dialog.setSourceId(m_sourceId);
-    dialog.clear();
-    dialog.showNormal();
-    dialog.raise();
-    dialog.activateWindow();
-  }
+  return parser.loadScript(m_sourceId, text(), true);
 }
 
 /**

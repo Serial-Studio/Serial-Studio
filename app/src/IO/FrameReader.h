@@ -54,6 +54,7 @@ signals:
 
 public:
   explicit FrameReader(QObject* parent = nullptr);
+  ~FrameReader() override;
 
   inline void resetDroppedFrameCount() { m_droppedFrames = 0; }
 
@@ -113,6 +114,7 @@ private:
   std::deque<PendingChunk> m_pendingChunks;
   moodycamel::ReaderWriterQueue<IO::CapturedDataPtr> m_queue;
 
+  bool m_bufferPinned;
   quint64 m_droppedFrames;
   IO::CapturedData::SteadyTimePoint m_lastDropNotify;
   IO::CapturedData::SteadyTimePoint m_lastOverflowLog;

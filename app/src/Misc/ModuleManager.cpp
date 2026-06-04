@@ -39,6 +39,7 @@
 #include "CSV/Export.h"
 #include "CSV/Player.h"
 #include "DataModel/Editors/JsCodeEditor.h"
+#include "DataModel/Editors/NativeParserEditor.h"
 #include "DataModel/Editors/OutputCodeEditor.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/Importers/ProtoImporter.h"
@@ -63,6 +64,7 @@
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
+#include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
 #include "UI/Dashboard.h"
 #include "UI/DashboardWidget.h"
@@ -143,6 +145,10 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
       return;
 
     if (msg.contains("QSocketNotifier::Exception is not supported on iOS"))
+      return;
+
+    // Benign MMCSS side effect: inherit-started threads land at NORMAL, their pre-MMCSS value
+    if (msg.startsWith("QThread::start: Failed to set thread priority"))
       return;
   }
 
@@ -281,6 +287,7 @@ void Misc::ModuleManager::onQuit()
   if (m_quitHandled)
     return;
 
+  // Set quit flag
   m_quitHandled = true;
 
   // Restore default handler so late qWarning() during static destruction is safe
@@ -310,6 +317,7 @@ void Misc::ModuleManager::onQuit()
   API::GRPC::GRPCServer::instance().setEnabled(false);
 #endif
 
+  // Log a clean exit
   Misc::CrashTracker::instance().markCleanExit();
 
   // Terminate the application event loop
@@ -371,6 +379,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
   qmlRegisterType<DataModel::ProjectEditor>("SerialStudio", 1, 0, "ProjectEditor");
   qmlRegisterType<DataModel::OutputCodeEditor>("SerialStudio", 1, 0, "OutputCodeEditor");
+  qmlRegisterType<DataModel::NativeParserEditor>("SerialStudio", 1, 0, "NativeParserEditor");
 
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
@@ -413,6 +422,8 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   qInstallMessageHandler(MessageHandler);
   qAddPostRoutine([]() { qInstallMessageHandler(nullptr); });
+
+  Platform::AppPlatform::registerIngestThreadWithMmcss();
 
   const auto c = m_engine.rootContext();
   registerCoreContextProperties(c);

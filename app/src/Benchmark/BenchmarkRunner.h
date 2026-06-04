@@ -83,6 +83,7 @@ public:
   [[nodiscard]] QStringList secondsOptions() const;
 
 public slots:
+  void copyResults();
   void clearResults();
   void start(int framesIndex, int secondsIndex);
 

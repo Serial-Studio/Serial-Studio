@@ -12,8 +12,10 @@ Driver  (driver thread OR main, depending on driver)
   ▼
 FrameReader::processData  (main thread)
   │ appends to CircularBuffer (SPSC); tracks per-chunk timestamps;
-  │ KMP / multi-pattern delimiter scan; enqueues completed frames
-  │ to lock-free ReaderWriterQueue<CapturedDataPtr>; emits readyRead once
+  │ delimiter scan: vectorized memchr for 1-byte delimiters, memchr-anchored
+  │ + memcmp for <= 8-byte patterns on the linear region, KMP for long or
+  │ wrap-straddling patterns; enqueues completed frames to lock-free
+  │ ReaderWriterQueue<CapturedDataPtr>; emits readyRead once
   ▼
 DeviceManager::onReadyRead  (main, DirectConnection)
   │ while try_dequeue: Q_EMIT frameReady(deviceId, frame)
@@ -23,8 +25,27 @@ ConnectionManager::onFrameReady  (main)
   ▼
 FrameBuilder  (main)
   │ parse → apply per-dataset transforms → mutate m_frame / m_sourceFrames
+  │ Native + PlainText takes the span fast lane (trySpanLane): the engine tokenizes the
+  │ raw bytes into the member QByteArrayView scratch (IScriptEngine::parseUtf8Spans,
+  │ -1 = unsupported → QList fallback) and applyDatasetValuesSpans writes datasets in
+  │ place (assign_utf8_in_place) DIRECTLY into the claimed pool slot — single write per
+  │ dataset, steady-state zero-allocation. On this lane m_frame / m_sourceFrames stay
+  │ structural templates only (frame() consumers — CSV/MDF4 worker templates,
+  │ configureActions — read structure/actions, never live values). JS/Lua always take
+  │ the QList<QStringList> path, which still refreshes the template frame's values.
   │ Dashboard gets the pooled TimestampedFramePtr (acquireFrame slot, fast recycle);
-  │ async sinks get one detached make_shared copy (their backlog can't pin the pool)
+  │ async sinks get one detached make_shared copy (their backlog can't pin the pool).
+  │ A slot is free exactly when the pool's shared_ptr is its only reference; acquireFrame
+  │ probes use_count()==1 and hands out an ALIASING shared_ptr (no per-frame control block,
+  │ no deleter). Pool slots fast-path reuse only when generation + sourceId + structure
+  │ match; the generation bumps (invalidateFramePool) on project sync/save, QuickPlot
+  │ rebuild, op-mode change, and connect/disconnect — stale slots full-assign once, then
+  │ recycle. copy_frame_values deep-copies value strings IN PLACE (assign_string_in_place)
+  │ so producer strings stay unique and never detach-allocate.
+  │ Per-frame singleton polls are cached: operationMode / player-open / any-async-sink /
+  │ Dashboard streamAvailable are members refreshed by their owning signals; table-store
+  │ dataset capture only runs when a script can read it back (transforms, Lua parser
+  │ engines, injected table APIs) — native/script-less projects skip it entirely.
   ▼
 Dashboard (pooled)   |   CSV / MDF4 / API / gRPC / Sessions / MQTT (detached copy)
 ```
@@ -107,9 +128,11 @@ reconfigure and the per-frame walk is pointer-only.
 256 kHz is a CI gate, not a slogan. `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`) drives the
 real parse pipeline in-process — `FrameReader` extraction → `FrameBuilder` → frame parser →
 per-dataset transforms → Dashboard — against a project loaded programmatically via
-`ProjectModel::loadFromJsonDocument`. Five runs are gated, all tiered off `--min-fps` (default
+`ProjectModel::loadFromJsonDocument`. Seven runs are gated, all tiered off `--min-fps` (default
 256000) so a `--min-fps 1` PGO training run stays effectively ungated: **data-pipeline** at 4x
 (1.024 MHz; `runDataPipeline` — `FrameReader` extraction only, no parse; `HOTPATH_DATA_FPS`),
+**Native numeric** at 4x (1.024 MHz; `CFrameParser` delimited template,
+`HOTPATH_NATIVE_FPS`), **Native mixed** at 2x (512 kHz),
 **Lua numeric** at `min-fps` (256 kHz), **JS numeric** at half (128 kHz), **Lua mixed**
 (numeric + string columns) at half (128 kHz), **JS mixed** at a quarter (64 kHz).
 Numeric runs drop both the 3 string chunk columns and the string datagrid group from the project;
@@ -220,13 +243,53 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
 - Use `obj.contains(Keys::Foo)` to detect "field absent", not `std::isnan` on a default-zero
   read.
 
-## Frame Parser — Dual Language (JS + Lua)
+## Frame Parser — Three Languages (JS + Lua + Native)
 
-- `IScriptEngine` is the abstraction. Two impls:
+- `IScriptEngine` is the abstraction. Three impls:
   - `JsScriptEngine` — `QJSEngine` with `ConsoleExtension + GarbageCollectionExtension`
     only (**not** `AllExtensions`). Watchdog: **always route through
     `IScriptEngine::guardedCall()`**; never call `parseFunction.call()` directly.
   - `LuaScriptEngine` — Lua 5.4 (`lib/lua/lua54`), one `lua_State*` per source.
+  - `CFrameParser` — native C++ parametrized templates (`SerialStudio::Native = 2`). The
+    "script" is a canonical JSON descriptor `{"params": {...}, "template": "<id>"}` built by
+    `CFrameParser::buildDescriptor()` (compact + key-sorted, so the BackupManager SHA stays
+    byte-stable). Template registry: `Scripting/NativeTemplates/` — stateless
+    `INativeTemplate` descriptors (id, tr()'d metadata, param schema, `makeParser()`) +
+    per-source stateful `INativeParser` instances (latch buffers live in the instance, never
+    in the registry singleton). Catalog/schema for QML + AI:
+    `CFrameParser::templateCatalog()` / `templateSchema(id)`.
+- **Engine mismatch detection uses `IScriptEngine::language()`** (the old `dynamic_cast`
+  bool check silently broke with 3 languages). `FrameParser::parseMultiFrame*` never falls
+  back to source 0 across language boundaries.
+- Native config persists in `Source::frameParserTemplate` (string id) +
+  `Source::frameParserParams` (JSON object). `FrameParser::scriptForSource()` builds the
+  descriptor for native sources (empty template id falls back to the default `delimited`
+  comma config).
+- **Language switches convert the template, both directions.**
+  `FrameParser::nativeEquivalentForFile()` / `fileForNativeTemplate()` map script template
+  file basenames ⇄ native ids (+ `delimited` separator params for the CSV/TSV/pipe/semicolon
+  variants); `JsCodeEditor::switchNativeLanguage` uses them, so JS → Native → Lua lands on
+  the equivalent Lua template, never stale wrong-language code. Custom code that matches no
+  template falls back to the default template (same semantics as the JS ↔ Lua switch).
+- UI: `SourceFrameParserView.qml` is **the only parser editor view** — every parser tree
+  item (source 0 included) routes through `selectSourceParserItem` →
+  `SourceFrameParserView` (the old project-level `FrameParserView.qml` was dead code and
+  was deleted). In native mode it swaps the code editor for `NativeParserPane.qml` (param
+  form + Markdown documentation page); the native template combo lives in the secondary
+  toolbar next to "Test With Sample Data". Per-template docs ship at
+  `app/rcc/scripts/native/<id>.md` (exposed via
+  `NativeParserEditor::templateDocumentation`). The bridge is
+  `DataModel::NativeParserEditor` (registered as `SerialStudio.NativeParserEditor`).
+- **The frame parser test dialog is QML** (`app/qml/Dialogs/FrameParserTest.qml`, one dialog
+  for all three languages), backed by the same `NativeParserEditor` bridge: pipeline
+  get/setters write through `ProjectModel::updateSource`, and `dryRun()` branches by source
+  language (JS/Lua → live engines via `runFrameParserPipeline`, Native →
+  `runNativeTemplatePipeline`). The old QWidget `FrameParserTestDialog` was deleted;
+  `JsCodeEditor::prepareParserTest()` only loads/validates the script before QML opens
+  the dialog. **The dialog is hosted by a `DialogLoader` in `ProjectEditor.qml`
+  (`parserTestLoader.openTester(sourceId)`)** — never instantiate it inside the
+  Loader-managed views, or any `updateSource` triggered from the dialog rebuilds the view
+  and destroys the window mid-interaction.
 - **JS interruption is cross-thread.** A `QTimer` on the thread running `QJSValue::call()`
   can never fire — the event loop is blocked while the script runs (this was a real,
   shipped no-op against `while(true){}`). `JsWatchdogThread` (a dedicated `QThread` polling
@@ -236,8 +299,14 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   that registers with the thread; `arm()`/`disarm()` are lock-free atomic-deadline stores
   safe on the hotpath. **`setInterrupted(true)` may appear only in `JsWatchdogThread.cpp`**
   — `code-verify.py:js-interrupt-off-thread` blocks it anywhere else.
-- Per-source `frameParserLanguage` ("javascript" | "lua") picks the engine at
-  `compileFrameParser()`. Templates in `app/rcc/scripts/{js,lua}/` + `templates.json`.
+- Per-source `frameParserLanguage` (0 = JS, 1 = Lua, 2 = Native) picks the engine in
+  `FrameParser::engineForSource()`. JS/Lua templates in `app/rcc/scripts/parser/{js,lua}/`
+  + `templates.json`; native templates are compiled in (`nativeTemplates()` registry,
+  delimited/comma is the default).
+- **New projects/sources default to Native CSV** (`seedDefaultFrameParser` in
+  ProjectModel.cpp: language = Native, template = delimited, params = schema defaults).
+  `frameParserCode` is not seeded; the switch mapping generates the equivalent script
+  template on demand.
 
 ## Per-Dataset Value Transforms
 

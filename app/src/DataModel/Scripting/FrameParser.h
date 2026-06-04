@@ -23,12 +23,15 @@
 
 #include <map>
 #include <memory>
+#include <QJsonObject>
 #include <QObject>
 #include <QStringList>
 
 #include "DataModel/Scripting/IScriptEngine.h"
 
 namespace DataModel {
+
+struct Source;
 
 /**
  * @brief Per-source script engine manager driving the frame parser pipeline.
@@ -51,14 +54,26 @@ public:
   [[nodiscard]] static FrameParser& instance();
 
   [[nodiscard]] static QString defaultTemplateCode(int language = 0);
+  [[nodiscard]] static bool nativeEquivalentForFile(const QString& file,
+                                                    QString& templateId,
+                                                    QJsonObject& params);
+  [[nodiscard]] static QString fileForNativeTemplate(const QString& templateId,
+                                                     const QJsonObject& params);
 
   [[nodiscard]] QString templateCode(int sourceId = 0) const;
   [[nodiscard]] const QStringList& templateNames() const;
+  [[nodiscard]] const QStringList& templateNames(int language) const;
   [[nodiscard]] const QStringList& templateFiles() const;
 
   [[nodiscard]] QList<QStringList> parseMultiFrame(const QString& frame, int sourceId);
   [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray& frame, int sourceId);
   [[nodiscard]] QList<QStringList> parseMultiFrameUtf8(const QByteArray& frame, int sourceId);
+  [[nodiscard]] qsizetype parseSpansUtf8(const QByteArray& frame,
+                                         int sourceId,
+                                         QByteArrayView* out,
+                                         qsizetype maxSpans);
+
+  [[nodiscard]] bool hasTableApiEngines() const noexcept;
 
   [[nodiscard]] bool loadScript(int sourceId, const QString& script, bool showMessageBoxes = true);
 
@@ -78,15 +93,22 @@ public slots:
   void loadDefaultTemplate(int sourceId, bool guiTrigger = false);
 
 private:
+  void refreshEngineCaches() noexcept;
+  void setNativeTemplateIdx(int sourceId, int idx);
   [[nodiscard]] IScriptEngine& engineForSource(int sourceId);
   [[nodiscard]] int languageForSource(int sourceId) const;
+  [[nodiscard]] int detectNativeTemplate(const QString& code) const;
+  [[nodiscard]] QString scriptForSource(const Source& src) const;
 
 private:
+  bool m_hasLuaEngine;
   bool m_suppressMessageBoxes;
+  IScriptEngine* m_engine0Cache;
 
   QString m_defaultTemplateFile;
   QStringList m_templateFiles;
   QStringList m_templateNames;
+  QStringList m_nativeTemplateNames;
 
   std::map<int, std::unique_ptr<IScriptEngine>> m_engines;
 };

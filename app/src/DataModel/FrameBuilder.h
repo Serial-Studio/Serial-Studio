@@ -23,10 +23,12 @@
 
 #include <lua.h>
 
+#include <array>
 #include <atomic>
 #include <chrono>
 #include <map>
 #include <memory>
+#include <QByteArrayView>
 #include <QDeadlineTimer>
 #include <QJSEngine>
 #include <QJSValue>
@@ -95,6 +97,7 @@ public slots:
 private slots:
   void onSourceRemoved();
   void onConnectedChanged();
+  void onOperationModeChanged();
 
 private:
   using BudgetClock                             = std::chrono::steady_clock;
@@ -149,6 +152,11 @@ private:
   bool m_parseBudgetWarned;
   bool m_parseBudgetEnabled;
   bool m_lastConnectedState;
+  bool m_playerOpen;
+  bool m_anyAsyncSink;
+  bool m_captureDatasetValues;
+  bool m_externalTableApiUsers;
+  SerialStudio::OperationMode m_operationMode;
   qint64 m_parseBudgetUsedNs;
   BudgetClock::time_point m_parseBudgetWindowStart;
 
@@ -176,22 +184,25 @@ private:
   bool m_compilePending;
 
   /**
-   * @brief Recyclable pool slot holding one TimestampedFrame, its in-use flag, and the template
-   *        generation that last full-assigned it.
+   * @brief Recyclable pool slot holding one TimestampedFrame and the template generation that
+   *        last full-assigned it. A slot is free exactly when the pool's shared_ptr is the only
+   *        reference; hand-outs alias that shared_ptr, so no per-frame control block exists.
    */
   struct PooledFrameSlot {
     PooledFrameSlot();
     DataModel::TimestampedFrame frame;
     quint64 generation;
-    std::atomic<bool> inUse;
   };
 
-  static constexpr int kFramePoolSize = 8192;
+  static constexpr int kFramePoolSize     = 8192;
+  static constexpr size_t kInvalidSlotIdx = static_cast<size_t>(-1);
   std::vector<std::shared_ptr<PooledFrameSlot>> m_framePool;
   std::atomic<size_t> m_framePoolHint;
   quint64 m_framePoolGeneration;
 
   void invalidateFramePool() noexcept;
+  void notePoolExhausted();
+  [[nodiscard]] size_t claimPoolSlot() noexcept;
   [[nodiscard]] DataModel::TimestampedFramePtr acquireFrame(const DataModel::Frame& src);
   [[nodiscard]] DataModel::TimestampedFramePtr acquireFrame(
     const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts);
@@ -199,6 +210,9 @@ private:
 private:
   // code-verify off
   // Parse pipeline
+  static constexpr qsizetype kMaxSpanFields = 64;
+  std::array<QByteArrayView, kMaxSpanFields> m_spanScratch;
+
   DataModel::Source makeQuickPlotSource() const;
   DataModel::Frame& ensureSourceFrame(int sourceId);
   SerialStudio::DecoderMethod resolveDecoderMethod(int sourceId, bool applyPerSourceOverride) const;
@@ -209,18 +223,34 @@ private:
   void buildQuickPlotAudioFrame(const QStringList& channels);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
   void publishSourceTemplateFrame(const DataModel::Source& src);
+  void refreshAnyAsyncSink();
+  void refreshDatasetCaptureFlag();
+  int trySpanLane(int sourceId,
+                  bool applyPerSourceOverride,
+                  DataModel::Frame& frame,
+                  const IO::CapturedDataPtr& data);
   void decodeProjectChannels(int sourceId,
                              bool applyPerSourceOverride,
                              const IO::CapturedDataPtr& data,
                              QList<QStringList>& outChannels);
+  bool beginDatasetPass(const TransformFrameInfo& info);
+  void endDatasetPass(bool armedJsWatchdog);
   void applyDatasetValues(DataModel::Frame& frame,
                           const QStringList& channels,
                           const TransformFrameInfo& info);
+  void applyDatasetValuesSpans(DataModel::Frame& frame,
+                               const QByteArrayView* spans,
+                               qsizetype count,
+                               const TransformFrameInfo& info);
   void applyDatasetValue(Dataset& dataset,
                          const QString* channelData,
                          int channelCount,
                          const TransformFrameInfo& info,
                          const std::unordered_map<int, int>* replayColumns);
+  void applyDatasetValueSpan(Dataset& dataset,
+                             const QByteArrayView* spans,
+                             qsizetype count,
+                             const TransformFrameInfo& info);
 
   // Parser-load budget guard
   bool parseBudgetSkipFrame();

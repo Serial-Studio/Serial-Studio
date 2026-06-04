@@ -226,11 +226,11 @@ Each source has its own Frame Parser tab for a per-source parser script.
 
 ### Step 7: write a frame parser script (optional)
 
-For data that isn't plain CSV, write a `parse()` function to transform each frame into an array of values. Serial Studio supports Lua (default, recommended) and JavaScript. Pick the language from the Language dropdown in the parser editor toolbar.
+For data that isn't plain CSV, write a `parse()` function to transform each frame into an array of values. Serial Studio supports Lua (default, recommended) and JavaScript. Pick the language from the Platform dropdown in the parser editor toolbar.
 
 1. Select a source in the tree (or the "Frame Parser" node for single-source projects).
 2. Open the Frame Parser view.
-3. Pick the scripting language from the Language dropdown.
+3. Pick the scripting language from the Platform dropdown.
 4. Write a function:
 
 **Lua (default):**

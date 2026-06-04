@@ -53,8 +53,12 @@
     </message>
     <message>
         <location filename="../../src/AI/Assistant.cpp" line="385"/>
+        <source>AI Assistant is not available in this build</source>
+        <translation>AI-Асистент недоступний у цій збірці</translation>
+    </message>
+    <message>
         <source>AI Assistant requires a Pro license</source>
-        <translation>AI-Асистент потребує ліцензії Pro</translation>
+        <translation type="vanished">AI-Асистент потребує ліцензії Pro</translation>
     </message>
     <message>
         <location filename="../../src/AI/Assistant.cpp" line="390"/>
@@ -65,27 +69,31 @@
 <context>
     <name>AI::Conversation</name>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="166"/>
         <source>AI Assistant requires a Pro license</source>
-        <translation>Асистент AI потребує ліцензії Pro</translation>
+        <translation type="vanished">Асистент AI потребує ліцензії Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="172"/>
+        <location filename="../../src/AI/Conversation.cpp" line="165"/>
+        <source>AI Assistant is not available in this build</source>
+        <translation>AI-Асистент недоступний у цій збірці</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Conversation.cpp" line="171"/>
         <source>AI subsystem not initialized</source>
         <translation>Підсистему AI не ініціалізовано</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="178"/>
+        <location filename="../../src/AI/Conversation.cpp" line="177"/>
         <source>Already busy with a previous request</source>
         <translation>Вже зайнято попереднім запитом</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="462"/>
+        <location filename="../../src/AI/Conversation.cpp" line="461"/>
         <source>Tool-call budget reached for this turn; no further tools will run.</source>
         <translation>Досягнуто ліміту викликів інструментів для цього ходу; більше інструментів не буде запущено.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1725"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1724"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Ви досягли ліміту викликів інструментів для цього ходу. Не запитуйте більше інструментів. Підсумуйте те, що знайшли досі, і якщо завдання не завершено, вкажіть, які кроки залишилися, щоб користувач міг попросити вас продовжити.</translation>
     </message>
@@ -94,17 +102,17 @@
         <translation type="vanished">Перевищено ліміт викликів інструментів</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="912"/>
+        <location filename="../../src/AI/Conversation.cpp" line="911"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(Модель повернула порожню відповідь. Спробуйте перефразувати, перейти на іншу модель або перевірити, чи дозволено запит фільтрами безпеки провайдера.)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1009"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1008"/>
         <source>Sending request to %1...</source>
         <translation>Надсилання запиту до %1...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1021"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1020"/>
         <source>Provider returned no reply</source>
         <translation>Провайдер не повернув відповіді</translation>
     </message>
@@ -1066,67 +1074,67 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Згрупувати мої набори даних у корисні робочі простори</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="446"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Запитайте Serial Studio про що завгодно…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="466"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="468"/>
         <source>Clear conversation</source>
         <translation>Очистити розмову</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="510"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="512"/>
         <source>Stop generating</source>
         <translation>Зупинити генерацію</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="511"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="513"/>
         <source>Send message (Enter)</source>
         <translation>Надіслати повідомлення (Enter)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="553"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="555"/>
         <source>Provider</source>
         <translation>Постачальник</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="586"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="588"/>
         <source>Model selection</source>
         <translation>Вибір моделі</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="632"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>Виконувати дії редагування без запиту щоразу. Заблоковані дії залишаються заблокованими.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="636"/>
         <source>Auto-approve edits</source>
         <translation>Автоматично схвалювати зміни</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="653"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="655"/>
         <source>Manage API keys</source>
         <translation>Керувати ключами API</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="674"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="676"/>
         <source>Working</source>
         <translation>Обробка</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="675"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="677"/>
         <source>Ready</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="676"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="678"/>
         <source>  •  cache %1k tok</source>
         <translation>•  кеш %1k токенів</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="677"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="679"/>
         <source>  •  cache write %1k tok</source>
         <translation>запис кешу %1k токенів</translation>
     </message>
@@ -1520,30 +1528,43 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
+        <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard phases are informational.</source>
+        <translation>Успіх/невдача застосовується до фаз конвеєра даних та парсера (конвеєр даних та вбудований числовий 1024 К кадрів/с; вбудований змішаний 512 К; Lua числовий 256 К; JavaScript числовий та Lua змішаний 128 К; JavaScript змішаний 64 К). Фази експорту та панелі приладів є інформаційними.</translation>
+    </message>
+    <message>
+        <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline and Native numeric 1024 K frames/s; Native mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard phases are informational.</source>
+        <translation type="vanished">Успіх/Невдача застосовується до фаз конвеєра даних і парсера (конвеєр даних і Native числовий 1024 K кадрів/с; Native змішаний 512 K; Lua числовий 256 K; JavaScript числовий і Lua змішаний 128 K; JavaScript змішаний 64 K). Фази експорту та панелі приладів є інформаційними.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="413"/>
+        <source>Copy</source>
+        <translation>Копіювати</translation>
+    </message>
+    <message>
         <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline 1024 K frames/s; numeric: Lua 256 K, JavaScript 128 K; mixed: Lua 128 K, JavaScript 64 K). The export and dashboard phases are informational.</source>
-        <translation>Успіх/невдача застосовується лише до фаз конвеєра даних та парсера (конвеєр даних 1024 К кадрів/с; числові: Lua 256 К, JavaScript 128 К; змішані: Lua 128 К, JavaScript 64 К). Фази експорту та панелі приладів є інформаційними.</translation>
+        <translation type="vanished">Успіх/невдача застосовується лише до фаз конвеєра даних та парсера (конвеєр даних 1024 К кадрів/с; числові: Lua 256 К, JavaScript 128 К; змішані: Lua 128 К, JavaScript 64 К). Фази експорту та панелі приладів є інформаційними.</translation>
     </message>
     <message>
         <source>Pass/Fail applies to the parser phases only (Lua target 256 K frames/s, JavaScript 128 K). The export and dashboard phases are informational.</source>
         <translation type="vanished">Успіх/невдача застосовується лише до фаз парсера (Lua цільове значення 256 К кадрів/с, JavaScript 128 К). Фази експорту та панелі приладів є інформаційними.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="412"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="420"/>
         <source>Clear</source>
         <translation>Очистити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="421"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="429"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="431"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="439"/>
         <source>Running...</source>
         <translation>Виконується...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="431"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="439"/>
         <source>Run Benchmark</source>
         <translation>Запустити Тест</translation>
     </message>
@@ -1551,7 +1572,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>BenchmarkRunner</name>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="187"/>
         <source>Data pipeline</source>
         <translation>Конвеєр даних</translation>
     </message>
@@ -1572,74 +1593,154 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Lua + панель приладів</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
+        <source>Native parser (numeric)</source>
+        <translation type="vanished">Native парсер (числовий)</translation>
+    </message>
+    <message>
+        <source>Native parser (mixed)</source>
+        <translation type="vanished">Native парсер (змішаний)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <source>Built-in parser (numeric)</source>
+        <translation>Вбудований парсер (числовий)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <source>Built-in parser (mixed)</source>
+        <translation>Вбудований парсер (змішаний)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
         <source>Lua parser (numeric)</source>
         <translation>Парсер Lua (числові)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="184"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
         <source>JavaScript parser (numeric)</source>
         <translation>Парсер JavaScript (числові)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="185"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="192"/>
         <source>Lua parser (mixed)</source>
         <translation>Парсер Lua (змішані)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="186"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="193"/>
         <source>JavaScript parser (mixed)</source>
         <translation>Парсер JavaScript (змішані)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="187"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
         <source>Lua + data export (mixed)</source>
         <translation>Lua + експорт даних (змішані)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
         <source>Lua + dashboard (numeric)</source>
         <translation>Lua + панель приладів (числові)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="196"/>
         <source>100 K frames</source>
         <translation>100 тис. кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="196"/>
         <source>250 K frames</source>
         <translation>250 тис. кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="196"/>
         <source>500 K frames</source>
         <translation>500 тис. кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="196"/>
         <source>1 M frames</source>
         <translation>1 млн кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="197"/>
         <source>1 second</source>
         <translation>1 секунда</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="197"/>
         <source>2 seconds</source>
         <translation>2 секунди</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="197"/>
         <source>5 seconds</source>
         <translation>5 секунд</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="197"/>
         <source>10 seconds</source>
         <translation>10 секунд</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="225"/>
+        <source>Serial Studio %1 - Hotpath Benchmark</source>
+        <translation>Serial Studio %1 - Тест Продуктивності Критичного Шляху</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="228"/>
+        <source>%1 (%2), workload: %3 frames minimum, %4 s minimum</source>
+        <translation>%1 (%2), навантаження: мінімум %3 кадрів, мінімум %4 с</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <source>Pipeline</source>
+        <translation>Конвеєр</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <source>Throughput</source>
+        <translation>Пропускна Здатність</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <source>Target</source>
+        <translation>Ціль</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <source>Time</source>
+        <translation>Час</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <source>Result</source>
+        <translation>Результат</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="246"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="252"/>
+        <source>%1 frames/s</source>
+        <translation>%1 кадрів/с</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="246"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="248"/>
+        <source>n/a</source>
+        <translation>н/д</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="248"/>
+        <source>Pass</source>
+        <translation>Пройдено</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="248"/>
+        <source>Fail</source>
+        <translation>Не Пройдено</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="254"/>
+        <source>%1 s</source>
+        <translation>%1 с</translation>
     </message>
     <message>
         <source>Showing dashboard...</source>
@@ -2821,54 +2922,54 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="973"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1091"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1289"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1407"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1103"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1419"/>
         <source>Audio Input</source>
         <translation>Аудіовхід</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="982"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1108"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1298"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1424"/>
         <source>Quick Plot</source>
         <translation>Швидкий Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="846"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1099"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Перетворення JavaScript перевищило ліміт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="847"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1100"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Перетворення для одного з наборів даних тривало більше ніж %1 мс; решта наборів даних у фреймі були повернуті у вигляді сирих значень до наступного фрейму. Проаналізуйте або спростіть код перетворення.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="190"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="195"/>
         <source>Frame pool exhausted</source>
         <translation>Пул фреймів вичерпано</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="192"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Один із споживачів (dashboard, експорт у CSV/MDF4, база даних сесій або підписник API) не встигає обробляти фрейми. Serial Studio переходить до виділення пам’яті для кожного фрейму окремо, поки черга не очиститься. Вимкніть важкого споживача або зменшіть швидкість передачі даних.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="936"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1249"/>
         <source>Device A</source>
         <translation>Пристрій A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="989"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1305"/>
         <source>Quick Plot Data</source>
         <translation>Дані Швидкого Графіка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1001"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1317"/>
         <source>Multiple Plots</source>
         <translation>Кілька Графіків</translation>
     </message>
@@ -2876,149 +2977,120 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameParserTestDialog</name>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="248"/>
         <source>None</source>
-        <translation>Немає</translation>
+        <translation type="vanished">Немає</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="395"/>
         <source>Invalid Hex Input</source>
-        <translation>Недійсний HEX Вхід</translation>
+        <translation type="vanished">Недійсний HEX Вхід</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="396"/>
         <source>Please enter valid hexadecimal bytes.
 
 Valid format: 01 A2 FF 3C</source>
-        <translation>Введіть дійсні шістнадцяткові байти.
+        <translation type="vanished">Введіть дійсні шістнадцяткові байти.
 
 Дійсний формат: 01 A2 FF 3C</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="430"/>
         <source>(no frames)</source>
-        <translation>(немає кадрів)</translation>
+        <translation type="vanished">(немає кадрів)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="432"/>
         <source>Extraction did not produce a complete frame. Check the start / end delimiters and the detection mode.</source>
-        <translation>Видобування не створило повного кадру. Перевірте початковий/кінцевий роздільники та режим виявлення.</translation>
+        <translation type="vanished">Видобування не створило повного кадру. Перевірте початковий/кінцевий роздільники та режим виявлення.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="440"/>
         <source>%1 frame(s) extracted | %2 byte(s) consumed | %3 byte(s) buffered | %4 dropped</source>
-        <translation>Видобуто кадрів: %1 | Спожито байтів: %2 | Буферизовано байтів: %3 | Відкинуто: %4</translation>
+        <translation type="vanished">Видобуто кадрів: %1 | Спожито байтів: %2 | Буферизовано байтів: %3 | Відкинуто: %4</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="631"/>
         <source>Pipeline Configuration</source>
-        <translation>Конфігурація Конвеєра</translation>
+        <translation type="vanished">Конфігурація Конвеєра</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="633"/>
         <source>Pipeline Results</source>
-        <translation>Результати Конвеєра</translation>
+        <translation type="vanished">Результати Конвеєра</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="635"/>
         <source>Detection</source>
-        <translation>Виявлення</translation>
+        <translation type="vanished">Виявлення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="636"/>
         <source>Decoder</source>
-        <translation>Декодер</translation>
+        <translation type="vanished">Декодер</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="637"/>
         <source>Checksum</source>
-        <translation>Контрольна Сума</translation>
+        <translation type="vanished">Контрольна Сума</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="638"/>
         <source>Start Delimiter</source>
-        <translation>Початковий Роздільник</translation>
+        <translation type="vanished">Початковий Роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="639"/>
         <source>End Delimiter</source>
-        <translation>Кінцевий Роздільник</translation>
+        <translation type="vanished">Кінцевий Роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="640"/>
         <source>Hex Delimiters</source>
-        <translation>Hex Роздільники</translation>
+        <translation type="vanished">Hex Роздільники</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="642"/>
         <source>End delimiter only</source>
-        <translation>Лише кінцевий роздільник</translation>
+        <translation type="vanished">Лише кінцевий роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="643"/>
         <source>Start + end delimiters</source>
-        <translation>Початковий + кінцевий роздільники</translation>
+        <translation type="vanished">Початковий + кінцевий роздільники</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="644"/>
         <source>Start delimiter only</source>
-        <translation>Лише початковий роздільник</translation>
+        <translation type="vanished">Лише початковий роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="645"/>
         <source>No delimiters (whole chunk)</source>
-        <translation>Без роздільників (весь фрагмент)</translation>
+        <translation type="vanished">Без роздільників (весь фрагмент)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="647"/>
         <source>Plain text (UTF-8)</source>
-        <translation>Звичайний текст (UTF-8)</translation>
+        <translation type="vanished">Звичайний текст (UTF-8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="648"/>
         <source>Hexadecimal</source>
-        <translation>Шістнадцятковий</translation>
+        <translation type="vanished">Шістнадцятковий</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="649"/>
         <source>Base64</source>
-        <translation>Base64</translation>
+        <translation type="vanished">Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="650"/>
         <source>Binary (raw bytes)</source>
-        <translation>Бінарний (необроблені байти)</translation>
+        <translation type="vanished">Бінарний (необроблені байти)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="652"/>
         <source>HEX</source>
-        <translation>HEX</translation>
+        <translation type="vanished">HEX</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="653"/>
         <source>Clear</source>
-        <translation>Очистити</translation>
+        <translation type="vanished">Очистити</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="654"/>
         <source>Evaluate</source>
-        <translation>Обчислити</translation>
+        <translation type="vanished">Обчислити</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="655"/>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="682"/>
         <source>Enter raw stream bytes here...</source>
-        <translation>Введіть необроблені байти потоку тут...</translation>
+        <translation type="vanished">Введіть необроблені байти потоку тут...</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="656"/>
         <source>Stage</source>
-        <translation>Етап</translation>
+        <translation type="vanished">Етап</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="632"/>
         <source>Frame Data Input</source>
-        <translation>Введення Даних Кадру</translation>
+        <translation type="vanished">Введення Даних Кадру</translation>
     </message>
     <message>
         <source>Frame Parser Results</source>
@@ -3033,9 +3105,8 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">Індекс Набору Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="656"/>
         <source>Value</source>
-        <translation>Значення</translation>
+        <translation type="vanished">Значення</translation>
     </message>
     <message>
         <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
@@ -3048,14 +3119,12 @@ Example (HEX):  48 65 6C 6C 6F</source>
 Приклад (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="663"/>
         <source>Test Frame Parser</source>
-        <translation>Тестування Парсера Кадрів</translation>
+        <translation type="vanished">Тестування Парсера Кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="676"/>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation>Введіть шістнадцяткові байти (наприклад, 01 A2 FF)</translation>
+        <translation type="vanished">Введіть шістнадцяткові байти (наприклад, 01 A2 FF)</translation>
     </message>
     <message>
         <source>(empty)</source>
@@ -3069,12 +3138,12 @@ Example (HEX):  48 65 6C 6C 6F</source>
 <context>
     <name>DataModel::JsCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="208"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="215"/>
         <source>Change Scripting Language?</source>
         <translation>Змінити Мову Сценаріїв?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="209"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="216"/>
         <source>Switching the scripting language replaces the current parser code with the equivalent template in the new language.
 
 Any unsaved changes are lost. Continue?</source>
@@ -3083,32 +3152,32 @@ Any unsaved changes are lost. Continue?</source>
 Усі незбережені зміни буде втрачено. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="335"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="384"/>
         <source>Select Javascript file to import</source>
         <translation>Виберіть файл Javascript для імпорту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="335"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="384"/>
         <source>Select Lua file to import</source>
         <translation>Виберіть файл Lua для імпорту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="369"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="418"/>
         <source>Code Validation Successful</source>
         <translation>Валідація Коду Успішна</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="370"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="419"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>Синтаксичних помилок у коді парсера не виявлено.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="483"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="532"/>
         <source>Select Frame Parser Template</source>
         <translation>Вибрати Шаблон Парсера Кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="484"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="533"/>
         <source>Choose a template to load:</source>
         <translation>Оберіть шаблон для завантаження:</translation>
     </message>
@@ -3178,6 +3247,74 @@ Any unsaved changes are lost. Continue?</source>
     </message>
 </context>
 <context>
+    <name>DataModel::NativeParserEditor</name>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="254"/>
+        <source>Plain text (UTF-8)</source>
+        <translation>Звичайний текст (UTF-8)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="254"/>
+        <source>Hexadecimal</source>
+        <translation>Шістнадцятковий</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="254"/>
+        <source>Base64</source>
+        <translation>Base64</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="254"/>
+        <source>Binary (raw bytes)</source>
+        <translation>Бінарний (необроблені байти)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="262"/>
+        <source>End delimiter only</source>
+        <translation>Лише кінцевий роздільник</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="263"/>
+        <source>Start + end delimiters</source>
+        <translation>Початковий + кінцевий роздільники</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="264"/>
+        <source>Start delimiter only</source>
+        <translation>Лише початковий роздільник</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="265"/>
+        <source>No delimiters (whole chunk)</source>
+        <translation>Без роздільників (весь фрагмент)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="276"/>
+        <source>No Checksum</source>
+        <translation>Без Контрольної Суми</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="472"/>
+        <source>Invalid hexadecimal input.</source>
+        <translation>Некоректний шістнадцятковий ввід.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="501"/>
+        <source>No template selected.</source>
+        <translation>Шаблон не вибрано.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="542"/>
+        <source>%1 frame(s) extracted | %2 byte(s) consumed | %3 byte(s) buffered | %4 dropped</source>
+        <translation>Видобуто кадрів: %1 | Спожито байтів: %2 | Буферизовано байтів: %3 | Відкинуто: %4</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="703"/>
+        <source>Parameters</source>
+        <translation>Параметри</translation>
+    </message>
+</context>
+<context>
     <name>DataModel::OutputCodeEditor</name>
     <message>
         <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="290"/>
@@ -3230,487 +3367,487 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2155"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2179"/>
         <source>Project Information</source>
         <translation>Інформація Про Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2165"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2189"/>
         <source>Project Title</source>
         <translation>Назва Проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2166"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2190"/>
         <source>Untitled Project</source>
         <translation>Проєкт Без Назви</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2167"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2191"/>
         <source>Name or description of the project</source>
         <translation>Назва або опис проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2392"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2416"/>
         <source>Frame Detection</source>
         <translation>Виявлення Кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2408"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2432"/>
         <source>Frame Detection Method</source>
         <translation>Метод Виявлення Кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2409"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2433"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Виберіть спосіб ідентифікації вхідних кадрів даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2419"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2443"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Шістнадцяткові Роздільники</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2420"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2444"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>Введіть послідовності початку/кінця кадру як шістнадцяткові значення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2436"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2460"/>
         <source>Frame Start Delimiter</source>
         <translation>Роздільник Початку Кадру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2437"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2461"/>
         <source>e.g. /*</source>
         <translation>напр. /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2438"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2462"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>Послідовність, що позначає початок кадру даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2474"/>
         <source>Frame End Delimiter</source>
         <translation>Кінцевий Роздільник Кадру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2451"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2475"/>
         <source>e.g. */</source>
         <translation>напр. */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2476"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>Послідовність, що позначає кінець кадру даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2464"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2488"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Обробка та Перевірка Корисного Навантаження</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2475"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2499"/>
         <source>Data Conversion Method</source>
         <translation>Метод Перетворення Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2476"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2500"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>Виберіть спосіб декодування вхідних бінарних даних перед розбором</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2492"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2516"/>
         <source>Checksum Algorithm</source>
         <translation>Алгоритм Контрольної Суми</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2493"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2517"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>Виберіть алгоритм контрольної суми для перевірки кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2185"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2209"/>
         <source>Group Information</source>
         <translation>Інформація Про Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2195"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2219"/>
         <source>Group Title</source>
         <translation>Назва Групи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2196"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2220"/>
         <source>Untitled Group</source>
         <translation>Група Без Назви</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2197"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2221"/>
         <source>Title or description of this dataset group</source>
         <translation>Назва або опис цієї групи наборів даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2330"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2354"/>
         <source>Composite Widget</source>
         <translation>Композитний Віджет</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2331"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2355"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Виберіть спосіб візуалізації цієї групи наборів даних (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2247"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2271"/>
         <source>Image Configuration</source>
         <translation>Конфігурація Зображення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3091"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3115"/>
         <source>Virtual Dataset</source>
         <translation>Віртуальний Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3092"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3116"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>Віртуальні набори даних обчислюють своє значення з перетворень і таблиць даних, їм не потрібен індекс кадру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3593"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
         <source>Auto-detect</source>
         <translation>Автовизначення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3593"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
         <source>Manual Delimiters</source>
         <translation>Ручні Роздільники</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2260"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2284"/>
         <source>Detection Mode</source>
         <translation>Режим Виявлення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1288"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1291"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1312"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1315"/>
         <source>Frame Parser</source>
         <translation>Парсер Фреймів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1431"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1432"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1476"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1455"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1456"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1500"/>
         <source>Groups</source>
         <translation>Групи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1506"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1519"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1520"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1543"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1544"/>
         <source>Shared Memory</source>
         <translation>Спільна Пам'ять</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1506"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1526"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1527"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4963"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1550"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1551"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4987"/>
         <source>Dataset Values</source>
         <translation>Значення Набору Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1570"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1583"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1584"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1594"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1607"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1608"/>
         <source>Workspaces</source>
         <translation>Робочі Простори</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1622"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1625"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1626"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1646"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1649"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1650"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Видавець</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1675"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1699"/>
         <source>Publishing</source>
         <translation>Публікація</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1686"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1710"/>
         <source>Enable Publishing</source>
         <translation>Увімкнути Публікацію</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1687"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1711"/>
         <source>Broadcast frames, raw bytes and notifications to the broker</source>
         <translation>Транслювати кадри, необроблені байти та сповіщення до брокера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1698"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1722"/>
         <source>Payload</source>
         <translation>Корисне Навантаження</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1699"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1723"/>
         <source>Selects what gets published: parsed dashboard data or raw RX bytes</source>
         <translation>Вибирає, що публікується: оброблені дані панелі або необроблені байти RX</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1709"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1733"/>
         <source>Publish Rate (Hz)</source>
         <translation>Частота Публікації (Гц)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1710"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1734"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
         <translation>Скільки разів на секунду публікувати (1-30 Гц). Вищі частоти збільшують навантаження на брокер; дані панелі обмежені за частотою, тому повільний брокер ніколи не блокує розбір кадрів.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1722"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1746"/>
         <source>Topic Base</source>
         <translation>Базова Тема</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1723"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1747"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/device</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1724"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1748"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>Базовий топік для публікації фреймів і необроблених байтів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1735"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1759"/>
         <source>Script Topic</source>
         <translation>Топік Скрипта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1736"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1760"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1784"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>За замовчуванням дорівнює Базовому Топіку, якщо порожньо</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1737"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1761"/>
         <source>Topic the user script publishes to</source>
         <translation>Топік, до якого публікує користувацький скрипт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1747"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1771"/>
         <source>Publish Notifications</source>
         <translation>Публікувати Сповіщення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1748"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1772"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>Дублювати сповіщення панелі в окремий топік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1759"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1783"/>
         <source>Notification Topic</source>
         <translation>Топік Сповіщень</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1761"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1785"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>Топік, до якого дублюються сповіщення панелі</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1774"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1798"/>
         <source>Broker</source>
         <translation>Брокер</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1784"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1808"/>
         <source>Hostname</source>
         <translation>Ім'я Хоста</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1785"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1809"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1786"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1810"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>Ім'я хоста або IP-адреса MQTT-брокера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1795"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1819"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1796"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1820"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>TCP-порт, відкритий брокером (1883 звичайний, 8883 TLS)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1806"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1830"/>
         <source>Custom Client ID</source>
         <translation>Власний ID Клієнта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1832"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>Вимк: генерується новий випадковий ID при кожному завантаженні проєкту. Увімк: використовується ID нижче.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1819"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1843"/>
         <source>Client ID</source>
         <translation>ID Клієнта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1820"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1844"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>Ідентифікатор, надісланий брокеру при CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1833"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1857"/>
         <source>Protocol Version</source>
         <translation>Версія Протоколу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1834"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1858"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>Версія протоколу MQTT, що використовується при CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1843"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1867"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (с)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1844"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1868"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>Секунди між пакетами PINGREQ у режимі очікування</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1853"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1877"/>
         <source>Clean Session</source>
         <translation>Чиста Сесія</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1854"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1878"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>Відкинути будь-який стан постійної сесії при CONNECT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1869"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1893"/>
         <source>Username</source>
         <translation>Ім'я Користувача</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1870"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1894"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>Ім'я користувача для автентифікації брокера (залиште порожнім для анонімного доступу)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1880"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1904"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1881"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1905"/>
         <source>Password for broker authentication</source>
         <translation>Пароль для автентифікації брокера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1892"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1916"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1902"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1926"/>
         <source>Use SSL/TLS</source>
         <translation>Використовувати SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1903"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1927"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Тунелювати з'єднання з брокером через TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1916"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1940"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1917"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1941"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Узгоджене сімейство протоколів TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1927"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1951"/>
         <source>Peer Verify</source>
         <translation>Перевірка Вузла</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1928"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1952"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Наскільки строго перевіряється ланцюжок сертифікатів брокера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1938"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1962"/>
         <source>Verify Depth</source>
         <translation>Глибина Перевірки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1939"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1963"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Максимальна довжина ланцюжка сертифікатів (0 = необмежено)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2212"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2826"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2236"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2850"/>
         <source>Device %1</source>
         <translation>Пристрій %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2230"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2351"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2254"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
         <source>Input Device</source>
         <translation>Вхідний Пристрій</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2231"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2255"/>
         <source>Select which connected device provides data for this group</source>
         <translation>Виберіть підключений пристрій, який надає дані для цієї групи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2262"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2286"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>Автовизначення зчитує магічні байти JPEG/PNG; Ручний режим використовує явні послідовності початку/кінця</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2272"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2296"/>
         <source>Start Sequence (Hex)</source>
         <translation>Початкова Послідовність (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2273"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2297"/>
         <source>e.g. FF D8 FF</source>
         <translation>напр. FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2274"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2298"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>Hex-байти, що позначають початок кадру зображення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2283"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2307"/>
         <source>End Sequence (Hex)</source>
         <translation>Кінцева Послідовність (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2284"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2308"/>
         <source>e.g. FF D9</source>
         <translation>напр. FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2285"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2309"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>Hex-байти, що позначають кінець кадру зображення</translation>
     </message>
@@ -3719,409 +3856,409 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Ідентифікація</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2361"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2385"/>
         <source>Device Name</source>
         <translation>Назва Пристрою</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2362"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2386"/>
         <source>Device 1</source>
         <translation>Пристрій 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2363"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2387"/>
         <source>Human-readable name for this input device</source>
         <translation>Зрозуміла назва для цього вхідного пристрою</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2372"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2396"/>
         <source>Bus Type</source>
         <translation>Тип Шини</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2373"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2397"/>
         <source>Select the hardware interface for this input device</source>
         <translation>Виберіть апаратний інтерфейс для цього пристрою введення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
         <source>Serial Port</source>
         <translation>Послідовний Порт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
         <source>Network Socket</source>
         <translation>Мережевий Сокет</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
         <source>Audio Input</source>
         <translation>Аудіовхід</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
         <source>CAN Bus</source>
         <translation>Шина CAN</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
         <source>Raw USB</source>
         <translation>Прямий USB</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
         <source>HID Device</source>
         <translation>Пристрій HID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
         <source>Process</source>
         <translation>Процес</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2378"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
         <source>MQTT Subscriber</source>
         <translation>Підписник MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2545"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2569"/>
         <source>Connection Settings</source>
         <translation>Налаштування Підключення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2793"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3067"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4654"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2817"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3091"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4678"/>
         <source>General Information</source>
         <translation>Загальна Інформація</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2802"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2826"/>
         <source>Action Title</source>
         <translation>Назва Дії</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2804"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2828"/>
         <source>Untitled Action</source>
         <translation>Дія Без Назви</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2805"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2829"/>
         <source>Name or description of this action</source>
         <translation>Назва або опис цієї дії</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2814"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2838"/>
         <source>Action Icon</source>
         <translation>Іконка Дії</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2815"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2839"/>
         <source>Default Icon</source>
         <translation>Типова Іконка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2816"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2840"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>Іконка, що відображається для цієї дії на панелі</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2844"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2868"/>
         <source>Target Device</source>
         <translation>Цільовий Пристрій</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2845"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2869"/>
         <source>Select which connected device this action sends data to</source>
         <translation>Виберіть підключений пристрій, якому ця дія надсилає дані</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2857"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2881"/>
         <source>Data Payload</source>
         <translation>Дані Корисного Навантаження</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2868"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2892"/>
         <source>Send as Binary</source>
         <translation>Надсилати як Двійкові</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2869"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2893"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>Надсилати необроблені двійкові дані при спрацюванні цієї дії</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2880"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2892"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2904"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2916"/>
         <source>Command</source>
         <translation>Команда</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2881"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2905"/>
         <source>Transmit Data (Hex)</source>
         <translation>Передати Дані (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2882"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2906"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Шістнадцяткове корисне навантаження для надсилання при спрацюванні дії</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2893"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2917"/>
         <source>Transmit Data</source>
         <translation>Передати Дані</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2894"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2918"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Текстове корисне навантаження для надсилання при спрацюванні дії</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2905"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4713"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2929"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4737"/>
         <source>Text Encoding</source>
         <translation>Кодування Тексту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2906"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2930"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>Кодування символів для серіалізації текстового корисного навантаження</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2930"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2954"/>
         <source>End-of-Line Sequence</source>
         <translation>Послідовність Кінця Рядка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2931"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2955"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>Символи EOL для додавання до повідомлення (напр. </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2943"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2967"/>
         <source>Execution Behavior</source>
         <translation>Поведінка Виконання</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2954"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2978"/>
         <source>Auto-Execute on Connect</source>
         <translation>Автовиконання при Підключенні</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2955"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2979"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>Автоматично запускати цю дію при підключенні пристрою</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2961"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2985"/>
         <source>Timer Behavior</source>
         <translation>Поведінка Таймера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2970"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2994"/>
         <source>Timer Mode</source>
         <translation>Режим Таймера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2973"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2997"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>Виберіть, коли і як ця дія має повторюватися автоматично</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2980"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3004"/>
         <source>Interval (ms)</source>
         <translation>Інтервал (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2984"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3008"/>
         <source>Timer Interval (ms)</source>
         <translation>Інтервал Таймера (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2985"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3009"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>Мілісекунди між кожним повторним спрацюванням цієї дії</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2992"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2996"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3016"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3020"/>
         <source>Repeat Count</source>
         <translation>Кількість Повторів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2997"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3021"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>Кількість відправлень команди при кожному спрацюванні</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3077"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3101"/>
         <source>Untitled Dataset</source>
         <translation>Набір Даних Без Назви</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3078"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3102"/>
         <source>Dataset Title</source>
         <translation>Назва Набору Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3079"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3103"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Назва набору даних для позначення та ідентифікації</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3109"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3133"/>
         <source>Hide on Dashboard</source>
         <translation>Приховати на Панелі</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3110"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3134"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Приховати окрему плитку панелі для цього набору даних; віджет малювання все ще зможе читати його значення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3156"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3180"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Нижня межа діапазону значень набору даних; віджети та FFT використовують її, коли власний діапазон не встановлено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3169"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3193"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Верхня межа діапазону значень набору даних; віджети та FFT використовують її, коли власний діапазон не встановлено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3229"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3253"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Оберіть Час або набір даних для керування віссю X на графіках</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3242"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3266"/>
         <source>Frequency Analysis</source>
         <translation>Аналіз Частоти</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3290"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3314"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Виберіть Час (за замовчуванням) або будь-який набір даних, значення якого керує віссю Y -- створює діаграму Кемпбелла при прив'язці до, наприклад, RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3341"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3430"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3365"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3454"/>
         <source>Minimum Value (optional)</source>
         <translation>Мінімальне Значення (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3342"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3366"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Нижня межа для нормалізації даних; за замовчуванням використовується діапазон значень набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3354"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3443"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3378"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3467"/>
         <source>Maximum Value (optional)</source>
         <translation>Максимальне Значення (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3355"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3379"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Верхня межа для нормалізації даних; за замовчуванням використовується діапазон значень набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3431"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3455"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Нижня межа діапазону індикатора або стовпчика; за замовчуванням використовується діапазон значень набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3444"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3468"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Верхня межа діапазону індикатора або стовпчика; за замовчуванням використовується діапазон значень набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
         <source>Painter Widget</source>
         <translation>Віджет Малювання</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4964"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4988"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
         <translation>Необроблені та перетворені значення для кожного набору даних (лише читання)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4974"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4998"/>
         <source>Shared table defined in this project</source>
         <translation>Спільна таблиця, визначена в цьому проєкті</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5326"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5350"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>Видалити 1 посилання на віджет, чия цільова група або набір даних більше не існує?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5327"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5351"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>Видалити %1 посилань на віджети, чиї цільові групи або набори даних більше не існують?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5332"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5356"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>Це вплине лише на розміщення плиток у робочій області; жодні групи, набори даних або дані не будуть видалені.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5335"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5359"/>
         <source>Clean Up Workspaces</source>
         <translation>Очистити Робочі Простори</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3123"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3147"/>
         <source>Frame Index</source>
         <translation>Індекс Кадру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3124"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3148"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Позиція кадру для вирівнювання наборів даних у часі</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3133"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3157"/>
         <source>Measurement Unit</source>
         <translation>Одиниця Вимірювання</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3134"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3158"/>
         <source>Volts, Amps, etc.</source>
         <translation>Вольти, Ампери тощо.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3135"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3159"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Одиниця вимірювання, наприклад вольти або ампери (необов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3183"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3207"/>
         <source>Plot Settings</source>
         <translation>Налаштування Графіка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3206"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3230"/>
         <source>Enable Plot Widget</source>
         <translation>Увімкнути Віджет Графіка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3208"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3232"/>
         <source>Plot data in real-time</source>
         <translation>Відображати дані в реальному часі</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3228"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3252"/>
         <source>X-Axis Source</source>
         <translation>Джерело Осі X</translation>
     </message>
@@ -4150,27 +4287,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Конфігурація FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3253"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3277"/>
         <source>Enable FFT Analysis</source>
         <translation>Увімкнути Аналіз FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3254"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3278"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Виконати частотний аналіз набору даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3264"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3288"/>
         <source>Enable Waterfall Plot</source>
         <translation>Увімкнути Графік Водоспаду</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3265"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3289"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Показати прокручувану спектрограму частотного вмісту в часі (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3289"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3313"/>
         <source>Waterfall Y Axis</source>
         <translation>Вісь Y Водоспаду</translation>
     </message>
@@ -4179,22 +4316,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Виберіть Час (за замовчуванням) або будь-який набір даних, значення якого керує віссю Y — створює діаграму Кемпбелла при прив'язці до, наприклад, RPM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3318"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3342"/>
         <source>FFT Window Size</source>
         <translation>Розмір Вікна FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3319"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3343"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Кількість вибірок для кожного вікна обчислення FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3330"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3354"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>Частота Дискретизації FFT (Гц, обов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3331"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3355"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>Частота дискретизації для FFT (у Гц)</translation>
     </message>
@@ -4215,17 +4352,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Верхня межа для нормалізації даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3380"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3404"/>
         <source>Widget Settings</source>
         <translation>Налаштування Віджета</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3403"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3427"/>
         <source>Widget</source>
         <translation>Віджет</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3404"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3428"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Виберіть візуальний віджет для відображення цього набору даних</translation>
     </message>
@@ -4246,28 +4383,28 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Верхня межа діапазону відображення шкали або стовпчика</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3460"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3622"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3484"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3646"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3461"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3485"/>
         <source>Tick Count</source>
         <translation>Кількість Поділок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3465"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3489"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Кількість великих поділок на шкалі циферблата (0 = автопідбір під розмір віджета)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3484"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3508"/>
         <source>Label Format</source>
         <translation>Формат Мітки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3485"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3509"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>Кількість десяткових знаків або нотація для міток поділок і відображення значення</translation>
     </message>
@@ -4308,184 +4445,184 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Запускає візуальну сигналізацію, коли значення перевищує цей поріг</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3522"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3546"/>
         <source>LED Display Settings</source>
         <translation>Налаштування LED-Дисплея</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3533"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3557"/>
         <source>Show in LED Panel</source>
         <translation>Показувати на LED-Панелі</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3534"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3558"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Увімкнути візуальний моніторинг стану за допомогою LED-дисплея</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3545"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3569"/>
         <source>LED On Threshold (required)</source>
         <translation>Поріг увімкнення LED (обов'язково)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3546"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3570"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>LED загоряється, коли значення досягає або перевищує цей поріг</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3567"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Off</source>
         <translation>Вимкнено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3567"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Auto Start</source>
         <translation>Автозапуск</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3567"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Start on Trigger</source>
         <translation>Запуск за тригером</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3567"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Toggle on Trigger</source>
         <translation>Перемикання за тригером</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3568"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
         <source>Repeat N Times</source>
         <translation>Повторити N Разів</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3572"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
         <source>Plain Text (UTF8)</source>
         <translation>Простий Текст (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3572"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
         <source>Hexadecimal</source>
         <translation>Шістнадцятковий</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3572"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3573"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3597"/>
         <source>Binary (Direct)</source>
         <translation>Бінарний (Прямий)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3580"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3604"/>
         <source>No Checksum</source>
         <translation>Без Контрольної Суми</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3585"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
         <source>End Delimiter Only</source>
         <translation>Лише Кінцевий Роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3585"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
         <source>Start Delimiter Only</source>
         <translation>Лише Початковий Роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3586"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
         <source>Start + End Delimiter</source>
         <translation>Початковий + Кінцевий Роздільник</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3586"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
         <source>No Delimiters</source>
         <translation>Без Роздільників</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
         <source>Button</source>
         <translation>Кнопка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
         <source>Slider</source>
         <translation>Повзунок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
         <source>Toggle</source>
         <translation>Перемикач</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
         <source>Text Field</source>
         <translation>Текстове Поле</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3597"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3621"/>
         <source>Knob</source>
         <translation>Регулятор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3626"/>
         <source>Data Grid</source>
         <translation>Таблиця Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3603"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3627"/>
         <source>GPS Map</source>
         <translation>Карта GPS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3604"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3628"/>
         <source>Gyroscope</source>
         <translation>Гіроскоп</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3605"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3629"/>
         <source>Multiple Plot</source>
         <translation>Множинний Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3606"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
         <source>Accelerometer</source>
         <translation>Акселерометр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3607"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
         <source>3D Plot</source>
         <translation>3D Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3608"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
         <source>Image View</source>
         <translation>Перегляд Зображень</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3614"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3634"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3638"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3655"/>
         <source>None</source>
         <translation>Немає</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3615"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3639"/>
         <source>Bar</source>
         <translation>Стовпчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3616"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
         <source>Gauge</source>
         <translation>Датчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3641"/>
         <source>Compass</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3618"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3642"/>
         <source>Meter</source>
         <translation>Лічильник</translation>
     </message>
@@ -4494,109 +4631,109 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Термометр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3623"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3647"/>
         <source>Integer (0 decimals)</source>
         <translation>Ціле Число (0 десяткових знаків)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3624"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3648"/>
         <source>1 decimal</source>
         <translation>1 десятковий знак</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3625"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3649"/>
         <source>2 decimals</source>
         <translation>2 десяткових знаки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3626"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
         <source>3 decimals</source>
         <translation>3 десяткових знаки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3627"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
         <source>Scientific</source>
         <translation>Науковий</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3656"/>
         <source>New Line (\n)</source>
         <translation>Новий Рядок (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3657"/>
         <source>Carriage Return (\r)</source>
         <translation>Повернення Каретки (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3634"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3658"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3638"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3662"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3639"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3663"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4664"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4688"/>
         <source>Label</source>
         <translation>Мітка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4665"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4689"/>
         <source>Display label</source>
         <translation>Мітка відображення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4675"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4699"/>
         <source>Button Icon</source>
         <translation>Піктограма Кнопки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4684"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4708"/>
         <source>Colorize Icon</source>
         <translation>Розфарбувати Іконку</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4685"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4709"/>
         <source>Tint the icon with the button color</source>
         <translation>Тонувати піктограму кольором кнопки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4702"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4726"/>
         <source>Initial Value</source>
         <translation>Початкове Значення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4714"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4738"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Кодування символів, що використовується, коли transmit() повертає рядкове значення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4732"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4756"/>
         <source>Value Range</source>
         <translation>Діапазон Значень</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3155"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4742"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3179"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4766"/>
         <source>Minimum Value</source>
         <translation>Мінімальне Значення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3168"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4751"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3192"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4775"/>
         <source>Maximum Value</source>
         <translation>Максимальне Значення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4760"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4784"/>
         <source>Step Size</source>
         <translation>Розмір Кроку</translation>
     </message>
@@ -4604,53 +4741,53 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="526"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="535"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="527"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="536"/>
         <source>Lock Project</source>
         <translation>Заблокувати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="527"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="528"/>
         <source>Choose a password to lock the project:</source>
         <translation>Виберіть пароль для блокування проєкту:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="535"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="536"/>
         <source>Confirm the password:</source>
         <translation>Підтвердіть пароль:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="540"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="541"/>
         <source>Passwords do not match</source>
         <translation>Паролі не збігаються</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="541"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="542"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>Введені паролі не збігаються. Проєкт не заблоковано.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="575"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="576"/>
         <source>Unlock Project</source>
         <translation>Розблокувати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="576"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="577"/>
         <source>Enter the project password:</source>
         <translation>Введіть пароль проєкту:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="586"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
         <source>Incorrect password</source>
         <translation>Неправильний пароль</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="588"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>Введений пароль не збігається з паролем, збереженим у файлі проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="619"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="620"/>
         <source>New Project</source>
         <translation>Новий Проєкт</translation>
     </message>
@@ -4659,17 +4796,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Зразки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1169"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1231"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Кілька джерел даних вимагають ліцензії Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1232"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro дозволяє підключатися до кількох пристроїв одночасно. Будь ласка, оновіть версію, щоб розблокувати цю функцію.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1245"/>
         <source>Device %1</source>
         <translation>Пристрій %1</translation>
     </message>
@@ -4678,187 +4815,187 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">(Копія)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1467"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1528"/>
         <source>Do you want to save your changes?</source>
         <translation>Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1468"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1529"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>У цьому проєкті є незбережені зміни!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="395"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="405"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="419"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="396"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="406"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="420"/>
         <source>Project error</source>
         <translation>Помилка проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="395"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="396"/>
         <source>Project title cannot be empty!</source>
         <translation>Назва проєкту не може бути порожньою!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="405"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="406"/>
         <source>You need to add at least one group!</source>
         <translation>Необхідно додати принаймні одну групу!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="419"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="420"/>
         <source>You need to add at least one dataset!</source>
         <translation>Необхідно додати принаймні один набір даних!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="467"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="468"/>
         <source>Your project needs a title</source>
         <translation>Проєкту потрібна назва</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="469"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="470"/>
         <source>Add a group to get started</source>
         <translation>Додайте групу, щоб почати</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="471"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="472"/>
         <source>Add a dataset to a group</source>
         <translation>Додайте набір даних до групи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="485"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="486"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Відкрийте вигляд Проєкту у верхній частині дерева та введіть назву. Проєкт можна перейменувати в будь-який час.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="488"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="489"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Групи організовують набори даних у віджети панелі. Використайте кнопку Група на панелі інструментів вище, щоб створити групу, а потім додайте до неї набори даних.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="492"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="493"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Набори даних — це значення, які відображаються на панелі приладів. Виберіть групу в дереві та використайте кнопку «Набір даних» на панелі інструментів, щоб додати його.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="773"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="821"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="774"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="822"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1280"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>Видалити джерело даних "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1281"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>Групи, що використовують це джерело, буде переміщено до типового джерела. Цю дію не можна скасувати.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1507"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1568"/>
         <source>Save Serial Studio Project</source>
         <translation>Зберегти Проєкт Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1509"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2132"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1570"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2192"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Файли Проєктів Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1767"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2123"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1592"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1828"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2183"/>
         <source>Untitled Project</source>
         <translation>Проєкт Без Назви</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1777"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2284"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1838"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2344"/>
         <source>Device A</source>
         <translation>Пристрій A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1952"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2012"/>
         <source>Select Project File</source>
         <translation>Вибрати Файл Проєкту</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1954"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2014"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Файли Проєктів (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2003"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2063"/>
         <source>JSON validation error</source>
         <translation>Помилка валідації JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2098"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2158"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>Проєкт оновлено з попереднього формату файлу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2099"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2159"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>Цей проєкт було збережено зі схемою версії %1; поточна версія — %2. Для нових полів застосовано значення за замовчуванням. Збережіть проєкт, щоб зафіксувати оновлення.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2190"/>
         <source>Save Imported Project</source>
         <translation>Зберегти Імпортований Проєкт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2329"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2389"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Багатоджерельні проєкти потребують ліцензії Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2390"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Цей проєкт містить кілька джерел даних. Завантажено лише перше джерело. Для використання багатоджерельних проєктів потрібна ліцензія Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2564"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2626"/>
         <source>Workspace IDs remapped on load</source>
         <translation>Ідентифікатори робочих просторів переназначено під час завантаження</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2565"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2627"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 власних ідентифікаторів робочих просторів перекрили новий зарезервований автоматичний діапазон і були переміщені в користувацький діапазон. Збережіть проєкт, щоб зробити переназначення постійним.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2772"/>
         <source>Legacy frame parser function updated</source>
         <translation>Застарілу функцію парсера кадрів оновлено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2773"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Ваш проєкт використовував застарілу функцію парсера фреймів з аргументом 'separator'. Її автоматично перенесено до нового формату.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2909"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2973"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Видалити групу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2910"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2961"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2996"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2974"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3025"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3060"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3827"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Цю дію неможливо скасувати. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2960"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3024"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Видалити дію "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2995"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3059"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Видалити набір даних "%1"?</translation>
     </message>
@@ -4867,78 +5004,78 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">%1 (Копія)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3671"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3710"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3735"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3774"/>
         <source>Output Controls</source>
         <translation>Елементи Керування Виводом</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3723"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3787"/>
         <source>New Button</source>
         <translation>Нова Кнопка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3726"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3790"/>
         <source>New Slider</source>
         <translation>Новий Повзунок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3729"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3793"/>
         <source>New Toggle</source>
         <translation>Новий Перемикач</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3732"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3796"/>
         <source>New Text Field</source>
         <translation>Нове Текстове Поле</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3735"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3799"/>
         <source>New Knob</source>
         <translation>Новий Регулятор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3762"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3826"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Видалити віджет виводу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3935"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3999"/>
         <source>Group</source>
         <translation>Група</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3954"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4018"/>
         <source>New Dataset</source>
         <translation>Новий Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3957"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4021"/>
         <source>New Plot</source>
         <translation>Новий Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3961"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4025"/>
         <source>New FFT Plot</source>
         <translation>Новий FFT Графік</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3965"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4029"/>
         <source>New Level Indicator</source>
         <translation>Новий Індикатор Рівня</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3969"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4033"/>
         <source>New Gauge</source>
         <translation>Новий Датчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3973"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4037"/>
         <source>New Compass</source>
         <translation>Новий Компас</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3979"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4043"/>
         <source>New Meter</source>
         <translation>Новий Лічильник</translation>
     </message>
@@ -4947,245 +5084,245 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Новий Термометр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3983"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4047"/>
         <source>New LED Indicator</source>
         <translation>Новий Світлодіодний Індикатор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3987"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4051"/>
         <source>New Waterfall</source>
         <translation>Новий Водоспад</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4057"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4121"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4194"/>
         <source>New Action</source>
         <translation>Нова Дія</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4273"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4337"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Ви впевнені, що хочете змінити віджет рівня групи?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4275"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4339"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Наявні набори даних для цієї групи буде видалено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4339"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4340"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4341"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4403"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4404"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4405"/>
         <source>Accelerometer %1</source>
         <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4356"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4356"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4356"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4420"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4420"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4420"/>
         <source>Gyro %1</source>
         <translation>Гіроскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4371"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4435"/>
         <source>Latitude</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4371"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4435"/>
         <source>Longitude</source>
         <translation>Довгота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4371"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4435"/>
         <source>Altitude</source>
         <translation>Висота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4386"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4450"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4464"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4386"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4450"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4464"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4386"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4450"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4464"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4604"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5500"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4739"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5635"/>
         <source>Workspace</source>
         <translation>Робоча Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4770"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4977"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4905"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5112"/>
         <source>Shared Table</source>
         <translation>Спільна Таблиця</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4852"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4987"/>
         <source>register</source>
         <translation>регістр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4977"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5112"/>
         <source>New Shared Table</source>
         <translation>Нова Спільна Таблиця</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4977"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4995"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5014"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5038"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5065"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5084"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5107"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5112"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5500"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5521"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5149"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5200"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5242"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5265"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5635"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5656"/>
         <source>Name:</source>
         <translation>Назва:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4995"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
         <source>Rename Table</source>
         <translation>Перейменувати Таблицю</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5014"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5149"/>
         <source>Rename Group</source>
         <translation>Перейменувати Групу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5038"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
         <source>Rename Dataset</source>
         <translation>Перейменувати Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5065"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5200"/>
         <source>Rename Data Source</source>
         <translation>Перейменувати Джерело Даних</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5084"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5219"/>
         <source>Rename Action</source>
         <translation>Перейменувати Дію</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5106"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5241"/>
         <source>New Register</source>
         <translation>Новий Регістр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5265"/>
         <source>Rename Register</source>
         <translation>Перейменувати Регістр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5169"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5194"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6048"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5329"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6183"/>
         <source>This action cannot be undone.</source>
         <translation>Цю дію не можна скасувати.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5170"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5305"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Це видалить %1 регістр(ів) разом із таблицею. Цю дію не можна скасувати.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5193"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6047"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5308"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5328"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6182"/>
         <source>Delete "%1"?</source>
         <translation>Видалити "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5176"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5311"/>
         <source>Delete Table</source>
         <translation>Видалити Таблицю</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5196"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5331"/>
         <source>Delete Register</source>
         <translation>Видалити Регістр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5220"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5355"/>
         <source>Export Table</source>
         <translation>Експортувати Таблицю</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5222"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5266"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5401"/>
         <source>CSV files (*.csv)</source>
         <translation>Файли CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5264"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5399"/>
         <source>Import Table</source>
         <translation>Імпортувати Таблицю</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5500"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5635"/>
         <source>New Workspace</source>
         <translation>Нова Робоча Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5521"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5656"/>
         <source>Rename Workspace</source>
         <translation>Перейменувати Робочу Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5610"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5745"/>
         <source>Overview</source>
         <translation>Огляд</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5620"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5755"/>
         <source>All Data</source>
         <translation>Усі Дані</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5804"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5939"/>
         <source>Discard workspace customisations?</source>
         <translation>Відкинути налаштування робочого простору?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5805"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5940"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Вимкнення режиму налаштування відкине ваші зміни та перебудує список робочих просторів із груп проєкту.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5808"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5943"/>
         <source>Customize Workspaces</source>
         <translation>Налаштувати Робочі Простори</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6185"/>
         <source>Delete Workspace</source>
         <translation>Видалити Робочу Область</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6391"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6526"/>
         <source>File save error</source>
         <translation>Помилка збереження файлу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2167"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2227"/>
         <source>File open error</source>
         <translation>Помилка відкриття файлу</translation>
     </message>
@@ -6640,126 +6777,229 @@ Valid format: 01 A2 FF 3C</source>
     </message>
 </context>
 <context>
-    <name>FrameParserView</name>
+    <name>FrameParserTest</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="102"/>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="249"/>
-        <source>Undo</source>
-        <translation>Скасувати</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="39"/>
+        <source>Test Frame Parser</source>
+        <translation>Тестування Парсера Кадрів</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="263"/>
-        <source>Redo</source>
-        <translation>Повторити</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="96"/>
+        <source>Frame %1</source>
+        <translation>Кадр %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="118"/>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="288"/>
-        <source>Cut</source>
-        <translation>Вирізати</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="98"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="209"/>
+        <source>Decoder</source>
+        <translation>Декодер</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="123"/>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="301"/>
-        <source>Copy</source>
-        <translation>Копіювати</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="100"/>
+        <source>Rows</source>
+        <translation>Рядки</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="128"/>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="314"/>
-        <source>Paste</source>
-        <translation>Вставити</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="101"/>
+        <source>%1 row(s)</source>
+        <translation>%1 рядків</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="135"/>
-        <source>Select All</source>
-        <translation>Вибрати Все</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="105"/>
+        <source>Row %1</source>
+        <translation>Рядок %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="145"/>
-        <source>Format Document</source>
-        <translation>Форматувати Документ</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="164"/>
+        <source>Pipeline Configuration</source>
+        <translation>Конфігурація Конвеєра</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="152"/>
-        <source>Format Selection</source>
-        <translation>Форматувати Виділення</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="186"/>
+        <source>Detection</source>
+        <translation>Виявлення</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
-        <source>Reset</source>
-        <translation>Скинути</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="232"/>
+        <source>Start</source>
+        <translation>Початок</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="228"/>
-        <source>Reset to the default parsing script</source>
-        <translation>Скинути до типового скрипта парсингу</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="253"/>
+        <source>End</source>
+        <translation>Кінець</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="236"/>
-        <source>Open</source>
-        <translation>Відкрити</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="274"/>
+        <source>Checksum</source>
+        <translation>Контрольна Сума</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="241"/>
-        <source>Import a script file for data parsing</source>
-        <translation>Імпортувати файл скрипта для парсингу даних</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="299"/>
+        <source>Hex Delimiters</source>
+        <translation>Hex Роздільники</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="343"/>
-        <source>Open help documentation for data parsing</source>
-        <translation>Відкрити довідкову документацію з парсингу даних</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="315"/>
+        <source>Frame Data Input</source>
+        <translation>Введення Даних Кадру</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="365"/>
-        <source>Language:</source>
-        <translation>Мова:</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="342"/>
+        <source>Enter hex bytes (e.g. 01 A2 FF)</source>
+        <translation>Введіть hex байти (напр. 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="419"/>
-        <source>Select Template…</source>
-        <translation>Вибрати Шаблон…</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="343"/>
+        <source>Enter raw stream bytes here...</source>
+        <translation>Введіть необроблені байти потоку тут...</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="432"/>
-        <source>Test With Sample Data</source>
-        <translation>Тестувати з Прикладом Даних</translation>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="362"/>
+        <source>HEX</source>
+        <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="439"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="387"/>
+        <source>The sample does not contain the configured frame delimiters, so no frame will be extracted. Type them into the sample (e.g. 
+ for a newline) or adjust the detection mode.</source>
+        <translation>Зразок не містить налаштованих роздільників кадру, тому жоден кадр не буде витягнуто. Введіть їх у зразок (напр. 
+ для нового рядка) або налаштуйте режим виявлення.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="407"/>
+        <source>Pipeline Results</source>
+        <translation>Результати Конвеєра</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="480"/>
+        <source>Stage</source>
+        <translation>Етап</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="487"/>
+        <source>Value</source>
+        <translation>Значення</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="530"/>
+        <source>Extraction did not produce a complete frame. Check the start / end delimiters and the detection mode.</source>
+        <translation>Витягування не створило повний фрейм. Перевірте початкові/кінцеві роздільники та режим виявлення.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="532"/>
+        <source>Enter sample data above and press Evaluate to preview the parsed output</source>
+        <translation>Введіть зразкові дані вище та натисніть Обчислити для попереднього перегляду розібраного виводу</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="614"/>
+        <source>Clear</source>
+        <translation>Очистити</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="625"/>
+        <source>Close</source>
+        <translation>Закрити</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="632"/>
         <source>Evaluate</source>
         <translation>Обчислити</translation>
     </message>
+</context>
+<context>
+    <name>FrameParserView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
+        <source>Undo</source>
+        <translation type="vanished">Скасувати</translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation type="vanished">Повторити</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="vanished">Вирізати</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="vanished">Копіювати</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="vanished">Вставити</translation>
+    </message>
+    <message>
+        <source>Select All</source>
+        <translation type="vanished">Вибрати Все</translation>
+    </message>
+    <message>
+        <source>Format Document</source>
+        <translation type="vanished">Форматувати Документ</translation>
+    </message>
+    <message>
+        <source>Format Selection</source>
+        <translation type="vanished">Форматувати Виділення</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="vanished">Скинути</translation>
+    </message>
+    <message>
+        <source>Reset to the default parsing script</source>
+        <translation type="vanished">Скинути до типового скрипта парсингу</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="vanished">Відкрити</translation>
+    </message>
+    <message>
+        <source>Import a script file for data parsing</source>
+        <translation type="vanished">Імпортувати файл скрипта для парсингу даних</translation>
+    </message>
+    <message>
+        <source>Open help documentation for data parsing</source>
+        <translation type="vanished">Відкрити довідкову документацію з парсингу даних</translation>
+    </message>
+    <message>
+        <source>Language:</source>
+        <translation type="vanished">Мова:</translation>
+    </message>
+    <message>
+        <source>Select Template…</source>
+        <translation type="vanished">Вибрати Шаблон…</translation>
+    </message>
+    <message>
+        <source>Test With Sample Data</source>
+        <translation type="vanished">Тестувати з Прикладом Даних</translation>
+    </message>
+    <message>
+        <source>Evaluate</source>
+        <translation type="vanished">Обчислити</translation>
+    </message>
+    <message>
         <source>Undo the last code edit</source>
-        <translation>Скасувати останнє редагування коду</translation>
+        <translation type="vanished">Скасувати останнє редагування коду</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
         <source>Redo the previously undone edit</source>
-        <translation>Повторити скасоване редагування</translation>
+        <translation type="vanished">Повторити скасоване редагування</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="293"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Вирізати виділений код у буфер обміну</translation>
+        <translation type="vanished">Вирізати виділений код у буфер обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="306"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Копіювати виділений код у буфер обміну</translation>
+        <translation type="vanished">Копіювати виділений код у буфер обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <source>Paste code from clipboard</source>
-        <translation>Вставити код з буфера обміну</translation>
+        <translation type="vanished">Вставити код з буфера обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="338"/>
         <source>Help</source>
-        <translation>Довідка</translation>
+        <translation type="vanished">Довідка</translation>
     </message>
 </context>
 <context>
@@ -7070,27 +7310,27 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Завантаження…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="289"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="291"/>
         <source>Select a page from the sidebar</source>
         <translation>Виберіть сторінку з бічної панелі</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="319"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="321"/>
         <source>Copied to Clipboard</source>
         <translation>Скопійовано до буфера обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="351"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="353"/>
         <source>View Online</source>
         <translation>Переглянути Онлайн</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="370"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="372"/>
         <source>%1 pages</source>
         <translation>%1 сторінок</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="379"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -7593,9 +7833,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Функція MQTT Потребує Комерційної Ліцензії</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="178"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio commercial license (Hobbyist tier or above).</source>
-        <translation>Підписка на MQTT-брокер доступна лише з дійсною комерційною ліцензією Serial Studio (рівень Hobbyist або вище).</translation>
+        <translation type="vanished">Підписка на MQTT-брокер доступна лише з дійсною комерційною ліцензією Serial Studio (рівень Hobbyist або вище).</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="178"/>
+        <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
+        <translation>Підписка на MQTT-брокер доступна лише з дійсною ліцензією Serial Studio або активним пробним періодом.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/MQTT.cpp" line="408"/>
@@ -8599,12 +8843,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="298"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="314"/>
         <source>Frames dropped</source>
         <translation>Втрачено кадрів</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="300"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="316"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>Вхідні дані надходять швидше, ніж Serial Studio може їх обробити; втрачено %1 кадр(ів). Зменшіть швидкість передачі даних або вимкніть ресурсомісткий споживач.</translation>
     </message>
@@ -9276,129 +9520,129 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="546"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
         <source>There was an issue validating your license.</source>
         <translation>Виникла проблема під час перевірки вашої ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="564"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="745"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="870"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="562"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="868"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Наданий вами ліцензійний ключ не належить Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="563"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Переконайтеся, що ви придбали ліцензію в офіційному магазині Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
         <source>This license key was activated on a different device.</source>
         <translation>Цей ліцензійний ключ активовано на іншому пристрої.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="575"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="753"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Спочатку деактивуйте його там або зверніться до служби підтримки.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="588"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="763"/>
         <source>This license is not currently active.</source>
         <translation>Ця ліцензія наразі неактивна.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="589"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="587"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Можливо, термін її дії закінчився або її деактивовано (статус: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
         <source>Something went wrong on the server.</source>
         <translation>Сталася помилка на сервері.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="776"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="598"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
         <source>No activation ID was returned.</source>
         <translation>Ідентифікатор активації не повернуто.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
         <source>Could not validate your license at this time.</source>
         <translation>Не вдалося перевірити вашу ліцензію.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="611"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="785"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="609"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="879"/>
         <source>Try again later.</source>
         <translation>Спробуйте пізніше.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="746"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="869"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Переконайтеся, що ви придбали ліцензію в офіційному магазині Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="775"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
         <source>Something went wrong on the server…</source>
         <translation>Щось пішло не так на сервері…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="631"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="682"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="680"/>
         <source>Your license has been successfully activated.</source>
         <translation>Вашу ліцензію успішно активовано.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="683"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="681"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Дякуємо за підтримку Serial Studio!
 Тепер у вас є доступ до всіх преміум-функцій.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="735"/>
         <source>There was an issue activating your license.</source>
         <translation>Виникла проблема під час активації вашої ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="784"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
         <source>Could not activate your license at this time.</source>
         <translation>Не вдалося активувати вашу ліцензію зараз.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="861"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="859"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Виникла проблема під час деактивації вашої ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="878"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Не вдалося деактивувати вашу ліцензію зараз.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
         <source>Your license has been deactivated.</source>
         <translation>Вашу ліцензію деактивовано.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Доступ до функцій Pro вилучено.
@@ -10354,7 +10598,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MarkdownWebView</name>
     <message>
-        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="35"/>
+        <location filename="../../qml/Widgets/MarkdownWebView.qml" line="36"/>
         <source>Copied to Clipboard</source>
         <translation>Скопійовано до буфера обміну</translation>
     </message>
@@ -10438,98 +10682,98 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MessageWebView</name>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="62"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="63"/>
         <source>You</source>
         <translation>Ви</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="63"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="64"/>
         <source>Assistant</source>
         <translation>Асистент</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="64"/>
-        <location filename="../../qml/AI/MessageWebView.qml" line="70"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="65"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="71"/>
         <source>Error</source>
         <translation>Помилка</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="65"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="66"/>
         <source>Discovery</source>
         <translation>Виявлення</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="66"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="67"/>
         <source>Execution</source>
         <translation>Виконання</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="67"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="68"/>
         <source>Running</source>
         <translation>Виконується</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="68"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="69"/>
         <source>Awaiting approval</source>
         <translation>Очікування підтвердження</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="69"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="70"/>
         <source>Done</source>
         <translation>Завершено</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="71"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="72"/>
         <source>Denied</source>
         <translation>Відхилено</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="72"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="73"/>
         <source>Blocked</source>
         <translation>Заблоковано</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="73"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="74"/>
         <source>Approve</source>
         <translation>Схвалити</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="74"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="75"/>
         <source>Deny</source>
         <translation>Відхилити</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="75"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="76"/>
         <source>Approve all</source>
         <translation>Схвалити всі</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="76"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="77"/>
         <source>Deny all</source>
         <translation>Відхилити всі</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="77"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="78"/>
         <source>Arguments</source>
         <translation>Аргументи</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="78"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="79"/>
         <source>Result</source>
         <translation>Результат</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="79"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="80"/>
         <source>Approve {n} actions in {family}?</source>
         <translation>Схвалити {n} дій у {family}?</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="80"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="81"/>
         <source>These calls will run together. Expand each card to inspect arguments.</source>
         <translation>Ці виклики виконуватимуться разом. Розгорніть кожну картку для перегляду аргументів.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageWebView.qml" line="81"/>
+        <location filename="../../qml/AI/MessageWebView.qml" line="82"/>
         <source>Copy</source>
         <translation>Копіювати</translation>
     </message>
@@ -10795,8 +11039,8 @@ Would you like to open the download page?</source>
         <translation>Не вдалося записати Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Засіб створення ярликів Windows недоступний на цій платформі.</translation>
     </message>
@@ -10827,8 +11071,8 @@ Would you like to open the download page?</source>
         <translation>Збереження файлу .lnk завершилося невдало (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Засіб створення ярликів macOS недоступний на цій платформі.</translation>
     </message>
@@ -11364,6 +11608,291 @@ Add groups above to poll multiple register types.</source>
     <message>
         <source>Samples</source>
         <translation type="vanished">Зразки</translation>
+    </message>
+</context>
+<context>
+    <name>NativeTemplates</name>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="365"/>
+        <source>Bytes per value</source>
+        <translation>Байтів на значення</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="366"/>
+        <source>Number of bytes combined into each channel value.</source>
+        <translation>Кількість байтів, об'єднаних у кожне значення каналу.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="374"/>
+        <source>Endianness</source>
+        <translation>Порядок Байтів</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="375"/>
+        <source>Byte order used when combining multi-byte values.</source>
+        <translation>Порядок байтів, що використовується при об'єднанні багатобайтових значень.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="383"/>
+        <source>Signed values</source>
+        <translation>Знакові значення</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="384"/>
+        <source>Interprets each value as two's-complement signed.</source>
+        <translation>Інтерпретує кожне значення як знакове у доповняльному коді.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="588"/>
+        <source>Tag routing table</source>
+        <translation>Таблиця маршрутизації тегів</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="589"/>
+        <source>Comma-separated tag:index entries, e.g. 1:0,2:1,3:2. Tags may be decimal or 0x-prefixed hex.</source>
+        <translation>Записи тег:індекс, розділені комами, наприклад 1:0,2:1,3:2. Теги можуть бути десятковими або шістнадцятковими з префіксом 0x.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1033"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1238"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1166"/>
+        <source>Validate checksum</source>
+        <translation>Перевірити контрольну суму</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1034"/>
+        <source>Rejects messages with an invalid Fletcher checksum.</source>
+        <translation>Відхиляє повідомлення з недійсною контрольною сумою Fletcher.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1239"/>
+        <source>Rejects messages with an invalid additive checksum.</source>
+        <translation>Відхиляє повідомлення з недійсною адитивною контрольною сумою.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1392"/>
+        <source>Protocol version</source>
+        <translation>Версія протоколу</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1393"/>
+        <source>Selects the expected start marker (0xFE for v1, 0xFD for v2).</source>
+        <translation>Вибирає очікуваний стартовий маркер (0xFE для v1, 0xFD для v2).</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1821"/>
+        <source>Validate CRC</source>
+        <translation>Перевірити CRC</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1822"/>
+        <source>Rejects frames with an invalid CRC-24Q checksum.</source>
+        <translation>Відхиляє кадри з недійсною контрольною сумою CRC-24Q.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1997"/>
+        <source>Channel count</source>
+        <translation>Кількість каналів</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1998"/>
+        <source>Number of output channels (registers or coils).</source>
+        <translation>Кількість вихідних каналів (регістрів або котушок).</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2006"/>
+        <source>Register offset</source>
+        <translation>Зміщення регістра</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2007"/>
+        <source>Address offset subtracted from single-write echoes (40001 for legacy Modicon maps).</source>
+        <translation>Зміщення адреси, яке віднімається від відлунь одиночного запису (40001 для застарілих карт Modicon).</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2017"/>
+        <source>Signed registers</source>
+        <translation>Знакові регістри</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2018"/>
+        <source>Interprets 16-bit registers as two's-complement signed values.</source>
+        <translation>Інтерпретує 16-бітні регістри як знакові значення з доповненням до двох.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2325"/>
+        <source>Payload layout</source>
+        <translation>Макет корисного навантаження</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2326"/>
+        <source>Array emits every element in order; map routes keys through the key list.</source>
+        <translation>Масив виводить кожен елемент по порядку; карта направляє ключі через список ключів.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2336"/>
+        <source>Keys (map mode)</source>
+        <translation>Ключі (режим мапи)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2337"/>
+        <source>Comma-separated map keys in channel order. Only used for the map layout.</source>
+        <translation>Ключі мапи, розділені комами, у порядку каналів. Використовується лише для макета мапи.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="184"/>
+        <source>Scalar fields</source>
+        <translation>Скалярні поля</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="185"/>
+        <source>Comma-separated JSON fields repeated in every generated frame.</source>
+        <translation>Поля JSON, розділені комами, що повторюються в кожному згенерованому кадрі.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="192"/>
+        <source>Sample array field</source>
+        <translation>Поле масиву вибірок</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="193"/>
+        <source>JSON field holding the batched sample array.</source>
+        <translation>Поле JSON, що містить пакетний масив вибірок.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="334"/>
+        <source>Records array field</source>
+        <translation>Поле масиву записів</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="335"/>
+        <source>JSON field holding the array of record objects.</source>
+        <translation>Поле JSON, що містить масив об'єктів записів.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="341"/>
+        <source>Record fields (in channel order)</source>
+        <translation>Поля запису (у порядку каналів)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp" line="342"/>
+        <source>Comma-separated record fields. The position of each field sets its channel index.</source>
+        <translation>Поля запису, розділені комами. Позиція кожного поля визначає його індекс каналу.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="526"/>
+        <source>Column widths</source>
+        <translation>Ширини стовпців</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="527"/>
+        <source>Comma-separated character counts per field. Leave empty to split on whitespace.</source>
+        <translation>Кількість символів для кожного поля через кому. Залиште порожнім для розділення за пробілами.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="535"/>
+        <source>Trim whitespace</source>
+        <translation>Обрізати пробіли</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="536"/>
+        <source>Removes padding around every sliced field.</source>
+        <translation>Видаляє відступи навколо кожного розділеного поля.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="665"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="814"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1282"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1710"/>
+        <source>Keys (in channel order)</source>
+        <translation>Ключі (у порядку каналів)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="666"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="815"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1711"/>
+        <source>Comma-separated key names. The position of each key sets its channel index.</source>
+        <translation>Імена ключів через кому. Позиція кожного ключа визначає його індекс каналу.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="674"/>
+        <source>Pair separator</source>
+        <translation>Роздільник пар</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="675"/>
+        <source>Character between key=value pairs.</source>
+        <translation>Символ між парами ключ=значення.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="681"/>
+        <source>Key-value separator</source>
+        <translation>Роздільник ключ-значення</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="682"/>
+        <source>Character between a key and its value.</source>
+        <translation>Символ між ключем та його значенням.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="688"/>
+        <source>Numeric values only</source>
+        <translation>Лише числові значення</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="689"/>
+        <source>Ignores pairs whose value is not a number.</source>
+        <translation>Ігнорує пари, значення яких не є числом.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="931"/>
+        <source>Command routing table</source>
+        <translation>Таблиця маршрутизації команд</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="932"/>
+        <source>Semicolon-separated entries of NAME:index list, e.g. CSQ:0,1;CREG:2,3;CGATT:4.</source>
+        <translation>Записи NAME:index, розділені крапкою з комою, наприклад CSQ:0,1;CREG:2,3;CGATT:4.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1157"/>
+        <source>Talker prefix</source>
+        <translation>Префікс передавача</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1158"/>
+        <source>Two-letter talker id, e.g. GP for GPS or GN for multi-constellation receivers.</source>
+        <translation>Двобуквений ідентифікатор передавача, наприклад GP для GPS або GN для багатосистемних приймачів.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1167"/>
+        <source>Rejects sentences whose *hh checksum does not match.</source>
+        <translation>Відхиляє речення, контрольна сума *hh яких не збігається.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1283"/>
+        <source>Comma-separated parameter names. The position of each key sets its channel index.</source>
+        <translation>Імена параметрів, розділені комами. Позиція кожного ключа визначає його індекс каналу.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1422"/>
+        <source>Fields (in channel order)</source>
+        <translation>Поля (у порядку каналів)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1423"/>
+        <source>Comma-separated field names. The position of each field sets its channel index.</source>
+        <translation>Імена полів, розділені комами. Позиція кожного поля визначає його індекс каналу.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1543"/>
+        <source>Tags (in channel order)</source>
+        <translation>Теги (у порядку каналів)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1544"/>
+        <source>Comma-separated tag names. The position of each tag sets its channel index.</source>
+        <translation>Імена тегів, розділені комами. Позиція кожного тега визначає його індекс каналу.</translation>
     </message>
 </context>
 <context>
@@ -12133,47 +12662,47 @@ Click Refresh to update the list.</source>
         <translation>змінено</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="322"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="342"/>
         <source>This project is password protected</source>
         <translation>Цей проєкт захищено паролем</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="323"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="343"/>
         <source>Editing is available in Project mode</source>
         <translation>Редагування доступне в режимі проєкту</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="334"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="354"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Введіть пароль для внесення змін або відкрийте інший проєкт.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="335"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="355"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>Перейдіть у режим проєкту для завантаження та редагування проєкту.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="377"/>
         <source>Unlock</source>
         <translation>Розблокувати</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="358"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="378"/>
         <source>Switch to Project Mode</source>
         <translation>Перейти в режим проєкту</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="377"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="397"/>
         <source>Open Other Project</source>
         <translation>Відкрити Інший Проєкт</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="378"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="398"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="414"/>
         <source>Create New Project</source>
         <translation>Створити Новий Проєкт</translation>
     </message>
@@ -12879,13 +13408,13 @@ Click Refresh to update the list.</source>
         <translation>Загальна помилка введення/виведення</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="275"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="256"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="284"/>
         <source>Frame Parser Disabled</source>
         <translation>Парсер Фреймів Вимкнено</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="285"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -12894,12 +13423,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Найімовірніша причина: нескінченний цикл або надзвичайно повільна операція в тілі скрипта. Виправте скрипт і перезавантажте проєкт, щоб увімкнути парсинг знову.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="324"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="333"/>
         <source>Lua Syntax Error</source>
         <translation>Синтаксична Помилка Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="325"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="334"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -12908,12 +13437,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="375"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="384"/>
         <source>Lua Runtime Error</source>
         <translation>Помилка Виконання Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="376"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="385"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -12922,13 +13451,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="397"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="488"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="406"/>
         <source>Missing Parse Function</source>
         <translation>Відсутня Функція Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="398"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="407"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -12939,13 +13468,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="460"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="533"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="542"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="469"/>
         <source>Parse Function Runtime Error</source>
         <translation>Помилка Виконання Функції Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="461"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="470"/>
         <source>The parse function contains an error:
 
 %1
@@ -12958,7 +13487,7 @@ Please fix the error in the function body.</source>
 Будь ласка, виправте помилку в тілі функції.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="256"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="257"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -12967,12 +13496,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Найімовірніша причина: нескінченний цикл або надзвичайно повільна операція в тілі скрипта. Виправте скрипт і перезавантажте проєкт, щоб увімкнути парсинг знову.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="418"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="427"/>
         <source>JavaScript Timed Out</source>
         <translation>Тайм-аут Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="419"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="428"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -12981,12 +13510,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 Найімовірніша причина: нескінченний цикл на верхньому рівні скрипта.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="437"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="446"/>
         <source>JavaScript Syntax Error</source>
         <translation>Синтаксична Помилка Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="438"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="447"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -12995,12 +13524,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="453"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="462"/>
         <source>JavaScript Exception Occurred</source>
         <translation>Виникло Виключення Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="454"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="463"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -13009,7 +13538,7 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="480"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="489"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -13020,7 +13549,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="534"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="543"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -13033,12 +13562,12 @@ Please fix the error in the function body.</source>
 Будь ласка, виправте помилку в тілі функції.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="637"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="646"/>
         <source>Invalid Function Declaration</source>
         <translation>Недійсне Оголошення Функції</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="638"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="647"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -13051,7 +13580,7 @@ Define one of:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="654"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="663"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>Функція 'parse' повинна приймати принаймні один параметр (навантаження фрейму).</translation>
     </message>
@@ -13066,7 +13595,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="653"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="662"/>
         <source>Invalid Function Parameter</source>
         <translation>Недійсний Параметр Функції</translation>
     </message>
@@ -13081,12 +13610,12 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="618"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="627"/>
         <source>Deprecated Function Signature</source>
         <translation>Застаріла Сигнатура Функції</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="619"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="628"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -13101,12 +13630,12 @@ function parse(%1) { ... }
 Параметр роздільника більше не потрібен.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="182"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="188"/>
         <source>Critical</source>
         <translation>Критично</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="182"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="188"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -13195,12 +13724,12 @@ function parse(%1) { ... }
         <translation>API-ключ Groq не встановлено. Відкрийте Керування Ключами, щоб додати його.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="657"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="863"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Парсер фреймів використовує понад %1% процесорного часу.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="659"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="865"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio пропускає фрейми, щоб зберегти відгук програми. Спростіть або оптимізуйте скрипт парсера фреймів, щоб зменшити його навантаження.</translation>
     </message>
@@ -13290,34 +13819,47 @@ function parse(%1) { ... }
         <translation>Програмно (Резервний Режим)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="93"/>
         <source>Row %1</source>
-        <translation>Рядок %1</translation>
+        <translation type="vanished">Рядок %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="98"/>
         <source>[%1]</source>
-        <translation>[%1]</translation>
+        <translation type="vanished">[%1]</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="112"/>
         <source>Frame %1</source>
-        <translation>Кадр %1</translation>
+        <translation type="vanished">Кадр %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="119"/>
         <source>Decoder</source>
-        <translation>Декодер</translation>
+        <translation type="vanished">Декодер</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="123"/>
         <source>Rows</source>
-        <translation>Рядки</translation>
+        <translation type="vanished">Рядки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/FrameParserTestDialog.cpp" line="124"/>
         <source>%1 row(s)</source>
-        <translation>%1 рядків</translation>
+        <translation type="vanished">%1 рядків</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="185"/>
+        <source>The native parser configuration is not a valid JSON object.</source>
+        <translation>Конфігурація вбудованого парсера не є дійсним об'єктом JSON.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="195"/>
+        <source>Unknown native parser template: "%1".</source>
+        <translation>Невідомий шаблон вбудованого парсера: "%1".</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="329"/>
+        <source>Built-In Parser Error</source>
+        <translation>Помилка Вбудованого Парсера</translation>
+    </message>
+    <message>
+        <source>Native Parser Error</source>
+        <translation type="vanished">Помилка Вбудованого Парсера</translation>
     </message>
 </context>
 <context>
@@ -15318,122 +15860,145 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>SourceFrameParserView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="110"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="242"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="116"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="255"/>
         <source>Undo</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="117"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="123"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="267"/>
         <source>Redo</source>
         <translation>Повторити</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="126"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="272"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="132"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="288"/>
         <source>Cut</source>
         <translation>Вирізати</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="131"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="282"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="299"/>
         <source>Copy</source>
         <translation>Копіювати</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="136"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="292"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="310"/>
         <source>Paste</source>
         <translation>Вставити</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="149"/>
         <source>Select All</source>
         <translation>Вибрати Все</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="159"/>
         <source>Format Document</source>
         <translation>Форматувати Документ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="160"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="166"/>
         <source>Format Selection</source>
         <translation>Форматувати Виділення</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="222"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="228"/>
         <source>Reset</source>
         <translation>Скинути</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="227"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="232"/>
+        <source>Reset template parameters to their defaults</source>
+        <translation>Скинути параметри шаблону до типових значень</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="233"/>
         <source>Reset to the default parsing script</source>
         <translation>Скинути до типового скрипта парсингу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="232"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="244"/>
         <source>Open</source>
         <translation>Відкрити</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="237"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="250"/>
         <source>Import a script file for data parsing</source>
         <translation>Імпортувати файл скрипта для парсингу даних</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="315"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="334"/>
         <source>Open help documentation for data parsing</source>
         <translation>Відкрити довідкову документацію з парсингу даних</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="352"/>
         <source>Language:</source>
-        <translation>Мова:</translation>
+        <translation type="vanished">Мова:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="378"/>
+        <source>Native</source>
+        <translation type="vanished">Вбудований</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="410"/>
         <source>Select Template…</source>
         <translation>Вибрати Шаблон…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="247"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="261"/>
         <source>Undo the last code edit</source>
         <translation>Скасувати останнє редагування коду</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="259"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="274"/>
         <source>Redo the previously undone edit</source>
         <translation>Повторити скасовану дію редагування</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="294"/>
         <source>Cut selected code to clipboard</source>
         <translation>Вирізати виділений код до буфера обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="287"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="305"/>
         <source>Copy selected code to clipboard</source>
         <translation>Скопіювати виділений код у буфер обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="296"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="315"/>
         <source>Paste code from clipboard</source>
         <translation>Вставити код з буфера обміну</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="310"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="329"/>
         <source>Help</source>
         <translation>Довідка</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="387"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="383"/>
+        <source>Platform:</source>
+        <translation>Платформа:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="391"/>
+        <source>Built-In</source>
+        <translation>Вбудований</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="419"/>
+        <source>Template:</source>
+        <translation>Шаблон:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="447"/>
         <source>Test With Sample Data</source>
         <translation>Тестувати з Прикладом Даних</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="457"/>
         <source>Evaluate</source>
         <translation>Обчислити</translation>
     </message>
@@ -16584,37 +17149,37 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1201"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1944"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1246"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1989"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1288"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1956"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1333"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2001"/>
         <source>Notifications</source>
         <translation>Сповіщення</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1374"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1968"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1419"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2013"/>
         <source>Clock</source>
         <translation>Годинник</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1459"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1979"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1504"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2024"/>
         <source>Stopwatch</source>
         <translation>Секундомір</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2036"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2052"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2081"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2097"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Резервний)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2078"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2123"/>
         <source>LED Panel (%1)</source>
         <translation>LED-Панель (%1)</translation>
     </message>
@@ -16630,12 +17195,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1099"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1098"/>
         <source>Select Background Image</source>
         <translation>Вибрати Фонове Зображення</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1101"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1100"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>Зображення (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>

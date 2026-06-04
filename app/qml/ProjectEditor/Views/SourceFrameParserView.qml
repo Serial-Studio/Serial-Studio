@@ -22,7 +22,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import SerialStudio as SerialStudio
+import SerialStudio
 
 import "../../Widgets" as Widgets
 
@@ -33,10 +33,16 @@ Widgets.Pane {
   icon: Cpp_JSON_ProjectEditor.selectedIcon
   title: Cpp_JSON_ProjectEditor.selectedText
 
+  //
+  // Native mode swaps the code editor for the template configuration pane
+  //
+  readonly property bool nativeMode: frameParser.language === SerialStudio.Native
+
   onVisibleChanged: {
     if (visible) {
       frameParser.sourceId = Cpp_JSON_ProjectEditor.selectedSourceId
-      Qt.callLater(frameParser.forceActiveFocus)
+      if (!root.nativeMode)
+        Qt.callLater(frameParser.forceActiveFocus)
     }
   }
 
@@ -222,15 +228,22 @@ Widgets.Pane {
             text: qsTr("Reset")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            onClicked: frameParser.reload(true)
             icon.source: "qrc:/icons/code-editor/reload.svg"
-            ToolTip.text: qsTr("Reset to the default parsing script")
+            ToolTip.text: root.nativeMode ? qsTr("Reset template parameters to their defaults")
+                                          : qsTr("Reset to the default parsing script")
+            onClicked: {
+              if (root.nativeMode)
+                nativePane.editor.resetToDefaults()
+              else
+                frameParser.reload(true)
+            }
           }
 
           Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Open")
             toolbarButton: false
+            visible: !root.nativeMode
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/open.svg"
@@ -241,6 +254,7 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Undo")
             toolbarButton: false
+            visible: !root.nativeMode
             onClicked: frameParser.undo()
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.undoAvailable
@@ -252,6 +266,7 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Redo")
             toolbarButton: false
+            visible: !root.nativeMode
             onClicked: frameParser.redo()
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.redoAvailable
@@ -263,6 +278,7 @@ Widgets.Pane {
             implicitWidth: 1
             Layout.fillHeight: true
             Layout.maximumHeight: 48
+            visible: !root.nativeMode
             Layout.alignment: Qt.AlignVCenter
             color: Cpp_ThemeManager.colors["groupbox_border"]
           }
@@ -271,6 +287,7 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Cut")
             toolbarButton: false
+            visible: !root.nativeMode
             onClicked: frameParser.cut()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/cut.svg"
@@ -281,6 +298,7 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Copy")
             toolbarButton: false
+            visible: !root.nativeMode
             onClicked: frameParser.copy()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/code-editor/copy.svg"
@@ -291,6 +309,7 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Paste")
             toolbarButton: false
+            visible: !root.nativeMode
             onClicked: frameParser.paste()
             Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Paste code from clipboard")
@@ -339,6 +358,16 @@ Widgets.Pane {
         RowLayout {
           id: templateLayout
 
+          //
+          // Loop-free fit test: required width sums the native-mode items' implicit widths
+          // (none depend on the label's visibility, so the binding graph stays acyclic)
+          //
+          readonly property bool templateLabelFits:
+            width >= languageLabel.implicitWidth + languageSelector.implicitWidth
+                     + templateLabel.implicitWidth
+                     + Math.max(templateCombo.implicitWidth, 220)
+                     + testButton.implicitWidth + 5 * spacing
+
           spacing: 4
 
           anchors {
@@ -349,7 +378,9 @@ Widgets.Pane {
           }
 
           Label {
-            text: qsTr("Language:")
+            id: languageLabel
+
+            text: qsTr("Platform:")
             Layout.alignment: Qt.AlignVCenter
             font: Cpp_Misc_CommonFonts.uiFont
           }
@@ -357,7 +388,7 @@ Widgets.Pane {
           Widgets.Combo {
             id: languageSelector
 
-            model: ["JavaScript", "Lua"]
+            model: ["JavaScript", "Lua", qsTr("Built-In")]
             Layout.alignment: Qt.AlignVCenter
             currentIndex: frameParser.language
 
@@ -375,23 +406,56 @@ Widgets.Pane {
 
           Widgets.IconButton {
             horizontalPadding: 12
+            visible: !root.nativeMode
             text: qsTr("Select Template…")
             Layout.alignment: Qt.AlignVCenter
             onClicked: frameParser.selectTemplate()
             icon.source: "qrc:/icons/buttons/code.svg"
           }
 
+          Label {
+            id: templateLabel
+
+            text: qsTr("Template:")
+            Layout.alignment: Qt.AlignVCenter
+            font: Cpp_Misc_CommonFonts.uiFont
+            visible: root.nativeMode && templateLayout.templateLabelFits
+          }
+
+          Widgets.Combo {
+            id: templateCombo
+
+            visible: root.nativeMode
+            Layout.minimumWidth: 220
+            Layout.alignment: Qt.AlignVCenter
+            model: nativePane.editor.templateNames
+            currentIndex: nativePane.editor.templateIndex
+
+            onActivated: {
+              nativePane.editor.setTemplateIndex(currentIndex)
+              currentIndex = Qt.binding(function() {
+                return nativePane.editor.templateIndex
+              })
+            }
+          }
+
           Widgets.IconButton {
+            id: testButton
+
             horizontalPadding: 12
             Layout.alignment: Qt.AlignVCenter
             text: qsTr("Test With Sample Data")
-            onClicked: frameParser.testWithSampleData()
             icon.source: "qrc:/icons/buttons/test.svg"
+            onClicked: {
+              if (root.nativeMode || frameParser.prepareParserTest())
+                parserTestLoader.openTester(frameParser.sourceId)
+            }
           }
 
           Widgets.IconButton {
             horizontalPadding: 12
             text: qsTr("Evaluate")
+            visible: !root.nativeMode
             onClicked: frameParser.evaluate()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/icons/buttons/media-play.svg"
@@ -406,25 +470,34 @@ Widgets.Pane {
         color: Cpp_ThemeManager.colors["groupbox_border"]
       }
 
-      SerialStudio.JsCodeEditor {
-        id: frameParser
-
+      StackLayout {
         Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
+        currentIndex: root.nativeMode ? 1 : 0
 
-        MouseArea {
-          anchors.fill: parent
-          cursorShape: Qt.IBeamCursor
-          propagateComposedEvents: true
-          acceptedButtons: Qt.RightButton
+        JsCodeEditor {
+          id: frameParser
 
-          onClicked: (mouse) => {
-                       if (mouse.button === Qt.RightButton) {
-                         contextMenu.popup()
-                         mouse.accepted = true
+          MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.IBeamCursor
+            propagateComposedEvents: true
+            acceptedButtons: Qt.RightButton
+
+            onClicked: (mouse) => {
+                         if (mouse.button === Qt.RightButton) {
+                           contextMenu.popup()
+                           mouse.accepted = true
+                         }
                        }
-                     }
+          }
+        }
+
+        NativeParserPane {
+          id: nativePane
+
+          sourceId: frameParser.sourceId
         }
       }
     }

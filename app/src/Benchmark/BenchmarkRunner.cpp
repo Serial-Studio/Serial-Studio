@@ -21,6 +21,9 @@
 
 #include "Benchmark/BenchmarkRunner.h"
 
+#include <QClipboard>
+#include <QGuiApplication>
+#include <QSysInfo>
 #include <QTimer>
 #include <QVariantMap>
 
@@ -62,6 +65,8 @@ struct PhaseSpec {
 // code-verify off
 static const PhaseSpec kPhases[] = {
   {                       -1, false, false, false,  true, 1024000.0}, // Data pipeline
+  {     SerialStudio::Native, false, false, false, false, 1024000.0}, // Native parser (numeric)
+  {     SerialStudio::Native, false,  true, false, false,  512000.0}, // Native parser (mixed)
   {        SerialStudio::Lua, false, false, false, false,  256000.0}, // Lua parser (numeric)
   { SerialStudio::JavaScript, false, false, false, false,  128000.0}, // Javascript parser (numeric)
   {        SerialStudio::Lua, false,  true, false, false,  128000.0}, // Lua parser (mixed)
@@ -180,6 +185,8 @@ QStringList BenchmarkRunner::secondsOptions() const
 void BenchmarkRunner::retranslate()
 {
   m_phaseLabels    = {tr("Data pipeline"),
+                      tr("Built-in parser (numeric)"),
+                      tr("Built-in parser (mixed)"),
                       tr("Lua parser (numeric)"),
                       tr("JavaScript parser (numeric)"),
                       tr("Lua parser (mixed)"),
@@ -205,6 +212,52 @@ void BenchmarkRunner::retranslate()
 //--------------------------------------------------------------------------------------------------
 // Public control
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Copies the results table to the clipboard as a Markdown report.
+ */
+void BenchmarkRunner::copyResults()
+{
+  if (m_results.isEmpty())
+    return;
+
+  QString text;
+  text += tr("Serial Studio %1 - Hotpath Benchmark")
+            .arg(QCoreApplication::applicationVersion());
+  text += QStringLiteral("\n");
+  text += tr("%1 (%2), workload: %3 frames minimum, %4 s minimum")
+            .arg(QSysInfo::prettyProductName(),
+                 QSysInfo::currentCpuArchitecture(),
+                 QString::number(m_frames),
+                 QString::number(m_seconds, 'f', 0));
+  text += QStringLiteral("\n\n");
+  text += QStringLiteral("| %1 | %2 | %3 | %4 | %5 |\n")
+            .arg(tr("Pipeline"), tr("Throughput"), tr("Target"), tr("Time"), tr("Result"));
+  text += QStringLiteral("|---|---:|---:|---:|---|\n");
+
+  for (const auto& entry : std::as_const(m_results)) {
+    const auto row       = entry.toMap();
+    const bool gated     = row.value(QStringLiteral("gated")).toBool();
+    const double fps     = SerialStudio::toDouble(row.value(QStringLiteral("fps")));
+    const double seconds = SerialStudio::toDouble(row.value(QStringLiteral("seconds")));
+    const double minFps  = SerialStudio::toDouble(row.value(QStringLiteral("target")));
+
+    const QString target =
+      gated ? tr("%1 frames/s").arg(QString::number(minFps, 'f', 0)) : tr("n/a");
+    const QString result =
+      gated ? (row.value(QStringLiteral("passed")).toBool() ? tr("Pass") : tr("Fail")) : tr("n/a");
+
+    text += QStringLiteral("| %1 | %2 | %3 | %4 | %5 |\n")
+              .arg(row.value(QStringLiteral("label")).toString(),
+                   tr("%1 frames/s").arg(QString::number(fps, 'f', 0)),
+                   target,
+                   tr("%1 s").arg(QString::number(seconds, 'f', 2)),
+                   result);
+  }
+
+  if (auto* clipboard = QGuiApplication::clipboard())
+    clipboard->setText(text);
+}
 
 /**
  * @brief Clears the results table (no-op while a session is running).

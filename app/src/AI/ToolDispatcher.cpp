@@ -226,7 +226,10 @@ static QJsonObject scriptPropsBag()
   props[QStringLiteral("code")] =
     makeProperty(QStringLiteral("string"), QStringLiteral("Script source to validate/apply."));
   props[QStringLiteral("language")] =
-    makeProperty(QStringLiteral("integer"), QStringLiteral("0 = JavaScript, 1 = Lua."));
+    makeProperty(QStringLiteral("integer"),
+                 QStringLiteral("0 = JavaScript, 1 = Lua, 2 = Built-In (frame_parser only; "
+                                "pass the JSON template descriptor {\"template\": id, "
+                                "\"params\": {...}} as `code`)."));
   props[Keys::SourceId] =
     makeProperty(QStringLiteral("integer"), QStringLiteral("Optional source id, default 0."));
   props[QStringLiteral("inputBytes")] =

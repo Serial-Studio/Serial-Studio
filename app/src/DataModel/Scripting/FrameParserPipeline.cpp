@@ -23,6 +23,7 @@
 
 #include <memory>
 
+#include "DataModel/Scripting/CFrameParser.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/IScriptEngine.h"
 #include "DataModel/Scripting/JsScriptEngine.h"
@@ -94,7 +95,10 @@ static QList<IO::CapturedDataPtr> drainExtractedFrames(IO::FrameReader& reader)
  */
 static std::unique_ptr<DataModel::IScriptEngine> makeEngineForLanguage(int language)
 {
-  if (language == 1)
+  if (language == SerialStudio::Native)
+    return std::make_unique<DataModel::CFrameParser>();
+
+  if (language == SerialStudio::Lua)
     return std::make_unique<DataModel::LuaScriptEngine>();
 
   return std::make_unique<DataModel::JsScriptEngine>();
@@ -314,6 +318,20 @@ DataModel::PipelineResult DataModel::runFrameParserPipelineWithCode(
     result.frames.append(buildPipelineFrame(f, spec, nullptr, engine.get(), 0));
 
   return result;
+}
+
+/**
+ * @brief Runs a throwaway native template engine over the input; used by the live preview pane.
+ */
+DataModel::PipelineResult DataModel::runNativeTemplatePipeline(const QByteArray& input,
+                                                               const DataModel::PipelineSpec& spec,
+                                                               const QString& templateId,
+                                                               const QJsonObject& params)
+{
+  Q_ASSERT(!templateId.isEmpty());
+
+  const auto descriptor = CFrameParser::buildDescriptor(templateId, params);
+  return runFrameParserPipelineWithCode(input, spec, descriptor, SerialStudio::Native);
 }
 
 /**

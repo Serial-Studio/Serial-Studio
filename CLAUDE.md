@@ -79,8 +79,11 @@ auto-trigger. Keep them current when the workflows they encode change.
 Serial Studio: cross-platform telemetry dashboard, Qt 6.11.1 + C++20. Data sources: UART,
 TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O. 15+
 visualization widgets, 5 output (control) widgets, 256 KHz+ data rate (CI-gated; see below). Frame parsers
-in JavaScript (`QJSEngine`) or Lua 5.4 (embedded `lua54`). Per-dataset value transforms in
-either language. Pro features: Output widgets, Modbus, CAN Bus, MDF4, 3D, ImageView,
+in JavaScript (`QJSEngine`), Lua 5.4 (embedded `lua54`), or Built-In ("Native" in all internal
+identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only user-facing
+strings/docs say Built-In. Parametrized C++ templates configured via a JSON descriptor, no
+user code). Per-dataset value
+transforms in JS or Lua. Pro features: Output widgets, Modbus, CAN Bus, MDF4, 3D, ImageView,
 Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer, Session Database.
 
 ## Sub-Documentation
@@ -107,16 +110,24 @@ benchmark mechanics) in [doc/claude/architecture.md](doc/claude/architecture.md)
 - **Hotpath signal hops must be `Qt::DirectConnection`.** Queued between two main-thread
   objects fills the 4096-slot queue at 10+ kHz and drops frames.
 - **No allocation, no Frame copy on the dashboard path.** Draw the Dashboard frame from
-  `FrameBuilder::acquireFrame()` (slot pool), never a direct `make_shared<TimestampedFrame>`.
-  The async-sink fan-out in `hotpathTxFrame` makes one detached copy on purpose (slow export
-  path, gated on a sink being on) so a backlog can't pin the pool.
+  `FrameBuilder::acquireFrame()` (slot pool, aliasing shared_ptr — no per-frame control
+  block), never a direct `make_shared<TimestampedFrame>`. The async-sink fan-out in
+  `hotpathTxFrame` makes one detached copy on purpose (slow export path, gated on a sink
+  being on) so a backlog can't pin the pool.
+- **Native + PlainText parses through the span fast lane** (`trySpanLane` →
+  `parseUtf8Spans` → `applyDatasetValuesSpans`): byte views + in-place QString writes
+  (`assign_utf8_in_place`), zero steady-state allocation. The hotpath reads **cached**
+  flags (`m_operationMode`, `m_playerOpen`, `m_anyAsyncSink`, Dashboard
+  `m_streamAvailable`) — a new input to any of them must wire its change signal to the
+  cache refresh or frames/exports silently stop (see common-mistakes.md).
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
   workers (use `monotonicFrameNs(...)` as the safety net only).
 - **JS scripts**: always `IScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
 - **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`)
-  drives the real parse pipeline with five gates tiered off `--min-fps` (default 256000): data
-  pipeline 1.024 MHz (4x), Lua numeric 256 kHz, JS numeric + Lua mixed 128 kHz, JS mixed 64 kHz;
+  drives the real parse pipeline with seven gates tiered off `--min-fps` (default 256000): data
+  pipeline + Native numeric 1.024 MHz (4x), Native mixed 512 kHz (2x), Lua numeric 256 kHz,
+  JS numeric + Lua mixed 128 kHz, JS mixed 64 kHz;
   `test.yml` runs it per PR, `deploy.yml` gates the shipped PGO binary. Don't regress it.
 
 ## Code Style — Essentials

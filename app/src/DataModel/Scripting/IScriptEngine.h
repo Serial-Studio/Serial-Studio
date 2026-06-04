@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QByteArray>
+#include <QByteArrayView>
 #include <QList>
 #include <QString>
 #include <QStringList>
@@ -51,7 +52,21 @@ public:
     return parseString(QString::fromUtf8(frame));
   }
 
+  /**
+   * @brief Allocation-free single-row fast path; -1 = no span-capable parser (native only).
+   */
+  [[nodiscard]] virtual qsizetype parseUtf8Spans(QByteArrayView frame,
+                                                 QByteArrayView* out,
+                                                 qsizetype maxSpans) noexcept
+  {
+    Q_UNUSED(frame)
+    Q_UNUSED(out)
+    Q_UNUSED(maxSpans)
+    return -1;
+  }
+
   [[nodiscard]] virtual bool isLoaded() const noexcept = 0;
+  [[nodiscard]] virtual int language() const noexcept  = 0;
 
   virtual void collectGarbage() = 0;
   virtual void reset()          = 0;

@@ -521,10 +521,11 @@ class SerialStudioClient:
         Set the frame parser script for a given source, explicitly specifying
         the language so the project model and the script engine stay in sync.
 
-        New projects default to Lua (see ProjectModel::newJsonFile), so tests
-        that ship JavaScript snippets MUST pass language=0 — otherwise the JS
-        code is persisted but the Lua engine fails to compile it and frame
-        parsing silently produces empty output.
+        New projects default to the Native template parser (language 2, see
+        ProjectModel::seedDefaultFrameParser), so tests that ship JS or Lua
+        snippets MUST pass the matching language — otherwise the code is
+        persisted but a different engine stays active and frame parsing
+        silently produces unexpected output.
 
         Args:
             code: Frame parser script source.
@@ -538,6 +539,29 @@ class SerialStudioClient:
             "project.frameParser.setCode",
             {"code": code, "language": language, "sourceId": source_id},
         )
+
+    def set_frame_parser_template(
+        self,
+        template: str,
+        params: Optional[dict] = None,
+        source_id: int = 0,
+    ) -> dict:
+        """
+        Select a Native (C++) frame parser template for a source. Switches the
+        source to the Native language (2); omitted params use schema defaults.
+
+        Args:
+            template: Template id (see project.frameParser.listTemplates).
+            params: Optional template parameters dict.
+            source_id: Logical source identifier (default 0).
+
+        Returns:
+            Dict with {"sourceId": int, "language": 2, "template": str, "params": dict}.
+        """
+        payload = {"template": template, "sourceId": source_id}
+        if params is not None:
+            payload["params"] = params
+        return self.command("project.frameParser.setTemplate", payload)
 
     def get_dashboard_data(self) -> dict:
         """

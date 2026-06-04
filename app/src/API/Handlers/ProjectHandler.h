@@ -55,6 +55,7 @@ private:
   static void registerOutputWidgetCommands();
   static void registerParserCommands();
   static void registerParserCodeCommands();
+  static void registerParserTemplateCommands();
   static void registerParserConfigCommands();
   static void registerPainterCommands();
   static void registerPainterCodeCommands();
@@ -100,6 +101,10 @@ private:
   static CommandResponse parserGetCode(const QString& id, const QJsonObject& params);
   static CommandResponse parserSetLanguage(const QString& id, const QJsonObject& params);
   static CommandResponse parserGetLanguage(const QString& id, const QJsonObject& params);
+  static CommandResponse parserListTemplates(const QString& id, const QJsonObject& params);
+  static CommandResponse parserGetTemplateSchema(const QString& id, const QJsonObject& params);
+  static CommandResponse parserGetTemplate(const QString& id, const QJsonObject& params);
+  static CommandResponse parserSetTemplate(const QString& id, const QJsonObject& params);
   static CommandResponse frameParserConfigure(const QString& id, const QJsonObject& params);
   static CommandResponse frameParserGetConfig(const QString& id, const QJsonObject& params);
 

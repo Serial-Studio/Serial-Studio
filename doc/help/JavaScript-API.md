@@ -1,25 +1,60 @@
-# Frame Parser Scripting Reference
+# Frame Parser Reference
 
-Complete reference for Serial Studio's frame parser scripting API. Serial Studio supports two scripting languages for custom frame parsers: **Lua** (default, recommended) and **JavaScript**.
+Complete reference for Serial Studio's frame parser. Three options are available: **Built-In templates** (configured, not coded; the default for new projects), **Lua** scripts and **JavaScript** scripts.
 
 ## Overview
 
-In Project File mode, you write a `parse()` function that turns raw device data into the array of values Serial Studio maps to your dashboard datasets. It's the most flexible way to handle custom protocols.
+In Project File mode, the frame parser turns raw device data into the array of values Serial Studio maps to your dashboard datasets.
 
-**Lua** is the default for new projects. It runs faster and uses less overhead than JavaScript, which is a good fit for high-throughput telemetry. JavaScript is still fully supported for existing projects.
+**Built-In** templates are compiled C++ parsers for common formats (delimited text, key=value, JSON, NMEA, Modbus, TLV and more). You pick a template, adjust its parameters in a form, and read the bundled documentation page for the wire format and channel mapping. No code is involved, and it is the fastest option by a wide margin. New projects start with the Built-In *Delimited text* template configured for comma-separated values.
 
-You can switch between languages at any time using the **Language** dropdown in the frame parser editor toolbar. Switching loads the equivalent template in the new language.
+**Lua** is the recommended scripting language. It runs faster and uses less overhead than JavaScript, which is a good fit for high-throughput telemetry. JavaScript is still fully supported for existing projects. Scripting is the most flexible way to handle custom protocols: you write a `parse()` function with full control over the frame.
+
+You can switch between platforms at any time using the **Platform** dropdown in the frame parser editor toolbar. Every switch converts the current template to its closest equivalent on the new platform: the CSV/TSV/pipe/semicolon script templates map to and from the Built-In *Delimited text* separator, and the other formats map by name. Custom script code that does not match a template is replaced by the default template, as with any platform switch.
 
 ### Engine Details
 
-| | Lua | JavaScript |
-|---|---|---|
-| **Version** | Lua 5.4 | ECMAScript 7 / ES2016 |
-| **Performance** | Faster, lower overhead | Slower |
-| **Integer support** | Native 64-bit integers | Numbers are IEEE 754 doubles only |
-| **Timeout** | 1 second per call | 1 second per call |
-| **Isolation** | Separate engine per source | Separate engine per source |
-| **Sandboxing** | `base`, `table`, `string`, `math`, `utf8` libraries | Console and GC extensions |
+| | Built-In | Lua | JavaScript |
+|---|---|---|---|
+| **Runtime** | Compiled C++ | Lua 5.4 | ECMAScript 7 / ES2016 |
+| **Authoring** | Template + parameters, no code | `parse()` script | `parse()` script |
+| **Performance** | Fastest (no interpreter) | Faster, lower overhead | Slower |
+| **Integer support** | Full native range | Native 64-bit integers | Numbers are IEEE 754 doubles only |
+| **Timeout** | Not needed (bounded parsers) | 1 second per call | 1 second per call |
+| **Isolation** | Separate instance per source | Separate engine per source | Separate engine per source |
+| **Sandboxing** | No user code runs | `base`, `table`, `string`, `math`, `utf8` libraries | Console and GC extensions |
+
+## Built-In Templates
+
+Selecting **Built-In** in the **Platform** dropdown replaces the code editor with a template configurator: the template combobox sits in the editor toolbar, with the parameter form and the template's documentation page below it.
+
+To test any parser, press **Test With Sample Data**: the Test Frame Parser dialog works with every platform (JavaScript, Lua and Built-In), lets you adjust the extraction pipeline (detection, delimiters, decoder, checksum), and shows the extracted frames, decoder output and parsed rows as a tree.
+
+### Available Templates
+
+| Family | Templates |
+|---|---|
+| Text | Delimited text (CSV by default; any separator text works), Fixed-width fields, Key-value pairs, INI/config format, AT command responses, NMEA 0183 sentences, URL-encoded data, JSON data, XML data, YAML data |
+| Binary | Raw bytes, Hexadecimal bytes, Base64-encoded data, Binary TLV, COBS-encoded frames, SLIP-encoded frames, UBX protocol (u-blox), SiRF binary protocol, MAVLink messages, NMEA 2000 messages, RTCM corrections, Modbus frames, MessagePack data |
+| Multi-frame | Batched sensor data, Time-series 2D arrays |
+
+Every template exposes typed parameters. For example, *Delimited text* takes the separator text (a comma by default; type `;`, `|` or an escape sequence such as `\t` for tab), an optional quote character, whitespace trimming and empty-field removal. Templates that map named keys to channels (key-value, JSON, NMEA and similar) take an ordered key list: the position of each key in the list is the channel index, and missing keys keep their previous values between frames.
+
+Binary protocol templates expect the matching decoder: select **Binary (Direct)** for TLV, COBS, SLIP, UBX, SiRF, MAVLink, NMEA 2000, RTCM, Modbus and MessagePack, and **Hexadecimal** for the Hexadecimal bytes template. The frame delimiters, checksum and decoder are configured per source, exactly as with scripted parsers.
+
+### Built-In Templates Over the API
+
+The Built-In configuration persists in the project file as `frameParserTemplate` (the template id) and `frameParserParams` (the parameter object) on each source. The control API mirrors this:
+
+- `project.frameParser.listTemplates` returns the template catalog (id, name, description).
+- `project.frameParser.getTemplateSchema` returns the parameter schema for a template id.
+- `project.frameParser.setTemplate` applies a template (with optional params) to a source and switches it to the Built-In language.
+- `project.frameParser.getTemplate` reads the current template and params for a source.
+- `project.frameParser.dryRun` accepts `language: 2` with the JSON descriptor `{"template": "delimited", "params": {"separator": ";"}}` as the `code` payload to preview parsing without touching the project.
+
+### When to Write a Script Instead
+
+Use Lua or JavaScript when your device speaks a custom protocol that no template covers, when channel values need computation inside the parser, or when you need the scripting extras (`tableGet`/`tableSet`, `deviceWrite`, notifications). For everything the templates cover, Built-In parses the same frames with less setup and more headroom.
 
 ## Parser Pipeline
 

@@ -119,16 +119,16 @@ def _get_parser_code(api_client, source_id: int = 0) -> str:
 def test_setLanguage_api_switches_engine(api_client, clean_state):
     """project.frameParser.setLanguage flips source 0 to JS and back to Lua.
 
-    New projects default to Lua (the faster engine) per the v3.3 change. This
-    test verifies both directions and confirms the parser code is swapped to
-    the matching default template on transition.
+    New projects default to the Native template parser (language 2). This
+    test verifies the script-language directions and confirms the parser code
+    is swapped to the matching default template on transition.
     """
-    # New project starts on Lua
+    # New project starts on the Native template parser
     api_client.create_new_project()
     time.sleep(0.2)
 
     lang = api_client.get_frame_parser_language(source_id=0)
-    assert lang == 1, f"Default new-project language should be Lua, got {lang}"
+    assert lang == 2, f"Default new-project language should be Native, got {lang}"
 
     # Switch to JavaScript
     result = api_client.set_frame_parser_language(0, source_id=0)
@@ -160,12 +160,16 @@ def test_setLanguage_api_switches_engine(api_client, clean_state):
 
 @pytest.mark.project
 def test_setLanguage_api_rejects_invalid_language(api_client, clean_state):
-    """Passing language=2 (or any out-of-range value) must fail InvalidParam."""
+    """Out-of-range language values must fail InvalidParam (0/1/2 are valid)."""
     api_client.create_new_project()
     time.sleep(0.2)
 
+    # Native (2) is a valid language since the native template parser shipped
+    result = api_client.set_frame_parser_language(2, source_id=0)
+    assert result["language"] == 2
+
     with pytest.raises(APIError):
-        api_client.set_frame_parser_language(2, source_id=0)
+        api_client.set_frame_parser_language(3, source_id=0)
 
     with pytest.raises(APIError):
         api_client.set_frame_parser_language(-1, source_id=0)
@@ -187,9 +191,9 @@ def test_setLanguage_api_noop_when_same_language(api_client, clean_state):
     api_client.create_new_project()
     time.sleep(0.2)
 
-    # New project is already Lua; setting it again should be accepted
-    result = api_client.set_frame_parser_language(1, source_id=0)
-    assert result["language"] == 1
+    # New project is already Native; setting it again should be accepted
+    result = api_client.set_frame_parser_language(2, source_id=0)
+    assert result["language"] == 2
 
 
 # ---------------------------------------------------------------------------

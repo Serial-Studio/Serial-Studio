@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <atomic>
 #include <cstddef>
 #include <cstring>
@@ -69,6 +70,9 @@ public:
 
   [[nodiscard]] qsizetype capacity() const noexcept { return m_capacity; }
 
+  // Raw backing-store pointer; owners use it to pin the buffer into physical memory
+  [[nodiscard]] const StorageType* storage() const noexcept { return m_buffer.data(); }
+
   [[nodiscard]] T read(qsizetype size);
   [[nodiscard]] T peek(qsizetype size) const;
   [[nodiscard]] T peekRange(qsizetype offset, qsizetype size) const;
@@ -100,7 +104,22 @@ public:
   void resetOverflowCount() noexcept { m_overflowCount.store(0, std::memory_order_relaxed); }
 
 private:
+  static constexpr qsizetype kShortPatternMax = 8;
+
   [[nodiscard]] std::vector<int> computeKMPTable(const T& p) const;
+  [[nodiscard]] static int byteScanLinear(const StorageType* base,
+                                          qsizetype current_size,
+                                          int pos,
+                                          typename T::value_type byte);
+  [[nodiscard]] int byteScanWrap(qsizetype current_size,
+                                 int pos,
+                                 qsizetype head,
+                                 typename T::value_type byte) const;
+  [[nodiscard]] static int shortPatternScanLinear(const StorageType* base,
+                                                  qsizetype current_size,
+                                                  int pos,
+                                                  const typename T::value_type* pData,
+                                                  qsizetype pSize);
   [[nodiscard]] static int kmpScanLinear(const StorageType* base,
                                          qsizetype current_size,
                                          int pos,
@@ -336,7 +355,7 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern, const i
 }
 
 /**
- * @brief Computes the KMP table for a given pattern.
+ * @brief Pattern search: vectorized memchr paths for the common short delimiters, KMP otherwise.
  */
 template<typename T, Concepts::ByteLike StorageType>
 int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
@@ -350,12 +369,120 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
   const qsizetype head = m_head.load(std::memory_order_acquire);
   const auto pSize     = pattern.size();
   const auto* pData    = pattern.constData();
+  const bool linear    = (head + current_size) <= m_capacity;
 
-  // Linear region fast path: no wrap-around, scan with plain pointers (no mask).
-  if ((head + current_size) <= m_capacity) [[likely]]
+  // Single-byte delimiters (\n, the dominant case): libc memchr beats the per-byte KMP loop
+  if (pSize == 1) {
+    if (linear) [[likely]]
+      return byteScanLinear(m_buffer.data() + head, current_size, pos, pData[0]);
+
+    return byteScanWrap(current_size, pos, head, pData[0]);
+  }
+
+  // Short patterns (\r\n, sync words) on the linear region: memchr-first-byte + memcmp verify
+  if (linear && pSize <= kShortPatternMax) [[likely]]
+    return shortPatternScanLinear(m_buffer.data() + head, current_size, pos, pData, pSize);
+
+  // Long patterns, or short ones straddling the wrap boundary: KMP with precomputed tables
+  if (linear)
     return kmpScanLinear(m_buffer.data() + head, current_size, pos, pData, pSize, lps);
 
   return kmpScanWrap(current_size, pos, head, pData, pSize, lps);
+}
+
+/**
+ * @brief memchr scan over the linear region for a single-byte pattern.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::byteScanLinear(const StorageType* base,
+                                                       qsizetype current_size,
+                                                       int pos,
+                                                       typename T::value_type byte)
+{
+  Q_ASSERT(base != nullptr);
+  Q_ASSERT(pos >= 0);
+
+  if (pos >= current_size) [[unlikely]]
+    return -1;
+
+  const void* hit = std::memchr(
+    base + pos, static_cast<unsigned char>(byte), static_cast<size_t>(current_size - pos));
+  if (!hit)
+    return -1;
+
+  return static_cast<int>(static_cast<const StorageType*>(hit) - base);
+}
+
+/**
+ * @brief memchr scan across the two linear segments of a wrapped buffer (single byte cannot
+ *        straddle the boundary, so two plain scans cover the logical range).
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::byteScanWrap(qsizetype current_size,
+                                                     int pos,
+                                                     qsizetype head,
+                                                     typename T::value_type byte) const
+{
+  Q_ASSERT(pos >= 0);
+  Q_ASSERT(head >= 0 && head < m_capacity);
+
+  const qsizetype firstLen = m_capacity - head;
+  const auto c             = static_cast<unsigned char>(byte);
+
+  // Segment 1: logical [pos, firstLen) maps to m_buffer[head + pos ...]
+  if (pos < firstLen) {
+    const StorageType* base = m_buffer.data() + head + pos;
+    const void* hit         = std::memchr(base, c, static_cast<size_t>(firstLen - pos));
+    if (hit)
+      return static_cast<int>(pos + (static_cast<const StorageType*>(hit) - base));
+  }
+
+  // Segment 2: logical [firstLen, current_size) maps to m_buffer[0 ...]
+  const qsizetype start2 = std::max<qsizetype>(pos, firstLen);
+  if (start2 < current_size) {
+    const StorageType* base = m_buffer.data() + (start2 - firstLen);
+    const void* hit         = std::memchr(base, c, static_cast<size_t>(current_size - start2));
+    if (hit)
+      return static_cast<int>(start2 + (static_cast<const StorageType*>(hit) - base));
+  }
+
+  return -1;
+}
+
+/**
+ * @brief memchr-anchored scan for short multi-byte patterns over the linear region: vectorized
+ *        first-byte search + memcmp verify. Worst case is O(n * pSize) with pSize <= 8.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::shortPatternScanLinear(const StorageType* base,
+                                                               qsizetype current_size,
+                                                               int pos,
+                                                               const typename T::value_type* pData,
+                                                               qsizetype pSize)
+{
+  Q_ASSERT(base != nullptr);
+  Q_ASSERT(pSize >= 2 && pSize <= kShortPatternMax);
+
+  const auto first     = static_cast<unsigned char>(pData[0]);
+  const qsizetype last = current_size - pSize;
+  if (pos > last)
+    return -1;
+
+  // i strictly increases every candidate, so the start count bounds the loop
+  qsizetype i = pos;
+  for (qsizetype it = 0; it <= last - pos && i <= last; ++it) {
+    const void* hit = std::memchr(base + i, first, static_cast<size_t>(last - i + 1));
+    if (!hit)
+      return -1;
+
+    i = static_cast<const StorageType*>(hit) - base;
+    if (std::memcmp(base + i, pData, static_cast<size_t>(pSize)) == 0)
+      return static_cast<int>(i);
+
+    ++i;
+  }
+
+  return -1;
 }
 
 template<typename T, Concepts::ByteLike StorageType>

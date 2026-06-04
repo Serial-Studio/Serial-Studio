@@ -23,8 +23,10 @@
 
 #include <chrono>
 #include <cmath>
+#include <cstring>
 #include <limits>
 #include <memory>
+#include <QByteArrayView>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMap>
@@ -75,6 +77,8 @@ inline constexpr KeyView DecoderMethod("decoderMethod");
 inline constexpr KeyView HexadecimalDelimiters("hexadecimalDelimiters");
 inline constexpr KeyView FrameParserCode("frameParserCode");
 inline constexpr KeyView FrameParserLanguage("frameParserLanguage");
+inline constexpr KeyView FrameParserTemplate("frameParserTemplate");
+inline constexpr KeyView FrameParserParams("frameParserParams");
 
 // Dataset keys
 inline constexpr KeyView FFT("fft");
@@ -451,6 +455,8 @@ struct alignas(8) Source {
   int frameParserLanguage    = 0;      ///< Frame parser language/runtime identifier
   QJsonObject connectionSettings;      ///< Opaque bus-specific connection params
   QString frameParserCode;             ///< Per-source parser code
+  QString frameParserTemplate;         ///< Native parser template id (Native language only)
+  QJsonObject frameParserParams;       ///< Native parser template params (Native language only)
 };
 
 static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
@@ -509,6 +515,13 @@ struct TableDef {
 
   if (s.frameParserLanguage != 0)
     obj.insert(Keys::FrameParserLanguage, s.frameParserLanguage);
+
+  // Only ever set when the source uses the native parser language
+  if (!s.frameParserTemplate.isEmpty()) {
+    obj.insert(Keys::FrameParserTemplate, s.frameParserTemplate);
+    if (!s.frameParserParams.isEmpty())
+      obj.insert(Keys::FrameParserParams, s.frameParserParams);
+  }
 
   return obj;
 }
@@ -683,6 +696,52 @@ inline void clear_frame(Frame& frame) noexcept
 }
 
 /**
+ * @brief Allocation-free QString copy: reuses the destination buffer when it is unique and
+ *        large enough, falling back to an implicit-share assignment otherwise.
+ */
+inline void assign_string_in_place(QString& dst, const QString& src) noexcept
+{
+  const qsizetype n = src.size();
+  if (dst.isDetached() && dst.capacity() >= n) {
+    dst.resize(n);
+    if (n > 0)
+      memcpy(dst.data(), src.constData(), static_cast<size_t>(n) * sizeof(QChar));
+  } else
+    dst = src;
+}
+
+/**
+ * @brief Writes UTF-8 bytes into a QString, reusing the destination buffer for ASCII payloads.
+ *        Non-ASCII input falls back to QString::fromUtf8 (one allocation).
+ */
+inline void assign_utf8_in_place(QString& dst, QByteArrayView src)
+{
+  const char* p     = src.data();
+  const qsizetype n = src.size();
+
+  Q_ASSERT(n >= 0);
+
+  // One-time growth; subsequent frames reuse the buffer with a plain widening copy
+  if (!(dst.isDetached() && dst.capacity() >= n)) {
+    dst = QString();
+    dst.reserve(qMax<qsizetype>(n, 8));
+  }
+
+  // Single pass: widen and detect non-ASCII together; the rare fallback redoes the field
+  dst.resize(n);
+  QChar* out = dst.data();
+  for (qsizetype i = 0; i < n; ++i) {
+    const uchar c = static_cast<uchar>(p[i]);
+    if (c >= 0x80) [[unlikely]] {
+      dst = QString::fromUtf8(p, n);
+      return;
+    }
+
+    out[i] = QLatin1Char(static_cast<char>(c));
+  }
+}
+
+/**
  * @brief Copies per-frame volatile state (source id + dataset values) into a structure-matched dst.
  */
 inline void copy_frame_values(Frame& dst, const Frame& src) noexcept
@@ -695,12 +754,14 @@ inline void copy_frame_values(Frame& dst, const Frame& src) noexcept
     auto& dstGroup            = dst.groups[g];
     const size_t datasetCount = srcGroup.datasets.size();
     for (size_t d = 0; d < datasetCount; ++d) {
-      const auto& srcDataset     = srcGroup.datasets[d];
-      auto& dstDataset           = dstGroup.datasets[d];
-      dstDataset.value           = srcDataset.value;
+      const auto& srcDataset = srcGroup.datasets[d];
+      auto& dstDataset       = dstGroup.datasets[d];
+
+      // In-place copies keep slot strings unique, so the producer never detach-allocates
+      assign_string_in_place(dstDataset.value, srcDataset.value);
+      assign_string_in_place(dstDataset.rawValue, srcDataset.rawValue);
       dstDataset.numericValue    = srcDataset.numericValue;
       dstDataset.isNumeric       = srcDataset.isNumeric;
-      dstDataset.rawValue        = srcDataset.rawValue;
       dstDataset.rawNumericValue = srcDataset.rawNumericValue;
     }
   }
@@ -1005,6 +1066,8 @@ void read_io_settings(QByteArray& frameStart,
   s.connectionSettings    = ss_jsr(obj, Keys::SourceConn, QJsonObject()).toJsonObject();
   s.frameParserCode       = ss_jsr(obj, Keys::FrameParserCode, "").toString();
   s.frameParserLanguage   = ss_jsr(obj, Keys::FrameParserLanguage, 0).toInt();
+  s.frameParserTemplate   = ss_jsr(obj, Keys::FrameParserTemplate, "").toString();
+  s.frameParserParams     = ss_jsr(obj, Keys::FrameParserParams, QJsonObject()).toJsonObject();
 
   // Prefer canonical keys; fall back to legacy aliases from older versions.
   if (obj.contains(Keys::ChecksumAlgorithm))

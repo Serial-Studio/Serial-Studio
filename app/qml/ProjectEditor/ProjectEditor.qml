@@ -78,6 +78,26 @@ Widgets.SmartWindow {
   }
 
   //
+  // Frame parser test dialog (hosted here so source edits can't destroy the window)
+  //
+  DialogLoader {
+    id: parserTestLoader
+
+    property int requestedSourceId: 0
+
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/FrameParserTest.qml"
+    onLoaded: item.openForSource(requestedSourceId)
+
+    function openTester(sourceId) {
+      requestedSourceId = sourceId
+      if (active && dialog)
+        dialog.openForSource(sourceId)
+      else
+        activate()
+    }
+  }
+
+  //
   // Shortcuts
   //
   Shortcut {

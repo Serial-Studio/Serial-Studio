@@ -90,6 +90,11 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_parseBudgetWarned(false)
   , m_parseBudgetEnabled(true)
   , m_lastConnectedState(false)
+  , m_playerOpen(false)
+  , m_anyAsyncSink(false)
+  , m_captureDatasetValues(false)
+  , m_externalTableApiUsers(false)
+  , m_operationMode(SerialStudio::ProjectFile)
   , m_parseBudgetUsedNs(0)
   , m_parseBudgetWindowStart(BudgetClock::time_point{})
   , m_parsedFrameCount(0)
@@ -134,9 +139,9 @@ DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Default-constructs a pool slot with inUse = false and no template generation.
+ * @brief Default-constructs a pool slot with no template generation.
  */
-DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : generation(0), inUse(false) {}
+DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : generation(0) {}
 
 /**
  * @brief Bumps the pool generation after a template rebuild so stale slots full-assign on reuse
@@ -148,47 +153,35 @@ void DataModel::FrameBuilder::invalidateFramePool() noexcept
 }
 
 /**
- * @brief Claims a pool slot, copies @p src + @p ts into it, and returns a shared_ptr whose
- *        deleter releases the slot back to the pool when the last consumer drops it.
+ * @brief Probes for a free pool slot (the pool holds its only reference) and returns its index,
+ *        or kInvalidSlotIdx when every slot is pinned by a consumer.
  */
-DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
-  const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts)
+size_t DataModel::FrameBuilder::claimPoolSlot() noexcept
 {
   const size_t n    = m_framePool.size();
   const size_t hint = m_framePoolHint.load(std::memory_order_relaxed);
   Q_ASSERT(n == static_cast<size_t>(kFramePoolSize));
 
-  // Raw-pointer scan: copy the shared_ptr only on success so a miss skips its two atomic ops.
   for (size_t k = 0; k < n; ++k) {
     const size_t idx = (hint + k) % n;
-    auto* slotRaw    = m_framePool[idx].get();
-    bool expected    = false;
-    if (slotRaw->inUse.compare_exchange_strong(
-          expected, true, std::memory_order_acquire, std::memory_order_relaxed)) {
-      m_framePoolHint.store(idx + 1, std::memory_order_relaxed);
 
-      // Structure-matched slot from the current template generation refreshes only value fields
-      if (slotRaw->generation == m_framePoolGeneration && compare_frames(slotRaw->frame.data, src))
-        [[likely]] {
-        Q_ASSERT(slotRaw->frame.data.title == src.title);
-        copy_frame_values(slotRaw->frame.data, src);
-      } else {
-        slotRaw->frame.data = src;
-        slotRaw->generation = m_framePoolGeneration;
-      }
+    // All aliases are created and released on this thread, so the count-1 probe is exact
+    if (m_framePool[idx].use_count() != 1)
+      continue;
 
-      slotRaw->frame.timestamp = ts;
-      Q_ASSERT(slotRaw->frame.data.groups.size() == src.groups.size());
-
-      // shared_ptr capture keeps the slot alive if a consumer outlives FrameBuilder.
-      auto slotPtr = m_framePool[idx];
-      return TimestampedFramePtr(&slotRaw->frame, [slotPtr](TimestampedFrame*) noexcept {
-        slotPtr->inUse.store(false, std::memory_order_release);
-      });
-    }
+    // Hint points at the claimed slot: an instantly-released slot stays L1-hot frame to frame
+    m_framePoolHint.store(idx, std::memory_order_relaxed);
+    return idx;
   }
 
-  // Pool exhausted: log once, fall back to heap allocation so the producer never blocks
+  return kInvalidSlotIdx;
+}
+
+/**
+ * @brief Logs the one-shot pool-exhaustion warning before a heap-allocation fallback.
+ */
+void DataModel::FrameBuilder::notePoolExhausted()
+{
   static bool warned = false;
   if (!warned) [[unlikely]] {
     warned = true;
@@ -206,7 +199,39 @@ DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
                "back to per-frame allocations until the backlog clears. Disable a heavy "
                "consumer or reduce the data rate.")));
   }
-  return std::make_shared<TimestampedFrame>(src, ts);
+}
+
+/**
+ * @brief Claims a free pool slot, copies @p src + @p ts into it, and returns an aliasing
+ *        shared_ptr: no deleter, no per-frame control block.
+ */
+DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
+  const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts)
+{
+  const size_t idx = claimPoolSlot();
+  if (idx == kInvalidSlotIdx) [[unlikely]] {
+    // Pool exhausted: log once, fall back to heap allocation so the producer never blocks
+    notePoolExhausted();
+    return std::make_shared<TimestampedFrame>(src, ts);
+  }
+
+  const auto& slotOwner = m_framePool[idx];
+  auto* slotRaw         = slotOwner.get();
+
+  // Same-generation same-source slots are structure-identical: refresh values only
+  if (slotRaw->generation == m_framePoolGeneration && slotRaw->frame.data.sourceId == src.sourceId
+      && compare_frames(slotRaw->frame.data, src)) [[likely]] {
+    copy_frame_values(slotRaw->frame.data, src);
+  } else {
+    slotRaw->frame.data = src;
+    slotRaw->generation = m_framePoolGeneration;
+  }
+
+  slotRaw->frame.timestamp = ts;
+  Q_ASSERT(slotRaw->frame.data.groups.size() == src.groups.size());
+
+  // Aliasing ctor: one incref, no allocation; keeps the slot alive past FrameBuilder teardown
+  return TimestampedFramePtr(slotOwner, &slotRaw->frame);
 }
 
 /**
@@ -293,6 +318,12 @@ void DataModel::FrameBuilder::setupExternalConnections()
           this,
           &DataModel::FrameBuilder::onConnectedChanged);
 
+  // Mode switches retarget the pool at a different logical frame; stale slots must full-assign
+  connect(&AppState::instance(),
+          &AppState::operationModeChanged,
+          this,
+          &DataModel::FrameBuilder::onOperationModeChanged);
+
   // Wipe transform engines on source-delete: IDs renumber, stale refs would misfire.
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::sourceDeleted,
@@ -305,12 +336,14 @@ void DataModel::FrameBuilder::setupExternalConnections()
           this,
           &DataModel::FrameBuilder::collectTransformEngineGarbage);
 
-  // File players force a disconnect, tearing down transforms + table store; rebuild on open.
+  // Player transitions rebuild transforms/table store and refresh the cached player-open flag
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [this] {
+    m_playerOpen = SerialStudio::isAnyPlayerOpen();
     if (CSV::Player::instance().isOpen())
       rebuildTransformsForPlayback();
   });
   connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [this] {
+    m_playerOpen = SerialStudio::isAnyPlayerOpen();
     if (MDF4::Player::instance().isOpen())
       rebuildTransformsForPlayback();
   });
@@ -318,10 +351,57 @@ void DataModel::FrameBuilder::setupExternalConnections()
 #ifdef BUILD_COMMERCIAL
   // Session player bypasses ConnectionManager; rebuild engines on its openChanged.
   connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, [this] {
+    m_playerOpen = SerialStudio::isAnyPlayerOpen();
     if (Sessions::Player::instance().isOpen())
       rebuildTransformsForPlayback();
   });
 #endif
+
+  // Cache the consumer-enabled fan-out; polling five singletons per frame costs the hotpath
+  connect(&CSV::Export::instance(), &CSV::Export::enabledChanged, this, [this] {
+    refreshAnyAsyncSink();
+  });
+  connect(&MDF4::Export::instance(), &MDF4::Export::enabledChanged, this, [this] {
+    refreshAnyAsyncSink();
+  });
+  connect(&API::Server::instance(), &API::Server::enabledChanged, this, [this] {
+    refreshAnyAsyncSink();
+  });
+#ifdef BUILD_COMMERCIAL
+  connect(&Sessions::Export::instance(), &Sessions::Export::enabledChanged, this, [this] {
+    refreshAnyAsyncSink();
+  });
+  connect(&MQTT::Publisher::instance(), &MQTT::Publisher::configurationChanged, this, [this] {
+    refreshAnyAsyncSink();
+  });
+#endif
+#ifdef ENABLE_GRPC
+  connect(&API::GRPC::GRPCServer::instance(), &API::GRPC::GRPCServer::enabledChanged, this, [this] {
+    refreshAnyAsyncSink();
+  });
+#endif
+
+  m_operationMode = AppState::instance().operationMode();
+  m_playerOpen    = SerialStudio::isAnyPlayerOpen();
+  refreshAnyAsyncSink();
+}
+
+/**
+ * @brief Recomputes the cached any-async-consumer flag from every export/output module.
+ */
+void DataModel::FrameBuilder::refreshAnyAsyncSink()
+{
+  bool any = CSV::Export::instance().exportEnabled() || MDF4::Export::instance().exportEnabled()
+          || API::Server::instance().enabled();
+#ifdef BUILD_COMMERCIAL
+  any =
+    any || Sessions::Export::instance().exportEnabled() || MQTT::Publisher::instance().enabled();
+#endif
+#ifdef ENABLE_GRPC
+  any = any || API::GRPC::GRPCServer::instance().enabled();
+#endif
+
+  m_anyAsyncSink = any;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,6 +419,9 @@ void DataModel::FrameBuilder::syncFromProjectModel()
   clear_frame(m_frame);
   m_sourceFrames.clear();
   m_sourceFrameCounters.clear();
+
+  // New project context: re-injected script engines (parsers, dialogs) re-set this flag
+  m_externalTableApiUsers = false;
 
   m_frame.title   = pm.title();
   m_frame.groups  = pm.groups();
@@ -385,10 +468,9 @@ void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
 {
   Q_ASSERT(data);
   Q_ASSERT(!data->data.isEmpty());
-  Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
-           && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
+  Q_ASSERT(m_operationMode == AppState::instance().operationMode());
 
-  switch (AppState::instance().operationMode()) {
+  switch (m_operationMode) {
     case SerialStudio::QuickPlot:
       parseQuickPlotFrame(data);
       break;
@@ -411,7 +493,7 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::Captu
   Q_ASSERT(data);
   Q_ASSERT(!data->data.isEmpty());
 
-  if (AppState::instance().operationMode() != SerialStudio::ProjectFile) {
+  if (m_operationMode != SerialStudio::ProjectFile) {
     hotpathRxFrame(data);
     return;
   }
@@ -430,6 +512,23 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::Captu
 void DataModel::FrameBuilder::onSourceRemoved()
 {
   destroyTransformEngines();
+}
+
+/**
+ * @brief Drops mode-scoped frame state on operation-mode changes so the next published frame is
+ *        rebuilt from the active mode's template instead of a recycled pool slot.
+ */
+void DataModel::FrameBuilder::onOperationModeChanged()
+{
+  Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
+           && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
+
+  m_operationMode     = AppState::instance().operationMode();
+  m_quickPlotChannels = -1;
+  m_sourceFrames.clear();
+  m_sourceFrameCounters.clear();
+  invalidateFramePool();
+  parseBudgetReset();
 }
 
 /**
@@ -469,6 +568,9 @@ void DataModel::FrameBuilder::onConnectedChanged()
   // Reset quick-plot channel count
   m_lastConnectedState = nowConnected;
   m_quickPlotChannels  = -1;
+
+  // Session boundary: stale pool slots must full-assign instead of fast-path matching
+  invalidateFramePool();
 
   // Re-arm the parser-load circuit breaker
   parseBudgetReset();
@@ -538,7 +640,15 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
   if (parseBudgetSkipFrame()) [[unlikely]]
     return;
 
-  const auto t0 = BudgetClock::now();
+  // The QPC read is dead weight while the budget guard is disabled (throughput benchmark)
+  const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
+
+  const int published = trySpanLane(0, false, m_frame, data);
+  if (published >= 0) {
+    m_parsedFrameCount += static_cast<quint64>(published);
+    parseBudgetAccount(t0);
+    return;
+  }
 
   QList<QStringList> multiChannels;
   decodeProjectChannels(0, false, data, multiChannels);
@@ -551,10 +661,14 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
 
     const auto frameTs = data->timestamp + step * i;
     TransformFrameInfo info;
-    info.sourceId    = 0;
-    info.frameNumber = ++m_sourceFrameCounters[0];
-    info.timestampMs =
-      std::chrono::duration_cast<std::chrono::milliseconds>(frameTs.time_since_epoch()).count();
+    info.sourceId = 0;
+
+    // Frame metadata is only consumed by transforms; skip the counter + clock math without them
+    if (!m_transformEngines.empty()) {
+      info.frameNumber = ++m_sourceFrameCounters[0];
+      info.timestampMs =
+        std::chrono::duration_cast<std::chrono::milliseconds>(frameTs.time_since_epoch()).count();
+    }
 
     applyDatasetValues(m_frame, channels, info);
     hotpathTxFrame(acquireFrame(m_frame, frameTs));
@@ -576,7 +690,13 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
   if (parseBudgetSkipFrame()) [[unlikely]]
     return;
 
-  const auto t0 = BudgetClock::now();
+  // The QPC read is dead weight while the budget guard is disabled (throughput benchmark)
+  const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
+
+  if (trySpanLane(sourceId, true, ensureSourceFrame(sourceId), data) >= 0) {
+    parseBudgetAccount(t0);
+    return;
+  }
 
   QList<QStringList> multiChannels;
   decodeProjectChannels(sourceId, /*applyPerSourceOverride=*/true, data, multiChannels);
@@ -590,16 +710,89 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
     DataModel::Frame& srcFrame = ensureSourceFrame(sourceId);
     const auto frameTs         = data->timestamp + step * i;
     TransformFrameInfo info;
-    info.sourceId    = sourceId;
-    info.frameNumber = ++m_sourceFrameCounters[sourceId];
-    info.timestampMs =
-      std::chrono::duration_cast<std::chrono::milliseconds>(frameTs.time_since_epoch()).count();
+    info.sourceId = sourceId;
+
+    // Frame metadata is only consumed by transforms; skip the counter + clock math without them
+    if (!m_transformEngines.empty()) {
+      info.frameNumber = ++m_sourceFrameCounters[sourceId];
+      info.timestampMs =
+        std::chrono::duration_cast<std::chrono::milliseconds>(frameTs.time_since_epoch()).count();
+    }
+
     applyDatasetValues(srcFrame, channels, info);
-    // Pooled fan-out: one TimestampedFramePtr per parsed frame, slot recycled by deleter.
+    // Pooled fan-out: one TimestampedFramePtr per parsed frame, slot released with its last alias.
     hotpathTxFrame(acquireFrame(srcFrame, frameTs));
   }
 
   parseBudgetAccount(t0);
+}
+
+/**
+ * @brief Native span fast lane: parses byte views directly into the claimed pool slot; @p frame
+ *        stays a structural template. Returns frames published, or -1 to use the QList path.
+ */
+int DataModel::FrameBuilder::trySpanLane(int sourceId,
+                                         bool applyPerSourceOverride,
+                                         DataModel::Frame& frame,
+                                         const IO::CapturedDataPtr& data)
+{
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(data);
+
+  if (m_playerOpen) [[unlikely]]
+    return -1;
+
+  if (frame.groups.empty()) [[unlikely]]
+    return -1;
+
+  if (resolveDecoderMethod(sourceId, applyPerSourceOverride) != SerialStudio::PlainText)
+    return -1;
+
+  static auto& parser = DataModel::FrameParser::instance();
+  const qsizetype tokens =
+    parser.parseSpansUtf8(data->data, sourceId, m_spanScratch.data(), kMaxSpanFields);
+  if (tokens < 0)
+    return -1;
+
+  if (tokens == 0)
+    return 0;
+
+  TransformFrameInfo info;
+  info.sourceId = sourceId;
+
+  // Frame metadata is only consumed by transforms; skip the counter + clock math without them
+  if (!m_transformEngines.empty()) [[unlikely]] {
+    info.frameNumber = ++m_sourceFrameCounters[sourceId];
+    info.timestampMs =
+      std::chrono::duration_cast<std::chrono::milliseconds>(data->timestamp.time_since_epoch())
+        .count();
+  }
+
+  const size_t idx = claimPoolSlot();
+  if (idx == kInvalidSlotIdx) [[unlikely]] {
+    // Pool exhausted: heap fallback keeps the producer non-blocking (rare, alloc accepted)
+    notePoolExhausted();
+    auto heap = std::make_shared<TimestampedFrame>(frame, data->timestamp);
+    applyDatasetValuesSpans(heap->data, m_spanScratch.data(), tokens, info);
+    hotpathTxFrame(heap);
+    return 1;
+  }
+
+  const auto& slotOwner = m_framePool[idx];
+  auto* slotRaw         = slotOwner.get();
+
+  // Structural sync from the template only when the slot held a different shape
+  if (!(slotRaw->generation == m_framePoolGeneration
+        && slotRaw->frame.data.sourceId == frame.sourceId
+        && compare_frames(slotRaw->frame.data, frame))) [[unlikely]] {
+    slotRaw->frame.data = frame;
+    slotRaw->generation = m_framePoolGeneration;
+  }
+
+  applyDatasetValuesSpans(slotRaw->frame.data, m_spanScratch.data(), tokens, info);
+  slotRaw->frame.timestamp = data->timestamp;
+  hotpathTxFrame(TimestampedFramePtr(slotOwner, &slotRaw->frame));
+  return 1;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -712,7 +905,7 @@ void DataModel::FrameBuilder::decodeProjectChannels(int sourceId,
                                                     QList<QStringList>& outChannels)
 {
   // Player playback: replayed rows arrive pre-CSV; reuse the QuickPlot comma split.
-  if (SerialStudio::isAnyPlayerOpen()) [[unlikely]] {
+  if (m_playerOpen) [[unlikely]] {
     DataModel::splitQuickPlotChannels(data->data, outChannels);
     return;
   }
@@ -783,7 +976,7 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
   dataset.rawNumericValue = dataset.numericValue;
   dataset.rawValue        = dataset.value;
 
-  if (m_tableStore.isInitialized())
+  if (m_captureDatasetValues)
     m_tableStore.setDatasetRaw(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
 
@@ -801,9 +994,131 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
     }
   }
 
-  if (m_tableStore.isInitialized())
+  if (m_captureDatasetValues)
     m_tableStore.setDatasetFinal(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
+}
+
+/**
+ * @brief Span twin of applyDatasetValue: in-place writes keep the producer allocation-free.
+ */
+void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
+                                                    const QByteArrayView* spans,
+                                                    qsizetype count,
+                                                    const TransformFrameInfo& info)
+{
+  Q_ASSERT(spans != nullptr);
+  Q_ASSERT(count > 0);
+
+  if (dataset.virtual_) {
+    dataset.numericValue = 0.0;
+    dataset.value.clear();
+    dataset.isNumeric = true;
+  } else {
+    const int idx = dataset.index;
+    if (idx <= 0 || idx > count) [[unlikely]]
+      return;
+
+    const QByteArrayView token = spans[idx - 1];
+    DataModel::assign_utf8_in_place(dataset.value, token);
+    dataset.numericValue = SerialStudio::toDouble(token, &dataset.isNumeric);
+  }
+
+  dataset.rawNumericValue = dataset.numericValue;
+  DataModel::assign_string_in_place(dataset.rawValue, dataset.value);
+
+  if (m_captureDatasetValues)
+    m_tableStore.setDatasetRaw(
+      dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
+
+  // The span lane never runs during playback, so no final-value player check is needed here
+  if (!dataset.transformCode.isEmpty()) [[unlikely]] {
+    const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
+    const auto result = applyTransform(dataset.transformLanguage, dataset.uniqueId, input, info);
+
+    if (result.typeId() == QMetaType::Double) {
+      dataset.numericValue = SerialStudio::toDouble(result);
+      dataset.value        = QString::number(dataset.numericValue, 'g', 15);
+      dataset.isNumeric    = true;
+    } else {
+      dataset.value     = result.toString();
+      dataset.isNumeric = false;
+    }
+  }
+
+  if (m_captureDatasetValues)
+    m_tableStore.setDatasetFinal(
+      dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
+}
+
+/**
+ * @brief Shared per-frame scaffolding (capture flag, engine cache, watchdog arm, storage pin);
+ *        returns true when the JS watchdog was armed (forwarded to endDatasetPass).
+ */
+bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
+{
+  refreshDatasetCaptureFlag();
+
+  // Refresh per-source engine cache on sourceId change: one map lookup per rotation.
+  if (info.sourceId != m_engineCacheSourceId) [[unlikely]] {
+    m_engineCacheSourceId = info.sourceId;
+    auto luaIt            = m_transformEngines.find({info.sourceId, SerialStudio::Lua});
+    auto jsIt             = m_transformEngines.find({info.sourceId, SerialStudio::JavaScript});
+    m_luaEngineForSource  = (luaIt != m_transformEngines.end()) ? &luaIt->second : nullptr;
+    m_jsEngineForSource   = (jsIt != m_transformEngines.end()) ? &jsIt->second : nullptr;
+  }
+
+  // Frame-level JS watchdog: one arm/disarm per frame; the budget covers the whole frame.
+  const bool armJsWatchdog = (m_jsEngineForSource != nullptr);
+  if (armJsWatchdog) [[unlikely]] {
+    Q_ASSERT(m_jsEngineForSource->jsWatchdog);
+    m_jsTransformTimedOut = false;
+    m_jsEngineForSource->jsWatchdog->arm();
+  }
+
+  // Re-entrancy guard: pin engine storage while cached pointers into it are live
+  ++m_compileGuard;
+  return armJsWatchdog;
+}
+
+/**
+ * @brief Releases the dataset-pass scaffolding: unpins engine storage, disarms the watchdog and
+ *        drains any project mutation a transform queued while hot pointers were live.
+ */
+void DataModel::FrameBuilder::endDatasetPass(bool armedJsWatchdog)
+{
+  Q_ASSERT(m_compileGuard > 0);
+
+  --m_compileGuard;
+
+  if (armedJsWatchdog) [[unlikely]] {
+    m_jsEngineForSource->jsWatchdog->disarm();
+    if (m_jsTransformTimedOut)
+      NotificationCenter::instance().postWarning(
+        QStringLiteral("FrameBuilder"),
+        tr("JavaScript transform exceeded budget"),
+        tr("A dataset transform took longer than %1 ms; remaining datasets in the frame fell "
+           "back to raw values until the next frame. Profile or simplify the transform code.")
+          .arg(kTransformWatchdogMs));
+  }
+
+  // Drain any project mutation a transform queued, now that hot pointers have been released
+  if (m_compileGuard == 0 && m_compilePending) [[unlikely]] {
+    m_compilePending = false;
+    QMetaObject::invokeMethod(this, [this] { compileTransforms(); }, Qt::QueuedConnection);
+  }
+}
+
+/**
+ * @brief Recomputes whether per-dataset values must be mirrored into the table store: only
+ *        scripts (transforms, Lua parsers, externally-injected engines) can read them back.
+ */
+void DataModel::FrameBuilder::refreshDatasetCaptureFlag()
+{
+  static auto& parser = DataModel::FrameParser::instance();
+  m_captureDatasetValues =
+    m_tableStore.isInitialized()
+    && (!m_transformEngines.empty() || m_externalTableApiUsers || parser.hasTableApiEngines());
 }
 
 /**
@@ -825,48 +1140,33 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
       replayColumns = &it->second;
   }
 
-  // Refresh per-source engine cache on sourceId change: one map lookup per rotation.
-  if (info.sourceId != m_engineCacheSourceId) [[unlikely]] {
-    m_engineCacheSourceId = info.sourceId;
-    auto luaIt            = m_transformEngines.find({info.sourceId, SerialStudio::Lua});
-    auto jsIt             = m_transformEngines.find({info.sourceId, SerialStudio::JavaScript});
-    m_luaEngineForSource  = (luaIt != m_transformEngines.end()) ? &luaIt->second : nullptr;
-    m_jsEngineForSource   = (jsIt != m_transformEngines.end()) ? &jsIt->second : nullptr;
-  }
-
-  // Frame-level JS watchdog: one arm/disarm per frame; the budget covers the whole frame.
-  const bool armJsWatchdog = (m_jsEngineForSource != nullptr);
-  if (armJsWatchdog) [[unlikely]] {
-    Q_ASSERT(m_jsEngineForSource->jsWatchdog);
-    m_jsTransformTimedOut = false;
-    m_jsEngineForSource->jsWatchdog->arm();
-  }
-
-  // Re-entrancy guard: pin engine storage while cached pointers into it are live
-  ++m_compileGuard;
+  const bool armedWatchdog = beginDatasetPass(info);
 
   for (auto& group : frame.groups)
     for (auto& dataset : group.datasets)
       applyDatasetValue(dataset, channelData, channelCount, info, replayColumns);
 
-  --m_compileGuard;
+  endDatasetPass(armedWatchdog);
+}
 
-  if (armJsWatchdog) [[unlikely]] {
-    m_jsEngineForSource->jsWatchdog->disarm();
-    if (m_jsTransformTimedOut)
-      NotificationCenter::instance().postWarning(
-        QStringLiteral("FrameBuilder"),
-        tr("JavaScript transform exceeded budget"),
-        tr("A dataset transform took longer than %1 ms; remaining datasets in the frame fell "
-           "back to raw values until the next frame. Profile or simplify the transform code.")
-          .arg(kTransformWatchdogMs));
-  }
+/**
+ * @brief Span twin of applyDatasetValues: writes tokenized byte views into every dataset.
+ */
+void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Frame& frame,
+                                                      const QByteArrayView* spans,
+                                                      qsizetype count,
+                                                      const TransformFrameInfo& info)
+{
+  Q_ASSERT(spans != nullptr);
+  Q_ASSERT(count > 0);
 
-  // Drain any project mutation a transform queued, now that hot pointers have been released
-  if (m_compileGuard == 0 && m_compilePending) [[unlikely]] {
-    m_compilePending = false;
-    QMetaObject::invokeMethod(this, [this] { compileTransforms(); }, Qt::QueuedConnection);
-  }
+  const bool armedWatchdog = beginDatasetPass(info);
+
+  for (auto& group : frame.groups)
+    for (auto& dataset : group.datasets)
+      applyDatasetValueSpan(dataset, spans, count, info);
+
+  endDatasetPass(armedWatchdog);
 }
 
 /**
@@ -1143,10 +1443,17 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
   Q_ASSERT(!frame->data.groups.empty());
   Q_ASSERT(!frame->data.title.isEmpty());
 
-  // Obtain references to export subsystems
+  // Dashboard keeps only the latest frame, so its pooled slot recycles fast regardless of sinks.
+  static auto& dashboard = UI::Dashboard::instance();
+  dashboard.hotpathRxFrame(frame);
+
+  // Cached consumer flag: async sinks get a detached copy so backlogs can't pin the pool
+  if (!m_anyAsyncSink)
+    return;
+
+  // Export-side singleton guards live behind the early return; only paying sinks reach them
   static auto& csvExport     = CSV::Export::instance();
   static auto& mdf4Export    = MDF4::Export::instance();
-  static auto& dashboard     = UI::Dashboard::instance();
   static auto& pluginsServer = API::Server::instance();
 #ifdef BUILD_COMMERCIAL
   static auto& sqliteExport  = Sessions::Export::instance();
@@ -1155,23 +1462,6 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
 #endif
-
-  // Dashboard keeps only the latest frame, so its pooled slot recycles fast regardless of sinks.
-  dashboard.hotpathRxFrame(frame);
-
-  // Async sinks get a detached heap copy so their slow-I/O backlog can't pin the Dashboard pool.
-  bool anyAsync =
-    csvExport.exportEnabled() || mdf4Export.exportEnabled() || pluginsServer.enabled();
-#ifdef BUILD_COMMERCIAL
-  anyAsync = anyAsync || sqliteExport.exportEnabled() || mqttPublisher.enabled();
-#endif
-#ifdef ENABLE_GRPC
-  anyAsync = anyAsync || grpcServer.enabled();
-#endif
-
-  // No export enabled, do not detach frame
-  if (!anyAsync)
-    return;
 
   // Generate export frame
   const auto detached =
@@ -1913,6 +2203,9 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 {
   Q_ASSERT(L);
 
+  // Someone can now read dataset registers, so the hotpath must keep capturing them
+  m_externalTableApiUsers = true;
+
   lua_pushlightuserdata(L, &m_tableStore);
   lua_pushcclosure(L, luaTableGet, 1);
   lua_setglobal(L, "tableGet");
@@ -1941,6 +2234,9 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
 {
   Q_ASSERT(js);
+
+  // Someone can now read dataset registers, so the hotpath must keep capturing them
+  m_externalTableApiUsers = true;
 
   // Create bridge parented to the engine (destroyed when engine is deleted)
   auto* bridge  = new DataModel::TableApiBridge(js);

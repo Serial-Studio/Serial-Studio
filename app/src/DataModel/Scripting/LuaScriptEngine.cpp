@@ -36,6 +36,7 @@
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "Misc/Utilities.h"
+#include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // Sandboxed library loader
@@ -214,6 +215,14 @@ void DataModel::LuaScriptEngine::destroyState()
 bool DataModel::LuaScriptEngine::isLoaded() const noexcept
 {
   return m_loaded;
+}
+
+/**
+ * @brief Returns the ScriptLanguage implemented by this engine.
+ */
+int DataModel::LuaScriptEngine::language() const noexcept
+{
+  return SerialStudio::Lua;
 }
 
 /**

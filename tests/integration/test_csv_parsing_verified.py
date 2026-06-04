@@ -292,18 +292,18 @@ def test_frame_parser_language_mismatch_does_not_crash(api_client, clean_state):
     """
     Regression: a frame-parser language mismatch must never crash the app.
 
-    New projects default the frame-parser language to Lua. Loading JavaScript
-    source into the Lua engine makes luaL_loadbuffer raise a syntax error;
-    because Lua is built as C++ the error propagates as a thrown lua_longjmp*.
-    On macOS (Xcode 26 ld dropped DWARF unwind under -dead_strip + -flto) that
-    throw escaped Lua's own catch and aborted the process. The fix wraps the
-    Lua load path in a C++ try/catch so the mismatch becomes a clean load
-    failure. This test feeds the mismatch on purpose and asserts the app
-    stays alive and responsive afterwards.
+    Loading JavaScript source into the Lua engine makes luaL_loadbuffer raise
+    a syntax error; because Lua is built as C++ the error propagates as a
+    thrown lua_longjmp*. On macOS (Xcode 26 ld dropped DWARF unwind under
+    -dead_strip + -flto) that throw escaped Lua's own catch and aborted the
+    process. The fix wraps the Lua load path in a C++ try/catch so the
+    mismatch becomes a clean load failure. This test feeds the mismatch on
+    purpose and asserts the app stays alive and responsive afterwards.
 
-    The mismatch is sent via the raw setCode command WITHOUT a language key,
-    so the JS code lands in the default Lua engine exactly as the original
-    crash did. Both flip directions are exercised.
+    New projects now default to the Native template parser, so each direction
+    flips the language explicitly first, then sends the mismatched code via
+    the raw setCode command WITHOUT a language key so it lands in the engine
+    exactly as the original crash did. Both flip directions are exercised.
     """
 
     def feed_mismatch(code: str) -> None:
@@ -318,9 +318,11 @@ def test_frame_parser_language_mismatch_does_not_crash(api_client, clean_state):
                 f"App crashed loading mismatched parser code: {code!r}"
             ) from exc
 
-    # JavaScript source into the default Lua engine (the original crash trigger)
+    # JavaScript source into the Lua engine (the original crash trigger)
     api_client.create_new_project()
     time.sleep(0.2)
+    api_client.set_frame_parser_language(1)
+    time.sleep(0.1)
     feed_mismatch("function parse(frame) { return frame.split(';'); }")
     time.sleep(0.2)
 

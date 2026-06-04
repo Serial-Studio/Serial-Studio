@@ -73,6 +73,8 @@ public:
   [[nodiscard]] int language() const noexcept;
   [[nodiscard]] QString text() const;
 
+  Q_INVOKABLE [[nodiscard]] bool prepareParserTest();
+
 public slots:
   void cut();
   void undo();
@@ -88,7 +90,6 @@ public slots:
   void formatDocument();
   void formatSelection();
   void selectTemplate();
-  void testWithSampleData();
   void setSourceId(const int sourceId);
   void setLanguage(const int language);
   void switchLanguage(const int language);
@@ -99,6 +100,9 @@ private slots:
   void onThemeChanged();
   void renderWidget();
   void resizeWidget();
+
+private:
+  void switchNativeLanguage(const int language);
 
 private:
   void paint(QPainter* painter) override;

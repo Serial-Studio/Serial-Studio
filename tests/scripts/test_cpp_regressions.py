@@ -876,45 +876,44 @@ def test_assistant_script_apply_strips_pipeline_keys():
 
 
 # ----------------------------------------------------------------------------------
-# R11 -- FrameParserTestDialog drives the shared pipeline and writes back to the source
+# R11 -- the parser tester bridge drives the shared pipeline and writes back to the source
 # ----------------------------------------------------------------------------------
 
 
-def test_dialog_runs_pipeline_and_writes_back_to_source():
-    """The dialog must call the shared pipeline runner and must write delimiter / decoder
-    / detection / checksum edits back to ProjectModel so the live driver reconfigures.
+def test_tester_runs_pipeline_and_writes_back_to_source():
+    """The QML test dialog's bridge (NativeParserEditor) must call the shared pipeline
+    runners and must write delimiter / decoder / detection / checksum edits back to
+    ProjectModel so the live driver reconfigures.
     """
-    text = _read("app/src/DataModel/Dialogs/FrameParserTestDialog.cpp")
+    text = _read("app/src/DataModel/Editors/NativeParserEditor.cpp")
 
     assert '#include "DataModel/Scripting/FrameParserPipeline.h"' in text
 
-    # Pipeline runner is called from parseData.
-    assert (
-        "const auto result = runFrameParserPipeline(input, spec, m_sourceId);" in text
-    )
+    # Both pipeline runners are exercised from dryRun: the live engine for JS/Lua
+    # sources and the throwaway native-template engine for Native sources.
+    assert "runFrameParserPipeline(bytes, spec, m_sourceId)" in text
+    assert "runNativeTemplatePipeline(bytes, spec," in text
 
-    # All five pipeline slots write back through updateSource.
+    # All pipeline setters write back through updateSource.
     for slot in (
-        "onDetectionChanged",
-        "onDecoderChanged",
-        "onChecksumChanged",
-        "applyDelimitersToProject",
+        "setDecoderIndex",
+        "setDetectionIndex",
+        "setChecksumIndex",
+        "setFrameStart",
+        "setFrameEnd",
+        "setHexDelimiters",
     ):
         body = re.search(
-            r"void DataModel::FrameParserTestDialog::" + slot + r"\([\s\S]*?\n\}",
+            r"void DataModel::NativeParserEditor::" + slot + r"\([\s\S]*?\n\}",
             text,
         )
         assert body is not None, f"{slot} body must exist"
-        assert (
-            "DataModel::ProjectModel::instance().updateSource(m_sourceId, src);"
-            in body.group(0)
+        assert "ProjectModel::instance().updateSource(m_sourceId, src);" in body.group(
+            0
         ), f"{slot} must persist edits via updateSource"
 
-    # Dialog reacts to live source mutations so it stays in sync with external edits.
-    assert (
-        "&DataModel::ProjectModel::sourceChanged" in text
-        and "&FrameParserTestDialog::onSourceChanged" in text
-    )
+    # Bridge reacts to live source mutations so it stays in sync with external edits.
+    assert "&ProjectModel::sourceChanged" in text
 
 
 # ----------------------------------------------------------------------------------

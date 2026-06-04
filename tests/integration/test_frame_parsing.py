@@ -289,9 +289,8 @@ def test_invalid_checksum_rejection(
 # ---------------------------------------------------------------------------
 #
 # The same scenario as `test_checksum_validation` but driving the parser with
-# a Lua script. New projects default to Lua, so this also doubles as a check
-# that the Lua engine is wired up correctly end-to-end (FrameParser ->
-# FrameBuilder -> Dashboard). Only a representative subset of checksums is
+# a Lua script, checking that the Lua engine is wired up correctly end-to-end
+# (FrameParser -> FrameBuilder -> Dashboard). Only a representative subset is
 # parameterized here to keep the suite runtime manageable; the JS version
 # above already covers every algorithm.
 # ---------------------------------------------------------------------------
@@ -1185,3 +1184,223 @@ def test_large_frame_handling(api_client, device_simulator, clean_state):
 
     project_status = api_client.get_project_status()
     assert project_status["groupCount"] >= 0
+
+
+# ---------------------------------------------------------------------------
+# Parser engine coverage: JavaScript, Lua and Native through one dry-run
+# ---------------------------------------------------------------------------
+#
+# project.frameParser.dryRun drives the same extraction -> decoder -> parser
+# path the live FrameBuilder uses, with a throwaway engine. Parameterizing it
+# over the three languages guarantees every parser engine ships working: a
+# regression in any engine fails this test without needing a device.
+# ---------------------------------------------------------------------------
+
+JS_CSV_PARSER = "function parse(frame) { return frame.split(','); }"
+
+LUA_CSV_PARSER = 'function parse(frame)\n  return frame:split(",")\nend'
+
+NATIVE_CSV_DESCRIPTOR = json.dumps(
+    {"template": "delimited", "params": {"separator": ","}}
+)
+
+
+@pytest.mark.parametrize(
+    "language,code",
+    [
+        pytest.param(0, JS_CSV_PARSER, id="javascript"),
+        pytest.param(1, LUA_CSV_PARSER, id="lua"),
+        pytest.param(2, NATIVE_CSV_DESCRIPTOR, id="native"),
+    ],
+)
+def test_frame_parser_dry_run_all_languages(api_client, clean_state, language, code):
+    """Every parser engine (JS, Lua, Native) splits a CSV frame identically."""
+    result = api_client.command(
+        "project.frameParser.dryRun",
+        {
+            "code": code,
+            "language": language,
+            "inputBytes": "1,2,3\n",
+            "frameDetection": 0,
+            "frameEnd": "\n",
+        },
+    )
+
+    assert result["ok"], f"dryRun failed for language={language}"
+    assert result["frameCount"] == 1, f"Expected 1 frame, got {result['frameCount']}"
+    rows = result["frames"][0]["rows"]
+    assert rows == [["1", "2", "3"]], f"Unexpected rows for language={language}: {rows}"
+
+    # dryCompile must accept the same payload (syntax/descriptor check only)
+    compiled = api_client.command(
+        "project.frameParser.dryCompile", {"code": code, "language": language}
+    )
+    assert compiled["ok"], f"dryCompile failed for language={language}"
+
+
+def test_native_template_catalog_and_schema(api_client, clean_state):
+    """The native template catalog and per-template schemas are queryable."""
+    catalog = api_client.command("project.frameParser.listTemplates")
+    assert catalog["count"] >= 20, f"Expected >= 20 templates, got {catalog['count']}"
+
+    ids = [entry["id"] for entry in catalog["templates"]]
+    assert "delimited" in ids, "Default 'delimited' template missing from catalog"
+    for entry in catalog["templates"]:
+        assert entry["name"], f"Template {entry['id']} has no display name"
+
+    schema = api_client.command(
+        "project.frameParser.getTemplateSchema", {"template": "delimited"}
+    )
+    assert schema["id"] == "delimited"
+    param_keys = {p["key"]: p for p in schema["params"]}
+    assert "separator" in param_keys, "delimited schema must expose a separator param"
+    assert param_keys["separator"]["type"] == "string"
+    assert param_keys["separator"]["default"] == ","
+
+    # Unknown template ids are rejected with a helpful error
+    with pytest.raises(Exception):
+        api_client.command(
+            "project.frameParser.getTemplateSchema", {"template": "no_such_template"}
+        )
+
+
+def test_native_frame_parser_end_to_end(api_client, device_simulator, clean_state):
+    """Native delimited template (semicolon) parses device frames to dashboard."""
+    api_client.create_new_project()
+    time.sleep(0.2)
+    api_client.command("project.group.add", {"title": "Test Group", "widgetType": 0})
+    time.sleep(0.2)
+
+    for i in range(6):
+        api_client.command("project.dataset.add", {"groupId": 0, "options": 1})
+        time.sleep(0.1)
+
+    # Apply the native delimited template with a semicolon separator
+    applied = api_client.set_frame_parser_template(
+        "delimited", params={"separator": ";"}
+    )
+    assert applied["language"] == 2, "setTemplate should flip the source to Native"
+    assert applied["template"] == "delimited"
+    time.sleep(0.2)
+
+    api_client.command("project.setTitle", {"title": "Native Parser End To End"})
+    time.sleep(0.1)
+
+    api_client.set_operation_mode("project")
+    time.sleep(0.1)
+
+    api_client.configure_frame_parser(
+        start_sequence="/*",
+        end_sequence="*/",
+        checksum_algorithm="",
+        operation_mode=0,
+    )
+    time.sleep(0.1)
+
+    api_client.configure_frame_parser(frame_detection=1, operation_mode=0)
+    time.sleep(0.1)
+
+    result = api_client.command("project.activate")
+    time.sleep(0.2)
+    assert result["loaded"], "Should have loaded into FrameBuilder"
+
+    # Config round-trips: language, template id and params survive persistence
+    assert api_client.get_frame_parser_language(0) == 2
+    template = api_client.command("project.frameParser.getTemplate", {"sourceId": 0})
+    assert template["template"] == "delimited"
+    assert template["params"]["separator"] == ";"
+
+    source_config = api_client.command("project.source.getConfig", {"sourceId": 0})
+    assert source_config.get("frameParserTemplate") == "delimited"
+
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+
+    # Semicolon-separated payloads: the native template must split on ';'
+    frames = []
+    for i in range(10):
+        payload = ";".join(f"{(i + j) * 1.5:.2f}" for j in range(6))
+        frame = DataGenerator.wrap_frame(
+            payload,
+            start_delimiter="/*",
+            end_delimiter="*/",
+            checksum_type=ChecksumType.NONE,
+            mode="project",
+        )
+        frames.append(frame)
+
+    api_client.connect_device()
+    assert device_simulator.wait_for_connection(timeout=5.0), "Device did not connect"
+
+    device_simulator.send_frames(frames, interval_seconds=0.1)
+    time.sleep(1.5)
+
+    status = api_client.command("io.getStatus")
+    assert status["isConnected"], "Device should be connected"
+
+    widget_count = _wait_for_dashboard_widgets(api_client, minimum=6)
+    assert widget_count >= 6, f"Expected widgets, got {widget_count}"
+    data = api_client.get_dashboard_data()
+    assert data["datasetCount"] >= 6, f"Expected datasets, got {data['datasetCount']}"
+
+
+def test_new_project_defaults_to_native_csv(api_client, device_simulator, clean_state):
+    """A fresh project parses comma-separated frames with zero parser setup."""
+    api_client.create_new_project()
+    time.sleep(0.2)
+
+    # The default parser is the Native delimited template with a comma separator
+    assert api_client.get_frame_parser_language(0) == 2
+    template = api_client.command("project.frameParser.getTemplate", {"sourceId": 0})
+    assert template["template"] == "delimited"
+    assert template["params"].get("separator") == ","
+
+    api_client.command("project.group.add", {"title": "Test Group", "widgetType": 0})
+    time.sleep(0.2)
+
+    for i in range(6):
+        api_client.command("project.dataset.add", {"groupId": 0, "options": 1})
+        time.sleep(0.1)
+
+    api_client.set_operation_mode("project")
+    time.sleep(0.1)
+
+    # Only framing is configured; the parser itself is untouched (default Native CSV)
+    api_client.configure_frame_parser(
+        start_sequence="/*",
+        end_sequence="*/",
+        checksum_algorithm="",
+        operation_mode=0,
+    )
+    time.sleep(0.1)
+
+    api_client.configure_frame_parser(frame_detection=1, operation_mode=0)
+    time.sleep(0.1)
+
+    result = api_client.command("project.activate")
+    time.sleep(0.2)
+    assert result["loaded"], "Should have loaded into FrameBuilder"
+
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+
+    frames = []
+    for i in range(10):
+        payload = DataGenerator.generate_csv_frame()
+        frame = DataGenerator.wrap_frame(
+            payload,
+            start_delimiter="/*",
+            end_delimiter="*/",
+            checksum_type=ChecksumType.NONE,
+            mode="project",
+        )
+        frames.append(frame)
+
+    api_client.connect_device()
+    assert device_simulator.wait_for_connection(timeout=5.0), "Device did not connect"
+
+    device_simulator.send_frames(frames, interval_seconds=0.1)
+    time.sleep(1.5)
+
+    widget_count = _wait_for_dashboard_widgets(api_client, minimum=6)
+    assert widget_count >= 6, f"Expected widgets, got {widget_count}"
+    data = api_client.get_dashboard_data()
+    assert data["datasetCount"] >= 6, f"Expected datasets, got {data['datasetCount']}"

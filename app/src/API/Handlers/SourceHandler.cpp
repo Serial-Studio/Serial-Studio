@@ -205,8 +205,10 @@ API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
     obj[Keys::DecoderMethod]                  = src.decoderMethod;
     obj[QStringLiteral("decoderMethodLabel")] = EnumLabels::decoderMethodLabel(src.decoderMethod);
     obj[Keys::HexadecimalDelimiters]          = src.hexadecimalDelimiters;
-    obj[QStringLiteral("hasFrameParser")]     = !src.frameParserCode.isEmpty();
-    obj[Keys::FrameParserLanguage]            = src.frameParserLanguage;
+    obj[QStringLiteral("hasFrameParser")] =
+      !src.frameParserCode.isEmpty() || !src.frameParserTemplate.isEmpty();
+    obj[Keys::FrameParserLanguage] = src.frameParserLanguage;
+    obj[Keys::FrameParserTemplate] = src.frameParserTemplate;
     arr.append(obj);
   }
 

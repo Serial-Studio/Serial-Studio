@@ -47,7 +47,7 @@
 //--------------------------------------------------------------------------------------------------
 
 // clang-format off
-typedef enum { kRootItem, kFrameParser } TopLevelItem;
+typedef enum { kRootItem } TopLevelItem;
 
 typedef enum {
   kProjectView_Title
@@ -583,6 +583,30 @@ void DataModel::ProjectEditor::wireExternalSignals()
 
     buildSourceModel(m_selectedSource);
   });
+
+  // Refresh the form on external source edits; queued so internal edits short-circuit
+  connect(
+    &DataModel::ProjectModel::instance(),
+    &DataModel::ProjectModel::sourceChanged,
+    this,
+    [this](int sourceId) {
+      if (m_currentView != SourceView || sourceId != m_selectedSource.sourceId)
+        return;
+
+      const auto& sources = DataModel::ProjectModel::instance().sources();
+      for (const auto& src : sources) {
+        if (src.sourceId != sourceId)
+          continue;
+
+        if (DataModel::serialize(src) == DataModel::serialize(m_selectedSource))
+          return;
+
+        m_selectedSource = src;
+        buildSourceModel(m_selectedSource);
+        return;
+      }
+    },
+    Qt::QueuedConnection);
 }
 
 /**
