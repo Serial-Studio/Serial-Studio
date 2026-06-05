@@ -50,9 +50,13 @@ def api_client(serial_studio_running):
     """
     Provide a connected API client.
 
-    Automatically connects and disconnects.
+    Automatically connects and disconnects. The command timeout is wider
+    than the client default because functional tests should survive a
+    transient CI-runner stall; the security suite keeps short timeouts on
+    purpose (there a TimeoutError means a hang). Real hangs are still
+    bounded by the 30 s per-test pytest timeout.
     """
-    client = SerialStudioClient()
+    client = SerialStudioClient(timeout=15.0)
     client.connect()
 
     yield client

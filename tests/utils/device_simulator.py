@@ -159,15 +159,26 @@ class DeviceSimulator:
         interval_seconds: float = 0.1,
     ) -> None:
         """
-        Send multiple frames with delay between them.
+        Send multiple frames paced at a fixed interval.
+
+        Pacing follows an absolute schedule rather than sleeping the interval
+        after each frame: loaded CI runners overshoot short sleeps by tens of
+        milliseconds, and a relative sleep accumulates that overshoot until
+        wall-clock assertions measure the host scheduler instead of the app.
+        When the schedule slips, frames are sent back-to-back to catch up, so
+        total wall time stays close to len(frames) * interval_seconds.
 
         Args:
             frames: List of frames to send
-            interval_seconds: Delay between frames
+            interval_seconds: Target spacing between frames
         """
+        next_send = time.monotonic()
         for frame in frames:
             self.send_frame(frame)
-            time.sleep(interval_seconds)
+            next_send += interval_seconds
+            delay = next_send - time.monotonic()
+            if delay > 0:
+                time.sleep(delay)
 
     def stream_data(
         self,
