@@ -19,9 +19,10 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
-#include "DataModel/Editors/NativeParserEditor.h"
+#include "DataModel/Editors/FrameParserModel.h"
 
 #include <QFile>
+#include <QInputDialog>
 #include <QStandardItem>
 
 #include "DataModel/FrameBuilder.h"
@@ -82,18 +83,18 @@ static QByteArray delimiterBytes(const QString& text, bool hex)
 /**
  * @brief Builds the bridge and wires project-model + translation subscriptions.
  */
-DataModel::NativeParserEditor::NativeParserEditor(QObject* parent)
+DataModel::FrameParserModel::FrameParserModel(QObject* parent)
   : QObject(parent), m_sourceId(0), m_applying(false), m_parameterModel(nullptr)
 {
   connect(&ProjectModel::instance(),
           &ProjectModel::sourceFrameParserTemplateChanged,
           this,
-          &NativeParserEditor::onSourceTemplateChanged);
+          &FrameParserModel::onSourceTemplateChanged);
 
   connect(&ProjectModel::instance(),
           &ProjectModel::sourceFrameParserParamsChanged,
           this,
-          &NativeParserEditor::onSourceParamsChanged);
+          &FrameParserModel::onSourceParamsChanged);
 
   connect(&ProjectModel::instance(), &ProjectModel::sourceChanged, this, [this](int sourceId) {
     if (sourceId == m_sourceId)
@@ -103,7 +104,7 @@ DataModel::NativeParserEditor::NativeParserEditor(QObject* parent)
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
-          &NativeParserEditor::onLanguageChanged);
+          &FrameParserModel::onLanguageChanged);
 
   rebuildTemplateNames();
   rebuildParameterModel();
@@ -116,7 +117,7 @@ DataModel::NativeParserEditor::NativeParserEditor(QObject* parent)
 /**
  * @brief Returns the source ID this editor is bound to.
  */
-int DataModel::NativeParserEditor::sourceId() const noexcept
+int DataModel::FrameParserModel::sourceId() const noexcept
 {
   return m_sourceId;
 }
@@ -124,7 +125,7 @@ int DataModel::NativeParserEditor::sourceId() const noexcept
 /**
  * @brief Returns the registry index of the source's template (default template if unset).
  */
-int DataModel::NativeParserEditor::templateIndex() const
+int DataModel::FrameParserModel::templateIndex() const
 {
   const QString id      = ProjectModel::instance().frameParserTemplate(m_sourceId);
   const auto& templates = nativeTemplates();
@@ -138,7 +139,7 @@ int DataModel::NativeParserEditor::templateIndex() const
 /**
  * @brief Returns the current parameter validation error, or an empty string.
  */
-QString DataModel::NativeParserEditor::paramError() const
+QString DataModel::FrameParserModel::paramError() const
 {
   return m_paramError;
 }
@@ -146,7 +147,7 @@ QString DataModel::NativeParserEditor::paramError() const
 /**
  * @brief Returns the translated description of the selected template.
  */
-QString DataModel::NativeParserEditor::templateDescription() const
+QString DataModel::FrameParserModel::templateDescription() const
 {
   const auto* tmpl = currentTemplate();
   if (!tmpl)
@@ -158,7 +159,7 @@ QString DataModel::NativeParserEditor::templateDescription() const
 /**
  * @brief Returns the Markdown documentation page bundled for the selected template.
  */
-QString DataModel::NativeParserEditor::templateDocumentation() const
+QString DataModel::FrameParserModel::templateDocumentation() const
 {
   const auto* tmpl = currentTemplate();
   if (!tmpl)
@@ -174,7 +175,7 @@ QString DataModel::NativeParserEditor::templateDocumentation() const
 /**
  * @brief Returns the translated display names of every native template.
  */
-const QStringList& DataModel::NativeParserEditor::templateNames() const
+const QStringList& DataModel::FrameParserModel::templateNames() const
 {
   return m_templateNames;
 }
@@ -182,7 +183,7 @@ const QStringList& DataModel::NativeParserEditor::templateNames() const
 /**
  * @brief Returns the dynamic parameter form model for the selected template.
  */
-QAbstractItemModel* DataModel::NativeParserEditor::parameterModel() const
+QAbstractItemModel* DataModel::FrameParserModel::parameterModel() const
 {
   return m_parameterModel;
 }
@@ -190,7 +191,7 @@ QAbstractItemModel* DataModel::NativeParserEditor::parameterModel() const
 /**
  * @brief Returns the number of parameter rows for the selected template.
  */
-int DataModel::NativeParserEditor::parameterCount() const
+int DataModel::FrameParserModel::parameterCount() const
 {
   return m_parameterModel ? m_parameterModel->rowCount() : 0;
 }
@@ -198,7 +199,7 @@ int DataModel::NativeParserEditor::parameterCount() const
 /**
  * @brief Returns the source's decoder method as a combobox index.
  */
-int DataModel::NativeParserEditor::decoderIndex() const
+int DataModel::FrameParserModel::decoderIndex() const
 {
   return currentSource().decoderMethod;
 }
@@ -206,7 +207,7 @@ int DataModel::NativeParserEditor::decoderIndex() const
 /**
  * @brief Returns the source's frame detection mode as a combobox index.
  */
-int DataModel::NativeParserEditor::detectionIndex() const
+int DataModel::FrameParserModel::detectionIndex() const
 {
   const auto detection = static_cast<SerialStudio::FrameDetection>(currentSource().frameDetection);
   const auto idx       = kDetectionValues.indexOf(detection);
@@ -216,7 +217,7 @@ int DataModel::NativeParserEditor::detectionIndex() const
 /**
  * @brief Returns the source's checksum algorithm as a combobox index.
  */
-int DataModel::NativeParserEditor::checksumIndex() const
+int DataModel::FrameParserModel::checksumIndex() const
 {
   const auto idx = IO::availableChecksums().indexOf(currentSource().checksumAlgorithm);
   return idx >= 0 ? static_cast<int>(idx) : 0;
@@ -225,7 +226,7 @@ int DataModel::NativeParserEditor::checksumIndex() const
 /**
  * @brief Returns the source's frame start delimiter.
  */
-QString DataModel::NativeParserEditor::frameStart() const
+QString DataModel::FrameParserModel::frameStart() const
 {
   return currentSource().frameStart;
 }
@@ -233,7 +234,7 @@ QString DataModel::NativeParserEditor::frameStart() const
 /**
  * @brief Returns the source's frame end delimiter.
  */
-QString DataModel::NativeParserEditor::frameEnd() const
+QString DataModel::FrameParserModel::frameEnd() const
 {
   return currentSource().frameEnd;
 }
@@ -241,7 +242,7 @@ QString DataModel::NativeParserEditor::frameEnd() const
 /**
  * @brief Returns true when the source's delimiters are hex-encoded.
  */
-bool DataModel::NativeParserEditor::hexDelimiters() const
+bool DataModel::FrameParserModel::hexDelimiters() const
 {
   return currentSource().hexadecimalDelimiters;
 }
@@ -249,7 +250,7 @@ bool DataModel::NativeParserEditor::hexDelimiters() const
 /**
  * @brief Returns the translated decoder option labels (enum order, dialog wording).
  */
-QStringList DataModel::NativeParserEditor::decoderOptions() const
+QStringList DataModel::FrameParserModel::decoderOptions() const
 {
   return {tr("Plain text (UTF-8)"), tr("Hexadecimal"), tr("Base64"), tr("Binary (raw bytes)")};
 }
@@ -257,7 +258,7 @@ QStringList DataModel::NativeParserEditor::decoderOptions() const
 /**
  * @brief Returns the translated frame detection option labels (dialog wording).
  */
-QStringList DataModel::NativeParserEditor::detectionOptions() const
+QStringList DataModel::FrameParserModel::detectionOptions() const
 {
   return {tr("End delimiter only"),
           tr("Start + end delimiters"),
@@ -268,7 +269,7 @@ QStringList DataModel::NativeParserEditor::detectionOptions() const
 /**
  * @brief Returns the checksum algorithm labels, mapping the empty algorithm to "No Checksum".
  */
-QStringList DataModel::NativeParserEditor::checksumOptions() const
+QStringList DataModel::FrameParserModel::checksumOptions() const
 {
   auto options = IO::availableChecksums();
   for (auto& option : options)
@@ -285,7 +286,7 @@ QStringList DataModel::NativeParserEditor::checksumOptions() const
 /**
  * @brief Binds the editor to a source and reloads template + params from the project.
  */
-void DataModel::NativeParserEditor::setSourceId(int sourceId)
+void DataModel::FrameParserModel::setSourceId(int sourceId)
 {
   if (m_sourceId == sourceId)
     return;
@@ -298,9 +299,30 @@ void DataModel::NativeParserEditor::setSourceId(int sourceId)
 }
 
 /**
+ * @brief Shows a native-template picker dialog and applies the chosen template.
+ */
+void DataModel::FrameParserModel::selectTemplate()
+{
+  bool ok = false;
+  const auto name = QInputDialog::getItem(nullptr,
+                                          tr("Select Frame Parser Template"),
+                                          tr("Choose a template to load:"),
+                                          m_templateNames,
+                                          templateIndex(),
+                                          false,
+                                          &ok);
+  if (!ok)
+    return;
+
+  const int idx = m_templateNames.indexOf(name);
+  if (idx >= 0)
+    setTemplateIndex(idx);
+}
+
+/**
  * @brief Selects the template at the registry index and seeds its default parameters.
  */
-void DataModel::NativeParserEditor::setTemplateIndex(int index)
+void DataModel::FrameParserModel::setTemplateIndex(int index)
 {
   const auto& templates = nativeTemplates();
   if (index < 0 || index >= templates.size() || index == templateIndex())
@@ -323,7 +345,7 @@ void DataModel::NativeParserEditor::setTemplateIndex(int index)
 /**
  * @brief Persists the decoder method to the source.
  */
-void DataModel::NativeParserEditor::setDecoderIndex(int index)
+void DataModel::FrameParserModel::setDecoderIndex(int index)
 {
   if (index < 0 || index == decoderIndex())
     return;
@@ -336,7 +358,7 @@ void DataModel::NativeParserEditor::setDecoderIndex(int index)
 /**
  * @brief Persists the frame detection mode to the source.
  */
-void DataModel::NativeParserEditor::setDetectionIndex(int index)
+void DataModel::FrameParserModel::setDetectionIndex(int index)
 {
   if (index < 0 || index >= kDetectionValues.size() || index == detectionIndex())
     return;
@@ -349,7 +371,7 @@ void DataModel::NativeParserEditor::setDetectionIndex(int index)
 /**
  * @brief Persists the checksum algorithm to the source.
  */
-void DataModel::NativeParserEditor::setChecksumIndex(int index)
+void DataModel::FrameParserModel::setChecksumIndex(int index)
 {
   const auto algorithms = IO::availableChecksums();
   if (index < 0 || index >= algorithms.size() || index == checksumIndex())
@@ -363,7 +385,7 @@ void DataModel::NativeParserEditor::setChecksumIndex(int index)
 /**
  * @brief Persists the frame start delimiter to the source.
  */
-void DataModel::NativeParserEditor::setFrameStart(const QString& sequence)
+void DataModel::FrameParserModel::setFrameStart(const QString& sequence)
 {
   auto src = currentSource();
   if (src.frameStart == sequence)
@@ -376,7 +398,7 @@ void DataModel::NativeParserEditor::setFrameStart(const QString& sequence)
 /**
  * @brief Persists the frame end delimiter to the source.
  */
-void DataModel::NativeParserEditor::setFrameEnd(const QString& sequence)
+void DataModel::FrameParserModel::setFrameEnd(const QString& sequence)
 {
   auto src = currentSource();
   if (src.frameEnd == sequence)
@@ -389,7 +411,7 @@ void DataModel::NativeParserEditor::setFrameEnd(const QString& sequence)
 /**
  * @brief Persists the hex-delimiters toggle to the source.
  */
-void DataModel::NativeParserEditor::setHexDelimiters(bool hexadecimal)
+void DataModel::FrameParserModel::setHexDelimiters(bool hexadecimal)
 {
   auto src = currentSource();
   if (src.hexadecimalDelimiters == hexadecimal)
@@ -406,7 +428,7 @@ void DataModel::NativeParserEditor::setHexDelimiters(bool hexadecimal)
 /**
  * @brief Restores every parameter of the selected template to its schema default.
  */
-void DataModel::NativeParserEditor::resetToDefaults()
+void DataModel::FrameParserModel::resetToDefaults()
 {
   const auto* tmpl = currentTemplate();
   if (!tmpl)
@@ -423,7 +445,7 @@ void DataModel::NativeParserEditor::resetToDefaults()
 /**
  * @brief Returns true when the sample input carries every delimiter the detection mode needs.
  */
-bool DataModel::NativeParserEditor::inputContainsDelimiters(const QString& input, bool hex) const
+bool DataModel::FrameParserModel::inputContainsDelimiters(const QString& input, bool hex) const
 {
   if (input.isEmpty())
     return true;
@@ -458,7 +480,7 @@ bool DataModel::NativeParserEditor::inputContainsDelimiters(const QString& input
  * @brief Runs extraction + decoder + the source's parser against sample input bytes. Native
  * sources run their template; JS/Lua sources run the live engine (like the old test dialog).
  */
-void DataModel::NativeParserEditor::dryRun(const QString& input, bool hex)
+void DataModel::FrameParserModel::dryRun(const QString& input, bool hex)
 {
   if (input.isEmpty()) {
     Q_EMIT previewReady(QVariantList(), QString(), QString());
@@ -514,7 +536,7 @@ void DataModel::NativeParserEditor::dryRun(const QString& input, bool hex)
 /**
  * @brief Serializes a pipeline result into the previewReady payload.
  */
-void DataModel::NativeParserEditor::emitPreview(const PipelineResult& result, int decoderMethod)
+void DataModel::FrameParserModel::emitPreview(const PipelineResult& result, int decoderMethod)
 {
   if (!result.stageError.isEmpty()) {
     Q_EMIT previewReady(QVariantList(), result.stageError, QString());
@@ -556,7 +578,7 @@ void DataModel::NativeParserEditor::emitPreview(const PipelineResult& result, in
 /**
  * @brief Applies a single parameter edit from the form model to the project.
  */
-void DataModel::NativeParserEditor::onItemChanged(QStandardItem* item)
+void DataModel::FrameParserModel::onItemChanged(QStandardItem* item)
 {
   if (m_applying || !item)
     return;
@@ -632,7 +654,7 @@ void DataModel::NativeParserEditor::onItemChanged(QStandardItem* item)
 /**
  * @brief Reacts to external template changes targeting this editor's source.
  */
-void DataModel::NativeParserEditor::onSourceTemplateChanged(int sourceId)
+void DataModel::FrameParserModel::onSourceTemplateChanged(int sourceId)
 {
   if (m_applying || sourceId != m_sourceId)
     return;
@@ -645,7 +667,7 @@ void DataModel::NativeParserEditor::onSourceTemplateChanged(int sourceId)
 /**
  * @brief Reacts to external parameter changes targeting this editor's source.
  */
-void DataModel::NativeParserEditor::onSourceParamsChanged(int sourceId)
+void DataModel::FrameParserModel::onSourceParamsChanged(int sourceId)
 {
   if (m_applying || sourceId != m_sourceId)
     return;
@@ -657,7 +679,7 @@ void DataModel::NativeParserEditor::onSourceParamsChanged(int sourceId)
 /**
  * @brief Refreshes translated template names and option labels on language change.
  */
-void DataModel::NativeParserEditor::onLanguageChanged()
+void DataModel::FrameParserModel::onLanguageChanged()
 {
   rebuildTemplateNames();
   rebuildParameterModel();
@@ -672,7 +694,7 @@ void DataModel::NativeParserEditor::onLanguageChanged()
 /**
  * @brief Rebuilds the cached translated template name list.
  */
-void DataModel::NativeParserEditor::rebuildTemplateNames()
+void DataModel::FrameParserModel::rebuildTemplateNames()
 {
   m_templateNames.clear();
   const auto& templates = nativeTemplates();
@@ -686,13 +708,13 @@ void DataModel::NativeParserEditor::rebuildTemplateNames()
 /**
  * @brief Rebuilds the parameter form model from the selected template's schema.
  */
-void DataModel::NativeParserEditor::rebuildParameterModel()
+void DataModel::FrameParserModel::rebuildParameterModel()
 {
   const auto* tmpl = currentTemplate();
 
   // Replace the model wholesale so delegates never see rows mutate across templates
   auto* model = new CustomModel(this);
-  connect(model, &CustomModel::itemChanged, this, &NativeParserEditor::onItemChanged);
+  connect(model, &CustomModel::itemChanged, this, &FrameParserModel::onItemChanged);
 
   m_params = ProjectModel::instance().frameParserParams(m_sourceId);
   if (tmpl && m_params.isEmpty())
@@ -769,7 +791,7 @@ void DataModel::NativeParserEditor::rebuildParameterModel()
 /**
  * @brief Stores and publishes the parameter validation error.
  */
-void DataModel::NativeParserEditor::setParamError(const QString& error)
+void DataModel::FrameParserModel::setParamError(const QString& error)
 {
   if (m_paramError == error)
     return;
@@ -781,7 +803,7 @@ void DataModel::NativeParserEditor::setParamError(const QString& error)
 /**
  * @brief Returns a copy of the source this editor is bound to.
  */
-DataModel::Source DataModel::NativeParserEditor::currentSource() const
+DataModel::Source DataModel::FrameParserModel::currentSource() const
 {
   const auto& sources = ProjectModel::instance().sources();
   for (const auto& src : sources)
@@ -794,7 +816,7 @@ DataModel::Source DataModel::NativeParserEditor::currentSource() const
 /**
  * @brief Returns the descriptor of the source's selected template (default when unset).
  */
-const DataModel::INativeTemplate* DataModel::NativeParserEditor::currentTemplate() const
+const DataModel::INativeTemplate* DataModel::FrameParserModel::currentTemplate() const
 {
   const QString id = ProjectModel::instance().frameParserTemplate(m_sourceId);
   if (const auto* tmpl = nativeTemplateById(id))
@@ -806,7 +828,7 @@ const DataModel::INativeTemplate* DataModel::NativeParserEditor::currentTemplate
 /**
  * @brief Validates params by building a throwaway parser instance.
  */
-bool DataModel::NativeParserEditor::validateParams(const QJsonObject& params, QString& error) const
+bool DataModel::FrameParserModel::validateParams(const QJsonObject& params, QString& error) const
 {
   const auto* tmpl = currentTemplate();
   if (!tmpl)

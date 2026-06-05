@@ -157,17 +157,74 @@ static constexpr int kMaxBytesPerFrame = 65536;
   return out;
 }
 
+/**
+ * @brief Combines one byte group at the offset into a decimal value string.
+ */
+[[nodiscard]] static QString byteGroupValue(const QByteArray& bytes, qsizetype offset,
+                                            int bytesPerValue, bool bigEndian, bool signedValues)
+{
+  Q_ASSERT(bytesPerValue >= 1);
+  Q_ASSERT(bytesPerValue <= 8);
+  Q_ASSERT(offset + bytesPerValue <= bytes.size());
+
+  quint64 value = 0;
+  for (int b = 0; b < bytesPerValue; ++b) {
+    const qsizetype idx = bigEndian ? (offset + b) : (offset + bytesPerValue - 1 - b);
+    value               = (value << 8) | u8At(bytes, idx);
+  }
+
+  if (!signedValues)
+    return QString::number(value);
+
+  const int bits         = bytesPerValue * 8;
+  const quint64 sign_bit = quint64(1) << (bits - 1);
+  if (bits < 64 && (value & sign_bit))
+    return QString::number(static_cast<qint64>(value) - (qint64(1) << bits));
+
+  return QString::number(static_cast<qint64>(value));
+}
+
+/**
+ * @brief Groups frame bytes into one channel per group; trailing partial groups are dropped.
+ */
+[[nodiscard]] static QList<QStringList> groupedByteFrame(const QByteArray& bytes, int bytesPerValue,
+                                                         bool bigEndian, bool signedValues)
+{
+  Q_ASSERT(bytesPerValue >= 1);
+
+  QStringList row;
+  row.reserve(bytes.size() / bytesPerValue + 1);
+
+  const qsizetype count = qMin<qsizetype>(bytes.size(), kMaxBytesPerFrame);
+  for (qsizetype i = 0; i + bytesPerValue <= count; i += bytesPerValue)
+    row.append(byteGroupValue(bytes, i, bytesPerValue, bigEndian, signedValues));
+
+  QList<QStringList> out;
+  out.append(std::move(row));
+  return out;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Raw bytes
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Emits every frame byte as one decimal channel (requires the Binary decoder).
+ * @brief Groups raw frame bytes into numeric channels (requires the Binary decoder).
  */
 class RawBytesParser final : public INativeParser {
 public:
   /**
-   * @brief Emits the UTF-8 bytes of a text frame.
+   * @brief Stores the grouping, endianness and sign configuration.
+   */
+  RawBytesParser(int bytesPerValue, bool bigEndian, bool signedValues)
+    : m_bytesPerValue(bytesPerValue), m_bigEndian(bigEndian), m_signedValues(signedValues)
+  {
+    Q_ASSERT(m_bytesPerValue >= 1);
+    Q_ASSERT(m_bytesPerValue <= 8);
+  }
+
+  /**
+   * @brief Groups the UTF-8 bytes of a text frame.
    */
   [[nodiscard]] QList<QStringList> parseText(const QString& frame) override
   {
@@ -183,14 +240,19 @@ public:
   }
 
   /**
-   * @brief Emits one channel per byte.
+   * @brief Emits one channel per byte group.
    */
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override
   {
     Q_ASSERT(!frame.isEmpty());
 
-    return byteRowFrame(frame);
+    return groupedByteFrame(frame, m_bytesPerValue, m_bigEndian, m_signedValues);
   }
+
+private:
+  int m_bytesPerValue;
+  bool m_bigEndian;
+  bool m_signedValues;
 };
 
 /**
@@ -213,24 +275,59 @@ public:
    */
   [[nodiscard]] QString description() const override
   {
-    return trBinary("Emits every frame byte as one decimal channel. Use with the Binary "
-                    "(Direct) decoder.");
+    return trBinary("Groups raw frame bytes into numeric channels, with configurable grouping, "
+                    "endianness and sign. Use with the Binary (Direct) decoder.");
   }
 
   /**
    * @brief Returns the parameter schema for the template.
    */
-  [[nodiscard]] QList<NativeParamSpec> params() const override { return {}; }
+  [[nodiscard]] QList<NativeParamSpec> params() const override
+  {
+    auto group = DataModel::nativeParam(
+      "bytesPerValue",
+      NativeParamType::Int,
+      QT_TRANSLATE_NOOP("NativeTemplates", "Bytes per value"),
+      QT_TRANSLATE_NOOP("NativeTemplates", "Number of bytes combined into each channel value."),
+      1);
+    group.minValue = 1;
+    group.maxValue = 8;
+
+    auto endian = DataModel::nativeParam(
+      "endianness",
+      NativeParamType::Enum,
+      QT_TRANSLATE_NOOP("NativeTemplates", "Endianness"),
+      QT_TRANSLATE_NOOP("NativeTemplates", "Byte order used when combining multi-byte values."),
+      QStringLiteral("big"));
+    endian.optionValues = {QStringLiteral("big"), QStringLiteral("little")};
+    endian.optionLabels = {trBinary("Big endian"), trBinary("Little endian")};
+
+    auto sign = DataModel::nativeParam(
+      "signedValues",
+      NativeParamType::Bool,
+      QT_TRANSLATE_NOOP("NativeTemplates", "Signed values"),
+      QT_TRANSLATE_NOOP("NativeTemplates", "Interprets each value as two's-complement signed."),
+      false);
+
+    return {group, endian, sign};
+  }
 
   /**
-   * @brief Builds a configured parser instance.
+   * @brief Validates the grouping and builds a configured parser instance.
    */
   [[nodiscard]] std::unique_ptr<INativeParser> makeParser(const QJsonObject& params,
                                                           QString& error) const override
   {
-    Q_UNUSED(params)
-    Q_UNUSED(error)
-    return std::make_unique<RawBytesParser>();
+    const int group = DataModel::nativeParamInt(params, QStringLiteral("bytesPerValue"), 1);
+    if (group < 1 || group > 8) {
+      error = trBinary("Bytes per value must be between 1 and 8.");
+      return nullptr;
+    }
+
+    const QString endian =
+      DataModel::nativeParamString(params, QStringLiteral("endianness"), QStringLiteral("big"));
+    const bool sign = DataModel::nativeParamBool(params, QStringLiteral("signedValues"), false);
+    return std::make_unique<RawBytesParser>(group, endian != QStringLiteral("little"), sign);
   }
 };
 
@@ -287,41 +384,7 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override
   {
-    QStringList row;
-    row.reserve(frame.size() / m_bytesPerValue + 1);
-
-    const qsizetype count = qMin<qsizetype>(frame.size(), kMaxBytesPerFrame);
-    for (qsizetype i = 0; i + m_bytesPerValue <= count; i += m_bytesPerValue)
-      row.append(groupValue(frame, i));
-
-    QList<QStringList> out;
-    out.append(std::move(row));
-    return out;
-  }
-
-private:
-  /**
-   * @brief Combines one byte group into a decimal value string.
-   */
-  [[nodiscard]] QString groupValue(const QByteArray& frame, qsizetype offset) const
-  {
-    Q_ASSERT(offset + m_bytesPerValue <= frame.size());
-
-    quint64 value = 0;
-    for (int b = 0; b < m_bytesPerValue; ++b) {
-      const qsizetype idx = m_bigEndian ? (offset + b) : (offset + m_bytesPerValue - 1 - b);
-      value               = (value << 8) | u8At(frame, idx);
-    }
-
-    if (!m_signedValues)
-      return QString::number(value);
-
-    const int bits         = m_bytesPerValue * 8;
-    const quint64 sign_bit = quint64(1) << (bits - 1);
-    if (bits < 64 && (value & sign_bit))
-      return QString::number(static_cast<qint64>(value) - (qint64(1) << bits));
-
-    return QString::number(static_cast<qint64>(value));
+    return groupedByteFrame(frame, m_bytesPerValue, m_bigEndian, m_signedValues);
   }
 
 private:

@@ -109,7 +109,6 @@ typedef enum {
   kSourceView_Title,
   kSourceView_BusType,
   kSourceView_Property,
-  kSourceView_FrameParser,
   kSourceView_FrameDetection,
   kSourceView_HexadecimalSequence,
   kSourceView_FrameStartSequence,
@@ -2407,7 +2406,7 @@ void DataModel::ProjectEditor::buildSourceCommonRows(const DataModel::Source& so
 }
 
 /**
- * @brief Appends Frame Detection rows including delimiter and start/end sequence inputs.
+ * @brief Appends the Frame Detection + Payload Processing rows to the source form model.
  */
 void DataModel::ProjectEditor::buildSourceFrameDetectionRows(const DataModel::Source& source)
 {
@@ -2419,8 +2418,6 @@ void DataModel::ProjectEditor::buildSourceFrameDetectionRows(const DataModel::So
 
   const auto detection     = static_cast<SerialStudio::FrameDetection>(source.frameDetection);
   const bool hexDelimiters = source.hexadecimalDelimiters;
-  const auto frameStart    = source.frameStart;
-  const auto frameEnd      = source.frameEnd;
 
   auto* frameDetectionItem = new QStandardItem();
   frameDetectionItem->setEditable(true);
@@ -2455,7 +2452,7 @@ void DataModel::ProjectEditor::buildSourceFrameDetectionRows(const DataModel::So
     startSeqItem->setEditable(true);
     startSeqItem->setData(true, Active);
     startSeqItem->setData(hexDelimiters ? HexTextField : TextField, WidgetType);
-    startSeqItem->setData(frameStart, EditableValue);
+    startSeqItem->setData(source.frameStart, EditableValue);
     startSeqItem->setData(kSourceView_FrameStartSequence, ParameterType);
     startSeqItem->setData(tr("Frame Start Delimiter"), ParameterName);
     startSeqItem->setData(tr("e.g. /*"), PlaceholderValue);
@@ -2469,20 +2466,14 @@ void DataModel::ProjectEditor::buildSourceFrameDetectionRows(const DataModel::So
     endSeqItem->setEditable(true);
     endSeqItem->setData(true, Active);
     endSeqItem->setData(hexDelimiters ? HexTextField : TextField, WidgetType);
-    endSeqItem->setData(frameEnd, EditableValue);
+    endSeqItem->setData(source.frameEnd, EditableValue);
     endSeqItem->setData(kSourceView_FrameEndSequence, ParameterType);
     endSeqItem->setData(tr("Frame End Delimiter"), ParameterName);
     endSeqItem->setData(tr("e.g. */"), PlaceholderValue);
     endSeqItem->setData(tr("Sequence that marks the end of a data frame"), ParameterDescription);
     m_sourceModel->appendRow(endSeqItem);
   }
-}
 
-/**
- * @brief Appends Payload Processing & Validation rows (decoder + checksum).
- */
-void DataModel::ProjectEditor::buildSourceConnectionSection(const DataModel::Source& source)
-{
   auto* ppHdr = new QStandardItem();
   ppHdr->setData(SectionHeader, WidgetType);
   ppHdr->setData(tr("Payload Processing & Validation"), PlaceholderValue);
@@ -2540,7 +2531,6 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
     appendDriverPropertyRows(source);
 
   buildSourceFrameDetectionRows(source);
-  buildSourceConnectionSection(source);
 
   connect(
     m_sourceModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onSourceItemChanged);
@@ -2686,77 +2676,6 @@ void DataModel::ProjectEditor::handleSourcePropertyChange(QStandardItem* item)
 }
 
 /**
- * @brief Applies frame-detection method or hex-delimiter edits and rebuilds the source form.
- */
-void DataModel::ProjectEditor::handleSourceFrameDetectionChange(QStandardItem* item,
-                                                                DataModel::Source& updated)
-{
-  const int id  = item->data(ParameterType).toInt();
-  const int sid = m_selectedSource.sourceId;
-
-  if (id == kSourceView_FrameDetection) {
-    const int idx = item->data(EditableValue).toInt();
-    if (idx < 0 || idx >= m_frameDetectionMethodsValues.size())
-      return;
-
-    updated.frameDetection = static_cast<int>(m_frameDetectionMethodsValues.at(idx));
-    DataModel::ProjectModel::instance().updateSource(sid, updated);
-    m_selectedSource = updated;
-    buildSourceModel(m_selectedSource);
-    return;
-  }
-
-  updated.hexadecimalDelimiters = item->data(EditableValue).toBool();
-  DataModel::ProjectModel::instance().updateSource(sid, updated);
-  m_selectedSource = updated;
-  buildSourceModel(m_selectedSource);
-}
-
-/**
- * @brief Applies frame start/end delimiter edits to the source.
- */
-void DataModel::ProjectEditor::handleSourceFrameStartEndChange(QStandardItem* item,
-                                                               DataModel::Source& updated)
-{
-  const int id  = item->data(ParameterType).toInt();
-  const int sid = m_selectedSource.sourceId;
-
-  if (id == kSourceView_FrameStartSequence)
-    updated.frameStart = item->data(EditableValue).toString();
-  else
-    updated.frameEnd = item->data(EditableValue).toString();
-
-  DataModel::ProjectModel::instance().updateSource(sid, updated);
-  m_selectedSource = updated;
-}
-
-/**
- * @brief Applies decoder method or checksum algorithm edits to the source.
- */
-void DataModel::ProjectEditor::handleSourceDecoderChecksumChange(QStandardItem* item,
-                                                                 DataModel::Source& updated)
-{
-  const int id  = item->data(ParameterType).toInt();
-  const int sid = m_selectedSource.sourceId;
-
-  if (id == kSourceView_FrameDecoder) {
-    updated.decoderMethod = item->data(EditableValue).toInt();
-    DataModel::ProjectModel::instance().updateSource(sid, updated);
-    m_selectedSource = updated;
-    return;
-  }
-
-  const auto checksums = IO::availableChecksums();
-  const int checksumId = item->data(EditableValue).toInt();
-  if (checksumId < 0 || checksumId >= checksums.size())
-    return;
-
-  updated.checksumAlgorithm = checksums.at(checksumId);
-  DataModel::ProjectModel::instance().updateSource(sid, updated);
-  m_selectedSource = updated;
-}
-
-/**
  * @brief Dispatches source form edits to ProjectModel or the live driver.
  */
 void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
@@ -2781,14 +2700,8 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
     return;
   }
 
-  const auto& sources = DataModel::ProjectModel::instance().sources();
-  const int sid       = m_selectedSource.sourceId;
-
-  if (sid < 0 || sid >= static_cast<int>(sources.size()))
-    return;
-
-  DataModel::Source updated = sources[sid];
-
+  // Frame-detection / payload rows edit a copy of the selected source, then persist it
+  DataModel::Source updated = m_selectedSource;
   switch (static_cast<SourceItem>(id)) {
     case kSourceView_FrameDetection:
     case kSourceView_HexadecimalSequence:
@@ -2805,6 +2718,76 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
     default:
       break;
   }
+}
+
+/**
+ * @brief Applies a frame-detection-method or hex-delimiter edit and rebuilds the source form.
+ */
+void DataModel::ProjectEditor::handleSourceFrameDetectionChange(QStandardItem* item,
+                                                                DataModel::Source& updated)
+{
+  const int id  = item->data(ParameterType).toInt();
+  const int sid = m_selectedSource.sourceId;
+
+  if (id == kSourceView_FrameDetection) {
+    const int idx = item->data(EditableValue).toInt();
+    if (idx < 0 || idx >= m_frameDetectionMethodsValues.size())
+      return;
+
+    updated.frameDetection = static_cast<int>(m_frameDetectionMethodsValues.at(idx));
+  } else {
+    updated.hexadecimalDelimiters = item->data(EditableValue).toBool();
+  }
+
+  DataModel::ProjectModel::instance().updateSource(sid, updated);
+  m_selectedSource = updated;
+
+  // Both edits change which delimiter rows are shown / how they are encoded, so rebuild
+  buildSourceModel(m_selectedSource);
+}
+
+/**
+ * @brief Applies a frame start/end delimiter edit to the source.
+ */
+void DataModel::ProjectEditor::handleSourceFrameStartEndChange(QStandardItem* item,
+                                                               DataModel::Source& updated)
+{
+  const int id  = item->data(ParameterType).toInt();
+  const int sid = m_selectedSource.sourceId;
+
+  if (id == kSourceView_FrameStartSequence)
+    updated.frameStart = item->data(EditableValue).toString();
+  else
+    updated.frameEnd = item->data(EditableValue).toString();
+
+  DataModel::ProjectModel::instance().updateSource(sid, updated);
+  m_selectedSource = updated;
+}
+
+/**
+ * @brief Applies a decoder-method or checksum-algorithm edit to the source.
+ */
+void DataModel::ProjectEditor::handleSourceDecoderChecksumChange(QStandardItem* item,
+                                                                 DataModel::Source& updated)
+{
+  const int id  = item->data(ParameterType).toInt();
+  const int sid = m_selectedSource.sourceId;
+
+  if (id == kSourceView_FrameDecoder) {
+    updated.decoderMethod = item->data(EditableValue).toInt();
+    DataModel::ProjectModel::instance().updateSource(sid, updated);
+    m_selectedSource = updated;
+    return;
+  }
+
+  const auto checksums = IO::availableChecksums();
+  const int checksumId = item->data(EditableValue).toInt();
+  if (checksumId < 0 || checksumId >= checksums.size())
+    return;
+
+  updated.checksumAlgorithm = checksums.at(checksumId);
+  DataModel::ProjectModel::instance().updateSource(sid, updated);
+  m_selectedSource = updated;
 }
 
 /**
@@ -3597,7 +3580,6 @@ void DataModel::ProjectEditor::generateComboBoxModels()
                    << tr("Binary (Direct)");
 
   // Checksum methods
-  m_checksumMethods.clear();
   m_checksumMethods         = IO::availableChecksums();
   const int noChecksumIndex = m_checksumMethods.indexOf(QLatin1String(""));
   if (noChecksumIndex >= 0)

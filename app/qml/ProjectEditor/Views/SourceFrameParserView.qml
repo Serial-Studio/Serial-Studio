@@ -205,149 +205,9 @@ Widgets.Pane {
       anchors.rightMargin: -10
       anchors.bottomMargin: -9
 
-      Rectangle {
-        Layout.fillWidth: true
-        Layout.maximumHeight: Layout.minimumHeight
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-        Layout.minimumHeight: toolbarLayout.implicitHeight + 12
-
-        RowLayout {
-          id: toolbarLayout
-
-          spacing: 4
-
-          anchors {
-            margins: 8
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Reset")
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/code-editor/reload.svg"
-            ToolTip.text: root.nativeMode ? qsTr("Reset template parameters to their defaults")
-                                          : qsTr("Reset to the default parsing script")
-            onClicked: {
-              if (root.nativeMode)
-                nativePane.editor.resetToDefaults()
-              else
-                frameParser.reload(true)
-            }
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Open")
-            toolbarButton: false
-            visible: !root.nativeMode
-            onClicked: frameParser.import()
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/code-editor/open.svg"
-            ToolTip.text: qsTr("Import a script file for data parsing")
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Undo")
-            toolbarButton: false
-            visible: !root.nativeMode
-            onClicked: frameParser.undo()
-            Layout.alignment: Qt.AlignVCenter
-            enabled: frameParser.undoAvailable
-            ToolTip.text: qsTr("Undo the last code edit")
-            icon.source: "qrc:/icons/code-editor/undo.svg"
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Redo")
-            toolbarButton: false
-            visible: !root.nativeMode
-            onClicked: frameParser.redo()
-            Layout.alignment: Qt.AlignVCenter
-            enabled: frameParser.redoAvailable
-            icon.source: "qrc:/icons/code-editor/redo.svg"
-            ToolTip.text: qsTr("Redo the previously undone edit")
-          }
-
-          Rectangle {
-            implicitWidth: 1
-            Layout.fillHeight: true
-            Layout.maximumHeight: 48
-            visible: !root.nativeMode
-            Layout.alignment: Qt.AlignVCenter
-            color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Cut")
-            toolbarButton: false
-            visible: !root.nativeMode
-            onClicked: frameParser.cut()
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/code-editor/cut.svg"
-            ToolTip.text: qsTr("Cut selected code to clipboard")
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Copy")
-            toolbarButton: false
-            visible: !root.nativeMode
-            onClicked: frameParser.copy()
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/code-editor/copy.svg"
-            ToolTip.text: qsTr("Copy selected code to clipboard")
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Paste")
-            toolbarButton: false
-            visible: !root.nativeMode
-            onClicked: frameParser.paste()
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Paste code from clipboard")
-            icon.source: "qrc:/icons/code-editor/paste.svg"
-          }
-
-          Rectangle {
-            implicitWidth: 1
-            Layout.fillHeight: true
-            Layout.maximumHeight: 48
-            Layout.alignment: Qt.AlignVCenter
-            color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Help")
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: app.showHelpCenter("javascript-api")
-            icon.source: "qrc:/icons/code-editor/help.svg"
-            ToolTip.text: qsTr("Open help documentation for data parsing")
-          }
-
-          Item {
-            Layout.fillWidth: true
-          }
-        }
-      }
-
-      Rectangle {
-        implicitHeight: 1
-        Layout.fillWidth: true
-        color: Cpp_ThemeManager.colors["groupbox_border"]
-      }
 
       //
-      // Template selector + evaluate row
+      // Template selector
       //
       Rectangle {
         implicitHeight: 32
@@ -357,16 +217,6 @@ Widgets.Pane {
 
         RowLayout {
           id: templateLayout
-
-          //
-          // Loop-free fit test: required width sums the native-mode items' implicit widths
-          // (none depend on the label's visibility, so the binding graph stays acyclic)
-          //
-          readonly property bool templateLabelFits:
-            width >= languageLabel.implicitWidth + languageSelector.implicitWidth
-                     + templateLabel.implicitWidth
-                     + Math.max(templateCombo.implicitWidth, 220)
-                     + testButton.implicitWidth + 5 * spacing
 
           spacing: 4
 
@@ -406,36 +256,14 @@ Widgets.Pane {
 
           Widgets.IconButton {
             horizontalPadding: 12
-            visible: !root.nativeMode
             text: qsTr("Select Template…")
             Layout.alignment: Qt.AlignVCenter
-            onClicked: frameParser.selectTemplate()
             icon.source: "qrc:/icons/buttons/code.svg"
-          }
-
-          Label {
-            id: templateLabel
-
-            text: qsTr("Template:")
-            Layout.alignment: Qt.AlignVCenter
-            font: Cpp_Misc_CommonFonts.uiFont
-            visible: root.nativeMode && templateLayout.templateLabelFits
-          }
-
-          Widgets.Combo {
-            id: templateCombo
-
-            visible: root.nativeMode
-            Layout.minimumWidth: 220
-            Layout.alignment: Qt.AlignVCenter
-            model: nativePane.editor.templateNames
-            currentIndex: nativePane.editor.templateIndex
-
-            onActivated: {
-              nativePane.editor.setTemplateIndex(currentIndex)
-              currentIndex = Qt.binding(function() {
-                return nativePane.editor.templateIndex
-              })
+            onClicked: {
+              if (root.nativeMode)
+                nativePane.editor.selectTemplate()
+              else
+                frameParser.selectTemplate()
             }
           }
 
@@ -453,16 +281,18 @@ Widgets.Pane {
           }
 
           Widgets.IconButton {
+            text: qsTr("Help")
             horizontalPadding: 12
-            text: qsTr("Evaluate")
-            visible: !root.nativeMode
-            onClicked: frameParser.evaluate()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/buttons/media-play.svg"
+            icon.source: "qrc:/icons/buttons/help.svg"
+            onClicked: app.showHelpCenter("Project-Editor")
           }
         }
       }
 
+      //
+      // Separator
+      //
       Rectangle {
         z: 2
         implicitHeight: 1
@@ -470,27 +300,156 @@ Widgets.Pane {
         color: Cpp_ThemeManager.colors["groupbox_border"]
       }
 
+      //
+      // Frame parser editor
+      //
       StackLayout {
-        Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
         currentIndex: root.nativeMode ? 1 : 0
 
-        JsCodeEditor {
-          id: frameParser
+        ColumnLayout {
+          spacing: -1
 
-          MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.IBeamCursor
-            propagateComposedEvents: true
-            acceptedButtons: Qt.RightButton
+          Rectangle {
+            Layout.fillWidth: true
+            Layout.maximumHeight: Layout.minimumHeight
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+            Layout.minimumHeight: toolbarLayout.implicitHeight + 12
 
-            onClicked: (mouse) => {
-                         if (mouse.button === Qt.RightButton) {
-                           contextMenu.popup()
-                           mouse.accepted = true
+            RowLayout {
+              id: toolbarLayout
+
+              spacing: 4
+
+              anchors {
+                margins: 8
+                left: parent.left
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                text: qsTr("Reset")
+                toolbarButton: false
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: frameParser.reload(true)
+                icon.source: "qrc:/icons/code-editor/reload.svg"
+                ToolTip.text: qsTr("Reset to the default parsing script")
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                text: qsTr("Open")
+                toolbarButton: false
+                onClicked: frameParser.import()
+                Layout.alignment: Qt.AlignVCenter
+                icon.source: "qrc:/icons/code-editor/open.svg"
+                ToolTip.text: qsTr("Import a script file for data parsing")
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                text: qsTr("Undo")
+                toolbarButton: false
+                onClicked: frameParser.undo()
+                Layout.alignment: Qt.AlignVCenter
+                enabled: frameParser.undoAvailable
+                ToolTip.text: qsTr("Undo the last code edit")
+                icon.source: "qrc:/icons/code-editor/undo.svg"
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                text: qsTr("Redo")
+                toolbarButton: false
+                onClicked: frameParser.redo()
+                Layout.alignment: Qt.AlignVCenter
+                enabled: frameParser.redoAvailable
+                icon.source: "qrc:/icons/code-editor/redo.svg"
+                ToolTip.text: qsTr("Redo the previously undone edit")
+              }
+
+              Rectangle {
+                implicitWidth: 1
+                Layout.fillHeight: true
+                Layout.maximumHeight: 48
+                Layout.alignment: Qt.AlignVCenter
+                color: Cpp_ThemeManager.colors["groupbox_border"]
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                text: qsTr("Cut")
+                toolbarButton: false
+                onClicked: frameParser.cut()
+                Layout.alignment: Qt.AlignVCenter
+                icon.source: "qrc:/icons/code-editor/cut.svg"
+                ToolTip.text: qsTr("Cut selected code to clipboard")
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                text: qsTr("Copy")
+                toolbarButton: false
+                onClicked: frameParser.copy()
+                Layout.alignment: Qt.AlignVCenter
+                icon.source: "qrc:/icons/code-editor/copy.svg"
+                ToolTip.text: qsTr("Copy selected code to clipboard")
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                text: qsTr("Paste")
+                toolbarButton: false
+                onClicked: frameParser.paste()
+                Layout.alignment: Qt.AlignVCenter
+                ToolTip.text: qsTr("Paste code from clipboard")
+                icon.source: "qrc:/icons/code-editor/paste.svg"
+              }
+
+              Item {
+                Layout.fillWidth: true
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                toolbarButton: false
+                text: qsTr("Validate")
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: frameParser.evaluate()
+                icon.source: "qrc:/icons/code-editor/test.svg"
+                ToolTip.text: qsTr("Verify that the script compiles correctly")
+              }
+            }
+          }
+
+          Rectangle {
+            z: 2
+            implicitHeight: 1
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          JsCodeEditor {
+            id: frameParser
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            MouseArea {
+              anchors.fill: parent
+              cursorShape: Qt.IBeamCursor
+              propagateComposedEvents: true
+              acceptedButtons: Qt.RightButton
+
+              onClicked: (mouse) => {
+                           if (mouse.button === Qt.RightButton) {
+                             contextMenu.popup()
+                             mouse.accepted = true
+                           }
                          }
-                       }
+            }
           }
         }
 

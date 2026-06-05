@@ -417,7 +417,6 @@ private:
 
   void buildSourceCommonRows(const DataModel::Source& source);
   void buildSourceFrameDetectionRows(const DataModel::Source& source);
-  void buildSourceConnectionSection(const DataModel::Source& source);
 
   void handleSourceTitleChange(QStandardItem* item);
   void handleSourceBusTypeChange(QStandardItem* item);
@@ -504,10 +503,10 @@ private:
   QStringList m_timerModes;
   QStringList m_decoderOptions;
   QStringList m_checksumMethods;
-  QStringList m_frameDetectionMethods;
-  QList<SerialStudio::FrameDetection> m_frameDetectionMethodsValues;
   QStringList m_imgDetectionModes;
   QStringList m_outputWidgetTypes;
+  QStringList m_frameDetectionMethods;
+  QList<SerialStudio::FrameDetection> m_frameDetectionMethodsValues;
 
   QTimer m_rebuildTimer;
   QMetaObject::Connection m_deviceListConn;

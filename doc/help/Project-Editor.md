@@ -102,23 +102,37 @@ The overview is useful as a sanity check ("does my group widget have the three d
 3. Click the project root in the tree to configure it.
 4. Set the **Project Title** (shown in the dashboard header).
 
-### Step 2: configure frame detection
+### Step 2: configure frame parsing
 
-When the project root is selected, the property panel shows frame detection settings. They apply globally in single-source projects, or per-source in multi-source projects.
+When the project root is selected, the property panel shows the frame-parsing settings: how the byte stream is sliced into frames, how each frame is decoded, and which parser turns it into values. They apply globally in single-source projects, or per-source in multi-source projects.
 
-- **Frame detection method.** How Serial Studio finds frame boundaries in the byte stream.
-  - *End Delimiter Only.* Frames end with a known sequence (for example `\n`). The most common choice.
-  - *Start and End Delimiter.* Frames are bounded by a start marker and an end marker (for example `/*` and `*/`).
-  - *Start Delimiter Only.* Frames begin with a header. The next header marks the end of the previous frame.
-  - *No Delimiters.* Raw data is fed directly to the frame parser script. Use this for fixed-size or length-prefixed protocols.
-- **Start delimiter / end delimiter.** The actual delimiter strings.
-- **Hex delimiters.** Tick this if the delimiter strings are written in hex (for example `0A` for newline).
-- **Data conversion.** How the byte stream inside delimiters is decoded before parsing.
-  - *Plain Text (UTF-8).* Default text mode.
-  - *Hexadecimal.* Each byte pair is interpreted as a hex value.
-  - *Base64.* Data is Base64-decoded first.
-  - *Binary Direct (Pro).* Raw bytes are passed to the JS parser as a byte array.
-- **Checksum algorithm.** Optional integrity check appended to each frame. Supported: CRC-8, CRC-16, CRC-32, CRC-CCITT, and others.
+#### Detection, decoding, and integrity
+
+These settings run *before* the parser and apply to every parser type (Built-In, Lua, and JavaScript alike):
+
+| Setting | Description | Options |
+|---------|-------------|---------|
+| Frame detection method | How Serial Studio finds frame boundaries in the byte stream. | *End Delimiter Only* (frames end with a known sequence such as `\n`; the most common choice); *Start and End Delimiter* (bounded by a start and an end marker, e.g. `/*` and `*/`); *Start Delimiter Only* (a header begins each frame, and the next header ends the previous one); *No Delimiters* (the whole captured chunk is one frame; use it for fixed-size or length-prefixed protocols). |
+| Start delimiter / end delimiter | The actual delimiter strings. Which ones apply depends on the detection method. | Any string, e.g. `\n`, `/*`, `*/`. |
+| Hex delimiters | Tick when the delimiter strings are written in hex. | e.g. `0A` for newline. |
+| Data conversion (decoder) | How the bytes inside the delimiters are decoded before the parser sees them. | *Plain Text (UTF-8)* (default text mode); *Hexadecimal* (each byte pair read as a hex value); *Base64* (Base64-decoded first); *Binary Direct (Pro)* (raw bytes passed straight to the parser as a byte array/table). |
+| Checksum algorithm | Optional integrity check appended to each frame; frames that fail are dropped. | CRC-8, CRC-16, CRC-32, CRC-CCITT, and others. |
+
+Picking the wrong decoder/detection pair silently mojibakes binary data or never produces a frame. The trap to remember: **Plain Text routes through `QString::fromUtf8`**, so any byte that is not valid UTF-8 (most binary payloads contain `0x00` or values above `0x7F`) is replaced with `U+FFFD` and the original bytes are lost. For anything non-text, pick **Binary Direct**.
+
+#### Parser language
+
+The **parser** turns a decoded frame into an array of values, one per dataset frame index. Pick the language from the Platform dropdown in the parser editor toolbar:
+
+| Language | What you configure | Best for |
+|----------|--------------------|----------|
+| Built-In | No code. Pick a template and fill in its parameter form. | Common wire formats with no setup: delimited/CSV, fixed-width, key-value, NMEA 0183/2000, JSON, XML, YAML, MessagePack, Modbus, UBX, MAVLink, COBS/SLIP, and batched/time-series multi-frame data. |
+| Lua | A `parse(frame)` function (default, recommended). | Custom logic the templates do not cover, with the lowest scripting overhead. |
+| JavaScript | A `parse(frame)` function. | Custom logic when you prefer JavaScript or need `JSON.parse`-style ergonomics. |
+
+For Built-In, the parameter form is per template. For example, *Delimited text* exposes a separator, an optional quote character, and trim/skip-empty toggles, while *Modbus frames* exposes a channel count, register offset, and a signed-registers toggle. The full template catalog and its parameters live in [Frame Parser Scripting](JavaScript-API.md).
+
+Writing a Lua or JavaScript `parse()` function is covered in Step 7 below. The Built-In templates need no script: the parameter form *is* the configuration, so you can skip straight to Step 3.
 
 ### Step 3: add groups
 
@@ -226,7 +240,9 @@ Each source has its own Frame Parser tab for a per-source parser script.
 
 ### Step 7: write a frame parser script (optional)
 
-For data that isn't plain CSV, write a `parse()` function to transform each frame into an array of values. Serial Studio supports Lua (default, recommended) and JavaScript. Pick the language from the Platform dropdown in the parser editor toolbar.
+This step applies to the **Lua** and **JavaScript** parsers. If you picked a **Built-In** template in Step 2, the parameter form is your parser (there is no script to write), so skip ahead.
+
+For data that isn't plain CSV and isn't covered by a Built-In template, write a `parse()` function to transform each frame into an array of values. Serial Studio supports Lua (default, recommended) and JavaScript. Pick the language from the Platform dropdown in the parser editor toolbar.
 
 1. Select a source in the tree (or the "Frame Parser" node for single-source projects).
 2. Open the Frame Parser view.
@@ -294,29 +310,9 @@ Reading the tree top-down tells you exactly which stage failed:
 - **Rows present but the wrong count.** Index mapping in `parse()` is off; compare row indices to the **Frame Index** field on each dataset.
 - **Rows present and correct in the dialog but missing on the dashboard.** A transform on the dataset is rejecting the value (returns `nil` / `NaN`) or a widget min/max is clipping it.
 
-### How the decoder + detection settings affect the parser
+### How the decoder + detection settings reach the parser
 
-Picking the right pair matters; the wrong combination silently mojibakes binary data or never produces a frame.
-
-**Frame detection** decides how the byte stream is sliced into frames *before* the parser runs:
-
-| Mode | Behavior |
-|------|----------|
-| End Delimiter Only | The most common choice. Frames are everything up to the next end delimiter (`\n`, `*/`, a custom hex byte). |
-| Start and End Delimiter | Frames are everything between a start marker and an end marker. Bytes outside the markers are discarded. |
-| Start Delimiter Only | Frames begin at a start marker; the next start marker terminates the previous one. Good for protocols that lead with a sync word. |
-| No Delimiters | The whole captured chunk is one frame. Use this for fixed-size binary, COBS (where the parser itself splits on `0x00`), length-prefixed packets, or protobuf over UDP. |
-
-**Decoder method** decides what `parse(frame)` receives:
-
-| Decoder | What the parser sees | When to pick it |
-|---------|---------------------|-----------------|
-| Plain Text (UTF-8) | A string built by `QString::fromUtf8(bytes)`. | Text / CSV / NMEA / AT-command protocols. |
-| Hexadecimal | A hex-encoded string (no spaces, e.g. `48656C6C6F`). | When you want to operate on bytes from a string parser without dealing with binary glyphs. |
-| Base64 | A Base64-encoded string. | When the device already emits Base64-encoded payloads. |
-| Binary Direct (Pro) | The raw byte buffer - a 1-indexed table in Lua, a length-keyed object in JavaScript. | Binary protocols: COBS, Modbus, custom packed structs, protobuf. |
-
-The trap to remember: **Plain Text routes through `QString::fromUtf8`**. Any byte sequence that is not valid UTF-8 (most binary payloads contain `0x00` or values above `0x7F`) gets replaced with the Unicode replacement character `U+FFFD`, and the original bytes are lost. For anything non-text, pick **Binary Direct**.
+The detection mode, delimiters, and decoder you configured in Step 2 run *before* the parser. They decide where each frame starts and stops, and what `parse(frame)` receives: a `QString::fromUtf8` string for Plain Text, a hex or Base64 string, or the raw byte buffer (a 1-indexed table in Lua, a length-keyed object in JavaScript) for Binary Direct. See the table in Step 2 for the full option list and the UTF-8 trap.
 
 ## Frame index mapping
 

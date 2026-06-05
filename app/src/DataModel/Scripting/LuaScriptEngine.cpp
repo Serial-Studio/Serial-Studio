@@ -703,7 +703,24 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
     return results;
   }
 
-  return classifyTable(len);
+  // Fused single-pass 1D conversion; bail to the classifier on the first nested table
+  const int scanLen = qMin(len, kMaxElements);
+  QStringList scalars;
+  scalars.reserve(scanLen);
+  for (int i = 1; i <= scanLen; ++i) {
+    lua_rawgeti(m_state, -1, i);
+    if (lua_istable(m_state, -1)) [[unlikely]] {
+      lua_pop(m_state, 1);
+      return classifyTable(len);
+    }
+
+    scalars.append(luaValueToString());
+    lua_pop(m_state, 1);
+  }
+
+  lua_pop(m_state, 1);
+  results.append(scalars);
+  return results;
 }
 
 /**

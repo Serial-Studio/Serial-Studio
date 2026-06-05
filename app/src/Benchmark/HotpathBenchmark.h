@@ -88,7 +88,7 @@ private:
   static void activateDashboardWidgets();
   [[nodiscard]] static QByteArray buildChunk(int frames, int channels, int stringColumns = 0);
   [[nodiscard]] static QJsonObject buildProjectJson(int language, int channels, bool withStrings);
-  [[nodiscard]] static QJsonObject buildDashboardProjectJson(int language);
+  [[nodiscard]] static QJsonObject buildDashboardProjectJson(int language, bool withStrings);
 };
 
 }  // namespace Benchmark

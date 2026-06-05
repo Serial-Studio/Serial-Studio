@@ -192,18 +192,35 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
  */
 static QList<QStringList> convertJsResult(const QJSValue& jsResult)
 {
-  QList<QStringList> results;
-  switch (detectArrayType(jsResult)) {
-    case ArrayType::Array2D:
-      return convert2DArray(jsResult);
-    case ArrayType::ArrayMixed:
-      return convertMixedArray(jsResult);
-    case ArrayType::Array1D:
-    case ArrayType::Scalar:
-    default:
-      results.append(jsArrayToStringList(jsResult));
-      return results;
+  static const QString kLength = QStringLiteral("length");
+
+  // Non-array (or empty) returns the legacy single empty-or-scalar frame
+  if (!jsResult.isArray()) {
+    QList<QStringList> results;
+    results.append(jsArrayToStringList(jsResult));
+    return results;
   }
+
+  // Fused single-pass 1D conversion; bail to the classifier on the first nested array
+  const int length = jsResult.property(kLength).toInt();
+
+  QStringList scalars;
+  scalars.reserve(length);
+  for (int i = 0; i < length; ++i) {
+    const auto element = jsResult.property(static_cast<quint32>(i));
+
+    // A nested array means 2D or mixed; only a full re-scan can tell them apart
+    if (element.isArray()) [[unlikely]] {
+      return detectArrayType(jsResult) == ArrayType::Array2D ? convert2DArray(jsResult)
+                                                             : convertMixedArray(jsResult);
+    }
+
+    scalars.append(element.toString());
+  }
+
+  QList<QStringList> results;
+  results.append(scalars);
+  return results;
 }
 
 //--------------------------------------------------------------------------------------------------

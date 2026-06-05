@@ -37,10 +37,10 @@ struct PipelineResult;
 struct Source;
 
 /**
- * @brief QML bridge for the native frame-parser editor pane: template selection, the dynamic
- * parameter form model, inline pipeline controls and the live dry-run preview.
+ * @brief Per-source QML bridge for a source's whole frame-parser configuration (detection,
+ * delimiters, decoder, checksum, native template + params, dry-run preview) over ProjectModel.
  */
-class NativeParserEditor : public QObject {
+class FrameParserModel : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(int sourceId
@@ -115,7 +115,7 @@ signals:
   void previewReady(const QVariantList& frames, const QString& error, const QString& stats);
 
 public:
-  explicit NativeParserEditor(QObject* parent = nullptr);
+  explicit FrameParserModel(QObject* parent = nullptr);
 
   [[nodiscard]] int sourceId() const noexcept;
   [[nodiscard]] int templateIndex() const;
@@ -139,6 +139,7 @@ public:
   Q_INVOKABLE [[nodiscard]] bool inputContainsDelimiters(const QString& input, bool hex) const;
 
 public slots:
+  void selectTemplate();
   void setSourceId(int sourceId);
   void setTemplateIndex(int index);
   void setDecoderIndex(int index);

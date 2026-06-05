@@ -66,6 +66,11 @@ Item {
                                        && (Cpp_Licensing_LemonSqueezy.isActivated
                                            || Cpp_Licensing_Trial.trialEnabled)
 
+  //
+  // Suppresses the sweepChanged auto-save while restore assigns persisted values
+  //
+  property bool restoringSweep: false
+
   PlotCommon {
     id: plotCommon
   }
@@ -100,6 +105,8 @@ Item {
     if (s["userShowYLabel"] !== undefined)
       root.userShowYLabel = s["userShowYLabel"]
 
+    root.restoringSweep = true
+
     if (s["sweepMode"] !== undefined)
       root.model.sweepMode = s["sweepMode"]
 
@@ -117,12 +124,17 @@ Item {
 
     if (root.sweepAllowed && s["sweepEnabled"] !== undefined)
       root.model.sweepEnabled = s["sweepEnabled"]
+
+    root.restoringSweep = false
   }
 
   //
   // Persist trigger settings whenever they change
   //
   function saveSweepSettings() {
+    if (root.restoringSweep)
+      return
+
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "sweepMode", root.model.sweepMode)
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "triggerEdge", root.model.triggerEdge)
     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "triggerLevel", root.model.triggerLevel)

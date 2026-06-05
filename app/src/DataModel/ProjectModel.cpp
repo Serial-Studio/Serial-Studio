@@ -1168,6 +1168,10 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
                                                 const QVariant& value)
 {
+  // Only persist widget settings for the active project file
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
   // Skip if the value hasn't changed
   auto obj            = m_widgetSettings.value(widgetId).toObject();
   const auto newValue = QJsonValue::fromVariant(value);
@@ -1178,10 +1182,8 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
   obj.insert(key, newValue);
   m_widgetSettings.insert(widgetId, obj);
 
-  // Dirty the project only in ProjectFile mode; QuickPlot/ConsoleOnly view state is transient
-  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
-    setModified(true);
-
+  // Mark the project dirty and notify listeners
+  setModified(true);
   Q_EMIT widgetSettingsChanged();
 }
 

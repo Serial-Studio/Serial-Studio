@@ -39,7 +39,7 @@
 #include "CSV/Export.h"
 #include "CSV/Player.h"
 #include "DataModel/Editors/JsCodeEditor.h"
-#include "DataModel/Editors/NativeParserEditor.h"
+#include "DataModel/Editors/FrameParserModel.h"
 #include "DataModel/Editors/OutputCodeEditor.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/Importers/ProtoImporter.h"
@@ -379,7 +379,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
   qmlRegisterType<DataModel::ProjectEditor>("SerialStudio", 1, 0, "ProjectEditor");
   qmlRegisterType<DataModel::OutputCodeEditor>("SerialStudio", 1, 0, "OutputCodeEditor");
-  qmlRegisterType<DataModel::NativeParserEditor>("SerialStudio", 1, 0, "NativeParserEditor");
+  qmlRegisterType<DataModel::FrameParserModel>("SerialStudio", 1, 0, "FrameParserModel");
 
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");

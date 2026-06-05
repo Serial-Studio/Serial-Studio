@@ -41,7 +41,7 @@ Rectangle {
   //
   // C++ bridge: template catalog + parameter form model + documentation
   //
-  NativeParserEditor {
+  FrameParserModel {
     id: nativeEditor
 
     sourceId: root.sourceId

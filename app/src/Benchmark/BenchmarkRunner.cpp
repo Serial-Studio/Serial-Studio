@@ -49,35 +49,18 @@
 namespace Benchmark {
 
 //--------------------------------------------------------------------------------------------------
-// Phase table + selectable workloads
+// Gated targets + selectable workloads
 //--------------------------------------------------------------------------------------------------
 
-struct PhaseSpec {
-  int language;
-  bool exporters;
-  bool strings;
-  bool dashboard;
-  bool dataPipeline;
-  double minFps;
-};
-
-// clang-format off
-// code-verify off
-static const PhaseSpec kPhases[] = {
-  {                       -1, false, false, false,  true, 1024000.0}, // Data pipeline
-  {     SerialStudio::Native, false, false, false, false, 1024000.0}, // Native parser (numeric)
-  {     SerialStudio::Native, false,  true, false, false,  512000.0}, // Native parser (mixed)
-  {        SerialStudio::Lua, false, false, false, false,  256000.0}, // Lua parser (numeric)
-  { SerialStudio::JavaScript, false, false, false, false,  128000.0}, // Javascript parser (numeric)
-  {        SerialStudio::Lua, false,  true, false, false,  128000.0}, // Lua parser (mixed)
-  { SerialStudio::JavaScript, false,  true, false, false,   64000.0}, // Javascript parser (mixed)
-  {        SerialStudio::Lua,  true,  true, false, false,       1.0}, // Lua + data export (mixed)
-  {        SerialStudio::Lua, false, false,  true, false,       1.0}, // Lua + dashboard (numeric)
-};
-// code-verify on
-// clang-format off
-
-static constexpr int kPhaseCount = static_cast<int>(sizeof(kPhases) / sizeof(kPhases[0]));
+// Per-engine parser gates (frames/s). Export and dashboard phases are informational (ungated).
+static constexpr double kDataPipelineFps  = 1024000.0;
+static constexpr double kNativeNumericFps = 1024000.0;
+static constexpr double kNativeMixedFps   =  512000.0;
+static constexpr double kLuaNumericFps    =  256000.0;
+static constexpr double kLuaMixedFps      =  128000.0;
+static constexpr double kJsNumericFps     =  128000.0;
+static constexpr double kJsMixedFps       =   64000.0;
+static constexpr double kUngatedFps       =       1.0;
 
 static const quint64 kFrameValues[]    = {100'000ull, 250'000ull, 500'000ull, 1'000'000ull};
 static const double kSecondValues[]    = {1.0, 2.0, 5.0, 10.0};
@@ -180,33 +163,13 @@ QStringList BenchmarkRunner::secondsOptions() const
 }
 
 /**
- * @brief Rebuilds every user-facing string for the active language (Translator-driven).
+ * @brief Rebuilds the workload selector strings for the active language (Translator-driven).
  */
 void BenchmarkRunner::retranslate()
 {
-  m_phaseLabels    = {tr("Data pipeline"),
-                      tr("Built-in parser (numeric)"),
-                      tr("Built-in parser (mixed)"),
-                      tr("Lua parser (numeric)"),
-                      tr("JavaScript parser (numeric)"),
-                      tr("Lua parser (mixed)"),
-                      tr("JavaScript parser (mixed)"),
-                      tr("Lua + data export (mixed)"),
-                      tr("Lua + dashboard (numeric)")};
   m_frameOptions   = {tr("100 K frames"), tr("250 K frames"), tr("500 K frames"), tr("1 M frames")};
   m_secondsOptions = {tr("1 second"), tr("2 seconds"), tr("5 seconds"), tr("10 seconds")};
-
-  // Re-translate the labels already shown in the results table (rows are in phase order).
-  const int rows = qMin(m_results.size(), m_phaseLabels.size());
-  for (int i = 0; i < rows; ++i) {
-    QVariantMap row = m_results[i].toMap();
-    row.insert(QStringLiteral("label"), m_phaseLabels[i]);
-    m_results[i] = row;
-  }
-
   Q_EMIT optionsChanged();
-  if (rows > 0)
-    Q_EMIT resultsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -272,17 +235,90 @@ void BenchmarkRunner::clearResults()
 }
 
 /**
+ * @brief Assembles the ordered phase list from the user's section + variant selection.
+ */
+void BenchmarkRunner::buildPhases(bool parsers, bool dataExport, bool dashboard, bool numeric,
+                                  bool mixed)
+{
+  m_phases.clear();
+
+  // The data pipeline always runs: it is the lower bound every parser path builds on.
+  m_phases.push_back({-1, false, false, false, true, kDataPipelineFps, tr("Data pipeline")});
+
+  // Parser section: gated per engine + variant; the numbers CI enforces.
+  if (parsers && numeric) {
+    m_phases.push_back({SerialStudio::Native, false, false, false, false, kNativeNumericFps,
+                        tr("Built-in parser (numeric)")});
+    m_phases.push_back({SerialStudio::Lua, false, false, false, false, kLuaNumericFps,
+                        tr("Lua parser (numeric)")});
+    m_phases.push_back({SerialStudio::JavaScript, false, false, false, false, kJsNumericFps,
+                        tr("JavaScript parser (numeric)")});
+  }
+  if (parsers && mixed) {
+    m_phases.push_back({SerialStudio::Native, false, true, false, false, kNativeMixedFps,
+                        tr("Built-in parser (mixed)")});
+    m_phases.push_back({SerialStudio::Lua, false, true, false, false, kLuaMixedFps,
+                        tr("Lua parser (mixed)")});
+    m_phases.push_back({SerialStudio::JavaScript, false, true, false, false, kJsMixedFps,
+                        tr("JavaScript parser (mixed)")});
+  }
+
+  // Data-export section: informational, exporters on, every engine x selected variant.
+  if (dataExport && numeric) {
+    m_phases.push_back({SerialStudio::Native, true, false, false, false, kUngatedFps,
+                        tr("Built-in + data export (numeric)")});
+    m_phases.push_back({SerialStudio::Lua, true, false, false, false, kUngatedFps,
+                        tr("Lua + data export (numeric)")});
+    m_phases.push_back({SerialStudio::JavaScript, true, false, false, false, kUngatedFps,
+                        tr("JavaScript + data export (numeric)")});
+  }
+  if (dataExport && mixed) {
+    m_phases.push_back({SerialStudio::Native, true, true, false, false, kUngatedFps,
+                        tr("Built-in + data export (mixed)")});
+    m_phases.push_back({SerialStudio::Lua, true, true, false, false, kUngatedFps,
+                        tr("Lua + data export (mixed)")});
+    m_phases.push_back({SerialStudio::JavaScript, true, true, false, false, kUngatedFps,
+                        tr("JavaScript + data export (mixed)")});
+  }
+
+  // Dashboard section: informational, dashboard on, every engine x selected variant.
+  if (dashboard && numeric) {
+    m_phases.push_back({SerialStudio::Native, false, false, true, false, kUngatedFps,
+                        tr("Built-in + dashboard (numeric)")});
+    m_phases.push_back({SerialStudio::Lua, false, false, true, false, kUngatedFps,
+                        tr("Lua + dashboard (numeric)")});
+    m_phases.push_back({SerialStudio::JavaScript, false, false, true, false, kUngatedFps,
+                        tr("JavaScript + dashboard (numeric)")});
+  }
+  if (dashboard && mixed) {
+    m_phases.push_back({SerialStudio::Native, false, true, true, false, kUngatedFps,
+                        tr("Built-in + dashboard (mixed)")});
+    m_phases.push_back({SerialStudio::Lua, false, true, true, false, kUngatedFps,
+                        tr("Lua + dashboard (mixed)")});
+    m_phases.push_back({SerialStudio::JavaScript, false, true, true, false, kUngatedFps,
+                        tr("JavaScript + dashboard (mixed)")});
+  }
+}
+
+/**
  * @brief Starts a benchmark session at the selected workload; schedules the first phase.
  */
-void BenchmarkRunner::start(int framesIndex, int secondsIndex)
+void BenchmarkRunner::start(int framesIndex, int secondsIndex, bool parsers, bool dataExport,
+                            bool dashboard, bool numeric, bool mixed)
 {
   if (m_running)
+    return;
+
+  // Guard against an empty schedule: a section and a variant must both be chosen.
+  if (!(parsers || dataExport || dashboard) || !(numeric || mixed))
     return;
 
   const int fi = qBound(0, framesIndex, kFrameCount - 1);
   const int si = qBound(0, secondsIndex, kSecondCount - 1);
   m_frames     = kFrameValues[fi];
   m_seconds    = kSecondValues[si];
+
+  buildPhases(parsers, dataExport, dashboard, numeric, mixed);
 
   m_results.clear();
   Q_EMIT resultsChanged();
@@ -380,14 +416,12 @@ void BenchmarkRunner::endSession()
  */
 void BenchmarkRunner::announcePhase(int index)
 {
-  Q_ASSERT(index >= 0 && index < kPhaseCount);
+  Q_ASSERT(index >= 0 && index < static_cast<int>(m_phases.size()));
 
-  m_currentPhase = m_phaseLabels.value(index);
+  m_currentPhase = m_phases[index].label;
   Q_EMIT currentPhaseChanged();
 
-   Q_EMIT dashboardPreviewActive(false);
-  if (kPhases[index].dashboard)
-    Q_EMIT dashboardPreviewActive(true);
+  Q_EMIT dashboardPreviewActive(m_phases[index].dashboard);
 
   QTimer::singleShot(0, this, [this, index] { executePhase(index); });
 }
@@ -397,9 +431,10 @@ void BenchmarkRunner::announcePhase(int index)
  */
 void BenchmarkRunner::executePhase(int index)
 {
-  Q_ASSERT(index >= 0 && index < kPhaseCount);
+  const int phaseCount = static_cast<int>(m_phases.size());
+  Q_ASSERT(index >= 0 && index < phaseCount);
 
-  const PhaseSpec& spec = kPhases[index];
+  const PhaseSpec& spec = m_phases[index];
   const HotpathBenchmark::Result r =
     spec.dataPipeline ? HotpathBenchmark::runDataPipeline(m_frames, spec.minFps, m_seconds)
                       : HotpathBenchmark::run(m_frames,
@@ -411,7 +446,7 @@ void BenchmarkRunner::executePhase(int index)
                                               spec.dashboard);
 
   QVariantMap row;
-  row.insert(QStringLiteral("label"), m_phaseLabels.value(index));
+  row.insert(QStringLiteral("label"), spec.label);
   row.insert(QStringLiteral("fps"), r.framesPerSecond);
   row.insert(QStringLiteral("parsed"), static_cast<double>(r.framesParsed));
   row.insert(QStringLiteral("skipped"), static_cast<double>(r.framesSkipped));
@@ -422,10 +457,10 @@ void BenchmarkRunner::executePhase(int index)
   m_results.append(row);
   Q_EMIT resultsChanged();
 
-  m_progress = static_cast<double>(index + 1) / kPhaseCount;
+  m_progress = static_cast<double>(index + 1) / phaseCount;
   Q_EMIT progressChanged();
 
-  if (index + 1 < kPhaseCount) {
+  if (index + 1 < phaseCount) {
     m_phaseIndex = index + 1;
     announcePhase(index + 1);
     return;

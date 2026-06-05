@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -29,6 +30,19 @@
 #include <QVariantList>
 
 namespace Benchmark {
+
+/**
+ * @brief One scheduled benchmark phase: language + workload flags + gated target.
+ */
+struct PhaseSpec {
+  int language;
+  bool exporters;
+  bool strings;
+  bool dashboard;
+  bool dataPipeline;
+  double minFps;
+  QString label;
+};
 
 /**
  * @brief Drives the in-app hotpath benchmark and exposes its progress/results to QML.
@@ -85,7 +99,8 @@ public:
 public slots:
   void copyResults();
   void clearResults();
-  void start(int framesIndex, int secondsIndex);
+  void start(int framesIndex, int secondsIndex, bool parsers, bool dataExport, bool dashboard,
+             bool numeric, bool mixed);
 
 private slots:
   void retranslate();
@@ -96,6 +111,7 @@ private:
   void finishSession();
   void announcePhase(int index);
   void executePhase(int index);
+  void buildPhases(bool parsers, bool dataExport, bool dashboard, bool numeric, bool mixed);
 
 private:
   bool m_running;
@@ -105,7 +121,7 @@ private:
   double m_seconds;
   QString m_currentPhase;
   QVariantList m_results;
-  QStringList m_phaseLabels;
+  std::vector<PhaseSpec> m_phases;
   QStringList m_frameOptions;
   QStringList m_secondsOptions;
 

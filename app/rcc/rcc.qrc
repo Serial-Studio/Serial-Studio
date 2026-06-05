@@ -847,5 +847,6 @@
         <file>icons/buttons/add-workspace.svg</file>
         <file>icons/buttons/mqtt-off.svg</file>
         <file>icons/buttons/mqtt-on.svg</file>
+        <file>icons/buttons/help.svg</file>
     </qresource>
 </RCC>

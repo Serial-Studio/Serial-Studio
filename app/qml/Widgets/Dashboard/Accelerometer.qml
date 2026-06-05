@@ -51,6 +51,11 @@ Item {
   property real currentPitch: root.model.pitch
   property real currentTheta: root.model.theta
   property real currentMagnitude: root.model.magnitude
+
+  //
+  // Suppresses the change auto-save while restore assigns persisted values
+  //
+  property bool restoringSettings: false
   readonly property bool angleLabelsVisible: {
     const minGaugeSize = 200
     const labelMargin = 40
@@ -106,13 +111,15 @@ Item {
     if (root.model)
       root.model.maxG = root.displayMaxG
 
-    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "displayMaxG", root.displayMaxG)
+    if (!root.restoringSettings)
+      Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "displayMaxG", root.displayMaxG)
   }
   onInputInGChanged: {
     if (root.model)
       root.model.inputInG = root.inputInG
 
-    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "inputInG", root.inputInG)
+    if (!root.restoringSettings)
+      Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "inputInG", root.inputInG)
   }
 
   //
@@ -131,6 +138,8 @@ Item {
   // Restore persisted settings
   //
   Component.onCompleted: {
+    root.restoringSettings = true
+
     const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
 
     if (s["displayMaxG"] !== undefined)
@@ -138,6 +147,8 @@ Item {
 
     if (s["inputInG"] !== undefined)
       root.inputInG = s["inputInG"]
+
+    root.restoringSettings = false
   }
 
   //

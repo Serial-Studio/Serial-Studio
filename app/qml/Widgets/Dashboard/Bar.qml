@@ -526,16 +526,27 @@ Item {
   }
 
   //
+  // Suppresses the page auto-save while restore assigns the persisted index
+  //
+  property bool restoringPage: false
+
+  //
   // Restore per-widget page from project settings, then persist on change.
   //
   Component.onCompleted: {
+    root.restoringPage = true
     const s = Cpp_JSON_ProjectModel.widgetSettings(root.widgetId)
     if (s["page"] !== undefined)
       swipeView.currentIndex = parseInt(s["page"])
+
+    root.restoringPage = false
   }
   Connections {
     target: swipeView
     function onCurrentIndexChanged() {
+      if (root.restoringPage)
+        return
+
       Cpp_JSON_ProjectModel.saveWidgetSetting(
             root.widgetId, "page", swipeView.currentIndex)
     }

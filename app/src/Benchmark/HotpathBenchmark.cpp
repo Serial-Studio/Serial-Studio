@@ -79,9 +79,77 @@ void __gcov_dump(void);
 
 namespace Benchmark {
 
+//--------------------------------------------------------------------------------------------------
+// Internal linkage: shared state, workload constants, and report layout
+//--------------------------------------------------------------------------------------------------
+
 static bool s_benchmarkActive           = false;
 static constexpr int kDashboardChannels = 13;
 static constexpr int kStringChannels    = 3;
+
+// Index of each run in the Result array; also drives the report row order and tag labels.
+enum ReportIndex {
+  kReportData,
+  kReportNative,
+  kReportNativeMix,
+  kReportLua,
+  kReportJs,
+  kReportLuaMix,
+  kReportJsMix,
+  kReportLuaX,
+  kReportLuaD,
+  kReportLuaDoff,
+  kReportCount
+};
+
+static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
+                                                          "native(numeric)",
+                                                          "native(mixed)",
+                                                          "lua(numeric)",
+                                                          "js(numeric)",
+                                                          "lua(mixed)",
+                                                          "js(mixed)",
+                                                          "lua+exporters",
+                                                          "lua+dashboard",
+                                                          "lua+dashboard(off)"};
+
+/**
+ * @brief Prints the per-run throughput rows through the shared stdout + file sink.
+ */
+template<typename PrintFn>
+static void printRunRows(const HotpathBenchmark::Result* results, const PrintFn& printData)
+{
+  Q_ASSERT(results != nullptr);
+
+  for (int i = 0; i < kReportCount; ++i) {
+    const auto& r = results[i];
+    printData("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
+              kReportTags[i],
+              static_cast<unsigned long long>(r.framesParsed),
+              static_cast<unsigned long long>(r.framesSkipped),
+              r.elapsedSeconds);
+    printData("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
+              kReportTags[i],
+              r.framesPerSecond,
+              r.minFps,
+              r.passed ? "PASS" : "FAIL");
+  }
+}
+
+// Event-loop pump interval so the dialog repaints mid-phase (macOS coalesces paints otherwise).
+static constexpr double kSpinIntervalSec = 0.016;
+
+/**
+ * @brief Pumps the GUI event loop once and returns the wall-clock it consumed (discounted from
+ * the measurement so a repaint never deflates throughput).
+ */
+[[nodiscard]] static double spinEventLoop()
+{
+  using Clock      = std::chrono::steady_clock;
+  const auto start = Clock::now();
+  QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+  return std::chrono::duration<double>(Clock::now() - start).count();
+}
 
 //--------------------------------------------------------------------------------------------------
 // Benchmark-active flag (read by UI::Dashboard::streamAvailable)
@@ -162,7 +230,6 @@ QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels, bool 
   source.insert(Keys::DecoderMethod, static_cast<int>(SerialStudio::PlainText));
   source.insert(Keys::FrameParserLanguage, language);
 
-  // Native sources select a template + params; script languages carry parser code
   if (language == SerialStudio::Native)
     source.insert(Keys::FrameParserTemplate, QStringLiteral("delimited"));
   else
@@ -180,9 +247,10 @@ QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels, bool 
 /**
  * @brief Builds a project that exercises every per-frame dashboard sub-hotpath.
  */
-QJsonObject HotpathBenchmark::buildDashboardProjectJson(int language)
+QJsonObject HotpathBenchmark::buildDashboardProjectJson(int language, bool withStrings)
 {
-  Q_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua);
+  Q_ASSERT(language == SerialStudio::JavaScript || language == SerialStudio::Lua
+           || language == SerialStudio::Native);
 
   const auto makeDataset = [](int index, const QString& title) {
     QJsonObject ds;
@@ -245,6 +313,14 @@ QJsonObject HotpathBenchmark::buildDashboardProjectJson(int language)
     makeGroup(QStringLiteral("Location"), QStringLiteral("gps"), gpsDatasets),
     makeGroup(QStringLiteral("Trajectory"), QStringLiteral("plot3d"), plot3dDatasets)};
 
+  if (withStrings) {
+    QJsonArray stringDatasets;
+    for (int i = 0; i < kStringChannels; ++i)
+      stringDatasets.append(makeDataset(kDashboardChannels + i + 1, QStringLiteral("STR%1").arg(i + 1)));
+
+    groups.append(makeGroup(QStringLiteral("Status"), QStringLiteral("datagrid"), stringDatasets));
+  }
+
   QJsonObject source;
   source.insert(Keys::SourceId, 0);
   source.insert(Keys::Title, QStringLiteral("Benchmark"));
@@ -254,7 +330,11 @@ QJsonObject HotpathBenchmark::buildDashboardProjectJson(int language)
   source.insert(Keys::Decoder, static_cast<int>(SerialStudio::PlainText));
   source.insert(Keys::DecoderMethod, static_cast<int>(SerialStudio::PlainText));
   source.insert(Keys::FrameParserLanguage, language);
-  source.insert(Keys::FrameParserCode, DataModel::FrameParser::defaultTemplateCode(language));
+
+  if (language == SerialStudio::Native)
+    source.insert(Keys::FrameParserTemplate, QStringLiteral("delimited"));
+  else
+    source.insert(Keys::FrameParserCode, DataModel::FrameParser::defaultTemplateCode(language));
 
   QJsonObject root;
   root.insert(Keys::Title, QStringLiteral("Hotpath Dashboard Benchmark"));
@@ -275,11 +355,8 @@ QByteArray HotpathBenchmark::buildChunk(int frames, int channels, int stringColu
   Q_ASSERT(channels > 0);
   Q_ASSERT(stringColumns >= 0);
 
-  // Rotating status words give the parser non-numeric tokens (toDouble fails) of varying length.
   static constexpr const char* kStatusWords[] = {"OK", "WARN", "FAIL", "IDLE"};
   constexpr int kStatusWordCount              = 4;
-
-  // Varying values (not a constant) exercise auto-range and give PGO a realistic distribution.
   constexpr double kTwoPi = 6.283185307179586;
   constexpr int kPeriod   = 360;
 
@@ -324,7 +401,7 @@ void HotpathBenchmark::setupProject(int language, int channels, bool withStrings
 
   AppState::instance().setOperationMode(SerialStudio::ProjectFile);
 
-  const QJsonObject root = dashboard ? buildDashboardProjectJson(language)
+  const QJsonObject root = dashboard ? buildDashboardProjectJson(language, withStrings)
                                      : buildProjectJson(language, channels, withStrings);
   const bool loaded      = project.loadFromJsonDocument(QJsonDocument(root));
   Q_ASSERT(loaded);
@@ -443,6 +520,8 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
   quint64 extracted = 0;
   quint64 fed       = 0;
   double seconds    = 0.0;
+  double spentSpin  = 0.0;
+  double lastSpin   = 0.0;
   const auto start  = Clock::now();
   for (quint64 c = 0; c < maxChunks && (fed < targetFrames || seconds < minSeconds); ++c) {
     reader.processData(IO::makeCapturedData(chunk));
@@ -454,7 +533,13 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
     // code-verify on
 
     fed     += kFramesPerChunk;
-    seconds  = std::chrono::duration<double>(Clock::now() - start).count();
+    seconds  = std::chrono::duration<double>(Clock::now() - start).count() - spentSpin;
+
+    // Keep the dialog repainting mid-phase; the pump time is discounted from the measurement.
+    if (seconds - lastSpin >= kSpinIntervalSec) {
+      spentSpin += spinEventLoop();
+      lastSpin = seconds;
+    }
   }
 
   const double fps = seconds > 0.0 ? static_cast<double>(extracted) / seconds : 0.0;
@@ -488,8 +573,6 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
 
   constexpr int kChannels       = 8;
   constexpr int kFramesPerChunk = 1000;
-
-  // Ingest-off keeps the all-widget project but leaves the Dashboard inactive (early-return)
   const bool activateDashboard = withDashboard && dashboardIngest;
 
   const int channels = withDashboard ? kDashboardChannels : kChannels;
@@ -500,7 +583,7 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   if (activateDashboard)
     setActive(true);
 
-  const int stringColumns = (withStrings && !withDashboard) ? kStringChannels : 0;
+  const int stringColumns = withStrings ? kStringChannels : 0;
   const QByteArray chunk  = buildChunk(kFramesPerChunk, channels, stringColumns);
 
   IO::FrameReader reader;
@@ -532,6 +615,7 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
 
   quint64 fed        = 0;
   double seconds     = 0.0;
+  double spentSpin   = 0.0;
   double lastSpinSec = 0.0;
   const auto start   = Clock::now();
   for (quint64 c = 0; c < maxChunks && (fed < targetFrames || seconds < minSeconds); ++c) {
@@ -543,10 +627,11 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
     // code-verify on
 
     fed     += kFramesPerChunk;
-    seconds  = std::chrono::duration<double>(Clock::now() - start).count();
+    seconds  = std::chrono::duration<double>(Clock::now() - start).count() - spentSpin;
 
-    if (withDashboard && seconds - lastSpinSec >= 0.016) {
-      QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    // Repaint mid-run on every phase (not just dashboard); pump time is discounted above.
+    if (seconds - lastSpinSec >= kSpinIntervalSec) {
+      spentSpin += spinEventLoop();
       lastSpinSec = seconds;
     }
   }
@@ -592,7 +677,6 @@ HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Res
   constexpr size_t kSampleFrames = 100000;
   constexpr int kTimingPasses    = 5;
 
-  // Pre-extract the same chunk shape the gated runs use; extraction stays untimed here
   const QByteArray chunk = buildChunk(kFramesPerChunk, kChannels);
 
   IO::FrameReader reader;
@@ -613,7 +697,6 @@ HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Res
     // code-verify on
   }
 
-  // Tokenize-only loop against the live native engine (the run() project is still loaded)
   auto& parser = DataModel::FrameParser::instance();
   std::array<QByteArrayView, 64> spans;
 
@@ -643,54 +726,9 @@ HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Res
   return stages;
 }
 
-// Canonical run order shared by runAndReport() and printReport().
-enum ReportIndex {
-  kReportData,
-  kReportNative,
-  kReportNativeMix,
-  kReportLua,
-  kReportJs,
-  kReportLuaMix,
-  kReportJsMix,
-  kReportLuaX,
-  kReportLuaD,
-  kReportLuaDoff,
-  kReportCount
-};
-
-static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
-                                                          "native(numeric)",
-                                                          "native(mixed)",
-                                                          "lua(numeric)",
-                                                          "js(numeric)",
-                                                          "lua(mixed)",
-                                                          "js(mixed)",
-                                                          "lua+exporters",
-                                                          "lua+dashboard",
-                                                          "lua+dashboard(off)"};
-
-/**
- * @brief Prints the per-run throughput rows through the shared stdout + file sink.
- */
-template<typename PrintFn>
-static void printRunRows(const HotpathBenchmark::Result* results, const PrintFn& printData)
-{
-  Q_ASSERT(results != nullptr);
-
-  for (int i = 0; i < kReportCount; ++i) {
-    const auto& r = results[i];
-    printData("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
-              kReportTags[i],
-              static_cast<unsigned long long>(r.framesParsed),
-              static_cast<unsigned long long>(r.framesSkipped),
-              r.elapsedSeconds);
-    printData("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
-              kReportTags[i],
-              r.framesPerSecond,
-              r.minFps,
-              r.passed ? "PASS" : "FAIL");
-  }
-}
+//--------------------------------------------------------------------------------------------------
+// Report generation
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Prints the per-run, stage, ratio, and machine-readable readouts; true when every gate

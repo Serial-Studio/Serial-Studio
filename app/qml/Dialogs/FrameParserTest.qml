@@ -141,7 +141,7 @@ Widgets.SmartDialog {
   //
   // C++ bridge: pipeline settings + language-aware dry-run for the bound source
   //
-  NativeParserEditor {
+  FrameParserModel {
     id: tester
 
     sourceId: root.sourceId

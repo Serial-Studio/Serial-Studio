@@ -285,7 +285,7 @@ set(SOURCES
   src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
-  src/DataModel/Editors/NativeParserEditor.cpp
+  src/DataModel/Editors/FrameParserModel.cpp
   src/DataModel/Editors/CodeFormatter.cpp
   src/DataModel/Editors/OutputCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
@@ -404,7 +404,7 @@ set(HEADERS
   src/DataModel/Scripting/CFrameParser.h
   src/DataModel/Scripting/NativeTemplates/NativeTemplate.h
   src/DataModel/Editors/JsCodeEditor.h
-  src/DataModel/Editors/NativeParserEditor.h
+  src/DataModel/Editors/FrameParserModel.h
   src/DataModel/Editors/CodeFormatter.h
   src/DataModel/Editors/OutputCodeEditor.h
   src/DataModel/ProjectModel.h
