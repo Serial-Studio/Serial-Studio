@@ -1334,7 +1334,7 @@ jobs:
         cd build
         DIRNAME=$(cat dirname.txt)
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/msvc2022_64/plugins"
-        DEST="$DIRNAME/bin/platforms"
+        DEST="$DIRNAME/plugins/platforms"
         mkdir -p "$DEST"
         if [ -f "$QT_PLUGINS_PATH/platforms/qoffscreen.dll" ]; then
           cp "$QT_PLUGINS_PATH/platforms/qoffscreen.dll" "$DEST/"
