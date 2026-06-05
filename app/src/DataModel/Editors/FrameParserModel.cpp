@@ -23,6 +23,8 @@
 
 #include <QFile>
 #include <QInputDialog>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QStandardItem>
 
 #include "DataModel/FrameBuilder.h"
@@ -303,7 +305,7 @@ void DataModel::FrameParserModel::setSourceId(int sourceId)
  */
 void DataModel::FrameParserModel::selectTemplate()
 {
-  bool ok = false;
+  bool ok         = false;
   const auto name = QInputDialog::getItem(nullptr,
                                           tr("Select Frame Parser Template"),
                                           tr("Choose a template to load:"),
@@ -630,6 +632,16 @@ void DataModel::FrameParserModel::onItemChanged(QStandardItem* item)
       json = text;
       break;
     }
+    case NativeParamType::Json: {
+      QJsonParseError parseError;
+      const auto doc = QJsonDocument::fromJson(value.toString().toUtf8(), &parseError);
+      if (parseError.error != QJsonParseError::NoError || !doc.isArray()) {
+        setParamError(tr("Invalid JSON: %1").arg(parseError.errorString()));
+        return;
+      }
+      json = doc.array();
+      break;
+    }
     case NativeParamType::String:
     default:
       json = value.toString();
@@ -729,10 +741,6 @@ void DataModel::FrameParserModel::rebuildParameterModel()
 
   const auto specs = tmpl ? tmpl->params() : QList<NativeParamSpec>();
   for (const auto& spec : specs) {
-    // Structured params are importer/API-managed; the form never edits them
-    if (spec.type == NativeParamType::Json)
-      continue;
-
     auto* item = new QStandardItem();
     item->setEditable(true);
     item->setData(true, ProjectEditor::Active);
@@ -772,6 +780,14 @@ void DataModel::FrameParserModel::rebuildParameterModel()
           item->setData(spec.maxValue, ProjectEditor::MaxValue);
         }
         break;
+      case NativeParamType::Json: {
+        // Structured maps are importer-generated; expose the raw config as editable JSON
+        const auto array = stored.isArray() ? stored.toArray() : spec.defaultValue.toArray();
+        const auto text  = QString::fromUtf8(QJsonDocument(array).toJson(QJsonDocument::Compact));
+        item->setData(ProjectEditor::TextField, ProjectEditor::WidgetType);
+        item->setData(text, ProjectEditor::EditableValue);
+        break;
+      }
       case NativeParamType::Char:
       case NativeParamType::String:
       default:

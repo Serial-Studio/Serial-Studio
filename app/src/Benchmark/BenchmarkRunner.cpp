@@ -57,17 +57,17 @@ namespace Benchmark {
 // Per-engine parser gates (frames/s). Export and dashboard phases are informational (ungated).
 static constexpr double kDataPipelineFps  = 1024000.0;
 static constexpr double kNativeNumericFps = 1024000.0;
-static constexpr double kNativeMixedFps   =  512000.0;
-static constexpr double kLuaNumericFps    =  256000.0;
-static constexpr double kLuaMixedFps      =  128000.0;
-static constexpr double kJsNumericFps     =  128000.0;
-static constexpr double kJsMixedFps       =   64000.0;
-static constexpr double kUngatedFps       =       1.0;
+static constexpr double kNativeMixedFps   = 512000.0;
+static constexpr double kLuaNumericFps    = 256000.0;
+static constexpr double kLuaMixedFps      = 128000.0;
+static constexpr double kJsNumericFps     = 128000.0;
+static constexpr double kJsMixedFps       = 64000.0;
+static constexpr double kUngatedFps       = 1.0;
 
-static const quint64 kFrameValues[]    = {100'000ull, 250'000ull, 500'000ull, 1'000'000ull};
-static const double kSecondValues[]    = {1.0, 2.0, 5.0, 10.0};
-static constexpr int kFrameCount       = static_cast<int>(sizeof(kFrameValues) / sizeof(quint64));
-static constexpr int kSecondCount      = static_cast<int>(sizeof(kSecondValues) / sizeof(double));
+static const quint64 kFrameValues[]  = {100'000ull, 250'000ull, 500'000ull, 1'000'000ull};
+static const double kSecondValues[]  = {1.0, 2.0, 5.0, 10.0};
+static constexpr int kFrameCount     = static_cast<int>(sizeof(kFrameValues) / sizeof(quint64));
+static constexpr int kSecondCount    = static_cast<int>(sizeof(kSecondValues) / sizeof(double));
 static constexpr int kDefaultFrames  = 1;
 static constexpr int kDefaultSeconds = 1;
 
@@ -197,8 +197,7 @@ void BenchmarkRunner::copyResults()
     return;
 
   QString text;
-  text += tr("Serial Studio %1 - Hotpath Benchmark")
-            .arg(QCoreApplication::applicationVersion());
+  text += tr("Serial Studio %1 - Hotpath Benchmark").arg(QCoreApplication::applicationVersion());
   text += QStringLiteral("\n");
   text += tr("%1 (%2), workload: %3 frames minimum, %4 s minimum")
             .arg(QSysInfo::prettyProductName(),
@@ -248,65 +247,154 @@ void BenchmarkRunner::clearResults()
 /**
  * @brief Assembles the ordered phase list from the user's section + variant selection.
  */
-void BenchmarkRunner::buildPhases(bool parsers, bool dataExport, bool dashboard, bool numeric,
-                                  bool mixed)
+void BenchmarkRunner::buildPhases(
+  bool parsers, bool dataExport, bool dashboard, bool numeric, bool mixed)
 {
   m_phases.clear();
 
   // The data pipeline always runs: it is the lower bound every parser path builds on.
   m_phases.push_back({-1, false, false, false, true, kDataPipelineFps, tr("Data pipeline")});
 
-  // Parser section: gated per engine + variant; the numbers CI enforces.
-  if (parsers && numeric) {
-    m_phases.push_back({SerialStudio::Native, false, false, false, false, kNativeNumericFps,
+  if (parsers)
+    appendParserPhases(numeric, mixed);
+
+  if (dataExport)
+    appendDataExportPhases(numeric, mixed);
+
+  if (dashboard)
+    appendDashboardPhases(numeric, mixed);
+}
+
+/**
+ * @brief Appends the parser-section phases: gated per engine + variant, the numbers CI enforces.
+ */
+void BenchmarkRunner::appendParserPhases(bool numeric, bool mixed)
+{
+  if (numeric) {
+    m_phases.push_back({SerialStudio::Native,
+                        false,
+                        false,
+                        false,
+                        false,
+                        kNativeNumericFps,
                         tr("Built-in parser (numeric)")});
-    m_phases.push_back({SerialStudio::Lua, false, false, false, false, kLuaNumericFps,
-                        tr("Lua parser (numeric)")});
-    m_phases.push_back({SerialStudio::JavaScript, false, false, false, false, kJsNumericFps,
+    m_phases.push_back(
+      {SerialStudio::Lua, false, false, false, false, kLuaNumericFps, tr("Lua parser (numeric)")});
+    m_phases.push_back({SerialStudio::JavaScript,
+                        false,
+                        false,
+                        false,
+                        false,
+                        kJsNumericFps,
                         tr("JavaScript parser (numeric)")});
   }
-  if (parsers && mixed) {
-    m_phases.push_back({SerialStudio::Native, false, true, false, false, kNativeMixedFps,
+  if (mixed) {
+    m_phases.push_back({SerialStudio::Native,
+                        false,
+                        true,
+                        false,
+                        false,
+                        kNativeMixedFps,
                         tr("Built-in parser (mixed)")});
-    m_phases.push_back({SerialStudio::Lua, false, true, false, false, kLuaMixedFps,
-                        tr("Lua parser (mixed)")});
-    m_phases.push_back({SerialStudio::JavaScript, false, true, false, false, kJsMixedFps,
+    m_phases.push_back(
+      {SerialStudio::Lua, false, true, false, false, kLuaMixedFps, tr("Lua parser (mixed)")});
+    m_phases.push_back({SerialStudio::JavaScript,
+                        false,
+                        true,
+                        false,
+                        false,
+                        kJsMixedFps,
                         tr("JavaScript parser (mixed)")});
   }
+}
 
-  // Data-export section: informational, exporters on, every engine x selected variant.
-  if (dataExport && numeric) {
-    m_phases.push_back({SerialStudio::Native, true, false, false, false, kUngatedFps,
+/**
+ * @brief Appends the data-export-section phases: informational, exporters on, every engine.
+ */
+void BenchmarkRunner::appendDataExportPhases(bool numeric, bool mixed)
+{
+  if (numeric) {
+    m_phases.push_back({SerialStudio::Native,
+                        true,
+                        false,
+                        false,
+                        false,
+                        kUngatedFps,
                         tr("Built-in + data export (numeric)")});
-    m_phases.push_back({SerialStudio::Lua, true, false, false, false, kUngatedFps,
+    m_phases.push_back({SerialStudio::Lua,
+                        true,
+                        false,
+                        false,
+                        false,
+                        kUngatedFps,
                         tr("Lua + data export (numeric)")});
-    m_phases.push_back({SerialStudio::JavaScript, true, false, false, false, kUngatedFps,
+    m_phases.push_back({SerialStudio::JavaScript,
+                        true,
+                        false,
+                        false,
+                        false,
+                        kUngatedFps,
                         tr("JavaScript + data export (numeric)")});
   }
-  if (dataExport && mixed) {
-    m_phases.push_back({SerialStudio::Native, true, true, false, false, kUngatedFps,
+  if (mixed) {
+    m_phases.push_back({SerialStudio::Native,
+                        true,
+                        true,
+                        false,
+                        false,
+                        kUngatedFps,
                         tr("Built-in + data export (mixed)")});
-    m_phases.push_back({SerialStudio::Lua, true, true, false, false, kUngatedFps,
-                        tr("Lua + data export (mixed)")});
-    m_phases.push_back({SerialStudio::JavaScript, true, true, false, false, kUngatedFps,
+    m_phases.push_back(
+      {SerialStudio::Lua, true, true, false, false, kUngatedFps, tr("Lua + data export (mixed)")});
+    m_phases.push_back({SerialStudio::JavaScript,
+                        true,
+                        true,
+                        false,
+                        false,
+                        kUngatedFps,
                         tr("JavaScript + data export (mixed)")});
   }
+}
 
-  // Dashboard section: informational, dashboard on, every engine x selected variant.
-  if (dashboard && numeric) {
-    m_phases.push_back({SerialStudio::Native, false, false, true, false, kUngatedFps,
+/**
+ * @brief Appends the dashboard-section phases: informational, dashboard on, every engine.
+ */
+void BenchmarkRunner::appendDashboardPhases(bool numeric, bool mixed)
+{
+  if (numeric) {
+    m_phases.push_back({SerialStudio::Native,
+                        false,
+                        false,
+                        true,
+                        false,
+                        kUngatedFps,
                         tr("Built-in + dashboard (numeric)")});
-    m_phases.push_back({SerialStudio::Lua, false, false, true, false, kUngatedFps,
-                        tr("Lua + dashboard (numeric)")});
-    m_phases.push_back({SerialStudio::JavaScript, false, false, true, false, kUngatedFps,
+    m_phases.push_back(
+      {SerialStudio::Lua, false, false, true, false, kUngatedFps, tr("Lua + dashboard (numeric)")});
+    m_phases.push_back({SerialStudio::JavaScript,
+                        false,
+                        false,
+                        true,
+                        false,
+                        kUngatedFps,
                         tr("JavaScript + dashboard (numeric)")});
   }
-  if (dashboard && mixed) {
-    m_phases.push_back({SerialStudio::Native, false, true, true, false, kUngatedFps,
+  if (mixed) {
+    m_phases.push_back({SerialStudio::Native,
+                        false,
+                        true,
+                        true,
+                        false,
+                        kUngatedFps,
                         tr("Built-in + dashboard (mixed)")});
-    m_phases.push_back({SerialStudio::Lua, false, true, true, false, kUngatedFps,
-                        tr("Lua + dashboard (mixed)")});
-    m_phases.push_back({SerialStudio::JavaScript, false, true, true, false, kUngatedFps,
+    m_phases.push_back(
+      {SerialStudio::Lua, false, true, true, false, kUngatedFps, tr("Lua + dashboard (mixed)")});
+    m_phases.push_back({SerialStudio::JavaScript,
+                        false,
+                        true,
+                        true,
+                        false,
+                        kUngatedFps,
                         tr("JavaScript + dashboard (mixed)")});
   }
 }
@@ -314,8 +402,13 @@ void BenchmarkRunner::buildPhases(bool parsers, bool dataExport, bool dashboard,
 /**
  * @brief Starts a benchmark session at the selected workload; schedules the first phase.
  */
-void BenchmarkRunner::start(int framesIndex, int secondsIndex, bool parsers, bool dataExport,
-                            bool dashboard, bool numeric, bool mixed)
+void BenchmarkRunner::start(int framesIndex,
+                            int secondsIndex,
+                            bool parsers,
+                            bool dataExport,
+                            bool dashboard,
+                            bool numeric,
+                            bool mixed)
 {
   if (m_running)
     return;

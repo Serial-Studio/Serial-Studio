@@ -441,6 +441,11 @@ Widgets.SmartDialog {
               model: root.results
               boundsBehavior: Flickable.StopAtBounds
 
+              //
+              // Keep the newest row in view as phases stream in
+              //
+              onCountChanged: positionViewAtEnd()
+
               delegate: RowLayout {
                 id: resultRow
 

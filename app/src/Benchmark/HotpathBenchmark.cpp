@@ -264,7 +264,8 @@ QJsonObject HotpathBenchmark::buildDashboardProjectJson(int language, bool withS
   if (withStrings) {
     QJsonArray stringDatasets;
     for (int i = 0; i < kStringChannels; ++i)
-      stringDatasets.append(makeDataset(kDashboardChannels + i + 1, QStringLiteral("STR%1").arg(i + 1)));
+      stringDatasets.append(
+        makeDataset(kDashboardChannels + i + 1, QStringLiteral("STR%1").arg(i + 1)));
 
     groups.append(makeGroup(QStringLiteral("Status"), QStringLiteral("datagrid"), stringDatasets));
   }
@@ -305,8 +306,8 @@ QByteArray HotpathBenchmark::buildChunk(int frames, int channels, int stringColu
 
   static constexpr const char* kStatusWords[] = {"OK", "WARN", "FAIL", "IDLE"};
   constexpr int kStatusWordCount              = 4;
-  constexpr double kTwoPi = 6.283185307179586;
-  constexpr int kPeriod   = 360;
+  constexpr double kTwoPi                     = 6.283185307179586;
+  constexpr int kPeriod                       = 360;
 
   QByteArray chunk;
   chunk.reserve(static_cast<qsizetype>(frames) * (channels * 8 + stringColumns * 6));
@@ -486,7 +487,7 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
     // Keep the dialog repainting mid-phase; the pump time is discounted from the measurement.
     if (seconds - lastSpin >= kSpinIntervalSec) {
       spentSpin += spinEventLoop();
-      lastSpin = seconds;
+      lastSpin   = seconds;
     }
   }
 
@@ -521,7 +522,7 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
 
   constexpr int kChannels       = 8;
   constexpr int kFramesPerChunk = 1000;
-  const bool activateDashboard = withDashboard && dashboardIngest;
+  const bool activateDashboard  = withDashboard && dashboardIngest;
 
   const int channels = withDashboard ? kDashboardChannels : kChannels;
   setupProject(language, channels, withStrings, withDashboard);
@@ -579,8 +580,8 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
 
     // Repaint mid-run on every phase (not just dashboard); pump time is discounted above.
     if (seconds - lastSpinSec >= kSpinIntervalSec) {
-      spentSpin += spinEventLoop();
-      lastSpinSec = seconds;
+      spentSpin   += spinEventLoop();
+      lastSpinSec  = seconds;
     }
   }
 

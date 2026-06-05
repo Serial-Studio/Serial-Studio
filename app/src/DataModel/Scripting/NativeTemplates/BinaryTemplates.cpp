@@ -160,8 +160,8 @@ static constexpr int kMaxBytesPerFrame = 65536;
 /**
  * @brief Combines one byte group at the offset into a decimal value string.
  */
-[[nodiscard]] static QString byteGroupValue(const QByteArray& bytes, qsizetype offset,
-                                            int bytesPerValue, bool bigEndian, bool signedValues)
+[[nodiscard]] static QString byteGroupValue(
+  const QByteArray& bytes, qsizetype offset, int bytesPerValue, bool bigEndian, bool signedValues)
 {
   Q_ASSERT(bytesPerValue >= 1);
   Q_ASSERT(bytesPerValue <= 8);
@@ -187,8 +187,10 @@ static constexpr int kMaxBytesPerFrame = 65536;
 /**
  * @brief Groups frame bytes into one channel per group; trailing partial groups are dropped.
  */
-[[nodiscard]] static QList<QStringList> groupedByteFrame(const QByteArray& bytes, int bytesPerValue,
-                                                         bool bigEndian, bool signedValues)
+[[nodiscard]] static QList<QStringList> groupedByteFrame(const QByteArray& bytes,
+                                                         int bytesPerValue,
+                                                         bool bigEndian,
+                                                         bool signedValues)
 {
   Q_ASSERT(bytesPerValue >= 1);
 

@@ -433,6 +433,7 @@ Widgets.Pane {
 
           JsCodeEditor {
             id: frameParser
+
             Layout.fillWidth: true
             Layout.fillHeight: true
 

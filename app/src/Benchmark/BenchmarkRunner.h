@@ -22,12 +22,12 @@
 #pragma once
 
 #include <memory>
-#include <vector>
 #include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QTemporaryDir>
 #include <QVariantList>
+#include <vector>
 
 namespace Benchmark {
 
@@ -100,8 +100,13 @@ public:
 public slots:
   void copyResults();
   void clearResults();
-  void start(int framesIndex, int secondsIndex, bool parsers, bool dataExport, bool dashboard,
-             bool numeric, bool mixed);
+  void start(int framesIndex,
+             int secondsIndex,
+             bool parsers,
+             bool dataExport,
+             bool dashboard,
+             bool numeric,
+             bool mixed);
 
 private slots:
   void retranslate();
@@ -113,6 +118,9 @@ private:
   void announcePhase(int index);
   void executePhase(int index);
   void buildPhases(bool parsers, bool dataExport, bool dashboard, bool numeric, bool mixed);
+  void appendParserPhases(bool numeric, bool mixed);
+  void appendDataExportPhases(bool numeric, bool mixed);
+  void appendDashboardPhases(bool numeric, bool mixed);
 
 private:
   bool m_running;
