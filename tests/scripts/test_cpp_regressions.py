@@ -476,11 +476,27 @@ def test_frame_reader_buffer_overflow_log_is_throttled():
     )
 
 
-def test_frame_builder_acquire_frame_scans_with_raw_pointers():
-    """acquireFrame previously copied the slot's shared_ptr inside the scan loop,
-    paying two atomic ops per iteration on miss. The shared_ptr must be captured
-    only on the successful-CAS path."""
+def test_frame_builder_pool_scan_copies_no_shared_ptr():
+    """The pool-slot scan must not copy a slot's shared_ptr per iteration. The
+    allocator probes free slots via use_count() == 1 (the pool holds the only
+    reference) inside claimPoolSlot(), and acquireFrame binds the chosen slot by
+    const reference and returns through the aliasing TimestampedFramePtr ctor --
+    no per-frame control block, no copy in the scan."""
     text = _read("app/src/DataModel/FrameBuilder.cpp")
+
+    scan = re.search(
+        r"size_t DataModel::FrameBuilder::claimPoolSlot\(\) noexcept\s*\{[\s\S]*?\n\}",
+        text,
+    )
+    assert scan is not None, "claimPoolSlot body must be present"
+    scan_body = scan.group(0)
+
+    # The scan probes the pool's own reference count -- no shared_ptr copy, no CAS.
+    assert "if (m_framePool[idx].use_count() != 1)" in scan_body
+    assert "compare_exchange_strong" not in scan_body, "scan must not CAS a slot flag"
+    assert (
+        "auto slotPtr = m_framePool[idx];" not in scan_body
+    ), "scan must not copy a slot shared_ptr"
 
     body = re.search(
         r"DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame\("
@@ -491,16 +507,11 @@ def test_frame_builder_acquire_frame_scans_with_raw_pointers():
     assert body is not None, "acquireFrame body must be present"
     snippet = body.group(0)
 
-    # Raw scan pointer must appear in the loop.
-    assert "auto* slotRaw    = m_framePool[idx].get();" in snippet
-    # shared_ptr copy must only appear after the successful CAS path returns
-    # the slot to the deleter -- never before the CAS.
-    cas_pos = snippet.find("compare_exchange_strong")
-    copy_pos = snippet.find("auto slotPtr = m_framePool[idx];")
-    assert cas_pos != -1 and copy_pos != -1
-    assert (
-        copy_pos > cas_pos
-    ), "shared_ptr copy must be on the success path, not in the scan"
+    # The claimed slot is bound by reference, mutated through a raw pointer, and
+    # returned via the aliasing ctor -- the only incref happens at construction.
+    assert "const auto& slotOwner = m_framePool[idx];" in snippet
+    assert "auto* slotRaw         = slotOwner.get();" in snippet
+    assert "return TimestampedFramePtr(slotOwner, &slotRaw->frame);" in snippet
 
 
 # ----------------------------------------------------------------------------------
@@ -881,11 +892,11 @@ def test_assistant_script_apply_strips_pipeline_keys():
 
 
 def test_tester_runs_pipeline_and_writes_back_to_source():
-    """The QML test dialog's bridge (NativeParserEditor) must call the shared pipeline
-    runners and must write delimiter / decoder / detection / checksum edits back to
-    ProjectModel so the live driver reconfigures.
+    """The per-source frame parser bridge (FrameParserModel) must call the shared
+    pipeline runners and must write delimiter / decoder / detection / checksum edits
+    back to ProjectModel so the live driver reconfigures.
     """
-    text = _read("app/src/DataModel/Editors/NativeParserEditor.cpp")
+    text = _read("app/src/DataModel/Editors/FrameParserModel.cpp")
 
     assert '#include "DataModel/Scripting/FrameParserPipeline.h"' in text
 
@@ -904,7 +915,7 @@ def test_tester_runs_pipeline_and_writes_back_to_source():
         "setHexDelimiters",
     ):
         body = re.search(
-            r"void DataModel::NativeParserEditor::" + slot + r"\([\s\S]*?\n\}",
+            r"void DataModel::FrameParserModel::" + slot + r"\([\s\S]*?\n\}",
             text,
         )
         assert body is not None, f"{slot} body must exist"
