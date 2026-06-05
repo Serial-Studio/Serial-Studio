@@ -1189,9 +1189,11 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
 
   const bool armedWatchdog = beginDatasetPass(info);
 
-  for (auto& group : frame.groups)
+  for (auto& group : frame.groups) {
+    SS_NO_UNROLL
     for (auto& dataset : group.datasets)
       applyDatasetValue(dataset, channelData, channelCount, info, replayColumns);
+  }
 
   endDatasetPass(armedWatchdog);
 }
@@ -1209,9 +1211,11 @@ void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Frame& frame,
 
   const bool armedWatchdog = beginDatasetPass(info);
 
-  for (auto& group : frame.groups)
+  for (auto& group : frame.groups) {
+    SS_NO_UNROLL
     for (auto& dataset : group.datasets)
       applyDatasetValueSpan(dataset, spans, count, info);
+  }
 
   endDatasetPass(armedWatchdog);
 }
@@ -1231,6 +1235,7 @@ void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Dataset* const*
 
   const bool armedWatchdog = beginDatasetPass(info);
 
+  SS_NO_UNROLL
   for (qsizetype i = 0; i < datasetCount; ++i)
     applyDatasetValueSpan(*datasets[i], spans, count, info);
 

@@ -696,6 +696,18 @@ inline void clear_frame(Frame& frame) noexcept
 }
 
 /**
+ * @brief Disables unrolling for the following loop. The per-dataset publish loops have short
+ *        trip counts with large inlined bodies, where -O3 unrolling only bloats I-cache.
+ */
+#if defined(__clang__)
+#  define SS_NO_UNROLL _Pragma("clang loop unroll(disable)")
+#elif defined(__GNUC__)
+#  define SS_NO_UNROLL _Pragma("GCC unroll 1")
+#else
+#  define SS_NO_UNROLL
+#endif
+
+/**
  * @brief Allocation-free QString copy: reuses the destination buffer when it is unique and
  *        large enough, falling back to an implicit-share assignment otherwise.
  */
@@ -753,6 +765,7 @@ inline void copy_frame_values(Frame& dst, const Frame& src) noexcept
     const auto& srcGroup      = src.groups[g];
     auto& dstGroup            = dst.groups[g];
     const size_t datasetCount = srcGroup.datasets.size();
+    SS_NO_UNROLL
     for (size_t d = 0; d < datasetCount; ++d) {
       const auto& srcDataset = srcGroup.datasets[d];
       auto& dstDataset       = dstGroup.datasets[d];
