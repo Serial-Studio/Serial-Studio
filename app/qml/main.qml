@@ -108,6 +108,7 @@ Item {
     if (projectEditorLoader.item)
       projectEditorLoader.item.visible = false
 
+    helpCenter.close()
     dbExplorerLoader.close()
     aiAssistantLoader.close()
     aiProUpgradeLoader.close()
@@ -218,7 +219,6 @@ Item {
 
       aboutDialog.close()
       donateDialog.close()
-      helpCenter.close()
       licenseDialog.close()
       settingsDialog.close()
       examplesBrowser.close()
@@ -246,16 +246,6 @@ Item {
       id: aboutDialog
 
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/About.qml"
-    }
-
-    //
-    // Help center: synchronous load (WebEngineView races otherwise)
-    //
-    DialogLoader {
-      id: helpCenter
-
-      asynchronous: false
-      source: "qrc:/serial-studio.com/gui/qml/Dialogs/HelpCenter.qml"
     }
 
     //
@@ -424,6 +414,17 @@ Item {
     id: dbExplorerLoader
 
     source: "qrc:/serial-studio.com/gui/qml/DatabaseExplorer/DatabaseExplorer.qml"
+  }
+
+  //
+  // Help center: top-level window independent of the main window;
+  // synchronous load (WebEngineView races otherwise)
+  //
+  DialogLoader {
+    id: helpCenter
+
+    asynchronous: false
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/HelpCenter.qml"
   }
 
   //

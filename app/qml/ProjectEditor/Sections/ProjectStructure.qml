@@ -509,7 +509,7 @@ Widgets.Pane {
           Image {
             id: icon
 
-            source: model.treeViewIcon
+            source: model.treeViewIcon ?? ""
             sourceSize: Qt.size(12, 12)
             Layout.alignment: Qt.AlignVCenter
           }
@@ -531,7 +531,7 @@ Widgets.Pane {
 
             Layout.fillWidth: true
             elide: Label.ElideRight
-            text: model.treeViewText
+            text: model.treeViewText ?? ""
             Layout.alignment: Qt.AlignVCenter
             LayoutMirroring.enabled: false
             horizontalAlignment: Cpp_Misc_Translator.rtl ? Text.AlignRight
