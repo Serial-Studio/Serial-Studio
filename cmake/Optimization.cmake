@@ -148,12 +148,15 @@ if(PRODUCTION_OPTIMIZATION)
          endforeach()
       endforeach()
 
+      # /clang:-O3 follows /O2 (last -O wins in clang) so this branch matches the -O3 used by
+      # every other production toolchain instead of clang-cl's /O2 -> -O2 mapping.
       add_compile_options(
          /O2
          /Oi
          /Ot
          /Gy
          /Gw
+         /clang:-O3
          /clang:-march=x86-64-v2
          /fp:precise
          /DNDEBUG
@@ -164,7 +167,12 @@ if(PRODUCTION_OPTIMIZATION)
       )
 
       if(NOT DISABLE_LTO)
-         add_compile_options(/clang:-flto=thin)
+         # -fwhole-program-vtables devirtualizes app-internal interfaces (hidden LTO visibility
+         # on COFF); dllimported Qt classes keep public visibility, so plugins are unaffected.
+         add_compile_options(
+            /clang:-flto=thin
+            /clang:-fwhole-program-vtables
+         )
          add_link_options(/lldltocache:${CMAKE_BINARY_DIR}/lto.cache)
       endif()
 
