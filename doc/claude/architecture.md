@@ -14,8 +14,10 @@ FrameReader::processData  (main thread)
   │ appends to CircularBuffer (SPSC); tracks per-chunk timestamps;
   │ delimiter scan: vectorized memchr for 1-byte delimiters, memchr-anchored
   │ + memcmp for <= 8-byte patterns on the linear region, KMP for long or
-  │ wrap-straddling patterns; enqueues completed frames to lock-free
-  │ ReaderWriterQueue<CapturedDataPtr>; emits readyRead once
+  │ wrap-straddling patterns; extracted frames fill REUSED CapturedData pool
+  │ slots (use_count()==1 probe, peekRangeInto writes the slot's QByteArray
+  │ in place — steady-state zero-allocation; backlog falls back to heap);
+  │ enqueues to lock-free ReaderWriterQueue<CapturedDataPtr>; emits readyRead
   ▼
 DeviceManager::onReadyRead  (main, DirectConnection)
   │ while try_dequeue: Q_EMIT frameReady(deviceId, frame)

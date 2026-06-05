@@ -45,7 +45,7 @@
  * @brief Constructs the FrameParser singleton and seeds the source-0 engine.
  */
 DataModel::FrameParser::FrameParser()
-  : m_hasLuaEngine(false), m_suppressMessageBoxes(false), m_engine0Cache(nullptr)
+  : m_hasLuaEngine(false), m_suppressMessageBoxes(false), m_engineEpoch(0), m_engine0Cache(nullptr)
 {
   (void)engineForSource(0);
 
@@ -403,6 +403,9 @@ void DataModel::FrameParser::refreshEngineCaches() noexcept
       break;
     }
   }
+
+  // Cheap change signal: FrameBuilder re-derives its capture flag when this moves
+  ++m_engineEpoch;
 }
 
 /**
@@ -411,6 +414,14 @@ void DataModel::FrameParser::refreshEngineCaches() noexcept
 bool DataModel::FrameParser::hasTableApiEngines() const noexcept
 {
   return m_hasLuaEngine;
+}
+
+/**
+ * @brief Monotonic engine-set change counter; lets per-frame callers poll with one compare.
+ */
+int DataModel::FrameParser::engineEpoch() const noexcept
+{
+  return m_engineEpoch;
 }
 
 /**

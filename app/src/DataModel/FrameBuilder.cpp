@@ -93,7 +93,9 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_playerOpen(false)
   , m_anyAsyncSink(false)
   , m_captureDatasetValues(false)
+  , m_captureFlagsDirty(true)
   , m_externalTableApiUsers(false)
+  , m_seenEngineEpoch(-1)
   , m_operationMode(SerialStudio::ProjectFile)
   , m_parseBudgetUsedNs(0)
   , m_parseBudgetWindowStart(BudgetClock::time_point{})
@@ -139,9 +141,9 @@ DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Default-constructs a pool slot with no template generation.
+ * @brief Default-constructs a pool slot with no template generation or bound source frame.
  */
-DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : generation(0) {}
+DataModel::FrameBuilder::PooledFrameSlot::PooledFrameSlot() : generation(0), matchedSrc(nullptr) {}
 
 /**
  * @brief Bumps the pool generation after a template rebuild so stale slots full-assign on reuse
@@ -202,6 +204,50 @@ void DataModel::FrameBuilder::notePoolExhausted()
 }
 
 /**
+ * @brief Binds a structure-synced slot to its source template: remembers the match and rebuilds
+ *        the flattened dataset table the span lane walks.
+ */
+void DataModel::FrameBuilder::bindSlotTemplate(PooledFrameSlot* slot, const DataModel::Frame& src)
+{
+  Q_ASSERT(slot != nullptr);
+  Q_ASSERT(compare_frames(slot->frame.data, src));
+
+  slot->matchedSrc = &src;
+
+  slot->flat.clear();
+  for (auto& group : slot->frame.data.groups)
+    for (auto& dataset : group.datasets)
+      slot->flat.push_back(&dataset);
+}
+
+/**
+ * @brief Syncs a claimed slot's structure to @p src. Returns true when only values need
+ *        refreshing (the steady state); false when the slot was full-assigned from the template.
+ */
+bool DataModel::FrameBuilder::preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src)
+{
+  Q_ASSERT(slot != nullptr);
+
+  // Memo fast path: same template frame bound under the current generation
+  if (slot->generation == m_framePoolGeneration && slot->matchedSrc == &src) [[likely]] {
+    Q_ASSERT(compare_frames(slot->frame.data, src));
+    return true;
+  }
+
+  // Same-generation same-source slots are structure-identical: bind without a full assign
+  if (slot->generation == m_framePoolGeneration && slot->frame.data.sourceId == src.sourceId
+      && compare_frames(slot->frame.data, src)) {
+    bindSlotTemplate(slot, src);
+    return true;
+  }
+
+  slot->frame.data = src;
+  slot->generation = m_framePoolGeneration;
+  bindSlotTemplate(slot, src);
+  return false;
+}
+
+/**
  * @brief Claims a free pool slot, copies @p src + @p ts into it, and returns an aliasing
  *        shared_ptr: no deleter, no per-frame control block.
  */
@@ -218,14 +264,8 @@ DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
   const auto& slotOwner = m_framePool[idx];
   auto* slotRaw         = slotOwner.get();
 
-  // Same-generation same-source slots are structure-identical: refresh values only
-  if (slotRaw->generation == m_framePoolGeneration && slotRaw->frame.data.sourceId == src.sourceId
-      && compare_frames(slotRaw->frame.data, src)) [[likely]] {
+  if (preparePooledSlot(slotRaw, src)) [[likely]]
     copy_frame_values(slotRaw->frame.data, src);
-  } else {
-    slotRaw->frame.data = src;
-    slotRaw->generation = m_framePoolGeneration;
-  }
 
   slotRaw->frame.timestamp = ts;
   Q_ASSERT(slotRaw->frame.data.groups.size() == src.groups.size());
@@ -422,6 +462,7 @@ void DataModel::FrameBuilder::syncFromProjectModel()
 
   // New project context: re-injected script engines (parsers, dialogs) re-set this flag
   m_externalTableApiUsers = false;
+  m_captureFlagsDirty     = true;
 
   m_frame.title   = pm.title();
   m_frame.groups  = pm.groups();
@@ -781,15 +822,14 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
   const auto& slotOwner = m_framePool[idx];
   auto* slotRaw         = slotOwner.get();
 
-  // Structural sync from the template only when the slot held a different shape
-  if (!(slotRaw->generation == m_framePoolGeneration
-        && slotRaw->frame.data.sourceId == frame.sourceId
-        && compare_frames(slotRaw->frame.data, frame))) [[unlikely]] {
-    slotRaw->frame.data = frame;
-    slotRaw->generation = m_framePoolGeneration;
-  }
+  // Structure sync + memo; the flattened table makes the per-dataset walk pointer-only
+  (void)preparePooledSlot(slotRaw, frame);
+  applyDatasetValuesSpans(slotRaw->flat.data(),
+                          static_cast<qsizetype>(slotRaw->flat.size()),
+                          m_spanScratch.data(),
+                          tokens,
+                          info);
 
-  applyDatasetValuesSpans(slotRaw->frame.data, m_spanScratch.data(), tokens, info);
   slotRaw->frame.timestamp = data->timestamp;
   hotpathTxFrame(TimestampedFramePtr(slotOwner, &slotRaw->frame));
   return 1;
@@ -1057,7 +1097,13 @@ void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
  */
 bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
 {
-  refreshDatasetCaptureFlag();
+  // Recompute the capture flag only when one of its inputs moved (epoch poll + dirty flag)
+  static auto& parser = DataModel::FrameParser::instance();
+  const int epoch     = parser.engineEpoch();
+  if (m_captureFlagsDirty || epoch != m_seenEngineEpoch) [[unlikely]] {
+    m_seenEngineEpoch = epoch;
+    refreshDatasetCaptureFlag();
+  }
 
   // Refresh per-source engine cache on sourceId change: one map lookup per rotation.
   if (info.sourceId != m_engineCacheSourceId) [[unlikely]] {
@@ -1119,6 +1165,7 @@ void DataModel::FrameBuilder::refreshDatasetCaptureFlag()
   m_captureDatasetValues =
     m_tableStore.isInitialized()
     && (!m_transformEngines.empty() || m_externalTableApiUsers || parser.hasTableApiEngines());
+  m_captureFlagsDirty = false;
 }
 
 /**
@@ -1165,6 +1212,27 @@ void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Frame& frame,
   for (auto& group : frame.groups)
     for (auto& dataset : group.datasets)
       applyDatasetValueSpan(dataset, spans, count, info);
+
+  endDatasetPass(armedWatchdog);
+}
+
+/**
+ * @brief Flat-table span apply: the slot's pre-resolved dataset pointers make the walk
+ *        pointer-only, with no per-frame group/dataset container traversal.
+ */
+void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Dataset* const* datasets,
+                                                      qsizetype datasetCount,
+                                                      const QByteArrayView* spans,
+                                                      qsizetype count,
+                                                      const TransformFrameInfo& info)
+{
+  Q_ASSERT(datasets != nullptr);
+  Q_ASSERT(spans != nullptr);
+
+  const bool armedWatchdog = beginDatasetPass(info);
+
+  for (qsizetype i = 0; i < datasetCount; ++i)
+    applyDatasetValueSpan(*datasets[i], spans, count, info);
 
   endDatasetPass(armedWatchdog);
 }
@@ -1834,6 +1902,7 @@ void DataModel::FrameBuilder::destroyTransformEngines()
   m_engineCacheSourceId = -1;
   m_luaEngineForSource  = nullptr;
   m_jsEngineForSource   = nullptr;
+  m_captureFlagsDirty   = true;
 
   // Drop the (interned-string) lookup cache before any owning Lua state closes
   m_tableStore.clearLookupCache();
@@ -2050,6 +2119,7 @@ void DataModel::FrameBuilder::initializeTableStore()
 {
   const auto& pm = DataModel::ProjectModel::instance();
   m_tableStore.initialize(pm.tables(), m_frame);
+  m_captureFlagsDirty = true;
 }
 
 /**
@@ -2062,6 +2132,7 @@ void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
   scratch.title  = pm.title();
   scratch.groups = pm.groups();
   m_tableStore.initialize(pm.tables(), scratch);
+  m_captureFlagsDirty = true;
 }
 
 /**
@@ -2205,6 +2276,7 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 
   // Someone can now read dataset registers, so the hotpath must keep capturing them
   m_externalTableApiUsers = true;
+  m_captureFlagsDirty     = true;
 
   lua_pushlightuserdata(L, &m_tableStore);
   lua_pushcclosure(L, luaTableGet, 1);
@@ -2237,6 +2309,7 @@ void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
 
   // Someone can now read dataset registers, so the hotpath must keep capturing them
   m_externalTableApiUsers = true;
+  m_captureFlagsDirty     = true;
 
   // Create bridge parented to the engine (destroyed when engine is deleted)
   auto* bridge  = new DataModel::TableApiBridge(js);

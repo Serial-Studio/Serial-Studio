@@ -42,11 +42,17 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_circularBuffer(1024 * 1024)
   , m_queue(65536)
+  , m_capturedPoolHint(0)
   , m_bufferPinned(false)
   , m_droppedFrames(0)
   , m_lastDropNotify()
   , m_lastOverflowLog()
 {
+  // Pre-allocate frame slots: steady-state extraction reuses them without touching the heap
+  m_capturedPool.reserve(kCapturedPoolSize);
+  for (int i = 0; i < kCapturedPoolSize; ++i)
+    m_capturedPool.emplace_back(std::make_shared<CapturedData>());
+
   // Best-effort pin: a page-fault stall on the scan buffer is a latency spike at rate
   m_bufferPinned = Platform::AppPlatform::lockMemoryResident(
     m_circularBuffer.storage(), static_cast<size_t>(m_circularBuffer.capacity()));
@@ -281,11 +287,49 @@ void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection m
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Enqueues a validated frame and reports queue overflow without nesting.
+ * @brief Claims a free CapturedData slot (the pool holds its only reference) for in-place
+ *        filling; falls back to a heap allocation when the queue backlog pins every slot.
  */
-void IO::FrameReader::enqueueOrWarn(QByteArray&& frame, qsizetype frameEndPos)
+IO::CapturedData* IO::FrameReader::claimCapturedSlot(IO::CapturedDataPtr& ptr)
 {
-  if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
+  const size_t n = m_capturedPool.size();
+  Q_ASSERT(n == static_cast<size_t>(kCapturedPoolSize));
+
+  // Consumers drain FIFO, so the free slot is at (or just past) the hint; the probe is bounded
+  const size_t probes = std::min<size_t>(n, kMaxClaimProbes);
+  for (size_t k = 0; k < probes; ++k) {
+    const size_t idx      = (m_capturedPoolHint + k) % n;
+    const auto& slotOwner = m_capturedPool[idx];
+    if (slotOwner.use_count() != 1)
+      continue;
+
+    m_capturedPoolHint = idx;
+    ptr                = CapturedDataPtr(slotOwner, slotOwner.get());
+    return slotOwner.get();
+  }
+
+  // Backlogged: per-frame heap allocation until the consumer catches up (pre-pool behavior)
+  auto heap = std::make_shared<CapturedData>();
+  auto* raw = heap.get();
+  ptr       = std::move(heap);
+  return raw;
+}
+
+/**
+ * @brief Stamps a filled slot with source timing and enqueues it, reporting queue overflow.
+ */
+void IO::FrameReader::enqueueCaptured(IO::CapturedDataPtr&& ptr,
+                                      IO::CapturedData* cd,
+                                      qsizetype frameEndPos)
+{
+  Q_ASSERT(cd != nullptr);
+  Q_ASSERT(frameEndPos >= 0);
+
+  cd->timestamp         = frameTimestamp(frameEndPos);
+  cd->frameStep         = std::chrono::nanoseconds(1);
+  cd->logicalFramesHint = 0;
+
+  if (!m_queue.try_enqueue(std::move(ptr))) [[unlikely]]
     noteDroppedFrame();
 
   consumeBytes(frameEndPos);
@@ -350,20 +394,23 @@ void IO::FrameReader::readEndDelimitedFrames()
     if (endIndex == -1)
       break;
 
-    auto frame             = m_circularBuffer.peek(endIndex);
+    CapturedDataPtr ptr;
+    CapturedData* cd = claimCapturedSlot(ptr);
+    m_circularBuffer.peekRangeInto(0, endIndex, cd->data);
+
     const auto crcPosition = endIndex + delimiter->size();
     const auto frameEndPos = crcPosition + m_checksumLength;
-    if (frame.isEmpty()) {
+    if (cd->data.isEmpty()) {
       consumeBytes(frameEndPos);
       continue;
     }
 
-    const auto result = checksum(frame, crcPosition);
+    const auto result = checksum(cd->data, crcPosition);
     if (result == ValidationStatus::ChecksumIncomplete)
       break;
 
     if (result == ValidationStatus::FrameOk)
-      enqueueOrWarn(std::move(frame), frameEndPos);
+      enqueueCaptured(std::move(ptr), cd, frameEndPos);
     else
       consumeBytes(frameEndPos);
   }
@@ -415,18 +462,20 @@ void IO::FrameReader::readStartDelimitedFrames()
       continue;
     }
 
-    auto frame = m_circularBuffer.peekRange(frameStart, frameLength - m_checksumLength);
-    if (frame.isEmpty()) {
+    CapturedDataPtr ptr;
+    CapturedData* cd = claimCapturedSlot(ptr);
+    m_circularBuffer.peekRangeInto(frameStart, frameLength - m_checksumLength, cd->data);
+    if (cd->data.isEmpty()) {
       consumeBytes(frameEndPos);
       continue;
     }
 
-    const auto result = checksum(frame, crcPosition);
+    const auto result = checksum(cd->data, crcPosition);
     if (result == ValidationStatus::ChecksumIncomplete)
       break;
 
     if (result == ValidationStatus::FrameOk)
-      enqueueOrWarn(std::move(frame), frameEndPos);
+      enqueueCaptured(std::move(ptr), cd, frameEndPos);
     else
       consumeBytes(frameEndPos);
   }
@@ -474,18 +523,21 @@ void IO::FrameReader::readStartEndDelimitedFrames()
 
     const auto crcPosition = finishIndex + finishSeq.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
-    auto frame             = m_circularBuffer.peekRange(frameStart, frameLength);
-    if (frame.isEmpty()) {
+
+    CapturedDataPtr ptr;
+    CapturedData* cd = claimCapturedSlot(ptr);
+    m_circularBuffer.peekRangeInto(frameStart, frameLength, cd->data);
+    if (cd->data.isEmpty()) {
       consumeBytes(frameEndPos);
       continue;
     }
 
-    const auto result = checksum(frame, crcPosition);
+    const auto result = checksum(cd->data, crcPosition);
     if (result == ValidationStatus::ChecksumIncomplete)
       break;
 
     if (result == ValidationStatus::FrameOk)
-      enqueueOrWarn(std::move(frame), frameEndPos);
+      enqueueCaptured(std::move(ptr), cd, frameEndPos);
     else
       consumeBytes(frameEndPos);
   }
@@ -561,12 +613,4 @@ IO::CapturedData::SteadyTimePoint IO::FrameReader::frameTimestamp(qsizetype endO
   const auto stamp          = chunk.nextFrameTimestamp;
   chunk.nextFrameTimestamp += chunk.frameStep;
   return stamp;
-}
-
-/**
- * @brief Wraps extracted frame bytes into a CapturedData with proper timing.
- */
-IO::CapturedDataPtr IO::FrameReader::buildFrame(QByteArray&& data, qsizetype endOffsetExclusive)
-{
-  return IO::makeCapturedData(std::move(data), frameTimestamp(endOffsetExclusive));
 }

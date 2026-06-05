@@ -19,11 +19,17 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <bit>
 #include <cstring>
 #include <QCoreApplication>
 #include <QHash>
 #include <QJsonDocument>
 #include <QRegularExpression>
+
+#if defined(__SSE2__) || defined(_M_X64) || defined(_M_AMD64)
+#  define SS_TEXT_SPLIT_SSE2 1
+#  include <emmintrin.h>
+#endif
 
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "SerialStudio.h"
@@ -122,8 +128,96 @@ public:
     if (!m_quote.isNull())
       return -1;
 
-    const char* data       = frame.data();
-    const qsizetype len    = frame.size();
+    const char* data    = frame.data();
+    const qsizetype len = frame.size();
+
+    qsizetype count = -1;
+    if (m_sepUtf8.size() == 1)
+      count = splitSpansSingleByte(data, len, m_sepUtf8.at(0), out, maxSpans);
+    else
+      count = splitSpansMultiByte(data, len, out, maxSpans);
+
+    if (count < 0)
+      return -1;
+
+    if (m_skipEmpty) {
+      qsizetype kept = 0;
+      for (qsizetype i = 0; i < count; ++i)
+        if (!out[i].isEmpty())
+          out[kept++] = out[i];
+
+      count = kept;
+    }
+
+    return count;
+  }
+
+private:
+  /**
+   * @brief One-pass single-byte split: SIMD compare + bit scan on x86-64 (SSE2 is inside the
+   *        x86-64-v2 baseline), scalar elsewhere. Returns the span count or -1 on overflow.
+   */
+  [[nodiscard]] qsizetype splitSpansSingleByte(const char* data,
+                                               qsizetype len,
+                                               char sep,
+                                               QByteArrayView* out,
+                                               qsizetype maxSpans) const noexcept
+  {
+    Q_ASSERT(data != nullptr || len == 0);
+    Q_ASSERT(maxSpans > 0);
+
+    qsizetype count = 0;
+    qsizetype start = 0;
+    qsizetype i     = 0;
+
+#ifdef SS_TEXT_SPLIT_SSE2
+    const __m128i needle = _mm_set1_epi8(sep);
+    for (; i + 16 <= len; i += 16) {
+      const __m128i block = _mm_loadu_si128(reinterpret_cast<const __m128i*>(data + i));
+      unsigned mask       = static_cast<unsigned>(_mm_movemask_epi8(_mm_cmpeq_epi8(block, needle)));
+
+      // Each iteration clears one of the <= 16 set bits
+      for (int b = 0; b < 16 && mask != 0; ++b) {
+        const qsizetype pos = i + std::countr_zero(mask);
+        if (count >= maxSpans)
+          return -1;
+
+        out[count++]  = fieldSpan(data + start, pos - start);
+        start         = pos + 1;
+        mask         &= mask - 1;
+      }
+    }
+#endif
+
+    // Scalar tail (and the whole frame on non-x86 builds)
+    for (; i < len; ++i) {
+      if (data[i] == sep) {
+        if (count >= maxSpans)
+          return -1;
+
+        out[count++] = fieldSpan(data + start, i - start);
+        start        = i + 1;
+      }
+    }
+
+    if (count >= maxSpans)
+      return -1;
+
+    out[count++] = fieldSpan(data + start, len - start);
+    return count;
+  }
+
+  /**
+   * @brief Multi-byte split: memchr-anchored first-byte search + memcmp verify per candidate.
+   */
+  [[nodiscard]] qsizetype splitSpansMultiByte(const char* data,
+                                              qsizetype len,
+                                              QByteArrayView* out,
+                                              qsizetype maxSpans) const noexcept
+  {
+    Q_ASSERT(maxSpans > 0);
+    Q_ASSERT(m_sepUtf8.size() > 1);
+
     const char sep0        = m_sepUtf8.at(0);
     const qsizetype sepLen = m_sepUtf8.size();
 
@@ -142,7 +236,7 @@ public:
         if (pos + sepLen > len)
           break;
 
-        if (sepLen == 1 || memcmp(data + pos, m_sepUtf8.constData(), sepLen) == 0) {
+        if (memcmp(data + pos, m_sepUtf8.constData(), sepLen) == 0) {
           end = pos;
           break;
         }
@@ -162,19 +256,9 @@ public:
       start = stop + sepLen;
     }
 
-    if (m_skipEmpty) {
-      qsizetype kept = 0;
-      for (qsizetype i = 0; i < count; ++i)
-        if (!out[i].isEmpty())
-          out[kept++] = out[i];
-
-      count = kept;
-    }
-
     return count;
   }
 
-private:
   /**
    * @brief Returns the field view with optional ASCII whitespace trimming applied.
    */

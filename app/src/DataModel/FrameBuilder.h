@@ -155,7 +155,9 @@ private:
   bool m_playerOpen;
   bool m_anyAsyncSink;
   bool m_captureDatasetValues;
+  bool m_captureFlagsDirty;
   bool m_externalTableApiUsers;
+  int m_seenEngineEpoch;
   SerialStudio::OperationMode m_operationMode;
   qint64 m_parseBudgetUsedNs;
   BudgetClock::time_point m_parseBudgetWindowStart;
@@ -184,14 +186,17 @@ private:
   bool m_compilePending;
 
   /**
-   * @brief Recyclable pool slot holding one TimestampedFrame and the template generation that
-   *        last full-assigned it. A slot is free exactly when the pool's shared_ptr is the only
-   *        reference; hand-outs alias that shared_ptr, so no per-frame control block exists.
+   * @brief Recyclable pool slot holding one TimestampedFrame, the template generation + source
+   *        frame that last bound it, and a flattened dataset table for the span lane. A slot is
+   *        free exactly when the pool's shared_ptr is the only reference; hand-outs alias that
+   *        shared_ptr, so no per-frame control block exists.
    */
   struct PooledFrameSlot {
     PooledFrameSlot();
     DataModel::TimestampedFrame frame;
     quint64 generation;
+    const DataModel::Frame* matchedSrc;
+    std::vector<DataModel::Dataset*> flat;
   };
 
   static constexpr int kFramePoolSize     = 8192;
@@ -203,6 +208,8 @@ private:
   void invalidateFramePool() noexcept;
   void notePoolExhausted();
   [[nodiscard]] size_t claimPoolSlot() noexcept;
+  void bindSlotTemplate(PooledFrameSlot* slot, const DataModel::Frame& src);
+  [[nodiscard]] bool preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src);
   [[nodiscard]] DataModel::TimestampedFramePtr acquireFrame(const DataModel::Frame& src);
   [[nodiscard]] DataModel::TimestampedFramePtr acquireFrame(
     const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts);
@@ -239,6 +246,11 @@ private:
                           const QStringList& channels,
                           const TransformFrameInfo& info);
   void applyDatasetValuesSpans(DataModel::Frame& frame,
+                               const QByteArrayView* spans,
+                               qsizetype count,
+                               const TransformFrameInfo& info);
+  void applyDatasetValuesSpans(DataModel::Dataset* const* datasets,
+                               qsizetype datasetCount,
                                const QByteArrayView* spans,
                                qsizetype count,
                                const TransformFrameInfo& info);

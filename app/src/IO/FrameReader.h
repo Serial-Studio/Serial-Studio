@@ -91,13 +91,13 @@ private:
   void readStartDelimitedFrames();
   void readStartEndDelimitedFrames();
 
-  void enqueueOrWarn(QByteArray&& frame, qsizetype frameEndPos);
+  [[nodiscard]] IO::CapturedData* claimCapturedSlot(IO::CapturedDataPtr& ptr);
+  void enqueueCaptured(IO::CapturedDataPtr&& ptr, IO::CapturedData* cd, qsizetype frameEndPos);
   void noteDroppedFrame();
 
   ValidationStatus checksum(const QByteArray& frame, qsizetype crcPosition);
 
   IO::CapturedData::SteadyTimePoint frameTimestamp(qsizetype endOffsetExclusive);
-  IO::CapturedDataPtr buildFrame(QByteArray&& data, qsizetype endOffsetExclusive);
 
 private:
   QString m_checksum;
@@ -113,6 +113,12 @@ private:
   CircularBuffer<QByteArray, char> m_circularBuffer;
   std::deque<PendingChunk> m_pendingChunks;
   moodycamel::ReaderWriterQueue<IO::CapturedDataPtr> m_queue;
+
+  // Reused CapturedData slots: free when the pool holds the only reference (FIFO drain order)
+  static constexpr int kCapturedPoolSize  = 4096;
+  static constexpr size_t kMaxClaimProbes = 64;
+  std::vector<std::shared_ptr<IO::CapturedData>> m_capturedPool;
+  size_t m_capturedPoolHint;
 
   bool m_bufferPinned;
   quint64 m_droppedFrames;

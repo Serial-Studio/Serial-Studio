@@ -76,6 +76,7 @@ public:
   [[nodiscard]] T read(qsizetype size);
   [[nodiscard]] T peek(qsizetype size) const;
   [[nodiscard]] T peekRange(qsizetype offset, qsizetype size) const;
+  void peekRangeInto(qsizetype offset, qsizetype size, T& out) const;
 
   void discard(qsizetype size);
 
@@ -323,26 +324,46 @@ T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
 template<typename T, Concepts::ByteLike StorageType>
 T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset, qsizetype size) const
 {
+  T result;
+  peekRangeInto(offset, size, result);
+  return result;
+}
+
+/**
+ * @brief peekRange twin that fills a caller-owned container, reusing its buffer when it is
+ *        unique and large enough (the pooled-frame steady state allocates nothing).
+ */
+template<typename T, Concepts::ByteLike StorageType>
+void IO::CircularBuffer<T, StorageType>::peekRangeInto(qsizetype offset,
+                                                       qsizetype size,
+                                                       T& out) const
+{
+  Q_ASSERT(offset >= 0);
+  Q_ASSERT(size >= 0);
+
   const qsizetype current_size = this->size();
-  if (offset >= current_size)
-    return T();
+  if (offset >= current_size || size <= 0) [[unlikely]] {
+    out = T();
+    return;
+  }
 
   size = std::min(size, current_size - offset);
 
-  T result;
-  result.resize(size);
+  // A consumer holding a COW copy keeps its bytes: the shared buffer is replaced, not reused
+  if (!out.isDetached() || out.capacity() < size)
+    out = T();
+
+  out.resize(size);
 
   const qsizetype head       = m_head.load(std::memory_order_acquire);
   const qsizetype start      = (head + offset) & m_capacityMask;
   const qsizetype firstChunk = std::min(size, m_capacity - start);
-  std::memcpy(result.data(), &m_buffer[start], firstChunk);
+  std::memcpy(out.data(), &m_buffer[start], firstChunk);
 
   if (size > firstChunk) [[unlikely]] {
     const qsizetype secondChunk = size - firstChunk;
-    std::memcpy(result.data() + firstChunk, &m_buffer[0], secondChunk);
+    std::memcpy(out.data() + firstChunk, &m_buffer[0], secondChunk);
   }
-
-  return result;
 }
 
 /**

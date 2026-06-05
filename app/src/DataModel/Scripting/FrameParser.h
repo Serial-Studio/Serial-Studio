@@ -74,6 +74,7 @@ public:
                                          qsizetype maxSpans);
 
   [[nodiscard]] bool hasTableApiEngines() const noexcept;
+  [[nodiscard]] int engineEpoch() const noexcept;
 
   [[nodiscard]] bool loadScript(int sourceId, const QString& script, bool showMessageBoxes = true);
 
@@ -103,6 +104,7 @@ private:
 private:
   bool m_hasLuaEngine;
   bool m_suppressMessageBoxes;
+  int m_engineEpoch;
   IScriptEngine* m_engine0Cache;
 
   QString m_defaultTemplateFile;
