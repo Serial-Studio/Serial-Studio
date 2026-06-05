@@ -639,6 +639,31 @@ Widgets.SmartDialog {
         }
 
         //
+        // Allow device control: unblocks driver config, connect/disconnect and
+        // writes behind a C++ warning dialog; Connections resyncs on decline.
+        //
+        CheckBox {
+          id: deviceControlCheck
+
+          Layout.preferredHeight: 26
+          ToolTip.delay: 400
+          ToolTip.visible: hovered
+          font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
+          ToolTip.text: qsTr("Let the AI configure devices, connect/disconnect and send data. "
+                             + "Each action still asks for your approval.")
+          text: qsTr("Allow device control")
+          checked: Cpp_AI_Assistant.allowDeviceControl
+          onToggled: Cpp_AI_Assistant.allowDeviceControl = checked
+
+          Connections {
+            target: Cpp_AI_Assistant
+            function onAllowDeviceControlChanged() {
+              deviceControlCheck.checked = Cpp_AI_Assistant.allowDeviceControl
+            }
+          }
+        }
+
+        //
         // Spacer right-aligning the key-manager button + status pill
         //
         Item {

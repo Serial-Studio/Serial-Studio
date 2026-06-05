@@ -10,6 +10,7 @@
 
 #include <QMessageBox>
 
+#include "AI/CommandRegistry.h"
 #include "AI/Conversation.h"
 #include "AI/Logging.h"
 #include "AI/Providers/AnthropicProvider.h"
@@ -50,6 +51,7 @@ AI::Assistant::Assistant()
   , m_cacheReadTokens(0)
   , m_cacheCreatedTokens(0)
   , m_autoApproveEdits(false)
+  , m_allowDeviceControl(false)
 {
   m_nam          = std::make_unique<QNetworkAccessManager>(this);
   m_dispatcher   = std::make_unique<ToolDispatcher>(this);
@@ -65,6 +67,10 @@ AI::Assistant::Assistant()
 
   // Restore the auto-approve toggle (default off).
   m_autoApproveEdits = m_settings.value(QStringLiteral("ai/autoApproveEdits"), false).toBool();
+
+  // Restore the device-control gate (default off) and push it to the safety registry.
+  m_allowDeviceControl = m_settings.value(QStringLiteral("ai/allowDeviceControl"), false).toBool();
+  CommandRegistry::instance().setDeviceControlAllowed(m_allowDeviceControl);
 
   m_conversation->setDispatcher(m_dispatcher.get());
   rewireConversationProvider();
@@ -164,6 +170,49 @@ void AI::Assistant::setAutoApproveEdits(bool enabled)
   m_autoApproveEdits = enabled;
   m_settings.setValue(QStringLiteral("ai/autoApproveEdits"), enabled);
   Q_EMIT autoApproveEditsChanged();
+}
+
+/**
+ * @brief Returns whether device-gated tools (driver config, writes, connect) are unblocked.
+ */
+bool AI::Assistant::allowDeviceControl() const noexcept
+{
+  return m_allowDeviceControl;
+}
+
+/**
+ * @brief Persists the device-control gate, warning the user before enabling it.
+ */
+void AI::Assistant::setAllowDeviceControl(bool enabled)
+{
+  if (m_allowDeviceControl == enabled)
+    return;
+
+  if (enabled) {
+    const int result = Misc::Utilities::showMessageBox(
+      tr("Allow AI Device Control?"),
+      tr("This lets the AI assistant configure devices, open and close connections, "
+         "and send data to your hardware.\n\n"
+         "Every device action still requires your explicit per-call approval in the "
+         "chat, even when auto-approve is enabled. Only enable this if you trust the "
+         "configured AI provider with hardware access."),
+      QMessageBox::Warning,
+      QString(),
+      QMessageBox::Yes | QMessageBox::No,
+      QMessageBox::No);
+
+    if (result == QMessageBox::No) {
+      m_allowDeviceControl = false;
+      m_settings.setValue(QStringLiteral("ai/allowDeviceControl"), false);
+      Q_EMIT allowDeviceControlChanged();
+      return;
+    }
+  }
+
+  m_allowDeviceControl = enabled;
+  m_settings.setValue(QStringLiteral("ai/allowDeviceControl"), m_allowDeviceControl);
+  CommandRegistry::instance().setDeviceControlAllowed(m_allowDeviceControl);
+  Q_EMIT allowDeviceControlChanged();
 }
 
 /**

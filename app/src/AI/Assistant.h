@@ -65,6 +65,10 @@ class Assistant : public QObject {
              READ autoApproveEdits
              WRITE setAutoApproveEdits
              NOTIFY autoApproveEditsChanged)
+  Q_PROPERTY(bool allowDeviceControl
+             READ allowDeviceControl
+             WRITE setAllowDeviceControl
+             NOTIFY allowDeviceControlChanged)
   // clang-format on
 
 signals:
@@ -77,6 +81,7 @@ signals:
   void busyChanged();
   void cacheStatsChanged();
   void autoApproveEditsChanged();
+  void allowDeviceControlChanged();
 
 private:
   explicit Assistant();
@@ -99,6 +104,7 @@ public:
   [[nodiscard]] int cacheReadTokens() const noexcept;
   [[nodiscard]] int cacheCreatedTokens() const noexcept;
   [[nodiscard]] bool autoApproveEdits() const noexcept;
+  [[nodiscard]] bool allowDeviceControl() const noexcept;
 
   Q_INVOKABLE [[nodiscard]] bool hasKey(int providerIdx) const;
   Q_INVOKABLE [[nodiscard]] QString redactedKey(int providerIdx) const;
@@ -113,6 +119,7 @@ public:
 
   void setCurrentProvider(int providerIdx);
   void setAutoApproveEdits(bool enabled);
+  void setAllowDeviceControl(bool enabled);
 
 public slots:
   void openKeyManager();
@@ -160,6 +167,7 @@ private:
   int m_cacheReadTokens;
   int m_cacheCreatedTokens;
   bool m_autoApproveEdits;
+  bool m_allowDeviceControl;
 };
 
 }  // namespace AI

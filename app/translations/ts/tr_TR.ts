@@ -37,22 +37,36 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="344"/>
+        <location filename="../../src/AI/Assistant.cpp" line="193"/>
+        <source>Allow AI Device Control?</source>
+        <translation>AI Cihaz Kontrolüne İzin Verilsin mi?</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Assistant.cpp" line="194"/>
+        <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
+
+Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
+        <translation>Bu, AI asistanının cihazları yapılandırmasına, bağlantıları açıp kapatmasına ve donanımınıza veri göndermesine izin verir.
+
+Otomatik onay etkinleştirildiğinde bile her cihaz eylemi sohbette açık çağrı başına onayınızı gerektirir. Bunu yalnızca yapılandırılmış AI sağlayıcısına donanım erişimi konusunda güveniyorsanız etkinleştirin.</translation>
+    </message>
+    <message>
+        <location filename="../../src/AI/Assistant.cpp" line="393"/>
         <source>Switch AI provider?</source>
         <translation>AI sağlayıcısı değiştirilsin mi?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="345"/>
+        <location filename="../../src/AI/Assistant.cpp" line="394"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>Farklı bir sağlayıcıya geçiş mevcut konuşmayı temizler. Devam etmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="348"/>
+        <location filename="../../src/AI/Assistant.cpp" line="397"/>
         <source>Assistant</source>
         <translation>Asistan</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="385"/>
+        <location filename="../../src/AI/Assistant.cpp" line="434"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI Asistanı bu derlemede mevcut değil</translation>
     </message>
@@ -61,7 +75,7 @@
         <translation type="vanished">AI Asistanı Pro lisansı gerektirir</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="390"/>
+        <location filename="../../src/AI/Assistant.cpp" line="439"/>
         <source>Set an API key first</source>
         <translation>Önce bir API anahtarı ayarlayın</translation>
     </message>
@@ -352,23 +366,23 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
 <context>
     <name>Accelerometer</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="170"/>
-        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="171"/>
+        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="181"/>
+        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="182"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="229"/>
+        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="240"/>
         <source>G-FORCE</source>
         <translation>G-KUVVET</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="276"/>
         <source>PITCH ↕</source>
         <translation>YUNUSLAMA ↕</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="300"/>
+        <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="311"/>
         <source>ROLL ↔</source>
         <translation>YALPA ↔</translation>
     </message>
@@ -1114,27 +1128,37 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Düzenlemeleri otomatik onayla</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="655"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
+        <translation>AI'nın cihazları yapılandırmasına, bağlanıp bağlantıyı kesmesine ve veri göndermesine izin verin. Her eylem yine de onayınızı sorar.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="654"/>
+        <source>Allow device control</source>
+        <translation>Cihaz kontrolüne izin ver</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="680"/>
         <source>Manage API keys</source>
         <translation>API anahtarlarını yönet</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="676"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="701"/>
         <source>Working</source>
         <translation>Çalışıyor</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="677"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="702"/>
         <source>Ready</source>
         <translation>Hazır</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="678"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="703"/>
         <source>  •  cache %1k tok</source>
         <translation>•  önbellek %1k tok</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="679"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="704"/>
         <source>  •  cache write %1k tok</source>
         <translation>önbellek yazma %1k tok</translation>
     </message>
@@ -1442,101 +1466,150 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Kıyaslama</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="62"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="79"/>
         <source>%1 frames/s</source>
         <translation>%1 frame/s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="66"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="83"/>
         <source>%1 s</source>
         <translation>%1 s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="71"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="88"/>
         <source>n/a</source>
         <translation>yok</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="73"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="90"/>
         <source>Pass</source>
         <translation>Başarılı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="73"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="90"/>
         <source>Fail</source>
         <translation>Başarısız</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="111"/>
         <source>Hotpath Benchmark</source>
         <translation>Hotpath Kıyaslaması</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="122"/>
         <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Bu bilgisayarın Serial Studio veri hattı üzerinden frame'leri ne hızda çıkarabileceğini, ayrıştırabileceğini ve görselleştirebileceğini ölçer.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="143"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="160"/>
         <source>The interface will freeze while running</source>
         <translation>Çalışırken arayüz donacak</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="154"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="171"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Her aşama ana iş parçacığında kesintisiz çalışır, bu nedenle pencere bitene kadar yanıt vermez. Mevcut projeniz kıyaslama sona erdiğinde otomatik olarak yeniden yüklenir.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="173"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="190"/>
         <source>Frames per phase:</source>
         <translation>Aşama başına çerçeve:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="187"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="204"/>
         <source>Minimum duration:</source>
         <translation>Minimum süre:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="233"/>
+        <source>Stages</source>
+        <translation>Aşamalar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="241"/>
+        <source>Parsers</source>
+        <translation>Ayrıştırıcılar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
+        <source>Data export</source>
+        <translation>Veri dışa aktarımı</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="258"/>
+        <source>Dashboard</source>
+        <translation>Gösterge Paneli</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="270"/>
+        <source>Data</source>
+        <translation>Veri</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="280"/>
+        <source>Numeric only</source>
+        <translation>Yalnızca sayısal</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <source>Mixed (numeric + text)</source>
+        <translation>Karışık (sayısal + metin)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
+        <source>Select at least one stage and one data type to run a benchmark.</source>
+        <translation>Kıyaslama çalıştırmak için en az bir aşama ve bir veri türü seçin.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="332"/>
         <source>Running %1...</source>
         <translation>%1 Çalıştırılıyor...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
         <source>Preparing...</source>
         <translation>Hazırlanıyor...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="269"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
         <source>Pipeline</source>
         <translation>Boru Hattı</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="281"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="386"/>
         <source>Throughput</source>
         <translation>Verim</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="293"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
         <source>Time</source>
         <translation>Zaman</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="410"/>
         <source>Result</source>
         <translation>Sonuç</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
-        <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard phases are informational.</source>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="511"/>
+        <source>Run a test to see results</source>
+        <translation>Sonuçları görmek için bir test çalıştırın</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="530"/>
+        <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>Başarılı/Başarısız yalnızca veri hattı ve ayrıştırıcı aşamaları için geçerlidir (veri hattı ve Yerleşik sayısal 1024 K çerçeve/s; Yerleşik karışık 512 K; Lua sayısal 256 K; JavaScript sayısal ve Lua karışık 128 K; JavaScript karışık 64 K). Dışa aktarma ve gösterge paneli aşamaları bilgilendirme amaçlıdır.</translation>
+    </message>
+    <message>
+        <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard phases are informational.</source>
+        <translation type="vanished">Başarılı/Başarısız yalnızca veri hattı ve ayrıştırıcı aşamaları için geçerlidir (veri hattı ve Yerleşik sayısal 1024 K çerçeve/s; Yerleşik karışık 512 K; Lua sayısal 256 K; JavaScript sayısal ve Lua karışık 128 K; JavaScript karışık 64 K). Dışa aktarma ve gösterge paneli aşamaları bilgilendirme amaçlıdır.</translation>
     </message>
     <message>
         <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline and Native numeric 1024 K frames/s; Native mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard phases are informational.</source>
         <translation type="vanished">Başarılı/Başarısız durumu veri hattı ve ayrıştırıcı aşamalarına uygulanır (veri hattı ve Yerel sayısal 1024 K kare/s; Yerel karışık 512 K; Lua sayısal 256 K; JavaScript sayısal ve Lua karışık 128 K; JavaScript karışık 64 K). Dışa aktarma ve gösterge paneli aşamaları bilgilendirme amaçlıdır.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="413"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="545"/>
         <source>Copy</source>
         <translation>Kopyala</translation>
     </message>
@@ -1549,22 +1622,22 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation type="vanished">Başarılı/Başarısız yalnızca ayrıştırıcı aşamaları için geçerlidir (Lua hedef 256 K çerçeve/s, JavaScript 128 K). Dışa aktarma ve gösterge paneli aşamaları bilgilendirme amaçlıdır.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="420"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="552"/>
         <source>Clear</source>
         <translation>Temizle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="429"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="439"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
         <source>Running...</source>
         <translation>Çalışıyor...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="439"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
         <source>Run Benchmark</source>
         <translation>Kıyaslamayı Çalıştır</translation>
     </message>
@@ -1572,7 +1645,7 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
 <context>
     <name>BenchmarkRunner</name>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="187"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="256"/>
         <source>Data pipeline</source>
         <translation>Veri hattı</translation>
     </message>
@@ -1601,146 +1674,196 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation type="vanished">Yerel ayrıştırıcı (karışık)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="188"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="280"/>
         <source>Built-in parser (numeric)</source>
         <translation>Yerleşik ayrıştırıcı (sayısal)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="189"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="298"/>
         <source>Built-in parser (mixed)</source>
         <translation>Yerleşik ayrıştırıcı (karışık)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="190"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="282"/>
         <source>Lua parser (numeric)</source>
         <translation>Lua ayrıştırıcı (sayısal)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="191"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="289"/>
         <source>JavaScript parser (numeric)</source>
         <translation>JavaScript ayrıştırıcı (sayısal)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="192"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="300"/>
         <source>Lua parser (mixed)</source>
         <translation>Lua ayrıştırıcı (karışık)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="193"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="307"/>
         <source>JavaScript parser (mixed)</source>
         <translation>JavaScript ayrıştırıcı (karışık)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="194"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="323"/>
+        <source>Built-in + data export (numeric)</source>
+        <translation>Yerleşik + veri dışa aktarma (sayısal)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="330"/>
+        <source>Lua + data export (numeric)</source>
+        <translation>Lua + veri dışa aktarma (sayısal)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="337"/>
+        <source>JavaScript + data export (numeric)</source>
+        <translation>JavaScript + veri dışa aktarma (sayısal)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="346"/>
+        <source>Built-in + data export (mixed)</source>
+        <translation>Yerleşik + veri dışa aktarma (karışık)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="348"/>
         <source>Lua + data export (mixed)</source>
         <translation>Lua + veri dışa aktarma (karışık)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="195"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="355"/>
+        <source>JavaScript + data export (mixed)</source>
+        <translation>JavaScript + veri dışa aktarma (karışık)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="371"/>
+        <source>Built-in + dashboard (numeric)</source>
+        <translation>Yerleşik + gösterge paneli (sayısal)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="373"/>
         <source>Lua + dashboard (numeric)</source>
         <translation>Lua + gösterge paneli (sayısal)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="196"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
         <source>100 K frames</source>
         <translation>100 K çerçeve</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="196"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
         <source>250 K frames</source>
         <translation>250 K frame</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="196"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
         <source>500 K frames</source>
         <translation>500 K frame</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="196"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="182"/>
         <source>1 M frames</source>
         <translation>1 M frame</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="197"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
         <source>1 second</source>
         <translation>1 saniye</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="197"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
         <source>2 seconds</source>
         <translation>2 saniye</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="197"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
         <source>5 seconds</source>
         <translation>5 saniye</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="197"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="183"/>
         <source>10 seconds</source>
         <translation>10 saniye</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="225"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="200"/>
         <source>Serial Studio %1 - Hotpath Benchmark</source>
         <translation>Serial Studio %1 - Kritik Yol Kıyaslaması</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="228"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="202"/>
         <source>%1 (%2), workload: %3 frames minimum, %4 s minimum</source>
         <translation>%1 (%2), iş yükü: minimum %3 kare, minimum %4 s</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="209"/>
         <source>Pipeline</source>
         <translation>Boru Hattı</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="209"/>
         <source>Throughput</source>
         <translation>Verim</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="209"/>
         <source>Target</source>
         <translation>Hedef</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="209"/>
         <source>Time</source>
         <translation>Zaman</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="235"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="209"/>
         <source>Result</source>
         <translation>Sonuç</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="246"/>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="252"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="225"/>
         <source>%1 frames/s</source>
         <translation>%1 frame/s</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="246"/>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="248"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="219"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="221"/>
         <source>n/a</source>
         <translation>yok</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="248"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="221"/>
         <source>Pass</source>
         <translation>Başarılı</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="248"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="221"/>
         <source>Fail</source>
         <translation>Başarısız</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="254"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="227"/>
         <source>%1 s</source>
         <translation>%1 s</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="380"/>
+        <source>JavaScript + dashboard (numeric)</source>
+        <translation>JavaScript + gösterge paneli (sayısal)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="389"/>
+        <source>Built-in + dashboard (mixed)</source>
+        <translation>Yerleşik + gösterge paneli (karışık)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="391"/>
+        <source>Lua + dashboard (mixed)</source>
+        <translation>Lua + gösterge paneli (karışık)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="398"/>
+        <source>JavaScript + dashboard (mixed)</source>
+        <translation>JavaScript + gösterge paneli (karışık)</translation>
     </message>
     <message>
         <source>Showing dashboard...</source>
@@ -2922,56 +3045,139 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1289"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1407"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1357"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1475"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1419"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1487"/>
         <source>Audio Input</source>
         <translation>Ses Girişi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1298"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1424"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1366"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1492"/>
         <source>Quick Plot</source>
         <translation>Hızlı Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1099"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1145"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript dönüşümü bütçeyi aştı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1100"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1146"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Bir veri kümesi dönüşümü %1 ms'den uzun sürdü; çerçevedeki kalan veri kümeleri bir sonraki çerçeveye kadar ham değerlere döndü. Dönüşüm kodunu profilleyin veya basitleştirin.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="195"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
         <source>Frame pool exhausted</source>
         <translation>Çerçeve havuzu tükendi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Bir alt tüketici (gösterge paneli, CSV/MDF4 dışa aktarımı, oturum veritabanı veya API abonesi) çerçeveleri yeterince hızlı boşaltmıyor. Serial Studio, birikmiş işleri temizleyene kadar çerçeve başına tahsise geri dönüyor. Yoğun bir tüketiciyi devre dışı bırakın veya veri hızını azaltın.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1249"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1317"/>
         <source>Device A</source>
         <translation>Cihaz A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1305"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1373"/>
         <source>Quick Plot Data</source>
         <translation>Hızlı Grafik Verisi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1317"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1385"/>
         <source>Multiple Plots</source>
         <translation>Çoklu Grafikler</translation>
+    </message>
+</context>
+<context>
+    <name>DataModel::FrameParserModel</name>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="257"/>
+        <source>Plain text (UTF-8)</source>
+        <translation>Düz metin (UTF-8)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="257"/>
+        <source>Hexadecimal</source>
+        <translation>Onaltılık</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="257"/>
+        <source>Base64</source>
+        <translation>Base64</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="257"/>
+        <source>Binary (raw bytes)</source>
+        <translation>İkili (ham baytlar)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="265"/>
+        <source>End delimiter only</source>
+        <translation>Yalnızca bitiş sınırlayıcısı</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="266"/>
+        <source>Start + end delimiters</source>
+        <translation>Başlangıç + bitiş sınırlayıcıları</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="267"/>
+        <source>Start delimiter only</source>
+        <translation>Yalnızca başlangıç sınırlayıcısı</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="268"/>
+        <source>No delimiters (whole chunk)</source>
+        <translation>Sınırlayıcı yok (tüm parça)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="279"/>
+        <source>No Checksum</source>
+        <translation>Sağlama Toplamı Yok</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="310"/>
+        <source>Select Frame Parser Template</source>
+        <translation>Çerçeve Ayrıştırıcı Şablonu Seç</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="311"/>
+        <source>Choose a template to load:</source>
+        <translation>Yüklenecek bir şablon seçin:</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="496"/>
+        <source>Invalid hexadecimal input.</source>
+        <translation>Geçersiz onaltılık giriş.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="525"/>
+        <source>No template selected.</source>
+        <translation>Şablon seçilmedi.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="566"/>
+        <source>%1 frame(s) extracted | %2 byte(s) consumed | %3 byte(s) buffered | %4 dropped</source>
+        <translation>%1 çerçeve çıkarıldı | %2 bayt tüketildi | %3 bayt arabelleğe alındı | %4 düşürüldü</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="639"/>
+        <source>Invalid JSON: %1</source>
+        <translation>Geçersiz JSON: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="737"/>
+        <source>Parameters</source>
+        <translation>Parametreler</translation>
     </message>
 </context>
 <context>
@@ -3249,69 +3455,56 @@ Kaydedilmemiş değişiklikler kaybolur. Devam edilsin mi?</translation>
 <context>
     <name>DataModel::NativeParserEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="254"/>
         <source>Plain text (UTF-8)</source>
-        <translation>Düz metin (UTF-8)</translation>
+        <translation type="vanished">Düz metin (UTF-8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="254"/>
         <source>Hexadecimal</source>
-        <translation>Onaltılık</translation>
+        <translation type="vanished">Onaltılık</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="254"/>
         <source>Base64</source>
-        <translation>Base64</translation>
+        <translation type="vanished">Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="254"/>
         <source>Binary (raw bytes)</source>
-        <translation>İkili (ham baytlar)</translation>
+        <translation type="vanished">İkili (ham baytlar)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="262"/>
         <source>End delimiter only</source>
-        <translation>Yalnızca bitiş sınırlayıcısı</translation>
+        <translation type="vanished">Yalnızca bitiş sınırlayıcısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="263"/>
         <source>Start + end delimiters</source>
-        <translation>Başlangıç + bitiş sınırlayıcıları</translation>
+        <translation type="vanished">Başlangıç + bitiş sınırlayıcıları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="264"/>
         <source>Start delimiter only</source>
-        <translation>Yalnızca başlangıç sınırlayıcısı</translation>
+        <translation type="vanished">Yalnızca başlangıç sınırlayıcısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="265"/>
         <source>No delimiters (whole chunk)</source>
-        <translation>Sınırlayıcı yok (tüm parça)</translation>
+        <translation type="vanished">Sınırlayıcı yok (tüm parça)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="276"/>
         <source>No Checksum</source>
-        <translation>Sağlama Toplamı Yok</translation>
+        <translation type="vanished">Sağlama Toplamı Yok</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="472"/>
         <source>Invalid hexadecimal input.</source>
-        <translation>Geçersiz onaltılık girdi.</translation>
+        <translation type="vanished">Geçersiz onaltılık girdi.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="501"/>
         <source>No template selected.</source>
-        <translation>Şablon seçilmedi.</translation>
+        <translation type="vanished">Şablon seçilmedi.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="542"/>
         <source>%1 frame(s) extracted | %2 byte(s) consumed | %3 byte(s) buffered | %4 dropped</source>
-        <translation>%1 frame çıkarıldı | %2 bayt tüketildi | %3 bayt arabelleğe alındı | %4 düşürüldü</translation>
+        <translation type="vanished">%1 frame çıkarıldı | %2 bayt tüketildi | %3 bayt arabelleğe alındı | %4 düşürüldü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/NativeParserEditor.cpp" line="703"/>
         <source>Parameters</source>
-        <translation>Parametreler</translation>
+        <translation type="vanished">Parametreler</translation>
     </message>
 </context>
 <context>
@@ -3367,487 +3560,487 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2179"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2178"/>
         <source>Project Information</source>
         <translation>Proje Bilgileri</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2189"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2188"/>
         <source>Project Title</source>
         <translation>Proje Başlığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2190"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2189"/>
         <source>Untitled Project</source>
         <translation>Adsız Proje</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2191"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2190"/>
         <source>Name or description of the project</source>
         <translation>Projenin adı veya açıklaması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2416"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2415"/>
         <source>Frame Detection</source>
         <translation>Frame Algılama</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2432"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2429"/>
         <source>Frame Detection Method</source>
         <translation>Frame Algılama Yöntemi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2433"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2430"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Gelen veri frame'lerinin nasıl tanımlandığını seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2443"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2440"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Onaltılık Sınırlayıcılar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2444"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2441"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>Frame başlangıç/bitiş dizilerini onaltılık değerler olarak girin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2460"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2457"/>
         <source>Frame Start Delimiter</source>
         <translation>Frame Başlangıç Sınırlayıcısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2461"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2458"/>
         <source>e.g. /*</source>
         <translation>örn. /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2462"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2459"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>Bir veri frame'inin başlangıcını işaretleyen dizi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2474"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2471"/>
         <source>Frame End Delimiter</source>
         <translation>Çerçeve Bitiş Sınırlayıcısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2475"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2472"/>
         <source>e.g. */</source>
         <translation>örn. */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2476"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2473"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>Veri çerçevesinin sonunu işaretleyen dizi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2488"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2479"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Yük İşleme ve Doğrulama</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2499"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2490"/>
         <source>Data Conversion Method</source>
         <translation>Veri Dönüştürme Yöntemi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2500"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2491"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>Gelen ikili verinin ayrıştırmadan önce nasıl çözüleceğini seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2516"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2507"/>
         <source>Checksum Algorithm</source>
         <translation>Sağlama Toplamı Algoritması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2517"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2508"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>Çerçeveleri doğrulamak için kullanılan sağlama toplamı algoritmasını seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2209"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2208"/>
         <source>Group Information</source>
         <translation>Grup Bilgileri</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2219"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2218"/>
         <source>Group Title</source>
         <translation>Grup Başlığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2220"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2219"/>
         <source>Untitled Group</source>
         <translation>Adsız Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2221"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2220"/>
         <source>Title or description of this dataset group</source>
         <translation>Bu veri kümesi grubunun başlığı veya açıklaması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2354"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2353"/>
         <source>Composite Widget</source>
         <translation>Bileşik Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2355"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2354"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>Bu veri kümesi grubunun nasıl görselleştirileceğini seçin (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2271"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2270"/>
         <source>Image Configuration</source>
         <translation>Görüntü Yapılandırması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3115"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3098"/>
         <source>Virtual Dataset</source>
         <translation>Sanal Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3116"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3099"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>Sanal veri kümeleri değerlerini dönüşümler ve veri tablolarından hesaplar, çerçeve indeksi gerektirmez</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3599"/>
         <source>Auto-detect</source>
         <translation>Otomatik Algıla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3617"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3599"/>
         <source>Manual Delimiters</source>
         <translation>Manuel Sınırlayıcılar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2284"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2283"/>
         <source>Detection Mode</source>
         <translation>Algılama Modu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1312"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1315"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1311"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1314"/>
         <source>Frame Parser</source>
         <translation>Çerçeve Ayrıştırıcı</translation>
     </message>
     <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1454"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1455"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1456"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1500"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1499"/>
         <source>Groups</source>
         <translation>Gruplar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1529"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1542"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1543"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1544"/>
         <source>Shared Memory</source>
         <translation>Paylaşılan Bellek</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1529"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1549"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1550"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1551"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4987"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4969"/>
         <source>Dataset Values</source>
         <translation>Veri Kümesi Değerleri</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1594"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1593"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1606"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1607"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1608"/>
         <source>Workspaces</source>
         <translation>Çalışma Alanları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1646"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1645"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1648"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1649"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1650"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Yayıncı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1699"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1698"/>
         <source>Publishing</source>
         <translation>Yayınlama</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1710"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1709"/>
         <source>Enable Publishing</source>
         <translation>Yayınlamayı Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1711"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1710"/>
         <source>Broadcast frames, raw bytes and notifications to the broker</source>
         <translation>Frame'leri, ham baytları ve bildirimleri broker'a yayınla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1722"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1721"/>
         <source>Payload</source>
         <translation>Yük</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1723"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1722"/>
         <source>Selects what gets published: parsed dashboard data or raw RX bytes</source>
         <translation>Neyin yayınlanacağını seçer: ayrıştırılmış gösterge paneli verisi veya ham RX baytları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1733"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1732"/>
         <source>Publish Rate (Hz)</source>
         <translation>Yayınlama Hızı (Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1734"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1733"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
         <translation>Saniyede kaç kez yayınlanacağı (1-30 Hz). Yüksek hızlar broker yükünü artırır; gösterge paneli verisi hız sınırlıdır, böylece yavaş bir broker asla frame ayrıştırmayı engellemez.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1746"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1745"/>
         <source>Topic Base</source>
         <translation>Topic Tabanı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1747"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1746"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/cihaz</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1748"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1747"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>Çerçeve ve ham bayt yayını için kullanılan temel konu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1759"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1758"/>
         <source>Script Topic</source>
         <translation>Betik Konusu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1760"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1784"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1759"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1783"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>Boş olduğunda Temel Konu kullanılır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1761"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1760"/>
         <source>Topic the user script publishes to</source>
         <translation>Kullanıcı betiğinin yayın yaptığı konu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1771"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1770"/>
         <source>Publish Notifications</source>
         <translation>Bildirimleri Yayınla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1772"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1771"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>Gösterge paneli bildirimlerini özel bir konuya yansıt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1783"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1782"/>
         <source>Notification Topic</source>
         <translation>Bildirim Konusu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1785"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1784"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>Gösterge paneli bildirimlerinin yansıtıldığı konu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1798"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1797"/>
         <source>Broker</source>
         <translation>Broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1807"/>
         <source>Hostname</source>
         <translation>Sunucu Adı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1809"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1808"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1810"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1809"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>MQTT broker'ının sunucu adı veya IP adresi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1819"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1818"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1820"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1819"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>Broker tarafından sunulan TCP portu (1883 düz, 8883 TLS)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1830"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1829"/>
         <source>Custom Client ID</source>
         <translation>Özel İstemci ID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1832"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1831"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>Kapalı: her proje yüklemesinde yeni rastgele bir id oluşturulur. Açık: aşağıdaki id kullanılır.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1843"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1842"/>
         <source>Client ID</source>
         <translation>İstemci ID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1844"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1843"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>CONNECT sırasında broker'a gönderilen tanımlayıcı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1857"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1856"/>
         <source>Protocol Version</source>
         <translation>Protokol Sürümü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1858"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1857"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>CONNECT sırasında kullanılan MQTT protokol sürümü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1867"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1866"/>
         <source>Keep Alive (s)</source>
         <translation>Canlı Tut (s)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1868"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1867"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>Boşta iken PINGREQ paketleri arasındaki saniye</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1877"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1876"/>
         <source>Clean Session</source>
         <translation>Temiz Oturum</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1878"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1877"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>CONNECT sırasında kalıcı oturum durumunu sil</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1893"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1892"/>
         <source>Username</source>
         <translation>Kullanıcı Adı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1894"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1893"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>Broker kimlik doğrulaması için kullanıcı adı (anonim için boş bırakın)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1904"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1903"/>
         <source>Password</source>
         <translation>Parola</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1905"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1904"/>
         <source>Password for broker authentication</source>
         <translation>Broker kimlik doğrulaması için parola</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1916"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1915"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1926"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1925"/>
         <source>Use SSL/TLS</source>
         <translation>SSL/TLS Kullan</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1927"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1926"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Broker bağlantısını TLS üzerinden tünelle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1940"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1939"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1941"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1940"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Müzakere edilen TLS protokol ailesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1951"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1950"/>
         <source>Peer Verify</source>
         <translation>Eş Doğrulama</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1952"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1951"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Broker'ın sertifika zincirinin ne kadar katı doğrulandığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1962"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1961"/>
         <source>Verify Depth</source>
         <translation>Doğrulama Derinliği</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1963"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1962"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Kabul edilen maksimum sertifika zinciri uzunluğu (0 = sınırsız)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2236"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2850"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2235"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2833"/>
         <source>Device %1</source>
         <translation>Cihaz %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2254"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2253"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2374"/>
         <source>Input Device</source>
         <translation>Giriş Aygıtı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2255"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2254"/>
         <source>Select which connected device provides data for this group</source>
         <translation>Bu grup için hangi bağlı cihazın veri sağlayacağını seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2286"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2285"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>Otomatik algılama JPEG/PNG sihirli baytlarını okur; Manuel açık başlangıç/bitiş dizileri kullanır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2296"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2295"/>
         <source>Start Sequence (Hex)</source>
         <translation>Başlangıç Dizisi (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2297"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2296"/>
         <source>e.g. FF D8 FF</source>
         <translation>örn. FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2298"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2297"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>Görüntü çerçevesinin başlangıcını işaretleyen onaltılık baytlar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2307"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2306"/>
         <source>End Sequence (Hex)</source>
         <translation>Bitiş Dizisi (Onaltılık)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2308"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2307"/>
         <source>e.g. FF D9</source>
         <translation>örn. FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2309"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2308"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>Görüntü çerçevesinin sonunu işaretleyen onaltılık baytlar</translation>
     </message>
@@ -3856,409 +4049,409 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Kimlik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2385"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2384"/>
         <source>Device Name</source>
         <translation>Cihaz Adı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2386"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2385"/>
         <source>Device 1</source>
         <translation>Cihaz 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2387"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2386"/>
         <source>Human-readable name for this input device</source>
         <translation>Bu giriş aygıtı için okunabilir ad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2396"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2395"/>
         <source>Bus Type</source>
         <translation>Veri Yolu Türü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2397"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2396"/>
         <source>Select the hardware interface for this input device</source>
         <translation>Bu giriş aygıtı için donanım arayüzünü seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2398"/>
         <source>Serial Port</source>
         <translation>Seri Port</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2398"/>
         <source>Network Socket</source>
         <translation>Ağ Soketi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2398"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
         <source>Audio Input</source>
         <translation>Ses Girişi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
         <source>Raw USB</source>
         <translation>Ham USB</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
         <source>HID Device</source>
         <translation>HID Aygıtı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
         <source>Process</source>
         <translation>İşlem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT Abonesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2569"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2559"/>
         <source>Connection Settings</source>
         <translation>Bağlantı Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2817"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3091"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4678"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2800"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3074"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4660"/>
         <source>General Information</source>
         <translation>Genel Bilgiler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2826"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2809"/>
         <source>Action Title</source>
         <translation>Eylem Başlığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2828"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2811"/>
         <source>Untitled Action</source>
         <translation>Başlıksız Eylem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2829"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2812"/>
         <source>Name or description of this action</source>
         <translation>Bu eylemin adı veya açıklaması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2838"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2821"/>
         <source>Action Icon</source>
         <translation>Eylem Simgesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2839"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2822"/>
         <source>Default Icon</source>
         <translation>Varsayılan Simge</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2840"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2823"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>Panoda bu eylem için görüntülenen simge</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2868"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2851"/>
         <source>Target Device</source>
         <translation>Hedef Cihaz</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2869"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2852"/>
         <source>Select which connected device this action sends data to</source>
         <translation>Bu eylemin veri göndereceği bağlı cihazı seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2881"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2864"/>
         <source>Data Payload</source>
         <translation>Veri Yükü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2892"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2875"/>
         <source>Send as Binary</source>
         <translation>İkili Olarak Gönder</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2893"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2876"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>Bu eylem tetiklendiğinde ham ikili veri gönder</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2904"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2916"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2887"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2899"/>
         <source>Command</source>
         <translation>Komut</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2905"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2888"/>
         <source>Transmit Data (Hex)</source>
         <translation>Veri İlet (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2906"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2889"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Eylem tetiklendiğinde gönderilecek onaltılık yük</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2917"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2900"/>
         <source>Transmit Data</source>
         <translation>Veri İlet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2918"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2901"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Eylem tetiklendiğinde gönderilecek metin yükü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2929"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4737"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2912"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4719"/>
         <source>Text Encoding</source>
         <translation>Metin Kodlaması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2930"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2913"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>Metin yükünü serileştirmek için kullanılan karakter kodlaması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2954"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2937"/>
         <source>End-of-Line Sequence</source>
         <translation>Satır Sonu Dizisi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2955"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2938"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>Mesaja eklenecek EOL karakterleri (örn. </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2967"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2950"/>
         <source>Execution Behavior</source>
         <translation>Yürütme Davranışı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2978"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2961"/>
         <source>Auto-Execute on Connect</source>
         <translation>Bağlantıda Otomatik Yürüt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2979"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2962"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>Cihaz bağlandığında bu eylemi otomatik olarak tetikle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2985"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2968"/>
         <source>Timer Behavior</source>
         <translation>Zamanlayıcı Davranışı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2994"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2977"/>
         <source>Timer Mode</source>
         <translation>Zamanlayıcı Modu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2997"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2980"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>Bu eylemin ne zaman ve nasıl otomatik olarak tekrarlanacağını seç</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3004"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2987"/>
         <source>Interval (ms)</source>
         <translation>Aralık (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3008"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2991"/>
         <source>Timer Interval (ms)</source>
         <translation>Zamanlayıcı Aralığı (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3009"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2992"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>Bu eylemin her tekrarlanan tetiklemesi arasındaki milisaniye</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3016"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3020"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2999"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3003"/>
         <source>Repeat Count</source>
         <translation>Tekrar Sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3021"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3004"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>Her tetiklemede komutun kaç kez gönderileceği</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3101"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3084"/>
         <source>Untitled Dataset</source>
         <translation>Adsız Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3102"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3085"/>
         <source>Dataset Title</source>
         <translation>Veri Kümesi Başlığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3103"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3086"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Veri kümesinin adı, etiketleme ve tanımlama için kullanılır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3133"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3116"/>
         <source>Hide on Dashboard</source>
         <translation>Panoda Gizle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3134"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3117"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>Bu veri kümesinin bağımsız pano kutucuğunu gizle; painter widget değerlerini okumaya devam edebilir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3180"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3163"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Veri kümesi değer aralığının alt sınırı; widget'lar ve FFT kendi aralıkları ayarlanmadığında buna geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3193"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3176"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>Veri kümesi değer aralığının üst sınırı; widget'lar ve FFT kendi aralıkları ayarlanmadığında buna geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3253"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3236"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>Grafiklerde X eksenini sürmek için Zaman veya bir veri kümesi seçin</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3266"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3249"/>
         <source>Frequency Analysis</source>
         <translation>Frekans Analizi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3314"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3297"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>Zaman (varsayılan) veya Y eksenini yönlendiren herhangi bir veri kümesi seçin -- örneğin RPM'e bağlandığında Campbell diyagramı üretir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3365"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3454"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3348"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3437"/>
         <source>Minimum Value (optional)</source>
         <translation>Maksimum Değer (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3366"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3349"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Veri normalizasyonu için alt sınır; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3378"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3467"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3361"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3450"/>
         <source>Maximum Value (optional)</source>
         <translation>Minimum Değer (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3379"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3362"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>Veri normalizasyonu için üst sınır; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3455"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3438"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Gösterge veya çubuk aralığının alt sınırı; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3468"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3451"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>Gösterge veya çubuk aralığının üst sınırı; ayarlanmadığında veri kümesi değer aralığına geri döner</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3615"/>
         <source>Painter Widget</source>
         <translation>Painter Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4988"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4970"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
         <translation>Her veri kümesi için ham ve dönüştürülmüş değerler (salt okunur)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4998"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4980"/>
         <source>Shared table defined in this project</source>
         <translation>Bu projede tanımlanan paylaşılan tablo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5350"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5332"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>Hedef grubu veya veri seti artık mevcut olmayan 1 widget referansı kaldırılsın mı?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5351"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5333"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>Hedef grupları veya veri setleri artık mevcut olmayan %1 widget referansı kaldırılsın mı?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5356"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5338"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>Bu yalnızca çalışma alanı döşeme yerleşimini etkiler; hiçbir grup, veri seti veya veri silinmez.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5359"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5341"/>
         <source>Clean Up Workspaces</source>
         <translation>Çalışma Alanlarını Temizle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3147"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3130"/>
         <source>Frame Index</source>
         <translation>Çerçeve İndeksi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3148"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3131"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Veri kümelerini zamanda hizalamak için kullanılan çerçeve konumu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3157"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3140"/>
         <source>Measurement Unit</source>
         <translation>Ölçüm Birimi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3158"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3141"/>
         <source>Volts, Amps, etc.</source>
         <translation>Volt, Amper, vb.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3159"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3142"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>Volt veya amper gibi ölçüm birimi (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3207"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3190"/>
         <source>Plot Settings</source>
         <translation>Grafik Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3230"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3213"/>
         <source>Enable Plot Widget</source>
         <translation>Grafik Widget'ını Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3232"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3215"/>
         <source>Plot data in real-time</source>
         <translation>Verileri gerçek zamanlı olarak grafikle</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3252"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3235"/>
         <source>X-Axis Source</source>
         <translation>X Ekseni Kaynağı</translation>
     </message>
@@ -4287,27 +4480,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT Yapılandırması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3277"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3260"/>
         <source>Enable FFT Analysis</source>
         <translation>FFT Analizini Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3278"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3261"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>Veri kümesinin frekans-alanı analizini gerçekleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3288"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3271"/>
         <source>Enable Waterfall Plot</source>
         <translation>Waterfall Grafiğini Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3289"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3272"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>Zaman içinde frekans içeriğinin kayan spektrogramını göster (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3313"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3296"/>
         <source>Waterfall Y Axis</source>
         <translation>Waterfall Y Ekseni</translation>
     </message>
@@ -4316,22 +4509,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Zaman (varsayılan) veya Y eksenini yönlendiren herhangi bir veri kümesi seçin — örneğin RPM'e bağlandığında Campbell diyagramı üretir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3342"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3325"/>
         <source>FFT Window Size</source>
         <translation>FFT Pencere Boyutu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3343"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3326"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>Her FFT hesaplama penceresi için kullanılan örnek sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3354"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3337"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT Örnekleme Hızı (Hz, gerekli)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3355"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3338"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>FFT için kullanılan örnekleme frekansı (Hz cinsinden)</translation>
     </message>
@@ -4352,17 +4545,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Veri normalizasyonu için üst sınır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3404"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3387"/>
         <source>Widget Settings</source>
         <translation>Widget Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3427"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3410"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3428"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3411"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Bu veri kümesini görüntülemek için kullanılan görsel widget'ı seçin</translation>
     </message>
@@ -4383,28 +4576,28 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Gösterge veya çubuk görüntüleme aralığının üst sınırı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3484"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3646"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3467"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3628"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3485"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3468"/>
         <source>Tick Count</source>
         <translation>İşaret Sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3489"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3472"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>Kadran ölçeğindeki ana işaret sayısı (0 = widget boyutuna otomatik sığdır)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3508"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3491"/>
         <source>Label Format</source>
         <translation>Etiket Biçimi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3509"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3492"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>İşaret etiketlerinde ve değer gösteriminde kullanılan ondalık basamak veya gösterim</translation>
     </message>
@@ -4445,184 +4638,184 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Değer bu eşiği aştığında görsel bir alarm tetikler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3546"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3529"/>
         <source>LED Display Settings</source>
         <translation>LED Ekran Ayarları</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3557"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3540"/>
         <source>Show in LED Panel</source>
         <translation>LED Panelinde Göster</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3558"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3541"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LED ekran kullanarak görsel durum izlemeyi etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3569"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3552"/>
         <source>LED On Threshold (required)</source>
         <translation>LED Açık Eşiği (gerekli)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3570"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3553"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>LED, değer bu eşiği karşıladığında veya aştığında yanar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
         <source>Off</source>
         <translation>Kapalı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
         <source>Auto Start</source>
         <translation>Otomatik Başlat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
         <source>Start on Trigger</source>
         <translation>Tetiklemede Başlat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
         <source>Toggle on Trigger</source>
         <translation>Tetiklemede Değiştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3575"/>
         <source>Repeat N Times</source>
         <translation>N Kez Tekrarla</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3579"/>
         <source>Plain Text (UTF8)</source>
         <translation>Düz Metin (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3579"/>
         <source>Hexadecimal</source>
         <translation>Onaltılık</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3596"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3579"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3597"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3580"/>
         <source>Binary (Direct)</source>
         <translation>İkili (Doğrudan)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3604"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3586"/>
         <source>No Checksum</source>
         <translation>Sağlama Toplamı Yok</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>End Delimiter Only</source>
         <translation>Yalnızca Bitiş Sınırlayıcısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
         <source>Start Delimiter Only</source>
         <translation>Yalnızca Başlangıç Sınırlayıcısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
         <source>Start + End Delimiter</source>
         <translation>Başlangıç + Bitiş Sınırlayıcısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
         <source>No Delimiters</source>
         <translation>Sınırlayıcı Yok</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
         <source>Button</source>
         <translation>Düğme</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
         <source>Slider</source>
         <translation>Kaydırıcı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
         <source>Toggle</source>
         <translation>Anahtar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
         <source>Text Field</source>
         <translation>Metin Alanı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3621"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3603"/>
         <source>Knob</source>
         <translation>Düğme</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3626"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3608"/>
         <source>Data Grid</source>
         <translation>Veri Tablosu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3627"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
         <source>GPS Map</source>
         <translation>GPS Haritası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3628"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
         <source>Gyroscope</source>
         <translation>Jiroskop</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3629"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3611"/>
         <source>Multiple Plot</source>
         <translation>Çoklu Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3612"/>
         <source>Accelerometer</source>
         <translation>İvmeölçer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3613"/>
         <source>3D Plot</source>
         <translation>3D Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3614"/>
         <source>Image View</source>
         <translation>Görüntü Görünümü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3634"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3638"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3655"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3616"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3637"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3639"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3621"/>
         <source>Bar</source>
         <translation>Çubuk</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3622"/>
         <source>Gauge</source>
         <translation>Gösterge</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3641"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3623"/>
         <source>Compass</source>
         <translation>Pusula</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3642"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3624"/>
         <source>Meter</source>
         <translation>Ölçer</translation>
     </message>
@@ -4631,109 +4824,109 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Termometre</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3647"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3629"/>
         <source>Integer (0 decimals)</source>
         <translation>Tamsayı (0 ondalık)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3648"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
         <source>1 decimal</source>
         <translation>1 ondalık</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3649"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
         <source>2 decimals</source>
         <translation>2 ondalık</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
         <source>3 decimals</source>
         <translation>3 ondalık</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3651"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
         <source>Scientific</source>
         <translation>Bilimsel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3656"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3638"/>
         <source>New Line (\n)</source>
         <translation>Yeni Satır (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3657"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3639"/>
         <source>Carriage Return (\r)</source>
         <translation>Satırbaşı (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3658"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3662"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3644"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3663"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3645"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4688"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4670"/>
         <source>Label</source>
         <translation>Etiket</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4689"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4671"/>
         <source>Display label</source>
         <translation>Görüntüleme etiketi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4699"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4681"/>
         <source>Button Icon</source>
         <translation>Düğme Simgesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4708"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4690"/>
         <source>Colorize Icon</source>
         <translation>Simgeyi Renklendir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4709"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4691"/>
         <source>Tint the icon with the button color</source>
         <translation>Simgeyi düğme rengiyle boyayın</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4726"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4708"/>
         <source>Initial Value</source>
         <translation>Başlangıç Değeri</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4738"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4720"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Transmit() bir string değeri döndürdüğünde kullanılan karakter kodlaması</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4756"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4738"/>
         <source>Value Range</source>
         <translation>Değer Aralığı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3179"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4766"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3162"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4748"/>
         <source>Minimum Value</source>
         <translation>Minimum Değer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3192"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4775"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3175"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4757"/>
         <source>Maximum Value</source>
         <translation>Maksimum Değer</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4784"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4766"/>
         <source>Step Size</source>
         <translation>Adım Boyutu</translation>
     </message>
@@ -4796,17 +4989,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Örnekler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1231"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1233"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Birden fazla veri kaynağı Pro lisansı gerektirir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1232"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1234"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro, aynı anda birden fazla cihaza bağlanmaya olanak tanır. Bu özelliğin kilidini açmak için lütfen yükseltin.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1245"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1247"/>
         <source>Device %1</source>
         <translation>Cihaz %1</translation>
     </message>
@@ -4815,12 +5008,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">(Kopya)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1528"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1530"/>
         <source>Do you want to save your changes?</source>
         <translation>Değişiklikler kaydedilsin mi?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1529"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Bu projede kaydedilmemiş değişiklikler var!</translation>
     </message>
@@ -4883,119 +5076,119 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Zaman</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1280"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1282"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>"%1" veri kaynağını silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1281"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1283"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>Bu kaynağı kullanan gruplar varsayılan kaynağa taşınacaktır. Bu eylem geri alınamaz.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1568"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1570"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio Projesini Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1570"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2192"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1572"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2194"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio Proje Dosyaları (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1592"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1828"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1594"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1830"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2185"/>
         <source>Untitled Project</source>
         <translation>Adsız Proje</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1838"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2344"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1840"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2346"/>
         <source>Device A</source>
         <translation>Cihaz A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2012"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2014"/>
         <source>Select Project File</source>
         <translation>Proje Dosyası Seç</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2014"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2016"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Proje Dosyaları (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2063"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2065"/>
         <source>JSON validation error</source>
         <translation>JSON doğrulama hatası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2158"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2160"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>Proje önceki bir dosya formatından yükseltildi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2159"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2161"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>Bu proje şema sürümü %1 ile kaydedildi; mevcut sürüm %2. Yeni alanlara varsayılanlar uygulandı. Yükseltmeyi kalıcı yapmak için projeyi kaydedin.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2190"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2192"/>
         <source>Save Imported Project</source>
         <translation>İçe Aktarılan Projeyi Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2389"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2391"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Çoklu kaynak projeleri Pro lisansı gerektirir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2390"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2392"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Bu proje birden fazla veri kaynağı içeriyor. Yalnızca ilk kaynak yüklendi. Çoklu kaynak projelerini kullanmak için Serial Studio Pro lisansı gereklidir.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2626"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2628"/>
         <source>Workspace IDs remapped on load</source>
         <translation>Çalışma Alanı Kimlikleri yüklemede yeniden eşlendi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2627"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2629"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 özel çalışma alanı kimliği yeni ayrılmış otomatik aralıkla çakıştı ve kullanıcı aralığına taşındı. Yeniden eşlemeyi kalıcı hale getirmek için projeyi kaydedin.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2772"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2774"/>
         <source>Legacy frame parser function updated</source>
         <translation>Eski çerçeve ayrıştırıcı fonksiyonu güncellendi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2773"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2775"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Projeniz 'separator' argümanlı eski bir çerçeve ayrıştırıcı işlevi kullanıyordu. Yeni biçime otomatik olarak taşındı.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2973"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2975"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>"%1" grubunu silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2974"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3025"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3060"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3827"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2976"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3027"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3062"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3829"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Bu eylem geri alınamaz. Devam etmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3024"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3026"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>"%1" eylemini silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3059"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3061"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>"%1" veri kümesini silmek istiyor musunuz?</translation>
     </message>
@@ -5004,78 +5197,78 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">%1 (Kopya)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3735"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3774"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3737"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3776"/>
         <source>Output Controls</source>
         <translation>Çıkış Kontrolleri</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3787"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3789"/>
         <source>New Button</source>
         <translation>Yeni Düğme</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3790"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3792"/>
         <source>New Slider</source>
         <translation>Yeni Kaydırıcı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3793"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3795"/>
         <source>New Toggle</source>
         <translation>Yeni Anahtar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3796"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3798"/>
         <source>New Text Field</source>
         <translation>Yeni Metin Alanı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3799"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3801"/>
         <source>New Knob</source>
         <translation>Yeni Düğme</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3826"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3828"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>"%1" çıkış widget'ını silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3999"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4001"/>
         <source>Group</source>
         <translation>Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4018"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4020"/>
         <source>New Dataset</source>
         <translation>Yeni Veri Kümesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4021"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4023"/>
         <source>New Plot</source>
         <translation>Yeni Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4025"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4027"/>
         <source>New FFT Plot</source>
         <translation>Yeni FFT Grafiği</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4029"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4031"/>
         <source>New Level Indicator</source>
         <translation>Yeni Seviye Göstergesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4033"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4035"/>
         <source>New Gauge</source>
         <translation>Yeni Gösterge</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4037"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4039"/>
         <source>New Compass</source>
         <translation>Yeni Pusula</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4043"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4045"/>
         <source>New Meter</source>
         <translation>Yeni Ölçer</translation>
     </message>
@@ -5084,245 +5277,245 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Yeni Termometre</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4047"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4049"/>
         <source>New LED Indicator</source>
         <translation>Yeni LED Göstergesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4053"/>
         <source>New Waterfall</source>
         <translation>Yeni Waterfall</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4121"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4123"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4194"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4196"/>
         <source>New Action</source>
         <translation>Yeni Eylem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4337"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4339"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Grup düzeyindeki widget'ı değiştirmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4339"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4341"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Bu gruba ait mevcut veri kümeleri silinir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4403"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4404"/>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="4405"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4406"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4407"/>
         <source>Accelerometer %1</source>
         <translation>İvmeölçer %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4420"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4420"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4420"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4422"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4422"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4422"/>
         <source>Gyro %1</source>
         <translation>Jiroskop %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4435"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4437"/>
         <source>Latitude</source>
         <translation>Enlem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4435"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4437"/>
         <source>Longitude</source>
         <translation>Boylam</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4435"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4437"/>
         <source>Altitude</source>
         <translation>Yükseklik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4450"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4464"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4452"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4466"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4450"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4464"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4452"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4466"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4450"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4464"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4452"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4466"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4739"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5635"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4741"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5637"/>
         <source>Workspace</source>
         <translation>Çalışma Alanı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4905"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5112"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4907"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5114"/>
         <source>Shared Table</source>
         <translation>Paylaşılan Tablo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4987"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
         <source>register</source>
         <translation>kayıt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5112"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5114"/>
         <source>New Shared Table</source>
         <translation>Yeni Paylaşılan Tablo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5112"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5149"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5200"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5219"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5242"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5265"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5635"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5656"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5114"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5132"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5151"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5175"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5202"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5221"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5244"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5267"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5637"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5658"/>
         <source>Name:</source>
         <translation>Ad:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5132"/>
         <source>Rename Table</source>
         <translation>Tabloyu Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5149"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5151"/>
         <source>Rename Group</source>
         <translation>Grubu Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5173"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5175"/>
         <source>Rename Dataset</source>
         <translation>Veri Kümesini Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5200"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5202"/>
         <source>Rename Data Source</source>
         <translation>Veri Kaynağını Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5221"/>
         <source>Rename Action</source>
         <translation>Eylemi Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5241"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5243"/>
         <source>New Register</source>
         <translation>Yeni Kayıt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5265"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5267"/>
         <source>Rename Register</source>
         <translation>Kaydı Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5304"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5329"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5306"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5331"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6185"/>
         <source>This action cannot be undone.</source>
         <translation>Bu işlem geri alınamaz.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5305"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5307"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Bu işlem %1 kayıt(lar)ı tabloyla birlikte kaldırır. Bu işlem geri alınamaz.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5308"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5328"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6182"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5310"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6184"/>
         <source>Delete "%1"?</source>
         <translation>"%1" Silinsin Mi?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5311"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5313"/>
         <source>Delete Table</source>
         <translation>Tabloyu Sil</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5331"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5333"/>
         <source>Delete Register</source>
         <translation>Kaydı Sil</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5355"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5357"/>
         <source>Export Table</source>
         <translation>Tabloyu Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5357"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5401"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5359"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5403"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV dosyaları (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5399"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5401"/>
         <source>Import Table</source>
         <translation>Tabloyu İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5635"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5637"/>
         <source>New Workspace</source>
         <translation>Yeni Çalışma Alanı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5656"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5658"/>
         <source>Rename Workspace</source>
         <translation>Çalışma Alanını Yeniden Adlandır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5745"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5747"/>
         <source>Overview</source>
         <translation>Genel Bakış</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5755"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5757"/>
         <source>All Data</source>
         <translation>Tüm Veriler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5939"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5941"/>
         <source>Discard workspace customisations?</source>
         <translation>Çalışma alanı özelleştirmeleri iptal edilsin mi?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5940"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5942"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Özelleştirmeyi kapatmak düzenlemelerinizi iptal eder ve çalışma alanı listesini projenin gruplarından yeniden oluşturur.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5943"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5945"/>
         <source>Customize Workspaces</source>
         <translation>Çalışma Alanlarını Özelleştir</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6185"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6187"/>
         <source>Delete Workspace</source>
         <translation>Çalışma Alanını Sil</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6526"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6528"/>
         <source>File save error</source>
         <translation>Dosya kaydetme hatası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2227"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2229"/>
         <source>File open error</source>
         <translation>Dosya açma hatası</translation>
     </message>
@@ -8843,12 +9036,12 @@ Cihaz, etkin yapılandırmasında veri uç noktalarını sunmuyor olabilir veya 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="314"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="358"/>
         <source>Frames dropped</source>
         <translation>Düşürülen çerçeveler</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="316"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="360"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>Gelen veriler Serial Studio'nun işleyebileceğinden daha hızlı geliyor; %1 çerçeve düşürüldü. Veri hızını azaltın veya ağır bir tüketiciyi devre dışı bırakın.</translation>
     </message>
@@ -11552,7 +11745,7 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation type="vanished">Enterpolasyon Yap</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="249"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="261"/>
         <source>Interpolation: %1</source>
         <translation>Enterpolasyon: %1</translation>
     </message>
@@ -11561,47 +11754,47 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation type="vanished">Lejantları Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="271"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="283"/>
         <source>Show X Axis Label</source>
         <translation>X Ekseni Etiketini Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="282"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="294"/>
         <source>Show Y Axis Label</source>
         <translation>Y Ekseni Etiketini Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="294"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="306"/>
         <source>Show Crosshair</source>
         <translation>Artı İşaretini Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="301"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="313"/>
         <source>Pause</source>
         <translation>Duraklat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="301"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="313"/>
         <source>Resume</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="318"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="330"/>
         <source>Sweep / Trigger Mode</source>
         <translation>Tarama / Tetikleme Modu</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="330"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="342"/>
         <source>Trigger Settings</source>
         <translation>Tetikleme Ayarları</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="354"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="366"/>
         <source>Reset View</source>
         <translation>Görünümü Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="360"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="372"/>
         <source>Axis Range Settings</source>
         <translation>Eksen Aralığı Ayarları</translation>
     </message>
@@ -11613,129 +11806,135 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="365"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="292"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="430"/>
         <source>Bytes per value</source>
         <translation>Değer başına bayt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="366"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="293"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="431"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Her kanal değerine birleştirilen bayt sayısı.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="374"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="301"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="439"/>
         <source>Endianness</source>
         <translation>Bayt Sırası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="375"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="302"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="440"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Çok baytlı değerler birleştirilirken kullanılan bayt sırası.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="383"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="310"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="448"/>
         <source>Signed values</source>
         <translation>İşaretli değerler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="384"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="311"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="449"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Her değeri ikinin tümleyeni işaretli olarak yorumlar.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="588"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="653"/>
         <source>Tag routing table</source>
         <translation>Etiket yönlendirme tablosu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="589"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="654"/>
         <source>Comma-separated tag:index entries, e.g. 1:0,2:1,3:2. Tags may be decimal or 0x-prefixed hex.</source>
         <translation>Virgülle ayrılmış etiket:indeks girdileri, örn. 1:0,2:1,3:2. Etiketler ondalık veya 0x önekli onaltılık olabilir.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1033"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1238"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1166"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1098"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1303"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1250"/>
         <source>Validate checksum</source>
         <translation>Sağlama toplamını doğrula</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1034"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1099"/>
         <source>Rejects messages with an invalid Fletcher checksum.</source>
         <translation>Geçersiz Fletcher sağlama toplamına sahip mesajları reddeder.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1239"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1304"/>
         <source>Rejects messages with an invalid additive checksum.</source>
         <translation>Geçersiz toplamalı sağlama toplamına sahip mesajları reddeder.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1392"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1457"/>
         <source>Protocol version</source>
         <translation>Protokol sürümü</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1393"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1458"/>
         <source>Selects the expected start marker (0xFE for v1, 0xFD for v2).</source>
         <translation>Beklenen başlangıç işaretçisini seçer (v1 için 0xFE, v2 için 0xFD).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1821"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1886"/>
         <source>Validate CRC</source>
         <translation>CRC Doğrula</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1822"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1887"/>
         <source>Rejects frames with an invalid CRC-24Q checksum.</source>
         <translation>Geçersiz CRC-24Q sağlama toplamına sahip çerçeveleri reddeder.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1997"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2062"/>
         <source>Channel count</source>
         <translation>Kanal sayısı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1998"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2063"/>
         <source>Number of output channels (registers or coils).</source>
         <translation>Çıkış kanallarının sayısı (kayıtlar veya bobinler).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2006"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2071"/>
         <source>Register offset</source>
         <translation>Kayıt ofseti</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2007"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2072"/>
         <source>Address offset subtracted from single-write echoes (40001 for legacy Modicon maps).</source>
         <translation>Tek yazma yankılarından çıkarılan adres ofseti (eski Modicon haritaları için 40001).</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2017"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2082"/>
         <source>Signed registers</source>
         <translation>İşaretli kayıtlar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2018"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2083"/>
         <source>Interprets 16-bit registers as two's-complement signed values.</source>
         <translation>16-bit kayıtları ikiye tümleyen işaretli değerler olarak yorumlar.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2325"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2390"/>
         <source>Payload layout</source>
         <translation>Yük düzeni</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2326"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2391"/>
         <source>Array emits every element in order; map routes keys through the key list.</source>
         <translation>Dizi her öğeyi sırayla yayar; harita anahtarları anahtar listesi üzerinden yönlendirir.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2336"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2401"/>
         <source>Keys (map mode)</source>
         <translation>Anahtarlar (harita modu)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2337"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2402"/>
         <source>Comma-separated map keys in channel order. Only used for the map layout.</source>
         <translation>Kanal sırasına göre virgülle ayrılmış harita anahtarları. Yalnızca harita düzeni için kullanılır.</translation>
     </message>
@@ -11780,119 +11979,139 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation>Virgülle ayrılmış kayıt alanları. Her alanın konumu kanal indeksini belirler.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="526"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="610"/>
         <source>Column widths</source>
         <translation>Sütun genişlikleri</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="527"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="611"/>
         <source>Comma-separated character counts per field. Leave empty to split on whitespace.</source>
         <translation>Her alan için virgülle ayrılmış karakter sayıları. Boşluklara göre bölmek için boş bırakın.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="535"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="619"/>
         <source>Trim whitespace</source>
         <translation>Boşlukları kırp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="536"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="620"/>
         <source>Removes padding around every sliced field.</source>
         <translation>Dilimlenen her alanın etrafındaki dolguyu kaldırır.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="665"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="814"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1282"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1710"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="749"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="898"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1366"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1794"/>
         <source>Keys (in channel order)</source>
         <translation>Anahtarlar (kanal sırasına göre)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="666"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="815"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1711"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="750"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="899"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1795"/>
         <source>Comma-separated key names. The position of each key sets its channel index.</source>
         <translation>Virgülle ayrılmış anahtar adları. Her anahtarın konumu kanal dizinini belirler.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="674"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="758"/>
         <source>Pair separator</source>
         <translation>Çift ayırıcı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="675"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="759"/>
         <source>Character between key=value pairs.</source>
         <translation>Anahtar=değer çiftleri arasındaki karakter.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="681"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="765"/>
         <source>Key-value separator</source>
         <translation>Anahtar-değer ayırıcı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="682"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="766"/>
         <source>Character between a key and its value.</source>
         <translation>Bir anahtar ile değeri arasındaki karakter.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="688"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="772"/>
         <source>Numeric values only</source>
         <translation>Yalnızca sayısal değerler</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="689"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="773"/>
         <source>Ignores pairs whose value is not a number.</source>
         <translation>Değeri sayı olmayan çiftleri yok sayar.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="931"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1015"/>
         <source>Command routing table</source>
         <translation>Komut yönlendirme tablosu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="932"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1016"/>
         <source>Semicolon-separated entries of NAME:index list, e.g. CSQ:0,1;CREG:2,3;CGATT:4.</source>
         <translation>Noktalı virgülle ayrılmış NAME:index listesi girdileri, örn. CSQ:0,1;CREG:2,3;CGATT:4.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1157"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1241"/>
         <source>Talker prefix</source>
         <translation>Konuşmacı öneki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1158"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1242"/>
         <source>Two-letter talker id, e.g. GP for GPS or GN for multi-constellation receivers.</source>
         <translation>İki harfli konuşmacı kimliği, örn. GPS için GP veya çoklu takımyıldız alıcıları için GN.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1167"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1251"/>
         <source>Rejects sentences whose *hh checksum does not match.</source>
         <translation>*hh sağlama toplamı eşleşmeyen cümleleri reddeder.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1283"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1367"/>
         <source>Comma-separated parameter names. The position of each key sets its channel index.</source>
         <translation>Virgülle ayrılmış parametre adları. Her anahtarın konumu kanal indeksini belirler.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1422"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1506"/>
         <source>Fields (in channel order)</source>
         <translation>Alanlar (kanal sırasına göre)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1423"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1507"/>
         <source>Comma-separated field names. The position of each field sets its channel index.</source>
         <translation>Virgülle ayrılmış alan adları. Her alanın konumu kanal indeksini belirler.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1543"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1627"/>
         <source>Tags (in channel order)</source>
         <translation>Etiketler (kanal sırasına göre)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1544"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1628"/>
         <source>Comma-separated tag names. The position of each tag sets its channel index.</source>
         <translation>Virgülle ayrılmış etiket isimleri. Her etiketin konumu kanal indeksini belirler.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="476"/>
+        <source>Register blocks</source>
+        <translation>Kayıt Blokları</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="477"/>
+        <source>Polled register blocks with typed, scaled entries. Written by the Modbus register map importer.</source>
+        <translation>Türlendirilmiş, ölçeklendirilmiş girişlere sahip yoklamalı kayıt blokları. Modbus kayıt haritası içe aktarıcısı tarafından yazılır.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="783"/>
+        <source>Signal map</source>
+        <translation>Sinyal Haritası</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="784"/>
+        <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
+        <translation>CAN mesajları ile sinyal bit düzenleri ve ölçeklendirmeleri. DBC içe aktarıcısı tarafından yazılır.</translation>
     </message>
 </context>
 <context>
@@ -12314,57 +12533,57 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation type="vanished">Enterpolasyon Yap</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="245"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="257"/>
         <source>Interpolation: %1</source>
         <translation>Enterpolasyon: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="258"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="270"/>
         <source>Show Area Under Plot</source>
         <translation>Grafik Altındaki Alanı Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="276"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="288"/>
         <source>Show X Axis Label</source>
         <translation>X Ekseni Etiketini Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="287"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="299"/>
         <source>Show Y Axis Label</source>
         <translation>Y Ekseni Etiketini Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="299"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="311"/>
         <source>Show Crosshair</source>
         <translation>Artı İşaretini Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="306"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="318"/>
         <source>Pause</source>
         <translation>Duraklat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="306"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="318"/>
         <source>Resume</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="323"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="335"/>
         <source>Sweep / Trigger Mode</source>
         <translation>Tarama / Tetikleme Modu</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="347"/>
         <source>Trigger Settings</source>
         <translation>Tetikleme Ayarları</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="359"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="371"/>
         <source>Reset View</source>
         <translation>Görünümü Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="365"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="377"/>
         <source>Axis Range Settings</source>
         <translation>Eksen Aralığı Ayarları</translation>
     </message>
@@ -13408,7 +13627,7 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
         <translation>Genel G/Ç hatası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="256"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="284"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Ayrıştırıcı Devre Dışı</translation>
@@ -13451,7 +13670,7 @@ Muhtemel neden: betik gövdesinde sonsuz döngü veya son derece yavaş işlem. 
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="488"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="406"/>
         <source>Missing Parse Function</source>
         <translation>Eksik Parse Fonksiyonu</translation>
@@ -13468,7 +13687,7 @@ Lütfen kodunuzun şunu içerdiğinden emin olun:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="542"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="469"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse Fonksiyonu Çalışma Zamanı Hatası</translation>
@@ -13487,7 +13706,7 @@ Please fix the error in the function body.</source>
 Lütfen fonksiyon gövdesindeki hatayı düzeltin.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="257"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="274"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -13496,12 +13715,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Muhtemel neden: betik gövdesinde sonsuz döngü veya son derece yavaş işlem. Ayrıştırmayı yeniden etkinleştirmek için betiği düzeltin ve projeyi yeniden yükleyin.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="427"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="444"/>
         <source>JavaScript Timed Out</source>
         <translation>Javascript Zaman Aşımına Uğradı</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="428"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="445"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -13510,12 +13729,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 Olası neden: betiğin en üst düzeyinde sonsuz döngü.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="446"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="463"/>
         <source>JavaScript Syntax Error</source>
         <translation>Javascript Sözdizimi Hatası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="447"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="464"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -13524,12 +13743,12 @@ Olası neden: betiğin en üst düzeyinde sonsuz döngü.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="462"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
         <source>JavaScript Exception Occurred</source>
         <translation>Javascript İstisnası Oluştu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="463"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="480"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -13538,7 +13757,7 @@ Olası neden: betiğin en üst düzeyinde sonsuz döngü.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="489"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="506"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -13549,7 +13768,7 @@ Lütfen kodunuzun şunu içerdiğinden emin olun:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="543"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -13562,12 +13781,12 @@ Please fix the error in the function body.</source>
 Lütfen fonksiyon gövdesindeki hatayı düzeltin.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="646"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="663"/>
         <source>Invalid Function Declaration</source>
         <translation>Geçersiz Fonksiyon Bildirimi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="647"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="664"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -13580,7 +13799,7 @@ Define one of:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="663"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="680"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>'parse' fonksiyonu en az bir parametre (frame yükü) kabul etmelidir.</translation>
     </message>
@@ -13595,7 +13814,7 @@ Beklenen format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="662"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="679"/>
         <source>Invalid Function Parameter</source>
         <translation>Geçersiz Fonksiyon Parametresi</translation>
     </message>
@@ -13610,12 +13829,12 @@ Beklenen format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="627"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="644"/>
         <source>Deprecated Function Signature</source>
         <translation>Kullanımdan Kaldırılmış Fonksiyon İmzası</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="628"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="645"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -13724,12 +13943,12 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Groq API anahtarı ayarlanmamış. Bir tane eklemek için Anahtarları Yönet'i açın.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="863"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="903"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Frame ayrıştırıcı CPU zamanının %1%'sinden fazlasını kullanıyor.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="865"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="905"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio uygulamanın yanıt vermesini sağlamak için kareleri atıyor. İş yükünü azaltmak için lütfen frame ayrıştırıcı betiğini basitleştirin veya optimize edin.</translation>
     </message>
@@ -13843,17 +14062,17 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation type="vanished">%1 satır</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="185"/>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="187"/>
         <source>The native parser configuration is not a valid JSON object.</source>
         <translation>Yerel ayrıştırıcı yapılandırması geçerli bir JSON nesnesi değil.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="195"/>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="197"/>
         <source>Unknown native parser template: "%1".</source>
         <translation>Bilinmeyen yerel ayrıştırıcı şablonu: "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="329"/>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="331"/>
         <source>Built-In Parser Error</source>
         <translation>Yerleşik Ayrıştırıcı Hatası</translation>
     </message>
@@ -15861,31 +16080,31 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
     <name>SourceFrameParserView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="116"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="255"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="353"/>
         <source>Undo</source>
         <translation>Geri Al</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="123"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="364"/>
         <source>Redo</source>
         <translation>Yinele</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="132"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="288"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="383"/>
         <source>Cut</source>
         <translation>Kes</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="137"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="299"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="393"/>
         <source>Copy</source>
         <translation>Kopyala</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="142"/>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="310"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="403"/>
         <source>Paste</source>
         <translation>Yapıştır</translation>
     </message>
@@ -15905,34 +16124,42 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Seçimi Biçimlendir</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="228"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="333"/>
         <source>Reset</source>
         <translation>Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="232"/>
-        <source>Reset template parameters to their defaults</source>
-        <translation>Şablon parametrelerini varsayılanlara sıfırla</translation>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="418"/>
+        <source>Validate</source>
+        <translation>Doğrula</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="233"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="422"/>
+        <source>Verify that the script compiles correctly</source>
+        <translation>Betiğin doğru şekilde derlendiğini doğrula</translation>
+    </message>
+    <message>
+        <source>Reset template parameters to their defaults</source>
+        <translation type="vanished">Şablon parametrelerini varsayılanlara sıfırla</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="338"/>
         <source>Reset to the default parsing script</source>
         <translation>Varsayılan ayrıştırma betiğine sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="244"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="343"/>
         <source>Open</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="250"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="348"/>
         <source>Import a script file for data parsing</source>
         <translation>Veri ayrıştırma için betik dosyası içe aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="334"/>
         <source>Open help documentation for data parsing</source>
-        <translation>Veri ayrıştırma için yardım belgelerini aç</translation>
+        <translation type="vanished">Veri ayrıştırma için yardım belgelerini aç</translation>
     </message>
     <message>
         <source>Language:</source>
@@ -15943,64 +16170,62 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Yerel</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="410"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="258"/>
         <source>Select Template…</source>
         <translation>Şablon Seç…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="261"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="358"/>
         <source>Undo the last code edit</source>
         <translation>Son kod düzenlemesini geri al</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="274"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="370"/>
         <source>Redo the previously undone edit</source>
         <translation>Geri alınan düzenlemeyi yinele</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="294"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="388"/>
         <source>Cut selected code to clipboard</source>
         <translation>Seçili kodu panoya kes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="305"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="398"/>
         <source>Copy selected code to clipboard</source>
         <translation>Seçili Kodu Panoya Kopyala</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="315"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="407"/>
         <source>Paste code from clipboard</source>
         <translation>Panodan Kod Yapıştır</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="283"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="383"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="232"/>
         <source>Platform:</source>
         <translation>Platform:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="391"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="240"/>
         <source>Built-In</source>
         <translation>Yerleşik</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="419"/>
         <source>Template:</source>
-        <translation>Şablon:</translation>
+        <translation type="vanished">Şablon:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="447"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="274"/>
         <source>Test With Sample Data</source>
         <translation>Örnek Veriyle Test Et</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="457"/>
         <source>Evaluate</source>
-        <translation>Değerlendir</translation>
+        <translation type="vanished">Değerlendir</translation>
     </message>
 </context>
 <context>
@@ -16387,12 +16612,12 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="806"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="811"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="806"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="811"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>

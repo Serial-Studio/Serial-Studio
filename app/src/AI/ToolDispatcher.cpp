@@ -1788,10 +1788,12 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
     QJsonObject error;
     error[QStringLiteral("code")]    = QStringLiteral("blocked");
     error[QStringLiteral("message")] = QStringLiteral("This command is blocked for AI safety.");
-    if (name.startsWith(QStringLiteral("io.")) || name == QStringLiteral("console.send")) {
+    if (AI::CommandRegistry::instance().isDeviceGated(name)) {
       error[QStringLiteral("repair")] =
-        QStringLiteral("Hardware writes and connection changes must be performed by the user. "
-                       "Offer to build an Output Control tile instead.");
+        QStringLiteral("Hardware writes and connection changes must be performed by the user "
+                       "unless they enable the 'Allow device control' checkbox in the AI panel. "
+                       "Offer to build an Output Control tile instead; mention the checkbox only "
+                       "if the user explicitly wants you to drive the device.");
     }
 
     QJsonObject reply;

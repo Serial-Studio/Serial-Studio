@@ -36,7 +36,7 @@ AI::CommandRegistry& AI::CommandRegistry::instance()
 /**
  * @brief Loads the safety map at first use.
  */
-AI::CommandRegistry::CommandRegistry()
+AI::CommandRegistry::CommandRegistry() : m_deviceControlAllowed(false)
 {
   load();
 }
@@ -70,6 +70,7 @@ void AI::CommandRegistry::load()
   const auto root          = result.document.object();
   const auto safe          = root.value(QStringLiteral("safe")).toArray();
   const auto blocked       = root.value(QStringLiteral("blocked")).toArray();
+  const auto deviceGated   = root.value(QStringLiteral("deviceGated")).toArray();
   const auto alwaysConfirm = root.value(QStringLiteral("alwaysConfirm")).toArray();
 
   for (const auto& entry : safe)
@@ -80,13 +81,17 @@ void AI::CommandRegistry::load()
     if (entry.isString())
       m_tags.insert(entry.toString(), Safety::Blocked);
 
+  for (const auto& entry : deviceGated)
+    if (entry.isString())
+      m_deviceGated.insert(entry.toString());
+
   for (const auto& entry : alwaysConfirm)
     if (entry.isString())
       m_tags.insert(entry.toString(), Safety::AlwaysConfirm);
 
   qCDebug(serialStudioAI) << "Loaded AI command safety tags:" << safe.size() << "safe,"
-                          << blocked.size() << "blocked," << alwaysConfirm.size()
-                          << "alwaysConfirm.";
+                          << blocked.size() << "blocked," << m_deviceGated.size() << "deviceGated,"
+                          << alwaysConfirm.size() << "alwaysConfirm.";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -98,7 +103,35 @@ void AI::CommandRegistry::load()
  */
 AI::Safety AI::CommandRegistry::safetyOf(const QString& commandName) const
 {
+  // Device-gated names track the toggle; AlwaysConfirm keeps per-call approval mandatory.
+  if (m_deviceGated.contains(commandName))
+    return m_deviceControlAllowed ? Safety::AlwaysConfirm : Safety::Blocked;
+
   return m_tags.value(commandName, Safety::Confirm);
+}
+
+/**
+ * @brief Returns whether device-gated commands are currently unblocked.
+ */
+bool AI::CommandRegistry::deviceControlAllowed() const
+{
+  return m_deviceControlAllowed;
+}
+
+/**
+ * @brief Returns whether a command belongs to the device-gated set.
+ */
+bool AI::CommandRegistry::isDeviceGated(const QString& commandName) const
+{
+  return m_deviceGated.contains(commandName);
+}
+
+/**
+ * @brief Toggles the device-control gate driven by AI::Assistant.
+ */
+void AI::CommandRegistry::setDeviceControlAllowed(bool allowed)
+{
+  m_deviceControlAllowed = allowed;
 }
 
 /**
@@ -115,7 +148,7 @@ QStringList AI::CommandRegistry::safeNames() const
 }
 
 /**
- * @brief Returns the names of all explicitly Blocked commands.
+ * @brief Returns the names of all currently Blocked commands.
  */
 QStringList AI::CommandRegistry::blockedNames() const
 {
@@ -123,6 +156,10 @@ QStringList AI::CommandRegistry::blockedNames() const
   for (auto it = m_tags.constBegin(); it != m_tags.constEnd(); ++it)
     if (it.value() == Safety::Blocked)
       result.append(it.key());
+
+  if (!m_deviceControlAllowed)
+    for (const auto& name : m_deviceGated)
+      result.append(name);
 
   return result;
 }

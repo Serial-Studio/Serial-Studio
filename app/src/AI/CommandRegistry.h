@@ -12,6 +12,7 @@
 #pragma once
 
 #include <QHash>
+#include <QSet>
 #include <QString>
 #include <QStringList>
 
@@ -37,6 +38,10 @@ public:
   [[nodiscard]] Safety safetyOf(const QString& commandName) const;
   [[nodiscard]] QStringList safeNames() const;
   [[nodiscard]] QStringList blockedNames() const;
+  [[nodiscard]] bool deviceControlAllowed() const;
+  [[nodiscard]] bool isDeviceGated(const QString& commandName) const;
+
+  void setDeviceControlAllowed(bool allowed);
 
 private:
   CommandRegistry();
@@ -47,6 +52,8 @@ private:
 
   void load();
 
+  bool m_deviceControlAllowed;
+  QSet<QString> m_deviceGated;
   QHash<QString, Safety> m_tags;
 };
 
