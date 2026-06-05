@@ -679,7 +679,7 @@ HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Res
 // Report generation
 //--------------------------------------------------------------------------------------------------
 
-// Canonical run order shared by runAndReport() and printReport().
+// Named rows: gated parser tiers plus the three lua reference rows the HOTPATH_* tokens read.
 enum ReportIndex {
   kReportData,
   kReportNative,
@@ -704,6 +704,32 @@ static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
                                                           "lua+exporters",
                                                           "lua+dashboard",
                                                           "lua+dashboard(off)"};
+
+// One ungated coverage row: an engine x {numeric,mixed} x {exporters,dashboard} combination.
+struct CoverageRow {
+  int language;
+  bool strings;
+  bool exporters;
+  bool dashboard;
+  const char* tag;
+};
+
+// The rest of the matrix the named rows do not cover; ungated, run for code-path coverage only.
+static constexpr CoverageRow kCoverageMatrix[] = {
+  {    SerialStudio::Native, false,  true, false, "native+exporters(numeric)"},
+  {       SerialStudio::Lua, false,  true, false,    "lua+exporters(numeric)"},
+  {SerialStudio::JavaScript, false,  true, false,     "js+exporters(numeric)"},
+  {    SerialStudio::Native,  true,  true, false,   "native+exporters(mixed)"},
+  {SerialStudio::JavaScript,  true,  true, false,       "js+exporters(mixed)"},
+  {    SerialStudio::Native, false, false,  true, "native+dashboard(numeric)"},
+  {SerialStudio::JavaScript, false, false,  true,     "js+dashboard(numeric)"},
+  {    SerialStudio::Native,  true, false,  true,   "native+dashboard(mixed)"},
+  {       SerialStudio::Lua,  true, false,  true,      "lua+dashboard(mixed)"},
+  {SerialStudio::JavaScript,  true, false,  true,       "js+dashboard(mixed)"},
+};
+
+static constexpr int kCoverageCount =
+  static_cast<int>(sizeof(kCoverageMatrix) / sizeof(CoverageRow));
 
 static constexpr int kReportColumns = 7;
 
@@ -738,12 +764,16 @@ static void fillReportRow(const HotpathBenchmark::Result& r, const char* tag, QS
 }
 
 /**
- * @brief Prints the per-run throughput table through the shared stdout + file sink.
+ * @brief Prints the per-run throughput table through the shared stdout + file sink. The named
+ *        rows (gated tiers + lua reference rows) print first, then the ungated coverage matrix.
  */
 template<typename PrintFn>
-static void printRunTable(const HotpathBenchmark::Result* results, const PrintFn& printData)
+static void printRunTable(const HotpathBenchmark::Result* results,
+                          const HotpathBenchmark::Result* coverage,
+                          const PrintFn& printData)
 {
   Q_ASSERT(results != nullptr);
+  Q_ASSERT(coverage != nullptr);
 
   static const QString s_headers[kReportColumns] = {QStringLiteral("Benchmark"),
                                                     QStringLiteral("Parsed"),
@@ -753,14 +783,18 @@ static void printRunTable(const HotpathBenchmark::Result* results, const PrintFn
                                                     QStringLiteral("Target"),
                                                     QStringLiteral("Result")};
 
-  QString cells[kReportCount][kReportColumns];
+  constexpr int kRowCount = kReportCount + kCoverageCount;
+  QString cells[kRowCount][kReportColumns];
   for (int i = 0; i < kReportCount; ++i)
     fillReportRow(results[i], kReportTags[i], cells[i]);
+
+  for (int i = 0; i < kCoverageCount; ++i)
+    fillReportRow(coverage[i], kCoverageMatrix[i].tag, cells[kReportCount + i]);
 
   qsizetype widths[kReportColumns];
   for (int col = 0; col < kReportColumns; ++col) {
     widths[col] = s_headers[col].size();
-    for (int row = 0; row < kReportCount; ++row)
+    for (int row = 0; row < kRowCount; ++row)
       widths[col] = qMax(widths[col], cells[row][col].size());
   }
 
@@ -783,7 +817,7 @@ static void printRunTable(const HotpathBenchmark::Result* results, const PrintFn
   printData("%s\n", separator.toUtf8().constData());
   printData("%s\n", formatRow(s_headers).toUtf8().constData());
   printData("%s\n", separator.toUtf8().constData());
-  for (int row = 0; row < kReportCount; ++row)
+  for (int row = 0; row < kRowCount; ++row)
     printData("%s\n", formatRow(cells[row]).toUtf8().constData());
 
   printData("%s\n", separator.toUtf8().constData());
@@ -794,10 +828,12 @@ static void printRunTable(const HotpathBenchmark::Result* results, const PrintFn
  *        passed.
  */
 bool HotpathBenchmark::printReport(const Result* results,
+                                   const Result* coverage,
                                    const StageBreakdown& stages,
                                    const QString& outputFile)
 {
   Q_ASSERT(results != nullptr);
+  Q_ASSERT(coverage != nullptr);
 
   QFile file(outputFile);
   const bool fileOpen  = !outputFile.isEmpty() && file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -808,7 +844,7 @@ bool HotpathBenchmark::printReport(const Result* results,
       file.write(line);
   };
 
-  printRunTable(results, printData);
+  printRunTable(results, coverage, printData);
 
   const Result& data      = results[kReportData];
   const Result& native    = results[kReportNative];
@@ -893,7 +929,8 @@ bool HotpathBenchmark::printReport(const Result* results,
 }
 
 /**
- * @brief Runs the gated data, Lua/JS numeric + mixed, exporter, and dashboard pipelines.
+ * @brief Runs the gated data + parser tiers, then the full ungated export x dashboard x engine
+ *        coverage matrix so PGO training and CI exercise every consumer/engine combination.
  */
 SS_NO_PGO
 int HotpathBenchmark::runAndReport(quint64 targetFrames,
@@ -931,7 +968,15 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
   results[kReportLuaDoff] =
     run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, false, false, true, false);
 
-  const int code = printReport(results, stages, outputFile) ? EXIT_SUCCESS : EXIT_FAILURE;
+  // The rest of the matrix: ungated, run purely to exercise each remaining code path for PGO.
+  Result coverage[kCoverageCount] = {};
+  for (int i = 0; i < kCoverageCount; ++i) {
+    const CoverageRow& row = kCoverageMatrix[i];
+    coverage[i] =
+      run(targetFrames, 1.0, minSeconds, row.language, row.exporters, row.strings, row.dashboard);
+  }
+
+  const int code = printReport(results, coverage, stages, outputFile) ? EXIT_SUCCESS : EXIT_FAILURE;
 
 #ifdef SS_PGO_INSTRUMENT
 #  if defined(__clang__)

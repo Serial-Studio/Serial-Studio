@@ -79,6 +79,7 @@ public:
 
 private:
   [[nodiscard]] static bool printReport(const Result* results,
+                                        const Result* coverage,
                                         const StageBreakdown& stages,
                                         const QString& outputFile);
   [[nodiscard]] static StageBreakdown measureNativeStages(const Result& data, const Result& native);
