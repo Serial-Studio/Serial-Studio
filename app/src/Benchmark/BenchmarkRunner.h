@@ -95,6 +95,7 @@ public:
   [[nodiscard]] QVariantList results() const;
   [[nodiscard]] QStringList frameOptions() const;
   [[nodiscard]] QStringList secondsOptions() const;
+  [[nodiscard]] Q_INVOKABLE QString formatCount(double value) const;
 
 public slots:
   void copyResults();

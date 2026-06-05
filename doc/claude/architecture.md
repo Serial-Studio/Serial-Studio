@@ -275,8 +275,9 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   item (source 0 included) routes through `selectSourceParserItem` →
   `SourceFrameParserView` (the old project-level `FrameParserView.qml` was dead code and
   was deleted). In native mode it swaps the code editor for `NativeParserPane.qml` (param
-  form + Markdown documentation page); the native template combo lives in the secondary
-  toolbar next to "Test With Sample Data". Per-template docs ship at
+  form + Markdown documentation page) and hides the code-editor toolbar row; the native
+  template combo lives in the secondary toolbar next to a Help button and "Test With
+  Sample Data". Per-template docs ship at
   `app/rcc/scripts/native/<id>.md` (exposed via
   `NativeParserEditor::templateDocumentation`). The bridge is
   `DataModel::NativeParserEditor` (registered as `SerialStudio.NativeParserEditor`).
@@ -464,3 +465,14 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
 - **Modbus Map Importer (Pro)**: `DataModel::ModbusMapImporter` imports CSV/XML/JSON →
   auto-generates a Modbus project; preview in `ModbusPreviewDialog.qml`. Pairs with
   `IO::Drivers::Modbus::generateRegisterGroupProject`.
+- **Importer parser output**: the Modbus map and DBC importers configure **native map
+  templates**, not generated Lua (`frameParserTemplate` = `modbus_register_map` /
+  `can_signal_map`, params = the register/signal map; `MapTemplates.cpp`,
+  `mapNativeTemplates()` family). The map lives in a `NativeParamType::Json` param —
+  machine-managed, skipped by the `NativeParserEditor` form (re-import to change it).
+  Channel order = params order = dataset-index order; the importers build both from the
+  same iteration, so they can't drift. The Modbus parser keeps the driver's round-robin
+  poll cursor as latch state and resyncs on the response function code; the CAN parser
+  mirrors the Lua DBC bit semantics (BE MSB-first, LE LSB-first, Qt endian quirk flipped
+  at import). The Modbus *driver* quick-connect (`buildFrameParser`) and the Protobuf
+  importer still generate script parsers.

@@ -646,8 +646,13 @@ ColumnLayout {
               if (text === auto || text === "" || text.toLowerCase() === "auto")
                 return 0
 
-              const n = parseInt(text, 10)
-              return isNaN(n) ? 0 : n
+              try {
+                const n = Number.fromLocaleString(locale, text)
+                return isNaN(n) ? 0 : Math.round(n)
+              } catch (e) {
+                const n = parseInt(text, 10)
+                return isNaN(n) ? 0 : n
+              }
             }
 
             onValueModified: {

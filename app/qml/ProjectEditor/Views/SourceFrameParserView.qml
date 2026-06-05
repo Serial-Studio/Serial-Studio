@@ -205,7 +205,6 @@ Widgets.Pane {
       anchors.rightMargin: -10
       anchors.bottomMargin: -9
 
-
       //
       // Template selector
       //

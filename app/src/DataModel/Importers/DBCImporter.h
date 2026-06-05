@@ -105,31 +105,16 @@ private:
                                  MuxRole role,
                                  qint64 muxValue);
   QJsonObject generateProject(const QList<QCanMessageDescription>& messages);
-  QString generateFrameParser(const QList<QCanMessageDescription>& messages);
+  QJsonObject generateNativeParserParams(const QList<QCanMessageDescription>& messages);
 
-  [[nodiscard]] QString frameParserHeader(int totalSignals) const;
-  [[nodiscard]] QString frameParserExtractHelper() const;
-  [[nodiscard]] QString frameParserDispatchTable(
-    const QList<QCanMessageDescription>& messages) const;
+  [[nodiscard]] static QJsonObject signalToJson(const QCanSignalDescription& signal,
+                                                MuxRole role,
+                                                qint64 muxValue);
 
-  QString sanitizeString(const QString& str);
   QString selectGroupWidget(const QCanMessageDescription& message);
   QString selectWidgetForSignal(const QCanSignalDescription& signal);
 
   [[nodiscard]] static bool isIntegerSignal(const QCanSignalDescription& signal);
-  QString generateSignalExtraction(const QCanSignalDescription& signal);
-  QString generateMessageDecoder(const QCanMessageDescription& message, int& datasetIndex);
-  QString generateDecoderHeader(const QCanMessageDescription& message,
-                                const QCanSignalDescription* selector,
-                                int startIndex);
-  QString emitSelectorExtraction(const QCanSignalDescription& selector, int& datasetIndex);
-  QString emitPlainExtractions(const QCanMessageDescription& message,
-                               int& datasetIndex,
-                               bool& firstEmit);
-  QString emitMuxedExtractions(const QCanMessageDescription& message,
-                               const QCanSignalDescription* selector,
-                               int& datasetIndex,
-                               bool& firstEmit);
 
   [[nodiscard]] MuxRole classifyMux(const QCanSignalDescription& signal,
                                     const QCanMessageDescription& message,

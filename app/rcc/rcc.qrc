@@ -705,6 +705,7 @@
         <file>scripts/native/base64_encoded.md</file>
         <file>scripts/native/batched_sensor_data.md</file>
         <file>scripts/native/binary_tlv.md</file>
+        <file>scripts/native/can_signal_map.md</file>
         <file>scripts/native/cobs_encoded.md</file>
         <file>scripts/native/delimited.md</file>
         <file>scripts/native/fixed_width.md</file>
@@ -715,6 +716,7 @@
         <file>scripts/native/mavlink.md</file>
         <file>scripts/native/messagepack.md</file>
         <file>scripts/native/modbus.md</file>
+        <file>scripts/native/modbus_register_map.md</file>
         <file>scripts/native/nmea_0183.md</file>
         <file>scripts/native/nmea_2000.md</file>
         <file>scripts/native/raw_bytes.md</file>

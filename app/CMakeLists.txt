@@ -283,6 +283,7 @@ set(SOURCES
   src/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
   src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+  src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
   src/DataModel/Editors/FrameParserModel.cpp

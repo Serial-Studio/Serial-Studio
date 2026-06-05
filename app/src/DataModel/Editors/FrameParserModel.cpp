@@ -729,6 +729,10 @@ void DataModel::FrameParserModel::rebuildParameterModel()
 
   const auto specs = tmpl ? tmpl->params() : QList<NativeParamSpec>();
   for (const auto& spec : specs) {
+    // Structured params are importer/API-managed; the form never edits them
+    if (spec.type == NativeParamType::Json)
+      continue;
+
     auto* item = new QStandardItem();
     item->setEditable(true);
     item->setData(true, ProjectEditor::Active);

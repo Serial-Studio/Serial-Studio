@@ -35,6 +35,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLocale>
 #include <vector>
 
 #include "API/Server.h"
@@ -79,62 +80,9 @@ void __gcov_dump(void);
 
 namespace Benchmark {
 
-//--------------------------------------------------------------------------------------------------
-// Internal linkage: shared state, workload constants, and report layout
-//--------------------------------------------------------------------------------------------------
-
 static bool s_benchmarkActive           = false;
 static constexpr int kDashboardChannels = 13;
 static constexpr int kStringChannels    = 3;
-
-// Index of each run in the Result array; also drives the report row order and tag labels.
-enum ReportIndex {
-  kReportData,
-  kReportNative,
-  kReportNativeMix,
-  kReportLua,
-  kReportJs,
-  kReportLuaMix,
-  kReportJsMix,
-  kReportLuaX,
-  kReportLuaD,
-  kReportLuaDoff,
-  kReportCount
-};
-
-static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
-                                                          "native(numeric)",
-                                                          "native(mixed)",
-                                                          "lua(numeric)",
-                                                          "js(numeric)",
-                                                          "lua(mixed)",
-                                                          "js(mixed)",
-                                                          "lua+exporters",
-                                                          "lua+dashboard",
-                                                          "lua+dashboard(off)"};
-
-/**
- * @brief Prints the per-run throughput rows through the shared stdout + file sink.
- */
-template<typename PrintFn>
-static void printRunRows(const HotpathBenchmark::Result* results, const PrintFn& printData)
-{
-  Q_ASSERT(results != nullptr);
-
-  for (int i = 0; i < kReportCount; ++i) {
-    const auto& r = results[i];
-    printData("hotpath[%s]: %llu parsed, %llu skipped in %.2fs\n",
-              kReportTags[i],
-              static_cast<unsigned long long>(r.framesParsed),
-              static_cast<unsigned long long>(r.framesSkipped),
-              r.elapsedSeconds);
-    printData("hotpath[%s]: %.0f frames/s  (target %.0f)  %s\n",
-              kReportTags[i],
-              r.framesPerSecond,
-              r.minFps,
-              r.passed ? "PASS" : "FAIL");
-  }
-}
 
 // Event-loop pump interval so the dialog repaints mid-phase (macOS coalesces paints otherwise).
 static constexpr double kSpinIntervalSec = 0.016;
@@ -730,6 +678,116 @@ HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Res
 // Report generation
 //--------------------------------------------------------------------------------------------------
 
+// Canonical run order shared by runAndReport() and printReport().
+enum ReportIndex {
+  kReportData,
+  kReportNative,
+  kReportNativeMix,
+  kReportLua,
+  kReportJs,
+  kReportLuaMix,
+  kReportJsMix,
+  kReportLuaX,
+  kReportLuaD,
+  kReportLuaDoff,
+  kReportCount
+};
+
+static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
+                                                          "native(numeric)",
+                                                          "native(mixed)",
+                                                          "lua(numeric)",
+                                                          "js(numeric)",
+                                                          "lua(mixed)",
+                                                          "js(mixed)",
+                                                          "lua+exporters",
+                                                          "lua+dashboard",
+                                                          "lua+dashboard(off)"};
+
+static constexpr int kReportColumns = 7;
+
+/**
+ * @brief Formats a count with thousands separators (fixed English grouping for stable CI logs).
+ */
+[[nodiscard]] static QString groupedCount(double value)
+{
+  static const QLocale s_locale(QLocale::English);
+  return s_locale.toString(static_cast<qulonglong>(value > 0.0 ? std::llround(value) : 0));
+}
+
+/**
+ * @brief Fills one report row: ungated runs (informational tiers) show n/a target and result.
+ */
+static void fillReportRow(const HotpathBenchmark::Result& r, const char* tag, QString* cells)
+{
+  Q_ASSERT(tag != nullptr);
+  Q_ASSERT(cells != nullptr);
+
+  const bool gated = r.minFps > 1.0;
+  cells[0]         = QString::fromLatin1(tag);
+  cells[1]         = groupedCount(static_cast<double>(r.framesParsed));
+  cells[2]         = groupedCount(static_cast<double>(r.framesSkipped));
+  cells[3]         = QString::number(r.elapsedSeconds, 'f', 2);
+  cells[4]         = groupedCount(r.framesPerSecond);
+  cells[5]         = gated ? groupedCount(r.minFps) : QStringLiteral("n/a");
+  if (gated)
+    cells[6] = r.passed ? QStringLiteral("PASS") : QStringLiteral("FAIL");
+  else
+    cells[6] = QStringLiteral("n/a");
+}
+
+/**
+ * @brief Prints the per-run throughput table through the shared stdout + file sink.
+ */
+template<typename PrintFn>
+static void printRunTable(const HotpathBenchmark::Result* results, const PrintFn& printData)
+{
+  Q_ASSERT(results != nullptr);
+
+  static const QString s_headers[kReportColumns] = {QStringLiteral("Benchmark"),
+                                                    QStringLiteral("Parsed"),
+                                                    QStringLiteral("Skipped"),
+                                                    QStringLiteral("Time (s)"),
+                                                    QStringLiteral("Frames/s"),
+                                                    QStringLiteral("Target"),
+                                                    QStringLiteral("Result")};
+
+  QString cells[kReportCount][kReportColumns];
+  for (int i = 0; i < kReportCount; ++i)
+    fillReportRow(results[i], kReportTags[i], cells[i]);
+
+  qsizetype widths[kReportColumns];
+  for (int col = 0; col < kReportColumns; ++col) {
+    widths[col] = s_headers[col].size();
+    for (int row = 0; row < kReportCount; ++row)
+      widths[col] = qMax(widths[col], cells[row][col].size());
+  }
+
+  // Benchmark name and result are left-aligned; every numeric column is right-aligned
+  const auto formatRow = [&](const QString* row) {
+    QString line = QStringLiteral("|");
+    for (int col = 0; col < kReportColumns; ++col) {
+      const bool left  = (col == 0 || col == kReportColumns - 1);
+      line            += QStringLiteral(" ");
+      line += left ? row[col].leftJustified(widths[col]) : row[col].rightJustified(widths[col]);
+      line += QStringLiteral(" |");
+    }
+    return line;
+  };
+
+  QString separator = QStringLiteral("+");
+  for (int col = 0; col < kReportColumns; ++col)
+    separator += QString(widths[col] + 2, QLatin1Char('-')) + QLatin1Char('+');
+
+  printData("%s\n", separator.toUtf8().constData());
+  printData("%s\n", formatRow(s_headers).toUtf8().constData());
+  printData("%s\n", separator.toUtf8().constData());
+  for (int row = 0; row < kReportCount; ++row)
+    printData("%s\n", formatRow(cells[row]).toUtf8().constData());
+
+  printData("%s\n", separator.toUtf8().constData());
+}
+
 /**
  * @brief Prints the per-run, stage, ratio, and machine-readable readouts; true when every gate
  *        passed.
@@ -749,7 +807,7 @@ bool HotpathBenchmark::printReport(const Result* results,
       file.write(line);
   };
 
-  printRunRows(results, printData);
+  printRunTable(results, printData);
 
   const Result& data      = results[kReportData];
   const Result& native    = results[kReportNative];

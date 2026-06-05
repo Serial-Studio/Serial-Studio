@@ -110,7 +110,7 @@ private:
 
   [[nodiscard]] QVector<RegisterBlock> computeBlocks() const;
   [[nodiscard]] QJsonObject buildProject() const;
-  [[nodiscard]] QString buildFrameParser(const QVector<RegisterBlock>& blocks) const;
+  [[nodiscard]] static QJsonObject buildNativeParserParams(const QVector<RegisterBlock>& blocks);
 
   [[nodiscard]] static int registersForDataType(const QString& dataType);
   [[nodiscard]] static QString registerTypeName(quint8 type);
@@ -119,9 +119,6 @@ private:
                                                int defaultType = -1);
 
   [[nodiscard]] static QString selectDatasetWidget(const RegisterEntry& entry);
-  [[nodiscard]] static QString emitParserEntry(const RegisterEntry& entry,
-                                               const RegisterBlock& block,
-                                               int datasetIndex);
 
   QString m_filePath;
   QVector<RegisterEntry> m_registers;

@@ -21,8 +21,10 @@
 
 #include "Benchmark/BenchmarkRunner.h"
 
+#include <cmath>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QLocale>
 #include <QSysInfo>
 #include <QTimer>
 #include <QVariantMap>
@@ -163,7 +165,17 @@ QStringList BenchmarkRunner::secondsOptions() const
 }
 
 /**
- * @brief Rebuilds the workload selector strings for the active language (Translator-driven).
+ * @brief Formats a count with thousands separators, forcing grouping even in the C locale.
+ */
+QString BenchmarkRunner::formatCount(double value) const
+{
+  QLocale locale;
+  locale.setNumberOptions(locale.numberOptions() & ~QLocale::OmitGroupSeparator);
+  return locale.toString(static_cast<qulonglong>(value > 0.0 ? std::llround(value) : 0));
+}
+
+/**
+ * @brief Rebuilds every user-facing string for the active language (Translator-driven).
  */
 void BenchmarkRunner::retranslate()
 {
@@ -191,7 +203,7 @@ void BenchmarkRunner::copyResults()
   text += tr("%1 (%2), workload: %3 frames minimum, %4 s minimum")
             .arg(QSysInfo::prettyProductName(),
                  QSysInfo::currentCpuArchitecture(),
-                 QString::number(m_frames),
+                 formatCount(static_cast<double>(m_frames)),
                  QString::number(m_seconds, 'f', 0));
   text += QStringLiteral("\n\n");
   text += QStringLiteral("| %1 | %2 | %3 | %4 | %5 |\n")
@@ -205,14 +217,13 @@ void BenchmarkRunner::copyResults()
     const double seconds = SerialStudio::toDouble(row.value(QStringLiteral("seconds")));
     const double minFps  = SerialStudio::toDouble(row.value(QStringLiteral("target")));
 
-    const QString target =
-      gated ? tr("%1 frames/s").arg(QString::number(minFps, 'f', 0)) : tr("n/a");
+    const QString target = gated ? tr("%1 frames/s").arg(formatCount(minFps)) : tr("n/a");
     const QString result =
       gated ? (row.value(QStringLiteral("passed")).toBool() ? tr("Pass") : tr("Fail")) : tr("n/a");
 
     text += QStringLiteral("| %1 | %2 | %3 | %4 | %5 |\n")
               .arg(row.value(QStringLiteral("label")).toString(),
-                   tr("%1 frames/s").arg(QString::number(fps, 'f', 0)),
+                   tr("%1 frames/s").arg(formatCount(fps)),
                    target,
                    tr("%1 s").arg(QString::number(seconds, 'f', 2)),
                    result);
