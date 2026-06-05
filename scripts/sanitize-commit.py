@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# sanitize-commit.py -- Clean up and prepare Git commits
+# sanitize-commit.py -- Clean up the working tree before a commit
 #
 # Mirrors the previous bash/cmd pipeline:
 #  - Normalize file permissions on tracked files (POSIX only)
@@ -12,7 +12,8 @@
 #  - black                    -> format Python under app/, examples/, tests/, scripts/
 #  - documentation-verify.py  -> Markdown AI-narration scan
 #  - build_search_index.py    -> refresh AI assistant BM25 index
-#  - prompt to commit (Conventional Commits) and optionally push
+#
+# Sanitize only: committing and pushing are left to the developer.
 #
 # Usage:  ./scripts/sanitize-commit.py
 #
@@ -24,7 +25,6 @@
 from __future__ import annotations
 
 import os
-import re
 import shutil
 import subprocess
 import sys
@@ -35,9 +35,6 @@ SOURCE_DIRS = ("app", "doc", "examples")
 SOURCE_EXTS = (".cpp", ".h", ".c")
 SOURCE_SKIP = {"miniaudio.h", "fast_float.h"}
 PYTHON_DIRS = ("app", "examples", "tests", "scripts")
-COMMIT_PATTERN = re.compile(
-    r"^(feat|fix|chore|docs|style|refactor|perf|test)(\(.+\))?: .+"
-)
 
 
 def run(cmd, **kwargs):
@@ -148,13 +145,6 @@ def run_python_step_quiet(label: str, script: Path, *args: str) -> None:
         print(f"{script.name} found issues")
 
 
-def prompt(message: str) -> str:
-    try:
-        return input(message)
-    except EOFError:
-        return ""
-
-
 def main() -> int:
     root = repo_root()
     os.chdir(root)
@@ -205,44 +195,7 @@ def main() -> int:
     count = len(staged)
     if count == 0:
         count = len(capture(["git", "diff", "--name-only"]).splitlines())
-    print(f"{count} file(s) changed.")
-
-    answer = (
-        prompt("Do you want to commit and push these changes? [y/N] ").strip().lower()
-    )
-    if answer != "y":
-        print("Aborting.")
-        return 0
-
-    while True:
-        print()
-        print(
-            "Enter a Conventional Commit message (e.g., 'fix: correct permission issue'):"
-        )
-        msg = prompt("> ").strip()
-        if msg and COMMIT_PATTERN.match(msg):
-            break
-        print(
-            "Invalid commit message format. Use Conventional Commits (e.g., 'feat: add new thing')."
-        )
-
-    if run(["git", "add", "."]).returncode != 0:
-        print("git add failed.")
-        return 1
-
-    if run(["git", "commit", "-m", msg]).returncode != 0:
-        print("git commit failed.")
-        return 1
-
-    branch = capture(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
-    push_answer = prompt(f"Push to origin/{branch}? [y/N] ").strip().lower()
-    if push_answer == "y":
-        if run(["git", "push", "origin", branch]).returncode != 0:
-            print("git push failed.")
-            return 1
-        print("Changes pushed.")
-    else:
-        print("Changes committed but not pushed.")
+    print(f"{count} file(s) changed. Review and commit when ready.")
 
     return 0
 
