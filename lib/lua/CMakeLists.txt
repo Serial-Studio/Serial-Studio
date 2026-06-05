@@ -86,6 +86,22 @@ if(NOT MSVC)
   )
 endif()
 
+# Xcode 26's ld (ld-1267) drops a function's DWARF (__eh_frame) exception unwind
+# when it falls back from compact unwind and -flto is active (llvm-project#135888),
+# and -Wl,-keep_dwarf_unwind is a no-op there. Lua's VM throws cross-TU on any
+# error, so keep this target out of LTO entirely: -fno-lto overrides the
+# directory-level -flto=auto (INTERPROCEDURAL_OPTIMIZATION FALSE below does not),
+# producing real machine code whose codegen honors -femit-dwarf-unwind — under
+# bitcode the flag never reaches the LTO backend, which is why the previous
+# compile-only belt failed. DWARF-only unwind means no compact-unwind fallback
+# for the linker bug to mishandle.
+if(APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|AppleClang)$")
+  target_compile_options(lua54 PRIVATE
+    -fno-lto
+    -femit-dwarf-unwind=no-compact-unwind
+  )
+endif()
+
 # Disable LTO for Lua specifically — interprocedural inlining across the
 # C++-exception throw path has a track record of dropping unwind info
 # when paired with macOS ld's -dead_strip.

@@ -59,7 +59,9 @@ not an optimization:
   output must be bit-stable across builds and platforms. This is the one rule most likely to be
   "helpfully" violated.
 - **Unwind tables on every TU (non-MSVC).** `-fexceptions -funwind-tables
-  -fasynchronous-unwind-tables`, plus `-Wl,-keep_dwarf_unwind` on macOS. Lua is compiled as
+  -fasynchronous-unwind-tables`; on macOS the lua54 target additionally opts out of LTO with
+  `-fno-lto -femit-dwarf-unwind=no-compact-unwind` (Xcode 26's ld drops fallback DWARF unwind
+  under `-flto`, llvm#135888, and made `-Wl,-keep_dwarf_unwind` a no-op). Lua is compiled as
   C++ and throws across the VM stack; without unwind metadata, `--gc-sections`/`-dead_strip`
   + LTO can drop a personality routine and turn a routine Lua error into `std::terminate`. See
   [[ss-cpp-modern]] and the Lua exception-safety setup. Do not remove these to "shrink" the

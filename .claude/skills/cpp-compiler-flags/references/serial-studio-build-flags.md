@@ -22,7 +22,8 @@ GCC/MinGW.
 ### Always-on (every non-MSVC TU, when PRODUCTION_OPTIMIZATION)
 ```
 -fexceptions -funwind-tables -fasynchronous-unwind-tables      # Lua throws across the VM; see below
-# macOS link: -Wl,-keep_dwarf_unwind
+# macOS: lua54 compiles -fno-lto -femit-dwarf-unwind=no-compact-unwind (lib/lua/CMakeLists.txt) --
+# Xcode 26's ld drops fallback DWARF unwind under -flto (llvm#135888) and made -keep_dwarf_unwind a no-op
 add_compile_definitions(NDEBUG)
 ```
 
@@ -30,7 +31,7 @@ add_compile_definitions(NDEBUG)
 
 **GCC/Clang (Linux), AppleClang (macOS), Clang/GCC MinGW, IntelLLVM** (the "-O3 family"):
 ```
--O3 -funroll-loops -fomit-frame-pointer
+-O3 -funroll-loops -fomit-frame-pointer                   # macOS keeps FP: -fno-omit-frame-pointer (arm64 ABI)
 -fno-fast-math -fno-unsafe-math-optimizations            # IEEE-stable, non-negotiable
 -ffunction-sections -fdata-sections                       # paired with --gc-sections / -dead_strip
 -flto=auto                                                # unless DISABLE_LTO
@@ -183,6 +184,10 @@ Included **before** Optimization.cmake so it isn't swept into LTO/PGO. Call
   unwind can't encode RA signing (arm64e-only), so every function falls back to DWARF and
   the system unwinder fails to authenticate the signed return addresses during a throw --
   the same Lua error then aborts even though all unwind metadata is present and valid.
+- **lua54 out of LTO on macOS** -> Xcode 26's ld drops fallback DWARF unwind under `-flto`
+  (llvm#135888, open). With pac-ret off the app rides compact unwind; lua54 compiles
+  `-fno-lto` (real objects, so `-femit-dwarf-unwind=no-compact-unwind` is honored -- under
+  bitcode it never reaches the LTO backend) so no Lua throw frame depends on LTO codegen.
 - **x86-64-v2 baseline** -> runs on 2012+ CPUs; `v3`/`v4`/`native` would SIGILL on older
   hardware that the shipped binary must support.
 - **Hardening auto-on for optimized configs** -> can't accidentally ship an unhardened release.
