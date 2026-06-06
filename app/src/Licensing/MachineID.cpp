@@ -231,10 +231,35 @@ static QString readPlatformId(QString& os)
     }
   }
 
-  // Read the system UUID via WMI; native call avoids PowerShell cold-start racing the timeout.
-  uuid = readWmiComputerSystemProductUuid();
+  // DIAGNOSTIC: run both UUID sources, log raw strings, keep PowerShell value for the fingerprint.
+  const auto psTool =
+    resolveSystemTool({system32 + "WindowsPowerShell\\v1.0\\powershell.exe"}, "powershell");
+  process.start(psTool,
+                {"-ExecutionPolicy",
+                 "Bypass",
+                 "-command",
+                 "(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"});
+  process.waitForFinished();
+  const QString psUuid  = process.readAllStandardOutput().trimmed();
+  const QString wmiUuid = readWmiComputerSystemProductUuid();
 
-  id = machineGuid + uuid;
+  // Mirror the real derivation so each source's resulting machineId can be compared to 3.2.7.
+  const auto machineIdFor = [&](const QString& candidateUuid) {
+    const auto rawId = machineGuid + candidateUuid;
+    const auto data  = QString("%1@%2:%3").arg(qApp->applicationName(), rawId, os);
+    const auto hash  = QCryptographicHash::hash(data.toUtf8(), QCryptographicHash::Blake2s_128);
+    return QString::fromUtf8(hash.toBase64());
+  };
+
+  qInfo().noquote() << "[MachineID] machineGuid =[" << machineGuid << "]";
+  qInfo().noquote() << "[MachineID] PS  uuid     =[" << psUuid << "]";
+  qInfo().noquote() << "[MachineID] WMI uuid     =[" << wmiUuid << "]";
+  qInfo().noquote() << "[MachineID] PS  machineId=[" << machineIdFor(psUuid) << "]";
+  qInfo().noquote() << "[MachineID] WMI machineId=[" << machineIdFor(wmiUuid) << "]";
+  qInfo().noquote() << "[MachineID] (3.2.7 was   [ DSI+5LBOk1yBnWZFRrAQpg== ])";
+
+  uuid = psUuid;
+  id   = machineGuid + uuid;
 #endif
 
 // Obtain machine ID in OpenBSD
