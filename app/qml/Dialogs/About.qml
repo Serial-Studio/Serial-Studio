@@ -216,6 +216,24 @@ SmartDialog {
       }
 
       //
+      // What's New in this version
+      //
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("What's New")
+        onClicked: app.showWhatsNew()
+      }
+
+      //
+      // Did You Know? tips
+      //
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("Tips && Tricks")
+        onClicked: app.showTips()
+      }
+
+      //
       // License Agreement
       //
       Button {

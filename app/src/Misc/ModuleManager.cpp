@@ -63,6 +63,7 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
+#include "Misc/WhatsNew.h"
 #include "Misc/WorkspaceManager.h"
 #include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
@@ -546,6 +547,7 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
   ctx->setContextProperty("Cpp_Misc_GraphicsBackend", &Misc::GraphicsBackend::instance());
   ctx->setContextProperty("Cpp_Misc_CrashTracker", &Misc::CrashTracker::instance());
+  ctx->setContextProperty("Cpp_Misc_WhatsNew", &Misc::WhatsNew::instance());
   ctx->setContextProperty("Cpp_Misc_BackupManager", &Misc::BackupManager::instance());
   ctx->setContextProperty("Cpp_Benchmark_Runner", &Benchmark::BenchmarkRunner::instance());
 }

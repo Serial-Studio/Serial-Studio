@@ -334,31 +334,41 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <source>What's New</source>
+        <translation>Что Нового</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <source>Tips &amp;&amp; Tricks</source>
+        <translation>Советы и Хитрости</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>License Agreement</source>
         <translation>Лицензионное Соглашение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Report Bug</source>
         <translation>Сообщить об Ошибке</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Acknowledgements</source>
         <translation>Благодарности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="268"/>
         <source>Benchmark</source>
         <translation>Тест Производительности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="258"/>
+        <location filename="../../qml/Dialogs/About.qml" line="276"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="274"/>
+        <location filename="../../qml/Dialogs/About.qml" line="292"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -3045,29 +3055,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1368"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1486"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1370"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1488"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1498"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1500"/>
         <source>Audio Input</source>
         <translation>Аудиовход</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1377"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1503"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1379"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1505"/>
         <source>Quick Plot</source>
         <translation>Быстрый График</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1149"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1151"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Превышен лимит преобразования JavaScript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1150"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1152"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Преобразование набора данных заняло больше %1 мс; остальные наборы данных в кадре были возвращены в исходном виде до следующего кадра. Проанализируйте или упростите код преобразования.</translation>
     </message>
@@ -3082,17 +3092,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Один из потребителей данных (панель, экспорт CSV/MDF4, база данных сессий или подписчик API) не успевает обрабатывать кадры. Serial Studio переходит к выделению памяти для каждого кадра до устранения очереди. Отключите ресурсоёмкого потребителя или уменьшите скорость передачи данных.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1328"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1330"/>
         <source>Device A</source>
         <translation>Устройство A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1384"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1386"/>
         <source>Quick Plot Data</source>
         <translation>Данные Быстрого Графика</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1396"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1398"/>
         <source>Multiple Plots</source>
         <translation>Несколько Графиков</translation>
     </message>
@@ -9713,129 +9723,129 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="546"/>
         <source>There was an issue validating your license.</source>
         <translation>Возникла проблема при проверке вашей лицензии.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="562"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="868"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="564"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="745"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="870"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>Предоставленный лицензионный ключ не принадлежит Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="563"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Пожалуйста, убедитесь, что вы приобрели лицензию в официальном магазине Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
         <source>This license key was activated on a different device.</source>
         <translation>Этот лицензионный ключ был активирован на другом устройстве.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="575"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="753"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>Сначала деактивируйте его там или обратитесь в службу поддержки.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="763"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="588"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
         <source>This license is not currently active.</source>
         <translation>Эта лицензия в настоящее время не активна.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="587"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="589"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>Возможно, срок её действия истёк или она была деактивирована (статус: %1).</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
         <source>Something went wrong on the server.</source>
         <translation>Произошла ошибка на сервере.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="598"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="776"/>
         <source>No activation ID was returned.</source>
         <translation>Идентификатор активации не был возвращён.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
         <source>Could not validate your license at this time.</source>
         <translation>Не удалось проверить вашу лицензию в данный момент.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="609"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="879"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="611"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="785"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
         <source>Try again later.</source>
         <translation>Повторите попытку позже.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="869"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="746"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>Убедитесь, что лицензия приобретена в официальном магазине Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="775"/>
         <source>Something went wrong on the server…</source>
         <translation>Что-то пошло не так на сервере…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="631"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="680"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="682"/>
         <source>Your license has been successfully activated.</source>
         <translation>Ваша лицензия успешно активирована.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="681"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="683"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Спасибо за поддержку Serial Studio!
 Теперь вам доступны все премиум-функции.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="735"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
         <source>There was an issue activating your license.</source>
         <translation>Возникла проблема при активации лицензии.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="784"/>
         <source>Could not activate your license at this time.</source>
         <translation>Не удалось активировать лицензию в данный момент.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="859"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="861"/>
         <source>There was an issue deactivating your license.</source>
         <translation>Возникла проблема при деактивации лицензии.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="878"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>Не удалось деактивировать вашу лицензию в данный момент.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
         <source>Your license has been deactivated.</source>
         <translation>Ваша лицензия деактивирована.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Доступ к функциям Pro удалён.
@@ -13849,12 +13859,12 @@ function parse(%1) { ... }
 Параметр разделителя больше не требуется.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="188"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="189"/>
         <source>Critical</source>
         <translation>Критическая</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="188"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="189"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -16792,6 +16802,109 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
 </context>
 <context>
+    <name>Tips</name>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
+        <source>Did You Know?</source>
+        <translation>Знаете Ли Вы?</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
+        <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
+        <translation>Упростите прошивку, отправляя необработанные данные и позволяя Serial Studio обрабатывать их в JavaScript, Lua или встроенных шаблонах без кода.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
+        <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
+        <translation>Назначьте каждому каналу собственную функцию для калибровки, фильтрации или преобразования единиц. Переложите математику на Serial Studio и сохраните прошивку компактной.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
+        <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
+        <translation>Нужно значение, которое устройство не передаёт? Виртуальный набор данных вычисляет собственный канал, например мощность из напряжения и тока, с построением графиков и записью как данных.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
+        <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
+        <translation>Ловите сбои как на осциллографе. Графики по оси времени имеют режим развёртки и триггера, а уровень триггера можно перетаскивать прямо на графике.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
+        <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
+        <translation>Хватит прокручивать в поисках нужного виджета. Группируйте их в собственные рабочие области и переключайтесь между ними через поиск на панели задач.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
+        <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
+        <translation>Больше не теряйте результаты тестов. Записывайте сеансы в локальную базу данных, затем просматривайте, помечайте и воспроизводите их когда потребуется.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
+        <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
+        <translation>Передайте команде готовый отчёт за секунды. Экспортируйте любой сеанс в HTML или PDF с графиками и статистикой мин/макс/среднее.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
+        <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
+        <translation>Замкните цикл без дополнительных инструментов. Элементы управления выводом позволяют отправлять команды обратно на устройство прямо с панели управления.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
+        <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
+        <translation>Создайте визуализацию, которой нет ни у кого другого. Виджет Painter выполняет ваш собственный скрипт для отрисовки полностью настраиваемой графики из входящих данных.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
+        <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
+        <translation>Один инструмент для любого канала связи. Serial Studio читает данные из UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, аудио, USB, HID, MQTT и Process I/O.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
+        <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
+        <translation>Забудьте о танцах с терминалом. Отправляйте и получайте файлы по последовательному каналу связи с помощью встроенных протоколов XMODEM, YMODEM и ZMODEM.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
+        <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
+        <translation>Уже есть карта регистров Modbus или файл DBC? Автоматически сгенерируйте готовый к использованию проект вместо того, чтобы создавать его вручную.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
+        <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
+        <translation>Опишите, что вы хотите, и позвольте AI-ассистенту создать это. Он может создавать и редактировать проекты для вас, используя восемь провайдеров моделей.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
+        <source>Tip %1 of %2</source>
+        <translation>Совет %1 из %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
+        <source>Learn More</source>
+        <translation>Узнать Больше</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
+        <source>Show Tips on Startup</source>
+        <translation>Показывать Советы при Запуске</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
+        <source>Previous</source>
+        <translation>Предыдущий</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
+        <source>Next</source>
+        <translation>Далее</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
     <name>ToolCallCard</name>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="47"/>
@@ -17800,6 +17913,184 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <source>Start Trial</source>
         <translation>Начать Пробный Период</translation>
+    </message>
+</context>
+<context>
+    <name>WhatsNew</name>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="31"/>
+        <source>What's New in %1</source>
+        <translation>Что нового в %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="59"/>
+        <source>Lua &amp; Built-In Parsers</source>
+        <translation>Lua и Встроенные Парсеры</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="60"/>
+        <source>Parse frames in Lua 5.4 or with code-free Built-In templates, alongside JavaScript.</source>
+        <translation>Разбор фреймов на Lua 5.4 или с помощью встроенных шаблонов без кода, наряду с JavaScript.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="68"/>
+        <source>AI Assistant</source>
+        <translation>AI-ассистент</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="69"/>
+        <source>An in-app assistant across eight providers that can build and edit projects for you.</source>
+        <translation>Встроенный ассистент с поддержкой восьми провайдеров, который может создавать и редактировать проекты за вас.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="77"/>
+        <source>Oscilloscope Sweep &amp; Trigger</source>
+        <translation>Развёртка и Триггер Осциллографа</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="78"/>
+        <source>Scope-style sweep with an animated trigger cursor you can drag on the plot.</source>
+        <translation>Развёртка в стиле осциллографа с анимированным курсором триггера, который можно перетаскивать по графику.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="86"/>
+        <source>Output Controls</source>
+        <translation>Элементы Управления Выводом</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="87"/>
+        <source>Transmit back to your device with control widgets and a protocol-helper engine.</source>
+        <translation>Передавайте данные обратно на ваше устройство с помощью управляющих виджетов и движка-протокол помощника.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="95"/>
+        <source>Dashboard Workspaces</source>
+        <translation>Рабочие Пространства Панели Управления</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="96"/>
+        <source>Group widgets into your own dashboards and find them from the taskbar search.</source>
+        <translation>Группируйте виджеты в собственные панели управления и находите их через поиск на панели задач.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="104"/>
+        <source>Session Database &amp; Reports</source>
+        <translation>База Данных Сеансов и Отчёты</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="105"/>
+        <source>Record sessions to SQLite, replay them, and export HTML or PDF reports.</source>
+        <translation>Записывайте сеансы в SQLITE, воспроизводите их и экспортируйте отчёты в HTML или PDF.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="113"/>
+        <source>Operator Deployments</source>
+        <translation>Развёртывания для Операторов</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="114"/>
+        <source>Ship a locked-down, single-purpose build to operators with a runtime-only mode.</source>
+        <translation>Поставляйте защищённую, специализированную сборку операторам с режимом только для выполнения.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="122"/>
+        <source>New Dashboard Widgets</source>
+        <translation>Новые Виджеты Панели Управления</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="123"/>
+        <source>Gauge and Meter faces with live readouts, plus Clock, Stopwatch, and Waterfall.</source>
+        <translation>Циферблаты индикаторов и измерителей с живыми показаниями, а также Часы, Секундомер и Водопад.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="131"/>
+        <source>Dataset Transforms</source>
+        <translation>Преобразования Наборов Данных</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="132"/>
+        <source>Calibrate, filter, and convert each channel with a per-dataset function, or add virtual datasets that compute new channels.</source>
+        <translation>Калибруйте, фильтруйте и преобразуйте каждый канал с помощью функции для каждого набора данных или добавляйте виртуальные наборы данных для вычисления новых каналов.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="140"/>
+        <source>Painter Widget</source>
+        <translation>Виджет Рисования</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="141"/>
+        <source>Draw fully custom graphics from incoming data with your own drawing script.</source>
+        <translation>Рисуйте полностью настраиваемую графику из входящих данных с помощью собственного скрипта рисования.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="149"/>
+        <source>Data Tables</source>
+        <translation>Таблицы Данных</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="150"/>
+        <source>Live register-style tables with virtual datasets and editable cells.</source>
+        <translation>Живые таблицы в стиле регистров с виртуальными наборами данных и редактируемыми ячейками.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="158"/>
+        <source>Image Widget</source>
+        <translation>Виджет Изображения</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="159"/>
+        <source>Decode and display image frames streamed straight from your device.</source>
+        <translation>Декодируйте и отображайте кадры изображений, поступающие напрямую с вашего устройства.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="167"/>
+        <source>Notifications &amp; Alarms</source>
+        <translation>Уведомления и Оповещения</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="168"/>
+        <source>Multi-band dataset alarms with severity tiers, routed to the Notification Center.</source>
+        <translation>Многополосные оповещения по наборам данных с уровнями серьезности, направляемые в Центр Уведомлений.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="176"/>
+        <source>Project Lock</source>
+        <translation>Блокировка Проекта</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="177"/>
+        <source>Lock a project to separate operator use from editing, with an access code.</source>
+        <translation>Заблокируйте проект, чтобы разделить использование оператора и редактирование с помощью кода доступа.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="185"/>
+        <source>MQTT, Protobuf &amp; File Transfer</source>
+        <translation>MQTT, Protobuf и Передача Файлов</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="186"/>
+        <source>MQTT input and publishing, Protobuf import, and XMODEM / YMODEM / ZMODEM transfers.</source>
+        <translation>Ввод и публикация MQTT, импорт Protobuf и передача XMODEM / YMODEM / ZMODEM.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="232"/>
+        <source>Welcome to %1!</source>
+        <translation>Добро пожаловать в %1!</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="242"/>
+        <source>Here's what's new in version %1.</source>
+        <translation>Вот что нового в версии %1.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="415"/>
+        <source>Show on Startup</source>
+        <translation>Показывать при запуске</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="422"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>

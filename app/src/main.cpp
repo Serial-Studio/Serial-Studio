@@ -100,12 +100,10 @@ int main(int argc, char** argv)
 {
   setupQtApplicationMetadata();
 
-  // CLI early-exit commands are not GUI sessions; skip crash tracking so they never trip it.
   const bool cliEarlyExit = Misc::CLI::isCliEarlyExit(argc, argv);
   if (!cliEarlyExit)
     Misc::CrashTracker::instance().markStartup();
 
-  // The hotpath benchmark is display-independent; force offscreen so it runs on headless boxes.
   const bool benchmark = Misc::CLI::isBenchmarkRequested(argc, argv);
   const bool headless  = Misc::CLI::argvHasFlag(argc, argv, "--headless");
   if (headless || benchmark)

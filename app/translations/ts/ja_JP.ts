@@ -334,31 +334,41 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <source>What's New</source>
+        <translation>新機能</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <source>Tips &amp;&amp; Tricks</source>
+        <translation>ヒント &amp; テクニック</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>License Agreement</source>
         <translation>ライセンス契約</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Report Bug</source>
         <translation>バグを報告</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Acknowledgements</source>
         <translation>謝辞</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="268"/>
         <source>Benchmark</source>
         <translation>ベンチマーク</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="258"/>
+        <location filename="../../qml/Dialogs/About.qml" line="276"/>
         <source>Website</source>
         <translation>ウェブサイト</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="274"/>
+        <location filename="../../qml/Dialogs/About.qml" line="292"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
@@ -3045,29 +3055,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1368"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1486"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1370"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1488"/>
         <source>Channel %1</source>
         <translation>チャンネル %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1498"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1500"/>
         <source>Audio Input</source>
         <translation>オーディオ入力</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1377"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1503"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1379"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1505"/>
         <source>Quick Plot</source>
         <translation>クイックプロット</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1149"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1151"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript変換の上限を超えました</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1150"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1152"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>データセット変換が%1ミリ秒以上かかりました。フレーム内の残りのデータセットは次のフレームまで生データにフォールバックしました。変換コードのプロファイルまたは簡素化を検討してください。</translation>
     </message>
@@ -3082,17 +3092,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>下流のコンシューマー（ダッシュボード、CSV/MDF4エクスポート、セッションDB、API購読者）がフレームを十分な速度で処理していません。Serial Studioはバックログが解消されるまでフレームごとの割り当てにフォールバックします。負荷の高いコンシューマーを無効化するか、データレートを下げてください。</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1328"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1330"/>
         <source>Device A</source>
         <translation>デバイス A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1384"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1386"/>
         <source>Quick Plot Data</source>
         <translation>クイックプロットデータ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1396"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1398"/>
         <source>Multiple Plots</source>
         <translation>マルチプロット</translation>
     </message>
@@ -9713,129 +9723,129 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="544"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="546"/>
         <source>There was an issue validating your license.</source>
         <translation>ライセンスの検証中に問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="562"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="743"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="868"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="564"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="745"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="870"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>入力されたライセンスキーはSerial Studioのものではありません。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="563"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>公式Serial Studioストアからライセンスを購入したか再度ご確認ください。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="574"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="752"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
         <source>This license key was activated on a different device.</source>
         <translation>このライセンスキーは別のデバイスで有効化されています。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="575"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="753"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>先にそちらで無効化するか、サポートにお問い合わせください。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="586"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="763"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="588"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
         <source>This license is not currently active.</source>
         <translation>このライセンスは現在有効ではありません。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="587"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="764"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="589"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>有効期限が切れているか、無効化されている可能性があります（ステータス: %1）。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="597"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
         <source>Something went wrong on the server.</source>
         <translation>サーバー側で問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="598"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="774"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="776"/>
         <source>No activation ID was returned.</source>
         <translation>アクティベーションIDが返されませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="608"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
         <source>Could not validate your license at this time.</source>
         <translation>現在ライセンスを検証できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="609"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="783"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="879"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="611"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="785"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
         <source>Try again later.</source>
         <translation>後で再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="869"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="746"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>公式Serial Studioストアからライセンスを購入したことを再確認してください。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="773"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="775"/>
         <source>Something went wrong on the server…</source>
         <translation>サーバーで問題が発生しました…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="627"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="631"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="680"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="682"/>
         <source>Your license has been successfully activated.</source>
         <translation>ライセンスが正常に有効化されました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="681"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="683"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Serial Studioをサポートいただきありがとうございます！
 すべてのプレミアム機能にアクセスできるようになりました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="735"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
         <source>There was an issue activating your license.</source>
         <translation>ライセンスの有効化中に問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="782"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="784"/>
         <source>Could not activate your license at this time.</source>
         <translation>現在ライセンスを有効化できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="859"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="861"/>
         <source>There was an issue deactivating your license.</source>
         <translation>ライセンスの無効化中に問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="878"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>現在、ライセンスを無効化できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="889"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
         <source>Your license has been deactivated.</source>
         <translation>ライセンスが無効化されました。</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="890"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro機能へのアクセスが削除されました。
@@ -13849,12 +13859,12 @@ function parse(%1) { ... }
 セパレータパラメータは不要になりました。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="188"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="189"/>
         <source>Critical</source>
         <translation>重大</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="188"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="189"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -16792,6 +16802,109 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
 </context>
 <context>
+    <name>Tips</name>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
+        <source>Did You Know?</source>
+        <translation>ご存知ですか？</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
+        <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
+        <translation>ファームウェアは生データを送信するだけにして、JavaScript、Lua、またはコード不要のビルトインテンプレートでSerial Studioに解析させることで、シンプルに保つことができます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
+        <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
+        <translation>各チャンネルに独自の関数を割り当てて、較正、フィルタリング、単位変換を行えます。演算をSerial Studioにオフロードして、ファームウェアを軽量に保ちましょう。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
+        <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
+        <translation>デバイスが送信しない値が必要ですか？仮想データセットは、電圧と電流から電力を計算するなど、独自のチャンネルを演算し、データとしてプロットおよび記録できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
+        <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
+        <translation>ベンチオシロスコープのようにグリッチを捕捉できます。時間軸プロットにはスイープとトリガーモードがあり、プロット上で直接トリガーレベルをドラッグできます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
+        <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
+        <translation>適切なウィジェットを探してスクロールする必要はありません。独自のワークスペースにグループ化して、タスクバー検索から切り替えられます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
+        <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
+        <translation>テスト実行を二度と失わないでください。セッションをローカルデータベースに記録し、必要なときにいつでも参照、タグ付け、再生できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
+        <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
+        <translation>数秒で洗練されたレポートをチームに提供できます。任意のセッションをHTMLまたはPDFにエクスポートでき、グラフと最小/最大/平均統計が含まれます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
+        <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
+        <translation>追加のツールなしでループを完結。出力コントロールを使用すると、ダッシュボードから直接デバイスにコマンドを送信できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
+        <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
+        <translation>誰も持っていないビジュアライゼーションを構築。Painterウィジェットは独自のスクリプトを実行し、受信データから完全にカスタムなグラフィックを描画します。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
+        <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
+        <translation>あらゆるリンクに対応する1つのツール。Serial StudioはUART、TCP/UDP、Bluetooth LE、Modbus、CANバス、オーディオ、USB、HID、MQTT、プロセスI/Oから読み取ります。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
+        <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
+        <translation>ターミナル操作を省略。内蔵のXMODEM、YMODEM、ZMODEMプロトコルを使用して、シリアルリンク経由でファイルを送受信できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
+        <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
+        <translation>ModbusレジスタマップまたはDBCファイルをお持ちですか？手動で構築する代わりに、そこからすぐに使用できるプロジェクトを自動生成できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
+        <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
+        <translation>必要な内容を説明すれば、AIアシスタントが構築します。8つのモデルプロバイダーを通じて、プロジェクトの作成と編集が可能です。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
+        <source>Tip %1 of %2</source>
+        <translation>ヒント %1/%2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
+        <source>Learn More</source>
+        <translation>詳細を表示</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
+        <source>Show Tips on Startup</source>
+        <translation>起動時にヒントを表示</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
+        <source>Previous</source>
+        <translation>前へ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
+        <source>Next</source>
+        <translation>次へ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
+        <source>Close</source>
+        <translation>閉じる</translation>
+    </message>
+</context>
+<context>
     <name>ToolCallCard</name>
     <message>
         <location filename="../../qml/AI/ToolCallCard.qml" line="47"/>
@@ -17800,6 +17913,184 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <source>Start Trial</source>
         <translation>トライアル開始</translation>
+    </message>
+</context>
+<context>
+    <name>WhatsNew</name>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="31"/>
+        <source>What's New in %1</source>
+        <translation>%1 の新機能</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="59"/>
+        <source>Lua &amp; Built-In Parsers</source>
+        <translation>Lua &amp; ビルトインパーサー</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="60"/>
+        <source>Parse frames in Lua 5.4 or with code-free Built-In templates, alongside JavaScript.</source>
+        <translation>Lua 5.4またはコード不要のビルトインテンプレートでフレームを解析（JavaScriptと併用可能）</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="68"/>
+        <source>AI Assistant</source>
+        <translation>AIアシスタント</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="69"/>
+        <source>An in-app assistant across eight providers that can build and edit projects for you.</source>
+        <translation>8つのプロバイダーに対応したアプリ内アシスタントで、プロジェクトの構築と編集が可能</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="77"/>
+        <source>Oscilloscope Sweep &amp; Trigger</source>
+        <translation>オシロスコープスイープ &amp; トリガー</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="78"/>
+        <source>Scope-style sweep with an animated trigger cursor you can drag on the plot.</source>
+        <translation>プロット上でドラッグ可能なアニメーショントリガーカーソルを備えたスコープスタイルのスイープ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="86"/>
+        <source>Output Controls</source>
+        <translation>出力コントロール</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="87"/>
+        <source>Transmit back to your device with control widgets and a protocol-helper engine.</source>
+        <translation>コントロールウィジェットとプロトコルヘルパーエンジンでデバイスへ送信できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="95"/>
+        <source>Dashboard Workspaces</source>
+        <translation>ダッシュボードワークスペース</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="96"/>
+        <source>Group widgets into your own dashboards and find them from the taskbar search.</source>
+        <translation>ウィジェットを独自のダッシュボードにグループ化し、タスクバー検索から見つけられます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="104"/>
+        <source>Session Database &amp; Reports</source>
+        <translation>セッションデータベースとレポート</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="105"/>
+        <source>Record sessions to SQLite, replay them, and export HTML or PDF reports.</source>
+        <translation>セッションをSQLITEに記録し、再生して、HTMLまたはPDFレポートをエクスポートできます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="113"/>
+        <source>Operator Deployments</source>
+        <translation>オペレーター配布</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="114"/>
+        <source>Ship a locked-down, single-purpose build to operators with a runtime-only mode.</source>
+        <translation>ランタイム専用モードで、オペレーター向けにロックダウンされた単一目的ビルドを配布できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="122"/>
+        <source>New Dashboard Widgets</source>
+        <translation>新しいダッシュボードウィジェット</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="123"/>
+        <source>Gauge and Meter faces with live readouts, plus Clock, Stopwatch, and Waterfall.</source>
+        <translation>ライブ表示付きのゲージとメーターフェイス、さらに時計、ストップウォッチ、ウォーターフォールを追加。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="131"/>
+        <source>Dataset Transforms</source>
+        <translation>データセット変換</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="132"/>
+        <source>Calibrate, filter, and convert each channel with a per-dataset function, or add virtual datasets that compute new channels.</source>
+        <translation>データセットごとの関数で各チャンネルを較正、フィルタリング、変換するか、新しいチャンネルを計算する仮想データセットを追加できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="140"/>
+        <source>Painter Widget</source>
+        <translation>ペインターウィジェット</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="141"/>
+        <source>Draw fully custom graphics from incoming data with your own drawing script.</source>
+        <translation>独自の描画スクリプトで受信データから完全にカスタムなグラフィックを描画します。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="149"/>
+        <source>Data Tables</source>
+        <translation>データテーブル</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="150"/>
+        <source>Live register-style tables with virtual datasets and editable cells.</source>
+        <translation>仮想データセットと編集可能なセルを備えたレジスタ形式のライブテーブル。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="158"/>
+        <source>Image Widget</source>
+        <translation>画像ウィジェット</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="159"/>
+        <source>Decode and display image frames streamed straight from your device.</source>
+        <translation>デバイスから直接ストリーミングされた画像フレームをデコードして表示します。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="167"/>
+        <source>Notifications &amp; Alarms</source>
+        <translation>通知とアラーム</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="168"/>
+        <source>Multi-band dataset alarms with severity tiers, routed to the Notification Center.</source>
+        <translation>重大度レベルを持つマルチバンドデータセットアラームで、通知センターにルーティングされます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="176"/>
+        <source>Project Lock</source>
+        <translation>プロジェクトロック</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="177"/>
+        <source>Lock a project to separate operator use from editing, with an access code.</source>
+        <translation>プロジェクトをロックして、アクセスコードで編集とオペレーター使用を分離します。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="185"/>
+        <source>MQTT, Protobuf &amp; File Transfer</source>
+        <translation>MQTT、Protobuf、ファイル転送</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="186"/>
+        <source>MQTT input and publishing, Protobuf import, and XMODEM / YMODEM / ZMODEM transfers.</source>
+        <translation>MQTT入力とパブリッシュ、Protobufインポート、XMODEM / YMODEM / ZMODEM転送。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="232"/>
+        <source>Welcome to %1!</source>
+        <translation>%1へようこそ！</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="242"/>
+        <source>Here's what's new in version %1.</source>
+        <translation>バージョン%1の新機能です。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="415"/>
+        <source>Show on Startup</source>
+        <translation>起動時に表示</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="422"/>
+        <source>Close</source>
+        <translation>閉じる</translation>
     </message>
 </context>
 <context>

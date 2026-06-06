@@ -102,23 +102,40 @@ static QString readWmiComputerSystemProductUuid()
   });
 
   // Process-wide security is a one-shot call; a benign failure here is non-fatal.
-  CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT,
-                       RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr);
+  CoInitializeSecurity(nullptr,
+                       -1,
+                       nullptr,
+                       nullptr,
+                       RPC_C_AUTHN_LEVEL_DEFAULT,
+                       RPC_C_IMP_LEVEL_IMPERSONATE,
+                       nullptr,
+                       EOAC_NONE,
+                       nullptr);
 
   // Connect to the WMI locator and the CIMV2 namespace
-  if (FAILED(CoCreateInstance(CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator,
+  if (FAILED(CoCreateInstance(CLSID_WbemLocator,
+                              nullptr,
+                              CLSCTX_INPROC_SERVER,
+                              IID_IWbemLocator,
                               reinterpret_cast<void**>(&locator))))
     return QString();
-  if (FAILED(locator->ConnectServer(_bstr_t(L"ROOT\\CIMV2"), nullptr, nullptr, nullptr, 0, nullptr,
-                                    nullptr, &services)))
+  if (FAILED(locator->ConnectServer(
+        _bstr_t(L"ROOT\\CIMV2"), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &services)))
     return QString();
 
   // Query the single product instance for its UUID property
-  CoSetProxyBlanket(services, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL,
-                    RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE);
+  CoSetProxyBlanket(services,
+                    RPC_C_AUTHN_WINNT,
+                    RPC_C_AUTHZ_NONE,
+                    nullptr,
+                    RPC_C_AUTHN_LEVEL_CALL,
+                    RPC_C_IMP_LEVEL_IMPERSONATE,
+                    nullptr,
+                    EOAC_NONE);
   if (FAILED(services->ExecQuery(_bstr_t(L"WQL"),
                                  _bstr_t(L"SELECT UUID FROM Win32_ComputerSystemProduct"),
-                                 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr,
+                                 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
+                                 nullptr,
                                  &itr)))
     return QString();
 

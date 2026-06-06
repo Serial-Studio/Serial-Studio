@@ -142,6 +142,8 @@ Item {
   // Boot path: runtime mode skips the welcome dialog
   //
   Component.onCompleted: {
+    Cpp_Misc_WhatsNew.syncVersion()
+
     if (Cpp_Misc_CrashTracker.previousRunCrashed
         && Cpp_Misc_CrashTracker.recoveryRecommended) {
       crashRecoveryDialog.activate()
@@ -213,10 +215,13 @@ Item {
         if (!app.rhiStartupConfirmed) {
           app.rhiStartupConfirmed = true
           rhiConfirmTimer.start()
+          app.showStartupDialogs()
         }
         return
       }
 
+      whatsNewDialog.close()
+      tipsDialog.close()
       aboutDialog.close()
       donateDialog.close()
       licenseDialog.close()
@@ -446,6 +451,24 @@ Item {
   }
 
   //
+  // "What's New" dialog: auto-shown once per version upgrade
+  //
+  DialogLoader {
+    id: whatsNewDialog
+
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/WhatsNew.qml"
+  }
+
+  //
+  // "Did You Know?" tips dialog: auto-shown on startup unless opted out
+  //
+  DialogLoader {
+    id: tipsDialog
+
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/Tips.qml"
+  }
+
+  //
   // AI assistant (Pro, author-only): lazy DialogLoader, hosts a SmartWindow
   //
   DialogLoader {
@@ -517,6 +540,34 @@ Item {
       showMainWindow()
     else
       welcomeDialog.activate()
+  }
+
+  //
+  // "What's New" dialog: explicit open from menus
+  //
+  function showWhatsNew() {
+    whatsNewDialog.activate()
+  }
+
+  //
+  // "Did You Know?" tips dialog: explicit open from menus
+  //
+  function showTips() {
+    tipsDialog.activate()
+  }
+
+  //
+  // First-show auto-open: What's New on an upgrade, otherwise a tip (when enabled).
+  // Only one auto-pops per launch so the user never faces two stacked dialogs.
+  //
+  function showStartupDialogs() {
+    if (app.runtimeMode)
+      return
+
+    if (Cpp_Misc_WhatsNew.shouldShowWhatsNew)
+      whatsNewDialog.activate()
+    else if (Cpp_Misc_WhatsNew.showTipsOnStartup)
+      tipsDialog.activate()
   }
 
   //

@@ -484,6 +484,21 @@
         <file>icons/start/settings.svg</file>
         <file>icons/start/stopwatch.svg</file>
         <file>icons/start/tools.svg</file>
+        <file>icons/whats-new/ai.svg</file>
+        <file>icons/whats-new/alarms.svg</file>
+        <file>icons/whats-new/connectivity.svg</file>
+        <file>icons/whats-new/deployments.svg</file>
+        <file>icons/whats-new/image.svg</file>
+        <file>icons/whats-new/lock.svg</file>
+        <file>icons/whats-new/oscilloscope.svg</file>
+        <file>icons/whats-new/output.svg</file>
+        <file>icons/whats-new/painter.svg</file>
+        <file>icons/whats-new/scripting.svg</file>
+        <file>icons/whats-new/sessions.svg</file>
+        <file>icons/whats-new/tables.svg</file>
+        <file>icons/whats-new/transforms.svg</file>
+        <file>icons/whats-new/widgets.svg</file>
+        <file>icons/whats-new/workspaces.svg</file>
         <file>icons/taskbar/clock.svg</file>
         <file>icons/taskbar/console.svg</file>
         <file>icons/taskbar/file-transmission.svg</file>
