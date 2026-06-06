@@ -1501,102 +1501,102 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>यह मापता है कि यह कंप्यूटर Serial Studio के डेटा पाइपलाइन के माध्यम से फ़्रेम को कितनी तेज़ी से निकाल, पार्स और विज़ुअलाइज़ कर सकता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="160"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="168"/>
         <source>The interface will freeze while running</source>
         <translation>चलते समय इंटरफ़ेस फ्रीज़ हो जाएगा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="171"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="179"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>प्रत्येक चरण मुख्य थ्रेड पर पूर्ण गति से चलता है, इसलिए विंडो समाप्त होने तक प्रतिसाद देना बंद कर देती है। बेंचमार्क समाप्त होने पर आपका वर्तमान प्रोजेक्ट स्वचालित रूप से पुनः लोड हो जाता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="190"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="236"/>
         <source>Frames per phase:</source>
         <translation>प्रति चरण फ़्रेम:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="204"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
         <source>Minimum duration:</source>
         <translation>न्यूनतम अवधि:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="233"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="279"/>
         <source>Stages</source>
         <translation>चरण</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="241"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
         <source>Parsers</source>
         <translation>पार्सर</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="296"/>
         <source>Data export</source>
         <translation>डेटा एक्सपोर्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="258"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="304"/>
         <source>Dashboard</source>
         <translation>डैशबोर्ड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="316"/>
         <source>Data</source>
         <translation>डेटा</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="326"/>
         <source>Numeric only</source>
         <translation>केवल संख्यात्मक</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Mixed (numeric + text)</source>
         <translation>मिश्रित (संख्यात्मक + टेक्स्ट)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="351"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>बेंचमार्क चलाने के लिए कम से कम एक स्टेज और एक डेटा प्रकार चुनें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="332"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="210"/>
         <source>Running %1...</source>
         <translation>%1 चल रहा है...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="211"/>
         <source>Preparing...</source>
         <translation>तैयारी हो रही है...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="383"/>
         <source>Pipeline</source>
         <translation>पाइपलाइन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="386"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="395"/>
         <source>Throughput</source>
         <translation>थ्रूपुट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="407"/>
         <source>Time</source>
         <translation>समय</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="419"/>
         <source>Result</source>
         <translation>परिणाम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="511"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="520"/>
         <source>Run a test to see results</source>
         <translation>परिणाम देखने के लिए टेस्ट चलाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="530"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="539"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>पास/फेल केवल डेटा-पाइपलाइन और पार्सर चरणों पर लागू होता है (डेटा पाइपलाइन और Built-in न्यूमेरिक 1024 K फ़्रेम/s; Built-in मिक्स्ड 512 K; Lua न्यूमेरिक 256 K; JavaScript न्यूमेरिक और Lua मिक्स्ड 128 K; JavaScript मिक्स्ड 64 K)। एक्सपोर्ट और डैशबोर्ड चरण सूचनात्मक हैं।</translation>
     </message>
@@ -1609,7 +1609,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Pass/Fail डेटा-पाइपलाइन और पार्सर चरणों पर लागू होता है (डेटा पाइपलाइन और Native न्यूमेरिक 1024 K फ्रेम्स/s; Native मिक्स्ड 512 K; Lua न्यूमेरिक 256 K; JavaScript न्यूमेरिक और Lua मिक्स्ड 128 K; JavaScript मिक्स्ड 64 K)। एक्सपोर्ट और डैशबोर्ड चरण सूचनात्मक हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="545"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="554"/>
         <source>Copy</source>
         <translation>कॉपी करें</translation>
     </message>
@@ -1622,22 +1622,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">पास/फेल केवल पार्सर चरणों पर लागू होता है (Lua लक्ष्य 256 K फ़्रेम/s, JavaScript 128 K)। एक्सपोर्ट और डैशबोर्ड चरण सूचनात्मक हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="552"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Clear</source>
         <translation>साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="570"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Running...</source>
         <translation>चल रहा है...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Run Benchmark</source>
         <translation>बेंचमार्क चलाएं</translation>
     </message>
@@ -3045,54 +3045,54 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1357"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1475"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1368"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1486"/>
         <source>Channel %1</source>
         <translation>चैनल %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1487"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1498"/>
         <source>Audio Input</source>
         <translation>ऑडियो इनपुट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1366"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1492"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1377"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1503"/>
         <source>Quick Plot</source>
         <translation>क्विक प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1145"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1149"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript ट्रांसफॉर्म बजट सीमा पार हो गई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1146"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1150"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>एक डेटासेट ट्रांसफॉर्म को %1 मि.से. से अधिक समय लगा; फ्रेम के बाकी डेटासेट अगले फ्रेम तक कच्चे मानों पर लौट आए। ट्रांसफॉर्म कोड को प्रोफाइल या सरल करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
         <source>Frame pool exhausted</source>
         <translation>फ्रेम पूल समाप्त हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="201"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>एक डाउनस्ट्रीम उपभोक्ता (डैशबोर्ड, CSV/MDF4 निर्यात, सत्र DB, या API सब्सक्राइबर) फ्रेम को पर्याप्त तेजी से नहीं निकाल रहा है। Serial Studio अब बैकलॉग साफ़ होने तक प्रति-फ्रेम आवंटन पर वापस जा रहा है। भारी उपभोक्ता को अक्षम करें या डेटा दर कम करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1317"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1328"/>
         <source>Device A</source>
         <translation>डिवाइस A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1373"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1384"/>
         <source>Quick Plot Data</source>
         <translation>क्विक प्लॉट डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1385"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1396"/>
         <source>Multiple Plots</source>
         <translation>मल्टीपल प्लॉट</translation>
     </message>
@@ -11232,8 +11232,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist नहीं लिखा जा सका: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -11264,8 +11264,8 @@ Would you like to open the download page?</source>
         <translation>.lnk फ़ाइल सहेजना विफल (HRESULT 0x%1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -12094,22 +12094,22 @@ Add groups above to poll multiple register types.</source>
         <translation>कॉमा से अलग किए गए टैग नाम। प्रत्येक टैग की स्थिति उसका चैनल इंडेक्स निर्धारित करती है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="476"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="488"/>
         <source>Register blocks</source>
         <translation>रजिस्टर ब्लॉक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="477"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="489"/>
         <source>Polled register blocks with typed, scaled entries. Written by the Modbus register map importer.</source>
         <translation>टाइप किए गए, स्केल किए गए एंट्री के साथ पोल किए गए रजिस्टर ब्लॉक। Modbus रजिस्टर मैप इम्पोर्टर द्वारा लिखा गया।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="783"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="797"/>
         <source>Signal map</source>
         <translation>सिग्नल मैप</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="784"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="798"/>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation>CAN संदेश अपने सिग्नल बिट लेआउट और स्केलिंग के साथ। DBC इम्पोर्टर द्वारा लिखा गया।</translation>
     </message>
@@ -13627,8 +13627,8 @@ Click Refresh to update the list.</source>
         <translation>सामान्य I/O त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="284"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Parser अक्षम</translation>
     </message>
@@ -13670,8 +13670,8 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="406"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <source>Missing Parse Function</source>
         <translation>Parse फ़ंक्शन अनुपलब्ध</translation>
     </message>
@@ -13687,8 +13687,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="469"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse फ़ंक्शन रनटाइम त्रुटि</translation>
     </message>
@@ -13943,12 +13943,12 @@ function parse(%1) { ... }
         <translation>कोई Groq API कुंजी सेट नहीं है। एक जोड़ने के लिए कुंजी प्रबंधन खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="903"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="906"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Frame parser CPU समय का %1% से अधिक उपयोग कर रहा है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="905"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="908"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio एप्लिकेशन को उत्तरदायी रखने के लिए फ़्रेम छोड़ रहा है। कृपया frame parser स्क्रिप्ट को सरल या अनुकूलित करें ताकि इसका कार्यभार कम हो।</translation>
     </message>

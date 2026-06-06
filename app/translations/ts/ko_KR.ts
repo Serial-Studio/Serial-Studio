@@ -1501,102 +1501,102 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>이 컴퓨터가 Serial Studio의 데이터 파이프라인을 통해 프레임을 추출, 파싱 및 시각화하는 속도를 측정합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="160"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="168"/>
         <source>The interface will freeze while running</source>
         <translation>실행 중 인터페이스가 정지됩니다</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="171"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="179"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>각 단계는 메인 스레드에서 전력으로 실행되므로 완료될 때까지 창이 응답하지 않습니다. 벤치마크가 끝나면 현재 프로젝트가 자동으로 다시 로드됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="190"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="236"/>
         <source>Frames per phase:</source>
         <translation>단계당 프레임 수:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="204"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
         <source>Minimum duration:</source>
         <translation>최소 지속 시간:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="233"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="279"/>
         <source>Stages</source>
         <translation>단계</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="241"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
         <source>Parsers</source>
         <translation>파서</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="296"/>
         <source>Data export</source>
         <translation>데이터 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="258"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="304"/>
         <source>Dashboard</source>
         <translation>대시보드</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="316"/>
         <source>Data</source>
         <translation>데이터</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="326"/>
         <source>Numeric only</source>
         <translation>숫자 값만</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Mixed (numeric + text)</source>
         <translation>혼합(숫자 + 텍스트)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="351"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>벤치마크를 실행하려면 최소 하나의 단계와 하나의 데이터 유형을 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="332"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="210"/>
         <source>Running %1...</source>
         <translation>%1 실행 중...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="211"/>
         <source>Preparing...</source>
         <translation>준비 중...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="383"/>
         <source>Pipeline</source>
         <translation>파이프라인</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="386"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="395"/>
         <source>Throughput</source>
         <translation>처리량</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="407"/>
         <source>Time</source>
         <translation>시간</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="419"/>
         <source>Result</source>
         <translation>결과</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="511"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="520"/>
         <source>Run a test to see results</source>
         <translation>결과를 보려면 테스트를 실행하십시오</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="530"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="539"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>합격/불합격은 데이터 파이프라인 및 파서 단계에만 적용됩니다(데이터 파이프라인 및 내장 숫자 1024 K 프레임/초; 내장 혼합 512 K; Lua 숫자 256 K; JavaScript 숫자 및 Lua 혼합 128 K; JavaScript 혼합 64 K). 내보내기 및 대시보드 단계는 정보 제공용입니다.</translation>
     </message>
@@ -1609,7 +1609,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">합격/불합격은 데이터 파이프라인 및 파서 단계에 적용됩니다(데이터 파이프라인 및 네이티브 숫자 1024 K 프레임/초; 네이티브 혼합 512 K; Lua 숫자 256 K; JavaScript 숫자 및 Lua 혼합 128 K; JavaScript 혼합 64 K). 내보내기 및 대시보드 단계는 참고용입니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="545"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="554"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
@@ -1622,22 +1622,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">합격/불합격은 파서 단계에만 적용됩니다(Lua 목표 256 K 프레임/초, JavaScript 128 K). 내보내기 및 대시보드 단계는 정보 제공용입니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="552"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="570"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Running...</source>
         <translation>실행 중...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Run Benchmark</source>
         <translation>벤치마크 실행</translation>
     </message>
@@ -3045,54 +3045,54 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1357"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1475"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1368"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1486"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1487"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1498"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1366"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1492"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1377"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1503"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1145"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1149"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript 변환 예산 초과</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1146"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1150"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>데이터셋 변환이 %1ms 이상 소요되어, 프레임의 나머지 데이터셋은 다음 프레임까지 원시 값으로 대체되었습니다. 변환 코드를 프로파일링하거나 단순화하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
         <source>Frame pool exhausted</source>
         <translation>프레임 풀 소진</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="201"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>다운스트림 소비자(대시보드, CSV/MDF4 내보내기, 세션 DB, API 구독자)가 프레임을 충분히 빠르게 처리하지 못하고 있습니다. Serial Studio가 백로그가 해소될 때까지 프레임별 할당으로 전환합니다. 무거운 소비자를 비활성화하거나 데이터 속도를 줄이세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1317"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1328"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1373"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1384"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1385"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1396"/>
         <source>Multiple Plots</source>
         <translation>다중 플롯</translation>
     </message>
@@ -11232,8 +11232,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist를 쓸 수 없음: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -11264,8 +11264,8 @@ Would you like to open the download page?</source>
         <translation>.lnk 파일 저장 실패(HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -12094,22 +12094,22 @@ Add groups above to poll multiple register types.</source>
         <translation>쉼표로 구분된 태그 이름. 각 태그의 위치가 채널 인덱스를 설정합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="476"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="488"/>
         <source>Register blocks</source>
         <translation>레지스터 블록</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="477"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="489"/>
         <source>Polled register blocks with typed, scaled entries. Written by the Modbus register map importer.</source>
         <translation>타입 지정 및 스케일링된 항목이 포함된 폴링 레지스터 블록. Modbus 레지스터 맵 가져오기에서 작성됨.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="783"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="797"/>
         <source>Signal map</source>
         <translation>신호 맵</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="784"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="798"/>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation>신호 비트 레이아웃 및 스케일링이 포함된 CAN 메시지. DBC 가져오기에서 작성됨.</translation>
     </message>
@@ -13627,8 +13627,8 @@ Click Refresh to update the list.</source>
         <translation>일반 I/O 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="284"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>프레임 파서 비활성화됨</translation>
     </message>
@@ -13670,8 +13670,8 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="406"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <source>Missing Parse Function</source>
         <translation>Parse 함수 누락</translation>
     </message>
@@ -13687,8 +13687,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="469"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse 함수 런타임 오류</translation>
     </message>
@@ -13943,12 +13943,12 @@ function parse(%1) { ... }
         <translation>Groq API 키가 설정되지 않았습니다. 키 관리를 열어 추가하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="903"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="906"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>프레임 파서가 CPU 시간의 %1% 이상을 사용하고 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="905"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="908"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio가 애플리케이션 응답성을 유지하기 위해 프레임을 드롭하고 있습니다. 프레임 파서 스크립트를 단순화하거나 최적화하여 작업 부하를 줄이십시오.</translation>
     </message>

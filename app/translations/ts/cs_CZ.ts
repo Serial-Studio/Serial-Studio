@@ -1501,102 +1501,102 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Měří, jak rychle tento počítač dokáže extrahovat, parsovat a vizualizovat rámce prostřednictvím datového pipeline Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="160"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="168"/>
         <source>The interface will freeze while running</source>
         <translation>Rozhraní se během běhu zablokuje</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="171"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="179"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Každá fáze běží naplno v hlavním vlákně, takže okno přestane reagovat, dokud neskončí. Aktuální projekt se po dokončení benchmarku automaticky znovu načte.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="190"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="236"/>
         <source>Frames per phase:</source>
         <translation>Snímků na fázi:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="204"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
         <source>Minimum duration:</source>
         <translation>Minimální trvání:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="233"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="279"/>
         <source>Stages</source>
         <translation>Fáze</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="241"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
         <source>Parsers</source>
         <translation>Parsery</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="296"/>
         <source>Data export</source>
         <translation>Export dat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="258"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="304"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="316"/>
         <source>Data</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="326"/>
         <source>Numeric only</source>
         <translation>Pouze číselné</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Mixed (numeric + text)</source>
         <translation>Smíšený (numerický + text)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="351"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>Vyberte alespoň jednu fázi a jeden datový typ pro spuštění benchmarku.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="332"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="210"/>
         <source>Running %1...</source>
         <translation>Spuštěno %1...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="211"/>
         <source>Preparing...</source>
         <translation>Příprava...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="383"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="386"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="395"/>
         <source>Throughput</source>
         <translation>Propustnost</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="407"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="419"/>
         <source>Result</source>
         <translation>Výsledek</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="511"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="520"/>
         <source>Run a test to see results</source>
         <translation>Spusťte test pro zobrazení výsledků</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="530"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="539"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>Úspěch/Neúspěch se vztahuje na fáze datového pipeline a parseru (datový pipeline a vestavěný numerický 1024 K snímků/s; vestavěný smíšený 512 K; Lua numerický 256 K; JavaScript numerický a Lua smíšený 128 K; JavaScript smíšený 64 K). Fáze exportu a dashboardu jsou informativní.</translation>
     </message>
@@ -1609,7 +1609,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Úspěch/Selhání se vztahuje na fáze datového pipeline a parseru (datový pipeline a Nativní numerický 1024 K snímků/s; Nativní smíšený 512 K; Lua numerický 256 K; JavaScript numerický a Lua smíšený 128 K; JavaScript smíšený 64 K). Fáze exportu a dashboardu jsou informativní.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="545"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="554"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
@@ -1622,22 +1622,22 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Úspěch/Neúspěch se vztahuje pouze na fáze parseru (cíl Lua 256 K snímků/s, JavaScript 128 K). Fáze exportu a dashboardu jsou informativní.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="552"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="570"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Running...</source>
         <translation>Probíhá...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Run Benchmark</source>
         <translation>Spustit Benchmark</translation>
     </message>
@@ -3045,54 +3045,54 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1357"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1475"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1368"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1486"/>
         <source>Channel %1</source>
         <translation>Kanál %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1487"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1498"/>
         <source>Audio Input</source>
         <translation>Zvukový Vstup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1366"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1492"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1377"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1503"/>
         <source>Quick Plot</source>
         <translation>Rychlý Graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1145"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1149"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Transformace v JavaScriptu překročila limit</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1146"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1150"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Transformace datové sady trvala déle než %1 ms; zbývající datové sady ve frame byly převedeny na surové hodnoty až do dalšího frame. Profilujte nebo zjednodušte kód transformace.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
         <source>Frame pool exhausted</source>
         <translation>Vyčerpán zásobník framů</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="201"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Následný spotřebitel (dashboard, export do CSV/MDF4, databáze sezení nebo API odběratel) nezpracovává framy dostatečně rychle. Serial Studio přechází na alokace po framech, dokud se nevyčistí fronta. Vypněte náročného spotřebitele nebo snižte datovou rychlost.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1317"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1328"/>
         <source>Device A</source>
         <translation>Zařízení A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1373"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1384"/>
         <source>Quick Plot Data</source>
         <translation>Data Rychlého Grafu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1385"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1396"/>
         <source>Multiple Plots</source>
         <translation>Více Grafů</translation>
     </message>
@@ -11232,8 +11232,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Nelze zapsat Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců Windows není na této platformě dostupný.</translation>
     </message>
@@ -11264,8 +11264,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Uložení souboru .lnk selhalo (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců macOS není na této platformě dostupný.</translation>
     </message>
@@ -12094,22 +12094,22 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Názvy značek oddělené čárkami. Pozice každé značky určuje její index kanálu.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="476"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="488"/>
         <source>Register blocks</source>
         <translation>Bloky Registrů</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="477"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="489"/>
         <source>Polled register blocks with typed, scaled entries. Written by the Modbus register map importer.</source>
         <translation>Dotazované bloky registrů s typovanými, škálovanými položkami. Vytvořeno importérem mapy registrů Modbus.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="783"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="797"/>
         <source>Signal map</source>
         <translation>Mapa Signálů</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="784"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="798"/>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation>CAN zprávy s jejich bitovými rozloženími signálů a škálováním. Vytvořeno importérem DBC.</translation>
     </message>
@@ -13627,8 +13627,8 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Obecná chyba I/O</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="284"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Analyzátor Rámců Zakázán</translation>
     </message>
@@ -13670,8 +13670,8 @@ Nejpravděpodobnější příčina: nekonečná smyčka nebo extrémně pomalá 
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="406"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <source>Missing Parse Function</source>
         <translation>Chybějící Funkce Parse</translation>
     </message>
@@ -13687,8 +13687,8 @@ Ujistěte se, že váš kód obsahuje:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="469"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>Parse Function Runtime Error</source>
         <translation>Chyba Běhu Funkce Parse</translation>
     </message>
@@ -13943,12 +13943,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Není nastaven API klíč Groq. Otevřete Správu klíčů a přidejte ho.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="903"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="906"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Analyzátor rámců využívá více než %1% času CPU.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="905"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="908"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio zahazuje rámce, aby aplikace zůstala responzivní. Zjednodušte nebo optimalizujte skript analyzátoru rámců pro snížení jeho zátěže.</translation>
     </message>

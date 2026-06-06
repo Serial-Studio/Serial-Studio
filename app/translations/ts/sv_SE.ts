@@ -1501,102 +1501,102 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Mäter hur snabbt denna dator kan extrahera, tolka och visualisera ramar genom Serial Studios datapipeline.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="160"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="168"/>
         <source>The interface will freeze while running</source>
         <translation>Gränssnittet fryser under körning</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="171"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="179"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Varje fas körs på huvudtråden, så fönstret slutar svara tills den är klar. Ditt nuvarande projekt laddas om automatiskt när benchmarket avslutas.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="190"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="236"/>
         <source>Frames per phase:</source>
         <translation>Ramar per fas:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="204"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
         <source>Minimum duration:</source>
         <translation>Minsta varaktighet:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="233"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="279"/>
         <source>Stages</source>
         <translation>Steg</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="241"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
         <source>Parsers</source>
         <translation>Parsers</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="296"/>
         <source>Data export</source>
         <translation>Dataexport</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="258"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="304"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="316"/>
         <source>Data</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="326"/>
         <source>Numeric only</source>
         <translation>Endast numeriska värden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Mixed (numeric + text)</source>
         <translation>Blandad (numerisk + text)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="351"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>Välj minst ett steg och en datatyp för att köra ett prestandatest.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="332"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="210"/>
         <source>Running %1...</source>
         <translation>Kör %1...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="211"/>
         <source>Preparing...</source>
         <translation>Förbereder...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="383"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="386"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="395"/>
         <source>Throughput</source>
         <translation>Genomströmning</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="407"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="419"/>
         <source>Result</source>
         <translation>Resultat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="511"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="520"/>
         <source>Run a test to see results</source>
         <translation>Kör ett test för att se resultat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="530"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="539"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>Godkänt/Underkänt gäller datapipeline- och parserstegen (datapipeline och inbyggd numerisk 1024 K ramar/s; inbyggd blandad 512 K; Lua numerisk 256 K; JavaScript numerisk och Lua blandad 128 K; JavaScript blandad 64 K). Export- och instrumentpanelsstegen är informativa.</translation>
     </message>
@@ -1609,7 +1609,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Pass/Fail gäller data-pipeline- och parserfaserna (data-pipeline och Native numerisk 1024 K ramar/s; Native blandad 512 K; Lua numerisk 256 K; JavaScript numerisk och Lua blandad 128 K; JavaScript blandad 64 K). Export- och instrumentpanelsfaserna är informativa.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="545"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="554"/>
         <source>Copy</source>
         <translation>Kopiera</translation>
     </message>
@@ -1622,22 +1622,22 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Godkänt/Underkänt gäller endast parserfaserna (Lua-mål 256 K ramar/s, JavaScript 128 K). Export- och instrumentpanelsfaserna är informativa.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="552"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Clear</source>
         <translation>Rensa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="570"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Running...</source>
         <translation>Kör…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Run Benchmark</source>
         <translation>Kör Benchmark</translation>
     </message>
@@ -3045,54 +3045,54 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1357"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1475"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1368"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1486"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1487"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1498"/>
         <source>Audio Input</source>
         <translation>Ljudingång</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1366"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1492"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1377"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1503"/>
         <source>Quick Plot</source>
         <translation>Snabbdiagram</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1145"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1149"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript-transform överskred budgeten</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1146"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1150"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>En datasettransform tog längre än %1 ms; återstående dataset i framen föll tillbaka till råvärden tills nästa frame. Profilera eller förenkla transformkoden.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
         <source>Frame pool exhausted</source>
         <translation>Frame-poolen är uttömd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="201"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>En nedströmskonsument (dashboard, CSV/MDF4-export, sessionsdatabas eller API-prenumerant) tömmer inte frames tillräckligt snabbt. Serial Studio faller tillbaka till per-frame-allokeringar tills kön är borta. Inaktivera en tung konsument eller sänk datahastigheten.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1317"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1328"/>
         <source>Device A</source>
         <translation>Enhet A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1373"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1384"/>
         <source>Quick Plot Data</source>
         <translation>Snabbdiagramdata</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1385"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1396"/>
         <source>Multiple Plots</source>
         <translation>Flera Diagram</translation>
     </message>
@@ -11232,8 +11232,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation>Kunde inte skriva Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows-genvägsverktyget är inte tillgängligt på denna plattform.</translation>
     </message>
@@ -11264,8 +11264,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation>Sparande av .lnk-filen misslyckades (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS-genvägsverktyget är inte tillgängligt på denna plattform.</translation>
     </message>
@@ -12094,22 +12094,22 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
         <translation>Kommaseparerade taggnamn. Positionen för varje tagg anger dess kanalindex.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="476"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="488"/>
         <source>Register blocks</source>
         <translation>Registerblock</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="477"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="489"/>
         <source>Polled register blocks with typed, scaled entries. Written by the Modbus register map importer.</source>
         <translation>Pollade registerblock med typade, skalade poster. Skrivna av Modbus-registerkartan importeraren.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="783"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="797"/>
         <source>Signal map</source>
         <translation>Signalkarta</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="784"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="798"/>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation>CAN-meddelanden med sina signalbitlayouter och skalning. Skrivna av DBC-importeraren.</translation>
     </message>
@@ -13627,8 +13627,8 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
         <translation>Allmänt I/O-fel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="284"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Inaktiverad</translation>
     </message>
@@ -13670,8 +13670,8 @@ Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkrop
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="406"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <source>Missing Parse Function</source>
         <translation>Parse-funktion Saknas</translation>
     </message>
@@ -13687,8 +13687,8 @@ Säkerställ att din kod innehåller:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="469"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>Parse Function Runtime Error</source>
         <translation>Körningsfel i Parse-funktionen</translation>
     </message>
@@ -13943,12 +13943,12 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Ingen Groq API-nyckel angiven. Öppna Hantera Nycklar för att lägga till en.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="903"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="906"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Frame-parsern använder mer än %1% av CPU-tiden.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="905"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="908"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio tappar ramar för att hålla applikationen responsiv. Förenkla eller optimera frame-parser-skriptet för att minska dess arbetsbelastning.</translation>
     </message>

@@ -1489,102 +1489,102 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Đo tốc độ máy tính này có thể trích xuất, phân tích và hiển thị frame qua pipeline dữ liệu của Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="160"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="168"/>
         <source>The interface will freeze while running</source>
         <translation>Giao diện sẽ đóng băng trong khi chạy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="171"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="179"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Mỗi giai đoạn chạy liên tục trên luồng chính, do đó cửa sổ ngừng phản hồi cho đến khi hoàn tất. Dự án hiện tại của bạn sẽ được tải lại tự động khi benchmark kết thúc.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="190"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="236"/>
         <source>Frames per phase:</source>
         <translation>Số frame mỗi giai đoạn:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="204"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
         <source>Minimum duration:</source>
         <translation>Thời lượng tối thiểu:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="233"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="279"/>
         <source>Stages</source>
         <translation>Giai Đoạn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="241"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
         <source>Parsers</source>
         <translation>Bộ Phân Tích</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="250"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="296"/>
         <source>Data export</source>
         <translation>Xuất dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="258"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="304"/>
         <source>Dashboard</source>
         <translation>Bảng Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="316"/>
         <source>Data</source>
         <translation>Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="326"/>
         <source>Numeric only</source>
         <translation>Chỉ giá trị số</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Mixed (numeric + text)</source>
         <translation>Hỗn hợp (số + văn bản)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="351"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>Chọn ít nhất một giai đoạn và một loại dữ liệu để chạy benchmark.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="332"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="210"/>
         <source>Running %1...</source>
         <translation>Đang Chạy %1...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="211"/>
         <source>Preparing...</source>
         <translation>Đang Chuẩn Bị...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="383"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="386"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="395"/>
         <source>Throughput</source>
         <translation>Thông Lượng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="398"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="407"/>
         <source>Time</source>
         <translation>Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="410"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="419"/>
         <source>Result</source>
         <translation>Kết Quả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="511"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="520"/>
         <source>Run a test to see results</source>
         <translation>Chạy thử nghiệm để xem kết quả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="530"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="539"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>Đạt/Không Đạt áp dụng cho các giai đoạn data-pipeline và parser (data pipeline và Built-in số 1024 K frames/s; Built-in hỗn hợp 512 K; Lua số 256 K; JavaScript số và Lua hỗn hợp 128 K; JavaScript hỗn hợp 64 K). Các giai đoạn export và dashboard chỉ mang tính thông tin.</translation>
     </message>
@@ -1597,7 +1597,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Đạt/Không Đạt áp dụng cho các giai đoạn pipeline dữ liệu và phân tích cú pháp (pipeline dữ liệu và Native số 1024 K khung/s; Native hỗn hợp 512 K; Lua số 256 K; JavaScript số và Lua hỗn hợp 128 K; JavaScript hỗn hợp 64 K). Các giai đoạn xuất và bảng điều khiển chỉ mang tính thông tin.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="545"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="554"/>
         <source>Copy</source>
         <translation>Sao Chép</translation>
     </message>
@@ -1610,22 +1610,22 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Đạt/Không Đạt chỉ áp dụng cho các giai đoạn parser (Lua mục tiêu 256 K frames/s, JavaScript 128 K). Các giai đoạn export và dashboard chỉ mang tính thông tin.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="552"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="570"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Running...</source>
         <translation>Đang Chạy...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="571"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="580"/>
         <source>Run Benchmark</source>
         <translation>Chạy Benchmark</translation>
     </message>
@@ -2969,54 +2969,54 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1145"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1149"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Chuyển đổi JavaScript vượt quá giới hạn</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1146"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1150"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Một phép biến đổi tập dữ liệu mất hơn %1 ms; các tập dữ liệu còn lại trong frame sử dụng giá trị thô cho đến frame tiếp theo. Hãy phân tích hoặc đơn giản hóa mã chuyển đổi.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
         <source>Frame pool exhausted</source>
         <translation>Bộ nhớ frame đã cạn kiệt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="201"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Một tiến trình phía sau (dashboard, xuất CSV/MDF4, cơ sở dữ liệu phiên, hoặc API subscriber) không xử lý frame đủ nhanh. Serial Studio sẽ chuyển sang cấp phát từng frame cho đến khi xóa hết tồn đọng. Hãy tắt bớt tiến trình nặng hoặc giảm tốc độ dữ liệu.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1317"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1328"/>
         <source>Device A</source>
         <translation>Thiết Bị A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1357"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1475"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1368"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1486"/>
         <source>Channel %1</source>
         <translation>Kênh %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1366"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1492"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1377"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1503"/>
         <source>Quick Plot</source>
         <translation>Biểu Đồ Nhanh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1373"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1384"/>
         <source>Quick Plot Data</source>
         <translation>Dữ Liệu Biểu Đồ Nhanh</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1385"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1396"/>
         <source>Multiple Plots</source>
         <translation>Nhiều Biểu Đồ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1487"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1498"/>
         <source>Audio Input</source>
         <translation>Đầu Vào Âm Thanh</translation>
     </message>
@@ -10734,8 +10734,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Không thể tạo cấu trúc thư mục bundle .app.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Trình ghi lối tắt Windows không khả dụng trên nền tảng này.</translation>
     </message>
@@ -10766,8 +10766,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Lưu tệp .lnk thất bại (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Trình tạo lối tắt macOS không khả dụng trên nền tảng này.</translation>
     </message>
@@ -11584,22 +11584,22 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Tên thẻ phân tách bằng dấu phẩy. Vị trí của mỗi thẻ xác định chỉ số kênh của nó.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="476"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="488"/>
         <source>Register blocks</source>
         <translation>Khối Thanh Ghi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="477"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="489"/>
         <source>Polled register blocks with typed, scaled entries. Written by the Modbus register map importer.</source>
         <translation>Khối thanh ghi được truy vấn với các mục có kiểu và tỷ lệ. Được tạo bởi trình nhập bản đồ thanh ghi Modbus.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="783"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="797"/>
         <source>Signal map</source>
         <translation>Bản Đồ Tín Hiệu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="784"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="798"/>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation>Thông điệp CAN với bố cục bit tín hiệu và tỷ lệ của chúng. Được tạo bởi trình nhập DBC.</translation>
     </message>
@@ -13185,18 +13185,18 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Phản hồi từ máy chủ thiếu các trường bắt buộc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="903"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="906"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Bộ phân tích frame đang sử dụng hơn %1% thời gian CPU.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="905"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="908"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio đang loại bỏ các frame để giữ ứng dụng phản hồi. Vui lòng đơn giản hóa hoặc tối ưu hóa script bộ phân tích frame để giảm khối lượng công việc.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="284"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
         <source>Frame Parser Disabled</source>
         <translation>Bộ Phân Tích Frame Đã Tắt</translation>
     </message>
@@ -13238,8 +13238,8 @@ Nguyên nhân có thể: vòng lặp vô hạn hoặc thao tác cực kỳ chậ
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="406"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
         <source>Missing Parse Function</source>
         <translation>Thiếu Hàm Parse</translation>
     </message>
@@ -13255,8 +13255,8 @@ Vui lòng đảm bảo mã của bạn bao gồm:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="469"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>Parse Function Runtime Error</source>
         <translation>Lỗi Runtime Hàm Parse</translation>
     </message>

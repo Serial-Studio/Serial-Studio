@@ -124,7 +124,8 @@ Widgets.SmartDialog {
     }
 
     //
-    // Warning callout: the run blocks the main thread
+    // Status callout: idle it warns that the run blocks the main thread; running it swaps to
+    // a spinner + phase label + progress bar. Same box, so the dialog footprint never shifts.
     //
     Rectangle {
       radius: 6
@@ -132,45 +133,90 @@ Widgets.SmartDialog {
       Layout.topMargin: 2
       Layout.fillWidth: true
       Layout.minimumWidth: 560
-      implicitHeight: warningLayout.implicitHeight + 20
+      implicitHeight: calloutStack.implicitHeight + 20
       color: Cpp_ThemeManager.colors["groupbox_background"]
       border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
-      RowLayout {
-        id: warningLayout
+      Item {
+        id: calloutStack
 
-        spacing: 12
         anchors.margins: 10
         anchors.fill: parent
+        implicitHeight: Math.max(warningLayout.implicitHeight, runningLayout.implicitHeight)
 
-        Image {
-          Layout.preferredWidth: 48
-          Layout.preferredHeight: 48
-          sourceSize: Qt.size(48, 48)
-          Layout.alignment: Qt.AlignVCenter
-          source: "qrc:/icons/notifications/warning.svg"
-        }
+        RowLayout {
+          id: warningLayout
 
-        ColumnLayout {
-          spacing: 2
-          Layout.fillWidth: true
+          spacing: 12
+          anchors.fill: parent
+          visible: !root.running
 
-          Label {
-            Layout.fillWidth: true
-            text: qsTr("The interface will freeze while running")
-            color: Cpp_ThemeManager.colors["text"]
-            font: Cpp_Misc_CommonFonts.customUiFont(1, true)
+          Image {
+            Layout.preferredWidth: 48
+            Layout.preferredHeight: 48
+            sourceSize: Qt.size(48, 48)
+            Layout.alignment: Qt.AlignVCenter
+            source: "qrc:/icons/notifications/warning.svg"
           }
 
-          Label {
-            opacity: 0.8
+          ColumnLayout {
+            spacing: 2
             Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            color: Cpp_ThemeManager.colors["text"]
-            font: Cpp_Misc_CommonFonts.uiFont
-            text: qsTr("Each phase runs flat-out on the main thread, so the window stops " +
-                       "responding until it finishes. Your current project is reloaded " +
-                       "automatically when the benchmark ends.")
+
+            Label {
+              Layout.fillWidth: true
+              text: qsTr("The interface will freeze while running")
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.customUiFont(1, true)
+            }
+
+            Label {
+              opacity: 0.8
+              Layout.fillWidth: true
+              wrapMode: Text.WordWrap
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.uiFont
+              text: qsTr("Each phase runs flat-out on the main thread, so the window stops " +
+                         "responding until it finishes. Your current project is reloaded " +
+                         "automatically when the benchmark ends.")
+            }
+          }
+        }
+
+        RowLayout {
+          id: runningLayout
+
+          spacing: 12
+          anchors.fill: parent
+          visible: root.running
+
+          BusyIndicator {
+            running: root.running
+            Layout.preferredWidth: 48
+            Layout.preferredHeight: 48
+            Layout.alignment: Qt.AlignVCenter
+          }
+
+          ColumnLayout {
+            spacing: 6
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+
+            Label {
+              Layout.fillWidth: true
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.customUiFont(1, true)
+              text: root.runner.currentPhase.length > 0
+                    ? qsTr("Running %1...").arg(root.runner.currentPhase)
+                    : qsTr("Preparing...")
+            }
+
+            ProgressBar {
+              to: 1
+              from: 0
+              Layout.fillWidth: true
+              value: root.runner.progress
+            }
           }
         }
       }
@@ -303,43 +349,6 @@ Widgets.SmartDialog {
       color: Cpp_ThemeManager.colors["error"]
       font: Cpp_Misc_CommonFonts.uiFont
       text: qsTr("Select at least one stage and one data type to run a benchmark.")
-    }
-
-    //
-    // Progress area (only while running)
-    //
-    ColumnLayout {
-      spacing: 8
-      Layout.topMargin: 4
-      visible: root.running
-      Layout.fillWidth: true
-
-      RowLayout {
-        spacing: 12
-        Layout.fillWidth: true
-
-        BusyIndicator {
-          implicitWidth: 24
-          implicitHeight: 24
-          running: root.running
-        }
-
-        Label {
-          Layout.fillWidth: true
-          color: Cpp_ThemeManager.colors["text"]
-          font: Cpp_Misc_CommonFonts.customUiFont(1, true)
-          text: root.runner.currentPhase.length > 0
-                ? qsTr("Running %1...").arg(root.runner.currentPhase)
-                : qsTr("Preparing...")
-        }
-      }
-
-      ProgressBar {
-        to: 1
-        from: 0
-        Layout.fillWidth: true
-        value: root.runner.progress
-      }
     }
 
     //

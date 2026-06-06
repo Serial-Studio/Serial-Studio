@@ -129,6 +129,13 @@ benchmark mechanics) in [doc/claude/architecture.md](doc/claude/architecture.md)
   pipeline + Native numeric 1.024 MHz (4x), Native mixed 512 kHz (2x), Lua numeric 256 kHz,
   JS numeric + Lua mixed 128 kHz, JS mixed 64 kHz;
   `test.yml` runs it per PR, `deploy.yml` gates the shipped PGO binary. Don't regress it.
+- **Hotpath optimization macros live in `app/src/DataModel/HotpathOptimization.h`** (`SS_FORCE_INLINE`,
+  `SS_FLATTEN`, `SS_HOT`/`SS_COLD`, `SS_RESTRICT`, `SS_ASSUME`, `SS_NO_UNROLL`, ...): cross-toolchain
+  spellings with a `__clang__`-first cascade (clang-cl/IntelLLVM take the GNU branch). Annotate the
+  `.h` declaration and `.cpp` definition in lockstep. Never add a fast-math / no-unwind / GCC
+  `optimize("...")` macro (breaks the IEEE-stable + Lua-unwind invariants). `SS_ASSUME` must restate
+  a guard that already ran, never a precondition on a parsed frame. The `datasets+publish` stage is
+  ~70-80% of per-frame time — gate any change here with `--benchmark-hotpath`.
 
 ## Code Style — Essentials
 

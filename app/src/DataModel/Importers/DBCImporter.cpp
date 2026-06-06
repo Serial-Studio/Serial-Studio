@@ -453,11 +453,11 @@ QJsonObject DataModel::DBCImporter::signalToJson(const QCanSignalDescription& si
                                                  MuxRole role,
                                                  qint64 muxValue)
 {
-  // Qt's DBC parser inverts byte order, flip it back
+  // Qt reports DBC @0 (Motorola) as BigEndian and @1 (Intel) as LittleEndian
   QJsonObject json;
   json.insert(QStringLiteral("startBit"), signal.startBit());
   json.insert(QStringLiteral("length"), signal.bitLength());
-  json.insert(QStringLiteral("bigEndian"), signal.dataEndian() == QSysInfo::LittleEndian);
+  json.insert(QStringLiteral("bigEndian"), signal.dataEndian() == QSysInfo::BigEndian);
   json.insert(QStringLiteral("signed"), signal.dataFormat() == QtCanBus::DataFormat::SignedInteger);
   json.insert(QStringLiteral("factor"), signal.factor());
   json.insert(QStringLiteral("offset"), signal.offset());

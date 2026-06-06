@@ -37,6 +37,7 @@
 #include <vector>
 
 #include "Concepts.h"
+#include "HotpathOptimization.h"
 
 //--------------------------------------------------------------------------------------------------
 // Standard keys for loading/offloading frame structures using JSON files
@@ -696,22 +697,10 @@ inline void clear_frame(Frame& frame) noexcept
 }
 
 /**
- * @brief Disables unrolling for the following loop. The per-dataset publish loops have short
- *        trip counts with large inlined bodies, where -O3 unrolling only bloats I-cache.
- */
-#if defined(__clang__)
-#  define SS_NO_UNROLL _Pragma("clang loop unroll(disable)")
-#elif defined(__GNUC__)
-#  define SS_NO_UNROLL _Pragma("GCC unroll 1")
-#else
-#  define SS_NO_UNROLL
-#endif
-
-/**
  * @brief Allocation-free QString copy: reuses the destination buffer when it is unique and
  *        large enough, falling back to an implicit-share assignment otherwise.
  */
-inline void assign_string_in_place(QString& dst, const QString& src) noexcept
+SS_FORCE_INLINE void assign_string_in_place(QString& dst, const QString& src) noexcept
 {
   const qsizetype n = src.size();
   if (dst.isDetached() && dst.capacity() >= n) {
@@ -726,7 +715,7 @@ inline void assign_string_in_place(QString& dst, const QString& src) noexcept
  * @brief Writes UTF-8 bytes into a QString, reusing the destination buffer for ASCII payloads.
  *        Non-ASCII input falls back to QString::fromUtf8 (one allocation).
  */
-inline void assign_utf8_in_place(QString& dst, QByteArrayView src)
+SS_FORCE_INLINE void assign_utf8_in_place(QString& dst, QByteArrayView src)
 {
   const char* p     = src.data();
   const qsizetype n = src.size();

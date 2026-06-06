@@ -368,10 +368,19 @@ def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
     assert "moodycamel::ReaderWriterQueue<IO::CapturedDataPtr>" in reader_h
     assert "void processData(const IO::CapturedDataPtr& data);" in reader_h
     assert "frameTimestamp(qsizetype endOffsetExclusive)" in reader_h
-    assert "buildFrame(QByteArray&& data, qsizetype endOffsetExclusive)" in reader_h
+    # Captured frames are stamped and enqueued through the slot-pool seam
+    # (claimCapturedSlot -> fill -> enqueueCaptured), not a value-returning
+    # buildFrame helper. enqueueCaptured owns the timestamp at the source.
     assert (
-        "m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))" in reader_cpp
+        "void enqueueCaptured(IO::CapturedDataPtr&& ptr, IO::CapturedData* cd, qsizetype frameEndPos);"
+        in reader_h
     )
+    assert (
+        "[[nodiscard]] IO::CapturedData* claimCapturedSlot(IO::CapturedDataPtr& ptr);"
+        in reader_h
+    )
+    assert "cd->timestamp         = frameTimestamp(frameEndPos);" in reader_cpp
+    assert "m_queue.try_enqueue(std::move(ptr))" in reader_cpp
 
     assert "void hotpathRxFrame(const IO::CapturedDataPtr& data);" in builder_h
     assert (
@@ -1090,3 +1099,190 @@ def test_dashboard_snapshots_around_every_clearing_trigger():
     pts_snippet = pts_body.group(0)
     assert _SNAPSHOT_DECL.search(pts_snippet) is not None
     assert "restorePlotTimeRings(savedPlotRings);" in pts_snippet
+
+
+# ----------------------------------------------------------------------------------
+# R14 -- Modbus map importer: a bool on a holding/input register decodes the whole
+#        16-bit word, not a packed coil bit (PLC e-stop LED never lit otherwise)
+# ----------------------------------------------------------------------------------
+
+
+def test_modbus_register_bool_decodes_whole_word():
+    """A holding/input-register bool used to be funneled to decodeBit(), which reads
+    one LSB-packed bit out of the byte stream -- correct for coils/discrete inputs
+    (register type >= 2) but wrong for holding/input registers, whose response is
+    2-byte big-endian words. For E-Stop at register offset 0, decodeBit() read the
+    register's HIGH byte (always 0x00) and the LED never turned on.
+
+    The fix routes a register-block bool to a new RegBool entry type, decoded as a
+    full word with 0/1 truthiness. Coil/discrete blocks still decode as packed bits.
+    """
+    text = _read("app/src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp")
+
+    # The RegBool entry type exists and is dispatched through decodeRegister().
+    assert "RegBool," in text, "ModbusEntryType::RegBool must exist"
+    assert re.search(
+        r"if \(entry\.type == ModbusEntryType::RegBool\)\s*\{\s*"
+        r"storeAt\(entry\.channel, QString::number\(raw != 0 \? 1 : 0\)\);",
+        text,
+    ), "decodeRegister must short-circuit RegBool to a 0/1 word truthiness"
+
+    # Only bit blocks (coils/discrete) force the packed-bit path now; a bool on a
+    # register block must NOT be collapsed into Bit.
+    assert (
+        'if (bitBlock || name == QLatin1String("bool"))' not in text
+    ), "the bug was the combined `bitBlock || bool` guard; it must be split"
+    assert re.search(r"if \(bitBlock\)\s*return ModbusEntryType::Bit;", text)
+    assert re.search(
+        r'if \(name == QLatin1String\("bool"\)\)\s*return ModbusEntryType::RegBool;',
+        text,
+    )
+
+
+def _decode_modbus_reg_bool(reg_value: int) -> int:
+    """Mirror of the fixed RegBool path: read the full 16-bit register, report 0/1."""
+    hi = (reg_value >> 8) & 0xFF
+    lo = reg_value & 0xFF
+    frame = bytes([0x01, 0x03, 0x02, hi, lo])  # [slave, FC03, byteCount, data...]
+    byte_off = 3  # reg_offset 0 -> 3 + 0 * 2
+    raw = (frame[byte_off] << 8) | frame[byte_off + 1]
+    return 1 if raw != 0 else 0
+
+
+def _decode_modbus_old_bit(reg_value: int) -> int:
+    """Mirror of the OLD buggy decodeBit() path for a holding-register bool."""
+    hi = (reg_value >> 8) & 0xFF
+    lo = reg_value & 0xFF
+    frame = bytes([0x01, 0x03, 0x02, hi, lo])
+    byte_idx = 3 + (0 // 8)  # reg_offset 0 as a bit index
+    return (frame[byte_idx] >> (0 % 8)) & 0x01
+
+
+def test_modbus_register_bool_roundtrip_lights_estop():
+    """Behavioural check: an E-Stop register reading 1 must decode to 1 (LED on),
+    and 0 to 0. The old packed-bit path returns 0 for value 1 -- the actual bug."""
+    assert _decode_modbus_reg_bool(0) == 0
+    assert _decode_modbus_reg_bool(1) == 1
+    assert _decode_modbus_reg_bool(0xFF00) == 1  # any nonzero word is "on"
+
+    # Prove the test discriminates the bug: the old path mis-reads value 1 as 0.
+    assert _decode_modbus_old_bit(1) == 0
+    assert _decode_modbus_reg_bool(1) != _decode_modbus_old_bit(1)
+
+
+# ----------------------------------------------------------------------------------
+# R15 -- DBC importer: Motorola (big-endian) signals decode correctly. Two bugs --
+#        an inverted endian flag and a non-sawtooth big-endian bit walk.
+# ----------------------------------------------------------------------------------
+
+
+def test_dbc_importer_endian_flag_not_inverted():
+    """signalToJson() emitted bigEndian = (dataEndian == LittleEndian), an inversion.
+    Qt reports DBC @0 (Motorola) as QSysInfo::BigEndian and @1 (Intel) as
+    LittleEndian, verbatim -- so the flag was backwards for BOTH endiannesses and
+    every signal hit the wrong extractor branch."""
+    text = _read("app/src/DataModel/Importers/DBCImporter.cpp")
+
+    assert (
+        'json.insert(QStringLiteral("bigEndian"), signal.dataEndian() == QSysInfo::BigEndian);'
+        in text
+    ), "bigEndian must compare against BigEndian"
+    assert "QSysInfo::LittleEndian" not in re.search(
+        r"DBCImporter::signalToJson[\s\S]*?\n\}", text
+    ).group(0), "signalToJson must not regress to the inverted LittleEndian compare"
+
+
+def test_dbc_extract_signal_uses_motorola_sawtooth():
+    """The big-endian branch of extractCanSignal walked bit_pos = start_bit + i
+    monotonically, which is not the DBC Motorola layout. The fix steps the in-byte
+    bit index DOWN and jumps +15 across byte boundaries (Qt's sawtooth)."""
+    text = _read("app/src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp")
+
+    be_branch = re.search(r"if \(signal\.big_endian\)\s*\{[\s\S]*?\n  \} else \{", text)
+    assert be_branch is not None
+    snippet = be_branch.group(0)
+
+    # The sawtooth step is the heart of the fix.
+    assert "bit_pos = ((bit_pos % 8) == 0) ? (bit_pos + 15) : (bit_pos - 1);" in snippet
+    # The old monotonic walk and its complemented shift must be gone.
+    assert "const int bit_pos  = signal.start_bit + i;" not in snippet
+    assert "7 - (bit_pos % 8)" not in snippet
+
+
+def _extract_be(frame: bytes, start_bit: int, length: int) -> int:
+    """Mirror of the fixed Motorola (big-endian) sawtooth extractor."""
+    value = 0
+    bit_pos = start_bit
+    for _ in range(length):
+        byte_idx = bit_pos // 8
+        if byte_idx < len(frame):
+            bit = (frame[byte_idx] >> (bit_pos % 8)) & 1
+            value = (value << 1) | bit
+        bit_pos = (bit_pos + 15) if (bit_pos % 8 == 0) else (bit_pos - 1)
+    return value
+
+
+def _extract_be_old(frame: bytes, start_bit: int, length: int) -> int:
+    """Mirror of the OLD buggy monotonic big-endian walk."""
+    value = 0
+    for i in range(length):
+        bit_pos = start_bit + i
+        byte_idx = bit_pos // 8
+        if byte_idx >= len(frame):
+            continue
+        bit = (frame[byte_idx] >> (7 - (bit_pos % 8))) & 1
+        value = (value << 1) | bit
+    return value
+
+
+def test_dbc_motorola_sawtooth_matches_qt_doc_example():
+    """Qt's QCanSignalDescription docs give a canonical big-endian example: two
+    12-bit values in a 3-byte payload as signal1(startBit=7,len=12) and
+    signal2(startBit=11,len=12). Pack 0xABC and 0x123 per the sawtooth and confirm
+    both decode back. Also pin a byte0-MSB 16-bit signal (7|16@0) of 0x1234."""
+
+    def build_be(frame_len, placements):
+        bits = [0] * (frame_len * 8)
+        for start_bit, length, value in placements:
+            bp = start_bit
+            for i in range(length):
+                bits[bp] = (value >> (length - 1 - i)) & 1
+                bp = (bp + 15) if (bp % 8 == 0) else (bp - 1)
+        frame = bytearray(frame_len)
+        for idx, b in enumerate(bits):
+            if b:
+                frame[idx // 8] |= 1 << (idx % 8)
+        return bytes(frame)
+
+    frame = build_be(3, [(7, 12, 0xABC), (11, 12, 0x123)])
+    assert _extract_be(frame, 7, 12) == 0xABC
+    assert _extract_be(frame, 11, 12) == 0x123
+
+    f16 = build_be(8, [(7, 16, 0x1234)])
+    assert f16[0] == 0x12 and f16[1] == 0x34  # byte 0 is the MSB
+    assert _extract_be(f16, 7, 16) == 0x1234
+
+    # The old monotonic walk does not reproduce these layouts.
+    assert _extract_be_old(f16, 7, 16) != 0x1234
+
+
+# ----------------------------------------------------------------------------------
+# R16 -- CAN Bus example DBC matches its little-endian simulator wire format
+# ----------------------------------------------------------------------------------
+
+
+def test_can_example_dbc_is_intel_endian():
+    """ecu_simulator.dbc declared every signal @0 (Motorola) but ecu_simulator.py
+    packs multi-byte signals with struct.pack('<...') (Intel). The DBC was flipped
+    to @1 so the shipped example is internally consistent. Guard against any @0
+    creeping back into a signal line."""
+    dbc = _read("examples/CAN Bus Example/ecu_simulator.dbc")
+
+    # Real signal definitions are "SG_ <name> : <bits>@<order><sign> ..." -- the
+    # NS_ header's bare "SG_MUL_VAL_" symbol token must not be mistaken for one.
+    signal_lines = [ln for ln in dbc.splitlines() if re.match(r"\s*SG_\s+\w+\s*:", ln)]
+    assert signal_lines, "expected SG_ signal definitions in the example DBC"
+
+    motorola = [ln for ln in signal_lines if re.search(r"@0[+-]", ln)]
+    assert not motorola, f"example DBC must be Intel (@1), found @0 in: {motorola}"
+    assert all(re.search(r"@1[+-]", ln) for ln in signal_lines)

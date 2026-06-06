@@ -162,7 +162,9 @@ size_t DataModel::FrameBuilder::claimPoolSlot() noexcept
 {
   const size_t n    = m_framePool.size();
   const size_t hint = m_framePoolHint.load(std::memory_order_relaxed);
-  Q_ASSERT(n == static_cast<size_t>(kFramePoolSize));
+
+  // Power-of-two pool size: the modulo below strength-reduces to a mask
+  SS_ASSUME(n == static_cast<size_t>(kFramePoolSize));
 
   for (size_t k = 0; k < n; ++k) {
     const size_t idx = (hint + k) % n;
@@ -182,7 +184,7 @@ size_t DataModel::FrameBuilder::claimPoolSlot() noexcept
 /**
  * @brief Logs the one-shot pool-exhaustion warning before a heap-allocation fallback.
  */
-void DataModel::FrameBuilder::notePoolExhausted()
+SS_COLD void DataModel::FrameBuilder::notePoolExhausted()
 {
   static bool warned = false;
   if (!warned) [[unlikely]] {
@@ -251,7 +253,7 @@ bool DataModel::FrameBuilder::preparePooledSlot(PooledFrameSlot* slot, const Dat
  * @brief Claims a free pool slot, copies @p src + @p ts into it, and returns an aliasing
  *        shared_ptr: no deleter, no per-frame control block.
  */
-DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
+SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
   const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts)
 {
   const size_t idx = claimPoolSlot();
@@ -277,7 +279,8 @@ DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
 /**
  * @brief Convenience overload that timestamps the slot with SteadyClock::now().
  */
-DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(const DataModel::Frame& src)
+SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
+  const DataModel::Frame& src)
 {
   return acquireFrame(src, DataModel::TimestampedFrame::SteadyClock::now());
 }
@@ -1042,13 +1045,11 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
 /**
  * @brief Span twin of applyDatasetValue: in-place writes keep the producer allocation-free.
  */
-void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
-                                                    const QByteArrayView* spans,
-                                                    qsizetype count,
-                                                    const TransformFrameInfo& info)
+SS_HOT SS_FLATTEN void DataModel::FrameBuilder::applyDatasetValueSpan(
+  Dataset& dataset, const QByteArrayView* spans, qsizetype count, const TransformFrameInfo& info)
 {
   Q_ASSERT(spans != nullptr);
-  Q_ASSERT(count > 0);
+  SS_ASSUME(count > 0);
 
   if (dataset.virtual_) {
     dataset.numericValue = 0.0;
@@ -1058,6 +1059,9 @@ void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
     const int idx = dataset.index;
     if (idx <= 0 || idx > count) [[unlikely]]
       return;
+
+    // Restates the guard above; never assume idx range before the bounds check on a parsed frame
+    SS_ASSUME(idx >= 1 && idx <= count);
 
     const QByteArrayView token = spans[idx - 1];
     DataModel::assign_utf8_in_place(dataset.value, token);
@@ -1224,15 +1228,17 @@ void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Frame& frame,
  * @brief Flat-table span apply: the slot's pre-resolved dataset pointers make the walk
  *        pointer-only, with no per-frame group/dataset container traversal.
  */
-void DataModel::FrameBuilder::applyDatasetValuesSpans(DataModel::Dataset* const* datasets,
-                                                      qsizetype datasetCount,
-                                                      const QByteArrayView* spans,
-                                                      qsizetype count,
-                                                      const TransformFrameInfo& info)
+SS_HOT void DataModel::FrameBuilder::applyDatasetValuesSpans(
+  DataModel::Dataset* const* SS_RESTRICT datasets,
+  qsizetype datasetCount,
+  const QByteArrayView* SS_RESTRICT spans,
+  qsizetype count,
+  const TransformFrameInfo& info)
 {
   Q_ASSERT(datasets != nullptr);
   Q_ASSERT(spans != nullptr);
 
+  // No-alias contract: flat dataset-pointer table and span scratch are distinct, never written here
   const bool armedWatchdog = beginDatasetPass(info);
 
   SS_NO_UNROLL

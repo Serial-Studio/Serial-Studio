@@ -102,6 +102,7 @@ enum class ModbusEntryType : quint8 {
   F32,
   F64,
   Bit,
+  RegBool,
 };
 
 /**
@@ -142,12 +143,17 @@ struct ModbusMapBlock {
 }
 
 /**
- * @brief Maps a dataType string to the entry layout (bit blocks override to Bit).
+ * @brief Maps a dataType string to the entry layout (bit blocks decode as packed
+ * bits; a register-block bool decodes as a 16-bit truthiness word).
  */
 [[nodiscard]] static ModbusEntryType modbusEntryType(const QString& name, bool bitBlock)
 {
-  if (bitBlock || name == QLatin1String("bool"))
+  // Coil / discrete-input blocks pack one bit per address
+  if (bitBlock)
     return ModbusEntryType::Bit;
+
+  if (name == QLatin1String("bool"))
+    return ModbusEntryType::RegBool;
 
   if (name == QLatin1String("int16"))
     return ModbusEntryType::I16;
@@ -315,6 +321,12 @@ private:
 
     const quint64 raw = uBeAt(frame, byte_off, bytes);
     const bool scaled = (entry.scale != 1.0 || entry.offset != 0.0);
+
+    // A register-backed boolean reports the truthiness of the whole word
+    if (entry.type == ModbusEntryType::RegBool) {
+      storeAt(entry.channel, QString::number(raw != 0 ? 1 : 0));
+      return;
+    }
 
     // Unscaled integers keep the exact textual value (doubles clip past 2^53)
     if (!scaled && isIntegerEntry(entry.type)) {
@@ -540,8 +552,8 @@ struct CanMapMessage {
 };
 
 /**
- * @brief Extracts a raw signal value from the payload, mirroring the DBC bit layouts:
- * big-endian walks MSB-first from the start bit, little-endian accumulates LSB-first.
+ * @brief Extracts a raw signal value from the payload, mirroring the DBC bit layouts
+ * (Motorola MSB-first sawtooth, Intel LSB-first) with Qt's verbatim DBC start bits.
  */
 [[nodiscard]] static qint64 extractCanSignal(const QByteArray& frame,
                                              qsizetype payloadStart,
@@ -553,14 +565,16 @@ struct CanMapMessage {
 
   quint64 value = 0;
   if (signal.big_endian) {
+    // DBC Motorola sawtooth: MSB-first, stepping down then jumping to the next byte's bit 7
+    int bit_pos = signal.start_bit;
     for (int i = 0; i < signal.bit_length; ++i) {
-      const int bit_pos  = signal.start_bit + i;
       const int byte_idx = bit_pos / 8;
-      if (byte_idx >= payloadLen)
-        continue;
+      if (byte_idx < payloadLen) {
+        const int bit = (u8At(frame, payloadStart + byte_idx) >> (bit_pos % 8)) & 0x01;
+        value         = (value << 1) | static_cast<quint64>(bit);
+      }
 
-      const int bit = (u8At(frame, payloadStart + byte_idx) >> (7 - (bit_pos % 8))) & 0x01;
-      value         = (value << 1) | static_cast<quint64>(bit);
+      bit_pos = ((bit_pos % 8) == 0) ? (bit_pos + 15) : (bit_pos - 1);
     }
   } else {
     int bits_read = 0;

@@ -206,12 +206,12 @@ private:
   quint64 m_framePoolGeneration;
 
   void invalidateFramePool() noexcept;
-  void notePoolExhausted();
+  SS_COLD void notePoolExhausted();
   [[nodiscard]] size_t claimPoolSlot() noexcept;
   void bindSlotTemplate(PooledFrameSlot* slot, const DataModel::Frame& src);
   [[nodiscard]] bool preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src);
-  [[nodiscard]] DataModel::TimestampedFramePtr acquireFrame(const DataModel::Frame& src);
-  [[nodiscard]] DataModel::TimestampedFramePtr acquireFrame(
+  [[nodiscard]] SS_HOT DataModel::TimestampedFramePtr acquireFrame(const DataModel::Frame& src);
+  [[nodiscard]] SS_HOT DataModel::TimestampedFramePtr acquireFrame(
     const DataModel::Frame& src, const DataModel::TimestampedFrame::SteadyTimePoint& ts);
 
 private:
@@ -249,20 +249,20 @@ private:
                                const QByteArrayView* spans,
                                qsizetype count,
                                const TransformFrameInfo& info);
-  void applyDatasetValuesSpans(DataModel::Dataset* const* datasets,
-                               qsizetype datasetCount,
-                               const QByteArrayView* spans,
-                               qsizetype count,
-                               const TransformFrameInfo& info);
+  SS_HOT void applyDatasetValuesSpans(DataModel::Dataset* const* SS_RESTRICT datasets,
+                                      qsizetype datasetCount,
+                                      const QByteArrayView* SS_RESTRICT spans,
+                                      qsizetype count,
+                                      const TransformFrameInfo& info);
   void applyDatasetValue(Dataset& dataset,
                          const QString* channelData,
                          int channelCount,
                          const TransformFrameInfo& info,
                          const std::unordered_map<int, int>* replayColumns);
-  void applyDatasetValueSpan(Dataset& dataset,
-                             const QByteArrayView* spans,
-                             qsizetype count,
-                             const TransformFrameInfo& info);
+  SS_HOT SS_FLATTEN void applyDatasetValueSpan(Dataset& dataset,
+                                               const QByteArrayView* spans,
+                                               qsizetype count,
+                                               const TransformFrameInfo& info);
 
   // Parser-load budget guard
   bool parseBudgetSkipFrame();

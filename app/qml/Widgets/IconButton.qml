@@ -16,12 +16,13 @@ Button {
   id: root
 
   padding: 4
-  property int iconSize: 18
-  property bool mirrorIconInRtl: icon.source.toString() !== "qrc:/icons/buttons/apply.svg"
-
   icon.width: iconSize
   icon.height: iconSize
+  opacity: enabled ? 1 : 0.5
   icon.color: Cpp_ThemeManager.colors["button_text"]
+
+  property int iconSize: 18
+  property bool mirrorIconInRtl: icon.source.toString() !== "qrc:/icons/buttons/apply.svg"
 
   readonly property bool hasText: text.length > 0
   readonly property bool flip: mirrorIconInRtl && Cpp_Misc_Translator.rtl
