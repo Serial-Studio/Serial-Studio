@@ -259,10 +259,10 @@ private:
                          int channelCount,
                          const TransformFrameInfo& info,
                          const std::unordered_map<int, int>* replayColumns);
-  SS_HOT SS_FLATTEN void applyDatasetValueSpan(Dataset& dataset,
-                                               const QByteArrayView* spans,
-                                               qsizetype count,
-                                               const TransformFrameInfo& info);
+  SS_HOT void applyDatasetValueSpan(Dataset& dataset,
+                                    const QByteArrayView* spans,
+                                    qsizetype count,
+                                    const TransformFrameInfo& info);
 
   // Parser-load budget guard
   bool parseBudgetSkipFrame();

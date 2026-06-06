@@ -1045,8 +1045,10 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
 /**
  * @brief Span twin of applyDatasetValue: in-place writes keep the producer allocation-free.
  */
-SS_HOT SS_FLATTEN void DataModel::FrameBuilder::applyDatasetValueSpan(
-  Dataset& dataset, const QByteArrayView* spans, qsizetype count, const TransformFrameInfo& info)
+SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
+                                                           const QByteArrayView* spans,
+                                                           qsizetype count,
+                                                           const TransformFrameInfo& info)
 {
   Q_ASSERT(spans != nullptr);
   SS_ASSUME(count > 0);
