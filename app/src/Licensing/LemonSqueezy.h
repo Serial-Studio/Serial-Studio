@@ -119,7 +119,7 @@ public slots:
 private slots:
   void readSettings();
   void writeSettings();
-  void clearLicenseCache(const bool clearLicense = false);
+  void clearLicenseCache(const bool clearLicense = false, const bool persist = true);
 
 private:
   void readActivationResponse(const QByteArray& data);

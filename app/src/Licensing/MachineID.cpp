@@ -26,7 +26,14 @@
 #include <QCryptographicHash>
 #include <QFileInfo>
 #include <QProcess>
+#include <QScopeGuard>
 #include <QtCore/qendian.h>
+
+#if defined(Q_OS_WIN)
+#  include <comdef.h>
+#  include <wbemidl.h>
+#  include <windows.h>
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Executable path resolution
@@ -58,6 +65,82 @@ static void awaitTool(QProcess& process)
     process.waitForFinished(500);
   }
 }
+
+#if defined(Q_OS_WIN)
+/**
+ * @brief Reads Win32_ComputerSystemProduct.UUID via WMI/COM without spawning a process.
+ */
+static QString readWmiComputerSystemProductUuid()
+{
+  // Initialize COM; comOwned records whether this call owns the de-init.
+  const HRESULT initHr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+  const bool comOwned  = SUCCEEDED(initHr);
+  if (initHr == RPC_E_CHANGED_MODE)
+    return QString();
+
+  // Cleanup runs on every exit path; release order is reverse of acquisition.
+  IWbemLocator* locator     = nullptr;
+  IWbemServices* services   = nullptr;
+  IEnumWbemClassObject* itr = nullptr;
+  IWbemClassObject* obj     = nullptr;
+  QString uuid;
+  auto cleanup = qScopeGuard([&] {
+    if (obj)
+      obj->Release();
+
+    if (itr)
+      itr->Release();
+
+    if (services)
+      services->Release();
+
+    if (locator)
+      locator->Release();
+
+    if (comOwned)
+      CoUninitialize();
+  });
+
+  // Process-wide security is a one-shot call; a benign failure here is non-fatal.
+  CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT,
+                       RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr);
+
+  // Connect to the WMI locator and the CIMV2 namespace
+  if (FAILED(CoCreateInstance(CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator,
+                              reinterpret_cast<void**>(&locator))))
+    return QString();
+  if (FAILED(locator->ConnectServer(_bstr_t(L"ROOT\\CIMV2"), nullptr, nullptr, nullptr, 0, nullptr,
+                                    nullptr, &services)))
+    return QString();
+
+  // Query the single product instance for its UUID property
+  CoSetProxyBlanket(services, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL,
+                    RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE);
+  if (FAILED(services->ExecQuery(_bstr_t(L"WQL"),
+                                 _bstr_t(L"SELECT UUID FROM Win32_ComputerSystemProduct"),
+                                 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr,
+                                 &itr)))
+    return QString();
+
+  // Read the UUID string from the first row
+  ULONG returned = 0;
+  if (itr->Next(WBEM_INFINITE, 1, &obj, &returned) == WBEM_S_NO_ERROR && obj) {
+    VARIANT value;
+    VariantInit(&value);
+    if (SUCCEEDED(obj->Get(L"UUID", 0, &value, nullptr, nullptr)) && value.vt == VT_BSTR)
+      uuid = QString::fromWCharArray(value.bstrVal).trimmed();
+
+    VariantClear(&value);
+  }
+
+  // Treat the documented "no UUID" sentinels as empty so the fingerprint stays stable.
+  if (uuid.compare("00000000-0000-0000-0000-000000000000", Qt::CaseInsensitive) == 0
+      || uuid.compare("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF", Qt::CaseInsensitive) == 0)
+    return QString();
+
+  return uuid;
+}
+#endif
 
 /**
  * @brief Gathers the raw, platform-specific machine identifier and OS label.
@@ -116,8 +199,6 @@ static QString readPlatformId(QString& os)
 
   const auto system32 = systemRoot + QStringLiteral("\\System32\\");
   const auto regTool  = resolveSystemTool({system32 + "reg.exe"}, "reg");
-  const auto psTool =
-    resolveSystemTool({system32 + "WindowsPowerShell\\v1.0\\powershell.exe"}, "powershell");
 
   // Read MachineGuid from the registry
   process.start(
@@ -133,14 +214,8 @@ static QString readPlatformId(QString& os)
     }
   }
 
-  // Read system UUID via PowerShell
-  process.start(psTool,
-                {"-ExecutionPolicy",
-                 "Bypass",
-                 "-command",
-                 "(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"});
-  awaitTool(process);
-  uuid = process.readAllStandardOutput().trimmed();
+  // Read the system UUID via WMI; native call avoids PowerShell cold-start racing the timeout.
+  uuid = readWmiComputerSystemProductUuid();
 
   id = machineGuid + uuid;
 #endif

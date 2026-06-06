@@ -465,7 +465,7 @@ QDateTime Licensing::LemonSqueezy::monotonicNow()
 /**
  * @brief Clears all in-memory licensing state and optionally the stored license key.
  */
-void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
+void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense, const bool persist)
 {
   // Reset all in-memory licensing state
   m_busy           = false;
@@ -492,7 +492,9 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
   Q_EMIT activatedChanged();
   Q_EMIT licenseDataChanged();
 
-  writeSettings();
+  // A failed cache restore must not erase the on-disk blob; only a live verdict persists.
+  if (persist)
+    writeSettings();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -543,7 +545,7 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
       Misc::Utilities::showMessageBox(
         tr("There was an issue validating your license."), error.toString(), QMessageBox::Critical);
 
-    clearLicenseCache();
+    clearLicenseCache(false, !cachedResponse);
     return false;
   }
 
@@ -564,7 +566,7 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
            "Serial Studio store."),
         QMessageBox::Critical);
 
-    clearLicenseCache();
+    clearLicenseCache(false, !cachedResponse);
     return false;
   }
 
@@ -575,7 +577,7 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
                                       tr("Deactivate it there first or contact support for help."),
                                       QMessageBox::Critical);
 
-    clearLicenseCache();
+    clearLicenseCache(false, !cachedResponse);
     return false;
   }
 
@@ -587,7 +589,7 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
         tr("It may have expired or been deactivated (status: %1).").arg(licenseStatus),
         QMessageBox::Warning);
 
-    clearLicenseCache();
+    clearLicenseCache(false, !cachedResponse);
     return false;
   }
 
@@ -598,7 +600,7 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
                                       tr("No activation ID was returned."),
                                       QMessageBox::Critical);
 
-    clearLicenseCache();
+    clearLicenseCache(false, !cachedResponse);
     return false;
   }
 
@@ -609,7 +611,7 @@ bool Licensing::LemonSqueezy::checkValidationRules(const QJsonObject& json,
                                       tr("Try again later."),
                                       QMessageBox::Warning);
 
-    clearLicenseCache();
+    clearLicenseCache(false, !cachedResponse);
     return false;
   }
 
@@ -698,7 +700,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
   const auto doc = QJsonDocument::fromJson(data, &parseError);
   if (parseError.error != QJsonParseError::NoError) {
     qWarning() << "[LemonSqueezy] JSON parse error" << parseError.errorString();
-    clearLicenseCache();
+    clearLicenseCache(false, !cachedResponse);
     return;
   }
 

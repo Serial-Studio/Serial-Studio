@@ -206,6 +206,7 @@ set(SOURCES
   src/Misc/IconEngine.cpp
   src/Misc/GraphicsBackend.cpp
   src/Misc/CrashTracker.cpp
+  src/Misc/WhatsNew.cpp
   src/Misc/BackupManager.cpp
   src/Misc/CLI.cpp
   src/Benchmark/HotpathBenchmark.cpp
@@ -324,6 +325,7 @@ set(HEADERS
   src/Misc/IconEngine.h
   src/Misc/GraphicsBackend.h
   src/Misc/CrashTracker.h
+  src/Misc/WhatsNew.h
   src/Misc/BackupManager.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
@@ -459,6 +461,8 @@ set(QML_SOURCES
   qml/Dialogs/OnlineIconPicker.qml
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
+  qml/Dialogs/WhatsNew.qml
+  qml/Dialogs/Tips.qml
   qml/Dialogs/WorkspaceDialog.qml
   qml/Dialogs/ExtensionManager.qml
   qml/Dialogs/ExamplesBrowser.qml
@@ -1248,7 +1252,7 @@ endif()
 
 if(WIN32)
   target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE
-    Dwmapi.lib Shell32.lib Advapi32.lib Ole32.lib Uuid.lib Propsys.lib)
+    Dwmapi.lib Shell32.lib Advapi32.lib Ole32.lib Uuid.lib Propsys.lib Wbemuuid.lib)
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     WIN32_EXECUTABLE TRUE
   )
