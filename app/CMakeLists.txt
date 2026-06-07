@@ -617,6 +617,7 @@ if(BUILD_COMMERCIAL)
     src/AI/Logging.h
     src/AI/KeyVault.h
     src/AI/CommandRegistry.h
+    src/AI/FileSandbox.h
     src/AI/ToolDispatcher.h
     src/AI/Assistant.h
     src/AI/DocSearch.h
@@ -697,6 +698,7 @@ if(BUILD_COMMERCIAL)
     src/AI/Logging.cpp
     src/AI/KeyVault.cpp
     src/AI/CommandRegistry.cpp
+    src/AI/FileSandbox.cpp
     src/AI/ToolDispatcher.cpp
     src/AI/Assistant.cpp
     src/AI/DocSearch.cpp
@@ -1252,7 +1254,7 @@ endif()
 
 if(WIN32)
   target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE
-    Dwmapi.lib Shell32.lib Advapi32.lib Ole32.lib Uuid.lib Propsys.lib Wbemuuid.lib)
+    Dwmapi.lib Shell32.lib Advapi32.lib Ole32.lib Uuid.lib Propsys.lib)
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     WIN32_EXECUTABLE TRUE
   )

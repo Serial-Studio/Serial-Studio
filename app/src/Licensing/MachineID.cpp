@@ -26,14 +26,7 @@
 #include <QCryptographicHash>
 #include <QFileInfo>
 #include <QProcess>
-#include <QScopeGuard>
 #include <QtCore/qendian.h>
-
-#if defined(Q_OS_WIN)
-#  include <comdef.h>
-#  include <wbemidl.h>
-#  include <windows.h>
-#endif
 
 //--------------------------------------------------------------------------------------------------
 // Executable path resolution
@@ -56,108 +49,14 @@ static QString resolveSystemTool(const QStringList& candidates, const QString& f
 /**
  * @brief Waits for a fingerprint helper with a hard timeout, killing it if it wedges.
  */
-static void awaitTool(QProcess& process)
+static void awaitTool(QProcess& process, int timeoutMs = 3000)
 {
-  // Runs before the event loop, so a hung tool must not block launch for Qt's 30s default.
-  static constexpr int kToolTimeoutMs = 3000;
-  if (!process.waitForFinished(kToolTimeoutMs)) {
+  // The timeout must clear the tool's normal worst case, else a slow start changes the fingerprint.
+  if (!process.waitForFinished(timeoutMs)) {
     process.kill();
     process.waitForFinished(500);
   }
 }
-
-#if defined(Q_OS_WIN)
-/**
- * @brief Reads Win32_ComputerSystemProduct.UUID via WMI/COM without spawning a process.
- */
-static QString readWmiComputerSystemProductUuid()
-{
-  // Initialize COM; comOwned records whether this call owns the de-init.
-  const HRESULT initHr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-  const bool comOwned  = SUCCEEDED(initHr);
-  if (initHr == RPC_E_CHANGED_MODE)
-    return QString();
-
-  // Cleanup runs on every exit path; release order is reverse of acquisition.
-  IWbemLocator* locator     = nullptr;
-  IWbemServices* services   = nullptr;
-  IEnumWbemClassObject* itr = nullptr;
-  IWbemClassObject* obj     = nullptr;
-  QString uuid;
-  auto cleanup = qScopeGuard([&] {
-    if (obj)
-      obj->Release();
-
-    if (itr)
-      itr->Release();
-
-    if (services)
-      services->Release();
-
-    if (locator)
-      locator->Release();
-
-    if (comOwned)
-      CoUninitialize();
-  });
-
-  // Process-wide security is a one-shot call; a benign failure here is non-fatal.
-  CoInitializeSecurity(nullptr,
-                       -1,
-                       nullptr,
-                       nullptr,
-                       RPC_C_AUTHN_LEVEL_DEFAULT,
-                       RPC_C_IMP_LEVEL_IMPERSONATE,
-                       nullptr,
-                       EOAC_NONE,
-                       nullptr);
-
-  // Connect to the WMI locator and the CIMV2 namespace
-  if (FAILED(CoCreateInstance(CLSID_WbemLocator,
-                              nullptr,
-                              CLSCTX_INPROC_SERVER,
-                              IID_IWbemLocator,
-                              reinterpret_cast<void**>(&locator))))
-    return QString();
-  if (FAILED(locator->ConnectServer(
-        _bstr_t(L"ROOT\\CIMV2"), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &services)))
-    return QString();
-
-  // Query the single product instance for its UUID property
-  CoSetProxyBlanket(services,
-                    RPC_C_AUTHN_WINNT,
-                    RPC_C_AUTHZ_NONE,
-                    nullptr,
-                    RPC_C_AUTHN_LEVEL_CALL,
-                    RPC_C_IMP_LEVEL_IMPERSONATE,
-                    nullptr,
-                    EOAC_NONE);
-  if (FAILED(services->ExecQuery(_bstr_t(L"WQL"),
-                                 _bstr_t(L"SELECT UUID FROM Win32_ComputerSystemProduct"),
-                                 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
-                                 nullptr,
-                                 &itr)))
-    return QString();
-
-  // Read the UUID string from the first row
-  ULONG returned = 0;
-  if (itr->Next(WBEM_INFINITE, 1, &obj, &returned) == WBEM_S_NO_ERROR && obj) {
-    VARIANT value;
-    VariantInit(&value);
-    if (SUCCEEDED(obj->Get(L"UUID", 0, &value, nullptr, nullptr)) && value.vt == VT_BSTR)
-      uuid = QString::fromWCharArray(value.bstrVal).trimmed();
-
-    VariantClear(&value);
-  }
-
-  // Treat the documented "no UUID" sentinels as empty so the fingerprint stays stable.
-  if (uuid.compare("00000000-0000-0000-0000-000000000000", Qt::CaseInsensitive) == 0
-      || uuid.compare("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF", Qt::CaseInsensitive) == 0)
-    return QString();
-
-  return uuid;
-}
-#endif
 
 /**
  * @brief Gathers the raw, platform-specific machine identifier and OS label.
@@ -231,7 +130,7 @@ static QString readPlatformId(QString& os)
     }
   }
 
-  // DIAGNOSTIC: run both UUID sources, log raw strings, keep PowerShell value for the fingerprint.
+  // Read the system UUID via PowerShell; allow a long timeout so cold-start cannot drop it.
   const auto psTool =
     resolveSystemTool({system32 + "WindowsPowerShell\\v1.0\\powershell.exe"}, "powershell");
   process.start(psTool,
@@ -239,27 +138,10 @@ static QString readPlatformId(QString& os)
                  "Bypass",
                  "-command",
                  "(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"});
-  process.waitForFinished();
-  const QString psUuid  = process.readAllStandardOutput().trimmed();
-  const QString wmiUuid = readWmiComputerSystemProductUuid();
+  awaitTool(process, 30000);
+  uuid = process.readAllStandardOutput().trimmed();
 
-  // Mirror the real derivation so each source's resulting machineId can be compared to 3.2.7.
-  const auto machineIdFor = [&](const QString& candidateUuid) {
-    const auto rawId = machineGuid + candidateUuid;
-    const auto data  = QString("%1@%2:%3").arg(qApp->applicationName(), rawId, os);
-    const auto hash  = QCryptographicHash::hash(data.toUtf8(), QCryptographicHash::Blake2s_128);
-    return QString::fromUtf8(hash.toBase64());
-  };
-
-  qInfo().noquote() << "[MachineID] machineGuid =[" << machineGuid << "]";
-  qInfo().noquote() << "[MachineID] PS  uuid     =[" << psUuid << "]";
-  qInfo().noquote() << "[MachineID] WMI uuid     =[" << wmiUuid << "]";
-  qInfo().noquote() << "[MachineID] PS  machineId=[" << machineIdFor(psUuid) << "]";
-  qInfo().noquote() << "[MachineID] WMI machineId=[" << machineIdFor(wmiUuid) << "]";
-  qInfo().noquote() << "[MachineID] (3.2.7 was   [ DSI+5LBOk1yBnWZFRrAQpg== ])";
-
-  uuid = psUuid;
-  id   = machineGuid + uuid;
+  id = machineGuid + uuid;
 #endif
 
 // Obtain machine ID in OpenBSD
