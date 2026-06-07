@@ -37,12 +37,12 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="193"/>
+        <location filename="../../src/AI/Assistant.cpp" line="195"/>
         <source>Allow AI Device Control?</source>
         <translation>Разрешить Управление Устройством через ИИ?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="194"/>
+        <location filename="../../src/AI/Assistant.cpp" line="196"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -51,22 +51,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 Каждое действие с устройством по-прежнему требует вашего явного подтверждения в чате, даже при включенном автоматическом одобрении. Включайте эту функцию только если вы доверяете настроенному провайдеру ИИ доступ к оборудованию.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="393"/>
+        <location filename="../../src/AI/Assistant.cpp" line="395"/>
         <source>Switch AI provider?</source>
         <translation>Переключить провайдера AI?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="394"/>
+        <location filename="../../src/AI/Assistant.cpp" line="396"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>Переключение на другого провайдера очищает текущий диалог. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="397"/>
+        <location filename="../../src/AI/Assistant.cpp" line="399"/>
         <source>Assistant</source>
         <translation>Ассистент</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="434"/>
+        <location filename="../../src/AI/Assistant.cpp" line="436"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI-ассистент недоступен в этой сборке</translation>
     </message>
@@ -75,7 +75,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">AI-Ассистент требует лицензию Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="439"/>
+        <location filename="../../src/AI/Assistant.cpp" line="441"/>
         <source>Set an API key first</source>
         <translation>Сначала установите ключ API</translation>
     </message>
@@ -107,7 +107,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>Достигнут лимит вызовов инструментов для этого хода; дальнейшие инструменты не будут выполнены.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1724"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1736"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Вы достигли лимита вызовов инструментов для этого хода. Не запрашивайте больше инструментов. Подведите итог того, что найдено на данный момент, и если задача не завершена, укажите, какие шаги остались, чтобы пользователь мог попросить вас продолжить.</translation>
     </message>
@@ -172,22 +172,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="334"/>
         <source>Invalid API key (%1)</source>
         <translation>Недействительный ключ API (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="326"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="336"/>
         <source>Rate limited: %1</source>
         <translation>Превышен лимит запросов: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="328"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="338"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
@@ -338,37 +338,36 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Что Нового</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>Tips &amp;&amp; Tricks</source>
-        <translation>Советы и Хитрости</translation>
+        <translation type="vanished">Советы и Хитрости</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>License Agreement</source>
         <translation>Лицензионное Соглашение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Report Bug</source>
         <translation>Сообщить об Ошибке</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Acknowledgements</source>
         <translation>Благодарности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="268"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Benchmark</source>
         <translation>Тест Производительности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="276"/>
+        <location filename="../../qml/Dialogs/About.qml" line="267"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="292"/>
+        <location filename="../../qml/Dialogs/About.qml" line="283"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -1098,77 +1097,92 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Сгруппировать наборы данных в удобные рабочие пространства</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>Drop files or folders to let the assistant read them</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="472"/>
+        <source>Added folder "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="473"/>
+        <source>Added "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="557"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Спросите Serial Studio о чём угодно…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="468"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="577"/>
         <source>Clear conversation</source>
         <translation>Очистить диалог</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="512"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="621"/>
         <source>Stop generating</source>
         <translation>Остановить генерацию</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="513"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="622"/>
         <source>Send message (Enter)</source>
         <translation>Отправить сообщение (Enter)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="555"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="664"/>
         <source>Provider</source>
         <translation>Провайдер</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="588"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="697"/>
         <source>Model selection</source>
         <translation>Выбор модели</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="743"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>Выполнять действия редактирования без подтверждения. Заблокированные действия остаются заблокированными.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="636"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="745"/>
         <source>Auto-approve edits</source>
         <translation>Автоматически одобрять правки</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="761"/>
         <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
         <translation>Разрешить ИИ настраивать устройства, подключаться/отключаться и отправлять данные. Каждое действие по-прежнему требует вашего подтверждения.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="654"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="763"/>
         <source>Allow device control</source>
         <translation>Разрешить управление устройством</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="680"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="789"/>
         <source>Manage API keys</source>
         <translation>Управление ключами API</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="701"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="810"/>
         <source>Working</source>
         <translation>Обработка</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="702"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="811"/>
         <source>Ready</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="703"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="812"/>
         <source>  •  cache %1k tok</source>
         <translation>•  кэш %1k токенов</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="704"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="813"/>
         <source>  •  cache write %1k tok</source>
         <translation>запись кэша %1k токенов</translation>
     </message>
@@ -13913,7 +13927,7 @@ function parse(%1) { ... }
         <translation>Время: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="327"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="364"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>Ключ API OpenAI не задан. Откройте «Управление ключами», чтобы добавить его.</translation>
     </message>
@@ -16804,104 +16818,84 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>Tips</name>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
         <source>Did You Know?</source>
-        <translation>Знаете Ли Вы?</translation>
+        <translation type="vanished">Знаете Ли Вы?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
         <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
-        <translation>Упростите прошивку, отправляя необработанные данные и позволяя Serial Studio обрабатывать их в JavaScript, Lua или встроенных шаблонах без кода.</translation>
+        <translation type="vanished">Упростите прошивку, отправляя необработанные данные и позволяя Serial Studio обрабатывать их в JavaScript, Lua или встроенных шаблонах без кода.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
         <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
-        <translation>Назначьте каждому каналу собственную функцию для калибровки, фильтрации или преобразования единиц. Переложите математику на Serial Studio и сохраните прошивку компактной.</translation>
+        <translation type="vanished">Назначьте каждому каналу собственную функцию для калибровки, фильтрации или преобразования единиц. Переложите математику на Serial Studio и сохраните прошивку компактной.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
         <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
-        <translation>Нужно значение, которое устройство не передаёт? Виртуальный набор данных вычисляет собственный канал, например мощность из напряжения и тока, с построением графиков и записью как данных.</translation>
+        <translation type="vanished">Нужно значение, которое устройство не передаёт? Виртуальный набор данных вычисляет собственный канал, например мощность из напряжения и тока, с построением графиков и записью как данных.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
         <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
-        <translation>Ловите сбои как на осциллографе. Графики по оси времени имеют режим развёртки и триггера, а уровень триггера можно перетаскивать прямо на графике.</translation>
+        <translation type="vanished">Ловите сбои как на осциллографе. Графики по оси времени имеют режим развёртки и триггера, а уровень триггера можно перетаскивать прямо на графике.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
         <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
-        <translation>Хватит прокручивать в поисках нужного виджета. Группируйте их в собственные рабочие области и переключайтесь между ними через поиск на панели задач.</translation>
+        <translation type="vanished">Хватит прокручивать в поисках нужного виджета. Группируйте их в собственные рабочие области и переключайтесь между ними через поиск на панели задач.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
         <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
-        <translation>Больше не теряйте результаты тестов. Записывайте сеансы в локальную базу данных, затем просматривайте, помечайте и воспроизводите их когда потребуется.</translation>
+        <translation type="vanished">Больше не теряйте результаты тестов. Записывайте сеансы в локальную базу данных, затем просматривайте, помечайте и воспроизводите их когда потребуется.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
         <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
-        <translation>Передайте команде готовый отчёт за секунды. Экспортируйте любой сеанс в HTML или PDF с графиками и статистикой мин/макс/среднее.</translation>
+        <translation type="vanished">Передайте команде готовый отчёт за секунды. Экспортируйте любой сеанс в HTML или PDF с графиками и статистикой мин/макс/среднее.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
         <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
-        <translation>Замкните цикл без дополнительных инструментов. Элементы управления выводом позволяют отправлять команды обратно на устройство прямо с панели управления.</translation>
+        <translation type="vanished">Замкните цикл без дополнительных инструментов. Элементы управления выводом позволяют отправлять команды обратно на устройство прямо с панели управления.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
         <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
-        <translation>Создайте визуализацию, которой нет ни у кого другого. Виджет Painter выполняет ваш собственный скрипт для отрисовки полностью настраиваемой графики из входящих данных.</translation>
+        <translation type="vanished">Создайте визуализацию, которой нет ни у кого другого. Виджет Painter выполняет ваш собственный скрипт для отрисовки полностью настраиваемой графики из входящих данных.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
         <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
-        <translation>Один инструмент для любого канала связи. Serial Studio читает данные из UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, аудио, USB, HID, MQTT и Process I/O.</translation>
+        <translation type="vanished">Один инструмент для любого канала связи. Serial Studio читает данные из UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, аудио, USB, HID, MQTT и Process I/O.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
         <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
-        <translation>Забудьте о танцах с терминалом. Отправляйте и получайте файлы по последовательному каналу связи с помощью встроенных протоколов XMODEM, YMODEM и ZMODEM.</translation>
+        <translation type="vanished">Забудьте о танцах с терминалом. Отправляйте и получайте файлы по последовательному каналу связи с помощью встроенных протоколов XMODEM, YMODEM и ZMODEM.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
         <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
-        <translation>Уже есть карта регистров Modbus или файл DBC? Автоматически сгенерируйте готовый к использованию проект вместо того, чтобы создавать его вручную.</translation>
+        <translation type="vanished">Уже есть карта регистров Modbus или файл DBC? Автоматически сгенерируйте готовый к использованию проект вместо того, чтобы создавать его вручную.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
         <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
-        <translation>Опишите, что вы хотите, и позвольте AI-ассистенту создать это. Он может создавать и редактировать проекты для вас, используя восемь провайдеров моделей.</translation>
+        <translation type="vanished">Опишите, что вы хотите, и позвольте AI-ассистенту создать это. Он может создавать и редактировать проекты для вас, используя восемь провайдеров моделей.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
         <source>Tip %1 of %2</source>
-        <translation>Совет %1 из %2</translation>
+        <translation type="vanished">Совет %1 из %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
         <source>Learn More</source>
-        <translation>Узнать Больше</translation>
+        <translation type="vanished">Узнать Больше</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
         <source>Show Tips on Startup</source>
-        <translation>Показывать Советы при Запуске</translation>
+        <translation type="vanished">Показывать Советы при Запуске</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
         <source>Previous</source>
-        <translation>Предыдущий</translation>
+        <translation type="vanished">Предыдущий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
         <source>Next</source>
-        <translation>Далее</translation>
+        <translation type="vanished">Далее</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation type="vanished">Закрыть</translation>
     </message>
 </context>
 <context>

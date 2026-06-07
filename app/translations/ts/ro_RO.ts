@@ -37,12 +37,12 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="193"/>
+        <location filename="../../src/AI/Assistant.cpp" line="195"/>
         <source>Allow AI Device Control?</source>
         <translation>Permiteți Controlul Dispozitivului prin AI?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="194"/>
+        <location filename="../../src/AI/Assistant.cpp" line="196"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -51,22 +51,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. explicită per apel în chat, chiar și când auto-aprobarea este activată. Activați această opțiune doar dacă aveți încredere în furnizorul AI configurat cu acces la hardware.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="393"/>
+        <location filename="../../src/AI/Assistant.cpp" line="395"/>
         <source>Switch AI provider?</source>
         <translation>Schimbați furnizorul AI?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="394"/>
+        <location filename="../../src/AI/Assistant.cpp" line="396"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>Schimbarea furnizorului șterge conversația curentă. Doriți să continuați?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="397"/>
+        <location filename="../../src/AI/Assistant.cpp" line="399"/>
         <source>Assistant</source>
         <translation>Asistent</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="434"/>
+        <location filename="../../src/AI/Assistant.cpp" line="436"/>
         <source>AI Assistant is not available in this build</source>
         <translation>Asistentul AI nu este disponibil în această versiune</translation>
     </message>
@@ -75,7 +75,7 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
         <translation type="vanished">Asistentul AI necesită o licență Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="439"/>
+        <location filename="../../src/AI/Assistant.cpp" line="441"/>
         <source>Set an API key first</source>
         <translation>Setați mai întâi o cheie API</translation>
     </message>
@@ -107,7 +107,7 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
         <translation>Bugetul de apeluri de instrumente a fost atins pentru această rundă; nu vor mai fi executate instrumente.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1724"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1736"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Ați atins bugetul de apeluri de instrumente pentru această rundă. Nu mai solicitați instrumente. Rezumați ceea ce ați găsit până acum și, dacă sarcina este incompletă, menționați ce pași rămân pentru ca utilizatorul să vă poată spune să continuați.</translation>
     </message>
@@ -172,22 +172,22 @@ Fiecare acțiune asupra dispozitivului necesită în continuare aprobarea dvs. e
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="334"/>
         <source>Invalid API key (%1)</source>
         <translation>Cheie API invalidă (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="326"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="336"/>
         <source>Rate limited: %1</source>
         <translation>Limită de rată: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="328"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="338"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
@@ -338,37 +338,36 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation>Ce Este Nou</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>Tips &amp;&amp; Tricks</source>
-        <translation>Sfaturi și Trucuri</translation>
+        <translation type="vanished">Sfaturi și Trucuri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>License Agreement</source>
         <translation>Acord de Licență</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Report Bug</source>
         <translation>Raportează Eroare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Acknowledgements</source>
         <translation>Mulțumiri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="268"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="276"/>
+        <location filename="../../qml/Dialogs/About.qml" line="267"/>
         <source>Website</source>
         <translation>Site Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="292"/>
+        <location filename="../../qml/Dialogs/About.qml" line="283"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
@@ -1098,77 +1097,92 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation>Grupează seturile de date în spații de lucru utile</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>Drop files or folders to let the assistant read them</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="472"/>
+        <source>Added folder "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="473"/>
+        <source>Added "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="557"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Întreabă Serial Studio orice…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="468"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="577"/>
         <source>Clear conversation</source>
         <translation>Șterge conversația</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="512"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="621"/>
         <source>Stop generating</source>
         <translation>Oprește generarea</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="513"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="622"/>
         <source>Send message (Enter)</source>
         <translation>Trimite mesaj (Enter)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="555"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="664"/>
         <source>Provider</source>
         <translation>Furnizor</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="588"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="697"/>
         <source>Model selection</source>
         <translation>Selectare model</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="743"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>Execută acțiunile de editare fără a întreba de fiecare dată. Acțiunile blocate rămân blocate.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="636"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="745"/>
         <source>Auto-approve edits</source>
         <translation>Aprobă automat editările</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="761"/>
         <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
         <translation>Permite AI-ului să configureze dispozitive, să conecteze/deconecteze și să trimită date. Fiecare acțiune solicită în continuare aprobarea dvs.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="654"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="763"/>
         <source>Allow device control</source>
         <translation>Permite controlul dispozitivului</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="680"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="789"/>
         <source>Manage API keys</source>
         <translation>Gestionează cheile API</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="701"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="810"/>
         <source>Working</source>
         <translation>Se Lucrează</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="702"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="811"/>
         <source>Ready</source>
         <translation>Gata</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="703"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="812"/>
         <source>  •  cache %1k tok</source>
         <translation>•  cache %1k tok</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="704"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="813"/>
         <source>  •  cache write %1k tok</source>
         <translation>scriere cache %1k tok</translation>
     </message>
@@ -13913,7 +13927,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Timp: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="327"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="364"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>Nicio cheie API OpenAI configurată. Deschide Gestionare Chei pentru a adăuga una.</translation>
     </message>
@@ -16804,104 +16818,84 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
 <context>
     <name>Tips</name>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
         <source>Did You Know?</source>
-        <translation>Știați Că?</translation>
+        <translation type="vanished">Știați Că?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
         <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
-        <translation>Păstrați firmware-ul simplu trimițând date brute și lăsând Serial Studio să le parseze în JavaScript, Lua sau șabloane Built-In fără cod.</translation>
+        <translation type="vanished">Păstrați firmware-ul simplu trimițând date brute și lăsând Serial Studio să le parseze în JavaScript, Lua sau șabloane Built-In fără cod.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
         <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
-        <translation>Atribuiți fiecărui canal propria funcție pentru calibrare, filtrare sau conversie de unități. Transferați calculele către Serial Studio și mențineți firmware-ul compact.</translation>
+        <translation type="vanished">Atribuiți fiecărui canal propria funcție pentru calibrare, filtrare sau conversie de unități. Transferați calculele către Serial Studio și mențineți firmware-ul compact.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
         <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
-        <translation>Aveți nevoie de o valoare pe care dispozitivul nu o trimite niciodată? Un dataset virtual calculează propriul canal, cum ar fi puterea din tensiune și curent, afișat și înregistrat ca date.</translation>
+        <translation type="vanished">Aveți nevoie de o valoare pe care dispozitivul nu o trimite niciodată? Un dataset virtual calculează propriul canal, cum ar fi puterea din tensiune și curent, afișat și înregistrat ca date.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
         <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
-        <translation>Detectați anomalii ca un osciloscop de bancă. Graficele cu axă temporală au mod de baleiaj și declanșare, iar nivelul de declanșare poate fi ajustat direct pe grafic.</translation>
+        <translation type="vanished">Detectați anomalii ca un osciloscop de bancă. Graficele cu axă temporală au mod de baleiaj și declanșare, iar nivelul de declanșare poate fi ajustat direct pe grafic.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
         <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
-        <translation>Nu mai derulați pentru a găsi widget-ul potrivit. Grupați-le în propriile workspace-uri și navigați între ele din căutarea din bara de activități.</translation>
+        <translation type="vanished">Nu mai derulați pentru a găsi widget-ul potrivit. Grupați-le în propriile workspace-uri și navigați între ele din căutarea din bara de activități.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
         <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
-        <translation>Nu mai pierdeți niciodată o rulare de test. Înregistrați sesiuni într-o bază de date locală, apoi răsfoiți, etichetați și redați-le oricând aveți nevoie.</translation>
+        <translation type="vanished">Nu mai pierdeți niciodată o rulare de test. Înregistrați sesiuni într-o bază de date locală, apoi răsfoiți, etichetați și redați-le oricând aveți nevoie.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
         <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
-        <translation>Furnizați un raport finalizat echipei în câteva secunde. Exportați orice sesiune în HTML sau PDF, completă cu grafice și statistici min/max/medie.</translation>
+        <translation type="vanished">Furnizați un raport finalizat echipei în câteva secunde. Exportați orice sesiune în HTML sau PDF, completă cu grafice și statistici min/max/medie.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
         <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
-        <translation>Închide bucla fără unelte suplimentare. Controalele de Ieșire îți permit să trimiți comenzi înapoi către dispozitiv direct din tablou de bord.</translation>
+        <translation type="vanished">Închide bucla fără unelte suplimentare. Controalele de Ieșire îți permit să trimiți comenzi înapoi către dispozitiv direct din tablou de bord.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
         <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
-        <translation>Construiește o vizualizare pe care nimeni altcineva nu o are. Widget-ul Painter rulează propriul tău script pentru a desena grafică complet personalizată din datele primite.</translation>
+        <translation type="vanished">Construiește o vizualizare pe care nimeni altcineva nu o are. Widget-ul Painter rulează propriul tău script pentru a desena grafică complet personalizată din datele primite.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
         <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
-        <translation>O unealtă pentru fiecare legătură. Serial Studio citește din UART, TCP/UDP, Bluetooth LE, Modbus, Magistrala CAN, audio, USB, HID, MQTT și Process I/O.</translation>
+        <translation type="vanished">O unealtă pentru fiecare legătură. Serial Studio citește din UART, TCP/UDP, Bluetooth LE, Modbus, Magistrala CAN, audio, USB, HID, MQTT și Process I/O.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
         <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
-        <translation>Omite dansul terminalului. Trimite și primește fișiere prin legătura ta serială cu protocoalele integrate XMODEM, YMODEM și ZMODEM.</translation>
+        <translation type="vanished">Omite dansul terminalului. Trimite și primește fișiere prin legătura ta serială cu protocoalele integrate XMODEM, YMODEM și ZMODEM.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
         <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
-        <translation>Ai deja o hartă de registre Modbus sau un fișier DBC? Generează automat un proiect gata de utilizat în loc să construiești unul manual.</translation>
+        <translation type="vanished">Ai deja o hartă de registre Modbus sau un fișier DBC? Generează automat un proiect gata de utilizat în loc să construiești unul manual.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
         <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
-        <translation>Descrie ce vrei și lasă Asistentul AI să construiască. Poate crea și edita proiecte pentru tine pe opt furnizori de modele.</translation>
+        <translation type="vanished">Descrie ce vrei și lasă Asistentul AI să construiască. Poate crea și edita proiecte pentru tine pe opt furnizori de modele.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
         <source>Tip %1 of %2</source>
-        <translation>Sfat %1 din %2</translation>
+        <translation type="vanished">Sfat %1 din %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
         <source>Learn More</source>
-        <translation>Află Mai Multe</translation>
+        <translation type="vanished">Află Mai Multe</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
         <source>Show Tips on Startup</source>
-        <translation>Afișează Sfaturi la Pornire</translation>
+        <translation type="vanished">Afișează Sfaturi la Pornire</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
         <source>Previous</source>
-        <translation>Anterior</translation>
+        <translation type="vanished">Anterior</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
         <source>Next</source>
-        <translation>Următorul</translation>
+        <translation type="vanished">Următorul</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
         <source>Close</source>
-        <translation>Închide</translation>
+        <translation type="vanished">Închide</translation>
     </message>
 </context>
 <context>

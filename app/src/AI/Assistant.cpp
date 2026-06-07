@@ -8,10 +8,12 @@
 
 #include "AI/Assistant.h"
 
+#include <QFileInfo>
 #include <QMessageBox>
 
 #include "AI/CommandRegistry.h"
 #include "AI/Conversation.h"
+#include "AI/FileSandbox.h"
 #include "AI/Logging.h"
 #include "AI/Providers/AnthropicProvider.h"
 #include "AI/Providers/DeepSeekProvider.h"
@@ -496,6 +498,31 @@ void AI::Assistant::clearConversation()
 {
   if (m_conversation)
     m_conversation->clear();
+
+  AI::FileSandbox::instance().clearDroppedPaths();
+}
+
+/**
+ * @brief Authorizes a user-dropped file/folder for sandboxed reads this session.
+ */
+void AI::Assistant::addDroppedPath(const QString& localPath)
+{
+  const auto canonical = AI::FileSandbox::instance().registerDroppedPath(localPath);
+  if (canonical.isEmpty()) {
+    qCWarning(serialStudioAI) << "Ignoring undroppable path:" << localPath;
+    return;
+  }
+
+  const QFileInfo info(canonical);
+  Q_EMIT droppedPathAdded(info.fileName(), info.isDir());
+}
+
+/**
+ * @brief Drops every session-authorized path from the read allow-list.
+ */
+void AI::Assistant::clearDroppedPaths()
+{
+  AI::FileSandbox::instance().clearDroppedPaths();
 }
 
 /**

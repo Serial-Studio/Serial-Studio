@@ -28,7 +28,7 @@
 namespace Misc {
 /**
  * @brief Tracks the last app version a user has seen the "What's New" dialog for,
- *        and the opt-out flags for the What's New and Tips dialogs.
+ *        and the opt-out flag for the What's New dialog.
  */
 class WhatsNew : public QObject {
   // clang-format off
@@ -43,14 +43,9 @@ class WhatsNew : public QObject {
              READ showWhatsNewOnStartup
              WRITE setShowWhatsNewOnStartup
              NOTIFY showWhatsNewOnStartupChanged)
-  Q_PROPERTY(bool showTipsOnStartup
-             READ showTipsOnStartup
-             WRITE setShowTipsOnStartup
-             NOTIFY showTipsOnStartupChanged)
   // clang-format on
 
 signals:
-  void showTipsOnStartupChanged();
   void showWhatsNewOnStartupChanged();
 
 private:
@@ -65,12 +60,10 @@ public:
 
   [[nodiscard]] QString currentVersion() const;
   [[nodiscard]] bool shouldShowWhatsNew() const;
-  [[nodiscard]] bool showTipsOnStartup() const;
   [[nodiscard]] bool showWhatsNewOnStartup() const;
 
 public slots:
   void syncVersion();
-  void setShowTipsOnStartup(const bool show);
   void setShowWhatsNewOnStartup(const bool show);
 
 private:
@@ -78,7 +71,6 @@ private:
 
 private:
   static constexpr const char* kKeyLastSeen = "WhatsNew/LastSeenVersion";
-  static constexpr const char* kKeyTips     = "WhatsNew/ShowTipsOnStartup";
   static constexpr const char* kKeyStartup  = "WhatsNew/ShowOnStartup";
 
   QSettings m_settings;

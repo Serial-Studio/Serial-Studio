@@ -37,12 +37,12 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="193"/>
+        <location filename="../../src/AI/Assistant.cpp" line="195"/>
         <source>Allow AI Device Control?</source>
         <translation>Povolit Ovládání Zařízení AI?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="194"/>
+        <location filename="../../src/AI/Assistant.cpp" line="196"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -51,22 +51,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 Každá akce se zařízením stále vyžaduje explicitní schválení pro každé volání v chatu, i když je povoleno automatické schvalování. Povolte pouze v případě, že důvěřujete nakonfigurovanému poskytovateli AI s přístupem k hardwaru.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="393"/>
+        <location filename="../../src/AI/Assistant.cpp" line="395"/>
         <source>Switch AI provider?</source>
         <translation>Přepnout poskytovatele AI?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="394"/>
+        <location filename="../../src/AI/Assistant.cpp" line="396"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>Přepnutí na jiného poskytovatele vymaže aktuální konverzaci. Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="397"/>
+        <location filename="../../src/AI/Assistant.cpp" line="399"/>
         <source>Assistant</source>
         <translation>Asistent</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="434"/>
+        <location filename="../../src/AI/Assistant.cpp" line="436"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI Asistent není v tomto sestavení k dispozici</translation>
     </message>
@@ -75,7 +75,7 @@ Každá akce se zařízením stále vyžaduje explicitní schválení pro každ�
         <translation type="vanished">AI Asistent vyžaduje licenci Pro</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="439"/>
+        <location filename="../../src/AI/Assistant.cpp" line="441"/>
         <source>Set an API key first</source>
         <translation>Nejprve nastavte klíč API</translation>
     </message>
@@ -107,7 +107,7 @@ Každá akce se zařízením stále vyžaduje explicitní schválení pro každ�
         <translation>Dosažen limit volání nástrojů pro toto kolo; žádné další nástroje nebudou spuštěny.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1724"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1736"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Dosáhli jste limitu volání nástrojů pro toto kolo. Nepožadujte další nástroje. Shrňte, co jste dosud zjistili, a pokud úloha není dokončena, uveďte, které kroky zbývají, aby vám uživatel mohl říct, abyste pokračovali.</translation>
     </message>
@@ -172,22 +172,22 @@ Každá akce se zařízením stále vyžaduje explicitní schválení pro každ�
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="334"/>
         <source>Invalid API key (%1)</source>
         <translation>Neplatný API klíč (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="326"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="336"/>
         <source>Rate limited: %1</source>
         <translation>Omezení rychlosti: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="328"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="338"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
@@ -338,37 +338,36 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Co Je Nového</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>Tips &amp;&amp; Tricks</source>
-        <translation>Tipy a Triky</translation>
+        <translation type="vanished">Tipy a Triky</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>License Agreement</source>
         <translation>Licenční Smlouva</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Report Bug</source>
         <translation>Nahlásit Chybu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Acknowledgements</source>
         <translation>Poděkování</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="268"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="276"/>
+        <location filename="../../qml/Dialogs/About.qml" line="267"/>
         <source>Website</source>
         <translation>Webové Stránky</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="292"/>
+        <location filename="../../qml/Dialogs/About.qml" line="283"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -1098,77 +1097,92 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Seskupit mé datasety do užitečných pracovních prostorů</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>Drop files or folders to let the assistant read them</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="472"/>
+        <source>Added folder "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="473"/>
+        <source>Added "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="557"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Zeptejte se Serial Studio na cokoliv…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="468"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="577"/>
         <source>Clear conversation</source>
         <translation>Vymazat konverzaci</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="512"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="621"/>
         <source>Stop generating</source>
         <translation>Zastavit generování</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="513"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="622"/>
         <source>Send message (Enter)</source>
         <translation>Odeslat zprávu (Enter)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="555"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="664"/>
         <source>Provider</source>
         <translation>Poskytovatel</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="588"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="697"/>
         <source>Model selection</source>
         <translation>Výběr modelu</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="743"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>Spouštět úpravy bez potvrzení. Blokované akce zůstanou blokovány.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="636"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="745"/>
         <source>Auto-approve edits</source>
         <translation>Automaticky schvalovat úpravy</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="761"/>
         <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
         <translation>Umožnit AI konfigurovat zařízení, připojovat/odpojovat a odesílat data. Každá akce stále vyžaduje schválení.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="654"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="763"/>
         <source>Allow device control</source>
         <translation>Povolit ovládání zařízení</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="680"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="789"/>
         <source>Manage API keys</source>
         <translation>Spravovat API klíče</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="701"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="810"/>
         <source>Working</source>
         <translation>Zpracovává Se</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="702"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="811"/>
         <source>Ready</source>
         <translation>Připraveno</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="703"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="812"/>
         <source>  •  cache %1k tok</source>
         <translation>•  cache %1k tok</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="704"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="813"/>
         <source>  •  cache write %1k tok</source>
         <translation>zápis cache %1k tok</translation>
     </message>
@@ -13913,7 +13927,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Čas: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="327"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="364"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>Není nastaven API klíč OpenAI. Otevřete Správu klíčů a přidejte ho.</translation>
     </message>
@@ -16804,104 +16818,84 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
 <context>
     <name>Tips</name>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
         <source>Did You Know?</source>
-        <translation>Věděli Jste?</translation>
+        <translation type="vanished">Věděli Jste?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
         <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
-        <translation>Udržujte firmware jednoduchý odesíláním surových dat a nechte Serial Studio analyzovat je v JavaScriptu, Lua nebo pomocí vestavěných šablon bez kódu.</translation>
+        <translation type="vanished">Udržujte firmware jednoduchý odesíláním surových dat a nechte Serial Studio analyzovat je v JavaScriptu, Lua nebo pomocí vestavěných šablon bez kódu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
         <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
-        <translation>Přiřaďte každému kanálu vlastní funkci pro kalibraci, filtrování nebo převod jednotek. Přeneste matematiku na Serial Studio a udržujte firmware štíhlý.</translation>
+        <translation type="vanished">Přiřaďte každému kanálu vlastní funkci pro kalibraci, filtrování nebo převod jednotek. Přeneste matematiku na Serial Studio a udržujte firmware štíhlý.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
         <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
-        <translation>Potřebujete hodnotu, kterou zařízení nikdy neposílá? Virtuální dataset vypočítá vlastní kanál, například výkon z napětí a proudu, vykreslený a zaznamenávaný jako data.</translation>
+        <translation type="vanished">Potřebujete hodnotu, kterou zařízení nikdy neposílá? Virtuální dataset vypočítá vlastní kanál, například výkon z napětí a proudu, vykreslený a zaznamenávaný jako data.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
         <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
-        <translation>Zachyťte poruchy jako na osciloskopu. Grafy s časovou osou mají režim zametání a spouštění a úroveň spouštění můžete přetáhnout přímo na grafu.</translation>
+        <translation type="vanished">Zachyťte poruchy jako na osciloskopu. Grafy s časovou osou mají režim zametání a spouštění a úroveň spouštění můžete přetáhnout přímo na grafu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
         <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
-        <translation>Přestaňte hledat správný widget. Seskupte je do vlastních pracovních prostorů a přepínejte mezi nimi pomocí vyhledávání na hlavním panelu.</translation>
+        <translation type="vanished">Přestaňte hledat správný widget. Seskupte je do vlastních pracovních prostorů a přepínejte mezi nimi pomocí vyhledávání na hlavním panelu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
         <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
-        <translation>Už nikdy neztratíte testovací běh. Zaznamenávejte relace do lokální databáze, poté je procházejte, označujte a přehrávejte, kdykoli je potřebujete.</translation>
+        <translation type="vanished">Už nikdy neztratíte testovací běh. Zaznamenávejte relace do lokální databáze, poté je procházejte, označujte a přehrávejte, kdykoli je potřebujete.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
         <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
-        <translation>Předejte týmu vyleštěnou zprávu během několika sekund. Exportujte jakoukoli relaci do HTML nebo PDF, kompletní s grafy a statistikami min/max/průměr.</translation>
+        <translation type="vanished">Předejte týmu vyleštěnou zprávu během několika sekund. Exportujte jakoukoli relaci do HTML nebo PDF, kompletní s grafy a statistikami min/max/průměr.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
         <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
-        <translation>Uzavřete smyčku bez dalších nástrojů. Výstupní Ovládací Prvky umožňují odesílat příkazy zpět do zařízení přímo z dashboardu.</translation>
+        <translation type="vanished">Uzavřete smyčku bez dalších nástrojů. Výstupní Ovládací Prvky umožňují odesílat příkazy zpět do zařízení přímo z dashboardu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
         <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
-        <translation>Vytvořte vizualizaci, kterou nikdo jiný nemá. Widget Painter spouští vlastní skript pro kreslení plně přizpůsobené grafiky z příchozích dat.</translation>
+        <translation type="vanished">Vytvořte vizualizaci, kterou nikdo jiný nemá. Widget Painter spouští vlastní skript pro kreslení plně přizpůsobené grafiky z příchozích dat.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
         <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
-        <translation>Jeden nástroj pro každé připojení. Serial Studio čte z UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audia, USB, HID, MQTT a Process I/O.</translation>
+        <translation type="vanished">Jeden nástroj pro každé připojení. Serial Studio čte z UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audia, USB, HID, MQTT a Process I/O.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
         <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
-        <translation>Přeskočte tanec s terminálem. Odesílejte a přijímejte soubory přes sériové připojení pomocí vestavěných protokolů XMODEM, YMODEM a ZMODEM.</translation>
+        <translation type="vanished">Přeskočte tanec s terminálem. Odesílejte a přijímejte soubory přes sériové připojení pomocí vestavěných protokolů XMODEM, YMODEM a ZMODEM.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
         <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
-        <translation>Už máte mapu registrů Modbus nebo soubor DBC? Vygenerujte z ní automaticky projekt připravený k použití místo ručního vytváření.</translation>
+        <translation type="vanished">Už máte mapu registrů Modbus nebo soubor DBC? Vygenerujte z ní automaticky projekt připravený k použití místo ručního vytváření.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
         <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
-        <translation>Popište, co chcete, a nechte AI Asistenta to vytvořit. Může vytvářet a upravovat projekty za vás napříč osmi poskytovateli modelů.</translation>
+        <translation type="vanished">Popište, co chcete, a nechte AI Asistenta to vytvořit. Může vytvářet a upravovat projekty za vás napříč osmi poskytovateli modelů.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
         <source>Tip %1 of %2</source>
-        <translation>Tip %1 z %2</translation>
+        <translation type="vanished">Tip %1 z %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
         <source>Learn More</source>
-        <translation>Zjistit Více</translation>
+        <translation type="vanished">Zjistit Více</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
         <source>Show Tips on Startup</source>
-        <translation>Zobrazit Tipy při Spuštění</translation>
+        <translation type="vanished">Zobrazit Tipy při Spuštění</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
         <source>Previous</source>
-        <translation>Předchozí</translation>
+        <translation type="vanished">Předchozí</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
         <source>Next</source>
-        <translation>Další</translation>
+        <translation type="vanished">Další</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
         <source>Close</source>
-        <translation>Zavřít</translation>
+        <translation type="vanished">Zavřít</translation>
     </message>
 </context>
 <context>

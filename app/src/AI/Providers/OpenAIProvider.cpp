@@ -13,6 +13,7 @@
 #include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QObject>
+#include <QSet>
 #include <QTimer>
 
 #include "AI/ContextBuilder.h"
@@ -178,6 +179,42 @@ bool AI::OpenAIProvider::isReasoningModel(const QString& modelId)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Inserts stub tool replies for any assistant tool_call that lacks a tool message.
+ */
+static QJsonArray backfillDanglingToolCalls(const QJsonArray& messages)
+{
+  // OpenAI rejects the request when a tool_call id has no following tool message.
+  QSet<QString> answered;
+  for (const auto& value : messages) {
+    const auto msg = value.toObject();
+    if (msg.value(QStringLiteral("role")).toString() == QStringLiteral("tool"))
+      answered.insert(msg.value(QStringLiteral("tool_call_id")).toString());
+  }
+
+  QJsonArray out;
+  for (const auto& value : messages) {
+    const auto msg = value.toObject();
+    out.append(msg);
+
+    const auto calls = msg.value(QStringLiteral("tool_calls")).toArray();
+    for (const auto& callValue : calls) {
+      const auto id = callValue.toObject().value(QStringLiteral("id")).toString();
+      if (id.isEmpty() || answered.contains(id))
+        continue;
+
+      QJsonObject stub;
+      stub[QStringLiteral("role")]         = QStringLiteral("tool");
+      stub[QStringLiteral("tool_call_id")] = id;
+      stub[QStringLiteral("content")] = QStringLiteral("{\"ok\":false,\"error\":\"no_result\"}");
+      out.append(stub);
+      answered.insert(id);
+    }
+  }
+
+  return out;
+}
+
+/**
  * @brief Converts Anthropic-shaped history into the OpenAI Chat Completions shape.
  */
 QJsonArray AI::OpenAIProvider::translateHistory(const QJsonArray& history,
@@ -236,7 +273,7 @@ QJsonArray AI::OpenAIProvider::translateHistory(const QJsonArray& history,
       out.append(tr);
   }
 
-  return out;
+  return backfillDanglingToolCalls(out);
 }
 
 /**

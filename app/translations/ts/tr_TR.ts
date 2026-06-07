@@ -37,12 +37,12 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="193"/>
+        <location filename="../../src/AI/Assistant.cpp" line="195"/>
         <source>Allow AI Device Control?</source>
         <translation>AI Cihaz Kontrolüne İzin Verilsin mi?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="194"/>
+        <location filename="../../src/AI/Assistant.cpp" line="196"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -51,22 +51,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 Otomatik onay etkinleştirildiğinde bile her cihaz eylemi sohbette açık çağrı başına onayınızı gerektirir. Bunu yalnızca yapılandırılmış AI sağlayıcısına donanım erişimi konusunda güveniyorsanız etkinleştirin.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="393"/>
+        <location filename="../../src/AI/Assistant.cpp" line="395"/>
         <source>Switch AI provider?</source>
         <translation>AI sağlayıcısı değiştirilsin mi?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="394"/>
+        <location filename="../../src/AI/Assistant.cpp" line="396"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>Farklı bir sağlayıcıya geçiş mevcut konuşmayı temizler. Devam etmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="397"/>
+        <location filename="../../src/AI/Assistant.cpp" line="399"/>
         <source>Assistant</source>
         <translation>Asistan</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="434"/>
+        <location filename="../../src/AI/Assistant.cpp" line="436"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI Asistanı bu derlemede mevcut değil</translation>
     </message>
@@ -75,7 +75,7 @@ Otomatik onay etkinleştirildiğinde bile her cihaz eylemi sohbette açık çağ
         <translation type="vanished">AI Asistanı Pro lisansı gerektirir</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="439"/>
+        <location filename="../../src/AI/Assistant.cpp" line="441"/>
         <source>Set an API key first</source>
         <translation>Önce bir API anahtarı ayarlayın</translation>
     </message>
@@ -107,7 +107,7 @@ Otomatik onay etkinleştirildiğinde bile her cihaz eylemi sohbette açık çağ
         <translation>Bu tur için araç çağrısı bütçesine ulaşıldı; başka araç çalıştırılmayacak.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1724"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1736"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Bu tur için araç çağrısı bütçesine ulaştınız. Daha fazla araç talep etmeyin. Şimdiye kadar bulduklarınızı özetleyin ve görev tamamlanmadıysa, devam etmenizi söyleyebilmesi için kullanıcıya hangi adımların kaldığını belirtin.</translation>
     </message>
@@ -172,22 +172,22 @@ Otomatik onay etkinleştirildiğinde bile her cihaz eylemi sohbette açık çağ
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="334"/>
         <source>Invalid API key (%1)</source>
         <translation>Geçersiz API anahtarı (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="326"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="336"/>
         <source>Rate limited: %1</source>
         <translation>Hız sınırlandı: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="328"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="338"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
@@ -338,37 +338,36 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Yenilikler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>Tips &amp;&amp; Tricks</source>
-        <translation>İpuçları &amp;&amp; Püf Noktaları</translation>
+        <translation type="vanished">İpuçları &amp;&amp; Püf Noktaları</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>License Agreement</source>
         <translation>Lisans Sözleşmesi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Report Bug</source>
         <translation>Hata Bildir</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Acknowledgements</source>
         <translation>Teşekkürler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="268"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Benchmark</source>
         <translation>Kıyaslama</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="276"/>
+        <location filename="../../qml/Dialogs/About.qml" line="267"/>
         <source>Website</source>
         <translation>Web Sitesi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="292"/>
+        <location filename="../../qml/Dialogs/About.qml" line="283"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
@@ -1098,77 +1097,92 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Veri Kümelerimi Kullanışlı Çalışma Alanlarına Grupla</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>Drop files or folders to let the assistant read them</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="472"/>
+        <source>Added folder "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="473"/>
+        <source>Added "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="557"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Serial Studio'ya herhangi bir şey sorun…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="468"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="577"/>
         <source>Clear conversation</source>
         <translation>Konuşmayı temizle</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="512"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="621"/>
         <source>Stop generating</source>
         <translation>Oluşturmayı durdur</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="513"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="622"/>
         <source>Send message (Enter)</source>
         <translation>Mesaj gönder (Enter)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="555"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="664"/>
         <source>Provider</source>
         <translation>Sağlayıcı</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="588"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="697"/>
         <source>Model selection</source>
         <translation>Model seçimi</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="743"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>Düzenleme eylemlerini her seferinde sormadan çalıştır. Engellenen eylemler engellenmiş kalır.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="636"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="745"/>
         <source>Auto-approve edits</source>
         <translation>Düzenlemeleri otomatik onayla</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="761"/>
         <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
         <translation>AI'nın cihazları yapılandırmasına, bağlanıp bağlantıyı kesmesine ve veri göndermesine izin verin. Her eylem yine de onayınızı sorar.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="654"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="763"/>
         <source>Allow device control</source>
         <translation>Cihaz kontrolüne izin ver</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="680"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="789"/>
         <source>Manage API keys</source>
         <translation>API anahtarlarını yönet</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="701"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="810"/>
         <source>Working</source>
         <translation>Çalışıyor</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="702"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="811"/>
         <source>Ready</source>
         <translation>Hazır</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="703"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="812"/>
         <source>  •  cache %1k tok</source>
         <translation>•  önbellek %1k tok</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="704"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="813"/>
         <source>  •  cache write %1k tok</source>
         <translation>önbellek yazma %1k tok</translation>
     </message>
@@ -13913,7 +13927,7 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Zaman: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="327"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="364"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>OpenAI API anahtarı ayarlanmamış. Bir tane eklemek için Anahtarları Yönet'i açın.</translation>
     </message>
@@ -16804,104 +16818,84 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
 <context>
     <name>Tips</name>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
         <source>Did You Know?</source>
-        <translation>Biliyor Muydunuz?</translation>
+        <translation type="vanished">Biliyor Muydunuz?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
         <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
-        <translation>Donanım yazılımınızı basit tutmak için ham verileri gönderin ve ayrıştırmayı Serial Studio'nun JavaScript, Lua veya kodsuz Dahili şablonlarına bırakın.</translation>
+        <translation type="vanished">Donanım yazılımınızı basit tutmak için ham verileri gönderin ve ayrıştırmayı Serial Studio'nun JavaScript, Lua veya kodsuz Dahili şablonlarına bırakın.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
         <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
-        <translation>Her kanal için kalibrasyon, filtreleme veya birim dönüştürme işlevini ayrı tanımlayın. Hesaplamaları Serial Studio'ya bırakın, donanım yazılımınızı hafif tutun.</translation>
+        <translation type="vanished">Her kanal için kalibrasyon, filtreleme veya birim dönüştürme işlevini ayrı tanımlayın. Hesaplamaları Serial Studio'ya bırakın, donanım yazılımınızı hafif tutun.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
         <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
-        <translation>Cihazınızın asla göndermediği bir değere mi ihtiyacınız var? Sanal bir veri kümesi, kendi kanalını hesaplar; örneğin, voltaj ve akımdan güç üretir, grafikler ve kayıtlar.</translation>
+        <translation type="vanished">Cihazınızın asla göndermediği bir değere mi ihtiyacınız var? Sanal bir veri kümesi, kendi kanalını hesaplar; örneğin, voltaj ve akımdan güç üretir, grafikler ve kayıtlar.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
         <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
-        <translation>Hataları bir laboratuvar osiloskobu gibi yakalayın. Zaman eksenli grafiklerde süpürme ve tetikleme modu bulunur, tetikleme seviyesini grafikte sürükleyebilirsiniz.</translation>
+        <translation type="vanished">Hataları bir laboratuvar osiloskobu gibi yakalayın. Zaman eksenli grafiklerde süpürme ve tetikleme modu bulunur, tetikleme seviyesini grafikte sürükleyebilirsiniz.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
         <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
-        <translation>Doğru widget'ı bulmak için kaydırmayı bırakın. Onları kendi çalışma alanlarınıza gruplayın ve görev çubuğu aramasından aralarında geçiş yapın.</translation>
+        <translation type="vanished">Doğru widget'ı bulmak için kaydırmayı bırakın. Onları kendi çalışma alanlarınıza gruplayın ve görev çubuğu aramasından aralarında geçiş yapın.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
         <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
-        <translation>Artık hiçbir test kaydını kaybetmeyin. Oturumları yerel veritabanına kaydedin, ardından istediğiniz zaman göz atın, etiketleyin ve tekrar oynatın.</translation>
+        <translation type="vanished">Artık hiçbir test kaydını kaybetmeyin. Oturumları yerel veritabanına kaydedin, ardından istediğiniz zaman göz atın, etiketleyin ve tekrar oynatın.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
         <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
-        <translation>Ekibinize saniyeler içinde şık bir rapor sunun. Herhangi bir oturumu HTML veya PDF olarak, grafikler ve min/maks/ortalama istatistiklerle birlikte dışa aktarın.</translation>
+        <translation type="vanished">Ekibinize saniyeler içinde şık bir rapor sunun. Herhangi bir oturumu HTML veya PDF olarak, grafikler ve min/maks/ortalama istatistiklerle birlikte dışa aktarın.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
         <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
-        <translation>Ekstra araçlara gerek kalmadan döngüyü kapatın. Çıkış Kontrolleri, komutları doğrudan dashboard üzerinden cihazınıza göndermenizi sağlar.</translation>
+        <translation type="vanished">Ekstra araçlara gerek kalmadan döngüyü kapatın. Çıkış Kontrolleri, komutları doğrudan dashboard üzerinden cihazınıza göndermenizi sağlar.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
         <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
-        <translation>Kimsenin yapmadığı bir görselleştirme oluşturun. Painter widget'ı, gelen verilerden tamamen özel grafikler çizmek için kendi scriptinizi çalıştırır.</translation>
+        <translation type="vanished">Kimsenin yapmadığı bir görselleştirme oluşturun. Painter widget'ı, gelen verilerden tamamen özel grafikler çizmek için kendi scriptinizi çalıştırır.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
         <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
-        <translation>Her bağlantı için tek bir araç. Serial Studio, UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, ses, USB, HID, MQTT ve Process I/O üzerinden veri okur.</translation>
+        <translation type="vanished">Her bağlantı için tek bir araç. Serial Studio, UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, ses, USB, HID, MQTT ve Process I/O üzerinden veri okur.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
         <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
-        <translation>Terminal karmaşasını atlayın. Dahili XMODEM, YMODEM ve ZMODEM protokolleriyle seri bağlantınız üzerinden dosya gönderip alın.</translation>
+        <translation type="vanished">Terminal karmaşasını atlayın. Dahili XMODEM, YMODEM ve ZMODEM protokolleriyle seri bağlantınız üzerinden dosya gönderip alın.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
         <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
-        <translation>Zaten bir Modbus register haritanız veya DBC dosyanız mı var? Elle oluşturmak yerine, ondan otomatik olarak kullanıma hazır bir proje oluşturun.</translation>
+        <translation type="vanished">Zaten bir Modbus register haritanız veya DBC dosyanız mı var? Elle oluşturmak yerine, ondan otomatik olarak kullanıma hazır bir proje oluşturun.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
         <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
-        <translation>Ne istediğinizi açıklayın ve AI Asistanı inşa etsin. Sekiz farklı model sağlayıcısı üzerinden sizin için projeler oluşturabilir ve düzenleyebilir.</translation>
+        <translation type="vanished">Ne istediğinizi açıklayın ve AI Asistanı inşa etsin. Sekiz farklı model sağlayıcısı üzerinden sizin için projeler oluşturabilir ve düzenleyebilir.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
         <source>Tip %1 of %2</source>
-        <translation>İpucu %1 / %2</translation>
+        <translation type="vanished">İpucu %1 / %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
         <source>Learn More</source>
-        <translation>Daha Fazla Bilgi Al</translation>
+        <translation type="vanished">Daha Fazla Bilgi Al</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
         <source>Show Tips on Startup</source>
-        <translation>Başlangıçta İpuçlarını Göster</translation>
+        <translation type="vanished">Başlangıçta İpuçlarını Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
         <source>Previous</source>
-        <translation>Önceki</translation>
+        <translation type="vanished">Önceki</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
         <source>Next</source>
-        <translation>Sonraki</translation>
+        <translation type="vanished">Sonraki</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation type="vanished">Kapat</translation>
     </message>
 </context>
 <context>

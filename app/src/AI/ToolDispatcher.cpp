@@ -15,6 +15,7 @@
 #include <QVector>
 
 #include "AI/CommandRegistry.h"
+#include "AI/FileSandbox.h"
 #include "AI/Logging.h"
 #include "API/CommandProtocol.h"
 #include "API/CommandRegistry.h"
@@ -417,6 +418,180 @@ static QVector<detail::AssistantToolDef> assistantToolDefs()
 static bool isAssistantTool(const QString& name)
 {
   return name.startsWith(QStringLiteral("assistant."));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Sandboxed filesystem virtual tools
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Input schema for fs.list.
+ */
+static QJsonObject fsListInputSchema()
+{
+  QJsonObject props;
+  props[QStringLiteral("path")] = makeProperty(
+    QStringLiteral("string"),
+    QStringLiteral("Directory path relative to the workspace folder (default '.'), or an "
+                   "absolute path the user dragged into the chat."));
+  props[QStringLiteral("recursive")] = makeProperty(
+    QStringLiteral("boolean"), QStringLiteral("Recurse into subdirectories (bounded depth)."));
+  return makeObjectSchema(props);
+}
+
+/**
+ * @brief Input schema for fs.read.
+ */
+static QJsonObject fsReadInputSchema()
+{
+  QJsonObject props;
+  props[QStringLiteral("path")] =
+    makeProperty(QStringLiteral("string"),
+                 QStringLiteral("File path relative to the workspace folder, or an absolute "
+                                "dragged-in path. Text files only."));
+  props[QStringLiteral("offset")] =
+    makeProperty(QStringLiteral("integer"),
+                 QStringLiteral("Byte offset to start at; follow nextOffset to "
+                                "page large files. Default 0."));
+  props[QStringLiteral("limit")] = makeProperty(
+    QStringLiteral("integer"),
+    QStringLiteral("Max bytes to return this call (capped at 32 KB). Default is the cap."));
+  return makeObjectSchema(props, QJsonArray{QStringLiteral("path")});
+}
+
+/**
+ * @brief Input schema for fs.search.
+ */
+static QJsonObject fsSearchInputSchema()
+{
+  QJsonObject props;
+  props[QStringLiteral("query")] =
+    makeProperty(QStringLiteral("string"),
+                 QStringLiteral("Text to find (case-insensitive) across the "
+                                "workspace and dragged-in paths."));
+  props[QStringLiteral("isRegex")] = makeProperty(
+    QStringLiteral("boolean"),
+    QStringLiteral("Treat query as a regular expression instead of a literal string."));
+  return makeObjectSchema(props, QJsonArray{QStringLiteral("query")});
+}
+
+/**
+ * @brief Input schema for fs.write and fs.append.
+ */
+static QJsonObject fsWriteInputSchema()
+{
+  QJsonObject props;
+  props[QStringLiteral("path")] = makeProperty(
+    QStringLiteral("string"),
+    QStringLiteral("Destination path under the workspace 'AI/' subfolder, e.g. 'notes.md' "
+                   "or 'exports/data.csv'. Paths outside AI/ are rejected."));
+  props[QStringLiteral("content")] =
+    makeProperty(QStringLiteral("string"), QStringLiteral("UTF-8 text to write."));
+  return makeObjectSchema(props, QJsonArray{QStringLiteral("path"), QStringLiteral("content")});
+}
+
+/**
+ * @brief Input schema for fs.delete.
+ */
+static QJsonObject fsDeleteInputSchema()
+{
+  QJsonObject props;
+  props[QStringLiteral("path")] =
+    makeProperty(QStringLiteral("string"),
+                 QStringLiteral("File or empty directory under the 'AI/' subfolder to delete."));
+  return makeObjectSchema(props, QJsonArray{QStringLiteral("path")});
+}
+
+/**
+ * @brief Returns the fs.* virtual-tool catalog exposed to assistant providers.
+ */
+static QVector<detail::AssistantToolDef> fsToolDefs()
+{
+  return {
+    {  QStringLiteral("fs.list"),
+     QStringLiteral("List files and folders in the Serial Studio workspace folder (or a "
+     "dragged-in directory). Read-only."),
+     fsListInputSchema()  },
+    {  QStringLiteral("fs.read"),
+     QStringLiteral("Read a text file from the workspace folder (or a dragged-in path). "
+     "Paged: pass offset/limit and follow nextOffset for large files. Refuses "
+     "binary files."),
+     fsReadInputSchema()  },
+    {QStringLiteral("fs.search"),
+     QStringLiteral("Search file contents across the workspace folder and dragged-in paths "
+     "(grep-like, literal or regex). Read-only."),
+     fsSearchInputSchema()},
+    { QStringLiteral("fs.write"),
+     QStringLiteral("Write a UTF-8 text file inside the workspace 'AI/' subfolder, replacing "
+     "it. Use for notes, summaries, generated configs/exports. Cannot write "
+     "outside AI/."),
+     fsWriteInputSchema() },
+    {QStringLiteral("fs.append"),
+     QStringLiteral("Append UTF-8 text to a file inside the workspace 'AI/' subfolder, "
+     "creating it if needed. Cannot write outside AI/."),
+     fsWriteInputSchema() },
+    {QStringLiteral("fs.delete"),
+     QStringLiteral("Delete a file or empty directory inside the workspace 'AI/' subfolder. "
+     "Always asks the user first."),
+     fsDeleteInputSchema()},
+  };
+}
+
+/**
+ * @brief Returns true when `name` targets an fs.* sandboxed filesystem tool.
+ */
+static bool isFsTool(const QString& name)
+{
+  return name.startsWith(QStringLiteral("fs."));
+}
+
+/**
+ * @brief Returns the metadata block for an fs.* tool, or empty if none matches.
+ */
+static QJsonObject fsToolDescription(const QString& name)
+{
+  for (const auto& def : fsToolDefs()) {
+    if (def.name != name)
+      continue;
+
+    QJsonObject desc;
+    desc[QStringLiteral("name")]        = def.name;
+    desc[QStringLiteral("description")] = def.description;
+    desc[QStringLiteral("inputSchema")] = def.inputSchema;
+    return desc;
+  }
+
+  return {};
+}
+
+/**
+ * @brief Routes an fs.* tool call to the FileSandbox primitive.
+ */
+static QJsonObject executeFsTool(const QString& name, const QJsonObject& args)
+{
+  auto& sandbox = AI::FileSandbox::instance();
+  if (name == QStringLiteral("fs.list"))
+    return sandbox.list(args);
+
+  if (name == QStringLiteral("fs.read"))
+    return sandbox.read(args);
+
+  if (name == QStringLiteral("fs.search"))
+    return sandbox.search(args);
+
+  if (name == QStringLiteral("fs.write"))
+    return sandbox.write(args);
+
+  if (name == QStringLiteral("fs.append"))
+    return sandbox.append(args);
+
+  if (name == QStringLiteral("fs.delete"))
+    return sandbox.remove(args);
+
+  QJsonObject out;
+  out[QStringLiteral("ok")]    = false;
+  out[QStringLiteral("error")] = QStringLiteral("unknown_fs_tool");
+  return out;
 }
 
 /**
@@ -1559,16 +1734,20 @@ static QJsonObject executeAssistantTool(const QString& name, const QJsonObject& 
 QJsonArray AI::ToolDispatcher::availableTools(const QString& category) const
 {
   QJsonArray tools;
-  for (const auto& def : assistantToolDefs()) {
-    if (!category.isEmpty() && !def.name.startsWith(category))
-      continue;
+  auto appendVirtual = [&tools, &category](const QVector<detail::AssistantToolDef>& defs) {
+    for (const auto& def : defs) {
+      if (!category.isEmpty() && !def.name.startsWith(category))
+        continue;
 
-    QJsonObject tool;
-    tool[QStringLiteral("name")]        = def.name;
-    tool[QStringLiteral("description")] = def.description;
-    tool[QStringLiteral("inputSchema")] = def.inputSchema;
-    tools.append(tool);
-  }
+      QJsonObject tool;
+      tool[QStringLiteral("name")]        = def.name;
+      tool[QStringLiteral("description")] = def.description;
+      tool[QStringLiteral("inputSchema")] = def.inputSchema;
+      tools.append(tool);
+    }
+  };
+  appendVirtual(assistantToolDefs());
+  appendVirtual(fsToolDefs());
 
   const auto& commands = API::CommandRegistry::instance().commands();
   const auto& aiReg    = AI::CommandRegistry::instance();
@@ -1599,15 +1778,19 @@ QJsonObject AI::ToolDispatcher::listCommands(const QString& prefix) const
   const auto& aiReg    = AI::CommandRegistry::instance();
 
   QJsonArray entries;
-  for (const auto& def : assistantToolDefs()) {
-    if (!prefix.isEmpty() && !def.name.startsWith(prefix))
-      continue;
+  auto appendVirtual = [&entries, &prefix](const QVector<detail::AssistantToolDef>& defs) {
+    for (const auto& def : defs) {
+      if (!prefix.isEmpty() && !def.name.startsWith(prefix))
+        continue;
 
-    QJsonObject row;
-    row[QStringLiteral("name")]        = def.name;
-    row[QStringLiteral("description")] = def.description;
-    entries.append(row);
-  }
+      QJsonObject row;
+      row[QStringLiteral("name")]        = def.name;
+      row[QStringLiteral("description")] = def.description;
+      entries.append(row);
+    }
+  };
+  appendVirtual(assistantToolDefs());
+  appendVirtual(fsToolDefs());
 
   for (auto it = commands.constBegin(); it != commands.constEnd(); ++it) {
     const auto& def = it.value();
@@ -1631,11 +1814,10 @@ QJsonObject AI::ToolDispatcher::listCommands(const QString& prefix) const
 }
 
 /**
- * @brief Returns the top-level scope namespaces with descriptions.
+ * @brief Returns the curated one-line description for each top-level command scope.
  */
-QJsonObject AI::ToolDispatcher::listCategories() const
+static const QHash<QString, QString>& scopeDescriptions()
 {
-  // Curated scope descriptions (only emitted when scope has non-Blocked commands)
   // clang-format off
   static const QHash<QString, QString> kDescriptions = {
     {QStringLiteral("project"),
@@ -1680,11 +1862,23 @@ QJsonObject AI::ToolDispatcher::listCategories() const
     {QStringLiteral("assistant"),
      QStringLiteral("High-level assistant rails: compact project snapshots, dataset/workspace "
                     "resolvers, workspace planning, and safe workspace tile orchestration.")},
+    {QStringLiteral("fs"),
+     QStringLiteral("Sandboxed filesystem: read/list/search anything in the workspace folder "
+                    "and dragged-in paths; write/append/delete only inside the 'AI/' "
+                    "subfolder.")},
   };
   // clang-format on
+  return kDescriptions;
+}
 
-  const auto& commands = API::CommandRegistry::instance().commands();
-  const auto& aiReg    = AI::CommandRegistry::instance();
+/**
+ * @brief Returns the top-level scope namespaces with descriptions.
+ */
+QJsonObject AI::ToolDispatcher::listCategories() const
+{
+  const auto& kDescriptions = scopeDescriptions();
+  const auto& commands      = API::CommandRegistry::instance().commands();
+  const auto& aiReg         = AI::CommandRegistry::instance();
 
   QHash<QString, int> counts;
   for (auto it = commands.constBegin(); it != commands.constEnd(); ++it) {
@@ -1700,6 +1894,7 @@ QJsonObject AI::ToolDispatcher::listCategories() const
     counts[QStringLiteral("meta")] = 6;
 
   counts[QStringLiteral("assistant")] = assistantToolDefs().size();
+  counts[QStringLiteral("fs")]        = fsToolDefs().size();
 
   // Sort scopes (build vector first since QJsonValueRef is non-swappable)
   std::vector<QJsonObject> rows;
@@ -1740,6 +1935,9 @@ QJsonObject AI::ToolDispatcher::describeCommand(const QString& name) const
   if (isAssistantTool(name))
     return assistantToolDescription(name);
 
+  if (isFsTool(name))
+    return fsToolDescription(name);
+
   const auto& commands = API::CommandRegistry::instance().commands();
   const auto it        = commands.constFind(name);
   if (it == commands.constEnd())
@@ -1760,6 +1958,29 @@ QJsonObject AI::ToolDispatcher::describeCommand(const QString& name) const
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Builds the Blocked-tool rejection reply, with a device-control repair hint.
+ */
+static QJsonObject makeBlockedReply(const QString& name)
+{
+  qCWarning(AI::serialStudioAI) << "Tool execution blocked:" << name;
+  QJsonObject error;
+  error[QStringLiteral("code")]    = QStringLiteral("blocked");
+  error[QStringLiteral("message")] = QStringLiteral("This command is blocked for AI safety.");
+  if (AI::CommandRegistry::instance().isDeviceGated(name)) {
+    error[QStringLiteral("repair")] =
+      QStringLiteral("Hardware writes and connection changes must be performed by the user "
+                     "unless they enable the 'Allow device control' checkbox in the AI panel. "
+                     "Offer to build an Output Control tile instead; mention the checkbox only "
+                     "if the user explicitly wants you to drive the device.");
+  }
+
+  QJsonObject reply;
+  reply[QStringLiteral("ok")]    = false;
+  reply[QStringLiteral("error")] = error;
+  return reply;
+}
+
+/**
  * @brief Validates args and forwards to API::CommandRegistry honoring AI safety tags.
  */
 QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
@@ -1773,7 +1994,7 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
   limits.maxArraySize = 1000;
 
   if (!Misc::JsonValidator::validateStructure(QJsonValue(args), limits)) {
-    qCWarning(serialStudioAI) << "Tool args validation failed for" << name;
+    qCWarning(AI::serialStudioAI) << "Tool args validation failed for" << name;
     QJsonObject reply;
     reply[QStringLiteral("ok")]    = false;
     reply[QStringLiteral("error")] = QStringLiteral("args_validation_failed");
@@ -1783,24 +2004,8 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
   // Read-only previews (dryRun:true) bypass the Confirm gate; Blocked still blocks.
   const auto safety        = AI::CommandRegistry::instance().safetyOf(name);
   const bool isDryRunQuery = args.value(QStringLiteral("dryRun")).toBool(false);
-  if (safety == Safety::Blocked) {
-    qCWarning(serialStudioAI) << "Tool execution blocked:" << name;
-    QJsonObject error;
-    error[QStringLiteral("code")]    = QStringLiteral("blocked");
-    error[QStringLiteral("message")] = QStringLiteral("This command is blocked for AI safety.");
-    if (AI::CommandRegistry::instance().isDeviceGated(name)) {
-      error[QStringLiteral("repair")] =
-        QStringLiteral("Hardware writes and connection changes must be performed by the user "
-                       "unless they enable the 'Allow device control' checkbox in the AI panel. "
-                       "Offer to build an Output Control tile instead; mention the checkbox only "
-                       "if the user explicitly wants you to drive the device.");
-    }
-
-    QJsonObject reply;
-    reply[QStringLiteral("ok")]    = false;
-    reply[QStringLiteral("error")] = error;
-    return reply;
-  }
+  if (safety == Safety::Blocked)
+    return makeBlockedReply(name);
 
   // Confirm gates require explicit user approval (autoConfirmSafe=true).
   if ((safety == Safety::Confirm || safety == Safety::AlwaysConfirm) && !autoConfirmSafe
@@ -1822,6 +2027,9 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
 
   if (isAssistantTool(name))
     return executeAssistantTool(name, args);
+
+  if (isFsTool(name))
+    return executeFsTool(name, args);
 
   // Forward to API::CommandRegistry
   const auto callId   = QUuid::createUuid().toString(QUuid::WithoutBraces);

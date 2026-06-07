@@ -37,12 +37,12 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="193"/>
+        <location filename="../../src/AI/Assistant.cpp" line="195"/>
         <source>Allow AI Device Control?</source>
         <translation>AI デバイス制御を許可しますか？</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="194"/>
+        <location filename="../../src/AI/Assistant.cpp" line="196"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -51,22 +51,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 自動承認が有効な場合でも、すべてのデバイス操作はチャット内で個別の承認が必要です。ハードウェアアクセスを信頼できる AI プロバイダーを使用する場合のみ有効にしてください。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="393"/>
+        <location filename="../../src/AI/Assistant.cpp" line="395"/>
         <source>Switch AI provider?</source>
         <translation>AIプロバイダーを切り替えますか?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="394"/>
+        <location filename="../../src/AI/Assistant.cpp" line="396"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>別のプロバイダーに切り替えると、現在の会話がクリアされます。続行しますか?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="397"/>
+        <location filename="../../src/AI/Assistant.cpp" line="399"/>
         <source>Assistant</source>
         <translation>アシスタント</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="434"/>
+        <location filename="../../src/AI/Assistant.cpp" line="436"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI アシスタントはこのビルドでは利用できません</translation>
     </message>
@@ -75,7 +75,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">AIアシスタントにはProライセンスが必要です</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="439"/>
+        <location filename="../../src/AI/Assistant.cpp" line="441"/>
         <source>Set an API key first</source>
         <translation>最初にAPIキーを設定してください</translation>
     </message>
@@ -107,7 +107,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>このターンのツール呼び出し予算に達しました。これ以上ツールは実行されません。</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1724"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1736"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>このターンのツール呼び出し予算に達しました。これ以上ツールをリクエストしないでください。これまでに見つかった内容を要約し、タスクが未完了の場合は残りの手順を示してください。ユーザーが続行を指示できます。</translation>
     </message>
@@ -172,22 +172,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="334"/>
         <source>Invalid API key (%1)</source>
         <translation>無効なAPIキー (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="326"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="336"/>
         <source>Rate limited: %1</source>
         <translation>レート制限: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="328"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="338"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
@@ -338,37 +338,36 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>新機能</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>Tips &amp;&amp; Tricks</source>
-        <translation>ヒント &amp; テクニック</translation>
+        <translation type="vanished">ヒント &amp; テクニック</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>License Agreement</source>
         <translation>ライセンス契約</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Report Bug</source>
         <translation>バグを報告</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Acknowledgements</source>
         <translation>謝辞</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="268"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Benchmark</source>
         <translation>ベンチマーク</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="276"/>
+        <location filename="../../qml/Dialogs/About.qml" line="267"/>
         <source>Website</source>
         <translation>ウェブサイト</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="292"/>
+        <location filename="../../qml/Dialogs/About.qml" line="283"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
@@ -1098,77 +1097,92 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>データセットを便利なワークスペースにグループ化</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>Drop files or folders to let the assistant read them</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="472"/>
+        <source>Added folder "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="473"/>
+        <source>Added "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="557"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Serial Studioに何でも質問…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="468"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="577"/>
         <source>Clear conversation</source>
         <translation>会話をクリア</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="512"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="621"/>
         <source>Stop generating</source>
         <translation>生成を停止</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="513"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="622"/>
         <source>Send message (Enter)</source>
         <translation>メッセージを送信 (Enter)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="555"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="664"/>
         <source>Provider</source>
         <translation>プロバイダー</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="588"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="697"/>
         <source>Model selection</source>
         <translation>モデル選択</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="743"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>毎回確認せずに編集アクションを実行します。ブロックされたアクションはブロックされたままです。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="636"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="745"/>
         <source>Auto-approve edits</source>
         <translation>編集を自動承認</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="761"/>
         <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
         <translation>AI がデバイスの設定、接続/切断、データ送信を行えるようにします。各操作は承認が必要です。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="654"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="763"/>
         <source>Allow device control</source>
         <translation>デバイス制御を許可</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="680"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="789"/>
         <source>Manage API keys</source>
         <translation>APIキーを管理</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="701"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="810"/>
         <source>Working</source>
         <translation>処理中</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="702"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="811"/>
         <source>Ready</source>
         <translation>準備完了</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="703"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="812"/>
         <source>  •  cache %1k tok</source>
         <translation>•  キャッシュ %1k トークン</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="704"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="813"/>
         <source>  •  cache write %1k tok</source>
         <translation>キャッシュ書込 %1k トークン</translation>
     </message>
@@ -13913,7 +13927,7 @@ function parse(%1) { ... }
         <translation>時間: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="327"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="364"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>OpenAI APIキーが設定されていません。キー管理を開いて追加してください。</translation>
     </message>
@@ -16804,104 +16818,84 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>Tips</name>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
         <source>Did You Know?</source>
-        <translation>ご存知ですか？</translation>
+        <translation type="vanished">ご存知ですか？</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
         <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
-        <translation>ファームウェアは生データを送信するだけにして、JavaScript、Lua、またはコード不要のビルトインテンプレートでSerial Studioに解析させることで、シンプルに保つことができます。</translation>
+        <translation type="vanished">ファームウェアは生データを送信するだけにして、JavaScript、Lua、またはコード不要のビルトインテンプレートでSerial Studioに解析させることで、シンプルに保つことができます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
         <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
-        <translation>各チャンネルに独自の関数を割り当てて、較正、フィルタリング、単位変換を行えます。演算をSerial Studioにオフロードして、ファームウェアを軽量に保ちましょう。</translation>
+        <translation type="vanished">各チャンネルに独自の関数を割り当てて、較正、フィルタリング、単位変換を行えます。演算をSerial Studioにオフロードして、ファームウェアを軽量に保ちましょう。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
         <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
-        <translation>デバイスが送信しない値が必要ですか？仮想データセットは、電圧と電流から電力を計算するなど、独自のチャンネルを演算し、データとしてプロットおよび記録できます。</translation>
+        <translation type="vanished">デバイスが送信しない値が必要ですか？仮想データセットは、電圧と電流から電力を計算するなど、独自のチャンネルを演算し、データとしてプロットおよび記録できます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
         <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
-        <translation>ベンチオシロスコープのようにグリッチを捕捉できます。時間軸プロットにはスイープとトリガーモードがあり、プロット上で直接トリガーレベルをドラッグできます。</translation>
+        <translation type="vanished">ベンチオシロスコープのようにグリッチを捕捉できます。時間軸プロットにはスイープとトリガーモードがあり、プロット上で直接トリガーレベルをドラッグできます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
         <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
-        <translation>適切なウィジェットを探してスクロールする必要はありません。独自のワークスペースにグループ化して、タスクバー検索から切り替えられます。</translation>
+        <translation type="vanished">適切なウィジェットを探してスクロールする必要はありません。独自のワークスペースにグループ化して、タスクバー検索から切り替えられます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
         <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
-        <translation>テスト実行を二度と失わないでください。セッションをローカルデータベースに記録し、必要なときにいつでも参照、タグ付け、再生できます。</translation>
+        <translation type="vanished">テスト実行を二度と失わないでください。セッションをローカルデータベースに記録し、必要なときにいつでも参照、タグ付け、再生できます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
         <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
-        <translation>数秒で洗練されたレポートをチームに提供できます。任意のセッションをHTMLまたはPDFにエクスポートでき、グラフと最小/最大/平均統計が含まれます。</translation>
+        <translation type="vanished">数秒で洗練されたレポートをチームに提供できます。任意のセッションをHTMLまたはPDFにエクスポートでき、グラフと最小/最大/平均統計が含まれます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
         <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
-        <translation>追加のツールなしでループを完結。出力コントロールを使用すると、ダッシュボードから直接デバイスにコマンドを送信できます。</translation>
+        <translation type="vanished">追加のツールなしでループを完結。出力コントロールを使用すると、ダッシュボードから直接デバイスにコマンドを送信できます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
         <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
-        <translation>誰も持っていないビジュアライゼーションを構築。Painterウィジェットは独自のスクリプトを実行し、受信データから完全にカスタムなグラフィックを描画します。</translation>
+        <translation type="vanished">誰も持っていないビジュアライゼーションを構築。Painterウィジェットは独自のスクリプトを実行し、受信データから完全にカスタムなグラフィックを描画します。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
         <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
-        <translation>あらゆるリンクに対応する1つのツール。Serial StudioはUART、TCP/UDP、Bluetooth LE、Modbus、CANバス、オーディオ、USB、HID、MQTT、プロセスI/Oから読み取ります。</translation>
+        <translation type="vanished">あらゆるリンクに対応する1つのツール。Serial StudioはUART、TCP/UDP、Bluetooth LE、Modbus、CANバス、オーディオ、USB、HID、MQTT、プロセスI/Oから読み取ります。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
         <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
-        <translation>ターミナル操作を省略。内蔵のXMODEM、YMODEM、ZMODEMプロトコルを使用して、シリアルリンク経由でファイルを送受信できます。</translation>
+        <translation type="vanished">ターミナル操作を省略。内蔵のXMODEM、YMODEM、ZMODEMプロトコルを使用して、シリアルリンク経由でファイルを送受信できます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
         <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
-        <translation>ModbusレジスタマップまたはDBCファイルをお持ちですか？手動で構築する代わりに、そこからすぐに使用できるプロジェクトを自動生成できます。</translation>
+        <translation type="vanished">ModbusレジスタマップまたはDBCファイルをお持ちですか？手動で構築する代わりに、そこからすぐに使用できるプロジェクトを自動生成できます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
         <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
-        <translation>必要な内容を説明すれば、AIアシスタントが構築します。8つのモデルプロバイダーを通じて、プロジェクトの作成と編集が可能です。</translation>
+        <translation type="vanished">必要な内容を説明すれば、AIアシスタントが構築します。8つのモデルプロバイダーを通じて、プロジェクトの作成と編集が可能です。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
         <source>Tip %1 of %2</source>
-        <translation>ヒント %1/%2</translation>
+        <translation type="vanished">ヒント %1/%2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
         <source>Learn More</source>
-        <translation>詳細を表示</translation>
+        <translation type="vanished">詳細を表示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
         <source>Show Tips on Startup</source>
-        <translation>起動時にヒントを表示</translation>
+        <translation type="vanished">起動時にヒントを表示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
         <source>Previous</source>
-        <translation>前へ</translation>
+        <translation type="vanished">前へ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
         <source>Next</source>
-        <translation>次へ</translation>
+        <translation type="vanished">次へ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
         <source>Close</source>
-        <translation>閉じる</translation>
+        <translation type="vanished">閉じる</translation>
     </message>
 </context>
 <context>

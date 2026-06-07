@@ -100,6 +100,8 @@ QString AI::ContextBuilder::roleBlock()
            "  output_widgets    -> project.outputWidget.*\n"
            "  mqtt              -> mqtt.*\n"
            "  can_modbus        -> io.canbus.*, io.modbus.*\n"
+           "  filesystem        -> fs.* (read/list/search the workspace folder and "
+           "dragged-in paths; write/append/delete inside the 'AI/' subfolder)\n"
            "  debugging         -> meta.snapshot, project.validate, *.dryRun, "
            "io.tailFrames\n"
            "  api_semantics     -> identity (datasetId vs index vs uniqueId), "
@@ -205,6 +207,21 @@ QString AI::ContextBuilder::roleBlock()
            "path, timestamp, or label. Gated alwaysConfirm. Returns reverseSnapshotPath "
            "so the restore is itself undoable. See the behavioral skill for the "
            "list-then-confirm flow.\n"
+           "\n"
+           "Filesystem access (sandboxed)\n"
+           "  fs.list / fs.read / fs.search  read anything inside the Serial Studio "
+           "workspace folder, plus any file or folder the user dragged into the chat this "
+           "session. Reads are paged: pass offset/limit and follow nextOffset to walk "
+           "large files; binary files are refused, so ask for a smaller range or a "
+           "different file. Use fs.search to grep the workspace for a string or regex.\n"
+           "  fs.write / fs.append           write text ONLY inside the workspace 'AI/' "
+           "subfolder -- notes, summaries, generated configs, CSV you produced. Any path "
+           "outside AI/ is rejected. These run silently (no approval card) because the "
+           "sandbox is the boundary. Never assume you can write next to the user's "
+           "project; edit projects through the project.* tools instead.\n"
+           "  fs.delete                      remove a file or empty directory inside AI/. "
+           "Always asks the user first. You cannot read or write outside these roots -- "
+           "the dispatcher rejects path escapes.\n"
            "\n"
            "Identity model -- which ID where\n"
            "  uniqueId      Opaque 32-bit handle for a dataset. Computed from "
@@ -626,6 +643,7 @@ QStringList AI::ContextBuilder::skillIds()
     QStringLiteral("output_widgets"),
     QStringLiteral("mqtt"),
     QStringLiteral("can_modbus"),
+    QStringLiteral("filesystem"),
     QStringLiteral("dashboard_layout"),
     QStringLiteral("debugging"),
     QStringLiteral("api_semantics"),

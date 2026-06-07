@@ -225,15 +225,6 @@ SmartDialog {
       }
 
       //
-      // Did You Know? tips
-      //
-      Button {
-        Layout.fillWidth: true
-        text: qsTr("Tips && Tricks")
-        onClicked: app.showTips()
-      }
-
-      //
       // License Agreement
       //
       Button {

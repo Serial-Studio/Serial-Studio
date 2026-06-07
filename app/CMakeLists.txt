@@ -462,7 +462,6 @@ set(QML_SOURCES
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
   qml/Dialogs/WhatsNew.qml
-  qml/Dialogs/Tips.qml
   qml/Dialogs/WorkspaceDialog.qml
   qml/Dialogs/ExtensionManager.qml
   qml/Dialogs/ExamplesBrowser.qml

@@ -37,12 +37,12 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="193"/>
+        <location filename="../../src/AI/Assistant.cpp" line="195"/>
         <source>Allow AI Device Control?</source>
         <translation>KI-Gerätesteuerung zulassen?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="194"/>
+        <location filename="../../src/AI/Assistant.cpp" line="196"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -51,22 +51,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 Jede Geräteaktion erfordert weiterhin Ihre ausdrückliche Genehmigung pro Aufruf im Chat, auch wenn die automatische Genehmigung aktiviert ist. Aktivieren Sie dies nur, wenn Sie dem konfigurierten KI-Anbieter den Hardwarezugriff zutrauen.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="393"/>
+        <location filename="../../src/AI/Assistant.cpp" line="395"/>
         <source>Switch AI provider?</source>
         <translation>KI-Anbieter wechseln?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="394"/>
+        <location filename="../../src/AI/Assistant.cpp" line="396"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>Der Wechsel zu einem anderen Anbieter löscht die aktuelle Konversation. Möchten Sie fortfahren?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="397"/>
+        <location filename="../../src/AI/Assistant.cpp" line="399"/>
         <source>Assistant</source>
         <translation>Assistent</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="434"/>
+        <location filename="../../src/AI/Assistant.cpp" line="436"/>
         <source>AI Assistant is not available in this build</source>
         <translation>KI-Assistent ist in diesem Build nicht verfügbar</translation>
     </message>
@@ -75,7 +75,7 @@ Jede Geräteaktion erfordert weiterhin Ihre ausdrückliche Genehmigung pro Aufru
         <translation type="vanished">KI-Assistent erfordert eine Pro-Lizenz</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="439"/>
+        <location filename="../../src/AI/Assistant.cpp" line="441"/>
         <source>Set an API key first</source>
         <translation>Zuerst einen API-Schlüssel festlegen</translation>
     </message>
@@ -107,7 +107,7 @@ Jede Geräteaktion erfordert weiterhin Ihre ausdrückliche Genehmigung pro Aufru
         <translation>Budget für Tool-Aufrufe in diesem Durchgang erreicht; es werden keine weiteren Tools ausgeführt.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1724"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1736"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Sie haben das Budget für Tool-Aufrufe in diesem Durchgang erreicht. Fordern Sie keine weiteren Tools an. Fassen Sie zusammen, was Sie bisher gefunden haben, und geben Sie an, welche Schritte noch ausstehen, falls die Aufgabe unvollständig ist, damit der Benutzer Ihnen sagen kann, fortzufahren.</translation>
     </message>
@@ -172,22 +172,22 @@ Jede Geräteaktion erfordert weiterhin Ihre ausdrückliche Genehmigung pro Aufru
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="334"/>
         <source>Invalid API key (%1)</source>
         <translation>Ungültiger API-Schlüssel (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="326"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="336"/>
         <source>Rate limited: %1</source>
         <translation>Ratenbegrenzung: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="328"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="338"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
@@ -338,37 +338,36 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation>Was Ist Neu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>Tips &amp;&amp; Tricks</source>
-        <translation>Tipps &amp;&amp; Tricks</translation>
+        <translation type="vanished">Tipps &amp;&amp; Tricks</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>License Agreement</source>
         <translation>Lizenzvereinbarung</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Report Bug</source>
         <translation>Fehler Melden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Acknowledgements</source>
         <translation>Danksagungen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="268"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="276"/>
+        <location filename="../../qml/Dialogs/About.qml" line="267"/>
         <source>Website</source>
         <translation>Website</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="292"/>
+        <location filename="../../qml/Dialogs/About.qml" line="283"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
@@ -1098,77 +1097,92 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation>Datensätze in nützliche Arbeitsbereiche gruppieren</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>Drop files or folders to let the assistant read them</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="472"/>
+        <source>Added folder "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="473"/>
+        <source>Added "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="557"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Fragen Sie Serial Studio beliebig…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="468"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="577"/>
         <source>Clear conversation</source>
         <translation>Konversation löschen</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="512"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="621"/>
         <source>Stop generating</source>
         <translation>Generierung stoppen</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="513"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="622"/>
         <source>Send message (Enter)</source>
         <translation>Nachricht senden (Eingabe)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="555"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="664"/>
         <source>Provider</source>
         <translation>Anbieter</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="588"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="697"/>
         <source>Model selection</source>
         <translation>Modellauswahl</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="743"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>Bearbeitungsaktionen ohne Rückfrage ausführen. Blockierte Aktionen bleiben blockiert.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="636"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="745"/>
         <source>Auto-approve edits</source>
         <translation>Bearbeitungen automatisch genehmigen</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="761"/>
         <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
         <translation>KI erlauben, Geräte zu konfigurieren, zu verbinden/trennen und Daten zu senden. Jede Aktion erfordert weiterhin Ihre Genehmigung.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="654"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="763"/>
         <source>Allow device control</source>
         <translation>Gerätesteuerung zulassen</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="680"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="789"/>
         <source>Manage API keys</source>
         <translation>API-Schlüssel verwalten</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="701"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="810"/>
         <source>Working</source>
         <translation>Verarbeitung</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="702"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="811"/>
         <source>Ready</source>
         <translation>Bereit</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="703"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="812"/>
         <source>  •  cache %1k tok</source>
         <translation>•  Cache %1k Tok</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="704"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="813"/>
         <source>  •  cache write %1k tok</source>
         <translation>Cache-Schreiben %1k Tok</translation>
     </message>
@@ -13913,7 +13927,7 @@ Der Trennzeichen-Parameter wird nicht mehr benötigt.</translation>
         <translation>Zeit: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="327"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="364"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>Kein OpenAI-API-Schlüssel gesetzt. Öffnen Sie Schlüssel verwalten, um einen hinzuzufügen.</translation>
     </message>
@@ -16804,104 +16818,84 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
 <context>
     <name>Tips</name>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
         <source>Did You Know?</source>
-        <translation>Wussten Sie Schon?</translation>
+        <translation type="vanished">Wussten Sie Schon?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
         <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
-        <translation>Firmware einfach halten, indem Rohdaten gesendet und von Serial Studio in JavaScript, Lua oder codefreien integrierten Vorlagen geparst werden.</translation>
+        <translation type="vanished">Firmware einfach halten, indem Rohdaten gesendet und von Serial Studio in JavaScript, Lua oder codefreien integrierten Vorlagen geparst werden.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
         <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
-        <translation>Jedem Kanal eine eigene Funktion geben, um zu kalibrieren, zu filtern oder Einheiten umzurechnen. Mathematik an Serial Studio auslagern und Firmware schlank halten.</translation>
+        <translation type="vanished">Jedem Kanal eine eigene Funktion geben, um zu kalibrieren, zu filtern oder Einheiten umzurechnen. Mathematik an Serial Studio auslagern und Firmware schlank halten.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
         <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
-        <translation>Ein Wert wird vom Gerät nie gesendet? Ein virtueller Datensatz berechnet seinen eigenen Kanal, wie Leistung aus Spannung und Strom, geplottet und protokolliert als Daten.</translation>
+        <translation type="vanished">Ein Wert wird vom Gerät nie gesendet? Ein virtueller Datensatz berechnet seinen eigenen Kanal, wie Leistung aus Spannung und Strom, geplottet und protokolliert als Daten.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
         <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
-        <translation>Störimpulse wie mit einem Oszilloskop erfassen. Zeitachsen-Plots haben einen Sweep- und Trigger-Modus, und der Trigger-Pegel kann direkt im Plot gezogen werden.</translation>
+        <translation type="vanished">Störimpulse wie mit einem Oszilloskop erfassen. Zeitachsen-Plots haben einen Sweep- und Trigger-Modus, und der Trigger-Pegel kann direkt im Plot gezogen werden.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
         <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
-        <translation>Scrollen beenden, um das richtige Widget zu finden. In eigene Arbeitsbereiche gruppieren und über die Taskleisten-Suche zwischen ihnen wechseln.</translation>
+        <translation type="vanished">Scrollen beenden, um das richtige Widget zu finden. In eigene Arbeitsbereiche gruppieren und über die Taskleisten-Suche zwischen ihnen wechseln.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
         <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
-        <translation>Testläufe nie wieder verlieren. Sitzungen in einer lokalen Datenbank aufzeichnen, dann durchsuchen, taggen und bei Bedarf wiedergeben.</translation>
+        <translation type="vanished">Testläufe nie wieder verlieren. Sitzungen in einer lokalen Datenbank aufzeichnen, dann durchsuchen, taggen und bei Bedarf wiedergeben.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
         <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
-        <translation>In Sekunden einen ausgefeilten Bericht an das Team übergeben. Jede Sitzung nach HTML oder PDF exportieren, komplett mit Diagrammen und Min/Max/Mittelwert-Statistiken.</translation>
+        <translation type="vanished">In Sekunden einen ausgefeilten Bericht an das Team übergeben. Jede Sitzung nach HTML oder PDF exportieren, komplett mit Diagrammen und Min/Max/Mittelwert-Statistiken.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
         <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
-        <translation>Schließen Sie den Regelkreis ohne zusätzliche Werkzeuge. Ausgabesteuerungen ermöglichen es Ihnen, Befehle direkt vom Dashboard an Ihr Gerät zu senden.</translation>
+        <translation type="vanished">Schließen Sie den Regelkreis ohne zusätzliche Werkzeuge. Ausgabesteuerungen ermöglichen es Ihnen, Befehle direkt vom Dashboard an Ihr Gerät zu senden.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
         <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
-        <translation>Erstellen Sie eine Visualisierung, die sonst niemand hat. Das Painter-Widget führt Ihr eigenes Skript aus, um vollständig benutzerdefinierte Grafiken aus eingehenden Daten zu zeichnen.</translation>
+        <translation type="vanished">Erstellen Sie eine Visualisierung, die sonst niemand hat. Das Painter-Widget führt Ihr eigenes Skript aus, um vollständig benutzerdefinierte Grafiken aus eingehenden Daten zu zeichnen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
         <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
-        <translation>Ein Werkzeug für jede Verbindung. Serial Studio liest von UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, Audio, USB, HID, MQTT und Prozess-I/O.</translation>
+        <translation type="vanished">Ein Werkzeug für jede Verbindung. Serial Studio liest von UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, Audio, USB, HID, MQTT und Prozess-I/O.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
         <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
-        <translation>Überspringen Sie den Terminal-Tanz. Senden und empfangen Sie Dateien über Ihre serielle Verbindung mit den integrierten XMODEM-, YMODEM- und ZMODEM-Protokollen.</translation>
+        <translation type="vanished">Überspringen Sie den Terminal-Tanz. Senden und empfangen Sie Dateien über Ihre serielle Verbindung mit den integrierten XMODEM-, YMODEM- und ZMODEM-Protokollen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
         <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
-        <translation>Haben Sie bereits eine Modbus-Registerkarte oder eine DBC-Datei? Generieren Sie automatisch ein einsatzbereites Projekt daraus, anstatt eines manuell zu erstellen.</translation>
+        <translation type="vanished">Haben Sie bereits eine Modbus-Registerkarte oder eine DBC-Datei? Generieren Sie automatisch ein einsatzbereites Projekt daraus, anstatt eines manuell zu erstellen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
         <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
-        <translation>Beschreiben Sie, was Sie möchten, und lassen Sie den KI-Assistenten es erstellen. Er kann Projekte für Sie über acht Modellanbieter erstellen und bearbeiten.</translation>
+        <translation type="vanished">Beschreiben Sie, was Sie möchten, und lassen Sie den KI-Assistenten es erstellen. Er kann Projekte für Sie über acht Modellanbieter erstellen und bearbeiten.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
         <source>Tip %1 of %2</source>
-        <translation>Tipp %1 von %2</translation>
+        <translation type="vanished">Tipp %1 von %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
         <source>Learn More</source>
-        <translation>Mehr Erfahren</translation>
+        <translation type="vanished">Mehr Erfahren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
         <source>Show Tips on Startup</source>
-        <translation>Tipps beim Start Anzeigen</translation>
+        <translation type="vanished">Tipps beim Start Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
         <source>Previous</source>
-        <translation>Zurück</translation>
+        <translation type="vanished">Zurück</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
         <source>Next</source>
-        <translation>Weiter</translation>
+        <translation type="vanished">Weiter</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
         <source>Close</source>
-        <translation>Schließen</translation>
+        <translation type="vanished">Schließen</translation>
     </message>
 </context>
 <context>

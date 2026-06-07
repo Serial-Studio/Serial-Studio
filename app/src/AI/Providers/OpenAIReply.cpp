@@ -8,6 +8,7 @@
 
 #include "AI/Providers/OpenAIReply.h"
 
+#include <QHash>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonValue>
@@ -20,6 +21,7 @@
 #include "AI/KeyVault.h"
 #include "AI/Logging.h"
 #include "AI/SseEventReader.h"
+#include "AI/ToolDispatcher.h"
 #include "API/CommandRegistry.h"
 #include "Misc/JsonValidator.h"
 
@@ -28,21 +30,29 @@ static const char* const kOpenAIEndpoint       = "https://api.openai.com/v1/chat
 static const char* const kOpenAIAuthHeader     = "Authorization";
 
 /**
- * @brief Resolves a sanitized tool name back to its dotted canonical form.
+ * @brief Inverts provider name sanitization across the full advertised tool surface.
  */
 static QString resolveCanonicalToolName(const QString& sanitized)
 {
-  const auto& commands = API::CommandRegistry::instance().commands();
-  if (commands.contains(sanitized))
-    return sanitized;
+  // Build from the dispatcher catalog so virtual fs.*/assistant.* names round-trip too.
+  static const auto buildReverseMap = []() {
+    QHash<QString, QString> map;
+    AI::ToolDispatcher dispatcher;
+    const auto tools = dispatcher.availableTools();
+    for (const auto& value : tools) {
+      const auto canonical = value.toObject().value(QStringLiteral("name")).toString();
+      QString key          = canonical;
+      key.replace(QChar('.'), QChar('_'));
+      key.replace(QChar(':'), QChar('_'));
+      map.insert(key, canonical);
+    }
+    return map;
+  };
+  static const QHash<QString, QString> kReverse = buildReverseMap();
 
-  for (auto it = commands.constBegin(); it != commands.constEnd(); ++it) {
-    QString candidate = it.key();
-    candidate.replace(QChar('.'), QChar('_'));
-    candidate.replace(QChar(':'), QChar('_'));
-    if (candidate == sanitized)
-      return it.key();
-  }
+  const auto it = kReverse.constFind(sanitized);
+  if (it != kReverse.constEnd())
+    return it.value();
 
   if (sanitized.startsWith(QStringLiteral("meta_"))) {
     QString restored = sanitized;

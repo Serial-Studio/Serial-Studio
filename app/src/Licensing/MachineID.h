@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <QSettings>
 
 namespace Licensing {
 /**
@@ -56,8 +57,11 @@ public:
 
 private:
   void readInformation();
+  [[nodiscard]] QString loadLastGoodRawId(const QString& os);
+  void saveLastGoodRawId(const QString& rawId, const QString& os);
 
 private:
+  QSettings m_settings;
   QString m_machineId;
   QString m_appVerMachineId;
   quint64 m_machineSpecificKey;

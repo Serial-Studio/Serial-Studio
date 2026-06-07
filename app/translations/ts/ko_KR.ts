@@ -37,12 +37,12 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="193"/>
+        <location filename="../../src/AI/Assistant.cpp" line="195"/>
         <source>Allow AI Device Control?</source>
         <translation>AI 장치 제어를 허용하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="194"/>
+        <location filename="../../src/AI/Assistant.cpp" line="196"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -51,22 +51,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 자동 승인이 활성화된 경우에도 모든 장치 작업은 채팅에서 호출별 명시적 승인이 필요합니다. 구성된 AI 공급자에게 하드웨어 액세스 권한을 신뢰하는 경우에만 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="393"/>
+        <location filename="../../src/AI/Assistant.cpp" line="395"/>
         <source>Switch AI provider?</source>
         <translation>AI 제공자를 전환하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="394"/>
+        <location filename="../../src/AI/Assistant.cpp" line="396"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>다른 제공자로 전환하면 현재 대화가 지워집니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="397"/>
+        <location filename="../../src/AI/Assistant.cpp" line="399"/>
         <source>Assistant</source>
         <translation>어시스턴트</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="434"/>
+        <location filename="../../src/AI/Assistant.cpp" line="436"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI 어시스턴트는 이 빌드에서 사용할 수 없습니다</translation>
     </message>
@@ -75,7 +75,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">AI 어시스턴트는 Pro 라이선스가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="439"/>
+        <location filename="../../src/AI/Assistant.cpp" line="441"/>
         <source>Set an API key first</source>
         <translation>먼저 API 키를 설정하십시오</translation>
     </message>
@@ -107,7 +107,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>이번 턴의 도구 호출 한도에 도달했습니다. 더 이상 도구가 실행되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1724"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1736"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>이번 턴의 도구 호출 한도에 도달했습니다. 더 이상 도구를 요청하지 마십시오. 지금까지 찾은 내용을 요약하고, 작업이 완료되지 않았다면 남은 단계를 알려 사용자가 계속 진행하도록 할 수 있습니다.</translation>
     </message>
@@ -172,22 +172,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="324"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="334"/>
         <source>Invalid API key (%1)</source>
         <translation>유효하지 않은 API 키 (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="326"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="336"/>
         <source>Rate limited: %1</source>
         <translation>속도 제한됨: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="328"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="338"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
@@ -338,37 +338,36 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>새로운 기능</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>Tips &amp;&amp; Tricks</source>
-        <translation>팁 &amp;&amp; 트릭</translation>
+        <translation type="vanished">팁 &amp;&amp; 트릭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="232"/>
         <source>License Agreement</source>
         <translation>라이선스 계약</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Report Bug</source>
         <translation>버그 신고</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="259"/>
+        <location filename="../../qml/Dialogs/About.qml" line="250"/>
         <source>Acknowledgements</source>
         <translation>감사의 글</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="268"/>
+        <location filename="../../qml/Dialogs/About.qml" line="259"/>
         <source>Benchmark</source>
         <translation>벤치마크</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="276"/>
+        <location filename="../../qml/Dialogs/About.qml" line="267"/>
         <source>Website</source>
         <translation>웹사이트</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="292"/>
+        <location filename="../../qml/Dialogs/About.qml" line="283"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -1098,77 +1097,92 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>데이터셋을 유용한 작업 공간으로 그룹화</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="448"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
+        <source>Drop files or folders to let the assistant read them</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="472"/>
+        <source>Added folder "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="473"/>
+        <source>Added "%1" - readable this session</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="557"/>
         <source>Ask Serial Studio anything…</source>
         <translation>Serial Studio에 무엇이든 물어보세요…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="468"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="577"/>
         <source>Clear conversation</source>
         <translation>대화 지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="512"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="621"/>
         <source>Stop generating</source>
         <translation>생성 중지</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="513"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="622"/>
         <source>Send message (Enter)</source>
         <translation>메시지 전송 (Enter)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="555"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="664"/>
         <source>Provider</source>
         <translation>제공자</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="588"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="697"/>
         <source>Model selection</source>
         <translation>모델 선택</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="634"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="743"/>
         <source>Run editing actions without asking each time. Blocked actions stay blocked.</source>
         <translation>매번 묻지 않고 편집 작업을 실행합니다. 차단된 작업은 차단 상태를 유지합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="636"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="745"/>
         <source>Auto-approve edits</source>
         <translation>편집 자동 승인</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="652"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="761"/>
         <source>Let the AI configure devices, connect/disconnect and send data. Each action still asks for your approval.</source>
         <translation>AI가 장치를 구성하고, 연결/연결 해제하며, 데이터를 전송할 수 있도록 합니다. 각 작업은 여전히 승인을 요청합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="654"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="763"/>
         <source>Allow device control</source>
         <translation>장치 제어 허용</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="680"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="789"/>
         <source>Manage API keys</source>
         <translation>API 키 관리</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="701"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="810"/>
         <source>Working</source>
         <translation>작업 중</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="702"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="811"/>
         <source>Ready</source>
         <translation>준비됨</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="703"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="812"/>
         <source>  •  cache %1k tok</source>
         <translation>•  캐시 %1k tok</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="704"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="813"/>
         <source>  •  cache write %1k tok</source>
         <translation>캐시 쓰기 %1k 토큰</translation>
     </message>
@@ -13913,7 +13927,7 @@ function parse(%1) { ... }
         <translation>시간: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="327"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="364"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>OpenAI API 키가 설정되지 않았습니다. 키 관리를 열어 추가하세요.</translation>
     </message>
@@ -16804,104 +16818,84 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>Tips</name>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="31"/>
         <source>Did You Know?</source>
-        <translation>알고 계셨나요?</translation>
+        <translation type="vanished">알고 계셨나요?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="52"/>
         <source>Keep your firmware simple by sending raw data and letting Serial Studio parse it in JavaScript, Lua, or code-free Built-In templates.</source>
-        <translation>JavaScript, Lua 또는 코드 없는 내장 템플릿으로 Serial Studio가 파싱하도록 하여 원시 데이터를 전송함으로써 펌웨어를 단순하게 유지하세요.</translation>
+        <translation type="vanished">JavaScript, Lua 또는 코드 없는 내장 템플릿으로 Serial Studio가 파싱하도록 하여 원시 데이터를 전송함으로써 펌웨어를 단순하게 유지하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="57"/>
         <source>Give each channel its own function to calibrate, filter, or convert units. Offload the math to Serial Studio and keep your firmware lean.</source>
-        <translation>각 채널에 보정, 필터링 또는 단위 변환을 위한 고유 함수를 부여하세요. 수학 연산을 Serial Studio로 오프로드하여 펌웨어를 가볍게 유지하세요.</translation>
+        <translation type="vanished">각 채널에 보정, 필터링 또는 단위 변환을 위한 고유 함수를 부여하세요. 수학 연산을 Serial Studio로 오프로드하여 펌웨어를 가볍게 유지하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="62"/>
         <source>Need a value your device never sends? A virtual dataset computes its own channel, like power from voltage and current, plotted and logged as data.</source>
-        <translation>장치가 전송하지 않는 값이 필요하신가요? 가상 데이터셋은 전압과 전류로부터 전력과 같은 자체 채널을 계산하여 데이터로 플롯하고 기록합니다.</translation>
+        <translation type="vanished">장치가 전송하지 않는 값이 필요하신가요? 가상 데이터셋은 전압과 전류로부터 전력과 같은 자체 채널을 계산하여 데이터로 플롯하고 기록합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="67"/>
         <source>Catch glitches like a bench scope. Time-axis plots have a sweep and trigger mode, and you can drag the trigger level right on the plot.</source>
-        <translation>벤치 스코프처럼 글리치를 포착하세요. 시간축 플롯에는 스윕 및 트리거 모드가 있으며, 플롯에서 직접 트리거 레벨을 드래그할 수 있습니다.</translation>
+        <translation type="vanished">벤치 스코프처럼 글리치를 포착하세요. 시간축 플롯에는 스윕 및 트리거 모드가 있으며, 플롯에서 직접 트리거 레벨을 드래그할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="72"/>
         <source>Stop scrolling to find the right widget. Group them into your own workspaces and jump between them from the taskbar search.</source>
-        <translation>올바른 위젯을 찾기 위해 스크롤하는 것을 멈추세요. 위젯을 자신만의 작업 공간으로 그룹화하고 작업 표시줄 검색에서 전환하세요.</translation>
+        <translation type="vanished">올바른 위젯을 찾기 위해 스크롤하는 것을 멈추세요. 위젯을 자신만의 작업 공간으로 그룹화하고 작업 표시줄 검색에서 전환하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="77"/>
         <source>Never lose a test run again. Record sessions to a local database, then browse, tag, and replay them whenever you need them.</source>
-        <translation>테스트 실행을 다시는 잃어버리지 마세요. 세션을 로컬 데이터베이스에 기록한 다음 필요할 때마다 찾아보고, 태그를 지정하고, 재생하세요.</translation>
+        <translation type="vanished">테스트 실행을 다시는 잃어버리지 마세요. 세션을 로컬 데이터베이스에 기록한 다음 필요할 때마다 찾아보고, 태그를 지정하고, 재생하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="82"/>
         <source>Hand a polished report to your team in seconds. Export any session to HTML or PDF, complete with charts and min/max/mean stats.</source>
-        <translation>몇 초 만에 팀에 완성된 보고서를 전달하세요. 차트 및 최소/최대/평균 통계가 포함된 세션을 HTML 또는 PDF로 내보내세요.</translation>
+        <translation type="vanished">몇 초 만에 팀에 완성된 보고서를 전달하세요. 차트 및 최소/최대/평균 통계가 포함된 세션을 HTML 또는 PDF로 내보내세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="87"/>
         <source>Close the loop without extra tooling. Output Controls let you send commands back to your device straight from the dashboard.</source>
-        <translation>추가 도구 없이 루프를 완성하세요. 출력 컨트롤을 사용하면 대시보드에서 직접 장치로 명령을 전송할 수 있습니다.</translation>
+        <translation type="vanished">추가 도구 없이 루프를 완성하세요. 출력 컨트롤을 사용하면 대시보드에서 직접 장치로 명령을 전송할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="92"/>
         <source>Build a visualization nobody else has. The Painter widget runs your own script to draw fully custom graphics from incoming data.</source>
-        <translation>누구도 만들지 않은 시각화를 구축하세요. Painter 위젯은 사용자 스크립트를 실행하여 수신 데이터로부터 완전히 맞춤형 그래픽을 그립니다.</translation>
+        <translation type="vanished">누구도 만들지 않은 시각화를 구축하세요. Painter 위젯은 사용자 스크립트를 실행하여 수신 데이터로부터 완전히 맞춤형 그래픽을 그립니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="97"/>
         <source>One tool for every link. Serial Studio reads from UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, audio, USB, HID, MQTT, and Process I/O.</source>
-        <translation>모든 연결을 위한 하나의 도구. Serial Studio는 UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, 오디오, USB, HID, MQTT 및 프로세스 I/O에서 데이터를 읽습니다.</translation>
+        <translation type="vanished">모든 연결을 위한 하나의 도구. Serial Studio는 UART, TCP/UDP, Bluetooth LE, Modbus, CAN Bus, 오디오, USB, HID, MQTT 및 프로세스 I/O에서 데이터를 읽습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="102"/>
         <source>Skip the terminal dance. Send and receive files over your serial link with the built-in XMODEM, YMODEM, and ZMODEM protocols.</source>
-        <translation>터미널 작업을 건너뛰세요. 내장된 XMODEM, YMODEM, ZMODEM 프로토콜로 시리얼 링크를 통해 파일을 송수신하세요.</translation>
+        <translation type="vanished">터미널 작업을 건너뛰세요. 내장된 XMODEM, YMODEM, ZMODEM 프로토콜로 시리얼 링크를 통해 파일을 송수신하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="107"/>
         <source>Already have a Modbus register map or a DBC file? Generate a ready-to-use project from it automatically instead of building one by hand.</source>
-        <translation>이미 Modbus 레지스터 맵이나 DBC 파일이 있으신가요? 수동으로 구축하는 대신 자동으로 바로 사용 가능한 프로젝트를 생성하세요.</translation>
+        <translation type="vanished">이미 Modbus 레지스터 맵이나 DBC 파일이 있으신가요? 수동으로 구축하는 대신 자동으로 바로 사용 가능한 프로젝트를 생성하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="112"/>
         <source>Describe what you want and let the AI Assistant build it. It can create and edit projects for you across eight model providers.</source>
-        <translation>원하는 내용을 설명하면 AI 어시스턴트가 구축합니다. 8개 모델 제공업체를 통해 프로젝트를 생성하고 편집할 수 있습니다.</translation>
+        <translation type="vanished">원하는 내용을 설명하면 AI 어시스턴트가 구축합니다. 8개 모델 제공업체를 통해 프로젝트를 생성하고 편집할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="186"/>
         <source>Tip %1 of %2</source>
-        <translation>팁 %1/%2</translation>
+        <translation type="vanished">팁 %1/%2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="202"/>
         <source>Learn More</source>
-        <translation>자세히 알아보기</translation>
+        <translation type="vanished">자세히 알아보기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="229"/>
         <source>Show Tips on Startup</source>
-        <translation>시작 시 팁 표시</translation>
+        <translation type="vanished">시작 시 팁 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="236"/>
         <source>Previous</source>
-        <translation>이전</translation>
+        <translation type="vanished">이전</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="243"/>
         <source>Next</source>
-        <translation>다음</translation>
+        <translation type="vanished">다음</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Tips.qml" line="252"/>
         <source>Close</source>
-        <translation>닫기</translation>
+        <translation type="vanished">닫기</translation>
     </message>
 </context>
 <context>

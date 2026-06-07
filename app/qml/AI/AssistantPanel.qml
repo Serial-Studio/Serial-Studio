@@ -368,6 +368,115 @@ Widgets.SmartDialog {
             }
           }
         }
+
+        //
+        // Drag & drop authorizes any dropped file/folder for sandboxed reads this session
+        //
+        DropArea {
+          id: fileDrop
+
+          anchors.fill: parent
+
+          //
+          // Highlight the overlay while a drag hovers
+          //
+          onEntered: (drag) => {
+            if (drag.urls.length > 0) {
+              drag.accept(Qt.LinkAction)
+              dropOverlay.opacity = 0.92
+            }
+          }
+
+          onExited: dropOverlay.opacity = 0
+
+          //
+          // Register every dropped URL with the C++ sandbox allow-list
+          //
+          onDropped: (drop) => {
+            dropOverlay.opacity = 0
+            for (var i = 0; i < drop.urls.length; ++i) {
+              var path = drop.urls[i].toString()
+              if (Qt.platform.os !== "windows")
+                path = path.replace(/^(file:\/{2})/, "")
+              else
+                path = path.replace(/^(file:\/{3})/, "")
+
+              Cpp_AI_Assistant.addDroppedPath(decodeURIComponent(path))
+            }
+          }
+
+          //
+          // Drop affordance rectangle
+          //
+          Rectangle {
+            id: dropOverlay
+
+            opacity: 0
+            radius: 12
+            border.width: 2
+            anchors.fill: parent
+            color: Qt.rgba(Cpp_ThemeManager.colors["highlight"].r,
+                           Cpp_ThemeManager.colors["highlight"].g,
+                           Cpp_ThemeManager.colors["highlight"].b, 0.18)
+            border.color: Cpp_ThemeManager.colors["highlight"]
+
+            Behavior on opacity { NumberAnimation { duration: 120 } }
+
+            Label {
+              anchors.centerIn: parent
+              text: qsTr("Drop files or folders to let the assistant read them")
+              font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+              color: Cpp_ThemeManager.colors["highlighted_text"]
+            }
+          }
+
+          //
+          // Transient banner confirming the most recent authorization
+          //
+          Rectangle {
+            id: dropToast
+
+            radius: 8
+            height: 30
+            opacity: 0
+            border.width: 1
+            anchors.top: parent.top
+            anchors.topMargin: 8
+            width: toastLabel.implicitWidth + 28
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+            border.color: Cpp_ThemeManager.colors["highlight"]
+
+            Behavior on opacity { NumberAnimation { duration: 160 } }
+
+            Label {
+              id: toastLabel
+
+              anchors.centerIn: parent
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.uiFont
+            }
+
+            Timer {
+              id: toastTimer
+
+              repeat: false
+              interval: 2600
+              onTriggered: dropToast.opacity = 0
+            }
+
+            Connections {
+              target: Cpp_AI_Assistant
+              function onDroppedPathAdded(displayName, isDir) {
+                toastLabel.text = isDir
+                  ? qsTr("Added folder \"%1\" - readable this session").arg(displayName)
+                  : qsTr("Added \"%1\" - readable this session").arg(displayName)
+                dropToast.opacity = 1
+                toastTimer.restart()
+              }
+            }
+          }
+        }
       }
 
       //

@@ -69,14 +69,6 @@ bool Misc::WhatsNew::showWhatsNewOnStartup() const
   return m_settings.value(kKeyStartup, true).toBool();
 }
 
-/**
- * @brief Returns whether the Tips dialog should appear automatically on startup.
- */
-bool Misc::WhatsNew::showTipsOnStartup() const
-{
-  return m_settings.value(kKeyTips, true).toBool();
-}
-
 //--------------------------------------------------------------------------------------------------
 // Mutators
 //--------------------------------------------------------------------------------------------------
@@ -95,19 +87,6 @@ void Misc::WhatsNew::syncVersion()
     setShowWhatsNewOnStartup(true);
 
   m_settings.sync();
-}
-
-/**
- * @brief Persists the Tips-on-startup opt-out flag and notifies bound QML.
- */
-void Misc::WhatsNew::setShowTipsOnStartup(const bool show)
-{
-  if (show == showTipsOnStartup())
-    return;
-
-  m_settings.setValue(kKeyTips, show);
-  m_settings.sync();
-  Q_EMIT showTipsOnStartupChanged();
 }
 
 /**

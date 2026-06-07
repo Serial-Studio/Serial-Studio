@@ -221,7 +221,6 @@ Item {
       }
 
       whatsNewDialog.close()
-      tipsDialog.close()
       aboutDialog.close()
       donateDialog.close()
       licenseDialog.close()
@@ -460,15 +459,6 @@ Item {
   }
 
   //
-  // "Did You Know?" tips dialog: auto-shown on startup unless opted out
-  //
-  DialogLoader {
-    id: tipsDialog
-
-    source: "qrc:/serial-studio.com/gui/qml/Dialogs/Tips.qml"
-  }
-
-  //
   // AI assistant (Pro, author-only): lazy DialogLoader, hosts a SmartWindow
   //
   DialogLoader {
@@ -550,15 +540,7 @@ Item {
   }
 
   //
-  // "Did You Know?" tips dialog: explicit open from menus
-  //
-  function showTips() {
-    tipsDialog.activate()
-  }
-
-  //
-  // First-show auto-open: What's New on an upgrade, otherwise a tip (when enabled).
-  // Only one auto-pops per launch so the user never faces two stacked dialogs.
+  // First-show auto-open: What's New on an upgrade.
   //
   function showStartupDialogs() {
     if (app.runtimeMode)
@@ -566,8 +548,6 @@ Item {
 
     if (Cpp_Misc_WhatsNew.shouldShowWhatsNew)
       whatsNewDialog.activate()
-    else if (Cpp_Misc_WhatsNew.showTipsOnStartup)
-      tipsDialog.activate()
   }
 
   //

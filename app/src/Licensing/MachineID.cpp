@@ -28,6 +28,8 @@
 #include <QProcess>
 #include <QtCore/qendian.h>
 
+#include "SimpleCrypt.h"
+
 //--------------------------------------------------------------------------------------------------
 // Executable path resolution
 //--------------------------------------------------------------------------------------------------
@@ -58,37 +60,42 @@ static void awaitTool(QProcess& process, int timeoutMs = 3000)
   }
 }
 
-/**
- * @brief Gathers the raw, platform-specific machine identifier and OS label.
- */
-static QString readPlatformId(QString& os)
-{
-  QString id;
-  QProcess process;
-
-// Obtain machine ID in GNU/Linux
 #if defined(Q_OS_LINUX)
-  os                 = QStringLiteral("Linux");
+/**
+ * @brief Reads the GNU/Linux machine id from the dbus or systemd store.
+ */
+static QString readLinuxId(bool& complete)
+{
+  QProcess process;
   const auto catTool = resolveSystemTool({"/bin/cat", "/usr/bin/cat"}, "cat");
   process.start(catTool, {"/var/lib/dbus/machine-id"});
   awaitTool(process);
-  id = process.readAllStandardOutput().trimmed();
+  QString id = process.readAllStandardOutput().trimmed();
 
   if (id.isEmpty()) {
     process.start(catTool, {"/etc/machine-id"});
     awaitTool(process);
     id = process.readAllStandardOutput().trimmed();
   }
+
+  complete = !id.isEmpty();
+  return id;
+}
 #endif
 
-// Obtain machine ID in macOS
 #if defined(Q_OS_MAC)
-  os                   = QStringLiteral("macOS");
+/**
+ * @brief Reads the macOS IOPlatformUUID from the IO registry.
+ */
+static QString readMacId(bool& complete)
+{
+  QProcess process;
   const auto ioregTool = resolveSystemTool({"/usr/sbin/ioreg"}, "ioreg");
   process.start(ioregTool, {"-rd1", "-c", "IOPlatformExpertDevice"});
   awaitTool(process);
   QString output = process.readAllStandardOutput();
 
+  QString id;
   QStringList lines = output.split("\n");
   for (const QString& line : std::as_const(lines)) {
     if (line.contains("IOPlatformUUID")) {
@@ -101,11 +108,19 @@ static QString readPlatformId(QString& os)
       break;
     }
   }
+
+  complete = !id.isEmpty();
+  return id;
+}
 #endif
 
-// Obtain machine ID in Windows
 #if defined(Q_OS_WIN)
-  os = QStringLiteral("Windows");
+/**
+ * @brief Reads the Windows MachineGuid and system UUID, requiring both.
+ */
+static QString readWindowsId(bool& complete)
+{
+  QProcess process;
   QString machineGuid, uuid;
 
   // Resolve system tools under the real Windows directory
@@ -141,26 +156,58 @@ static QString readPlatformId(QString& os)
   awaitTool(process, 30000);
   uuid = process.readAllStandardOutput().trimmed();
 
-  id = machineGuid + uuid;
+  // A partial read (one component missing) degrades the fingerprint, so require both.
+  complete = !machineGuid.isEmpty() && !uuid.isEmpty();
+  return machineGuid + uuid;
+}
 #endif
 
-// Obtain machine ID in OpenBSD
 #if defined(Q_OS_BSD)
-  os                  = QStringLiteral("BSD");
+/**
+ * @brief Reads the BSD host id, falling back to the SMBIOS system UUID.
+ */
+static QString readBsdId(bool& complete)
+{
+  QProcess process;
   const auto catTool  = resolveSystemTool({"/bin/cat", "/usr/bin/cat"}, "cat");
   const auto kenvTool = resolveSystemTool({"/sbin/kenv", "/usr/sbin/kenv"}, "kenv");
   process.start(catTool, {"/etc/hostid"});
   awaitTool(process);
-  id = process.readAllStandardOutput().trimmed();
+  QString id = process.readAllStandardOutput().trimmed();
 
   if (id.isEmpty()) {
     process.start(kenvTool, {"-q", "smbios.system.uuid"});
     awaitTool(process);
     id = process.readAllStandardOutput().trimmed();
   }
+
+  complete = !id.isEmpty();
+  return id;
+}
 #endif
 
-  return id;
+/**
+ * @brief Gathers the raw, platform-specific machine identifier and OS label.
+ */
+static QString readPlatformId(QString& os, bool& complete)
+{
+#if defined(Q_OS_LINUX)
+  os = QStringLiteral("Linux");
+  return readLinuxId(complete);
+#elif defined(Q_OS_MAC)
+  os = QStringLiteral("macOS");
+  return readMacId(complete);
+#elif defined(Q_OS_WIN)
+  os = QStringLiteral("Windows");
+  return readWindowsId(complete);
+#elif defined(Q_OS_BSD)
+  os = QStringLiteral("BSD");
+  return readBsdId(complete);
+#else
+  os       = QStringLiteral("Unknown");
+  complete = false;
+  return QString();
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,6 +260,54 @@ quint64 Licensing::MachineID::machineSpecificKey() const noexcept
 }
 
 //--------------------------------------------------------------------------------------------------
+// Last-good raw id persistence
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Fixed, machine-independent cipher for the last-good raw id store.
+ */
+static Licensing::SimpleCrypt& lastGoodCrypt()
+{
+  // Constant key so the store decrypts even on a degraded read (machineSpecificKey is unavailable).
+  static constexpr quint64 kStoreKey = 0x5331'4D49'4452'4157ULL;
+  static Licensing::SimpleCrypt crypt(kStoreKey);
+  static bool configured = false;
+  if (!configured) {
+    crypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
+    configured = true;
+  }
+
+  return crypt;
+}
+
+/**
+ * @brief Returns the persisted last-good raw id, but only when it was saved for this same OS.
+ */
+QString Licensing::MachineID::loadLastGoodRawId(const QString& os)
+{
+  m_settings.beginGroup("licensing");
+  const auto storedRaw = m_settings.value("lastGoodRawId", "").toString();
+  const auto storedOs  = m_settings.value("lastGoodOs", "").toString();
+  m_settings.endGroup();
+
+  if (storedRaw.isEmpty() || storedOs != os)
+    return QString();
+
+  return lastGoodCrypt().decryptToString(storedRaw);
+}
+
+/**
+ * @brief Persists the current raw id so a later degraded read can reuse it instead of re-keying.
+ */
+void Licensing::MachineID::saveLastGoodRawId(const QString& rawId, const QString& os)
+{
+  m_settings.beginGroup("licensing");
+  m_settings.setValue("lastGoodRawId", lastGoodCrypt().encryptToString(rawId));
+  m_settings.setValue("lastGoodOs", os);
+  m_settings.endGroup();
+}
+
+//--------------------------------------------------------------------------------------------------
 // Information gathering and processing
 //--------------------------------------------------------------------------------------------------
 
@@ -222,11 +317,24 @@ quint64 Licensing::MachineID::machineSpecificKey() const noexcept
 void Licensing::MachineID::readInformation()
 {
   QString os;
-  const QString id = readPlatformId(os);
+  bool complete = false;
+  QString id    = readPlatformId(os, complete);
 
-  // Warn when every platform fallback returned empty; derivation still proceeds
-  if (id.isEmpty()) [[unlikely]]
-    qWarning() << "[MachineID] fallback produced empty fingerprint";
+  // A healthy read is the source of truth and refreshes the store; the happy path is unchanged.
+  if (complete)
+    saveLastGoodRawId(id, os);
+
+  // A degraded read reuses the last-good value so a transient tool failure never re-keys.
+  else {
+    const auto stored = loadLastGoodRawId(os);
+    if (!stored.isEmpty()) {
+      qWarning() << "[MachineID] degraded read; reusing last-good fingerprint";
+      id = stored;
+    }
+
+    else
+      qWarning() << "[MachineID] degraded read and no stored fingerprint";
+  }
 
   // Hash the composite identifier with BLAKE2s-128
   auto data = QString("%1@%2:%3").arg(qApp->applicationName(), id, os);

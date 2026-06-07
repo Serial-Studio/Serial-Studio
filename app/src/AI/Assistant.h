@@ -82,6 +82,7 @@ signals:
   void cacheStatsChanged();
   void autoApproveEditsChanged();
   void allowDeviceControlChanged();
+  void droppedPathAdded(const QString& displayName, bool isDir);
 
 private:
   explicit Assistant();
@@ -137,6 +138,8 @@ public slots:
   void approveToolCallGroup(const QString& family);
   void denyToolCallGroup(const QString& family);
   void clearConversation();
+  void addDroppedPath(const QString& localPath);
+  void clearDroppedPaths();
 
 private slots:
   void onConversationBusyChanged();

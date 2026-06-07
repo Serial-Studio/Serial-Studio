@@ -1228,12 +1228,17 @@ void AI::Conversation::ageHistoryToolResults()
       continue;
     }
 
-    // Older turn: stub each tool_result block's content
+    // Older turn: stub tool_result content, but exempt fs.read/search/list (file content to quote).
     QJsonArray newBlocks;
     bool mutated = false;
     for (const auto& bv : blocks) {
-      auto block = bv.toObject();
-      if (block.value(QStringLiteral("type")).toString() == QStringLiteral("tool_result")
+      auto block             = bv.toObject();
+      const auto toolName    = block.value(QStringLiteral("_tool_name")).toString();
+      const bool isFsContent = toolName == QStringLiteral("fs.read")
+                            || toolName == QStringLiteral("fs.search")
+                            || toolName == QStringLiteral("fs.list");
+      if (!isFsContent
+          && block.value(QStringLiteral("type")).toString() == QStringLiteral("tool_result")
           && block.value(QStringLiteral("content")).toString().size() > 64) {
         block[QStringLiteral("content")] = QStringLiteral("[result elided -- ask again if needed]");
         mutated                          = true;
@@ -1653,9 +1658,16 @@ void AI::Conversation::recordToolResult(const QString& callId,
   // Scrub secrets before forwarding to the model
   const auto scrubbed = AI::Redactor::scrubObject(payload);
 
-  // Cap a single tool result to keep the context bounded; stronger providers get a larger budget.
+  // fs.read/search/list deliver file content the model must quote; give them a larger budget.
+  constexpr int kFsResultByteBudget = 48 * 1024;
+  const bool isFsReadResult         = name == QStringLiteral("fs.read")
+                           || name == QStringLiteral("fs.search")
+                           || name == QStringLiteral("fs.list");
   const int kMaxToolResultBytes =
-    qBound(2048, m_provider ? m_provider->capabilities().toolResultByteBudget : 4096, 16 * 1024);
+    isFsReadResult ? kFsResultByteBudget
+                   : qBound(2048,
+                            m_provider ? m_provider->capabilities().toolResultByteBudget : 4096,
+                            16 * 1024);
   auto contentBytes = QJsonDocument(scrubbed).toJson(QJsonDocument::Compact);
   if (contentBytes.size() > kMaxToolResultBytes) {
     const auto kept = contentBytes.left(kMaxToolResultBytes - 64);
@@ -2084,21 +2096,11 @@ static void appendDocMetaTools(QJsonArray& out)
 }
 
 /**
- * @brief Returns the AI tool surface: 3 meta tools + a small curated set.
+ * @brief Returns the curated essentials advertised to the model every turn.
  */
-QJsonArray AI::Conversation::dispatcherTools() const
+static QStringList essentialToolNames()
 {
-  if (!m_dispatcher)
-    return {};
-
-  // Discovery-first meta tools + curated essentials
-  QJsonArray remapped;
-  const auto caps = m_provider ? m_provider->capabilities() : ProviderCapabilities{};
-
-  appendCoreMetaTools(remapped);
-  appendDocMetaTools(remapped);
-
-  QStringList essentials = {
+  return {
     QStringLiteral("assistant.snapshot"),
     QStringLiteral("assistant.dataset.resolve"),
     QStringLiteral("assistant.workspace.resolve"),
@@ -2107,6 +2109,12 @@ QJsonArray AI::Conversation::dispatcherTools() const
     QStringLiteral("assistant.script.dryRun"),
     QStringLiteral("assistant.script.apply"),
     QStringLiteral("assistant.project.bulkApply"),
+    QStringLiteral("fs.list"),
+    QStringLiteral("fs.read"),
+    QStringLiteral("fs.search"),
+    QStringLiteral("fs.write"),
+    QStringLiteral("fs.append"),
+    QStringLiteral("fs.delete"),
     QStringLiteral("project.new"),
     QStringLiteral("project.open"),
     QStringLiteral("project.save"),
@@ -2147,7 +2155,24 @@ QJsonArray AI::Conversation::dispatcherTools() const
     QStringLiteral("dashboard.tailFrames"),
     QStringLiteral("io.getStatus"),
   };
+}
 
+/**
+ * @brief Returns the AI tool surface: 3 meta tools + a small curated set.
+ */
+QJsonArray AI::Conversation::dispatcherTools() const
+{
+  if (!m_dispatcher)
+    return {};
+
+  // Discovery-first meta tools + curated essentials
+  QJsonArray remapped;
+  const auto caps = m_provider ? m_provider->capabilities() : ProviderCapabilities{};
+
+  appendCoreMetaTools(remapped);
+  appendDocMetaTools(remapped);
+
+  QStringList essentials = essentialToolNames();
   if (caps.needsSmallToolSurface) {
     essentials.removeAll(QStringLiteral("project.workspace.addWidget"));
     essentials.removeAll(QStringLiteral("project.workspace.removeWidget"));
