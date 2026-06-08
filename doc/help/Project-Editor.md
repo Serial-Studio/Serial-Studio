@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Project Editor lets you create and edit JSON project files that define how Serial Studio interprets incoming data and displays it on the dashboard. Open it from the toolbar (wrench icon) or with Ctrl+Shift+P (Cmd+Shift+P on macOS).
+The Project Editor lets you create and edit JSON project files that define how Serial Studio interprets incoming data and displays it on the dashboard. Open it from the toolbar (wrench icon).
 
 A project file describes three things: the structure of your data (groups and datasets), how to detect and parse frames from the wire, and what actions (commands) the user can send back to the device. Serial Studio reads the file at connect time and builds the dashboard from it.
 
@@ -116,7 +116,7 @@ These settings run *before* the parser and apply to every parser type (Built-In,
 | Start delimiter / end delimiter | The actual delimiter strings. Which ones apply depends on the detection method. | Any string, e.g. `\n`, `/*`, `*/`. |
 | Hex delimiters | Tick when the delimiter strings are written in hex. | e.g. `0A` for newline. |
 | Data conversion (decoder) | How the bytes inside the delimiters are decoded before the parser sees them. | *Plain Text (UTF-8)* (default text mode); *Hexadecimal* (each byte pair read as a hex value); *Base64* (Base64-decoded first); *Binary Direct (Pro)* (raw bytes passed straight to the parser as a byte array/table). |
-| Checksum algorithm | Optional integrity check appended to each frame; frames that fail are dropped. | CRC-8, CRC-16, CRC-32, CRC-CCITT, and others. |
+| Checksum algorithm | Optional integrity check appended to each frame; frames that fail are dropped. | XOR-8, MOD-256, CRC-8, CRC-16, CRC-16-MODBUS, CRC-16-CCITT, CRC-32. |
 
 Picking the wrong decoder/detection pair silently mojibakes binary data or never produces a frame. The trap to remember: **Plain Text routes through `QString::fromUtf8`**, so any byte that is not valid UTF-8 (most binary payloads contain `0x00` or values above `0x7F`) is replaced with `U+FFFD` and the original bytes are lost. For anything non-text, pick **Binary Direct**.
 
@@ -198,7 +198,7 @@ Datasets map to individual data fields in your device's output.
 
 **Widget range**
 
-- **Widget Min / Widget Max.** Range for Bar, Gauge, and Meter displays. Defaults to 0 to 100.
+- **Widget Min / Widget Max.** Range for Bar, Gauge, and Meter displays. Both default to 0; set them to the expected range for the dataset.
 
 ### Step 5: add actions (optional)
 
@@ -215,14 +215,16 @@ Actions place buttons on the dashboard that send commands to the connected devic
 - **Auto-Execute on Connect.** Send the command automatically when the device connects.
 - **Timer mode:**
 
-| Mode             | Behavior |
-|------------------|----------|
-| Off              | Manual click only (default). |
-| AutoStart        | Timer starts automatically on connect. Command repeats at the configured interval. |
-| StartOnTrigger   | Timer starts on the first click. Command repeats until stopped. |
-| ToggleOnTrigger  | Each click toggles the repeating timer on or off. |
+| Mode               | Behavior |
+|--------------------|----------|
+| Off                | Manual click only (default). |
+| Auto Start         | Timer starts automatically on connect. Command repeats at the configured interval. |
+| Start on Trigger   | Timer starts on the first click. Command repeats until stopped. |
+| Toggle on Trigger  | Each click toggles the repeating timer on or off. |
+| Repeat N Times     | Each click sends the command a fixed number of times (Repeat Count), spaced by the configured interval. |
 
-- **Timer Interval.** Repeat interval in milliseconds (default 100 ms).
+- **Timer Interval.** Repeat interval in milliseconds (default 100 ms). Disabled when the mode is Off.
+- **Repeat Count.** Number of sends in Repeat N Times mode (default 3).
 
 ### Step 6: add sources (multi-device projects)
 
@@ -231,7 +233,7 @@ Sources define where data comes from. Single-device projects have one implicit s
 1. Right-click "Sources" in the tree and add a source.
 2. Configure:
    - **Title.** Descriptive label (for example "Arduino Uno").
-   - **Bus Type.** Serial Port, Network Socket, Bluetooth LE, or (Pro) Audio, Modbus, CAN Bus, USB, HID, Process.
+   - **Bus Type.** Serial Port, Network Socket, Bluetooth LE, or (Pro) Audio Input, Modbus, CAN Bus, Raw USB, HID Device, Process, MQTT Subscriber.
    - **Frame Detection / Delimiters.** Per-source overrides (same options as the project root).
    - **Data Conversion / Checksum.** Per-source overrides.
    - **Connection Settings.** Bus-specific parameters (COM port, baud rate, IP address, and so on) saved with the project.
@@ -273,7 +275,7 @@ function parse(frame) {
 }
 ```
 
-5. Click **Apply** to save the parser code.
+5. The parser code is stored in the project automatically as you type. Use the **Validate** button to check that the script compiles, and **Test With Sample Data** to run it against a sample frame.
 
 **Rules:**
 
@@ -295,7 +297,7 @@ end
 
 ### Step 7b: test the pipeline with the Test dialog
 
-The **Evaluate** button on the parser toolbar opens the **Test Frame Parser** dialog. It runs the same byte-to-channels pipeline the live dashboard uses, so what you see here is what the dashboard would see for the same input.
+The **Test With Sample Data** button on the parser toolbar opens the **Test Frame Parser** dialog. It runs the same byte-to-channels pipeline the live dashboard uses, so what you see here is what the dashboard would see for the same input. (The separate **Validate** button in the code-editor toolbar only checks that the script compiles.)
 
 The dialog has three sections:
 
@@ -339,7 +341,7 @@ For the full documentation, see [Dataset Value Transforms](Dataset-Transforms.md
 
 ## Multi-source architecture
 
-When a project has multiple sources, each source represents a separate physical device with its own connection, bus type, frame detection, and JS parser.
+When a project has multiple sources, each source represents a separate physical device with its own connection, bus type, frame detection, and parser (Built-In, Lua, or JavaScript).
 
 1. Add one source per device in the tree.
 2. Assign groups to sources via the **Input Device** dropdown in the group or dataset properties.
@@ -370,7 +372,7 @@ When a project has multiple sources, each source represents a separate physical 
 1. Check the console for error messages.
 2. Add `console.log()` calls to inspect the raw frame and parsed output.
 3. Make sure the function always returns an array, never a string, object, or undefined.
-4. Don't forget to click **Apply** after editing the parser code.
+4. Use **Validate** to confirm the script compiles after editing the parser code.
 
 ### Delimiter mismatch
 

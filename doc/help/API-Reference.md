@@ -505,7 +505,7 @@ sequenceDiagram
 2. **Send commands** as JSON objects, each terminated with newline (`\n`)
 3. **Receive responses** as JSON objects, each terminated with newline
 4. **Keep connection open** for multiple commands (persistent connection)
-5. **Close when done** or let timeout close it (default: 5 seconds idle)
+5. **Close when done** - the server keeps the connection open until the client disconnects (no idle timeout)
 
 ### Connection Handling
 
@@ -731,7 +731,7 @@ Get current connection status and configuration.
   "configurationOk": true,
   "readOnly": false,
   "readWrite": true,
-  "busTypeName": "Serial Port"
+  "busTypeName": "UART/COM"
 }
 ```
 
@@ -744,7 +744,7 @@ Get list of supported bus types.
 ```json
 {
   "buses": [
-    {"index": 0, "name": "Serial Port"},
+    {"index": 0, "name": "UART/COM"},
     {"index": 1, "name": "Network Socket"},
     {"index": 2, "name": "Bluetooth LE"}
   ]
@@ -755,7 +755,7 @@ Get list of supported bus types.
 Set the active bus/driver type.
 
 **Parameters:**
-- `busType` (int): 0=UART, 1=Network, 2=BLE, 3=Audio, 4=Modbus, 5=CAN, 6=MQTT
+- `busType` (int): 0=UART, 1=Network, 2=BLE, 3=Audio, 4=Modbus, 5=CAN, 6=USB, 7=HID, 8=Process (3-8 require Pro)
 
 **Example:**
 ```bash
@@ -1022,7 +1022,7 @@ Get current network configuration.
 ```json
 {
   "socketType": 0,
-  "socketTypeName": "TCP Client",
+  "socketTypeName": "TCP",
   "remoteAddress": "192.168.1.1",
   "tcpPort": 8080,
   "udpLocalPort": 0,
@@ -1479,8 +1479,11 @@ Get all dashboard configuration settings.
 {
   "operationMode": 0,
   "operationModeName": "ProjectFile",
-  "fps": 24,
-  "points": 500
+  "fps": 60,
+  "timeRange": 10.0,
+  "widgetCount": 3,
+  "datasetCount": 12,
+  "running": false
 }
 ```
 
@@ -1551,8 +1554,8 @@ python test_api.py send dashboard.setFps -p fps=60
 
 **Notes:**
 - Higher FPS provides smoother visualization but increases CPU usage
-- Default is typically 24 FPS
-- Maximum is 240 FPS
+- Default is 60 FPS
+- Valid range is 1-240 FPS
 
 #### 🟢 `dashboard.getFps`
 Get the current visualization refresh rate.
@@ -1562,7 +1565,7 @@ Get the current visualization refresh rate.
 **Returns:**
 ```json
 {
-  "fps": 24
+  "fps": 60
 }
 ```
 
@@ -1571,44 +1574,45 @@ Get the current visualization refresh rate.
 python test_api.py send dashboard.getFps
 ```
 
-#### 🟢 `dashboard.setPoints`
-Set the number of data points displayed per plot.
+#### 🟢 `dashboard.setTimeRange`
+Set the visible plot time window, in seconds.
 
 **Parameters:**
-- `points` (int): Number of data points (minimum 1)
+- `seconds` (double): Visible plot time window in seconds (0.001-300)
 
 **Returns:**
 ```json
 {
-  "points": 500
+  "seconds": 10.0
 }
 ```
 
 **Example:**
 ```bash
-python test_api.py send dashboard.setPoints -p points=1000
+python test_api.py send dashboard.setTimeRange -p seconds=10
 ```
 
 **Notes:**
-- More points provide longer history but increase memory usage
-- Typical values: 100-1000 points
+- A longer window shows more history but increases memory usage
+- Plots are time-based: the window length sets how far back samples are kept
 - Affects all plot widgets in the dashboard
+- Also exposed as `project.dashboard.setTimeRange` (per-project; survives project reload)
 
-#### 🟢 `dashboard.getPoints`
-Get the current number of data points per plot.
+#### 🟢 `dashboard.getTimeRange`
+Get the current visible plot time window, in seconds.
 
 **Parameters:** None
 
 **Returns:**
 ```json
 {
-  "points": 500
+  "seconds": 10.0
 }
 ```
 
 **Example:**
 ```bash
-python test_api.py send dashboard.getPoints
+python test_api.py send dashboard.getTimeRange
 ```
 
 ### Project Management Commands (19)
@@ -1694,7 +1698,8 @@ Duplicate current action.
 Set frame parser code.
 
 **Parameters:**
-- `code` (string): JavaScript parser code
+- `code` (string): Frame parser source code
+- `language` (int, optional): 0=JavaScript, 1=Lua, 2=Built-In. Pass it to lock in the runtime engine; a mismatch silently fails to compile.
 
 #### 🟢 `project.frameParser.getCode`
 Get frame parser code.
@@ -1702,10 +1707,13 @@ Get frame parser code.
 **Returns:**
 ```json
 {
+  "sourceId": 0,
+  "language": 0,
   "code": "function parse(frame) { ... }",
   "codeLength": 256
 }
 ```
+Built-In (`language: 2`) sources also return `template` and `params`, and `code` carries the JSON descriptor.
 
 #### 🟢 `project.group.list`
 List all groups.
@@ -2437,7 +2445,7 @@ echo -n "Hello World" | base64
   "commands": [
     {"command": "dashboard.setOperationMode", "id": "1", "params": {"mode": 1}},
     {"command": "dashboard.setFps", "id": "2", "params": {"fps": 60}},
-    {"command": "dashboard.setPoints", "id": "3", "params": {"points": 1000}},
+    {"command": "dashboard.setTimeRange", "id": "3", "params": {"seconds": 10}},
     {"command": "dashboard.getStatus", "id": "4"}
   ]
 }
@@ -2447,7 +2455,7 @@ echo -n "Hello World" | base64
 ```bash
 python test_api.py send dashboard.setOperationMode -p mode=1
 python test_api.py send dashboard.setFps -p fps=60
-python test_api.py send dashboard.setPoints -p points=1000
+python test_api.py send dashboard.setTimeRange -p seconds=10
 python test_api.py send dashboard.getStatus
 ```
 
@@ -2509,7 +2517,7 @@ python test_api.py send csvExport.setEnabled -p enabled=true
 ```bash
 python test_api.py send dashboard.setOperationMode -p mode=1
 python test_api.py send dashboard.setFps -p fps=60
-python test_api.py send dashboard.setPoints -p points=1000
+python test_api.py send dashboard.setTimeRange -p seconds=10
 python test_api.py send dashboard.getStatus
 ```
 

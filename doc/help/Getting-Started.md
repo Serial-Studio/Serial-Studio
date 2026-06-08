@@ -7,7 +7,7 @@ Serial Studio is a cross-platform telemetry dashboard for visualizing real-time 
 **Core capabilities:**
 
 - **Data sources.** Serial/UART, TCP/UDP, and Bluetooth LE are included in the free edition. MQTT, Modbus, CAN Bus, Audio input, raw USB, HID, and Process I/O are available in Pro.
-- **15+ widget types.** Plot, MultiPlot, FFT Plot, Bar, Gauge, Compass, Meter, Gyroscope, Accelerometer, GPS Map, Data Grid, LED Panel, Terminal, 3D Plot, XY Plot, Image View, plus Clock and Stopwatch utility widgets. Bar, Gauge, and Meter each ship as a two-page swipe view (analog face + large digital readout) so the same tile shows both a quick-glance summary and the exact numeric value.
+- **15+ widget types.** Plot, MultiPlot, FFT Plot, Bar, Gauge, Compass, Meter, Gyroscope, Accelerometer, GPS Map, Data Grid, LED Panel, Terminal, 3D Plot, Image View, plus Clock and Stopwatch utility widgets. The Plot widget can take its X axis from another dataset for XY/scatter plots (Pro). Bar, Gauge, and Meter each ship as a two-page swipe view (analog face + large digital readout) so the same tile shows both a quick-glance summary and the exact numeric value.
 - **Export.** Save sessions to CSV or MDF4 for offline analysis.
 - **Performance.** Built with Qt 6 and C++20, aimed at 256 KHz+ data rates.
 - **Three operation modes.** Console Only for inspecting the raw stream, Quick Plot for instant CSV visualization, and Project File for fully customized dashboards.
@@ -208,7 +208,7 @@ Click the **Project Editor** button in the toolbar. That opens a separate editor
 ### Step 4: save and load
 
 1. Save the project file (a `.ssproj`).
-2. Back in the main window, set the operation mode to **Parse via JSON Project File**.
+2. Back in the main window, set the operation mode to **Parse via Project File**.
 3. Load your project file through the file selector in the Setup panel.
 
 ### Step 5: connect

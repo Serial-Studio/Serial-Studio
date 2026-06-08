@@ -21,7 +21,7 @@ flowchart TD
 
 ## Stage 1: device and driver
 
-Your device sends raw bytes over one of nine supported transports: UART, TCP/UDP, Bluetooth LE, audio input, Modbus RTU/TCP, CAN Bus, USB, HID, or Process I/O.
+Your device sends raw bytes over one of ten supported transports: UART, TCP/UDP, Bluetooth LE, audio input, Modbus RTU/TCP, CAN Bus, MQTT, USB, HID, or Process I/O.
 
 The selected driver receives bytes from the operating system and hands them off to the rest of the pipeline. No parsing happens here. The driver's only job is raw byte transport. Each driver handles its own protocol: serial framing, TCP streams, BLE characteristic notifications, audio sample buffers, and so on.
 

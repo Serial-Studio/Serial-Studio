@@ -186,7 +186,7 @@ The Publisher also exposes a `mqttPublish(topic, payload, qos = 0, retain = fals
 - Mirroring a small fraction of high-rate data to a low-rate topic for cheap remote dashboards.
 - Acting on dashboard events: publish to a control topic from an Action handler.
 
-The slot returns the broker message ID on success, or `-1` if the publisher is not connected or the license check fails. QoS is clamped to `0..2`.
+The slot returns `1` once the publish is queued for the worker, or `-1` if the publisher is not connected or the license check fails. The actual broker send happens asynchronously on the worker thread, so the returned value is not the broker message ID. QoS is clamped to `0..2`.
 
 Use **Custom Script** mode when the script's main job is shaping the publish payload; use `mqttPublish()` from a frame parser when the script's main job is parsing the frame and the publish is a side-effect.
 

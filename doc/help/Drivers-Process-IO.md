@@ -66,11 +66,11 @@ The Process I/O driver runs the child or pipe read on a dedicated thread (`m_pip
 | Setting | Controls |
 |---------|----------|
 | **Mode** | Launch |
-| **Executable** | Absolute path to the program to run |
-| **Arguments** | Command-line arguments, space-separated |
+| **Executable** | Path to the program to run, or a bare name resolved against PATH |
+| **Arguments** | Command-line arguments (whitespace-separated; quote arguments that contain spaces) |
 | **Working directory** | The directory the child should be spawned in (cwd) |
 
-On connect, Serial Studio spawns the child process and reads its stdout until the child exits or the user disconnects. The driver does not capture stderr; anything the child writes there flows to Serial Studio's own stderr.
+On connect, Serial Studio spawns the child process and reads its output until the child exits or the user disconnects. The child runs with merged output channels, so anything the child writes to stderr is captured alongside stdout and treated as incoming data.
 
 ### Named pipe mode configuration
 
@@ -79,13 +79,13 @@ On connect, Serial Studio spawns the child process and reads its stdout until th
 | **Mode** | Named pipe |
 | **Pipe path** | Filesystem path (Linux/macOS) or pipe name (Windows) |
 
-For Linux/macOS, the pipe must already exist. Create it before connecting:
+For Linux/macOS, if the path does not already exist Serial Studio creates the FIFO for you (with `0600` permissions) when you connect. You can also create it yourself beforehand:
 
 ```sh
 mkfifo /tmp/serialstudio_in
 ```
 
-For Windows, name the pipe with the standard prefix: `\\.\pipe\serialstudio_in`. The pipe is created by whichever side opens it first; Serial Studio creates the pipe if it doesn't exist.
+For Windows, name the pipe with the standard prefix: `\\.\pipe\serialstudio_in`. On Windows Serial Studio acts as the pipe server and always creates the named pipe, then waits for a writer to connect.
 
 ### Example: piping a Python data generator
 
@@ -111,11 +111,11 @@ For step-by-step setup, see the [Protocol Setup Guides, Process I/O section](Pro
 
 - **No data appears.** The child is usually buffering its own output. Standard-library functions buffer stdout in 4 KB chunks when stdout is not a terminal. Force a flush after each line: in Python use `print(..., flush=True)` or `sys.stdout.flush()`; in C use `fflush(stdout)`; in Bash use `stdbuf -oL my_program` to force line-buffered output.
 - **Child process exits immediately.** Serial Studio reports the child as terminated and reads no data. Run the child from a normal terminal first to confirm it starts.
-- **Path issues.** Spaces and Unicode in executable paths or arguments can be misparsed. On Windows, quote paths that contain spaces. The arguments field is split on whitespace (no shell-style quoting), so an argument with a space requires the same care.
+- **Path issues.** Spaces and Unicode in executable paths or arguments can be misparsed. On Windows, quote paths that contain spaces. The arguments field is split with Qt's command splitter, which honors single and double quotes, so wrap an argument that contains spaces in quotes.
 - **Working directory matters.** Some programs read configuration files relative to their working directory. Set the Working Directory field accordingly.
 - **Permission denied on the pipe.** On Linux/macOS, the FIFO inherits filesystem permissions. `chmod 666 /tmp/mypipe` opens it to all users; tighter permissions require both reader and writer to share a user or group.
 - **Pipe buffer fills up.** Linux pipes have a small buffer (typically 64 KB). If the writer outruns Serial Studio (or vice versa), the writer blocks until the reader catches up. This is normal flow control. For real-time critical paths, send bytes through a TCP socket instead (see [Drivers: Network](Drivers-Network.md)).
-- **Windows-specific pipe path syntax.** On Windows, the pipe must be named `\\.\pipe\<name>`. A Unix-style path fails silently or with an opaque error.
+- **Windows-specific pipe path syntax.** On Windows, the pipe must be named `\\.\pipe\<name>`. A Unix-style path causes pipe creation to fail, and Serial Studio reports a "Pipe Error" dialog.
 - **Process I/O is convenient but not free.** At very high data rates (hundreds of kHz), the cost of stdout buffering, the OS pipe, and the cross-thread queue becomes noticeable. Direct drivers are always cheaper. Process I/O is the right tool at moderate rates and for prototype or integration work.
 
 ## Further reading

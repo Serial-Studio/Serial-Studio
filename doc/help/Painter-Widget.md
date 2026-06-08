@@ -19,7 +19,7 @@ Each Painter widget is bound to one project group. On every dashboard tick:
 2. If the script defines `onFrame()`, it runs once. Use it to advance time-domain state such as ring buffers, peak-hold decay, or accumulated angles.
 3. `paint(ctx, w, h)` runs. `ctx` is a Canvas2D-shaped context, `w` and `h` are the widget's pixel dimensions. The result is composited onto the dashboard.
 
-The context is a `QPainter` exposed through a `CanvasRenderingContext2D`-style API. The widget repaints at the dashboard refresh rate (24 Hz by default), independent of the data rate.
+The context is a `QPainter` exposed through a `CanvasRenderingContext2D`-style API. The widget repaints at the dashboard refresh rate (60 Hz by default, configurable from 1 to 240 Hz), independent of the data rate.
 
 ## Script structure
 
@@ -83,7 +83,7 @@ function paint(ctx, w, h) {
 
 ### Persistent state
 
-Variables declared at the top of the script (`const`, `let`, `var`) live for the lifetime of the widget and retain their values between calls. State is reset when the script is recompiled (Apply in the editor) or when the widget is destroyed (project closed, group deleted). Disconnecting and reconnecting the device does not reset state.
+Variables declared at the top of the script (`const`, `let`, `var`) live for the lifetime of the widget and retain their values between calls. State is reset when the script is recompiled (after an edit in the editor) or when the widget is destroyed (project closed, group deleted). Disconnecting and reconnecting the device does not reset state.
 
 ## Globals
 
@@ -151,7 +151,7 @@ actionFire(actionId)             // -> { ok: true } | { ok: false, error: "..." 
 
 Both are synchronous, fire-and-forget, and never throw. `deviceWrite` defaults `sourceId` to the painter's group `sourceId`; pass an explicit one to target a different source.
 
-**Important:** `paint()` runs on every dashboard tick (24 Hz). Calling `deviceWrite` or `actionFire` from `paint()` will saturate the link. Use them from `onFrame()` (called once per parsed frame, before the next paint), or guard with mouse / state conditions:
+**Important:** `paint()` runs on every dashboard tick (60 Hz by default). Calling `deviceWrite` or `actionFire` from `paint()` will saturate the link. Use them from `onFrame()` (called once per parsed frame, before the next paint), or guard with mouse / state conditions:
 
 ```javascript
 function onFrame() {
@@ -165,7 +165,7 @@ See [Frame Parser Scripting](JavaScript-API.md) for full signatures and failure 
 
 ## Drawing API
 
-The context exposes a Canvas2D-style API backed by `QPainter`. The list below is the full set of supported methods and properties; calls outside this list will throw.
+The context exposes a Canvas2D-style API backed by `QPainter`. The sections below cover the commonly used methods and properties. Additional Canvas2D members are implemented (`roundRect`, `arcTo`, `ellipse`, `transform` / `setTransform` / `getTransform`, `setLineDash` / `getLineDash`, `isPointInPath`, `isPointInStroke`, `measureText`, `globalCompositeOperation`, `miterLimit`, `lineDashOffset`, the `shadow*` properties, and image-smoothing controls). Calling a member that does not exist throws.
 
 ### State
 
@@ -183,7 +183,7 @@ The context exposes a Canvas2D-style API backed by `QPainter`. The list below is
 
 `save()` and `restore()` push and pop the full state stack, including the current transform.
 
-Gradient and pattern objects are not implemented. `createLinearGradient`, `createRadialGradient`, and `createPattern` are unavailable. `fillStyle` and `strokeStyle` accept color strings only. To approximate a gradient, draw a stack of solid-color rectangles or arcs.
+Gradient and pattern objects are supported. `createLinearGradient(x0, y0, x1, y1)`, `createRadialGradient(x0, y0, r0, x1, y1, r1)`, `createConicGradient(startRad, cx, cy)`, and `createPattern(src, repetition)` each return a handle that can be assigned to `fillStyle` or `strokeStyle`; gradient handles take stops via `addColorStop(offset, color)`. `fillStyle` and `strokeStyle` also accept plain color strings. The bundled templates favor stacks of solid-color rectangles or arcs for a flat look, but a gradient is available when a smooth ramp is wanted.
 
 ### Transforms
 
@@ -214,7 +214,7 @@ For full circles, `moveTo(cx + r, cy)` is sufficient.
 
 ### Images
 
-`drawImage(src, x, y)` and `drawImageScaled(src, x, y, w, h)`. The `src` string is resolved through a sandbox: `qrc:/` resources, the project file's directory, and the user's Documents folder are accepted. Other paths are rejected.
+`drawImage(src, x, y)` and `drawImageScaled(src, x, y, w, h)`. The `src` string is resolved through a sandbox: `qrc:/` resources and paths inside the project file's directory are accepted. Other paths are rejected.
 
 ```javascript
 ctx.drawImage("logo.png", 12, 12);                        // relative to the project
@@ -224,11 +224,11 @@ ctx.drawImage("qrc:/icons/dashboard-large/painter.svg",   // bundled resource
 
 ## Adding a Painter widget to a project
 
-1. Open the **Project Editor** (toolbar wrench, or `Ctrl+Shift+P` / `Cmd+Shift+P`).
-2. Click **Add Painter** in the toolbar. A new Painter group is created with a default template attached.
+1. Open the **Project Editor** from the main toolbar.
+2. Click **Painter** in the toolbar. A new Painter group is created with a default template attached.
 3. Add datasets to the group. The script accesses them through the `datasets` global.
 4. Select the group in the tree and click **Edit Code** to open the script editor.
-5. Optionally select a built-in template from the dropdown. Click **Apply** to compile and reload.
+5. Optionally click **Template** to load a built-in template. Edits compile and reload live.
 
 ## Built-in templates
 
@@ -584,7 +584,7 @@ function paint(ctx, w, h) {
 
 ## Performance
 
-The Painter pipeline targets 24 Hz repaint of moderately complex scenes: a few hundred line segments, a few hundred filled shapes, and on the order of ten text labels per frame.
+The Painter pipeline targets the dashboard refresh rate (60 Hz by default) for moderately complex scenes: a few hundred line segments, a few hundred filled shapes, and on the order of ten text labels per frame.
 
 Common causes of slow paints:
 
@@ -620,19 +620,19 @@ ctx.stroke();
 
 For full circles, `moveTo(cx + r, cy)` is sufficient.
 
-### `createLinearGradient is not a function`
+### Gradient or pattern fill shows nothing
 
-Gradient and pattern objects are not implemented. Replace gradients with stacked solid-color rectangles or arcs. The audio meter, dial gauge, and progress rings templates use this approach.
+`createLinearGradient`, `createRadialGradient`, `createConicGradient`, and `createPattern` return handles that must be assigned to `fillStyle` or `strokeStyle` before drawing, and a gradient needs at least two `addColorStop()` entries to render visible color. A pattern whose `src` falls outside the image sandbox resolves to an empty tile. The bundled audio meter, dial gauge, and progress rings templates avoid gradients entirely and stack solid-color rectangles or arcs instead.
 
-### `measureText is not a function`
+### Measuring text width
 
-The function is `measureTextWidth(text)` and it returns a number, not a metrics object:
+`measureTextWidth(text)` returns the advance width as a number directly:
 
 ```javascript
 const w = ctx.measureTextWidth("hello");
 ```
 
-For centered text, prefer `ctx.textAlign = "center"` over measuring.
+`measureText(text)` is also available and returns a metrics object with `width`, `actualBoundingBoxAscent`, `actualBoundingBoxDescent`, `fontBoundingBoxAscent`, and `fontBoundingBoxDescent`. For centered text, prefer `ctx.textAlign = "center"` over measuring.
 
 ### Lines look fuzzy
 
@@ -658,7 +658,7 @@ function onFrame() {
 
 ### `drawImage` shows nothing
 
-The image path resolver accepts `qrc:/` resources, paths relative to the project file's directory, and paths under the user's Documents folder. Other paths are rejected. A rejected path produces a `drawImage:` entry in `lastError`, visible in the editor status bar.
+The image path resolver accepts `qrc:/` resources and paths inside the project file's directory. Other paths are rejected, and a rejected path is silently skipped: nothing is drawn and no exception is raised. Confirm the resource path or that the file resolves under the project directory.
 
 ## Recommendations
 
@@ -666,7 +666,7 @@ The image path resolver accepts `qrc:/` resources, paths relative to the project
 - Keep `paint()` free of per-tick state mutation. Move bookkeeping into `onFrame()` so `paint()` is a function of the current state.
 - Use `frame.timestampMs` for animation timing instead of `Date.now()`.
 - If a built-in widget covers the visualization, use the built-in widget. The Painter is appropriate when no other widget fits.
-- `console.log` is throttled to the dashboard refresh rate (24 lines per second by default). Useful during development; remove from shipped projects.
+- A `console.log` called once per `paint()` emits one line per dashboard tick (60 lines per second at the default refresh rate). Useful during development; remove from shipped projects.
 - For scripts longer than around 100 lines, split rendering into named helpers (`drawGrid`, `drawTraces`, `drawLegend`).
 
 ## See also

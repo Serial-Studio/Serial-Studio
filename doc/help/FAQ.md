@@ -129,9 +129,9 @@ Then log out and back in for the change to take effect.
 
 **Prerequisites:**
 
-- Qt 6.7+ (6.9.2 recommended).
+- Qt 6.9+ (6.11.1 recommended).
 - C++20 compiler: GCC 10+, Clang 12+, or MSVC 2019+.
-- CMake 3.16+.
+- CMake 3.20+.
 
 **Linux build:**
 
@@ -501,7 +501,7 @@ The ARM64 AppImage needs Ubuntu 24.04+ (glibc 2.38+). Upgrade the OS or use the 
 | Basic plots, gauges, maps        | ✅                         | ✅                             |
 | XY plots                         | ❌                         | ✅                             |
 | 3D visualization                 | ❌                         | ✅                             |
-| FFT spectrum analyzer            | ❌                         | ✅                             |
+| FFT spectrum analyzer            | ✅                         | ✅                             |
 | Advanced plotting                | ❌                         | ✅                             |
 | Image View (camera/image stream) | ❌                         | ✅                             |
 | Raw USB (libusb)                 | ❌                         | ✅                             |
@@ -689,23 +689,21 @@ In Serial Studio, use a JavaScript frame parser to validate the checksum and ext
 
 ### Can Serial Studio control my Arduino (send data back)?
 
-Not directly in the current version. Today, Serial Studio is mainly a receive-and-visualize tool, not a command sender.
+Yes. The Console panel has a send line: type text (or hex), pick a line ending, and Serial Studio writes it back to the connected device. You can also append a checksum to the outgoing bytes.
 
-**Workarounds:**
+**Other options:**
 
 - Write a [plugin application](https://github.com/Serial-Studio/Serial-Studio/tree/master/app/src/API) in your preferred language or framework that shares the device with Serial Studio.
 - Use MQTT (Pro). Serial Studio can publish commands to MQTT topics that your device subscribes to.
-- Bidirectional communication is planned for a future version.
 
 ### Can I integrate Serial Studio with my CI/CD pipeline?
 
-Serial Studio is primarily a GUI app and does not support headless automation. That said:
+Yes. Serial Studio accepts command-line options, including a `--headless` flag that runs without a GUI (server mode) and `--api-server` to expose the API server on startup. You can pass a project file, a connection (UART, TCP, UDP, Modbus, CAN Bus), and export options (CSV, MDF4) from the command line. For CI/CD:
 
-- Serial Studio exports CSV in real time.
-- Write a script that watches the CSV file and validates the data.
-- Use that script in CI/CD for hardware-in-the-loop testing.
+- Drive a headless session from the command line, or
+- Export CSV in real time, then run a script that watches the CSV file and validates the data.
 
-A CLI mode is being considered for automated testing scenarios.
+Use either approach in CI/CD for hardware-in-the-loop testing.
 
 ### How do I contribute to Serial Studio?
 
@@ -737,15 +735,13 @@ Open a GitHub issue with:
 
 ### Is there a command-line interface (CLI)?
 
-Not yet. Serial Studio is built as a GUI app.
+Yes. Serial Studio accepts command-line options. Run it with `--help` to list them. Highlights:
 
-A CLI mode is being considered for:
+- `--headless` runs without a GUI (server mode), and `--api-server` enables the API server on startup (port 7777).
+- You can pass a project file, set up a connection (`--uart`, `--tcp`, `--udp`, and on Pro builds `--modbus-*` and `--canbus`), and enable exports (CSV, MDF4) from the command line.
+- `--activate`/`--deactivate` manage a license key for CI/headless setup.
 
-- Automated testing.
-- Headless data logging.
-- Server deployments.
-
-Upvote related GitHub issues if you need this.
+This covers automated testing, headless data logging, and server deployments.
 
 ### Can Serial Studio run on Raspberry Pi?
 
@@ -860,4 +856,4 @@ Yes. Serial Studio is a desktop app that runs entirely offline. No internet is r
 - **Issues:** [GitHub Issues](https://github.com/Serial-Studio/Serial-Studio/issues).
 - **Email:** alex@serial-studio.com (Pro users get priority).
 
-**Last updated:** 2025-12-02
+**Last updated:** 2026-06-08

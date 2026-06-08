@@ -20,7 +20,7 @@ You can switch between platforms at any time using the **Platform** dropdown in 
 | **Authoring** | Template + parameters, no code | `parse()` script | `parse()` script |
 | **Performance** | Fastest (no interpreter) | Faster, lower overhead | Slower |
 | **Integer support** | Full native range | Native 64-bit integers | Numbers are IEEE 754 doubles only |
-| **Timeout** | Not needed (bounded parsers) | 1 second per call | 1 second per call |
+| **Timeout** | Not needed (bounded parsers) | 500 ms per call | 500 ms per call |
 | **Isolation** | Separate instance per source | Separate engine per source | Separate engine per source |
 | **Sandboxing** | No user code runs | `base`, `table`, `string`, `math`, `utf8` libraries | Console and GC extensions |
 
@@ -66,7 +66,7 @@ flowchart LR
     D --> E["Dashboard"]
 ```
 
-> **Legend:** 1 second timeout per call &bull; One engine per source
+> **Legend:** 500 ms timeout per call &bull; One engine per source
 
 ## The `parse()` Function
 
@@ -504,7 +504,7 @@ end
 
 - For one-shot user-triggered commands (button press, slider drag), use an **Output Widget** instead. Output widgets carry UI, validation, and protocol helpers (CRC, Modbus, NMEA, ...). `deviceWrite` is the right tool when the *parser itself* needs to react to incoming data.
 - Don't loop on `deviceWrite` inside a single `parse()` call. The parser hotpath runs on every frame, and runaway writes will saturate the link.
-- Don't use it to broadcast unrelated state. The 1-second parser watchdog will fire if your script spends too long in I/O.
+- Don't use it to broadcast unrelated state. The 500 ms parser watchdog will fire if your script spends too long in I/O.
 
 ## Firing actions: `actionFire()`
 
@@ -715,7 +715,7 @@ Beyond the focused helpers above, parsers can invoke **any** of Serial Studio's 
 apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }
 ```
 
-`method` is a dotted command name (for example `"dashboard.snapshot"`, `"workspaces.setActive"`, `"console.write"`). `params` is an optional object/table that maps to the same JSON parameters the TCP API accepts. See [API Reference](API-Reference.md) for the complete catalog.
+`method` is a dotted command name (for example `"dashboard.snapshot"`, `"ui.window.setActiveGroup"`, `"console.send"`). `params` is an optional object/table that maps to the same JSON parameters the TCP API accepts. See [API Reference](API-Reference.md) for the complete catalog.
 
 A second helper, `apiCallList()`, returns an array of every registered command name, handy for quick discovery from the parser console.
 
@@ -746,8 +746,8 @@ function parse(frame)
 
   local fault = tonumber(values[4] or "0") or 0
   if fault ~= 0 and lastFaultBit == 0 then
-    apiCall("workspaces.setActive", { idOrName = "Diagnostics" })
-    apiCall("console.write", { text = "[FAULT] code=" .. fault .. "\n" })
+    apiCall("ui.window.setActiveGroup", { groupId = 1002 })
+    print("[FAULT] code=" .. fault)
   end
   lastFaultBit = fault
 
@@ -755,17 +755,14 @@ function parse(frame)
 end
 ```
 
-**JavaScript -- bridge a parser event to MQTT:**
+**JavaScript -- forward a parser event back to the device:**
 
 ```javascript
 function parse(frame) {
     const values = frame.split(",");
     if (values[0] === "ALERT") {
-        apiCall("mqtt.publish", {
-            topic: "telemetry/alerts",
-            payload: values.slice(1).join("|"),
-            retain: false,
-            qos: 1
+        apiCall("console.send", {
+            data: "ALERT-ACK:" + values.slice(1).join("|") + "\n"
         });
     }
     return values;
@@ -791,7 +788,7 @@ end
 ### When NOT to use it
 
 - **One-shot, fire-and-forget.** `apiCall` runs synchronously on the dashboard thread. Heavy work (mass mutations, project save, MDF4 export) blocks frame processing. Gate every call on an event transition; never `apiCall` on every frame.
-- **Don't shadow the focused helpers.** `dashboard.clearPlots`, `dashboard.setActiveWorkspace`, etc. are available as both `apiCall("dashboard.clearPlots", ...)` and as the dedicated `clearPlots()` / `setActiveWorkspace()` shortcuts. Prefer the shortcuts, which read better and trim a layer of marshalling.
+- **Prefer the focused helpers.** Runtime UI orchestration (clearing plots, toggling panes, switching the active workspace) is exposed only as the dedicated `clearPlots()` / `setPlotPoints()` / `setActiveWorkspace()` shortcuts, not as `apiCall` commands. Use the shortcuts for those tasks; reach for `apiCall` for the rest of the command surface.
 - **Avoid destructive commands from a parser.** Anything that mutates the project (`project.save`, `project.batch`, `groups.delete`) is fine from a one-time setup hook, but should not fire from the streaming hotpath.
 - **Pro features stay gated.** Commands behind the commercial tier (Modbus, CAN, sessions, MDF4, MQTT...) return `{ ok = false, errorCode = "EXECUTION_ERROR" }` in GPL builds. Check `result.ok` before assuming success.
 
@@ -845,7 +842,7 @@ Each source runs in an isolated engine instance. Global variables in one source 
 3. It must return a table (Lua) or array (JavaScript). Not a string, number, or nil.
 4. Return an empty table/array for invalid or incomplete frames.
 5. **Synchronous only.** No coroutines (Lua) or Promises/async (JavaScript).
-6. **1 second execution timeout** per parse call. If your function takes longer (e.g., infinite loop), the engine is interrupted and the frame is dropped.
+6. **500 ms execution timeout** per parse call. If your function takes longer (e.g., infinite loop), the engine is interrupted and the frame is dropped.
 7. **No file system access**, no network access, no module imports.
 8. Lua: `io`, `os`, `debug`, `package` libraries are not available. JavaScript: No DOM, `window`, `require`.
 9. Global tables/arrays that grow without bound will leak memory. Always cap history buffers.

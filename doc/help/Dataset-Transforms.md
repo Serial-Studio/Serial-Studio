@@ -47,9 +47,9 @@ function transform(value) {
 
 ### Input
 
-The `value` parameter is the numeric value already parsed from the frame and mapped to this dataset by its Frame Index. It's a floating-point number (Lua `number` / JS `number`).
+The `value` parameter is the value already parsed from the frame and mapped to this dataset by its Frame Index. When the parsed value is numeric it arrives as a floating-point number (Lua `number` / JS `number`); when it isn't, it arrives as a string (Lua `string` / JS `string`).
 
-Non-numeric dataset values (strings) skip the transform entirely: the raw string is displayed as-is.
+Non-numeric dataset values are still passed to the transform as a string. If the transform returns a number, the dataset becomes numeric; if it returns a string, the string value is kept.
 
 ### Output
 
@@ -406,7 +406,7 @@ Full reference, including argument types and longer examples (GPS fix reset, mod
 2. Click the **Transform** button in the dataset toolbar.
 3. The Transform Editor opens with:
    - **Language selector.** Lua (default) or JavaScript. Follows the source's frame parser language.
-   - **Template dropdown.** 33 ready-made transforms for common operations.
+   - **Template dropdown.** 34 ready-made transforms for common operations.
    - **Code editor.** Syntax-highlighted, with auto-completion.
    - **Test area.** Enter a raw value, click Test, see the transformed output.
 4. Write or pick a `transform(value)` function.
@@ -420,7 +420,7 @@ When you switch the language dropdown, the editor loads the equivalent template 
 
 ## Built-in templates
 
-The Transform Editor includes 33 ready-to-use templates. Pick one from the Template dropdown and it loads into the editor ready to tune.
+The Transform Editor includes 34 ready-to-use templates. Pick one from the Template dropdown and it loads into the editor ready to tune.
 
 ### Calibration and conversion
 
@@ -430,6 +430,7 @@ The Transform Editor includes 33 ready-to-use templates. Pick one from the Templ
 | Polynomial (2nd order)  | `y = a×x² + b×x + c`. Non-linear response curves. |
 | Map Range               | Rescale from `[inMin, inMax]` to `[outMin, outMax]`. |
 | ADC to Voltage          | 10-bit ADC count to voltage (3.3 V reference). |
+| Calibration from Data Table | Read slope/offset from a data table register and apply it. |
 
 ### Smoothing filters
 

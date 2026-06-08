@@ -56,9 +56,9 @@ In Serial Studio each input channel can drive its own dataset. A 4-input audio i
 
 The audio driver is built on **miniaudio**, a single-header cross-platform audio library. miniaudio talks directly to:
 
-- **WASAPI / WaveOut** on Windows
+- **WASAPI** on Windows
 - **Core Audio** on macOS
-- **ALSA / PulseAudio / JACK** on Linux
+- **ALSA** on Linux
 
 This avoids the overhead of QtMultimedia and gives the driver direct access to low-latency callback-based capture.
 
@@ -90,7 +90,7 @@ The FFT and Waterfall widgets share the same per-dataset settings (`fftSamples`,
 | **Input device** | Which OS audio device to capture from |
 | **Sample rate** | Sample rate, in Hz. Available rates depend on the hardware. |
 | **Sample format** | Bit depth and integer/float encoding. |
-| **Channel configuration** | Mono or stereo, depending on the device. |
+| **Channel configuration** | Mono, stereo, or a multichannel layout, depending on the device. |
 
 For step-by-step setup, see the [Protocol Setup Guides — Audio Input section](Protocol-Setup-Guides.md).
 
@@ -100,7 +100,7 @@ For step-by-step setup, see the [Protocol Setup Guides — Audio Input section](
 - **Distorted signal at high amplitude.** The input is clipping. Reduce the input gain in the OS or on the hardware preamp. PCM saturation produces hard distortion that looks like sharp peaks pinned to the bit-depth maximum.
 - **High noise floor.** Microphone inputs are noisier than line inputs because they expect a millivolt-range source. Driving a low-impedance signal into a microphone input amplifies the noise as well; use a line input where possible.
 - **Required sample rate is not listed.** The hardware reports its supported sample rates and Serial Studio only offers those. If a rate is unsupported, the driver cannot fake it; use a different audio interface.
-- **FFT or waterfall looks wrong.** Set `fftSamplingRate` on the dataset to match the audio sample rate. If the sample rate is 48 kHz and `fftSamplingRate` is left at 1000, the frequency axis is scaled by 48x.
+- **FFT or waterfall looks wrong.** Set `fftSamplingRate` on the dataset to match the audio sample rate. If the sample rate is 48 kHz and `fftSamplingRate` is left at its default of 100, the frequency axis is scaled by 480x.
 - **Latency feels high.** Audio backends typically buffer 10 to 50 ms by default. That is fine for real-time visualisation but not for closed-loop applications. Lower-latency capture requires backend-specific tuning that Serial Studio does not currently expose.
 - **Stereo input but only one channel visible.** Channel configuration is set to Mono. Switch to Stereo and the second channel appears as a second dataset.
 - **High CPU at 192 kHz.** FFT plus waterfall at a high sample rate is expensive. Reduce `fftSamples` or disable the waterfall on per-dataset settings.

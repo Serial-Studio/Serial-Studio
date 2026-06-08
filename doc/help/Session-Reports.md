@@ -8,9 +8,9 @@ Serial Studio Pro can export any recorded session as a **self-contained HTML rep
 2. Select a recorded session.
 3. Click **Generate Report** in the session detail pane.
 4. Configure branding, page, and section options in the dialog (see [Options](#options)).
-5. Click **Export HTML**, **Export PDF**, or **Export Both**.
+5. Click **Export PDF** (or **Export HTML** on builds without the embedded browser engine).
 
-A progress dialog appears while charts render and (for PDF) the page is rasterized. When finished, the files are written to:
+A progress dialog appears while charts render and (for PDF) the page is rasterized. The output format depends on the build: builds with the embedded browser engine produce a PDF, and builds without it produce a self-contained HTML file. When finished, the file is written to:
 
 ```
 <Workspace>/Reports/<Project Title>/
@@ -40,14 +40,13 @@ All options are persisted between runs, so you only configure them once per proj
 
 ### Page tab
 
-- **Page size**: A4, A3, Letter, Legal
-- **Orientation**: Portrait or Landscape
+- **Page size**: A0–A6, B4, B5, Letter, Legal, Executive, Tabloid, or Ledger. Reports always print in landscape orientation.
 - **Line width**: 0.5 – 3.0 pt (default 1.4)
 - **Line style**: solid, dashed, or dotted
 
 ### Sections tab
 
-Toggle each of the four sections on or off independently. Turning off **Parameter trends** produces a text-only summary report that renders instantly and prints to a few pages.
+Toggle each of the four sections on or off independently. An extra **Annotate min, max, and mean values on plots** checkbox overlays those statistics on each chart. Turning off **Parameter trends** produces a text-only summary report that renders instantly and prints to a few pages.
 
 ## HTML vs PDF
 
@@ -61,7 +60,7 @@ Both formats ship the same content, rendered from the same template.
 | File size | Larger (embeds Chart.js + raw data) | Smaller, fixed per page count |
 | Best for | Internal review, web sharing, debugging | Customer deliverables, regulatory submissions, printing |
 
-Choose **Export Both** to get an interactive version for your team and a printable version for the archive in a single step.
+Which format you get is determined by the build: builds that include the embedded browser engine export a PDF, while builds without it export the self-contained HTML.
 
 ## How charts are rendered
 
@@ -69,7 +68,7 @@ Charts use **Chart.js 4.x**, bundled inside Serial Studio. No network access is 
 
 ### Downsampling
 
-Long sessions are downsampled to a maximum of **1,200 points per chart** using first/min/max/last bucket decimation across 300 equal-time buckets. This preserves the signal envelope (peaks and valleys survive) while keeping charts responsive even for sessions with millions of samples.
+Long sessions are downsampled to a maximum of **10,000 points per chart** using first/min/max/last bucket decimation across 2,500 equal-count buckets. This preserves the signal envelope (peaks and valleys survive) while keeping charts responsive even for sessions with millions of samples.
 
 If you need the full-resolution data, export the session to **CSV** from the Session Explorer instead.
 

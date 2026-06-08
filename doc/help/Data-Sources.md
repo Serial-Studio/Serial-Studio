@@ -38,7 +38,7 @@ Talks to physical or virtual serial ports. A good fit for Arduino, ESP32, STM32,
 | Parity           | None, Even, Odd, Space, Mark                       | None      |
 | Stop bits        | 1, 1.5, 2                                          | 1         |
 | Flow control     | None, RTS/CTS (hardware), XON/XOFF (software)      | None      |
-| DTR signal       | On / Off. Toggles the Data Terminal Ready line     | Off       |
+| DTR signal       | On / Off. Toggles the Data Terminal Ready line     | On        |
 | Auto reconnect   | On / Off. Reconnects automatically on disconnect   | Off       |
 
 **Platform notes.** Port names are platform-specific: `COM3` on Windows, `/dev/ttyUSB0` or `/dev/ttyACM0` on Linux, `/dev/cu.usbserial-*` on macOS. You can register custom port paths manually.
@@ -126,7 +126,7 @@ Captures audio samples from system input devices through the miniaudio library. 
 |---------------------|-------------------------------------------------------------|
 | Input device        | System audio inputs (microphone, line-in, and so on)        |
 | Sample rate         | Device-dependent (common: 8, 22.05, 44.1, 48, 96, 192 kHz)  |
-| Sample format       | PCM signed/unsigned 16/24/32-bit, float 32-bit              |
+| Sample format       | PCM unsigned 8-bit, signed 16/24/32-bit, float 32-bit       |
 | Channel config      | Mono, stereo, or any layout the device supports             |
 | Output device       | System audio outputs (optional, for loopback)               |
 
@@ -149,14 +149,14 @@ Polls registers from Modbus-compatible PLCs, sensors, and industrial controllers
 |------------------|-------------------------------------------------|
 | Protocol         | Modbus RTU, Modbus TCP                          |
 | Slave address    | 1 to 247                                        |
-| Poll interval    | 50 to 60,000 ms                                 |
+| Poll interval    | 10 to 60,000 ms                                 |
 | Register groups  | Type + start address + count (multiple groups)  |
 
 **Register types:** coil (read/write discrete), discrete input (read-only discrete), holding register (read/write 16-bit), input register (read-only 16-bit).
 
 **RTU-specific parameters.** Serial port, baud rate, data bits, parity, stop bits. Identical to the UART driver settings.
 
-**TCP-specific parameters.** Host address and TCP port (default: 502).
+**TCP-specific parameters.** Host address and TCP port (default: 5020).
 
 **Quick start (RTU):**
 
@@ -191,7 +191,7 @@ Receives and transmits CAN frames through platform-specific CAN interface plugin
 - **Windows:** Requires a third-party CAN adapter with a Qt CAN Bus plugin (PEAK, Vector, Systec).
 - **macOS:** Limited support. Requires third-party drivers.
 
-**Frame format.** Standard CAN uses 11-bit identifiers (0x000 to 0x7FF). CAN FD extends that to 29-bit identifiers and up to 64 data bytes per frame. The driver outputs frames as `[ID_high, ID_low, DLC, data...]` byte arrays.
+**Frame format.** Standard CAN uses 11-bit identifiers (0x000 to 0x7FF); IDs above 0x7FF are sent as 29-bit extended frames. CAN FD raises the payload limit to 64 data bytes per frame (classic CAN caps at 8). The driver outputs frames as `[ID_high, ID_low, DLC, data...]` byte arrays.
 
 **Quick start:**
 

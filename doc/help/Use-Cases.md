@@ -559,8 +559,8 @@ scope: no persistence trace, no afterglow, no XY mode for Lissajous patterns.
 on a phosphor-green CRT background:
 - Per-channel traces drawn with a glow underlay and a crisp foreground line
 - 10 x 8 graticule with a brighter centre cross
-- Switch to the `XY scope` template for Lissajous patterns from two synchronous
-  channels
+- Switch to the `XY scope (Lissajous)` template for Lissajous patterns from two
+  synchronous channels
 
 **Hardware:** Any UART/USB device pushing one or more analog channels.
 **Pro Feature Used:** Painter widget, `oscilloscope.js` / `xy_scope.js` templates

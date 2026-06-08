@@ -12,7 +12,7 @@ The index of the source the dataset reads from. `0` for the default (and only) s
 
 ### `groupId`
 
-The unique identifier of the group inside the project. Group IDs are assigned by the Project Editor and are stable across edits to other groups. Workspace IDs share the same integer space but always start at `1000`, so anything below `1000` is a group, anything `>= 1000` is a workspace.
+The **positional** index of the group inside the project: `0` for the first group, `1` for the second, and so on. It is *not* a stable identity, because adding, deleting, or reordering groups renumbers it. For a group identifier that survives reorders, use the group's own `uniqueId` field. Workspace IDs live in a separate reserved range that starts at `1000` (Overview = `1000`, All Data = `1001`, per-group workspaces from `1002`, user workspaces from `5000`), so a workspace ID never collides with a positional `groupId`.
 
 ### `datasetId`
 
@@ -46,11 +46,11 @@ Treat the integer as opaque: it's allocated, not derived. Two assumptions you'd 
 
 | ID         | Used by                                                                                          |
 |------------|--------------------------------------------------------------------------------------------------|
-| `sourceId` | Source-scoped API calls (`project.source.update`, `frameparser.compile`, etc.)                   |
+| `sourceId` | Source-scoped API calls (`project.source.update`, `project.source.setFrameParserCode`, etc.)     |
 | `groupId`  | Group-scoped API calls (`project.group.update`, dataset CRUD addressing)                         |
 | `datasetId`| Dataset CRUD addressing (`project.dataset.update`, `project.dataset.setOptions`, `project.dataset.delete`) |
 | `index`    | Frame-parser scripts when assigning values from the parsed array (`group.datasets[0].index = 1`) |
-| `uniqueId` | Live-data API (`live.dataset.read`), transform scripts (`datasetGetRaw(uid)`, `datasetGetFinal(uid)`), Data Tables (`raw:<uid>`, `final:<uid>`) |
+| `uniqueId` | Live-data API (`dashboard.getData`, `dashboard.tailFrames`), transform scripts (`datasetGetRaw(uid)`, `datasetGetFinal(uid)`), Data Tables (`raw:<uid>`, `final:<uid>`) |
 
 ## Rule of thumb
 

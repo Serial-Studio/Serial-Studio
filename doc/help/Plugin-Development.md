@@ -127,8 +127,9 @@ def main():
     stub = rpc.SerialStudioAPIStub(channel)
 
     print("Streaming frames...")
-    for frame in stub.StreamFrames(pb.StreamRequest()):
-        print(frame.frame)
+    for batch in stub.StreamFrames(pb.StreamRequest()):
+        for frame in batch.frames:
+            print(frame.frame)
 
 if __name__ == "__main__":
     main()
@@ -268,9 +269,10 @@ stub = rpc.SerialStudioAPIStub(channel)
 resp = stub.ExecuteCommand(pb.CommandRequest(
     id="1", command="io.getStatus"))
 
-# Stream frames
-for frame in stub.StreamFrames(pb.StreamRequest()):
-    process(frame.frame)
+# Stream frames (each item is a FrameBatch)
+for batch in stub.StreamFrames(pb.StreamRequest()):
+    for frame in batch.frames:
+        process(frame.frame)
 ```
 
 See the [gRPC Server](gRPC-Server.md) documentation for the full service definition and stub generation instructions.
@@ -315,7 +317,8 @@ Platform keys use the format `os/arch` or `os/*` (for universal builds):
 
 | Key | Matches |
 |-----|---------|
-| `darwin/*` | macOS (always universal) |
+| `darwin/*` | macOS (any architecture) |
+| `darwin/arm64` | macOS Apple Silicon only |
 | `linux/x86_64` | Linux x86_64 |
 | `linux/arm64` | Linux ARM64 (Raspberry Pi, etc.) |
 | `windows/*` | Windows (any architecture) |
@@ -360,7 +363,7 @@ state = result.get("result", {}).get("state", {})
 
 ### Auto-Relaunch
 
-Plugins that were running when Serial Studio closed are automatically relaunched on the next startup.
+Plugins that were running when Serial Studio closed are remembered and automatically relaunched the next time a device connects (when the dashboard becomes available).
 
 ## Lifecycle Events
 
@@ -427,7 +430,7 @@ grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/ListCommands
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Connection refused | API server not enabled | Enable in Preferences → Miscellaneous |
+| Connection refused | API server not enabled | Enable in Preferences → General → Advanced |
 | `grpcio` import error | Package not installed | `pip install grpcio grpcio-tools` |
 | Plugin exits immediately | Unhandled exception | Set `"terminal": true` to see errors |
 | No frames streaming | Device not connected | Connect a device first |

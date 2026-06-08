@@ -124,8 +124,10 @@ See [MQTT Subscriber](Drivers-MQTT.md) for the full protocol primer.
 1. Open the project editor and select **MQTT Publisher** in the left tree (immediately below **Devices**).
 2. Under **Publishing**, turn on **Enable Publishing**.
 3. Pick **Payload**:
-   - **Dashboard Data** publishes each parsed frame as compact JSON.
+   - **Dashboard Data (JSON)** publishes each parsed frame as compact JSON.
+   - **Dashboard Data (CSV)** publishes each parsed frame as a CSV row.
    - **Raw RX Data** republishes the bytes that arrived on any active driver, unmodified.
+   - **Custom Script** publishes the value returned by the `mqttPublish()` script hook.
 4. Set **Topic Base**. The Publisher silently produces no traffic when this is empty.
 5. Turn on **Publish Notifications** to mirror dashboard events to MQTT; set **Notification Topic** if you want them on a separate topic from the frame stream.
 6. Under **Broker**, fill in hostname, port, credentials, protocol version, and keep-alive.
@@ -172,7 +174,7 @@ Once you have configured your register groups, you can auto-generate a Serial St
 3. You will be prompted to save the `.ssproj` file.
 4. The project editor opens for further customization.
 
-The generated project includes one group per register block, one dataset per register/coil, and a Lua frame parser. See [How Multi-Group Polling Works](#how-multi-group-polling-works) below for details on the frame parser.
+The generated project includes one group per register block, one dataset per register/coil, and a Built-In frame parser (the `modbus_register_map` template). See [How Multi-Group Polling Works](#how-multi-group-polling-works) below for details on the frame parser.
 
 ### Troubleshooting
 
@@ -191,7 +193,7 @@ The generated project includes one group per register block, one dataset per reg
 1. In the **Setup Panel**, select **Modbus** from the I/O Interface dropdown.
 2. Set the **Protocol** to **Modbus TCP**.
 3. Enter the **Host** (device IP address or hostname).
-4. Enter the **Port** (default: 502).
+4. Enter the **Port** (Serial Studio prefills 5020; standard Modbus TCP devices listen on 502).
 5. Set the **Slave Address** (usually 1 for TCP gateways, but may vary).
 6. Add one or more **Register Groups** as described in the Modbus RTU section above.
 7. Set the **Poll Interval**.
@@ -206,7 +208,7 @@ The generated project includes one group per register block, one dataset per reg
 
 **License:** Pro
 
-Instead of manually adding register groups one by one, you can import a register map file that describes all registers for your device. Serial Studio will auto-generate a complete project with register groups, datasets, a Lua frame parser, and appropriate dashboard widgets.
+Instead of manually adding register groups one by one, you can import a register map file that describes all registers for your device. Serial Studio will auto-generate a complete project with register groups, datasets, a Built-In frame parser, and appropriate dashboard widgets.
 
 ### Supported Formats
 
@@ -335,7 +337,7 @@ The importer produces:
 - **Register groups** loaded into the Modbus driver (ready to connect immediately).
 - **Project groups.** One per contiguous block of same-type registers.
 - **Datasets.** One per register entry, with name, units, min/max, and widget type (LED for booleans, gauge for temperatures/pressures, bar for percentages).
-- **Frame parser.** JavaScript code that extracts values from Modbus protocol frames, handles data types (uint16, int16, float32), and applies scaling/offset. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on how the parser handles multiple register groups.
+- **Frame parser.** A Built-In `modbus_register_map` template that extracts values from Modbus protocol frames, handles data types (uint16, int16, float32), and applies scaling/offset. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on how the parser handles multiple register groups.
 
 ### Example Files
 
@@ -437,51 +439,21 @@ The groups are always polled in the same fixed order (the order they appear in t
 
 ### Parser Side
 
-The auto-generated frame parser maintains a `currentGroup` counter that starts at 0. Each time `parse(frame)` is called, the parser uses the counter to determine which register group the frame belongs to, extracts the data accordingly, then advances the counter:
+The Built-In `modbus_register_map` template keeps a poll cursor that starts at the first register block. Each time a response frame arrives, the parser reads the Modbus function code (the second byte of the response) and matches it against the configured blocks, probing in cursor order. It decodes the matching block, latches the extracted values, then advances the cursor to the block after the one it just decoded. Because matching is keyed on the function code rather than on cursor position alone, the parser snaps to the correct block even if a response is missing or arrives out of order.
 
-```js
-currentGroup = (currentGroup + 1) % numberOfGroups;
-```
+The parser is value-latching: each register block updates only its own datasets, and the values from other blocks are carried over from the previous frame. A single contiguous block decodes on every frame; with multiple blocks, the cursor walks through them as their responses arrive.
 
-For a single register group, the counter is always 0: the `switch` block has one `case` and the modulo is `% 1`.
+For two groups (e.g., holding registers at address 0 and coils at address 100), the response for the holding registers carries function code `0x03` and updates the temperature and pressure datasets, while the coils response carries function code `0x01` and updates the E-Stop and Motor Run datasets.
 
-For two groups (e.g., holding registers at address 0 and coils at address 100), the generated parser looks like:
-
-```js
-var values = new Array(totalDatasets).fill(0);
-var currentGroup = 0;
-
-function parse(frame) {
-  if (frame.length < 3)
-    return values;
-
-  var data = frame.slice(3);
-
-  switch (currentGroup) {
-    case 0: // Holding Registers @ 0
-      values[0] = (data[0] << 8) | data[1]; // Temperature
-      values[1] = (data[2] << 8) | data[3]; // Pressure
-      break;
-    case 1: // Coils @ 100
-      values[2] = (data[0] >> 0) & 1; // E-Stop
-      values[3] = (data[0] >> 1) & 1; // Motor Run
-      break;
-  }
-
-  currentGroup = (currentGroup + 1) % 2;
-  return values;
-}
-```
-
-Frame 1 arrives → parser is in `case 0` → extracts holding register values → advances to 1.
-Frame 2 arrives → parser is in `case 1` → extracts coil values → advances back to 0.
+Frame with function `0x03` arrives → parser matches the holding-register block → extracts holding register values → advances the cursor.
+Frame with function `0x01` arrives → parser matches the coil block → extracts coil values → advances the cursor.
 
 ### Practical Considerations
 
 - **Typical group count:** Most Modbus devices use 1–3 register groups. A single contiguous block of holding registers is the most common configuration.
-- **Synchronization.** The parser relies on the driver always delivering frames in the same fixed order. This works reliably because each poll cycle is sequential: group N+1 isn't polled until group N's response arrives.
-- **Frame loss:** If a Modbus response times out or is dropped (rare over TCP, uncommon over RTU), the parser's counter may temporarily misalign for one poll cycle. It self-corrects on the next complete cycle. At typical poll rates (100ms+), this causes at most a brief glitch.
-- **Customization:** If you modify the generated parser, keep the `currentGroup` counter logic intact. Adding or removing register groups requires regenerating the parser (or manually updating the `switch` cases and modulo value).
+- **Synchronization.** Each poll cycle is sequential: group N+1 isn't polled until group N's response arrives. The parser also matches each response to a block by its Modbus function code, so it stays aligned even when block types differ.
+- **Frame loss:** If a Modbus response times out or is dropped (rare over TCP, uncommon over RTU), the parser latches the previous values for that block and resynchronizes on the next matching response. At typical poll rates (100ms+), this causes at most a brief glitch.
+- **Customization:** The generated parser is a configured Built-In template, not editable script. To change which registers are decoded, adjust the register groups and regenerate the project.
 
 ## CAN Bus Setup (Pro)
 
@@ -554,7 +526,7 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 ### Steps
 
 1. In the **Setup Panel**, select **Raw USB** from the I/O Interface dropdown.
-2. Pick the device from the dropdown. Devices are listed as `VID:PID, Product Name`.
+2. Pick the device from the dropdown. Devices are listed as `VID:PID – Manufacturer Product`.
 3. Select the **Transfer Mode**:
    - **Bulk Stream** (default): Standard synchronous bulk IN/OUT. Works for most devices.
    - **Advanced Control**: Bulk transfers plus vendor-specific control transfers. A confirmation dialog appears before enabling.
@@ -580,7 +552,7 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 1. In the **Setup Panel**, select **HID** from the I/O Interface dropdown.
 2. Wait for device enumeration. HID devices are re-enumerated every 2 seconds automatically.
-3. Pick the device from the dropdown. Devices are listed as `VID:PID, Product Name`.
+3. Pick the device from the dropdown. Devices are listed as `Product Name (VID:PID)`.
 4. Review the **Usage Page** and **Usage** fields to confirm the correct device function is selected.
 5. Click **Connect**.
 

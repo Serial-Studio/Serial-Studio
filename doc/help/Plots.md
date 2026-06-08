@@ -34,7 +34,7 @@ When a plot is large enough to show its toolbar, these controls appear left to r
 
 | Control | Icon | What it does |
 |---------|------|--------------|
-| **Interpolation** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-on.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-off.svg" width="16" height="16"> | Cycles line smoothing: none (raw points), linear, or stepped. |
+| **Interpolation** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-on.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-off.svg" width="16" height="16"> | Cycles line style: none (raw points), linear, ZOH (stepped), or stem. |
 | **Area** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/area.svg" width="16" height="16"> | Fills the region under the curve. Available with line interpolation. Plot only. |
 | **X / Y label** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/x.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/y.svg" width="16" height="16"> | Shows or hides each axis label. |
 | **Crosshair** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/crosshair.svg" width="16" height="16"> | Shows a tracking crosshair that follows the cursor. |
@@ -66,7 +66,7 @@ There are three **modes**:
 
 Auto is the everyday choice and matches the Auto button on a scope. Use Normal for an intermittent signal you don't want redrawn by noise, and Single to freeze one event.
 
-On a **MultiPlot**, the **Signal** setting picks which curve the trigger watches. All curves are captured together and stay aligned to that one signal.
+On a **MultiPlot**, the **Source** setting picks which curve the trigger watches. All curves are captured together and stay aligned to that one signal.
 
 ### Timing: width and rate
 

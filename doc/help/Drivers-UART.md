@@ -43,8 +43,8 @@ Parity options exposed by Serial Studio:
 - **None**: no parity bit. The default for almost every modern device.
 - **Even**: total number of `1`s is always even.
 - **Odd**: total number of `1`s is always odd.
+- **Space**: parity bit is always `0`. Rare.
 - **Mark**: parity bit is always `1`. Used for inter-byte signalling on a few legacy buses.
-- **Space**: parity bit is always `0`. Also rare.
 
 ### Stop bits
 
@@ -79,7 +79,7 @@ The UART driver wraps Qt's `QSerialPort`. Settings exposed in the Setup Panel ma
 | **Port** | Which OS-level serial device to open (COM3, `/dev/ttyACM0`, etc.) |
 | **Baud rate** | Bits per second |
 | **Data bits** | 5 / 6 / 7 / 8 |
-| **Parity** | None / Even / Odd / Mark / Space |
+| **Parity** | None / Even / Odd / Space / Mark |
 | **Stop bits** | 1 / 1.5 / 2 |
 | **Flow control** | None / Hardware (RTS/CTS) / Software (XON/XOFF) |
 | **DTR enabled** | Asserts the DTR line on connect (some boards reset on DTR toggle, e.g. Arduino) |

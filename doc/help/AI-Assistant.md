@@ -10,7 +10,7 @@ It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gem
 
 The assistant talks to Serial Studio through the same command surface as the MCP/JSON-RPC API (see the [API Reference](API-Reference.md) for the full list). The short version: anything you can do in the Project Editor, the assistant can do for you, with two important caveats:
 
-- **It does not connect, disconnect, or change driver settings** while you are mid-shift. Anything that pokes the running connection (open/close port, change baud rate, change Modbus slave, toggle MQTT) is permanently blocked from the AI surface so a wrong answer cannot knock you offline.
+- **It does not connect, disconnect, or change driver settings by default.** Anything that pokes the running connection (open/close port, change baud rate, change Modbus slave, write bytes to the device) is blocked from the AI surface unless you opt in by ticking **Allow device control** in the panel footer. With that toggle on, those commands become Confirm-tier (you still approve each one); with it off they are refused outright so a wrong answer cannot knock you offline.
 - **It can read documentation.** When you ask about a feature it doesn't already know, it pulls the relevant page from `doc/help/` directly off the Serial Studio repo so its answer matches the version you are running.
 
 Typical things people ask it to do:
@@ -23,7 +23,7 @@ Typical things people ask it to do:
 - "Add a moving-average transform to dataset *Speed*."
 - "Open the painter widget docs and walk me through writing one for a compass."
 
-The four chips on the empty-conversation card are starter prompts. Click one to drop it into the input box and edit before sending.
+The four chips on the empty-conversation card are starter prompts (one per category, reshuffled each time the card appears). Click one to send it straight to the assistant.
 
 ## Picking a provider
 
@@ -31,7 +31,7 @@ Eight providers are wired in. They all do roughly the same job; the trade-offs a
 
 | Provider | Default model | What it costs | What it does well |
 |---|---|---|---|
-| **Anthropic** (Claude) | Haiku 4.5 | ~$1 / $5 per million tokens (in/out) | Default. Streaming, tool use, prompt caching, extended thinking on Sonnet/Opus. Sonnet 4.6 and Opus 4.7 are also selectable for harder tasks. |
+| **Anthropic** (Claude) | Haiku 4.5 | ~$1 / $5 per million tokens (in/out) | Default. Streaming, tool use, prompt caching, extended thinking on Sonnet/Opus. Sonnet 4.6, Opus 4.7, and Opus 4.8 are also selectable for harder tasks. |
 | **OpenAI** | GPT-5 mini | Pay-per-token; mini tier is cheap | Default. Streaming, parallel tool calls, native function-calling. GPT-5.2 and GPT-5.2 Chat are the strongest options for hard tasks. GPT-4.1, GPT-4.1 mini, GPT-4o, and GPT-4o mini remain available. Reasoning-capable models run at `reasoning_effort: none` -- right for fast, interactive tool-calling. |
 | **Google Gemini** | 2.5 Flash | Generous free tier (rate-limited via AI Studio) | 2.5 Flash and 2.0 Flash run on the free tier. 2.5 Pro is paid. |
 | **DeepSeek** | deepseek-chat (V3) | Often the cheapest cloud option for tool use | OpenAI-compatible API. `deepseek-reasoner` (R1) is also selectable. |
@@ -68,7 +68,7 @@ flowchart TD
     B --> C{"Tool call?"}
     C -- "Read-only<br/>(safe)" --> D["Auto-executed,<br/>result fed back to model"]
     C -- "Mutating<br/>(confirm)" --> E["Card shows in chat<br/>with Approve / Deny buttons"]
-    C -- "Connection / runtime<br/>(blocked)" --> F["Refused.<br/>Model is told and continues."]
+    C -- "Device / secrets<br/>(blocked)" --> F["Refused.<br/>Model is told and continues."]
     E -- "Approve" --> D
     E -- "Deny" --> G["Reported back to model;<br/>turn continues"]
     D --> B
@@ -78,19 +78,21 @@ flowchart TD
 
 Each tool call shows up in the chat as a small expandable card with the command name, the arguments, and (after it runs) the result. You can click the card to inspect what was sent and what came back. This is useful when you want to learn the underlying API, or when something goes sideways.
 
-### The three safety tiers
+### The safety tiers
 
-Every command is tagged at startup. There are three buckets:
+Every command is tagged at startup. There are four buckets:
 
 | Tier | Behavior | Examples |
 |---|---|---|
 | **Safe** | Auto-runs. No prompt. Read-only inspection. | `project.group.list`, `dashboard.getStatus`, `io.uart.listPorts`, every `get*` and `*.list` |
 | **Confirm** | Card with **Approve** / **Deny** buttons. Anything that mutates the project counts. | `project.group.add`, `project.dataset.update`, `project.workspace.add`, `project.template.apply` |
-| **Blocked** | Refused outright. The model is told it isn't available. | `io.connect`, `io.disconnect`, `io.setPaused`, `io.writeData`, `console.send`, every driver `set*`, `mqtt.set*` (password/SSL), `licensing.*` mutations |
+| **Always confirm** | Like Confirm, but still asks **even when Auto-approve edits is on**. Destructive families (delete / clear / new / import / reset). | `project.new`, `project.group.delete`, `project.workspace.clearAll`, `project.frameParser.reset`, `fs.delete`, `sessions.clearAll` |
+| **Device-gated** | Blocked by default; becomes **Always confirm** only when **Allow device control** is ticked. Driver settings, connection state, and anything that writes bytes to the device. | `io.connect`, `io.disconnect`, `io.setPaused`, `io.writeData`, `console.send`, every driver `set*` |
+| **Blocked** | Refused outright; never unblockable from the UI. The model is told it isn't available. | `mqtt.setPassword`, `mqtt.setSslEnabled`, `mqtt.setSslProtocol`, `licensing.*` mutations |
 
 You can approve a single call (**Approve**) or, when the assistant queues several mutations in a row, approve the whole batch at once (**Approve all**). Denial is logged and the assistant is told. It will usually offer an alternative or back off, not retry blindly.
 
-The full safety map ships in `app/rcc/ai/command_safety.json`. New commands default to **Confirm** until they're explicitly tagged, so adding an API method doesn't quietly grant the AI new powers. There is also an **Auto-approve edits** toggle in the panel footer: when on, **Confirm**-tier project edits run without asking. **Blocked** and **Safe** are unaffected.
+The full safety map ships in `app/rcc/ai/command_safety.json`. New commands default to **Confirm** until they're explicitly tagged, so adding an API method doesn't quietly grant the AI new powers. Two footer toggles tune this: **Auto-approve edits** runs **Confirm**-tier project edits without asking (Always-confirm, device-gated, and Blocked are unaffected), and **Allow device control** unblocks the device-gated commands above behind a one-time warning (each call still asks for approval).
 
 ## The composer
 
@@ -118,7 +120,7 @@ The assistant can pull `doc/help/*.md` pages directly off the Serial Studio GitH
 
 For scripting, there's a parallel surface called `meta.fetchScriptingDocs` that returns the API reference for one of six scripting contexts (frame parser JS, frame parser Lua, dataset transform JS, dataset transform Lua, output widget JS, painter JS). The assistant is wired to call this **before** writing or modifying any script. That's why frame parsers it generates use real APIs and not made-up function names.
 
-There's also `meta.searchDocs` (a small built-in BM25 index over the bundled help and scripting docs, used to find the right page when a path isn't obvious) and `meta.loadSkill` (loads one of a handful of focused skill briefs: `painter`, `frame_parsers`, `transforms`, `output_widgets`, `dashboard_layout`, `mqtt`, `can_modbus`, `debugging`, `project_basics`, `tool_discovery`, `behavioral`) when the assistant needs deeper guidance for a specific task.
+There's also `meta.searchDocs` (a small built-in BM25 index over the bundled help and scripting docs, used to find the right page when a path isn't obvious) and `meta.loadSkill` (loads one of a handful of focused skill briefs: `painter`, `frame_parsers`, `transforms`, `output_widgets`, `workspace_design`, `dashboard_layout`, `mqtt`, `can_modbus`, `filesystem`, `debugging`, `project_basics`, `tool_discovery`, `api_semantics`, `behavioral`) when the assistant needs deeper guidance for a specific task.
 
 ## Project templates
 
@@ -136,16 +138,16 @@ Eight providers are wired in: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, 
 Yes. That's exactly what the **Confirm** tier is for. The card shows the command name and the full arguments object before you approve.
 
 **Can the assistant connect or disconnect my device?**
-No. Connection-state changes (`io.connect`, `io.disconnect`, `io.setPaused`) and every `set*` on every driver are permanently blocked. The assistant can read your device list and your current configuration, but it can't pick up the receiver.
+Not unless you let it. Connection-state changes (`io.connect`, `io.disconnect`, `io.setPaused`) and every `set*` on every driver are device-gated: blocked by default, and the assistant can only read your device list and current configuration. Tick **Allow device control** in the footer and those commands become available as Confirm-tier actions (you still approve each one).
 
 **Can it write data to my device?**
-Direct MCP write commands are blocked: `console.send` (text/serial writes) and `io.writeData` (raw binary writes), alongside every driver `set*`, every connection-state command, `licensing.*` mutations, and `mqtt.set*` (password / SSL). The assistant can, however, propose **frame parser / transform / painter code that calls `deviceWrite()` or `actionFire()`** (scripting APIs that push bytes back to the device or trigger an existing project Action whenever the script decides to). Pushing the script is a **Confirm** tier action, so you see the exact code before it lands. Once approved and connected, the script will fire on incoming frames — review the logic carefully before approving anything that writes on every frame. For one-shot user-triggered commands, prefer an [Output Control](Output-Controls.md).
+Direct MCP write commands are device-gated: `console.send` (text/serial writes) and `io.writeData` (raw binary writes), alongside every driver `set*` and every connection-state command, are blocked until you tick **Allow device control** (then they ask for approval per call). A second group is blocked outright with no UI override: `licensing.*` mutations and `mqtt.set*` (password / SSL). The assistant can, however, propose **frame parser / transform / painter code that calls `deviceWrite()` or `actionFire()`** (scripting APIs that push bytes back to the device or trigger an existing project Action whenever the script decides to). Pushing the script is a **Confirm** tier action, so you see the exact code before it lands. Once approved and connected, the script will fire on incoming frames — review the logic carefully before approving anything that writes on every frame. For one-shot user-triggered commands, prefer an [Output Control](Output-Controls.md).
 
 **Why does my project state show up in the prompt?**
 So the assistant can answer "what sources are configured?", "which datasets feed this group?", or "is the frame parser doing what I think it is?" without first running ten read-only tool calls. The state snapshot lives outside the cached prefix so it can change between turns without invalidating the cache.
 
 **The assistant suggested an API call that doesn't exist.**
-Tell it; it will usually call `meta.listCommands` or `meta.describeCommand` to recover. If you keep hitting hallucinated commands on a given provider, switch to a stronger model (Sonnet 4.6 or Opus 4.7 on Anthropic, GPT-5.2 on OpenAI, 2.5 Pro on Gemini).
+Tell it; it will usually call `meta.listCommands` or `meta.describeCommand` to recover. If you keep hitting hallucinated commands on a given provider, switch to a stronger model (Sonnet 4.6, Opus 4.7, or Opus 4.8 on Anthropic, GPT-5.2 on OpenAI, 2.5 Pro on Gemini).
 
 **Where do I report a bug or a wrong answer?**
 File an issue on the Serial Studio GitHub repo. Include the prompt, the reply, and ideally the project file (or a stripped-down repro). Provider name and model help too.

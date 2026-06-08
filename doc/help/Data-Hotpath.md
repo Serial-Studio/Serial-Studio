@@ -115,8 +115,8 @@ building the info table or object when it isn't used.
 #### Parser engine details
 
 - One engine instance per source, never shared across sources.
-- Lua uses an embedded Lua 5.4 interpreter with `base`, `table`, `string`, `math`, and `utf8`
-  loaded. JavaScript uses Qt's `QJSEngine` with the Console and GC extensions only.
+- Lua uses an embedded Lua 5.4 interpreter with `base`, `table`, `string`, `math`, `utf8`, and
+  `coroutine` loaded. JavaScript uses Qt's `QJSEngine` with the Console and GC extensions only.
 - Each parser is compiled once when the project loads or the connection opens, then called
   many times. Compilation cost is paid up front, not per frame.
 
@@ -132,17 +132,20 @@ language.
 
 ### Stage 5: fan-out
 
-FrameBuilder produces exactly one `TimestampedFramePtr` per parsed frame and shares the same
-shared pointer with every consumer:
+FrameBuilder produces exactly one `TimestampedFramePtr` per parsed frame in
+`hotpathTxFrame`. The dashboard receives that pooled pointer directly. The asynchronous
+sinks receive it through a single detached copy, made once per frame and only when at least
+one sink is active (cached in `m_anyAsyncSink`):
 
-- the dashboard,
+- the dashboard (pooled frame, no copy),
 - CSV and MDF4 export workers,
 - the Session Database (Pro),
 - the API server (port 7777, MCP and legacy JSON-RPC),
 - the gRPC server (when built with `ENABLE_GRPC`),
-- the MQTT bridge.
+- the MQTT bridge (Pro).
 
-There is no second copy. Export workers run on dedicated threads and consume from lock-free
+The dashboard never copies the frame; the detached copy exists so a slow export backlog
+cannot pin the slot pool. Export workers run on dedicated threads and consume from lock-free
 queues, so writing to disk or the network never blocks the dashboard.
 
 ## Timestamp ownership
@@ -173,8 +176,10 @@ The hotpath is designed around three rules:
    recycled via a custom shared_ptr deleter when the last consumer releases the frame.
    Parser engines are compiled once, `CircularBuffer` and lock-free queues are pre-sized,
    and per-source transform engines are looked up once per source switch (not per dataset).
-2. **No copies of the frame.** Every consumer holds the same `TimestampedFramePtr`; there is
-   no second ownership layer.
+2. **No copy on the dashboard path.** The dashboard draws the pooled `TimestampedFramePtr`
+   directly. The only frame copy is the single detached one made for the asynchronous export
+   sinks, and only when one is active (gated on `m_anyAsyncSink`), so a slow sink can't pin
+   the slot pool.
 3. **No queued connections between main-thread objects.** Direct connections turn signal
    emissions into ordinary function calls.
 

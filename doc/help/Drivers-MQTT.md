@@ -73,8 +73,8 @@ For any broker reachable from outside the local network, use TLS:
 
 - Set the port to `8883` (the standard MQTT-over-TLS port).
 - Enable **SSL/TLS**.
-- Keep **Peer Verify Mode** at `Verify` for production. Drop to `None` only when testing against a self-signed broker certificate and never against a public broker.
-- If the broker uses a private CA, click **Load CA Certificates** and pick the PEM file or directory containing the chain.
+- Keep **Peer Verify** at `Verify Peer` (or the default `Auto Verify Peer`) for production. Drop to `None` only when testing against a self-signed broker certificate and never against a public broker.
+- If the broker uses a private CA, click **Load From Folder…** under **CA Certificates** and pick the directory containing the PEM chain.
 
 The TLS configuration is per-source, so two MQTT subscribers in the same project can use different brokers with different trust roots without interfering with each other.
 
@@ -83,7 +83,7 @@ The TLS configuration is per-source, so two MQTT subscribers in the same project
 - **Subscribed but no data.** Topics are case-sensitive: `Sensors/Temp` is not the same as `sensors/temp`. Run `mosquitto_sub -t '#' -v` against the broker to see what is being published. If the publisher uses a deeper or shallower level structure than expected, the filter will silently miss everything.
 - **Connected but stale data shows up.** A retained message on a topic above the live stream can mask new publishes for a fresh subscriber. Subscribe to `your/topic/#` and watch what the broker delivers on connect.
 - **Client ID conflict.** Brokers enforce unique client IDs. Two Serial Studio instances (or two sources within the same instance, by accident) sharing one client ID make the broker kick the older connection. **Regenerate** to pick a fresh ID per source.
-- **TLS handshake fails.** A broker requiring TLS will reject the connection if the certificate chain is not trusted. Self-signed brokers need the CA imported explicitly via **Load CA Certificates**.
+- **TLS handshake fails.** A broker requiring TLS will reject the connection if the certificate chain is not trusted. Self-signed brokers need the CA imported explicitly via the **CA Certificates** field's **Load From Folder…** button.
 - **Public-broker latency.** Free public brokers like `test.mosquitto.org` round-trip through the public Internet; expect tens-to-hundreds of milliseconds of jitter. For low-latency telemetry, run Mosquitto on the same LAN.
 - **High publish rate stalls the dashboard.** MQTT is not a streaming protocol. At thousands of messages per second, broker queues back up and the dashboard sees bursts and pauses. When per-reading granularity is not required, batch multiple readings into a single MQTT message and parse them frame-by-frame inside the project's frame parser.
 - **One filter, many publishers, mixed payload formats.** A `sensors/+/temp` filter that catches both `room1` (CSV) and `room2` (JSON) cannot be parsed by a single frame parser cleanly. Either standardise the payload format or split into two sources with one filter each.

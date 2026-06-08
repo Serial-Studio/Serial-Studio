@@ -76,23 +76,10 @@ Accepts arbitrary typed input and sends it as a string.
 
 Rotary dial for continuous setpoint adjustment. Same numeric properties as Slider (Min, Max, Step, Initial Value, Units) but displayed as a circular dial.
 
-### Ramp Generator
-
-Automated value sweep for testing and stress scenarios.
-
-| Property | Default | Description |
-|----------|---------|-------------|
-| Start Value | 0 | Ramp starting point |
-| Target Value | 100 | Ramp ending point |
-| Speed | 1 | Units per second |
-| Cycles | 0 | Number of forward-backward sweeps (0 = infinite) |
-
-When started, the ramp generator automatically increments the value from start to target at the configured speed, then reverses back. Each step calls `transmit()` with the current value. Use the dashboard controls to start, stop, and configure the ramp.
-
 ## Creating Output Controls
 
 1. Open the Project Editor (toolbar wrench icon, or Ctrl+Shift+P / Cmd+Shift+P).
-2. Click one of the **Add Output** buttons in the toolbar (Button, Slider, Toggle, Text Field, Knob, or Ramp).
+2. Click one of the **Add Output** buttons in the toolbar (Button, Slider, Toggle, Text Field, or Knob).
 3. An **Output Panel** group is created automatically if one does not exist.
 4. Select the new control in the tree view to configure its properties and transmit function.
 
@@ -111,7 +98,7 @@ function transmit(value) {
   // value is:
   //   1           for Button clicks
   //   0 or 1      for Toggle state changes
-  //   number       for Slider, Knob, Ramp Generator
+  //   number       for Slider and Knob
   //   "string"    for TextField input
 
   return "CMD " + value + "\r\n";
@@ -120,7 +107,7 @@ function transmit(value) {
 
 ### Built-in Templates
 
-The code editor includes 8 ready-to-use templates. Select one from the template dropdown and customize it for your device.
+The code editor includes a set of ready-to-use templates (Simple Command, JSON Command, Binary Packet, PWM Control, PID Setpoint, Relay Toggle, AT Command, Modbus Write, CAN Bus Frame, G-Code, GRBL, NMEA, SCPI, SLCAN, and a default starting point). Select one from the template dropdown and customize it for your device.
 
 #### Simple Command
 
@@ -298,7 +285,7 @@ Sends an arbitrary CAN frame with the given identifier and payload.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `id` | Number | CAN identifier (11-bit standard: 0x000–0x7FF) |
+| `id` | Number | CAN identifier, packed as two bytes (masked to 0x0000–0xFFFF) |
 | `payload` | Array or String | Payload bytes as an array of numbers (0–255), or a raw string |
 
 ```javascript
@@ -367,7 +354,7 @@ Output controls are displayed in an Output Panel widget on the dashboard. The pa
 
 - Controls are arranged in a configurable number of columns (set in the Output Panel group properties).
 - Small controls (Button, Slider, Toggle, TextField) stack vertically within columns.
-- Tall controls (Knob, Ramp Generator) span the full column height.
+- Tall controls (Knob) span the full column height.
 - If controls overflow the visible area, the panel scrolls vertically.
 
 ## Multi-Source Projects
@@ -380,10 +367,10 @@ Both output controls and [Actions](Actions.md) send data to connected devices, b
 
 | Feature | Output Controls | Actions |
 |---------|----------------|---------|
-| Widget types | 6 (button, slider, toggle, text, knob, ramp) | Button only |
+| Widget types | 5 (button, slider, toggle, text, knob) | Button only |
 | Data formatting | JavaScript `transmit()` function | Fixed TX Data + EOL |
-| Continuous values | Yes (slider, knob, ramp) | No |
-| Timer/auto-repeat | Ramp generator only | Yes (4 timer modes) |
+| Continuous values | Yes (slider, knob) | No |
+| Timer/auto-repeat | No | Yes (4 timer modes) |
 | Auto-execute on connect | No | Yes |
 | License | Pro | Free |
 
@@ -551,7 +538,6 @@ function transmit(value) {
 
 - Start with a built-in template and modify it. That avoids common syntax mistakes.
 - Test with the Console view open to see exactly what bytes are being transmitted.
-- Use the Ramp Generator to stress-test your device's command handling at sustained rates.
 - Combine output controls with input widgets in the same dashboard for full closed-loop monitoring (e.g., a slider to set a target temperature alongside a gauge showing the actual temperature).
 - Use the built-in protocol helpers (`modbusWriteRegister`, `canSendFrame`, and so on) instead of packing binary bytes by hand. See [Protocol Helper Functions](#protocol-helper-functions) above.
 - For complex protocols beyond the built-in helpers, write custom helper functions inside the transmit function scope. Variables declared outside `transmit()` persist across calls.

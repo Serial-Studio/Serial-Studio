@@ -82,9 +82,9 @@ is by design, and it's the same property that makes the hot path fast:
   loop can't repaint until the loop returns. See
   [Threading and Timing Guarantees](Threading-and-Timing.md#framereader-and-framebuilder-run-on-the-main-thread)
   for why frame parsing lives on the main thread.
-- **The dashboard phase pumps events about every 16 ms.** Only the final dashboard phase yields
-  to the event loop so widgets repaint while it measures the dashboard sub-hotpath; every other
-  phase blocks straight through.
+- **Each phase pumps events about every 16 ms.** Every phase yields briefly to the event loop on
+  a fixed 16 ms interval so the spinner and progress bar repaint while it runs; the wall-clock
+  spent on each pump is discounted from the measurement so a repaint never deflates throughput.
 - **The benchmark is for measurement, not interactive use.** Don't run it while you need the
   UI. Pick a smaller frame count and a 1-second floor for a quick check.
 
@@ -110,9 +110,9 @@ it comes back automatically.
 
 - **Throughput** is the sustained frames/second for that phase. Higher is better.
 - **Time** is the wall-clock seconds the phase ran.
-- **Result** is **Pass** (green) or **Fail** (red) for the five gated phases, and `n/a` for the
-  two informational ones. A gated phase fails if its throughput is below the tiered target shown
-  above.
+- **Result** is **Pass** (green) or **Fail** (red) for the seven gated phases (the data pipeline
+  plus the six parser phases), and `n/a` for the informational export and dashboard phases. A
+  gated phase fails if its throughput is below the tiered target shown above.
 
 A failing gated phase usually means the machine is too slow for the default 256 kHz target, the
 build is unoptimized (a debug build, or one without the shipped PGO profile), or a parser /
@@ -120,8 +120,9 @@ transform change regressed throughput. The headless
 [CLI form](Command-Line-Interface.md#hotpath-benchmark) is what CI uses to enforce these gates
 per pull request and on the shipped binary; the dialog is the same measurement on demand.
 
-**Clear** empties the results table; **Close** dismisses the dialog (also clearing the table).
-Neither is available while a benchmark is running.
+**Copy** places the results table on the clipboard as a Markdown report; **Clear** empties the
+results table; **Close** dismisses the dialog (also clearing the table). None of these are
+available while a benchmark is running.
 
 ## See also
 

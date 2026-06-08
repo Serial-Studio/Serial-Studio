@@ -177,7 +177,7 @@ Modbus is an industrial communication protocol for reading and writing registers
 - **Register groups.** One or more groups, each specifying a register type (coil, discrete input, input register, holding register), start address, and count.
 - **Poll interval.** How often to query registers, in milliseconds.
 - RTU-specific: serial port, baud rate, data bits, parity, stop bits.
-- TCP-specific: host address, port (default 502).
+- TCP-specific: host address, port (default 5020).
 
 **Register types:**
 

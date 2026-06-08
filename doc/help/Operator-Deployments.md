@@ -32,15 +32,24 @@ flowchart LR
 
 ## The dialog
 
-Two tabs.
+Three tabs.
 
 ### General
 
 - **Icon.** Click the 96×96 preview (or **Change Icon…**) to pick your own. macOS prefers `.icns`, Windows prefers `.ico`, Linux accepts SVG or PNG. Leave it alone to use the bundled deployment icon.
 - **Name.** Defaults to the project's title. Used as the deployment filename and the displayed label in the operator's shell. Reserved characters (`\ / : * ? " < > |`) are replaced with `_` automatically when saving.
 - **Project.** Read-only field showing the currently loaded project. Use the folder button to switch projects without leaving the dialog. A project must be loaded for **Save** to enable.
-- **Fullscreen.** When on, the deployment adds `--fullscreen` so the dashboard launches full-screen with no window chrome.
 - **Theme.** Defaults to **Same as Serial Studio**, which means the deployment inherits whatever theme the operator's installation has set globally. Pick a specific theme from the dropdown to pin the deployment to that palette regardless of the host's preference. Useful for kiosks where the dashboard should always look the same, or for paired light/dark deployments off the same project. The selection adds `--theme "<name>"` to the launcher; an unknown theme name on the target machine falls back to the host's default with a warning.
+- **Fullscreen.** When on, the deployment adds `--fullscreen` so the dashboard launches full-screen with no window chrome.
+- **Actions Panel.** When on (the default), the deployment adds `--actions-panel` so the dashboard's action panel is shown.
+- **File Transmission.** When on, the deployment adds `--file-transmission`, allowing the operator to open the File Transmission dialog in runtime mode.
+
+### Taskbar
+
+Controls the dashboard taskbar in runtime mode.
+
+- **Mode.** **Always shown** (default), **Auto-hide** (slides in near the bottom edge), or **Hidden** (removes window minimize/maximize/close buttons and forces auto-layout). Anything other than the default adds `--taskbar-mode <mode>`.
+- **Pinned Buttons.** Toggles for which taskbar buttons stay pinned (Console, Notifications, Clock, Stopwatch, Pause, File Transmission). The selection adds `--taskbar-buttons <ids>`. Disabled when the taskbar mode is **Hidden**.
 
 ### Logging
 
@@ -73,7 +82,7 @@ Every generated deployment adds `--runtime`. This flag adjusts the dashboard for
 | Failed initial connect (4 s grace)    | If no connection is established within 4 seconds of launch, a **Device Unavailable** dialog is shown. |
 | User-initiated disconnect             | Quits the application. In runtime mode, pressing Disconnect is treated as "I'm done." |
 | Device-initiated drop                 | Shows the **Connection Lost** dialog. The user can Reconnect, pick a different device, or Quit; the dashboard layout is preserved underneath. |
-| Project file missing at launch        | A pre-flight check runs before the QML loads. If the project file is missing, a "Project file not found" dialog is shown and offers to **Delete Deployment** (when `--shortcut-path` is provided) or **Quit**. |
+| Project file missing at launch        | A pre-flight check runs before the QML loads. If the project file is missing, a "Project file not found" dialog is shown and offers to **Delete Shortcut** (when `--shortcut-path` is provided) or **Quit**. |
 
 Runtime mode does **not** change anything about the data pipeline, frame parsers, exports, or the API server. The dashboard, MCP/JSON-RPC, gRPC, MQTT, and Session Database all behave exactly as they would in a normal Serial Studio session. Only the surrounding chrome is changed.
 
@@ -155,7 +164,7 @@ Not via the dialog. Deployments target Project mode; that's the intended use. Yo
 No. It records the absolute path to the `.ssproj`. Move the project, and the deployment breaks (cleanly — see the missing-file flow above).
 
 **Can I edit a deployment after creating it?**
-Yes. Windows `.lnk` exposes Properties → Target. macOS `.app/Contents/MacOS/run` is a small Bash script. Linux `.desktop` files are plain text. All three can be edited by hand if you need to adjust the flags.
+Yes. Windows `.lnk` exposes Properties → Target. The macOS `.app` keeps a small Bash launcher at `Contents/MacOS/<bundle-name>` (the executable named in `Info.plist`'s `CFBundleExecutable`). Linux `.desktop` files are plain text. All three can be edited by hand if you need to adjust the flags.
 
 **Will the deployment still work on a machine without a Pro license?**
 Yes — the runtime CLI flags are honoured by GPL builds. You just can't *generate* deployments there. The target machine still needs Serial Studio installed.

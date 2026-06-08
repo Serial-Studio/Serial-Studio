@@ -8,18 +8,18 @@ This is a lightweight feature by design. The goal is **operator/engineer separat
 
 ## What the lock does
 
-The Project Editor has a **Lock** button on the toolbar (next to Save As, before Add Device). Click it once and Serial Studio walks you through two prompts:
+The Project Editor has a **Lock** button on the toolbar (in the Restore section, next to the backup-restore button, before Add Device). Click it once and Serial Studio walks you through two prompts:
 
 1. **Choose a password.** The password you want operators to type when they need to unlock.
 2. **Confirm the password.** Paranoia check, exact-match.
 
 Once both prompts close cleanly:
 
-- The password is hashed (MD5) and stored in the project file under `passwordHash`.
+- The password is hashed (salted PBKDF2-SHA256) and stored in the project file under `passwordHash`.
 - The editor body is replaced by a blurred backdrop with a padlock and a single **Unlock** button.
 - The project is marked modified and saved automatically.
 
-To unlock, click **Unlock** (in the blurred overlay or on the toolbar). Enter the password. If it matches, the hash is cleared, the editor body returns, and the project is saved again with the password field gone.
+To unlock, click **Unlock** on the blurred overlay. Enter the password. If it matches, the hash is cleared, the editor body returns, and the project is saved again with the password field gone.
 
 ```mermaid
 flowchart LR
@@ -38,7 +38,7 @@ The lock is scoped to the **Project Editor body** only. If an operator clicks th
 
 ## What the lock does *not* do
 
-Be honest with yourself about the threat model. The password hash sits in plain JSON inside the project file. Anyone who can open that file in a text editor can see the hash, and anyone with a half-decent rainbow table can probably reverse it. So:
+Be honest with yourself about the threat model. The password hash sits in plain JSON inside the project file. The hash itself is salted PBKDF2-SHA256, so the password is not trivially recoverable, but anyone who can open that file in a text editor can delete the `passwordHash` line and remove the lock outright. So:
 
 | Question                                              | Answer |
 |-------------------------------------------------------|--------|
@@ -63,12 +63,11 @@ If the two passwords don't match, Serial Studio shows a warning and leaves the p
 
 ### Unlocking
 
-There are two entry points and they do the same thing:
+While the editor is locked, the toolbar is disabled and covered by the overlay, so there is a single way in:
 
 - **Unlock** button on the locked overlay.
-- **Unlock** action that replaces the **Lock** button on the toolbar while the editor is locked.
 
-Either prompts for the password. Correct password → hash is cleared, the editor opens, the project is saved. Wrong password → warning dialog, lock stays in place.
+It prompts for the password. Correct password → hash is cleared, the editor opens, the project is saved. Wrong password → warning dialog, lock stays in place.
 
 ### Changing the password
 
@@ -85,9 +84,7 @@ A locked project carries a single extra key under the JSON root:
 ```json
 {
   "title": "Production Cell A",
-  "passwordHash": "5f4dcc3b5aa765d61d8327deb882cf99",
-  "frameDecoder": 0,
-  "frameDetection": 1,
+  "passwordHash": "pbkdf2-sha256$600000$<saltB64>$<hashB64>",
   "groups": [ ... ],
   "actions": [ ... ]
 }
@@ -95,7 +92,7 @@ A locked project carries a single extra key under the JSON root:
 
 | Field          | Meaning |
 |----------------|---------|
-| `passwordHash` | MD5 hex digest of the password. Empty/absent means no lock. |
+| `passwordHash` | Salted PBKDF2-SHA256 digest of the password (`pbkdf2-sha256$<iterations>$<salt>$<hash>`). Bare 32-hex-char MD5 hashes written by Serial Studio 3.2.x are still accepted on load. Empty/absent means no lock. |
 
 When Serial Studio loads the file, `passwordHash` being non-empty is the entire trigger: the editor opens locked. There is no separate `locked` boolean: the hash is the lock.
 

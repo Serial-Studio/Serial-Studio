@@ -228,7 +228,7 @@ A few conventions are shared across widgets:
 
 | Button | Icon | What it does |
 |--------|------|--------------|
-| **Interpolation** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-on.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-off.svg" width="16" height="16"> | Cycles line smoothing: none (raw points), linear, or stepped. |
+| **Interpolation** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-on.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-off.svg" width="16" height="16"> | Cycles line smoothing: none (raw points), linear, stepped (ZOH), or stem. |
 | **Show Area Under Plot** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/area.svg" width="16" height="16"> | Fills the region beneath the curve. Available only with line interpolation. |
 | **Show X Axis Label** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/x.svg" width="16" height="16"> | Shows or hides the X-axis label. |
 | **Show Y Axis Label** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/y.svg" width="16" height="16"> | Shows or hides the Y-axis label. |
@@ -245,7 +245,7 @@ The MultiPlot toolbar matches the Plot toolbar, minus **Show Area Under Plot** (
 
 | Button | Icon | What it does |
 |--------|------|--------------|
-| **Interpolation** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-on.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-off.svg" width="16" height="16"> | Cycles line smoothing: none (raw points), linear, or stepped. |
+| **Interpolation** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-on.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/interpolate-off.svg" width="16" height="16"> | Cycles line smoothing: none (raw points), linear, stepped (ZOH), or stem. |
 | **Show X Axis Label** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/x.svg" width="16" height="16"> | Shows or hides the X-axis label. |
 | **Show Y Axis Label** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/y.svg" width="16" height="16"> | Shows or hides the Y-axis label. |
 | **Show Crosshair** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/dashboard-buttons/crosshair.svg" width="16" height="16"> | Tracking crosshair that follows the cursor. |

@@ -26,20 +26,20 @@ flowchart LR
 
 ### Turning export on
 
-CSV export is toggled in the Setup panel of the main window. Turn on the **CSV Export** switch before or during a live connection. Once it's on, Serial Studio writes every incoming frame to a CSV file on a background thread, so dashboard performance isn't affected.
+CSV export is toggled in the Setup panel of the main window, under **Data Export**. Turn on the **CSV Spreadsheet** switch before or during a live connection. Once it's on, Serial Studio writes every incoming frame to a CSV file on a background thread, so dashboard performance isn't affected.
 
 ### File location
 
 Exported CSV files land under your Documents directory in a structured hierarchy:
 
 ```
-Documents/Serial Studio/CSV/<Project Name>/<Year>/<Month>/<Day>/<Time>.csv
+Documents/Serial Studio/CSV/<Project Name>/<YYYY-MM-DD_HH-MM-SS>.csv
 ```
 
 For example, a session started at 3:30:05 PM on March 17, 2026, for a project named "Weather Station" would produce:
 
 ```
-Documents/Serial Studio/CSV/Weather Station/2026/03/17/15-30-05.csv
+Documents/Serial Studio/CSV/Weather Station/2026-03-17_15-30-05.csv
 ```
 
 ### File format
@@ -49,10 +49,10 @@ The CSV file contains a header row followed by one row per received frame.
 **Header row:**
 
 ```
-RX Date/Time,GroupName/DatasetName,GroupName/DatasetName,...
+Elapsed (s),GroupName/DatasetName,GroupName/DatasetName,...
 ```
 
-The first column is elapsed time in seconds since the session started, with nanosecond precision (for example `0.000000000`, `0.016384512`). The remaining columns correspond to each dataset defined in the project, ordered by unique ID. Header labels are formed as `GroupName/DatasetName` so you can trace each column back to the project structure.
+The first column, labeled `Elapsed (s)`, is elapsed time in seconds since the session started, with nanosecond precision (for example `0.000000000`, `0.016384512`). The remaining columns correspond to each dataset defined in the project, ordered by unique ID. Header labels are formed as `GroupName/DatasetName` (prefixed with `SourceName/` when a project has multiple data sources) so you can trace each column back to the project structure.
 
 **Data rows.** Each row is one complete frame. Cells hold the numeric or string values of each dataset at that point in time.
 
@@ -81,7 +81,7 @@ To replay a recorded CSV file:
 When a CSV file opens, Serial Studio looks at the first column to figure out the timestamp format:
 
 - **Decimal seconds** (for example `0.0`, `1.5`, `3.016`): used directly as elapsed time. This is the format Serial Studio's own export produces.
-- **Date/time strings** (for example `2026-03-17 15:30:05`): parsed into absolute timestamps and converted to elapsed offsets.
+- **Date/time strings** (for example `2026/03/17 15:30:05`): parsed into absolute timestamps and converted to elapsed offsets.
 - **Unrecognizable format:** Serial Studio asks you to specify a fixed interval between rows (in milliseconds). Useful for CSV files from other tools that don't include timestamps.
 
 ### Player controls

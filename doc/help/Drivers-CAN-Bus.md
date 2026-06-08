@@ -104,15 +104,16 @@ Most automotive and industrial CAN networks come with a DBC describing every mes
 
 ## How Serial Studio uses it
 
-The CAN driver wraps `QCanBusDevice`. Setup involves four fields:
+The CAN driver wraps `QCanBusDevice`. Setup involves these fields:
 
 | Setting | Controls |
 |---------|----------|
-| **Plugin** | Which CAN backend to use: `socketcan` (Linux), `peakcan`, `vectorcan`, `systeccan`, `tinycan`, etc. |
+| **CAN Driver** | Which CAN backend to use: `socketcan` (Linux), `peakcan`, `vectorcan`, `systeccan`, `tinycan`, etc. |
 | **Interface** | Which physical interface inside that backend (e.g. `can0`, `PCAN_USBBUS1`). |
-| **Bit rate** | Must match the bus exactly. |
-| **CAN FD enabled** | Whether to use the flexible-data-rate frame format. |
-| **Data bit rate** (CAN FD) | The faster rate used in the data phase. |
+| **Bitrate** | Must match the bus exactly. Pick a standard rate or type a custom value. |
+| **Flexible Data-Rate** | Whether to use the CAN FD frame format. |
+| **Loopback** | Echo transmitted frames back to the application (self-reception). |
+| **Listen-Only** | Silent monitoring: receive frames without acknowledging or transmitting. |
 
 For Linux SocketCAN, the interface must be brought up from a terminal *before* Serial Studio connects:
 
@@ -130,9 +131,9 @@ sudo ip link set up can0
 
 ### Frame parsing
 
-Serial Studio receives every CAN frame as a structured object containing the ID, DLC, and data bytes, and feeds it through the frame parser. In a DBC-imported project the auto-generated Lua parser dispatches by CAN ID, extracts each signal at the documented bit offset, applies factor and offset, and writes the value into the matching dataset.
+Serial Studio receives every CAN frame as a structured object containing the ID, DLC, and data bytes, and feeds it through the frame parser. In a DBC-imported project the auto-generated parser is a Built-In (no-code) parser configured from the DBC: it dispatches by CAN ID, extracts each signal at the documented bit offset, applies factor and offset, and writes the value into the matching dataset.
 
-When the project is built by hand, the dispatch logic is written in Lua or JavaScript. See [Frame Parser Scripting](JavaScript-API.md).
+When the project is built by hand, the dispatch logic can instead be written in Lua or JavaScript. See [Frame Parser Scripting](JavaScript-API.md).
 
 ### Threading
 
@@ -147,7 +148,7 @@ For step-by-step setup, see the [Protocol Setup Guides, CAN Bus section](Protoco
 - **Interface not listed (Linux).** Run `ip link show can0`. If the interface is not there, the kernel module is not loaded. `modprobe can_dev` and `modprobe vcan` (for virtual-CAN testing) usually fix it.
 - **Permission denied on SocketCAN.** Your user needs the `dialout` or `can` group, depending on the distribution. `sudo` works as a quick test but is not a long-term solution.
 - **DBC import produces wrong values.** Check the byte order on the signals. DBC supports both little-endian (Intel) and big-endian (Motorola) encoding inside the same message. Auto-generated parsers handle both, but a manually edited DBC with the wrong byte order produces values that look scaled or shifted by a constant amount.
-- **Multiplexed (MUX) signals do not decode.** Simple multiplexing is supported automatically: the importer recognises the message's `MultiplexorSwitch` selector and gates each muxed signal on the matching mux value. Imported datasets are titled `Foo (mux 3)` so you can tell them apart on the dashboard. Extended multiplexing (`SG_MUL_VAL_`, `SwitchAndSignal` intermediates, value ranges) is not supported; those signals are skipped during import and the post-import dialog reports how many were dropped. Edit the generated Lua to handle them by hand.
+- **Multiplexed (MUX) signals do not decode.** Simple multiplexing is supported automatically: the importer recognises the message's `MultiplexorSwitch` selector and gates each muxed signal on the matching mux value. Imported datasets are titled `Foo (mux 3)` so you can tell them apart on the dashboard. Extended multiplexing (`SG_MUL_VAL_`, `SwitchAndSignal` intermediates, value ranges) is not supported; those signals are skipped during import and the post-import dialog reports how many were dropped. Switch the source to a Lua or JavaScript frame parser to handle them by hand.
 - **CAN FD frames are dropped.** The bus, the adapter, and Serial Studio all need to be in CAN FD mode. Mixing classic-only nodes on a CAN FD bus works only if the FD nodes downshift, which not every adapter supports.
 - **PCAN/Vector/Kvaser SDK not found (Windows).** The vendor driver and runtime are separate installs. Qt's CAN plugin is only a wrapper; the actual hardware support comes from the vendor.
 

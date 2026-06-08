@@ -35,6 +35,7 @@ When you click an action button (or a timer fires), Serial Studio transmits the 
 - **Transmit data.** The command string or hex bytes to send when the action fires.
   - Text mode example: `RST` or `GET_TEMP`.
   - Binary mode example: `FF 01 00 A3`.
+- **Text encoding.** In text mode, the character encoding used to serialize the payload. This option is hidden when **Send as binary** is enabled.
 - **End-of-line sequence.** Characters appended after the payload:
 
 | Option        | Bytes sent         |
@@ -60,8 +61,10 @@ Actions can repeat on a timer, which is useful for periodic polling or keep-aliv
 | AutoStart       | Timer starts automatically when the device connects. The command repeats at the configured interval until the device disconnects. |
 | StartOnTrigger  | Timer starts on the first click. The command repeats at the configured interval until stopped. |
 | ToggleOnTrigger | Each click toggles the repeating timer on or off. |
+| RepeatNTimes    | Each click sends the command a fixed number of times, waiting the configured interval between each send. |
 
 - **Timer interval.** The repeat interval in milliseconds. Default is 100 ms. Set it to match your desired polling or command rate (for example 1000 ms for once per second).
+- **Repeat count.** Only used by the **RepeatNTimes** mode. The number of times the command is sent on each trigger. Default is 3.
 
 ## Multi-source actions
 

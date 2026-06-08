@@ -58,7 +58,7 @@ The host queries the device for its descriptor tree on enumeration, decides what
 
 ### VID and PID
 
-Every USB device has a **Vendor ID (VID)** and **Product ID (PID)**, both 16-bit. VIDs are assigned by the USB-IF; PIDs are chosen by the vendor. Together they uniquely identify a device model. Serial Studio lists USB devices as `VID:PID, Product Name`.
+Every USB device has a **Vendor ID (VID)** and **Product ID (PID)**, both 16-bit. VIDs are assigned by the USB-IF; PIDs are chosen by the vendor. Together they uniquely identify a device model. Serial Studio lists USB devices as `VID:PID`, followed by the manufacturer and product strings when the device reports them (for example `1234:5678 – Acme Logic Analyzer`).
 
 ## How Serial Studio uses it
 

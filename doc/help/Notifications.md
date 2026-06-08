@@ -43,7 +43,7 @@ The `transmit(value)` function in output widgets can post notifications too. Use
 
 ### C++ and the MCP API
 
-Notifications can also be posted from the command-line MCP API (`notifications.postInfo`, `notifications.postWarning`, etc.). That makes it easy to tie Serial Studio into larger test harnesses: your Python test driver posts an event, it shows up on the operator's dashboard immediately.
+Notifications can also be posted from the command-line MCP API (`notifications.post` with a `level` parameter, plus `notifications.resolve`, `notifications.list`, `notifications.listChannels`, etc.). That makes it easy to tie Serial Studio into larger test harnesses: your Python test driver posts an event, it shows up on the operator's dashboard immediately.
 
 ## The function family
 

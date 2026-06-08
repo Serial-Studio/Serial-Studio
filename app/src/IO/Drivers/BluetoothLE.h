@@ -147,6 +147,7 @@ private:
   QLowEnergyController* m_controller;
 
   QStringList m_serviceNames;
+  QStringList m_serviceUuids;
   QStringList m_characteristicNames;
 
   QList<QLowEnergyCharacteristic> m_characteristics;

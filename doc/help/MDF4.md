@@ -10,7 +10,7 @@ MDF stands for **Measurement Data Format**. The current revision is MDF4 (also w
 
 Compared to CSV, MDF4 differs in three ways that matter day to day:
 
-- **Binary, compressed.** Files are typically 5–10x smaller than the equivalent CSV for the same recording. Disk and network transfer costs drop accordingly.
+- **Binary.** Fixed-width binary records are typically several times smaller than the equivalent CSV text for the same recording. Disk and network transfer costs drop accordingly. (Serial Studio writes uncompressed MDF4; the format also supports block compression in other writers.)
 - **Per-channel sample rates.** Each "channel group" carries its own time base. A 1 Hz GPS channel and a 10 kHz vibration channel coexist in the same file without padding, and the readers respect each channel's native rate.
 - **Rich metadata.** Channel name, units, conversion formulas (linear, table, rational), comments, and source information travel with the data. A reader knows what `EngineRPM` means in physical units, not just as a column index.
 
@@ -29,7 +29,7 @@ flowchart LR
 
 | Aspect          | CSV                                  | MDF4 (Pro)                               |
 |-----------------|--------------------------------------|------------------------------------------|
-| File size       | Larger (text-based)                  | Smaller (binary, compressed)             |
+| File size       | Larger (text-based)                  | Smaller (fixed-width binary)             |
 | Write speed     | Fine for most rates                  | Better for high-frequency data           |
 | Compatibility   | Universal (Excel, Python, MATLAB, R) | Specialized (CANape, DIAdem, asammdf)    |
 | Metadata        | Column headers only                  | Rich: channel names, units, conversions  |
@@ -42,29 +42,30 @@ Pick CSV for ad-hoc analysis, sharing with colleagues who don't have MDF4 toolin
 
 ### Turning export on
 
-MDF4 export is toggled in the Setup panel of the main window. Turn on the **MDF4 Export** switch before or during a live connection. Once it's on, Serial Studio writes every incoming frame to an MDF4 file on a background thread.
+MDF4 export is toggled in the Setup panel of the main window. Turn on the **MDF4 Recording** switch before or during a live connection. Once it's on, Serial Studio writes every incoming frame to an MDF4 file on a background thread.
 
 ### File location
 
-Exported MDF4 files land under your Documents directory in a structured hierarchy:
+Exported MDF4 files land under your workspace directory (Documents by default) in a per-project folder, with the file named after the session start time:
 
 ```
-Documents/Serial Studio/MDF4/<Project Name>/<Year>/<Month>/<Day>/<Time>.mf4
+Serial Studio/MDF4/<Project Name>/<yyyy-MM-dd_HH-mm-ss>.mf4
 ```
 
 For example, a session started at 3:30:05 PM on March 17, 2026, for a project named "Vehicle Test" would produce:
 
 ```
-Documents/Serial Studio/MDF4/Vehicle Test/2026/03/17/15-30-05.mf4
+Serial Studio/MDF4/Vehicle Test/2026-03-17_15-30-05.mf4
 ```
 
 ### Channels and metadata
 
-Each dataset becomes one MDF4 channel. The exporter writes:
+Each dataset becomes one MDF4 channel, and each project group becomes one MDF4 channel group. The exporter writes:
 
-- **Channel name** as `GroupName/DatasetName`, matching the CSV header convention.
+- **Channel group name** as the group's title, or `SourceName / GroupName` for multi-source projects.
+- **Channel name** as the dataset's title, with a companion `<title> (raw)` channel carrying the pre-transform value.
 - **Physical unit** from the dataset's `units` field.
-- **Time channel** in seconds since session start, with nanosecond resolution (matching the source-derived timestamp on each frame).
+- **Time channel** ("Time", in seconds): a per-group master channel storing wall-clock seconds, recorded at nanosecond resolution and derived from each frame's source timestamp.
 - **Per-source channel groups** so multi-source projects keep each device's channels grouped together.
 
 ### File lifecycle
@@ -75,7 +76,7 @@ Each dataset becomes one MDF4 channel. The exporter writes:
 
 ### Background writing
 
-MDF4 export runs on its own worker thread and flushes to disk in batches. On modern desktop hardware, sustained 100 kHz frame rates are routine. The dashboard, the API server, and other consumers see the same parsed frame object; there is no copy or re-stamp.
+MDF4 export runs on its own worker thread and flushes to disk in batches. On modern desktop hardware, sustained high frame rates are routine. Each exported frame keeps the source-derived timestamp it was parsed with; the export path never re-stamps the data.
 
 ## MDF4 playback
 
@@ -89,7 +90,7 @@ To replay a recorded MDF4 file:
 
 ### How playback works
 
-During playback, the MDF4 Player feeds each frame through the same data pipeline as a live connection: Frame Builder, then Dashboard, widgets, MQTT, API, and CSV export if it's on. The dashboard renders exactly as it would with a live device. The player respects the original timing between frames so playback speed matches the original recording rate.
+During playback, the MDF4 Player feeds each frame through the same data pipeline as a live connection: Frame Builder, then Dashboard, widgets, MQTT, and API. The dashboard renders exactly as it would with a live device. File export (CSV and MDF4) is suppressed while any player is open, so replaying a file does not re-record it. The player respects the original timing between frames so playback speed matches the original recording rate.
 
 ### Player controls
 
@@ -100,11 +101,11 @@ During playback, the MDF4 Player feeds each frame through the same data pipeline
 | Next frame       | Step forward one frame           | Right Arrow    |
 | Progress slider  | Seek to any position in the file | Drag or click  |
 
-The current timestamp shows next to the slider as `HH:MM:SS.mmm`.
+The current timestamp shows above the slider as `HH:MM:SS.mmm`.
 
 ### Multi-channel files
 
-Files exported by Serial Studio replay cleanly because the channel group structure matches the project that produced them. For files captured by other tools (CANape, vector loggers, custom acquisition systems), the player maps channel names back to project datasets by name; channels without a matching dataset are ignored.
+Files exported by Serial Studio replay cleanly because the channel group structure matches the project that produced them. For files captured by other tools (CANape, vector loggers, custom acquisition systems), the player reads each channel group's data channels in file order and maps them positionally onto the currently loaded project's datasets, so the active project must define datasets in the same order as the file's channels.
 
 ## Analyzing exported data
 
@@ -120,7 +121,7 @@ For one-off conversions, `asammdf` exports MDF4 to CSV, Parquet, HDF5, MATLAB `.
 ## Common pitfalls
 
 - **No frames written.** Export needs an active connection. The file is created on the first received frame, not on the toggle. If the device isn't sending, the file won't appear.
-- **File size grows fast on high-rate sources.** Even with compression, an audio source at 48 kHz or a full CAN bus will produce gigabytes per hour. Monitor disk space and rotate sessions if you're recording continuously.
+- **File size grows fast on high-rate sources.** An audio source at 48 kHz or a full CAN bus will produce gigabytes per hour. Monitor disk space and rotate sessions if you're recording continuously.
 - **MDF4 reader can't open the file.** Some older readers (pre-2015) only support MDF3. Confirm the reader supports the MDF4 (`.mf4`) format. `asammdf` handles both.
 - **Channel names look mangled.** MDF4 limits channel names to ASCII in some reader implementations. Non-ASCII characters in your dataset titles may render as `?` in third-party tools. Stick to ASCII for portability.
 - **Timestamps drift compared to CSV.** They shouldn't, since both formats record the same source-derived timestamps. If they disagree, the issue is almost always in how the reader interprets the time channel's master/slave configuration. See [Threading and Timing Guarantees](Threading-and-Timing.md) for what the source timestamp represents.

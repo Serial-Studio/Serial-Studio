@@ -15,14 +15,14 @@ A short, honest description of what Serial Studio's hot path guarantees, what it
 
 - **Order preservation.** Frames are delivered to consumers in the order the driver produced them. The hot path uses a single-producer/single-consumer ring (`moodycamel::ReaderWriterQueue`) that's FIFO by construction.
 - **Source-derived timestamps.** Every parsed frame carries a `steady_clock` timestamp set at acquisition. Dashboard, CSV, MDF4, API, gRPC, MQTT, and the session database all see the same instant for the same frame. No consumer re-stamps.
-- **No frame loss in steady state.** If your CPU can keep up with the producer, the queue stays drained and nothing is dropped. If it can't, you'll see `[FrameReader] Frame queue full — frame dropped` in the log. That message is the canary; treat it as a real signal, not a warning.
+- **No frame loss in steady state.** If your CPU can keep up with the producer, the queue stays drained and nothing is dropped. If it can't, you'll see `[FrameReader] Frame queue full -- frame dropped` in the log. That message is the canary; treat it as a real signal, not a warning.
 - **Zero allocation on the hot path.** No `new`, no `make_shared`, no `QByteArray::append` after init. Each `TimestampedFramePtr` comes from a fixed-size slot pool inside `FrameBuilder` and is shared (refcounted) across every consumer; the slot is recycled when the last consumer drops the pointer. The pool falls back to a one-shot `make_shared` and logs a single warning only if every slot is in flight at once, which means a downstream consumer is not draining.
 - **Crash isolation across consumers.** A slow MQTT publish or a failing CSV write won't block FrameBuilder or the dashboard. Each consumer has its own worker thread and its own queue.
 
 ### Not guaranteed
 
 - **Latency bounds.** There is no upper bound on end-to-end latency from acquisition to dashboard. On an idle machine it's in the low milliseconds; on a loaded machine running a slow Lua transform, it can grow.
-- **Jitter bounds.** Frame-to-frame spacing on the dashboard is whatever Qt's event loop schedules that millisecond. The dashboard tick runs at ~24 Hz; widgets sample the latest frame on their tick.
+- **Jitter bounds.** Frame-to-frame spacing on the dashboard is whatever Qt's event loop schedules that millisecond. The dashboard tick runs at the configurable UI refresh rate (default 60 Hz, adjustable from 1 to 240 Hz); widgets sample the latest frame on their tick.
 - **Determinism on Windows.** Windows' `steady_clock` resolution is roughly 15 ms. Two frames produced inside the same tick get the same timestamp at acquisition. Export workers break ties using a monotonic counter (`monotonicFrameNs`), but on the dashboard you'll see them collapse onto one visual sample.
 - **Wall-clock accuracy.** All timestamps are `steady_clock`, not `system_clock`. They're great for measuring durations and ordering events; they're not synchronized to NTP and don't help you correlate with external systems by absolute time.
 - **Hard deadlines.** Nothing in Serial Studio yields if a frame takes too long. A 50 ms transform on one frame just makes that frame take 50 ms; the next frame starts when this one ends.
@@ -49,7 +49,7 @@ These drivers don't spawn threads. They use Qt's async I/O facilities, which run
 - **UART** (`QSerialPort`)
 - **Network** (`QTcpSocket`, `QUdpSocket`)
 - **Bluetooth LE** (`QLowEnergyController`, `QLowEnergyService`)
-- **CAN Bus** (`QCanBus`)
+- **CAN Bus** (`QCanBusDevice`)
 - **Modbus** (`QModbusDevice`)
 - **MQTT** (`QMqttClient`)
 
@@ -73,14 +73,14 @@ Everything that consumes a parsed frame except the dashboard runs off the main t
 - **MDF4 export.**
 - **Session database** (Pro). The SQLite writer batches inserts in WAL mode; raw bytes go through a second lock-free queue.
 - **MQTT publisher.**
-- **API server.** Each TCP client socket runs on a worker thread so a slow client can't stall the pipeline.
+- **API server.** All TCP client sockets are serviced on the server's own worker thread, off the main thread, so a slow client can't stall the pipeline.
 - **gRPC server** (when enabled).
 
 The main thread enqueues a shared `TimestampedFramePtr` into each consumer's queue and moves on. The worker drains its queue on its own clock. A blocked or slow consumer can only fill its own queue; it can't back-pressure the producer.
 
 ### Dashboard runs on the main thread
 
-The dashboard reads from the same `TimestampedFramePtr` everyone else reads from, on the main thread, on a ~24 Hz UI tick. It samples the latest frame; it doesn't process every frame. At 256 kHz input, the dashboard is rendering one out of ~10,000 frames. Everything else has already been logged or exported by the consumer threads.
+The dashboard reads from the same `TimestampedFramePtr` everyone else reads from, on the main thread, on the UI tick (default 60 Hz, configurable from 1 to 240 Hz). It samples the latest frame; it doesn't process every frame. At 256 kHz input and a 60 Hz tick, the dashboard is rendering one out of roughly 4,000 frames. Everything else has already been logged or exported by the consumer threads.
 
 This is the right tradeoff for a UI: a 250 kHz refresh would melt the GPU and the user can't see it anyway.
 
@@ -126,7 +126,7 @@ A few specific guarantees fall out of this:
 ### When you might think you have a timing problem and don't
 
 - **"My CSV timestamps look chunky on Windows."** Windows' `steady_clock` ticks at ~15 ms. Same-tick frames did happen at the same time as far as the kernel is concerned. The export worker's `monotonicFrameNs` is what makes them strictly increasing for SQL/CSV ordering, but the visible chunks reflect real clock granularity.
-- **"My dashboard is laggy at 100 kHz."** It isn't. The dashboard ticks at 24 Hz on purpose. Open the session report or the CSV after the run; that's the full-rate data.
+- **"My dashboard is laggy at 100 kHz."** It isn't. The dashboard ticks at the UI refresh rate (60 Hz by default) on purpose, not at the input rate. Open the session report or the CSV after the run; that's the full-rate data.
 - **"A widget skips frames."** Widgets sample on their tick, not per frame. They're not supposed to render every frame. The export and session-database paths see every frame; the UI doesn't need to.
 - **"My transform makes the dashboard stutter."** Transforms run on the main thread because they read peer-dataset values that are also on the main thread. A heavy transform (regex, JSON parsing, tight Lua loops) will block. Profile it. If you genuinely need expensive math per frame, do it offline against the session database.
 

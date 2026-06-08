@@ -224,7 +224,7 @@ CoolTerm is a serial port terminal with basic plotting.
 - You need advanced widgets (gauges, maps, FFT, accelerometers).
 - You need data sources beyond serial.
 - You want project-based dashboard configurations.
-- You need custom frame parsing in JavaScript.
+- You need custom frame parsing in JavaScript or Lua.
 - You want a dashboard-style presentation rather than a raw terminal.
 
 ### Serial Studio vs a custom web dashboard (Node.js + Chart.js)
@@ -324,11 +324,11 @@ Plotly Dash is a Python framework for building web-based analytical dashboards.
 | **CSV export**                 | Yes           | No              | Manual      | Yes      | Yes      | Yes       | Yes       |
 | **Gauges**                     | Yes           | No              | Manual      | Yes      | Manual   | Yes       | Yes       |
 | **GPS maps**                   | Yes           | No              | Manual      | Toolbox  | Manual   | Partial   | Plugin    |
-| **FFT spectrum**               | Pro           | No              | Manual      | Yes      | Manual   | Yes       | Partial   |
+| **FFT spectrum**               | Yes           | No              | Manual      | Yes      | Manual   | Yes       | Partial   |
 | **Waterfall (spectrogram)**    | Pro           | No              | Manual      | Yes      | Manual   | Yes       | Partial   |
 | **3D visualization**           | Pro           | No              | Yes         | Yes      | Yes      | Yes       | Partial   |
 | **Live image/camera stream**   | Pro           | No              | Manual      | Yes      | Manual   | Yes       | Plugin    |
-| **Custom parsing**             | JS            | No              | Yes         | Yes      | Yes      | Yes       | Partial   |
+| **Custom parsing**             | JS/Lua        | No              | Yes         | Yes      | Yes      | Yes       | Partial   |
 | **Cross-platform**             | Yes           | Yes             | Yes         | Yes      | Yes      | Partial   | Yes       |
 | **Open source**                | GPL           | Yes             | Yes         | No       | Yes      | No        | Yes       |
 | **Learning curve**             | Minutes       | Minutes         | Hours       | Days     | Hours    | Weeks     | Hours     |

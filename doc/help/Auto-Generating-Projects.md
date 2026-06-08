@@ -16,7 +16,7 @@ Both importers produce the same shape of output:
 
 - A new project (`.ssproj`) with one or more **groups** representing logical chunks of the device (a CAN message, a contiguous Modbus register block).
 - A **dataset per signal/register**, complete with `title`, `units`, `min`/`max`, scale, and a sensible default widget (gauge, bar, plot, LED, accelerometer, GPS, depending on what the importer can infer).
-- A configured **frame parser** that decodes each frame into the right datasets without any user code. DBC and Modbus imports configure a Built-In (native C++) parser template with the signal or register map; the Protobuf import generates a JavaScript parser.
+- A configured **frame parser** that decodes each frame into the right datasets without any user code. DBC and Modbus imports configure a Built-In (native C++) parser template with the signal or register map; the Protobuf import generates a Lua parser.
 - For Modbus, the **register groups** are also pushed into the live Modbus driver so it polls the right addresses immediately.
 
 The result is a project that is already wired up. From there you arrange widgets in workspaces, adjust titles, and connect.
@@ -27,7 +27,7 @@ The result is a project that is already wired up. From there you arrange widgets
 |-----------------|--------------------------|--------------------|-------------------------------------------------|
 | **DBC**         | `.dbc`                   | No                 | Project + Built-In parser, signals grouped by CAN ID |
 | **Modbus map**  | `.csv` / `.xml` / `.json`| Yes (register groups) | Project + Built-In parser, registers grouped by type/contiguity |
-| **Protobuf**    | `.proto`                 | No                 | Project + JavaScript parser, groups per message, recursive descent into nested messages |
+| **Protobuf**    | `.proto`                 | No                 | Project + Lua parser, groups per message, recursive descent into nested messages |
 
 All three importers preview before committing. You see the parsed messages, registers, or fields, click **Create Project**, and a `.ssproj` is generated and opened in the Project Editor.
 
@@ -84,7 +84,7 @@ Modbus register maps come in a hundred ad-hoc formats. Serial Studio accepts the
 1. In the **Setup Panel**, select **Modbus** from the I/O Interface dropdown.
 2. Click **Import Register Map...**.
 3. Pick a `.csv`, `.xml`, or `.json` file.
-4. Review the registers in the preview dialog: `0: Temperature @ holding 0x0000 (uint16, °C)`, `1: Pressure @ holding 0x0001 (uint16, PSI)`, ...
+4. Review the registers in the preview dialog: `1: Temperature @ 0 (Holding Registers, uint16) [°C]`, `2: Pressure @ 1 (Holding Registers, uint16) [PSI]`, ...
 5. Click **Create Project**. You'll be prompted to save the `.ssproj`.
 6. The contiguous register blocks are also pushed into the live Modbus driver, so polling starts immediately when you connect.
 
@@ -92,7 +92,7 @@ Modbus register maps come in a hundred ad-hoc formats. Serial Studio accepts the
 
 For each contiguous block of same-type registers (holding, input, coil, discrete input):
 
-- One **group** named after the register type and start address (e.g. *Holding @ 0*).
+- One **group** named after the register type and start address (e.g. *Holding Registers @ 0*).
 - One **dataset per register**, with the register's name, units, scale, and offset baked in.
 - An entry in the Built-In **Modbus register map** parser that decodes each register from the Modbus response (handling word order for 32-bit and 64-bit values automatically).
 - A **register group** added to the Modbus driver itself, sized to cover the contiguous block.
@@ -127,15 +127,15 @@ The importer does not load the result into any specific driver. You wire the pro
 
 - One **group per message** in the schema, with nested messages descended into recursively so each leaf scalar becomes its own dataset.
 - A **dataset per scalar field**, carrying the field name, its protobuf scalar type, and its tag.
-- A generated **JavaScript frame parser** containing a self-contained varint and length-delimited decoder plus per-message dispatch tables, so no runtime dependency on `protobuf.js` or generated stubs is required.
+- A generated **Lua frame parser** containing a self-contained varint and length-delimited decoder plus per-message dispatch tables, so no runtime dependency on generated stubs is required.
 - A score-based top-level dispatcher: when the schema declares more than one root message, the parser inspects the incoming bytes and routes them to the matching message decoder.
 
-Strings, bytes, enums, and maps decode to their natural JavaScript representations; repeated scalar fields decode into arrays. Nested messages are flattened into the dataset list in declaration order so the dashboard layout follows the schema.
+Strings, bytes, enums, and maps decode to their natural Lua representations; repeated scalar fields decode into arrays. Nested messages are flattened into the dataset list in declaration order so the dashboard layout follows the schema.
 
 ### Limitations
 
-- Imports the `proto2` and `proto3` subset that covers scalar fields, nested messages, enums, and `repeated`. `oneof`, `map<K, V>`, `Any`, services, RPC methods, and the `Well-Known Types` are not generated as datasets (fields outside the supported subset are skipped silently and the preview dialog reports the kept count).
-- The generator emits a JavaScript parser, not Lua, so the dataset-level language must remain JavaScript.
+- Requires `proto3` syntax. Imports the subset that covers scalar fields, nested messages, enums, `repeated`, `oneof` (flattened to plain fields), and `map<K, V>` (decoded as a repeated bytes field). `service` and RPC blocks are skipped, and message types whose definitions are not present in the file (including `Any` and the Well-Known Types) are not expanded into datasets.
+- The generator emits a Lua parser, not JavaScript, so the dataset-level language must remain Lua.
 - One serialised message per Serial Studio frame. If the transport batches multiple messages, split them upstream before the bytes reach the FrameReader.
 
 ## When to use auto-generation vs. by hand
@@ -155,7 +155,7 @@ Build the project by hand when:
 
 ## Editing after import
 
-The generated project is a project like any other. Once it's open in the Project Editor, everything is editable: rename datasets, regroup them, swap widgets, add transforms, attach datasets to workspaces. The importer produces a starting layout, not a fixed one. DBC and Modbus imports configure a Built-In parser whose map comes from the imported file: re-import to change the map, or switch the source's parser platform to Lua or JavaScript for custom decoding logic. The Protobuf parser is generated JavaScript and can be edited directly.
+The generated project is a project like any other. Once it's open in the Project Editor, everything is editable: rename datasets, regroup them, swap widgets, add transforms, attach datasets to workspaces. The importer produces a starting layout, not a fixed one. DBC and Modbus imports configure a Built-In parser whose map comes from the imported file: re-import to change the map, or switch the source's parser platform to Lua or JavaScript for custom decoding logic. The Protobuf parser is generated Lua and can be edited directly.
 
 If you need to re-import (the vendor published a new DBC, you added a register, the protobuf schema gained a field), the safest path is to import again as a new project and copy over your dashboard customizations, rather than trying to merge by hand.
 

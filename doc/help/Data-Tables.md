@@ -98,14 +98,15 @@ See [Dataset Value Transforms](Dataset-Transforms.md#data-table-api) for the per
 
 ## Processing order and visibility
 
-Transforms are applied sequentially: groups in project order, datasets in group order. Within a single frame:
+Transforms are applied sequentially: groups in project order, datasets in group order. Each dataset is processed in a single pass before moving to the next:
 
-1. All raw dataset values are populated from the frame parser first.
-2. Each dataset's transform runs in turn.
+1. The dataset's raw value is written to the system table.
+2. The dataset's transform runs (if it has one).
+3. The dataset's final value is written to the system table.
 
 That gives these guarantees:
 
-- `datasetGetRaw(uid)` can read any dataset at any time.
+- `datasetGetRaw(uid)` returns a meaningful value only for the current dataset and for datasets earlier in project order. A dataset later in the order still holds whatever raw value the previous frame left there, because its raw write hasn't happened yet.
 - `datasetGetFinal(uid)` only returns a meaningful value for datasets that have already been transformed (that is, datasets earlier in the same group, or in an earlier group).
 - Computed registers written by earlier transforms are visible to later ones, inside the same frame and on every subsequent frame, until the next write.
 
@@ -114,12 +115,12 @@ If dataset B depends on dataset A's final value, make sure A is listed before B 
 ## Defining tables in the Project Editor
 
 1. Open the project in the Project Editor.
-2. Select the **Tables** node in the tree.
-3. Click **Add Table** and give it a name (for example `calibration` or `runtime`).
+2. Select the **Shared Memory** node in the tree.
+3. Click **Add Shared Table** and give it a name (for example `calibration` or `runtime`).
 4. Add registers with **Add Register**. For each register, set:
-   - **Name.** Unique within the table.
-   - **Type.** Constant or Computed.
-   - **Default value.** The numeric or string value used at project load. Constants stay at this value for the whole session; Computed registers start the session at this value and hold whatever transforms write thereafter.
+   - **Register Name.** Unique within the table.
+   - **Permissions.** **Read-Only** (a Constant register) or **Read/Write** (a Computed register).
+   - **Default Value.** The numeric or string value used at project load. Read-Only (Constant) registers stay at this value for the whole session; Read/Write (Computed) registers start the session at this value and hold whatever transforms write thereafter.
 
 Tables are saved with the project file. When the project is shared, anyone opening it gets the same table definitions and defaults.
 

@@ -42,8 +42,8 @@ The gRPC API is defined in `serialstudio.proto` (exportable from **Preferences �
 service SerialStudioAPI {
   rpc ExecuteCommand(CommandRequest) returns (CommandResponse);
   rpc ExecuteBatch(BatchRequest) returns (BatchResponse);
-  rpc StreamFrames(StreamRequest) returns (stream FrameData);
-  rpc StreamRawData(StreamRequest) returns (stream RawData);
+  rpc StreamFrames(StreamRequest) returns (stream FrameBatch);
+  rpc StreamRawData(StreamRequest) returns (stream RawBatch);
   rpc WriteRawData(RawDataRequest) returns (CommandResponse);
   rpc ListCommands(google.protobuf.Empty) returns (CommandList);
 }
@@ -81,9 +81,10 @@ resp = stub.ExecuteCommand(pb.CommandRequest(
     id="1", command="io.getStatus"))
 print(resp.result)
 
-# Stream frames in real-time
-for frame in stub.StreamFrames(pb.StreamRequest()):
-    print(frame.frame)  # protobuf Struct, convertible to dict
+# Stream frames in real-time (each message is a FrameBatch)
+for batch in stub.StreamFrames(pb.StreamRequest()):
+    for frame in batch.frames:
+        print(frame.frame)  # protobuf Struct, convertible to dict
 ```
 
 ## Quick start (grpcurl)
@@ -134,8 +135,9 @@ import time
 def stream_with_retry(stub):
     while True:
         try:
-            for frame in stub.StreamFrames(pb.StreamRequest()):
-                process_frame(frame)
+            for batch in stub.StreamFrames(pb.StreamRequest()):
+                for frame in batch.frames:
+                    process_frame(frame)
         except grpc.RpcError as e:
             if e.code() == grpc.StatusCode.UNAVAILABLE:
                 time.sleep(1)
@@ -143,10 +145,10 @@ def stream_with_retry(stub):
             raise
 ```
 
-Each `FrameData` message contains:
+Each stream message is a `FrameBatch` whose `frames` field holds one or more `FrameData` entries. Each `FrameData` contains:
 
 - **frame.** The parsed frame as a protobuf `Struct` (equivalent to a JSON object).
-- **timestamp.** The frame's timestamp in milliseconds.
+- **timestamp_ms.** The frame's timestamp in milliseconds.
 
 ## External connections
 
@@ -159,7 +161,7 @@ The gRPC server follows the same **Allow External API Connections** setting as t
 
 Enable external connections in **Preferences → Miscellaneous → Allow External API Connections**.
 
-> **Security note.** Enabling external connections exposes the API to your network. There is no authentication. Use only on trusted networks.
+> **Security note.** Enabling external connections exposes the API to your network. Non-loopback clients must then authenticate: send the access token (found under **Preferences → Miscellaneous → API Access Token**) in the `x-serial-studio-token` request metadata. Loopback clients (`127.0.0.1` / `::1`) are exempt. The token is the only barrier, so keep it secret and disable external access when it is not needed.
 
 ## Comparison with the TCP/JSON API
 
