@@ -8,9 +8,13 @@
 
 #include "AI/ToolDispatcher.h"
 
+#include <functional>
+#include <QCoreApplication>
+#include <QEventLoop>
 #include <QFile>
 #include <QHash>
 #include <QStringList>
+#include <QThread>
 #include <QUuid>
 #include <QVector>
 
@@ -573,19 +577,38 @@ static QJsonObject fsToolDescription(const QString& name)
 }
 
 /**
+ * @brief Runs blocking work on a worker thread, pumping the caller's event loop until it returns.
+ */
+static QJsonObject runOffMainThread(const std::function<QJsonObject()>& work)
+{
+  if (QThread::currentThread() != QCoreApplication::instance()->thread())
+    return work();
+
+  QJsonObject result;
+  QEventLoop loop;
+  QThread* worker = QThread::create([&]() { result = work(); });
+  QObject::connect(worker, &QThread::finished, &loop, &QEventLoop::quit);
+  worker->start();
+  loop.exec();
+  worker->wait();
+  delete worker;
+  return result;
+}
+
+/**
  * @brief Routes an fs.* tool call to the FileSandbox primitive.
  */
 static QJsonObject executeFsTool(const QString& name, const QJsonObject& args)
 {
   auto& sandbox = AI::FileSandbox::instance();
   if (name == QStringLiteral("fs.list"))
-    return sandbox.list(args);
+    return runOffMainThread([&]() { return sandbox.list(args); });
 
   if (name == QStringLiteral("fs.read"))
-    return sandbox.read(args);
+    return runOffMainThread([&]() { return sandbox.read(args); });
 
   if (name == QStringLiteral("fs.search"))
-    return sandbox.search(args);
+    return runOffMainThread([&]() { return sandbox.search(args); });
 
   if (name == QStringLiteral("fs.write"))
     return sandbox.write(args);

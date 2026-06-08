@@ -12,6 +12,7 @@
 #pragma once
 
 #include <QJsonObject>
+#include <QMutex>
 #include <QString>
 #include <QStringList>
 
@@ -70,6 +71,7 @@ private:
   [[nodiscard]] static bool isWithinRoot(const QString& canonical, const QString& root);
 
   QStringList m_droppedPaths;
+  mutable QMutex m_dropMutex;
 };
 
 }  // namespace AI

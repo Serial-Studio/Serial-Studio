@@ -65,7 +65,7 @@ static QString displayPath(const QString& absolute, const QString& root)
   if (absolute == root)
     return QStringLiteral(".");
 
-  const auto prefix = root + QDir::separator();
+  const auto prefix = root + QLatin1Char('/');
   if (absolute.startsWith(prefix))
     return absolute.mid(prefix.size());
 
@@ -103,6 +103,7 @@ QString AI::FileSandbox::writeRoot() const
  */
 QStringList AI::FileSandbox::droppedPaths() const
 {
+  const QMutexLocker locker(&m_dropMutex);
   return m_droppedPaths;
 }
 
@@ -116,6 +117,7 @@ QStringList AI::FileSandbox::readRoots() const
   if (!ws.isEmpty())
     roots.append(ws);
 
+  const QMutexLocker locker(&m_dropMutex);
   for (const auto& dropped : m_droppedPaths)
     if (!dropped.isEmpty() && !roots.contains(dropped))
       roots.append(dropped);
@@ -170,7 +172,7 @@ bool AI::FileSandbox::isWithinRoot(const QString& canonical, const QString& root
   if (canonical == root)
     return true;
 
-  return canonical.startsWith(root + QDir::separator());
+  return canonical.startsWith(root + QLatin1Char('/'));
 }
 
 /**
@@ -275,6 +277,7 @@ QString AI::FileSandbox::registerDroppedPath(const QString& localPath)
   if (canonical.isEmpty())
     return {};
 
+  const QMutexLocker locker(&m_dropMutex);
   if (!m_droppedPaths.contains(canonical)) {
     m_droppedPaths.append(canonical);
     qCDebug(serialStudioAI) << "Sandbox: registered dropped path" << canonical;
@@ -288,6 +291,7 @@ QString AI::FileSandbox::registerDroppedPath(const QString& localPath)
  */
 void AI::FileSandbox::clearDroppedPaths()
 {
+  const QMutexLocker locker(&m_dropMutex);
   m_droppedPaths.clear();
 }
 
