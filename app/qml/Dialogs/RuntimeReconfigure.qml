@@ -21,7 +21,6 @@ Widgets.SmartDialog {
   id: root
 
   staysOnTop: true
-  fixedSize: false
 
   //
   // Direct CSD size hints (bypasses Page implicit-size propagation)

@@ -233,9 +233,6 @@ Item {
       runtimeReconfigureDialog.close()
       fileTransmissionDialog.close()
 
-      actionIconPicker.close()
-      onlineIconPicker.close()
-
       if (csvPlayerLoader.item)
         csvPlayerLoader.item.close()
 
@@ -378,23 +375,6 @@ Item {
       active: Cpp_CommercialBuild && !app.runtimeMode
     }
 
-    //
-    // Project-editor icon picker: direct instance, resolved by id from editor views
-    //
-    Dialogs.IconPicker {
-      id: actionIconPicker
-    }
-
-    //
-    // Online icon search (Iconify-backed)
-    //
-    Dialogs.OnlineIconPicker {
-      id: onlineIconPicker
-
-      onIconSelected: function(icon) {
-        actionIconPicker.iconSelected(icon)
-      }
-    }
   }
 
   //

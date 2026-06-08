@@ -29,6 +29,7 @@
 #include <QPainterPath>
 #include <QQmlComponent>
 #include <QQmlEngine>
+#include <QQuickImageProvider>
 #include <QQuickWindow>
 #include <QSurfaceFormat>
 #include <QSvgRenderer>
@@ -84,6 +85,118 @@ static bool isFixedSizeWindow(const QWindow* window)
 
   return minSize == maxSize;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Shadow atlas (shared 9-slice texture, replaces the per-window full-window shadow backing)
+//--------------------------------------------------------------------------------------------------
+
+namespace detail {
+
+/**
+ * @brief Generates a square shadow corner tile fading from opaque (inner) to transparent (outer).
+ */
+QImage generateShadowCorner(int size)
+{
+  QImage tile(size, size, QImage::Format_ARGB32_Premultiplied);
+  tile.fill(Qt::transparent);
+
+  const qreal invSize = size > 0 ? 1.0 / static_cast<qreal>(size) : 0.0;
+  for (int y = 0; y < size; ++y) {
+    for (int x = 0; x < size; ++x) {
+      const qreal dx   = static_cast<qreal>(size - x - 1);
+      const qreal dy   = static_cast<qreal>(size - y - 1);
+      const qreal dist = qSqrt(dx * dx + dy * dy);
+
+      qreal alpha  = 1.0 - qMin(dist * invSize, 1.0);
+      alpha        = alpha * alpha * (3.0 - 2.0 * alpha);
+      alpha       *= CSD::ShadowOpacity;
+      tile.setPixelColor(x, y, QColor(0, 0, 0, qRound(alpha * 255)));
+    }
+  }
+
+  return tile;
+}
+
+/**
+ * @brief Builds the (2r+1)^2 9-slice atlas: corner tiles + 1px edge gradients + transparent center.
+ */
+QImage buildShadowAtlas(int radius)
+{
+  const int n = 2 * radius + 1;
+  QImage atlas(n, n, QImage::Format_ARGB32_Premultiplied);
+  atlas.fill(Qt::transparent);
+
+  const QImage corner = generateShadowCorner(radius);
+  const qreal inv     = radius > 0 ? 1.0 / radius : 0.0;
+
+  QImage hEdge(1, radius, QImage::Format_ARGB32_Premultiplied);
+  hEdge.fill(Qt::transparent);
+  for (int y = 0; y < radius; ++y) {
+    qreal a = 1.0 - static_cast<qreal>(radius - y - 1) * inv;
+    a       = a * a * (3.0 - 2.0 * a) * CSD::ShadowOpacity;
+    hEdge.setPixelColor(0, y, QColor(0, 0, 0, qRound(a * 255)));
+  }
+
+  QImage vEdge(radius, 1, QImage::Format_ARGB32_Premultiplied);
+  vEdge.fill(Qt::transparent);
+  for (int x = 0; x < radius; ++x) {
+    qreal a = 1.0 - static_cast<qreal>(x) * inv;
+    a       = a * a * (3.0 - 2.0 * a) * CSD::ShadowOpacity;
+    vEdge.setPixelColor(x, 0, QColor(0, 0, 0, qRound(a * 255)));
+  }
+
+  QPainter p(&atlas);
+  p.setCompositionMode(QPainter::CompositionMode_Source);
+  p.drawImage(0, 0, corner);
+  p.drawImage(radius + 1, 0, corner.flipped(Qt::Horizontal));
+  p.drawImage(0, radius + 1, corner.flipped(Qt::Vertical));
+  p.drawImage(radius + 1, radius + 1, corner.flipped(Qt::Horizontal | Qt::Vertical));
+  p.drawImage(radius, 0, hEdge);
+  p.drawImage(radius, radius + 1, hEdge.flipped(Qt::Vertical));
+  p.drawImage(0, radius, vEdge.flipped(Qt::Horizontal));
+  p.drawImage(radius + 1, radius, vEdge);
+  p.end();
+
+  return atlas;
+}
+
+/**
+ * @brief Serves the shadow 9-slice atlas to BorderImage; "image://csdshadow/<radius>".
+ */
+class ShadowImageProvider : public QQuickImageProvider {
+public:
+  /**
+   * @brief Constructs the provider in QImage mode.
+   */
+  ShadowImageProvider() : QQuickImageProvider(QQuickImageProvider::Image) {}
+
+  /**
+   * @brief Returns the shadow atlas for the radius encoded in @p id; transparent 1x1 on failure.
+   */
+  QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize) override
+  {
+    Q_UNUSED(requestedSize);
+
+    bool ok          = false;
+    const int radius = id.toInt(&ok);
+    if (!ok || radius <= 0) {
+      QImage fallback(1, 1, QImage::Format_ARGB32_Premultiplied);
+      fallback.fill(Qt::transparent);
+      if (size)
+        *size = fallback.size();
+
+      return fallback;
+    }
+
+    const QImage atlas = buildShadowAtlas(radius);
+    if (size)
+      *size = atlas.size();
+
+    return atlas;
+  }
+};
+
+}  // namespace detail
 
 //--------------------------------------------------------------------------------------------------
 // Titlebar
@@ -198,11 +311,18 @@ QColor Titlebar::backgroundColor() const
  */
 QColor Titlebar::foregroundColor() const
 {
+  if (m_fgCacheKey == m_backgroundColor && m_fgCache.isValid())
+    return m_fgCache;
+
+  m_fgCacheKey = m_backgroundColor;
+
   const auto& theme       = Misc::ThemeManager::instance();
   const QColor toolbarTop = theme.getColor(QStringLiteral("toolbar_top"));
 
-  if (m_backgroundColor == toolbarTop)
-    return theme.getColor(QStringLiteral("titlebar_text"));
+  if (m_backgroundColor == toolbarTop) {
+    m_fgCache = theme.getColor(QStringLiteral("titlebar_text"));
+    return m_fgCache;
+  }
 
   // clang-format off
   constexpr qreal kInv1292 = 1.0 / 12.92;
@@ -213,7 +333,8 @@ QColor Titlebar::foregroundColor() const
                           + 0.0722 * linearize(m_backgroundColor.blueF());
   // clang-format on
 
-  return luminance > 0.179 ? QColor(Qt::black) : QColor(Qt::white);
+  m_fgCache = luminance > 0.179 ? QColor(Qt::black) : QColor(Qt::white);
+  return m_fgCache;
 }
 
 /**
@@ -245,6 +366,8 @@ void Titlebar::setWindowActive(bool active)
  */
 void Titlebar::setBackgroundColor(const QColor& color)
 {
+  m_fgCacheKey = QColor();
+
   if (m_backgroundColor != color) {
     m_backgroundColor = color;
     Q_EMIT backgroundColorChanged();
@@ -639,207 +762,6 @@ void Titlebar::hoverLeaveEvent(QHoverEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Frame
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Constructs a Frame.
- */
-Frame::Frame(QQuickItem* parent)
-  : QQuickPaintedItem(parent), m_shadowRadius(CSD::ShadowRadius), m_shadowEnabled(true)
-{
-  setFillColor(Qt::transparent);
-  setOpaquePainting(false);
-  regenerateShadow();
-}
-
-/**
- * @brief Paints the window frame including shadow and background.
- */
-void Frame::paint(QPainter* painter)
-{
-  const int r = m_shadowEnabled ? m_shadowRadius : 0;
-  const QRectF content(r, r, width() - 2 * r, height() - 2 * r);
-
-  if (m_shadowEnabled && !m_shadowCorner.isNull() && r > 0) {
-    painter->drawImage(0, 0, m_shadowCorner);
-    painter->drawImage(QPointF(width() - r, 0), m_shadowCornerFlippedH);
-    painter->drawImage(QPointF(0, height() - r), m_shadowCornerFlippedV);
-    painter->drawImage(QPointF(width() - r, height() - r), m_shadowCornerFlippedHV);
-
-    if (!m_shadowEdge.isNull()) {
-      const qreal hEdgeLen = width() - 2 * r;
-      const qreal vEdgeLen = height() - 2 * r;
-
-      if (hEdgeLen > 0) {
-        painter->drawImage(QRectF(r, 0, hEdgeLen, r), m_shadowEdge, QRectF(0, 0, 1, r));
-        painter->drawImage(
-          QRectF(r, height() - r, hEdgeLen, r), m_shadowEdgeFlipped, QRectF(0, 0, 1, r));
-      }
-
-      if (vEdgeLen > 0) {
-        painter->drawImage(
-          QRectF(0, r, r, vEdgeLen), m_shadowEdgeVerticalFlipped, QRectF(0, 0, r, 1));
-        painter->drawImage(
-          QRectF(width() - r, r, r, vEdgeLen), m_shadowEdgeVertical, QRectF(0, 0, r, 1));
-      }
-    }
-  }
-
-  if (content.width() > 0 && content.height() > 0) {
-    const auto& theme    = Misc::ThemeManager::instance();
-    const QColor bgColor = theme.getColor(QStringLiteral("toolbar_top"));
-
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(bgColor);
-    painter->fillRect(content, bgColor);
-  }
-}
-
-/**
- * @brief Returns the shadow blur radius in pixels.
- */
-int Frame::shadowRadius() const
-{
-  return m_shadowRadius;
-}
-
-/**
- * @brief Returns whether the shadow is enabled.
- */
-bool Frame::shadowEnabled() const
-{
-  return m_shadowEnabled;
-}
-
-/**
- * @brief Sets the shadow blur radius.
- */
-void Frame::setShadowRadius(int radius)
-{
-  if (m_shadowRadius != radius) {
-    m_shadowRadius = radius;
-    regenerateShadow();
-    Q_EMIT shadowRadiusChanged();
-    update();
-  }
-}
-
-/**
- * @brief Enables or disables shadow rendering.
- */
-void Frame::setShadowEnabled(bool enabled)
-{
-  if (m_shadowEnabled != enabled) {
-    m_shadowEnabled = enabled;
-    Q_EMIT shadowEnabledChanged();
-    update();
-  }
-}
-
-/**
- * @brief Regenerates the shadow tile images.
- */
-void Frame::regenerateShadow()
-{
-  if (m_shadowRadius <= 0) {
-    m_shadowCorner              = QImage();
-    m_shadowEdge                = QImage();
-    m_shadowEdgeFlipped         = QImage();
-    m_shadowEdgeVertical        = QImage();
-    m_shadowEdgeVerticalFlipped = QImage();
-    m_shadowCornerFlippedH      = QImage();
-    m_shadowCornerFlippedV      = QImage();
-    m_shadowCornerFlippedHV     = QImage();
-    return;
-  }
-
-  m_shadowCorner          = generateShadowCorner(m_shadowRadius);
-  m_shadowCornerFlippedH  = m_shadowCorner.flipped(Qt::Horizontal);
-  m_shadowCornerFlippedV  = m_shadowCorner.flipped(Qt::Vertical);
-  m_shadowCornerFlippedHV = m_shadowCorner.flipped(Qt::Horizontal | Qt::Vertical);
-
-  m_shadowEdge = QImage(1, m_shadowRadius, QImage::Format_ARGB32_Premultiplied);
-  m_shadowEdge.fill(Qt::transparent);
-
-  const qreal invShadowRadius = m_shadowRadius > 0 ? 1.0 / m_shadowRadius : 0.0;
-  for (int y = 0; y < m_shadowRadius; ++y) {
-    const qreal dist  = static_cast<qreal>(m_shadowRadius - y - 1) * invShadowRadius;
-    qreal alpha       = 1.0 - dist;
-    alpha             = alpha * alpha * (3.0 - 2.0 * alpha);
-    alpha            *= CSD::ShadowOpacity;
-    m_shadowEdge.setPixelColor(0, y, QColor(0, 0, 0, qRound(alpha * 255)));
-  }
-
-  m_shadowEdgeFlipped = m_shadowEdge.flipped(Qt::Vertical);
-
-  m_shadowEdgeVertical = QImage(m_shadowRadius, 1, QImage::Format_ARGB32_Premultiplied);
-  m_shadowEdgeVertical.fill(Qt::transparent);
-
-  for (int x = 0; x < m_shadowRadius; ++x) {
-    const qreal dist  = static_cast<qreal>(x) * invShadowRadius;
-    qreal alpha       = 1.0 - dist;
-    alpha             = alpha * alpha * (3.0 - 2.0 * alpha);
-    alpha            *= CSD::ShadowOpacity;
-    m_shadowEdgeVertical.setPixelColor(x, 0, QColor(0, 0, 0, qRound(alpha * 255)));
-  }
-
-  m_shadowEdgeVerticalFlipped = m_shadowEdgeVertical.flipped(Qt::Horizontal);
-}
-
-/**
- * @brief Generates a shadow corner tile image.
- */
-QImage Frame::generateShadowCorner(int size)
-{
-  QImage tile(size, size, QImage::Format_ARGB32_Premultiplied);
-  tile.fill(Qt::transparent);
-
-  const qreal invSize = size > 0 ? 1.0 / static_cast<qreal>(size) : 0.0;
-  for (int y = 0; y < size; ++y) {
-    for (int x = 0; x < size; ++x) {
-      const qreal dx   = static_cast<qreal>(size - x - 1);
-      const qreal dy   = static_cast<qreal>(size - y - 1);
-      const qreal dist = qSqrt(dx * dx + dy * dy);
-
-      qreal alpha  = 1.0 - qMin(dist * invSize, 1.0);
-      alpha        = alpha * alpha * (3.0 - 2.0 * alpha);
-      alpha       *= CSD::ShadowOpacity;
-      tile.setPixelColor(x, y, QColor(0, 0, 0, qRound(alpha * 255)));
-    }
-  }
-
-  return tile;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Border
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Constructs a Border.
- */
-Border::Border(QQuickItem* parent) : QQuickPaintedItem(parent)
-{
-  setFillColor(Qt::transparent);
-  setOpaquePainting(false);
-  setRenderTarget(QQuickPaintedItem::FramebufferObject);
-  setAntialiasing(true);
-}
-
-/**
- * @brief Paints the window border.
- */
-void Border::paint(QPainter* painter)
-{
-  const QColor borderColor = QColor(102, 102, 102, 115);
-
-  painter->setPen(QPen(borderColor, 1));
-  painter->setBrush(Qt::NoBrush);
-  painter->drawRect(QRectF(0.5, 0.5, width() - 1, height() - 1));
-}
-
-//--------------------------------------------------------------------------------------------------
 // Window
 //--------------------------------------------------------------------------------------------------
 
@@ -857,6 +779,7 @@ Window::Window(QWindow* window, const QString& color, QObject* parent)
   , m_minSize(0, 0)
   , m_window(window)
   , m_contentContainer(nullptr)
+  , m_lastCursor(Qt::ArrowCursor)
 {
   if (!m_window)
     return;
@@ -877,7 +800,7 @@ Window::Window(QWindow* window, const QString& color, QObject* parent)
     const bool fillScreen = state & (Qt::WindowMaximized | Qt::WindowFullScreen);
 
     if (m_frame)
-      m_frame->setShadowEnabled(!fillScreen);
+      m_frame->setVisible(!fillScreen);
 
     if (m_border)
       m_border->setVisible(!fillScreen);
@@ -946,14 +869,6 @@ Window::~Window()
 }
 
 /**
- * @brief Returns the shadow frame component.
- */
-Frame* Window::frame() const
-{
-  return m_frame;
-}
-
-/**
  * @brief Returns the decorated window.
  */
 QWindow* Window::window() const
@@ -1015,7 +930,8 @@ void Window::setColor(const QString& color)
 }
 
 /**
- * @brief Creates and configures the shadow frame.
+ * @brief Creates the drop-shadow as a BorderImage over a shared 9-slice atlas (no per-window
+ *        full-window backing); enables the window alpha channel the shadow needs.
  */
 void Window::setupFrame()
 {
@@ -1030,7 +946,37 @@ void Window::setupFrame()
   }
 
   quickWindow->setColor(Qt::transparent);
-  m_frame = new Frame(quickWindow->contentItem());
+
+  QQmlEngine* engine = qmlEngine(quickWindow);
+  if (!engine)
+    return;
+
+  if (!engine->imageProvider(QStringLiteral("csdshadow")))
+    engine->addImageProvider(QStringLiteral("csdshadow"), new detail::ShadowImageProvider);
+
+  const QString qml = QStringLiteral("import QtQuick\n"
+                                     "BorderImage {\n"
+                                     "  source: \"image://csdshadow/%1\"\n"
+                                     "  border { left: %1; right: %1; top: %1; bottom: %1 }\n"
+                                     "  horizontalTileMode: BorderImage.Stretch\n"
+                                     "  verticalTileMode: BorderImage.Stretch\n"
+                                     "}\n")
+                        .arg(CSD::ShadowRadius);
+
+  QQmlComponent component(engine);
+  component.setData(qml.toUtf8(), QUrl());
+  if (component.isError()) {
+    for (const auto& error : component.errors())
+      qWarning() << "CSD frame QML error:" << error.toString();
+
+    return;
+  }
+
+  m_frame = qobject_cast<QQuickItem*>(component.create());
+  if (!m_frame)
+    return;
+
+  m_frame->setParentItem(quickWindow->contentItem());
   m_frame->setZ(-1);
 
   connect(quickWindow, &QQuickWindow::widthChanged, this, &Window::updateFrameGeometry);
@@ -1040,7 +986,7 @@ void Window::setupFrame()
 }
 
 /**
- * @brief Creates and configures the border overlay.
+ * @brief Creates the 1px window border as four scene-graph edges (no painter, no FBO).
  */
 void Window::setupBorder()
 {
@@ -1048,7 +994,37 @@ void Window::setupBorder()
   if (!quickWindow)
     return;
 
-  m_border = new Border(quickWindow->contentItem());
+  QQmlEngine* engine = qmlEngine(quickWindow);
+  if (!engine)
+    return;
+
+  static const char* qmlCode = R"(
+    import QtQuick
+
+    Item {
+      id: border
+      readonly property color stroke: "#73666666"
+      Rectangle { color: border.stroke; height: 1; anchors { left: parent.left; right: parent.right; top: parent.top } }
+      Rectangle { color: border.stroke; height: 1; anchors { left: parent.left; right: parent.right; bottom: parent.bottom } }
+      Rectangle { color: border.stroke; width: 1; anchors { top: parent.top; bottom: parent.bottom; left: parent.left } }
+      Rectangle { color: border.stroke; width: 1; anchors { top: parent.top; bottom: parent.bottom; right: parent.right } }
+    }
+  )";
+
+  QQmlComponent component(engine);
+  component.setData(qmlCode, QUrl());
+  if (component.isError()) {
+    for (const auto& error : component.errors())
+      qWarning() << "CSD border QML error:" << error.toString();
+
+    return;
+  }
+
+  m_border = qobject_cast<QQuickItem*>(component.create());
+  if (!m_border)
+    return;
+
+  m_border->setParentItem(quickWindow->contentItem());
   m_border->setZ(1000000);
 
   connect(quickWindow, &QQuickWindow::widthChanged, this, &Window::updateBorderGeometry);
@@ -1168,7 +1144,7 @@ void Window::onMinimumSizeChanged()
 }
 
 /**
- * @brief Creates the content container for QML content.
+ * @brief Creates the opaque content-background container holding the reparented QML content.
  */
 void Window::setupContentContainer()
 {
@@ -1184,8 +1160,9 @@ void Window::setupContentContainer()
   static const char* qmlCode = R"(
     import QtQuick
 
-    Item {
+    Rectangle {
       id: contentContainer
+      color: "transparent"
     }
   )";
 
@@ -1290,6 +1267,9 @@ void Window::updateTheme()
       m_color.isEmpty() ? theme.getColor(QStringLiteral("toolbar_top")).name() : m_color;
     m_titleBar->setBackgroundColor(QColor(color));
   }
+
+  if (m_contentContainer)
+    m_contentContainer->setProperty("color", theme.getColor(QStringLiteral("toolbar_top")));
 }
 
 /**
@@ -1389,6 +1369,39 @@ Qt::Edges Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
 }
 
 /**
+ * @brief Releases the CSD resize-cursor override so widget/QML cursors regain control.
+ */
+void Window::releaseResizeCursor()
+{
+  if (m_lastCursor == Qt::ArrowCursor)
+    return;
+
+  m_lastCursor = Qt::ArrowCursor;
+  if (m_window)
+    m_window->unsetCursor();
+}
+
+/**
+ * @brief Applies a resize cursor only inside the resize band; elsewhere hands cursor control back.
+ */
+void Window::updateResizeCursor(const QPointF& pos)
+{
+  const ResizeEdge edge = edgeAt(pos);
+  if (edge == ResizeEdge::None) {
+    releaseResizeCursor();
+    return;
+  }
+
+  const Qt::CursorShape shape = cursorForEdge(edge);
+  if (shape == m_lastCursor)
+    return;
+
+  m_lastCursor = shape;
+  if (m_window)
+    m_window->setCursor(shape);
+}
+
+/**
  * @brief Event filter for window resize and content reparenting.
  */
 bool Window::eventFilter(QObject* watched, QEvent* event)
@@ -1415,7 +1428,7 @@ bool Window::eventFilter(QObject* watched, QEvent* event)
     case QEvent::MouseMove: {
       auto* me = static_cast<QMouseEvent*>(event);
       if (!m_resizing)
-        m_window->setCursor(cursorForEdge(edgeAt(me->position())));
+        updateResizeCursor(me->position());
 
       break;
     }
@@ -1441,7 +1454,7 @@ bool Window::eventFilter(QObject* watched, QEvent* event)
 
     case QEvent::Leave:
       if (!m_resizing)
-        m_window->setCursor(Qt::ArrowCursor);
+        releaseResizeCursor();
 
       break;
 

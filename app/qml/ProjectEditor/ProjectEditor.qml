@@ -30,6 +30,7 @@ import SerialStudio
 
 import "Sections" as Sections
 import "../Widgets" as Widgets
+import "../Dialogs" as Dialogs
 
 Widgets.SmartWindow {
   id: root
@@ -55,8 +56,26 @@ Widgets.SmartWindow {
       Cpp_JSON_ProjectModel.openJsonFile(Cpp_AppState.projectFilePath)
     }
 
-    else
+    else {
       Cpp_NativeWindow.removeWindow(root)
+      actionIconPicker.close()
+      onlineIconPicker.close()
+    }
+  }
+
+  //
+  // Icon picker dialogs (owned here so transientParent is the ProjectEditor window).
+  //
+  Dialogs.IconPicker {
+    id: actionIconPicker
+  }
+
+  Dialogs.OnlineIconPicker {
+    id: onlineIconPicker
+
+    onIconSelected: function(icon) {
+      actionIconPicker.iconSelected(icon)
+    }
   }
 
   //

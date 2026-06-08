@@ -28,10 +28,13 @@
 #include <QByteArray>
 #include <QCanBusDevice>
 #include <QCanBusFrame>
+#include <QElapsedTimer>
+#include <QHash>
 #include <QList>
 #include <QString>
 #include <QStringList>
 #include <QThread>
+#include <QTimer>
 
 #include "IO/Drivers/CanBackends.h"
 
@@ -69,7 +72,9 @@ protected:
   [[nodiscard]] QString interpretErrorFrame(const QCanBusFrame& frame) override;
 
 private slots:
+  void checkTxTimeouts();
   void handleReadError(const QString& reason);
+  void completeTransmits(const QList<quint32>& echoIds);
 
 private:
   void readLoop();
@@ -96,6 +101,10 @@ private:
   std::uint32_t m_echoCounter;
 
   QByteArray m_rxCarry;
+
+  QTimer m_txTimeoutTimer;
+  QElapsedTimer m_txClock;
+  QHash<quint32, qint64> m_pendingTx;
 
   static constexpr std::size_t kCacheLine = 64;
   alignas(kCacheLine) std::atomic<bool> m_running;

@@ -155,19 +155,6 @@ Item {
       }
 
       //
-      // Spacer
-      //
-      Item {
-        Layout.minimumHeight: 8 / 2
-        Layout.maximumHeight: 8 / 2
-        visible: Cpp_IO_CANBus.interfaceList.length > 0
-      } Item {
-        Layout.minimumHeight: 8 / 2
-        Layout.maximumHeight: 8 / 2
-        visible: Cpp_IO_CANBus.interfaceList.length > 0
-      }
-
-      //
       // Bitrate selector
       //
       Label {
@@ -241,9 +228,10 @@ Item {
         id: _canFDCheck
 
         Layout.leftMargin: -8
+        Layout.maximumHeight: 18
         checked: Cpp_IO_CANBus.canFD
-        Layout.alignment: Qt.AlignLeft
         visible: Cpp_IO_CANBus.interfaceList.length > 0
+        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
         onCheckedChanged: {
           if (Cpp_IO_CANBus.canFD !== checked)
             Cpp_IO_CANBus.canFD = checked
@@ -251,16 +239,43 @@ Item {
       }
 
       //
-      // Spacer
+      // Loopback checkbox
       //
-      Item {
-        Layout.minimumHeight: 8 / 2
-        Layout.maximumHeight: 8 / 2
+      Label {
+        text: qsTr("Loopback") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-      } Item {
-        Layout.minimumHeight: 8 / 2
-        Layout.maximumHeight: 8 / 2
+      } CheckBox {
+        id: _loopbackCheck
+
+        Layout.leftMargin: -8
+        Layout.maximumHeight: 18
+        checked: Cpp_IO_CANBus.loopback
         visible: Cpp_IO_CANBus.interfaceList.length > 0
+        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+        onCheckedChanged: {
+          if (Cpp_IO_CANBus.loopback !== checked)
+            Cpp_IO_CANBus.loopback = checked
+        }
+      }
+
+      //
+      // Listen-Only checkbox
+      //
+      Label {
+        text: qsTr("Listen-Only") + ":"
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
+      } CheckBox {
+        id: _listenOnlyCheck
+
+        Layout.leftMargin: -8
+        Layout.maximumHeight: 18
+        checked: Cpp_IO_CANBus.listenOnly
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
+        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+        onCheckedChanged: {
+          if (Cpp_IO_CANBus.listenOnly !== checked)
+            Cpp_IO_CANBus.listenOnly = checked
+        }
       }
 
       //

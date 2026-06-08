@@ -55,6 +55,14 @@ class CANBus : public HAL_Driver {
              READ canFD
              WRITE setCanFD
              NOTIFY canFDChanged)
+  Q_PROPERTY(bool loopback
+             READ loopback
+             WRITE setLoopback
+             NOTIFY loopbackChanged)
+  Q_PROPERTY(bool listenOnly
+             READ listenOnly
+             WRITE setListenOnly
+             NOTIFY listenOnlyChanged)
   Q_PROPERTY(QStringList pluginList
              READ pluginList
              NOTIFY availablePluginsChanged)
@@ -72,6 +80,8 @@ class CANBus : public HAL_Driver {
 signals:
   void canFDChanged();
   void bitrateChanged();
+  void loopbackChanged();
+  void listenOnlyChanged();
   void pluginIndexChanged();
   void interfaceIndexChanged();
   void availablePluginsChanged();
@@ -101,6 +111,8 @@ public:
   [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] bool canFD() const;
+  [[nodiscard]] bool loopback() const;
+  [[nodiscard]] bool listenOnly() const;
   [[nodiscard]] quint8 pluginIndex() const;
   [[nodiscard]] quint8 interfaceIndex() const;
   [[nodiscard]] quint32 bitrate() const;
@@ -116,6 +128,8 @@ public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;
   void setupExternalConnections();
   void setCanFD(const bool enabled);
+  void setLoopback(const bool enabled);
+  void setListenOnly(const bool enabled);
   void setBitrate(const quint32 bitrate);
   void setPluginIndex(const quint8 index);
   void setInterfaceIndex(const quint8 index);
@@ -140,6 +154,8 @@ private:
   QCanBusDevice* m_device;
 
   bool m_canFD;
+  bool m_loopback;
+  bool m_listenOnly;
   quint8 m_pluginIndex;
   quint8 m_interfaceIndex;
   quint32 m_bitrate;

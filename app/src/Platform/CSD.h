@@ -116,58 +116,9 @@ private:
   Button m_pressedButton;
   QColor m_backgroundColor;
   QHash<QString, QPixmap> m_iconCache;
-};
 
-/**
- * @brief Draws a 1px border around the entire CSD window.
- */
-class Border : public QQuickPaintedItem {
-  Q_OBJECT
-
-public:
-  explicit Border(QQuickItem* parent = nullptr);
-  void paint(QPainter* painter) override;
-};
-
-/**
- * @brief Draws the window shadow for CSD windows.
- */
-class Frame : public QQuickPaintedItem {
-  Q_OBJECT
-
-signals:
-  void borderColorChanged();
-  void shadowRadiusChanged();
-  void shadowEnabledChanged();
-
-public:
-  explicit Frame(QQuickItem* parent = nullptr);
-
-  void paint(QPainter* painter) override;
-
-  [[nodiscard]] int shadowRadius() const;
-  [[nodiscard]] bool shadowEnabled() const;
-
-public slots:
-  void setShadowRadius(int radius);
-  void setShadowEnabled(bool enabled);
-
-private:
-  void regenerateShadow();
-  QImage generateShadowCorner(int size);
-
-private:
-  int m_shadowRadius;
-  bool m_shadowEnabled;
-
-  QImage m_shadowEdge;
-  QImage m_shadowEdgeFlipped;
-  QImage m_shadowEdgeVertical;
-  QImage m_shadowEdgeVerticalFlipped;
-  QImage m_shadowCorner;
-  QImage m_shadowCornerFlippedH;
-  QImage m_shadowCornerFlippedV;
-  QImage m_shadowCornerFlippedHV;
+  mutable QColor m_fgCache;
+  mutable QColor m_fgCacheKey;
 };
 
 /**
@@ -180,7 +131,6 @@ public:
   explicit Window(QWindow* window, const QString& color = QString(), QObject* parent = nullptr);
   ~Window() override;
 
-  [[nodiscard]] Frame* frame() const;
   [[nodiscard]] QWindow* window() const;
   [[nodiscard]] Titlebar* titleBar() const;
 
@@ -223,6 +173,8 @@ private:
   [[nodiscard]] Qt::CursorShape cursorForEdge(ResizeEdge edge) const;
   [[nodiscard]] Qt::Edges qtEdgesFromResizeEdge(ResizeEdge edge) const;
 
+  void releaseResizeCursor();
+  void updateResizeCursor(const QPointF& pos);
   void reparentChildToContainer(QQuickItem* child);
 
 protected:
@@ -230,13 +182,14 @@ protected:
 
 private:
   bool m_resizing;
-  Frame* m_frame;
-  Border* m_border;
+  QQuickItem* m_frame;
+  QQuickItem* m_border;
   QString m_color;
   Titlebar* m_titleBar;
   ResizeEdge m_resizeEdge;
   QSize m_minSize;
   QPointer<QWindow> m_window;
   QQuickItem* m_contentContainer;
+  Qt::CursorShape m_lastCursor;
 };
 }  // namespace CSD

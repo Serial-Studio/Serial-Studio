@@ -18,7 +18,6 @@ Widgets.SmartDialog {
   //
   // Window options
   //
-  fixedSize: false
   minimumWidth: 680
   preferredWidth: 680
   title: qsTr("API Keys")

@@ -4,32 +4,32 @@
 <context>
     <name>AI::AnthropicReply</name>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="167"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="164"/>
         <source>Anthropic error</source>
         <translation>Anthropic त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="280"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="277"/>
         <source>Stream parse error: %1</source>
         <translation>स्ट्रीम पार्स त्रुटि: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="327"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="324"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="330"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="327"/>
         <source>Invalid API key (%1)</source>
         <translation>अमान्य API कुंजी (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="332"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="329"/>
         <source>Rate limited: %1</source>
         <translation>रेट सीमित: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="334"/>
+        <location filename="../../src/AI/Providers/AnthropicReply.cpp" line="331"/>
         <source>Anthropic %1: %2</source>
         <translation>Anthropic %1: %2</translation>
     </message>
@@ -37,12 +37,12 @@
 <context>
     <name>AI::Assistant</name>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="195"/>
+        <location filename="../../src/AI/Assistant.cpp" line="191"/>
         <source>Allow AI Device Control?</source>
         <translation>AI डिवाइस नियंत्रण की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="196"/>
+        <location filename="../../src/AI/Assistant.cpp" line="192"/>
         <source>This lets the AI assistant configure devices, open and close connections, and send data to your hardware.
 
 Every device action still requires your explicit per-call approval in the chat, even when auto-approve is enabled. Only enable this if you trust the configured AI provider with hardware access.</source>
@@ -51,22 +51,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 ऑटो-अप्रूव सक्षम होने पर भी, प्रत्येक डिवाइस क्रिया के लिए चैट में आपकी स्पष्ट प्रति-कॉल स्वीकृति आवश्यक है। इसे केवल तभी सक्षम करें जब आप हार्डवेयर एक्सेस के लिए कॉन्फ़िगर किए गए AI प्रदाता पर भरोसा करते हों।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="395"/>
+        <location filename="../../src/AI/Assistant.cpp" line="390"/>
         <source>Switch AI provider?</source>
         <translation>AI प्रदाता बदलें?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="396"/>
+        <location filename="../../src/AI/Assistant.cpp" line="391"/>
         <source>Switching to a different provider clears the current conversation. Do you want to continue?</source>
         <translation>किसी अन्य प्रदाता पर स्विच करने से वर्तमान वार्तालाप साफ़ हो जाएगा। क्या आप जारी रखना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="399"/>
+        <location filename="../../src/AI/Assistant.cpp" line="394"/>
         <source>Assistant</source>
         <translation>असिस्टेंट</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="436"/>
+        <location filename="../../src/AI/Assistant.cpp" line="431"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI Assistant इस बिल्ड में उपलब्ध नहीं है</translation>
     </message>
@@ -75,7 +75,7 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">AI असिस्टेंट के लिए Pro लाइसेंस आवश्यक है</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Assistant.cpp" line="441"/>
+        <location filename="../../src/AI/Assistant.cpp" line="436"/>
         <source>Set an API key first</source>
         <translation>पहले API key सेट करें</translation>
     </message>
@@ -87,27 +87,27 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">AI Assistant के लिए Pro लाइसेंस आवश्यक है</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="165"/>
+        <location filename="../../src/AI/Conversation.cpp" line="160"/>
         <source>AI Assistant is not available in this build</source>
         <translation>AI Assistant इस बिल्ड में उपलब्ध नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="171"/>
+        <location filename="../../src/AI/Conversation.cpp" line="166"/>
         <source>AI subsystem not initialized</source>
         <translation>AI सबसिस्टम इनिशियलाइज़ नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="177"/>
+        <location filename="../../src/AI/Conversation.cpp" line="172"/>
         <source>Already busy with a previous request</source>
         <translation>पिछली रिक्वेस्ट में व्यस्त है</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="461"/>
+        <location filename="../../src/AI/Conversation.cpp" line="449"/>
         <source>Tool-call budget reached for this turn; no further tools will run.</source>
         <translation>इस बारी के लिए टूल-कॉल बजट पूरा हो गया; अब कोई और टूल नहीं चलेगा।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1736"/>
+        <location filename="../../src/AI/Conversation.cpp" line="1691"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>आपने इस बारी के लिए टूल-कॉल बजट पूरा कर लिया है। अब और टूल का अनुरोध न करें। अब तक जो मिला है उसे सारांशित करें, और यदि कार्य अधूरा है, तो बताएं कि कौन से चरण शेष हैं ताकि उपयोगकर्ता आपको जारी रखने के लिए कह सके।</translation>
     </message>
@@ -116,17 +116,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">Tool-call बजट सीमा पार हो गई</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="911"/>
+        <location filename="../../src/AI/Conversation.cpp" line="894"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(मॉडल ने खाली रिस्पॉन्स दिया। दोबारा शब्दों में बदलकर प्रयास करें, किसी अन्य मॉडल पर स्विच करें, या जांचें कि प्रोवाइडर के सेफ्टी फ़िल्टर द्वारा रिक्वेस्ट की अनुमति है।)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1008"/>
+        <location filename="../../src/AI/Conversation.cpp" line="981"/>
         <source>Sending request to %1...</source>
         <translation>%1 को रिक्वेस्ट भेजी जा रही है...</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Conversation.cpp" line="1020"/>
+        <location filename="../../src/AI/Conversation.cpp" line="992"/>
         <source>Provider returned no reply</source>
         <translation>प्रोवाइडर ने कोई रिप्लाई नहीं दी</translation>
     </message>
@@ -134,37 +134,37 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>AI::GeminiReply</name>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="147"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="145"/>
         <source>Prompt blocked by Gemini safety filter: %1</source>
         <translation>Gemini सेफ्टी फ़िल्टर द्वारा प्रॉम्प्ट ब्लॉक किया गया: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="190"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="187"/>
         <source>Gemini stopped without producing a response: %1</source>
         <translation>Gemini बिना रिस्पॉन्स दिए रुक गया: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="250"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="247"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="253"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="250"/>
         <source>Invalid API key (%1)</source>
         <translation>अमान्य API कुंजी (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="255"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="252"/>
         <source>Rate limited: %1</source>
         <translation>रेट सीमित: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="257"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="254"/>
         <source>Invalid API key</source>
         <translation>अमान्य API कुंजी</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="259"/>
+        <location filename="../../src/AI/Providers/GeminiReply.cpp" line="256"/>
         <source>Gemini %1: %2</source>
         <translation>Gemini %1: %2</translation>
     </message>
@@ -172,22 +172,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>AI::OpenAIReply</name>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="326"/>
         <source>HTTP %1</source>
         <translation>HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="334"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="329"/>
         <source>Invalid API key (%1)</source>
         <translation>अमान्य API कुंजी (%1)</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="336"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="331"/>
         <source>Rate limited: %1</source>
         <translation>रेट सीमित: %1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="338"/>
+        <location filename="../../src/AI/Providers/OpenAIReply.cpp" line="333"/>
         <source>%1 %2: %3</source>
         <translation>%1 %2: %3</translation>
     </message>
@@ -199,22 +199,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="423"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="413"/>
         <source>Export Protobuf File</source>
         <translation>Protobuf फ़ाइल एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="425"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="415"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (*.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="474"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="461"/>
         <source>Unable to start gRPC server</source>
         <translation>GRPC सर्वर प्रारंभ करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="475"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="462"/>
         <source>Failed to bind to %1</source>
         <translation>%1 से बाइंड करने में विफल</translation>
     </message>
@@ -222,17 +222,17 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="438"/>
+        <location filename="../../src/API/Server.cpp" line="430"/>
         <source>Unable to start API TCP server</source>
         <translation>API TCP सर्वर प्रारंभ करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="483"/>
+        <location filename="../../src/API/Server.cpp" line="474"/>
         <source>Allow External API Connections?</source>
         <translation>बाहरी API कनेक्शन की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="484"/>
+        <location filename="../../src/API/Server.cpp" line="475"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -241,32 +241,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 इसे केवल विश्वसनीय नेटवर्क पर सक्षम करें। अविश्वसनीय क्लाइंट लाइव डेटा पढ़ सकते हैं या आपके डिवाइस को कमांड भेज सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="519"/>
+        <location filename="../../src/API/Server.cpp" line="509"/>
         <source>Unable to restart API TCP server</source>
         <translation>API TCP सर्वर पुनः प्रारंभ करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="598"/>
+        <location filename="../../src/API/Server.cpp" line="587"/>
         <source>Allow API device control?</source>
         <translation>API डिवाइस नियंत्रण की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="599"/>
+        <location filename="../../src/API/Server.cpp" line="588"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Serial Studio की लोकल API का उपयोग करने वाला एक प्रोग्राम कनेक्टेड डिवाइस को डेटा भेजने का अनुरोध कर रहा है। API क्लाइंट को डिवाइस पर लिखने की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="602"/>
+        <location filename="../../src/API/Server.cpp" line="591"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1255"/>
+        <location filename="../../src/API/Server.cpp" line="1205"/>
         <source>API server</source>
         <translation>API सर्वर</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1255"/>
+        <location filename="../../src/API/Server.cpp" line="1205"/>
         <source>Invalid pending connection</source>
         <translation>अमान्य लंबित कनेक्शन</translation>
     </message>
@@ -1099,17 +1099,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="427"/>
         <source>Drop files or folders to let the assistant read them</source>
-        <translation type="unfinished"/>
+        <translation>फ़ाइलें या फ़ोल्डर छोड़ें ताकि सहायक उन्हें पढ़ सके</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="472"/>
         <source>Added folder "%1" - readable this session</source>
-        <translation type="unfinished"/>
+        <translation>फ़ोल्डर "%1" जोड़ा गया - इस सत्र में पठनीय</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="473"/>
         <source>Added "%1" - readable this session</source>
-        <translation type="unfinished"/>
+        <translation>"%1" जोड़ा गया - इस सत्र में पठनीय</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel.qml" line="557"/>
@@ -1669,7 +1669,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>BenchmarkRunner</name>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="256"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="255"/>
         <source>Data pipeline</source>
         <translation>डेटा पाइपलाइन</translation>
     </message>
@@ -1698,72 +1698,72 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Native पार्सर (मिक्स्ड)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="280"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="279"/>
         <source>Built-in parser (numeric)</source>
         <translation>Built-in पार्सर (न्यूमेरिक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="298"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="297"/>
         <source>Built-in parser (mixed)</source>
         <translation>Built-in पार्सर (मिक्स्ड)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="282"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="281"/>
         <source>Lua parser (numeric)</source>
         <translation>Lua पार्सर (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="289"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="288"/>
         <source>JavaScript parser (numeric)</source>
         <translation>JavaScript पार्सर (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="300"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="299"/>
         <source>Lua parser (mixed)</source>
         <translation>Lua पार्सर (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="307"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="306"/>
         <source>JavaScript parser (mixed)</source>
         <translation>JavaScript पार्सर (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="323"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="322"/>
         <source>Built-in + data export (numeric)</source>
         <translation>Built-in + डेटा एक्सपोर्ट (न्यूमेरिक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="330"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="329"/>
         <source>Lua + data export (numeric)</source>
         <translation>Lua + डेटा एक्सपोर्ट (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="337"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="336"/>
         <source>JavaScript + data export (numeric)</source>
         <translation>JavaScript + डेटा एक्सपोर्ट (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="346"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="345"/>
         <source>Built-in + data export (mixed)</source>
         <translation>Built-in + डेटा एक्सपोर्ट (मिक्स्ड)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="348"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="347"/>
         <source>Lua + data export (mixed)</source>
         <translation>Lua + डेटा एक्सपोर्ट (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="355"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="354"/>
         <source>JavaScript + data export (mixed)</source>
         <translation>JavaScript + डेटा एक्सपोर्ट (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="371"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="370"/>
         <source>Built-in + dashboard (numeric)</source>
         <translation>Built-in + डैशबोर्ड (न्यूमेरिक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="373"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="372"/>
         <source>Lua + dashboard (numeric)</source>
         <translation>Lua + डैशबोर्ड (संख्यात्मक)</translation>
     </message>
@@ -1870,22 +1870,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>%1 सेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="380"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="379"/>
         <source>JavaScript + dashboard (numeric)</source>
         <translation>JavaScript + डैशबोर्ड (संख्यात्मक)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="389"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="388"/>
         <source>Built-in + dashboard (mixed)</source>
         <translation>बिल्ट-इन + डैशबोर्ड (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="391"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="390"/>
         <source>Lua + dashboard (mixed)</source>
         <translation>Lua + डैशबोर्ड (मिश्रित)</translation>
     </message>
     <message>
-        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="398"/>
+        <location filename="../../src/Benchmark/BenchmarkRunner.cpp" line="397"/>
         <source>JavaScript + dashboard (mixed)</source>
         <translation>JavaScript + डैशबोर्ड (मिश्रित)</translation>
     </message>
@@ -1970,17 +1970,27 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>फ्लेक्सिबल डेटा-रेट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="270"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="257"/>
+        <source>Loopback</source>
+        <translation>लूपबैक</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="276"/>
+        <source>Listen-Only</source>
+        <translation>केवल-सुनने योग्य</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="308"/>
         <source>DBC Database</source>
         <translation>DBC डेटाबेस</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="274"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="312"/>
         <source>Import DBC File…</source>
         <translation>DBC फ़ाइल आयात करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="307"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="345"/>
         <source>No CAN Interfaces Found</source>
         <translation>कोई CAN इंटरफ़ेस नहीं मिला</translation>
     </message>
@@ -1988,103 +1998,103 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="210"/>
+        <location filename="../../src/CSV/Player.cpp" line="205"/>
         <source>Select CSV file</source>
         <translation>CSV फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="212"/>
+        <location filename="../../src/CSV/Player.cpp" line="207"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV फ़ाइलें (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="383"/>
+        <location filename="../../src/CSV/Player.cpp" line="369"/>
         <source>Device Connection Active</source>
         <translation>डिवाइस कनेक्शन सक्रिय</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="384"/>
+        <location filename="../../src/CSV/Player.cpp" line="370"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>इस सुविधा का उपयोग करने के लिए, डिवाइस से डिस्कनेक्ट करना आवश्यक है। क्या आप आगे बढ़ना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="399"/>
+        <location filename="../../src/CSV/Player.cpp" line="384"/>
         <source>Check file permissions and location</source>
         <translation>फ़ाइल अनुमतियाँ और स्थान जाँचें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="432"/>
+        <location filename="../../src/CSV/Player.cpp" line="414"/>
         <source>Insufficient Data in CSV File</source>
         <translation>CSV फ़ाइल में अपर्याप्त डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="399"/>
+        <location filename="../../src/CSV/Player.cpp" line="384"/>
         <source>Cannot read CSV file</source>
         <translation>CSV फ़ाइल नहीं पढ़ी जा सकती</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="433"/>
+        <location filename="../../src/CSV/Player.cpp" line="415"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>CSV फ़ाइल में आगे बढ़ने के लिए कम से कम एक डेटा पंक्ति होनी चाहिए। फ़ाइल जाँचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="669"/>
+        <location filename="../../src/CSV/Player.cpp" line="645"/>
         <source>Invalid CSV</source>
         <translation>अमान्य CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="670"/>
+        <location filename="../../src/CSV/Player.cpp" line="646"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV फ़ाइल में कोई डेटा या हेडर नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="679"/>
+        <location filename="../../src/CSV/Player.cpp" line="655"/>
         <source>Select a date/time column</source>
         <translation>दिनांक/समय कॉलम चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="679"/>
-        <location filename="../../src/CSV/Player.cpp" line="691"/>
+        <location filename="../../src/CSV/Player.cpp" line="655"/>
+        <location filename="../../src/CSV/Player.cpp" line="667"/>
         <source>Set interval manually</source>
         <translation>अंतराल मैन्युअल रूप से सेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="681"/>
+        <location filename="../../src/CSV/Player.cpp" line="657"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV दिनांक/समय चयन</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="682"/>
+        <location filename="../../src/CSV/Player.cpp" line="658"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>दिनांक/समय डेटा को कैसे संभालना है चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="694"/>
+        <location filename="../../src/CSV/Player.cpp" line="670"/>
         <source>Set Interval</source>
         <translation>अंतराल सेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="695"/>
+        <location filename="../../src/CSV/Player.cpp" line="671"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>कृपया पंक्तियों के बीच अंतराल मिलीसेकंड में दर्ज करें:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="711"/>
+        <location filename="../../src/CSV/Player.cpp" line="687"/>
         <source>Select Date/Time Column</source>
         <translation>दिनांक/समय कॉलम चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="712"/>
+        <location filename="../../src/CSV/Player.cpp" line="688"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>कृपया वह कॉलम चुनें जिसमें दिनांक/समय डेटा है:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="722"/>
+        <location filename="../../src/CSV/Player.cpp" line="698"/>
         <source>Invalid Selection</source>
         <translation>अमान्य चयन</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="722"/>
+        <location filename="../../src/CSV/Player.cpp" line="698"/>
         <source>The selected column is not valid.</source>
         <translation>चयनित कॉलम मान्य नहीं है।</translation>
     </message>
@@ -2100,12 +2110,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="340"/>
+        <location filename="../../src/Console/Export.cpp" line="331"/>
         <source>Console Export is a Pro feature.</source>
         <translation>कंसोल एक्सपोर्ट एक Pro फीचर है।</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="341"/>
+        <location filename="../../src/Console/Export.cpp" line="332"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>इस फीचर के लिए लाइसेंस आवश्यक है। कंसोल एक्सपोर्ट सक्षम करने के लिए कृपया एक खरीदें।</translation>
     </message>
@@ -2158,7 +2168,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>कोई चेकसम नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="913"/>
+        <location filename="../../src/Console/Handler.cpp" line="908"/>
         <source>Device %1</source>
         <translation>डिवाइस %1</translation>
     </message>
@@ -2706,32 +2716,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>DBC फ़ाइलें (*.DBC);;सभी फ़ाइलें (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="158"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="157"/>
         <source>Failed to parse DBC file: %1</source>
         <translation>DBC फ़ाइल पार्स करने में विफल: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="159"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="158"/>
         <source>Verify the file format and try again.</source>
         <translation>फ़ाइल फ़ॉर्मेट सत्यापित करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="161"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="160"/>
         <source>DBC Import Error</source>
         <translation>DBC इम्पोर्ट त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="168"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="167"/>
         <source>DBC file contains no messages</source>
         <translation>DBC फ़ाइल में कोई मैसेज नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="169"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="168"/>
         <source>The selected file does not contain any CAN message definitions.</source>
         <translation>चयनित फ़ाइल में कोई CAN मैसेज परिभाषा नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="171"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="170"/>
         <source>DBC Import Warning</source>
         <translation>DBC इम्पोर्ट चेतावनी</translation>
     </message>
@@ -2744,12 +2754,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">जाँचें कि एप्लिकेशन के पास अस्थायी डायरेक्टरी में लिखने की अनुमति है या नहीं।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="223"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="221"/>
         <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
         <translation>DBC फ़ाइल सफलतापूर्वक आयात की गई: %1 संदेश और %2 सिग्नल।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="216"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="214"/>
         <source>The project editor is now open for customization.</source>
         <translation>प्रोजेक्ट एडिटर अब कस्टमाइज़ेशन के लिए खुला है।</translation>
     </message>
@@ -2762,17 +2772,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">जेनरेट किया गया प्रोजेक्ट JSON लोड नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="218"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="216"/>
         <source> Skipped %1 signal(s) using extended multiplexing (SG_MUL_VAL_); only simple multiplexing is supported.</source>
         <translation>%1 सिग्नल छोड़े गए जो विस्तारित मल्टीप्लेक्सिंग (SG_MUL_VAL_) का उपयोग करते हैं; केवल सरल मल्टीप्लेक्सिंग समर्थित है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="228"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="226"/>
         <source>DBC Import Complete</source>
         <translation>DBC इम्पोर्ट पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="250"/>
+        <location filename="../../src/DataModel/Importers/DBCImporter.cpp" line="248"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
@@ -2840,32 +2850,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="216"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="214"/>
         <source>Transform — %1</source>
         <translation>ट्रांसफ़ॉर्म — %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="306"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="296"/>
         <source>Enter a value</source>
         <translation>मान दर्ज करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="313"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="303"/>
         <source>Invalid number</source>
         <translation>अमान्य संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="383"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="372"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>दस्तावेज़ फ़ॉर्मेट करें	Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="384"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="373"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>चयन फ़ॉर्मेट करें	Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="490"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="472"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -2924,7 +2934,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 --</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="518"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="500"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -2981,7 +2991,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
  */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="788"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="745"/>
         <source>Select Template…</source>
         <translation>टेम्पलेट चुनें…</translation>
     </message>
@@ -3042,26 +3052,26 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
  * तैयार उदाहरणों के लिए टेम्पलेट ड्रॉपडाउन का उपयोग करें,</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="665"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="635"/>
         <source>Engine error</source>
         <translation>इंजन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="691"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="706"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="726"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="737"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="658"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="671"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="689"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="700"/>
         <source>Error: %1</source>
         <translation>त्रुटि: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="698"/>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="730"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="664"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="693"/>
         <source>Error: transform() not defined</source>
         <translation>त्रुटि: transform() परिभाषित नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="712"/>
+        <location filename="../../src/DataModel/Editors/DatasetTransformEditor.cpp" line="676"/>
         <source>Error: transform() must return a number</source>
         <translation>त्रुटि: transform() को एक संख्या लौटानी चाहिए</translation>
     </message>
@@ -3069,54 +3079,54 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1370"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1488"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1329"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1443"/>
         <source>Channel %1</source>
         <translation>चैनल %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1500"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1454"/>
         <source>Audio Input</source>
         <translation>ऑडियो इनपुट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1379"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1505"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1338"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1459"/>
         <source>Quick Plot</source>
         <translation>क्विक प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1151"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1115"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript ट्रांसफॉर्म बजट सीमा पार हो गई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1152"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1116"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>एक डेटासेट ट्रांसफॉर्म को %1 मि.से. से अधिक समय लगा; फ्रेम के बाकी डेटासेट अगले फ्रेम तक कच्चे मानों पर लौट आए। ट्रांसफॉर्म कोड को प्रोफाइल या सरल करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="199"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="195"/>
         <source>Frame pool exhausted</source>
         <translation>फ्रेम पूल समाप्त हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="201"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="197"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining frames fast enough. Serial Studio is falling back to per-frame allocations until the backlog clears. Disable a heavy consumer or reduce the data rate.</source>
         <translation>एक डाउनस्ट्रीम उपभोक्ता (डैशबोर्ड, CSV/MDF4 निर्यात, सत्र DB, या API सब्सक्राइबर) फ्रेम को पर्याप्त तेजी से नहीं निकाल रहा है। Serial Studio अब बैकलॉग साफ़ होने तक प्रति-फ्रेम आवंटन पर वापस जा रहा है। भारी उपभोक्ता को अक्षम करें या डेटा दर कम करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1330"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1290"/>
         <source>Device A</source>
         <translation>डिवाइस A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1386"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1345"/>
         <source>Quick Plot Data</source>
         <translation>क्विक प्लॉट डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1398"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="1357"/>
         <source>Multiple Plots</source>
         <translation>मल्टीपल प्लॉट</translation>
     </message>
@@ -3179,27 +3189,27 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>लोड करने के लिए टेम्पलेट चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="496"/>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="494"/>
         <source>Invalid hexadecimal input.</source>
         <translation>अमान्य हेक्साडेसिमल इनपुट।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="525"/>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="521"/>
         <source>No template selected.</source>
         <translation>कोई टेम्पलेट चयनित नहीं।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="566"/>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="561"/>
         <source>%1 frame(s) extracted | %2 byte(s) consumed | %3 byte(s) buffered | %4 dropped</source>
         <translation>%1 फ़्रेम एक्सट्रैक्ट किए गए | %2 बाइट उपयोग किए गए | %3 बाइट बफ़र किए गए | %4 छोड़े गए</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="639"/>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="632"/>
         <source>Invalid JSON: %1</source>
         <translation>अमान्य JSON: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="737"/>
+        <location filename="../../src/DataModel/Editors/FrameParserModel.cpp" line="728"/>
         <source>Parameters</source>
         <translation>पैरामीटर</translation>
     </message>
@@ -3368,12 +3378,12 @@ Example (HEX):  48 65 6C 6C 6F</source>
 <context>
     <name>DataModel::JsCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="215"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="202"/>
         <source>Change Scripting Language?</source>
         <translation>स्क्रिप्टिंग भाषा बदलें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="216"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="203"/>
         <source>Switching the scripting language replaces the current parser code with the equivalent template in the new language.
 
 Any unsaved changes are lost. Continue?</source>
@@ -3382,32 +3392,32 @@ Any unsaved changes are lost. Continue?</source>
 कोई भी असहेजित परिवर्तन खो जाएगा। जारी रखें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="384"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="365"/>
         <source>Select Javascript file to import</source>
         <translation>आयात करने के लिए Javascript फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="384"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="365"/>
         <source>Select Lua file to import</source>
         <translation>आयात करने के लिए Lua फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="418"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="397"/>
         <source>Code Validation Successful</source>
         <translation>कोड सत्यापन सफल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="419"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="398"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>पार्सर कोड में कोई सिंटैक्स त्रुटि नहीं मिली।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="532"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="508"/>
         <source>Select Frame Parser Template</source>
         <translation>फ़्रेम पार्सर टेम्पलेट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="533"/>
+        <location filename="../../src/DataModel/Editors/JsCodeEditor.cpp" line="509"/>
         <source>Choose a template to load:</source>
         <translation>लोड करने के लिए टेम्पलेट चुनें:</translation>
     </message>
@@ -3425,17 +3435,17 @@ Any unsaved changes are lost. Continue?</source>
         <translation>Modbus रजिस्टर मैप (*.CSV *.XML *.JSON);;CSV फ़ाइलें (*.CSV);;XML फ़ाइलें (*.XML);;JSON फ़ाइलें (*.JSON);;सभी फ़ाइलें (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="332"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="331"/>
         <source>No registers found</source>
         <translation>कोई रजिस्टर नहीं मिला</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="333"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="332"/>
         <source>The file could not be parsed or contains no register definitions.</source>
         <translation>फ़ाइल पार्स नहीं की जा सकी या इसमें कोई रजिस्टर परिभाषा नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="335"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="334"/>
         <source>Modbus Import</source>
         <translation>Modbus आयात</translation>
     </message>
@@ -3456,22 +3466,22 @@ Any unsaved changes are lost. Continue?</source>
         <translation type="vanished">अस्थायी डायरेक्टरी में लिखने की अनुमति जाँचें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="381"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="379"/>
         <source>Successfully imported %1 registers in %2 groups.</source>
         <translation>%2 समूहों में %1 रजिस्टर सफलतापूर्वक आयात किए गए।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="383"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="381"/>
         <source>The project editor is now open for customization.</source>
         <translation>प्रोजेक्ट एडिटर अब अनुकूलन के लिए खुला है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="385"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="383"/>
         <source>Modbus Import Complete</source>
         <translation>Modbus आयात पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="702"/>
+        <location filename="../../src/DataModel/Importers/ModbusMapImporter.cpp" line="692"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
@@ -3534,17 +3544,17 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::OutputCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="290"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="283"/>
         <source>Select Javascript file to import</source>
         <translation>आयात करने के लिए Javascript फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="351"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="341"/>
         <source>Select Output Widget Template</source>
         <translation>आउटपुट विजेट टेम्पलेट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="352"/>
+        <location filename="../../src/DataModel/Editors/OutputCodeEditor.cpp" line="342"/>
         <source>Choose a template to load:</source>
         <translation>लोड करने के लिए टेम्पलेट चुनें:</translation>
     </message>
@@ -3552,27 +3562,27 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::PainterCodeEditor</name>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="298"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="295"/>
         <source>Select Javascript file to import</source>
         <translation>आयात करने के लिए Javascript फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="386"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="382"/>
         <source>Select Painter Widget Template</source>
         <translation>पेंटर विजेट टेम्पलेट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="387"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="383"/>
         <source>Choose a template to load:</source>
         <translation>लोड करने के लिए टेम्पलेट चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="432"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="427"/>
         <source>Add datasets for this template?</source>
         <translation>इस टेम्पलेट के लिए डेटासेट जोड़ें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="433"/>
+        <location filename="../../src/DataModel/Editors/PainterCodeEditor.cpp" line="428"/>
         <source>"%1" expects %2 dataset(s); the current group has %3.
 
 Add %4 dataset(s) using the template's defaults?</source>
@@ -3584,487 +3594,487 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2178"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2142"/>
         <source>Project Information</source>
         <translation>प्रोजेक्ट जानकारी</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2188"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2152"/>
         <source>Project Title</source>
         <translation>प्रोजेक्ट शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2189"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2153"/>
         <source>Untitled Project</source>
         <translation>अनाम प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2190"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2154"/>
         <source>Name or description of the project</source>
         <translation>प्रोजेक्ट का नाम या विवरण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2415"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2377"/>
         <source>Frame Detection</source>
         <translation>फ्रेम डिटेक्शन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2429"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2391"/>
         <source>Frame Detection Method</source>
         <translation>फ्रेम डिटेक्शन विधि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2430"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2392"/>
         <source>Select how incoming data frames are identified</source>
         <translation>आने वाले डेटा फ्रेम की पहचान कैसे की जाती है चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2440"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
         <source>Hexadecimal Delimiters</source>
         <translation>हेक्साडेसिमल डिलीमिटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2441"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2403"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>फ्रेम स्टार्ट/एंड सीक्वेंस हेक्साडेसिमल वैल्यू के रूप में दर्ज करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2457"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2419"/>
         <source>Frame Start Delimiter</source>
         <translation>फ्रेम स्टार्ट डिलीमिटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2458"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2420"/>
         <source>e.g. /*</source>
         <translation>उदा. /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2459"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2421"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>डेटा फ्रेम की शुरुआत को चिह्नित करने वाला सीक्वेंस</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2471"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2433"/>
         <source>Frame End Delimiter</source>
         <translation>फ़्रेम समाप्ति डिलिमिटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2472"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2434"/>
         <source>e.g. */</source>
         <translation>उदा. */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2473"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2435"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>डेटा फ़्रेम के अंत को चिह्नित करने वाला अनुक्रम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2479"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2441"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>पेलोड प्रोसेसिंग और सत्यापन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2490"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2452"/>
         <source>Data Conversion Method</source>
         <translation>डेटा रूपांतरण विधि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2491"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>आने वाले बाइनरी डेटा को पार्स करने से पहले कैसे डिकोड किया जाता है चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2507"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2469"/>
         <source>Checksum Algorithm</source>
         <translation>चेकसम एल्गोरिदम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2508"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2470"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>फ़्रेम सत्यापित करने के लिए उपयोग किया जाने वाला चेकसम एल्गोरिदम चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2208"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2172"/>
         <source>Group Information</source>
         <translation>समूह जानकारी</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2218"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2182"/>
         <source>Group Title</source>
         <translation>समूह शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2219"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2183"/>
         <source>Untitled Group</source>
         <translation>शीर्षकहीन समूह</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2220"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2184"/>
         <source>Title or description of this dataset group</source>
         <translation>इस डेटासेट समूह का शीर्षक या विवरण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2353"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2315"/>
         <source>Composite Widget</source>
         <translation>कंपोजिट विजेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2354"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2316"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>चुनें कि डेटासेट के इस समूह को कैसे विज़ुअलाइज़ किया जाना चाहिए (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2270"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2234"/>
         <source>Image Configuration</source>
         <translation>इमेज कॉन्फ़िगरेशन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3098"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3049"/>
         <source>Virtual Dataset</source>
         <translation>वर्चुअल डेटासेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3099"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3050"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>वर्चुअल डेटासेट अपना मान ट्रांसफ़ॉर्म और डेटा टेबल से कंप्यूट करते हैं, उन्हें फ़्रेम इंडेक्स की आवश्यकता नहीं होती</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3599"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3539"/>
         <source>Auto-detect</source>
         <translation>स्वतः पहचानें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3599"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3539"/>
         <source>Manual Delimiters</source>
         <translation>मैनुअल डिलिमिटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2283"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2247"/>
         <source>Detection Mode</source>
         <translation>पहचान मोड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1311"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1314"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1287"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1290"/>
         <source>Frame Parser</source>
         <translation>फ़्रेम पार्सर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1454"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1455"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1499"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1429"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1430"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1472"/>
         <source>Groups</source>
         <translation>ग्रुप्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1529"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1542"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1543"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1502"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1515"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1516"/>
         <source>Shared Memory</source>
         <translation>शेयर्ड मेमोरी</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1529"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1549"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1550"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4969"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1502"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1521"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1522"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4887"/>
         <source>Dataset Values</source>
         <translation>डेटासेट वैल्यूज़</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1593"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1606"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1607"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1564"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1577"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1578"/>
         <source>Workspaces</source>
         <translation>वर्कस्पेसेज़</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1645"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1648"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1649"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1616"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1619"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1620"/>
         <source>MQTT Publisher</source>
         <translation>MQTT प्रकाशक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1698"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1669"/>
         <source>Publishing</source>
         <translation>प्रकाशन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1709"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1679"/>
         <source>Enable Publishing</source>
         <translation>प्रकाशन सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1710"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1680"/>
         <source>Broadcast frames, raw bytes and notifications to the broker</source>
         <translation>फ़्रेम, रॉ बाइट्स और सूचनाएं ब्रोकर पर प्रसारित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1721"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1691"/>
         <source>Payload</source>
         <translation>पेलोड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1722"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1692"/>
         <source>Selects what gets published: parsed dashboard data or raw RX bytes</source>
         <translation>क्या प्रकाशित होगा यह चुनें: पार्स किया गया डैशबोर्ड डेटा या रॉ RX बाइट्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1732"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1702"/>
         <source>Publish Rate (Hz)</source>
         <translation>प्रकाशन दर (Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1733"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1703"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
         <translation>प्रति सेकंड कितनी बार प्रकाशित करना है (1-30 Hz)। उच्च दर से ब्रोकर लोड बढ़ता है; डैशबोर्ड डेटा रेट-लिमिटेड है इसलिए धीमा ब्रोकर कभी फ़्रेम पार्सिंग को ब्लॉक नहीं करता।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1745"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1715"/>
         <source>Topic Base</source>
         <translation>टॉपिक बेस</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1746"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1716"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/device</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1747"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1717"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>फ़्रेम और रॉ-बाइट प्रकाशन के लिए उपयोग किया जाने वाला बेस टॉपिक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1758"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1727"/>
         <source>Script Topic</source>
         <translation>स्क्रिप्ट टॉपिक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1759"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1783"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1728"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1752"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>खाली होने पर टॉपिक बेस पर डिफ़ॉल्ट होता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1760"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1729"/>
         <source>Topic the user script publishes to</source>
         <translation>टॉपिक जिस पर यूज़र स्क्रिप्ट प्रकाशित करती है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1770"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1739"/>
         <source>Publish Notifications</source>
         <translation>नोटिफ़िकेशन प्रकाशित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1771"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1740"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>डैशबोर्ड नोटिफ़िकेशन को एक समर्पित टॉपिक पर मिरर करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1782"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1751"/>
         <source>Notification Topic</source>
         <translation>नोटिफ़िकेशन टॉपिक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1784"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1753"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>टॉपिक जहाँ डैशबोर्ड नोटिफ़िकेशन मिरर किए जाते हैं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1797"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1766"/>
         <source>Broker</source>
         <translation>Broker</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1807"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1776"/>
         <source>Hostname</source>
         <translation>होस्टनेम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1777"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1809"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1778"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>MQTT ब्रोकर का होस्टनेम या IP एड्रेस</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1818"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1787"/>
         <source>Port</source>
         <translation>पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1819"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1788"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>ब्रोकर द्वारा एक्सपोज़ किया गया TCP पोर्ट (1883 प्लेन, 8883 TLS)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1829"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1798"/>
         <source>Custom Client ID</source>
         <translation>कस्टम क्लाइंट ID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1831"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1800"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>बंद: हर प्रोजेक्ट लोड पर एक नया रैंडम ID जनरेट होता है। चालू: नीचे दिया गया ID उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1842"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1811"/>
         <source>Client ID</source>
         <translation>क्लाइंट ID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1843"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1812"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>CONNECT पर ब्रोकर को भेजा जाने वाला आइडेंटिफ़ायर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1856"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1825"/>
         <source>Protocol Version</source>
         <translation>प्रोटोकॉल संस्करण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1857"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1826"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>CONNECT पर उपयोग किया गया MQTT प्रोटोकॉल संशोधन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1866"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1835"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1867"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1836"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>निष्क्रिय होने पर PINGREQ पैकेट के बीच सेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1876"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1845"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1877"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1846"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>CONNECT पर किसी भी स्थायी सत्र स्थिति को त्यागें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1892"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1861"/>
         <source>Username</source>
         <translation>उपयोगकर्ता नाम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1893"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1862"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>ब्रोकर प्रमाणीकरण के लिए उपयोगकर्ता नाम (अनाम के लिए खाली छोड़ें)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1903"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1872"/>
         <source>Password</source>
         <translation>पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1904"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1873"/>
         <source>Password for broker authentication</source>
         <translation>ब्रोकर प्रमाणीकरण के लिए पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1915"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1884"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1925"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1894"/>
         <source>Use SSL/TLS</source>
         <translation>SSL/TLS उपयोग करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1926"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1895"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>TLS के माध्यम से ब्रोकर कनेक्शन टनल करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1939"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1908"/>
         <source>Protocol</source>
         <translation>प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1940"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1909"/>
         <source>Negotiated TLS protocol family</source>
         <translation>नेगोशिएटेड TLS प्रोटोकॉल फैमिली</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1950"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1919"/>
         <source>Peer Verify</source>
         <translation>पीयर सत्यापन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1951"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1920"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>ब्रोकर की सर्टिफिकेट चेन को कितनी सख्ती से मान्य किया जाता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1961"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1930"/>
         <source>Verify Depth</source>
         <translation>सत्यापन गहराई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1962"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1931"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>स्वीकृत अधिकतम सर्टिफिकेट चेन लंबाई (0 = असीमित)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2235"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2833"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2199"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2787"/>
         <source>Device %1</source>
         <translation>डिवाइस %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2253"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2374"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2217"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2336"/>
         <source>Input Device</source>
         <translation>इनपुट डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2254"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2218"/>
         <source>Select which connected device provides data for this group</source>
         <translation>चुनें कि कौन सा कनेक्टेड डिवाइस इस ग्रुप के लिए डेटा प्रदान करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2285"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2249"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>स्वतः-पहचान JPEG/PNG मैजिक बाइट्स पढ़ता है; मैनुअल स्पष्ट प्रारंभ/समाप्ति अनुक्रम उपयोग करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2295"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2259"/>
         <source>Start Sequence (Hex)</source>
         <translation>स्टार्ट सीक्वेंस (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2296"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2260"/>
         <source>e.g. FF D8 FF</source>
         <translation>उदा. FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2297"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2261"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>इमेज फ्रेम की शुरुआत को चिह्नित करने वाले Hex बाइट्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2306"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2270"/>
         <source>End Sequence (Hex)</source>
         <translation>समाप्ति अनुक्रम (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2307"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2271"/>
         <source>e.g. FF D9</source>
         <translation>उदा. FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2308"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2272"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>इमेज फ्रेम के अंत को चिह्नित करने वाले Hex बाइट्स</translation>
     </message>
@@ -4073,409 +4083,409 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">पहचान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2384"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2346"/>
         <source>Device Name</source>
         <translation>डिवाइस का नाम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2385"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2347"/>
         <source>Device 1</source>
         <translation>डिवाइस 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2386"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2348"/>
         <source>Human-readable name for this input device</source>
         <translation>इस इनपुट डिवाइस के लिए पठनीय नाम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2395"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2357"/>
         <source>Bus Type</source>
         <translation>बस प्रकार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2396"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2358"/>
         <source>Select the hardware interface for this input device</source>
         <translation>इस इनपुट डिवाइस के लिए हार्डवेयर इंटरफ़ेस चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2398"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2360"/>
         <source>Serial Port</source>
         <translation>सीरियल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2398"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2360"/>
         <source>Network Socket</source>
         <translation>नेटवर्क सॉकेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2398"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2360"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2362"/>
         <source>Audio Input</source>
         <translation>ऑडियो इनपुट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2362"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2362"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2400"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2362"/>
         <source>Raw USB</source>
         <translation>Raw USB</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2363"/>
         <source>HID Device</source>
         <translation>HID डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2363"/>
         <source>Process</source>
         <translation>प्रोसेस</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2401"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2363"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT Subscriber</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2559"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2518"/>
         <source>Connection Settings</source>
         <translation>कनेक्शन सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2800"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3074"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4660"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2755"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3025"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4583"/>
         <source>General Information</source>
         <translation>सामान्य जानकारी</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2809"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2764"/>
         <source>Action Title</source>
         <translation>एक्शन शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2811"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2766"/>
         <source>Untitled Action</source>
         <translation>अनाम एक्शन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2812"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2767"/>
         <source>Name or description of this action</source>
         <translation>इस एक्शन का नाम या विवरण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2821"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2776"/>
         <source>Action Icon</source>
         <translation>एक्शन आइकन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2822"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2777"/>
         <source>Default Icon</source>
         <translation>डिफ़ॉल्ट आइकन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2823"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2778"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>डैशबोर्ड में इस एक्शन के लिए प्रदर्शित आइकन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2851"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2805"/>
         <source>Target Device</source>
         <translation>लक्ष्य डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2852"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2806"/>
         <source>Select which connected device this action sends data to</source>
         <translation>चुनें कि यह एक्शन किस कनेक्टेड डिवाइस को डेटा भेजता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2864"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2818"/>
         <source>Data Payload</source>
         <translation>डेटा पेलोड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2875"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2829"/>
         <source>Send as Binary</source>
         <translation>बाइनरी के रूप में भेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2876"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2830"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>जब यह एक्शन ट्रिगर हो तो रॉ बाइनरी डेटा भेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2887"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2899"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2841"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2853"/>
         <source>Command</source>
         <translation>कमांड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2888"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2842"/>
         <source>Transmit Data (Hex)</source>
         <translation>डेटा ट्रांसमिट करें (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2889"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2843"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>हेक्साडेसिमल पेलोड जो एक्शन ट्रिगर होने पर भेजा जाएगा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2900"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2854"/>
         <source>Transmit Data</source>
         <translation>डेटा ट्रांसमिट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2901"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2855"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>टेक्स्ट पेलोड जो एक्शन ट्रिगर होने पर भेजा जाएगा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2912"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4719"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2866"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4642"/>
         <source>Text Encoding</source>
         <translation>टेक्स्ट एन्कोडिंग</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2913"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2867"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>टेक्स्ट पेलोड को सीरियलाइज़ करने के लिए उपयोग की जाने वाली कैरेक्टर एन्कोडिंग</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2937"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2891"/>
         <source>End-of-Line Sequence</source>
         <translation>एंड-ऑफ-लाइन सीक्वेंस</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2938"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2892"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>संदेश में जोड़े जाने वाले EOL कैरेक्टर (जैसे </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2950"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2904"/>
         <source>Execution Behavior</source>
         <translation>निष्पादन व्यवहार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2961"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2915"/>
         <source>Auto-Execute on Connect</source>
         <translation>कनेक्ट पर ऑटो-निष्पादित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2962"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2916"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>डिवाइस कनेक्ट होने पर इस एक्शन को स्वचालित रूप से ट्रिगर करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2968"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2922"/>
         <source>Timer Behavior</source>
         <translation>टाइमर व्यवहार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2977"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2931"/>
         <source>Timer Mode</source>
         <translation>टाइमर मोड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2980"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2934"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>चुनें कि यह एक्शन कब और कैसे स्वचालित रूप से दोहराया जाना चाहिए</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2987"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2941"/>
         <source>Interval (ms)</source>
         <translation>अंतराल (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2991"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2945"/>
         <source>Timer Interval (ms)</source>
         <translation>टाइमर अंतराल (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2992"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2946"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>इस एक्शन के प्रत्येक बार-बार ट्रिगर के बीच मिलीसेकंड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2999"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3003"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2953"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2957"/>
         <source>Repeat Count</source>
         <translation>रिपीट काउंट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3004"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2958"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>प्रत्येक ट्रिगर पर कमांड भेजने की संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3084"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3035"/>
         <source>Untitled Dataset</source>
         <translation>शीर्षकहीन डेटासेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3085"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3036"/>
         <source>Dataset Title</source>
         <translation>डेटासेट शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3086"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3037"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>डेटासेट का नाम, लेबलिंग और पहचान के लिए उपयोग किया जाता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3116"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3066"/>
         <source>Hide on Dashboard</source>
         <translation>डैशबोर्ड पर छिपाएँ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3117"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3067"/>
         <source>Suppress this dataset's standalone dashboard tile; the painter widget can still read its values</source>
         <translation>इस डेटासेट की स्वतंत्र डैशबोर्ड टाइल को दबाएँ; पेंटर विजेट अभी भी इसके मान पढ़ सकता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3163"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3113"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>डेटासेट वैल्यू रेंज की निचली सीमा; विजेट और FFT इस पर फॉलबैक करते हैं जब उनकी अपनी रेंज सेट नहीं होती</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3176"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3126"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
         <translation>डेटासेट वैल्यू रेंज की ऊपरी सीमा; विजेट और FFT इस पर फॉलबैक करते हैं जब उनकी अपनी रेंज सेट नहीं होती</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3236"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3184"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
         <translation>प्लॉट में X-Axis चलाने के लिए Time या डेटासेट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3249"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3197"/>
         <source>Frequency Analysis</source>
         <translation>फ्रीक्वेंसी विश्लेषण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3297"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3244"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
         <translation>समय (डिफ़ॉल्ट) या कोई भी डेटासेट चुनें जिसका मान Y अक्ष को संचालित करता है -- उदाहरण के लिए RPM से बाइंड करने पर कैंपबेल आरेख उत्पन्न करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3348"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3437"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3294"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3383"/>
         <source>Minimum Value (optional)</source>
         <translation>न्यूनतम मान (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3349"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3295"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>डेटा सामान्यीकरण के लिए निचली सीमा; अनसेट छोड़ने पर डेटासेट मान रेंज पर वापस आता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3361"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3307"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3396"/>
         <source>Maximum Value (optional)</source>
         <translation>अधिकतम मान (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3362"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3308"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
         <translation>डेटा सामान्यीकरण के लिए ऊपरी सीमा; अनसेट छोड़ने पर डेटासेट मान रेंज पर वापस आता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3438"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3384"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>गेज या बार रेंज की निचली सीमा; अनसेट छोड़ने पर डेटासेट मान रेंज पर वापस आता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3451"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3397"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
         <translation>गेज या बार रेंज की ऊपरी सीमा; अनसेट छोड़ने पर डेटासेट मान रेंज पर वापस आता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3615"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3554"/>
         <source>Painter Widget</source>
         <translation>पेंटर विजेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4970"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4888"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
         <translation>प्रत्येक डेटासेट के लिए कच्चे और रूपांतरित मान (केवल-पढ़ने योग्य)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4980"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4897"/>
         <source>Shared table defined in this project</source>
         <translation>इस प्रोजेक्ट में परिभाषित साझा टेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5332"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5244"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>1 विजेट संदर्भ हटाएं जिसका लक्ष्य ग्रुप या डेटासेट अब मौजूद नहीं है?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5333"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5245"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>%1 विजेट संदर्भ हटाएं जिनके लक्ष्य ग्रुप या डेटासेट अब मौजूद नहीं हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5338"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5250"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>यह केवल वर्कस्पेस टाइल प्लेसमेंट को प्रभावित करेगा; कोई ग्रुप, डेटासेट या डेटा डिलीट नहीं होगा।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5341"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="5253"/>
         <source>Clean Up Workspaces</source>
         <translation>वर्कस्पेसेज़ साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3130"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3080"/>
         <source>Frame Index</source>
         <translation>फ़्रेम इंडेक्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3131"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3081"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>समय में डेटासेट को संरेखित करने के लिए उपयोग की जाने वाली फ़्रेम स्थिति</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3140"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3090"/>
         <source>Measurement Unit</source>
         <translation>माप इकाई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3141"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3091"/>
         <source>Volts, Amps, etc.</source>
         <translation>वोल्ट, एम्पीयर, आदि।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3142"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3092"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>माप की इकाई, जैसे वोल्ट या एम्पीयर (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3190"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3139"/>
         <source>Plot Settings</source>
         <translation>प्लॉट सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3213"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3162"/>
         <source>Enable Plot Widget</source>
         <translation>प्लॉट विजेट सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3215"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3164"/>
         <source>Plot data in real-time</source>
         <translation>रियल-टाइम में डेटा प्लॉट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3235"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3183"/>
         <source>X-Axis Source</source>
         <translation>X-अक्ष स्रोत</translation>
     </message>
@@ -4504,27 +4514,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT कॉन्फ़िगरेशन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3260"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3208"/>
         <source>Enable FFT Analysis</source>
         <translation>FFT विश्लेषण सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3261"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3209"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>डेटासेट का फ़्रीक्वेंसी-डोमेन विश्लेषण करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3271"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3219"/>
         <source>Enable Waterfall Plot</source>
         <translation>वॉटरफॉल प्लॉट सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3272"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3220"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
         <translation>समय के साथ फ्रीक्वेंसी सामग्री का स्क्रॉलिंग स्पेक्ट्रोग्राम दिखाएं (Pro)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3296"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3243"/>
         <source>Waterfall Y Axis</source>
         <translation>वॉटरफॉल Y अक्ष</translation>
     </message>
@@ -4533,22 +4543,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="obsolete">समय (डिफ़ॉल्ट) या कोई भी डेटासेट चुनें जिसका मान Y अक्ष को संचालित करता है — उदाहरण के लिए RPM से बाइंड करने पर कैंपबेल आरेख उत्पन्न करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3271"/>
         <source>FFT Window Size</source>
         <translation>FFT विंडो आकार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3326"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3272"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>प्रत्येक FFT गणना विंडो के लिए उपयोग किए गए नमूनों की संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3337"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3283"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT सैंपलिंग रेट (Hz, आवश्यक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3338"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3284"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>FFT के लिए उपयोग की गई सैंपलिंग फ़्रीक्वेंसी (Hz में)</translation>
     </message>
@@ -4569,17 +4579,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">डेटा नॉर्मलाइज़ेशन के लिए ऊपरी सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3387"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3333"/>
         <source>Widget Settings</source>
         <translation>विजेट सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3410"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3356"/>
         <source>Widget</source>
         <translation>विजेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3411"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3357"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>इस डेटासेट को डिस्प्ले करने के लिए उपयोग किया जाने वाला विज़ुअल विजेट चुनें</translation>
     </message>
@@ -4600,28 +4610,28 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">गेज या बार डिस्प्ले रेंज की ऊपरी सीमा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3467"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3628"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3413"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3565"/>
         <source>Auto</source>
         <translation>स्वतः</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3468"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3414"/>
         <source>Tick Count</source>
         <translation>टिक संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3472"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3418"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
         <translation>डायल स्केल पर मुख्य-टिक संख्या (0 = विजेट आकार में स्वतः फ़िट)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3491"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3437"/>
         <source>Label Format</source>
         <translation>लेबल फ़ॉर्मेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3492"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3438"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
         <translation>टिक लेबल और मान प्रदर्शन में उपयोग किए गए दशमलव स्थान या संकेतन</translation>
     </message>
@@ -4662,184 +4672,184 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">मान इस थ्रेशोल्ड से अधिक होने पर विज़ुअल अलार्म ट्रिगर करता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3529"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3474"/>
         <source>LED Display Settings</source>
         <translation>LED डिस्प्ले सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3540"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3485"/>
         <source>Show in LED Panel</source>
         <translation>LED पैनल में दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3541"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3486"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LED डिस्प्ले का उपयोग करके विज़ुअल स्टेटस मॉनिटरिंग सक्षम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3552"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3497"/>
         <source>LED On Threshold (required)</source>
         <translation>LED ऑन थ्रेशोल्ड (आवश्यक)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3553"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3498"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>LED इस थ्रेशोल्ड को पूरा करने या पार करने पर प्रकाशित होता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3517"/>
         <source>Off</source>
         <translation>बंद</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3517"/>
         <source>Auto Start</source>
         <translation>स्वतः प्रारंभ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3517"/>
         <source>Start on Trigger</source>
         <translation>ट्रिगर पर प्रारंभ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3517"/>
         <source>Toggle on Trigger</source>
         <translation>ट्रिगर पर टॉगल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3575"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3518"/>
         <source>Repeat N Times</source>
         <translation>N बार दोहराएं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3579"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3521"/>
         <source>Plain Text (UTF8)</source>
         <translation>सादा टेक्स्ट (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3579"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3521"/>
         <source>Hexadecimal</source>
         <translation>हेक्साडेसिमल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3579"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3521"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3580"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3522"/>
         <source>Binary (Direct)</source>
         <translation>बाइनरी (प्रत्यक्ष)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3586"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3527"/>
         <source>No Checksum</source>
         <translation>कोई चेकसम नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3531"/>
         <source>End Delimiter Only</source>
         <translation>केवल अंत डिलीमिटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3531"/>
         <source>Start Delimiter Only</source>
         <translation>केवल प्रारंभ डिलीमिटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3532"/>
         <source>Start + End Delimiter</source>
         <translation>प्रारंभ + अंत डिलीमिटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3592"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3532"/>
         <source>No Delimiters</source>
         <translation>कोई डिलीमिटर नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3542"/>
         <source>Button</source>
         <translation>बटन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3542"/>
         <source>Slider</source>
         <translation>स्लाइडर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3542"/>
         <source>Toggle</source>
         <translation>टॉगल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3602"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3542"/>
         <source>Text Field</source>
         <translation>टेक्स्ट फ़ील्ड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3603"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3543"/>
         <source>Knob</source>
         <translation>नॉब</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3608"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3547"/>
         <source>Data Grid</source>
         <translation>डेटा ग्रिड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3548"/>
         <source>GPS Map</source>
         <translation>GPS मैप</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3610"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3549"/>
         <source>Gyroscope</source>
         <translation>जायरोस्कोप</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3611"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3550"/>
         <source>Multiple Plot</source>
         <translation>मल्टीपल प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3612"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3551"/>
         <source>Accelerometer</source>
         <translation>एक्सेलेरोमीटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3613"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3552"/>
         <source>3D Plot</source>
         <translation>3D प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3614"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3553"/>
         <source>Image View</source>
         <translation>इमेज व्यू</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3616"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3620"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3637"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3555"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3558"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3573"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3621"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3559"/>
         <source>Bar</source>
         <translation>बार</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3622"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3560"/>
         <source>Gauge</source>
         <translation>गेज</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3623"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3561"/>
         <source>Compass</source>
         <translation>कंपास</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3624"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3562"/>
         <source>Meter</source>
         <translation>मीटर</translation>
     </message>
@@ -4848,109 +4858,109 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">थर्मामीटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3629"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3566"/>
         <source>Integer (0 decimals)</source>
         <translation>पूर्णांक (0 दशमलव)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3630"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3567"/>
         <source>1 decimal</source>
         <translation>1 दशमलव</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3631"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3568"/>
         <source>2 decimals</source>
         <translation>2 दशमलव</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3632"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3569"/>
         <source>3 decimals</source>
         <translation>3 दशमलव</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3633"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3570"/>
         <source>Scientific</source>
         <translation>वैज्ञानिक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3638"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3574"/>
         <source>New Line (\n)</source>
         <translation>नई लाइन (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3639"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3575"/>
         <source>Carriage Return (\r)</source>
         <translation>कैरिज रिटर्न (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3640"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3576"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3644"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3579"/>
         <source>No</source>
         <translation>नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3645"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3580"/>
         <source>Yes</source>
         <translation>हाँ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4670"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4593"/>
         <source>Label</source>
         <translation>लेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4671"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4594"/>
         <source>Display label</source>
         <translation>डिस्प्ले लेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4681"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4604"/>
         <source>Button Icon</source>
         <translation>बटन आइकन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4690"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4613"/>
         <source>Colorize Icon</source>
         <translation>आइकन रंगीन करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4691"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4614"/>
         <source>Tint the icon with the button color</source>
         <translation>बटन रंग से आइकन को टिंट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4708"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4631"/>
         <source>Initial Value</source>
         <translation>प्रारंभिक मान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4720"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4643"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>कैरेक्टर एन्कोडिंग जब transmit() स्ट्रिंग मान लौटाता है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4738"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4661"/>
         <source>Value Range</source>
         <translation>मान रेंज</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3162"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4748"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3112"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4671"/>
         <source>Minimum Value</source>
         <translation>न्यूनतम मान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3175"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4757"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3125"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4680"/>
         <source>Maximum Value</source>
         <translation>अधिकतम मान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4766"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="4689"/>
         <source>Step Size</source>
         <translation>स्टेप साइज़</translation>
     </message>
@@ -4958,53 +4968,53 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="527"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="536"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="525"/>
         <source>Lock Project</source>
         <translation>प्रोजेक्ट लॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="528"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="517"/>
         <source>Choose a password to lock the project:</source>
         <translation>प्रोजेक्ट लॉक करने के लिए पासवर्ड चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="536"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="525"/>
         <source>Confirm the password:</source>
         <translation>पासवर्ड की पुष्टि करें:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="541"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="530"/>
         <source>Passwords do not match</source>
         <translation>पासवर्ड मेल नहीं खाते</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="542"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="531"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>दर्ज किए गए दोनों पासवर्ड मेल नहीं खाते। प्रोजेक्ट लॉक नहीं किया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="576"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="565"/>
         <source>Unlock Project</source>
         <translation>प्रोजेक्ट अनलॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="577"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="566"/>
         <source>Enter the project password:</source>
         <translation>प्रोजेक्ट पासवर्ड दर्ज करें:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="576"/>
         <source>Incorrect password</source>
         <translation>गलत पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="588"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="577"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>दर्ज किया गया पासवर्ड प्रोजेक्ट फ़ाइल में संग्रहीत पासवर्ड से मेल नहीं खाता।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="620"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="608"/>
         <source>New Project</source>
         <translation>नया प्रोजेक्ट</translation>
     </message>
@@ -5013,17 +5023,17 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">सैंपल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1233"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1210"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>एकाधिक डेटा स्रोतों के लिए Pro लाइसेंस आवश्यक है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1211"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro एक साथ कई डिवाइस से कनेक्ट करने की अनुमति देता है। कृपया इस सुविधा को अनलॉक करने के लिए अपग्रेड करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1247"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1223"/>
         <source>Device %1</source>
         <translation>डिवाइस %1</translation>
     </message>
@@ -5032,187 +5042,187 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">(कॉपी)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1486"/>
         <source>Do you want to save your changes?</source>
         <translation>क्या आप अपने परिवर्तन सहेजना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1487"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>इस प्रोजेक्ट में आपके पास असहेजे संशोधन हैं!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="396"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="406"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="420"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="388"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="397"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="410"/>
         <source>Project error</source>
         <translation>प्रोजेक्ट त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="396"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="388"/>
         <source>Project title cannot be empty!</source>
         <translation>प्रोजेक्ट शीर्षक खाली नहीं हो सकता!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="406"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="397"/>
         <source>You need to add at least one group!</source>
         <translation>आपको कम से कम एक ग्रुप जोड़ना होगा!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="420"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="410"/>
         <source>You need to add at least one dataset!</source>
         <translation>आपको कम से कम एक डेटासेट जोड़ना होगा!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="468"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="457"/>
         <source>Your project needs a title</source>
         <translation>आपके प्रोजेक्ट को एक शीर्षक चाहिए</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="470"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="459"/>
         <source>Add a group to get started</source>
         <translation>शुरू करने के लिए एक समूह जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="472"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="461"/>
         <source>Add a dataset to a group</source>
         <translation>किसी समूह में एक डेटासेट जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="486"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="475"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>ट्री के शीर्ष पर प्रोजेक्ट व्यू खोलें और एक नाम दर्ज करें। आप किसी भी समय प्रोजेक्ट का नाम बदल सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="489"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="478"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>समूह डेटासेट को डैशबोर्ड विजेट में व्यवस्थित करते हैं। एक बनाने के लिए ऊपर टूलबार में समूह बटन का उपयोग करें, फिर उसमें डेटासेट जोड़ें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="493"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="482"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>डेटासेट वे मान हैं जो डैशबोर्ड पर दिखाई देते हैं। ट्री में एक समूह चुनें और एक जोड़ने के लिए टूलबार में डेटासेट बटन का उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="774"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="822"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="760"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="807"/>
         <source>Time</source>
         <translation>समय</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1282"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1255"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>क्या आप डेटा स्रोत "%1" को डिलीट करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1283"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1256"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>इस स्रोत का उपयोग करने वाले समूह डिफ़ॉल्ट स्रोत में चले जाएंगे। यह एक्शन पूर्ववत नहीं किया जा सकता।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1570"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1526"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio प्रोजेक्ट सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1572"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2194"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1528"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2117"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio प्रोजेक्ट फ़ाइलें (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1594"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1830"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2185"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1549"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1765"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2108"/>
         <source>Untitled Project</source>
         <translation>अनाम प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1840"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2346"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1775"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2263"/>
         <source>Device A</source>
         <translation>डिवाइस A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2014"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1950"/>
         <source>Select Project File</source>
         <translation>प्रोजेक्ट फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2016"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1952"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>प्रोजेक्ट फ़ाइलें (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2065"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1996"/>
         <source>JSON validation error</source>
         <translation>JSON सत्यापन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2160"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2082"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>प्रोजेक्ट को पुराने फ़ाइल फ़ॉर्मेट से अपग्रेड किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2161"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2083"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>यह प्रोजेक्ट स्कीमा संस्करण %1 के साथ सेव किया गया था; वर्तमान संस्करण %2 है। किसी भी नए फ़ील्ड के लिए डिफ़ॉल्ट लागू किए गए हैं। अपग्रेड लॉक करने के लिए प्रोजेक्ट सेव करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2192"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2115"/>
         <source>Save Imported Project</source>
         <translation>आयातित प्रोजेक्ट सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2391"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2307"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>मल्टी-सोर्स प्रोजेक्ट के लिए Pro लाइसेंस आवश्यक है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2392"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2308"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>इस प्रोजेक्ट में एकाधिक डेटा स्रोत हैं। केवल पहला स्रोत लोड किया गया है। मल्टी-सोर्स प्रोजेक्ट उपयोग करने के लिए Serial Studio Pro लाइसेंस आवश्यक है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2628"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2541"/>
         <source>Workspace IDs remapped on load</source>
         <translation>लोड करते समय वर्कस्पेस ID फिर से मैप किए गए</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2629"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2542"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 कस्टम वर्कस्पेस ID नई आरक्षित ऑटो रेंज से ओवरलैप हो गईं और यूज़र रेंज में स्थानांतरित कर दी गईं। रीमैप को स्थायी बनाने के लिए प्रोजेक्ट सहेजें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2774"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2684"/>
         <source>Legacy frame parser function updated</source>
         <translation>लीगेसी फ़्रेम पार्सर फ़ंक्शन अपडेट किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2775"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2685"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>आपके प्रोजेक्ट में 'separator' आर्गुमेंट के साथ एक लीगेसी फ़्रेम पार्सर फ़ंक्शन का उपयोग किया गया था। इसे स्वचालित रूप से नए फ़ॉर्मेट में माइग्रेट कर दिया गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2975"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2882"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>क्या आप ग्रुप "%1" को डिलीट करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2976"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3027"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3062"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3829"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2883"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2928"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2960"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3698"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>यह क्रिया पूर्ववत नहीं की जा सकती। क्या आप आगे बढ़ना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3026"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2927"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>क्या आप एक्शन "%1" को डिलीट करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3061"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2959"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>क्या आप डेटासेट "%1" को डिलीट करना चाहते हैं?</translation>
     </message>
@@ -5221,78 +5231,78 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">%1 (कॉपी)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3737"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3776"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3610"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3646"/>
         <source>Output Controls</source>
         <translation>आउटपुट कंट्रोल्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3789"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3658"/>
         <source>New Button</source>
         <translation>नया बटन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3792"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3661"/>
         <source>New Slider</source>
         <translation>नया स्लाइडर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3664"/>
         <source>New Toggle</source>
         <translation>नया टॉगल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3798"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3667"/>
         <source>New Text Field</source>
         <translation>नया टेक्स्ट फ़ील्ड</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3801"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3670"/>
         <source>New Knob</source>
         <translation>नया नॉब</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3828"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3697"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>क्या आप आउटपुट विजेट "%1" को हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4001"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3862"/>
         <source>Group</source>
         <translation>समूह</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4020"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3880"/>
         <source>New Dataset</source>
         <translation>नया डेटासेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4023"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3883"/>
         <source>New Plot</source>
         <translation>नया प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4027"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3887"/>
         <source>New FFT Plot</source>
         <translation>नया FFT प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4031"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3891"/>
         <source>New Level Indicator</source>
         <translation>नया स्तर संकेतक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4035"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3895"/>
         <source>New Gauge</source>
         <translation>नया गेज</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4039"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3899"/>
         <source>New Compass</source>
         <translation>नया कंपास</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4045"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
         <source>New Meter</source>
         <translation>नया मीटर</translation>
     </message>
@@ -5301,245 +5311,245 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">नया थर्मामीटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4049"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3909"/>
         <source>New LED Indicator</source>
         <translation>नया LED इंडिकेटर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4053"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3913"/>
         <source>New Waterfall</source>
         <translation>नया वॉटरफॉल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4123"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3981"/>
         <source>Channel %1</source>
         <translation>चैनल %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4196"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4052"/>
         <source>New Action</source>
         <translation>नया एक्शन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4339"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4190"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>क्या आप वाकई ग्रुप-स्तरीय विजेट बदलना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4341"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4192"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>इस ग्रुप के मौजूदा डेटासेट हटा दिए जाएंगे</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4405"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4406"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4407"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4255"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4256"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4257"/>
         <source>Accelerometer %1</source>
         <translation>एक्सेलेरोमीटर %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4422"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4422"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4422"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4272"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4272"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4272"/>
         <source>Gyro %1</source>
         <translation>जायरो %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4437"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4287"/>
         <source>Latitude</source>
         <translation>अक्षांश</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4437"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4287"/>
         <source>Longitude</source>
         <translation>देशांतर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4437"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4287"/>
         <source>Altitude</source>
         <translation>ऊंचाई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4452"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4466"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4316"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4452"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4466"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4316"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4452"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4466"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4316"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4741"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5637"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4574"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5446"/>
         <source>Workspace</source>
         <translation>कार्यस्थान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4907"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5114"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4739"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4941"/>
         <source>Shared Table</source>
         <translation>साझा टेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4989"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4817"/>
         <source>register</source>
         <translation>रजिस्टर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5114"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4941"/>
         <source>New Shared Table</source>
         <translation>नई साझा टेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5114"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5132"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5151"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5175"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5202"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5221"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5244"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5267"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5637"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5658"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4941"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4958"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4977"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5001"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5028"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5047"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5069"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5091"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5446"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5467"/>
         <source>Name:</source>
         <translation>नाम:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5132"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4958"/>
         <source>Rename Table</source>
         <translation>टेबल का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5151"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4977"/>
         <source>Rename Group</source>
         <translation>समूह का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5175"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5001"/>
         <source>Rename Dataset</source>
         <translation>डेटासेट का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5202"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5028"/>
         <source>Rename Data Source</source>
         <translation>डेटा स्रोत का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5221"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5047"/>
         <source>Rename Action</source>
         <translation>एक्शन का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5243"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5068"/>
         <source>New Register</source>
         <translation>नया रजिस्टर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5267"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5091"/>
         <source>Rename Register</source>
         <translation>रजिस्टर का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5306"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5331"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6185"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5128"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5153"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5969"/>
         <source>This action cannot be undone.</source>
         <translation>यह क्रिया पूर्ववत नहीं की जा सकती।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5307"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5129"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>यह टेबल के साथ %1 रजिस्टर हटा देगा। यह क्रिया पूर्ववत नहीं की जा सकती।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5310"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5330"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6184"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5132"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5152"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5968"/>
         <source>Delete "%1"?</source>
         <translation>"%1" डिलीट करें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5313"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5135"/>
         <source>Delete Table</source>
         <translation>टेबल डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5333"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5155"/>
         <source>Delete Register</source>
         <translation>रजिस्टर डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5177"/>
         <source>Export Table</source>
         <translation>टेबल एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5359"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5403"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5179"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5219"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV फ़ाइलें (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5401"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5217"/>
         <source>Import Table</source>
         <translation>टेबल इम्पोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5637"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5446"/>
         <source>New Workspace</source>
         <translation>नया कार्यस्थान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5658"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5467"/>
         <source>Rename Workspace</source>
         <translation>वर्कस्पेस का नाम बदलें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5747"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5550"/>
         <source>Overview</source>
         <translation>अवलोकन</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5757"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5559"/>
         <source>All Data</source>
         <translation>सभी डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5941"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5737"/>
         <source>Discard workspace customisations?</source>
         <translation>वर्कस्पेस कस्टमाइज़ेशन को छोड़ें?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5942"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5738"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>कस्टमाइज़ बंद करने से आपके संपादन छोड़ दिए जाएंगे और प्रोजेक्ट के ग्रुप्स से वर्कस्पेस सूची पुनर्निर्मित होगी।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="5945"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5741"/>
         <source>Customize Workspaces</source>
         <translation>वर्कस्पेसेज़ कस्टमाइज़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="5971"/>
         <source>Delete Workspace</source>
         <translation>वर्कस्पेस डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="6528"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="6298"/>
         <source>File save error</source>
         <translation>फ़ाइल सहेजने में त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2229"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2151"/>
         <source>File open error</source>
         <translation>फ़ाइल खोलने में त्रुटि</translation>
     </message>
@@ -5547,53 +5557,53 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProtoImporter</name>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="907"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="902"/>
         <source>Import Protocol Buffers File</source>
         <translation>Protocol Buffers फ़ाइल इम्पोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="909"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="904"/>
         <source>Proto Files (*.proto);;All Files (*)</source>
         <translation>Proto फ़ाइलें (*.proto);;सभी फ़ाइलें (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="944"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="938"/>
         <source>Failed to open proto file: %1</source>
         <translation>Proto फ़ाइल खोलने में विफल: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="945"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="939"/>
         <source>Verify the file path and read permissions, then try again.</source>
         <translation>फ़ाइल पथ और पढ़ने की अनुमतियाँ सत्यापित करें, फिर पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="947"/>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="965"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="941"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="959"/>
         <source>Protobuf Import Error</source>
         <translation>Protobuf इम्पोर्ट त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="962"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="956"/>
         <source>Failed to parse proto file at line %1: %2</source>
         <translation>पंक्ति %1 पर proto फ़ाइल पार्स करने में विफल: %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="963"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="957"/>
         <source>Only proto3 syntax is supported. Verify the file format and try again.</source>
         <translation>केवल proto3 सिंटैक्स समर्थित है। फ़ाइल फ़ॉर्मेट सत्यापित करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="970"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="964"/>
         <source>Proto file contains no message definitions</source>
         <translation>Proto फ़ाइल में कोई message परिभाषा नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="971"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="965"/>
         <source>The selected file has no `message` blocks to import.</source>
         <translation>चयनित फ़ाइल में इम्पोर्ट करने के लिए कोई `message` ब्लॉक नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="973"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="967"/>
         <source>Protobuf Import Warning</source>
         <translation>Protobuf इम्पोर्ट चेतावनी</translation>
     </message>
@@ -5606,22 +5616,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">जनरेट किया गया प्रोजेक्ट JSON लोड नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1011"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1005"/>
         <source>Successfully imported %1 message(s) and %2 field(s) from the proto file.</source>
         <translation>proto फ़ाइल से %1 message(s) और %2 field(s) सफलतापूर्वक इम्पोर्ट किए गए।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1014"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1008"/>
         <source>The project editor is now open for customization.</source>
         <translation>प्रोजेक्ट एडिटर अब अनुकूलन के लिए खुला है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1016"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1010"/>
         <source>Protobuf Import Complete</source>
         <translation>Protobuf इम्पोर्ट पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1051"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="1044"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
@@ -5629,12 +5639,12 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::TransmitTestDialog</name>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="158"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="154"/>
         <source>Invalid Hex Input</source>
         <translation>अमान्य Hex इनपुट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="159"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="155"/>
         <source>Please enter valid hexadecimal bytes.
 
 Valid format: 01 A2 FF 3C</source>
@@ -5643,78 +5653,78 @@ Valid format: 01 A2 FF 3C</source>
 मान्य प्रारूप: 01 A2 FF 3C</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="165"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="160"/>
         <source>No transmit function code to evaluate.</source>
         <translation>मूल्यांकन के लिए कोई ट्रांसमिट फ़ंक्शन कोड नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="185"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="177"/>
         <source>transmit function is not callable</source>
         <translation>ट्रांसमिट फ़ंक्शन कॉल करने योग्य नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="249"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="238"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="250"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="239"/>
         <source>Clear</source>
         <translation>साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="251"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="240"/>
         <source>Evaluate</source>
         <translation>मूल्यांकन करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="252"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="241"/>
         <source>Input Value</source>
         <translation>इनपुट मान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="253"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="242"/>
         <source>Transmit Function Output</source>
         <translation>ट्रांसमिट फ़ंक्शन आउटपुट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="254"/>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="278"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="243"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="267"/>
         <source>Enter value to transmit…</source>
         <translation>ट्रांसमिट करने के लिए मान दर्ज करें…</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="255"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="244"/>
         <source>Raw string output appears here</source>
         <translation>रॉ स्ट्रिंग आउटपुट यहाँ दिखाई देगा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="256"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="245"/>
         <source>Hex byte output appears here</source>
         <translation>हेक्स बाइट आउटपुट यहाँ दिखाई देगा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="259"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="248"/>
         <source>Test Transmit Function</source>
         <translation>ट्रांसमिट फ़ंक्शन का परीक्षण करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="272"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="261"/>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
         <translation>हेक्स बाइट्स दर्ज करें (उदा., 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="383"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="367"/>
         <source>(empty) No data returned</source>
         <translation>(खाली) कोई डेटा नहीं मिला</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="385"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="369"/>
         <source>0 bytes</source>
         <translation>0 बाइट्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="426"/>
+        <location filename="../../src/DataModel/Dialogs/TransmitTestDialog.cpp" line="408"/>
         <source>%1 byte(s)</source>
         <translation>%1 बाइट(s)</translation>
     </message>
@@ -6268,72 +6278,72 @@ Valid format: 01 A2 FF 3C</source>
         <translation>उदाहरणों में खोजें…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="245"/>
         <source>Fetching examples…</source>
         <translation>उदाहरण प्राप्त किए जा रहे हैं…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
         <source>Loading...</source>
         <translation>लोड हो रहा है...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="569"/>
         <source>No README available.</source>
         <translation>कोई README उपलब्ध नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="609"/>
         <source>Copied to Clipboard</source>
         <translation>क्लिपबोर्ड पर कॉपी किया गया</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="672"/>
         <source>No screenshot available</source>
         <translation>कोई स्क्रीनशॉट उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="704"/>
         <source>Details</source>
         <translation>विवरण</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="733"/>
         <source>Info</source>
         <translation>जानकारी</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="756"/>
         <source>Category:</source>
         <translation>श्रेणी:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="769"/>
         <source>Difficulty:</source>
         <translation>कठिनाई:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="787"/>
         <source>Project:</source>
         <translation>प्रोजेक्ट:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="829"/>
         <source>No Results Found</source>
         <translation>कोई परिणाम नहीं मिला</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="840"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>वर्तनी जाँचें या कोई अन्य खोज शब्द आज़माएँ।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="855"/>
         <source>%1 examples</source>
         <translation>%1 उदाहरण</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="864"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
@@ -7555,62 +7565,62 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="271"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="267"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="272"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="268"/>
         <source>Network Socket</source>
         <translation>नेटवर्क सॉकेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="273"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="269"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="275"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="271"/>
         <source>Audio</source>
         <translation>ऑडियो</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="276"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="272"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="277"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="273"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="278"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="274"/>
         <source>USB Device</source>
         <translation>USB डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="279"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="275"/>
         <source>HID Device</source>
         <translation>HID डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="280"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="276"/>
         <source>Process</source>
         <translation>प्रोसेस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="281"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="277"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT सब्सक्राइबर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="631"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="620"/>
         <source>Your trial period has ended.</source>
         <translation>आपकी ट्रायल अवधि समाप्त हो गई है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="632"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="621"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studio का उपयोग जारी रखने के लिए, कृपया अपना लाइसेंस सक्रिय करें।</translation>
     </message>
@@ -7618,67 +7628,67 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="764"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="743"/>
         <source>channels</source>
         <translation>चैनल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="817"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="796"/>
         <source> channels</source>
         <translation>चैनल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="965"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="944"/>
         <source>Unsigned 8-bit</source>
         <translation>Unsigned 8-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="966"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="945"/>
         <source>Signed 16-bit</source>
         <translation>Signed 16-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="967"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="946"/>
         <source>Signed 24-bit</source>
         <translation>Signed 24-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="968"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="947"/>
         <source>Signed 32-bit</source>
         <translation>Signed 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="969"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="948"/>
         <source>Float 32-bit</source>
         <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="972"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="951"/>
         <source>Mono</source>
         <translation>मोनो</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="973"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="952"/>
         <source>Stereo</source>
         <translation>स्टीरियो</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1375"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1332"/>
         <source>Input Device</source>
         <translation>इनपुट डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1383"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1340"/>
         <source>Sample Rate</source>
         <translation>सैम्पल रेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1391"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1348"/>
         <source>Sample Format</source>
         <translation>सैम्पल फ़ॉर्मेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1399"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1356"/>
         <source>Channels</source>
         <translation>चैनल</translation>
     </message>
@@ -7686,72 +7696,72 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="69"/>
         <source>BLE I/O Module Error</source>
         <translation>BLE I/O मॉड्यूल त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="307"/>
         <source>Select Device</source>
         <translation>डिवाइस चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="318"/>
         <source>Select Service</source>
         <translation>सेवा चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="347"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="329"/>
         <source>Select Characteristic</source>
         <translation>विशेषता चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="479"/>
         <source>Error while configuring BLE service</source>
         <translation>BLE सेवा कॉन्फ़िगर करते समय त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="629"/>
         <source>Operation error</source>
         <translation>ऑपरेशन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="632"/>
         <source>Characteristic write error</source>
         <translation>विशेषता लिखने में त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="635"/>
         <source>Descriptor write error</source>
         <translation>डिस्क्रिप्टर लिखने में त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="686"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="638"/>
         <source>Unknown error</source>
         <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="689"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="641"/>
         <source>Characteristic read error</source>
         <translation>विशेषता पढ़ने में त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="692"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="644"/>
         <source>Descriptor read error</source>
         <translation>डिस्क्रिप्टर पढ़ने में त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="879"/>
         <source>BLE Device</source>
         <translation>BLE डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="887"/>
         <source>Service</source>
         <translation>सेवा</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="969"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="905"/>
         <source>Characteristic</source>
         <translation>विशेषता</translation>
     </message>
@@ -7759,15 +7769,15 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="261"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="267"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="273"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="278"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="308"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="314"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="319"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="274"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="315"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -7776,37 +7786,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 macOS पर CAN bus समर्थन सीमित है और तृतीय-पक्ष हार्डवेयर ड्राइवर की आवश्यकता हो सकती है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="279"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="320"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>इस प्लेटफ़ॉर्म पर कोई CAN bus प्लगइन उपलब्ध नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="291"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="332"/>
         <source>Invalid CAN Configuration</source>
         <translation>अमान्य CAN कॉन्फ़िगरेशन</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="299"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="340"/>
         <source>Invalid Selection</source>
         <translation>अमान्य चयन</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="308"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="349"/>
         <source>No Devices Available</source>
         <translation>कोई डिवाइस उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="224"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="259"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN डिवाइस निर्माण विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="242"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="283"/>
         <source>CAN Connection Failed</source>
         <translation>CAN कनेक्शन विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="262"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -7815,7 +7825,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Linux पर, सुनिश्चित करें कि SOCKETCAN कर्नेल मॉड्यूल लोड हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="268"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="309"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -7824,126 +7834,209 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Windows पर, CAN हार्डवेयर ड्राइवर इंस्टॉल करें (PEAK, VECTOR, आदि)।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="292"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="333"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN बस कॉन्फ़िगरेशन अधूरा है। मान्य प्लगइन और इंटरफ़ेस चुनें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="300"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="341"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>चयनित प्लगइन या इंटरफ़ेस अब उपलब्ध नहीं है। सूची रिफ़्रेश करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="309"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="350"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>प्लगइन या इंटरफ़ेस सूची खाली है। सूची रिफ़्रेश करें और सुनिश्चित करें कि आपका CAN हार्डवेयर कनेक्ट है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="225"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="260"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>CAN बस डिवाइस बनाने में असमर्थ। अपना हार्डवेयर और ड्राइवर जाँचें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="244"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="285"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>CAN Bus डिवाइस से कनेक्ट करने में असमर्थ। अपने हार्डवेयर कनेक्शन और सेटिंग्स जाँचें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="582"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="666"/>
         <source>CAN Bus Error</source>
         <translation>CAN Bus त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="583"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="667"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>एक त्रुटि हुई लेकिन CAN डिवाइस अब उपलब्ध नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="674"/>
         <source>Error code: %1</source>
         <translation>त्रुटि कोड: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="593"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="677"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN Bus संचार त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="648"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="734"/>
         <source>No CAN driver selected</source>
         <translation>कोई CAN ड्राइवर चयनित नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="609"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="696"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>पहले SOCKETCAN कर्नेल मॉड्यूल लोड करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="612"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="692"/>
+        <source>Connect a %1 adapter, then refresh</source>
+        <translation>%1 एडाप्टर कनेक्ट करें, फिर रिफ़्रेश करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="699"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>पहले एक वर्चुअल CAN इंटरफ़ेस सेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="614"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="634"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="701"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="721"/>
         <source>No interfaces found for %1</source>
         <translation>%1 के लिए कोई इंटरफ़ेस नहीं मिला</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="618"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="705"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN ड्राइवर&lt;/a&gt; इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="622"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN ड्राइवर&lt;/a&gt; इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="626"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="713"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN ड्राइवर&lt;/a&gt; इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="629"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="716"/>
         <source>Install %1 drivers</source>
         <translation>%1 ड्राइवर इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="632"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="719"/>
         <source>Install %1 drivers for macOS</source>
         <translation>macOS के लिए %1 ड्राइवर इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="729"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="815"/>
         <source>Plugin</source>
         <translation>प्लगइन</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="737"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="823"/>
         <source>Interface</source>
         <translation>इंटरफ़ेस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="745"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="831"/>
         <source>Bitrate</source>
         <translation>बिटरेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="754"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="840"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="847"/>
+        <source>Loopback</source>
+        <translation>लूपबैक</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="854"/>
+        <source>Listen-Only</source>
+        <translation>केवल-सुनने योग्य</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::GsUsbCanBackend</name>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="381"/>
+        <source>Failed to initialize libusb for the CANable adapter.</source>
+        <translation>CANable एडाप्टर के लिए libusb को आरंभ करने में विफल।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="409"/>
+        <source>Unable to enumerate USB devices.</source>
+        <translation>USB डिवाइस की गणना करने में असमर्थ।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="429"/>
+        <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
+        <translation>चयनित CANable एडाप्टर अब कनेक्ट नहीं है, या कोई अन्य एप्लिकेशन इसे खोले हुए है। Windows पर डिवाइस को WinUSB ड्राइवर का उपयोग करना चाहिए (candleLight इसे स्वचालित रूप से इंस्टॉल करता है)।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="442"/>
+        <source>Could not claim the CANable USB interface.</source>
+        <translation>CANable USB इंटरफ़ेस को क्लेम नहीं किया जा सका।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="509"/>
+        <source>CANable adapter is not open for writing.</source>
+        <translation>CANable एडाप्टर लिखने के लिए खुला नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="544"/>
+        <source>Failed to transmit CAN frame to the adapter.</source>
+        <translation>CAN फ़्रेम को एडाप्टर पर ट्रांसमिट करने में विफल।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="560"/>
+        <source>CAN bus error reported by the CANable adapter.</source>
+        <translation>CANable एडाप्टर द्वारा CAN Bus त्रुटि रिपोर्ट की गई।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="615"/>
+        <source>A CAN frame was not acknowledged on the bus.</source>
+        <translation>CAN फ़्रेम को बस पर स्वीकार नहीं किया गया।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="707"/>
+        <source>CANable adapter rejected the host-format handshake.</source>
+        <translation>CANable एडाप्टर ने होस्ट-फ़ॉर्मेट हैंडशेक को अस्वीकार कर दिया।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="714"/>
+        <source>Could not read CANable timing constants.</source>
+        <translation>CANable टाइमिंग कॉन्स्टेंट्स नहीं पढ़े जा सके।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="720"/>
+        <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
+        <translation>बिटरेट %1 bps इस CANable एडाप्टर द्वारा समर्थित नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="726"/>
+        <source>CANable adapter rejected the requested bitrate.</source>
+        <translation>CANable एडाप्टर ने अनुरोधित बिटरेट को अस्वीकार कर दिया।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/GsUsbCanBackend.cpp" line="740"/>
+        <source>Could not start the CANable channel.</source>
+        <translation>CANable चैनल प्रारंभ नहीं हो सका।</translation>
     </message>
 </context>
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="178"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="173"/>
         <source>Unknown error</source>
         <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="181"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
         <source>
 
 Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
@@ -7952,27 +8045,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="185"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
         <source>Failed to open "%1"</source>
         <translation>"%1" खोलने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="295"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="285"/>
         <source>HID Device Error</source>
         <translation>HID डिवाइस त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="296"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>HID डिवाइस डिस्कनेक्ट हो गया या गंभीर रीड त्रुटि आई।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="405"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="395"/>
         <source>Select Device</source>
         <translation>डिवाइस चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="549"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="537"/>
         <source>HID Device</source>
         <translation>HID डिवाइस</translation>
     </message>
@@ -7980,72 +8073,72 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="56"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="55"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="57"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="56"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="58"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="57"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="61"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="59"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="60"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="63"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="61"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 या बाद का</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="62"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 या बाद का</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="63"/>
         <source>Any Protocol</source>
         <translation>कोई भी प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="64"/>
         <source>Secure Protocols Only</source>
         <translation>केवल सुरक्षित प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="66"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="67"/>
         <source>Query Peer</source>
         <translation>पीयर से पूछें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="68"/>
         <source>Verify Peer</source>
         <translation>पीयर सत्यापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="69"/>
         <source>Auto Verify Peer</source>
         <translation>स्वतः पीयर सत्यापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="167"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT सुविधा के लिए व्यावसायिक लाइसेंस आवश्यक है</translation>
     </message>
@@ -8054,192 +8147,192 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">MQTT ब्रोकर की सदस्यता केवल वैध Serial Studio व्यावसायिक लाइसेंस (Hobbyist टियर या उससे ऊपर) के साथ उपलब्ध है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="178"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="168"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>MQTT ब्रोकर की सदस्यता केवल वैध Serial Studio लाइसेंस या सक्रिय ट्रायल के साथ उपलब्ध है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="408"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="393"/>
         <source>Use System Database</source>
         <translation>सिस्टम डेटाबेस उपयोग करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="394"/>
         <source>Load From Folder…</source>
         <translation>फ़ोल्डर से लोड करें…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="427"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM प्रमाणपत्र निर्देशिका चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="698"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="682"/>
         <source>Hostname</source>
         <translation>होस्टनेम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="705"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="689"/>
         <source>Port</source>
         <translation>पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="714"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="698"/>
         <source>Topic Filter</source>
         <translation>टॉपिक फ़िल्टर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="721"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="705"/>
         <source>Client ID</source>
         <translation>क्लाइंट ID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="728"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="712"/>
         <source>Username</source>
         <translation>उपयोगकर्ता नाम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="735"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="719"/>
         <source>Password</source>
         <translation>पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="742"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="726"/>
         <source>MQTT Version</source>
         <translation>MQTT संस्करण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="750"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="734"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="757"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="741"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="766"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="750"/>
         <source>Auto Keep Alive</source>
         <translation>Auto Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="783"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="767"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS सक्षम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="793"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="777"/>
         <source>SSL Protocol</source>
         <translation>SSL प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="801"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="785"/>
         <source>Peer Verify Mode</source>
         <translation>पीयर सत्यापन मोड</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="793"/>
         <source>Peer Verify Depth</source>
         <translation>पीयर सत्यापन गहराई</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="910"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="894"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT सदस्यता त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="911"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="895"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Topic "%1" की सदस्यता लेने में विफल।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="938"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="922"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>अमान्य MQTT प्रोटोकॉल संस्करण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="939"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="923"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>ब्रोकर ने कॉन्फ़िगर किए गए MQTT प्रोटोकॉल संस्करण को अस्वीकार कर दिया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="942"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="926"/>
         <source>Client ID Rejected</source>
         <translation>Client ID अस्वीकृत</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="927"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>ब्रोकर ने Client ID को अस्वीकार कर दिया। एक अलग पहचानकर्ता आज़माएं।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="946"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="930"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT सर्वर अनुपलब्ध</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="947"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="931"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>ब्रोकर वर्तमान में अनुपलब्ध है। बाद में पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="950"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="934"/>
         <source>Authentication Error</source>
         <translation>प्रमाणीकरण त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="935"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>प्रदान की गई क्रेडेंशियल्स को ब्रोकर द्वारा अस्वीकार कर दिया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="954"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="938"/>
         <source>Authorization Error</source>
         <translation>प्राधिकरण त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="955"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="939"/>
         <source>Account lacks permission for this operation.</source>
         <translation>खाते में इस ऑपरेशन के लिए अनुमति नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="958"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="942"/>
         <source>Network or Transport Error</source>
         <translation>नेटवर्क या ट्रांसपोर्ट त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="959"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="943"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>ब्रोकर से कनेक्ट करते समय नेटवर्क/ट्रांसपोर्ट लेयर समस्या।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="962"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="946"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT प्रोटोकॉल उल्लंघन</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="963"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="947"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>ब्रोकर ने प्रोटोकॉल उल्लंघन की रिपोर्ट की और कनेक्शन बंद कर दिया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="966"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="950"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="967"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="951"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>एक MQTT 5 प्रोटोकॉल-स्तरीय त्रुटि हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="970"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="954"/>
         <source>MQTT Error</source>
         <translation>MQTT त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/MQTT.cpp" line="971"/>
+        <location filename="../../src/IO/Drivers/MQTT.cpp" line="955"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>एक अप्रत्याशित MQTT त्रुटि हुई।</translation>
     </message>
@@ -8247,99 +8340,99 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="371"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="364"/>
         <source>Invalid Serial Port</source>
         <translation>अमान्य सीरियल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="416"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="409"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus आरंभीकरण विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="442"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="435"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus कनेक्शन विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="372"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="365"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>चयनित सीरियल पोर्ट "%1" अब उपलब्ध नहीं है। पोर्ट सूची रिफ्रेश करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="417"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="410"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Modbus डिवाइस बनाने में असमर्थ। अपना सिस्टम कॉन्फ़िगरेशन जांचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="444"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="437"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>"%1" से कनेक्ट नहीं हो सका। अपनी कनेक्शन सेटिंग्स जाँचें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="445"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="438"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="566"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="559"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="567"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="560"/>
         <source>Even</source>
         <translation>सम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="568"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="561"/>
         <source>Odd</source>
         <translation>विषम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="569"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="562"/>
         <source>Space</source>
         <translation>स्पेस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="570"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="563"/>
         <source>Mark</source>
         <translation>मार्क</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="622"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="615"/>
         <source>Holding Registers (0x03)</source>
         <translation>होल्डिंग रजिस्टर (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="616"/>
         <source>Input Registers (0x04)</source>
         <translation>इनपुट रजिस्टर (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="624"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="617"/>
         <source>Coils (0x01)</source>
         <translation>कॉइल (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="625"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="618"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Discrete Inputs (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="800"/>
         <source>No register groups configured</source>
         <translation>कोई रजिस्टर समूह कॉन्फ़िगर नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="801"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>प्रोजेक्ट जेनरेट करने से पहले कम से कम एक रजिस्टर समूह जोड़ें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="814"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="827"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="852"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="815"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="840"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus प्रोजेक्ट जेनरेटर</translation>
     </message>
@@ -8352,137 +8445,137 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">अस्थायी डायरेक्टरी में लिखने की अनुमति जाँचें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="824"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="812"/>
         <source>Failed to load generated project</source>
         <translation>जेनरेट किया गया प्रोजेक्ट लोड नहीं हो सका</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="825"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="813"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>जेनरेट किया गया प्रोजेक्ट JSON लोड नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="847"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="835"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1 समूहों और %2 डेटासेट के साथ प्रोजेक्ट सफलतापूर्वक जेनरेट किया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="850"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="838"/>
         <source>The project editor is now open for customization.</source>
         <translation>प्रोजेक्ट एडिटर अब अनुकूलन के लिए खुला है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="866"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="853"/>
         <source>Modbus Project</source>
         <translation>Modbus प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="872"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="858"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="894"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="878"/>
         <source>Holding Registers</source>
         <translation>होल्डिंग रजिस्टर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="879"/>
         <source>Input Registers</source>
         <translation>इनपुट रजिस्टर</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="896"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="880"/>
         <source>Coils</source>
         <translation>कॉइल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="897"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="881"/>
         <source>Discrete Inputs</source>
         <translation>डिस्क्रीट इनपुट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="912"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="895"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="927"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="908"/>
         <source>Register %1</source>
         <translation>रजिस्टर %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="916"/>
         <source>Coil %1</source>
         <translation>कॉइल %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="935"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="916"/>
         <source>Discrete %1</source>
         <translation>डिस्क्रीट %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1354"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1322"/>
         <source>Error code: %1</source>
         <translation>त्रुटि कोड: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1357"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1325"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus संचार त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1370"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1337"/>
         <source>Select Port</source>
         <translation>पोर्ट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1527"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1490"/>
         <source>Protocol</source>
         <translation>प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1535"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1498"/>
         <source>Slave Address</source>
         <translation>स्लेव एड्रेस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1544"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1507"/>
         <source>Poll Interval (ms)</source>
         <translation>पोल अंतराल (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1585"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1547"/>
         <source>Host / IP</source>
         <translation>होस्ट / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1592"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1554"/>
         <source>Port</source>
         <translation>पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1607"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1569"/>
         <source>Serial Port</source>
         <translation>सीरियल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1615"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1577"/>
         <source>Baud Rate</source>
         <translation>बॉड रेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1623"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1585"/>
         <source>Parity</source>
         <translation>पैरिटी</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1631"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1593"/>
         <source>Data Bits</source>
         <translation>डेटा बिट्स</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1639"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1601"/>
         <source>Stop Bits</source>
         <translation>स्टॉप बिट्स</translation>
     </message>
@@ -8490,37 +8583,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="495"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="473"/>
         <source>Network socket error</source>
         <translation>नेटवर्क सॉकेट त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="512"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="489"/>
         <source>Socket Type</source>
         <translation>सॉकेट प्रकार</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="520"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="497"/>
         <source>Remote Address</source>
         <translation>रिमोट पता</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="528"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="505"/>
         <source>TCP Port</source>
         <translation>TCP पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="537"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="514"/>
         <source>UDP Local Port</source>
         <translation>UDP लोकल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="546"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="523"/>
         <source>UDP Remote Port</source>
         <translation>UDP रिमोट पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="555"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="532"/>
         <source>UDP Multicast</source>
         <translation>UDP मल्टीकास्ट</translation>
     </message>
@@ -8528,270 +8621,326 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="190"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="234"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="183"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="224"/>
         <source>Failed to start process</source>
         <translation>प्रोसेस प्रारंभ करने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="191"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="184"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>निष्पादन योग्य "%1" PATH में नहीं मिला।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="379"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="368"/>
         <source>Select Executable</source>
         <translation>एक्ज़ीक्यूटेबल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="404"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="392"/>
         <source>Select Working Directory</source>
         <translation>वर्किंग डायरेक्टरी चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="430"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="417"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>नेम्ड पाइप / FIFO चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="529"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="514"/>
         <source>The process crashed.</source>
         <translation>प्रोसेस क्रैश हो गया।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="530"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="515"/>
         <source>Exit code: %1</source>
         <translation>एग्ज़िट कोड: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="533"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="518"/>
         <source>Process "%1" stopped</source>
         <translation>प्रोसेस "%1" रुक गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="552"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="536"/>
         <source>Unknown error</source>
         <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="553"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="537"/>
         <source>Process Error</source>
         <translation>प्रोसेस त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="567"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="551"/>
         <source>Pipe Error</source>
         <translation>पाइप त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="567"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="551"/>
         <source>Could not open named pipe: %1</source>
         <translation>नेम्ड पाइप खोल नहीं सका: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="781"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="763"/>
         <source>Mode</source>
         <translation>मोड</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="766"/>
         <source>Launch Process</source>
         <translation>प्रोसेस लॉन्च करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="784"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="766"/>
         <source>Named Pipe</source>
         <translation>नेम्ड पाइप</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="789"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="771"/>
         <source>Executable</source>
         <translation>एक्ज़ीक्यूटेबल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="796"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="778"/>
         <source>Arguments</source>
         <translation>आर्ग्युमेंट्स</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="785"/>
         <source>Working Directory</source>
         <translation>वर्किंग डायरेक्टरी</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="810"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="792"/>
         <source>Pipe Path</source>
         <translation>पाइप पाथ</translation>
     </message>
 </context>
 <context>
+    <name>IO::Drivers::SeeedCanBackend</name>
+    <message>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="205"/>
+        <source>The bitrate %1 bps is not supported by the USB-CAN Analyzer.</source>
+        <translation>बिटरेट %1 bps USB-CAN Analyzer द्वारा समर्थित नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="215"/>
+        <source>Could not open serial port %1: %2</source>
+        <translation>सीरियल पोर्ट %1 खोल नहीं सका: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="226"/>
+        <source>Failed to initialize the USB-CAN Analyzer.</source>
+        <translation>USB-CAN Analyzer प्रारंभ करने में विफल।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="263"/>
+        <source>USB-CAN Analyzer is not open for writing.</source>
+        <translation>USB-CAN Analyzer लिखने के लिए खुला नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/SeeedCanBackend.cpp" line="309"/>
+        <source>CAN bus error reported by the USB-CAN Analyzer.</source>
+        <translation>USB-CAN Analyzer द्वारा CAN Bus त्रुटि रिपोर्ट की गई।</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Drivers::SlcanBackend</name>
+    <message>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="166"/>
+        <source>The bitrate %1 bps is not a standard slcan rate.</source>
+        <translation>बिटरेट %1 bps मानक slcan दर नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="176"/>
+        <source>Could not open serial port %1: %2</source>
+        <translation>सीरियल पोर्ट %1 खोल नहीं सका: %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="189"/>
+        <source>Failed to open the slcan channel.</source>
+        <translation>slcan चैनल खोलने में विफल।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="228"/>
+        <source>slcan adapter is not open for writing.</source>
+        <translation>slcan एडाप्टर लिखने के लिए खुला नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/SlcanBackend.cpp" line="266"/>
+        <source>CAN bus error reported by the slcan adapter.</source>
+        <translation>slcan एडाप्टर द्वारा CAN Bus त्रुटि रिपोर्ट की गई।</translation>
+    </message>
+</context>
+<context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="72"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="73"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="395"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="69"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="375"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="414"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="352"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="333"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="717"/>
         <source>Select Port</source>
         <translation>पोर्ट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="396"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="376"/>
         <source>Even</source>
         <translation>सम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="397"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="377"/>
         <source>Odd</source>
         <translation>विषम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="398"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="378"/>
         <source>Space</source>
         <translation>स्पेस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="399"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="379"/>
         <source>Mark</source>
         <translation>मार्क</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="435"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="415"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="436"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="416"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="572"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="546"/>
         <source>"%1" is not a valid path</source>
         <translation>"%1" मान्य पथ नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="573"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="547"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>कस्टम सीरियल डिवाइस रजिस्टर करने के लिए कोई अन्य पथ टाइप करें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="852"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="807"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>निर्दिष्ट डिवाइस नहीं मिला। कनेक्शन जाँचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="859"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="814"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>अज्ञात त्रुटि हुई। डिवाइस जाँचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="861"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="816"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>डिवाइस खुला नहीं है। यह ऑपरेशन करने से पहले डिवाइस खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="263"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="245"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>सीरियल पोर्ट "%1" से कनेक्ट करने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="827"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="782"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="828"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="783"/>
         <source>Critical error on serial port "%1"</source>
         <translation>सीरियल पोर्ट "%1" पर गंभीर त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="829"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="784"/>
         <source>Unknown error</source>
         <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="851"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="806"/>
         <source>No error occurred.</source>
         <translation>कोई त्रुटि नहीं हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="853"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="808"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>अनुमति अस्वीकृत। सुनिश्चित करें कि एप्लिकेशन के पास डिवाइस तक पहुँचने के लिए आवश्यक अधिकार हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="854"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="809"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>डिवाइस खोलने में विफल। यह पहले से उपयोग में हो सकता है या अनुपलब्ध हो सकता है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="855"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="810"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>डिवाइस पर डेटा लिखते समय त्रुटि हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="856"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="811"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>डिवाइस से डेटा पढ़ते समय त्रुटि हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="857"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="812"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>एक गंभीर संसाधन त्रुटि हुई। डिवाइस डिस्कनेक्ट हो गया होगा या अब पहुँच योग्य नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="858"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="813"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>अनुरोधित ऑपरेशन इस डिवाइस पर समर्थित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="860"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="815"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>ऑपरेशन टाइम आउट हो गया। डिवाइस प्रतिक्रिया नहीं दे रहा है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1029"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="978"/>
         <source>Serial Port</source>
         <translation>सीरियल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1037"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="986"/>
         <source>Baud Rate</source>
         <translation>बॉड रेट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1045"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="994"/>
         <source>Parity</source>
         <translation>पैरिटी</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1053"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1002"/>
         <source>Data Bits</source>
         <translation>डेटा बिट्स</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1061"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1010"/>
         <source>Stop Bits</source>
         <translation>स्टॉप बिट्स</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1069"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1018"/>
         <source>Flow Control</source>
         <translation>फ्लो कंट्रोल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1077"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1026"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1084"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1033"/>
         <source>Auto-Reconnect</source>
         <translation>स्वतः पुनः कनेक्ट</translation>
     </message>
@@ -8799,25 +8948,25 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::USB</name>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="176"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="185"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="169"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
         <source>USB Error</source>
         <translation>USB त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="177"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="170"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
         <translation>USB सबसिस्टम को आरंभ करने में विफल। जाँचें कि आपके सिस्टम पर libusb उपलब्ध है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="223"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="240"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="632"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="212"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="227"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="612"/>
         <source>USB Device Error</source>
         <translation>USB डिवाइस त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="199"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="190"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
@@ -8826,22 +8975,22 @@ On Linux, ensure you have read/write permission on the device node (add a udev r
 Linux पर, सुनिश्चित करें कि आपके पास डिवाइस नोड पर read/write अनुमति है (udev नियम जोड़ें या root के रूप में चलाएं)। macOS पर, कर्नेल ड्राइवर को पहले detach करना आवश्यक हो सकता है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="186"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
         <source>No USB device selected. Select a device and try again.</source>
         <translation>कोई USB डिवाइस नहीं चुना गया। एक डिवाइस चुनें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="193"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="184"/>
         <source>Unknown Device</source>
         <translation>अज्ञात डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="198"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="189"/>
         <source>Failed to open "%1"</source>
         <translation>"%1" खोलने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="241"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="228"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -8850,42 +8999,42 @@ Another driver or application may already have it open. On Linux, try unloading 
 कोई अन्य ड्राइवर या एप्लिकेशन इसे पहले से खोल सकता है। Linux पर, कर्नेल ड्राइवर (जैसे cdc_acm) unload करने या udev नियम जोड़ने का प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="404"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="386"/>
         <source>Select Device</source>
         <translation>डिवाइस चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="423"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="405"/>
         <source>Select IN Endpoint</source>
         <translation>IN एंडपॉइंट चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="434"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="416"/>
         <source>None (Read-only)</source>
         <translation>कोई नहीं (केवल-पढ़ने योग्य)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="509"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="490"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>उन्नत USB नियंत्रण स्थानांतरण सक्षम करें?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="510"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="491"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>यह बल्क स्थानांतरण के अतिरिक्त नियंत्रण स्थानांतरण सक्षम करता है। गलत नियंत्रण अनुरोध भेजने से कनेक्टेड हार्डवेयर क्रैश या क्षतिग्रस्त हो सकता है। केवल तभी सक्षम करें जब आप जानते हों कि आप क्या कर रहे हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="495"/>
         <source>Advanced USB Mode</source>
         <translation>उन्नत USB मोड</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="633"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="613"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>USB डिवाइस डिस्कनेक्ट हो गया या गंभीर रीड त्रुटि आई।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="772"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="750"/>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
 Switch the Transfer Mode to "Bulk Stream" and try again.</source>
@@ -8894,7 +9043,7 @@ Switch the Transfer Mode to "Bulk Stream" and try again.</source>
 ट्रांसफर मोड को "बल्क स्ट्रीम" पर स्विच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="777"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="755"/>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
@@ -8903,7 +9052,7 @@ Switch the Transfer Mode to "Isochronous" and try again.</source>
 ट्रांसफर मोड को "Isochronous" पर स्विच करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="781"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="759"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may require a specific driver.</source>
@@ -8912,42 +9061,42 @@ The device may not expose data endpoints in its active configuration, or it may 
 डिवाइस अपने सक्रिय कॉन्फ़िगरेशन में डेटा एंडपॉइंट उजागर नहीं कर सकता, या इसे किसी विशिष्ट ड्राइवर की आवश्यकता हो सकती है।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1212"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1185"/>
         <source>USB Device</source>
         <translation>USB डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1220"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1193"/>
         <source>Transfer Mode</source>
         <translation>ट्रांसफर मोड</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1223"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1196"/>
         <source>Bulk Stream</source>
         <translation>बल्क स्ट्रीम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1223"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1196"/>
         <source>Advanced Control</source>
         <translation>उन्नत नियंत्रण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1223"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1196"/>
         <source>Isochronous</source>
         <translation>आइसोक्रोनस</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1228"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1201"/>
         <source>IN Endpoint</source>
         <translation>IN एंडपॉइंट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1236"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1209"/>
         <source>OUT Endpoint</source>
         <translation>OUT एंडपॉइंट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1244"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1217"/>
         <source>ISO Packet Size</source>
         <translation>ISO पैकेट आकार</translation>
     </message>
@@ -8955,104 +9104,104 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::FileTransmission</name>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="214"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="211"/>
         <source>No file selected…</source>
         <translation>कोई फ़ाइल चयनित नहीं…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="249"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="246"/>
         <source>Plain Text</source>
         <translation>सादा टेक्स्ट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="250"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="247"/>
         <source>Raw Binary</source>
         <translation>Raw बाइनरी</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="251"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="248"/>
         <source>XMODEM</source>
         <translation>XMODEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="252"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="249"/>
         <source>XMODEM-1K</source>
         <translation>XMODEM-1K</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="253"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="250"/>
         <source>YMODEM</source>
         <translation>YMODEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="254"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="251"/>
         <source>ZMODEM</source>
         <translation>ZMODEM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="268"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="265"/>
         <source>Select file to transmit</source>
         <translation>ट्रांसमिट करने के लिए फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="295"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="291"/>
         <source>File selected: %1 (%2 bytes)</source>
         <translation>फ़ाइल चुनी गई: %1 (%2 बाइट्स)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="298"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="294"/>
         <source>Error opening file: %1</source>
         <translation>फ़ाइल खोलने में त्रुटि: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="389"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="380"/>
         <source>Starting %1 transfer…</source>
         <translation>%1 ट्रांसफर शुरू हो रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="624"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="644"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="608"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="628"/>
         <source>Transmission complete</source>
         <translation>ट्रांसमिशन पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="626"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="610"/>
         <source>Plain text transmission complete</source>
         <translation>सादा टेक्स्ट ट्रांसमिशन पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="646"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="630"/>
         <source>Raw binary transmission complete (%1 bytes)</source>
         <translation>रॉ बाइनरी ट्रांसमिशन पूर्ण (%1 बाइट्स)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="670"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="654"/>
         <source>Transfer complete</source>
         <translation>ट्रांसफर पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="671"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="655"/>
         <source>Transfer completed successfully (%1 bytes)</source>
         <translation>ट्रांसफर सफलतापूर्वक पूर्ण हुआ (%1 बाइट्स)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="673"/>
-        <location filename="../../src/IO/FileTransmission.cpp" line="674"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="657"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="658"/>
         <source>Transfer failed: %1</source>
         <translation>ट्रांसफर विफल: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="758"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="742"/>
         <source>%1 B/s</source>
         <translation>%1 B/s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="760"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="744"/>
         <source>%1 KB/s</source>
         <translation>%1 KB/s</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="762"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="746"/>
         <source>%1 MB/s</source>
         <translation>%1 MB/s</translation>
     </message>
@@ -9060,12 +9209,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="358"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="345"/>
         <source>Frames dropped</source>
         <translation>फ्रेम छोड़े गए</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FrameReader.cpp" line="360"/>
+        <location filename="../../src/IO/FrameReader.cpp" line="347"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>आने वाला डेटा Serial Studio द्वारा प्रोसेस किए जाने की तुलना में तेज़ी से आ रहा है; %1 फ्रेम छोड़े गए हैं। डेटा दर कम करें या किसी भारी उपभोक्ता को अक्षम करें।</translation>
     </message>
@@ -9073,93 +9222,93 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::Protocols::XMODEM</name>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="85"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="83"/>
         <source>Cannot open file: %1</source>
         <translation>फ़ाइल नहीं खोली जा सकती: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="114"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="112"/>
         <source>Transfer cancelled</source>
         <translation>ट्रांसफर रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="115"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="113"/>
         <source>Transfer cancelled by user</source>
         <translation>उपयोगकर्ता द्वारा ट्रांसफर रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="95"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="93"/>
         <source>Waiting for receiver…</source>
         <translation>रिसीवर की प्रतीक्षा में…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="211"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="207"/>
         <source>Receiver ready (CRC mode), sending data…</source>
         <translation>रिसीवर तैयार (CRC मोड), डेटा भेजा जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="144"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="142"/>
         <source>Too many retries, transfer aborted</source>
         <translation>बहुत अधिक पुनः प्रयास, ट्रांसफर रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="145"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="143"/>
         <source>Maximum retries exceeded</source>
         <translation>अधिकतम पुनः प्रयास पार हो गए</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="149"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="147"/>
         <source>NAK received, retrying block %1 (%2/%3)</source>
         <translation>NAK प्राप्त हुआ, ब्लॉक %1 पुनः प्रयास किया जा रहा है (%2/%3)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="158"/>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="396"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="155"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="384"/>
         <source>Failed to seek in file</source>
         <translation>फ़ाइल में सीक करने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="168"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="165"/>
         <source>Transfer cancelled by receiver</source>
         <translation>रिसीवर द्वारा ट्रांसफर रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="169"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="166"/>
         <source>Receiver cancelled the transfer</source>
         <translation>रिसीवर ने ट्रांसफर रद्द कर दिया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="183"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="180"/>
         <source>Transfer complete</source>
         <translation>ट्रांसफर पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="310"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="302"/>
         <source>File read returned more data than requested</source>
         <translation>फ़ाइल रीड ने अनुरोधित से अधिक डेटा लौटाया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="326"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="316"/>
         <source>Sending block %1 (%2 bytes)</source>
         <translation>ब्लॉक %1 भेजा जा रहा है (%2 बाइट्स)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="339"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="329"/>
         <source>Sending EOT…</source>
         <translation>EOT भेजा जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="386"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="375"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>टाइमआउट, पुनः प्रयास (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="381"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="370"/>
         <source>Transfer timed out</source>
         <translation>ट्रांसफर टाइमआउट हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="382"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="371"/>
         <source>Timeout: no response from receiver</source>
         <translation>टाइमआउट: रिसीवर से कोई प्रतिक्रिया नहीं</translation>
     </message>
@@ -9167,75 +9316,75 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::Protocols::YMODEM</name>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="64"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="62"/>
         <source>Cannot open file: %1</source>
         <translation>फ़ाइल नहीं खोली जा सकती: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="98"/>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="176"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="96"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="173"/>
         <source>Transfer cancelled by receiver</source>
         <translation>रिसीवर द्वारा ट्रांसफर रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="99"/>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="177"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="97"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="174"/>
         <source>Receiver cancelled the transfer</source>
         <translation>रिसीवर ने ट्रांसफर रद्द कर दिया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="76"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="74"/>
         <source>Waiting for receiver…</source>
         <translation>रिसीवर की प्रतीक्षा में…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="135"/>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="331"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="133"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="316"/>
         <source>Sending first EOT…</source>
         <translation>पहला EOT भेजा जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="153"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="151"/>
         <source>Too many retries, transfer aborted</source>
         <translation>बहुत अधिक पुनः प्रयास, ट्रांसफर निरस्त किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="154"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="152"/>
         <source>Maximum retries exceeded</source>
         <translation>अधिकतम पुनः प्रयास सीमा पार हो गई</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="158"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="156"/>
         <source>NAK received, retrying block %1</source>
         <translation>NAK प्राप्त हुआ, ब्लॉक %1 पुनः प्रयास किया जा रहा है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="164"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="161"/>
         <source>Failed to seek in file</source>
         <translation>फ़ाइल में सीक करने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="228"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="220"/>
         <source>Sending second EOT…</source>
         <translation>दूसरा EOT भेजा जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="312"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="299"/>
         <source>Sending end-of-batch marker…</source>
         <translation>बैच-समाप्ति मार्कर भेजा जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="252"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="242"/>
         <source>Transfer complete</source>
         <translation>स्थानांतरण पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="297"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="284"/>
         <source>Sending file header: %1 (%2 bytes)</source>
         <translation>फ़ाइल हेडर भेजा जा रहा है: %1 (%2 बाइट्स)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="346"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="330"/>
         <source>Sending block %1 (%2/%3 bytes)</source>
         <translation>ब्लॉक %1 भेजा जा रहा है (%2/%3 बाइट्स)</translation>
     </message>
@@ -9243,123 +9392,123 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::Protocols::ZMODEM</name>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="88"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="86"/>
         <source>Cannot open file: %1</source>
         <translation>फ़ाइल नहीं खोली जा सकती: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="106"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="103"/>
         <source>File is too large for ZMODEM (%1 bytes, limit 4 GiB).</source>
         <translation>फ़ाइल ZMODEM के लिए बहुत बड़ी है (%1 बाइट्स, सीमा 4 GiB)।</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="133"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="128"/>
         <source>Transfer cancelled</source>
         <translation>स्थानांतरण रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="134"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="129"/>
         <source>Transfer cancelled by user</source>
         <translation>उपयोगकर्ता द्वारा स्थानांतरण रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="279"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="269"/>
         <source>Hex header CRC mismatch, dropping frame</source>
         <translation>हेक्स हेडर CRC बेमेल, फ्रेम छोड़ा जा रहा है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="466"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="444"/>
         <source>Sending file info: %1 (%2 bytes)</source>
         <translation>फ़ाइल जानकारी भेजी जा रही है: %1 (%2 बाइट्स)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="482"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="459"/>
         <source>Failed to seek to offset %1</source>
         <translation>ऑफसेट %1 पर सीक करने में विफल</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="513"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="488"/>
         <source>File read returned more data than requested</source>
         <translation>फ़ाइल रीड ने अनुरोधित से अधिक डेटा लौटाया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="601"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="571"/>
         <source>Receiver requests data from offset %1</source>
         <translation>रिसीवर ऑफसेट %1 से डेटा का अनुरोध कर रहा है</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="610"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="579"/>
         <source>Receiver skipped the file</source>
         <translation>रिसीवर ने फ़ाइल छोड़ दी</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="623"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="591"/>
         <source>Too many errors, transfer aborted</source>
         <translation>बहुत अधिक त्रुटियाँ, स्थानांतरण निरस्त किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="624"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="592"/>
         <source>Maximum retries exceeded</source>
         <translation>अधिकतम पुनः प्रयास सीमा पार हो गई</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="439"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="420"/>
         <source>Sending ZRQINIT, waiting for receiver…</source>
         <translation>ZRQINIT भेजा जा रहा है, रिसीवर की प्रतीक्षा में…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="541"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="514"/>
         <source>File data sent, waiting for confirmation…</source>
         <translation>फ़ाइल डेटा भेजा गया, पुष्टि की प्रतीक्षा में…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="552"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="525"/>
         <source>Sending ZFIN…</source>
         <translation>ZFIN भेजा जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="589"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="561"/>
         <source>Receiver ready, sending file info…</source>
         <translation>रिसीवर तैयार, फ़ाइल जानकारी भेजी जा रही है…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="628"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="596"/>
         <source>NAK received, retrying (%1/%2)…</source>
         <translation>NAK प्राप्त हुआ, पुनः प्रयास (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="650"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="617"/>
         <source>Transfer complete</source>
         <translation>ट्रांसफर पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="661"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="627"/>
         <source>Transfer cancelled by receiver</source>
         <translation>रिसीवर द्वारा ट्रांसफर रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="662"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="628"/>
         <source>Receiver cancelled the transfer</source>
         <translation>रिसीवर ने ट्रांसफर रद्द किया</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="671"/>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="672"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="636"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="637"/>
         <source>Receiver reported a file error</source>
         <translation>रिसीवर ने फ़ाइल त्रुटि रिपोर्ट की</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="879"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="835"/>
         <source>Transfer timed out</source>
         <translation>ट्रांसफर टाइमआउट</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="880"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="836"/>
         <source>Timeout: no response from receiver</source>
         <translation>टाइमआउट: रिसीवर से कोई प्रतिक्रिया नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="884"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="840"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>टाइमआउट, पुनः प्रयास (%1/%2)…</translation>
     </message>
@@ -9463,12 +9612,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>KeyManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="24"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="23"/>
         <source>API Keys</source>
         <translation>API कुंजियाँ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="48"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="47"/>
         <source>Anthropic Claude. The default is Claude Haiku 4.5 ($1 input / $5 output per million tokens). Sonnet 4.6 and Opus 4.7 are also available. Supports streaming, tool use, extended thinking, and prompt caching.</source>
         <translation>Anthropic Claude। डिफ़ॉल्ट Claude Haiku 4.5 है ($1 इनपुट / $5 आउटपुट प्रति मिलियन टोकन)। Sonnet 4.6 और OPUS 4.7 भी उपलब्ध हैं। स्ट्रीमिंग, टूल उपयोग, विस्तारित थिंकिंग और प्रॉम्प्ट कैशिंग समर्थित है।</translation>
     </message>
@@ -9477,22 +9626,22 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">OpenAI Chat Completions। डिफ़ॉल्ट GPT-4o mini है ($0.15 इनपुट / $0.60 आउटपुट प्रति मिलियन टोकन)। GPT-4o, GPT-4 Turbo और o1-mini भी उपलब्ध हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="58"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="57"/>
         <source>Google Gemini. The default is Gemini 2.0 Flash, which has a generous free tier (subject to rate limits). Gemini 1.5 Pro and Gemini 1.5 Flash are also available.</source>
         <translation>Google Gemini। डिफ़ॉल्ट Gemini 2.0 Flash है, जिसमें उदार फ्री टियर है (रेट लिमिट के अधीन)। Gemini 1.5 Pro और Gemini 1.5 Flash भी उपलब्ध हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="101"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="100"/>
         <source>Bring your own API keys. They are encrypted at rest with a per-machine key and never leave your computer except to communicate with the provider you select.</source>
         <translation>अपनी API कुंजियाँ लाएं। वे प्रति-मशीन कुंजी के साथ एन्क्रिप्टेड रहती हैं और आपके चुने गए प्रदाता से संचार के अलावा कभी आपके कंप्यूटर से बाहर नहीं जाती हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="166"/>
         <source>Key set</source>
         <translation>कुंजी सेट की गई</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
         <source>No key</source>
         <translation>कोई कुंजी नहीं</translation>
     </message>
@@ -9501,102 +9650,102 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">एक कुंजी फ़ाइल में है — इसे बदलने के लिए नई कुंजी पेस्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="53"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="52"/>
         <source>OpenAI Chat Completions. The default is GPT-5 mini for fast, cost-conscious agentic work. GPT-5.2 is the stronger general-purpose option, and GPT-5.2 Chat tracks the model currently used in ChatGPT.</source>
         <translation>OpenAI Chat Completions। डिफ़ॉल्ट GPT-5 mini है जो तेज़, लागत-कुशल एजेंटिक कार्य के लिए है। GPT-5.2 मजबूत सामान्य-उद्देश्य विकल्प है, और GPT-5.2 Chat वर्तमान में ChatGPT में उपयोग किए जाने वाले मॉडल को ट्रैक करता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="62"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="61"/>
         <source>DeepSeek. OpenAI-compatible API. The default is deepseek-chat (V3). deepseek-reasoner (R1) is also available. Often the cheapest cloud option for tool use.</source>
         <translation>DeepSeek। OpenAI-संगत API। डिफ़ॉल्ट deepseek-chat (V3) है। deepseek-reasoner (R1) भी उपलब्ध है। टूल उपयोग के लिए अक्सर सबसे सस्ता क्लाउड विकल्प।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="66"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="65"/>
         <source>OpenRouter. One key, ~200 models from Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen, and others. Free-tier models (suffixed :free) are rate-limited but require no additional billing. Pay-as-you-go for the rest.</source>
         <translation>OpenRouter। एक कुंजी, Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen और अन्य से ~200 मॉडल। फ्री-टियर मॉडल (:free प्रत्यय के साथ) रेट-लिमिटेड हैं लेकिन अतिरिक्त बिलिंग की आवश्यकता नहीं है। शेष के लिए pay-as-you-go।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="71"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="70"/>
         <source>Groq. Hardware-accelerated inference (LPUs) for very fast Llama, Mixtral, Gemma, DeepSeek-R1 distill, and Qwen models. Generous free tier with daily token limits.</source>
         <translation>Groq। बहुत तेज़ Llama, Mixtral, Gemma, DeepSeek-R1 distill और Qwen मॉडल के लिए हार्डवेयर-एक्सेलरेटेड इन्फरेंस (LPU)। दैनिक टोकन सीमा के साथ उदार फ्री टियर।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="75"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="74"/>
         <source>Mistral. The default is Mistral Large. Codestral targets code completion, Pixtral handles vision, and the Ministral models are tuned for edge / low-latency use.</source>
         <translation>Mistral। डिफ़ॉल्ट Mistral Large है। Codestral कोड कम्प्लीशन के लिए, Pixtral विज़न को हैंडल करता है, और Ministral मॉडल एज / लो-लेटेंसी उपयोग के लिए ट्यून किए गए हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="79"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>लोकल मॉडल सर्वर। किसी भी OpenAI-संगत एंडपॉइंट के साथ काम करता है -- Ollama, llama.cpp का llama-server, LM Studio, या vLLM। कुछ भी आपकी मशीन से बाहर नहीं जाता। मॉडल सूची सर्वर से लाइव क्वेरी की जाती है।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="204"/>
         <source>A key is on file -- paste a new one to replace it</source>
         <translation>एक कुंजी फ़ाइल में है -- इसे बदलने के लिए नई कुंजी पेस्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
         <source>Paste your API key here</source>
         <translation>अपनी API कुंजी यहाँ पेस्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="212"/>
         <source>Hide key</source>
         <translation>कुंजी छिपाएँ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
         <source>Show key while typing</source>
         <translation>टाइप करते समय कुंजी दिखाएँ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="224"/>
         <source>Get key</source>
         <translation>कुंजी प्राप्त करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
         <source>Open the provider's console to create a new key</source>
         <translation>नई कुंजी बनाने के लिए प्रदाता का कंसोल खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="237"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="236"/>
         <source>Save</source>
         <translation>सहेजें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="255"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="254"/>
         <source>Remove the stored key for %1</source>
         <translation>%1 के लिए संग्रहीत कुंजी हटाएँ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="279"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="278"/>
         <source>http://localhost:11434/v1</source>
         <translation>http://localhost:11434/v1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="282"/>
         <source>Install Ollama</source>
         <translation>Ollama इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
         <source>Open the Ollama download page</source>
         <translation>Ollama डाउनलोड पेज खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="295"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="294"/>
         <source>Apply</source>
         <translation>लागू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="310"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="309"/>
         <source>Re-query the model list</source>
         <translation>मॉडल सूची पुनः क्वेरी करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="358"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="357"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>अभी तक कोई API कुंजी कॉन्फ़िगर नहीं की गई है। शुरू करने के लिए एक कुंजी जोड़ें।</translation>
     </message>
@@ -9605,12 +9754,12 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">अभी तक कोई API कुंजी कॉन्फ़िगर नहीं की गई है। शुरू करने के लिए ऊपर कम से कम एक जोड़ें।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="361"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="360"/>
         <source>One provider is ready.</source>
         <translation>एक प्रदाता तैयार है।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="363"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="362"/>
         <source>%1 providers are ready.</source>
         <translation>%1 प्रदाता तैयार हैं।</translation>
     </message>
@@ -9737,129 +9886,129 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 <context>
     <name>Licensing::LemonSqueezy</name>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="546"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="515"/>
         <source>There was an issue validating your license.</source>
         <translation>आपके लाइसेंस को मान्य करने में समस्या आई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="564"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="745"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="870"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="533"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="714"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="833"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>आपके द्वारा प्रदान की गई लाइसेंस कुंजी Serial Studio से संबंधित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="565"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="534"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>कृपया दोबारा जाँचें कि आपने अपना लाइसेंस आधिकारिक Serial Studio स्टोर से खरीदा है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="576"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="545"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="723"/>
         <source>This license key was activated on a different device.</source>
         <translation>यह लाइसेंस कुंजी किसी अन्य डिवाइस पर सक्रिय की गई थी।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="577"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="755"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="546"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="724"/>
         <source>Deactivate it there first or contact support for help.</source>
         <translation>पहले उसे वहाँ निष्क्रिय करें या सहायता के लिए समर्थन से संपर्क करें।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="588"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="765"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="557"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="734"/>
         <source>This license is not currently active.</source>
         <translation>यह लाइसेंस वर्तमान में सक्रिय नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="589"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="766"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="558"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="735"/>
         <source>It may have expired or been deactivated (status: %1).</source>
         <translation>यह समाप्त हो गया होगा या निष्क्रिय कर दिया गया होगा (स्थिति: %1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="599"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="568"/>
         <source>Something went wrong on the server.</source>
         <translation>सर्वर पर कुछ गड़बड़ हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="776"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="569"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="745"/>
         <source>No activation ID was returned.</source>
         <translation>कोई सक्रियण ID नहीं मिला।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="610"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="579"/>
         <source>Could not validate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस सत्यापित नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="611"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="785"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="881"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="580"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="754"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="843"/>
         <source>Try again later.</source>
         <translation>बाद में पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="746"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="871"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="715"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="834"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>दोबारा जाँचें कि आपने अपना लाइसेंस आधिकारिक Serial Studio स्टोर से खरीदा है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="775"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="744"/>
         <source>Something went wrong on the server…</source>
         <translation>सर्वर पर कुछ गड़बड़ हुई…</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="598"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="631"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="600"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="682"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="651"/>
         <source>Your license has been successfully activated.</source>
         <translation>आपका लाइसेंस सफलतापूर्वक सक्रिय हो गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="683"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="652"/>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Serial Studio का समर्थन करने के लिए धन्यवाद!
 अब आपके पास सभी प्रीमियम सुविधाओं तक पहुंच है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="706"/>
         <source>There was an issue activating your license.</source>
         <translation>आपका लाइसेंस सक्रिय करने में समस्या हुई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="784"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="753"/>
         <source>Could not activate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस सक्रिय नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="861"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="825"/>
         <source>There was an issue deactivating your license.</source>
         <translation>आपका लाइसेंस निष्क्रिय करने में समस्या आई।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="880"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="842"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>इस समय आपका लाइसेंस निष्क्रिय नहीं किया जा सका।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="891"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="852"/>
         <source>Your license has been deactivated.</source>
         <translation>आपका लाइसेंस निष्क्रिय कर दिया गया है।</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="892"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro फीचर्स की एक्सेस हटा दी गई है।
@@ -9869,12 +10018,12 @@ Serial Studio को सपोर्ट करने के लिए पुन�
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="638"/>
+        <location filename="../../src/MDF4/Export.cpp" line="616"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>MDF4 एक्सपोर्ट एक Pro फीचर है।</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="639"/>
+        <location filename="../../src/MDF4/Export.cpp" line="617"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>इस फीचर के लिए लाइसेंस आवश्यक है। MDF4 एक्सपोर्ट सक्षम करने के लिए कृपया एक खरीदें।</translation>
     </message>
@@ -9882,52 +10031,52 @@ Serial Studio को सपोर्ट करने के लिए पुन�
 <context>
     <name>MDF4::Player</name>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="363"/>
+        <location filename="../../src/MDF4/Player.cpp" line="357"/>
         <source>Select MDF4 file</source>
         <translation>MDF4 फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="365"/>
+        <location filename="../../src/MDF4/Player.cpp" line="359"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
         <translation>MDF4 फ़ाइलें (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="389"/>
+        <location filename="../../src/MDF4/Player.cpp" line="381"/>
         <source>Disconnect from device?</source>
         <translation>डिवाइस से डिस्कनेक्ट करें?</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="390"/>
+        <location filename="../../src/MDF4/Player.cpp" line="382"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
         <translation>MDF4 फ़ाइल खोलने से पहले आपको वर्तमान डिवाइस से डिस्कनेक्ट करना होगा।</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="407"/>
+        <location filename="../../src/MDF4/Player.cpp" line="398"/>
         <source>Cannot open MDF4 file</source>
         <translation>MDF4 फ़ाइल नहीं खोली जा सकती</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="408"/>
+        <location filename="../../src/MDF4/Player.cpp" line="399"/>
         <source>The file may be corrupted or in an unsupported format.</source>
         <translation>फ़ाइल दूषित हो सकती है या असमर्थित प्रारूप में हो सकती है।</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="415"/>
+        <location filename="../../src/MDF4/Player.cpp" line="406"/>
         <source>Invalid MDF4 file</source>
         <translation>अमान्य MDF4 फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="416"/>
+        <location filename="../../src/MDF4/Player.cpp" line="407"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
         <translation>फ़ाइल संरचना पढ़ने में विफल। फ़ाइल दूषित हो सकती है।</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="433"/>
+        <location filename="../../src/MDF4/Player.cpp" line="422"/>
         <source>No data in file</source>
         <translation>फ़ाइल में कोई डेटा नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="434"/>
+        <location filename="../../src/MDF4/Player.cpp" line="423"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>MDF4 फ़ाइल में कोई माप डेटा नहीं है।</translation>
     </message>
@@ -10271,128 +10420,128 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MQTT::Publisher</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="815"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="792"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="816"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="793"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="817"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="794"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="819"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="796"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="820"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="797"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="821"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="798"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 या बाद का</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="822"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="799"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 या बाद का</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="823"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="800"/>
         <source>Any Protocol</source>
         <translation>कोई भी प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="824"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="801"/>
         <source>Secure Protocols Only</source>
         <translation>केवल सुरक्षित प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="826"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="803"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="827"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="804"/>
         <source>Query Peer</source>
         <translation>पीयर से पूछें</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="828"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="805"/>
         <source>Verify Peer</source>
         <translation>पीयर सत्यापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="829"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="806"/>
         <source>Auto Verify Peer</source>
         <translation>स्वतः पीयर सत्यापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1150"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1123"/>
         <source>Raw RX Data</source>
         <translation>कच्चा RX डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1151"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1124"/>
         <source>Custom Script</source>
         <translation>कस्टम स्क्रिप्ट</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1152"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1125"/>
         <source>Dashboard Data (CSV)</source>
         <translation>डैशबोर्ड डेटा (CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1153"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1126"/>
         <source>Dashboard Data (JSON)</source>
         <translation>डैशबोर्ड डेटा (JSON)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1313"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1281"/>
         <source>MQTT publisher unavailable</source>
         <translation>MQTT प्रकाशक अनुपलब्ध</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1314"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1282"/>
         <source>A valid commercial license is required to use MQTT publishing.</source>
         <translation>MQTT प्रकाशन उपयोग के लिए वैध व्यावसायिक लाइसेंस आवश्यक है।</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1316"/>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1890"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1284"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1853"/>
         <source>MQTT Test Connection</source>
         <translation>MQTT टेस्ट कनेक्शन</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1336"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1303"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM प्रमाणपत्र डायरेक्टरी चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1850"/>
         <source>MQTT broker reachable</source>
         <translation>MQTT ब्रोकर पहुँच योग्य है</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1887"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1850"/>
         <source>MQTT broker unreachable</source>
         <translation>MQTT ब्रोकर पहुँच योग्य नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1901"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1864"/>
         <source>MQTT broker connection failed</source>
         <translation>MQTT ब्रोकर कनेक्शन विफल</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="1901"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="1864"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
@@ -10485,7 +10634,7 @@ Please provide the necessary credentials.</source>
         <translation>चयन फ़ॉर्मेट करें	Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="488"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="487"/>
         <source>--
 -- Define a mqtt(frame) function that receives the raw bytes
 -- of one parsed frame and returns the payload to publish to
@@ -10522,7 +10671,7 @@ Please provide the necessary credentials.</source>
 --</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="505"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="504"/>
         <source>/*
  * Define a mqtt(frame) function that receives the raw bytes
  * of one parsed frame and returns the payload to publish to
@@ -10557,46 +10706,46 @@ Please provide the necessary credentials.</source>
  * तैयार उदाहरणों के लिए Template ड्रॉपडाउन का उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="602"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="601"/>
         <source>Script is empty</source>
         <translation>स्क्रिप्ट खाली है</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="609"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="608"/>
         <source>Lua engine error</source>
         <translation>Lua इंजन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="631"/>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="645"/>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="669"/>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="683"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="630"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="644"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="668"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="682"/>
         <source>Error: %1</source>
         <translation>त्रुटि: %1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="639"/>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="675"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="638"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="674"/>
         <source>mqtt() is not defined</source>
         <translation>mqtt() परिभाषित नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="656"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="655"/>
         <source>(nil -- frame skipped)</source>
         <translation>(nil -- फ़्रेम छोड़ा गया)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="658"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="657"/>
         <source>(non-string return)</source>
         <translation>(non-string return)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="688"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="687"/>
         <source>(null -- frame skipped)</source>
         <translation>(null -- frame skipped)</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="766"/>
+        <location filename="../../src/MQTT/PublisherScriptEditor.cpp" line="765"/>
         <source>Select Template…</source>
         <translation>टेम्पलेट चुनें…</translation>
     </message>
@@ -10604,17 +10753,17 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MQTT::PublisherWorker</name>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="696"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="674"/>
         <source>Configure broker hostname and port before testing the connection.</source>
         <translation>कनेक्शन परीक्षण से पहले ब्रोकर होस्टनेम और पोर्ट कॉन्फ़िगर करें।</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="733"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="710"/>
         <source>Successfully connected to %1:%2.</source>
         <translation>%1:%2 से सफलतापूर्वक कनेक्ट हुआ।</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Publisher.cpp" line="744"/>
+        <location filename="../../src/MQTT/Publisher.cpp" line="721"/>
         <source>Timed out after 5 seconds without reaching the broker.</source>
         <translation>ब्रोकर तक पहुँचे बिना 5 सेकंड के बाद टाइम आउट हुआ।</translation>
     </message>
@@ -10757,32 +10906,32 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="184"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="191"/>
         <source>Console Only Mode</source>
         <translation>केवल कंसोल मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="187"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="194"/>
         <source>Quick Plot Mode</source>
         <translation>त्वरित प्लॉट मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="194"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="201"/>
         <source>Empty Project</source>
         <translation>खाली प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="683"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="686"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="691"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="694"/>
         <source>Waiting for data…</source>
         <translation>डेटा का इंतज़ार है…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="692"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="695"/>
         <source>Connecting to device…</source>
         <translation>डिवाइस से कनेक्ट हो रहा है…</translation>
     </message>
@@ -10998,7 +11147,7 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::Examples</name>
     <message>
-        <location filename="../../src/Misc/Examples.cpp" line="294"/>
+        <location filename="../../src/Misc/Examples.cpp" line="282"/>
         <source>Failed to load README: %1</source>
         <translation>README लोड करने में विफल: %1</translation>
     </message>
@@ -11006,85 +11155,85 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Misc::ExtensionManager</name>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="247"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="244"/>
         <source>Theme</source>
         <translation>थीम</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="250"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="247"/>
         <source>Frame Parser</source>
         <translation>फ़्रेम पार्सर</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="253"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="250"/>
         <source>Project Template</source>
         <translation>प्रोजेक्ट टेम्पलेट</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="256"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="253"/>
         <source>Plugin</source>
         <translation>प्लगइन</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="259"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="256"/>
         <source>All Types</source>
         <translation>सभी प्रकार</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="487"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="473"/>
         <source>Reset Extensions</source>
         <translation>एक्सटेंशन रीसेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="488"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="474"/>
         <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>यह सभी एक्सटेंशन को अनइंस्टॉल करता है, सभी कस्टम रिपॉजिटरी को हटाता है, और डिफ़ॉल्ट सेटिंग्स को पुनर्स्थापित करता है। जारी रखें?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="531"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="513"/>
         <source>Select Extension Repository Folder</source>
         <translation>एक्सटेंशन रिपॉजिटरी फ़ोल्डर चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1064"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1014"/>
         <source>Installed (repository no longer available)</source>
         <translation>इंस्टॉल किया गया (रिपॉजिटरी अब उपलब्ध नहीं)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1378"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1388"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1409"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1431"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1475"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1485"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1494"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1321"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1331"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1352"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1374"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1418"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1428"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1437"/>
         <source>Plugin Error</source>
         <translation>प्लगइन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1378"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1321"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>प्लगइन "%1" इंस्टॉल नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1389"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1332"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>एक्सटेंशन "%1" एक प्लगइन नहीं है (प्रकार: %2)।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1410"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1353"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>प्लगइन मेटाडेटा फ़ाइल नहीं पढ़ी जा सकती:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1432"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1375"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>प्लगइन "%1" को GRPC की आवश्यकता है लेकिन इस बिल्ड में GRPC समर्थन शामिल नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1441"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1384"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -11093,34 +11242,34 @@ Would you like to enable it now?</source>
 क्या आप इसे अभी सक्षम करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1447"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1390"/>
         <source>API Server Required</source>
         <translation>API सर्वर आवश्यक</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1476"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1419"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>प्लगइन "%1" में info.json में 'entry' फ़ील्ड नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1486"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1429"/>
         <source>Entry point not found:
 %1</source>
         <translation>एंट्री पॉइंट नहीं मिला:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1495"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1438"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>प्लगइन "%1" में अमान्य एंट्री पॉइंट पथ है।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1538"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1481"/>
         <source>Missing Dependency</source>
         <translation>निर्भरता अनुपलब्ध</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1539"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1482"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -11129,7 +11278,7 @@ Would you like to open the download page?</source>
 क्या आप डाउनलोड पेज खोलना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1444"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1387"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>प्लगइन को Serial Studio के साथ संचार करने के लिए API सर्वर की आवश्यकता है। क्या आप इसे अभी सक्षम करना चाहते हैं?</translation>
     </message>
@@ -11150,7 +11299,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::HelpCenter</name>
     <message>
-        <location filename="../../src/Misc/HelpCenter.cpp" line="320"/>
+        <location filename="../../src/Misc/HelpCenter.cpp" line="303"/>
         <source>Failed to load page: %1</source>
         <translation>पेज लोड करने में विफल: %1</translation>
     </message>
@@ -11158,12 +11307,12 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::IconEngine</name>
     <message>
-        <location filename="../../src/Misc/IconEngine.cpp" line="154"/>
+        <location filename="../../src/Misc/IconEngine.cpp" line="148"/>
         <source>Invalid icon identifier</source>
         <translation>अमान्य आइकन पहचानकर्ता</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/IconEngine.cpp" line="228"/>
+        <location filename="../../src/Misc/IconEngine.cpp" line="218"/>
         <source>Empty SVG data received</source>
         <translation>खाली SVG डेटा प्राप्त हुआ</translation>
     </message>
@@ -11216,17 +11365,17 @@ Would you like to open the download page?</source>
         <translation>वेक्टर या रास्टर छवि (*.svg *.png)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="215"/>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="212"/>
         <source>A Pro license is required to generate shortcuts.</source>
         <translation>शॉर्टकट जनरेट करने के लिए Pro लाइसेंस आवश्यक है।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="220"/>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="217"/>
         <source>No output path was provided.</source>
         <translation>कोई आउटपुट पथ प्रदान नहीं किया गया।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="263"/>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="258"/>
         <source>Failed to write shortcut file.</source>
         <translation>शॉर्टकट फ़ाइल लिखने में विफल।</translation>
     </message>
@@ -11256,14 +11405,14 @@ Would you like to open the download page?</source>
         <translation>Info.plist नहीं लिखा जा सका: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="272"/>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="141"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="286"/>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="200"/>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="285"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="199"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Linux शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -11278,18 +11427,18 @@ Would you like to open the download page?</source>
         <translation>CoCreateInstance(IShellLink) विफल (HRESULT 0x%1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="153"/>
         <source>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</source>
         <translation>QueryInterface(IPersistFile) विफल (HRESULT 0x%1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="164"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="163"/>
         <source>Saving the .lnk file failed (HRESULT 0x%1).</source>
         <translation>.lnk फ़ाइल सहेजना विफल (HRESULT 0x%1)।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="186"/>
-        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -11312,7 +11461,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
-        <location filename="../../src/Misc/ThemeManager.cpp" line="426"/>
+        <location filename="../../src/Misc/ThemeManager.cpp" line="398"/>
         <source>System</source>
         <translation>सिस्टम</translation>
     </message>
@@ -11328,92 +11477,92 @@ Would you like to open the download page?</source>
         <translation type="vanished">क्या %1 को स्वचालित रूप से अपडेट जाँचने चाहिए? आप "About" डायलॉग से मैन्युअल रूप से अपडेट जाँच सकते हैं</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="170"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="161"/>
         <source>Ok</source>
         <translation>ठीक है</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="172"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="163"/>
         <source>Save</source>
         <translation>सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="174"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="165"/>
         <source>Save all</source>
         <translation>सभी सहेजें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="176"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="167"/>
         <source>Open</source>
         <translation>खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="178"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="169"/>
         <source>Yes</source>
         <translation>हाँ</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="180"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="171"/>
         <source>Yes to all</source>
         <translation>सभी के लिए हाँ</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="182"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="173"/>
         <source>No</source>
         <translation>नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="184"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="175"/>
         <source>No to all</source>
         <translation>सभी के लिए नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="186"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="177"/>
         <source>Abort</source>
         <translation>निरस्त करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="188"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="179"/>
         <source>Retry</source>
         <translation>पुनः प्रयास करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="190"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="181"/>
         <source>Ignore</source>
         <translation>अनदेखा करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="192"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="183"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="194"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="185"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="196"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="187"/>
         <source>Discard</source>
         <translation>त्यागें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="198"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="189"/>
         <source>Help</source>
         <translation>सहायता</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="191"/>
         <source>Apply</source>
         <translation>लागू करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="193"/>
         <source>Reset</source>
         <translation>रीसेट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="195"/>
         <source>Restore defaults</source>
         <translation>डिफ़ॉल्ट पुनर्स्थापित करें</translation>
     </message>
@@ -11421,7 +11570,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::WorkspaceManager</name>
     <message>
-        <location filename="../../src/Misc/WorkspaceManager.cpp" line="267"/>
+        <location filename="../../src/Misc/WorkspaceManager.cpp" line="261"/>
         <source>Select Workspace Location</source>
         <translation>वर्कस्पेस स्थान चुनें</translation>
     </message>
@@ -11866,99 +12015,99 @@ Add groups above to poll multiple register types.</source>
         <translation>प्रत्येक मान को two's-complement साइन किए गए के रूप में व्याख्यायित करता है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="653"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="651"/>
         <source>Tag routing table</source>
         <translation>टैग रूटिंग तालिका</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="654"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="652"/>
         <source>Comma-separated tag:index entries, e.g. 1:0,2:1,3:2. Tags may be decimal or 0x-prefixed hex.</source>
         <translation>अल्पविराम से अलग किए गए tag:index प्रविष्टियाँ, जैसे 1:0,2:1,3:2। टैग दशमलव या 0x-उपसर्गित हेक्स हो सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1098"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1303"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1250"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1096"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1300"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1245"/>
         <source>Validate checksum</source>
         <translation>चेकसम सत्यापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1099"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1097"/>
         <source>Rejects messages with an invalid Fletcher checksum.</source>
         <translation>अमान्य Fletcher चेकसम वाले संदेशों को अस्वीकार करता है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1304"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1301"/>
         <source>Rejects messages with an invalid additive checksum.</source>
         <translation>अमान्य योगात्मक चेकसम वाले संदेशों को अस्वीकार करता है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1457"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1454"/>
         <source>Protocol version</source>
         <translation>प्रोटोकॉल संस्करण</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1458"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1455"/>
         <source>Selects the expected start marker (0xFE for v1, 0xFD for v2).</source>
         <translation>अपेक्षित स्टार्ट मार्कर का चयन करता है (v1 के लिए 0xFE, v2 के लिए 0xFD)।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1886"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1883"/>
         <source>Validate CRC</source>
         <translation>CRC सत्यापित करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1887"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="1884"/>
         <source>Rejects frames with an invalid CRC-24Q checksum.</source>
         <translation>अमान्य CRC-24Q चेकसम वाले फ्रेम को अस्वीकार करता है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2062"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2059"/>
         <source>Channel count</source>
         <translation>चैनल संख्या</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2063"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2060"/>
         <source>Number of output channels (registers or coils).</source>
         <translation>आउटपुट चैनलों की संख्या (रजिस्टर या कॉइल)।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2071"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2068"/>
         <source>Register offset</source>
         <translation>रजिस्टर ऑफसेट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2072"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2069"/>
         <source>Address offset subtracted from single-write echoes (40001 for legacy Modicon maps).</source>
         <translation>सिंगल-राइट इको से घटाया गया पता ऑफसेट (लीगेसी Modicon मैप के लिए 40001)।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2082"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2079"/>
         <source>Signed registers</source>
         <translation>साइन्ड रजिस्टर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2083"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2080"/>
         <source>Interprets 16-bit registers as two's-complement signed values.</source>
         <translation>16-बिट रजिस्टर को टू'ज़-कॉम्प्लीमेंट साइन्ड मानों के रूप में व्याख्यायित करता है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2390"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2386"/>
         <source>Payload layout</source>
         <translation>पेलोड लेआउट</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2391"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2387"/>
         <source>Array emits every element in order; map routes keys through the key list.</source>
         <translation>ऐरे प्रत्येक एलिमेंट को क्रम में उत्सर्जित करता है; मैप की लिस्ट के माध्यम से की को रूट करता है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2401"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2397"/>
         <source>Keys (map mode)</source>
         <translation>कुंजियाँ (मैप मोड)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2402"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp" line="2398"/>
         <source>Comma-separated map keys in channel order. Only used for the map layout.</source>
         <translation>चैनल क्रम में अल्पविराम से अलग की गई मैप कुंजियाँ। केवल मैप लेआउट के लिए उपयोग की जाती हैं।</translation>
     </message>
@@ -12003,137 +12152,137 @@ Add groups above to poll multiple register types.</source>
         <translation>अल्पविराम से अलग की गई रिकॉर्ड फ़ील्ड। प्रत्येक फ़ील्ड की स्थिति उसका चैनल इंडेक्स निर्धारित करती है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="610"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="605"/>
         <source>Column widths</source>
         <translation>कॉलम चौड़ाई</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="611"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="606"/>
         <source>Comma-separated character counts per field. Leave empty to split on whitespace.</source>
         <translation>प्रत्येक फ़ील्ड के लिए अल्पविराम से अलग किए गए वर्ण गणना। व्हाइटस्पेस पर विभाजित करने के लिए खाली छोड़ें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="619"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="614"/>
         <source>Trim whitespace</source>
         <translation>व्हाइटस्पेस ट्रिम करें</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="620"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="615"/>
         <source>Removes padding around every sliced field.</source>
         <translation>प्रत्येक विभाजित फ़ील्ड के चारों ओर पैडिंग हटाता है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="749"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="898"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1366"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1794"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="744"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="893"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1360"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1787"/>
         <source>Keys (in channel order)</source>
         <translation>कुंजियाँ (चैनल क्रम में)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="750"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="899"/>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1795"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="745"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="894"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1788"/>
         <source>Comma-separated key names. The position of each key sets its channel index.</source>
         <translation>अल्पविराम से अलग की गई कुंजी नाम। प्रत्येक कुंजी की स्थिति उसका चैनल इंडेक्स निर्धारित करती है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="758"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="753"/>
         <source>Pair separator</source>
         <translation>युग्म विभाजक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="759"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="754"/>
         <source>Character between key=value pairs.</source>
         <translation>key=value युग्मों के बीच वर्ण।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="765"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="760"/>
         <source>Key-value separator</source>
         <translation>कुंजी-मान विभाजक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="766"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="761"/>
         <source>Character between a key and its value.</source>
         <translation>कुंजी और उसके मान के बीच वर्ण।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="772"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="767"/>
         <source>Numeric values only</source>
         <translation>केवल संख्यात्मक मान</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="773"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="768"/>
         <source>Ignores pairs whose value is not a number.</source>
         <translation>उन जोड़ों को अनदेखा करता है जिनका मान संख्या नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1015"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1010"/>
         <source>Command routing table</source>
         <translation>कमांड रूटिंग टेबल</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1016"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1011"/>
         <source>Semicolon-separated entries of NAME:index list, e.g. CSQ:0,1;CREG:2,3;CGATT:4.</source>
         <translation>अर्धविराम से अलग की गई NAME:index सूची की प्रविष्टियाँ, जैसे CSQ:0,1;CREG:2,3;CGATT:4।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1241"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1236"/>
         <source>Talker prefix</source>
         <translation>टॉकर प्रीफ़िक्स</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1242"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1237"/>
         <source>Two-letter talker id, e.g. GP for GPS or GN for multi-constellation receivers.</source>
         <translation>दो-अक्षर टॉकर id, जैसे GPS के लिए GP या मल्टी-कॉन्स्टेलेशन रिसीवर के लिए GN।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1251"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1246"/>
         <source>Rejects sentences whose *hh checksum does not match.</source>
         <translation>उन वाक्यों को अस्वीकार करता है जिनका *hh checksum मेल नहीं खाता।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1367"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1361"/>
         <source>Comma-separated parameter names. The position of each key sets its channel index.</source>
         <translation>कॉमा-विभाजित पैरामीटर नाम। प्रत्येक की की स्थिति उसका चैनल इंडेक्स सेट करती है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1506"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1500"/>
         <source>Fields (in channel order)</source>
         <translation>फ़ील्ड (चैनल क्रम में)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1507"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1501"/>
         <source>Comma-separated field names. The position of each field sets its channel index.</source>
         <translation>कॉमा-विभाजित फ़ील्ड नाम। प्रत्येक फ़ील्ड की स्थिति उसका चैनल इंडेक्स सेट करती है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1627"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1620"/>
         <source>Tags (in channel order)</source>
         <translation>टैग (चैनल क्रम में)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1628"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/TextTemplates.cpp" line="1621"/>
         <source>Comma-separated tag names. The position of each tag sets its channel index.</source>
         <translation>कॉमा से अलग किए गए टैग नाम। प्रत्येक टैग की स्थिति उसका चैनल इंडेक्स निर्धारित करती है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="488"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="483"/>
         <source>Register blocks</source>
         <translation>रजिस्टर ब्लॉक</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="489"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="484"/>
         <source>Polled register blocks with typed, scaled entries. Written by the Modbus register map importer.</source>
         <translation>टाइप किए गए, स्केल किए गए एंट्री के साथ पोल किए गए रजिस्टर ब्लॉक। Modbus रजिस्टर मैप इम्पोर्टर द्वारा लिखा गया।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="797"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="791"/>
         <source>Signal map</source>
         <translation>सिग्नल मैप</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="798"/>
+        <location filename="../../src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp" line="792"/>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation>CAN संदेश अपने सिग्नल बिट लेआउट और स्केलिंग के साथ। DBC इम्पोर्टर द्वारा लिखा गया।</translation>
     </message>
@@ -12900,52 +13049,52 @@ Click Refresh to update the list.</source>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="42"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="43"/>
         <source>modified</source>
         <translation>संशोधित</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="342"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="361"/>
         <source>This project is password protected</source>
         <translation>यह प्रोजेक्ट पासवर्ड से सुरक्षित है</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="343"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="362"/>
         <source>Editing is available in Project mode</source>
         <translation>प्रोजेक्ट मोड में संपादन उपलब्ध है</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="373"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>परिवर्तन करने के लिए पासवर्ड दर्ज करें, या कोई अन्य प्रोजेक्ट खोलें।</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="355"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="374"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>प्रोजेक्ट लोड और संपादित करने के लिए प्रोजेक्ट मोड पर स्विच करें।</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="377"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="396"/>
         <source>Unlock</source>
         <translation>अनलॉक करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="378"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="397"/>
         <source>Switch to Project Mode</source>
         <translation>प्रोजेक्ट मोड पर स्विच करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="416"/>
         <source>Open Other Project</source>
         <translation>अन्य प्रोजेक्ट खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="398"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="417"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="414"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="433"/>
         <source>Create New Project</source>
         <translation>नया प्रोजेक्ट बनाएँ</translation>
     </message>
@@ -13584,80 +13733,80 @@ Click Refresh to update the list.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="234"/>
+        <location filename="../../src/Misc/Translator.cpp" line="231"/>
         <source>Failed to load welcome text :(</source>
         <translation>स्वागत टेक्स्ट लोड करने में विफल :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="264"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="251"/>
         <source>Network error</source>
         <translation>नेटवर्क त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="267"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="284"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="317"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="254"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="270"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="302"/>
         <source>Trial Activation Error</source>
         <translation>ट्रायल एक्टिवेशन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="281"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="267"/>
         <source>Invalid server response</source>
         <translation>अमान्य सर्वर रिस्पॉन्स</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="282"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="268"/>
         <source>The server returned malformed data: %1</source>
         <translation>सर्वर ने विकृत डेटा भेजा: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="299"/>
         <source>Unexpected server response</source>
         <translation>अप्रत्याशित सर्वर रिस्पॉन्स</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="315"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="300"/>
         <source>The server response is missing required fields.</source>
         <translation>सर्वर प्रतिक्रिया में आवश्यक फ़ील्ड गायब हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="168"/>
+        <location filename="../../src/Console/Export.cpp" line="162"/>
         <source>Console Output File Error</source>
         <translation>Console आउटपुट फ़ाइल त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="169"/>
+        <location filename="../../src/Console/Export.cpp" line="163"/>
         <source>Cannot open file for writing!</source>
         <translation>लिखने के लिए फ़ाइल नहीं खोली जा सकती!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="750"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>अमान्य Bluetooth एडाप्टर!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="808"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="753"/>
         <source>Unsuported platform or operating system</source>
         <translation>असमर्थित प्लेटफ़ॉर्म या ऑपरेटिंग सिस्टम</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="811"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="756"/>
         <source>Unsupported discovery method</source>
         <translation>असमर्थित खोज विधि</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="814"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="759"/>
         <source>General I/O error</source>
         <translation>सामान्य I/O त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="284"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="273"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="262"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="271"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Parser अक्षम</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="285"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="272"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -13666,12 +13815,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 संभावित कारण: स्क्रिप्ट बॉडी में अनंत लूप या अत्यधिक धीमा ऑपरेशन। स्क्रिप्ट को ठीक करें और पार्सिंग पुनः सक्षम करने के लिए प्रोजेक्ट को फिर से लोड करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="333"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="320"/>
         <source>Lua Syntax Error</source>
         <translation>Lua सिंटैक्स त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="334"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="321"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -13680,12 +13829,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="384"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="369"/>
         <source>Lua Runtime Error</source>
         <translation>Lua रनटाइम त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="385"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="370"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -13694,13 +13843,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="406"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="505"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="488"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="391"/>
         <source>Missing Parse Function</source>
         <translation>Parse फ़ंक्शन अनुपलब्ध</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="407"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="392"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -13711,13 +13860,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="469"/>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="540"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="454"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse फ़ंक्शन रनटाइम त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="470"/>
+        <location filename="../../src/DataModel/Scripting/LuaScriptEngine.cpp" line="455"/>
         <source>The parse function contains an error:
 
 %1
@@ -13730,7 +13879,7 @@ Please fix the error in the function body.</source>
 कृपया फ़ंक्शन बॉडी में त्रुटि ठीक करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="274"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="263"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -13739,12 +13888,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 संभावित कारण: स्क्रिप्ट बॉडी में अनंत लूप या अत्यधिक धीमा ऑपरेशन। स्क्रिप्ट को ठीक करें और पार्सिंग पुनः सक्षम करने के लिए प्रोजेक्ट को फिर से लोड करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="444"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="429"/>
         <source>JavaScript Timed Out</source>
         <translation>JavaScript टाइमआउट हो गया</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="445"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="430"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -13753,12 +13902,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 संभावित कारण: स्क्रिप्ट के शीर्ष स्तर पर एक अनंत लूप।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="463"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="447"/>
         <source>JavaScript Syntax Error</source>
         <translation>JavaScript सिंटैक्स त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="464"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="448"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -13767,12 +13916,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="479"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="462"/>
         <source>JavaScript Exception Occurred</source>
         <translation>JavaScript अपवाद घटित हुआ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="480"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="463"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -13781,7 +13930,7 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="506"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="489"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -13792,7 +13941,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -13805,12 +13954,12 @@ Please fix the error in the function body.</source>
 कृपया फ़ंक्शन बॉडी में त्रुटि ठीक करें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="663"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="641"/>
         <source>Invalid Function Declaration</source>
         <translation>अमान्य फ़ंक्शन घोषणा</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="664"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="642"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -13823,7 +13972,7 @@ Define one of:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="680"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="658"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>'parse' फ़ंक्शन को कम से कम एक पैरामीटर (फ्रेम पेलोड) स्वीकार करना चाहिए।</translation>
     </message>
@@ -13838,7 +13987,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="679"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="657"/>
         <source>Invalid Function Parameter</source>
         <translation>अमान्य फ़ंक्शन पैरामीटर</translation>
     </message>
@@ -13853,12 +14002,12 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="644"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="623"/>
         <source>Deprecated Function Signature</source>
         <translation>पुराना फ़ंक्शन सिग्नेचर</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="645"/>
+        <location filename="../../src/DataModel/Scripting/JsScriptEngine.cpp" line="624"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -13873,22 +14022,22 @@ function parse(%1) { ... }
 सेपरेटर पैरामीटर की अब आवश्यकता नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="189"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="180"/>
         <source>Critical</source>
         <translation>गंभीर</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="189"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="180"/>
         <source>Warning</source>
         <translation>चेतावनी</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="523"/>
+        <location filename="../../src/Misc/CLI.cpp" line="522"/>
         <source>Project file not found</source>
         <translation>प्रोजेक्ट फ़ाइल नहीं मिली</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="524"/>
+        <location filename="../../src/Misc/CLI.cpp" line="523"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -13897,157 +14046,157 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="527"/>
+        <location filename="../../src/Misc/CLI.cpp" line="526"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>क्या आप यह शॉर्टकट डिलीट करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="531"/>
+        <location filename="../../src/Misc/CLI.cpp" line="530"/>
         <source>Delete Shortcut</source>
         <translation>शॉर्टकट डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="533"/>
+        <location filename="../../src/Misc/CLI.cpp" line="532"/>
         <source>Quit</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1070"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1013"/>
         <source>Time (s)</source>
         <translation>समय (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1132"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1071"/>
         <source>Freq: %1</source>
         <translation>आवृत्ति: %1</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1136"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="1074"/>
         <source>Time: −%1</source>
         <translation>समय: −%1</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="364"/>
+        <location filename="../../src/AI/Providers/OpenAIProvider.cpp" line="360"/>
         <source>No OpenAI API key set. Open Manage Keys to add one.</source>
         <translation>कोई OpenAI API कुंजी सेट नहीं है। एक जोड़ने के लिए कुंजी प्रबंधन खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/AnthropicProvider.cpp" line="199"/>
+        <location filename="../../src/AI/Providers/AnthropicProvider.cpp" line="198"/>
         <source>No Anthropic API key set. Open Manage Keys to add one.</source>
         <translation>कोई Anthropic API कुंजी सेट नहीं है। एक जोड़ने के लिए कुंजी प्रबंधन खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GeminiProvider.cpp" line="282"/>
+        <location filename="../../src/AI/Providers/GeminiProvider.cpp" line="279"/>
         <source>No Gemini API key set. Open Manage Keys to add one.</source>
         <translation>कोई Gemini API कुंजी सेट नहीं है। एक जोड़ने के लिए कुंजी प्रबंधन खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/LocalProvider.cpp" line="321"/>
+        <location filename="../../src/AI/Providers/LocalProvider.cpp" line="319"/>
         <source>No local model server URL configured. Open Manage Keys to set one.</source>
         <translation>कोई लोकल मॉडल सर्वर URL कॉन्फ़िगर नहीं है। एक सेट करने के लिए Keys प्रबंधित करें खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/DeepSeekProvider.cpp" line="141"/>
+        <location filename="../../src/AI/Providers/DeepSeekProvider.cpp" line="145"/>
         <source>No DeepSeek API key set. Open Manage Keys to add one.</source>
         <translation>कोई DeepSeek API key सेट नहीं है। एक जोड़ने के लिए Keys प्रबंधित करें खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/MistralProvider.cpp" line="164"/>
+        <location filename="../../src/AI/Providers/MistralProvider.cpp" line="168"/>
         <source>No Mistral API key set. Open Manage Keys to add one.</source>
         <translation>कोई Mistral API कुंजी सेट नहीं है। एक जोड़ने के लिए कुंजी प्रबंधन खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/OpenRouterProvider.cpp" line="177"/>
+        <location filename="../../src/AI/Providers/OpenRouterProvider.cpp" line="181"/>
         <source>No OpenRouter API key set. Open Manage Keys to add one.</source>
         <translation>कोई OpenRouter API कुंजी सेट नहीं है। एक जोड़ने के लिए कुंजी प्रबंधन खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/AI/Providers/GroqProvider.cpp" line="148"/>
+        <location filename="../../src/AI/Providers/GroqProvider.cpp" line="152"/>
         <source>No Groq API key set. Open Manage Keys to add one.</source>
         <translation>कोई Groq API कुंजी सेट नहीं है। एक जोड़ने के लिए कुंजी प्रबंधन खोलें।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="906"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="873"/>
         <source>The frame parser is using more than %1% of CPU time.</source>
         <translation>Frame parser CPU समय का %1% से अधिक उपयोग कर रहा है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="908"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="875"/>
         <source>Serial Studio is dropping frames to keep the application responsive. Please simplify or optimize the frame parser script to reduce its workload.</source>
         <translation>Serial Studio एप्लिकेशन को उत्तरदायी रखने के लिए फ़्रेम छोड़ रहा है। कृपया frame parser स्क्रिप्ट को सरल या अनुकूलित करें ताकि इसका कार्यभार कम हो।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="388"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="386"/>
         <source>Expected %1, got '%2'</source>
         <translation>अपेक्षित %1, प्राप्त '%2'</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="437"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="435"/>
         <source>Expected enum name after 'enum'</source>
         <translation>'enum' के बाद enum नाम अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="451"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="449"/>
         <source>Expected oneof name</source>
         <translation>oneof नाम अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="479"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="476"/>
         <source>Field tag '%1' out of range (1..%2)</source>
         <translation>फ़ील्ड टैग '%1' रेंज से बाहर (1..%2)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="497"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="494"/>
         <source>Expected key type in map&lt;&gt;</source>
         <translation>map&lt;&gt; में key प्रकार अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="505"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="502"/>
         <source>Expected value type in map&lt;&gt;</source>
         <translation>map&lt;&gt; में value प्रकार अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="513"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="510"/>
         <source>Expected map field name</source>
         <translation>map फ़ील्ड नाम अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="525"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="522"/>
         <source>Expected map field tag</source>
         <translation>map फ़ील्ड टैग अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="557"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="554"/>
         <source>Expected field type, got '%1'</source>
         <translation>फ़ील्ड प्रकार अपेक्षित, '%1' मिला</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="577"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="573"/>
         <source>Expected field name after type</source>
         <translation>प्रकार के बाद फ़ील्ड नाम अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="587"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="583"/>
         <source>Expected field tag number</source>
         <translation>फ़ील्ड टैग संख्या अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="635"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="630"/>
         <source>Message nesting too deep (limit %1)</source>
         <translation>मैसेज नेस्टिंग बहुत गहरी (सीमा %1)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="640"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="635"/>
         <source>Expected message name</source>
         <translation>संदेश नाम अपेक्षित</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="722"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="717"/>
         <source>Unexpected token '%1' at file scope</source>
         <translation>फ़ाइल स्कोप में अप्रत्याशित टोकन '%1'</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="768"/>
+        <location filename="../../src/DataModel/Importers/ProtoImporter.cpp" line="763"/>
         <source>Unsupported top-level keyword '%1'</source>
         <translation>असमर्थित टॉप-लेवल कीवर्ड '%1'</translation>
     </message>
@@ -14086,17 +14235,17 @@ function parse(%1) { ... }
         <translation type="vanished">%1 पंक्ति(याँ)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="187"/>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="186"/>
         <source>The native parser configuration is not a valid JSON object.</source>
         <translation>नेटिव पार्सर कॉन्फ़िगरेशन एक मान्य JSON ऑब्जेक्ट नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="197"/>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="196"/>
         <source>Unknown native parser template: "%1".</source>
         <translation>अज्ञात नेटिव पार्सर टेम्पलेट: "%1"।</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="331"/>
+        <location filename="../../src/DataModel/Scripting/CFrameParser.cpp" line="330"/>
         <source>Built-In Parser Error</source>
         <translation>Built-In पार्सर त्रुटि</translation>
     </message>
@@ -14419,43 +14568,43 @@ function parse(%1) { ... }
 <context>
     <name>RuntimeReconfigure</name>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="40"/>
         <source>Connection Lost</source>
         <translation>कनेक्शन खो गया</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
         <source>Device Unavailable</source>
         <translation>डिवाइस उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="95"/>
         <source>The connection to your device was lost.</source>
         <translation>आपके डिवाइस का कनेक्शन खो गया।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
         <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio आपके डिवाइस तक नहीं पहुँच सका।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="104"/>
         <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
         <translation>केबल, पावर जाँचें और सुनिश्चित करें कि किसी अन्य एप्लिकेशन ने डिवाइस को नहीं लिया है। आप पुनः कनेक्ट करने का प्रयास कर सकते हैं, दूसरे डिवाइस पर स्विच कर सकते हैं, या बाहर निकल सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="107"/>
         <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>सुनिश्चित करें कि यह प्लग इन है, चालू है, और किसी अन्य ऐप द्वारा उपयोग में नहीं है। आप पुनः प्रयास कर सकते हैं, कोई अन्य डिवाइस चुन सकते हैं, या बंद कर सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="120"/>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="189"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="119"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="188"/>
         <source>Quit</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="130"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="129"/>
         <source>Pick Different Device</source>
         <translation>दूसरा डिवाइस चुनें</translation>
     </message>
@@ -14464,27 +14613,27 @@ function parse(%1) { ... }
         <translation type="vanished">पुनः कॉन्फ़िगर करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="140"/>
         <source>Try Again</source>
         <translation>पुनः प्रयास करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="140"/>
         <source>Reconnect</source>
         <translation>पुनः कनेक्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="157"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="156"/>
         <source>Pick the correct device, then press Connect.</source>
         <translation>सही डिवाइस चुनें, फिर कनेक्ट करें दबाएं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="166"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="165"/>
         <source>I/O Interface: %1</source>
         <translation>I/O इंटरफ़ेस: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="199"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="198"/>
         <source>Connect</source>
         <translation>कनेक्ट करें</translation>
     </message>
@@ -14492,77 +14641,77 @@ function parse(%1) { ... }
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="336"/>
+        <location filename="../../src/SerialStudio.cpp" line="334"/>
         <source>Data Grids</source>
         <translation>डेटा ग्रिड</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="339"/>
+        <location filename="../../src/SerialStudio.cpp" line="337"/>
         <source>Multiple Data Plots</source>
         <translation>मल्टीपल डेटा प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="342"/>
+        <location filename="../../src/SerialStudio.cpp" line="340"/>
         <source>Accelerometers</source>
         <translation>एक्सेलेरोमीटर</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="345"/>
+        <location filename="../../src/SerialStudio.cpp" line="343"/>
         <source>Gyroscopes</source>
         <translation>जायरोस्कोप</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="348"/>
+        <location filename="../../src/SerialStudio.cpp" line="346"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="351"/>
+        <location filename="../../src/SerialStudio.cpp" line="349"/>
         <source>FFT Plots</source>
         <translation>FFT प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="354"/>
+        <location filename="../../src/SerialStudio.cpp" line="352"/>
         <source>LED Panels</source>
         <translation>LED पैनल</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="357"/>
+        <location filename="../../src/SerialStudio.cpp" line="355"/>
         <source>Data Plots</source>
         <translation>डेटा प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="360"/>
+        <location filename="../../src/SerialStudio.cpp" line="358"/>
         <source>Bars</source>
         <translation>बार</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="363"/>
+        <location filename="../../src/SerialStudio.cpp" line="361"/>
         <source>Gauges</source>
         <translation>गेज</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="366"/>
+        <location filename="../../src/SerialStudio.cpp" line="364"/>
         <source>Terminal</source>
         <translation>टर्मिनल</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="369"/>
+        <location filename="../../src/SerialStudio.cpp" line="367"/>
         <source>Clock</source>
         <translation>घड़ी</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="372"/>
+        <location filename="../../src/SerialStudio.cpp" line="370"/>
         <source>Stopwatch</source>
         <translation>स्टॉपवॉच</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="375"/>
+        <location filename="../../src/SerialStudio.cpp" line="373"/>
         <source>Compasses</source>
         <translation>कंपास</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="378"/>
+        <location filename="../../src/SerialStudio.cpp" line="376"/>
         <source>Meters</source>
         <translation>मीटर</translation>
     </message>
@@ -14571,87 +14720,87 @@ function parse(%1) { ... }
         <translation type="vanished">थर्मामीटर</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="381"/>
+        <location filename="../../src/SerialStudio.cpp" line="379"/>
         <source>3D Plots</source>
         <translation>3D प्लॉट</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="385"/>
+        <location filename="../../src/SerialStudio.cpp" line="383"/>
         <source>Image Views</source>
         <translation>इमेज व्यू</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="388"/>
+        <location filename="../../src/SerialStudio.cpp" line="386"/>
         <source>Output Panels</source>
         <translation>आउटपुट पैनल</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="391"/>
+        <location filename="../../src/SerialStudio.cpp" line="389"/>
         <source>Notifications</source>
         <translation>नोटिफ़िकेशन</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="394"/>
+        <location filename="../../src/SerialStudio.cpp" line="392"/>
         <source>Waterfalls</source>
         <translation>वॉटरफॉल</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="397"/>
+        <location filename="../../src/SerialStudio.cpp" line="395"/>
         <source>Painter Widgets</source>
         <translation>पेंटर विजेट</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="922"/>
+        <location filename="../../src/SerialStudio.cpp" line="912"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="923"/>
+        <location filename="../../src/SerialStudio.cpp" line="913"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="924"/>
+        <location filename="../../src/SerialStudio.cpp" line="914"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="925"/>
+        <location filename="../../src/SerialStudio.cpp" line="915"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="926"/>
+        <location filename="../../src/SerialStudio.cpp" line="916"/>
         <source>System</source>
         <translation>सिस्टम</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="927"/>
+        <location filename="../../src/SerialStudio.cpp" line="917"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="928"/>
+        <location filename="../../src/SerialStudio.cpp" line="918"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="929"/>
+        <location filename="../../src/SerialStudio.cpp" line="919"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="930"/>
+        <location filename="../../src/SerialStudio.cpp" line="920"/>
         <source>Shift-JIS</source>
         <translation>Shift-JIS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="931"/>
+        <location filename="../../src/SerialStudio.cpp" line="921"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="932"/>
+        <location filename="../../src/SerialStudio.cpp" line="922"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -14790,103 +14939,103 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::DatabaseManager</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="998"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="990"/>
         <source>Select logo image</source>
         <translation>लोगो इमेज चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1000"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="992"/>
         <source>Images (*.png *.jpg *.jpeg *.svg)</source>
         <translation>इमेज (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="418"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="415"/>
         <source>Open Session File</source>
         <translation>सेशन फ़ाइल खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="420"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="417"/>
         <source>Session files (*.db)</source>
         <translation>सेशन फ़ाइलें (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1198"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1189"/>
         <source>Cannot open session file</source>
         <translation>सेशन फ़ाइल नहीं खोली जा सकती</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="647"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="642"/>
         <source>Delete session from %1?</source>
         <translation>%1 से सेशन हटाएँ?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="650"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="645"/>
         <source>Delete Session</source>
         <translation>सेशन डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1059"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1050"/>
         <source>No project data</source>
         <translation>कोई प्रोजेक्ट डेटा नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="648"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="643"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>इस सेशन की सभी रीडिंग और रॉ डेटा स्थायी रूप से हटा दिए जाएंगे।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="477"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="486"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="473"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="482"/>
         <source>Lock Session File</source>
         <translation>सेशन फ़ाइल लॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="478"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="474"/>
         <source>Choose a password to lock the session file:</source>
         <translation>सेशन फ़ाइल लॉक करने के लिए पासवर्ड चुनें:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="487"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="483"/>
         <source>Confirm the password:</source>
         <translation>पासवर्ड की पुष्टि करें:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="495"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="491"/>
         <source>Passwords do not match</source>
         <translation>पासवर्ड मेल नहीं खाते</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="496"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="492"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>दर्ज किए गए दोनों पासवर्ड मेल नहीं खाते। सेशन फ़ाइल लॉक नहीं की गई।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="532"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="528"/>
         <source>Unlock Session File</source>
         <translation>सेशन फ़ाइल अनलॉक करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="533"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="529"/>
         <source>Enter the session file password:</source>
         <translation>सेशन फ़ाइल पासवर्ड दर्ज करें:</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="543"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="539"/>
         <source>Incorrect password</source>
         <translation>गलत पासवर्ड</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="544"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="540"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>दर्ज किया गया पासवर्ड सेशन फ़ाइल में संग्रहीत पासवर्ड से मेल नहीं खाता।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="637"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="632"/>
         <source>Session file locked</source>
         <translation>सेशन फ़ाइल लॉक की गई</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="638"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="633"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>रिकॉर्ड किए गए सेशन हटाने से पहले सेशन फ़ाइल अनलॉक करें।</translation>
     </message>
@@ -14895,12 +15044,12 @@ function parse(%1) { ... }
         <translation type="vanished">इस सेशन में एम्बेडेड प्रोजेक्ट फ़ाइल नहीं है — डैशबोर्ड क्विक-प्लॉट लेआउट पर वापस आ जाता है।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="772"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="767"/>
         <source>Export Session to CSV</source>
         <translation>सेशन को CSV में एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="772"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="767"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV फ़ाइलें (*.CSV)</translation>
     </message>
@@ -14919,85 +15068,85 @@ function parse(%1) { ... }
         <translation type="vanished">एक्सपोर्ट तैयार किया जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="970"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="962"/>
         <source>Done</source>
         <translation>पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="934"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="970"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="926"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="962"/>
         <source>Failed</source>
         <translation>विफल</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="940"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="980"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="932"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="972"/>
         <source>Report Failed</source>
         <translation>रिपोर्ट विफल</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="942"/>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="981"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="934"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="973"/>
         <source>Could not generate the report. Check the output path and try again.</source>
         <translation>रिपोर्ट जेनरेट नहीं हो सकी। आउटपुट पथ जाँचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="868"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="862"/>
         <source>Save PDF Report</source>
         <translation>PDF रिपोर्ट सेव करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="848"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="842"/>
         <source>Loading session data…</source>
         <translation>सेशन डेटा लोड हो रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="868"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="862"/>
         <source>Save HTML Report</source>
         <translation>HTML रिपोर्ट सेव करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="869"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="863"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDF फाइलें (*.PDF)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="869"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="863"/>
         <source>HTML files (*.html)</source>
         <translation>HTML फाइलें (*.HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1060"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1051"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>इस सेशन फाइल में एम्बेडेड प्रोजेक्ट नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1069"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1060"/>
         <source>Invalid project data</source>
         <translation>अमान्य प्रोजेक्ट डेटा</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1070"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1061"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>एम्बेडेड प्रोजेक्ट JSON खराब है और रिस्टोर नहीं किया जा सकता।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1080"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1071"/>
         <source>Restore Project</source>
         <translation>प्रोजेक्ट रिस्टोर करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1080"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1071"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio प्रोजेक्ट (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1088"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1079"/>
         <source>Cannot write file</source>
         <translation>फ़ाइल नहीं लिखी जा सकती</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1088"/>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="1079"/>
         <source>Check file permissions and try again.</source>
         <translation>फ़ाइल अनुमतियाँ जाँचें और पुनः प्रयास करें।</translation>
     </message>
@@ -15005,40 +15154,40 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::DatabaseWorker</name>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="77"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="76"/>
         <source>Empty file path</source>
         <translation>फ़ाइल पथ खाली है</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="174"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="229"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="290"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="361"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="386"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="414"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="454"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="644"/>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="709"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="170"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="225"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="285"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="356"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="381"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="409"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="449"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="638"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="703"/>
         <source>Database not open</source>
         <translation>डेटाबेस खुला नहीं है</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="267"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="262"/>
         <source>Database not open or empty label</source>
         <translation>डेटाबेस खुला नहीं है या लेबल खाली है</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="335"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="330"/>
         <source>Invalid label</source>
         <translation>अमान्य लेबल</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="603"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="597"/>
         <source>Cancelled</source>
         <translation>रद्द किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="716"/>
+        <location filename="../../src/Sessions/DatabaseWorker.cpp" line="710"/>
         <source>Could not load session data</source>
         <translation>सेशन डेटा लोड नहीं हो सका</translation>
     </message>
@@ -15046,206 +15195,206 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::HtmlReport</name>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="212"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="209"/>
         <source>Assembling report…</source>
         <translation>रिपोर्ट असेंबल की जा रही है…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="221"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="217"/>
         <source>Writing output…</source>
         <translation>आउटपुट लिखा जा रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="293"/>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="357"/>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="731"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="282"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="342"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="700"/>
         <source>Session Report</source>
         <translation>सेशन रिपोर्ट</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="360"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="345"/>
         <source>Untitled project</source>
         <translation>अनाम प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="368"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="352"/>
         <source>Prepared by</source>
         <translation>तैयारकर्ता</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="371"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="355"/>
         <source>Generated on %1</source>
         <translation>%1 को जेनरेट किया गया</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="394"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="377"/>
         <source>Test ID</source>
         <translation>टेस्ट ID</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="396"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="379"/>
         <source>Duration</source>
         <translation>अवधि</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="398"/>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="515"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="381"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="493"/>
         <source>Samples</source>
         <translation>सैंपल</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="400"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="383"/>
         <source>Parameters</source>
         <translation>पैरामीटर</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="402"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="385"/>
         <source>Started</source>
         <translation>शुरू किया</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="404"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="387"/>
         <source>Ended</source>
         <translation>समाप्त किया</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="440"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="423"/>
         <source>Project</source>
         <translation>प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="442"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="425"/>
         <source>Test identifier</source>
         <translation>टेस्ट पहचानकर्ता</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="443"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="426"/>
         <source>Start time</source>
         <translation>शुरुआत का समय</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="444"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="427"/>
         <source>End time</source>
         <translation>समाप्ति का समय</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="445"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="428"/>
         <source>Total duration</source>
         <translation>कुल अवधि</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="446"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="429"/>
         <source>Samples acquired</source>
         <translation>प्राप्त सैंपल</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="447"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="430"/>
         <source>Parameters logged</source>
         <translation>लॉग किए गए पैरामीटर</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="465"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="446"/>
         <source>Classification</source>
         <translation>वर्गीकरण</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="473"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="453"/>
         <source>Notes</source>
         <translation>टिप्पणियाँ</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="481"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="461"/>
         <source>Test Information</source>
         <translation>परीक्षण जानकारी</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="504"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="482"/>
         <source>Parameter</source>
         <translation>पैरामीटर</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="507"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="485"/>
         <source>Units</source>
         <translation>इकाइयाँ</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="516"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="494"/>
         <source>Minimum</source>
         <translation>न्यूनतम</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="517"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="495"/>
         <source>Maximum</source>
         <translation>अधिकतम</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="518"/>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="680"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="496"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="652"/>
         <source>Mean</source>
         <translation>औसत</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="519"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="497"/>
         <source>Std. Deviation</source>
         <translation>मानक विचलन</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="565"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="542"/>
         <source>Measurement Summary</source>
         <translation>माप सारांश</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="566"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="543"/>
         <source>click a column to sort</source>
         <translation>क्रमबद्ध करने के लिए कॉलम पर क्लिक करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="592"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="568"/>
         <source>%1 samples over %2 seconds</source>
         <translation>%2 सेकंड में %1 सैंपल</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="611"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="586"/>
         <source>Combined Parameter View</source>
         <translation>संयुक्त पैरामीटर व्यू</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="612"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="587"/>
         <source>click legend items to toggle signals</source>
         <translation>सिग्नल टॉगल करने के लिए लीजेंड आइटम पर क्लिक करें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="620"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="595"/>
         <source>Parameter Trends</source>
         <translation>पैरामीटर ट्रेंड</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="678"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="650"/>
         <source>Min</source>
         <translation>न्यूनतम</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="679"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="651"/>
         <source>Max</source>
         <translation>अधिकतम</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="758"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="724"/>
         <source>Page %1 of %2</source>
         <translation>पेज %1 का %2</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="828"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="794"/>
         <source>Loading rendering engine…</source>
         <translation>रेंडरिंग इंजन लोड हो रहा है…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="850"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="814"/>
         <source>Rendering charts…</source>
         <translation>चार्ट रेंडर हो रहे हैं…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="895"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="858"/>
         <source>Generating PDF…</source>
         <translation>PDF जनरेट हो रहा है…</translation>
     </message>
@@ -15253,48 +15402,48 @@ function parse(%1) { ... }
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="259"/>
+        <location filename="../../src/Sessions/Player.cpp" line="258"/>
         <source>Open Session File</source>
         <translation>सेशन फ़ाइल खोलें</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="261"/>
+        <location filename="../../src/Sessions/Player.cpp" line="260"/>
         <source>Session files (*.db)</source>
         <translation>सेशन फ़ाइलें (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="337"/>
+        <location filename="../../src/Sessions/Player.cpp" line="330"/>
         <source>Device Connection Active</source>
         <translation>डिवाइस कनेक्शन सक्रिय</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="338"/>
+        <location filename="../../src/Sessions/Player.cpp" line="331"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>इस सुविधा का उपयोग करने के लिए, डिवाइस से डिस्कनेक्ट करना आवश्यक है। क्या आप आगे बढ़ना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="388"/>
-        <location filename="../../src/Sessions/Player.cpp" line="470"/>
+        <location filename="../../src/Sessions/Player.cpp" line="379"/>
+        <location filename="../../src/Sessions/Player.cpp" line="458"/>
         <source>Cannot open session file</source>
         <translation>सेशन फ़ाइल नहीं खोली जा सकती</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="389"/>
+        <location filename="../../src/Sessions/Player.cpp" line="380"/>
         <source>Unknown error</source>
         <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="407"/>
+        <location filename="../../src/Sessions/Player.cpp" line="396"/>
         <source>No project data</source>
         <translation>कोई प्रोजेक्ट डेटा नहीं</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="408"/>
+        <location filename="../../src/Sessions/Player.cpp" line="397"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>इस सेशन में एम्बेडेड प्रोजेक्ट फ़ाइल नहीं है — डैशबोर्ड क्विक-प्लॉट लेआउट पर वापस आ जाता है।</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="471"/>
+        <location filename="../../src/Sessions/Player.cpp" line="459"/>
         <source>Check file permissions and try again.</source>
         <translation>फ़ाइल अनुमतियाँ जाँचें और पुनः प्रयास करें।</translation>
     </message>
@@ -15860,7 +16009,7 @@ function parse(%1) { ... }
         <translation type="vanished">नया शॉर्टकट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="95"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="93"/>
         <source>Choose an Icon</source>
         <translation>आइकन चुनें</translation>
     </message>
@@ -15869,148 +16018,148 @@ function parse(%1) { ... }
         <translation type="vanished">शॉर्टकट सहेजें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="24"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="22"/>
         <source>New Deployment</source>
         <translation>नई डिप्लॉयमेंट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="108"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="106"/>
         <source>Save Deployment</source>
         <translation>डिप्लॉयमेंट सहेजें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="148"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="146"/>
         <source>General</source>
         <translation>सामान्य</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="154"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="152"/>
         <source>Taskbar</source>
         <translation>टास्कबार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="160"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="158"/>
         <source>Logging</source>
         <translation>लॉगिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="217"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="215"/>
         <source>Identity</source>
         <translation>पहचान</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="273"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="271"/>
         <source>Click to choose an icon</source>
         <translation>आइकन चुनने के लिए क्लिक करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="280"/>
         <source>Name:</source>
         <translation>नाम:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="291"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="289"/>
         <source>Deployment Name</source>
         <translation>डिप्लॉयमेंट का नाम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="382"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="380"/>
         <source>Theme</source>
         <translation>थीम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="392"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="390"/>
         <source>Same as Serial Studio</source>
         <translation>Serial Studio के समान</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="414"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="412"/>
         <source>Actions Panel</source>
         <translation>एक्शन पैनल</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="425"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="634"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="423"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="632"/>
         <source>File Transmission</source>
         <translation>फ़ाइल ट्रांसमिशन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="441"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
         <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
         <translation>इस डिप्लॉयमेंट पर डबल-क्लिक करने से कोई सीधे इस प्रोजेक्ट के लाइव डैशबोर्ड पर पहुँच जाता है। कोई टूलबार या सेटअप पेन नहीं, केवल डेटा, और डिवाइस डिस्कनेक्ट होते ही Serial Studio बंद हो जाता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="487"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="485"/>
         <source>Visibility</source>
         <translation>दृश्यता</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="502"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="500"/>
         <source>Mode</source>
         <translation>मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="509"/>
         <source>Always shown</source>
         <translation>हमेशा दिखाई देता है</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="512"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="510"/>
         <source>Auto-hide</source>
         <translation>स्वतः छुपाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="513"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
         <source>Hidden</source>
         <translation>छुपा हुआ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="528"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="526"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>टास्कबार छुपाने से विंडो के minimize/maximize/close बटन हट जाते हैं और auto-layout सक्रिय हो जाता है, जिससे डैशबोर्ड हमेशा उपलब्ध क्षेत्र को भर देता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="532"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="530"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>जब उपयोगकर्ता कर्सर को निचले किनारे के पास ले जाता है तो टास्कबार स्लाइड करके आ जाता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="534"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="532"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>टास्कबार डैशबोर्ड के निचले हिस्से में स्थायी रूप से दिखाई देता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="547"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="545"/>
         <source>Pinned Buttons</source>
         <translation>पिन किए गए बटन</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="564"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="562"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="578"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="576"/>
         <source>Notifications</source>
         <translation>सूचनाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="592"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="590"/>
         <source>Clock</source>
         <translation>घड़ी</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="606"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="604"/>
         <source>Stopwatch</source>
         <translation>स्टॉपवॉच</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="620"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="618"/>
         <source>Pause</source>
         <translation>रोकें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="745"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="743"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>रिकॉर्डिंग Serial Studio वर्कस्पेस फ़ोल्डर में सहेजी जाती हैं</translation>
     </message>
@@ -16019,28 +16168,28 @@ function parse(%1) { ... }
         <translation type="vanished">शॉर्टकट नाम</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="300"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="298"/>
         <source>Change Icon…</source>
         <translation>आइकन बदलें…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="317"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="335"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="315"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="333"/>
         <source>Project</source>
         <translation>प्रोजेक्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="345"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="343"/>
         <source>Choose a project file to begin</source>
         <translation>शुरू करने के लिए प्रोजेक्ट फ़ाइल चुनें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="367"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="365"/>
         <source>Behavior</source>
         <translation>व्यवहार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="404"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="402"/>
         <source>Fullscreen</source>
         <translation>फ़ुलस्क्रीन</translation>
     </message>
@@ -16061,27 +16210,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 शॉर्टकट में प्रोजेक्ट को बेक करने के लिए प्रोजेक्ट एम्बेड करें चालू करें, ताकि मूल फ़ाइल हटाने या स्थानांतरित करने पर भी यह काम करता रहे।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="684"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="682"/>
         <source>Recorders</source>
         <translation>रिकॉर्डर</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="699"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="697"/>
         <source>CSV File</source>
         <translation>CSV फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="709"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="707"/>
         <source>MDF4 File</source>
         <translation>MDF4 फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="719"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="717"/>
         <source>Session Database</source>
         <translation>सत्र डेटाबेस</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="729"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="727"/>
         <source>Console Log</source>
         <translation>कंसोल लॉग</translation>
     </message>
@@ -16090,12 +16239,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">रिकॉर्डिंग प्रत्येक मॉड्यूल के डिफ़ॉल्ट स्थान पर सहेजी जाती हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="774"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="772"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="783"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="781"/>
         <source>Save</source>
         <translation>सहेजें</translation>
     </message>
@@ -17481,37 +17630,37 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1246"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1989"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1192"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1898"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1333"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2001"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1274"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1909"/>
         <source>Notifications</source>
         <translation>सूचनाएं</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1419"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2013"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1355"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1920"/>
         <source>Clock</source>
         <translation>घड़ी</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1504"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2024"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1435"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1930"/>
         <source>Stopwatch</source>
         <translation>स्टॉपवॉच</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2081"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="2097"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1978"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1993"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (फॉलबैक)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="2123"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="2015"/>
         <source>LED Panel (%1)</source>
         <translation>LED पैनल (%1)</translation>
     </message>
@@ -17527,12 +17676,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1098"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1057"/>
         <source>Select Background Image</source>
         <translation>पृष्ठभूमि छवि चुनें</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="1100"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="1059"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>छवियाँ (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
@@ -17917,172 +18066,172 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>%1 में नया क्या है</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="59"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="58"/>
         <source>Lua &amp; Built-In Parsers</source>
         <translation>Lua और बिल्ट-इन पार्सर</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="60"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="59"/>
         <source>Parse frames in Lua 5.4 or with code-free Built-In templates, alongside JavaScript.</source>
         <translation>Lua 5.4 में फ़्रेम पार्स करें या JavaScript के साथ कोड-फ्री बिल्ट-इन टेम्पलेट्स का उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="68"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="67"/>
         <source>AI Assistant</source>
         <translation>AI असिस्टेंट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="69"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="68"/>
         <source>An in-app assistant across eight providers that can build and edit projects for you.</source>
         <translation>आठ प्रदाताओं में एक इन-ऐप असिस्टेंट जो आपके लिए प्रोजेक्ट बना और संपादित कर सकता है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="77"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="76"/>
         <source>Oscilloscope Sweep &amp; Trigger</source>
         <translation>ऑसिलोस्कोप स्वीप और ट्रिगर</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="78"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="77"/>
         <source>Scope-style sweep with an animated trigger cursor you can drag on the plot.</source>
         <translation>स्कोप-स्टाइल स्वीप एक एनिमेटेड ट्रिगर कर्सर के साथ जिसे आप प्लॉट पर ड्रैग कर सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="86"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="85"/>
         <source>Output Controls</source>
         <translation>आउटपुट कंट्रोल्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="87"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="86"/>
         <source>Transmit back to your device with control widgets and a protocol-helper engine.</source>
         <translation>कंट्रोल विजेट्स और प्रोटोकॉल-हेल्पर इंजन के साथ अपने डिवाइस पर वापस ट्रांसमिट करें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="95"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="94"/>
         <source>Dashboard Workspaces</source>
         <translation>डैशबोर्ड वर्कस्पेसेज़</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="96"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="95"/>
         <source>Group widgets into your own dashboards and find them from the taskbar search.</source>
         <translation>विजेट्स को अपने डैशबोर्ड में समूहित करें और उन्हें टास्कबार सर्च से खोजें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="104"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="103"/>
         <source>Session Database &amp; Reports</source>
         <translation>सेशन डेटाबेस और रिपोर्ट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="105"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="104"/>
         <source>Record sessions to SQLite, replay them, and export HTML or PDF reports.</source>
         <translation>सेशन को SQLITE में रिकॉर्ड करें, उन्हें रीप्ले करें, और HTML या PDF रिपोर्ट्स एक्सपोर्ट करें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="113"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="112"/>
         <source>Operator Deployments</source>
         <translation>ऑपरेटर डिप्लॉयमेंट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="114"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="113"/>
         <source>Ship a locked-down, single-purpose build to operators with a runtime-only mode.</source>
         <translation>रनटाइम-ओनली मोड के साथ ऑपरेटर्स के लिए लॉक-डाउन, सिंगल-पर्पज बिल्ड शिप करें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="122"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="121"/>
         <source>New Dashboard Widgets</source>
         <translation>नए डैशबोर्ड विजेट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="123"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="122"/>
         <source>Gauge and Meter faces with live readouts, plus Clock, Stopwatch, and Waterfall.</source>
         <translation>लाइव रीडआउट के साथ गेज और मीटर फेसेस, साथ ही क्लॉक, स्टॉपवॉच, और वॉटरफॉल।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="131"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="130"/>
         <source>Dataset Transforms</source>
         <translation>डेटासेट ट्रांसफॉर्म्स</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="132"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="131"/>
         <source>Calibrate, filter, and convert each channel with a per-dataset function, or add virtual datasets that compute new channels.</source>
         <translation>प्रत्येक चैनल को प्रति-डेटासेट फ़ंक्शन से कैलिब्रेट, फ़िल्टर और कन्वर्ट करें, या वर्चुअल डेटासेट जोड़ें जो नए चैनल कंप्यूट करते हैं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="140"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="139"/>
         <source>Painter Widget</source>
         <translation>पेंटर विजेट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="141"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="140"/>
         <source>Draw fully custom graphics from incoming data with your own drawing script.</source>
         <translation>अपनी स्वयं की ड्रॉइंग स्क्रिप्ट से आने वाले डेटा से पूरी तरह कस्टम ग्राफ़िक्स बनाएं।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="149"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="148"/>
         <source>Data Tables</source>
         <translation>डेटा टेबल</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="150"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="149"/>
         <source>Live register-style tables with virtual datasets and editable cells.</source>
         <translation>वर्चुअल डेटासेट और संपादन योग्य सेल के साथ लाइव रजिस्टर-स्टाइल टेबल।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="158"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="157"/>
         <source>Image Widget</source>
         <translation>इमेज विजेट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="159"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="158"/>
         <source>Decode and display image frames streamed straight from your device.</source>
         <translation>अपने डिवाइस से सीधे स्ट्रीम किए गए इमेज फ़्रेम को डिकोड और प्रदर्शित करें।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="167"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="166"/>
         <source>Notifications &amp; Alarms</source>
         <translation>नोटिफ़िकेशन और अलार्म</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="168"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="167"/>
         <source>Multi-band dataset alarms with severity tiers, routed to the Notification Center.</source>
         <translation>गंभीरता स्तरों के साथ मल्टी-बैंड डेटासेट अलार्म, नोटिफ़िकेशन सेंटर पर रूट किए गए।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="176"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="175"/>
         <source>Project Lock</source>
         <translation>प्रोजेक्ट लॉक करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="177"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="176"/>
         <source>Lock a project to separate operator use from editing, with an access code.</source>
         <translation>प्रोजेक्ट को एक्सेस कोड के साथ लॉक करें ताकि ऑपरेटर उपयोग को संपादन से अलग किया जा सके।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="185"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="184"/>
         <source>MQTT, Protobuf &amp; File Transfer</source>
         <translation>MQTT, Protobuf और फ़ाइल ट्रांसफर</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="186"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="185"/>
         <source>MQTT input and publishing, Protobuf import, and XMODEM / YMODEM / ZMODEM transfers.</source>
         <translation>MQTT इनपुट और पब्लिशिंग, Protobuf इम्पोर्ट, और XMODEM / YMODEM / ZMODEM ट्रांसफर।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="232"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="231"/>
         <source>Welcome to %1!</source>
         <translation>%1 में आपका स्वागत है!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="242"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="241"/>
         <source>Here's what's new in version %1.</source>
         <translation>संस्करण %1 में नया क्या है।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="415"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="414"/>
         <source>Show on Startup</source>
         <translation>स्टार्टअप पर दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WhatsNew.qml" line="422"/>
+        <location filename="../../qml/Dialogs/WhatsNew.qml" line="421"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
@@ -18102,22 +18251,22 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Bar</name>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="332"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="331"/>
         <source>Alarm</source>
         <translation>अलार्म</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="333"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="332"/>
         <source>critical</source>
         <translation>गंभीर</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="333"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="332"/>
         <source>warning</source>
         <translation>चेतावनी</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="337"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="336"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>मान %1%2 %3 बैंड (%4–%5) में प्रवेश कर गया।</translation>
     </message>
@@ -18130,7 +18279,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">मान %1%2 निम्न अलार्म %3%2 तक पहुंच गया</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Bar.cpp" line="343"/>
+        <location filename="../../src/UI/Widgets/Bar.cpp" line="342"/>
         <source>Alarms</source>
         <translation>अलार्म</translation>
     </message>
@@ -18138,43 +18287,43 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Compass</name>
     <message>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="158"/>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="181"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="157"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="180"/>
         <source>N</source>
         <translation>उ</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="161"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="160"/>
         <source>NE</source>
         <translation>उ-पू</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="164"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="163"/>
         <source>E</source>
         <translation>पू</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="167"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="166"/>
         <source>SE</source>
         <translation>दक्षिण-पू</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="170"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="169"/>
         <source>S</source>
         <translation>द</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="173"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="172"/>
         <source>SW</source>
         <translation>दक्षिण-प</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="176"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="175"/>
         <source>W</source>
         <translation>प</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Compass.cpp" line="179"/>
+        <location filename="../../src/UI/Widgets/Compass.cpp" line="178"/>
         <source>NW</source>
         <translation>उत्तर-प</translation>
     </message>
@@ -18199,52 +18348,52 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::GPS</name>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="95"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="92"/>
         <source>Satellite Imagery</source>
         <translation>सैटेलाइट इमेजरी</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="95"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="92"/>
         <source>Satellite Imagery with Labels</source>
         <translation>लेबल के साथ सैटेलाइट इमेजरी</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="95"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="92"/>
         <source>Street Map</source>
         <translation>स्ट्रीट मैप</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="93"/>
         <source>Topographic Map</source>
         <translation>टोपोग्राफिक मैप</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="93"/>
         <source>Terrain</source>
         <translation>टेरेन</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="93"/>
         <source>Light Gray Canvas</source>
         <translation>लाइट ग्रे कैनवास</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="97"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="94"/>
         <source>Dark Gray Canvas</source>
         <translation>डार्क ग्रे कैनवास</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="97"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="94"/>
         <source>National Geographic</source>
         <translation>नेशनल ज्योग्राफिक</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="410"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="373"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>अतिरिक्त मैप लेयर केवल Pro उपयोगकर्ताओं के लिए उपलब्ध हैं।</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="411"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="374"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>हम अप्रतिबंधित एक्सेस प्रदान नहीं कर सकते क्योंकि ArcGIS API की की वास्तविक लागत आती है।</translation>
     </message>
@@ -18252,12 +18401,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::MultiPlot</name>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="102"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="97"/>
         <source>Time (s)</source>
         <translation>समय (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="102"/>
+        <location filename="../../src/UI/Widgets/MultiPlot.cpp" line="97"/>
         <source>Samples</source>
         <translation>सैंपल</translation>
     </message>
@@ -18265,12 +18414,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="175"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="167"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>ट्रांसमिट स्क्रिप्ट %1 ms के बाद टाइमआउट हो गई</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="194"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="183"/>
         <source>Payload exceeds maximum size</source>
         <translation>पेलोड अधिकतम साइज़ से अधिक है</translation>
     </message>
@@ -18278,12 +18427,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="87"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="86"/>
         <source>Time (s)</source>
         <translation>समय (s)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Plot.cpp" line="115"/>
+        <location filename="../../src/UI/Widgets/Plot.cpp" line="112"/>
         <source>Samples</source>
         <translation>सैंपल</translation>
     </message>
@@ -18291,7 +18440,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1046"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="959"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>ग्रिड अंतराल: %1 यूनिट</translation>
     </message>
@@ -18299,47 +18448,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="412"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="395"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="414"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="397"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="416"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="399"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="418"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="401"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="420"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="403"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="422"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="405"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="424"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="407"/>
         <source>Hot</source>
         <translation>Hot</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="426"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="409"/>
         <source>Grayscale</source>
         <translation>ग्रेस्केल</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="428"/>
+        <location filename="../../src/UI/Widgets/Waterfall.cpp" line="411"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>

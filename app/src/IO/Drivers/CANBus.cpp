@@ -55,11 +55,19 @@ static QStringList enumerateCanPlugins()
  * @brief Constructs the CANBus driver and restores persisted settings.
  */
 IO::Drivers::CANBus::CANBus()
-  : m_device(nullptr), m_canFD(false), m_pluginIndex(0), m_interfaceIndex(0), m_bitrate(500000)
+  : m_device(nullptr)
+  , m_canFD(false)
+  , m_loopback(false)
+  , m_listenOnly(false)
+  , m_pluginIndex(0)
+  , m_interfaceIndex(0)
+  , m_bitrate(500000)
 {
   m_pluginList = enumerateCanPlugins();
 
   m_canFD          = m_settings.value("CanBusDriver/canFD", false).toBool();
+  m_loopback       = m_settings.value("CanBusDriver/loopback", false).toBool();
+  m_listenOnly     = m_settings.value("CanBusDriver/listenOnly", false).toBool();
   m_bitrate        = m_settings.value("CanBusDriver/bitrate", 500000).toUInt();
   m_pluginIndex    = m_settings.value("CanBusDriver/pluginIndex", 0).toUInt();
   m_interfaceIndex = m_settings.value("CanBusDriver/interfaceIndex", 0).toUInt();
@@ -79,6 +87,12 @@ IO::Drivers::CANBus::CANBus()
     this, &IO::Drivers::CANBus::bitrateChanged, this, &IO::Drivers::CANBus::configurationChanged);
   connect(
     this, &IO::Drivers::CANBus::canFDChanged, this, &IO::Drivers::CANBus::configurationChanged);
+  connect(
+    this, &IO::Drivers::CANBus::loopbackChanged, this, &IO::Drivers::CANBus::configurationChanged);
+  connect(this,
+          &IO::Drivers::CANBus::listenOnlyChanged,
+          this,
+          &IO::Drivers::CANBus::configurationChanged);
 
   QLoggingCategory::setFilterRules("qt.canbus* = false");
 }
@@ -253,6 +267,12 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   if (m_canFD)
     m_device->setConfigurationParameter(QCanBusDevice::CanFdKey, true);
 
+  if (m_loopback)
+    m_device->setConfigurationParameter(QCanBusDevice::LoopbackKey, true);
+
+  if (m_listenOnly)
+    m_device->setConfigurationParameter(IO::Drivers::kListenOnlyConfigKey, true);
+
   wireCanBusSignals();
 
   if (!m_device->connectDevice()) {
@@ -371,6 +391,22 @@ bool IO::Drivers::CANBus::canFD() const
 }
 
 /**
+ * @brief Returns true if hardware loopback mode is enabled
+ */
+bool IO::Drivers::CANBus::loopback() const
+{
+  return m_loopback;
+}
+
+/**
+ * @brief Returns true if listen-only (silent) mode is enabled
+ */
+bool IO::Drivers::CANBus::listenOnly() const
+{
+  return m_listenOnly;
+}
+
+/**
  * @brief Returns the current plugin index
  */
 quint8 IO::Drivers::CANBus::pluginIndex() const
@@ -483,6 +519,32 @@ void IO::Drivers::CANBus::setCanFD(const bool enabled)
   m_canFD = enabled;
   m_settings.setValue("CanBusDriver/canFD", enabled);
   Q_EMIT canFDChanged();
+}
+
+/**
+ * @brief Sets whether hardware loopback mode is enabled.
+ */
+void IO::Drivers::CANBus::setLoopback(const bool enabled)
+{
+  if (m_loopback == enabled)
+    return;
+
+  m_loopback = enabled;
+  m_settings.setValue("CanBusDriver/loopback", enabled);
+  Q_EMIT loopbackChanged();
+}
+
+/**
+ * @brief Sets whether listen-only (silent) mode is enabled.
+ */
+void IO::Drivers::CANBus::setListenOnly(const bool enabled)
+{
+  if (m_listenOnly == enabled)
+    return;
+
+  m_listenOnly = enabled;
+  m_settings.setValue("CanBusDriver/listenOnly", enabled);
+  Q_EMIT listenOnlyChanged();
 }
 
 /**
@@ -780,6 +842,20 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
   canFd.value = m_canFD;
   props.append(canFd);
 
+  IO::DriverProperty loopback;
+  loopback.key   = QStringLiteral("loopback");
+  loopback.label = tr("Loopback");
+  loopback.type  = IO::DriverProperty::CheckBox;
+  loopback.value = m_loopback;
+  props.append(loopback);
+
+  IO::DriverProperty listenOnly;
+  listenOnly.key   = QStringLiteral("listenOnly");
+  listenOnly.label = tr("Listen-Only");
+  listenOnly.type  = IO::DriverProperty::CheckBox;
+  listenOnly.value = m_listenOnly;
+  props.append(listenOnly);
+
   return props;
 }
 
@@ -802,6 +878,16 @@ void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& 
 
   if (key == QLatin1String("canFD")) {
     setCanFD(value.toBool());
+    return;
+  }
+
+  if (key == QLatin1String("loopback")) {
+    setLoopback(value.toBool());
+    return;
+  }
+
+  if (key == QLatin1String("listenOnly")) {
+    setListenOnly(value.toBool());
     return;
   }
 

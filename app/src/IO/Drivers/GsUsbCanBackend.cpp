@@ -28,6 +28,7 @@
 #include <cmath>
 #include <cstring>
 #include <QMetaObject>
+#include <QScopeGuard>
 #include <QVariant>
 
 //--------------------------------------------------------------------------------------------------
@@ -60,6 +61,11 @@ constexpr std::uint8_t kBreqBtConst    = 4;
 constexpr std::uint32_t kModeReset = 0;
 constexpr std::uint32_t kModeStart = 1;
 
+// gs_can_mode flags from Linux kernel drivers/net/can/usb/gs_usb.c (GS_CAN_MODE_* = BIT(n))
+constexpr std::uint32_t kModeListenOnly    = 1u << 0;
+constexpr std::uint32_t kModeLoopBack      = 1u << 1;
+constexpr std::uint32_t kModeBerrReporting = 1u << 12;
+
 // SocketCAN-style CAN ID flags carried in gs_host_frame::can_id
 constexpr std::uint32_t kCanEffFlag = 0x80000000u;
 constexpr std::uint32_t kCanRtrFlag = 0x40000000u;
@@ -79,6 +85,10 @@ constexpr int kBulkReadBufSize        = 2048;
 constexpr unsigned int kReadTimeoutMs = 100;
 constexpr unsigned int kCtrlTimeoutMs = 1000;
 constexpr unsigned int kWriteTimeout  = 1000;
+
+// TX echo confirmation: poll cadence and the deadline after which an un-echoed transmit fails
+constexpr int kTxTimeoutPollMs       = 250;
+constexpr qint64 kTxConfirmTimeoutMs = 1000;
 
 #pragma pack(push, 1)
 
@@ -201,8 +211,13 @@ static_assert(sizeof(GsHostFrame) == kClassicFrameSize, "gs_host_frame must be 2
     out.phaseSeg2 = tseg2;
     out.phaseSeg1 = std::max<std::uint32_t>(1, tseg1 / 2);
     out.propSeg   = tseg1 - out.phaseSeg1;
-    out.sjw       = std::min(bt.sjwMax, tseg2);
-    out.brp       = brp;
+    if (out.propSeg == 0) {
+      out.propSeg   = 1;
+      out.phaseSeg1 = tseg1 - 1;
+    }
+
+    out.sjw = std::min(bt.sjwMax, tseg2);
+    out.brp = brp;
     return true;
   }
 
@@ -324,7 +339,11 @@ IO::Drivers::GsUsbCanBackend::GsUsbCanBackend(const QString& interfaceName, QObj
   , m_outEndpoint(0)
   , m_echoCounter(0)
   , m_running(false)
-{}
+{
+  m_txTimeoutTimer.setInterval(kTxTimeoutPollMs);
+  m_txTimeoutTimer.setTimerType(Qt::CoarseTimer);
+  connect(&m_txTimeoutTimer, &QTimer::timeout, this, &GsUsbCanBackend::checkTxTimeouts);
+}
 
 /**
  * @brief Tears down the read thread and releases all libusb resources.
@@ -365,6 +384,25 @@ bool IO::Drivers::GsUsbCanBackend::open()
     return false;
   }
 
+  bool opened           = false;
+  bool interfaceClaimed = false;
+  const auto cleanup    = qScopeGuard([&] {
+    if (opened)
+      return;
+
+    if (m_handle) {
+      if (interfaceClaimed)
+        libusb_release_interface(m_handle, m_interfaceNumber);
+
+      libusb_close(m_handle);
+      m_handle = nullptr;
+    }
+
+    libusb_exit(m_ctx);
+    m_ctx             = nullptr;
+    m_interfaceNumber = -1;
+  });
+
   libusb_device** devices = nullptr;
   const ssize_t count     = libusb_get_device_list(m_ctx, &devices);
   if (count < 0) {
@@ -402,25 +440,26 @@ bool IO::Drivers::GsUsbCanBackend::open()
 
   if (!claimGsUsbInterface()) {
     setError(tr("Could not claim the CANable USB interface."), QCanBusDevice::ConnectionError);
-    libusb_close(m_handle);
-    m_handle = nullptr;
     setState(QCanBusDevice::UnconnectedState);
     return false;
   }
 
+  interfaceClaimed = true;
+
   const auto bitrate = configurationParameter(QCanBusDevice::BitRateKey).toUInt();
   if (!configureDevice(bitrate == 0 ? 500000 : bitrate)) {
-    libusb_release_interface(m_handle, m_interfaceNumber);
-    libusb_close(m_handle);
-    m_handle = nullptr;
     setState(QCanBusDevice::UnconnectedState);
     return false;
   }
+
+  m_txClock.start();
+  m_txTimeoutTimer.start();
 
   m_running.store(true, std::memory_order_release);
   connect(&m_readThread, &QThread::started, this, &GsUsbCanBackend::readLoop, Qt::DirectConnection);
   m_readThread.start();
 
+  opened = true;
   setState(QCanBusDevice::ConnectedState);
   return true;
 }
@@ -431,6 +470,9 @@ bool IO::Drivers::GsUsbCanBackend::open()
 void IO::Drivers::GsUsbCanBackend::close()
 {
   setState(QCanBusDevice::ClosingState);
+
+  m_txTimeoutTimer.stop();
+  m_pendingTx.clear();
 
   stopReadThread();
 
@@ -503,7 +545,7 @@ bool IO::Drivers::GsUsbCanBackend::writeFrame(const QCanBusFrame& frame)
     return false;
   }
 
-  Q_EMIT framesWritten(1);
+  m_pendingTx.insert(host.echoId, m_txClock.elapsed());
   return true;
 }
 
@@ -532,6 +574,45 @@ void IO::Drivers::GsUsbCanBackend::handleReadError(const QString& reason)
 
   setError(reason, QCanBusDevice::ReadError);
   close();
+}
+
+/**
+ * @brief Confirms transmits whose TX echo returned, emitting framesWritten once per echo.
+ */
+void IO::Drivers::GsUsbCanBackend::completeTransmits(const QList<quint32>& echoIds)
+{
+  for (const quint32 echoId : echoIds) {
+    const auto it = m_pendingTx.find(echoId);
+    if (it == m_pendingTx.end())
+      continue;
+
+    m_pendingTx.erase(it);
+    Q_EMIT framesWritten(1);
+  }
+}
+
+/**
+ * @brief Fails transmits that were never echoed back within the confirmation deadline.
+ */
+void IO::Drivers::GsUsbCanBackend::checkTxTimeouts()
+{
+  if (m_pendingTx.isEmpty())
+    return;
+
+  const qint64 now = m_txClock.elapsed();
+  bool expired     = false;
+  for (auto it = m_pendingTx.begin(); it != m_pendingTx.end();) {
+    if (now - it.value() < kTxConfirmTimeoutMs) {
+      ++it;
+      continue;
+    }
+
+    it      = m_pendingTx.erase(it);
+    expired = true;
+  }
+
+  if (expired)
+    setError(tr("A CAN frame was not acknowledged on the bus."), QCanBusDevice::WriteError);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -565,16 +646,26 @@ void IO::Drivers::GsUsbCanBackend::readLoop()
 
     m_rxCarry.append(reinterpret_cast<const char*>(buffer), transferred);
 
+    QList<quint32> echoIds;
     QList<QCanBusFrame> received;
     while (m_rxCarry.size() >= kClassicFrameSize) {
       GsHostFrame host{};
       std::memcpy(&host, m_rxCarry.constData(), sizeof(host));
       m_rxCarry.remove(0, kClassicFrameSize);
 
+      if (host.echoId != kHostFrameRx) {
+        echoIds.append(host.echoId);
+        continue;
+      }
+
       QCanBusFrame canFrame;
       if (decodeRxFrame(host, canFrame))
         received.append(canFrame);
     }
+
+    if (!echoIds.isEmpty())
+      QMetaObject::invokeMethod(
+        this, [this, echoIds] { completeTransmits(echoIds); }, Qt::QueuedConnection);
 
     if (received.isEmpty())
       continue;
@@ -637,7 +728,14 @@ bool IO::Drivers::GsUsbCanBackend::configureDevice(quint32 bitrate)
     return false;
   }
 
-  GsDeviceMode mode{kModeStart, 0};
+  std::uint32_t modeFlags = kModeBerrReporting;
+  if (configurationParameter(QCanBusDevice::LoopbackKey).toBool())
+    modeFlags |= kModeLoopBack;
+
+  if (configurationParameter(IO::Drivers::kListenOnlyConfigKey).toBool())
+    modeFlags |= kModeListenOnly;
+
+  GsDeviceMode mode{kModeStart, modeFlags};
   if (controlOut(kBreqMode, 0, &mode, sizeof(mode)) < 0) {
     setError(tr("Could not start the CANable channel."), QCanBusDevice::ConfigurationError);
     return false;
@@ -700,6 +798,7 @@ int IO::Drivers::GsUsbCanBackend::controlOut(std::uint8_t request,
                                              std::uint16_t length)
 {
   Q_ASSERT(m_handle != nullptr);
+  Q_ASSERT(m_interfaceNumber >= 0);
 
   const std::uint8_t type =
     static_cast<std::uint8_t>(static_cast<unsigned>(LIBUSB_REQUEST_TYPE_VENDOR)
@@ -709,7 +808,7 @@ int IO::Drivers::GsUsbCanBackend::controlOut(std::uint8_t request,
                                  type,
                                  request,
                                  value,
-                                 0,
+                                 static_cast<std::uint16_t>(m_interfaceNumber),
                                  reinterpret_cast<unsigned char*>(data),
                                  length,
                                  kCtrlTimeoutMs);
@@ -724,6 +823,7 @@ int IO::Drivers::GsUsbCanBackend::controlIn(std::uint8_t request,
                                             std::uint16_t length)
 {
   Q_ASSERT(m_handle != nullptr);
+  Q_ASSERT(m_interfaceNumber >= 0);
 
   const std::uint8_t type =
     static_cast<std::uint8_t>(static_cast<unsigned>(LIBUSB_REQUEST_TYPE_VENDOR)
@@ -733,7 +833,7 @@ int IO::Drivers::GsUsbCanBackend::controlIn(std::uint8_t request,
                                  type,
                                  request,
                                  value,
-                                 0,
+                                 static_cast<std::uint16_t>(m_interfaceNumber),
                                  reinterpret_cast<unsigned char*>(data),
                                  length,
                                  kCtrlTimeoutMs);

@@ -22,14 +22,17 @@
 
 #pragma once
 
+#include <QCanBusDevice>
 #include <QList>
 #include <QString>
 #include <QStringList>
 
-class QCanBusDevice;
-
 namespace IO {
 namespace Drivers {
+
+// Shared listen-only config key (no standard Qt key); CANBus and the gs_usb backend must agree
+inline constexpr auto kListenOnlyConfigKey =
+  static_cast<QCanBusDevice::ConfigurationKey>(QCanBusDevice::UserKey);
 
 /**
  * @brief Registry of libusb/serial CAN backends surfaced as synthetic CANBus plugins.

@@ -101,11 +101,7 @@ int NativeWindow::frameMargin(QObject* window)
   if (auto* decorator = s_decorators.value(w, nullptr))
     return decorator->shadowMargin();
 
-#if defined(Q_OS_WIN)
-  return 0;
-#else
   return CSD::ShadowRadius;
-#endif
 }
 
 /**
@@ -123,11 +119,7 @@ int NativeWindow::frameTopInset(QObject* window)
   if (auto* decorator = s_decorators.value(w, nullptr))
     return decorator->shadowMargin() + decorator->titleBarHeight();
 
-#if defined(Q_OS_WIN)
-  return CSD::TitleBarHeight;
-#else
   return CSD::ShadowRadius + CSD::TitleBarHeight;
-#endif
 }
 
 /**

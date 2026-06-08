@@ -16,12 +16,26 @@ def _read(path: str) -> str:
 
 
 def test_project_model_save_returns_real_result():
+    """When the project file is already on disk, saveJsonFile must return the real
+    result of finalizeProjectSave() rather than a hardcoded `true`. The explanatory
+    in-body comment was stripped by the comment-cleanup pass, so pin the behaviour to
+    the code: the non-dialog tail of saveJsonFile returns finalizeProjectSave()."""
     text = _read("app/src/DataModel/ProjectModel.cpp")
 
-    assert re.search(
-        r"// File already on disk, just write new data to it\s+return finalizeProjectSave\(\);",
+    body = re.search(
+        r"bool DataModel::ProjectModel::saveJsonFile\(const bool askPath\)[\s\S]*?\n\}",
         text,
     )
+    assert body is not None, "saveJsonFile body must be present"
+    snippet = body.group(0)
+
+    assert (
+        "return finalizeProjectSave();" in snippet
+    ), "saveJsonFile must return the real finalizeProjectSave() result"
+    # The early dialog path returns false; the on-disk path must NOT hardcode true.
+    assert not re.search(
+        r"\n  return true;\n\}\n?$", snippet
+    ), "saveJsonFile must not hardcode a `return true;` for the on-disk save"
 
 
 def test_hal_write_api_uses_signed_sizes():

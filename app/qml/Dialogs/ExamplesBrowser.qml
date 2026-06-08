@@ -226,6 +226,7 @@ SmartDialog {
       Layout.minimumWidth: 860
       Layout.maximumWidth: 860
       Layout.minimumHeight: 520
+      Layout.preferredHeight: 520
 
       //
       // Busy indicator while fetching manifest

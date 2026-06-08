@@ -19,8 +19,6 @@ import "../Widgets" as Widgets
 
 Widgets.SmartDialog {
   id: root
-
-  fixedSize: false
   title: qsTr("New Deployment")
 
   //

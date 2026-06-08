@@ -33,7 +33,6 @@ Widgets.SmartDialog {
   //
   // Size hints
   //
-  fixedSize: false
   minimumWidth: 560
   minimumHeight: 460
   preferredWidth: layout.implicitWidth
