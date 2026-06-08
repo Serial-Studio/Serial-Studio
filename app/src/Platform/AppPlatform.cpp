@@ -266,22 +266,11 @@ static void enableWorkingSetPrivilege()
 }
 
 /**
- * @brief True when the loader launched us under a Windows compatibility shim (it exports
- *        __COMPAT_LAYER): legacy compat scheduling makes the priority/MMCSS boosts starve DWM.
- */
-[[nodiscard]] static bool runningUnderCompatibilityShim()
-{
-  return GetEnvironmentVariableW(L"__COMPAT_LAYER", nullptr, 0) > 0;
-}
-
-/**
- * @brief Opts the process out of EcoQoS throttling and prevents idle sleep; the process-wide
- *        HIGH priority boost is skipped under a compat shim where it crawls the desktop.
+ * @brief Opts the process out of EcoQoS throttling and prevents idle sleep.
  */
 static void enableWindowsPerformanceMode()
 {
-  if (!runningUnderCompatibilityShim())
-    SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+  SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
 #  if defined(PROCESS_POWER_THROTTLING_CURRENT_VERSION)
   PROCESS_POWER_THROTTLING_STATE state = {};
@@ -569,9 +558,6 @@ bool lockMemoryResident(const void* ptr, size_t len)
 void registerIngestThreadWithMmcss()
 {
 #if defined(Q_OS_WIN)
-  if (runningUnderCompatibilityShim())
-    return;
-
   static bool registered = false;
   if (registered)
     return;
