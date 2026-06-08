@@ -30,6 +30,7 @@ public:
   [[nodiscard]] QJsonArray availableTools(const QString& category = {}) const;
   [[nodiscard]] QJsonObject listCommands(const QString& prefix = {}) const;
   [[nodiscard]] QJsonObject listCategories() const;
+  [[nodiscard]] QString canonicalToolName(const QString& name) const;
   [[nodiscard]] QJsonObject describeCommand(const QString& name) const;
   [[nodiscard]] QJsonObject executeCommand(const QString& name,
                                            const QJsonObject& args,

@@ -1951,10 +1951,50 @@ QJsonObject AI::ToolDispatcher::listCategories() const
 }
 
 /**
+ * @brief Folds a provider-sanitized tool name (dots/colons as '_') back to its canonical form.
+ */
+QString AI::ToolDispatcher::canonicalToolName(const QString& name) const
+{
+  if (isAssistantTool(name) || isFsTool(name) || API::CommandRegistry::instance().hasCommand(name))
+    return name;
+
+  static const auto kReverse = []() {
+    QHash<QString, QString> map;
+    const auto add = [&map](const QString& canonical) {
+      QString key = canonical;
+      key.replace(QChar('.'), QChar('_'));
+      key.replace(QChar(':'), QChar('_'));
+      map.insert(key, canonical);
+    };
+    for (const auto& def : assistantToolDefs())
+      add(def.name);
+
+    for (const auto& def : fsToolDefs())
+      add(def.name);
+
+    const auto& commands = API::CommandRegistry::instance().commands();
+    for (auto it = commands.constBegin(); it != commands.constEnd(); ++it)
+      add(it.value().name);
+
+    return map;
+  }();
+
+  const auto it = kReverse.constFind(name);
+  if (it != kReverse.constEnd())
+    return it.value();
+
+  if (name.startsWith(QStringLiteral("meta_")))
+    return QStringLiteral("meta.") + name.mid(5);
+
+  return name;
+}
+
+/**
  * @brief Returns the metadata block for a single command, or an empty object.
  */
-QJsonObject AI::ToolDispatcher::describeCommand(const QString& name) const
+QJsonObject AI::ToolDispatcher::describeCommand(const QString& requestedName) const
 {
+  const QString name = canonicalToolName(requestedName);
   if (isAssistantTool(name))
     return assistantToolDescription(name);
 
@@ -2006,10 +2046,11 @@ static QJsonObject makeBlockedReply(const QString& name)
 /**
  * @brief Validates args and forwards to API::CommandRegistry honoring AI safety tags.
  */
-QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
+QJsonObject AI::ToolDispatcher::executeCommand(const QString& requestedName,
                                                const QJsonObject& args,
                                                bool autoConfirmSafe)
 {
+  const QString name = canonicalToolName(requestedName);
   Misc::JsonValidator::Limits limits;
   limits.maxFileSize  = 1 * 1024 * 1024;
   limits.maxDepth     = 32;

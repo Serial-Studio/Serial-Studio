@@ -425,12 +425,13 @@ void AI::Conversation::flushPendingStreamUpdate()
  * @brief Records a tool-use request and dispatches per safety tag.
  */
 void AI::Conversation::onToolCallRequested(const QString& callId,
-                                           const QString& name,
+                                           const QString& requestedName,
                                            const QJsonObject& arguments)
 {
   if (m_cancelled)
     return;
 
+  const QString name = m_dispatcher->canonicalToolName(requestedName);
   ++m_toolCallCount;
   if (m_toolCallCount > kMaxToolCalls) {
     qCWarning(serialStudioAI) << "Tool-call budget exceeded; forcing summary";
@@ -807,10 +808,11 @@ void AI::Conversation::runMetaHowTo(const QString& callId,
  * @brief Routes a non-meta tool call by its CommandRegistry safety tag.
  */
 void AI::Conversation::dispatchByCallSafety(const QString& callId,
-                                            const QString& name,
+                                            const QString& requestedName,
                                             const QJsonObject& arguments)
 {
-  const auto safety = AI::CommandRegistry::instance().safetyOf(name);
+  const QString name = m_dispatcher->canonicalToolName(requestedName);
+  const auto safety  = AI::CommandRegistry::instance().safetyOf(name);
   qCDebug(serialStudioAI) << "Tool call" << name << "safety=" << static_cast<int>(safety);
 
   if (safety == Safety::Blocked) {
