@@ -84,6 +84,7 @@ Widgets.SmartDialog {
         Rectangle {
           id: welcomeCard
 
+          z: 1
           radius: 12
           visible: root.conversationEmpty
           width: Math.min(parent.width - 32, 680)
@@ -274,41 +275,45 @@ Widgets.SmartDialog {
               Repeater {
                 model: welcomeCard.displayedSuggestions
 
-                delegate: AbstractButton {
+                delegate: Rectangle {
                   id: chip
 
-                  padding: 0
-                  contentItem: Item {}
+                  radius: 14
                   Layout.fillWidth: true
                   Layout.preferredHeight: chipText.implicitHeight + 12
-                  background: Rectangle {
-                    radius: 14
-                    color: chip.hovered
-                           ? Cpp_ThemeManager.colors["alternate_base"]
-                           : Cpp_ThemeManager.colors["base"]
-                    border.width: 1
-                    border.color: Cpp_ThemeManager.colors["groupbox_border"]
+                  border.width: 1
+                  border.color: Cpp_ThemeManager.colors["groupbox_border"]
+                  color: chipArea.containsMouse
+                         ? Cpp_ThemeManager.colors["alternate_base"]
+                         : Cpp_ThemeManager.colors["base"]
 
-                    Label {
-                      id: chipText
+                  Label {
+                    id: chipText
 
-                      anchors.fill: parent
-                      anchors.leftMargin: 11
-                      anchors.rightMargin: 11
-                      horizontalAlignment: Text.AlignHCenter
-                      verticalAlignment: Text.AlignVCenter
-                      elide: Text.ElideRight
-                      text: modelData
-                      font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
-                      color: Cpp_ThemeManager.colors["text"]
-                    }
+                    anchors.fill: parent
+                    anchors.leftMargin: 11
+                    anchors.rightMargin: 11
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                    text: modelData
+                    font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
+                    color: Cpp_ThemeManager.colors["text"]
                   }
-                  onClicked: {
-                    if (Cpp_AI_Assistant.busy)
-                      return
 
-                    composer.clear()
-                    Cpp_AI_Assistant.sendMessage(modelData)
+                  MouseArea {
+                    id: chipArea
+
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                      if (Cpp_AI_Assistant.busy)
+                        return
+
+                      composer.clear()
+                      Cpp_AI_Assistant.sendMessage(modelData)
+                    }
                   }
                 }
               }
