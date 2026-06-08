@@ -1,4 +1,4 @@
-# Output Widgets — JavaScript "transmit function" API
+# Output Widgets: JavaScript "transmit function" API
 
 Output widgets (Pro) translate UI state into bytes the device receives.
 Each widget instance has one user-authored JS function that runs on every
@@ -28,9 +28,9 @@ function transmit(value) {
 
 Return either:
 
-- a **String** — encoded using the widget's configured TX encoding and sent,
-- a **byte array** (`Uint8Array` or `Array<number>`) — sent verbatim,
-- `null` / `undefined` / an empty result — nothing is sent.
+- a **String**: encoded using the widget's configured TX encoding and sent,
+- a **byte array** (`Uint8Array` or `Array<number>`): sent verbatim,
+- `null` / `undefined` / an empty result: nothing is sent.
 
 There is a maximum payload size; oversized returns are dropped with an error.
 

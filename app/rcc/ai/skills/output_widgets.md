@@ -6,8 +6,9 @@ the device. Each one belongs to a group and has its own JavaScript
 
 **Output transmit functions are JavaScript-only** — the Lua-first
 guidance in the `frame_parsers` and `transforms` skills does NOT apply
-here. A small set of Modbus/CAN protocol helpers is JS-bound (see below);
-author transmit functions in JS, Lua will not compile.
+here. A small set of Modbus/CAN protocol helpers is JS-bound
+(see [The transmit function](#the-transmit-function)); author transmit
+functions in JS, Lua will not compile.
 
 ## Five widget types
 
@@ -32,10 +33,10 @@ project.outputWidget.get{groupId, widgetId}    // read current config
 
 Each widget has:
 
-- `title`, `icon` — UI labels
-- `minValue`, `maxValue`, `stepSize`, `initialValue` — numeric range
+- `title`, `icon`: UI labels
+- `minValue`, `maxValue`, `stepSize`, `initialValue`: numeric range
   (sliders, knobs)
-- `transmitFunction` — JS source that returns the bytes to send
+- `transmitFunction`: JS source that returns the bytes to send
 
 ## The transmit function
 
