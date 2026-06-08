@@ -33,41 +33,31 @@ struct Pattern {
 static const QList<detail::Pattern>& patterns()
 {
   static const QList<detail::Pattern> kPatterns = {
-    // OpenAI / Anthropic / Stripe key shapes
     {                               QRegularExpression(QStringLiteral("\\bsk-[A-Za-z0-9_\\-]{20,}\\b")),
      QStringLiteral("api_key")          },
     {                               QRegularExpression(QStringLiteral("\\bpk-[A-Za-z0-9_\\-]{20,}\\b")),
      QStringLiteral("api_key")          },
     {                               QRegularExpression(QStringLiteral("\\brk_[A-Za-z0-9_\\-]{20,}\\b")),
      QStringLiteral("api_key")          },
-    // Slack tokens
     {                          QRegularExpression(QStringLiteral("\\bxox[baprs]-[A-Za-z0-9-]{10,}\\b")),
      QStringLiteral("slack_token")      },
     {                                QRegularExpression(QStringLiteral("\\bxapp-[A-Za-z0-9-]{10,}\\b")),
      QStringLiteral("slack_token")      },
-    // GitHub PATs
     {                             QRegularExpression(QStringLiteral("\\bgh[opsu]_[A-Za-z0-9]{36,}\\b")),
      QStringLiteral("github_token")     },
-    // GitLab PATs
     {                            QRegularExpression(QStringLiteral("\\bglpat-[A-Za-z0-9_\\-]{20,}\\b")),
      QStringLiteral("gitlab_token")     },
-    // Google / Firebase / GCP API key
     {                               QRegularExpression(QStringLiteral("\\bAIza[A-Za-z0-9_\\-]{35}\\b")),
      QStringLiteral("google_api_key")   },
-    // AWS access key id
     {                                      QRegularExpression(QStringLiteral("\\bAKIA[A-Z0-9]{16}\\b")),
      QStringLiteral("aws_access_key_id")},
-    // JWT (eyJ...{base64}.{base64}.{base64})
     {QRegularExpression(
 QStringLiteral("\\beyJ[A-Za-z0-9_\\-]{8,}\\.[A-Za-z0-9_\\-]{8,}\\.[A-Za-z0-9_\\-]{8,}\\b")),
      QStringLiteral("jwt")              },
-    // Authorization: Bearer <token>
     {                 QRegularExpression(QStringLiteral("(?i)\\bbearer\\s+[A-Za-z0-9_\\-\\.]{20,}\\b")),
      QStringLiteral("bearer_token")     },
-    // Serial Studio commercial license key shape
     {                      QRegularExpression(QStringLiteral("\\bSS-PRO-[A-Z0-9]{4,}-[A-Z0-9]{4,}\\b")),
      QStringLiteral("license_key")      },
-    // PEM private key markers (don't match the entire body, just the marker)
     {                                                                QRegularExpression(
                                                                 QStringLiteral("-----BEGIN (?:RSA|OPENSSH|EC|DSA|ENCRYPTED|PRIVATE) ?(?:PRIVATE )?KEY-----"
                                                                 "[\\s\\S]*?-----END (?:RSA|OPENSSH|EC|DSA|ENCRYPTED|PRIVATE) ?(?:PRIVATE )?"

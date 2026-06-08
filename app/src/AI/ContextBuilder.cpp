@@ -262,6 +262,12 @@ QString AI::ContextBuilder::roleBlock()
            "  assistant.*              high-level rails for snapshots, resolvers, and "
            "workspace tile orchestration\n"
            "\n"
+           "Serial Studio Health Check\n"
+           "If the user says \"Serial Studio Health Check\" (or asks to test / verify the "
+           "whole API surface), call meta.howTo{task:'health_check'} and follow the returned "
+           "recipe end-to-end. It is READ-ONLY -- never mutate the project during a health "
+           "check.\n"
+           "\n"
            "Finish the job -- do NOT half-ass\n"
            "When the user gives you a task, complete it fully in this turn. Don't say "
            "\"Let me check ...\" and end the turn without the follow-up tool call. "
@@ -355,6 +361,7 @@ QStringList AI::ContextBuilder::howToTasks()
     QStringLiteral("add_transform"),
     QStringLiteral("use_constants_table"),
     QStringLiteral("bulk_dataset_edit"),
+    QStringLiteral("health_check"),
   };
 }
 
@@ -428,10 +435,14 @@ QString AI::ContextBuilder::howToRecipe(const QString& task)
                           "project.outputWidget.add {groupId, type}. Type enum: "
                           "0=Button, 1=Slider, 2=Toggle, 3=TextField, 4=Knob.\n"
                           "2. Call meta.fetchScriptingDocs('output_widget_js') BEFORE "
-                          "writing the JS that converts UI state into device bytes. Set "
-                          "the JS via project.outputWidget.update "
+                          "writing the JS that converts UI state into device bytes.\n"
+                          "3. Validate the transmit function with assistant.script.dryRun "
+                          "{kind:'output_widget', code, inputValue?, hex?} -- it compiles in "
+                          "the real protocol-helper + table-API environment and (with "
+                          "inputValue) runs transmit() once to show the produced bytes. "
+                          "Only then set it via project.outputWidget.update "
                           "{groupId, widgetId, transmitFunction: '...'}.\n"
-                          "3. Pin to a workspace with assistant.workspace.addTile "
+                          "4. Pin to a workspace with assistant.workspace.addTile "
                           "{workspaceId or workspace, groupId, widgetType:'output-panel'}.\n");
 
   if (task == QStringLiteral("add_executive_dashboard"))
@@ -605,6 +616,57 @@ QString AI::ContextBuilder::howToRecipe(const QString& task)
       "mutations and the 3rd is going to look the same, STOP and convert the "
       "rest into a batch.\n");
 
+  if (task == QStringLiteral("health_check"))
+    return QStringLiteral(
+      "SERIAL STUDIO HEALTH CHECK (whole-API smoke test, READ-ONLY)\n"
+      "Run when the user says \"Serial Studio Health Check\" or asks to test / verify "
+      "the whole API surface. NEVER mutate the project: use only meta.*, *.dryRun, "
+      "meta.loadSkill, meta.fetchScriptingDocs, snapshots, and meta.listCommands. Run "
+      "EVERY step even if an earlier one fails, then print a PASS/FAIL table (one row "
+      "per step) and a one-line overall verdict. On any FAIL, paste the raw error.\n"
+      "\n"
+      "1. Status: meta.snapshot. PASS if it returns; summarize project-loaded / IO-"
+      "connected / dashboard-mode in one line.\n"
+      "\n"
+      "2. Command surface: meta.listCommands for prefixes 'project.', 'assistant.', "
+      "'io.', 'meta.'. PASS if each returns a non-empty list; note the total count.\n"
+      "\n"
+      "3. Skills reachable: meta.loadSkill for 'tool_discovery', 'output_widgets', and "
+      "'workspace_design'. PASS only if all three return a non-empty body (this catches "
+      "a skill that is listed but not registered as a resource).\n"
+      "\n"
+      "4. Scripting docs: meta.fetchScriptingDocs for frame_parser_js, frame_parser_lua, "
+      "transform_js, transform_lua, painter_js, output_widget_js. PASS if each is non-"
+      "empty. For output_widget_js, confirm the entry point is transmit(value) -- NOT "
+      "output(state).\n"
+      "\n"
+      "5. Frame-parser dry-run (expect extractedCount 1): assistant.script.dryRun"
+      "{kind:'frame_parser', language:0, code:'function parse(frame, sep){ return "
+      "frame.split(sep); }', inputBytesHex:'61 2c 62 2c 63', decoderMethod:0, "
+      "frameDetection:2}.\n"
+      "\n"
+      "6. Transform dry-run (expect a per-input output of 42): assistant.script.dryRun"
+      "{kind:'transform', language:0, code:'function transform(v){ return v * 2; }', "
+      "values:[21]}.\n"
+      "\n"
+      "7. Painter dry-run (expect ok:true, hasPaint:true): assistant.script.dryRun"
+      "{kind:'painter', code:'function paint(ctx, w, h){ ctx.fillRect(0,0,w,h); }'}.\n"
+      "\n"
+      "8. Output-widget dry-run -- THREE cases:\n"
+      "   a) GOOD (expect ok:true + sampleRun.outputHex): {kind:'output_widget', "
+      "code:'function transmit(value){ return modbusWriteRegister(0x10, "
+      "Math.round(value)); }', inputValue:'1234'}.\n"
+      "   b) BROKEN (expect ok:false + compileError + line): {kind:'output_widget', "
+      "code:'function transmit(v){ return ;;; }'}.\n"
+      "   c) WRONG ENTRY POINT (expect ok:false, transmit not defined): "
+      "{kind:'output_widget', code:'function output(state){ return [1]; }'}.\n"
+      "\n"
+      "9. Schema lookup: meta.describeCommand{name:'project.outputWidget.dryRun'}. PASS "
+      "if it returns a schema exposing a 'code' parameter.\n"
+      "\n"
+      "Finish with the PASS/FAIL table and overall verdict. Do NOT fix anything -- a "
+      "health check is diagnostic only; offer to follow up on failures separately.\n");
+
   return QString();
 }
 
@@ -641,6 +703,7 @@ QStringList AI::ContextBuilder::skillIds()
     QStringLiteral("transforms"),
     QStringLiteral("painter"),
     QStringLiteral("output_widgets"),
+    QStringLiteral("workspace_design"),
     QStringLiteral("mqtt"),
     QStringLiteral("can_modbus"),
     QStringLiteral("filesystem"),
@@ -698,11 +761,9 @@ QString AI::ContextBuilder::liveProjectStateBlock()
 {
   ToolDispatcher dispatcher;
   const auto state    = dispatcher.getProjectState();
-  // Scrub key/token-shaped substrings (same scrubber used for tool results)
   const auto scrubbed = AI::Redactor::scrubObject(state);
   const auto pretty   = QJsonDocument(scrubbed).toJson(QJsonDocument::Indented);
 
-  // Wrap in <untrusted> envelope (project may carry hostile strings)
   QString out;
   out += QStringLiteral("# Current project state\n\n");
   out += QStringLiteral("<untrusted source=\"project_state\">\n");
@@ -720,7 +781,6 @@ QString AI::ContextBuilder::liveProjectStateBlock()
  */
 QJsonArray AI::ContextBuilder::buildSystemArray(bool includeScriptingDocs)
 {
-  // role + scripting docs + project state under one ephemeral cache breakpoint
   QJsonObject ephemeral;
   ephemeral[QStringLiteral("type")] = QStringLiteral("ephemeral");
 
@@ -738,7 +798,6 @@ QJsonArray AI::ContextBuilder::buildSystemArray(bool includeScriptingDocs)
     system.append(docs);
   }
 
-  // Live project state is the LAST block: only this turn pays cache-write
   QJsonObject live;
   live[QStringLiteral("type")]          = QStringLiteral("text");
   live[QStringLiteral("text")]          = liveProjectStateBlock();

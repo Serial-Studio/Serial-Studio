@@ -230,7 +230,7 @@ scopes because they're dashboard-wide preferences, not project state:
 | Setting                       | Command                                                                  |
 |-------------------------------|--------------------------------------------------------------------------|
 | Plot time range (visible window per series) | `dashboard.setTimeRange{seconds}` (alias: `project.dashboard.setTimeRange`) |
-| Theme                         | `ui.theme.*` / `--theme` flag                                             |
+| Theme                         | No JSON-API command; user-set in Settings (or the `--theme` CLI flag)     |
 | Operation mode                | `dashboard.setOperationMode`                                              |
 | Console terminal display      | `console.set*`                                                            |
 

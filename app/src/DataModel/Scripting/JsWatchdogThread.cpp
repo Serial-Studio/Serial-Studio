@@ -154,13 +154,13 @@ void DataModel::JsWatchdogThread::unregisterWatchdog(JsWatchdog* watchdog)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Interrupts every armed watchdog past its deadline; runs under the registry lock.
+ * @brief Interrupts every armed watchdog past its deadline; the registry lock is held
+ * across setInterrupted() so a watchdog can't be freed mid-dereference (UAF guard).
  */
 void DataModel::JsWatchdogThread::interruptExpired()
 {
   const qint64 now = steadyNowNs();
 
-  // Lock held across setInterrupted() so a watchdog can't be freed mid-dereference (UAF guard).
   QMutexLocker locker(&m_mutex);
   for (auto* watchdog : m_watchdogs) {
     const qint64 deadline = watchdog->deadlineNs();
@@ -197,7 +197,8 @@ void DataModel::JsWatchdogThread::ensureStarted()
 }
 
 /**
- * @brief Stops the worker thread and releases it; idempotent and main-thread safe.
+ * @brief Stops the worker thread and releases it; idempotent and main-thread safe. finish()
+ * runs on the worker thread via a blocking call so the timer is gone before the join below.
  */
 void DataModel::JsWatchdogThread::shutdown()
 {
@@ -206,7 +207,6 @@ void DataModel::JsWatchdogThread::shutdown()
 
   m_stopped = true;
 
-  // finish() must run on the worker thread; block so the timer is gone before the join below.
   QMetaObject::invokeMethod(m_worker, "finish", Qt::BlockingQueuedConnection);
 
   m_thread->quit();

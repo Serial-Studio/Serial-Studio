@@ -39,17 +39,14 @@ PanelLayout::SizeClass PanelLayout::classify(OWT type)
  */
 QSizeF PanelLayout::minSize(OWT type)
 {
-  // Initialize font metrics
   static const auto& fonts = Misc::CommonFonts::instance();
   const QFontMetricsF fm(fonts.uiFont());
   const QFontMetricsF fmMono(fonts.monoFont());
 
-  // Common measurements from actual fonts
   const qreal fontH = fm.height();
   const qreal monoH = fmMono.height();
   const qreal charW = fm.averageCharWidth();
 
-  // Widget element heights
   const qreal labelH  = std::ceil(fontH * 0.75) + 1 + 2;
   const qreal btnH    = qMax(fontH + 8, 28.0);
   const qreal inputH  = qMax(monoH + 10, 28.0);
@@ -58,7 +55,6 @@ QSizeF PanelLayout::minSize(OWT type)
   const qreal rangeH  = std::ceil(fontH * 0.7);
   const qreal valueH  = std::ceil(monoH);
 
-  // Layout constants (must match QML anchors.margins and spacing)
   const qreal m = 8;
   const qreal s = 4;
   switch (type) {
@@ -89,7 +85,6 @@ QVector<PanelLayout::Column> PanelLayout::buildColumns(const QVector<Item>& item
                                                        qreal height,
                                                        qreal gap)
 {
-  // Separate widgets by size class
   QVector<int> tall_idx;
   QVector<int> small_idx;
   for (int i = 0; i < n; ++i)
@@ -98,7 +93,6 @@ QVector<PanelLayout::Column> PanelLayout::buildColumns(const QVector<Item>& item
     else
       small_idx.append(i);
 
-  // Calculate average height for small widget stacking
   qreal small_avg_h = 0;
   for (int i : small_idx)
     small_avg_h += items[i].mh;
@@ -111,7 +105,6 @@ QVector<PanelLayout::Column> PanelLayout::buildColumns(const QVector<Item>& item
   const int small_per_stack =
     qMax(1, static_cast<int>(std::floor((height + gap) / (small_avg_h + gap))));
 
-  // Build columns, interleaving tall and small widgets in document order
   QVector<Column> columns;
   int si = 0;
   int ti = 0;
@@ -163,7 +156,6 @@ void PanelLayout::layoutRow(QVector<Rect>& result,
                             qreal width,
                             qreal gap)
 {
-  // Calculate total minimum width for proportional distribution
   const int row_col_count = col_end - col_start;
   qreal row_min_w         = 0;
   for (int c = col_start; c < col_end; ++c)
@@ -173,7 +165,6 @@ void PanelLayout::layoutRow(QVector<Rect>& result,
   const qreal avail_w   = width - row_gap_w;
   const qreal scale     = (row_min_w > 0) ? avail_w / row_min_w : 1.0;
 
-  // Distribute columns horizontally, items vertically within each column
   qreal x = 0;
   for (int c = col_start; c < col_end; ++c) {
     const auto& col   = columns[c];
@@ -195,7 +186,6 @@ void PanelLayout::layoutRow(QVector<Rect>& result,
       y           += itemH + gap;
     }
 
-    // Stretch last column to fill remaining width
     if (c == col_end - 1) {
       qreal final_w = width - x;
       for (int i = 0; i < n_items; ++i)
@@ -214,12 +204,10 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
                                                 qreal height,
                                                 qreal gap)
 {
-  // Validate inputs
   const int n = static_cast<int>(widgets.size());
   if (n == 0 || width <= 0 || height <= 0)
     return {};
 
-  // Build item list with size classifications
   QVector<Item> items;
   items.reserve(n);
   for (int i = 0; i < n; ++i) {
@@ -228,7 +216,6 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
     items.append({i, sc, widgets[i].type, ms.width(), ms.height()});
   }
 
-  // Build columns and determine how many fit per row
   auto columns = buildColumns(items, n, height, gap);
 
   const int num_cols = columns.size();
@@ -253,7 +240,6 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
     cols_per_row = qMax(1, cols_per_row);
   }
 
-  // Layout each row of columns
   QVector<Rect> result(n);
   int col_idx = 0;
   qreal row_y = 0;

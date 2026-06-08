@@ -33,7 +33,6 @@
  */
 IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_lookupActive(false)
 {
-  // Restore persisted settings
   // clang-format off
   auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
   auto remoteAddress = m_settings.value("NetworkDriver/address", "").toString();
@@ -43,7 +42,6 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
   auto udpRemotePort = m_settings.value("NetworkDriver/udpRemotePort", defaultUdpRemotePort()).toInt();
   // clang-format on
 
-  // Apply restored settings
   setTcpPort(tcpPort);
   setUdpLocalPort(udpLocalPort);
   setUdpRemotePort(udpRemotePort);
@@ -51,7 +49,6 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
   setUdpMulticast(udpMulticastEnabled);
   setSocketType(static_cast<QAbstractSocket::SocketType>(socketType));
 
-  // Propagate configuration changes
   connect(
     this, &IO::Drivers::Network::addressChanged, this, &IO::Drivers::Network::configurationChanged);
   connect(this,
@@ -61,7 +58,6 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
   connect(
     this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::configurationChanged);
 
-  // Update state when sockets change
   connect(&m_tcpSocket, &QAbstractSocket::stateChanged, this, [=, this] {
     Q_EMIT configurationChanged();
   });
@@ -69,7 +65,6 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
     Q_EMIT configurationChanged();
   });
 
-  // Handle socket errors
   connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
   connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
 }
@@ -83,11 +78,9 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
  */
 void IO::Drivers::Network::close()
 {
-  // Disconnect both socket types to avoid duplicate readyRead after a flip.
   disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
   disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
 
-  // Abort and close both sockets
   m_tcpSocket.abort();
   m_udpSocket.abort();
   m_tcpSocket.close();
@@ -101,7 +94,6 @@ void IO::Drivers::Network::close()
  */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
-  // Query the active socket for its connection state
   bool open  = false;
   auto state = QAbstractSocket::UnconnectedState;
 
@@ -175,23 +167,19 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
  */
 bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
-  // Close any existing connection
   close();
 
-  // Resolve host address
   auto hostAddr = remoteAddress();
   if (hostAddr.isEmpty())
     hostAddr = defaultAddress();
 
   QIODevice* socket = nullptr;
 
-  // TCP: connect to remote host
   if (socketType() == QAbstractSocket::TcpSocket) {
     socket = static_cast<QIODevice*>(&m_tcpSocket);
     m_tcpSocket.connectToHost(hostAddr, tcpPort());
   }
 
-  // UDP: bind to local port and optionally join multicast group
   else if (socketType() == QAbstractSocket::UdpSocket) {
     m_udpSocket.bind(udpLocalPort(),
                      QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint);
@@ -202,7 +190,6 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
     socket = static_cast<QIODevice*>(&m_udpSocket);
   }
 
-  // Open the socket and connect readyRead
   if (socket) {
     if (socket->open(mode)) {
       connect(socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead);
@@ -210,7 +197,6 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
     }
   }
 
-  // Failed to open, clean up
   close();
   return false;
 }
@@ -364,17 +350,14 @@ void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
  */
 void IO::Drivers::Network::setRemoteAddress(const QString& address)
 {
-  // Perform DNS lookup if address is not a direct IP
   if (!address.isEmpty() && QHostAddress(address).isNull()) {
     m_hostExists = false;
     lookup(address);
   }
 
-  // Direct IP address, mark host as valid
   else
     m_hostExists = true;
 
-  // Store and persist the address
   m_address = address;
   m_settings.setValue("NetworkDriver/address", address);
   Q_EMIT addressChanged();
@@ -438,7 +421,6 @@ void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
  */
 void IO::Drivers::Network::onReadyRead()
 {
-  // Read from UDP socket (bounded to prevent event loop starvation)
   if (socketType() == QAbstractSocket::UdpSocket) {
     constexpr int kMaxDatagramsPerRead = 256;
     for (int n = 0; n < kMaxDatagramsPerRead && udpSocket()->hasPendingDatagrams(); ++n) {
@@ -449,7 +431,6 @@ void IO::Drivers::Network::onReadyRead()
     }
   }
 
-  // Read from TCP socket
   else if (socketType() == QAbstractSocket::TcpSocket)
     publishReceivedData(tcpSocket()->readAll());
 }
@@ -459,7 +440,6 @@ void IO::Drivers::Network::onReadyRead()
  */
 void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 {
-  // Mark lookup as finished and check results
   m_lookupActive = false;
   Q_EMIT lookupActiveChanged();
 
@@ -477,12 +457,10 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
  */
 void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
-  // Ignore UDP "port unreachable": normal for fire-and-forget datagrams.
   if (socketType() == QAbstractSocket::UdpSocket
       && socketError == QAbstractSocket::ConnectionRefusedError) [[unlikely]]
     return;
 
-  // Retrieve the error string from the active socket
   QString error;
   if (socketType() == QAbstractSocket::TcpSocket)
     error = m_tcpSocket.errorString();
@@ -504,7 +482,6 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
  */
 QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
 {
-  // Build property list with socket type selector
   QList<IO::DriverProperty> props;
 
   IO::DriverProperty socketTypeProp;

@@ -500,7 +500,6 @@ struct TableDef {
   obj.insert(Keys::FrameStart, s.frameStart);
   obj.insert(Keys::FrameEnd, s.frameEnd);
 
-  // Emit both legacy and canonical aliases for back-compat with older versions.
   obj.insert(Keys::Checksum, s.checksumAlgorithm);
   obj.insert(Keys::ChecksumAlgorithm, s.checksumAlgorithm);
   obj.insert(Keys::FrameDetection, s.frameDetection);
@@ -517,7 +516,6 @@ struct TableDef {
   if (s.frameParserLanguage != 0)
     obj.insert(Keys::FrameParserLanguage, s.frameParserLanguage);
 
-  // Only ever set when the source uses the native parser language
   if (!s.frameParserTemplate.isEmpty()) {
     obj.insert(Keys::FrameParserTemplate, s.frameParserTemplate);
     if (!s.frameParserParams.isEmpty())
@@ -712,8 +710,10 @@ SS_FORCE_INLINE void assign_string_in_place(QString& dst, const QString& src) no
 }
 
 /**
- * @brief Writes UTF-8 bytes into a QString, reusing the destination buffer for ASCII payloads.
- *        Non-ASCII input falls back to QString::fromUtf8 (one allocation).
+ * @brief Writes UTF-8 bytes into a QString, reusing the destination buffer for ASCII payloads. The
+ *        widen runs branchless (OR-accumulating the high bit instead of an in-loop early return) so
+ *        it auto-vectorizes; a single non-ASCII byte then redoes the rare frame via
+ * QString::fromUtf8.
  */
 SS_FORCE_INLINE void assign_utf8_in_place(QString& dst, QByteArrayView src)
 {
@@ -722,24 +722,23 @@ SS_FORCE_INLINE void assign_utf8_in_place(QString& dst, QByteArrayView src)
 
   Q_ASSERT(n >= 0);
 
-  // One-time growth; subsequent frames reuse the buffer with a plain widening copy
   if (!(dst.isDetached() && dst.capacity() >= n)) {
     dst = QString();
     dst.reserve(qMax<qsizetype>(n, 8));
   }
 
-  // Single pass: widen and detect non-ASCII together; the rare fallback redoes the field
   dst.resize(n);
   QChar* out = dst.data();
-  for (qsizetype i = 0; i < n; ++i) {
-    const uchar c = static_cast<uchar>(p[i]);
-    if (c >= 0x80) [[unlikely]] {
-      dst = QString::fromUtf8(p, n);
-      return;
-    }
 
-    out[i] = QLatin1Char(static_cast<char>(c));
+  uchar nonAscii = 0;
+  for (qsizetype i = 0; i < n; ++i) {
+    const uchar c  = static_cast<uchar>(p[i]);
+    nonAscii      |= c;
+    out[i]         = QChar(static_cast<char16_t>(c));
   }
+
+  if (nonAscii & 0x80) [[unlikely]]
+    dst = QString::fromUtf8(p, n);
 }
 
 /**
@@ -759,7 +758,6 @@ inline void copy_frame_values(Frame& dst, const Frame& src) noexcept
       const auto& srcDataset = srcGroup.datasets[d];
       auto& dstDataset       = dstGroup.datasets[d];
 
-      // In-place copies keep slot strings unique, so the producer never detach-allocates
       assign_string_in_place(dstDataset.value, srcDataset.value);
       assign_string_in_place(dstDataset.rawValue, srcDataset.rawValue);
       dstDataset.numericValue    = srcDataset.numericValue;
@@ -1033,7 +1031,6 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Groups, groupArray);
   obj.insert(Keys::Actions, actionArray);
 
-  // Round-trip project-version metadata only when the Frame carries a writer stamp.
   if (!f.writerVersion.isEmpty() || !f.writerVersionAtCreation.isEmpty() || f.schemaVersion > 0) {
     obj.insert(Keys::SchemaVersion, f.schemaVersion > 0 ? f.schemaVersion : kSchemaVersion);
     if (!f.writerVersion.isEmpty())
@@ -1071,7 +1068,6 @@ void read_io_settings(QByteArray& frameStart,
   s.frameParserTemplate   = ss_jsr(obj, Keys::FrameParserTemplate, "").toString();
   s.frameParserParams     = ss_jsr(obj, Keys::FrameParserParams, QJsonObject()).toJsonObject();
 
-  // Prefer canonical keys; fall back to legacy aliases from older versions.
   if (obj.contains(Keys::ChecksumAlgorithm))
     s.checksumAlgorithm = obj.value(Keys::ChecksumAlgorithm).toString();
   else
@@ -1183,7 +1179,6 @@ inline void normalizeDatasetRanges(Dataset& d)
     return true;
   }
 
-  // Painter groups carry user JS plus optional datasets; don't early-return
   if (widget == QLatin1String("painter"))
     g.painterCode = ss_jsr(obj, Keys::PainterCode, "").toString();
 
@@ -1247,7 +1242,6 @@ inline void normalizeDatasetRanges(Dataset& d)
   f.groups.reserve(groups.count());
   f.actions.reserve(actions.count());
 
-  // Read project-version metadata; pre-stamp files default to 0 / empty.
   f.schemaVersion           = ss_jsr(obj, Keys::SchemaVersion, 0).toInt();
   f.writerVersion           = ss_jsr(obj, Keys::WriterVersion, "").toString();
   f.writerVersionAtCreation = ss_jsr(obj, Keys::WriterVersionAtCreation, "").toString();
@@ -1274,7 +1268,6 @@ inline void normalizeDatasetRanges(Dataset& d)
     }
   }
 
-  // Sources are optional
   if (ok) {
     const auto sources = obj.value(Keys::Sources).toArray();
     f.sources.clear();
@@ -1301,6 +1294,7 @@ struct TimestampedFrame {
 
   DataModel::Frame data;
   SteadyTimePoint timestamp;
+  quint64 structureGeneration = 0;  ///< Publisher pool generation; bumps when the layout changes
 
   /**
    * @brief Default constructor - creates empty timestamped frame.

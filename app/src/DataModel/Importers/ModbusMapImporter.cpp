@@ -294,7 +294,6 @@ void DataModel::ModbusMapImporter::importRegisterMap()
     tr("Modbus Register Maps (*.csv *.xml *.json);;CSV Files (*.csv);;XML Files "
        "(*.xml);;JSON Files (*.json);;All Files (*)"));
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -336,7 +335,6 @@ void DataModel::ModbusMapImporter::showPreview(const QString& filePath)
     return;
   }
 
-  // Sort by (type, address) for consistent block grouping
   std::sort(
     m_registers.begin(), m_registers.end(), [](const RegisterEntry& a, const RegisterEntry& b) {
       if (a.registerType != b.registerType)
@@ -419,7 +417,6 @@ static bool parseCsvRow(const QStringList& cols,
     return false;
   }
 
-  // Parse the register address; skip the row if it isn't a valid uint16
   bool addrOk              = false;
   const auto addrText      = cols[map.addr].trimmed().remove('"');
   const quint16 addrParsed = addrText.toUShort(&addrOk);
@@ -464,12 +461,10 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
   if (lines.count() < 2)
     return false;
 
-  // Map header columns to field indices using common aliases
   const auto map = buildCsvColumnMap(lines[0].trimmed().split(','));
   if (map.addr < 0)
     return false;
 
-  // Parse data rows
   for (int row = 1; row < lines.count(); ++row) {
     const auto line = lines[row].trimmed();
     if (line.isEmpty() || line.startsWith('#'))
@@ -498,7 +493,6 @@ static bool parseXmlRegisterElement(QXmlStreamReader& xml,
 {
   const auto attrs = xml.attributes();
 
-  // Validate the address attribute: skip the element if missing or malformed
   bool addrOk              = false;
   const auto addrText      = attrs.value("address").toString();
   const quint16 addrParsed = addrText.toUShort(&addrOk);
@@ -557,7 +551,6 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
 
     const auto tag_name = xml.name().toString().toLower();
 
-    // Container tag updates the current type and falls through
     const int container_type = xmlTagToType(tag_name);
     if (container_type >= 0) {
       current_type = container_type;
@@ -589,7 +582,6 @@ bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     return false;
 
-  // Route untrusted map files through the shared size/depth/array caps
   const auto result = Misc::JsonValidator::parseAndValidate(file.readAll());
   file.close();
 
@@ -603,7 +595,6 @@ bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
 
   const auto root = result.document.object();
 
-  // Flat format: {"registers": [...]}
   if (root.contains(QStringLiteral("registers"))) {
     const auto arr = root.value(QStringLiteral("registers")).toArray();
     for (const auto& item : arr) {
@@ -613,7 +604,6 @@ bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
     }
   }
 
-  // Grouped format: {"holdingRegisters": [...], "coils": [...], ...}
   // clang-format off
   static const struct { const char* key; int type; } groups[] = {
     {"holdingRegisters", 0}, {"holding_registers", 0}, {"holding", 0},
@@ -712,7 +702,6 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
   source[Keys::FrameParserTemplate]   = QStringLiteral("modbus_register_map");
   source[Keys::FrameParserParams]     = buildNativeParserParams(blocks);
 
-  // Embed register groups in connection settings
   QJsonArray reg_groups;
   for (const auto& block : blocks) {
     QJsonObject obj;
@@ -728,7 +717,6 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
 
   project[Keys::Sources] = QJsonArray{source};
 
-  // Build groups with datasets for each register block
   QJsonArray group_array;
   int group_id      = 0;
   int dataset_index = 1;
@@ -737,7 +725,6 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
     DataModel::Group group;
     group.groupId = group_id;
     group.widget  = QStringLiteral("datagrid");
-    // Drop the "@ address" suffix for single-block projects.
     if (blocks.size() == 1)
       group.title = registerTypeName(block.registerType);
     else
@@ -759,13 +746,11 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
         dataset.wgtMin  = 0;
         dataset.wgtMax  = 1;
       } else {
-        // Plot range stays tied to the raw register limits
         dataset.pltMin = entry.min;
         dataset.pltMax = entry.max;
         dataset.widget = selectDatasetWidget(entry);
         dataset.plt    = dataset.widget.isEmpty();
 
-        // Snap widget bounds and tick count to friendly multiples for analog widgets
         const auto nice          = niceAxisTicks(entry.min, entry.max);
         dataset.wgtMin           = nice.min;
         dataset.wgtMax           = nice.max;
@@ -938,11 +923,9 @@ QString DataModel::ModbusMapImporter::selectDatasetWidget(const RegisterEntry& e
 {
   const auto u = entry.units.toLower();
 
-  // Bar widget for percentage-style ranges
   if (u == QLatin1String("%") || (entry.min == 0 && entry.max == 100))
     return QStringLiteral("bar");
 
-  // Gauge widget for typical engineering units (degree symbol matches original UTF-8 bytes)
   if (u.contains(QLatin1String("\xc2\xb0")) || u == QLatin1String("rpm")
       || u == QLatin1String("psi") || u == QLatin1String("bar") || u == QLatin1String("kpa")
       || u == QLatin1String("v") || u == QLatin1String("a"))

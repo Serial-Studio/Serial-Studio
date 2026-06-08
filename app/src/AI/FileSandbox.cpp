@@ -218,7 +218,6 @@ AI::FileSandbox::Resolved AI::FileSandbox::resolveWrite(const QString& input) co
   if (root.isEmpty())
     return {false, {}, QStringLiteral("write_root_unavailable"), {}};
 
-  // Accept both 'notes.md' and 'AI/notes.md'; both normalize to <workspace>/AI/notes.md.
   QString joined;
   if (QDir::isAbsolutePath(input))
     joined = input;
@@ -572,7 +571,7 @@ QJsonObject AI::FileSandbox::write(const QJsonObject& args) const
     return failure(QStringLiteral("too_large"),
                    QStringLiteral("Content exceeds the 4 MB write cap; split it into parts."));
 
-  return writeBytes(resolved.path, payload, /*appendMode=*/false, workspaceRoot());
+  return writeBytes(resolved.path, payload, false, workspaceRoot());
 }
 
 /**
@@ -591,7 +590,7 @@ QJsonObject AI::FileSandbox::append(const QJsonObject& args) const
     return failure(QStringLiteral("too_large"),
                    QStringLiteral("Resulting file would exceed the 4 MB cap."));
 
-  return writeBytes(resolved.path, payload, /*appendMode=*/true, workspaceRoot());
+  return writeBytes(resolved.path, payload, true, workspaceRoot());
 }
 
 //--------------------------------------------------------------------------------------------------

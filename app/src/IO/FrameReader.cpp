@@ -33,7 +33,9 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs a FrameReader with default operation mode and a 1 MiB buffer.
+ * @brief Constructs a FrameReader with a 1 MiB scan buffer. Pre-allocates the frame-slot
+ *        pool so steady-state extraction never touches the heap, and best-effort pins the
+ *        scan buffer resident so a page fault can't stall the hotpath at rate.
  */
 IO::FrameReader::FrameReader(QObject* parent)
   : QObject(parent)
@@ -48,12 +50,10 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_lastDropNotify()
   , m_lastOverflowLog()
 {
-  // Pre-allocate frame slots: steady-state extraction reuses them without touching the heap
   m_capturedPool.reserve(kCapturedPoolSize);
   for (int i = 0; i < kCapturedPoolSize; ++i)
     m_capturedPool.emplace_back(std::make_shared<CapturedData>());
 
-  // Best-effort pin: a page-fault stall on the scan buffer is a latency spike at rate
   m_bufferPinned = Platform::AppPlatform::lockMemoryResident(
     m_circularBuffer.storage(), static_cast<size_t>(m_circularBuffer.capacity()));
 }
@@ -81,17 +81,14 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
            && m_operationMode <= SerialStudio::QuickPlot);
   Q_ASSERT(m_checksumLength >= 0);
 
-  // Validate input
   if (!data || data->data.isEmpty())
     return;
 
-  // ConsoleOnly mode skips frame extraction
   if (m_operationMode == SerialStudio::ConsoleOnly)
     return;
 
   bool framesEnqueued = false;
 
-  // Passthrough when no delimiters are configured
   if (m_operationMode == SerialStudio::ProjectFile
       && m_frameDetectionMode == SerialStudio::NoDelimiters) {
     framesEnqueued = m_queue.try_enqueue(data);
@@ -99,12 +96,10 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
       noteDroppedFrame();
   }
 
-  // Delimiter-based processing
   else {
     appendChunk(data);
     const auto overflow = m_circularBuffer.overflowCount();
     if (overflow > 0) [[unlikely]] {
-      // Throttle: unbounded qWarning() in a 10 kHz overflow loop floods stderr and burns CPU.
       const auto now = CapturedData::SteadyClock::now();
       if (now - m_lastOverflowLog >= std::chrono::seconds(5)) {
         m_lastOverflowLog = now;
@@ -115,7 +110,6 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
       m_circularBuffer.resetOverflowCount();
     }
 
-    // Call corresponding frame extraction algorithms depending on delimiter configuration
     const auto initialSize = m_queue.size_approx();
     switch (m_operationMode) {
       case SerialStudio::QuickPlot:
@@ -143,7 +137,6 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
     framesEnqueued = (m_queue.size_approx() > initialSize);
   }
 
-  // Notify the consumer whenever the queue has work to drain
   if (framesEnqueued || m_queue.size_approx() > 0)
     Q_EMIT readyRead();
 }
@@ -156,8 +149,8 @@ void IO::FrameReader::appendChunk(const CapturedDataPtr& data)
   Q_ASSERT(data);
   Q_ASSERT(!data->data.isEmpty());
 
-  // CircularBuffer is pre-sized SPSC; append is memcpy
   // code-verify off
+  // CircularBuffer is pre-sized SPSC; append is memcpy
   m_circularBuffer.append(data->data);
   // code-verify on
 
@@ -166,8 +159,8 @@ void IO::FrameReader::appendChunk(const CapturedDataPtr& data)
   chunk.bytesRemaining     = data->data.size();
   chunk.nextFrameTimestamp = data->timestamp;
   chunk.frameStep          = std::max(std::chrono::nanoseconds(1), data->frameStep);
-  // per-chunk timing record; deque only grows by 1 per chunk
   // code-verify off
+  // per-chunk timing record; deque only grows by 1 per chunk
   m_pendingChunks.push_back(std::move(chunk));
   // code-verify on
 }
@@ -212,7 +205,6 @@ void IO::FrameReader::consumeBytes(qsizetype size)
  */
 void IO::FrameReader::setChecksum(const QString& checksum)
 {
-  // Compute checksum output length from algorithm name
   m_checksum      = checksum;
   const auto& map = IO::checksumFunctionMap();
   const auto it   = map.find(m_checksum);
@@ -230,7 +222,6 @@ void IO::FrameReader::setStartSequences(const QList<QByteArray>& starts)
   m_startSequences.clear();
   m_startSequenceLps.clear();
 
-  // Build KMP tables for each non-empty pattern
   for (const auto& s : starts) {
     if (s.isEmpty())
       continue;
@@ -250,7 +241,6 @@ void IO::FrameReader::setFinishSequences(const QList<QByteArray>& finishes)
   m_finishSequences.clear();
   m_finishSequenceLps.clear();
 
-  // Build KMP tables for each non-empty pattern
   for (const auto& f : finishes) {
     if (f.isEmpty())
       continue;
@@ -295,7 +285,6 @@ IO::CapturedData* IO::FrameReader::claimCapturedSlot(IO::CapturedDataPtr& ptr)
   const size_t n = m_capturedPool.size();
   Q_ASSERT(n == static_cast<size_t>(kCapturedPoolSize));
 
-  // Consumers drain FIFO, so the free slot is at (or just past) the hint; the probe is bounded
   const size_t probes = std::min<size_t>(n, kMaxClaimProbes);
   for (size_t k = 0; k < probes; ++k) {
     const size_t idx      = (m_capturedPoolHint + k) % n;
@@ -308,7 +297,6 @@ IO::CapturedData* IO::FrameReader::claimCapturedSlot(IO::CapturedDataPtr& ptr)
     return slotOwner.get();
   }
 
-  // Backlogged: per-frame heap allocation until the consumer catches up (pre-pool behavior)
   auto heap = std::make_shared<CapturedData>();
   auto* raw = heap.get();
   ptr       = std::move(heap);
@@ -342,7 +330,6 @@ void IO::FrameReader::noteDroppedFrame()
 {
   ++m_droppedFrames;
 
-  // Throttle log + notification: per-frame qWarning() at 10 kHz costs string formatting on hotpath.
   const auto now = CapturedData::SteadyClock::now();
   if (now - m_lastDropNotify < std::chrono::seconds(5)) [[likely]]
     return;
@@ -558,22 +545,18 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
   Q_ASSERT(!frame.isEmpty());
   Q_ASSERT(crcPosition >= 0);
 
-  // No checksum configured: always valid
   if (m_checksumLength == 0)
     return ValidationStatus::FrameOk;
 
-  // Wait for more data if checksum bytes aren't yet available
   const auto bufferSize = m_circularBuffer.size();
   if (bufferSize < crcPosition + m_checksumLength)
     return ValidationStatus::ChecksumIncomplete;
 
-  // Compute the checksums & compare
   const auto calculated     = IO::checksum(m_checksum, frame);
   const QByteArray received = m_circularBuffer.peekRange(crcPosition, m_checksumLength);
   if (calculated == received)
     return ValidationStatus::FrameOk;
 
-  // Report checksum errors
   static constexpr qsizetype kMaxLogBytes = 128;
   qWarning() << "\n"
              << m_checksum << "failed:\n"
@@ -582,7 +565,6 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
              << "\t- Frame:" << frame.left(kMaxLogBytes).toHex(' ')
              << (frame.size() > kMaxLogBytes ? "...(truncated)" : "");
 
-  // Return error status
   return ValidationStatus::ChecksumError;
 }
 

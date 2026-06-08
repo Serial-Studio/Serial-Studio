@@ -46,7 +46,6 @@ void API::Handlers::SourceHandler::registerCommands()
   auto& registry   = CommandRegistry::instance();
   const auto empty = emptySchema();
 
-  // Listing / lifecycle
   registry.registerCommand(QStringLiteral("project.source.list"),
                            QStringLiteral("List all project sources"),
                            empty,
@@ -186,7 +185,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
 {
   (void)params;
 
-  // Per-source metadata: raw enum + human-readable label
   const auto& sources = DataModel::ProjectModel::instance().sources();
   QJsonArray arr;
   for (const auto& src : sources) {
@@ -212,7 +210,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
     arr.append(obj);
   }
 
-  // Human-readable summary so the AI doesn't have to invent one.
   QString summary;
   if (sources.empty()) {
     summary = QStringLiteral("No sources are configured.");
@@ -313,7 +310,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& i
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));
 
-  // Copy source and apply field updates
   const int sourceId    = params[Keys::SourceId].toInt(-1);
   const auto& sources   = DataModel::ProjectModel::instance().sources();
   const int sourceCount = static_cast<int>(sources.size());
@@ -364,7 +360,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& i
 API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString& id,
                                                                    const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(Keys::SourceId) || !params.contains(QStringLiteral("settings")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and settings are required"));
@@ -399,7 +394,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString
 
   DataModel::ProjectModel::instance().captureSourceSettings(sourceId);
 
-  // Sync to the live driver so projectConfigurationOk() sees the new values
   IO::HAL_Driver* live = IO::ConnectionManager::instance().driver(sourceId);
   if (live && live != driver)
     for (auto it = settings.constBegin(); it != settings.constEnd(); ++it)
@@ -414,7 +408,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString
 API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QString& id,
                                                                      const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(Keys::SourceId) || !params.contains(QStringLiteral("key")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and key are required"));
@@ -443,7 +436,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
   driver->setDriverProperty(key, val);
   DataModel::ProjectModel::instance().captureSourceSettings(sourceId);
 
-  // Sync to the live driver so projectConfigurationOk() sees the new value
   IO::HAL_Driver* live = IO::ConnectionManager::instance().driver(sourceId);
   if (live && live != driver)
     live->setDriverProperty(key, val);
@@ -457,7 +449,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
 API::CommandResponse API::Handlers::SourceHandler::sourceGetConfiguration(const QString& id,
                                                                           const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(Keys::SourceId))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));
@@ -481,7 +472,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceGetConfiguration(const 
 API::CommandResponse API::Handlers::SourceHandler::sourceSetFrameParserCode(
   const QString& id, const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(Keys::SourceId) || !params.contains(QStringLiteral("code")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and code are required"));
@@ -511,7 +501,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetFrameParserCode(
 API::CommandResponse API::Handlers::SourceHandler::sourceGetFrameParserCode(
   const QString& id, const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(Keys::SourceId))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));

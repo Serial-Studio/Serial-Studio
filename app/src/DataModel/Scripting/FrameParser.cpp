@@ -156,7 +156,6 @@ bool DataModel::FrameParser::nativeEquivalentForFile(const QString& file,
                                                      QString& templateId,
                                                      QJsonObject& params)
 {
-  // Delimited variants collapse into the parametrized native template
   struct DelimitedVariant {
     QLatin1StringView file;
     QLatin1StringView separator;
@@ -184,7 +183,6 @@ bool DataModel::FrameParser::nativeEquivalentForFile(const QString& file,
     return true;
   }
 
-  // Renamed equivalents; every other native id matches its script file basename
   QString id = file;
   if (file == QStringLiteral("fixed_width_fields"))
     id = QStringLiteral("fixed_width");
@@ -230,7 +228,6 @@ QString DataModel::FrameParser::fileForNativeTemplate(const QString& templateId,
   if (templateId == QStringLiteral("key_value"))
     return QStringLiteral("key_value_pairs");
 
-  // Every other native id matches its script file basename
   return templateId;
 }
 
@@ -271,7 +268,6 @@ int DataModel::FrameParser::detectTemplate(const QString& code) const
   if (trimmed.isEmpty())
     return -1;
 
-  // Native descriptors are JSON objects; JS/Lua template files never start with a brace
   if (trimmed.startsWith(QLatin1Char('{')))
     return detectNativeTemplate(trimmed);
 
@@ -389,7 +385,9 @@ DataModel::IScriptEngine& DataModel::FrameParser::engineForSource(int sourceId)
 }
 
 /**
- * @brief Rebuilds the hot source-0 engine pointer and the table-API (Lua) engine flag.
+ * @brief Rebuilds the hot source-0 engine pointer and the table-API (Lua) engine flag, then bumps
+ *        m_engineEpoch as a cheap change signal: FrameBuilder re-derives its dataset capture flag
+ *        per frame whenever this counter moves.
  */
 void DataModel::FrameParser::refreshEngineCaches() noexcept
 {
@@ -404,7 +402,6 @@ void DataModel::FrameParser::refreshEngineCaches() noexcept
     }
   }
 
-  // Cheap change signal: FrameBuilder re-derives its capture flag when this moves
   ++m_engineEpoch;
 }
 
@@ -519,7 +516,6 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrameUtf8(const QByteArray&
   if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
     return {};
 
-  // Hot single-source path: skip the engine-map walk
   if (sourceId == 0 && m_engine0Cache) [[likely]] {
     if (!m_engine0Cache->isLoaded()) [[unlikely]]
       return {};
@@ -562,7 +558,6 @@ qsizetype DataModel::FrameParser::parseSpansUtf8(const QByteArray& frame,
     if (languageForSource(sourceId) != languageForSource(0))
       return -1;
 
-    // Same source-0 fallback as the QList path; recursion depth is capped at one
     return parseSpansUtf8(frame, 0, out, maxSpans);
   }
 
@@ -718,7 +713,6 @@ void DataModel::FrameParser::loadTemplateNames()
   if (m_defaultTemplateFile.isEmpty() && !m_templateFiles.isEmpty())
     m_defaultTemplateFile = m_templateFiles.constFirst();
 
-  // Native names come from tr() in the registry, so rebuild on language change too
   const auto& native = nativeTemplates();
   for (const auto* tmpl : native)
     m_nativeTemplateNames.append(tmpl->name());
@@ -754,7 +748,9 @@ void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
 }
 
 /**
- * @brief Persists the native template at idx (with schema defaults) for the source.
+ * @brief Persists the native template at idx (with schema defaults) for the source; params are
+ *        written before the template id so the reload that the template change triggers never
+ *        sees a stale custom config.
  */
 void DataModel::FrameParser::setNativeTemplateIdx(int sourceId, int idx)
 {
@@ -769,7 +765,6 @@ void DataModel::FrameParser::setNativeTemplateIdx(int sourceId, int idx)
 
   engineForSource(sourceId).templateIdx = idx;
 
-  // Params land first so the template-change reload never sees a stale custom config
   auto& model = DataModel::ProjectModel::instance();
   model.updateSourceFrameParserParams(sourceId, nativeTemplateDefaults(*tmpl));
   model.updateSourceFrameParserTemplate(sourceId, tmpl->id());

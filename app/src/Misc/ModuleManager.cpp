@@ -119,16 +119,13 @@
  */
 static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
-  // Skip empty messages
   (void)context;
   if (msg.isEmpty())
     return;
 
-  // Filter out noisy/unfixable Qt diagnostic messages
   if (type == QtInfoMsg && msg.startsWith("OpenType support missing"))
     return;
 
-  // Filter out noisy/unfixable Qt diagnostic messages
   if (type == QtWarningMsg) {
     if (msg.startsWith("Qt was built without Direct3D 12 support"))
       return;
@@ -148,34 +145,28 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
     if (msg.contains("QSocketNotifier::Exception is not supported on iOS"))
       return;
 
-    // Benign MMCSS side effect: inherit-started threads land at NORMAL, their pre-MMCSS value
     if (msg.startsWith("QThread::start: Failed to set thread priority"))
       return;
   }
 
-  // Add function to string
   QString message;
   if (context.function)
     message = QStringLiteral("%1 - %2").arg(context.function, msg);
   else
     message = msg;
 
-  // Get console output
   const bool useAnsiColors = Console::Handler::instance().ansiColorsEnabled();
   const QString output     = Widgets::Terminal::formatDebugMessage(type, message, useAnsiColors);
   if (output.isEmpty())
     return;
 
-  // Print to stdio raw (this IS the qDebug handler, so qDebug() would recurse)
   // code-verify off
   std::cout << Widgets::Terminal::formatDebugMessage(type, message, false).toStdString()
             << std::endl;
   // code-verify on
 
-  // Print to console
   Console::Handler::instance().displayDebugData(output + "\n");
 
-  // Route Critical unconditionally; Warnings only when user opted in
   const bool isCritical = (type == QtCriticalMsg || type == QtFatalMsg);
   const bool isWarning  = (type == QtWarningMsg);
   if (!isCritical && !isWarning)
@@ -188,7 +179,6 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   const QString channel = QStringLiteral("System");
   const QString title   = isCritical ? QObject::tr("Critical") : QObject::tr("Warning");
 
-  // Forward on the GUI thread: post() asserts main-thread affinity
   QMetaObject::invokeMethod(
     &nc,
     [level = isCritical ? 2 : 1, channel, title, msg]() {
@@ -209,13 +199,10 @@ Misc::ModuleManager::ModuleManager()
   , m_quitHandled(false)
   , m_automaticUpdates(m_settings.value("App/CheckForUpdates", true).toBool())
 {
-  // Init translator
   (void)Misc::Translator::instance();
 
-  // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this, &Misc::ModuleManager::onQuit);
 
-  // Also catch macOS Cmd-Q / Dock-quit, which bypass the QML engine's quit signal
   connect(qApp, &QCoreApplication::aboutToQuit, this, &Misc::ModuleManager::onQuit);
 }
 
@@ -284,21 +271,16 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
  */
 void Misc::ModuleManager::onQuit()
 {
-  // Wired to both QML quit and qApp::aboutToQuit; run the teardown exactly once
   if (m_quitHandled)
     return;
 
-  // Set quit flag
   m_quitHandled = true;
 
-  // Restore default handler so late qWarning() during static destruction is safe
   qInstallMessageHandler(nullptr);
 
-  // Stop all plugins and active modules
   Misc::ExtensionManager::instance().stopAllPlugins();
   Misc::TimerEvents::instance().stopTimers();
 
-  // Flush any pending project autosave so a last-second layout drag survives quit
   DataModel::ProjectModel::instance().flushAutoSave();
 
   CSV::Export::instance().closeFile();
@@ -318,10 +300,8 @@ void Misc::ModuleManager::onQuit()
   API::GRPC::GRPCServer::instance().setEnabled(false);
 #endif
 
-  // Log a clean exit
   Misc::CrashTracker::instance().markCleanExit();
 
-  // Terminate the application event loop
   qApp->exit(0);
 }
 
@@ -334,7 +314,6 @@ void Misc::ModuleManager::onQuit()
  */
 void Misc::ModuleManager::configureUpdater()
 {
-  // Skip if auto-updater is disabled at build time
   if (!autoUpdaterEnabled())
     return;
 
@@ -352,7 +331,6 @@ void Misc::ModuleManager::configureUpdater()
  */
 void Misc::ModuleManager::registerQmlTypes()
 {
-  // Register custom QML widgets & widget models
   qmlRegisterType<Widgets::Bar>("SerialStudio", 1, 0, "BarModel");
   qmlRegisterType<Widgets::GPS>("SerialStudio", 1, 0, "GPSWidget");
   qmlRegisterType<Widgets::Plot>("SerialStudio", 1, 0, "PlotModel");
@@ -375,21 +353,17 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<DataModel::PainterCodeEditor>("SerialStudio", 1, 0, "PainterCodeEditor");
 #endif
 
-  // Register JSON custom items
   qmlRegisterType<DataModel::JsCodeEditor>("SerialStudio", 1, 0, "JsCodeEditor");
   qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
   qmlRegisterType<DataModel::ProjectEditor>("SerialStudio", 1, 0, "ProjectEditor");
   qmlRegisterType<DataModel::OutputCodeEditor>("SerialStudio", 1, 0, "OutputCodeEditor");
   qmlRegisterType<DataModel::FrameParserModel>("SerialStudio", 1, 0, "FrameParserModel");
 
-  // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 
-  // Register window manager & taskbar helpers
   qmlRegisterType<UI::Taskbar>("SerialStudio.UI", 1, 0, "TaskBar");
   qmlRegisterType<UI::WindowManager>("SerialStudio.UI", 1, 0, "WindowManager");
 
-  // Regsiter common Serial Studio enums & values
   qmlRegisterSingletonType<SerialStudio>(
     "SerialStudio", 1, 0, "SerialStudio", [](QQmlEngine*, QJSEngine*) -> QObject* {
       return new SerialStudio();

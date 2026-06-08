@@ -407,7 +407,6 @@ void MQTT::PublisherScriptEditor::onLanguageChanged(int index)
     return;
   }
 
-  // No template match: swap the placeholder if the editor is at one
   const QString trimmed = m_editor->toPlainText().trimmed();
   const int other = (newLang == SerialStudio::Lua) ? SerialStudio::JavaScript : SerialStudio::Lua;
   if (trimmed == defaultPlaceholder(other).trimmed())

@@ -71,16 +71,13 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_sweepMode(SerialStudio::SweepAuto)
   , m_triggerEdge(SerialStudio::TriggerRising)
 {
-  // Validate dashboard configuration
   if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
-  // Obtain min/max values from datasets
   const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
   m_minY            = std::numeric_limits<double>::max();
   m_maxY            = std::numeric_limits<double>::lowest();
 
-  // Populate data from datasets
   for (size_t i = 0; i < group.datasets.size(); ++i) {
     const auto& dataset = group.datasets[i];
 
@@ -91,27 +88,22 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
     m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
   }
 
-  // Obtain group title, appending the shared unit if all datasets agree
   m_yLabel                 = group.title;
   const QString sharedUnit = sharedDatasetUnit(group);
   if (!sharedUnit.isEmpty())
     m_yLabel += " (" + sharedUnit + ")";
 
-  // Resolve X-axis label (Quick Plot time preference or a Time-set dataset)
   m_timeAxis = UI::Dashboard::instance().useTimeXAxisGroup(group);
   m_xLabel   = m_timeAxis ? tr("Time (s)") : tr("Samples");
 
-  // Resize data container to fit curves
   m_data.resize(group.datasets.size());
 
-  // Connect to the dashboard signals
   connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
   connect(&UI::Dashboard::instance(),
           &UI::Dashboard::plotTimeRangeChanged,
           this,
           &MultiPlot::updateRange);
 
-  // Connect to the theme manager to update the curve colors
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
@@ -561,14 +553,11 @@ void Widgets::MultiPlot::pushSweepConfig()
  */
 void Widgets::MultiPlot::updateData()
 {
-  // Share workspace data
   static thread_local DSP::DownsampleWorkspace ws;
 
-  // Stop if widget is disabled or invalid
   if (!isEnabled() || !VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
-  // Sweep mode: decimate each curve's held sweep over the shared [0, T] window
   if (m_timeAxis && m_sweepEnabled) {
     const auto& engine        = UI::Dashboard::instance().multiplotSweep(m_index);
     const qsizetype plotCount = static_cast<qsizetype>(engine.front.size());
@@ -588,7 +577,6 @@ void Widgets::MultiPlot::updateData()
     return;
   }
 
-  // Time axis: decimate each curve's visible window from its decimating ring
   if (m_timeAxis) {
     const auto& rings         = UI::Dashboard::instance().multiplotTimeRings(m_index);
     const qsizetype plotCount = static_cast<qsizetype>(rings.size());
@@ -608,14 +596,11 @@ void Widgets::MultiPlot::updateData()
     return;
   }
 
-  // Fetch multiplot source data (shared X axis, multiple Y series)
   const auto& data = UI::Dashboard::instance().multiplotData(m_index);
   const auto& X    = *data.x;
 
-  // One QVector<QPointF> per series; resize only when count changes
   const qsizetype plotCount = data.y.size();
   if (m_data.size() != plotCount) {
-    // Squeeze only when shrinking by >20% to avoid thrashing
     if (m_data.size() > plotCount && m_data.size() > plotCount * 1.2) {
       m_data.clear();
       m_data.squeeze();
@@ -623,16 +608,13 @@ void Widgets::MultiPlot::updateData()
     m_data.resize(plotCount);
   }
 
-  // Populate data for each plot
   for (qsizetype i = 0; i < plotCount; ++i) {
-    // Skip if curve is not visible or out of bounds
     if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
       continue;
 
     DSP::downsampleMonotonic(X, data.y[i], m_dataW, m_dataH, m_data[i], &ws);
   }
 
-  // Calculate auto scale range
   calculateAutoScaleRange();
 }
 
@@ -641,11 +623,9 @@ void Widgets::MultiPlot::updateData()
  */
 void Widgets::MultiPlot::updateRange()
 {
-  // Validate widget and reset X-axis range for the new point count
   if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
-  // Reset data containers and update X-axis range
   const auto& data = UI::Dashboard::instance().multiplotData(m_index);
   m_data.clear();
   m_data.squeeze();
@@ -679,13 +659,11 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   const auto prevMinY = m_minY;
   const auto prevMaxY = m_maxY;
 
-  // If the data is empty, set the range to 0-1
   if (m_data.isEmpty()) {
     m_minY = 0;
     m_maxY = 1;
   }
 
-  // Try dataset-declared bounds; fall back to scanning curves on failure
   else if (!computeRangeFromDatasets()) {
     scanCurvesForRange();
     padDerivedRange();
@@ -757,7 +735,6 @@ void Widgets::MultiPlot::padDerivedRange()
 {
   applyDerivedYBounds();
 
-  // Round to integer numbers
   m_maxY = std::ceil(m_maxY);
   m_minY = std::floor(m_minY);
   if (DSP::almostEqual(m_maxY, m_minY)) {
@@ -771,21 +748,18 @@ void Widgets::MultiPlot::padDerivedRange()
  */
 void Widgets::MultiPlot::applyDerivedYBounds()
 {
-  // If no finite values found, use default range
   if (!std::isfinite(m_minY) || !std::isfinite(m_maxY)) {
     m_minY = 0;
     m_maxY = 1;
     return;
   }
 
-  // If the min and max are the same at zero, fall back to [-1, 1]
   if (DSP::almostEqual(m_minY, m_maxY) && DSP::isZero(m_minY)) {
     m_minY = -1;
     m_maxY = 1;
     return;
   }
 
-  // If min and max are equal but non-zero, expand by 10% of |min|
   if (DSP::almostEqual(m_minY, m_maxY)) {
     const double absValue = qAbs(m_minY);
     m_minY                = m_minY - absValue * 0.1;
@@ -793,7 +767,6 @@ void Widgets::MultiPlot::applyDerivedYBounds()
     return;
   }
 
-  // Expand range symmetrically around midY, with a 10% padding
   const double midY      = (m_minY + m_maxY) * 0.5;
   const double halfRange = (m_maxY - m_minY) * 0.5;
 
@@ -804,7 +777,6 @@ void Widgets::MultiPlot::applyDerivedYBounds()
   m_minY = std::floor(midY - paddedRange);
   m_maxY = std::ceil(midY + paddedRange);
 
-  // Safety check to avoid zero-range
   if (DSP::almostEqual(m_minY, m_maxY)) {
     m_minY -= 1;
     m_maxY += 1;
@@ -820,7 +792,6 @@ void Widgets::MultiPlot::applyDerivedYBounds()
  */
 void Widgets::MultiPlot::modifyCurveVisibility(const int index, const bool visible)
 {
-  // Update visibility flag and move the curve to the end of the draw order
   if (index >= 0 && index < m_visibleCurves.count()) {
     m_visibleCurves[index] = visible;
     if (visible) {
@@ -841,7 +812,6 @@ void Widgets::MultiPlot::modifyCurveVisibility(const int index, const bool visib
  */
 void Widgets::MultiPlot::onThemeChanged()
 {
-  // Rebuild per-dataset colors from the current theme
   if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
     const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 

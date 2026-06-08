@@ -50,6 +50,9 @@
 #include "IO/ConnectionManager.h"
 #include "Misc/BackupManager.h"
 #include "SerialStudio.h"
+#ifdef BUILD_COMMERCIAL
+#  include "UI/Widgets/Output/Base.h"
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Legacy alarm-field synthesis for MCP input compatibility
@@ -190,7 +193,6 @@ static QJsonObject buildDatasetObject(const DataModel::Dataset& dataset,
   dataset_obj[QStringLiteral("hasTransform")] = !dataset.transformCode.isEmpty();
   dataset_obj[QStringLiteral("isVirtual")]    = dataset.virtual_;
 
-  // Prose explanations block: saves the caller from translating raw enums and bitflags
   QJsonObject explanations;
   explanations[QStringLiteral("enabledOptions")] =
     QStringLiteral("%1 (bitflag %2)")
@@ -292,7 +294,7 @@ static void appendUnknownFieldsWarning(QJsonObject& result,
   w[QStringLiteral("fields")] = unknownFields;
   w[QStringLiteral("message")] =
     QStringLiteral("These fields were ignored because they are not patchable via %1. "
-                   "Call project.describeCommand for the list of writable fields, "
+                   "Call meta.describeCommand for the list of writable fields, "
                    "or check your spelling.")
       .arg(command);
   warnings.append(w);
@@ -1417,9 +1419,8 @@ static QJsonObject summarizeProjectJson(const QJsonObject& project)
   out[QStringLiteral("datasetCount")] = datasetCount;
   out[QStringLiteral("groupTitles")]  = groupTitles;
 
-  const auto sources = project.value(QStringLiteral("sources")).toArray();
-  out[QStringLiteral("sourceCount")] =
-    sources.isEmpty() ? 1 : sources.size();  // legacy projects have no `sources` array
+  const auto sources                 = project.value(QStringLiteral("sources")).toArray();
+  out[QStringLiteral("sourceCount")] = sources.isEmpty() ? 1 : sources.size();
   return out;
 }
 
@@ -1585,7 +1586,6 @@ API::CommandResponse API::Handlers::ProjectHandler::fileOpen(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::fileSave(const QString& id,
                                                              const QJsonObject& params)
 {
-  // When filePath is provided, save directly to that path (headless save-as)
   const QString explicit_path = params.value(QStringLiteral("filePath")).toString();
 
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
@@ -1702,7 +1702,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& i
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
 
-  // Capture target group + every dataset inside before mutation
   const auto& targetGroup = groups[groupId];
   QJsonArray childDatasets;
   for (const auto& d : targetGroup.datasets) {
@@ -1722,7 +1721,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& i
 
   const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
 
-  // Groups above target compact by 1; uniqueId derives from group/dataset IDs, so they go stale.
   QJsonArray renumbered;
   for (const auto& g : groups) {
     if (g.groupId <= groupId)
@@ -1873,7 +1871,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
 
-  // Headline flag drives the auto-generated title; remaining bits are applied below
   SerialStudio::DatasetOption headline = SerialStudio::DatasetGeneric;
   for (const auto cand : {SerialStudio::DatasetPlot,
                           SerialStudio::DatasetFFT,
@@ -1892,14 +1889,13 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id
   project.setSelectedGroup(groups[groupId]);
   project.addDataset(headline);
 
-  // Apply any remaining bits on top of the headline-seeded dataset
   const int remaining = options & ~static_cast<int>(headline);
   const auto& post    = project.groups();
   const int newIndex  = static_cast<int>(post[groupId].datasets.size()) - 1;
   if (remaining != 0 && newIndex >= 0) {
     DataModel::Dataset d = post[groupId].datasets[newIndex];
     applyDatasetVisualizationFlags(d, remaining);
-    project.updateDataset(groupId, newIndex, d, /*rebuildTree=*/true);
+    project.updateDataset(groupId, newIndex, d, true);
   }
 
   QJsonObject result;
@@ -1983,7 +1979,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAddMany(const QString
   const auto headline     = pickHeadlineDatasetOption(options);
   const int remainingBits = options & ~static_cast<int>(headline);
 
-  // Suspend autosave so the whole burst lands as a single save at the end
   project.setAutoSaveSuspended(true);
   project.setSelectedGroup(groups[groupId]);
 
@@ -2010,7 +2005,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAddMany(const QString
     if (startIndex >= 0)
       d.index = startIndex + i;
 
-    project.updateDataset(groupId, newIndex, d, /*rebuildTree=*/true);
+    project.updateDataset(groupId, newIndex, d, true);
 
     QJsonObject entry;
     entry[QStringLiteral("groupId")] = groupId;
@@ -2108,7 +2103,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetDelete(const QString&
 
   const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
 
-  // Peers above target compact down by 1 (matches ProjectModel::deleteDataset semantics).
   QJsonArray renumbered;
   for (const auto& d : targetGroup.datasets) {
     if (d.datasetId <= datasetId)
@@ -2214,7 +2208,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetOption(const QStri
   const int datasetId = params.value(Keys::DatasetId).toInt();
   const bool enabled  = params.value(QStringLiteral("enabled")).toBool();
 
-  // option accepts a string slug ('plot', 'fft', ...) or the DatasetOption integer
   int option                  = 0;
   const QJsonValue optionJson = params.value(QStringLiteral("option"));
   if (optionJson.isString()) {
@@ -2242,7 +2235,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetOption(const QStri
                                       QStringLiteral("Dataset id not found: %1 in group %2")
                                         .arg(QString::number(datasetId), QString::number(groupId)));
 
-  // changeDatasetOption() reads m_selectedDataset; select first.
   project.setSelectedDataset(groups[groupId].datasets[datasetId]);
   project.changeDatasetOption(static_cast<SerialStudio::DatasetOption>(option), enabled);
 
@@ -2276,7 +2268,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetOptions(const QStr
   const int groupId   = params.value(QStringLiteral("groupId")).toInt();
   const int datasetId = params.value(Keys::DatasetId).toInt();
 
-  // options accepts an integer bitflag OR an array of slug strings
   int options                  = 0;
   const QJsonValue optionsJson = params.value(QStringLiteral("options"));
   if (optionsJson.isArray()) {
@@ -2307,7 +2298,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetOptions(const QStr
   d.led                = (options & SerialStudio::DatasetLED) != 0;
   d.waterfall          = (options & SerialStudio::DatasetWaterfall) != 0;
 
-  // widget string is a one-of group; clear if caller did not request bar/gauge/compass
   const QString chosen = widgetForDatasetOptions(options);
   const bool wasOneOf  = d.widget == QStringLiteral("bar") || d.widget == QStringLiteral("gauge")
                      || d.widget == QStringLiteral("compass");
@@ -2316,7 +2306,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetOptions(const QStr
   else if (wasOneOf)
     d.widget = QString();
 
-  project.updateDataset(groupId, datasetId, d, /*rebuildTree=*/true);
+  project.updateDataset(groupId, datasetId, d, true);
 
   QJsonArray slugs;
   for (const auto& s : API::EnumLabels::datasetOptionsBitsToSlugs(options))
@@ -2340,7 +2330,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetOptions(const QStr
 API::CommandResponse API::Handlers::ProjectHandler::datasetSetVirtual(const QString& id,
                                                                       const QJsonObject& params)
 {
-  // Validate required parameters
   const QStringList required{
     QString(Keys::GroupId),
     QString(Keys::DatasetId),
@@ -2356,7 +2345,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetVirtual(const QStr
   const int datasetId = params.value(Keys::DatasetId).toInt();
   const bool isVirt   = params.value(Keys::Virtual).toBool();
 
-  // Locate the group by logical id, then the dataset within it
   auto& pm           = DataModel::ProjectModel::instance();
   const auto& groups = pm.groups();
   const auto git     = std::find_if(
@@ -2377,7 +2365,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetVirtual(const QStr
                                       QStringLiteral("Dataset id not found in group: %1/%2")
                                         .arg(QString::number(groupId), QString::number(datasetId)));
 
-  // Apply the flag: updateDataset validates, emits signals, and rebuilds the tree
   DataModel::Dataset updated = *dit;
   updated.virtual_           = isVirt;
   pm.updateDataset(groupId, datasetId, updated, true);
@@ -2412,7 +2399,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
   const int datasetId = params.value(Keys::DatasetId).toInt();
   const QString code  = params.value(QStringLiteral("code")).toString();
 
-  // Locate the group by logical id, then the dataset within it
   auto& pm           = DataModel::ProjectModel::instance();
   const auto& groups = pm.groups();
   const auto git     = std::find_if(
@@ -2447,7 +2433,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
 
     updated.transformLanguage = lang;
   } else if (!code.isEmpty() && updated.transformLanguage < 0) {
-    // Resolve from the owning source; Native parser sources inherit Lua (no native transforms)
     const auto& srcs = pm.sources();
     const auto sit   = std::find_if(
       srcs.begin(), srcs.end(), [&](const auto& s) { return s.sourceId == updated.sourceId; });
@@ -2692,7 +2677,6 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetAdd(const QStrin
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
 
-  // addOutputControl() reads m_selectedGroup; select the target first.
   project.setSelectedGroup(groups[groupId]);
   project.addOutputControl(static_cast<SerialStudio::OutputWidgetType>(
     qBound(0, type, static_cast<int>(SerialStudio::OutputKnob))));
@@ -2853,7 +2837,6 @@ static void applyNativeTemplate(int sourceId,
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!templateId.isEmpty());
 
-  // Callers validate first, so the lookup cannot fail; guard anyway for release builds
   const auto* tmpl = DataModel::nativeTemplateById(templateId);
   if (!tmpl)
     return;
@@ -2861,7 +2844,6 @@ static void applyNativeTemplate(int sourceId,
   const auto params =
     templateParams.isEmpty() ? DataModel::nativeTemplateDefaults(*tmpl) : templateParams;
 
-  // Language first so the param/template change signals reload the native engine
   auto& model = DataModel::ProjectModel::instance();
   model.updateSourceFrameParserLanguage(sourceId, SerialStudio::Native);
   model.updateSourceFrameParserParams(sourceId, params);
@@ -2908,13 +2890,11 @@ static API::CommandResponse setNativeParserFromDescriptor(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString& id,
                                                                   const QJsonObject& params)
 {
-  // Validate required "code" parameter
   if (!params.contains(QStringLiteral("code"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
   }
 
-  // Resolve code and sourceId, validate bounds
   const QString code = params.value(QStringLiteral("code")).toString();
   const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
   auto& model        = DataModel::ProjectModel::instance();
@@ -2924,7 +2904,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Invalid sourceId"));
 
-  // Optional language flip: validate under the new engine and roll back if invalid.
   const bool hasLanguage = params.contains(QStringLiteral("language"));
   int savedLanguage      = 0;
   if (hasLanguage) {
@@ -2936,29 +2915,23 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
         ErrorCode::InvalidParam,
         QStringLiteral("Invalid language: must be 0 (JavaScript), 1 (Lua) or 2 (Built-In)"));
 
-    // Native: the code payload is the template descriptor, persisted as template + params
     if (language == SerialStudio::Native)
       return setNativeParserFromDescriptor(id, sourceId, code);
 
-    // Snapshot prior language for rollback on validation failure.
     savedLanguage = model.frameParserLanguage(sourceId);
 
-    // Flip the language so the engine dispatch picks the right implementation.
     model.updateSourceFrameParserLanguage(sourceId, language);
 
-    // Suppress modal dialogs during headless API-driven validation.
     auto& parser            = DataModel::FrameParser::instance();
     const bool prevSuppress = model.suppressMessageBoxes();
     model.setSuppressMessageBoxes(true);
     parser.setSuppressMessageBoxes(true);
 
-    // Validate + load the script under the new engine.
     const bool ok = parser.loadScript(sourceId, code, false);
 
     parser.setSuppressMessageBoxes(prevSuppress);
     model.setSuppressMessageBoxes(prevSuppress);
 
-    // Roll back the language flip on validation failure.
     if (!ok) {
       model.updateSourceFrameParserLanguage(sourceId, savedLanguage);
       return CommandResponse::makeError(
@@ -2968,7 +2941,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
     }
   }
 
-  // Persist: source 0 -> setFrameParserCode; source >0 -> updateSourceFrameParser.
   if (sourceId == 0)
     model.setFrameParserCode(code);
   else
@@ -3011,7 +2983,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString&
   result[Keys::SourceId]             = sourceId;
   result[QStringLiteral("language")] = model.frameParserLanguage(sourceId);
 
-  // Native sources are configured by template + params; code carries the JSON descriptor
   if (model.frameParserLanguage(sourceId) == SerialStudio::Native) {
     QString template_id = model.frameParserTemplate(sourceId);
     if (template_id.isEmpty())
@@ -3039,15 +3010,12 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString&
 API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QString& id,
                                                                       const QJsonObject& params)
 {
-  // Validate required "language" parameter
   if (!params.contains(QStringLiteral("language")))
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: language"));
 
-  // Resolve sourceId (logical, default 0)
   const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
 
-  // Validate language value against the SerialStudio::ScriptLanguage enum
   const int language = params.value(QStringLiteral("language")).toInt();
   if (language != SerialStudio::JavaScript && language != SerialStudio::Lua
       && language != SerialStudio::Native)
@@ -3056,7 +3024,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
       ErrorCode::InvalidParam,
       QStringLiteral("Invalid language: must be 0 (JavaScript), 1 (Lua) or 2 (Built-In)"));
 
-  // Locate the source by logical ID (not by vector index)
   auto& model         = DataModel::ProjectModel::instance();
   const auto& sources = model.sources();
   const auto it =
@@ -3064,14 +3031,12 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
       return s.sourceId == sourceId;
     });
 
-  // Reject unknown source IDs
   if (it == sources.end())
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
 
   model.updateSourceFrameParserLanguage(sourceId, language);
 
-  // Reset to the default template; Native keeps an existing template selection intact
   if (language != SerialStudio::Native || model.frameParserTemplate(sourceId).isEmpty())
     DataModel::FrameParser::instance().loadDefaultTemplate(sourceId, true);
   else
@@ -3089,10 +3054,8 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
 API::CommandResponse API::Handlers::ProjectHandler::parserGetLanguage(const QString& id,
                                                                       const QJsonObject& params)
 {
-  // Resolve sourceId (logical, default 0)
   const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
 
-  // Verify the source exists before reporting a language
   const auto& model   = DataModel::ProjectModel::instance();
   const auto& sources = model.sources();
   const auto it =
@@ -3100,7 +3063,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetLanguage(const QStr
       return s.sourceId == sourceId;
     });
 
-  // Reject unknown source IDs
   if (it == sources.end())
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
@@ -3155,7 +3117,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetTemplateSchema(
 API::CommandResponse API::Handlers::ProjectHandler::parserGetTemplate(const QString& id,
                                                                       const QJsonObject& params)
 {
-  // Resolve sourceId (logical, default 0) and verify the source exists
   const int sourceId  = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
   const auto& model   = DataModel::ProjectModel::instance();
   const auto& sources = model.sources();
@@ -3186,7 +3147,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetTemplate(const QStr
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: template"));
 
-  // Resolve sourceId (logical, default 0) and verify the source exists
   const int sourceId  = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
   const auto& sources = DataModel::ProjectModel::instance().sources();
   const auto it =
@@ -3232,7 +3192,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupsList(const QString& id
 
     obj[QStringLiteral("datasetCount")] = static_cast<int>(group.datasets.size());
 
-    // Dataset titles + units to disambiguate groups beyond "groupId N"
     QJsonArray ds_summary;
     for (const auto& ds : group.datasets) {
       QJsonObject d;
@@ -3253,7 +3212,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupsList(const QString& id
     }
     obj[QStringLiteral("datasetSummary")] = ds_summary;
 
-    // Precomputed DashboardWidget enums accepted by workspace-add for this group
     QJsonArray compat;
     const auto group_w = static_cast<int>(SerialStudio::getDashboardWidget(group));
     if (group_w != SerialStudio::DashboardNoWidget)
@@ -3557,7 +3515,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetMove(const QString& i
   const int clampedNewId =
     std::clamp(newPosition, 0, static_cast<int>(matchGroup->datasets.size()) - 1);
 
-  // Compute the renumbering map; uniqueId stays stable across reorders.
   QJsonArray renumbered;
   for (const auto& d : matchGroup->datasets) {
     const int newId = projectedAfterMove(d.datasetId, oldPosition, clampedNewId);
@@ -3637,7 +3594,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupMove(const QString& id,
 
   const int clampedNew = std::clamp(newPosition, 0, static_cast<int>(groups.size()) - 1);
 
-  // Compute renumbering map.
   QJsonArray renumbered;
   for (const auto& g : groups) {
     const int newId = projectedAfterMove(g.groupId, groupId, clampedNew);
@@ -4022,7 +3978,6 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
     return CommandResponse::makeSuccess(id, result);
   }
 
-  // In-memory load: no temp file, no file association
   auto& project = DataModel::ProjectModel::instance();
   project.setSuppressMessageBoxes(true);
   const bool ok = project.loadFromJsonDocument(QJsonDocument(config));
@@ -4050,7 +4005,6 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
 API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const QString& id,
                                                                          const QJsonObject& params)
 {
-  // Obtain instance and validate state
   auto& model   = DataModel::ProjectModel::instance();
   auto& manager = IO::ConnectionManager::instance();
   bool updated  = false;
@@ -4071,7 +4025,6 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
   }
 
   if (sourceId == 0) {
-    // Route through top-level setters: they sync into source[0] and update the FrameReader.
     if (params.contains(QStringLiteral("startSequence"))) {
       const QString start = params.value(QStringLiteral("startSequence")).toString();
       manager.setStartSequence(start.toUtf8());
@@ -4149,7 +4102,6 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
 
   const auto& cfg = AppState::instance().frameConfig();
 
-  // Build the multi-source arrays
   QJsonArray startArr, endArr;
   for (const auto& s : cfg.startSequences)
     startArr.append(QString::fromUtf8(s));
@@ -4157,13 +4109,11 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
   for (const auto& f : cfg.finishSequences)
     endArr.append(QString::fromUtf8(f));
 
-  // Primary (source[0]) delimiters as singular scalars for single-source clients
   const QString primaryStart =
     cfg.startSequences.isEmpty() ? QString() : QString::fromUtf8(cfg.startSequences.first());
   const QString primaryEnd =
     cfg.finishSequences.isEmpty() ? QString() : QString::fromUtf8(cfg.finishSequences.first());
 
-  // Assemble the response
   QJsonObject result;
   result[QStringLiteral("startSequence")]  = primaryStart;
   result[QStringLiteral("endSequence")]    = primaryEnd;
@@ -4357,9 +4307,10 @@ void API::Handlers::ProjectHandler::registerEntityUpdateCommands()
                    "**JavaScript only** -- runs in QJSEngine to convert UI state into "
                    "device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} "
                    "before authoring** for the function signature (transmit(value) "
-                   "returning a Uint8Array / string), available globals, and the protocol "
-                   "helper APIs (CRC, NMEA, Modbus, SLCAN, GRBL, GCode, SCPI, binary "
-                   "packet)."),
+                   "returning a Uint8Array / string), the per-widget value semantics, and "
+                   "the injected Modbus/CAN helper globals (modbusWriteRegister / "
+                   "modbusWriteCoil / modbusWriteFloat / canSendFrame / canSendValue). "
+                   "Validate first with project.outputWidget.dryRun."),
     makeSchema({
       { QStringLiteral("groupId"),QStringLiteral("integer"),QStringLiteral("Target group id")                           },
       {QStringLiteral("widgetId"),
@@ -4570,6 +4521,29 @@ void API::Handlers::ProjectHandler::registerScriptDryRunCommands()
        QStringLiteral("Painter source. Must define paint(ctx, w, h)")}
   }),
     &painterDryRun);
+
+  registry.registerCommand(
+    QStringLiteral("project.outputWidget.dryRun"),
+    QStringLiteral("Compile an output-widget transmit function WITHOUT touching the live "
+                   "project. Verifies the script compiles and defines transmit(value); "
+                   "returns ok / compileError + line. The transmitFunction is **JavaScript "
+                   "only** and runs with the same injected Modbus/CAN helper globals + table "
+                   "API as the live widget. "
+                   "Pass inputValue (and hex:true for hex byte input) to also execute it once "
+                   "and return the produced bytes (outputHex + byteCount). Validate here "
+                   "BEFORE project.outputWidget.update."),
+    makeSchema({
+      {      QStringLiteral("code"),
+       QStringLiteral("string"),
+       QStringLiteral("Transmit source. Must define transmit(value)")   },
+      {QStringLiteral("inputValue"),
+       QStringLiteral("string"),
+       QStringLiteral("Optional sample value to run transmit() against")},
+      {       QStringLiteral("hex"),
+       QStringLiteral("boolean"),
+       QStringLiteral("Treat inputValue as space-separated hex bytes")  }
+  }),
+    &outputWidgetDryRun);
 }
 
 /**
@@ -4640,7 +4614,7 @@ API::CommandResponse API::Handlers::ProjectHandler::painterSetCode(const QString
 
   DataModel::Group g = groups[groupId];
   g.painterCode      = code;
-  project.updateGroup(groupId, g, /*rebuildTree=*/false);
+  project.updateGroup(groupId, g, false);
 
   QJsonObject result;
   result[QStringLiteral("groupId")]    = groupId;
@@ -4764,7 +4738,6 @@ static void applyDatasetTextAndToggleFields(DataModel::Dataset& d,
     rebuildTree = true;
   }
 
-  // Visualization booleans share the project JSON keys (graph/fft/led/waterfall)
   if (takeParam(params, consumed, Keys::Graph)) {
     d.plt       = params.value(Keys::Graph).toBool();
     rebuildTree = true;
@@ -5282,7 +5255,6 @@ static QJsonObject executeBatchOp(int index, const QJsonObject& op, bool dryRun,
                                 QJsonObject());
   }
 
-  // Propagate dryRun into every op so the inner handler short-circuits without mutating.
   if (dryRun)
     opParams.insert(QStringLiteral("dryRun"), true);
 
@@ -5773,12 +5745,10 @@ API::CommandResponse API::Handlers::ProjectHandler::validate(const QString& id,
   QJsonArray issues;
   bool ok = true;
 
-  // Build set of valid source ids for fast lookup.
   QSet<int> sourceIds;
   for (const auto& src : sources)
     sourceIds.insert(src.sourceId);
 
-  // Empty-project guard rail.
   if (groups.empty()) {
     addIssue(issues,
              QStringLiteral("warning"),
@@ -5923,7 +5893,6 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserDryRun(const QStr
   if (!end.isEmpty())
     spec.finishSequences.append(end);
 
-  // QuickPlot defaults to line-based extraction so the caller may omit framing fields.
   if (spec.operationMode == SerialStudio::QuickPlot && spec.finishSequences.isEmpty()) {
     spec.finishSequences = {QByteArray("\n"), QByteArray("\r\n"), QByteArray("\r")};
     spec.frameDetection  = SerialStudio::EndDelimiterOnly;
@@ -5983,7 +5952,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserDryCompile(const 
       QStringLiteral("Invalid language: must be 0 (JavaScript), 1 (Lua) or 2 (Built-In)"));
 
   auto engine   = makeScriptEngine(language);
-  const bool ok = engine->loadScript(code, /*sourceId=*/0, /*showMessageBoxes=*/false);
+  const bool ok = engine->loadScript(code, 0, false);
 
   QJsonObject result;
   result[QStringLiteral("ok")] = ok;
@@ -6002,7 +5971,6 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserDryCompile(const 
       result[QStringLiteral("error")] =
         QStringLiteral("Compile failed or parse(frame) is not defined.");
 
-    // Surface a heuristic language-mismatch nudge when applicable (script languages only)
     if (language != SerialStudio::Native) {
       const auto warning = detectLanguageMismatch(code, language);
       if (!warning.isEmpty())
@@ -6035,7 +6003,6 @@ API::CommandResponse API::Handlers::ProjectHandler::transformDryRun(const QStrin
   const auto language = params.value(QStringLiteral("language")).toInt();
   const auto values   = params.value(QStringLiteral("values")).toArray();
 
-  // Wrap user transform() in a parser-shaped parse(frame) for either language
   QString wrapped;
   if (language == 1) {
     wrapped = code
@@ -6055,7 +6022,7 @@ API::CommandResponse API::Handlers::ProjectHandler::transformDryRun(const QStrin
   }
 
   auto engine = makeScriptEngine(language);
-  if (!engine->loadScript(wrapped, /*sourceId=*/0, /*showMessageBoxes=*/false))
+  if (!engine->loadScript(wrapped, 0, false))
     return CommandResponse::makeError(
       id,
       ErrorCode::ExecutionError,
@@ -6106,11 +6073,9 @@ API::CommandResponse API::Handlers::ProjectHandler::painterDryRun(const QString&
 
   const auto code = params.value(QStringLiteral("code")).toString();
 
-  // Throwaway engine for syntax + paint() definition check
   QJSEngine engine;
   engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
-  // Stub the bridge globals so top-level reads don't ReferenceError.
   auto stub = engine.evaluate(
     QStringLiteral("var datasets = []; datasets.length = 0;"
                    "var group = { id: 0, title: '', columns: 0, sourceId: 0 };"
@@ -6160,6 +6125,106 @@ API::CommandResponse API::Handlers::ProjectHandler::painterDryRun(const QString&
 }
 
 /**
+ * @brief Runs a compiled transmit() against one sample value, reporting bytes or a runtime error.
+ */
+static QJsonObject runOutputWidgetSample(QJSEngine& engine,
+                                         QJSValue& transmitFn,
+                                         const QJsonValue& inputValue,
+                                         bool hex)
+{
+  QJSValue jsValue;
+  if (hex)
+    jsValue =
+      engine.toScriptValue(QString::fromLatin1(SerialStudio::hexToBytes(inputValue.toString())));
+  else if (inputValue.isDouble())
+    jsValue = engine.toScriptValue(SerialStudio::toDouble(inputValue));
+  else {
+    const auto text = inputValue.toString();
+    bool numeric    = false;
+    const auto num  = SerialStudio::toDouble(text, &numeric);
+    jsValue         = numeric ? engine.toScriptValue(num) : engine.toScriptValue(text);
+  }
+
+  const auto called = transmitFn.call(QJSValueList{jsValue});
+  QJsonObject out;
+  if (called.isError()) {
+    out[QStringLiteral("ok")]           = false;
+    out[QStringLiteral("runtimeError")] = called.toString();
+    out[QStringLiteral("line")]         = called.property(QStringLiteral("lineNumber")).toInt();
+    return out;
+  }
+
+  const QByteArray payload =
+    called.isString() ? called.toString().toLatin1() : called.toVariant().toByteArray();
+  out[QStringLiteral("ok")]        = true;
+  out[QStringLiteral("byteCount")] = payload.size();
+  out[QStringLiteral("outputHex")] = QString::fromLatin1(payload.toHex(' ')).toUpper();
+  return out;
+}
+
+/**
+ * @brief Compiles an output-widget transmit() in the live helper environment without applying.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDryRun(const QString& id,
+                                                                       const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("code")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
+
+  const auto code = params.value(QStringLiteral("code")).toString();
+  DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
+
+  QJSEngine engine;
+  engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
+#ifdef BUILD_COMMERCIAL
+  Widgets::Output::Base::installProtocolHelpers(engine);
+#endif
+  DataModel::FrameBuilder::instance().injectTableApiJS(&engine);
+
+  const auto wrapped =
+    QStringLiteral("(function() { %1\n"
+                   "return typeof transmit === 'function' ? transmit : undefined; })()")
+      .arg(code);
+  auto transmitFn = engine.evaluate(wrapped, QStringLiteral("output_widget_dryrun.js"));
+  if (transmitFn.isError()) {
+    QJsonObject result;
+    result[QStringLiteral("ok")] = false;
+    result[QStringLiteral("compileError")] =
+      transmitFn.property(QStringLiteral("message")).toString();
+    result[QStringLiteral("line")] = transmitFn.property(QStringLiteral("lineNumber")).toInt();
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  if (!transmitFn.isCallable()) {
+    QJsonObject result;
+    result[QStringLiteral("ok")] = false;
+    result[QStringLiteral("compileError")] =
+      QStringLiteral("Script compiled but did not define transmit(value). Output-widget "
+                     "transmit scripts MUST define `function transmit(value)` returning the "
+                     "bytes to send (a Uint8Array, a byte array, or a string). The function "
+                     "is named `transmit`, not `output` or `send`.");
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("ok")]          = true;
+  result[QStringLiteral("hasTransmit")] = true;
+  if (params.contains(QStringLiteral("inputValue")))
+    result[QStringLiteral("sampleRun")] =
+      runOutputWidgetSample(engine,
+                            transmitFn,
+                            params.value(QStringLiteral("inputValue")),
+                            params.value(QStringLiteral("hex")).toBool());
+  else
+    result[QStringLiteral("hint")] =
+      QStringLiteral("Compiled and transmit(value) is defined. Pass inputValue (and hex:true "
+                     "for hex byte input) to also execute it and see the produced bytes.");
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
  * @brief Wraps a transform() script so it can be driven via IScriptEngine::parseString.
  */
 static QString wrapTransformForParser(const QString& code, int language)
@@ -6199,7 +6264,7 @@ static QJsonValue applyTransformForDryRun(
   if (it == engines.end()) {
     auto engine    = makeScriptEngine(language);
     const auto src = wrapTransformForParser(dataset.transformCode, language);
-    const bool ok  = engine->loadScript(src, dataset.sourceId, /*showMessageBoxes=*/false);
+    const bool ok  = engine->loadScript(src, dataset.sourceId, false);
 
     engineOk[datasetKey] = ok;
     engines[datasetKey]  = std::move(engine);
@@ -6303,7 +6368,6 @@ static QJsonObject buildDryRunRow(
 API::CommandResponse API::Handlers::ProjectHandler::endToEndDryRun(const QString& id,
                                                                    const QJsonObject& params)
 {
-  // Resolve source + parser code (override or live project)
   auto& pm           = DataModel::ProjectModel::instance();
   const auto sources = pm.sources();
   const int sourceId = params.value(Keys::SourceId).toInt(0);
@@ -6317,7 +6381,6 @@ API::CommandResponse API::Handlers::ProjectHandler::endToEndDryRun(const QString
 
   const auto& source = sources[sourceId];
 
-  // Collect sample frames
   const bool hasFrame  = params.contains(QStringLiteral("sampleFrame"));
   const bool hasFrames = params.contains(QStringLiteral("sampleFrames"));
   if (!hasFrame && !hasFrames)
@@ -6341,15 +6404,13 @@ API::CommandResponse API::Handlers::ProjectHandler::endToEndDryRun(const QString
                        ? params.value(QStringLiteral("language")).toInt()
                        : source.frameParserLanguage;
 
-  // Compile parser
   auto parser = makeScriptEngine(language);
-  if (!parser->loadScript(code, sourceId, /*showMessageBoxes=*/false))
+  if (!parser->loadScript(code, sourceId, false))
     return CommandResponse::makeError(
       id,
       ErrorCode::ExecutionError,
       QStringLiteral("Frame parser failed to compile or define parse(frame)"));
 
-  // Cache transform engines across frames so stateful transforms reveal behavior
   std::map<int, std::unique_ptr<DataModel::IScriptEngine>> transformEngines;
   std::map<int, bool> transformEngineOk;
   const auto& groups = pm.groups();
@@ -6369,7 +6430,6 @@ API::CommandResponse API::Handlers::ProjectHandler::endToEndDryRun(const QString
     frameResults.append(perFrame);
   }
 
-  // Surface which transforms failed to compile so the caller can fix them
   QJsonArray failedTransforms;
   for (const auto& [uid, ok] : transformEngineOk)
     if (!ok)

@@ -72,7 +72,6 @@ bool SerialStudio::proWidgetsEnabled()
  */
 static bool transformUsesNotifications(const QString& code)
 {
-  // Substring screen for the notify*( identifier family
   return code.contains(QStringLiteral("notify(")) || code.contains(QStringLiteral("notifyInfo("))
       || code.contains(QStringLiteral("notifyWarning("))
       || code.contains(QStringLiteral("notifyCritical("))
@@ -287,7 +286,6 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
  */
 bool SerialStudio::groupEligibleForWorkspace(const DataModel::Group& g)
 {
-  // Output panels filter downstream via groupWidgetEligibleForWorkspace
   Q_UNUSED(g);
   return true;
 }
@@ -458,7 +456,6 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
   if (widget == "painter")
     return DashboardPainter;
 #else
-  // GPL fallback: render painter groups as a data grid
   if (widget == "painter")
     return DashboardDataGrid;
 #endif
@@ -718,22 +715,18 @@ QColor SerialStudio::getDeviceBottomColor(const int sourceId)
  */
 QColor SerialStudio::getDeviceColor(const int sourceId)
 {
-  // Validate source index
   if (sourceId <= 0)
     return QColor(Qt::transparent);
 
-  // Obtain colors from current theme
   static const auto* theme = &Misc::ThemeManager::instance();
   const auto& colors       = theme->deviceColors();
   if (colors.isEmpty())
     return QColor(Qt::transparent);
 
-  // Use the top gradient color's hue, then boost saturation/lightness for text
   const auto& base = colors.at((sourceId - 1) % colors.count()).first;
   const auto bg    = theme->getColor(QStringLiteral("base"));
   const bool dark  = bg.isValid() && bg.lightnessF() < 0.5;
 
-  // Saturate and pick a lightness suitable for text against the background
   float h, s, l, a;
   base.getHslF(&h, &s, &l, &a);
   s = qBound(0.45f, s * 2.5f, 0.85f);
@@ -836,7 +829,6 @@ QString SerialStudio::normalizeIconPath(const QString& path)
   if (path.isEmpty())
     return path;
 
-  // Rewrite legacy qrc:/rcc/... paths to the current resource root.
   if (path.startsWith(QStringLiteral("qrc:/rcc/")))
     return QStringLiteral("qrc:/") + path.mid(9);
 
@@ -879,7 +871,6 @@ static std::optional<QStringConverter::Encoding> nativeEncoding(SerialStudio::Te
  */
 static QTextCodec* legacyCodec(SerialStudio::TextEncoding enc)
 {
-  // Map the enum to a canonical codec name
   const char* name = nullptr;
   switch (enc) {
     case SerialStudio::EncGbk:
@@ -904,7 +895,6 @@ static QTextCodec* legacyCodec(SerialStudio::TextEncoding enc)
       break;
   }
 
-  // Resolve the codec with a UTF-8 fallback so the caller never sees nullptr
   QTextCodec* codec = name ? QTextCodec::codecForName(name) : nullptr;
   if (!codec)
     codec = QTextCodec::codecForName("UTF-8");
@@ -939,7 +929,6 @@ QStringList SerialStudio::textEncodings()
  */
 QString SerialStudio::textEncodingName(SerialStudio::TextEncoding enc)
 {
-  // Map to a canonical short name (not translated, for persistence)
   switch (enc) {
     case EncUtf8:
       return QStringLiteral("UTF-8");
@@ -972,13 +961,11 @@ QString SerialStudio::textEncodingName(SerialStudio::TextEncoding enc)
  */
 SerialStudio::TextEncoding SerialStudio::textEncodingFromName(const QString& name)
 {
-  // Guard-return for empty input and normalize the name
   if (name.isEmpty())
     return EncUtf8;
 
   const QString n = name.trimmed().toUpper();
 
-  // Match against the canonical names and a few popular aliases
   if (n == QLatin1String("UTF-8") || n == QLatin1String("UTF8"))
     return EncUtf8;
 
@@ -1020,17 +1007,14 @@ SerialStudio::TextEncoding SerialStudio::textEncodingFromName(const QString& nam
  */
 QByteArray SerialStudio::encodeText(const QString& text, SerialStudio::TextEncoding enc)
 {
-  // Fast path: empty input produces empty output
   if (text.isEmpty())
     return {};
 
-  // Use QStringEncoder for natively-supported encodings
   if (const auto native = nativeEncoding(enc); native.has_value()) {
     QStringEncoder encoder(*native);
     return QByteArray(encoder.encode(text));
   }
 
-  // Fall back to QTextCodec for East-Asian multi-byte encodings
   auto* codec = legacyCodec(enc);
   Q_ASSERT(codec != nullptr);
   return codec->fromUnicode(text);
@@ -1041,17 +1025,14 @@ QByteArray SerialStudio::encodeText(const QString& text, SerialStudio::TextEncod
  */
 QString SerialStudio::decodeText(QByteArrayView bytes, SerialStudio::TextEncoding enc)
 {
-  // Fast path: empty input produces empty output
   if (bytes.isEmpty())
     return {};
 
-  // Use QStringDecoder for natively-supported encodings
   if (const auto native = nativeEncoding(enc); native.has_value()) {
     QStringDecoder decoder(*native);
     return decoder.decode(bytes);
   }
 
-  // Fall back to QTextCodec for East-Asian multi-byte encodings
   auto* codec = legacyCodec(enc);
   Q_ASSERT(codec != nullptr);
   return codec->toUnicode(bytes.constData(), static_cast<int>(bytes.size()));

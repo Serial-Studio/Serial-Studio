@@ -109,16 +109,13 @@ bool TrackpadScrollFilter::eventFilter(QObject* obj, QEvent* event)
 
   auto* wheel = static_cast<QWheelEvent*>(event);
 
-  // Amplify pixel-precise trackpad scrolls only; mouse wheels use angleDelta.
   const QPoint pixel = wheel->pixelDelta();
   if (pixel.isNull())
     return QObject::eventFilter(obj, event);
 
-  // Skip synthesized gesture events.
   if (wheel->source() != Qt::MouseEventNotSynthesized)
     return QObject::eventFilter(obj, event);
 
-  // Scale pixelDelta only; angleDelta-driven zoom widgets keep their tuned factors.
   constexpr qreal kScale = 1.0;
   const QPoint scaledPixel(static_cast<int>(pixel.x() * kScale),
                            static_cast<int>(pixel.y() * kScale));
@@ -195,7 +192,6 @@ static void bindStreamToStdHandle(DWORD stdHandle, FILE* stream)
   if (src == nullptr || src == INVALID_HANDLE_VALUE)
     return;
 
-  // Duplicate first: the CRT fd takes ownership, and closing it must not close the process handle.
   const HANDLE self = GetCurrentProcess();
   HANDLE dup        = nullptr;
   if (!DuplicateHandle(self, src, self, &dup, 0, FALSE, DUPLICATE_SAME_ACCESS))
@@ -220,7 +216,6 @@ static void bindStreamToStdHandle(DWORD stdHandle, FILE* stream)
  */
 static void attachToConsole()
 {
-  // Redirected stdio: a GUI-subsystem CRT leaves streams unbound, so wire them, not CONOUT$.
   if (handleIsRedirected(STD_OUTPUT_HANDLE)) {
     bindStreamToStdHandle(STD_OUTPUT_HANDLE, stdout);
     bindStreamToStdHandle(STD_ERROR_HANDLE, stderr);
@@ -235,7 +230,6 @@ static void attachToConsole()
     printf("\n");
     // code-verify on
 
-    // GUI-subsystem apps hand the prompt back before finishing; nudge it on every exit path.
     std::atexit(redrawConsolePromptAtExit);
   }
 }
@@ -288,8 +282,6 @@ static void enableWindowsPerformanceMode()
 
   SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
   enableWorkingSetPrivilege();
-
-  // MMCSS is deferred to registerIngestThreadWithMmcss(): its warning filter must install first
 }
 
 // code-verify off  (cold argv setup before QApplication exists; C malloc is intentional)
@@ -340,7 +332,6 @@ static char** adjustArgumentsForFreeType(int& argc, char** argv)
 static void enableLinuxPerformanceMode()
 {
 #  ifdef SYS_sched_setattr
-  // Mirrors the kernel's struct sched_attr through the raw syscall (no glibc wrapper exists)
   struct SchedAttr {
     uint32_t size;
     uint32_t sched_policy;
@@ -354,16 +345,15 @@ static void enableLinuxPerformanceMode()
     uint32_t sched_util_max;
   };
 
-  constexpr uint64_t kKeepPolicy   = 0x08;  // SCHED_FLAG_KEEP_POLICY
-  constexpr uint64_t kKeepParams   = 0x10;  // SCHED_FLAG_KEEP_PARAMS
-  constexpr uint64_t kUtilClampMin = 0x20;  // SCHED_FLAG_UTIL_CLAMP_MIN
+  constexpr uint64_t kKeepPolicy   = 0x08;
+  constexpr uint64_t kKeepParams   = 0x10;
+  constexpr uint64_t kUtilClampMin = 0x20;
 
   SchedAttr attr      = {};
   attr.size           = sizeof(attr);
   attr.sched_flags    = kKeepPolicy | kKeepParams | kUtilClampMin;
-  attr.sched_util_min = 1024;  // SCHED_CAPACITY_SCALE: full-capacity placement hint
+  attr.sched_util_min = 1024;
 
-  // Child threads inherit the clamp, so setting it on main covers the workers too
   (void)syscall(SYS_sched_setattr, 0, &attr, 0);
 #  endif
 }
@@ -452,7 +442,6 @@ void prepareEnvironment(int& argc, char**& argv, const QString& shortcutPath)
 
 #ifdef SERIAL_STUDIO_WITH_WEBENGINE
 #  if defined(Q_OS_LINUX)
-  // QtWebEngineProcess sandbox can't read AppImage FUSE squashfs; disable before initialize()
   if (!qEnvironmentVariableIsSet("QTWEBENGINE_DISABLE_SANDBOX")
       && !qEnvironmentVariableIsSet("QTWEBENGINE_CHROMIUM_FLAGS"))
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-namespace-sandbox");
@@ -541,7 +530,6 @@ bool lockMemoryResident(const void* ptr, size_t len)
   if (VirtualLock(base, len))
     return true;
 
-  // Default minimum working set is too small for MiB-scale locks; grow once and retry
   SIZE_T minWs = 0;
   SIZE_T maxWs = 0;
   if (!GetProcessWorkingSetSize(GetCurrentProcess(), &minWs, &maxWs))
@@ -555,7 +543,6 @@ bool lockMemoryResident(const void* ptr, size_t len)
 
   return VirtualLock(base, len) != 0;
 #elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-  // Unprivileged RLIMIT_MEMLOCK (8 MiB on modern systemd) covers the 1 MiB scan buffers
   return mlock(ptr, len) == 0;
 #else
   Q_UNUSED(ptr);

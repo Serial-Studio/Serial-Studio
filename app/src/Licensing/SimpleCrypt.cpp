@@ -170,14 +170,12 @@ QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QString& plaintext)
  */
 QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QByteArray& plaintext)
 {
-  // No key configured
   if (m_keyParts.isEmpty()) {
     qWarning() << "No key set.";
     m_lastError = ErrorNoKeySet;
     return QByteArray();
   }
 
-  // Apply compression if configured
   QByteArray ba = plaintext;
 
   CryptoFlags flags = CryptoFlagNone;
@@ -194,7 +192,6 @@ QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QByteArray& plaintex
     }
   }
 
-  // Add integrity protection
   QByteArray integrityProtection;
   if (m_protectionMode == ProtectionChecksum) {
     flags |= CryptoFlagChecksum;
@@ -210,7 +207,6 @@ QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QByteArray& plaintex
     integrityProtection += hash.result();
   }
 
-  // Prepend random byte and XOR-encrypt
   char randomChar = char(QRandomGenerator::securelySeeded().generate() & 0xFF);
   ba              = randomChar + integrityProtection + ba;
 
@@ -264,7 +260,6 @@ QString Licensing::SimpleCrypt::decryptToString(const QString& cyphertext)
  */
 QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray& cypher)
 {
-  // No key configured
   if (m_keyParts.isEmpty()) {
     qWarning() << "No key set.";
     m_lastError = ErrorNoKeySet;
@@ -275,14 +270,12 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray& cypher)
   if (cypher.size() < 3)
     return QByteArray();
 
-  // Only version 3 is supported
   char version = ba.at(0);
   if (version != 3) {
     m_lastError = ErrorUnknownVersion;
     return QByteArray();
   }
 
-  // XOR-decrypt the payload
   CryptoFlags flags = CryptoFlags(ba.at(1));
   ba                = ba.mid(2);
   int pos(0);
@@ -295,10 +288,8 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray& cypher)
     ++pos;
   }
 
-  // Strip the random prefix byte
   ba = ba.mid(1);
 
-  // Verify integrity
   bool integrityOk(true);
   if (flags.testFlag(CryptoFlagChecksum)) {
     if (ba.length() < 2) {

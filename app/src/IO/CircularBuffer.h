@@ -331,7 +331,9 @@ T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset, qsizetype size
 
 /**
  * @brief peekRange twin that fills a caller-owned container, reusing its buffer when it is
- *        unique and large enough (the pooled-frame steady state allocates nothing).
+ *        unique and large enough (the pooled-frame steady state allocates nothing). A
+ *        non-detached out holds a COW copy still read by another holder, so it must be
+ *        replaced, never overwritten in place.
  */
 template<typename T, Concepts::ByteLike StorageType>
 void IO::CircularBuffer<T, StorageType>::peekRangeInto(qsizetype offset,
@@ -349,7 +351,6 @@ void IO::CircularBuffer<T, StorageType>::peekRangeInto(qsizetype offset,
 
   size = std::min(size, current_size - offset);
 
-  // A consumer holding a COW copy keeps its bytes: the shared buffer is replaced, not reused
   if (!out.isDetached() || out.capacity() < size)
     out = T();
 
@@ -392,7 +393,6 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
   const auto* pData    = pattern.constData();
   const bool linear    = (head + current_size) <= m_capacity;
 
-  // Single-byte delimiters (\n, the dominant case): libc memchr beats the per-byte KMP loop
   if (pSize == 1) {
     if (linear) [[likely]]
       return byteScanLinear(m_buffer.data() + head, current_size, pos, pData[0]);
@@ -400,11 +400,9 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
     return byteScanWrap(current_size, pos, head, pData[0]);
   }
 
-  // Short patterns (\r\n, sync words) on the linear region: memchr-first-byte + memcmp verify
   if (linear && pSize <= kShortPatternMax) [[likely]]
     return shortPatternScanLinear(m_buffer.data() + head, current_size, pos, pData, pSize);
 
-  // Long patterns, or short ones straddling the wrap boundary: KMP with precomputed tables
   if (linear)
     return kmpScanLinear(m_buffer.data() + head, current_size, pos, pData, pSize, lps);
 
@@ -450,7 +448,6 @@ int IO::CircularBuffer<T, StorageType>::byteScanWrap(qsizetype current_size,
   const qsizetype firstLen = m_capacity - head;
   const auto c             = static_cast<unsigned char>(byte);
 
-  // Segment 1: logical [pos, firstLen) maps to m_buffer[head + pos ...]
   if (pos < firstLen) {
     const StorageType* base = m_buffer.data() + head + pos;
     const void* hit         = std::memchr(base, c, static_cast<size_t>(firstLen - pos));
@@ -458,7 +455,6 @@ int IO::CircularBuffer<T, StorageType>::byteScanWrap(qsizetype current_size,
       return static_cast<int>(pos + (static_cast<const StorageType*>(hit) - base));
   }
 
-  // Segment 2: logical [firstLen, current_size) maps to m_buffer[0 ...]
   const qsizetype start2 = std::max<qsizetype>(pos, firstLen);
   if (start2 < current_size) {
     const StorageType* base = m_buffer.data() + (start2 - firstLen);
@@ -489,7 +485,6 @@ int IO::CircularBuffer<T, StorageType>::shortPatternScanLinear(const StorageType
   if (pos > last)
     return -1;
 
-  // i strictly increases every candidate, so the start count bounds the loop
   qsizetype i = pos;
   for (qsizetype it = 0; it <= last - pos && i <= last; ++it) {
     const void* hit = std::memchr(base + i, first, static_cast<size_t>(last - i + 1));
@@ -661,12 +656,10 @@ typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer
     return {};
   };
 
-  // Linear region fast path: pointer scan, no mask per byte.
   if ((head + bufSize) <= m_capacity) [[likely]] {
     const StorageType* base = m_buffer.data() + head;
     return scan([base](qsizetype k) { return base[k]; });
   }
 
-  // Wrap-around path: mask per byte
   return scan([this, head, mask](qsizetype k) { return m_buffer[(head + k) & mask]; });
 }

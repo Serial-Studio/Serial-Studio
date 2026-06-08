@@ -113,13 +113,11 @@ void Console::ExportWorker::closeResources()
  */
 void Console::ExportWorker::createFile(int deviceId)
 {
-  // Require a valid license for export
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
       || token.featureTier() < Licensing::FeatureTier::Trial)
     return;
 
-  // Close any existing file for this device
   auto it = m_deviceFiles.find(deviceId);
   if (it != m_deviceFiles.end()) {
     it->second.stream.reset();
@@ -129,7 +127,6 @@ void Console::ExportWorker::createFile(int deviceId)
     m_deviceFiles.erase(it);
   }
 
-  // Build filename with optional device suffix
   const auto dateTime = QDateTime::currentDateTime();
   auto fileName       = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"));
   if (deviceId >= 0)
@@ -137,7 +134,6 @@ void Console::ExportWorker::createFile(int deviceId)
 
   fileName += QStringLiteral(".txt");
 
-  // Pick the subdirectory bucket per operation mode
   const auto opMode        = AppState::instance().operationMode();
   const auto& projectTitle = DataModel::ProjectModel::instance().title();
   QString subdirName;
@@ -153,14 +149,12 @@ void Console::ExportWorker::createFile(int deviceId)
       break;
   }
 
-  // Ensure output directory exists
   QDir dir(Misc::WorkspaceManager::instance().path("Console"));
   if (!dir.exists(subdirName))
     dir.mkpath(subdirName);
 
   dir.cd(subdirName);
 
-  // Open the output file
   auto& state = m_deviceFiles[deviceId];
   state.file  = std::make_unique<QFile>(dir.filePath(fileName));
 
@@ -172,7 +166,6 @@ void Console::ExportWorker::createFile(int deviceId)
     return;
   }
 
-  // Configure UTF-8 output stream
   state.stream = std::make_unique<QTextStream>(state.file.get());
   state.stream->setGenerateByteOrderMark(true);
   state.stream->setEncoding(QStringConverter::Utf8);
@@ -200,7 +193,6 @@ Console::Export::Export()
 #endif
 {
 #ifdef BUILD_COMMERCIAL
-  // Initialize worker and track open state
   initializeWorker();
   connect(m_worker,
           &ExportWorker::resourceOpenChanged,
@@ -208,7 +200,6 @@ Console::Export::Export()
           &Export::onWorkerOpenChanged,
           Qt::QueuedConnection);
 
-  // Disable export on license deactivation
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged,
           this,
@@ -350,7 +341,6 @@ void Console::Export::registerData(int deviceId, QStringView data)
   if (!exportEnabled() || data.isEmpty() || SerialStudio::isAnyPlayerOpen())
     return;
 
-  // Strip ANSI CSI / OSC escape sequences so the txt log stays plain text
   static const QRegularExpression ansiRegex(
     QStringLiteral("\\x1B(?:\\[[0-9;?]*[ -/]*[@-~]|\\][^\\x07]*(?:\\x07|\\x1B\\\\)|[@-_])"));
 

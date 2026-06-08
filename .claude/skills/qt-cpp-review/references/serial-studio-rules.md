@@ -88,8 +88,10 @@ or a region is suppressed:
 - **SS-STY-5**: Never `disconnect(nullptr)` as the slot (disconnects ALL) — capture the
   `QMetaObject::Connection` and disconnect that handle.
 - **SS-STY-6**: Comments label, don't narrate. `.h`: SPDX banner + one `/** @brief */` per
-  type. `.cpp`: one-line `@brief` per function definition. No inline EOL comments, no AI
-  narration. ASCII-only; no em-dash via ` -- ` (rewrite the sentence).
+  type. `.cpp`: one-line `@brief` per function definition; **no comments inside the function
+  body** (`cxx-inbody-comment`) — fold a load-bearing why into the `@brief`, or fence a genuine
+  exception with `// code-verify off`. No inline EOL comments, no AI narration. ASCII-only; no
+  em-dash via ` -- ` (rewrite the sentence).
 - **SS-STY-7**: Control flow: max 3 nesting levels (guard clauses / early return); functions
   40-80 lines, hard limit 100.
 - **SS-STY-8**: SPDX banner is the dual-license block

@@ -79,13 +79,11 @@ void API::Handlers::NotificationsHandler::registerCommands()
   emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
   emptySchema[QStringLiteral("properties")] = QJsonObject();
 
-  // Shared event-shape property set
   QJsonObject eventProps;
   eventProps[QStringLiteral("channel")]  = stringProp(QStringLiteral("Channel ID (free-form)"));
   eventProps[QStringLiteral("title")]    = stringProp(QStringLiteral("Event title"));
   eventProps[QStringLiteral("subtitle")] = stringProp(QStringLiteral("Event detail (optional)"));
 
-  // notifications.post: one entrypoint with required severity level
   {
     QJsonObject props              = eventProps;
     props[QStringLiteral("level")] = QJsonObject{
@@ -99,13 +97,11 @@ void API::Handlers::NotificationsHandler::registerCommands()
                              &post);
   }
 
-  // notifications.resolve: emit a companion Info "Resolved: <title>"
   registry.registerCommand(QStringLiteral("notifications.resolve"),
                            QStringLiteral("Emit a companion 'Resolved' Info event"),
                            makeSchema(eventProps, QJsonArray()),
                            &resolve);
 
-  // notifications.list: optional channel filter + limit
   {
     QJsonObject props;
     props[QStringLiteral("channel")] = stringProp(QStringLiteral("Filter by channel (optional)"));
@@ -121,19 +117,16 @@ void API::Handlers::NotificationsHandler::registerCommands()
       &list);
   }
 
-  // notifications.channels
   registry.registerCommand(QStringLiteral("notifications.listChannels"),
                            QStringLiteral("List channel IDs currently present in history"),
                            emptySchema,
                            &channels);
 
-  // notifications.unreadCount
   registry.registerCommand(QStringLiteral("notifications.getUnreadCount"),
                            QStringLiteral("Return the number of unread Warning/Critical events"),
                            emptySchema,
                            &unreadCount);
 
-  // notifications.clearChannel
   {
     QJsonObject props;
     props[QStringLiteral("channel")] = stringProp(QStringLiteral("Channel to clear"));
@@ -143,13 +136,11 @@ void API::Handlers::NotificationsHandler::registerCommands()
                              &clearChannel);
   }
 
-  // notifications.clearAll
   registry.registerCommand(QStringLiteral("notifications.clearAll"),
                            QStringLiteral("Erase the entire notification history"),
                            emptySchema,
                            &clearAll);
 
-  // notifications.markRead
   registry.registerCommand(QStringLiteral("notifications.markRead"),
                            QStringLiteral("Clear the unread badge counter"),
                            emptySchema,

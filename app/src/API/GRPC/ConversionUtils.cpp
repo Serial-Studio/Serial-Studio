@@ -25,7 +25,6 @@ google::protobuf::Struct API::GRPC::ConversionUtils::toProtoStruct(const QJsonOb
 {
   google::protobuf::Struct result;
 
-  // Depth guard against deeply nested JSON
   if (depth >= kMaxConversionDepth) [[unlikely]]
     return result;
 
@@ -43,7 +42,6 @@ google::protobuf::Value API::GRPC::ConversionUtils::toProtoValue(const QJsonValu
 {
   google::protobuf::Value result;
 
-  // Depth guard against deeply nested JSON
   if (depth >= kMaxConversionDepth) [[unlikely]] {
     result.set_null_value(google::protobuf::NULL_VALUE);
     return result;
@@ -96,7 +94,6 @@ QJsonObject API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::St
 {
   QJsonObject result;
 
-  // Depth guard against deeply nested protobuf
   if (depth >= kMaxConversionDepth) [[unlikely]]
     return result;
 
@@ -111,7 +108,6 @@ QJsonObject API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::St
  */
 QJsonValue API::GRPC::ConversionUtils::toQJsonValue(const google::protobuf::Value& proto, int depth)
 {
-  // Depth guard against deeply nested protobuf
   if (depth >= kMaxConversionDepth) [[unlikely]]
     return QJsonValue(QJsonValue::Null);
 
@@ -170,11 +166,9 @@ static inline void setNumber(google::protobuf::Struct& s, const char* key, doubl
 google::protobuf::Struct API::GRPC::ConversionUtils::frameToProtoStruct(
   const DataModel::Frame& frame)
 {
-  // Build top-level frame Struct
   google::protobuf::Struct result;
   setString(result, "title", frame.title);
 
-  // Serialize each group and its datasets
   auto* groups_list = (*result.mutable_fields())["groups"].mutable_list_value();
 
   for (const auto& group : frame.groups) {

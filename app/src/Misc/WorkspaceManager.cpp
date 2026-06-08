@@ -181,7 +181,6 @@ void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
     return;
   }
 
-  // A previous run wrote the marker; the migration is complete.
   if (QFileInfo::exists(marker)) {
     m_settings.setValue(kMigratedKey, true);
     return;
@@ -201,7 +200,6 @@ void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
     const QString src = entry.absoluteFilePath();
     QString dst       = QStringLiteral("%1/%2").arg(newDir, entry.fileName());
 
-    // Skip identical-content targets left by a prior interrupted run.
     if (entry.isFile() && QFileInfo::exists(dst)) {
       QFile a(src);
       QFile b(dst);
@@ -210,7 +208,6 @@ void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
         continue;
     }
 
-    // Different-content target gets a .legacy suffix so nothing is overwritten.
     if (QFileInfo::exists(dst)) {
       const QString base = entry.completeBaseName();
       const QString ext  = entry.suffix();
@@ -224,14 +221,12 @@ void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
       } while (QFileInfo::exists(dst) && n < 1000);
     }
 
-    // QFile::copy is non-destructive: legacy survives a crash mid-migration.
     if (entry.isFile()) {
       if (!QFile::copy(src, dst)) {
         qWarning() << "Failed to copy" << src << "to" << dst;
         allCopied = false;
       }
     } else {
-      // Legacy layout was flat; subdirectories are an unexpected shape, not recursed into.
       qWarning() << "Skipping non-file entry in legacy projects folder:" << src;
     }
   }
@@ -239,7 +234,6 @@ void Misc::WorkspaceManager::migrateLegacyProjectsFolder()
   if (!allCopied)
     return;
 
-  // Marker written last; before this file exists, a future run re-attempts the copy.
   QFile m(marker);
   if (!m.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     qWarning() << "Failed to write migration marker" << marker;
@@ -270,7 +264,6 @@ void Misc::WorkspaceManager::selectPath()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;

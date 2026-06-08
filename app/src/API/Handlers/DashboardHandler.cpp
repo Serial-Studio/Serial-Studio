@@ -140,7 +140,6 @@ void API::Handlers::DashboardHandler::registerTimeRangeCommands()
                            emptySchema,
                            &getTimeRange);
 
-  // Aliases under project.*: the range is per-project (saved/restored on load)
   registry.registerCommand(
     QStringLiteral("project.dashboard.setTimeRange"),
     QStringLiteral("Set the visible plot time window (alias of dashboard.setTimeRange; "
@@ -176,7 +175,6 @@ void API::Handlers::DashboardHandler::registerQueryCommands()
                            emptySchema,
                            &getData);
 
-  // dashboard.tailFrames: last N samples of plot-enabled datasets
   {
     QJsonObject countProp;
     countProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
@@ -272,7 +270,6 @@ API::CommandResponse API::Handlers::DashboardHandler::getOperationMode(const QSt
   QJsonObject result;
   result[QStringLiteral("mode")] = modeIndex;
 
-  // Bounds-guarded lookup in case the enum grows.
   static const QStringList kModeNames = {
     QStringLiteral("ProjectFile"), QStringLiteral("ConsoleOnly"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("modeName")] = (modeIndex >= 0 && modeIndex < kModeNames.size())
@@ -389,7 +386,6 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
   result[QStringLiteral("operationModeLabel")] = API::EnumLabels::operationModeLabel(modeIndex);
   result[QStringLiteral("operationModeSlug")]  = API::EnumLabels::operationModeSlug(modeIndex);
 
-  // Bounds-guarded mode name (legacy field for back-compat)
   static const QStringList kModeNames = {
     QStringLiteral("ProjectFile"), QStringLiteral("ConsoleOnly"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("operationModeName")] = (modeIndex >= 0 && modeIndex < kModeNames.size())

@@ -239,7 +239,6 @@ API::CommandResponse API::Handlers::ScriptsHandler::get(const QString& id,
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown script kind: %1").arg(kindStr));
 
-  // Validate id against manifest (prevents path traversal)
   const auto manifest = loadManifest(*kind);
   bool known          = false;
   for (const auto& v : manifest) {

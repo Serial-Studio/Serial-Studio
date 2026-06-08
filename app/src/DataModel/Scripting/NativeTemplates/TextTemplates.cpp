@@ -176,7 +176,6 @@ private:
       const __m128i block = _mm_loadu_si128(reinterpret_cast<const __m128i*>(data + i));
       unsigned mask       = static_cast<unsigned>(_mm_movemask_epi8(_mm_cmpeq_epi8(block, needle)));
 
-      // Each iteration clears one of the <= 16 set bits
       for (int b = 0; b < 16 && mask != 0; ++b) {
         const qsizetype pos = i + std::countr_zero(mask);
         if (count >= maxSpans)
@@ -189,7 +188,6 @@ private:
     }
 #endif
 
-    // Scalar tail (and the whole frame on non-x86 builds)
     for (; i < len; ++i) {
       if (data[i] == sep) {
         if (count >= maxSpans)
@@ -224,7 +222,6 @@ private:
     qsizetype count = 0;
     qsizetype start = 0;
 
-    // Every pass emits one field and advances past one separator, so len + 1 bounds the loop
     for (qsizetype pass = 0; pass <= len; ++pass) {
       qsizetype end = -1;
       for (qsizetype from = start; from + sepLen <= len;) {
@@ -315,7 +312,6 @@ private:
     QString field;
     field.reserve(32);
 
-    // Each branch advances i by at least one, so the loop terminates in <= len steps
     bool in_quotes      = false;
     const qsizetype len = frame.length();
     qsizetype i         = 0;
@@ -493,7 +489,6 @@ public:
  */
 [[nodiscard]] static QString percentDecode(QStringView text)
 {
-  // Fast path: nothing is encoded, so the field round-trips unchanged
   if (!text.contains(QLatin1Char('%')) && !text.contains(QLatin1Char('+')))
     return text.toString();
 
@@ -1309,7 +1304,6 @@ public:
       if (split < 0)
         continue;
 
-      // Decode the value only after the key routes to a channel
       const auto it = m_keyIndex.constFind(percentDecode(pair.left(split)));
       if (it != m_keyIndex.constEnd())
         storeAt(it.value(), percentDecode(pair.mid(split + 1)));
@@ -1546,7 +1540,6 @@ public:
   {
     Q_ASSERT(!m_tags.isEmpty());
 
-    // The tag list is fixed, so the per-frame open/close markers are built once
     m_openTags.reserve(tags.size());
     m_closeTags.reserve(tags.size());
     for (const auto& tag : tags) {

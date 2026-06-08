@@ -60,11 +60,9 @@ DataModel::NotificationCenter::NotificationCenter()
   , m_routeWarningsToNotifications(false)
   , m_tray(nullptr)
 {
-  // Pin affinity to the GUI thread so post()'s thread-check is meaningful
   if (QCoreApplication::instance())
     moveToThread(QCoreApplication::instance()->thread());
 
-  // Restore user preferences (defaults to off)
   QSettings settings;
   m_systemNotificationsEnabled   = settings.value(kSettingsKeySysNotify, false).toBool();
   m_routeWarningsToNotifications = settings.value(kSettingsKeyRouteWarnings, false).toBool();
@@ -142,27 +140,21 @@ void DataModel::NotificationCenter::post(int level,
                                          const QString& title,
                                          const QString& subtitle)
 {
-  // Main-thread only (see class doc); workers must use QueuedConnection
   Q_ASSERT(thread() == QThread::currentThread());
 
-  // Clamp level to enum range
   const int clamped = qBound(static_cast<int>(Info), level, static_cast<int>(Critical));
 
-  // Trim inputs so "power " and "power" don't create two channels
   const QString chan = channel.trimmed();
   const QString ttl  = title.trimmed();
 
-  // Reject empty channel + title: nothing to display
   if (chan.isEmpty() && ttl.isEmpty())
     return;
 
-  // De-dup on full key (subtitle included so rising-value alarms aren't collapsed)
   const auto now = QDateTime::currentMSecsSinceEpoch();
   const DedupKey key{clamped, chan, ttl, subtitle};
   if (shouldDropDuplicate(key, now))
     return;
 
-  // Append to history with current wall-clock timestamp
   Event e;
   e.timestampMs = now;
   e.level       = clamped;
@@ -209,7 +201,6 @@ void DataModel::NotificationCenter::resolve(const QString& channel,
                                             const QString& title,
                                             const QString& subtitle)
 {
-  // Reuse post() so de-dup + fan-out rules apply uniformly
   const QString resolvedTitle = title.trimmed().isEmpty()
                                 ? QStringLiteral("Resolved")
                                 : QStringLiteral("Resolved: %1").arg(title.trimmed());
@@ -231,7 +222,6 @@ QVariantList DataModel::NotificationCenter::history(const QString& channel, int 
   const QString filter = channel.trimmed();
   const bool hasFilter = !filter.isEmpty();
 
-  // Walk newest-to-oldest so the `limit` cap keeps the most recent events
   for (auto it = m_history.rbegin(); it != m_history.rend(); ++it) {
     if (hasFilter && it->channel != filter)
       continue;
@@ -257,7 +247,6 @@ void DataModel::NotificationCenter::clearChannel(const QString& channel)
   if (chan.isEmpty())
     return;
 
-  // Erase entries for the channel in a single pass
   int removed = 0;
   for (auto it = m_history.begin(); it != m_history.end();) {
     if (it->channel == chan) {
@@ -271,10 +260,8 @@ void DataModel::NotificationCenter::clearChannel(const QString& channel)
   if (removed == 0)
     return;
 
-  // Drop channel from bookkeeping
   m_channelCounts.remove(chan);
 
-  // Reset dedup memory for this channel so identical events can post again.
   for (auto it = m_lastSeen.begin(); it != m_lastSeen.end();)
     if (it.key().channel == chan)
       it = m_lastSeen.erase(it);
@@ -376,11 +363,9 @@ QVariantMap DataModel::NotificationCenter::toVariant(const Event& e) const
  */
 void DataModel::NotificationCenter::ensureTrayIcon()
 {
-  // Skip if tray already exists or platform lacks a system tray
   if (m_tray || !QSystemTrayIcon::isSystemTrayAvailable())
     return;
 
-  // Use the same logo path as the Qt main window (see app/src/main.cpp)
   QIcon icon(QStringLiteral(":/logo/icon.svg"));
   if (icon.isNull())
     return;
@@ -417,17 +402,14 @@ bool DataModel::NotificationCenter::shouldDropDuplicate(const DedupKey& k, qint6
  */
 void DataModel::NotificationCenter::appendEvent(Event&& e)
 {
-  // Track channel before moving the event
   const QString chan     = e.channel;
   const bool newChannel  = !chan.isEmpty() && !m_channelCounts.contains(chan);
   const int level        = e.level;
   const QString title    = e.title;
   const QString subtitle = e.subtitle;
 
-  // Snapshot for notificationPosted + tray (moves invalidate e)
   const QVariantMap variant = toVariant(e);
 
-  // Push into the ring buffer
   m_history.push_back(std::move(e));
   if (m_history.size() > static_cast<size_t>(kMaxHistory)) {
     const auto& evicted = m_history.front();
@@ -439,11 +421,9 @@ void DataModel::NotificationCenter::appendEvent(Event&& e)
     m_history.pop_front();
   }
 
-  // Bump per-channel count
   if (!chan.isEmpty())
     m_channelCounts[chan] += 1;
 
-  // Skip unread bumps for Info; background chatter shouldn't raise the badge.
   if (level != Info) {
     ++m_unreadCount;
     Q_EMIT unreadCountChanged();
@@ -453,7 +433,6 @@ void DataModel::NotificationCenter::appendEvent(Event&& e)
   if (newChannel)
     Q_EMIT channelsChanged();
 
-  // Surface Warning/Critical via the OS tray when user opted in
   if (m_systemNotificationsEnabled && level != Info) {
     ensureTrayIcon();
     if (m_tray) {
@@ -595,7 +574,6 @@ void DataModel::NotificationCenter::installScriptApi(lua_State* L)
 {
   Q_ASSERT(L);
 
-  // Always-available integer constants
   lua_pushinteger(L, 0);
   lua_setglobal(L, "Info");
   lua_pushinteger(L, 1);
@@ -634,11 +612,9 @@ void DataModel::NotificationCenter::installScriptApi(QJSEngine* js)
 {
   Q_ASSERT(js);
 
-  // Level constants first so scripts parse-load cleanly regardless of tier
   js->evaluate(QStringLiteral("var Info = 0, Warning = 1, Critical = 2;\n"));
 
   if (isProTierActive()) {
-    // Route through the singleton with CppOwnership; the engine must not delete it.
     auto* nc = &instance();
     QQmlEngine::setObjectOwnership(nc, QQmlEngine::CppOwnership);
 
@@ -680,7 +656,6 @@ void DataModel::NotificationCenter::installScriptApi(QJSEngine* js)
                      "  __nc.resolve(a[0], a[1], a[2]);\n"
                      "}\n"));
   } else {
-    // Throwing stubs with an actionable message
     js->evaluate(QStringLiteral("function __ssNoPro() {\n"
                                 "  throw new Error('notify() requires a Pro license. "
                                 "See https://serial-studio.com/pricing');\n"

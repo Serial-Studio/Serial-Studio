@@ -126,7 +126,6 @@ void DataModel::DBCImporter::importDBC()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -172,7 +171,6 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
     return;
   }
 
-  // Sort by CAN ID so dataset indices stay consistent
   std::sort(m_messages.begin(),
             m_messages.end(),
             [](const QCanMessageDescription& a, const QCanMessageDescription& b) {
@@ -300,13 +298,11 @@ DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
     maxVal = 100.0;
   }
 
-  // Plot/FFT ranges stay tied to the raw signal limits
   dataset.pltMin = minVal;
   dataset.pltMax = maxVal;
   dataset.fftMin = minVal;
   dataset.fftMax = maxVal;
 
-  // Round widget bounds outward to friendly multiples.
   const auto nice          = niceAxisTicks(minVal, maxVal);
   dataset.wgtMin           = nice.min;
   dataset.wgtMax           = nice.max;
@@ -356,7 +352,6 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
     group.title   = message.name();
     group.widget  = selectGroupWidget(message);
 
-    // Emit datasets in the same order the decoder writes values: selector, plain, muxed
     const auto signalList    = message.signalDescriptions();
     const auto selectorIndex = findSelectorIndex(message);
     if (selectorIndex >= 0)
@@ -396,7 +391,6 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
 QJsonObject DataModel::DBCImporter::generateNativeParserParams(
   const QList<QCanMessageDescription>& messages)
 {
-  // Authoritative count of skipped extended-mux signals across all messages
   m_skippedExtendedMuxSignals = 0;
   for (const auto& message : messages) {
     for (const auto& signal : message.signalDescriptions()) {
@@ -412,7 +406,6 @@ QJsonObject DataModel::DBCImporter::generateNativeParserParams(
     if (!hasImportableSignals(message))
       continue;
 
-    // Signal order must match generateGroups: selector, plain, then muxed
     const auto signalList = message.signalDescriptions();
     QJsonArray signals_json;
 
@@ -453,7 +446,6 @@ QJsonObject DataModel::DBCImporter::signalToJson(const QCanSignalDescription& si
                                                  MuxRole role,
                                                  qint64 muxValue)
 {
-  // Qt reports DBC @0 (Motorola) as BigEndian and @1 (Intel) as LittleEndian
   QJsonObject json;
   json.insert(QStringLiteral("startBit"), signal.startBit());
   json.insert(QStringLiteral("length"), signal.bitLength());
@@ -719,30 +711,25 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower().trimmed();
 
-  // Skip counters and status fields
   if (name.contains("odometer") || name.contains("trip") || name.contains("counter")
       || name.contains("timestamp") || name.contains("status"))
     return QString("");
 
-  // Percentages and 0..100 ranges land on the horizontal bar
   if (unit == "%" || (signal.minimum() == 0 && signal.maximum() == 100))
     return SerialStudio::datasetWidgetId(SerialStudio::Bar);
 
-  // Temperatures use the bar so positive/negative excursions are obvious
   // code-verify off
   if (unit.contains("°c") || unit.contains("°f") || unit.contains("degc") || unit.contains("degf")
       || name.contains("temp") || name.contains("temperature"))
     return SerialStudio::datasetWidgetId(SerialStudio::Bar);
   // code-verify on
 
-  // Speed, RPM and power signals get the speedometer-style half-circle meter
   static const QSet<QString> kMeterUnits = {
     "rpm", "r/min", "1/min", "km/h", "kmh", "kph", "mph", "knot", "knots", "kn", "m/s", "kw", "hp"};
   if (kMeterUnits.contains(unit) || name.contains("rpm") || name.contains("speed")
       || name.contains("velocity") || name.contains("power"))
     return SerialStudio::datasetWidgetId(SerialStudio::Meter);
 
-  // Whole-word unit match for typical analog gauges.
   static const QSet<QString> kGaugeUnits = {"v",
                                             "mv",
                                             "kv",
@@ -764,7 +751,6 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
   if (kGaugeUnits.contains(unit))
     return SerialStudio::datasetWidgetId(SerialStudio::Gauge);
 
-  // Pressure-like compound units still resolve to gauge
   if (unit.contains("psi") || unit.contains("kpa") || unit.contains("mbar"))
     return SerialStudio::datasetWidgetId(SerialStudio::Gauge);
 

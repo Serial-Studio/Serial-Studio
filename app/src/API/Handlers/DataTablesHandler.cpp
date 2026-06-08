@@ -149,7 +149,6 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // register.add: defaultValue accepts number|string, splice manually.
   QJsonObject addProps;
   addProps[QStringLiteral("table")] = QJsonObject{
     {       QStringLiteral("type"),            QStringLiteral("string")},
@@ -186,7 +185,6 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
   }),
     &registerDelete);
 
-  // register.update: defaultValue accepts number|string, splice manually.
   QJsonObject updProps;
   updProps[QStringLiteral("table")] = QJsonObject{
     {       QStringLiteral("type"),            QStringLiteral("string")},
@@ -264,7 +262,6 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableGet(const QString& i
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(name));
 
-  // Delegate to ProjectModel's existing summary helper (returns QVariantList)
   const auto registers = DataModel::ProjectModel::instance().registersForTable(name);
 
   QJsonArray arr = QJsonArray::fromVariantList(registers);
@@ -333,7 +330,6 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableRename(const QString
 
   auto& pm = DataModel::ProjectModel::instance();
 
-  // renameTable silently no-ops on collision; check up front.
   const auto& preTables = pm.tables();
   const bool hasOld     = std::any_of(
     preTables.begin(), preTables.end(), [&oldName](const auto& t) { return t.name == oldName; });
@@ -341,7 +337,6 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableRename(const QString
     preTables.begin(), preTables.end(), [&newName](const auto& t) { return t.name == newName; });
   const bool collides = hasNew && (oldName != newName);
 
-  // Apply only when safe
   bool applied = false;
   if (hasOld && !collides) {
     pm.renameTable(oldName, newName);
@@ -379,7 +374,6 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerAdd(const QString
 
   const bool computed = params.value(QStringLiteral("computed")).toBool(true);
 
-  // defaultValue is canonical; "value" is accepted as a legacy alias
   QVariant defaultValue(0.0);
   if (params.contains(QStringLiteral("defaultValue")))
     defaultValue = jsonToVariant(params.value(QStringLiteral("defaultValue")));
@@ -437,7 +431,6 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerUpdate(const QStr
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
-  // Look up the register to preserve unspecified fields
   const auto& tables = DataModel::ProjectModel::instance().tables();
   const auto tit =
     std::find_if(tables.begin(), tables.end(), [&table](const auto& t) { return t.name == table; });
@@ -454,7 +447,6 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerUpdate(const QStr
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Register not found: %1/%2").arg(table, name));
 
-  // Merge caller-supplied fields over the current register's state
   const QString newName = params.contains(QStringLiteral("newName"))
                           ? params.value(QStringLiteral("newName")).toString()
                           : rit->name;

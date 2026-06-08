@@ -208,14 +208,11 @@ void DataModel::DatasetTransformEditor::installShortcuts()
 void DataModel::DatasetTransformEditor::displayDialog(
   const QString& datasetTitle, const QString& currentCode, int language, int groupId, int datasetId)
 {
-  // Capture target dataset identity at open time
   m_targetGroupId   = groupId;
   m_targetDatasetId = datasetId;
 
-  // Update window title with dataset name
   setWindowTitle(tr("Transform — %1").arg(datasetTitle));
 
-  // Sync combo + derive canonical language so m_language and highlighter can't disagree
   const int comboIdx = (language == SerialStudio::Lua) ? 0 : 1;
   m_languageCombo->blockSignals(true);
   m_languageCombo->setCurrentIndex(comboIdx);
@@ -224,20 +221,16 @@ void DataModel::DatasetTransformEditor::displayDialog(
   const int resolvedLanguage = (comboIdx == 0) ? SerialStudio::Lua : SerialStudio::JavaScript;
   applyLanguage(resolvedLanguage);
 
-  // Prefill the editor using the canonical language so placeholder matches highlighter
   if (currentCode.isEmpty())
     m_editor->setPlainText(defaultPlaceholder(resolvedLanguage));
   else
     m_editor->setPlainText(currentCode);
 
-  // Try to detect which template matches the current code
   const int tmplIdx = detectTemplate();
   m_templateCombo->setCurrentIndex(tmplIdx >= 0 ? tmplIdx + 1 : 0);
 
-  // Reset test output
   m_testOutput->setText(QStringLiteral("--.--"));
 
-  // Display the window & focus the text editor
   showNormal();
   raise();
   activateWindow();
@@ -285,12 +278,10 @@ int DataModel::DatasetTransformEditor::targetDatasetId() const noexcept
  */
 void DataModel::DatasetTransformEditor::onApply()
 {
-  // Drop the code entirely if no transform() function is defined
   QString code = m_editor->toPlainText();
   if (!definesTransformFunction(code, m_language))
     code.clear();
 
-  // Accept the transform code
   Q_EMIT transformApplied(code, m_language, m_targetGroupId, m_targetDatasetId);
   QDialog::accept();
 }
@@ -300,7 +291,6 @@ void DataModel::DatasetTransformEditor::onApply()
  */
 void DataModel::DatasetTransformEditor::onTest()
 {
-  // Validate input
   const QString inputStr = m_testInput->text().trimmed();
   if (inputStr.isEmpty()) {
     m_testOutput->setText(tr("Enter a value"));
@@ -314,7 +304,6 @@ void DataModel::DatasetTransformEditor::onTest()
     return;
   }
 
-  // Run the transform and display the result
   const QString result = testTransform(m_editor->toPlainText(), m_language, inputVal);
   m_testOutput->setText(result);
 }
@@ -402,11 +391,9 @@ void DataModel::DatasetTransformEditor::onClear()
  */
 void DataModel::DatasetTransformEditor::onTemplateSelected(int index)
 {
-  // Index 0 is the "Select Template..." placeholder
   if (index <= 0 || index > m_templates.size())
     return;
 
-  // Load the correct language variant
   const auto& tmpl   = m_templates[index - 1];
   const QString code = (m_language == SerialStudio::Lua) ? tmpl.luaCode : tmpl.jsCode;
   m_editor->setPlainText(code);
@@ -421,14 +408,11 @@ void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
   if (newLang == m_language)
     return;
 
-  // Detect template and placeholder match against the OLD language.
   const int tmplIdx         = detectTemplate();
   const bool wasPlaceholder = isDefaultPlaceholder(m_editor->toPlainText(), m_language);
 
-  // Switch highlighter
   applyLanguage(newLang);
 
-  // Swap to the matching template in the new language
   if (tmplIdx >= 0) {
     const auto& tmpl   = m_templates[tmplIdx];
     const QString code = (newLang == SerialStudio::Lua) ? tmpl.luaCode : tmpl.jsCode;
@@ -436,7 +420,6 @@ void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
     m_templateCombo->setCurrentIndex(tmplIdx + 1);
   }
 
-  // Swap default placeholder to the new language's comment style.
   else if (wasPlaceholder) {
     m_editor->setPlainText(defaultPlaceholder(newLang));
   }
@@ -471,7 +454,6 @@ void DataModel::DatasetTransformEditor::applyLanguage(int language)
 {
   m_language = language;
 
-  // Switch syntax highlighter and auto-completer
   if (language == SerialStudio::Lua) {
     m_editor->setHighlighter(new QLuaHighlighter());
     m_editor->setCompleter(new QLuaCompleter(m_editor));
@@ -553,11 +535,9 @@ bool DataModel::DatasetTransformEditor::isDefaultPlaceholder(const QString& code
   if (trimmed.isEmpty())
     return false;
 
-  // Match the current language's placeholder exactly
   if (trimmed == defaultPlaceholder(language).trimmed())
     return true;
 
-  // Match the opposite language's placeholder too, in case state drifted.
   const int other = (language == SerialStudio::Lua) ? SerialStudio::JavaScript : SerialStudio::Lua;
   return trimmed == defaultPlaceholder(other).trimmed();
 }
@@ -567,20 +547,16 @@ bool DataModel::DatasetTransformEditor::isDefaultPlaceholder(const QString& code
  */
 bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& code, int language)
 {
-  // Empty or whitespace-only code obviously has no function
   if (code.trimmed().isEmpty())
     return false;
 
-  // Pick up uncommitted edits to shared tables
   DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
 
-  // Lua: spin up a disposable state, run the code, check for transform()
   if (language == SerialStudio::Lua) {
     lua_State* L = luaL_newstate();
     if (!L)
       return false;
 
-    // Load only libs the chunk might reference at parse time.
     static const luaL_Reg kSafeLibs[] = {
       {    "_G",   luaopen_base},
       { "table",  luaopen_table},
@@ -594,26 +570,22 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
       lua_pop(L, 1);
     }
 
-    // Match the live hotpath: 5.1/5.2 compat shim + notify* + shared-memory table API
     DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
     DataModel::FrameBuilder::instance().injectTableApiLua(L);
 
-    // Load failure means no transform() exists.
     const QByteArray utf8 = code.toUtf8();
     if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
       lua_close(L);
       return false;
     }
 
-    // Check for a global named "transform" that is actually a function
     lua_getglobal(L, "transform");
     const bool hasFn = lua_isfunction(L, -1);
     lua_close(L);
     return hasFn;
   }
 
-  // JavaScript: evaluate in a disposable engine and look up transform
   QJSEngine jsEngine;
   DataModel::NotificationCenter::installScriptApi(&jsEngine);
   DataModel::FrameBuilder::instance().injectTableApiJS(&jsEngine);
@@ -655,16 +627,13 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
   if (code.trimmed().isEmpty())
     return QString::number(inputValue, 'g', 15);
 
-  // Pick up uncommitted edits to shared tables
   DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
 
   if (language == SerialStudio::Lua) {
-    // Disposable Lua state for a single test run
     lua_State* L = luaL_newstate();
     if (!L)
       return tr("Engine error");
 
-    // Open only safe libraries (no io, os, debug, package)
     static const luaL_Reg kSafeLibs[] = {
       {    "_G",   luaopen_base},
       { "table",  luaopen_table},
@@ -678,12 +647,10 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
       lua_pop(L, 1);
     }
 
-    // Match the live hotpath: 5.1/5.2 compat shim + notify* + shared-memory table API
     DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
     DataModel::FrameBuilder::instance().injectTableApiLua(L);
 
-    // Execute the user's code which defines transform(value)
     const QByteArray utf8 = code.toUtf8();
     if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
       QString err = QString::fromUtf8(lua_tostring(L, -1));
@@ -691,14 +658,12 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
       return tr("Error: %1").arg(err);
     }
 
-    // Verify transform() was defined
     lua_getglobal(L, "transform");
     if (!lua_isfunction(L, -1)) {
       lua_close(L);
       return tr("Error: transform() not defined");
     }
 
-    // Call transform(inputValue) and read the result
     lua_pushnumber(L, inputValue);
     if (lua_pcall(L, 1, 1, 0) != LUA_OK) {
       QString err = QString::fromUtf8(lua_tostring(L, -1));
@@ -706,7 +671,6 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
       return tr("Error: %1").arg(err);
     }
 
-    // Validate the return type before converting
     if (!lua_isnumber(L, -1)) {
       lua_close(L);
       return tr("Error: transform() must return a number");
@@ -717,7 +681,6 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
     return QString::number(result, 'g', 15);
   }
 
-  // JavaScript: execute user code then call transform(inputValue)
   QJSEngine jsEngine;
   DataModel::NotificationCenter::installScriptApi(&jsEngine);
   DataModel::FrameBuilder::instance().injectTableApiJS(&jsEngine);
@@ -751,7 +714,6 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
  */
 void DataModel::DatasetTransformEditor::buildTemplates()
 {
-  // Get name for currently selected file
   QString selectedFile;
   if (m_templateCombo) {
     const int currentIndex = m_templateCombo->currentIndex();
@@ -759,15 +721,12 @@ void DataModel::DatasetTransformEditor::buildTemplates()
       selectedFile = m_templates[currentIndex - 1].file;
   }
 
-  // Read tempaltes.json file
   const auto definitions =
     loadScriptTemplateManifest(QStringLiteral(":/scripts/transforms/templates.json"));
 
-  // Clear internal members
   m_templates.clear();
   m_templates.reserve(definitions.size());
 
-  // Parse definitions file
   for (const auto& definition : definitions) {
     m_templates.append(
       {definition.file,
@@ -778,18 +737,15 @@ void DataModel::DatasetTransformEditor::buildTemplates()
          QStringLiteral(":/scripts/transforms/js"), definition.file, QStringLiteral(".js")))});
   }
 
-  // Skip if no combo is available
   if (!m_templateCombo)
     return;
 
-  // Rebuild template combo
   m_templateCombo->blockSignals(true);
   m_templateCombo->clear();
   m_templateCombo->addItem(tr("Select Template…"));
   for (const auto& tmpl : std::as_const(m_templates))
     m_templateCombo->addItem(tmpl.name);
 
-  // Get current index based on previously selected file
   int selectedIndex = 0;
   if (!selectedFile.isEmpty()) {
     for (int i = 0; i < m_templates.size(); ++i) {
@@ -800,14 +756,12 @@ void DataModel::DatasetTransformEditor::buildTemplates()
     }
   }
 
-  // Get index for current file
   else {
     const int detectedIndex = detectTemplate();
     if (detectedIndex >= 0)
       selectedIndex = detectedIndex + 1;
   }
 
-  // Set current index
   m_templateCombo->setCurrentIndex(selectedIndex);
   m_templateCombo->blockSignals(false);
 }

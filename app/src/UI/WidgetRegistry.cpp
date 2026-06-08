@@ -61,7 +61,6 @@ void UI::WidgetRegistry::endBatchUpdate()
   if (m_batchDepth > 0)
     --m_batchDepth;
 
-  // Notify when outermost batch finishes with changes
   if (m_batchDepth == 0 && m_batchHadChanges) {
     m_batchHadChanges = false;
     Q_EMIT batchUpdateCompleted();
@@ -89,7 +88,6 @@ UI::WidgetID UI::WidgetRegistry::createWidget(SerialStudio::DashboardWidget type
                                               int datasetIndex,
                                               bool isGroupWidget)
 {
-  // Populate widget metadata with a unique ID
   WidgetInfo info;
   info.id            = m_nextId++;
   info.type          = type;
@@ -98,15 +96,12 @@ UI::WidgetID UI::WidgetRegistry::createWidget(SerialStudio::DashboardWidget type
   info.datasetIndex  = datasetIndex;
   info.isGroupWidget = isGroupWidget;
 
-  // Register the widget in the ordered list and lookup map
   m_widgetOrder.append(info.id);
   m_widgets.insert(info.id, info);
 
-  // Mark batch as dirty if inside a batch operation
   if (m_batchDepth > 0)
     m_batchHadChanges = true;
 
-  // Notify subscribers about the new widget
   Q_EMIT widgetCreated(info.id, info);
 
   return info.id;
@@ -229,7 +224,6 @@ void UI::WidgetRegistry::updateWidget(UI::WidgetID id,
   if (!m_widgets.contains(id))
     return;
 
-  // Merge non-empty fields and notify if anything changed
   WidgetInfo& info = m_widgets[id];
   bool changed     = false;
 

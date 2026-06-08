@@ -40,6 +40,7 @@ static constexpr int kSlowPaintMs       = 30;
 /**
  * @brief Returns the JS bootstrap that exposes bridge globals + redirects console.
  */
+// code-verify off
 [[nodiscard]] static QString jsBootstrap()
 {
   return QStringLiteral(
@@ -114,6 +115,8 @@ static constexpr int kSlowPaintMs       = 30;
     "} catch (e) { /* QJSEngine console is non-writable in some builds; leave default */ }");
 }
 
+// code-verify on
+
 //--------------------------------------------------------------------------------------------------
 // Construction / destruction
 //--------------------------------------------------------------------------------------------------
@@ -144,21 +147,17 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   DataModel::NotificationCenter::installScriptApi(&m_engine);
   DataModel::FrameBuilder::instance().injectTableApiJS(&m_engine);
 
-  // Closed-loop control APIs: deviceWrite() default source is refreshed in updateData()
-  DataModel::DeviceWriteApi::installJS(&m_engine, /*defaultSourceId=*/0);
+  DataModel::DeviceWriteApi::installJS(&m_engine, 0);
   DataModel::ActionFireApi::installJS(&m_engine);
 
-  // Dashboard helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(&m_engine);
 
-  // Generic API gateway (apiCall): painter widgets share the source-0 rate bucket
   DataModel::ScriptApiCall::installJS(&m_engine, 0);
 
   const auto projectPath = AppState::instance().projectFilePath();
   if (!projectPath.isEmpty())
     m_ctx->setProjectDirectory(QFileInfo(projectPath).absolutePath());
 
-  // Expose the per-widget bridge as __pp
   auto bridgeJsValue = m_engine.newQObject(m_bridge);
   m_engine.globalObject().setProperty(QStringLiteral("__pp"), bridgeJsValue);
 
@@ -166,13 +165,11 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   m_engine.globalObject().setProperty(QStringLiteral("__ctx"), ctxJsValue);
   m_ctxValue = ctxJsValue;
 
-  // Install the JS-side bridge wrappers (datasets/group/frame/console) before any user code runs
   installBootstrap();
   installTheme();
 
   connect(m_bridge, &PainterDataBridge::consoleLine, this, &Painter::consoleLine);
 
-  // Re-inject theme and force recompile on palette change
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged, this, [this]() {
     installTheme();
     m_compileDirty = true;
@@ -334,7 +331,6 @@ void Widgets::Painter::setSimulatedDatasets(const QVariantList& datasets)
     ds.wgtMin   = SerialStudio::toDouble(entry.value(QStringLiteral("min"), 0.0));
     ds.wgtMax   = SerialStudio::toDouble(entry.value(QStringLiteral("max"), 100.0));
 
-    // Accept bands explicitly; otherwise synthesise from legacy alarmLow/alarmHigh entries.
     const auto bandsVar = entry.value(QStringLiteral("alarmBands"));
     if (bandsVar.canConvert<QVariantList>())
       readBandsFromVariantList(bandsVar.toList(), ds.alarmBands);
@@ -379,10 +375,8 @@ void Widgets::Painter::updateData()
   m_bridge->setGroup(&group);
   m_bridge->setFrame(++m_frameSeq, QDateTime::currentMSecsSinceEpoch());
 
-  // Default deviceWrite() sourceId follows the painter's group
   DataModel::DeviceWriteApi::setJSDefaultSourceId(&m_engine, group.sourceId);
 
-  // Lazy-compile when user code changed; failed compile leaves runtimeOk false
   if (m_compileDirty) {
     if (!compile(m_userCode))
       return;
@@ -455,7 +449,6 @@ void Widgets::Painter::installBootstrap()
     return;
   }
 
-  // Defensive sanity check
   auto global       = m_engine.globalObject();
   const auto bridge = global.property(QStringLiteral("__pp"));
   const auto ds     = global.property(QStringLiteral("datasets"));
@@ -479,7 +472,6 @@ void Widgets::Painter::installTheme()
   for (auto it = palette.constBegin(); it != palette.constEnd(); ++it) {
     const auto v = it.value();
     if (v.typeId() == QMetaType::QVariantList || v.typeId() == QMetaType::QStringList) {
-      // Expose array-typed palette entries as real JS arrays
       const auto list = v.toList();
       auto jsArray    = m_engine.newArray(static_cast<quint32>(list.size()));
       for (int i = 0; i < list.size(); ++i)
@@ -496,6 +488,7 @@ void Widgets::Painter::installTheme()
 /**
  * @brief Returns a tiny built-in script used when the group has no painterCode.
  */
+// code-verify off
 QString Widgets::Painter::fallbackTemplate()
 {
   return QStringLiteral("function paint(ctx, w, h) {"
@@ -507,6 +500,8 @@ QString Widgets::Painter::fallbackTemplate()
                         "}");
 }
 
+// code-verify on
+
 /**
  * @brief Compiles the user JS, looks up paint() and (optional) onFrame().
  */
@@ -517,13 +512,11 @@ bool Widgets::Painter::compile(const QString& code)
   m_onFrameFn    = QJSValue();
   m_hasOnFrame   = false;
 
-  // Bootstrap must have succeeded; otherwise datasets/group/frame globals are unreachable
   if (!m_bootstrapOk) [[unlikely]] {
     setRuntimeOk(false);
     return false;
   }
 
-  // Empty painterCode falls back to a stub so the widget always renders something
   const QString effectiveCode = code.isEmpty() ? fallbackTemplate() : code;
   auto result                 = m_engine.evaluate(effectiveCode, QStringLiteral("painter.js"));
   if (result.isError()) {

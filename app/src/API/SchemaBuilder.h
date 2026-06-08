@@ -125,7 +125,6 @@ struct SchemaProp {
 {
   QJsonObject prop;
 
-  // Pipe-separated union types ("string|integer") emit as JSON-Schema type arrays (draft 2020-12).
   if (p.type.contains(QLatin1Char('|'))) {
     QJsonArray types;
     for (const auto& part : p.type.split(QLatin1Char('|'), Qt::SkipEmptyParts))
@@ -149,7 +148,6 @@ struct SchemaProp {
   if (!p.defaultValue.isUndefined() && !p.defaultValue.isNull())
     prop.insert(QStringLiteral("default"), p.defaultValue);
 
-  // items: itemsSchema overrides itemsType; only emitted for type == "array".
   if (p.type == QStringLiteral("array")) {
     if (!p.itemsSchema.isEmpty()) {
       prop.insert(QStringLiteral("items"), p.itemsSchema);

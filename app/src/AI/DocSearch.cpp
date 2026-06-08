@@ -152,7 +152,6 @@ QList<AI::DocSearch::Hit> AI::DocSearch::search(const QString& query, int k)
   if (qTokens.isEmpty())
     return {};
 
-  // Precompute query term IDF
   QList<QPair<QString, double>> qIdf;
   qIdf.reserve(qTokens.size());
   for (const auto& t : qTokens) {

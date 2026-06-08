@@ -197,7 +197,6 @@ static int luaStringSplit(lua_State* L)
 
   lua_newtable(L);
 
-  // Empty separator: return the whole string as a single element.
   if (seplen == 0) {
     lua_pushlstring(L, s, slen);
     lua_rawseti(L, -2, 1);
@@ -220,7 +219,6 @@ static int luaStringSplit(lua_State* L)
   }
   // code-verify on
 
-  // Trailing field (the remainder after the last separator; the whole string if none matched).
   lua_pushlstring(L, s + start, slen - start);
   lua_rawseti(L, -2, idx);
   return 1;
@@ -238,7 +236,6 @@ void DataModel::installLuaCompat(lua_State* L)
     lua_pop(L, 1);
   }
 
-  // Native, JS-compatible split (literal separator, keeps empties) for fast default CSV parsing.
   lua_getglobal(L, "string");
   if (lua_istable(L, -1)) {
     lua_pushcfunction(L, luaStringSplit);

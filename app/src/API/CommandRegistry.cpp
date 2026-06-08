@@ -77,7 +77,6 @@ static int similarityScore(const QString& want, const QString& have)
 
   const int dist = editDistance(want, have);
 
-  // Sharing a dotted prefix is worth a lot: each shared segment cancels 6 edits
   return dist - (sharedSegments * 6);
 }
 
@@ -178,7 +177,6 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
   if (!hasCommand(name))
     return buildUnknownCommandResponse(name, id);
 
-  // Snapshot destructive commands so the response carries a "backupPath"; skip dryRun.
   const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
   QString preMutationBackup;
   if (!isDryRun && destructiveCommandSet().contains(name))
@@ -246,7 +244,6 @@ void API::CommandRegistry::attachErrorMetadata(const QString& name, CommandRespo
   if (response.success)
     return;
 
-  // Attach inputSchema on validation errors for self-correction
   const bool isValidation =
     response.errorCode == ErrorCode::MissingParam || response.errorCode == ErrorCode::InvalidParam;
   if (isValidation && !m_commands[name].inputSchema.isEmpty()) {
@@ -260,7 +257,6 @@ void API::CommandRegistry::attachErrorMetadata(const QString& name, CommandRespo
     response.errorData = data;
   }
 
-  // Attach structured error category (handler-set values win)
   if (response.errorData.contains(QStringLiteral("category")))
     return;
 
@@ -268,7 +264,6 @@ void API::CommandRegistry::attachErrorMetadata(const QString& name, CommandRespo
   const auto category              = classifyErrorCategory(name, response);
   data[QStringLiteral("category")] = category;
 
-  // Steer scripting compile failures at the matching dryRun endpoint
   if (category == QStringLiteral("script_compile_failed")
       && !data.contains(QStringLiteral("dryRunHint"))) {
     const auto hint = dryRunHintForScriptCommand(name);
@@ -285,7 +280,6 @@ void API::CommandRegistry::attachErrorMetadata(const QString& name, CommandRespo
 QString API::CommandRegistry::classifyErrorCategory(const QString& commandName,
                                                     const CommandResponse& response)
 {
-  // Hardware-write family: distinguish runtime safety blocks from filesystem perms
   static const QStringList kHardwareWriteCommands = {
     QStringLiteral("io.writeData"),
     QStringLiteral("console.send"),
@@ -308,7 +302,6 @@ QString API::CommandRegistry::classifyErrorCategory(const QString& commandName,
   if (response.errorCode == ErrorCode::UnknownCommand)
     return QStringLiteral("unknown_command");
 
-  // Heuristic message scan (unhappy path only)
   if (msgLower.contains(QStringLiteral("commercial"))
       || msgLower.contains(QStringLiteral("pro license"))
       || msgLower.contains(QStringLiteral("requires a pro")))

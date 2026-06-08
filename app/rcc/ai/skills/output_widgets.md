@@ -6,9 +6,8 @@ the device. Each one belongs to a group and has its own JavaScript
 
 **Output transmit functions are JavaScript-only** — the Lua-first
 guidance in the `frame_parsers` and `transforms` skills does NOT apply
-here. The protocol helpers (CRC, NMEA, Modbus, SLCAN, GRBL, GCode,
-SCPI, binary packet) are JS-bound. Author transmit functions in JS;
-Lua will not compile.
+here. A small set of Modbus/CAN protocol helpers is JS-bound (see below);
+author transmit functions in JS, Lua will not compile.
 
 ## Five widget types
 
@@ -40,10 +39,17 @@ Each widget has:
 
 ## The transmit function
 
-The function name is `transmit`. It receives the widget's current value
-(numeric for slider/knob, boolean for toggle, string for textfield, or a
-sentinel for buttons) and returns either a string (sent verbatim) or a
-byte array.
+The function name is `transmit` (NOT `output` / `send`). It receives a
+single scalar `value` — numeric for slider/knob, `1`/`0` for toggle, the
+string for textfield, and `1` for a button press. There is no `state`
+object. It returns either a string (encoded with the widget's TX encoding)
+or a byte array.
+
+The only injected protocol globals are `modbusWriteRegister`,
+`modbusWriteCoil`, `modbusWriteFloat`, `canSendFrame`, and `canSendValue`.
+NMEA, GRBL, GCode, SCPI, SLCAN, CRC, and binary-packet logic are NOT
+globals — adapt a bundled reference script (next section) that self-contains
+that code. Full details: `meta.fetchScriptingDocs{kind: "output_widget_js"}`.
 
 ```js
 // Simple: send a Modbus-shaped command on button click
@@ -75,9 +81,17 @@ function transmit(text) {
 2. Read scripting reference:
    `meta.fetchScriptingDocs{kind: "output_widget_js"}`.
 3. Adapt a real example: `scripts.list{kind: "output_widget_js"}` ships
-   helpers for CRC16/CRC32, NMEA checksums, Modbus framing, SLCAN, GRBL,
-   GCode, SCPI, binary packet builders.
-4. Push: `project.outputWidget.update{groupId, widgetId,
+   reference scripts for NMEA checksums, Modbus framing, SLCAN, GRBL,
+   GCode, SCPI, AT commands, JSON, and binary packets — each self-contains
+   its protocol logic in a `transmit(value)` you copy and tweak.
+4. Validate BEFORE pushing:
+   `assistant.script.dryRun{kind: "output_widget", code, inputValue?, hex?}`.
+   It compiles `transmit()` in the real protocol-helper + table-API
+   environment and returns `{ok, compileError?, line?}`. Pass `inputValue`
+   (and `hex: true` for hex byte input) to also run `transmit()` once and
+   get `sampleRun.outputHex` + `byteCount` — the only way to catch runtime
+   errors and wrong byte output before the widget ships.
+5. Push: `project.outputWidget.update{groupId, widgetId,
    transmitFunction: "..."}`.
 
 ## Pinning to a workspace
@@ -113,9 +127,9 @@ produces the right bytes, and let the user be the one who fires it.
 Output widget transmit functions and Painter scripts are
 JavaScript-only on purpose:
 
-- Output widgets ship a JS-specific helper bundle (CRC variants,
-  NMEA, Modbus framing, SLCAN encoding, GRBL, GCode, SCPI, binary
-  packet helpers). Porting that to Lua is a large effort for marginal
+- Output widgets inject a JS-specific Modbus/CAN helper set and ship a
+  JS reference-script library (NMEA, GRBL, GCode, SCPI, SLCAN, binary
+  packet, etc.). Porting that to Lua is a large effort for marginal
   benefit.
 - Painters draw via Canvas2D, which is bound to QJSEngine; there is
   no Lua canvas API.

@@ -98,7 +98,6 @@ AI::LocalProvider::LocalProvider(QNetworkAccessManager& nam) : QObject(nullptr),
 
   loadCachedModels();
 
-  // Query live models on next tick so QNAM and providers are fully wired
   QTimer::singleShot(0, this, &LocalProvider::refreshModels);
 }
 
@@ -264,7 +263,6 @@ void AI::LocalProvider::refreshModels()
     reply->deleteLater();
 
     if (reply->error() != QNetworkReply::NoError) {
-      // Suppress background refresh noise when Local is not the active provider
       const bool localActive =
         static_cast<ProviderId>(AI::Assistant::instance().currentProvider()) == ProviderId::Local;
       if (reply->error() == QNetworkReply::ConnectionRefusedError || !localActive)
@@ -321,7 +319,6 @@ AI::Reply* AI::LocalProvider::sendMessage(const QJsonArray& history,
     return new detail::ImmediateErrorReplyLP(QObject::tr("No local model server URL configured. "
                                                          "Open Manage Keys to set one."));
 
-  // Flatten Anthropic-shaped system blocks into a single string
   const auto systemBlocks = ContextBuilder::buildSystemArray(false);
   QString systemText;
   for (const auto& v : systemBlocks) {
@@ -336,10 +333,9 @@ AI::Reply* AI::LocalProvider::sendMessage(const QJsonArray& history,
   }
 
   QJsonObject body;
-  body[QStringLiteral("model")]  = currentModel();
-  body[QStringLiteral("stream")] = true;
-  body[QStringLiteral("messages")] =
-    OpenAIProvider::translateHistory(history, systemText, /*useDeveloperRole=*/false);
+  body[QStringLiteral("model")]    = currentModel();
+  body[QStringLiteral("stream")]   = true;
+  body[QStringLiteral("messages")] = OpenAIProvider::translateHistory(history, systemText, false);
   if (!tools.isEmpty()) {
     body[QStringLiteral("tools")] = OpenAIProvider::translateTools(tools);
     body[QStringLiteral("tool_choice")] =

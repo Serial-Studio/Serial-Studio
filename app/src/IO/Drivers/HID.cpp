@@ -48,12 +48,10 @@ constexpr int kEnumIntervalMs = 2000;
 IO::Drivers::HID::HID()
   : m_handle(nullptr), m_deviceInfoList(nullptr), m_running(false), m_deviceIndex(0)
 {
-  // Initialize hidapi and restore last selection
   hid_init();
   m_deviceIndex = m_settings.value("HID/deviceIndex", 0).toInt();
   enumerateDevices();
 
-  // Start periodic enumeration for hotplug detection
   m_enumTimer.setInterval(kEnumIntervalMs);
   connect(&m_enumTimer, &QTimer::timeout, this, &HID::enumerateDevices);
   m_enumTimer.start();
@@ -66,7 +64,6 @@ IO::Drivers::HID::HID()
  */
 void IO::Drivers::HID::cleanupDevice()
 {
-  // Stop the read thread and close the device handle
   m_running = false;
 
   if (m_readThread.isRunning()) {
@@ -88,7 +85,6 @@ void IO::Drivers::HID::cleanupDevice()
  */
 IO::Drivers::HID::~HID()
 {
-  // Stop the hotplug timer before tearing down hidapi state
   m_enumTimer.stop();
   disconnect(&m_enumTimer, nullptr, this, nullptr);
 
@@ -168,7 +164,6 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
   if (!configurationOk())
     return false;
 
-  // Open the HID device by path
   const QString path = m_devicePaths.at(m_deviceIndex);
 
   m_handle = hid_open_path(path.toUtf8().constData());
@@ -190,7 +185,6 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 
   hid_set_nonblocking(m_handle, 0);
 
-  // Load cached usage info for this device
   const uint16_t up = m_deviceUsagePages.value(m_deviceIndex, 0);
   const uint16_t u  = m_deviceUsages.value(m_deviceIndex, 0);
   m_usagePage       = up
@@ -200,7 +194,6 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
               : QString();
   Q_EMIT deviceInfoChanged();
 
-  // Start the interrupt read loop on a worker thread
   m_running = true;
   m_readThread.start();
 
@@ -253,14 +246,12 @@ QString IO::Drivers::HID::usage() const
 void IO::Drivers::HID::setDeviceIndex(const int index)
 {
   if (m_deviceIndex != index) {
-    // Ensure device list is populated so the index is meaningful
     if (m_devicePaths.isEmpty())
       enumerateDevices();
 
     if (index > 0 && index >= m_devicePaths.size())
       return;
 
-    // Persist selection and update cached usage info
     m_deviceIndex = index;
     m_settings.setValue("HID/deviceIndex", index);
 
@@ -287,7 +278,6 @@ void IO::Drivers::HID::setDeviceIndex(const int index)
  */
 void IO::Drivers::HID::onReadError()
 {
-  // Already disconnected from a prior error
   if (!isOpen())
     return;
 
@@ -495,7 +485,6 @@ bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
   if (id.isEmpty())
     return false;
 
-  // Ensure device list is populated for matching
   if (m_devicePaths.isEmpty())
     enumerateDevices();
 
@@ -521,7 +510,6 @@ bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
         continue;
     }
 
-    // Look up the device's display-list index
     const auto path = QString::fromUtf8(dev->path);
     const int idx   = m_devicePaths.indexOf(path);
     if (idx > 0) {

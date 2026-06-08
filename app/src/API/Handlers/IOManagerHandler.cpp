@@ -210,16 +210,13 @@ API::CommandResponse API::Handlers::IOManagerHandler::connect(const QString& id,
       id, ErrorCode::ExecutionError, QStringLiteral("Already connected"));
   }
 
-  // Check configuration
   if (!manager.configurationOk()) {
     return CommandResponse::makeError(
       id, ErrorCode::ExecutionError, QStringLiteral("Device configuration is invalid"));
   }
 
-  // Attempt connection
   manager.connectDevice();
 
-  // Return status (connection may be async for some drivers)
   QJsonObject result;
   result[QStringLiteral("connected")] = manager.isConnected();
   return CommandResponse::makeSuccess(id, result);
@@ -302,7 +299,6 @@ API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& 
 API::CommandResponse API::Handlers::IOManagerHandler::writeData(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Validate parameters first before checking execution preconditions
   if (!params.contains(QStringLiteral("data"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: data"));
@@ -316,7 +312,6 @@ API::CommandResponse API::Handlers::IOManagerHandler::writeData(const QString& i
       id, ErrorCode::InvalidParam, QStringLiteral("Invalid base64 data"));
   }
 
-  // Now check execution preconditions
   auto& manager = IO::ConnectionManager::instance();
   if (!manager.isConnected()) {
     return CommandResponse::makeError(
@@ -358,12 +353,10 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
   result[QStringLiteral("readOnly")]        = manager.readOnly();
   result[QStringLiteral("readWrite")]       = manager.readWrite();
 
-  // Include bus type name (legacy field, kept for back-compat)
   const auto& availableBuses = manager.availableBuses();
   if (busInt >= 0 && busInt < availableBuses.count())
     result[QStringLiteral("busTypeName")] = availableBuses.at(busInt);
 
-  // Human-readable summary line for the AI
   QString summary;
   if (live)
     summary = QStringLiteral("Connected via %1%2.")

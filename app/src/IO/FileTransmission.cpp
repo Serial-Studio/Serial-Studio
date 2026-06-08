@@ -54,15 +54,12 @@ IO::FileTransmission::FileTransmission()
   , m_runtimeAccessAllowed(false)
   , m_lastSpeedBytes(0)
 {
-  // Configure periodic line/block transmission timer
   m_timer.setInterval(100);
   m_timer.setTimerType(Qt::PreciseTimer);
 
-  // Configure speed update timer
   m_speedUpdateTimer.setInterval(1000);
   connect(&m_speedUpdateTimer, &QTimer::timeout, this, &FileTransmission::updateTransferSpeed);
 
-  // Create and wire protocol instances
   m_xmodem = new IO::Protocols::XMODEM(this);
   m_ymodem = new IO::Protocols::YMODEM(this);
   m_zmodem = new IO::Protocols::ZMODEM(this);
@@ -269,7 +266,6 @@ void IO::FileTransmission::openFile()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -309,7 +305,6 @@ void IO::FileTransmission::openFile()
  */
 void IO::FileTransmission::closeFile()
 {
-  // Stop active transmission and release resources
   stopTransmission();
 
   if (m_file.isOpen())
@@ -320,7 +315,6 @@ void IO::FileTransmission::closeFile()
     m_stream = nullptr;
   }
 
-  // Reset counters and notify UI
   m_bytesSent  = 0;
   m_bytesTotal = 0;
   m_filePath.clear();
@@ -350,7 +344,6 @@ void IO::FileTransmission::stopTransmission()
   m_timer.stop();
   m_speedUpdateTimer.stop();
 
-  // Cancel any active protocol transfer
   if (m_xmodem->isActive())
     m_xmodem->cancelTransfer();
 
@@ -370,7 +363,6 @@ void IO::FileTransmission::stopTransmission()
  */
 void IO::FileTransmission::beginTransmission()
 {
-  // Skip if not connected
   if (!IO::ConnectionManager::instance().isConnected()) {
     stopTransmission();
     return;
@@ -379,7 +371,6 @@ void IO::FileTransmission::beginTransmission()
   if (!m_file.isOpen())
     return;
 
-  // Reset error count and speed tracking
   m_errorCount = 0;
   Q_EMIT errorCountChanged();
   m_lastSpeedBytes = 0;
@@ -388,7 +379,6 @@ void IO::FileTransmission::beginTransmission()
 
   appendLog(tr("Starting %1 transfer…").arg(transferModes().at(m_transferMode)));
 
-  // Wire timer to the correct slot for this mode
   disconnect(&m_timer, &QTimer::timeout, this, &FileTransmission::sendLine);
   disconnect(&m_timer, &QTimer::timeout, this, &FileTransmission::sendRawBlock);
 
@@ -399,7 +389,6 @@ void IO::FileTransmission::beginTransmission()
 
   switch (m_transferMode) {
     case PlainText: {
-      // Rewind if previous file was fully sent
       if (m_stream && transmissionProgress() >= 100) {
         m_stream->seek(0);
         m_bytesSent = 0;
@@ -412,7 +401,6 @@ void IO::FileTransmission::beginTransmission()
     }
 
     case RawBinary: {
-      // Rewind if previous file was fully sent
       if (transmissionProgress() >= 100) {
         m_file.seek(0);
         m_bytesSent = 0;
@@ -470,7 +458,6 @@ void IO::FileTransmission::beginTransmission()
  */
 void IO::FileTransmission::setupExternalConnections()
 {
-  // Stop transmission and refresh UI on connection state changes
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::connectedChanged,
           this,
@@ -481,10 +468,8 @@ void IO::FileTransmission::setupExternalConnections()
           this,
           &FileTransmission::fileChanged);
 
-  // Clean up on application quit
   connect(qApp, &QApplication::aboutToQuit, this, &FileTransmission::closeFile);
 
-  // Retranslate on language change
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
@@ -536,7 +521,6 @@ void IO::FileTransmission::setTransferMode(int mode)
 
     m_transferMode = newMode;
 
-    // Reset file position and stream for the new mode
     if (m_file.isOpen()) {
       m_file.seek(0);
       m_bytesSent = 0;
@@ -776,7 +760,6 @@ void IO::FileTransmission::appendLog(const QString& message)
   auto timestamp = QTime::currentTime().toString("HH:mm:ss");
   m_logEntries.append(QStringLiteral("[%1] %2").arg(timestamp, message));
 
-  // Trim oldest entries when capacity is exceeded
   while (m_logEntries.size() > kMaxLogEntries)
     m_logEntries.removeFirst();
 

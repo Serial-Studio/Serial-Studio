@@ -36,13 +36,11 @@
  */
 static QString escapeCsvField(const QString& s)
 {
-  // Bail early when no special characters are present
   const bool needs = s.contains(QChar(',')) || s.contains(QChar('"')) || s.contains(QChar('\n'))
                   || s.contains(QChar('\r')) || s.contains(QChar('\t'));
   if (!needs)
     return s;
 
-  // Double-up any embedded quotes per RFC 4180 and wrap the result
   QString out = s;
   out.replace(QChar('"'), QStringLiteral("\"\""));
   return QStringLiteral("\"%1\"").arg(out);
@@ -80,11 +78,9 @@ void CSV::ExportWorker::closeResources()
  */
 void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
-  // Validate batch is non-empty
   if (items.empty())
     return;
 
-  // Open a new CSV file if needed
   if (!m_csvFile.isOpen()) {
     if (!m_templateFrame.groups.empty())
       createCsvFile(m_templateFrame);
@@ -105,7 +101,6 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
     const double seconds     = static_cast<double>(nanoseconds) / 1'000'000'000.0;
     m_textStream << QString::number(seconds, 'f', 9);
 
-    // Refresh per-dataset last-known cache (carry forward across columns)
     for (const auto& g : i->data.groups)
       for (const auto& d : g.datasets)
         m_lastFinalValues[d.uniqueId] = d.value.simplified();
@@ -126,11 +121,9 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
  */
 void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 {
-  // Build the output file path from the current timestamp
   const auto dt       = QDateTime::currentDateTime();
   const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
 
-  // Sanitize frame title to prevent path traversal and Windows-invalid names
   const auto subdir = Misc::WorkspaceManager::instance().path("CSV");
   QString safeTitle = frame.title;
   safeTitle.remove(QChar('/'));
@@ -146,7 +139,6 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
   safeTitle.remove(QStringLiteral(".."));
   safeTitle = safeTitle.simplified();
 
-  // Strip trailing dots and spaces (invalid as file/dir names on Windows)
   int keepCsv = 0;
   for (int i = safeTitle.size(); i > 0; --i) {
     const QChar c = safeTitle.at(i - 1);
@@ -174,17 +166,14 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
     return;
   }
 
-  // Reset the forward-fill cache for the new file
   m_lastFinalValues.clear();
 
   m_textStream.setDevice(&m_csvFile);
   m_textStream.setGenerateByteOrderMark(true);
   m_textStream.setEncoding(QStringConverter::Utf8);
 
-  // Build schema from frame
   m_schema = DataModel::buildExportSchema(frame);
 
-  // Header: elapsed seconds from session start (not wall-clock), then per-column titles
   m_textStream << "Elapsed (s)";
   for (const auto& col : m_schema.columns) {
     auto label = QString("%1/%2").arg(col.groupTitle, col.title).simplified();
@@ -219,7 +208,6 @@ CSV::Export::Export()
           &Export::onWorkerOpenChanged,
           Qt::QueuedConnection);
 
-  // Restore persisted export preference
   setExportEnabled(m_settings.value("CSVExport", false).toBool());
 }
 
@@ -283,7 +271,6 @@ void CSV::Export::closeFile()
  */
 void CSV::Export::onWorkerOpenChanged()
 {
-  // Sync cached open state from worker thread
   auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
@@ -297,7 +284,6 @@ void CSV::Export::setupExternalConnections()
   connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
       if (IO::ConnectionManager::instance().isConnected()) {
-        // Only cache the template in ProjectFile mode
         auto* worker = static_cast<ExportWorker*>(m_worker);
         if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
           worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
@@ -314,7 +300,6 @@ void CSV::Export::setupExternalConnections()
       closeFile();
   });
 
-  // Force-off when the app enters Console-only mode
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
     if (AppState::instance().operationMode() == SerialStudio::ConsoleOnly && exportEnabled())
       setExportEnabled(false);
@@ -334,10 +319,8 @@ void CSV::Export::setSettingsPersistent(const bool persistent)
  */
 void CSV::Export::setExportEnabled(const bool enabled)
 {
-  // Refuse to enable while the app is in Console-only mode
   const bool allow = enabled && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
 
-  // Close file first when disabling
   if (!allow && isOpen())
     closeFile();
 

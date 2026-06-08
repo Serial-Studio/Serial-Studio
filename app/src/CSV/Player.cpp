@@ -55,7 +55,6 @@ CSV::Player::Player()
   , m_startTimestampSeconds(0.0)
   , m_useHighPrecisionTimestamps(false)
 {
-  // Install event filter and connect playback update signal
   qApp->installEventFilter(this);
   connect(this, &CSV::Player::playerStateChanged, this, &CSV::Player::updateData);
 }
@@ -86,7 +85,6 @@ bool CSV::Player::isOpen() const
  */
 double CSV::Player::progress() const
 {
-  // Avoid division by zero when no frames are loaded
   const auto count = frameCount();
   if (count <= 0)
     return 0.0;
@@ -127,7 +125,6 @@ int CSV::Player::framePosition() const
  */
 QString CSV::Player::filename() const
 {
-  // Return only the base filename for display
   if (isOpen()) {
     auto fileInfo = QFileInfo(m_csvFile.fileName());
     return fileInfo.fileName();
@@ -159,7 +156,6 @@ void CSV::Player::play()
   if (frameCount() <= 0)
     return;
 
-  // Wrap around to start if at end of file
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
@@ -205,7 +201,6 @@ void CSV::Player::toggle()
  */
 void CSV::Player::openFile()
 {
-  // Display file selection dialog for CSV files
   auto* dialog = new QFileDialog(qApp->activeWindow(),
                                  tr("Select CSV file"),
                                  Misc::WorkspaceManager::instance().path("CSV"),
@@ -214,7 +209,6 @@ void CSV::Player::openFile()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -230,7 +224,6 @@ void CSV::Player::openFile()
  */
 void CSV::Player::closeFile()
 {
-  // Nothing to do if no file is open
   if (!isOpen())
     return;
 
@@ -259,7 +252,6 @@ void CSV::Player::closeFile()
  */
 void CSV::Player::nextFrame()
 {
-  // Only advance if not at the last frame
   if (framePosition() < frameCount() - 1) {
     ++m_framePos;
 
@@ -278,7 +270,6 @@ void CSV::Player::nextFrame()
  */
 void CSV::Player::previousFrame()
 {
-  // Only step back if not at the first frame
   if (framePosition() > 0) {
     --m_framePos;
 
@@ -330,7 +321,6 @@ void CSV::Player::initializeTimestamps()
   Q_ASSERT(!m_csvData.isEmpty());
   Q_ASSERT(m_csvFile.isOpen());
 
-  // Check for high-precision numeric timestamps
   bool error            = false;
   QString firstCell     = getCellValue(1, 0, error);
   double firstTimestamp = error ? -1.0 : getTimestampSeconds(firstCell);
@@ -351,14 +341,12 @@ void CSV::Player::initializeTimestamps()
     return;
   }
 
-  // Check for standard date/time format
   if (getDateTime(1).isValid()) {
     m_useHighPrecisionTimestamps = false;
     m_timestampCache.clear();
     return;
   }
 
-  // No recognized timestamp: prompt user for a strategy
   m_useHighPrecisionTimestamps = false;
   m_timestampCache.clear();
 }
@@ -371,13 +359,11 @@ void CSV::Player::openFile(const QString& filePath)
   Q_ASSERT(!filePath.isEmpty());
   Q_ASSERT(!m_playing);
 
-  // Validate file path and close any open file
   if (filePath.isEmpty())
     return;
 
   closeFile();
 
-  // Prompt user to disconnect if a device is active
   if (IO::ConnectionManager::instance().isConnected()) {
     auto response =
       Misc::Utilities::showMessageBox(tr("Device Connection Active"),
@@ -392,7 +378,6 @@ void CSV::Player::openFile(const QString& filePath)
       return;
   }
 
-  // Open and read the CSV file
   m_csvFile.setFileName(filePath);
   if (!m_csvFile.open(QIODevice::ReadOnly)) {
     Misc::Utilities::showMessageBox(
@@ -404,7 +389,6 @@ void CSV::Player::openFile(const QString& filePath)
   QTextStream in(&m_csvFile);
   parseCsvRows(in);
 
-  // Detect timestamp format and build the cache
   initializeTimestamps();
   if (!m_useHighPrecisionTimestamps && m_timestampCache.isEmpty() && !getDateTime(1).isValid()) {
     if (!promptUserForDateTimeOrInterval()) {
@@ -413,7 +397,6 @@ void CSV::Player::openFile(const QString& filePath)
     }
   }
 
-  // Prepare playback state
   sendHeaderFrame();
   m_framePos = 0;
   m_csvData.removeFirst();
@@ -424,7 +407,6 @@ void CSV::Player::openFile(const QString& filePath)
       m_startTimestampSeconds = m_timestampCache[0];
   }
 
-  // Verify that at least one data row remains
   if (m_csvData.count() >= 1) {
     updateData();
     Q_EMIT openChanged();
@@ -449,7 +431,6 @@ void CSV::Player::setProgress(const double progress)
   Q_ASSERT(progress >= 0.0 && progress <= 1.0);
   Q_ASSERT(isOpen());
 
-  // Clamp and pause before seeking
   const auto validProgress = std::clamp(progress, 0.0, 1.0);
 
   if (isPlaying())
@@ -484,7 +465,6 @@ void CSV::Player::setProgress(const double progress)
  */
 void CSV::Player::updateTimestampDisplay()
 {
-  // Read timestamp cell for the current frame position
   bool err = true;
   auto ts  = getCellValue(m_framePos, 0, err);
   if (err)
@@ -544,7 +524,6 @@ void CSV::Player::updateData()
   Q_ASSERT(!m_csvData.isEmpty() || !isOpen());
   Q_ASSERT(m_framePos >= 0);
 
-  // Nothing to do if no file is loaded
   if (!isOpen())
     return;
 
@@ -637,7 +616,6 @@ void CSV::Player::processFrameBatch(int startFrame, int endFrame)
  */
 void CSV::Player::sendHeaderFrame()
 {
-  // Need at least one row for headers
   if (m_csvData.isEmpty())
     return;
 
@@ -645,7 +623,6 @@ void CSV::Player::sendHeaderFrame()
   if (headerRow.size() <= 1)
     return;
 
-  // Project mode: derive the replay column layout; multi-source skips QuickPlot headers
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
     buildReplayLayout();
     if (m_multiSource)
@@ -664,7 +641,6 @@ void CSV::Player::sendHeaderFrame()
  */
 bool CSV::Player::promptUserForDateTimeOrInterval()
 {
-  // Validate that CSV contains headers before prompting
   if (m_csvData.isEmpty() || m_csvData.first().isEmpty()) {
     Misc::Utilities::showMessageBox(tr("Invalid CSV"),
                                     tr("The CSV file does not contain any data or headers."),
@@ -736,7 +712,6 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
  */
 void CSV::Player::generateDateTimeForRows(int interval)
 {
-  // Synthesize evenly-spaced timestamps for rows lacking date/time
   const auto startTime = QDateTime::currentDateTime();
   const auto format    = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
 
@@ -751,21 +726,17 @@ void CSV::Player::generateDateTimeForRows(int interval)
  */
 void CSV::Player::convertColumnToDateTime(int columnIndex)
 {
-  // Validate column index against header row
   if (m_csvData.isEmpty() || columnIndex < 0 || columnIndex >= m_csvData.first().size())
     return;
 
-  // Rewrite each row so the chosen column becomes the leading timestamp
   const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
   for (int i = 1; i < m_csvData.size(); ++i) {
-    // Read the timestamp from the user-selected column, not column 0
     bool error    = false;
     auto cellText = getCellValue(i, columnIndex, error);
     auto dateTime = error ? QDateTime() : getDateTime(cellText);
     if (!dateTime.isValid())
       dateTime = QDateTime::currentDateTime();
 
-    // Guard against jagged rows shorter than the header
     if (columnIndex < m_csvData[i].size())
       m_csvData[i].remove(columnIndex);
 
@@ -782,7 +753,6 @@ void CSV::Player::convertColumnToDateTime(int columnIndex)
  */
 QDateTime CSV::Player::getDateTime(const int row)
 {
-  // Retrieve the timestamp cell for this row
   bool error = false;
   auto value = getCellValue(row, 0, error);
 
@@ -797,7 +767,6 @@ QDateTime CSV::Player::getDateTime(const int row)
  */
 QDateTime CSV::Player::getDateTime(const QString& cell)
 {
-  // Skip numeric strings (handled by getTimestampSeconds)
   bool isNumber = false;
   (void)SerialStudio::toDouble(cell, &isNumber);
   if (isNumber)
@@ -824,7 +793,6 @@ QDateTime CSV::Player::getDateTime(const QString& cell)
  */
 double CSV::Player::getTimestampSeconds(int row)
 {
-  // Use cached timestamp if available, otherwise parse from cell
   if (m_useHighPrecisionTimestamps && row >= 0 && row < m_timestampCache.size())
     return m_timestampCache[row];
 
@@ -841,7 +809,6 @@ double CSV::Player::getTimestampSeconds(int row)
  */
 double CSV::Player::getTimestampSeconds(const QString& cell)
 {
-  // Accept only non-negative numeric values as valid timestamps
   bool ok          = false;
   double timestamp = SerialStudio::toDouble(cell, &ok);
 
@@ -859,7 +826,6 @@ QString CSV::Player::formatTimestamp(double seconds) const
   constexpr double kInvHour = 1.0 / 3600.0;
   constexpr double kInvMin  = 1.0 / 60.0;
 
-  // Split total seconds into hours, minutes, and fractional seconds
   int hours   = static_cast<int>(seconds * kInvHour);
   int minutes = static_cast<int>((seconds - hours * 3600.0) * kInvMin);
   double secs = seconds - hours * 3600.0 - minutes * 60.0;
@@ -882,7 +848,6 @@ QByteArray CSV::Player::getFrame(const int row)
   Q_ASSERT(row >= 0);
   Q_ASSERT(row < m_csvData.count());
 
-  // Timestamp column (index 0) is excluded from the data frame
   QByteArray frame;
 
   if (m_csvData.count() > row) {
@@ -907,7 +872,6 @@ const QString CSV::Player::getCellValue(const int row, const int column, bool& e
   Q_ASSERT(row >= 0);
   Q_ASSERT(column >= 0);
 
-  // Return empty string on out-of-bounds access
   static auto defaultValue = QLatin1String("");
 
   if (m_csvData.count() > row) {
@@ -934,30 +898,25 @@ void CSV::Player::buildReplayLayout()
 {
   m_sourceColumnsByIndex.clear();
 
-  // Mirror the exporter's column layout so replay reads line up with the recorded columns.
   DataModel::Frame frame;
   frame.groups       = DataModel::ProjectModel::instance().groups();
   frame.sources      = DataModel::ProjectModel::instance().sources();
   const auto schema  = DataModel::buildExportSchema(frame);
   const int colCount = static_cast<int>(schema.columns.size());
 
-  // Distinct sources decide single- vs multi-source playback
   QSet<int> sources;
   for (const auto& col : schema.columns)
     sources.insert(col.sourceId);
 
   m_multiSource = sources.size() > 1;
 
-  // sourceId -> (uniqueId -> column index within that source's replay channels)
   std::unordered_map<int, std::unordered_map<int, int>> replay;
 
-  // Single-source: getFrame() strips the timestamp, so channel i == export column i
   if (!m_multiSource) {
     for (int i = 0; i < colCount; ++i)
       replay[0][schema.columns[static_cast<size_t>(i)].uniqueId] = i;
   }
 
-  // Multi-source: each source receives its own columns in export (uniqueId) order
   else {
     std::unordered_map<int, int> nextLocal;
     for (int i = 0; i < colCount; ++i) {
@@ -975,17 +934,14 @@ void CSV::Player::buildReplayLayout()
  */
 void CSV::Player::injectFrame(const QByteArray& frame)
 {
-  // Skip empty frames
   if (frame.isEmpty())
     return;
 
-  // Single-source: use standard path
   if (!m_multiSource) {
     IO::ConnectionManager::instance().processPayload(frame);
     return;
   }
 
-  // Multi-source: split CSV columns by source and reorder into parser-index order
   const auto fields = QString::fromUtf8(frame).trimmed().split(',');
 
   QMap<int, QStringList> sourceFields;
@@ -1005,7 +961,6 @@ void CSV::Player::injectFrame(const QByteArray& frame)
     sourceFields.insert(srcId, std::move(orderedCells));
   }
 
-  // Build per-source payloads, but only for sources that contributed data
   QMap<int, QByteArray> sourcePayloads;
   for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it) {
     if (!sourcesPresent.contains(it.key()))
@@ -1029,7 +984,6 @@ void CSV::Player::injectFrame(const QByteArray& frame)
  */
 bool CSV::Player::eventFilter(QObject* obj, QEvent* event)
 {
-  // Only handle key events during active playback sessions
   if (isOpen() && event->type() == QEvent::KeyPress) {
     auto* keyEvent = static_cast<QKeyEvent*>(event);
     return handleKeyPress(keyEvent);
@@ -1043,7 +997,6 @@ bool CSV::Player::eventFilter(QObject* obj, QEvent* event)
  */
 bool CSV::Player::handleKeyPress(QKeyEvent* keyEvent)
 {
-  // Map media and arrow keys to playback actions
   bool handled;
   switch (keyEvent->key()) {
     case Qt::Key_Space:

@@ -1924,6 +1924,23 @@ _ADVISORY_KINDS = frozenset(
         "comment-dash-substitute",
         "multi-line-comment",
         "qml-inline-comment",
+        # Any comment inside a function body. Functions here are capped at
+        # 100 lines, so the contract is a one-line `/** @brief ... */` above
+        # the function plus self-explanatory code. Ships advisory: the
+        # existing codebase has thousands of in-body comments, so the report
+        # is the cleanup checklist. New code should carry none.
+        "cxx-inbody-comment",
+        # Functions whose whole body is dead weight: empty, only `Q_UNUSED`, or
+        # a single constant return (`bool f() { return true; }`). Dead-code
+        # removal candidates -- advisory and report-only because deleting one
+        # ripples into its declaration, Q_PROPERTY blocks, QML bindings, and
+        # call sites, which is a human-approved step, not an auto-fix.
+        "cxx-trivial-function",
+        # File-scope static/constexpr/const constants declared after the first
+        # function instead of in a top `// Constants` section. Organizational;
+        # advisory because hoisting is a manual move (group + dedupe + keep any
+        # `#ifdef` guards) the report drives, not an auto-fix.
+        "cxx-scattered-constant",
         # comment-narration is the AST-style scan from code_verify_rules.py
         # (separate driver). Banned tone / phrasing in any comment line.
         "comment-narration",
@@ -1936,9 +1953,10 @@ _ADVISORY_KINDS = frozenset(
         # "delete the leading block".
         "doc-trailing-member",
         # Verbose doxygen blocks (carry `@param`/`@return`/`@note`/`@see`,
-        # blank-`*` paragraph splits, or wrap to 5+ lines). CLAUDE.md says the
-        # contract is a one-line `/** @brief ... */`; the existing codebase has
-        # plenty of multi-tag blocks so this ships as advisory.
+        # blank-`*` paragraph splits, or wrap past 6 lines). A one-line
+        # `/** @brief ... */` is the baseline, but a brief that absorbs a
+        # load-bearing in-body why (the `cxx-inbody-comment` policy) may run to
+        # 4-6 lines; past 6 it belongs in the commit message. Ships advisory.
         "doc-verbose-brief",
         # Raw stdio in Qt code -- `std::cout`, `<iostream>`, `printf` should
         # route through `qDebug()` / `qWarning()` so the message handler and
@@ -2140,6 +2158,50 @@ the kinds below are short labels.
   comma, colon, period, or parentheses. The point is human, considered
   prose, not one dash glyph for another. (`i--`, `--i`, and `//---`
   banners don't match: the rule requires a space on both sides.)
+- `cxx-inbody-comment` — a `//` or `/* */` comment inside a function body
+  (tree-sitter-located; the `/** @brief */` above the function is outside
+  the body node and never flagged). Every function in this codebase is
+  capped at 100 lines (`cxx-function-too-long`), so the contract is one
+  `/** @brief ... */` above the function plus code that reads on its own.
+  The cleanup decision is per-line, same as the other comment rules: a
+  comment that restates the next line or narrates ("increment the counter",
+  "now loop over rows") is **deleted**; a comment that encodes a load-bearing
+  *why* the code can't show is **folded up into the `@brief`** (lengthen the
+  brief if needed — `doc-verbose-brief` is advisory and the brief is the
+  right home for the why). A genuinely-needed in-body note (a literal table,
+  a derivation) stays behind a reviewed `// code-verify off` / `on` fence.
+  Tooling pragmas (`// clang-format`, `// NOLINT`, `// cppcheck-suppress`,
+  `// fallthrough`) are directives, not prose, and are never flagged.
+- `cxx-trivial-function` — a function whose entire body is dead weight:
+  empty (`void onX() {}`), only `Q_UNUSED(...)` no-ops, or a single constant
+  return (`bool foo() { return true; }`, `QVariantList groupModel() { return
+  {}; }`). These are dead-code removal candidates. The fix is **not** to keep
+  the function — it is to confirm it is genuinely unused and then **delete it
+  along with its declaration and every call site**. Before deleting, verify:
+  (a) it is not bound in QML (grep the `.qml` tree for the name and any
+  `Q_PROPERTY` that READs it), (b) it is not `Q_INVOKABLE` / metacall-reached,
+  (c) no C++ call site relies on it. Several legitimate-trivial patterns are
+  already excluded so the report stays high-precision: interface overrides
+  (`virtual` / `override` / `final`), `Q_PROPERTY` READ/WRITE/RESET/MEMBER
+  getters (the constant IS the property value — a capability flag or fixed
+  default exposed to QML), `default*()` providers (returning a fixed default
+  is their job), functions with more than one definition in the file (`#ifdef`
+  build variants whose other branch does the real work), and every function in
+  a platform-variant file (`*_macOS.mm`, `*_CSD.cpp`, `*_windows.cpp`, …, where
+  an empty body is the expected no-op stub). Constructors / destructors /
+  conversion operators with an empty body are never flagged. Because removal
+  ripples across headers, property blocks, QML, and call sites, this ships
+  **report-only** — never auto-deleted.
+- `cxx-scattered-constant` — a file-scope `static` / `constexpr` / `const`
+  declaration (including anonymous-namespace ones) positioned **after** the
+  first function definition in the file. Constants and file-locals belong in a
+  single `// Constants` banner at the top of the file, not sprinkled between
+  functions across thousands of lines where the next reader can't find them or
+  notices a duplicate too late. The fix is to **hoist** the declaration into
+  the top section (preserving any `#ifdef` guard around it) and delete the
+  scattered copy. Declarations before the first function (the top section
+  itself), class members, function-local `static`s, and `extern` declarations
+  are not flagged. Advisory: the hoist is a manual, order-sensitive move.
 - `doc-header-function-block` — function doxygen block above a non-inline
   member-function declaration in a header. Per CLAUDE.md "Headers (.h) —
   strict rule": only `/** @brief */` above type-level definitions belongs
@@ -2152,9 +2214,10 @@ the kinds below are short labels.
   `@throws` / `@throw` / `@exception` / `@see` / `@sa` / `@note` /
   `@warning` / `@todo` / `@since` / `@deprecated` / `@pre` / `@post` /
   `@invariant` / `@tparam` / `@details`, OR a blank ` *` continuation line
-  (extended-description paragraph break), OR wraps to 5+ lines. CLAUDE.md
-  "Comments & Doxygen" says the contract is a one-line
-  `/** @brief ... */`; collapse the block to that.
+  (extended-description paragraph break), OR wraps past 6 lines. A one-line
+  `/** @brief ... */` is the baseline; a brief that folds in a load-bearing
+  in-body why (per `cxx-inbody-comment`) may legitimately run 4-6 lines, so
+  only 7+ lines trips this. Past that, the prose belongs in the commit message.
 - `qt-prefer-qdebug` — `std::cout`, `std::cerr`, `<iostream>`, or `printf`
   in Qt code. Routes through the Qt message handler / Console widget when
   using `qDebug` / `qWarning` instead. Two known exceptions (the message

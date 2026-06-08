@@ -60,7 +60,6 @@ Misc::Examples::Examples()
   , m_pendingDownloads(0)
   , m_totalDownloads(0)
 {
-  // Bound every fetch so a stalled connection cannot pin the busy state
   m_nam.setTransferTimeout(15 * 1000);
 }
 
@@ -161,20 +160,17 @@ QVariantMap Misc::Examples::selectedExample() const
  */
 void Misc::Examples::setSelectedIndex(int index)
 {
-  // Guard against redundant selection
   if (m_selectedIndex == index)
     return;
 
   m_selectedIndex = index;
   Q_EMIT selectedIndexChanged();
 
-  // Clear previous content
   m_selectedReadme.clear();
   m_selectedScreenshot.clear();
   Q_EMIT selectedReadmeChanged();
   Q_EMIT selectedScreenshotChanged();
 
-  // Fetch content for the newly selected example
   if (index >= 0 && index < m_filteredExamples.count()) {
     const auto example = m_filteredExamples.at(index).toMap();
     const auto id      = example.value("id").toString();
@@ -209,24 +205,20 @@ void Misc::Examples::setSearchFilter(const QString& filter)
  */
 void Misc::Examples::downloadExample()
 {
-  // Validate selection
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExamples.count())
     return;
 
-  // Build download path inside the workspace Examples folder
   const auto example = m_filteredExamples.at(m_selectedIndex).toMap();
   const auto id      = example.value("id").toString();
   const auto dir     = Misc::WorkspaceManager::instance().path("Examples");
   m_downloadPath     = dir + "/" + id;
   QDir().mkpath(m_downloadPath);
 
-  // Start loading
   m_loading          = true;
   m_downloadProgress = 0;
   Q_EMIT loadingChanged();
   Q_EMIT downloadProgressChanged();
 
-  // Fetch the file listing from GitHub Contents API
   auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(id));
   auto url     = QUrl::fromEncoded((kApiContentsBase + encoded).toUtf8());
   auto* reply  = m_nam.get(QNetworkRequest(url));
@@ -248,14 +240,12 @@ void Misc::Examples::onManifestReply()
 
   reply->deleteLater();
 
-  // Parse the manifest
   if (reply->error() == QNetworkReply::NoError) {
     const auto doc = QJsonDocument::fromJson(reply->readAll());
     m_allExamples  = doc.array();
     applyFilter();
   }
 
-  // Clear loading state
   m_loading = false;
   Q_EMIT loadingChanged();
 }
@@ -274,7 +264,6 @@ void Misc::Examples::onReadmeReply()
   if (reply->error() == QNetworkReply::NoError) {
     const auto raw = QString::fromUtf8(reply->readAll());
 
-    // Cache the raw readme (unstripped)
     const auto id = reply->property("exampleId").toString();
     if (!id.isEmpty()) {
       const auto path = exampleCachePath(id);
@@ -286,14 +275,12 @@ void Misc::Examples::onReadmeReply()
       }
     }
 
-    // Expose raw markdown to QML (WebView handles images)
     m_selectedReadme = raw;
   }
 
   else
     m_selectedReadme = tr("Failed to load README: %1").arg(reply->errorString());
 
-  // Reset loading flag
   m_loading = false;
   Q_EMIT loadingChanged();
   Q_EMIT selectedReadmeChanged();
@@ -314,7 +301,6 @@ void Misc::Examples::onScreenshotReply()
     const auto data = reply->readAll();
     const auto id   = reply->property("exampleId").toString();
     if (!id.isEmpty()) {
-      // Cache the screenshot
       const auto path = exampleCachePath(id) + "/doc";
       QDir().mkpath(path);
       auto name = reply->property("fileName").toString();
@@ -351,7 +337,6 @@ void Misc::Examples::onContentsReply()
     return;
   }
 
-  // Parse the file listing
   const auto doc   = QJsonDocument::fromJson(reply->readAll());
   const auto files = doc.array();
 
@@ -360,7 +345,6 @@ void Misc::Examples::onContentsReply()
     const auto obj  = entry.toObject();
     const auto type = obj.value("type").toString();
 
-    // Only download files, not subdirectories
     if (type != "file")
       continue;
 
@@ -394,7 +378,6 @@ void Misc::Examples::onFileDownloadReply()
 
   reply->deleteLater();
 
-  // Write the file to the download directory
   if (reply->error() == QNetworkReply::NoError) {
     const auto file_name = reply->property("fileName").toString();
     const auto file_path = m_downloadPath + "/" + file_name;
@@ -409,26 +392,21 @@ void Misc::Examples::onFileDownloadReply()
     }
   }
 
-  // Update progress
   --m_pendingDownloads;
   m_downloadProgress = static_cast<float>(m_totalDownloads - m_pendingDownloads)
                      / static_cast<float>(m_totalDownloads);
   Q_EMIT downloadProgressChanged();
 
-  // Continue with next file or finish
   if (!m_downloadQueue.isEmpty()) {
     downloadNextFile();
     return;
   }
 
-  // All downloads complete
   m_loading = false;
   Q_EMIT loadingChanged();
 
-  // Always reveal the download folder in the file manager
   Misc::Utilities::revealFile(m_downloadPath);
 
-  // Load the project file & show the editor if one was downloaded
   if (m_selectedIndex >= 0 && m_selectedIndex < m_filteredExamples.count()) {
     const auto example      = m_filteredExamples.at(m_selectedIndex).toMap();
     const auto project_file = example.value("projectFileName").toString();
@@ -487,7 +465,6 @@ void Misc::Examples::applyFilter()
     m_filteredExamples.append(obj.toVariantMap());
   }
 
-  // Reset selection when filter changes
   m_selectedIndex = -1;
   Q_EMIT selectedIndexChanged();
   Q_EMIT filteredExamplesChanged();
@@ -498,7 +475,6 @@ void Misc::Examples::applyFilter()
  */
 void Misc::Examples::fetchReadme(const QString& id)
 {
-  // Try loading from local cache before fetching from network
   const auto cached = exampleCachePath(id) + "/README.md";
   if (QFile::exists(cached)) {
     QFile file(cached);
@@ -509,7 +485,6 @@ void Misc::Examples::fetchReadme(const QString& id)
     }
   }
 
-  // Fetch from GitHub
   m_loading = true;
   Q_EMIT loadingChanged();
 
@@ -526,7 +501,6 @@ void Misc::Examples::fetchReadme(const QString& id)
  */
 void Misc::Examples::fetchScreenshot(const QString& id, const QString& fileName)
 {
-  // Try loading from local cache before fetching from network
   const auto cached = exampleCachePath(id) + "/doc/" + fileName;
   if (QFile::exists(cached)) {
     m_selectedScreenshot = QUrl::fromLocalFile(cached);
@@ -534,7 +508,6 @@ void Misc::Examples::fetchScreenshot(const QString& id, const QString& fileName)
     return;
   }
 
-  // Fetch from GitHub
   auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(id));
   auto url     = QUrl::fromEncoded((kRawBase + encoded + "/doc/" + fileName).toUtf8());
   auto* reply  = m_nam.get(QNetworkRequest(url));

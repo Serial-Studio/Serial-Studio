@@ -71,7 +71,6 @@ void NativeWindow::installMacOSQuitInterceptor()
 {
   s_nativeWindowInstance = this;
 
-  // Get Qt's Cocoa app delegate class
   id delegate = [NSApp delegate];
   if (!delegate)
     return;
@@ -79,7 +78,6 @@ void NativeWindow::installMacOSQuitInterceptor()
   Class delegateClass = [delegate class];
   SEL selector = @selector(applicationShouldTerminate:);
 
-  // Replace the method implementation
   class_replaceMethod(delegateClass, selector,
                       (IMP)swizzled_applicationShouldTerminate,
                       "i@:@");
@@ -154,7 +152,6 @@ static void applyMacOSWindowStyleToNSWindow(NSWindow *w)
   [w setTitlebarAppearsTransparent:YES];
   [w setTitleVisibility:NSWindowTitleHidden];
 
-  // Mark the window as full-screen "auxiliary" so the green button does plain zoom
   NSWindowCollectionBehavior behaviour = [w collectionBehavior];
   behaviour &= ~NSWindowCollectionBehaviorFullScreenPrimary;
   behaviour |=  NSWindowCollectionBehaviorFullScreenAuxiliary;
@@ -200,7 +197,6 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
     connect(win, &QWindow::windowStateChanged, this,
             &NativeWindow::onWindowStateChanged);
 
-    // Listen for AppKit's post-fullscreen-exit notification to reapply the style
     NSView *view = reinterpret_cast<NSView *>(win->winId());
     NSWindow *nsWin = view ? [view window] : nil;
     if (nsWin)

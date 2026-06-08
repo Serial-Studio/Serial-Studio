@@ -74,7 +74,6 @@ DataModel::PainterCodeEditor::PainterCodeEditor(QQuickItem* parent)
   connect(&m_widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::PainterCodeEditor::textChanged);
 
-  // Auto-save: push edited text to the selected painter group on every keystroke
   connect(&m_widget, &QCodeEditor::textChanged, this, [this] {
     if (m_readingCode)
       return;
@@ -100,7 +99,6 @@ DataModel::PainterCodeEditor::PainterCodeEditor(QQuickItem* parent)
           this,
           &DataModel::PainterCodeEditor::loadTemplates);
 
-  // Refresh from ProjectModel on external group changes (AI/MCP edits)
   connect(
     &DataModel::ProjectModel::instance(), &DataModel::ProjectModel::groupDataChanged, this, [this] {
       if (m_readingCode)
@@ -216,7 +214,6 @@ void DataModel::PainterCodeEditor::commit()
   if (m_readingCode)
     return;
 
-  // Finalise any pending IME composition so the preedit string is committed
   if (auto* ime = QGuiApplication::inputMethod()) {
     if (ime->isVisible() || !ime->inputItemRectangle().isEmpty())
       ime->commit();
@@ -298,7 +295,6 @@ void DataModel::PainterCodeEditor::import()
     nullptr, tr("Select Javascript file to import"), QDir::homePath(), QStringLiteral("*.js"));
   dialog->setFileMode(QFileDialog::ExistingFile);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     dialog->deleteLater();
     if (path.isEmpty())
@@ -406,7 +402,6 @@ void DataModel::PainterCodeEditor::selectTemplate()
     file.close();
   }
 
-  // Top up the current group with the template's manifest-declared datasets
   const QString templateFile = QFileInfo(m_templateFiles.at(idx)).completeBaseName();
   const auto specs           = templateDatasetSpecs(templateFile);
   if (specs.isEmpty())

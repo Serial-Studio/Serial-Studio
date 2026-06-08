@@ -27,7 +27,6 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // Open command
   QJsonObject openSchema;
   {
     QJsonObject props;
@@ -44,7 +43,6 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("mdf4Player.open"), QStringLiteral("Open MDF4 file"), openSchema, &open);
 
-  // No-param commands
   QJsonObject emptySchema;
   emptySchema.insert("type", "object");
   emptySchema.insert("properties", QJsonObject());
@@ -52,7 +50,6 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("mdf4Player.close"), QStringLiteral("Close MDF4 file"), emptySchema, &close);
 
-  // setPaused command
   QJsonObject pausedSchema;
   {
     QJsonObject props;
@@ -71,7 +68,6 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
                            pausedSchema,
                            &setPaused);
 
-  // step command
   QJsonObject stepSchema;
   {
     QJsonObject props;
@@ -88,7 +84,6 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
     stepSchema,
     &step);
 
-  // SetProgress command
   QJsonObject setProgressSchema;
   {
     QJsonObject props;
@@ -109,7 +104,6 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
                            setProgressSchema,
                            &setProgress);
 
-  // GetStatus query
   QJsonObject getStatusSchema;
   getStatusSchema.insert("type", "object");
   getStatusSchema.insert("properties", QJsonObject());

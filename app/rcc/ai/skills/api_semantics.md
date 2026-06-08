@@ -257,7 +257,7 @@ hard error:
       {
         "code":   "unknown_field",
         "fields": ["plotMin", "fooBar"],
-        "message": "These fields were ignored because they are not patchable via project.dataset.update. Call project.describeCommand for the list of writable fields, or check your spelling."
+        "message": "These fields were ignored because they are not patchable via project.dataset.update. Call meta.describeCommand for the list of writable fields, or check your spelling."
       }
     ]
   }

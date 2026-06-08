@@ -76,7 +76,6 @@ void Widgets::ImageFrameReader::processData(const IO::CapturedDataPtr& data)
   if (!data || data->data.isEmpty())
     return;
 
-  // image accumulator; QByteArray amortizes growth
   // code-verify off
   m_accumulator.append(data->data);
   // code-verify on
@@ -125,7 +124,6 @@ void Widgets::ImageFrameReader::processAutodetect()
   if (iterations >= kMaxIterations) [[unlikely]]
     qWarning() << "[ImageView] Autodetect loop iteration limit reached";
 
-  // Prevent unbounded growth (cap at 16 MiB)
   constexpr qsizetype kMaxAccumulator = 16 * 1024 * 1024;
   if (m_accumulator.size() > kMaxAccumulator) {
     m_accumulator.clear();
@@ -315,7 +313,6 @@ void Widgets::ImageFrameReader::processManual()
   if (iterations >= kMaxIterations) [[unlikely]]
     qWarning() << "[ImageView] Manual loop iteration limit reached";
 
-  // Prevent unbounded growth (cap at 16 MiB)
   constexpr qsizetype kMaxAccumulator = 16 * 1024 * 1024;
   if (m_accumulator.size() > kMaxAccumulator) {
     m_accumulator.clear();
@@ -467,7 +464,6 @@ void Widgets::ImageView::onFrameReady(const QByteArray& data)
   if (IO::ConnectionManager::instance().paused())
     return;
 
-  // Decode and publish the image to the provider
   m_imageFormat = detectFormat(data);
 
   QImage img = QImage::fromData(data);
@@ -519,7 +515,6 @@ void Widgets::ImageView::reconfigureReader()
   Q_ASSERT(m_index >= 0);
   Q_ASSERT(!m_providerKey.isEmpty());
 
-  // Tear down old reader before creating a new one
   if (m_reader) {
     m_reader->deleteLater();
     m_reader = nullptr;

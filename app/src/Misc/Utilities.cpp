@@ -74,16 +74,13 @@ Misc::Utilities& Misc::Utilities::instance()
  */
 void Misc::Utilities::rebootApplication()
 {
-  // Flush events and persistent settings
   qApp->processEvents();
   QSettings().sync();
 
-  // Relaunch executable
   QString exe      = QCoreApplication::applicationFilePath();
   QStringList args = QCoreApplication::arguments().mid(1);
   QProcess::startDetached(exe, args);
 
-  // Quit application
   qApp->exit();
 }
 
@@ -136,17 +133,14 @@ int Misc::Utilities::showMessageBox(const QString& text,
                                     QMessageBox::StandardButton defaultButton,
                                     const ButtonTextMap& buttonTexts)
 {
-  // Skip GUI dialogs in headless/offscreen mode
   if (qApp->platformName() == QLatin1String("offscreen"))
     return QMessageBox::Ok;
 
-  // Route through a real NSAlert on macOS
 #ifdef Q_OS_MACOS
   return Misc_Utilities_showNativeMessageBox(
     text, informativeText, icon, windowTitle, bt, defaultButton, buttonTexts);
 #endif
 
-  // Create message box & set options
   QMessageBox box;
   box.setStandardButtons(bt);
   box.setWindowTitle(windowTitle);
@@ -154,17 +148,14 @@ int Misc::Utilities::showMessageBox(const QString& text,
   if (defaultButton != QMessageBox::NoButton)
     box.setDefaultButton(defaultButton);
 
-  // Set title & informative text
   box.setText(QStringLiteral("<h3>") + text + QStringLiteral("</h3>"));
   box.setInformativeText(informativeText);
 
-  // Set icon
   if (icon == QMessageBox::NoIcon)
     box.setIconPixmap(getHiDpiPixmap(":/logo/small-icon.png"));
   else
     box.setIcon(icon);
 
-  // Add button translations
   // code-verify off
   if (bt & QMessageBox::Ok)
     box.button(QMessageBox::Ok)->setText(tr("Ok"));
@@ -204,16 +195,13 @@ int Misc::Utilities::showMessageBox(const QString& text,
     box.button(QMessageBox::RestoreDefaults)->setText(tr("Restore defaults"));
   // code-verify on
 
-  // Apply caller-provided button text overrides
   for (auto it = buttonTexts.constBegin(); it != buttonTexts.constEnd(); ++it)
     box.button(it.key())->setText(" " + it.value() + " ");
 
-  // Resize message box
   auto* spacer = new QSpacerItem(320, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
   auto* layout = qobject_cast<QGridLayout*>(box.layout());
   layout->addItem(spacer, layout->rowCount(), 0, 1, layout->columnCount());
 
-  // Execute the message box
   return box.exec();
 }
 

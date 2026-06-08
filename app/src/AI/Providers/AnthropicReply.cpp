@@ -31,11 +31,9 @@ static QString resolveCanonicalToolName(const QString& sanitized)
 {
   const auto& commands = API::CommandRegistry::instance().commands();
 
-  // Fast path: exact match
   if (commands.contains(sanitized))
     return sanitized;
 
-  // Scan for a command whose sanitized form matches
   for (auto it = commands.constBegin(); it != commands.constEnd(); ++it) {
     QString candidate = it.key();
     candidate.replace(QChar('.'), QChar('_'));
@@ -44,7 +42,6 @@ static QString resolveCanonicalToolName(const QString& sanitized)
       return it.key();
   }
 
-  // meta.* tools live outside API::CommandRegistry; restore the dot prefix
   if (sanitized.startsWith(QStringLiteral("meta_"))) {
     QString restored = sanitized;
     restored.replace(0, 5, QStringLiteral("meta."));
@@ -336,7 +333,6 @@ void AI::AnthropicReply::onReplyFinished()
     return;
   }
 
-  // No more bytes coming and no error -> drain anything still buffered.
   m_sse->feed({});
   finishOk();
 }

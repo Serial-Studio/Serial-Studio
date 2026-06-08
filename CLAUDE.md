@@ -154,8 +154,12 @@ because they shape the code you write (not just how the linter rewrites it):
   `public slots:`). **No in-header member init** — ctor init list only.
 - **Signals**: `Q_EMIT` not `emit`; lowercase `signals:`/`public slots:`; never
   `SIGNAL()`/`SLOT()`. Never `disconnect(nullptr)` as the slot — capture the `Connection`.
-- **Comments**: code is the spec; label, don't narrate. No inline EOL comments, no AI
-  narration. Don't fake the em-dash with ` -- ` — rewrite the sentence.
+- **Comments**: code is the spec; label, don't narrate. **No comments inside a function body**
+  (`cxx-inbody-comment`, advisory) — functions are short, so the one-line `/** @brief ... */`
+  above the function plus self-explanatory code carry it; fold a load-bearing *why* into the
+  `@brief`, or fence a genuinely-needed note with `// code-verify off`. `//---` concern-group
+  banners live *between* functions, never inside one. No inline EOL comments, no AI narration.
+  Don't fake the em-dash with ` -- ` — rewrite the sentence.
 - **Naming**: `CamelCase` types, `camelCase` functions, `lower_case` locals + public members,
   `s_`/`m_`/`k`/`UPPER_CASE` for static/private/constexpr/macro (full table in the sub-doc).
 - **Safety-critical (NASA Power of Ten)** — hotpath violations are blockers. The ones that

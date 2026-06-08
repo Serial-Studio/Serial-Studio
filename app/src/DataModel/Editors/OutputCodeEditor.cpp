@@ -47,7 +47,6 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
   setAcceptedMouseButtons(Qt::AllButtons);
   setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
 
-  // Configure code editor
   m_widget.setTabReplace(true);
   m_widget.setTabReplaceSize(4);
   m_widget.setAutoIndentation(true);
@@ -55,18 +54,15 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
   m_widget.setFont(Misc::CommonFonts::instance().monoFont());
   m_widget.setLayoutDirection(Qt::LeftToRight);
 
-  // Apply current theme
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
           this,
           &DataModel::OutputCodeEditor::onThemeChanged);
 
-  // Emit modification signals
   connect(&m_widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::OutputCodeEditor::textChanged);
 
-  // Push code to the selected output widget on every edit
   connect(&m_widget, &QCodeEditor::textChanged, this, [this] {
     if (m_readingCode)
       return;
@@ -82,13 +78,11 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
     editor.setSelectedOutputWidgetTransmitFunction(text());
   });
 
-  // Reload when the output widget model changes
   connect(&DataModel::ProjectEditor::instance(),
           &DataModel::ProjectEditor::outputWidgetModelChanged,
           this,
           &DataModel::OutputCodeEditor::readCode);
 
-  // Refresh from ProjectModel on external group changes (AI/MCP edits)
   connect(
     &DataModel::ProjectModel::instance(), &DataModel::ProjectModel::groupDataChanged, this, [this] {
       if (m_readingCode)
@@ -113,7 +107,6 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
       }
     });
 
-  // Resize and render
   connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::OutputCodeEditor::resizeWidget);
   connect(
     this, &QQuickPaintedItem::heightChanged, this, &DataModel::OutputCodeEditor::resizeWidget);
@@ -290,7 +283,6 @@ void DataModel::OutputCodeEditor::import()
     nullptr, tr("Select Javascript file to import"), QDir::homePath(), QStringLiteral("*.js"));
   dialog->setFileMode(QFileDialog::ExistingFile);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     dialog->deleteLater();
     if (path.isEmpty())
@@ -316,7 +308,6 @@ void DataModel::OutputCodeEditor::import()
  */
 void DataModel::OutputCodeEditor::readCode()
 {
-  // Prevent reentrancy
   if (m_readingCode)
     return;
 
@@ -342,7 +333,6 @@ void DataModel::OutputCodeEditor::readCode()
  */
 void DataModel::OutputCodeEditor::selectTemplate()
 {
-  // No templates loaded
   if (m_templateNames.isEmpty())
     return;
 
@@ -453,14 +443,12 @@ void DataModel::OutputCodeEditor::loadTemplates()
  */
 void DataModel::OutputCodeEditor::onThemeChanged()
 {
-  // Resolve theme path
   static const auto* t = &Misc::ThemeManager::instance();
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
 
   const auto path =
     name.startsWith('/') ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
 
-  // Load syntax style XML
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {
     m_style.load(QString::fromUtf8(file.readAll()));

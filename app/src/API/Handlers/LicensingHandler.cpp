@@ -54,7 +54,6 @@ void API::Handlers::LicensingHandler::registerCommands()
                              &setLicense);
   }
 
-  // activate schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
@@ -65,7 +64,6 @@ void API::Handlers::LicensingHandler::registerCommands()
                              &activate);
   }
 
-  // deactivate schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
@@ -77,7 +75,6 @@ void API::Handlers::LicensingHandler::registerCommands()
       &deactivate);
   }
 
-  // validate schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
@@ -88,7 +85,6 @@ void API::Handlers::LicensingHandler::registerCommands()
                              &validate);
   }
 
-  // getStatus schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
@@ -99,7 +95,6 @@ void API::Handlers::LicensingHandler::registerCommands()
                              &getStatus);
   }
 
-  // guardStatus schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
@@ -110,7 +105,6 @@ void API::Handlers::LicensingHandler::registerCommands()
                              &guardStatus);
   }
 
-  // trialGetStatus schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
@@ -121,7 +115,6 @@ void API::Handlers::LicensingHandler::registerCommands()
                              &trialGetStatus);
   }
 
-  // trialEnable schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
@@ -224,7 +217,6 @@ API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& i
   const auto& ls = Licensing::LemonSqueezy::instance();
   const auto& tk = Licensing::CommercialToken::current();
 
-  // Map feature tier to human-readable name
   QString tierName;
   switch (tk.featureTier()) {
     case Licensing::FeatureTier::Hobbyist:

@@ -423,7 +423,6 @@ struct TimeRing {
    */
   void appendDecimated(double t, double v)
   {
-    // Track the larger-magnitude sample so transients survive the decimation
     if (!accValid || std::abs(v) > std::abs(accExtreme)) {
       accExtreme = v;
       accTime    = t;
@@ -431,7 +430,6 @@ struct TimeRing {
 
     accValid = true;
 
-    // Emit one representative point once an interval has elapsed
     if (time.size() == 0 || (t - lastEmit) >= interval) {
       time.push(accTime);
       value.push(accExtreme);
@@ -584,7 +582,6 @@ struct SweepEngine {
     if (curve >= front.size())
       return kEmpty;
 
-    // Live partial trace before the first completion or whenever the window is long
     const bool live = !hasFront || activeWindow() > kLiveWindowSec;
     if (live && sweeping && curve < back.size())
       return back[curve];
@@ -600,7 +597,6 @@ struct SweepEngine {
   {
     double sweepTime = -1.0;
 
-    // Filling: append until the timebase elapses, then complete and fall through
     if (sweeping) {
       const double st = now - t0;
       if (st > activeWindow())
@@ -614,7 +610,6 @@ struct SweepEngine {
       }
     }
 
-    // Idle: decide whether a trigger (or auto free-run) starts a new sweep
     if (!sweeping && shouldStart(now, trigValue)) {
       t0           = triggerOrigin(now, trigValue);
       lastSweepSec = now;
@@ -663,7 +658,6 @@ private:
     if (mode == kNormal)
       return edgeOk;
 
-    // Auto: trigger when possible, otherwise free-run after a quiet timebase
     return edgeOk || (now - lastSweepSec) >= activeWindow();
   }
 
@@ -751,7 +745,6 @@ struct DownsampleWorkspace {
       firstI.resize(C);
     }
 
-    // Clear per-column tallies and extrema
     std::fill(cnt.begin(), cnt.end(), 0u);
     std::fill(minY.begin(), minY.end(), std::numeric_limits<ssfp_t>::infinity());
     std::fill(maxY.begin(), maxY.end(), -std::numeric_limits<ssfp_t>::infinity());
@@ -1025,6 +1018,9 @@ inline bool downsampleMonotonic(
 
 /**
  * @brief Decimate the visible [xLo, xHi] slice of a monotonic time ring to render columns.
+ *        Times are rebased so the newest sample sits at 0 (axis is [-T, 0]); the forward
+ *        linear scan that finds the visible span is correct only because the ring is
+ *        monotonic non-decreasing.
  */
 inline bool downsampleTimeWindow(const AxisData& timeX,
                                  const AxisData& valueY,
@@ -1052,13 +1048,11 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
     return (i < yn0) ? yp0[i] : yp1[i - yn0];
   };
 
-  // Rebase absolute ring time so the newest sample sits at 0 and the axis is [-T, 0]
   const ssfp_t newest = xAbs(n - 1);
   auto tRel           = [&](std::size_t i) -> ssfp_t {
     return xAbs(i) - newest;
   };
 
-  // Locate the visible index span; the time ring is monotonic non-decreasing
   std::size_t lo = 0;
   while (lo < n && tRel(lo) < xLo)
     ++lo;
@@ -1071,7 +1065,6 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
   if (visible == 0)
     return true;
 
-  // Re-base the accessors onto the visible slice so helpers see [0, visible)
   auto xWin = [&](std::size_t i) -> ssfp_t {
     return tRel(lo + i);
   };
@@ -1082,7 +1075,6 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
   const std::size_t C = std::size_t(w);
   ws->reset(C);
 
-  // Columns are bound to the viewport, not the data extent, so zoom maps 1:1
   const ssfp_t span        = std::max<ssfp_t>(1e-12, xHi - xLo);
   const auto scaleX        = static_cast<ssfp_t>(w - 1) / span;
   const DownsampleBounds b = dsScanFiniteRange(visible, xWin, yWin);
@@ -1106,6 +1098,8 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
 
 /**
  * @brief Decimate the [xLo, xHi] slice of a ring whose times are already window-relative.
+ *        The forward linear scan that finds the visible span is correct only because the
+ *        sweep time is monotonic non-decreasing.
  */
 inline bool downsampleWindowAbsolute(const AxisData& timeX,
                                      const AxisData& valueY,
@@ -1133,7 +1127,6 @@ inline bool downsampleWindowAbsolute(const AxisData& timeX,
     return (i < yn0) ? yp0[i] : yp1[i - yn0];
   };
 
-  // Locate the visible index span; sweep time is monotonic non-decreasing
   std::size_t lo = 0;
   while (lo < n && xAbs(lo) < xLo)
     ++lo;
@@ -1192,7 +1185,6 @@ template<Concepts::Numeric T>
 template<Concepts::Numeric T>
 [[nodiscard]] inline bool almostEqual(T a, T b, T relEps = T(1e-12), T absEps = T(1e-12)) noexcept
 {
-  // Fast reject for NaNs (only applicable to floating-point types)
   if constexpr (std::floating_point<T>) {
     if (!std::isfinite(a) || !std::isfinite(b))
       return a == b;
@@ -1200,11 +1192,9 @@ template<Concepts::Numeric T>
 
   const T diff = std::abs(a - b);
 
-  // Absolute tolerance handles exact/near-zero and very small magnitudes.
   if (diff <= absEps)
     return true;
 
-  // Relative tolerance handles larger magnitudes.
   const T scale = std::max(std::abs(a), std::abs(b));
   return diff <= relEps * scale;
 }

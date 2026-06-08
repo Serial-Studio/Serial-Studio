@@ -33,6 +33,14 @@
 #  include "Misc/CommonFonts.h"
 #  include "SerialStudio.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Shadow blur radius is clamped to [1, 32] in renderWithShadow; max tap count is 2*32+1
+static constexpr int kMaxBlurTaps         = 65;
+static constexpr int kBlurReciprocalShift = 24;
+
 /**
  * @brief Maps Canvas2D line-cap names to Qt::PenCapStyle.
  */
@@ -254,7 +262,6 @@ QBrush Widgets::PainterPattern::brush() const
   if (m_repetition == QLatin1String("repeat") || m_repetition.isEmpty())
     return QBrush(m_tile);
 
-  // Build padded tile so brush paints only inside requested band
   const int tw = m_tile.width();
   const int th = m_tile.height();
   if (tw <= 0 || th <= 0)
@@ -977,7 +984,6 @@ void Widgets::PainterContext::roundRect(qreal x, qreal y, qreal w, qreal h, cons
   else if (radii.isArray())
     parseRoundRectRadiiArray(radii, tl, tr, br, bl);
 
-  // Clamp each radius to half the smaller side
   const qreal maxR = qMin(std::abs(w), std::abs(h)) * 0.5;
   tl               = qBound<qreal>(0.0, tl, maxR);
   tr               = qBound<qreal>(0.0, tr, maxR);
@@ -1010,7 +1016,6 @@ void Widgets::PainterContext::arc(
   if (r <= 0.0)
     return;
 
-  // Wrap into Canvas2D direction (CW = positive, CCW = negative); Qt sweep is the negation.
   constexpr qreal kTau = 2.0 * M_PI;
   const qreal raw      = endRad - startRad;
   qreal sweepRad;
@@ -1055,7 +1060,6 @@ void Widgets::PainterContext::arcTo(qreal x1, qreal y1, qreal x2, qreal y2, qrea
     return;
   }
 
-  // Angle between the two segments
   const qreal cos_a = (v1x * v2x + v1y * v2y) / (len1 * len2);
   const qreal a     = std::acos(qBound<qreal>(-1.0, cos_a, 1.0));
   if (qFuzzyCompare(a, M_PI) || qFuzzyIsNull(a)) {
@@ -1063,7 +1067,6 @@ void Widgets::PainterContext::arcTo(qreal x1, qreal y1, qreal x2, qreal y2, qrea
     return;
   }
 
-  // Tangent points on the two segments and arc centre at distance r/sin(a/2) along the bisector
   const qreal d       = r / std::tan(a * 0.5);
   const qreal invLen1 = 1.0 / len1;
   const qreal invLen2 = 1.0 / len2;
@@ -1132,7 +1135,6 @@ void Widgets::PainterContext::ellipse(qreal x,
       sweepRad -= kTau;
   }
 
-  // Build arc on unrotated ellipse, then apply rotation transform
   QPainterPath sub;
   const QRectF box(-rx, -ry, 2.0 * rx, 2.0 * ry);
   sub.arcMoveTo(box, -qRadiansToDegrees(startRad));
@@ -1428,7 +1430,6 @@ void Widgets::PainterContext::setLineDash(const QJSValue& segments)
       m_state.lineDash.push_back(v);
     }
 
-    // Canvas spec: odd-length arrays are doubled to make them even.
     if ((n & 1) != 0) {
       const int dup = n;
       for (int i = 0; i < dup; ++i)
@@ -1572,7 +1573,6 @@ QFont Widgets::PainterContext::parseFontSpec(const QString& spec) const
       || lower.contains(QLatin1String(" 800")) || lower.contains(QLatin1String(" 900")))
     bold = true;
 
-  // Family is whatever comes after the px size token; empty falls back to the dashboard widget font
   QString family;
   if (sizeMatch.hasMatch()) {
     const int sizeEnd  = sizeMatch.capturedEnd();
@@ -1662,7 +1662,7 @@ void Widgets::PainterContext::applyDashToPen()
     pattern.reserve(m_state.lineDash.size());
     const qreal w = qMax<qreal>(0.0001, m_state.strokePen.widthF());
     for (qreal v : m_state.lineDash)
-      pattern.push_back(v / w);  // Qt expresses dashes in pen-width units
+      pattern.push_back(v / w);
 
     m_state.strokePen.setDashPattern(pattern);
     m_state.strokePen.setDashOffset(m_state.lineDashOffset / w);
@@ -1691,10 +1691,6 @@ bool Widgets::PainterContext::shadowActive() const noexcept
 
   return m_state.shadowBlur > 0.0 || m_state.shadowOffsetX != 0.0 || m_state.shadowOffsetY != 0.0;
 }
-
-// Shadow blur radius is clamped to [1, 32] in renderWithShadow; max tap count is 2*32+1
-static constexpr int kMaxBlurTaps         = 65;
-static constexpr int kBlurReciprocalShift = 24;
 
 /**
  * @brief Builds the Q24 ceiling-reciprocal table so `(sum * inv) >> 24 == sum / n` exactly.
@@ -1810,12 +1806,10 @@ void Widgets::PainterContext::renderWithShadow(const std::function<void(QPainter
     sp.translate(-padded.topLeft());
     draw(&sp);
 
-    // Recolour the result to the shadow colour by source-in compositing
     sp.setCompositionMode(QPainter::CompositionMode_SourceIn);
     sp.fillRect(shadow.rect(), m_state.shadowColor);
   }
 
-  // Cheap separable box-blur for shadowBlur > 0. Iterating 3x approximates a Gaussian.
   if (m_state.shadowBlur > 0.0) {
     const int radius = qBound(1, int(std::ceil(m_state.shadowBlur)), 32);
     applyBoxBlur(shadow, radius);

@@ -126,11 +126,9 @@ QRgb Widgets::Waterfall::interpolateLut(
  */
 QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
 {
-  // Clamp to 0..1 for safety
   t = qBound(0.0, t, 1.0);
 
   switch (map) {
-    // Viridis
     case Viridis: {
       static constexpr double r[] = {
         0.267, 0.282, 0.253, 0.207, 0.164, 0.135, 0.135, 0.267, 0.478, 0.741, 0.993};
@@ -141,7 +139,6 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       return interpolateLut(r, g, b, 11, t);
     }
 
-    // Inferno
     case Inferno: {
       static constexpr double r[] = {0.001, 0.099, 0.301, 0.527, 0.733, 0.882, 0.973, 0.988};
       static constexpr double g[] = {0.000, 0.034, 0.064, 0.117, 0.214, 0.388, 0.626, 0.998};
@@ -149,7 +146,6 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       return interpolateLut(r, g, b, 8, t);
     }
 
-    // Magma
     case Magma: {
       static constexpr double r[] = {0.001, 0.146, 0.421, 0.715, 0.928, 0.987, 0.987};
       static constexpr double g[] = {0.000, 0.060, 0.139, 0.215, 0.473, 0.749, 0.991};
@@ -157,7 +153,6 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       return interpolateLut(r, g, b, 7, t);
     }
 
-    // Plasma
     case Plasma: {
       static constexpr double r[] = {0.050, 0.286, 0.530, 0.741, 0.892, 0.969, 0.940};
       static constexpr double g[] = {0.030, 0.010, 0.140, 0.347, 0.560, 0.789, 0.975};
@@ -165,7 +160,6 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       return interpolateLut(r, g, b, 7, t);
     }
 
-    // Turbo
     case Turbo: {
       static constexpr double r[] = {0.190, 0.275, 0.247, 0.085, 0.152, 0.617, 0.964, 0.974, 0.479};
       static constexpr double g[] = {0.072, 0.366, 0.703, 0.916, 0.988, 0.983, 0.787, 0.317, 0.016};
@@ -173,7 +167,6 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
       return interpolateLut(r, g, b, 9, t);
     }
 
-    // Jet
     case Jet: {
       const double v = t;
       const double r = qBound(0.0, qMin(4.0 * v - 1.5, 4.5 - 4.0 * v), 1.0);
@@ -183,7 +176,6 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
         static_cast<int>(r * 255.0), static_cast<int>(g * 255.0), static_cast<int>(b * 255.0));
     }
 
-    // Hot
     case Hot: {
       const double v = t;
       const double r = qBound(0.0, 3.0 * v, 1.0);
@@ -193,7 +185,6 @@ QRgb Widgets::Waterfall::sampleColorMap(int map, double t)
         static_cast<int>(r * 255.0), static_cast<int>(g * 255.0), static_cast<int>(b * 255.0));
     }
 
-    // Grayscale
     case Grayscale:
     default: {
       const int v = static_cast<int>(t * 255.0);
@@ -239,17 +230,14 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   , m_yMax(1.0)
   , m_plan(nullptr)
 {
-  // Accept mouse + wheel + hover (zoom/pan handled in C++)
   setAcceptedMouseButtons(Qt::LeftButton);
   setAcceptHoverEvents(true);
 
-  // Pull dataset config: clamp samples since project JSON is user-controlled
   if (VALIDATE_WIDGET(SerialStudio::DashboardWaterfall, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardWaterfall, m_index);
     m_size              = floorPow2Bounded(dataset.fftSamples);
     m_samplingRate      = qMax(1, dataset.fftSamplingRate);
 
-    // Configure input normalization from user-defined scale
     double minVal = dataset.fftMin;
     double maxVal = dataset.fftMax;
     if (std::isfinite(minVal) && std::isfinite(maxVal)) {
@@ -263,7 +251,6 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
       }
     }
 
-    // Resolve Campbell-mode binding (0 = time, fall back if dataset missing)
     m_yDatasetUniqueId = dataset.waterfallYAxis;
     if (m_yDatasetUniqueId > 0) {
       const auto& datasets = UI::Dashboard::instance().datasets();
@@ -281,14 +268,11 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
     rebuildHistoryImage();
   }
 
-  // Initial theme/font snapshot
   onThemeChanged();
 
-  // Push a new row only when the dashboard reports new data this tick
   connect(
     &UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Widgets::Waterfall::updateData);
 
-  // React to theme + dashboard-font changes (axis labels follow the global scale)
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
           this,
@@ -298,7 +282,6 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
           this,
           &Widgets::Waterfall::onFontsChanged);
 
-  // Time-history depth follows the dashboard/project Time Range (rows ~= range * fps)
   connect(&UI::Dashboard::instance(),
           &UI::Dashboard::plotTimeRangeChanged,
           this,
@@ -591,10 +574,8 @@ void Widgets::Waterfall::writeRow(const float* dbValues, int bins)
   if (m_image.isNull() || bins <= 0)
     return;
 
-  // Detach before the in-place memmove (QImage is copy-on-write)
   m_image.detach();
 
-  // Scroll all existing rows down by one pixel via memmove
   const int imageWidth  = m_image.width();
   const int imageHeight = m_image.height();
   if (imageHeight > 1) {
@@ -603,7 +584,6 @@ void Widgets::Waterfall::writeRow(const float* dbValues, int bins)
     std::memmove(base + bpl, base, static_cast<size_t>(bpl) * (imageHeight - 1));
   }
 
-  // Map each bin's dB into a normalized 0..1 value and resolve a color map entry
   const float minDb      = static_cast<float>(m_minDb);
   const float maxDb      = static_cast<float>(m_maxDb);
   const float invDbRange = 1.0f / qMax(1e-6f, maxDb - minDb);
@@ -616,14 +596,12 @@ void Widgets::Waterfall::writeRow(const float* dbValues, int bins)
     scan[x]        = sampleColorMap(m_colorMap, t);
   }
 
-  // Pad with floor color if the spectrum has fewer columns than the image
   if (writableBins < imageWidth) {
     const QRgb floor = sampleColorMap(m_colorMap, 0.0);
     for (int x = writableBins; x < imageWidth; ++x)
       scan[x] = floor;
   }
 
-  // Track filled rows for partial-fill painting until the buffer wraps once
   if (!m_filledOnce) {
     if (++m_writeRow >= imageHeight) {
       m_writeRow   = imageHeight;
@@ -684,13 +662,11 @@ void Widgets::Waterfall::updateData()
   if (!VALIDATE_WIDGET(SerialStudio::DashboardWaterfall, m_index))
     return;
 
-  // Fetch time-domain ring buffer (newest sample at end)
   const auto& data  = UI::Dashboard::instance().waterfallData(m_index);
   const int newSize = static_cast<int>(data.size());
   if (newSize <= 0)
     return;
 
-  // Re-init FFT structures if the dataset's FFT window size changed mid-run
   if (newSize != m_size) {
     allocateFftPlan(newSize);
     rebuildHistoryImage();
@@ -700,7 +676,6 @@ void Widgets::Waterfall::updateData()
   if (!m_plan)
     return;
 
-  // Window time-domain input + normalize against user-configured min/max
   const double* in       = data.raw();
   std::size_t idx        = data.frontIndex();
   const std::size_t mask = data.storageMask();
@@ -715,10 +690,8 @@ void Widgets::Waterfall::updateData()
     idx              = (idx + 1) & mask;
   }
 
-  // Run FFT
   kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
 
-  // Convert to dB
   const int spectrumSize = m_size / 2;
   const float normFactor = static_cast<float>(m_size) * static_cast<float>(m_size);
   const float invNorm    = 1.0f / normFactor;
@@ -729,18 +702,16 @@ void Widgets::Waterfall::updateData()
     m_dbCache[i]      = std::max(10.0f * std::log10(power), kFloorDb);
   }
 
-  // Light 3-bin frequency-axis smoothing to reduce sparkle
   if (m_smoothed.size() < static_cast<size_t>(spectrumSize))
     m_smoothed.resize(spectrumSize);
 
-  // Precomputed reciprocals indexed by tap count (1..kSmoothingWindow); edges have fewer taps
   static constexpr float kInvSmoothingTaps[] = {
-    0.0f,         // unused
-    1.0f / 1.0f,  // 1 tap
-    1.0f / 2.0f,  // 2 taps (edge)
-    1.0f / 3.0f,  // 3 taps (interior)
+    0.0f,
+    1.0f / 1.0f,
+    1.0f / 2.0f,
+    1.0f / 3.0f,
     1.0f / 4.0f,
-    1.0f / 5.0f,  // larger windows in case kSmoothingWindow grows
+    1.0f / 5.0f,
   };
   for (int i = 0; i < spectrumSize; ++i) {
     const int lo = std::max(0, i - kHalfSmoothWindow);
@@ -753,7 +724,6 @@ void Widgets::Waterfall::updateData()
     m_smoothed[i]  = sum * kInvSmoothingTaps[taps];
   }
 
-  // Push the new row (time mode scrolls; Campbell mode writes by Y value)
   if (m_campbellMode && m_image.height() > 0) {
     const auto& datasets = UI::Dashboard::instance().datasets();
     const auto it        = datasets.find(m_yDatasetUniqueId);
@@ -787,27 +757,22 @@ void Widgets::Waterfall::paint(QPainter* painter)
   if (!painter)
     return;
 
-  // Antialiased lines + crisp text
   painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
   painter->setRenderHint(QPainter::Antialiasing, true);
   painter->setRenderHint(QPainter::TextAntialiasing, true);
 
-  // Rebuild the axis overlay if invalidated since the previous paint
   if (m_axisDirty)
     renderAxisLayer();
 
-  // Outer background (theme window color)
   const QRectF outerRect(0, 0, width(), height());
   painter->fillRect(outerRect, m_outerBg);
 
-  // Inner plot area background (theme widget_base)
   const QRectF& plotRect = m_cachedPlotRect;
   if (plotRect.isEmpty())
     return;
 
   painter->fillRect(plotRect, m_innerBg);
 
-  // Spectrogram image, clipped to plotRect; source rect derives from zoom/pan
   if (!m_image.isNull()) {
     painter->save();
     painter->setClipRect(plotRect);
@@ -815,11 +780,9 @@ void Widgets::Waterfall::paint(QPainter* painter)
     painter->restore();
   }
 
-  // Composite the cached axis overlay (border, ticks, grid, labels, title)
   if (!m_axisLayer.isNull())
     painter->drawImage(outerRect, m_axisLayer, QRectF(m_axisLayer.rect()));
 
-  // Cursor overlay (live; not part of the cached axis layer)
   if (m_cursorEnabled && m_cursorHovering)
     drawCursor(painter, plotRect);
 }
@@ -835,7 +798,6 @@ void Widgets::Waterfall::renderAxisLayer()
 {
   m_axisDirty = false;
 
-  // Determine the device-pixel-aware buffer size
   const QSize itemSize(qMax(1, qCeil(width())), qMax(1, qCeil(height())));
   const qreal dpr     = (window() ? window()->devicePixelRatio() : 1.0);
   const QSize bufSize = itemSize * dpr;
@@ -852,22 +814,18 @@ void Widgets::Waterfall::renderAxisLayer()
   painter.setRenderHint(QPainter::Antialiasing, true);
   painter.setRenderHint(QPainter::TextAntialiasing, true);
 
-  // Use the dashboard's widget font so axis labels track the global scale
   static auto& fonts = Misc::CommonFonts::instance();
   painter.setFont(fonts.widgetFont(0.83, false));
 
-  // Compute (and cache) the plot rect; paint() reuses it without recomputation
   const QFontMetrics fm(painter.font());
   m_cachedPlotRect = computePlotRect(fm);
   if (m_cachedPlotRect.isEmpty())
     return;
 
-  // Plot frame (cached border color)
   painter.setPen(QPen(m_borderColor, 1));
   painter.setBrush(Qt::NoBrush);
   painter.drawRect(m_cachedPlotRect);
 
-  // Axes (ticks + grid + labels) when the widget is large enough
   if (m_axisVisible && width() >= kMinAxisWidth && height() >= kMinAxisHeight) {
     drawXAxis(&painter, m_cachedPlotRect);
     drawYAxis(&painter, m_cachedPlotRect);
@@ -892,17 +850,15 @@ void Widgets::Waterfall::markAxisDirty()
  */
 QRectF Widgets::Waterfall::computePlotRect(const QFontMetrics& fm) const
 {
-  // No axes: plot fills the whole item (border included)
   if (!m_axisVisible || width() < kMinAxisWidth || height() < kMinAxisHeight)
     return QRectF(0.5, 0.5, qMax(0.0, width() - 1), qMax(0.0, height() - 1));
 
-  // Reserve room for axis titles + tick columns
   static auto& fonts = Misc::CommonFonts::instance();
   const QFontMetrics titleFm(fonts.widgetFont(0.91, true));
 
   const int yTickWidth =
     fm.horizontalAdvance(QStringLiteral("00.00")) + kAxisTickPx + kAxisLabelPad;
-  const int yTitleWidth = titleFm.height() + 2;  // tight title column
+  const int yTitleWidth = titleFm.height() + 2;
 
   const int leftMargin   = yTitleWidth + yTickWidth;
   const int rightMargin  = kAxisLabelPad;
@@ -928,7 +884,6 @@ QRectF Widgets::Waterfall::computeSourceRect() const
   const double srcW = iw / m_xZoom;
   const double srcH = ih / m_yZoom;
 
-  // Pan range is constrained so the source rect never falls outside the image
   const double maxPanX = qMax(0.0, (iw - srcW) * 0.5);
   const double maxPanY = qMax(0.0, (ih - srcH) * 0.5);
   const double cx      = iw * 0.5 + qBound(-maxPanX, m_xPan * iw, maxPanX);
@@ -949,7 +904,6 @@ void Widgets::Waterfall::drawXAxis(QPainter* painter, const QRectF& plotRect) co
   if (m_samplingRate <= 0)
     return;
 
-  // Map zoom/pan into the visible Hz range
   const double nyquist = m_samplingRate * 0.5;
   const double srcW    = nyquist / m_xZoom;
   const double maxPan  = qMax(0.0, (nyquist - srcW) * 0.5);
@@ -964,7 +918,6 @@ void Widgets::Waterfall::drawXAxis(QPainter* painter, const QRectF& plotRect) co
   const double tickBotY = plotRect.bottom() + kAxisTickPx;
   const double labelY   = tickBotY + kAxisLabelPad;
 
-  // Pick a starting tick value aligned to the grid (snap to nearest step)
   const double step      = ticks.step;
   const double invStep   = 1.0 / step;
   const double first     = std::ceil(xMinHz * invStep - 1e-9) * step;
@@ -978,15 +931,12 @@ void Widgets::Waterfall::drawXAxis(QPainter* painter, const QRectF& plotRect) co
 
     const double x = plotRect.left() + t * plotRect.width();
 
-    // Vertical grid line through the plot
     painter->setPen(QPen(m_gridColor, 1, Qt::DotLine));
     painter->drawLine(QPointF(x, plotRect.top()), QPointF(x, plotRect.bottom()));
 
-    // Tick mark
     painter->setPen(QPen(m_borderColor, 1));
     painter->drawLine(QPointF(x, tickTopY), QPointF(x, tickBotY));
 
-    // Label centered under the tick
     const QString label  = formatFreqTick(v);
     const int labelWidth = fm.horizontalAdvance(label);
     painter->setPen(m_textColor);
@@ -999,7 +949,6 @@ void Widgets::Waterfall::drawXAxis(QPainter* painter, const QRectF& plotRect) co
  */
 void Widgets::Waterfall::drawYAxis(QPainter* painter, const QRectF& plotRect) const
 {
-  // Resolve the axis data range based on mode
   double dataMin = 0.0;
   double dataMax = 0.0;
   if (m_campbellMode) {
@@ -1015,7 +964,6 @@ void Widgets::Waterfall::drawYAxis(QPainter* painter, const QRectF& plotRect) co
   if (dataRange <= 0.0)
     return;
 
-  // Apply Y zoom/pan around the data center
   const double srcH    = dataRange / m_yZoom;
   const double maxPan  = qMax(0.0, (dataRange - srcH) * 0.5);
   const double centerD = (dataMin + dataMax) * 0.5 + qBound(-maxPan, m_yPan * dataRange, maxPan);
@@ -1040,19 +988,15 @@ void Widgets::Waterfall::drawYAxis(QPainter* painter, const QRectF& plotRect) co
     if (t < 0.0 || t > 1.0)
       continue;
 
-    // Time mode: top->bottom; Campbell mode: bottom->top (flipped)
     const double y = m_campbellMode ? plotRect.bottom() - t * plotRect.height()
                                     : plotRect.top() + t * plotRect.height();
 
-    // Horizontal grid line across the plot
     painter->setPen(QPen(m_gridColor, 1, Qt::DotLine));
     painter->drawLine(QPointF(plotRect.left(), y), QPointF(plotRect.right(), y));
 
-    // Tick mark
     painter->setPen(QPen(m_borderColor, 1));
     painter->drawLine(QPointF(tickLeftX, y), QPointF(tickRightX, y));
 
-    // Label clamped vertically
     const QString label  = formatTimeTick(v, step);
     const int labelWidth = fm.horizontalAdvance(label);
     const double textCy  = qBound(plotRect.top() + fm.ascent() * 0.5,
@@ -1062,7 +1006,6 @@ void Widgets::Waterfall::drawYAxis(QPainter* painter, const QRectF& plotRect) co
     painter->drawText(QPointF(labelRight - labelWidth, textCy), label);
   }
 
-  // Rotated axis title (Campbell mode swaps in the dataset title)
   static auto& fonts = Misc::CommonFonts::instance();
   const QFont titleFont(fonts.widgetFont(0.91, true));
   const QFontMetrics titleFm(titleFont);
@@ -1090,12 +1033,10 @@ void Widgets::Waterfall::drawCursor(QPainter* painter, const QRectF& plotRect) c
   if (plotRect.isEmpty() || !plotRect.contains(m_cursorPos))
     return;
 
-  // Set the dashboard widget font for the tooltip text
   static auto& fonts = Misc::CommonFonts::instance();
   painter->setFont(fonts.widgetFont(0.83, false));
   painter->setRenderHint(QPainter::TextAntialiasing, true);
 
-  // Crosshair lines: clamped within plotRect to avoid overdrawing the axes
   const double cx = qBound(plotRect.left(), m_cursorPos.x(), plotRect.right());
   const double cy = qBound(plotRect.top(), m_cursorPos.y(), plotRect.bottom());
 
@@ -1103,12 +1044,10 @@ void Widgets::Waterfall::drawCursor(QPainter* painter, const QRectF& plotRect) c
   painter->drawLine(QPointF(cx, plotRect.top()), QPointF(cx, plotRect.bottom()));
   painter->drawLine(QPointF(plotRect.left(), cy), QPointF(plotRect.right(), cy));
 
-  // Compute frequency and time/Campbell readout values
   double freqHz = 0.0;
   double yVal   = 0.0;
   cursorReadoutValues(plotRect, cx, cy, freqHz, yVal);
 
-  // Format readout strings
   auto fmtFreq = [](double hz) -> QString {
     const double abs = std::fabs(hz);
     if (abs >= 1e6)
@@ -1130,7 +1069,6 @@ void Widgets::Waterfall::drawCursor(QPainter* painter, const QRectF& plotRect) c
   };
 
   const QString freqText = QObject::tr("Freq: %1").arg(fmtFreq(freqHz));
-  // Campbell readout uses the dataset title; time mode keeps "Time: -Xs"
   const QString timeText =
     m_campbellMode ? QStringLiteral("%1: %2").arg(m_yAxisTitle, QString::number(yVal, 'f', 2))
                    : QObject::tr("Time: −%1").arg(fmtTime(yVal));
@@ -1144,7 +1082,6 @@ void Widgets::Waterfall::drawCursor(QPainter* painter, const QRectF& plotRect) c
 void Widgets::Waterfall::cursorReadoutValues(
   const QRectF& plotRect, double cx, double cy, double& freqHz, double& yVal) const
 {
-  // X axis: convert cursor position into the visible Hz window
   const double nyquist = m_samplingRate * 0.5;
   const double srcWHz  = nyquist / m_xZoom;
   const double maxPanX = qMax(0.0, (nyquist - srcWHz) * 0.5);
@@ -1152,7 +1089,6 @@ void Widgets::Waterfall::cursorReadoutValues(
   const double xMinHz  = centerH - srcWHz * 0.5;
   freqHz               = xMinHz + (cx - plotRect.left()) / plotRect.width() * srcWHz;
 
-  // Y axis: seconds elapsed (time mode) or external dataset value (Campbell mode)
   double yMinAxis = 0.0;
   double yMaxAxis = 1.0;
   if (m_campbellMode) {
@@ -1171,7 +1107,6 @@ void Widgets::Waterfall::cursorReadoutValues(
   const double yMinV   = centerY - srcWY * 0.5;
   const double yMaxV   = centerY + srcWY * 0.5;
 
-  // Time mode is top->bottom; Campbell mode is bottom->top (mirror write direction)
   const double tY = (cy - plotRect.top()) / plotRect.height();
   yVal = m_campbellMode ? (yMaxV - tY * (yMaxV - yMinV)) : (yMinV + tY * (yMaxV - yMinV));
 }
@@ -1193,7 +1128,6 @@ void Widgets::Waterfall::drawCursorTooltip(QPainter* painter,
   const int w = std::max(fm.horizontalAdvance(freqText), fm.horizontalAdvance(timeText)) + padX * 2;
   const int h = fm.height() * 2 + gap + padY * 2;
 
-  // Position next to the cursor; flip sides if it would overflow the plot
   double tx = cx + 12;
   double ty = cy + 12;
   if (tx + w > plotRect.right())
@@ -1205,7 +1139,6 @@ void Widgets::Waterfall::drawCursorTooltip(QPainter* painter,
   tx = qBound(plotRect.left() + 2, tx, plotRect.right() - w - 2);
   ty = qBound(plotRect.top() + 2, ty, plotRect.bottom() - h - 2);
 
-  // Tooltip background and two-line readout
   const QRectF tipRect(tx, ty, w, h);
   painter->setPen(Qt::NoPen);
   painter->setBrush(QColor(0, 0, 0, 184));
@@ -1409,7 +1342,6 @@ void Widgets::Waterfall::zoomBy(double factor, double anchorX, double anchorY)
   const double newX = qBound(1.0, m_xZoom * factor, kMaxZoom);
   const double newY = qBound(1.0, m_yZoom * factor, kMaxZoom);
 
-  // Re-anchor pan so the data point under the cursor stays visually fixed
   const double ax = qBound(0.0, anchorX, 1.0) - 0.5;
   const double ay = qBound(0.0, anchorY, 1.0) - 0.5;
   m_xPan          = m_xPan + ax * (1.0 / m_xZoom - 1.0 / newX);
@@ -1417,7 +1349,6 @@ void Widgets::Waterfall::zoomBy(double factor, double anchorX, double anchorY)
   m_xZoom         = newX;
   m_yZoom         = newY;
 
-  // Clamp pan to keep the visible window inside the data range
   const double maxPanX = (1.0 - 1.0 / m_xZoom) * 0.5;
   const double maxPanY = (1.0 - 1.0 / m_yZoom) * 0.5;
   m_xPan               = qBound(-maxPanX, m_xPan, maxPanX);
@@ -1436,7 +1367,6 @@ void Widgets::Waterfall::panBy(double normDx, double normDy)
   if (!std::isfinite(normDx) || !std::isfinite(normDy))
     return;
 
-  // Drag direction is opposite to pan direction (drag right, data scrolls right)
   m_xPan -= normDx / m_xZoom;
   m_yPan -= normDy / m_yZoom;
 

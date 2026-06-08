@@ -33,11 +33,9 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   , m_hasFn(false)
   , m_watchdog(&m_jsEngine, kTransmitWatchdogMs, QStringLiteral("transmit"))
 {
-  // Inject protocol helper functions before compiling user code
   m_rateLimiter.start();
   installProtocolHelpers(m_jsEngine);
 
-  // Compile the user's transmit function
   if (!config.transmitFunction.isEmpty()) {
     const auto wrapped =
       QStringLiteral("(function() { %1; return transmit; })()").arg(config.transmitFunction);
@@ -140,17 +138,14 @@ bool Widgets::Output::Base::hasTransmitFunction() const noexcept
  */
 void Widgets::Output::Base::sendValue(const QVariant& value)
 {
-  // Enforce rate limit
   if (m_rateLimiter.elapsed() < kMinSendIntervalMs)
     return;
 
-  // Validate license tier
   m_rateLimiter.restart();
   const auto& tk = Licensing::CommercialToken::current();
   if (!tk.isValid() || !SS_LICENSE_GUARD() || tk.featureTier() < Licensing::FeatureTier::Trial)
     return;
 
-  // Evaluate JS function and transmit result
   const auto data = evaluateTransmitFunction(value);
   if (!data.isEmpty())
     (void)IO::ConnectionManager::instance().writeDataToDevice(m_sourceId, data);
@@ -161,35 +156,29 @@ void Widgets::Output::Base::sendValue(const QVariant& value)
  */
 QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value)
 {
-  // Abort if no transmit function was compiled
   if (!m_hasFn)
     return {};
 
-  // Invoke the JS function with the widget value under the cross-thread watchdog
   auto jsValue      = m_jsEngine.toScriptValue(value);
   QJSValueList args = QJSValueList{jsValue};
   auto result       = m_watchdog.call(m_transmitFn, args);
 
-  // Report runaway-script interruption and drop the result
   if (m_watchdog.lastCallTimedOut()) [[unlikely]] {
     Q_EMIT transmitError(tr("Transmit script timed out after %1 ms").arg(kTransmitWatchdogMs));
     return {};
   }
 
-  // Handle JS execution errors
   if (result.isError()) [[unlikely]] {
     Q_EMIT transmitError(result.toString());
     return {};
   }
 
-  // String results honor the configured text encoding for non-ASCII safety
   QByteArray data;
   if (result.isString())
     data = SerialStudio::encodeText(result.toString(), m_txEncoding);
   else
     data = result.toVariant().toByteArray();
 
-  // Enforce hard payload size cap: oversized returns indicate runaway / hostile scripts
   if (data.size() > kMaxPayloadBytes) [[unlikely]] {
     Q_EMIT transmitError(tr("Payload exceeds maximum size"));
     return {};
@@ -209,11 +198,7 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
 {
   // clang-format off
   static const QString kHelpers = QStringLiteral(
-    // -----------------------------------------------------------------
-    // Modbus helpers
-    // -----------------------------------------------------------------
 
-    // modbusWriteRegister: 4 bytes [addr_hi, addr_lo, value_hi, value_lo]
     "function modbusWriteRegister(address, value) {"
     "  var a = address & 0xFFFF;"
     "  var v = Math.round(value) & 0xFFFF;"
@@ -222,12 +207,10 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
     "    (v >> 8) & 0xFF, v & 0xFF);"
     "}"
 
-    // Write a coil (ON = 0xFF00, OFF = 0x0000).
     "function modbusWriteCoil(address, on) {"
     "  return modbusWriteRegister(address, on ? 0xFF00 : 0x0000);"
     "}"
 
-    // modbusWriteFloat: 6 bytes [addr_hi, addr_lo, r1_hi, r1_lo, r2_hi, r2_lo]
     "function modbusWriteFloat(address, value) {"
     "  var buf = new ArrayBuffer(4);"
     "  new DataView(buf).setFloat32(0, value, false);"
@@ -238,11 +221,6 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
     "    b[0], b[1], b[2], b[3]);"
     "}"
 
-    // -----------------------------------------------------------------
-    // CAN Bus helpers
-    // -----------------------------------------------------------------
-
-    // canSendFrame: 3+ bytes [id_hi, id_lo, dlc, payload...]
     "function canSendFrame(id, payload) {"
     "  var canId = id & 0xFFFF;"
     "  var data = '';"
@@ -257,7 +235,6 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
     "    (canId >> 8) & 0xFF, canId & 0xFF, dlc) + data;"
     "}"
 
-    // Send a numeric value packed into a CAN frame (big-endian, 1-8 bytes).
     "function canSendValue(id, value, bytes) {"
     "  bytes = bytes || 2;"
     "  var arr = [];"
@@ -269,11 +246,9 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
   );
   // clang-format on
 
-  // Check for compilation errors on the protocol-helpers blob
   auto result = engine.evaluate(kHelpers);
   if (result.isError())
     qWarning() << "Failed to install protocol helpers:" << result.toString();
 
-  // Install notification API (notify/notifyInfo/... + level constants)
   DataModel::NotificationCenter::installScriptApi(&engine);
 }

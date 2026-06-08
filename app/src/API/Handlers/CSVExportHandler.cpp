@@ -38,7 +38,6 @@ void API::Handlers::CSVExportHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // Mutation commands
   {
     QJsonObject props;
     props[QStringLiteral("enabled")] = QJsonObject{
@@ -55,7 +54,6 @@ void API::Handlers::CSVExportHandler::registerCommands()
                              &setEnabled);
   }
 
-  // Empty schema for parameterless commands
   QJsonObject emptySchema;
   emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
   emptySchema.insert(QStringLiteral("properties"), QJsonObject());
@@ -65,7 +63,6 @@ void API::Handlers::CSVExportHandler::registerCommands()
                            emptySchema,
                            &close);
 
-  // Query commands
   registry.registerCommand(QStringLiteral("csvExport.getStatus"),
                            QStringLiteral("Get CSV export status"),
                            emptySchema,

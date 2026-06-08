@@ -83,14 +83,12 @@ void MDF4::ExportWorker::writeGroupDatasets(const DataModel::Group& group, Chann
   for (size_t i = 0; i < group.datasets.size(); ++i) {
     const auto& dataset = group.datasets.at(i);
 
-    // Write final (post-transform) values
     auto* channel = info.channels[i];
     if (info.isNumeric[i])
       channel->SetChannelValue(dataset.numericValue);
     else
       channel->SetChannelValue(dataset.value.toStdString());
 
-    // Skip raw channel when absent
     if (i >= info.rawChannels.size() || !info.rawChannels[i])
       continue;
 
@@ -131,7 +129,6 @@ void MDF4::ExportWorker::writeFrameGroups(const DataModel::Frame& frame,
  */
 void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
-  // Skip empty batches or when disconnected
   if (items.empty())
     return;
 
@@ -148,14 +145,12 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
   if (!isResourceOpen() || !m_writer)
     return;
 
-  // Guard mdflib calls against exceptions propagating through Qt's event loop
   try {
     const auto systemEpochNs =
       std::chrono::duration_cast<std::chrono::nanoseconds>(m_systemBaseline.time_since_epoch())
         .count();
 
     for (const auto& frame : items) {
-      // Monotonic offset from session start, shifted onto system-clock epoch
       const qint64 offsetNs     = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
       const qint64 timestamp_ns = systemEpochNs + offsetNs;
       const double timestamp_s  = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
@@ -173,7 +168,6 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
 void MDF4::ExportWorker::closeResources()
 {
   if (isResourceOpen() && m_writer) {
-    // Finalize the MDF4 measurement
     try {
       const auto steadyNow    = DataModel::TimestampedFrame::SteadyClock::now();
       const auto steadyOffset = steadyNow - m_steadyBaseline;
@@ -187,7 +181,6 @@ void MDF4::ExportWorker::closeResources()
       qWarning() << "[MDF4] Exception in closeResources:" << e.what();
     }
 
-    // Release writer and clear state
     m_fileOpen = false;
     m_writer.reset();
     m_groupMap.clear();
@@ -214,7 +207,6 @@ static QString sanitizeFrameTitle(const QString& title)
   frameName.remove(QStringLiteral(".."));
   frameName = frameName.simplified();
 
-  // Strip trailing dots and spaces (invalid as file/dir names on Windows)
   int keep = 0;
   for (int i = frameName.size(); i > 0; --i) {
     const QChar c = frameName.at(i - 1);
@@ -285,7 +277,6 @@ void MDF4::ExportWorker::addDatasetChannels(mdf::IChannelGroup* channelGroup,
                                             bool isNum,
                                             ChannelGroupInfo& info)
 {
-  // Final (post-transform) channel
   auto* channel = channelGroup->CreateChannel();
   if (!channel)
     return;
@@ -297,7 +288,6 @@ void MDF4::ExportWorker::addDatasetChannels(mdf::IChannelGroup* channelGroup,
   info.channels.push_back(channel);
   info.isNumeric.push_back(isNum);
 
-  // Raw (pre-transform) channel: always pushed (null included) to keep indices aligned
   auto* rawChannel = channelGroup->CreateChannel();
   if (rawChannel) {
     rawChannel->Name(dataset.title.toStdString() + " (raw)");
@@ -331,7 +321,6 @@ void MDF4::ExportWorker::buildChannelGroupForGroup(
   info.timeChannel  = createTimeChannel(channelGroup);
 
   for (const auto& dataset : group.datasets) {
-    // Resolve data type from live frame when using template
     bool isNum = dataset.isNumeric;
     if (usingTemplate) {
       auto nit = numericLookup.find({group.groupId, dataset.datasetId});
@@ -350,7 +339,6 @@ void MDF4::ExportWorker::buildChannelGroupForGroup(
 void MDF4::ExportWorker::buildChannelGroups(mdf::IDataGroup* dataGroup,
                                             const DataModel::Frame& frame)
 {
-  // Prefer cached project frame, fall back to first data frame
   const bool usingTemplate = !m_templateFrame.groups.empty();
   const auto& allGroups    = usingTemplate ? m_templateFrame.groups : frame.groups;
 
@@ -363,7 +351,6 @@ void MDF4::ExportWorker::buildChannelGroups(mdf::IDataGroup* dataGroup,
   if (usingTemplate)
     numericLookup = buildNumericLookup(frame);
 
-  // Skip image groups entirely: they have no telemetry datasets
   for (const auto& group : allGroups) {
     if (group.widget == QLatin1String("image"))
       continue;
@@ -401,11 +388,9 @@ bool MDF4::ExportWorker::initWriterAndHeader(const QString& frameName, const QDa
  */
 void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
 {
-  // Close any previously open file
   if (isResourceOpen())
     closeResources();
 
-  // Validate license before creating the file
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
       || token.featureTier() < Licensing::FeatureTier::Trial)
@@ -471,7 +456,6 @@ MDF4::Export::Export()
 #endif
 {
 #ifdef BUILD_COMMERCIAL
-  // Wire worker file-state and license-revocation signals
   initializeWorker();
   connect(m_worker,
           &ExportWorker::resourceOpenChanged,
@@ -489,7 +473,6 @@ MDF4::Export::Export()
           });
 #endif
 
-  // Restore persisted export preference
   setExportEnabled(m_settings.value("MDF4Export", false).toBool());
 }
 
@@ -561,7 +544,6 @@ void MDF4::Export::setupExternalConnections()
   connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
       if (IO::ConnectionManager::instance().isConnected()) {
-        // Cache project frame for file creation (only valid in ProjectFile mode)
         auto* worker = static_cast<ExportWorker*>(m_worker);
         if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
           worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
@@ -578,7 +560,6 @@ void MDF4::Export::setupExternalConnections()
       closeFile();
   });
 
-  // Force-off when the app enters Console-only mode
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
     if (AppState::instance().operationMode() == SerialStudio::ConsoleOnly && exportEnabled())
       setExportEnabled(false);
@@ -599,10 +580,8 @@ void MDF4::Export::setSettingsPersistent(const bool persistent)
  */
 void MDF4::Export::setExportEnabled(const bool enabled)
 {
-  // Refuse to enable while the app is in Console-only mode
   const bool allow = enabled && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
 
-  // Validate license and apply the export state
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
   if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial) {
@@ -617,7 +596,6 @@ void MDF4::Export::setExportEnabled(const bool enabled)
     return;
   }
 
-  // License invalid or missing: force disable
   closeFile();
   setConsumerEnabled(false);
   if (m_persistSettings)

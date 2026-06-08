@@ -15,12 +15,11 @@ Both are configured in the Project Editor and behave the same way at runtime. Ev
 
 ## How the X axis works
 
-A plot's X axis is one of three kinds, chosen automatically from the dataset configuration:
+A plot's X axis is one of two kinds, chosen automatically from the dataset configuration:
 
 | X axis      | When                                        | Reads as                          |
 |-------------|---------------------------------------------|-----------------------------------|
 | **Time**    | Default for a plotted dataset               | Seconds, newest sample at the right |
-| **Samples** | Dataset has a fixed point count, no time     | Sample index                      |
 | **Custom**  | `xAxisId` points at another dataset (Pro)   | That dataset's value (XY / scatter) |
 
 A **time** plot scrolls: it shows the most recent window of data, spanning `[-T, 0]` where `T` is the dashboard time range. The newest reading is always pinned at the right edge.

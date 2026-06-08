@@ -92,8 +92,7 @@ each one blindly; pick by the device class the user is asking about:
 | `io.modbus.*`    | Modbus RTU/TCP (load `can_modbus` skill)    |
 | `io.network.*`   | TCP / UDP                                   |
 | `io.process.*`   | Subprocess stdout (Pro)                     |
-| `io.serial.*`    | Generic serial port settings                |
-| `io.uart.*`      | UART driver (most projects start here)      |
+| `io.uart.*`      | UART / serial port (most projects start here)|
 
 Top-level `io.*` itself has bus-management and tail/peek commands; use
 `meta.listCommands{prefix:"io."}` (no trailing subscope) to see them.
@@ -148,9 +147,8 @@ Why it matters:
 
 Pre-flight self-check: **before authoring a loop, ask "am I about to
 issue ≥3 project.* mutations?" If yes, switch to `assistant.project.bulkApply`.**
-Specialized bulk endpoints (`project.dataset.addMany`,
-`project.dataTable.setRegisters`) win where they exist, but `project.batch`
-is the universal fallback.
+Specialized bulk endpoints (e.g. `project.dataset.addMany`) win where they
+exist, but `project.batch` is the universal fallback.
 
 Example, renumber + rename 40 datasets in one call:
 

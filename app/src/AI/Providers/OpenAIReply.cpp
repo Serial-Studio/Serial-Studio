@@ -34,7 +34,6 @@ static const char* const kOpenAIAuthHeader     = "Authorization";
  */
 static QString resolveCanonicalToolName(const QString& sanitized)
 {
-  // Build from the dispatcher catalog so virtual fs.*/assistant.* names round-trip too.
   static const auto buildReverseMap = []() {
     QHash<QString, QString> map;
     AI::ToolDispatcher dispatcher;
@@ -192,7 +191,6 @@ void AI::OpenAIReply::processChoiceDelta(const QJsonObject& choice)
 {
   const auto delta = choice.value(QStringLiteral("delta")).toObject();
 
-  // Text content delta
   const auto contentValue = delta.value(QStringLiteral("content"));
   if (contentValue.isString()) {
     const auto chunk = contentValue.toString();
@@ -200,7 +198,6 @@ void AI::OpenAIReply::processChoiceDelta(const QJsonObject& choice)
       Q_EMIT partialText(chunk);
   }
 
-  // Tool call deltas (array of {index, id?, function: {name?, arguments?}})
   const auto toolCallsValue = delta.value(QStringLiteral("tool_calls"));
   if (!toolCallsValue.isArray())
     return;
@@ -241,7 +238,6 @@ void AI::OpenAIReply::emitPendingToolCalls()
   limits.maxDepth     = 32;
   limits.maxArraySize = 1000;
 
-  // Iterate in index order so tool_use blocks are emitted in stream order
   QList<int> indices = m_toolCalls.keys();
   std::sort(indices.begin(), indices.end());
 
@@ -289,7 +285,6 @@ void AI::OpenAIReply::onReplyReadyRead()
 
   auto chunk = m_reply->readAll();
 
-  // Pre-strip "data: [DONE]\n\n" so it never reaches the JSON parser
   const QByteArray sentinel = "data: [DONE]";
   const int idx             = chunk.indexOf(sentinel);
   if (idx >= 0) {
@@ -343,7 +338,6 @@ void AI::OpenAIReply::onReplyFinished()
   m_sse->feed({});
   emitPendingToolCalls();
 
-  // Diagnostic for tool_calls finish_reason without any deltas
   if (m_finishReason == QStringLiteral("tool_calls") && m_toolCalls.isEmpty()) {
     qCWarning(serialStudioAI) << m_providerLabel
                               << "finish_reason=tool_calls but no tool_calls deltas were received "

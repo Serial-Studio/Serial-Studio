@@ -38,7 +38,6 @@ void API::Handlers::CANBusHandler::registerCommands()
   auto& registry   = CommandRegistry::instance();
   const auto empty = emptySchema();
 
-  // Mutation commands
   registry.registerCommand(QStringLiteral("io.canbus.setPluginIndex"),
                            QStringLiteral("Select CAN plugin by index (params: pluginIndex)"),
                            makeSchema({
@@ -75,7 +74,6 @@ void API::Handlers::CANBusHandler::registerCommands()
   }),
                            &setCanFD);
 
-  // Query commands
   registry.registerCommand(QStringLiteral("io.canbus.getConfig"),
                            QStringLiteral("Get current CAN bus configuration"),
                            empty,
@@ -229,27 +227,22 @@ API::CommandResponse API::Handlers::CANBusHandler::getConfiguration(const QStrin
 
   QJsonObject result;
 
-  // Plugin info
   result[QStringLiteral("pluginIndex")] = canbus->pluginIndex();
   const auto& pluginList                = canbus->pluginList();
   if (canbus->pluginIndex() < pluginList.count())
     result[QStringLiteral("pluginName")] = pluginList.at(canbus->pluginIndex());
 
-  // Interface info
   result[QStringLiteral("interfaceIndex")] = canbus->interfaceIndex();
   const auto& interfaceList                = canbus->interfaceList();
   if (canbus->interfaceIndex() < interfaceList.count())
     result[QStringLiteral("interfaceName")] = interfaceList.at(canbus->interfaceIndex());
 
-  // CAN settings
   result[QStringLiteral("bitrate")] = static_cast<qint64>(canbus->bitrate());
   result[QStringLiteral("canFD")]   = canbus->canFD();
 
-  // Connection status
   result[QStringLiteral("isOpen")]          = canbus->isOpen();
   result[QStringLiteral("configurationOk")] = canbus->configurationOk();
 
-  // Error info
   const QString interfaceError = canbus->interfaceError();
   if (!interfaceError.isEmpty())
     result[QStringLiteral("interfaceError")] = interfaceError;

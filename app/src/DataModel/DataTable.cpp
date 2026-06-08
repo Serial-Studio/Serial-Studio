@@ -52,15 +52,12 @@ DataModel::DataTableStore::DataTableStore() : m_initialized(false) {}
 void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTables,
                                            const Frame& templateFrame)
 {
-  // Reset all state
   clear();
 
-  // Estimate total register count for pre-allocation
   size_t totalRegs = 0;
   for (const auto& table : userTables)
     totalRegs += table.registers.size();
 
-  // Count datasets for system table (2 registers each: raw + final)
   size_t datasetCount = 0;
   for (const auto& group : templateFrame.groups)
     datasetCount += group.datasets.size();
@@ -68,13 +65,11 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
   totalRegs += datasetCount * 2;
   m_storage.reserve(totalRegs);
 
-  // Build user-defined tables
   for (const auto& table : userTables) {
     std::vector<QString> regNames;
     regNames.reserve(table.registers.size());
 
     for (const auto& reg : table.registers) {
-      // Numeric-looking string defaults become numeric registers (matches Lua tableSet coercion)
       RegisterValue defVal;
       defVal.numericValue = SerialStudio::toDouble(reg.defaultValue, &defVal.isNumeric);
       if (!defVal.isNumeric)
@@ -87,7 +82,6 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
     m_tableRegNames.emplace_back(table.name, std::move(regNames));
   }
 
-  // Build system __datasets__ table
   std::vector<QString> sysRegNames;
   sysRegNames.reserve(datasetCount * 2);
   for (const auto& group : templateFrame.groups) {
@@ -96,15 +90,12 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
       const QString rawReg = kRawPrefix + QString::number(uid);
       const QString finReg = kFinalPrefix + QString::number(uid);
 
-      // Raw register
       const int rawOffset = static_cast<int>(m_storage.size());
       addRegister(kSystemTable, rawReg, RegisterValue{}, RegisterType::System);
 
-      // Final register
       const int finOffset = static_cast<int>(m_storage.size());
       addRegister(kSystemTable, finReg, RegisterValue{}, RegisterType::System);
 
-      // Store dataset index mapping
       m_datasetIndex.insert(uid, {rawOffset, finOffset});
 
       sysRegNames.push_back(rawReg);
@@ -166,7 +157,6 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getByInternedKey(cons
     }
   }
 
-  // Cache miss: pay the QString conversion + hash probe once, then memoize.
   const QString tableStr = QString::fromUtf8(table);
   const QString regStr   = QString::fromUtf8(reg);
   const int idx          = indexOf(tableStr, regStr);
@@ -264,7 +254,6 @@ bool DataModel::DataTableStore::set(const QString& table,
   if (idx < 0) [[unlikely]]
     return false;
 
-  // O(1) read-only check; linear scan would dominate the transform hotpath.
   if (!m_isComputed[static_cast<size_t>(idx)]) [[unlikely]] {
     qWarning() << "[DataTableStore] Cannot write to non-computed register" << table << "/" << reg;
     return false;
@@ -462,7 +451,6 @@ void DataModel::TableApiBridge::tableSet(const QString& t, const QString& r, con
 {
   Q_ASSERT(store);
 
-  // Numeric-looking strings become numeric registers (matches Lua tableSet coercion)
   DataModel::RegisterValue rv;
   rv.numericValue = SerialStudio::toDouble(v, &rv.isNumeric);
   if (!rv.isNumeric)

@@ -457,7 +457,6 @@ bool DataModel::FrameParserModel::inputContainsDelimiters(const QString& input, 
   if (detection == SerialStudio::NoDelimiters)
     return true;
 
-  // Same byte conversion as dryRun, so hex mode and escape sequences match extraction
   const QByteArray bytes =
     hex ? SerialStudio::hexToBytes(input) : SerialStudio::resolveEscapeSequences(input).toUtf8();
 
@@ -489,7 +488,6 @@ void DataModel::FrameParserModel::dryRun(const QString& input, bool hex)
     return;
   }
 
-  // Text input resolves escape sequences so a typed \n matches the newline end delimiter
   const QByteArray bytes =
     hex ? SerialStudio::hexToBytes(input) : SerialStudio::resolveEscapeSequences(input).toUtf8();
   if (bytes.isEmpty()) {
@@ -497,7 +495,6 @@ void DataModel::FrameParserModel::dryRun(const QString& input, bool hex)
     return;
   }
 
-  // Mirror the live FrameBuilder path: extraction spec comes from the source's settings
   const auto src = currentSource();
   PipelineSpec spec;
   spec.operationMode     = SerialStudio::ProjectFile;
@@ -514,7 +511,6 @@ void DataModel::FrameParserModel::dryRun(const QString& input, bool hex)
     spec.finishSequences.append(end);
 
   if (src.frameParserLanguage != SerialStudio::Native) {
-    // Pick up uncommitted edits to shared tables, then run the live engine
     DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
     emitPreview(runFrameParserPipeline(bytes, spec, m_sourceId), spec.decoderMethod);
     return;
@@ -545,7 +541,6 @@ void DataModel::FrameParserModel::emitPreview(const PipelineResult& result, int 
     return;
   }
 
-  // Uppercase hex-style decoder output (Hex / Binary modes), like the test dialog
   const bool decoder_is_hex =
     (decoderMethod == SerialStudio::Hexadecimal || decoderMethod == SerialStudio::Binary);
 
@@ -590,7 +585,6 @@ void DataModel::FrameParserModel::onItemChanged(QStandardItem* item)
   if (!tmpl || key.isEmpty())
     return;
 
-  // Locate the schema entry for the edited row
   NativeParamSpec spec;
   bool found       = false;
   const auto specs = tmpl->params();
@@ -605,7 +599,6 @@ void DataModel::FrameParserModel::onItemChanged(QStandardItem* item)
   if (!found)
     return;
 
-  // Convert the widget payload to the parameter's JSON value
   const auto value = item->data(ProjectEditor::EditableValue);
   QJsonValue json;
   switch (spec.type) {
@@ -650,7 +643,6 @@ void DataModel::FrameParserModel::onItemChanged(QStandardItem* item)
 
   m_params.insert(key, json);
 
-  // Invalid configs stay local (banner only) so the live engine never loads them
   QString error;
   if (!validateParams(m_params, error)) {
     setParamError(error);
@@ -724,7 +716,6 @@ void DataModel::FrameParserModel::rebuildParameterModel()
 {
   const auto* tmpl = currentTemplate();
 
-  // Replace the model wholesale so delegates never see rows mutate across templates
   auto* model = new CustomModel(this);
   connect(model, &CustomModel::itemChanged, this, &FrameParserModel::onItemChanged);
 
@@ -781,7 +772,6 @@ void DataModel::FrameParserModel::rebuildParameterModel()
         }
         break;
       case NativeParamType::Json: {
-        // Structured maps are importer-generated; expose the raw config as editable JSON
         const auto array = stored.isArray() ? stored.toArray() : spec.defaultValue.toArray();
         const auto text  = QString::fromUtf8(QJsonDocument(array).toJson(QJsonDocument::Compact));
         item->setData(ProjectEditor::TextField, ProjectEditor::WidgetType);

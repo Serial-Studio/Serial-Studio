@@ -45,9 +45,7 @@ struct AxisTicks {
   if (!(rawMax > rawMin))
     return out;
 
-  // Pick a step from the {2, 5, 10, 20} family scaled to the range magnitude.
   const double range = rawMax - rawMin;
-  // Import-time only; pow cost is irrelevant.
   // code-verify off
   const double mag   = std::pow(10.0, std::floor(std::log10(range)));
   // code-verify on

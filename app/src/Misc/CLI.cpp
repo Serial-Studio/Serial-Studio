@@ -251,7 +251,6 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
       seconds = val;
   }
 
-  // No default file: the report is only written when --benchmark-output names one.
   QString output;
   if (m_parser.isSet(m_opts.benchmarkOutputOpt))
     output = m_parser.value(m_opts.benchmarkOutputOpt).trimmed();
@@ -568,7 +567,6 @@ void CLI::applyOperatorTaskbarSettings()
     tbs.setAutohide(false);
   }
 
-  // Missing flag means the deploy dialog left pins empty; do not fall back to persisted defaults
   const QStringList pinned = m_parser.isSet(m_opts.taskbarButtonsOpt)
                              ? splitTaskbarButtonIds(m_parser.value(m_opts.taskbarButtonsOpt))
                              : QStringList{};
@@ -596,7 +594,6 @@ void CLI::applyThemeOverride()
     return;
   }
 
-  // Operator-mode shortcuts must not overwrite the user's persisted theme
   if (runtimeMode())
     tm.setSettingsPersistent(false);
 

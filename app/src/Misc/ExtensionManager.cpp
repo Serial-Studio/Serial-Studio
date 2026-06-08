@@ -88,17 +88,14 @@ Misc::ExtensionManager::ExtensionManager()
   , m_pendingExtensionMetas(0)
   , m_dashboardWasAvailable(false)
 {
-  // Bound every fetch so a stalled connection cannot pin the busy state
   m_nam.setTransferTimeout(15 * 1000);
 
-  // Load repository list from settings, default to community repo
   const auto saved = m_settings.value("ExtensionRepositories").toStringList();
   if (saved.isEmpty())
     m_repositories.append(kDefaultRepoUrl);
   else
     m_repositories = saved;
 
-  // Load installed extension tracking and rebuild plugin list
   loadInstalledManifest();
   applyFilter();
   rebuildInstalledPlugins();
@@ -274,11 +271,9 @@ bool Misc::ExtensionManager::isInstalled(const QString& id) const
  */
 bool Misc::ExtensionManager::hasUpdate(const QString& id) const
 {
-  // Must be installed to have an update
   if (!isInstalled(id))
     return false;
 
-  // Compare installed version against the catalog version
   const auto installed = m_installedExtensions.value(id).toObject();
   const auto localVer  = installed.value("version").toString();
 
@@ -311,11 +306,9 @@ QString Misc::ExtensionManager::installedVersion(const QString& id) const
  */
 void Misc::ExtensionManager::setSelectedIndex(int index)
 {
-  // Guard against redundant updates
   if (m_selectedIndex == index)
     return;
 
-  // Update selection and fetch readme for the new extension
   m_selectedIndex = index;
   Q_EMIT selectedIndexChanged();
 
@@ -392,11 +385,9 @@ void Misc::ExtensionManager::setFilterType(const QString& type)
  */
 void Misc::ExtensionManager::refreshRepositories()
 {
-  // Avoid concurrent fetches
   if (m_loading)
     return;
 
-  // Abort stale replies so their callbacks can't append to the cleared catalog
   for (auto* reply : std::as_const(m_activeReplies)) {
     if (reply) {
       reply->disconnect(this);
@@ -407,7 +398,6 @@ void Misc::ExtensionManager::refreshRepositories()
 
   m_activeReplies.clear();
 
-  // Clear previous catalog
   m_allExtensions = QJsonArray();
   m_filteredExtensions.clear();
   m_selectedIndex         = -1;
@@ -416,7 +406,6 @@ void Misc::ExtensionManager::refreshRepositories()
   Q_EMIT selectedIndexChanged();
   Q_EMIT filteredExtensionsChanged();
 
-  // Separate local and remote repos
   QStringList remoteRepos;
   QStringList localRepos;
   for (const auto& repo : std::as_const(m_repositories))
@@ -425,11 +414,9 @@ void Misc::ExtensionManager::refreshRepositories()
     else
       remoteRepos.append(repo);
 
-  // Load local manifests synchronously
   for (const auto& localPath : std::as_const(localRepos))
     loadLocalManifest(localPath);
 
-  // Fetch remote manifests asynchronously
   m_pendingManifests = remoteRepos.count();
   if (m_pendingManifests > 0) {
     m_loading = true;
@@ -482,7 +469,6 @@ void Misc::ExtensionManager::removeRepository(int index)
  */
 void Misc::ExtensionManager::resetRepositories()
 {
-  // Confirm the destructive operation with the user
   const auto result = Misc::Utilities::showMessageBox(
     tr("Reset Extensions"),
     tr("This uninstalls all extensions, removes all custom repositories, "
@@ -495,10 +481,8 @@ void Misc::ExtensionManager::resetRepositories()
   if (result != QMessageBox::Yes)
     return;
 
-  // Stop all running plugins
   stopAllPlugins();
 
-  // Remove all installed extension files
   const auto ids = m_installedExtensions.keys();
   for (const auto& id : ids) {
     const auto info = m_installedExtensions.value(id).toObject();
@@ -510,13 +494,11 @@ void Misc::ExtensionManager::resetRepositories()
   m_installedExtensions = QJsonObject();
   saveInstalledManifest();
 
-  // Reset repos to default
   m_repositories.clear();
   m_repositories.append(kDefaultRepoUrl);
   m_settings.setValue("ExtensionRepositories", m_repositories);
   Q_EMIT repositoriesChanged();
 
-  // Notify theme manager about removed themes
   Q_EMIT extensionUninstalled(QString());
 
   refreshRepositories();
@@ -534,7 +516,6 @@ void Misc::ExtensionManager::browseLocalRepo()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -554,22 +535,18 @@ void Misc::ExtensionManager::browseLocalRepo()
  */
 void Misc::ExtensionManager::installExtension()
 {
-  // Refuse to start a second install while one is already in progress
   if (m_loading)
     return;
 
-  // Validate selection
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
     return;
 
-  // Read extension metadata and build the download queue
   const auto addon   = m_filteredExtensions.at(m_selectedIndex).toMap();
   const auto id      = addon.value("id").toString();
   const auto type    = addon.value("type").toString();
   const auto base    = addon.value("_repoBase").toString();
   const auto isLocal = addon.value("_isLocal").toBool();
 
-  // Collect base files + platform-specific files
   auto files           = addon.value("files").toList();
   const auto platforms = addon.value("platforms").toMap();
   const auto override  = selectPlatformOverride(platforms, currentPlatformKey());
@@ -581,24 +558,20 @@ void Misc::ExtensionManager::installExtension()
   if (id.isEmpty() || files.isEmpty())
     return;
 
-  // Reject IDs or types containing path traversal components
   if (id.contains("..") || id.contains('/') || id.contains('\\'))
     return;
 
   if (type.contains("..") || type.contains('/') || type.contains('\\'))
     return;
 
-  // Determine install path based on extension type
   const auto installDir = extensionsPath() + "/" + type + "/" + id;
   QDir().mkpath(installDir);
 
-  // Local repos: copy files directly (paths are relative to info.json)
   if (isLocal) {
     for (const auto& f : std::as_const(files)) {
       const auto localName = f.toString();
       const auto dst       = installDir + "/" + localName;
 
-      // Validate destination stays within install directory
       if (!isPathSafe(dst, installDir))
         continue;
 
@@ -607,7 +580,6 @@ void Misc::ExtensionManager::installExtension()
       QFile::copy(src, dst);
     }
 
-    // Register the installed addon
     QJsonObject info;
     info.insert("version", addon.value("version").toString());
     info.insert("type", type);
@@ -622,7 +594,6 @@ void Misc::ExtensionManager::installExtension()
     return;
   }
 
-  // Remote repos: build download queue (paths relative to info.json)
   m_downloadQueue.clear();
   for (const auto& f : files) {
     const auto localName = f.toString();
@@ -630,7 +601,6 @@ void Misc::ExtensionManager::installExtension()
     m_downloadQueue.append({localName, url});
   }
 
-  // Save metadata snapshot so async callbacks don't depend on selection
   m_currentInstallId       = id;
   m_currentInstallRepoBase = base;
   m_currentInstallMeta     = addon;
@@ -649,11 +619,9 @@ void Misc::ExtensionManager::installExtension()
  */
 void Misc::ExtensionManager::uninstallExtension()
 {
-  // Validate selection
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
     return;
 
-  // Remove the extension files and update tracking
   const auto addon = m_filteredExtensions.at(m_selectedIndex).toMap();
   const auto id    = addon.value("id").toString();
   const auto type  = addon.value("type").toString();
@@ -661,7 +629,6 @@ void Misc::ExtensionManager::uninstallExtension()
   if (id.isEmpty() || !isInstalled(id))
     return;
 
-  // Remove addon directory
   const auto installDir = extensionsPath() + "/" + type + "/" + id;
   QDir(installDir).removeRecursively();
 
@@ -684,11 +651,9 @@ void Misc::ExtensionManager::uninstallExtension()
  */
 void Misc::ExtensionManager::autoUpdateExtensions()
 {
-  // Skip if another operation is in progress
   if (m_loading)
     return;
 
-  // Build the update queue on first call
   if (m_autoUpdateQueue.isEmpty()) {
     const auto ids = m_installedExtensions.keys();
     for (const auto& id : ids)
@@ -699,10 +664,8 @@ void Misc::ExtensionManager::autoUpdateExtensions()
   if (m_autoUpdateQueue.isEmpty())
     return;
 
-  // Process next update
   const auto id = m_autoUpdateQueue.takeFirst();
 
-  // Find the extension in the filtered list
   bool found = false;
   for (int i = 0; i < m_filteredExtensions.count(); ++i) {
     if (m_filteredExtensions.at(i).toMap().value("id").toString() != id)
@@ -715,10 +678,8 @@ void Misc::ExtensionManager::autoUpdateExtensions()
     break;
   }
 
-  // Schedule next update via a queued hop so applyFilter() finishes before re-entry
   if (!m_autoUpdateQueue.isEmpty()) {
     if (found && m_loading) {
-      // Remote install in progress: wait for completion, then queue
       connect(
         this,
         &ExtensionManager::extensionInstalled,
@@ -728,7 +689,6 @@ void Misc::ExtensionManager::autoUpdateExtensions()
     }
 
     else {
-      // Local install completed synchronously, or extension not found
       QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
     }
   }
@@ -743,7 +703,6 @@ void Misc::ExtensionManager::autoUpdateExtensions()
  */
 void Misc::ExtensionManager::parseManifest(QNetworkReply* reply)
 {
-  // manifest.json is untrusted remote input: bound depth/size before walking it.
   const auto parsed = Misc::JsonValidator::parseAndValidate(reply->readAll());
   if (!parsed.valid || !parsed.document.isObject()) {
     qWarning() << "[ExtensionManager] Rejected manifest JSON:" << parsed.errorMessage;
@@ -756,7 +715,6 @@ void Misc::ExtensionManager::parseManifest(QNetworkReply* reply)
   const auto baseUrl = repoUrl.left(repoUrl.lastIndexOf('/') + 1);
 
   for (const auto& entry : addons) {
-    // String paths fetch each addon's info.json asynchronously
     if (entry.isString()) {
       const auto metaPath  = entry.toString();
       const auto metaUrl   = baseUrl + metaPath;
@@ -770,7 +728,6 @@ void Misc::ExtensionManager::parseManifest(QNetworkReply* reply)
       continue;
     }
 
-    // Inline objects (legacy) are appended directly
     if (entry.isObject()) {
       auto obj = entry.toObject();
       obj.insert("_repoBase", baseUrl);
@@ -791,7 +748,6 @@ void Misc::ExtensionManager::onManifestReply()
   m_activeReplies.remove(reply);
   reply->deleteLater();
 
-  // Parse the manifest and fetch each addon's metadata
   if (reply->error() == QNetworkReply::NoError)
     parseManifest(reply);
 
@@ -817,9 +773,7 @@ void Misc::ExtensionManager::onExtensionMetaReply()
   m_activeReplies.remove(reply);
   reply->deleteLater();
 
-  // Only append entries that parse to a non-empty object with a valid id
   if (reply->error() == QNetworkReply::NoError) {
-    // info.json is untrusted remote input: bound depth/size before processing.
     const auto parsed = Misc::JsonValidator::parseAndValidate(reply->readAll());
     auto obj          = parsed.valid ? parsed.document.object() : QJsonObject();
     if (!obj.isEmpty() && !obj.value("id").toString().isEmpty()) {
@@ -869,7 +823,6 @@ void Misc::ExtensionManager::onFileDownloadReply()
   m_activeReplies.remove(reply);
   reply->deleteLater();
 
-  // Write the downloaded file to the install directory
   if (reply->error() == QNetworkReply::NoError)
     writeExtensionFile(reply);
 
@@ -880,13 +833,11 @@ void Misc::ExtensionManager::onFileDownloadReply()
                        : 1.0f;
   Q_EMIT downloadProgressChanged();
 
-  // Continue with next file or finish
   if (!m_downloadQueue.isEmpty()) {
     downloadNextFile();
     return;
   }
 
-  // All downloads complete: register using saved metadata snapshot
   QJsonObject info;
   info.insert("version", m_currentInstallMeta.value("version").toString());
   info.insert("type", m_currentInstallMeta.value("type").toString());
@@ -900,7 +851,6 @@ void Misc::ExtensionManager::onFileDownloadReply()
   m_installedExtensions.insert(m_currentInstallId, info);
   saveInstalledManifest();
 
-  // Clear loading state
   m_loading = false;
   Q_EMIT loadingChanged();
   Q_EMIT extensionInstalled(m_currentInstallId);
@@ -1102,12 +1052,10 @@ void Misc::ExtensionManager::restoreSelectionByPreviousId()
  */
 QVariantMap Misc::ExtensionManager::loadPluginMetadata(const QString& iid)
 {
-  // Cached entries return immediately
   auto cacheIt = m_pluginMetadataCache.find(iid);
   if (cacheIt != m_pluginMetadataCache.end())
     return cacheIt.value();
 
-  // Read info.json from disk and populate the cache
   const auto pluginDir = extensionsPath() + "/plugin/" + iid;
   QVariantMap cached;
 
@@ -1135,7 +1083,6 @@ QVariantMap Misc::ExtensionManager::loadPluginMetadata(const QString& iid)
  */
 void Misc::ExtensionManager::rebuildInstalledPlugins()
 {
-  // Iterate installed extensions and collect plugin entries
   QVariantList plugins;
   const auto pluginIds = m_installedExtensions.keys();
   for (const auto& iid : pluginIds) {
@@ -1143,7 +1090,6 @@ void Misc::ExtensionManager::rebuildInstalledPlugins()
     if (info.value("type").toString() != QStringLiteral("plugin"))
       continue;
 
-    // Build the entry from cached or freshly loaded metadata
     QVariantMap entry;
     entry.insert("id", iid);
     entry.insert("running", isPluginRunning(iid));
@@ -1216,7 +1162,6 @@ QString Misc::ExtensionManager::currentPlatformKey() const
  */
 QJsonObject Misc::ExtensionManager::resolvePlatform(const QJsonObject& meta) const
 {
-  // Start with base metadata and overlay platform-specific overrides
   auto result = meta;
 
   const auto platforms = meta.value("platforms").toObject();
@@ -1226,7 +1171,6 @@ QJsonObject Misc::ExtensionManager::resolvePlatform(const QJsonObject& meta) con
   const auto key = currentPlatformKey();
   const auto os  = key.left(key.indexOf('/'));
 
-  // Try exact match first, then wildcard
   QJsonObject override;
   if (platforms.contains(key))
     override = platforms.value(key).toObject();
@@ -1238,7 +1182,6 @@ QJsonObject Misc::ExtensionManager::resolvePlatform(const QJsonObject& meta) con
   if (override.isEmpty())
     return result;
 
-  // Merge platform overrides on top of base fields
   for (auto it = override.begin(); it != override.end(); ++it)
     result.insert(it.key(), it.value());
 
@@ -1701,12 +1644,10 @@ void Misc::ExtensionManager::registerRunningPlugin(const QString& id,
  */
 void Misc::ExtensionManager::stopPlugin(const QString& id)
 {
-  // Find the running plugin process
   auto it = m_plugins.find(id);
   if (it == m_plugins.end())
     return;
 
-  // Track user-closed plugins to prevent auto-relaunch on next dashboard show
   if (UI::Dashboard::instance().available())
     m_userClosedPlugins.insert(id);
 
@@ -1714,13 +1655,10 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
   m_pluginOutput[id] += QStringLiteral("[Stopping...]\n");
   Q_EMIT pluginOutputChanged(id);
 
-  // Disconnect all signals to prevent onPluginFinished from firing
   process->disconnect(this);
 
-  // Remove from map before terminating to avoid double-free
   m_plugins.erase(it);
 
-  // Terminate the process and capture remaining output
   process->terminate();
   if (!process->waitForFinished(3000))
     process->kill();
@@ -1734,7 +1672,6 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
 
   delete process;
 
-  // Remove from the running plugins list and update UI
   for (int i = 0; i < m_runningPlugins.count(); ++i) {
     if (m_runningPlugins.at(i).toMap().value("id").toString() == id) {
       m_runningPlugins.removeAt(i);
@@ -1752,11 +1689,9 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
  */
 void Misc::ExtensionManager::stopAllPlugins()
 {
-  // Save running plugin IDs before stopping
   const auto ids = m_plugins.keys();
   m_settings.setValue("RunningPlugins", QStringList(ids));
 
-  // Inline stop logic to avoid O(n*m) applyFilter() calls from stopPlugin()
   for (const auto& id : ids) {
     auto* process = m_plugins.value(id);
     if (!process)
@@ -1782,7 +1717,6 @@ void Misc::ExtensionManager::stopAllPlugins()
  */
 void Misc::ExtensionManager::restoreRunningPlugins()
 {
-  // Wait for catalog to finish loading before restoring
   if (m_loading) {
     connect(
       this,
@@ -1809,11 +1743,9 @@ void Misc::ExtensionManager::onDashboardAvailableChanged()
 {
   const bool available = UI::Dashboard::instance().available();
 
-  // Dashboard just became visible: restore plugins
   if (available && !m_dashboardWasAvailable)
     restoreRunningPlugins();
 
-  // Dashboard just became hidden: save & stop plugins
   else if (!available && m_dashboardWasAvailable)
     stopAllPlugins();
 
@@ -1829,11 +1761,9 @@ void Misc::ExtensionManager::onPluginFinished(const QString& id)
   if (it == m_plugins.end())
     return;
 
-  // Track as user-closed so it won't auto-relaunch on next dashboard show
   if (UI::Dashboard::instance().available())
     m_userClosedPlugins.insert(id);
 
-  // Capture remaining output and log exit code
   auto* process        = it.value();
   const auto remaining = QString::fromUtf8(process->readAll());
   if (!remaining.isEmpty())
@@ -1843,7 +1773,6 @@ void Misc::ExtensionManager::onPluginFinished(const QString& id)
   m_pluginOutput[id]  += QStringLiteral("[Exited with code %1]\n").arg(exitCode);
   Q_EMIT pluginOutputChanged(id);
 
-  // Clean up the process and remove from running list
   m_plugins.erase(it);
   process->deleteLater();
 
@@ -1868,7 +1797,6 @@ void Misc::ExtensionManager::onPluginFinished(const QString& id)
  */
 void Misc::ExtensionManager::loadLocalManifest(const QString& repoPath)
 {
-  // Normalize the path and locate the manifest file
   auto path = repoPath;
   if (path.startsWith("file://"))
     path = QUrl(path).toLocalFile();
@@ -1881,7 +1809,6 @@ void Misc::ExtensionManager::loadLocalManifest(const QString& repoPath)
   if (!file.open(QIODevice::ReadOnly))
     return;
 
-  // Parse the manifest and load each addon's metadata
   const auto doc     = QJsonDocument::fromJson(file.readAll());
   const auto root    = doc.object();
   const auto addons  = root.value("extensions").toArray();
@@ -1948,7 +1875,6 @@ void Misc::ExtensionManager::writeExtensionFile(QNetworkReply* reply)
   const auto installDir = extensionsPath() + "/" + type + "/" + m_currentInstallId;
   const auto filePath   = installDir + "/" + localName;
 
-  // Validate destination stays within install directory
   if (!isPathSafe(filePath, installDir))
     return;
 

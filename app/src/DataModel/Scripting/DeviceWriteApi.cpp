@@ -42,7 +42,6 @@
  */
 static qint64 performDeviceWrite(int sourceId, const QByteArray& data, QString& errorMsgOut)
 {
-  // Guard against negative sourceId; ConnectionManager::writeDataToDevice Q_ASSERTs in debug
   if (sourceId < 0) {
     errorMsgOut = QStringLiteral("deviceWrite: sourceId must be >= 0");
     qInfo().noquote() << QStringLiteral("[deviceWrite] rejected source=%1 bytes=%2 (negative id)")
@@ -267,7 +266,7 @@ static bool fireActionByPublicId(int actionId, QString& errorMsgOut)
   }
 
   try {
-    UI::Dashboard::instance().activateAction(idx, /*guiTrigger=*/false);
+    UI::Dashboard::instance().activateAction(idx, false);
   } catch (const std::exception& e) {
     errorMsgOut = QString::fromUtf8(e.what());
   } catch (...) {

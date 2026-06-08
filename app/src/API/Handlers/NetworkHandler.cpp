@@ -39,7 +39,6 @@ void API::Handlers::NetworkHandler::registerCommands()
   auto& registry   = CommandRegistry::instance();
   const auto empty = emptySchema();
 
-  // Mutation commands
   SchemaProp address_prop;
   address_prop.name         = QStringLiteral("address");
   address_prop.type         = QStringLiteral("string");
@@ -95,7 +94,6 @@ void API::Handlers::NetworkHandler::registerCommands()
   }),
                            &lookup);
 
-  // Query commands
   registry.registerCommand(QStringLiteral("io.network.getConfig"),
                            QStringLiteral("Get current network configuration"),
                            empty,
@@ -298,21 +296,17 @@ API::CommandResponse API::Handlers::NetworkHandler::getConfiguration(const QStri
 
   QJsonObject result;
 
-  // Address
   result[QStringLiteral("remoteAddress")] = network->remoteAddress();
 
-  // Ports
   result[QStringLiteral("tcpPort")]       = network->tcpPort();
   result[QStringLiteral("udpLocalPort")]  = network->udpLocalPort();
   result[QStringLiteral("udpRemotePort")] = network->udpRemotePort();
 
-  // Socket type
   result[QStringLiteral("socketTypeIndex")] = network->socketTypeIndex();
   const auto& socketTypes                   = network->socketTypes();
   if (network->socketTypeIndex() < socketTypes.count())
     result[QStringLiteral("socketTypeName")] = socketTypes.at(network->socketTypeIndex());
 
-  // Other settings
   result[QStringLiteral("udpMulticast")]    = network->udpMulticast();
   result[QStringLiteral("lookupActive")]    = network->lookupActive();
   result[QStringLiteral("isOpen")]          = network->isOpen();

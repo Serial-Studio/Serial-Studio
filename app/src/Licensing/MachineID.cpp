@@ -49,11 +49,11 @@ static QString resolveSystemTool(const QStringList& candidates, const QString& f
 }
 
 /**
- * @brief Waits for a fingerprint helper with a hard timeout, killing it if it wedges.
+ * @brief Waits for a fingerprint helper, killing it if it wedges; the timeout
+ * must clear the tool's worst case so a slow start cannot change the fingerprint.
  */
 static void awaitTool(QProcess& process, int timeoutMs = 3000)
 {
-  // The timeout must clear the tool's normal worst case, else a slow start changes the fingerprint.
   if (!process.waitForFinished(timeoutMs)) {
     process.kill();
     process.waitForFinished(500);
@@ -85,7 +85,8 @@ static QString readLinuxId(bool& complete)
 
 #if defined(Q_OS_MAC)
 /**
- * @brief Reads the macOS IOPlatformUUID from the IO registry.
+ * @brief Reads the macOS IOPlatformUUID from the IO registry; only the
+ * `key = "value"` shape is accepted, never a line lacking the '=' separator.
  */
 static QString readMacId(bool& complete)
 {
@@ -99,7 +100,6 @@ static QString readMacId(bool& complete)
   QStringList lines = output.split("\n");
   for (const QString& line : std::as_const(lines)) {
     if (line.contains("IOPlatformUUID")) {
-      // Only accept the `key = "value"` shape; never build an ID from a line lacking '='.
       const auto parts = line.split("=");
       if (parts.size() >= 2) {
         id = parts.last().trimmed();
@@ -116,14 +116,15 @@ static QString readMacId(bool& complete)
 
 #if defined(Q_OS_WIN)
 /**
- * @brief Reads the Windows MachineGuid and system UUID, requiring both.
+ * @brief Reads the Windows MachineGuid and system UUID, requiring both since a
+ * partial read degrades the fingerprint; the PowerShell UUID query gets a long
+ * timeout so a cold start cannot drop it.
  */
 static QString readWindowsId(bool& complete)
 {
   QProcess process;
   QString machineGuid, uuid;
 
-  // Resolve system tools under the real Windows directory
   auto systemRoot = qEnvironmentVariable("SystemRoot");
   if (systemRoot.isEmpty())
     systemRoot = QStringLiteral("C:\\Windows");
@@ -131,7 +132,6 @@ static QString readWindowsId(bool& complete)
   const auto system32 = systemRoot + QStringLiteral("\\System32\\");
   const auto regTool  = resolveSystemTool({system32 + "reg.exe"}, "reg");
 
-  // Read MachineGuid from the registry
   process.start(
     regTool,
     {"query", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography", "/v", "MachineGuid"});
@@ -145,7 +145,6 @@ static QString readWindowsId(bool& complete)
     }
   }
 
-  // Read the system UUID via PowerShell; allow a long timeout so cold-start cannot drop it.
   const auto psTool =
     resolveSystemTool({system32 + "WindowsPowerShell\\v1.0\\powershell.exe"}, "powershell");
   process.start(psTool,
@@ -156,7 +155,6 @@ static QString readWindowsId(bool& complete)
   awaitTool(process, 30000);
   uuid = process.readAllStandardOutput().trimmed();
 
-  // A partial read (one component missing) degrades the fingerprint, so require both.
   complete = !machineGuid.isEmpty() && !uuid.isEmpty();
   return machineGuid + uuid;
 }
@@ -265,10 +263,12 @@ quint64 Licensing::MachineID::machineSpecificKey() const noexcept
 
 /**
  * @brief Fixed, machine-independent cipher for the last-good raw id store.
+ *
+ * The key is a constant so the store still decrypts on a degraded read, when
+ * machineSpecificKey is unavailable.
  */
 static Licensing::SimpleCrypt& lastGoodCrypt()
 {
-  // Constant key so the store decrypts even on a degraded read (machineSpecificKey is unavailable).
   static constexpr quint64 kStoreKey = 0x5331'4D49'4452'4157ULL;
   static Licensing::SimpleCrypt crypt(kStoreKey);
   static bool configured = false;
@@ -312,7 +312,9 @@ void Licensing::MachineID::saveLastGoodRawId(const QString& rawId, const QString
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Collects system-specific data to generate a unique machine identifier and encryption key.
+ * @brief Collects system data to derive the machine id and encryption key; a
+ * healthy platform read refreshes the last-good store, a degraded read reuses
+ * the stored fingerprint so a transient tool failure never re-keys the machine.
  */
 void Licensing::MachineID::readInformation()
 {
@@ -320,11 +322,9 @@ void Licensing::MachineID::readInformation()
   bool complete = false;
   QString id    = readPlatformId(os, complete);
 
-  // A healthy read is the source of truth and refreshes the store; the happy path is unchanged.
   if (complete)
     saveLastGoodRawId(id, os);
 
-  // A degraded read reuses the last-good value so a transient tool failure never re-keys.
   else {
     const auto stored = loadLastGoodRawId(os);
     if (!stored.isEmpty()) {
@@ -336,15 +336,12 @@ void Licensing::MachineID::readInformation()
       qWarning() << "[MachineID] degraded read and no stored fingerprint";
   }
 
-  // Hash the composite identifier with BLAKE2s-128
   auto data = QString("%1@%2:%3").arg(qApp->applicationName(), id, os);
   auto hash = QCryptographicHash::hash(data.toUtf8(), QCryptographicHash::Blake2s_128);
 
-  // Derive machine ID and encryption key
   m_machineId          = QString::fromUtf8(hash.toBase64());
   m_machineSpecificKey = qFromBigEndian<quint64>(hash.left(8));
 
-  // Derive version-specific machine ID
   auto appVerData =
     QString("%1_%2@%3:%4").arg(qApp->applicationName(), qApp->applicationVersion(), id, os);
   auto appVerHash = QCryptographicHash::hash(appVerData.toUtf8(), QCryptographicHash::Blake2s_128);

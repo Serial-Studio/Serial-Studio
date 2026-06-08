@@ -169,7 +169,6 @@ void Widgets::Accelerometer::resetPeakG()
  */
 void Widgets::Accelerometer::updateData()
 {
-  // Validate widget state
   if (!isEnabled())
     return;
 
@@ -180,7 +179,6 @@ void Widgets::Accelerometer::updateData()
   if (acc.datasets.size() != 3)
     return;
 
-  // Read raw axis values
   double rawX = 0, rawY = 0, rawZ = 0;
   for (int i = 0; i < 3; ++i) {
     const auto& dataset = acc.datasets[i];
@@ -195,25 +193,20 @@ void Widgets::Accelerometer::updateData()
       rawZ = dataset.numericValue;
   }
 
-  // Convert to G-force
   constexpr double kInv981 = 1.0 / 9.81;
   const double factor      = m_inputInG ? 1.0 : kInv981;
   const double gx          = rawX * factor;
   const double gy          = rawY * factor;
   const double gz          = rawZ * factor;
 
-  // 2D polar (X-Y plane)
   const double mag   = qSqrt(gx * gx + gy * gy);
   const double theta = qAtan2(gy, gx) * (180.0 / M_PI);
 
-  // 3D total G-force
   const double totalG = qSqrt(gx * gx + gy * gy + gz * gz);
 
-  // Tilt angles
   const double pitchVal = qAtan2(gx, qSqrt(gy * gy + gz * gz)) * (180.0 / M_PI);
   const double rollVal  = qAtan2(gy, qSqrt(gx * gx + gz * gz)) * (180.0 / M_PI);
 
-  // Store previous filtered values for change detection
   const double prevX     = m_x;
   const double prevY     = m_y;
   const double prevZ     = m_z;
@@ -224,7 +217,6 @@ void Widgets::Accelerometer::updateData()
   const double prevRoll  = m_roll;
   const double prevPeak  = m_peakG;
 
-  // Apply EMA filter for smooth display
   constexpr double kAlpha = 0.4;
   if (!m_filterInitialized) {
     m_x                 = gx;
@@ -245,7 +237,6 @@ void Widgets::Accelerometer::updateData()
     m_pitch     += kAlpha * (pitchVal - m_pitch);
     m_magnitude += kAlpha * (mag - m_magnitude);
 
-    // Angle-aware EMA for theta (handles wrapping at +/-180)
     double thetaDelta = theta - m_theta;
     if (thetaDelta > 180.0)
       thetaDelta -= 360.0;
@@ -255,10 +246,8 @@ void Widgets::Accelerometer::updateData()
     m_theta += kAlpha * thetaDelta;
   }
 
-  // Peak tracking uses raw (unfiltered) value
   m_peakG = qMax(m_peakG, totalG);
 
-  // Check for changes
   const bool changed = DSP::notEqual(m_x, prevX) || DSP::notEqual(m_y, prevY)
                     || DSP::notEqual(m_z, prevZ) || DSP::notEqual(m_g, prevG)
                     || DSP::notEqual(m_magnitude, prevMag) || DSP::notEqual(m_theta, prevTheta)

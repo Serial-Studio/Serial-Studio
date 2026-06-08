@@ -87,6 +87,64 @@ static constexpr int kStringChannels    = 3;
 // Event-loop pump interval so the dialog repaints mid-phase (macOS coalesces paints otherwise).
 static constexpr double kSpinIntervalSec = 0.016;
 
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Named rows: gated parser tiers plus the three lua reference rows the HOTPATH_* tokens read.
+enum ReportIndex {
+  kReportData,
+  kReportNative,
+  kReportNativeMix,
+  kReportLua,
+  kReportJs,
+  kReportLuaMix,
+  kReportJsMix,
+  kReportLuaX,
+  kReportLuaD,
+  kReportLuaDoff,
+  kReportCount
+};
+
+static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
+                                                          "native(numeric)",
+                                                          "native(mixed)",
+                                                          "lua(numeric)",
+                                                          "js(numeric)",
+                                                          "lua(mixed)",
+                                                          "js(mixed)",
+                                                          "lua+exporters",
+                                                          "lua+dashboard",
+                                                          "lua+dashboard(off)"};
+
+// One ungated coverage row: an engine x {numeric,mixed} x {exporters,dashboard} combination.
+struct CoverageRow {
+  int language;
+  bool strings;
+  bool exporters;
+  bool dashboard;
+  const char* tag;
+};
+
+// The rest of the matrix the named rows do not cover; ungated, run for code-path coverage only.
+static constexpr CoverageRow kCoverageMatrix[] = {
+  {    SerialStudio::Native, false,  true, false, "native+exporters(numeric)"},
+  {       SerialStudio::Lua, false,  true, false,    "lua+exporters(numeric)"},
+  {SerialStudio::JavaScript, false,  true, false,     "js+exporters(numeric)"},
+  {    SerialStudio::Native,  true,  true, false,   "native+exporters(mixed)"},
+  {SerialStudio::JavaScript,  true,  true, false,       "js+exporters(mixed)"},
+  {    SerialStudio::Native, false, false,  true, "native+dashboard(numeric)"},
+  {SerialStudio::JavaScript, false, false,  true,     "js+dashboard(numeric)"},
+  {    SerialStudio::Native,  true, false,  true,   "native+dashboard(mixed)"},
+  {       SerialStudio::Lua,  true, false,  true,      "lua+dashboard(mixed)"},
+  {SerialStudio::JavaScript,  true, false,  true,       "js+dashboard(mixed)"},
+};
+
+static constexpr int kCoverageCount =
+  static_cast<int>(sizeof(kCoverageMatrix) / sizeof(CoverageRow));
+
+static constexpr int kReportColumns = 7;
+
 /**
  * @brief Pumps the GUI event loop once and returns the wall-clock it consumed (discounted from
  * the measurement so a repaint never deflates throughput).
@@ -118,7 +176,6 @@ void HotpathBenchmark::setActive(bool active) noexcept
 {
   s_benchmarkActive = active;
 
-  // The Dashboard caches streamAvailable(); benchmark activation is one of its inputs
   UI::Dashboard::instance().updateStreamAvailable();
 }
 
@@ -389,7 +446,6 @@ void HotpathBenchmark::enableConsumers()
  */
 void HotpathBenchmark::disableConsumers()
 {
-  // Disable flags only; stopWorker() here would orphan the worker and crash a later setEnabled().
   CSV::Export::instance().setExportEnabled(false);
   API::Server::instance().setEnabled(false);
 #ifdef BUILD_COMMERCIAL
@@ -400,7 +456,6 @@ void HotpathBenchmark::disableConsumers()
   API::GRPC::GRPCServer::instance().setEnabled(false);
 #endif
 
-  // Flush the backlog so the queued heap frames are released instead of pinned until app exit.
   CSV::Export::instance().flushWorker();
   API::Server::instance().flushWorker();
 #ifdef BUILD_COMMERCIAL
@@ -475,7 +530,6 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
   for (quint64 c = 0; c < maxChunks && (fed < targetFrames || seconds < minSeconds); ++c) {
     reader.processData(IO::makeCapturedData(chunk));
 
-    // Drain the extracted frames without parsing; this is the driver-pipeline-only path.
     // code-verify off
     while (queue.try_dequeue(drained))
       ++extracted;
@@ -484,7 +538,6 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
     fed     += kFramesPerChunk;
     seconds  = std::chrono::duration<double>(Clock::now() - start).count() - spentSpin;
 
-    // Keep the dialog repainting mid-phase; the pump time is discounted from the measurement.
     if (seconds - lastSpin >= kSpinIntervalSec) {
       spentSpin += spinEventLoop();
       lastSpin   = seconds;
@@ -578,7 +631,6 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
     fed     += kFramesPerChunk;
     seconds  = std::chrono::duration<double>(Clock::now() - start).count() - spentSpin;
 
-    // Repaint mid-run on every phase (not just dashboard); pump time is discounted above.
     if (seconds - lastSpinSec >= kSpinIntervalSec) {
       spentSpin   += spinEventLoop();
       lastSpinSec  = seconds;
@@ -679,60 +731,6 @@ HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Res
 // Report generation
 //--------------------------------------------------------------------------------------------------
 
-// Named rows: gated parser tiers plus the three lua reference rows the HOTPATH_* tokens read.
-enum ReportIndex {
-  kReportData,
-  kReportNative,
-  kReportNativeMix,
-  kReportLua,
-  kReportJs,
-  kReportLuaMix,
-  kReportJsMix,
-  kReportLuaX,
-  kReportLuaD,
-  kReportLuaDoff,
-  kReportCount
-};
-
-static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
-                                                          "native(numeric)",
-                                                          "native(mixed)",
-                                                          "lua(numeric)",
-                                                          "js(numeric)",
-                                                          "lua(mixed)",
-                                                          "js(mixed)",
-                                                          "lua+exporters",
-                                                          "lua+dashboard",
-                                                          "lua+dashboard(off)"};
-
-// One ungated coverage row: an engine x {numeric,mixed} x {exporters,dashboard} combination.
-struct CoverageRow {
-  int language;
-  bool strings;
-  bool exporters;
-  bool dashboard;
-  const char* tag;
-};
-
-// The rest of the matrix the named rows do not cover; ungated, run for code-path coverage only.
-static constexpr CoverageRow kCoverageMatrix[] = {
-  {    SerialStudio::Native, false,  true, false, "native+exporters(numeric)"},
-  {       SerialStudio::Lua, false,  true, false,    "lua+exporters(numeric)"},
-  {SerialStudio::JavaScript, false,  true, false,     "js+exporters(numeric)"},
-  {    SerialStudio::Native,  true,  true, false,   "native+exporters(mixed)"},
-  {SerialStudio::JavaScript,  true,  true, false,       "js+exporters(mixed)"},
-  {    SerialStudio::Native, false, false,  true, "native+dashboard(numeric)"},
-  {SerialStudio::JavaScript, false, false,  true,     "js+dashboard(numeric)"},
-  {    SerialStudio::Native,  true, false,  true,   "native+dashboard(mixed)"},
-  {       SerialStudio::Lua,  true, false,  true,      "lua+dashboard(mixed)"},
-  {SerialStudio::JavaScript,  true, false,  true,       "js+dashboard(mixed)"},
-};
-
-static constexpr int kCoverageCount =
-  static_cast<int>(sizeof(kCoverageMatrix) / sizeof(CoverageRow));
-
-static constexpr int kReportColumns = 7;
-
 /**
  * @brief Formats a count with thousands separators (fixed English grouping for stable CI logs).
  */
@@ -798,7 +796,6 @@ static void printRunTable(const HotpathBenchmark::Result* results,
       widths[col] = qMax(widths[col], cells[row][col].size());
   }
 
-  // Benchmark name and result are left-aligned; every numeric column is right-aligned
   const auto formatRow = [&](const QString* row) {
     QString line = QStringLiteral("|");
     for (int col = 0; col < kReportColumns; ++col) {
@@ -857,7 +854,6 @@ bool HotpathBenchmark::printReport(const Result* results,
   const Result& luaD      = results[kReportLuaD];
   const Result& luaDoff   = results[kReportLuaDoff];
 
-  // Stage attribution for the native numeric run (composition-measured, ns per frame)
   if (stages.valid) {
     printData("hotpath-stage[native]: extract %.0f ns, tokenize %.0f ns, datasets+publish %.0f ns "
               "(total %.0f ns/frame)\n",
@@ -867,17 +863,14 @@ bool HotpathBenchmark::printReport(const Result* results,
               stages.totalNs);
   }
 
-  // The exporter run keeps the mixed workload, so compare it against the mixed baseline.
   const double slowdown =
     luaX.framesPerSecond > 0.0 ? luaMix.framesPerSecond / luaX.framesPerSecond : 0.0;
   printData("hotpath: exporters cost %.2fx throughput\n", slowdown);
 
-  // Cross-project upper bound (different baseline project): kept for historical continuity.
   const double dashSlowdown =
     luaD.framesPerSecond > 0.0 ? lua.framesPerSecond / luaD.framesPerSecond : 0.0;
   printData("hotpath: dashboard costs %.2fx throughput\n", dashSlowdown);
 
-  // Same-project isolation of pure ingest cost (the number to optimize against).
   const double dashIngest =
     luaD.framesPerSecond > 0.0 ? luaDoff.framesPerSecond / luaD.framesPerSecond : 0.0;
   printData("hotpath: dashboard ingest costs %.2fx throughput (same project, ingest on vs off)\n",
@@ -941,16 +934,13 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
   Q_ASSERT(targetFrames > 0);
   Q_ASSERT(minFps > 0.0);
 
-  // Headless runs skip the QML init that registers MMCSS; the gate must measure the boost too
   Platform::AppPlatform::registerIngestThreadWithMmcss();
 
-  // Tiers scale off minFps (ungated at --min-fps 1): data/native 4x, native-mix 2x, JS half Lua
   Result results[kReportCount] = {};
   results[kReportData]         = runDataPipeline(targetFrames, minFps * 4.0, minSeconds);
   results[kReportNative] =
     run(targetFrames, minFps * 4.0, minSeconds, SerialStudio::Native, false, false);
 
-  // Stage attribution runs while the native numeric project is still the loaded one
   const StageBreakdown stages = measureNativeStages(results[kReportData], results[kReportNative]);
 
   results[kReportNativeMix] =
@@ -964,11 +954,9 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
   results[kReportLuaX] = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, true);
   results[kReportLuaD] = run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, false, false, true);
 
-  // Same project as luaD with ingest off: isolates ingest cost (as luaX/luaMix do exporters)
   results[kReportLuaDoff] =
     run(targetFrames, 1.0, minSeconds, SerialStudio::Lua, false, false, true, false);
 
-  // The rest of the matrix: ungated, run purely to exercise each remaining code path for PGO.
   Result coverage[kCoverageCount] = {};
   for (int i = 0; i < kCoverageCount; ++i) {
     const CoverageRow& row = kCoverageMatrix[i];

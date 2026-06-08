@@ -105,7 +105,6 @@ void API::Handlers::UARTHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // Port selection
   registry.registerCommand(QStringLiteral("io.uart.setDevice"),
                            QStringLiteral("Set serial port by device name (params: device)"),
                            API::makeSchema({
@@ -126,7 +125,6 @@ void API::Handlers::UARTHandler::registerCommands()
 
   registerLineSettings(registry);
 
-  // Signals + reconnect
   registry.registerCommand(QStringLiteral("io.uart.setDtrEnabled"),
                            QStringLiteral("Enable/disable DTR signal (params: dtrEnabled)"),
                            API::makeSchema({
@@ -144,7 +142,6 @@ void API::Handlers::UARTHandler::registerCommands()
   }),
                            &setAutoReconnect);
 
-  // Query commands
   registry.registerCommand(QStringLiteral("io.uart.listPorts"),
                            QStringLiteral("Get list of available serial ports"),
                            &getPortList);
@@ -486,40 +483,33 @@ API::CommandResponse API::Handlers::UARTHandler::getConfiguration(const QString&
 
   QJsonObject result;
 
-  // Port info
   result[QStringLiteral("portIndex")] = uart->portIndex();
   const auto& portList                = uart->portList();
   if (uart->portIndex() < portList.count())
     result[QStringLiteral("portName")] = portList.at(uart->portIndex());
 
-  // Baud rate
   result[QStringLiteral("baudRate")] = uart->baudRate();
 
-  // Parity
   result[QStringLiteral("parityIndex")] = uart->parityIndex();
   const auto& parityList                = uart->parityList();
   if (uart->parityIndex() < parityList.count())
     result[QStringLiteral("parityName")] = parityList.at(uart->parityIndex());
 
-  // Data bits
   result[QStringLiteral("dataBitsIndex")] = uart->dataBitsIndex();
   const auto& dataBitsList                = uart->dataBitsList();
   if (uart->dataBitsIndex() < dataBitsList.count())
     result[QStringLiteral("dataBitsValue")] = dataBitsList.at(uart->dataBitsIndex());
 
-  // Stop bits
   result[QStringLiteral("stopBitsIndex")] = uart->stopBitsIndex();
   const auto& stopBitsList                = uart->stopBitsList();
   if (uart->stopBitsIndex() < stopBitsList.count())
     result[QStringLiteral("stopBitsValue")] = stopBitsList.at(uart->stopBitsIndex());
 
-  // Flow control
   result[QStringLiteral("flowControlIndex")] = uart->flowControlIndex();
   const auto& flowControlList                = uart->flowControlList();
   if (uart->flowControlIndex() < flowControlList.count())
     result[QStringLiteral("flowControlName")] = flowControlList.at(uart->flowControlIndex());
 
-  // Other settings
   result[QStringLiteral("dtrEnabled")]      = uart->dtrEnabled();
   result[QStringLiteral("autoReconnect")]   = uart->autoReconnect();
   result[QStringLiteral("isOpen")]          = uart->isOpen();

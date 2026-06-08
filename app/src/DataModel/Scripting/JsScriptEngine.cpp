@@ -68,7 +68,6 @@ static QStringList jsArrayToStringList(const QJSValue& jsValue)
  */
 static ArrayType detectArrayType(const QJSValue& jsValue)
 {
-  // Reject non-arrays and empty arrays as scalars
   if (!jsValue.isArray())
     return ArrayType::Scalar;
 
@@ -77,7 +76,6 @@ static ArrayType detectArrayType(const QJSValue& jsValue)
   if (length == 0)
     return ArrayType::Scalar;
 
-  // Scan elements to classify; early-exit once type is determined
   bool hasArray  = false;
   bool hasScalar = false;
 
@@ -123,7 +121,8 @@ static QList<QStringList> convert2DArray(const QJSValue& jsValue)
 }
 
 /**
- * @brief Unzips a mixed scalar/vector JS array into one frame per vector index.
+ * @brief Unzips a mixed scalar/vector JS array into one frame per vector index,
+ *        capping element and vector counts so a malformed JS array cannot OOM us.
  */
 static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
 {
@@ -157,7 +156,6 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
     return results;
   }
 
-  // Cap to prevent OOM from malformed JS arrays
   maxVectorLength = qMin(maxVectorLength, kMaxVecLen);
 
   for (auto& vec : vectors) {
@@ -194,14 +192,12 @@ static QList<QStringList> convertJsResult(const QJSValue& jsResult)
 {
   static const QString kLength = QStringLiteral("length");
 
-  // Non-array (or empty) returns the legacy single empty-or-scalar frame
   if (!jsResult.isArray()) {
     QList<QStringList> results;
     results.append(jsArrayToStringList(jsResult));
     return results;
   }
 
-  // Fused single-pass 1D conversion; bail to the classifier on the first nested array
   const int length = jsResult.property(kLength).toInt();
 
   QStringList scalars;
@@ -209,7 +205,6 @@ static QList<QStringList> convertJsResult(const QJSValue& jsResult)
   for (int i = 0; i < length; ++i) {
     const auto element = jsResult.property(static_cast<quint32>(i));
 
-    // A nested array means 2D or mixed; only a full re-scan can tell them apart
     if (element.isArray()) [[unlikely]] {
       return detectArrayType(jsResult) == ArrayType::Array2D ? convert2DArray(jsResult)
                                                              : convertMixedArray(jsResult);
@@ -238,22 +233,16 @@ DataModel::JsScriptEngine::JsScriptEngine()
 {
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
-  // Expose notify* + level constants (gated on the active license tier)
   DataModel::NotificationCenter::installScriptApi(&m_engine);
 
-  // Expose tableGet / tableSet / datasetGetRaw / datasetGetFinal
   DataModel::FrameBuilder::instance().injectTableApiJS(&m_engine);
 
-  // Expose deviceWrite(data, sourceId?) bound to source 0 until loadScript() updates it
   DataModel::DeviceWriteApi::installJS(&m_engine, m_sourceId);
 
-  // Expose actionFire(actionId) for firing dashboard actions from the parser
   DataModel::ActionFireApi::installJS(&m_engine);
 
-  // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(&m_engine);
 
-  // Expose apiCall(method, params?): gated to a read-only allow-list by default
   DataModel::ScriptApiCall::installJS(&m_engine, m_sourceId);
 }
 
@@ -375,14 +364,12 @@ QList<QStringList> DataModel::JsScriptEngine::parseBinary(const QByteArray& fram
   if (!m_parseFunction.isCallable() || m_disabled)
     return {};
 
-  // Convert binary data to JS array via hex helper or manual loop
   QJSValue jsArray;
   if (m_hexToArray.isCallable()) [[likely]] {
     QJSValueList hexArgs;
     hexArgs << QString::fromLatin1(frame.toHex());
     jsArray = m_hexToArray.call(hexArgs);
 
-    // Fall back to manual loop if the hex helper failed
     if (jsArray.isError()) [[unlikely]] {
       qWarning() << "[JsScriptEngine] hex helper error:" << jsArray.property("message").toString();
       jsArray = QJSValue();
@@ -416,7 +403,8 @@ QList<QStringList> DataModel::JsScriptEngine::parseBinary(const QByteArray& fram
 }
 
 /**
- * @brief Evaluates the script and reports any syntax errors.
+ * @brief Evaluates the script and reports any syntax errors, arming the watchdog
+ *        around evaluate() so a top-level infinite loop is interrupted off-thread.
  */
 bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
                                                      int sourceId,
@@ -425,18 +413,15 @@ bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
   Q_ASSERT(!script.isEmpty());
   Q_ASSERT(sourceId >= 0);
 
-  // Reset the engine and evaluate the script
   m_parseFunction = QJSValue();
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
-  // Arm the watchdog around evaluate() so a top-level infinite loop is interrupted off-thread.
   QStringList exceptionStackTrace;
   m_watchdog.arm();
   auto result = m_engine.evaluate(
     script, QStringLiteral("parser_%1.js").arg(sourceId), 1, &exceptionStackTrace);
   m_watchdog.disarm();
 
-  // Report a watchdog interruption (top-level evaluation that exceeded the time budget)
   if (m_engine.isInterrupted()) {
     m_engine.setInterrupted(false);
     if (showMessageBoxes) {
@@ -454,7 +439,6 @@ bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
     return false;
   }
 
-  // Report syntax errors
   if (result.isError()) {
     const QString errorMsg = result.property("message").toString();
     const int lineNumber   = result.property("lineNumber").toInt();
@@ -472,7 +456,6 @@ bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
     return false;
   }
 
-  // Report exceptions raised during evaluation
   if (!exceptionStackTrace.isEmpty()) {
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
@@ -516,7 +499,8 @@ QJSValue DataModel::JsScriptEngine::validateParseFunction(int sourceId, bool sho
 }
 
 /**
- * @brief Probes parse() with sample inputs under the runtime watchdog.
+ * @brief Probes parse() with sample inputs under the runtime watchdog, temporarily
+ *        installing the candidate as m_parseFunction so guardedCall protects each probe.
  */
 bool DataModel::JsScriptEngine::probeParseFunction(const QJSValue& parseFunction,
                                                    int sourceId,
@@ -525,14 +509,12 @@ bool DataModel::JsScriptEngine::probeParseFunction(const QJSValue& parseFunction
   Q_ASSERT(parseFunction.isCallable());
   Q_ASSERT(sourceId >= 0);
 
-  // Prepare three representative probe inputs
   bool probeOk = false;
   QJSValue lastError;
   auto byteProbe = m_engine.newArray(1);
   byteProbe.setProperty(0, 0);
   const QJSValue probeInputs[] = {QJSValue("0"), byteProbe, QJSValue("")};
 
-  // Install candidate as m_parseFunction so guardedCall protects each probe
   QJSValue savedParseFn = m_parseFunction;
   m_parseFunction       = parseFunction;
 
@@ -550,7 +532,6 @@ bool DataModel::JsScriptEngine::probeParseFunction(const QJSValue& parseFunction
 
   m_parseFunction = savedParseFn;
 
-  // Report probe failure
   if (!probeOk) {
     const QString errorMsg = lastError.property("message").toString();
     const int lineNumber   = lastError.property("lineNumber").toInt();
@@ -620,11 +601,9 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
                                    "a[j]=parseInt(h.substr(i,2),16);return a;}"));
   m_hexToArray = m_engine.globalObject().property(QStringLiteral("__ss_internal_hex_to_array__"));
 
-  // Re-bind deviceWrite() to this source so the optional sourceId argument defaults correctly
   m_sourceId = sourceId;
   DataModel::DeviceWriteApi::installJS(&m_engine, m_sourceId);
 
-  // Re-arm the circuit breaker on fresh script
   m_disabled            = false;
   m_consecutiveTimeouts = 0;
 
@@ -656,7 +635,6 @@ bool DataModel::JsScriptEngine::validateParseSignature(const QString& script, bo
     return false;
   }
 
-  // Engine-side check: parse must exist as a callable
   const auto parseFn = m_engine.globalObject().property(QStringLiteral("parse"));
   if (!parseFn.isCallable()) {
     if (showMessageBoxes) {

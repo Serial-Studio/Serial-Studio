@@ -589,7 +589,6 @@ public:
   {
     Q_ASSERT(!m_tagMap.isEmpty());
 
-    // Each entry consumes at least two bytes, so size/2 + 1 bounds the walk
     qsizetype i          = 0;
     const qsizetype size = qMin<qsizetype>(frame.size(), kMaxBytesPerFrame);
     for (qsizetype entry = 0; entry < (size / 2) + 1 && i + 1 < size; ++entry) {
@@ -598,7 +597,6 @@ public:
       if (i + length > size)
         break;
 
-      // Big-endian accumulation, capped at 8 bytes to stay within 64 bits
       quint64 value       = 0;
       const int use_bytes = qMin(length, 8);
       for (int b = 0; b < use_bytes; ++b)
@@ -1166,7 +1164,6 @@ public:
     if (m_validateChecksum && !checksumOk(frame, length))
       return latchedFrame();
 
-    // Payload starts at the message id; handlers receive the bytes after it
     const int message_id  = u8At(frame, 2);
     const QByteArray data = frame.mid(3, length - 1);
     routeMessage(message_id, data);
@@ -2296,7 +2293,6 @@ private:
       count  = u16Be(data, 1);
       offset = 3;
     } else {
-      // Single scalar payload: emit it as one channel
       offset = 0;
       bool ok;
       const QString value = decodeScalar(data, offset, ok);

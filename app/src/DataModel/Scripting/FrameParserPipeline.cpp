@@ -298,7 +298,7 @@ DataModel::PipelineResult DataModel::runFrameParserPipelineWithCode(
   std::unique_ptr<DataModel::IScriptEngine> engine;
   if (needsEngine) {
     engine = makeEngineForLanguage(parserLanguage);
-    if (!engine->loadScript(parserCode, /*sourceId=*/0, /*showMessageBoxes=*/false)) {
+    if (!engine->loadScript(parserCode, 0, false)) {
       PipelineResult failed;
       failed.stageError = QStringLiteral("Frame parser failed to compile or define parse(frame).");
       failed.stageWhere = QStringLiteral("compile");

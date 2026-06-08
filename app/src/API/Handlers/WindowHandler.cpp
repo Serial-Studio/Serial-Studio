@@ -170,7 +170,6 @@ void API::Handlers::WindowHandler::registerWidgetSettingCommands()
   }),
                            &getWidgetSettings);
 
-  // setWidgetSetting accepts a typeless "settingValue", so build the schema manually.
   QJsonObject swsProps;
   swsProps[QStringLiteral("widgetId")] = QJsonObject{
     {       QStringLiteral("type"),                QStringLiteral("string")},
@@ -222,7 +221,7 @@ API::CommandResponse API::Handlers::WindowHandler::getStatus(const QString& id,
     return CommandResponse::makeSuccess(id, result);
   }
 
-  const auto groups = taskbar->groupModel();
+  const auto groups = taskbar->workspaceModel();
 
   result[QStringLiteral("sessionActive")]      = true;
   result[QStringLiteral("activeGroupId")]      = taskbar->activeGroupId();
@@ -246,7 +245,7 @@ API::CommandResponse API::Handlers::WindowHandler::getGroups(const QString& id,
   if (!taskbar)
     return noSession(id);
 
-  const auto model = taskbar->groupModel();
+  const auto model = taskbar->workspaceModel();
   QJsonArray groups;
   for (const auto& entry : model) {
     const auto map = entry.toMap();

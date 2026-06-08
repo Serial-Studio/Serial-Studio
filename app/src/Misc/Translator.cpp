@@ -76,7 +76,6 @@ bool Misc::Translator::rtl() const
  */
 Misc::Translator::Language Misc::Translator::systemLanguage() const
 {
-  // Map system locale to internal language enum
   Language lang;
   switch (QLocale::system().language()) {
     case QLocale::English:
@@ -159,7 +158,6 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
  */
 QString Misc::Translator::welcomeConsoleText() const
 {
-  // Determine language code for the welcome text file
   QString lang;
   switch (language()) {
     case English:
@@ -230,7 +228,6 @@ QString Misc::Translator::welcomeConsoleText() const
       break;
   }
 
-  // Define fallback text & default message path
   QString text = QObject::tr("Failed to load welcome text :(");
 #ifdef BUILD_COMMERCIAL
   QString path   = ":/messages/trial/Welcome_" + lang + ".txt";
@@ -241,14 +238,12 @@ QString Misc::Translator::welcomeConsoleText() const
   QString path = ":/messages/gpl3/Welcome_" + lang + ".txt";
 #endif
 
-  // Read welcome text from resources
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {
     text = QString::fromUtf8(file.readAll());
     file.close();
   }
 
-  // Return obtained data
   return text + "\n";
 }
 
@@ -257,7 +252,6 @@ QString Misc::Translator::welcomeConsoleText() const
  */
 QString Misc::Translator::acknowledgementsText() const
 {
-  // Read acknowledgements text from bundled resources
   QString text = "";
   QFile file(QStringLiteral(":/messages/Acknowledgements.txt"));
   if (file.open(QFile::ReadOnly)) {
@@ -277,7 +271,6 @@ QString Misc::Translator::acknowledgementsText() const
  */
 QStringList& Misc::Translator::availableLanguages()
 {
-  // Build the list of available translations on first call
   static QStringList list;
   if (list.isEmpty()) {
     // code-verify off
@@ -313,7 +306,6 @@ QStringList& Misc::Translator::availableLanguages()
  */
 void Misc::Translator::setLanguage(const Language language)
 {
-  // Map language enum to locale name and QLocale
   QString langName;
   QLocale locale;
   switch (language) {

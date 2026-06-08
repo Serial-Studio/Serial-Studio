@@ -89,11 +89,9 @@ public:
    */
   bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
-    // Only process records from our own channel group
     if (record_id != m_recordId)
       return true;
 
-    // Use timestamp (ns) as cache key when available, else raw sample index
     uint64_t cacheKey = sample;
     if (m_groupTimeChannel) {
       double ts          = 0.0;
@@ -105,12 +103,10 @@ public:
       m_timestampCache[cacheKey] = ts;
     }
 
-    // Merge into existing entry so multi-group files accumulate all channels
     auto cacheIt = m_cache.find(cacheKey);
     if (cacheIt == m_cache.end())
       cacheIt = m_cache.emplace(cacheKey, std::vector<double>(m_allChannels.size(), 0.0)).first;
 
-    // Track which channels have actual data (not just default zeros)
     auto activeIt = m_activeChannels.find(cacheKey);
     if (activeIt == m_activeChannels.end())
       activeIt =
@@ -318,11 +314,9 @@ void MDF4::Player::play()
   if (!isOpen())
     return;
 
-  // Restart from beginning if at the end
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
-  // Capture start time for real-time synchronization
   m_startTimestamp = m_frameIndex[m_framePos].timestamp;
   m_elapsedTimer.start();
 
@@ -367,7 +361,6 @@ void MDF4::Player::openFile()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -383,7 +376,6 @@ void MDF4::Player::openFile()
  */
 void MDF4::Player::openFile(const QString& filePath)
 {
-  // Prompt the user to disconnect before opening a file
   if (IO::ConnectionManager::instance().isConnected()) {
     int response = Misc::Utilities::showMessageBox(
       tr("Disconnect from device?"),
@@ -400,7 +392,6 @@ void MDF4::Player::openFile(const QString& filePath)
 
   closeFile();
 
-  // Open and validate the MDF4 file
   m_reader = std::make_unique<mdf::MdfReader>(filePath.toStdString());
 
   if (!m_reader->IsOk()) {
@@ -419,14 +410,12 @@ void MDF4::Player::openFile(const QString& filePath)
     return;
   }
 
-  // Detect Serial Studio authorship for special handling
   auto* header = m_reader->GetHeader();
   if (header) {
     QString author       = QString::fromStdString(header->Author());
     m_isSerialStudioFile = (author == "Serial Studio");
   }
 
-  // Build the frame index from channel data
   buildFrameIndex();
 
   if (m_frameIndex.empty()) {
@@ -454,7 +443,6 @@ void MDF4::Player::closeFile()
   if (!isOpen())
     return;
 
-  // Clear all cached data and reset state
   m_framePos = 0;
   m_reader.reset();
   m_filePath.clear();
@@ -490,7 +478,6 @@ void MDF4::Player::nextFrame()
   if (m_framePos < frameCount() - 1) {
     ++m_framePos;
 
-    // Load historical frames for plot context, then send the current frame
     UI::Dashboard::instance().clearPlotData();
 
     int framesToLoad = UI::Dashboard::instance().points();
@@ -516,7 +503,6 @@ void MDF4::Player::previousFrame()
   if (m_framePos > 0) {
     --m_framePos;
 
-    // Load historical frames for plot context, then send the current frame
     UI::Dashboard::instance().clearPlotData();
 
     int framesToLoad = UI::Dashboard::instance().points();
@@ -543,7 +529,6 @@ void MDF4::Player::setProgress(const double progress)
   if (isPlaying())
     pause();
 
-  // Compute and apply the new frame position
   int newFramePos = qBound(0, static_cast<int>(progress * frameCount()), frameCount() - 1);
 
   if (newFramePos != m_framePos) {
@@ -631,7 +616,6 @@ void MDF4::Player::updateData()
     return;
   }
 
-  // Schedule the next frame at its real-time offset
   const qint64 delayMs = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
   QTimer::singleShot(delayMs, Qt::PreciseTimer, this, [this]() {
     if (isOpen() && isPlaying()) {
@@ -744,7 +728,6 @@ static std::vector<CgInfo> buildCgInfos(
         ci.timeCh = tit->second;
     }
 
-    // Skip master (time) channels and raw pre-transform channels
     for (auto* ch : cgChannels) {
       if (!ch || ch->Type() == mdf::ChannelType::Master)
         continue;
@@ -819,7 +802,6 @@ void MDF4::Player::readLegacyTimestamps(const std::vector<mdf::IDataGroup*>& dat
  */
 void MDF4::Player::buildFrameIndex()
 {
-  // Reset all cached data before rebuilding
   m_frameIndex.clear();
   m_channels.clear();
   m_sampleCache.clear();
@@ -840,13 +822,11 @@ void MDF4::Player::buildFrameIndex()
   if (dataGroups.empty())
     return;
 
-  // First pass: collect data channels + per-group master time channels
   std::vector<mdf::IChannel*> allChannels;
   std::map<mdf::IChannelGroup*, mdf::IChannel*> groupTimeChannels;
   int masterChannelCount = 0;
   collectAllChannels(dataGroups, allChannels, groupTimeChannels, masterChannelCount);
 
-  // Fall back to legacy single-master path for old MDF4 files
   const bool perGroupTime  = (masterChannelCount > 1);
   uint64_t legacyTimeRecId = 0;
   if (masterChannelCount == 1) {
@@ -858,7 +838,6 @@ void MDF4::Player::buildFrameIndex()
 
   m_channels = allChannels;
 
-  // Second pass: attach observers and read sample data per data group
   for (auto* dg : dataGroups) {
     if (!dg)
       continue;
@@ -866,11 +845,9 @@ void MDF4::Player::buildFrameIndex()
     readDataGroupWithObservers(dg, perGroupTime, groupTimeChannels);
   }
 
-  // Legacy path: read timestamps keyed by sample index for wall-clock lookup
   if (m_isSerialStudioFile && !perGroupTime && m_masterTimeChannel)
     readLegacyTimestamps(dataGroups, legacyTimeRecId);
 
-  // Build the frame index from the populated sample cache
   buildFrameIndexFromCache();
 }
 
@@ -888,7 +865,6 @@ void MDF4::Player::buildFrameIndexFromCache()
   for (const auto& cachePair : m_sampleCache) {
     FrameIndex frameIdx;
 
-    // Resolve timestamp from cache or fall back to synthetic timing
     if (m_isSerialStudioFile && !m_timestampCache.empty()) {
       auto timeIt = m_timestampCache.find(cachePair.first);
       if (timeIt != m_timestampCache.end())
@@ -906,7 +882,6 @@ void MDF4::Player::buildFrameIndexFromCache()
     ++sampleIndex;
   }
 
-  // Sort by record ID so binary lookups and sequential playback work
   std::sort(m_frameIndex.begin(), m_frameIndex.end(), [](const FrameIndex& a, const FrameIndex& b) {
     return a.recordIndex < b.recordIndex;
   });
@@ -945,7 +920,6 @@ void MDF4::Player::sendHeaderFrame()
   if (!isOpen() || m_channels.empty())
     return;
 
-  // Project mode: derive the replay channel layout; multi-source skips QuickPlot headers
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
     buildReplayLayout();
     if (m_multiSource)
@@ -999,7 +973,6 @@ QByteArray MDF4::Player::getFrame(const int index)
   if (!isOpen() || index < 0 || index >= frameCount())
     return QByteArray();
 
-  // Build CSV row from cached channel values
   const auto& frameIdx = m_frameIndex[index];
   QByteArray frame;
 
@@ -1037,7 +1010,6 @@ void MDF4::Player::buildReplayLayout()
 {
   m_sourceChannelsByIndex.clear();
 
-  // Declaration order matches the file's channel-group order; do not sort by uniqueId.
   struct ChMeta {
     int uid;
     int sourceId;
@@ -1052,23 +1024,19 @@ void MDF4::Player::buildReplayLayout()
       chs.append({d.uniqueId, g.sourceId});
   }
 
-  // Count distinct sources to decide single- vs multi-source playback
   std::unordered_map<int, int> localCounter;
   for (const auto& m : chs)
     localCounter[m.sourceId];
 
   m_multiSource = localCounter.size() > 1;
 
-  // sourceId -> (uniqueId -> channel index within that source's replay channels)
   std::unordered_map<int, std::unordered_map<int, int>> replay;
 
-  // Single-source: getFrame() emits every data channel, so channel ch == file index ch
   if (!m_multiSource) {
     for (int ch = 0; ch < chs.size(); ++ch)
       replay[0][chs[ch].uid] = ch;
   }
 
-  // Multi-source: each source receives its own channels in file (declaration) order
   else {
     for (auto& kv : localCounter)
       kv.second = 0;
@@ -1087,17 +1055,14 @@ void MDF4::Player::buildReplayLayout()
  */
 void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
 {
-  // Ignore empty frames
   if (frame.isEmpty())
     return;
 
-  // Single-source: use standard path
   if (!m_multiSource) {
     IO::ConnectionManager::instance().processPayload(frame);
     return;
   }
 
-  // Look up which channels are active for this sample
   const std::vector<bool>* active = nullptr;
   if (frameIndex >= 0 && frameIndex < static_cast<int>(m_frameIndex.size())) {
     auto ait = m_activeChannels.find(m_frameIndex[frameIndex].recordIndex);
@@ -1105,7 +1070,6 @@ void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
       active = &ait->second;
   }
 
-  // Multi-source: split channels by source and reorder into parser-index order
   const auto fields = QString::fromUtf8(frame).trimmed().split(',');
 
   QMap<int, QStringList> sourceFields;
@@ -1116,7 +1080,7 @@ void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
     const auto& orderedChs = it.value();
     QStringList orderedCells;
     orderedCells.reserve(orderedChs.size());
-    bool anyActive = !active;  // when no active mask is available, accept all
+    bool anyActive = !active;
     for (int ch : orderedChs) {
       const QString cell = (ch >= 0 && ch < fields.size()) ? fields[ch] : QString();
       orderedCells.append(cell);
@@ -1127,7 +1091,6 @@ void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
     sourceHasActive.insert(srcId, anyActive);
   }
 
-  // Only include sources that have at least one active channel
   QMap<int, QByteArray> sourcePayloads;
   for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it) {
     if (!sourceHasActive.value(it.key(), true))

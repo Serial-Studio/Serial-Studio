@@ -139,7 +139,6 @@ MQTT::PublisherWorker::PublisherWorker(
  */
 MQTT::PublisherWorker::~PublisherWorker()
 {
-  // Disarm any pending reconnect lambda so it cannot run during teardown.
   if (m_reconnectConn) {
     QObject::disconnect(m_reconnectConn);
     m_reconnectConn = {};
@@ -198,7 +197,6 @@ void MQTT::PublisherWorker::closeResources()
  */
 void MQTT::PublisherWorker::processData()
 {
-  // Frame queue first via the base class; routes through processItems below
   DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>::processData();
 
   if (!consumerEnabled())
@@ -209,7 +207,6 @@ void MQTT::PublisherWorker::processData()
 
   const int mode = m_mode->load(std::memory_order_relaxed);
 
-  // Drain queues that are not in use for the current mode so they don't unbound-grow.
   if (m_rawQueue && mode != static_cast<int>(Publisher::Mode::RawRxData)) {
     TimestampedRawBytes drain;
     while (m_rawQueue->try_dequeue(drain))
@@ -229,7 +226,6 @@ void MQTT::PublisherWorker::processData()
     if (!topic.isValid())
       return;
 
-    // Concatenate every queued chunk into one publish per tick
     m_rawBatchBuffer.resize(0);
     TimestampedRawBytes item;
     while (m_rawQueue->try_dequeue(item))
@@ -252,7 +248,6 @@ void MQTT::PublisherWorker::processData()
     if (!m_script || !m_script->isLoaded())
       return;
 
-    // Concatenate every payload returned by mqtt(frame) into one bulk publish per tick
     QByteArray aggregate;
     aggregate.reserve(4096);
 
@@ -299,7 +294,6 @@ void MQTT::PublisherWorker::processItems(const std::vector<DataModel::Timestampe
       publishBatchAsCsv(items);
       break;
 
-    // Script mode receives raw frame bytes, not parsed frames (handled in processData)
     case Publisher::Mode::ScriptDriven:
     case Publisher::Mode::RawRxData:
       break;
@@ -317,14 +311,12 @@ void MQTT::PublisherWorker::publishBatchAsJson(
   if (!topic.isValid())
     return;
 
-  // Pick the latest frame as the structural template (titles, widget metadata, etc.)
   const auto& latest = items.back();
   if (!latest)
     return;
 
   QJsonObject root = DataModel::serialize(latest->data);
 
-  // Collect per-dataset arrays of string + numeric samples across the batch in arrival order
   QMap<int, QJsonArray> valuesByDataset;
   QMap<int, QJsonArray> numericByDataset;
   for (const auto& item : items) {
@@ -339,7 +331,6 @@ void MQTT::PublisherWorker::publishBatchAsJson(
     }
   }
 
-  // Walk live groups in lockstep with the serialized JSON, swapping per-dataset value/numericValue
   QJsonArray groupArray = root.value(Keys::Groups).toArray();
   for (int gi = 0; gi < groupArray.size() && gi < static_cast<int>(latest->data.groups.size());
        ++gi) {
@@ -381,14 +372,12 @@ void MQTT::PublisherWorker::publishBatchAsCsv(
   if (!latest)
     return;
 
-  // Detect schema changes via frame-title pivot; ExportSchema is content-addressed by datasets
   if (m_csvHeaderDirty || latest->data.title != m_csvFrameTitle)
     rebuildCsvSchema(latest->data);
 
   if (m_csvHeaderPayload.isEmpty())
     return;
 
-  // Publish header as a retained message so late subscribers always get the schema
   if (m_csvHeaderDirty) {
     QMqttTopicName headerTopic(m_cfg.topicBase + QStringLiteral("/header"));
     if (headerTopic.isValid())
@@ -403,7 +392,6 @@ void MQTT::PublisherWorker::publishBatchAsCsv(
     if (!item)
       continue;
 
-    // Refresh forward-fill cache for every dataset in this frame
     for (const auto& g : item->data.groups)
       for (const auto& d : g.datasets)
         m_csvLastFinal[d.uniqueId] = d.value.simplified();
@@ -501,7 +489,6 @@ void MQTT::PublisherWorker::publishAndCount(const QMqttTopicName& topic, const Q
  */
 void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
 {
-  // Detect whether broker-identifying fields changed and warrant a reconnect cycle
   const bool brokerChanged =
     cfg.hostname != m_cfg.hostname || cfg.port != m_cfg.port || cfg.username != m_cfg.username
     || cfg.password != m_cfg.password || cfg.clientId != m_cfg.clientId
@@ -511,11 +498,9 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
     || cfg.peerVerifyDepth != m_cfg.peerVerifyDepth || cfg.caCertificates != m_cfg.caCertificates
     || cfg.enabled != m_cfg.enabled;
 
-  // Force CSV header rebuild so dataset add/remove takes effect on next publish
   m_csvHeaderDirty = true;
   m_csvFrameTitle.clear();
 
-  // Drop the compiled script when the source changes; recompile is lazy on next publish
   if (cfg.scriptCode != m_cfg.scriptCode && m_script)
     m_script->reset();
 
@@ -524,7 +509,6 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
   if (!m_client)
     return;
 
-  // SSL bits take effect only on the next CONNECT
   m_sslConfiguration.setProtocol(m_cfg.sslProtocol);
   m_sslConfiguration.setPeerVerifyMode(m_cfg.peerVerifyMode);
   m_sslConfiguration.setPeerVerifyDepth(m_cfg.peerVerifyDepth);
@@ -537,7 +521,6 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
     m_sslConfiguration.setCaCertificates(existing);
   }
 
-  // QMqttClient broker setters corrupt the state machine unless applied while Disconnected
   if (m_client->state() == QMqttClient::Disconnected) {
     applyClientPropertiesUnsafe();
 
@@ -547,11 +530,9 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
     return;
   }
 
-  // Non-broker edits take effect on the next publish without dropping the live session
   if (!brokerChanged)
     return;
 
-  // Pending teardown will pick up the fresh m_cfg; nudge another disconnect just in case
   if (m_reconnectPending) {
     if (m_client->state() != QMqttClient::Disconnected)
       m_client->disconnectFromHost();
@@ -561,13 +542,11 @@ void MQTT::PublisherWorker::applyBrokerConfig(const MQTT::BrokerConfig& cfg)
 
   m_reconnectPending = true;
 
-  // Defer the property mutation off the stateChanged emission via a queued slot call
   m_reconnectConn =
     connect(m_client, &QMqttClient::stateChanged, this, [this](QMqttClient::ClientState s) {
       if (s != QMqttClient::Disconnected)
         return;
 
-      // Drop this connection first so a later state change can't re-fire this lambda
       if (m_reconnectConn) {
         QObject::disconnect(m_reconnectConn);
         m_reconnectConn = {};
@@ -590,7 +569,6 @@ void MQTT::PublisherWorker::finishPendingReconnect()
   if (!m_client)
     return;
 
-  // Another applyBrokerConfig may have reopened the client between lambda and slot
   if (m_client->state() != QMqttClient::Disconnected)
     return;
 
@@ -720,7 +698,6 @@ void MQTT::PublisherWorker::runTestConnection()
     if (tester->state() != QMqttClient::Disconnected)
       tester->disconnectFromHost();
 
-    // Marshal the user-visible message back to the main thread via signal
     Q_EMIT testConnectionFinished(ok, detail);
 
     tester->deleteLater();
@@ -828,12 +805,10 @@ MQTT::Publisher::Publisher()
   m_peerVerifyModes.insert(tr("Verify Peer"), QSslSocket::VerifyPeer);
   m_peerVerifyModes.insert(tr("Auto Verify Peer"), QSslSocket::AutoVerifyPeer);
 
-  // Debounce timer coalesces rapid setter bursts into one snapshot push
   m_syncTimer.setSingleShot(true);
   m_syncTimer.setInterval(kSyncDebounceMs);
   connect(&m_syncTimer, &QTimer::timeout, this, &Publisher::syncToWorker);
 
-  // Stats poll: cheap atomic read, emit only when the counter advanced
   m_statsTimer.setInterval(kStatsTickMs);
   connect(&m_statsTimer, &QTimer::timeout, this, &Publisher::emitStatsIfChanged);
   m_statsTimer.start();
@@ -843,7 +818,6 @@ MQTT::Publisher::Publisher()
   initializeWorker();
   applyTimerInterval();
 
-  // Wire the worker's cross-thread signals (AutoConnection becomes QueuedConnection)
   auto* w = static_cast<PublisherWorker*>(m_worker);
   connect(w, &PublisherWorker::brokerStateChanged, this, &Publisher::onWorkerBrokerStateChanged);
   connect(w, &PublisherWorker::brokerErrorOccurred, this, &Publisher::onWorkerBrokerError);
@@ -851,7 +825,6 @@ MQTT::Publisher::Publisher()
   connect(
     w, &PublisherWorker::testConnectionFinished, this, &Publisher::onWorkerTestConnectionFinished);
 
-  // Construct QMqttClient on the worker thread so its socket/notifier get the right affinity
   QMetaObject::invokeMethod(w, &PublisherWorker::bootstrap, Qt::QueuedConnection);
 }
 
@@ -1218,7 +1191,6 @@ QJsonObject MQTT::Publisher::toJson() const
   obj.insert(kKeyPort, static_cast<int>(m_port));
   obj.insert(kKeyCustomClientId, m_customClientId);
 
-  // Persist the typed id only when the user opted in; auto ids are regenerated per load
   if (m_customClientId)
     obj.insert(kKeyClientId, m_clientId);
 
@@ -1252,7 +1224,6 @@ void MQTT::Publisher::applyProjectConfig(const QJsonObject& cfg)
   setHostname(cfg.value(kKeyHostname).toString(QStringLiteral("127.0.0.1")));
   setPort(static_cast<quint16>(cfg.value(kKeyPort).toInt(1883)));
 
-  // Stored clientId is consulted only when customClientId is set
   const bool customCid = cfg.value(kKeyCustomClientId).toBool(false);
   setCustomClientId(customCid);
 
@@ -1262,7 +1233,6 @@ void MQTT::Publisher::applyProjectConfig(const QJsonObject& cfg)
   else
     regenerateClientId();
 
-  // Credentials are stored encrypted per host:port in QSettings, not in the project file.
   reloadCredentialsFromVault();
 
   setCleanSession(cfg.value(kKeyCleanSession).toBool(true));
@@ -1276,7 +1246,6 @@ void MQTT::Publisher::applyProjectConfig(const QJsonObject& cfg)
 
   m_inApply = false;
 
-  // Normalize the project's stored config so missing fields are filled with defaults.
   m_savingToProjectModel = true;
   DataModel::ProjectModel::instance().setMqttPublisher(toJson());
   m_savingToProjectModel = false;
@@ -1285,7 +1254,6 @@ void MQTT::Publisher::applyProjectConfig(const QJsonObject& cfg)
   Q_EMIT configurationChanged();
   m_skipNextSync = false;
 
-  // Project load: arm one-shot error reporting, then push the snapshot to the worker now.
   m_reportConnectionErrors = m_enabled;
   m_syncTimer.stop();
   syncToWorker();
@@ -1317,7 +1285,6 @@ void MQTT::Publisher::testConnection()
     return;
   }
 
-  // Flush any pending debounced sync so the worker sees the freshest config
   if (m_syncTimer.isActive()) {
     m_syncTimer.stop();
     syncToWorker();
@@ -1340,7 +1307,6 @@ void MQTT::Publisher::addCaCertificates()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -1414,7 +1380,6 @@ void MQTT::Publisher::setupExternalConnections()
 
   auto& projectModel = DataModel::ProjectModel::instance();
   connect(&projectModel, &DataModel::ProjectModel::mqttPublisherChanged, this, [this] {
-    // Skip the round-trip echo from interactive edits to avoid close+reopen per keystroke
     if (m_savingToProjectModel)
       return;
 
@@ -1770,7 +1735,6 @@ void MQTT::Publisher::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame
   if (!m_enabled || !licenseValid()) [[likely]]
     return;
 
-  // Only dashboard modes consume parsed frames; raw and script modes use byte queues
   if (m_mode != static_cast<int>(Mode::DashboardDataJson)
       && m_mode != static_cast<int>(Mode::DashboardDataCsv))
     return;
@@ -1858,7 +1822,6 @@ qint64 MQTT::Publisher::mqttPublish(const QString& topic,
                             Q_ARG(int, qos),
                             Q_ARG(bool, retain));
 
-  // Dispatch succeeded; the actual broker message ID is no longer observable from main
   return 1;
 }
 

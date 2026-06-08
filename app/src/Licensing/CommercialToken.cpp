@@ -93,7 +93,6 @@ void Licensing::CommercialToken::clearCurrent()
  */
 bool Licensing::CommercialToken::isValid() const
 {
-  // All required fields must be present
   if (m_tier == FeatureTier::None)
     return false;
 
@@ -214,7 +213,6 @@ quint64 Licensing::CommercialToken::deobfuscateSalt()
  */
 quint64 Licensing::CommercialToken::computeHmac() const
 {
-  // Reassemble salt and mix with token fields
   const auto salt = deobfuscateSalt();
 
   QByteArray message;
@@ -224,7 +222,6 @@ quint64 Licensing::CommercialToken::computeHmac() const
   message.append(QByteArray::number(static_cast<quint8>(m_tier)));
   message.append(QByteArray::number(m_graceDays));
 
-  // SHA-256 truncated to 64 bits
   const auto hash = QCryptographicHash::hash(message, QCryptographicHash::Sha256);
   quint64 result  = 0;
   if (hash.size() >= 8)

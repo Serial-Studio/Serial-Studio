@@ -60,7 +60,6 @@ struct ExportSchema {
   ExportSchema schema;
   schema.frameTitle = frame.title;
 
-  // Source-id -> source-title lookup
   QMap<int, QString> sourceTitles;
   for (const auto& s : frame.sources)
     sourceTitles.insert(s.sourceId, s.title);
@@ -74,7 +73,6 @@ struct ExportSchema {
       col.uniqueId    = dataset.uniqueId;
       col.groupId     = group.groupId;
       col.sourceId    = dataset.sourceId;
-      // SQLite source_title is NOT NULL; bind "" rather than a null QString
       col.sourceTitle = sourceTitles.value(dataset.sourceId, QStringLiteral(""));
       col.groupTitle  = group.title;
       col.title       = dataset.title;

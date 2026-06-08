@@ -242,7 +242,6 @@ void DataModel::ProjectEditor::wireProjectModelRebuilds()
       buildProjectModel();
   });
   connect(&pm, &DataModel::ProjectModel::jsonFileChanged, this, [this] {
-    // Same path means it was a re-save (autosave), not a project switch: preserve selection
     const auto& path = DataModel::ProjectModel::instance().jsonFilePath();
     if (path == m_lastJsonFilePath)
       return;
@@ -288,7 +287,6 @@ void DataModel::ProjectEditor::wireGroupSignals()
       if (!m_selectionModel)
         return;
 
-      // Fall back to the "Groups" parent category, not the project root.
       if (m_groupsRootItem) {
         m_selectionModel->setCurrentIndex(m_groupsRootItem->index(),
                                           QItemSelectionModel::ClearAndSelect);
@@ -346,7 +344,6 @@ void DataModel::ProjectEditor::wireDatasetSignals()
         return;
       }
 
-      // The tree rebuild scheduled by groupsChanged hasn't run yet, so defer.
       m_pendingSelectionKind    = PendingSelectionKind::Dataset;
       m_pendingSelectionGroupId = groupId;
       m_pendingSelectionItemId  = datasetId;
@@ -371,7 +368,6 @@ void DataModel::ProjectEditor::wireDatasetSignals()
       if (!m_selectionModel)
         return;
 
-      // Group was emptied and removed; fall back to the Groups parent.
       if (m_groupsRootItem) {
         m_selectionModel->setCurrentIndex(m_groupsRootItem->index(),
                                           QItemSelectionModel::ClearAndSelect);
@@ -445,7 +441,6 @@ void DataModel::ProjectEditor::wireOutputWidgetSignals()
         return;
       }
 
-      // The tree rebuild scheduled by groupsChanged hasn't run yet, so defer.
       m_pendingSelectionKind    = PendingSelectionKind::OutputWidget;
       m_pendingSelectionGroupId = groupId;
       m_pendingSelectionItemId  = widgetId;
@@ -567,7 +562,6 @@ void DataModel::ProjectEditor::wireExternalSignals()
     }
   });
 
-  // Rebuild source model on bus type change so the form stays current
   connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::driverChanged, this, [this] {
     if (m_currentView != SourceView)
       return;
@@ -583,7 +577,6 @@ void DataModel::ProjectEditor::wireExternalSignals()
     buildSourceModel(m_selectedSource);
   });
 
-  // Refresh the form on external source edits; queued so internal edits short-circuit
   connect(
     &DataModel::ProjectModel::instance(),
     &DataModel::ProjectModel::sourceChanged,
@@ -639,7 +632,6 @@ DataModel::ProjectEditor::ProjectEditor()
 {
   generateComboBoxModels();
 
-  // Coalesce rapid mutation bursts (keystrokes, batch edits) into one rebuild
   m_rebuildTimer.setSingleShot(true);
   m_rebuildTimer.setInterval(0);
   connect(&m_rebuildTimer, &QTimer::timeout, this, &DataModel::ProjectEditor::buildTreeModel);
@@ -723,7 +715,6 @@ const QString DataModel::ProjectEditor::outputWidgetIcon() const
  */
 const QStringList& DataModel::ProjectEditor::availableActionIcons() const
 {
-  // Scan and cache action icon names from embedded resources
   static QStringList icons;
 
   if (icons.isEmpty()) {
@@ -946,7 +937,6 @@ void DataModel::ProjectEditor::setSelectedOutputWidgetTransmitFunction(const QSt
 
   m_selectedOutputWidget.transmitFunction = code;
 
-  // Sync the tree-item cache
   for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
     if (it.value().groupId == m_selectedOutputWidget.groupId
         && it.value().widgetId == m_selectedOutputWidget.widgetId) {
@@ -983,7 +973,6 @@ void DataModel::ProjectEditor::openTransformEditorFor(int groupId, int datasetId
 
   const auto& dataset = groups[groupId].datasets[datasetId];
 
-  // Prefer per-dataset transformLanguage; fall back to source parser language when unset
   int lang = dataset.transformLanguage;
   if (lang < 0 || dataset.transformCode.isEmpty()) {
     for (const auto& src : pm.sources())
@@ -993,7 +982,6 @@ void DataModel::ProjectEditor::openTransformEditorFor(int groupId, int datasetId
       }
   }
 
-  // Lazy-create the dialog to dodge destruction-order issues.
   if (!m_transformEditor) {
     m_transformEditor = new DatasetTransformEditor(nullptr);
 
@@ -1009,7 +997,6 @@ void DataModel::ProjectEditor::openTransformEditorFor(int groupId, int datasetId
               if (dId < 0 || static_cast<size_t>(dId) >= groups[gId].datasets.size())
                 return;
 
-              // Reset language to -1 (unset) when code is cleared so stale flags don't stick
               auto dataset              = groups[gId].datasets[dId];
               dataset.transformCode     = code;
               dataset.transformLanguage = code.isEmpty() ? -1 : lang;
@@ -1020,7 +1007,6 @@ void DataModel::ProjectEditor::openTransformEditorFor(int groupId, int datasetId
                 m_selectedDataset.transformLanguage = dataset.transformLanguage;
               }
 
-              // Keep the tree-item cache in sync
               for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
                 if (it.value().groupId == gId && it.value().datasetId == dId) {
                   it.value().transformCode     = code;
@@ -1029,7 +1015,6 @@ void DataModel::ProjectEditor::openTransformEditorFor(int groupId, int datasetId
                 }
               }
 
-              // Re-sync FrameBuilder to recompile transform engines
               DataModel::FrameBuilder::instance().syncFromProjectModel();
             });
   }
@@ -1170,7 +1155,6 @@ void DataModel::ProjectEditor::scheduleTreeRebuild()
  */
 void DataModel::ProjectEditor::buildTreeModel()
 {
-  // Clear all item maps for the fresh rebuild
   m_rootItems.clear();
   m_groupItems.clear();
   m_sourceItems.clear();
@@ -1186,18 +1170,15 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_workspacesRootItem = nullptr;
   m_mqttPublisherItem  = nullptr;
 
-  // Save expanded state before destroying the old model
   QHash<QString, bool> expandedStates;
   if (m_treeModel)
     saveExpandedStateMap(m_treeModel->invisibleRootItem(), expandedStates, "");
 
-  // Disconnect only our captured lambda/slot connection, not every signal
   if (m_currentSelectionConnection) {
     QObject::disconnect(m_currentSelectionConnection);
     m_currentSelectionConnection = QMetaObject::Connection();
   }
 
-  // Dispose of the previous selection model
   if (m_selectionModel) {
     m_selectionModel->deleteLater();
     m_selectionModel = nullptr;
@@ -1209,7 +1190,6 @@ void DataModel::ProjectEditor::buildTreeModel()
     m_treeModel = nullptr;
   }
 
-  // Create fresh model and root item
   m_treeModel = new CustomModel(this);
 
   const auto& pm = DataModel::ProjectModel::instance();
@@ -1221,10 +1201,8 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_treeModel->appendRow(root);
   m_rootItems.insert(root, kRootItem);
 
-  // Populate sources, actions, groups, datasets, output widgets
   buildTreeItems(root, expandedStates);
 
-  // Connect the selection model and emit the new tree
   m_selectionModel             = new QItemSelectionModel(m_treeModel);
   m_currentSelectionConnection = connect(m_selectionModel,
                                          &QItemSelectionModel::currentChanged,
@@ -1233,7 +1211,6 @@ void DataModel::ProjectEditor::buildTreeModel()
 
   Q_EMIT treeModelChanged();
 
-  // Reveal queued add-* node, otherwise restore prior selection by ID
   const auto revealIndex = consumePendingSelection();
   if (!revealIndex.isValid())
     restoreTreeSelection();
@@ -1257,7 +1234,6 @@ QModelIndex DataModel::ProjectEditor::consumePendingSelection()
   m_pendingSelectionGroupId = -1;
   m_pendingSelectionItemId  = -1;
 
-  // Resolves the matching tree item via a per-kind predicate, sets selection, returns index.
   const auto pickFirst = [this](const auto& map, auto&& pred) -> QModelIndex {
     for (auto it = map.begin(); it != map.end(); ++it) {
       if (!pred(it.value()))
@@ -1445,7 +1421,6 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     return s.contains(q, Qt::CaseInsensitive);
   };
 
-  // Lazy-built "Groups" parent so empty projects don't leave a dangling node.
   QStandardItem* groupsRoot   = nullptr;
   const auto ensureGroupsRoot = [&]() {
     if (groupsRoot)
@@ -1458,7 +1433,6 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     groupsRoot->setData(true, TreeViewExpanded);
   };
 
-  // True when the search filter excludes the group entirely (title and all datasets miss).
   const auto groupFilteredOut = [&](const DataModel::Group& g, bool groupTitleMatches) {
     if (!filterActive || groupTitleMatches)
       return false;
@@ -1488,7 +1462,6 @@ void DataModel::ProjectEditor::appendGroupTreeItems(QStandardItem* root,
     groupItem->setData(group.groupId, TreeItemId);
     groupItem->setData(-1, TreeItemParentId);
 
-    // Force-expand groups that matched via a descendant when filtering
     if (filterActive)
       groupItem->setData(true, TreeViewExpanded);
 
@@ -1545,14 +1518,12 @@ void DataModel::ProjectEditor::appendSharedMemoryTreeItems(QStandardItem* root,
   tablesRoot->setData(-1, TreeViewFrameIndex);
   tablesRoot->setData(true, TreeViewExpanded);
 
-  // Add the read-only "Dataset Values" entry (auto-generated from the project)
   auto* sysDsItem = new QStandardItem(tr("Dataset Values"));
   sysDsItem->setData(tr("Dataset Values"), TreeViewText);
   sysDsItem->setData("qrc:/icons/project-editor/treeview/dataset-values.svg", TreeViewIcon);
   sysDsItem->setData(-1, TreeViewFrameIndex);
   tablesRoot->appendRow(sysDsItem);
 
-  // Add user-defined shared tables as children (filtered by search query)
   for (const auto& table : userTables) {
     if (filterActive && !matches(table.name))
       continue;
@@ -1699,7 +1670,6 @@ void DataModel::ProjectEditor::buildMqttPublishingSection(const MQTT::Publisher&
   pubHdr->setData("qrc:/icons/project-editor/model/mqtt-publishing.svg", ParameterIcon);
   m_mqttPublisherModel->appendRow(pubHdr);
 
-  // Master toggle stays editable so the user can flip it back on
   auto* enabledItem = new QStandardItem();
   enabledItem->setEditable(true);
   enabledItem->setData(true, Active);
@@ -1747,7 +1717,6 @@ void DataModel::ProjectEditor::buildMqttPublishingSection(const MQTT::Publisher&
   topicItem->setData(tr("Base topic used for frame and raw-byte publishing"), ParameterDescription);
   m_mqttPublisherModel->appendRow(topicItem);
 
-  // Optional per-script topic override; visible only in ScriptDriven mode
   if (pub.mode() == static_cast<int>(MQTT::Publisher::Mode::ScriptDriven)) {
     auto* scriptTopicItem = new QStandardItem();
     scriptTopicItem->setEditable(true);
@@ -2072,7 +2041,6 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   appendSharedMemoryTreeItems(root, expandedStates);
   appendWorkspaceTreeItems(root, expandedStates);
 
-  // Add spacer item at the end of the tree
   auto* spacer = new QStandardItem(" ");
   spacer->setData(" ", TreeViewText);
   spacer->setData("", TreeViewIcon);
@@ -2095,7 +2063,6 @@ void DataModel::ProjectEditor::restoreTreeSelection()
     return nullptr;
   };
 
-  // Resolve the selection target for the current view via flat dispatch
   QStandardItem* toSelect = nullptr;
 
   if (m_currentView == DatasetView) {
@@ -2150,7 +2117,6 @@ void DataModel::ProjectEditor::restoreTreeSelection()
       toSelect = m_workspacesRootItem;
   }
 
-  // Fall back to root project item when no match found
   if (!toSelect)
     toSelect = findKey(m_rootItems, [](const auto& v) { return v == kRootItem; });
 
@@ -2163,7 +2129,6 @@ void DataModel::ProjectEditor::restoreTreeSelection()
  */
 void DataModel::ProjectEditor::buildProjectModel()
 {
-  // Dispose of the previous model and create a fresh one
   if (m_projectModel) {
     disconnect(m_projectModel);
     m_projectModel->deleteLater();
@@ -2172,7 +2137,6 @@ void DataModel::ProjectEditor::buildProjectModel()
   m_projectModel = new CustomModel(this);
   const auto& pm = DataModel::ProjectModel::instance();
 
-  // Project Information section
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Project Information"), PlaceholderValue);
@@ -2317,7 +2281,6 @@ void DataModel::ProjectEditor::buildGroupImageSection(const DataModel::Group& gr
  */
 void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
 {
-  // Dispose of the previous model and create a fresh one
   if (m_groupModel) {
     disconnect(m_groupModel);
     m_groupModel->deleteLater();
@@ -2329,7 +2292,6 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
   buildGroupGeneralSection(group);
   buildGroupSourceSection(group);
 
-  // Composite widget selector (hidden for output groups)
   if (group.groupType != DataModel::GroupType::Output) {
     int index  = 0;
     bool found = false;
@@ -2515,7 +2477,6 @@ void DataModel::ProjectEditor::buildSourceFrameDetectionRows(const DataModel::So
  */
 void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
 {
-  // Dispose of the previous model and create a fresh one
   if (m_sourceModel) {
     disconnect(m_sourceModel);
     m_sourceModel->deleteLater();
@@ -2526,7 +2487,6 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
 
   buildSourceCommonRows(source);
 
-  // BLE connection is configured at runtime via the Setup panel, not the editor
   if (source.busType != static_cast<int>(SerialStudio::BusType::BluetoothLE))
     appendDriverPropertyRows(source);
 
@@ -2535,7 +2495,6 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   connect(
     m_sourceModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onSourceItemChanged);
 
-  // Rebuild source form when device lists change so ComboBox options stay current
   if (m_deviceListConn)
     disconnect(m_deviceListConn);
 
@@ -2564,7 +2523,6 @@ void DataModel::ProjectEditor::appendDriverPropertyRows(const DataModel::Source&
   if (!driver)
     return;
 
-  // Resolves the EditorWidget kind for a given driver-property type.
   const auto widgetForProperty = [](IO::DriverProperty::Type t) -> EditorWidget {
     switch (t) {
       case IO::DriverProperty::Text:
@@ -2666,7 +2624,6 @@ void DataModel::ProjectEditor::handleSourcePropertyChange(QStandardItem* item)
 
   DataModel::ProjectModel::instance().captureSourceSettings(m_selectedSource.sourceId);
 
-  // Transport mode change affects which properties are visible, rebuild the form
   static const QStringList kModeKeys = {
     QStringLiteral("socketTypeIndex"),
     QStringLiteral("protocolIndex"),
@@ -2700,7 +2657,6 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
     return;
   }
 
-  // Frame-detection / payload rows edit a copy of the selected source, then persist it
   DataModel::Source updated = m_selectedSource;
   switch (static_cast<SourceItem>(id)) {
     case kSourceView_FrameDetection:
@@ -2742,7 +2698,6 @@ void DataModel::ProjectEditor::handleSourceFrameDetectionChange(QStandardItem* i
   DataModel::ProjectModel::instance().updateSource(sid, updated);
   m_selectedSource = updated;
 
-  // Both edits change which delimiter rows are shown / how they are encoded, so rebuild
   buildSourceModel(m_selectedSource);
 }
 
@@ -2823,7 +2778,6 @@ void DataModel::ProjectEditor::buildActionGeneralRows(const DataModel::Action& a
   iconItem->setData(tr("Icon displayed for this action in the dashboard"), ParameterDescription);
   m_actionModel->appendRow(iconItem);
 
-  // Target device (only shown when multiple sources exist)
   const auto& sources = DataModel::ProjectModel::instance().sources();
   if (sources.size() <= 1)
     return;
@@ -3011,7 +2965,6 @@ void DataModel::ProjectEditor::buildActionTimingRows(const DataModel::Action& ac
  */
 void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
 {
-  // Dispose of the previous model and create a fresh one
   if (m_actionModel) {
     disconnect(m_actionModel);
     m_actionModel->deleteLater();
@@ -3035,7 +2988,6 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
  */
 void DataModel::ProjectEditor::buildDatasetModel(const DataModel::Dataset& dataset)
 {
-  // Dispose of the previous model and create a fresh one
   if (m_datasetModel) {
     disconnect(m_datasetModel);
     m_datasetModel->deleteLater();
@@ -3068,7 +3020,6 @@ void DataModel::ProjectEditor::buildDatasetModel(const DataModel::Dataset& datas
 void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
                                                  const DataModel::Dataset& dataset)
 {
-  // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("General Information"), PlaceholderValue);
@@ -3101,7 +3052,6 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
                        ParameterDescription);
   model->appendRow(virtualItem);
 
-  // hideOnDashboard checkbox: only emitted for datasets inside a painter group
   const auto& parentGroups = pm.groups();
   const bool insidePainter =
     (dataset.groupId >= 0 && static_cast<size_t>(dataset.groupId) < parentGroups.size()
@@ -3184,7 +3134,6 @@ void DataModel::ProjectEditor::addDatasetRangeRows(CustomModel* model,
  */
 void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
-  // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Plot Settings"), PlaceholderValue);
@@ -3215,7 +3164,6 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
   plotItem->setData(tr("Plot data in real-time"), ParameterDescription);
   model->appendRow(plotItem);
 
-  // X-axis source: xAxisId is -2 (time) or a dataset uniqueId, via the parallel list
   const auto xUids  = DataModel::ProjectModel::instance().xDataSourceUniqueIds();
   int xAxisComboPos = 0;
   for (int i = 0; i < xUids.size(); ++i) {
@@ -3276,7 +3224,6 @@ void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model,
   if (!dataset.waterfall)
     return;
 
-  // waterfallYAxis stores a dataset uniqueId; translate via the parallel list.
   const auto yUids  = DataModel::ProjectModel::instance().yWaterfallSourceUniqueIds();
   int yAxisComboPos = 0;
   for (int i = 0; i < yUids.size(); ++i) {
@@ -3307,7 +3254,6 @@ void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model,
 void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model,
                                                  const DataModel::Dataset& dataset)
 {
-  // FFT settings drive both the FFT plot and the Pro waterfall widget
   const bool fftSettingsEditable = dataset.fft || dataset.waterfall;
 
   const auto windowSize = QString::number(dataset.fftSamples);
@@ -3523,7 +3469,6 @@ void DataModel::ProjectEditor::openAlarmBandsEditorForSelection()
  */
 void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
-  // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("LED Display Settings"), PlaceholderValue);
@@ -3564,28 +3509,23 @@ void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel
  */
 void DataModel::ProjectEditor::generateComboBoxModels()
 {
-  // FFT window sizes
   m_fftSamples.clear();
   m_fftSamples << "8" << "16" << "32" << "64" << "128" << "256" << "512"
                << "1024" << "2048" << "4096" << "8192" << "16384";
 
-  // Timer modes
   m_timerModes.clear();
   m_timerModes << tr("Off") << tr("Auto Start") << tr("Start on Trigger") << tr("Toggle on Trigger")
                << tr("Repeat N Times");
 
-  // Decoder options
   m_decoderOptions.clear();
   m_decoderOptions << tr("Plain Text (UTF8)") << tr("Hexadecimal") << tr("Base64")
                    << tr("Binary (Direct)");
 
-  // Checksum methods
   m_checksumMethods         = IO::availableChecksums();
   const int noChecksumIndex = m_checksumMethods.indexOf(QLatin1String(""));
   if (noChecksumIndex >= 0)
     m_checksumMethods[noChecksumIndex] = tr("No Checksum");
 
-  // Frame detection methods
   m_frameDetectionMethods.clear();
   m_frameDetectionMethodsValues.clear();
   m_frameDetectionMethods << tr("End Delimiter Only") << tr("Start Delimiter Only")
@@ -3603,7 +3543,6 @@ void DataModel::ProjectEditor::generateComboBoxModels()
                       << tr("Knob");
 #endif
 
-  // Group composite widgets
   m_groupWidgets.clear();
   m_groupWidgets.insert(QStringLiteral("datagrid"), tr("Data Grid"));
   m_groupWidgets.insert(QStringLiteral("map"), tr("GPS Map"));
@@ -3615,7 +3554,6 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_groupWidgets.insert(QStringLiteral("painter"), tr("Painter Widget"));
   m_groupWidgets.insert(QLatin1String(""), tr("None"));
 
-  // Dataset widgets
   m_datasetWidgets.clear();
   m_datasetWidgets.insert(QLatin1String(""), tr("None"));
   m_datasetWidgets.insert(QStringLiteral("bar"), tr("Bar"));
@@ -3623,7 +3561,6 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_datasetWidgets.insert(QStringLiteral("compass"), tr("Compass"));
   m_datasetWidgets.insert(QStringLiteral("meter"), tr("Meter"));
 
-  // Display label format presets for analog widgets (bar/gauge/meter)
   m_displayFormats.clear();
   m_displayFormats.insert(QLatin1String(""), tr("Auto"));
   m_displayFormats.insert(QStringLiteral("0d"), tr("Integer (0 decimals)"));
@@ -3632,14 +3569,12 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_displayFormats.insert(QStringLiteral("3d"), tr("3 decimals"));
   m_displayFormats.insert(QStringLiteral("sci"), tr("Scientific"));
 
-  // End-of-line sequences
   m_eolSequences.clear();
   m_eolSequences.insert(QLatin1String(""), tr("None"));
   m_eolSequences.insert(QStringLiteral("\n"), tr("New Line (\\n)"));
   m_eolSequences.insert(QStringLiteral("\r"), tr("Carriage Return (\\r)"));
   m_eolSequences.insert(QStringLiteral("\r\n"), tr("CRLF (\\r\\n)"));
 
-  // Plot options
   m_plotOptions.clear();
   m_plotOptions.insert(qMakePair(false, false), tr("No"));
   m_plotOptions.insert(qMakePair(true, false), tr("Yes"));
@@ -3682,7 +3617,6 @@ void DataModel::ProjectEditor::setSuppressViewChange(bool suppress) noexcept
  */
 void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
 {
-  // Validate item and extract the changed parameter
   if (!item)
     return;
 
@@ -3807,7 +3741,6 @@ bool DataModel::ProjectEditor::applyGroupWidgetEdit(int widgetIdx, int groupId)
     return true;
   }
 
-  // Rejected: rebuild tree and restore selection on the original group.
   QTimer::singleShot(0, this, [this, groupId] {
     buildTreeModel();
     for (auto g = m_groupItems.begin(); g != m_groupItems.end(); ++g) {
@@ -3846,7 +3779,6 @@ bool DataModel::ProjectEditor::applyGroupImgModeEdit(int modeIdx, int groupId)
  */
 void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
 {
-  // Validate item and lazy-initialize EOL key list
   if (!item)
     return;
 
@@ -3909,13 +3841,11 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
       break;
   }
 
-  // Persist the change to the project model
   auto& pm            = DataModel::ProjectModel::instance();
   const auto actionId = m_selectedAction.actionId;
   pm.setSelectedAction(m_selectedAction);
   pm.updateAction(actionId, m_selectedAction, false);
 
-  // Update tree item text in-place for title changes
   if (static_cast<ActionItem>(id.toInt()) == kActionView_Title) {
     const auto newTitle = value.toString();
     for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
@@ -3931,7 +3861,6 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
 
     Q_EMIT selectedTextChanged();
   } else {
-    // updateAction(rebuildTree=false) skips the tree refresh; sync the cache here.
     for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
       if (it.value().actionId == actionId) {
         m_actionItems[it.key()] = m_selectedAction;
@@ -3946,7 +3875,6 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
  */
 void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
 {
-  // Validate item and dispatch the change
   if (!item)
     return;
 
@@ -4081,7 +4009,6 @@ void DataModel::ProjectEditor::onDatasetRangeItemChanged(QStandardItem* item,
 
   switch (id) {
     case kDatasetView_xAxis: {
-      // Translate ComboBox position -> dataset uniqueId; -2 at position 0 = "Time".
       const auto xUids = DataModel::ProjectModel::instance().xDataSourceUniqueIds();
       const int pos    = value.toInt();
       dataset.xAxisId  = (pos >= 0 && pos < xUids.size()) ? xUids.at(pos) : kXAxisTime;
@@ -4124,7 +4051,6 @@ void DataModel::ProjectEditor::onDatasetFftItemChanged(QStandardItem* item,
       dataset.fftMax = SerialStudio::toDouble(value);
       break;
     case kDatasetView_WaterfallYAxis: {
-      // Translate ComboBox position -> dataset uniqueId; 0 at position 0 = "Time".
       const auto yUids       = DataModel::ProjectModel::instance().yWaterfallSourceUniqueIds();
       const int pos          = value.toInt();
       dataset.waterfallYAxis = (pos >= 0 && pos < yUids.size()) ? yUids.at(pos) : 0;
@@ -4218,7 +4144,6 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
   const auto idInt = static_cast<DatasetItem>(item->data(ParameterType).toInt());
   const auto value = item->data(EditableValue);
 
-  // Bounds-checked dispatch: abort silently when index lookups fail
   if (idInt == kDatasetView_Widget) {
     const int widgetIdx = value.toInt();
     if (widgetIdx < 0 || widgetIdx >= m_datasetWidgets.size())
@@ -4245,7 +4170,6 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
   const auto groupId   = m_selectedDataset.groupId;
   const auto datasetId = m_selectedDataset.datasetId;
 
-  // Title updates tree item in-place; index changes require a full rebuild
   if (idInt == kDatasetView_Title) {
     const auto newTitle = m_selectedDataset.title;
     pm.updateDataset(groupId, datasetId, m_selectedDataset, false);
@@ -4523,7 +4447,6 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
   if (!item)
     return;
 
-  // Always refetch live record from ProjectModel; cache snapshots are stale
   if (selectSourceParserItem(item))
     return;
 
@@ -4772,7 +4695,6 @@ void DataModel::ProjectEditor::buildOutputWidgetValueRows(const DataModel::Outpu
  */
 void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
 {
-  // Store selection and dispose of the previous model
   m_selectedOutputWidget = widget;
 
   if (m_outputWidgetModel) {
@@ -4799,7 +4721,6 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
  */
 void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
 {
-  // Validate item and dispatch the change by parameter type
   if (!item)
     return;
 
@@ -4856,7 +4777,6 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
       }
     }
   } else {
-    // Sync the tree-item cache; updateOutputWidget(rebuildTree=false) skips it.
     for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
       if (it.value().groupId == m_selectedOutputWidget.groupId
           && it.value().widgetId == m_selectedOutputWidget.widgetId) {
@@ -4866,7 +4786,6 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
     }
   }
 
-  // Persist to ProjectModel
   DataModel::ProjectModel::instance().updateOutputWidget(
     m_selectedOutputWidget.groupId, m_selectedOutputWidget.widgetId, m_selectedOutputWidget, false);
 }
@@ -4957,7 +4876,6 @@ QVariantList DataModel::ProjectEditor::selectedTreeItems() const
  */
 QVariantList DataModel::ProjectEditor::tablesSummary() const
 {
-  // Always list the auto-generated "Dataset Values" entry first
   QVariantList result;
   const auto& groups = DataModel::ProjectModel::instance().groups();
 
@@ -4972,7 +4890,6 @@ QVariantList DataModel::ProjectEditor::tablesSummary() const
   sysRow["entryCount"]  = datasetCount;
   result.append(sysRow);
 
-  // Append user-defined shared tables
   const auto& tables = DataModel::ProjectModel::instance().tables();
   for (const auto& table : tables) {
     QVariantMap row;
@@ -5065,7 +4982,6 @@ void DataModel::ProjectEditor::setTreeSearchQuery(const QString& query)
   m_treeSearchQuery = query;
   Q_EMIT treeSearchQueryChanged();
 
-  // Defer rebuild and re-check query freshness so rapid typing coalesces.
   const auto current = m_treeSearchQuery;
   QTimer::singleShot(0, this, [this, current] {
     if (m_treeSearchQuery == current)
@@ -5078,7 +4994,6 @@ void DataModel::ProjectEditor::setTreeSearchQuery(const QString& query)
  */
 QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
 {
-  // Recompute uniqueId via finalize_frame encoding (ProjectModel copy isn't finalized).
   QVariantList result;
   const auto& groups = DataModel::ProjectModel::instance().groups();
 
@@ -5140,7 +5055,6 @@ qint64 DataModel::ProjectEditor::workspaceWidgetKey(int widgetType, int groupId,
 QHash<qint64, DataModel::ProjectEditor::ResolvedWidget> DataModel::ProjectEditor::
   buildResolvedWidgetLookup(const DataModel::ProjectModel& pm)
 {
-  // relativeIndex is project-wide per widget type, matching buildAutoWorkspaces.
   QHash<qint64, ResolvedWidget> lookup;
   const auto& groups = pm.groups();
   const bool pro     = SerialStudio::proWidgetsEnabled();
@@ -5191,7 +5105,6 @@ QHash<qint64, DataModel::ProjectEditor::ResolvedWidget> DataModel::ProjectEditor
     for (const auto& ds : g.datasets)
       walkDatasetWidgets(ds);
 
-    // Synthesise one LED panel entry per group with any led:true dataset.
     const bool groupHasLed =
       std::any_of(g.datasets.begin(), g.datasets.end(), [](const DataModel::Dataset& ds) {
         return !ds.hideOnDashboard && ds.led;
@@ -5220,7 +5133,6 @@ QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) cons
   const auto& pm     = DataModel::ProjectModel::instance();
   const auto& wsList = pm.editorWorkspaces();
 
-  // Locate the workspace
   auto wsIt = std::find_if(wsList.begin(), wsList.end(), [workspaceId](const auto& w) {
     return w.workspaceId == workspaceId;
   });
@@ -5358,16 +5270,13 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
   const auto& groups = DataModel::ProjectModel::instance().groups();
   const bool pro     = SerialStudio::proWidgetsEnabled();
   for (const auto& group : groups) {
-    // Skip groups that don't contribute to Dashboard's widget walker
     if (!SerialStudio::groupEligibleForWorkspace(group))
       continue;
 
-    // Group-level widget: mirror Dashboard's non-Pro Plot3D fallback.
     auto groupKey = SerialStudio::getDashboardWidget(group);
     if (groupKey == SerialStudio::DashboardPlot3D && !pro)
       groupKey = SerialStudio::DashboardMultiPlot;
 
-    // Skip empty output panels: nothing to offer in the picker.
     const bool isEmptyOutputPanel =
       group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
 
@@ -5384,7 +5293,6 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
       result.append(row);
     }
 
-    // Records one dataset-widget summary row.
     const auto recordDatasetWidget = [&](const DataModel::Dataset& ds,
                                          SerialStudio::DashboardWidget k) {
       QVariantMap row;
@@ -5399,7 +5307,6 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
       result.append(row);
     };
 
-    // Walk dataset widgets through a lambda so the predicate filter resets nesting.
     const auto walkDatasetWidgets = [&](const DataModel::Dataset& ds) {
       const auto keys = SerialStudio::getDashboardWidgets(ds);
       for (const auto& k : keys)
@@ -5410,7 +5317,6 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
     for (const auto& ds : group.datasets)
       walkDatasetWidgets(ds);
 
-    // Synthesise one LED panel entry per group with any led:true dataset.
     const bool groupHasLed =
       std::any_of(group.datasets.begin(), group.datasets.end(), [](const DataModel::Dataset& ds) {
         return !ds.hideOnDashboard && ds.led;

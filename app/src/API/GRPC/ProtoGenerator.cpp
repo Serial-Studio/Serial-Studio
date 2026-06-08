@@ -207,7 +207,6 @@ QString API::GRPC::ProtoGenerator::jsonTypeToProtoType(const QString& jsonType)
   if (jsonType == QStringLiteral("array"))
     return QStringLiteral("google.protobuf.ListValue");
 
-  // Fallback for object, mixed, or unknown types
   return QStringLiteral("google.protobuf.Struct");
 }
 

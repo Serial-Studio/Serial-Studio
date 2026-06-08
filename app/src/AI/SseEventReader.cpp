@@ -31,7 +31,6 @@ AI::SseEventReader::SseEventReader(QObject* parent) : QObject(parent) {}
  */
 void AI::SseEventReader::feed(const QByteArray& chunk)
 {
-  // Empty chunk is the end-of-stream flush: drain any frames left buffered by a prior call.
   if (chunk.isEmpty()) {
     drainFrames();
     return;
@@ -74,7 +73,6 @@ qsizetype AI::SseEventReader::bufferedBytes() const noexcept
  */
 void AI::SseEventReader::drainFrames()
 {
-  // Each iteration removes >=2 bytes, so buffer size bounds the loop (P10) with no data-loss cliff.
   const qsizetype maxIterations = m_buffer.size();
   for (qsizetype safety = 0; safety < maxIterations; ++safety) {
     const auto end = m_buffer.indexOf("\n\n");

@@ -819,7 +819,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::remove(const QString& id,
 
   const int wid = params.value(QStringLiteral("id")).toInt();
 
-  // Snapshot target details pre-mutation so dryRun and real call return the same shape.
   const auto& workspaces = pm.activeWorkspaces();
   const auto it          = findWorkspace(workspaces, wid);
   if (it == workspaces.end())
@@ -861,7 +860,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::clearAll(const QString& i
 
   auto& pm = DataModel::ProjectModel::instance();
 
-  // Summarise the affected workspaces so dryRun + real call return the same shape.
   const auto& active = pm.activeWorkspaces();
   QJsonArray wouldDelete;
   for (const auto& ws : active) {
@@ -1096,7 +1094,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetAdd(const QString& 
   const int wid = params.value(QStringLiteral("workspaceId")).toInt();
   const int gid = params.value(QStringLiteral("groupId")).toInt();
 
-  // widgetType accepts either an integer (DashboardWidget enum) or a string slug
   const QJsonValue wtypeJson = params.value(QStringLiteral("widgetType"));
   const int wtype            = resolveWidgetType(wtypeJson);
   if (const auto err = validateResolvedWidgetType(wtype, wtypeJson))
@@ -1109,7 +1106,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetAdd(const QString& 
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace not found: %1").arg(wid));
 
-  // The MCP "groupId" is a Group.uniqueId (stable identity); reorders don't invalidate it.
   const auto& groups  = DataModel::ProjectModel::instance().groups();
   const auto group_it = std::find_if(
     groups.begin(), groups.end(), [gid](const DataModel::Group& g) { return g.uniqueId == gid; });
@@ -1123,7 +1119,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetAdd(const QString& 
   if (const auto err = validateGroupCompatibility(*group_it, wtype, gid))
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, *err);
 
-  // Resolve relativeIndex AFTER all validation so error messages stay specific.
   const bool hasRelIndex    = params.contains(QStringLiteral("relativeIndex"));
   const bool hasDatasetId   = params.contains(Keys::DatasetId);
   const int targetDatasetId = hasDatasetId ? params.value(Keys::DatasetId).toInt() : -1;
@@ -1182,7 +1177,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetRemove(const QStrin
       ErrorCode::InvalidParam,
       QStringLiteral("customizeWorkspaces is off; call project.workspace.setCustomizeMode first"));
 
-  // Two input forms: {widgetId:"..."} or the legacy 4-tuple
   int wid      = -1;
   int wtype    = -1;
   int gid      = -1;
@@ -1220,7 +1214,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetRemove(const QStrin
     gid      = params.value(QStringLiteral("groupId")).toInt();
     relIndex = params.value(QStringLiteral("relativeIndex")).toInt();
 
-    // widgetType accepts integer or string slug
     const QJsonValue wtypeJson = params.value(QStringLiteral("widgetType"));
     if (wtypeJson.isString()) {
       wtype = API::EnumLabels::dashboardWidgetFromSlug(wtypeJson.toString());
@@ -1261,7 +1254,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::validate(const QString& i
   const auto& wsList = pm.editorWorkspaces();
   const auto lookup  = DataModel::ProjectEditor::buildResolvedWidgetLookup(pm);
 
-  // Restrict to one workspace when caller asks
   const bool filtered = params.contains(QStringLiteral("workspaceId"));
   const int onlyWid   = filtered ? params.value(QStringLiteral("workspaceId")).toInt() : -1;
 
@@ -1305,7 +1297,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::validate(const QString& i
     }
   }
 
-  // Unreferenced groups: warning, only meaningful for full-project scope
   QJsonArray unreferenced;
   if (!filtered) {
     for (const auto& g : pm.groups()) {
@@ -1350,7 +1341,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::cleanup(const QString& id
   const bool filtered = params.contains(QStringLiteral("workspaceId"));
   const int onlyWid   = filtered ? params.value(QStringLiteral("workspaceId")).toInt() : -1;
 
-  // Enumerate orphans up-front; non-dryRun callers still see the removed identities
   QJsonArray removedRefs;
   for (const auto& ws : wsList) {
     if (filtered && ws.workspaceId != onlyWid)
@@ -1413,7 +1403,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::reorder(const QString& id
 
   const auto arr = params.value(QStringLiteral("workspaceIds")).toArray();
 
-  // Reject any id below the user threshold up-front: system workspaces don't reorder
   QList<int> orderedIds;
   QStringList rejected;
   for (const auto& v : arr) {
@@ -1433,7 +1422,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::reorder(const QString& id
                      "Rejected ids: [%1]")
         .arg(rejected.join(QStringLiteral(", "))));
 
-  // Set-equality check against current user workspaces (avoid partial reorder)
   auto& pm           = DataModel::ProjectModel::instance();
   const auto& wsList = pm.editorWorkspaces();
   QSet<int> currentUserIds;
@@ -1453,7 +1441,6 @@ API::CommandResponse API::Handlers::WorkspacesHandler::reorder(const QString& id
 
   pm.reorderWorkspaces(orderedIds);
 
-  // Echo back the new order
   QJsonArray newOrder;
   for (const auto& ws : pm.editorWorkspaces())
     if (ws.workspaceId >= ::WorkspaceIds::UserStart)

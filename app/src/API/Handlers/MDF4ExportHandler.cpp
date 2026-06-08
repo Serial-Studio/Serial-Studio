@@ -36,7 +36,6 @@ void API::Handlers::MDF4ExportHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // Mutation commands
   QJsonObject setEnabledSchema;
   {
     QJsonObject props;
@@ -63,7 +62,6 @@ void API::Handlers::MDF4ExportHandler::registerCommands()
                            closeSchema,
                            &close);
 
-  // Query commands
   QJsonObject getStatusSchema;
   getStatusSchema.insert("type", "object");
   getStatusSchema.insert("properties", QJsonObject());

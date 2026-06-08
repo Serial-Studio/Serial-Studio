@@ -105,11 +105,11 @@ public:
   }
 
   /**
-   * @brief Flushes remaining data and closes resources.
+   * @brief Flushes remaining data and closes resources; the try/catch is mandatory because this
+   * runs through Qt's event loop, where an escaping exception would cross the dispatch boundary.
    */
   void close() override
   {
-    // Guard against exceptions - this method runs through Qt's event loop.
     try {
       processData();
       closeResources();
@@ -123,11 +123,11 @@ public:
   }
 
   /**
-   * @brief Drains every pending frame without closing resources; keeps the worker reusable.
+   * @brief Drains every pending frame without closing resources; keeps the worker reusable and
+   * deliberately ignores the enabled flag so a just-disabled consumer still writes out its backlog.
    */
   void flush() override
   {
-    // Ignores the enabled flag so a just-disabled consumer can still write out its backlog.
     try {
       // code-verify off: bounded queue drain; each drainBatch() consumes items or returns 0
       while (drainBatch() > 0) {
@@ -190,8 +190,10 @@ private:
     if (wasOpen != isOpen)
       Q_EMIT resourceOpenChanged();
 
-    // Release the pooled-frame refs now that they are written, not at the next drain cycle.
+    // code-verify off: release the pooled-frame refs now that they are written, not at the next
+    // drain cycle, so a backlog cannot pin the slot pool
     m_writeBuffer.clear();
+    // code-verify on
     return count;
   }
 
@@ -258,28 +260,28 @@ public:
   }
 
   /**
-   * @brief Drains the worker's backlog without stopping it; the worker stays reusable.
+   * @brief Drains the worker's backlog without stopping it; the worker stays reusable. Skips the
+   * flush at exit because BlockingQueuedConnection needs a live event loop on both ends.
    */
   void flushWorker()
   {
     if (!m_worker || !m_workerThread.isRunning())
       return;
 
-    // BlockingQueuedConnection needs a live event loop on both ends; skip it at exit.
     if (QCoreApplication::instance())
       QMetaObject::invokeMethod(
         m_worker, &FrameConsumerWorkerBase::flush, Qt::BlockingQueuedConnection);
   }
 
   /**
-   * @brief Flushes and stops the worker thread. Idempotent; call before QApplication teardown.
+   * @brief Flushes and stops the worker thread. Idempotent; call before QApplication teardown. The
+   * blocking flush spins a QEventLoop needing a live QCoreApplication, so it is skipped at exit.
    */
   void stopWorker()
   {
     if (!m_worker || !m_workerThread.isRunning())
       return;
 
-    // The blocking flush spins a QEventLoop, which needs a live QCoreApplication; skip it at exit.
     if (QCoreApplication::instance())
       QMetaObject::invokeMethod(
         m_worker, &FrameConsumerWorkerBase::close, Qt::BlockingQueuedConnection);

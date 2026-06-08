@@ -54,7 +54,6 @@ void API::Handlers::SessionsHandler::registerLifecycleCommands()
     emptySchema,
     &getStatus);
 
-  // sessions.setExportEnabled: {enabled: bool}
   {
     QJsonObject props;
     props[QStringLiteral("enabled")] = QJsonObject{
@@ -78,7 +77,6 @@ void API::Handlers::SessionsHandler::registerLifecycleCommands()
     emptySchema,
     &close);
 
-  // sessions.getCanonicalDbPath: {projectTitle: string}
   {
     QJsonObject props;
     props[QStringLiteral("projectTitle")] = QJsonObject{
@@ -132,7 +130,6 @@ void API::Handlers::SessionsHandler::registerBrowsingCommands()
     emptySchema,
     &list);
 
-  // sessions.get: {sessionId}
   {
     QJsonObject props;
     props[QStringLiteral("sessionId")] = QJsonObject{
@@ -165,7 +162,6 @@ void API::Handlers::SessionsHandler::registerBrowsingCommands()
       &exportToCsv);
   }
 
-  // sessions.setNotes: {sessionId, notes}
   {
     QJsonObject props;
     props[QStringLiteral("sessionId")] = QJsonObject{
@@ -205,7 +201,6 @@ void API::Handlers::SessionsHandler::registerTagCommands()
                            emptySchema,
                            &listTags);
 
-  // sessions.addTag: {label}
   {
     QJsonObject props;
     props[QStringLiteral("label")] = QJsonObject{
@@ -222,7 +217,6 @@ void API::Handlers::SessionsHandler::registerTagCommands()
                              &addTag);
   }
 
-  // sessions.deleteTag: {tagId}, sessions.renameTag: {tagId, newLabel}
   {
     QJsonObject delProps;
     delProps[QStringLiteral("tagId")] = QJsonObject{
@@ -254,7 +248,6 @@ void API::Handlers::SessionsHandler::registerTagCommands()
                              &renameTag);
   }
 
-  // sessions.assignTag / removeTag: {sessionId, tagId}
   {
     QJsonObject props;
     props[QStringLiteral("sessionId")] = QJsonObject{

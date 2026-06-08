@@ -118,7 +118,6 @@ void Sessions::Player::shutdown()
   m_workerThread->quit();
   m_workerThread->wait(5000);
 
-  // Worker thread has exited; safe to delete the worker directly from here.
   delete m_worker;
   m_worker = nullptr;
 
@@ -263,7 +262,6 @@ void Sessions::Player::openFile()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -284,7 +282,6 @@ void Sessions::Player::closeFile()
 
   const bool wasLoading = m_loading;
 
-  // Reset playback state
   m_playing  = false;
   m_framePos = 0;
   m_loading  = false;
@@ -294,7 +291,6 @@ void Sessions::Player::closeFile()
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
-  // Restore project + operation mode that existed before the session
   restorePreSessionState();
 
   if (wasLoading)
@@ -325,13 +321,10 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
   if (filePath.isEmpty())
     return;
 
-  // Cancel any in-flight load and tear down whatever is currently open
   closeFile();
 
-  // Snapshot mode + project path before restoreProjectFromJson mutates them
   capturePreSessionState();
 
-  // Prompt to disconnect live devices: must happen on main thread
   if (IO::ConnectionManager::instance().isConnected()) {
     auto response =
       Misc::Utilities::showMessageBox(tr("Device Connection Active"),
@@ -361,7 +354,6 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
  */
 void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
 {
-  // If the load was cancelled or superseded, the path may have been cleared
   if (!payload || m_filePath.isEmpty()) {
     if (m_loading) {
       m_loading = false;
@@ -371,7 +363,6 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
     return;
   }
 
-  // Drop stale results from a load that was superseded by a fresh openFile()
   if (payload->filePath != m_filePath)
     return;
 
@@ -399,18 +390,15 @@ void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
     return;
   }
 
-  // Restore project: must happen on the main thread before column alignment
   if (!payload->projectJson.isEmpty()) {
     (void)restoreProjectFromJson(payload->projectJson);
   } else {
-    // Inform the user the embedded project is missing
     Misc::Utilities::showMessageBox(tr("No project data"),
                                     tr("This session does not contain an embedded project file — "
                                        "the dashboard falls back to a quick-plot layout."),
                                     QMessageBox::Warning);
   }
 
-  // Open the main-thread DB connection used for per-frame fetches
   if (!openLocalDb(m_filePath)) {
     m_loading = false;
     Q_EMIT loadingChanged();
@@ -675,7 +663,6 @@ void Sessions::Player::updateData()
     return;
   }
 
-  // Schedule the next frame on the recording's wall-clock delta
   constexpr double kInvMs = 1.0 / 1000.0;
   constexpr double kInvNs = 1.0 / 1e9;
   const qint64 elapsedMs  = m_elapsedTimer.elapsed();
@@ -683,7 +670,6 @@ void Sessions::Player::updateData()
   const double targetSec  = m_startTimestampSeconds + (elapsedMs * kInvMs);
   qint64 msUntilNext      = qMax(0LL, static_cast<qint64>((nextSec - targetSec) * 1000.0));
 
-  // Burst-emit late frames in one chunk to prevent runaway queues
   if (msUntilNext <= 0) {
     constexpr int kMaxBatchSize = 100;
     int processed               = 0;
@@ -754,14 +740,12 @@ void Sessions::Player::alignColumnsToProject()
   if (m_columnUniqueIds.empty())
     return;
 
-  // Datasets carry persisted uniqueIds; just index them.
   QMap<int, QPair<int, int>> uidToSrcIndex;
   const auto& groups = DataModel::ProjectModel::instance().groups();
   for (const auto& g : groups)
     for (const auto& d : g.datasets)
       uidToSrcIndex.insert(d.uniqueId, qMakePair(g.sourceId, d.index));
 
-  // Bucket session columns by source so each source ends up index-sorted
   QMap<int, std::vector<QPair<int, int>>> bySource;
   std::vector<int> orphans;
   for (int uid : m_columnUniqueIds) {
@@ -774,13 +758,11 @@ void Sessions::Player::alignColumnsToProject()
     bySource[it.value().first].push_back(qMakePair(it.value().second, uid));
   }
 
-  // Sort each source's slice by dataset.index ascending
   for (auto it = bySource.begin(); it != bySource.end(); ++it)
     std::sort(it.value().begin(), it.value().end(), [](const auto& a, const auto& b) {
       return a.first < b.first;
     });
 
-  // Concatenate sources in ascending sourceId order, append unknown columns
   std::vector<int> aligned;
   aligned.reserve(m_columnUniqueIds.size());
   for (auto it = bySource.constBegin(); it != bySource.constEnd(); ++it)
@@ -812,10 +794,8 @@ void Sessions::Player::pickSlotForDataset(const DataModel::Group& g,
   if (d.index <= 0)
     return;
 
-  // Datasets sharing dataset.index collapse to the same channel slot
   m_sourceMaxIndex[g.sourceId] = std::max(m_sourceMaxIndex.value(g.sourceId, 0), d.index);
 
-  // Prefer a transform-free uid for the slot so replay re-applies transforms cleanly
   const auto key       = qMakePair(g.sourceId, d.index);
   const bool noXform   = d.transformCode.isEmpty();
   const auto pickIt    = slotPick.constFind(key);
@@ -840,18 +820,15 @@ void Sessions::Player::buildMultiSourceMapping()
   m_sourceMaxIndex.clear();
   m_sourceSlotUid.clear();
 
-  // Pick a canonical uid per (sourceId, parserIndex) slot
   QHash<QPair<int, int>, int> slotPick;
   QSet<QPair<int, int>> slotPickIsTransformFree;
 
-  // Recompute uniqueId locally and capture dataset.index per uid
   QMap<int, int> uidToSource;
   const auto& groups = DataModel::ProjectModel::instance().groups();
   for (const auto& g : groups)
     for (const auto& d : g.datasets)
       pickSlotForDataset(g, d, uidToSource, slotPick, slotPickIsTransformFree);
 
-  // Materialize the per-source slot tables: index 1..maxIndex -> canonical uid
   for (auto it = m_sourceMaxIndex.constBegin(); it != m_sourceMaxIndex.constEnd(); ++it) {
     const int srcId  = it.key();
     const int maxIdx = it.value();
@@ -894,7 +871,6 @@ QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
   if (!m_db) [[unlikely]]
     return uidValues;
 
-  // Lazy-prepare the per-frame fetch query once and reuse it across ticks
   if (!m_frameQueryPrepared) {
     m_frameQuery.emplace(*m_db);
     m_frameQuery->setForwardOnly(true);
@@ -926,7 +902,6 @@ QHash<int, QString> Sessions::Player::buildFrameAt(qint64 timestampNs)
       uidValues[uid] = m_frameQuery->value(2).toString();
     }
 
-    // Track which sources contributed data at this timestamp
     const auto srcIt = m_columnToSource.constFind(it.value());
     if (srcIt != m_columnToSource.constEnd())
       m_sourcesAtCurrentTs.insert(srcIt.value());
@@ -944,7 +919,6 @@ void Sessions::Player::injectFrame(const QHash<int, QString>& uidValues)
   if (uidValues.isEmpty() || m_sourcesAtCurrentTs.isEmpty())
     return;
 
-  // Build one CSV per source slotted by dataset.index using the canonical uid
   QMap<int, QByteArray> sourcePayloads;
   for (int srcId : std::as_const(m_sourcesAtCurrentTs)) {
     const auto slotIt = m_sourceSlotUid.constFind(srcId);
@@ -976,7 +950,6 @@ void Sessions::Player::injectFrame(const QHash<int, QString>& uidValues)
     return;
   }
 
-  // Combined payload feeds the console/API; per-source payloads drive parsing
   QByteArray combined;
   for (auto it = sourcePayloads.constBegin(); it != sourcePayloads.constEnd(); ++it) {
     if (!combined.isEmpty())

@@ -249,7 +249,6 @@ bool Misc::ShortcutGenerator::writeMacCommand(const QString& outputPath,
 
   writePkgInfo(contentsDir);
 
-  // Strip quarantine so Gatekeeper does not block the launcher
   stripQuarantine(bundlePath);
 
   return true;

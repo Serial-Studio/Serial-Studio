@@ -319,7 +319,6 @@ void Widgets::Bar::notifyOnBandEdge()
   if (!fireWorthy || idx < 0 || idx >= m_bands.size())
     return;
 
-  // Severity-aware cooldown: a higher severity escalates through a lower one's cooldown.
   const qint64 now = QDateTime::currentMSecsSinceEpoch();
   for (int s = sev; s <= 3; ++s)
     if (now - m_lastFireBySeverityMs[s] < kMinNotifyIntervalMs)

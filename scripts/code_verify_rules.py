@@ -1336,9 +1336,12 @@ def _verbose_doxygen_reason(block_lines: list[str]) -> str:
       `@note`, `@see`, `@throws`, `@tparam`, `@retval`, ...).
     - Contains a blank doxygen continuation line (` *` with no body), which
       separates an extended description paragraph from the brief.
-    - Spans more than 4 source lines (the natural ceiling for a wrapped
-      one-sentence brief is 3-4 lines: `/**`, ` * @brief ...`, ` * ...wrap`,
-      ` */`).
+    - Spans more than 6 source lines. The `cxx-inbody-comment` policy folds a
+      load-bearing in-body "why" up INTO the brief, so a brief that absorbs one
+      or two of those is legitimately 4-6 lines (`/**`, three or four ` * ...`
+      content lines, ` */`). Beyond 6 the block has stopped being a brief and
+      should move to the commit message. (Was 4: tightened back when briefs were
+      one-liners; relaxed once the brief became the home for the in-body why.)
     """
     if not block_lines:
         return ""
@@ -1355,10 +1358,10 @@ def _verbose_doxygen_reason(block_lines: list[str]) -> str:
                 "description belongs in the commit message, not the "
                 "header doxygen"
             )
-    if len(block_lines) > 4:
+    if len(block_lines) > 6:
         return (
-            f"spans {len(block_lines)} lines -- collapse to a one-line "
-            "`/** @brief ... */`"
+            f"spans {len(block_lines)} lines -- a brief that has grown past "
+            "six lines belongs in the commit message, not the doxygen"
         )
     return ""
 
@@ -1389,8 +1392,14 @@ def _cpp_rules(src: bytes, path: Path, fence_mask: list[bool]) -> list[Finding]:
         doc-missing-brief-cpp    .cpp function definition without /** @brief */
         doc-missing-brief-h      header type-level definition without /** @brief */
         doc-verbose-brief        doxygen block carries @param/@return/blank-`*`
-                                 paragraphs or wraps to 5+ lines (one-line
-                                 `/** @brief ... */` is the contract)
+                                 paragraphs or wraps past 6 lines (a brief may
+                                 absorb an in-body why, but stays <=6 lines)
+        cxx-inbody-comment       comment inside a function body (functions are
+                                 short; the @brief above + the code carry it)
+        cxx-trivial-function     function with an empty / only-Q_UNUSED / single
+                                 constant-return body (dead-code candidate)
+        cxx-scattered-constant   file-scope static/constexpr/const declared after
+                                 the first function (hoist to the top section)
         hotpath-allocation       allocation/append on a known hotpath method
         keys-hardcoded-literal   raw "busType" etc. literal where Keys:: belongs
         cxx-anonymous-namespace  helpers/types defined inside `namespace { ... }`
@@ -1542,7 +1551,18 @@ def _cpp_rules(src: bytes, path: Path, fence_mask: list[bool]) -> list[Finding]:
 
     # ---- AST-driven rules
     # Walk every function_definition: function-too-long, nesting-too-deep,
-    # missing @brief in .cpp, hotpath allocations.
+    # missing @brief in .cpp, hotpath allocations, trivial dead-function bodies.
+    contract_names = _header_contract_names(path, src_text, is_header)
+    # Functions defined more than once in this translation unit are build
+    # variants (one body per `#ifdef` branch); a trivial stub in one branch is
+    # expected, not dead code. Count top-level definitions by name.
+    func_name_counts: dict = {}
+    for fn in _walk(root):
+        if fn.type == "function_definition" and not _has_function_ancestor(fn):
+            nm = _function_name(fn, src)
+            if nm:
+                func_name_counts[nm] = func_name_counts.get(nm, 0) + 1
+    is_platform_file = bool(_PLATFORM_FILE_RE.search(path.name))
     for n in _walk(root):
         if n.type == "function_definition":
             line = _line_of(n)
@@ -1667,6 +1687,101 @@ def _cpp_rules(src: bytes, path: Path, fence_mask: list[bool]) -> list[Finding]:
             # passed by value, and body scan for oversized stack arrays.
             out.extend(_parameter_perf_findings(n, src, fenced))
             out.extend(_large_stack_buffer_findings(body, src, fenced))
+
+            # Trivial / dead-function candidate: empty body, only Q_UNUSED, or a
+            # single constant return. Interface overrides (header `virtual` /
+            # `override` / `final`), operators and `main` are excluded.
+            if (
+                not _has_function_ancestor(n)
+                and not fenced(line)
+                and not is_platform_file
+            ):
+                fname = _function_name(n, src)
+                if (
+                    fname
+                    and fname != "main"
+                    and not fname.startswith("operator")
+                    and fname not in contract_names
+                    and fname not in _CPP_NON_FUNCTION_NAMES
+                    and not _DEFAULT_PROVIDER_RE.match(fname)
+                    and func_name_counts.get(fname, 1) <= 1
+                ):
+                    reason = _function_trivial_reason(n, src)
+                    if reason:
+                        out.append(
+                            Finding(
+                                line,
+                                "cxx-trivial-function",
+                                f"`{fname}` has a trivial body ({reason}) -- likely "
+                                f"dead. Interface overrides are already excluded; "
+                                f"confirm no QML binding, Q_INVOKABLE/Q_PROPERTY use, "
+                                f"or call site depends on it, then delete the function "
+                                f"with its declaration and call sites. Not auto-removed "
+                                f"-- removal ripples into headers, properties, and QML.",
+                            )
+                        )
+
+    # ---- In-body comments. Every function here is <=100 lines (the
+    # cxx-function-too-long cap), so the contract is one `/** @brief ... */`
+    # above the function plus self-explanatory code -- no comments INSIDE the
+    # body. The @brief sits outside the body node, so it is never flagged
+    # (see _comment_in_function_body). Tooling pragmas (clang-format / NOLINT /
+    # cppcheck-suppress / fallthrough) are directives and skipped; a genuinely
+    # load-bearing note can stay behind a reviewed `// code-verify off` fence.
+    for n in _walk(root):
+        if n.type != "comment":
+            continue
+        if not _comment_in_function_body(n):
+            continue
+        line = _line_of(n)
+        if fenced(line):
+            continue
+        if _is_inbody_pragma(_node_text(n, src)):
+            continue
+        out.append(
+            Finding(
+                line,
+                "cxx-inbody-comment",
+                "comment inside a function body -- functions here are short "
+                "(<=100 lines) so the code reads on its own. Delete the "
+                "comment, or fold a load-bearing 'why' into the one-line "
+                "`/** @brief ... */` above the function. A genuinely-needed "
+                "note can stay behind a reviewed `// code-verify off` fence.",
+            )
+        )
+
+    # ---- Scattered file-scope constants/globals. Anything `static` /
+    # `constexpr` / `const` declared at file or namespace scope AFTER the first
+    # function definition should be hoisted into the top `// Constants` banner
+    # so every constant lives in one place, not spread across the file.
+    func_starts = [
+        n.start_point[0]
+        for n in _walk(root)
+        if n.type == "function_definition" and not _has_function_ancestor(n)
+    ]
+    if path.suffix in _IMPL_SUFFIXES and func_starts:
+        first_func_line = min(func_starts)
+        for n in _walk(root):
+            if n.type != "declaration" or n.start_point[0] <= first_func_line:
+                continue
+            if not _is_file_scope_decl(n) or not _is_constant_global_decl(n, src):
+                continue
+            line = _line_of(n)
+            if fenced(line):
+                continue
+            name = _decl_first_name(n, src)
+            if not _CONSTANT_NAME_RE.match(name):
+                continue
+            out.append(
+                Finding(
+                    line,
+                    "cxx-scattered-constant",
+                    f"file-scope constant/global `{name}` is declared after the "
+                    f"first function (line {first_func_line + 1}) -- hoist it into "
+                    f"the `// Constants` banner at the top of the file so every "
+                    f"constant lives in one section, not scattered across the file.",
+                )
+            )
 
     # ---- Anonymous-namespace helpers (.cpp only). Anonymous namespaces hide
     # symbols from the linker but also from grep, doxygen, IDE call hierarchies,
@@ -1876,7 +1991,7 @@ def _cpp_rules(src: bytes, path: Path, fence_mask: list[bool]) -> list[Finding]:
             else:
                 # Verbose @brief on a type-level definition. Same rule:
                 # one-line `/** @brief ... */`, no `@param`/`@note`/blank-`*`
-                # paragraph splits / 5+ line prose.
+                # paragraph splits / 7+ line prose.
                 name = _type_name(n, src)
                 if name:
                     rng = _previous_doxygen_block_range(n, src)
@@ -2068,6 +2183,330 @@ def _has_function_ancestor(node) -> bool:
     return False
 
 
+def _comment_in_function_body(node) -> bool:
+    """True when a `comment` node sits INSIDE a function body or a
+    constructor's member-initializer list.
+
+    The discriminator against a function's own `/** @brief */` is that an
+    in-body comment's ancestor chain passes through a `compound_statement`
+    (the `{ ... }` body) or a `field_initializer_list` before reaching the
+    enclosing `function_definition`. The doxygen banner above a definition
+    is a sibling of that definition at namespace / class scope, so it never
+    passes through the body and is never flagged. Verified empirically: on
+    Taskbar.cpp this matches the body-range walk exactly (112/112) and skips
+    every leading `@brief` block."""
+    parent = node.parent
+    seen = 0
+    passed_body = False
+    while parent is not None and seen < 64:
+        if parent.type in ("compound_statement", "field_initializer_list"):
+            passed_body = True
+        if parent.type == "function_definition":
+            return passed_body
+        parent = parent.parent
+        seen += 1
+    return False
+
+
+# ---------------------------------------------------------------------------
+# Trivial / dead-function detection (cxx-trivial-function)
+# ---------------------------------------------------------------------------
+#
+# Flags a function whose entire body is dead weight: empty (`void onX() {}`),
+# only `Q_UNUSED(...)` no-ops, or a single constant return
+# (`bool foo() { return true; }`, `QVariantList groupModel() { return {}; }`).
+# These are candidates for removal -- advisory, because deleting one ripples
+# into its declaration, any `Q_PROPERTY` block, QML bindings, and call sites,
+# so it stays a human-approved step, not an auto-fix.
+#
+# Interface contracts are excluded: a method declared `virtual` / `override` /
+# `final` in the (paired) header returns its constant by design -- the base
+# type requires the override, and dropping it changes behavior rather than
+# removing dead code. Constructors, destructors and conversion operators (no
+# return type) are excluded too -- an empty ctor body is normal.
+
+_TRIVIAL_RETURN_LITERAL_TYPES = frozenset(
+    {
+        "true",
+        "false",
+        "null",
+        "nullptr",
+        "number_literal",
+        "string_literal",
+        "char_literal",
+        "concatenated_string",
+        "user_defined_literal",
+    }
+)
+
+# C++ keywords that tree-sitter occasionally surfaces as a `_function_name`
+# when a macro-without-semicolon (`Q_OBJECT`, `Q_GADGET`) inside a class body
+# derails the parse and the access-specifier / class header gets mistaken for
+# a definition (e.g. `class R : public QObject { Q_OBJECT ... }` yields a
+# phantom function named `public`). Never a real function name.
+_CPP_NON_FUNCTION_NAMES = frozenset(
+    {
+        "public",
+        "private",
+        "protected",
+        "class",
+        "struct",
+        "union",
+        "enum",
+        "namespace",
+        "template",
+        "typename",
+        "return",
+        "if",
+        "else",
+        "for",
+        "while",
+        "do",
+        "switch",
+        "case",
+        "default",
+        "try",
+        "catch",
+        "const",
+        "constexpr",
+        "static",
+        "inline",
+        "virtual",
+        "explicit",
+        "friend",
+        "using",
+        "typedef",
+    }
+)
+
+_OVERRIDE_DECL_RE = re.compile(
+    r"\b([A-Za-z_]\w*)\s*\([^;{]*?\)\s*(?:const\b\s*)?(?:noexcept\b[^;{]*?)?"
+    r"(?:->[^;{]*?)?(?:\boverride\b|\bfinal\b)"
+)
+_VIRTUAL_DECL_RE = re.compile(r"\bvirtual\b[^;{=]*?\b([A-Za-z_]\w*)\s*\(")
+# Q_PROPERTY READ/WRITE/RESET/MEMBER targets: a method/member the property
+# system reads is QML-exposed. A trivial constant getter behind a Q_PROPERTY
+# is the property's value (a capability flag, a fixed default), not dead code.
+_QPROP_TARGET_RE = re.compile(r"\b(?:READ|WRITE|RESET|MEMBER)\s+([A-Za-z_]\w*)")
+# Files holding platform-specific variants of a method: a trivial / empty body
+# is the expected no-op stub for the platforms where the real implementation
+# lives elsewhere (e.g. NativeWindow_CSD.cpp's stub vs NativeWindow_macOS.mm).
+_PLATFORM_FILE_RE = re.compile(
+    r"_(?:macOS|mac|cocoa|CSD|windows|win|winrt|linux|unix|x11|wayland"
+    r"|android|ios|qnx|generic|stub)\.(?:cpp|mm|cc|cxx)$",
+    re.IGNORECASE,
+)
+# A `defaultFoo()` accessor returns a fixed default value by convention; that
+# is its whole job, not dead code.
+_DEFAULT_PROVIDER_RE = re.compile(r"^default[A-Z0-9]")
+_header_contract_cache: dict = {}
+
+
+def _contract_names_from_text(text: str) -> set:
+    """Names a trivial body is legitimate on: declared `virtual` / `override` /
+    `final` (interface contract), or a `Q_PROPERTY` READ/WRITE/RESET/MEMBER
+    target (QML-exposed -- the constant IS the property value, not dead code)."""
+    names: set = set()
+    for m in _OVERRIDE_DECL_RE.finditer(text):
+        names.add(m.group(1))
+    for m in _VIRTUAL_DECL_RE.finditer(text):
+        names.add(m.group(1))
+    for m in _QPROP_TARGET_RE.finditer(text):
+        names.add(m.group(1))
+    return names
+
+
+def _header_contract_names(path, src_text: str, is_header: bool) -> set:
+    """Override/virtual/final method names relevant to `path`: always the ones
+    declared in the file itself -- this catches classes defined inline in a
+    `.cpp` (e.g. the NativeTemplate implementations, whose `id()`/`name()`
+    overrides live in the `.cpp`, not a header) -- unioned, for a `.cpp`, with
+    those in the paired `.h`/`.hpp`/`.hxx`. A trivial body on one of these is
+    an interface contract, not dead code."""
+    names = _contract_names_from_text(src_text)
+    if is_header:
+        return names
+    for suffix in (".h", ".hpp", ".hxx"):
+        cand = path.with_suffix(suffix)
+        if not cand.exists():
+            continue
+        key = str(cand)
+        cached = _header_contract_cache.get(key)
+        if cached is None:
+            try:
+                text = cand.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                text = ""
+            cached = _contract_names_from_text(text)
+            _header_contract_cache[key] = cached
+        names = names | cached
+        break
+    return names
+
+
+def _is_constant_return_expr(node, src: bytes) -> bool:
+    """True when a return expression is a compile-time / default constant: a
+    literal, `nullptr`, an empty `{}`, a zero-arg construction of a Type
+    (`QVariantList()`), or a string-literal macro (`QStringLiteral("x")`)."""
+    t = node.type
+    if t in _TRIVIAL_RETURN_LITERAL_TYPES:
+        return True
+    if t == "initializer_list":
+        return all(c.type in ("{", "}", ",") for c in node.children)
+    if t == "unary_expression":
+        arg = node.child_by_field_name("argument")
+        return arg is not None and arg.type == "number_literal"
+    if t == "call_expression":
+        fn = node.child_by_field_name("function")
+        args = node.child_by_field_name("arguments")
+        if fn is None or args is None:
+            return False
+        arg_nodes = [c for c in args.children if c.type not in ("(", ")", ",")]
+        fn_text = _node_text(fn, src)
+        # Zero-arg construction of a CamelCase Type (`QVariantList()`,
+        # `QString()`). Require a lowercase letter so ALL_CAPS macros
+        # (`SS_LICENSE_GUARD()`, `Q_NULLPTR`) aren't mistaken for a default
+        # value -- a macro can expand to anything, including a real check.
+        if (
+            not arg_nodes
+            and fn.type == "identifier"
+            and fn_text[:1].isupper()
+            and any(c.islower() for c in fn_text)
+        ):
+            return True
+        if fn_text in ("QStringLiteral", "QByteArrayLiteral", "QLatin1String"):
+            return bool(arg_nodes) and all(
+                a.type in _TRIVIAL_RETURN_LITERAL_TYPES for a in arg_nodes
+            )
+    return False
+
+
+def _function_trivial_reason(func_node, src: bytes) -> str:
+    """Return a short reason when @p func_node's body is trivial dead weight
+    (empty, only Q_UNUSED no-ops, or a single constant return), else "".
+
+    Constructors / destructors / conversion operators (no return type) return
+    "" -- an empty ctor body is not dead code. The caller additionally skips
+    interface overrides, operators, and `main`."""
+    if func_node.child_by_field_name("type") is None:
+        return ""
+    body = func_node.child_by_field_name("body")
+    if body is None or body.type != "compound_statement":
+        return ""
+
+    meaningful = [c for c in body.children if c.type not in ("{", "}", "comment")]
+    if not meaningful:
+        return "empty body"
+    if all(_node_text(c, src).lstrip().startswith("Q_UNUSED") for c in meaningful):
+        return "only Q_UNUSED no-ops"
+    if len(meaningful) != 1 or meaningful[0].type != "return_statement":
+        return ""
+
+    expr = None
+    for c in meaningful[0].children:
+        if c.type not in ("return", ";"):
+            expr = c
+    if expr is None:
+        return "returns nothing"
+    if _is_constant_return_expr(expr, src):
+        snippet = _node_text(expr, src).strip().replace("\n", " ")[:40]
+        return f"only returns the constant `{snippet}`"
+    return ""
+
+
+# ---------------------------------------------------------------------------
+# Scattered file-scope constants / globals (cxx-scattered-constant)
+# ---------------------------------------------------------------------------
+#
+# File-scope `static` / `constexpr` / `const` declarations (and anonymous-
+# namespace ones) belong together in a `// Constants` banner at the top of the
+# file, not sprinkled between functions across thousands of lines. The rule
+# flags any such declaration positioned AFTER the first function definition --
+# those should be hoisted to the top section so every constant lives in one
+# reviewable place. Declarations before the first function (the top section
+# itself), class members, function-local statics, and `extern` declarations
+# are not flagged.
+
+_CONST_DECL_SPECIFIERS = frozenset({"static", "constexpr", "const", "constinit"})
+
+# A file-scope constant / global in this codebase follows one of three naming
+# conventions: `kCamelCase` (constexpr), `s_lower_case` (static file-local), or
+# `UPPER_CASE`. Requiring the name to match keeps the scattered-constant rule
+# from firing on locals that tree-sitter mis-attributes to file scope when a
+# `#ifdef` splits a function body (e.g. `const auto& dy = ...` in a commercial
+# branch) and on attribute identifiers like `nodiscard`.
+_CONSTANT_NAME_RE = re.compile(r"^(?:k[A-Z]|s_[a-z_]|[A-Z][A-Z0-9_]+$)")
+
+# Implementation-file suffixes for the "all constants in one top section" rule.
+# Headers legitimately group constants next to the type they describe, so the
+# rule skips them. `.mm` is excluded too: tree-sitter-cpp can't parse
+# Objective-C++, so it mis-classifies function-local statics as file-scope
+# (a false positive on Utilities_macOS.mm's `kOrder`).
+_IMPL_SUFFIXES = (".cpp", ".cc", ".cxx")
+
+
+def _is_file_scope_decl(node) -> bool:
+    """True when `node` sits at translation-unit or namespace scope -- not
+    inside a class body, a function body, or a lambda."""
+    p = node.parent
+    while p is not None:
+        if p.type in (
+            "function_definition",
+            "lambda_expression",
+            "field_declaration_list",
+            "compound_statement",
+        ):
+            return False
+        p = p.parent
+    return True
+
+
+def _is_constant_global_decl(node, src: bytes) -> bool:
+    """True when `node` is a file-scope variable declaration carrying a
+    `static` / `constexpr` / `const` / `constinit` specifier. Function forward
+    declarations (`static void f();`) and `extern` declarations are excluded --
+    only actual constant/global variables count."""
+    if node.type != "declaration":
+        return False
+    specs = {
+        _node_text(c, src).strip()
+        for c in node.children
+        if c.type in ("storage_class_specifier", "type_qualifier")
+    }
+    if "extern" in specs:
+        return False
+    if not (specs & _CONST_DECL_SPECIFIERS):
+        return False
+    child_types = [c.type for c in node.children]
+    if "function_declarator" in child_types:
+        return False
+    return any(
+        t
+        in (
+            "init_declarator",
+            "identifier",
+            "array_declarator",
+            "pointer_declarator",
+            "reference_declarator",
+        )
+        for t in child_types
+    )
+
+
+def _decl_first_name(node, src: bytes) -> str:
+    """Best-effort name of the first variable declared in `node`."""
+    for c in node.children:
+        if c.type == "init_declarator":
+            target = c.child_by_field_name("declarator") or c
+            for sub in _walk(target):
+                if sub.type == "identifier":
+                    return _node_text(sub, src)
+    for sub in _walk(node):
+        if sub.type == "identifier":
+            return _node_text(sub, src)
+    return "<constant>"
+
+
 def _in_signals_section(node, src: bytes) -> bool:
     """Heuristic: walk backwards to the previous access_specifier inside the
     same field_declaration_list. Returns True when that specifier is
@@ -2163,6 +2602,42 @@ def _strip_line_comments(line: str) -> str:
     if idx >= 0:
         return line[:idx] + " " * (len(line) - idx)
     return line
+
+
+# Tooling pragmas a compiler or another linter reads. Deleting one changes
+# behavior (clang-format regions, suppressed warnings, switch fallthrough),
+# so the in-body-comment rule never flags them even though they live inside
+# a function body.
+_INBODY_PRAGMA_RE = re.compile(
+    r"^(?:clang-format|code-(?:verify|format)|NOLINT\w*|cppcheck-suppress"
+    r"|coverity|lint|fallthrough|FALLTHROUGH|@suppress)\b",
+    re.IGNORECASE,
+)
+
+
+def _comment_pragma_payload(text: str) -> str:
+    """Return the prose after a single comment's leading markers, for pragma
+    detection. Handles `//`, `///`, `//!`, and `/*` / `*` block openers."""
+    s = text.lstrip()
+    if s.startswith("//"):
+        j = 2
+        while j < len(s) and s[j] == "/":
+            j += 1
+        if j < len(s) and s[j] == "!":
+            j += 1
+        return s[j:].lstrip()
+    if s.startswith("/*"):
+        return s[2:].lstrip().lstrip("*").lstrip()
+    if s.startswith("*"):
+        return s[1:].lstrip()
+    return s
+
+
+def _is_inbody_pragma(text: str) -> bool:
+    """True when a comment carries a tooling pragma (clang-format / NOLINT /
+    cppcheck-suppress / fallthrough / code-verify). Those are directives, not
+    the narration the in-body rule targets, and removing them is not safe."""
+    return bool(_INBODY_PRAGMA_RE.match(_comment_pragma_payload(text)))
 
 
 # `while (...)` condition extraction + whitelist. Tree-sitter would give us

@@ -407,12 +407,10 @@ QString Console::Handler::formatUserHex(const QString& text)
  */
 void Console::Handler::clear()
 {
-  // Reset the text buffer and line state
   m_textBuffer.clear();
   m_isStartingLine = true;
   m_lastCharWasCR  = false;
 
-  // Clear the current device's per-device state
   auto it = m_deviceState.find(m_currentDeviceId);
   if (it != m_deviceState.end()) {
     it->second.buffer.clear();
@@ -639,7 +637,6 @@ void Console::Handler::setChecksumMethod(const int method)
  */
 void Console::Handler::setFontFamily(const QString& family)
 {
-  // Only accept fixed-pitch font families
   if (m_fontFamily != family) {
     QFont testFont(family);
     QFontInfo fontInfo(testFont);
@@ -899,7 +896,6 @@ void Console::Handler::setCurrentDeviceIndex(int index)
  */
 void Console::Handler::onDevicesChanged()
 {
-  // Gather current connection and source state
   const auto& mgr     = IO::ConnectionManager::instance();
   const auto opMode   = AppState::instance().operationMode();
   const auto& sources = DataModel::ProjectModel::instance().sources();
@@ -907,7 +903,6 @@ void Console::Handler::onDevicesChanged()
   QStringList names;
   QList<int> ids;
 
-  // Multi-device mode: ProjectFile with multiple sources
   if (opMode == SerialStudio::ProjectFile && sources.size() > 1) {
     for (const auto& src : sources) {
       const auto label = src.title.isEmpty() ? tr("Device %1").arg(src.sourceId) : src.title;
@@ -922,7 +917,6 @@ void Console::Handler::onDevicesChanged()
   m_deviceNames     = names;
   m_deviceSourceIds = ids;
 
-  // If not connected, clear all device state
   if (!mgr.isConnected()) {
     m_deviceState.clear();
     m_currentDeviceId = -1;
@@ -931,7 +925,6 @@ void Console::Handler::onDevicesChanged()
     return;
   }
 
-  // Reset to first device if current is gone
   if (!ids.isEmpty() && !ids.contains(m_currentDeviceId))
     setCurrentDeviceId(ids.first());
   else if (ids.isEmpty())
@@ -953,10 +946,8 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
   if (str.isEmpty())
     return QString();
 
-  // Get or create per-device state
   auto& state = m_deviceState[deviceId];
 
-  // Process the string through timestamp/newline logic
   auto data = str;
   if (state.lastCharWasCR && data.startsWith('\n'))
     data.removeFirst();
@@ -975,7 +966,6 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
   QString processedString;
   processedString.reserve(data.length() + timestamp.length() * 4);
 
-  // Single-pass newline scan
   int pos = 0;
   while (pos < data.length()) {
     const int nlPos = data.indexOf('\n', pos);
@@ -1003,7 +993,6 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
       pos = end;
   }
 
-  // Cap per-device buffer at 10 KB
   static constexpr int kMaxDeviceBuffer = 10 * 1024;
   state.buffer.append(processedString);
   if (state.buffer.size() > kMaxDeviceBuffer) {
@@ -1011,7 +1000,6 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
     state.buffer.remove(0, excess);
   }
 
-  // Buffer for throttled display if this is the active device
   if (deviceId == m_currentDeviceId || m_currentDeviceId < 0) {
     m_textBuffer.append(processedString.toUtf8());
     m_pendingDisplay.append(processedString);
@@ -1025,7 +1013,6 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
  */
 bool Console::Handler::hasImageWidget() const
 {
-  // Only check project groups when connected in project mode
   if (!IO::ConnectionManager::instance().isConnected())
     return false;
 
@@ -1053,7 +1040,6 @@ bool Console::Handler::imageWidgetActive() const
  */
 void Console::Handler::updateFont()
 {
-  // Validate font is fixed-pitch, fall back to default if not
   QFont testFont(m_fontFamily, m_fontSize);
   QFontInfo fontInfo(testFont);
 
@@ -1077,7 +1063,6 @@ void Console::Handler::updateFont()
  */
 void Console::Handler::addToHistory(const QString& command)
 {
-  // Trim history to max 100 entries and append the new command
   while (m_historyItems.count() > 100)
     m_historyItems.removeFirst();
 
@@ -1106,18 +1091,15 @@ QString Console::Handler::dataToString(QByteArrayView data)
  */
 QString Console::Handler::plainTextStr(QByteArrayView data)
 {
-  // Decode raw bytes using the user-selected text encoding
   QString utf8Data = SerialStudio::decodeText(data, m_encoding);
   if (vt100Emulation())
     return utf8Data;
 
-  // Batch printable runs, replace non-printable chars with dots
   QString filteredData;
   filteredData.reserve(utf8Data.size());
 
   int i = 0;
   while (i < utf8Data.size()) {
-    // Scan a run of printable characters
     const int runStart = i;
     while (i < utf8Data.size()) {
       const ushort unicode = utf8Data[i].unicode();
@@ -1138,11 +1120,9 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
       ++i;
     }
 
-    // Bulk-append printable run
     if (i > runStart)
       filteredData.append(QStringView(utf8Data).mid(runStart, i - runStart));
 
-    // Replace non-printable char with dot
     if (i < utf8Data.size()) {
       filteredData.append('.');
       ++i;

@@ -101,14 +101,12 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data)
   QString type;
   QJsonObject json;
 
-  // Parse the incoming JSON
   if (!parseMessage(data, type, json)) {
     return CommandResponse::makeError(
              QString(), ErrorCode::InvalidJson, QStringLiteral("Failed to parse JSON message"))
       .toJsonBytes();
   }
 
-  // Route based on message type
   if (type == MessageType::Command) {
     const auto request = CommandRequest::fromJson(json);
     if (!request.isValid()) {
@@ -120,7 +118,6 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data)
   }
 
   else if (type == MessageType::Batch) {
-    // Guard against oversized batch before parsing
     const QString batchId    = json.value(QStringLiteral("id")).toString();
     const auto commandsArray = json.value(QStringLiteral("commands")).toArray();
 
@@ -141,7 +138,6 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data)
     return processBatch(batch).toJsonBytes();
   }
 
-  // Unknown message type
   return CommandResponse::makeError(QString(),
                                     ErrorCode::InvalidMessageType,
                                     QStringLiteral("Unknown message type: %1").arg(type))
@@ -173,7 +169,6 @@ API::BatchResponse API::CommandHandler::processBatch(const BatchRequest& batch)
     const auto result = processCommand(cmd);
     response.results.append(result);
 
-    // Track overall batch success
     if (!result.success)
       response.success = false;
   }
@@ -213,7 +208,6 @@ void API::CommandHandler::initializeHandlers()
   if (m_initialized)
     return;
 
-  // Register built-in api.* commands
   CommandRegistry::instance().registerCommand(QStringLiteral("api.getCommands"),
                                               QStringLiteral("Get list of all available commands"),
                                               [this](const QString& id, const QJsonObject&) {
@@ -221,7 +215,6 @@ void API::CommandHandler::initializeHandlers()
                                                   id, getAvailableCommands());
                                               });
 
-  // Initialize all handler modules
   Handlers::IOManagerHandler::registerCommands();
   Handlers::UARTHandler::registerCommands();
   Handlers::NetworkHandler::registerCommands();

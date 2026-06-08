@@ -87,10 +87,17 @@ aliases declared inside a function body.
 
 **Source (.cpp)** — every function definition gets a one-line `/** @brief ... */` directly
 above it. Ctors, dtors, slots, helpers, every one. No `@param`/`@return`/`@note`. Use 98-dash
-`//---` banners for concern groups. In-body comments: one-line `//` section headers above a
-logical block, only when not self-evident. **Forbidden**: inline EOL comments, multi-line
-`//` prose, `/* ... */` inside function bodies, restating the code, AI narration ("we",
-"Note that", tutorial voice, "this used to...", hedging, bare `TODO`).
+`//---` banners for concern groups *between* functions. **No comments inside a function body.**
+Functions are capped at 100 lines, so the `@brief` above the function plus self-explanatory code
+carry it: a comment that restates or narrates the next line gets deleted, and a load-bearing
+*why* is folded up into the `@brief` (lengthen the brief if needed — the brief is the right home
+for the why). A genuinely-needed in-body note (a literal lookup table, a derivation, a citation)
+stays behind a reviewed `// code-verify off` / `on` fence. `code-verify.py` flags every in-body
+comment as `cxx-inbody-comment` (advisory; tree-sitter-located, so the `@brief` above the
+function is never caught, and tooling pragmas like `// clang-format`/`// NOLINT`/`// fallthrough`
+are skipped). **Forbidden**: inline EOL comments, multi-line `//` prose, `/* ... */` inside
+function bodies, restating the code, AI narration ("we", "Note that", tutorial voice, "this used
+to...", hedging, bare `TODO`).
 
 **Don't fake the em-dash.** Source and user-facing Markdown are ASCII-only, so the em-dash
 glyph (U+2014) is out — but the fix is to *rewrite the sentence*, not to swap in a spaced

@@ -183,7 +183,6 @@ bool AI::OpenAIProvider::isReasoningModel(const QString& modelId)
  */
 static QJsonArray backfillDanglingToolCalls(const QJsonArray& messages)
 {
-  // OpenAI rejects the request when a tool_call id has no following tool message.
   QSet<QString> answered;
   for (const auto& value : messages) {
     const auto msg = value.toObject();
@@ -236,7 +235,6 @@ QJsonArray AI::OpenAIProvider::translateHistory(const QJsonArray& history,
     const auto role         = msg.value(QStringLiteral("role")).toString();
     const auto contentValue = msg.value(QStringLiteral("content"));
 
-    // Anthropic content can be a string OR an array of typed blocks
     if (contentValue.isString()) {
       QJsonObject m;
       m[QStringLiteral("role")]    = role;
@@ -253,14 +251,13 @@ QJsonArray AI::OpenAIProvider::translateHistory(const QJsonArray& history,
     QJsonArray toolResultMessages;
     translateBlocks(contentValue.toArray(), textAccumulator, toolCalls, toolResultMessages);
 
-    // Emit assistant-or-user message first when text/tool_calls accumulated
     if (!textAccumulator.isEmpty() || !toolCalls.isEmpty()) {
       QJsonObject m;
       m[QStringLiteral("role")] = role;
       if (!textAccumulator.isEmpty())
         m[QStringLiteral("content")] = textAccumulator;
       else
-        m[QStringLiteral("content")] = QJsonValue();  // null content for tool-only assistant
+        m[QStringLiteral("content")] = QJsonValue();
 
       if (!toolCalls.isEmpty())
         m[QStringLiteral("tool_calls")] = toolCalls;
@@ -268,7 +265,6 @@ QJsonArray AI::OpenAIProvider::translateHistory(const QJsonArray& history,
       out.append(m);
     }
 
-    // Then emit any tool result messages in order
     for (const auto& tr : toolResultMessages)
       out.append(tr);
   }
@@ -363,7 +359,6 @@ AI::Reply* AI::OpenAIProvider::sendMessage(const QJsonArray& history,
     return new detail::ImmediateErrorReply(
       QObject::tr("No OpenAI API key set. Open Manage Keys to add one."));
 
-  // Flatten the Anthropic-shaped system blocks into a single string
   const auto systemBlocks = ContextBuilder::buildSystemArray(false);
   QString systemText;
   for (const auto& v : systemBlocks) {

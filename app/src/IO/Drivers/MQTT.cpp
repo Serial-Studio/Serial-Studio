@@ -52,12 +52,10 @@ IO::Drivers::MQTT::MQTT()
   , m_protocolVersion(QMqttClient::MQTT_5_0)
   , m_hostname(QStringLiteral("127.0.0.1"))
 {
-  // Populate MQTT protocol versions
   m_mqttVersions.insert(tr("MQTT 3.1"), QMqttClient::MQTT_3_1);
   m_mqttVersions.insert(tr("MQTT 3.1.1"), QMqttClient::MQTT_3_1_1);
   m_mqttVersions.insert(tr("MQTT 5.0"), QMqttClient::MQTT_5_0);
 
-  // Populate SSL protocols
   m_sslProtocols.insert(tr("TLS 1.2"), QSsl::TlsV1_2);
   m_sslProtocols.insert(tr("TLS 1.3"), QSsl::TlsV1_3);
   m_sslProtocols.insert(tr("TLS 1.3 or Later"), QSsl::TlsV1_3OrLater);
@@ -65,36 +63,29 @@ IO::Drivers::MQTT::MQTT()
   m_sslProtocols.insert(tr("Any Protocol"), QSsl::AnyProtocol);
   m_sslProtocols.insert(tr("Secure Protocols Only"), QSsl::SecureProtocols);
 
-  // Populate SSL peer verification modes
   m_peerVerifyModes.insert(tr("None"), QSslSocket::VerifyNone);
   m_peerVerifyModes.insert(tr("Query Peer"), QSslSocket::QueryPeer);
   m_peerVerifyModes.insert(tr("Verify Peer"), QSslSocket::VerifyPeer);
   m_peerVerifyModes.insert(tr("Auto Verify Peer"), QSslSocket::AutoVerifyPeer);
 
-  // SSL defaults are pushed to the configuration directly; safe at any state
   m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
   m_sslConfiguration.setPeerVerifyMode(QSslSocket::AutoVerifyPeer);
   m_sslConfiguration.setPeerVerifyDepth(10);
 
-  // Wire QMqttClient signals
   connect(&m_client, &QMqttClient::stateChanged, this, &MQTT::onStateChanged);
   connect(&m_client, &QMqttClient::errorChanged, this, &MQTT::onErrorChanged);
   connect(&m_client, &QMqttClient::messageReceived, this, &MQTT::onMessageReceived);
 
-  // Restore persisted broker settings (writes only to mirror fields, never to m_client)
   loadPersistedSettings();
   if (m_clientId.isEmpty())
     regenerateClientId();
 
-  // Push the mirror state into m_client now (safe: client is Disconnected at construction)
   applyPendingToClient();
 
-  // Forward state/configuration signals as configurationChanged for ConnectionManager
   connect(this, &MQTT::mqttConfigurationChanged, this, &MQTT::configurationChanged);
   connect(this, &MQTT::sslConfigurationChanged, this, &MQTT::configurationChanged);
   connect(this, &MQTT::connectedChanged, this, &MQTT::configurationChanged);
 
-  // Emit initial configurationChanged so ConnectionManager picks up defaults
   Q_EMIT configurationChanged();
 }
 
@@ -169,7 +160,6 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
 {
   Q_UNUSED(mode);
 
-  // Validate commercial license
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
       || token.featureTier() < Licensing::FeatureTier::Trial) {
@@ -181,7 +171,6 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  // Validate configuration
   if (m_hostname.isEmpty() || m_port == 0) {
     qCWarning(lcMqttSub) << "open() rejected: missing hostname or port" << m_hostname << m_port;
     return false;
@@ -192,17 +181,14 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  // Already connecting/connected
   if (m_client.state() != QMqttClient::Disconnected) {
     qCInfo(lcMqttSub) << "open() no-op; state already" << m_client.state();
     return true;
   }
 
-  // Ensure client ID
   if (m_clientId.isEmpty())
     regenerateClientId();
 
-  // Push mirror -> client. Safe here because state is Disconnected.
   applyPendingToClient();
   m_userWantsOpen = true;
 
@@ -210,7 +196,6 @@ bool IO::Drivers::MQTT::open(const QIODevice::OpenMode mode)
                               << m_hostname << ":" << m_port << " clientId=" << m_clientId
                               << " topic=" << m_topicFilter;
 
-  // Connect to broker
   if (m_sslEnabled)
     m_client.connectToHostEncrypted(m_sslConfiguration);
   else
@@ -446,7 +431,6 @@ void IO::Drivers::MQTT::addCaCertificates()
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -982,7 +966,6 @@ void IO::Drivers::MQTT::onMessageReceived(const QByteArray& message, const QMqtt
 {
   Q_ASSERT(topic.isValid());
 
-  // License gate
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
       || token.featureTier() < Licensing::FeatureTier::Trial) {
@@ -995,7 +978,6 @@ void IO::Drivers::MQTT::onMessageReceived(const QByteArray& message, const QMqtt
     return;
   }
 
-  // Filter match (in case broker delivered an unexpected topic)
   QMqttTopicFilter filter(m_topicFilter);
   if (!filter.match(topic)) {
     qCInfo(lcMqttSub) << "messageReceived: topic" << topic.name() << "did not match filter"
@@ -1006,7 +988,6 @@ void IO::Drivers::MQTT::onMessageReceived(const QByteArray& message, const QMqtt
   qCDebug(lcMqttSub) << "messageReceived on" << topic.name() << "size=" << message.size()
                      << "preview=" << message.left(80);
 
-  // Inject into the standard capture pipeline; FrameReader handles the rest
   publishReceivedData(message);
 }
 
@@ -1019,12 +1000,10 @@ void IO::Drivers::MQTT::onMessageReceived(const QByteArray& message, const QMqtt
  */
 void IO::Drivers::MQTT::loadPersistedSettings()
 {
-  // Strings
   const auto host = m_settings.value(settingsKey("hostname"), m_hostname).toString();
   const auto cid  = m_settings.value(settingsKey("clientId"), QString()).toString();
   const auto top  = m_settings.value(settingsKey("topicFilter"), QString()).toString();
 
-  // Numerics
   const auto p    = m_settings.value(settingsKey("port"), m_port).toUInt();
   const auto ka   = m_settings.value(settingsKey("keepAlive"), m_keepAlive).toUInt();
   const auto ver  = m_settings.value(settingsKey("mqttVersion"), mqttVersion()).toUInt();
@@ -1032,12 +1011,10 @@ void IO::Drivers::MQTT::loadPersistedSettings()
   const auto sslP = m_settings.value(settingsKey("sslProtocol"), sslProtocol()).toUInt();
   const auto pvm  = m_settings.value(settingsKey("peerVerifyMode"), peerVerifyMode()).toUInt();
 
-  // Bools
   const auto autoKa = m_settings.value(settingsKey("autoKeepAlive"), m_autoKeepAlive).toBool();
   const auto clean  = m_settings.value(settingsKey("cleanSession"), m_cleanSession).toBool();
   const auto ssl    = m_settings.value(settingsKey("sslEnabled"), false).toBool();
 
-  // Credentials: prefer encrypted vault; migrate any legacy plaintext on first load
   const auto port16        = static_cast<quint16>(p);
   auto creds               = m_vault.credentials(host, port16);
   const bool hasLegacyUser = m_settings.contains(settingsKey("username"));
@@ -1103,7 +1080,6 @@ void IO::Drivers::MQTT::scheduleReconnectIfActive()
   if (m_client.state() == QMqttClient::Disconnected)
     return;
 
-  // Already in the middle of a teardown; the pending lambda will pick up the fresh mirror
   if (m_reconnectPending) {
     if (m_client.state() != QMqttClient::Disconnected)
       m_client.disconnectFromHost();
@@ -1124,7 +1100,6 @@ void IO::Drivers::MQTT::scheduleReconnectIfActive()
       delete conn;
       m_reconnectPending = false;
 
-      // The user may have hit Disconnect during our async teardown; honor that
       if (!m_userWantsOpen)
         return;
 

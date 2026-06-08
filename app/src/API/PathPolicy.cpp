@@ -71,7 +71,6 @@ static QString normalizedPath(const QString& path, bool allowNonexistent)
   if (!allowNonexistent)
     return QString();
 
-  // Canonicalize the nearest existing ancestor so an 8.3 short path resolves.
   const QString absolute = QDir::cleanPath(info.absoluteFilePath());
 
   QDir ancestor(absolute);
@@ -96,7 +95,6 @@ static QString normalizedPath(const QString& path, bool allowNonexistent)
  */
 bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
 {
-  // Build allowed-root list from environment or defaults
   QStringList roots;
   if (qEnvironmentVariableIsSet("SERIAL_STUDIO_API_ALLOWED_PATHS")) {
     const QString envValue = QString::fromLocal8Bit(qgetenv("SERIAL_STUDIO_API_ALLOWED_PATHS"));
@@ -109,7 +107,6 @@ bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
   else
     roots = {QDir::homePath(), QDir::tempPath()};
 
-  // Normalize and verify the target is under an allowed root
   const QString targetPath = normalizedPath(filePath, allowNonexistent);
   if (targetPath.isEmpty())
     return false;
@@ -128,7 +125,6 @@ bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
     if (targetPath.compare(rootPath, sensitivity) == 0)
       return true;
 
-    // Canonical paths use '/'; QDir::separator() ('\' on Windows) would never match.
     const QString prefix = rootPath + QLatin1Char('/');
     if (targetPath.startsWith(prefix, sensitivity))
       return true;

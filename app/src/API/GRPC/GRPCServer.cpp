@@ -71,7 +71,6 @@ public:
     const auto id      = QString::fromStdString(request->id());
     const auto command = QString::fromStdString(request->command());
 
-    // Marshal command execution to the main thread
     API::CommandResponse result;
     QMetaObject::invokeMethod(
       QCoreApplication::instance(),
@@ -133,7 +132,6 @@ public:
     ctx->writer  = writer;
     ctx->context = context;
 
-    // Register this stream
     {
       std::lock_guard<std::mutex> lock(m_server->m_frameStreamsMutex);
       m_server->m_frameStreams.push_back(ctx);
@@ -143,11 +141,9 @@ public:
     QMetaObject::invokeMethod(
       m_server, [this]() { Q_EMIT m_server->clientCountChanged(); }, Qt::QueuedConnection);
 
-    // Block until cancelled
     while (!context->IsCancelled() && !ctx->cancelled.load())
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-    // Unregister this stream
     {
       std::lock_guard<std::mutex> lock(m_server->m_frameStreamsMutex);
       auto& streams = m_server->m_frameStreams;
@@ -268,17 +264,14 @@ private:
    */
   static bool authorize(grpc::ServerContext* context)
   {
-    // Internal call (e.g. ExecuteBatch -> ExecuteCommand); already authorized by the outer RPC.
     if (context == nullptr)
       return true;
 
-    // Loopback peers are auto-trusted, mirroring the TCP server's local-client policy.
     const std::string peer = context->peer();
     if (peer.find("127.0.0.1") != std::string::npos || peer.find("[::1]") != std::string::npos
         || peer.rfind("unix:", 0) == 0)
       return true;
 
-    // External peers must present the API token via request metadata.
     const auto& md = context->client_metadata();
     const auto it  = md.find("x-serial-studio-token");
     if (it == md.end())
@@ -311,18 +304,15 @@ API::GRPC::GRPCServer::GRPCServer()
 {
   auto& server = API::Server::instance();
 
-  // Mirror the API server enabled state
   connect(&server, &API::Server::enabledChanged, this, [this]() {
     setEnabled(API::Server::instance().enabled());
   });
 
-  // Restart gRPC when external connections setting changes
   connect(&server,
           &API::Server::externalConnectionsChanged,
           this,
           &GRPCServer::onExternalConnectionsChanged);
 
-  // Defer initial sync until the event loop is running
   QTimer::singleShot(0, this, [this]() { setEnabled(API::Server::instance().enabled()); });
 }
 
@@ -454,15 +444,12 @@ void API::GRPC::GRPCServer::onExternalConnectionsChanged()
  */
 void API::GRPC::GRPCServer::startServer()
 {
-  // Determine bind address
   const bool external = API::Server::instance().externalConnections();
   const auto address  = external ? QStringLiteral("0.0.0.0:%1").arg(API_GRPC_PORT)
                                  : QStringLiteral("127.0.0.1:%1").arg(API_GRPC_PORT);
 
-  // Ensure command handlers are initialized
   (void)API::CommandHandler::instance();
 
-  // Build and start the server
   m_service = std::make_unique<SerialStudioServiceImpl>(this);
   grpc::ServerBuilder builder;
   builder.AddListeningPort(address.toStdString(), grpc::InsecureServerCredentials());
@@ -477,10 +464,8 @@ void API::GRPC::GRPCServer::startServer()
     return;
   }
 
-  // Run Wait() on a dedicated thread so the main thread is not blocked
   m_serverThread = std::thread([this]() { m_grpcServer->Wait(); });
 
-  // Start the background writer thread for frame/raw data serialization
   m_writerRunning.store(true);
   m_writerThread = std::thread([this]() { writerLoop(); });
 }
@@ -490,7 +475,6 @@ void API::GRPC::GRPCServer::startServer()
  */
 void API::GRPC::GRPCServer::stopServer()
 {
-  // Cancel all active streams
   {
     std::lock_guard<std::mutex> lock(m_frameStreamsMutex);
     for (auto& ctx : m_frameStreams)
@@ -503,16 +487,13 @@ void API::GRPC::GRPCServer::stopServer()
       ctx->cancelled.store(true);
   }
 
-  // Stop the writer thread
   m_writerRunning.store(false);
   if (m_writerThread.joinable())
     m_writerThread.join();
 
-  // Shut down the gRPC server
   if (m_grpcServer)
     m_grpcServer->Shutdown(std::chrono::system_clock::now() + std::chrono::seconds(3));
 
-  // Wait for the server thread to finish
   if (m_serverThread.joinable())
     m_serverThread.join();
 
@@ -562,7 +543,6 @@ void API::GRPC::GRPCServer::writerLoop()
   while (m_writerRunning.load()) {
     bool did_work = false;
 
-    // Drain all queued frames into a single FrameBatch to amortize HTTP/2 overhead
     {
       serialstudio::FrameBatch batch;
       DataModel::TimestampedFramePtr frame;
@@ -579,7 +559,6 @@ void API::GRPC::GRPCServer::writerLoop()
         broadcastFrameBatch(batch);
     }
 
-    // Drain all queued raw data into a single RawBatch
     {
       serialstudio::RawBatch batch;
       QByteArray data;
@@ -596,7 +575,6 @@ void API::GRPC::GRPCServer::writerLoop()
         broadcastRawBatch(batch);
     }
 
-    // Sleep briefly if no work to avoid busy-spinning
     if (!did_work)
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }

@@ -250,7 +250,6 @@ API::CommandResponse API::Handlers::MqttHandler::publisherGetConfig(const QStrin
   result[QStringLiteral("peerVerifyMode")]       = p.peerVerifyMode();
   result[QStringLiteral("peerVerifyDepth")]      = p.peerVerifyDepth();
 
-  // Enum tables for client-side decoding
   result[QStringLiteral("modes")]           = QJsonArray::fromStringList(p.modes());
   result[QStringLiteral("mqttVersions")]    = QJsonArray::fromStringList(p.mqttVersions());
   result[QStringLiteral("sslProtocols")]    = QJsonArray::fromStringList(p.sslProtocols());
@@ -286,7 +285,6 @@ API::CommandResponse API::Handlers::MqttHandler::publisherGetConfig(const QStrin
   if (params.contains(QStringLiteral("customClientId")))
     p.setCustomClientId(params.value(QStringLiteral("customClientId")).toBool());
 
-  // Credential pair: password requires username in the same call
   const bool hasUser = params.contains(QStringLiteral("username"));
   const bool hasPass = params.contains(QStringLiteral("password"));
   if (hasPass && !hasUser)

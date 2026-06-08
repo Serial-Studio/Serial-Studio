@@ -63,7 +63,6 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   setAcceptedMouseButtons(Qt::AllButtons);
   setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
 
-  // Configure code editor
   m_widget.setTabReplace(true);
   m_widget.setTabReplaceSize(4);
   m_widget.setAutoIndentation(true);
@@ -71,24 +70,20 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   m_widget.setFont(Misc::CommonFonts::instance().monoFont());
   m_widget.setLayoutDirection(Qt::LeftToRight);
 
-  // Apply current theme
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
           this,
           &DataModel::JsCodeEditor::onThemeChanged);
 
-  // Emit modification signals when the editor document changes
   connect(&m_widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::JsCodeEditor::textChanged);
 
-  // Push code to the project model on every edit (guarded by m_readingCode)
   connect(&m_widget, &QCodeEditor::textChanged, this, [this] {
     if (!m_readingCode)
       ProjectModel::instance().storeFrameParserCode(m_sourceId, text());
   });
 
-  // Keep display in sync when the project loads new parser code or language
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::frameParserCodeChanged,
           this,
@@ -99,7 +94,6 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
           this,
           &DataModel::JsCodeEditor::readCode);
 
-  // Per-source language changes: only react when they target THIS editor
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::sourceFrameParserLanguageChanged,
           this,
@@ -108,7 +102,6 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
               readCode();
           });
 
-  // Per-source code changes (from API or multi-source editor flows)
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::sourceFrameParserCodeChanged,
           this,
@@ -122,17 +115,14 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
           this,
           &DataModel::JsCodeEditor::readCode);
 
-  // Resize backing widget to match QML item dimensions
   connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::JsCodeEditor::resizeWidget);
   connect(this, &QQuickPaintedItem::heightChanged, this, &DataModel::JsCodeEditor::resizeWidget);
 
-  // Drive the render loop
   connect(&Misc::TimerEvents::instance(),
           &Misc::TimerEvents::uiTimeout,
           this,
           &DataModel::JsCodeEditor::renderWidget);
 
-  // Populate editor text from the current project state
   readCode();
 }
 
@@ -183,7 +173,6 @@ void DataModel::JsCodeEditor::setLanguage(const int language)
 
   m_language = language;
 
-  // Switch syntax highlighter and completer
   if (language == 1) {
     m_widget.setHighlighter(new QLuaHighlighter());
     m_widget.setCompleter(new QLuaCompleter(&m_widget));
@@ -203,13 +192,11 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
   if (m_language == language)
     return;
 
-  // Native transitions preserve the JS/Lua code, so they skip the unsaved-changes warning
   if (language == SerialStudio::Native || m_language == SerialStudio::Native) {
     switchNativeLanguage(language);
     return;
   }
 
-  // Warn user if the editor has been modified
   if (isModified()) {
     const auto answer = Misc::Utilities::showMessageBox(
       tr("Change Scripting Language?"),
@@ -227,13 +214,10 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
   auto& parser = DataModel::FrameParser::instance();
   auto& model  = DataModel::ProjectModel::instance();
 
-  // Detect which template the current code matches BEFORE switching
   const int tmplIdx = parser.detectTemplate(text());
 
-  // Switch project language first so templateCode() picks the new path.
   model.updateSourceFrameParserLanguage(m_sourceId, language);
 
-  // Load the matching template, or the default if the code matches none.
   if (tmplIdx >= 0)
     parser.setTemplateIdx(m_sourceId, tmplIdx);
   else
@@ -251,7 +235,6 @@ void DataModel::JsCodeEditor::switchNativeLanguage(const int language)
   auto& parser = DataModel::FrameParser::instance();
 
   if (language == SerialStudio::Native) {
-    // Map the current script template onto its native equivalent before switching
     const int tmplIdx = parser.detectTemplate(text());
     model.updateSourceFrameParserLanguage(m_sourceId, language);
 
@@ -270,7 +253,6 @@ void DataModel::JsCodeEditor::switchNativeLanguage(const int language)
     return;
   }
 
-  // Leaving Native: load the equivalent script template in the target language
   const QString file = DataModel::FrameParser::fileForNativeTemplate(
     model.frameParserTemplate(m_sourceId), model.frameParserParams(m_sourceId));
   model.updateSourceFrameParserLanguage(m_sourceId, language);
@@ -378,7 +360,6 @@ void DataModel::JsCodeEditor::apply()
  */
 void DataModel::JsCodeEditor::import()
 {
-  // Build language-specific file filter
   const auto filter = (m_language == 1) ? QStringLiteral("*.lua") : QStringLiteral("*.js");
   const auto title =
     (m_language == 1) ? tr("Select Lua file to import") : tr("Select Javascript file to import");
@@ -386,7 +367,6 @@ void DataModel::JsCodeEditor::import()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -412,7 +392,6 @@ void DataModel::JsCodeEditor::import()
  */
 void DataModel::JsCodeEditor::evaluate()
 {
-  // Validate and report
   auto& parser = DataModel::FrameParser::instance();
   if (parser.loadScript(m_sourceId, text(), true)) {
     Misc::Utilities::showMessageBox(tr("Code Validation Successful"),
@@ -426,13 +405,11 @@ void DataModel::JsCodeEditor::evaluate()
  */
 void DataModel::JsCodeEditor::readCode()
 {
-  // Prevent reentrancy
   if (m_readingCode)
     return;
 
   m_readingCode = true;
 
-  // Find code and language for the active source
   QString code;
   int lang            = 0;
   const auto& sources = DataModel::ProjectModel::instance().sources();
@@ -447,7 +424,6 @@ void DataModel::JsCodeEditor::readCode()
   if (code.isEmpty())
     code = DataModel::ProjectModel::instance().frameParserCode();
 
-  // Sync language and load code into the editor
   setLanguage(lang);
 
   m_widget.setPlainText(code);
@@ -586,14 +562,12 @@ void DataModel::JsCodeEditor::loadDefaultTemplate(const bool guiTrigger)
  */
 void DataModel::JsCodeEditor::onThemeChanged()
 {
-  // Resolve theme path
   static const auto* t = &Misc::ThemeManager::instance();
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
 
   const auto path =
     name.startsWith('/') ? name : QStringLiteral(":/themes/code-editor/%1.xml").arg(name);
 
-  // Load syntax style XML
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {
     m_style.load(QString::fromUtf8(file.readAll()));

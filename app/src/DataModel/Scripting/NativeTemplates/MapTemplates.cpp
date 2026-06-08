@@ -148,7 +148,6 @@ struct ModbusMapBlock {
  */
 [[nodiscard]] static ModbusEntryType modbusEntryType(const QString& name, bool bitBlock)
 {
-  // Coil / discrete-input blocks pack one bit per address
   if (bitBlock)
     return ModbusEntryType::Bit;
 
@@ -241,12 +240,10 @@ public:
     if (frame.size() < 3)
       return latchedFrame();
 
-    // Exception responses neither decode nor advance the poll cursor
     const int function = u8At(frame, 1);
     if (function >= 0x80)
       return latchedFrame();
 
-    // Resync on dropped replies: probe cyclically from the expected block
     int block_idx = -1;
     for (int probe = 0; probe < m_blocks.size(); ++probe) {
       const int candidate = (m_group + probe) % m_blocks.size();
@@ -322,13 +319,11 @@ private:
     const quint64 raw = uBeAt(frame, byte_off, bytes);
     const bool scaled = (entry.scale != 1.0 || entry.offset != 0.0);
 
-    // A register-backed boolean reports the truthiness of the whole word
     if (entry.type == ModbusEntryType::RegBool) {
       storeAt(entry.channel, QString::number(raw != 0 ? 1 : 0));
       return;
     }
 
-    // Unscaled integers keep the exact textual value (doubles clip past 2^53)
     if (!scaled && isIntegerEntry(entry.type)) {
       storeAt(entry.channel, integerValue(entry.type, raw));
       return;
@@ -565,7 +560,6 @@ struct CanMapMessage {
 
   quint64 value = 0;
   if (signal.big_endian) {
-    // DBC Motorola sawtooth: MSB-first, stepping down then jumping to the next byte's bit 7
     int bit_pos = signal.start_bit;
     for (int i = 0; i < signal.bit_length; ++i) {
       const int byte_idx = bit_pos / 8;

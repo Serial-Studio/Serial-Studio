@@ -45,16 +45,19 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-constexpr int kDefaultPlotPoints  = 1000;
-constexpr int kDefaultPlotBuckets = 1024;
-
-// Per-curve raw retention for time-axis plots: bounded ring decimated to the viewport
-constexpr int kMaxTimeRingSamples  = 262144;
-constexpr double kAssumedMaxRateHz = 50000.0;
-
-// Display-clock jitter rejection: only smooth sub-ms-cadence sources, and only small wobble
+constexpr int kDefaultPlotPoints      = 1000;
+constexpr int kDefaultPlotBuckets     = 1024;
+constexpr int kMaxTimeRingSamples     = 262144;
+constexpr double kAssumedMaxRateHz    = 50000.0;
 constexpr double kSmoothMaxPeriodSec  = 0.002;
 constexpr double kSmoothMaxForwardSec = 0.050;
+
+// Pre-resolved push fallbacks for GPS / 3D groups missing an axis dataset
+static constexpr double kNoGpsFix   = std::numeric_limits<double>::quiet_NaN();
+static constexpr bool kNeverNumeric = false;
+#ifdef BUILD_COMMERCIAL
+static constexpr double kZeroAxisSource = 0.0;
+#endif
 
 /**
  * @brief Time-ring capacity for a window: enough for the assumed max rate, capped.
@@ -90,13 +93,6 @@ static void tickRepeatTimer(int index, QMap<int, QTimer*>& timers, QMap<int, int
 
   counters.erase(it);
 }
-
-// Pre-resolved push fallbacks for GPS / 3D groups missing an axis dataset
-static constexpr double kNoGpsFix   = std::numeric_limits<double>::quiet_NaN();
-static constexpr bool kNeverNumeric = false;
-#ifdef BUILD_COMMERCIAL
-static constexpr double kZeroAxisSource = 0.0;
-#endif
 
 /**
  * @brief Applies a non-RepeatNTimes timer mode to an action's QTimer.
@@ -157,7 +153,6 @@ UI::Dashboard::Dashboard()
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
 {
-  // Reset dashboard when data sources open/close or project changes
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
   connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
@@ -199,7 +194,6 @@ UI::Dashboard::Dashboard()
       }
     }
 
-    // Leaving ProjectFile mode invalidates project-derived caches
     if (mode != SerialStudio::ProjectFile)
       resetData(true);
   }, Qt::QueuedConnection);
@@ -223,13 +217,10 @@ UI::Dashboard::Dashboard()
     }
   });
 
-  // Update action items when frame format changes
   connect(this, &UI::Dashboard::widgetCountChanged, this, &UI::Dashboard::actionStatusChanged);
 
-  // Seed the cached stream flag in case a data source predates this singleton
   updateStreamAvailable();
 
-  // Load persisted settings
   m_autoHideToolbar        = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
   m_showActionPanel        = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
   m_terminalEnabled        = m_settings.value("Dashboard/TerminalEnabled", false).toBool();
@@ -265,16 +256,13 @@ bool UI::Dashboard::available() const
     return true;
 
 #ifdef BUILD_COMMERCIAL
-  // Promote an empty project to the dashboard when NotificationLog is the only widget
   if (m_notificationLogEnabled)
     return true;
 #endif
 
-  // Clock works without datasets, same promotion as NotificationLog
   if (m_clockEnabled)
     return true;
 
-  // Stopwatch works without datasets too
   if (m_stopwatchEnabled)
     return true;
 
@@ -327,7 +315,6 @@ bool UI::Dashboard::useTimeXAxisGroup(const DataModel::Group& group) const
  */
 bool UI::Dashboard::streamAvailable() const
 {
-  // Headless benchmark feeds frames with no live device; let them reach the dashboard.
   if (Benchmark::HotpathBenchmark::active()) [[unlikely]]
     return true;
 
@@ -517,13 +504,11 @@ SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex) c
  */
 int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
 {
-  // Check group widgets first
   if (SerialStudio::isGroupWidget(widget)) {
     auto it = m_widgetGroups.constFind(widget);
     return it != m_widgetGroups.cend() ? it->count() : 0;
   }
 
-  // Fall through to dataset widgets
   if (SerialStudio::isDatasetWidget(widget)) {
     auto it = m_widgetDatasets.constFind(widget);
     return it != m_widgetDatasets.cend() ? it->count() : 0;
@@ -549,7 +534,6 @@ const QString& UI::Dashboard::title() const
  */
 QVariantList UI::Dashboard::actions() const
 {
-  // Populate metadata for each action
   QVariantList actions;
   for (int i = 0; i < m_actions.count(); ++i) {
     const auto& action = m_actions[i];
@@ -646,7 +630,6 @@ const DataModel::Group& UI::Dashboard::getGroupWidget(const SerialStudio::Dashbo
     return emptyGroup;
   }
 
-  // Validate index bounds
   if (index < 0 || index >= it->size()) [[unlikely]] {
     qWarning() << "getGroupWidget: index out of bounds:" << index << "for widget" << widget;
     return emptyGroup;
@@ -669,7 +652,6 @@ const DataModel::Dataset& UI::Dashboard::getDatasetWidget(
     return emptyDataset;
   }
 
-  // Validate index bounds
   if (index < 0 || index >= it->size()) [[unlikely]] {
     qWarning() << "getDatasetWidget: index out of bounds:" << index << "for widget" << widget;
     return emptyDataset;
@@ -823,7 +805,6 @@ const DSP::LineSeries3D& UI::Dashboard::plotData3D(const int index) const
 
   Q_ASSERT(index < m_plot3DRings.size());
 
-  // Materialize the ring into the ordered snapshot at read (render) cadence, off the hotpath
   const auto& ring = m_plot3DRings[index];
   auto& snapshot   = m_plotData3D[index];
 
@@ -914,7 +895,6 @@ void UI::Dashboard::setPoints(const int points)
     if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
       m_settings.setValue("Dashboard/Points", m_points);
 
-    // Snapshot to keep time-axis history across the raw-sample ring resize.
     auto savedPlotRings      = snapshotPlotTimeRings();
     auto savedMultiplotRings = snapshotMultiplotTimeRings();
 
@@ -959,17 +939,14 @@ void UI::Dashboard::clearPushTables()
  */
 void UI::Dashboard::resetData(const bool notify)
 {
-  // Restore default point count when not in ProjectFile mode
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile
       && m_points != kDefaultPlotPoints) {
     m_points = kDefaultPlotPoints;
     Q_EMIT pointsChanged();
   }
 
-  // Clear the widget registry (emits widgetDestroyed for each widget)
   WidgetRegistry::instance().clear();
 
-  // Reset terminal widget ID
   m_terminalWidgetId = kInvalidWidgetId;
 #ifdef BUILD_COMMERCIAL
   m_notificationLogWidgetId = kInvalidWidgetId;
@@ -977,23 +954,18 @@ void UI::Dashboard::resetData(const bool notify)
   m_clockWidgetId     = kInvalidWidgetId;
   m_stopwatchWidgetId = kInvalidWidgetId;
 
-  // Clear plotting data
   m_fftValues.clear();
   m_pltValues.clear();
   m_multipltValues.clear();
 
-  // Free memory associated with the containers of the plotting data
   m_fftValues.squeeze();
   m_pltValues.squeeze();
   m_multipltValues.squeeze();
 
-  // Cached Dataset*/ring/flag pointers die with the containers freed below
   m_layoutValid = false;
 
-  // Drop pre-resolved hotpath push tables (point into maps cleared below)
   clearPushTables();
 
-  // Clear data for 3D plots
 #ifdef BUILD_COMMERCIAL
   m_plotData3D.clear();
   m_plotData3D.squeeze();
@@ -1003,11 +975,9 @@ void UI::Dashboard::resetData(const bool notify)
   m_waterfallValues.squeeze();
 #endif
 
-  // Clear GPS data
   m_gpsValues.clear();
   m_gpsValues.squeeze();
 
-  // Clear X/Y axis arrays
   m_xAxisData.clear();
   m_yAxisData.clear();
   m_plotTimeRings.clear();
@@ -1016,17 +986,14 @@ void UI::Dashboard::resetData(const bool notify)
   m_multiplotSweep.clear();
   m_plotTimeOriginSet = false;
 
-  // Clear widget & action structures
   m_widgetCount = 0;
   m_widgetMap.clear();
   m_widgetGroups.clear();
   m_widgetDatasets.clear();
   m_datasetReferences.clear();
 
-  // Drop the flat dataset cache so callers don't see stale entries
   m_datasets.clear();
 
-  // Clear activity status flags for plot widgets
   m_activePlots.clear();
   m_activeFFTPlots.clear();
   m_activeMultiplots.clear();
@@ -1034,16 +1001,13 @@ void UI::Dashboard::resetData(const bool notify)
   m_activeWaterfalls.clear();
 #endif
 
-  // Reset frame data
   m_lastFrame = DataModel::Frame();
   m_sourceRawFrames.clear();
   m_updateRetryInProgress = false;
 
-  // Configure actions
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
     configureActions(DataModel::FrameBuilder::instance().frame());
 
-  // Notify user interface
   if (notify) {
     m_updateRequired = true;
 
@@ -1059,25 +1023,20 @@ void UI::Dashboard::resetData(const bool notify)
  */
 void UI::Dashboard::clearPlotData()
 {
-  // Clear FFT plot data
   for (auto& fft : m_fftValues)
     fft.clear();
 
 #ifdef BUILD_COMMERCIAL
-  // Clear waterfall time-domain history
   for (auto& wf : m_waterfallValues)
     wf.clear();
 #endif
 
-  // Clear line plot Y-axis data
   for (auto it = m_yAxisData.begin(); it != m_yAxisData.end(); ++it)
     it.value().clear();
 
-  // Clear custom X-axis data (preserve default X-axis)
   for (auto it = m_xAxisData.begin(); it != m_xAxisData.end(); ++it)
     it.value().clear();
 
-  // Clear time-axis rings and restart the relative-time origin
   for (auto it = m_plotTimeRings.begin(); it != m_plotTimeRings.end(); ++it)
     it.value().clear();
 
@@ -1085,7 +1044,6 @@ void UI::Dashboard::clearPlotData()
     for (auto& ring : it.value())
       ring.clear();
 
-  // Restart sweep acquisition alongside the time rings
   for (auto it = m_plotSweep.begin(); it != m_plotSweep.end(); ++it)
     it.value().resetState();
 
@@ -1094,12 +1052,10 @@ void UI::Dashboard::clearPlotData()
 
   m_plotTimeOriginSet = false;
 
-  // Clear multiplot Y-axis data
   for (auto& multiSeries : m_multipltValues)
     for (auto& yAxis : multiSeries.y)
       yAxis.clear();
 
-  // Clear GPS trajectory data
   for (auto& gps : m_gpsValues) {
     gps.latitudes.clear();
     gps.longitudes.clear();
@@ -1107,7 +1063,6 @@ void UI::Dashboard::clearPlotData()
   }
 
 #ifdef BUILD_COMMERCIAL
-  // Clear 3D plot data (live rings and the materialized snapshots)
   for (auto& ring : m_plot3DRings)
     ring.clear();
 
@@ -1153,17 +1108,14 @@ void UI::Dashboard::setPlotTimeRange(const double seconds)
 
   m_plotTimeRange = clamped;
 
-  // Global default persists outside ProjectFile; inside a project the value lives in the .ssproj
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     m_settings.setValue("Dashboard/PlotTimeRange", m_plotTimeRange);
 
-  // Snapshot rings; restore replays through appendDecimated to rebin to the new interval.
   auto savedPlotRings            = snapshotPlotTimeRings();
   auto savedMultiplotRings       = snapshotMultiplotTimeRings();
   const auto savedPlotSweep      = m_plotSweep;
   const auto savedMultiplotSweep = m_multiplotSweep;
 
-  // Re-bin the time-bucket envelopes to the new window width
   configureLineSeries();
   configureMultiLineSeries();
 
@@ -1181,7 +1133,6 @@ void UI::Dashboard::setPlotTimeRange(const double seconds)
  */
 void UI::Dashboard::removeTerminalWidget()
 {
-  // Remove terminal from registry if it exists
   auto& registry = WidgetRegistry::instance();
 
   if (m_terminalWidgetId != kInvalidWidgetId) {
@@ -1189,7 +1140,6 @@ void UI::Dashboard::removeTerminalWidget()
     m_terminalWidgetId = kInvalidWidgetId;
   }
 
-  // Purge terminal from widget groups and frame
   m_widgetGroups.remove(SerialStudio::DashboardTerminal);
 
   auto& groups = m_lastFrame.groups;
@@ -1198,7 +1148,6 @@ void UI::Dashboard::removeTerminalWidget()
                               [](const DataModel::Group& g) { return g.widget == "terminal"; }),
                groups.end());
 
-  // Rebuild contiguous widget map from remaining widgets
   m_widgetMap.clear();
   m_widgetCount = 0;
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
@@ -1212,7 +1161,6 @@ void UI::Dashboard::removeTerminalWidget()
       m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
 
-  // erase above shifted m_lastFrame.groups, dangling stored dataset pointers
   rebuildDatasetReferences();
 }
 
@@ -1236,11 +1184,9 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
   if (m_persistSettings)
     m_settings.setValue("Dashboard/TerminalEnabled", m_terminalEnabled);
 
-  // Incremental update path when a dashboard is already live
   if (!m_sourceRawFrames.isEmpty() && m_widgetCount > 0) {
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
-      // Create terminal group and add to internal structures
       DataModel::Group terminal;
       terminal.widget   = "terminal";
       terminal.title    = tr("Console");
@@ -1250,12 +1196,10 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
       m_lastFrame.groups.push_back(terminal);
       m_widgetGroups[SerialStudio::DashboardTerminal].append(terminal);
 
-      // Register in widget registry and widget map
       m_terminalWidgetId = registry.createWidget(
         SerialStudio::DashboardTerminal, terminal.title, terminal.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardTerminal, 0));
 
-      // push_back above may have reallocated m_lastFrame.groups
       rebuildDatasetReferences();
     } else {
       removeTerminalWidget();
@@ -1292,7 +1236,6 @@ void UI::Dashboard::removeNotificationLogWidget()
                    [](const DataModel::Group& g) { return g.widget == "notification-log"; }),
     groups.end());
 
-  // Rebuild contiguous widget map from remaining widgets
   m_widgetMap.clear();
   m_widgetCount = 0;
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
@@ -1306,7 +1249,6 @@ void UI::Dashboard::removeNotificationLogWidget()
       m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
 
-  // erase above shifted m_lastFrame.groups, dangling stored dataset pointers
   rebuildDatasetReferences();
 #endif
 }
@@ -1324,7 +1266,6 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
     m_settings.setValue("Dashboard/NotificationLogEnabled", m_notificationLogEnabled);
 
 #ifdef BUILD_COMMERCIAL
-  // Unlike Terminal, NotificationLog can be the only widget; only a live source frame is needed
   if (!m_sourceRawFrames.isEmpty()) {
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
@@ -1341,7 +1282,6 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
         SerialStudio::DashboardNotificationLog, notif.title, notif.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardNotificationLog, 0));
 
-      // push_back above may have reallocated m_lastFrame.groups
       rebuildDatasetReferences();
     } else {
       removeNotificationLogWidget();
@@ -1352,7 +1292,6 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
   Q_EMIT widgetCountChanged();
   Q_EMIT notificationLogEnabledChanged();
 
-  // Re-evaluate Setup -> Dashboard transition in MainWindow
   Q_EMIT updated();
 }
 
@@ -1380,7 +1319,6 @@ void UI::Dashboard::removeClockWidget()
                               [](const DataModel::Group& g) { return g.widget == "clock"; }),
                groups.end());
 
-  // Rebuild contiguous widget map from remaining widgets
   m_widgetMap.clear();
   m_widgetCount = 0;
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
@@ -1394,7 +1332,6 @@ void UI::Dashboard::removeClockWidget()
       m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
 
-  // erase above shifted m_lastFrame.groups, dangling stored dataset pointers
   rebuildDatasetReferences();
 }
 
@@ -1410,7 +1347,6 @@ void UI::Dashboard::setClockEnabled(const bool enabled)
   if (m_persistSettings)
     m_settings.setValue("Dashboard/ClockEnabled", m_clockEnabled);
 
-  // Same gating as NotificationLog: needs a live source frame to register
   if (!m_sourceRawFrames.isEmpty()) {
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
@@ -1427,7 +1363,6 @@ void UI::Dashboard::setClockEnabled(const bool enabled)
         registry.createWidget(SerialStudio::DashboardClock, clock.title, clock.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardClock, 0));
 
-      // push_back above may have reallocated m_lastFrame.groups
       rebuildDatasetReferences();
     } else {
       removeClockWidget();
@@ -1437,7 +1372,6 @@ void UI::Dashboard::setClockEnabled(const bool enabled)
   Q_EMIT widgetCountChanged();
   Q_EMIT clockEnabledChanged();
 
-  // Re-evaluate Setup -> Dashboard transition in MainWindow
   Q_EMIT updated();
 }
 
@@ -1465,7 +1399,6 @@ void UI::Dashboard::removeStopwatchWidget()
                               [](const DataModel::Group& g) { return g.widget == "stopwatch"; }),
                groups.end());
 
-  // Rebuild contiguous widget map from remaining widgets
   m_widgetMap.clear();
   m_widgetCount = 0;
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
@@ -1479,7 +1412,6 @@ void UI::Dashboard::removeStopwatchWidget()
       m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
   }
 
-  // erase above shifted m_lastFrame.groups, dangling stored dataset pointers
   rebuildDatasetReferences();
 }
 
@@ -1495,7 +1427,6 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
   if (m_persistSettings)
     m_settings.setValue("Dashboard/StopwatchEnabled", m_stopwatchEnabled);
 
-  // Same gating as Clock: needs a live source frame to register
   if (!m_sourceRawFrames.isEmpty()) {
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
@@ -1512,7 +1443,6 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
         SerialStudio::DashboardStopwatch, stopwatch.title, stopwatch.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardStopwatch, 0));
 
-      // push_back above may have reallocated m_lastFrame.groups
       rebuildDatasetReferences();
     } else {
       removeStopwatchWidget();
@@ -1522,7 +1452,6 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
   Q_EMIT widgetCountChanged();
   Q_EMIT stopwatchEnabledChanged();
 
-  // Re-evaluate Setup -> Dashboard transition in MainWindow
   Q_EMIT updated();
 }
 
@@ -1538,23 +1467,19 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
   Q_ASSERT(index >= 0);
   Q_ASSERT(index < m_actions.count());
 
-  // Validate index
   if (index < 0 || index >= m_actions.count()) {
     qWarning() << "Invalid action index:" << index;
     return;
   }
 
-  // Fetch the action configuration
   const auto& action = m_actions[index];
 
-  // Handle RepeatNTimes mode: on GUI trigger, start the repeat sequence
   if (action.timerMode == DataModel::TimerMode::RepeatNTimes && guiTrigger) {
     if (m_timers.contains(index) && m_timers[index]) {
       m_repeatCounters[index] = qMax(1, action.repeatCount);
       m_timers[index]->start();
     }
 
-    // Send first occurrence immediately
     if (!IO::ConnectionManager::instance().paused())
       (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
@@ -1565,7 +1490,6 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
     return;
   }
 
-  // Handle RepeatNTimes mode: timer tick (not GUI trigger)
   if (action.timerMode == DataModel::TimerMode::RepeatNTimes && !guiTrigger) {
     if (!IO::ConnectionManager::instance().paused())
       (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
@@ -1576,16 +1500,13 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
     return;
   }
 
-  // Handle other timer behaviors
   const auto timerIt = m_timers.find(index);
   if (timerIt != m_timers.end())
     applyTimerMode(timerIt.value(), action.timerMode, guiTrigger, action.title);
 
-  // Send data payload
   if (!IO::ConnectionManager::instance().paused())
     (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
-  // Notify UI of potential toggle-state change
   Q_EMIT actionStatusChanged();
 }
 
@@ -1721,7 +1642,10 @@ void UI::Dashboard::armMultiplotSweep(const int index)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Processes an incoming data frame and updates the dashboard accordingly.
+ * @brief Processes an incoming data frame and updates the dashboard. The display clock never runs
+ *        backwards; it only smooths small forward jitter for sub-ms-cadence sources, snapping
+ *        low-rate sources and large gaps to real arrival time. A matching cached publisher
+ *        generation skips the per-frame compare_frames() walk (it changes only on pool rebuild).
  */
 void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 {
@@ -1731,11 +1655,9 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
 
   const auto& payload = frame->data;
 
-  // Validate frame against the cached stream flag (refreshed on every input transition)
   if (payload.groups.size() <= 0 || !m_streamAvailable) [[unlikely]]
     return;
 
-  // Track elapsed seconds since the first frame for time-axis plots
   if (!m_plotTimeOriginSet) [[unlikely]] {
     m_plotTimeOrigin      = frame->timestamp;
     m_plotTimeOriginSet   = true;
@@ -1747,14 +1669,13 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
   m_relativeFrameTimeSec =
     std::chrono::duration<double>(frame->timestamp - m_plotTimeOrigin).count();
 
-  // Spread same-timestamp frames by a smoothed per-sample period (display only, raw stamps kept)
   ++m_plotGroupCount;
   if (m_relativeFrameTimeSec > m_plotGroupStartSec) {
     const int n      = (m_plotGroupCount > 1) ? (m_plotGroupCount - 1) : 1;
     const double gap = m_relativeFrameTimeSec - m_plotGroupStartSec;
 
-    // Divide only for rare multi-sample coarse-clock groups; fine-timestamp sources hit n == 1
     // code-verify off
+    // Divide only for rare multi-sample coarse-clock groups; fine-timestamp sources hit n == 1.
     const double period = (n > 1) ? (gap / n) : gap;
     // code-verify on
 
@@ -1765,10 +1686,8 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
   }
   const double expected = m_plotDisplayTimeSec + m_plotSamplePeriodSec;
 
-  // Never run the display clock backwards; default to snapping up to real arrival time
   double displayNext = qMax(expected, m_relativeFrameTimeSec);
 
-  // High-rate sources absorb tiny forward jitter; low-rate sources and large gaps still snap
   const double forwardError = m_relativeFrameTimeSec - expected;
   if (m_plotSamplePeriodSec > 0 && m_plotSamplePeriodSec < kSmoothMaxPeriodSec && forwardError > 0
       && forwardError < kSmoothMaxForwardSec)
@@ -1779,13 +1698,16 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
   const int sid             = payload.sourceId;
   const bool hadProFeatures = containsCommercialFeatures();
 
-  const auto it               = m_sourceRawFrames.find(sid);
-  const bool structureChanged = it == m_sourceRawFrames.end()
-                             || !DataModel::compare_frames(payload, it.value())
-                             || m_datasetReferences.isEmpty();
+  const auto genIt = m_sourceStructureGen.constFind(sid);
+  const bool genKnown =
+    genIt != m_sourceStructureGen.cend() && genIt.value() == frame->structureGeneration;
+
+  const bool structureChanged =
+    !genKnown || !m_sourceRawFrames.contains(sid) || m_datasetReferences.isEmpty();
 
   if (structureChanged) [[unlikely]] {
-    m_sourceRawFrames[sid] = payload;
+    m_sourceStructureGen[sid] = frame->structureGeneration;
+    m_sourceRawFrames[sid]    = payload;
     DataModel::Frame combined;
     combined.title   = payload.title;
     combined.actions = payload.actions;
@@ -1804,10 +1726,8 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
       Q_EMIT containsCommercialFeaturesChanged();
   }
 
-  // Update dashboard data (only this source's datasets)
   updateDashboardData(payload);
 
-  // Schedule a UI refresh on the next timer tick
   m_updateRequired = true;
 }
 
@@ -1823,7 +1743,6 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
   Q_ASSERT(!frame.groups.empty());
   Q_ASSERT(frame.sourceId >= 0);
 
-  // Disconnect on repeated failure, or retry once after reconfiguring
   if (m_updateRetryInProgress) {
     qWarning() << "Failed to build dashboard widget model";
 
@@ -1852,7 +1771,6 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
     return;
   }
 
-  // Regenerate the dashboard model and retry the update once
   reconfigureDashboard(frame);
 
   m_updateRetryInProgress = true;
@@ -1912,20 +1830,17 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
   Q_ASSERT(datasetIn.index >= 0);
   Q_ASSERT(datasetIn.uniqueId >= 0);
 
-  // Widget display ranges fall back to the plot value range when left unset (min == max)
   DataModel::Dataset dataset = datasetIn;
   if (DSP::almostEqual(dataset.wgtMin, dataset.wgtMax)) {
     dataset.wgtMin = dataset.pltMin;
     dataset.wgtMax = dataset.pltMax;
   }
 
-  // FFT display ranges fall back to the plot value range when left unset (min == max)
   if (DSP::almostEqual(dataset.fftMin, dataset.fftMax)) {
     dataset.fftMin = dataset.pltMin;
     dataset.fftMax = dataset.pltMax;
   }
 
-  // Keyed by uniqueId; sibling datasets sharing a frame index stay distinct.
   if (!m_datasets.contains(dataset.uniqueId)) {
     m_datasets.insert(dataset.uniqueId, dataset);
   } else {
@@ -1939,11 +1854,9 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
     m_datasets.insert(dataset.uniqueId, d);
   }
 
-  // hideOnDashboard suppresses dataset-level tiles; painter still sees the dataset
   if (dataset.hideOnDashboard)
     return;
 
-  // Route dataset into per-widget-type lists (LEDs go to the group panel)
   auto keys = SerialStudio::getDashboardWidgets(dataset);
   for (const auto& widgetKey : std::as_const(keys)) {
     if (widgetKey == SerialStudio::DashboardLED) {
@@ -1956,33 +1869,29 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
 }
 
 /**
- * @brief Reconfigures the dashboard layout and widgets based on the new frame.
+ * @brief Reconfigures the dashboard layout and widgets based on the new frame. Time rings
+ *        and the per-source cache are snapshotted before resetData() and restored after,
+ *        so a cosmetic project edit that rebuilds the layout does not erase in-flight plot
+ *        history.
  */
 void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 {
   Q_ASSERT(!frame.groups.empty());
   Q_ASSERT(streamAvailable());
 
-  // Check commercial license status for Pro-only widgets
   const bool pro = SerialStudio::proWidgetsEnabled();
 
-  // Save per-source cache before reset so multi-source merging still works
   auto savedSourceFrames = m_sourceRawFrames;
 
-  // Snapshot rings so cosmetic project edits don't erase in-flight plot history.
   auto savedPlotRings      = snapshotPlotTimeRings();
   auto savedMultiplotRings = snapshotMultiplotTimeRings();
 
-  // Reset all dashboard state without notifying the UI
   resetData(false);
 
-  // Restore per-source cache that resetData cleared
   m_sourceRawFrames = std::move(savedSourceFrames);
 
-  // Save combined frame structure for terminal/widget tracking
   m_lastFrame = frame;
 
-  // Add terminal group
   if (m_terminalEnabled) {
     DataModel::Group terminal;
     terminal.widget   = "terminal";
@@ -1994,7 +1903,6 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   }
 
 #ifdef BUILD_COMMERCIAL
-  // Add notification log group
   if (m_notificationLogEnabled) {
     DataModel::Group notif;
     notif.widget   = "notification-log";
@@ -2006,7 +1914,6 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   }
 #endif
 
-  // Add clock group
   if (m_clockEnabled) {
     DataModel::Group clock;
     clock.widget   = "clock";
@@ -2017,7 +1924,6 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
     m_lastFrame.groups.push_back(clock);
   }
 
-  // Add stopwatch group
   if (m_stopwatchEnabled) {
     DataModel::Group stopwatch;
     stopwatch.widget   = "stopwatch";
@@ -2028,28 +1934,21 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
     m_lastFrame.groups.push_back(stopwatch);
   }
 
-  // Build widget type -> group lists from the frame
   buildWidgetGroups(frame, pro);
 
-  // Register all widgets with the dashboard registry
   registerWidgets();
 
-  // Build dataset reference maps and the pre-resolved propagation tables
   buildDatasetReferences();
   buildValuePushes();
 
-  // Initialize data series & update actions
   updateDataSeries();
   configureActions(frame);
 
-  // Splice in-flight rings back where the same dataset / group still maps to a slot.
   restorePlotTimeRings(savedPlotRings);
   restoreMultiplotTimeRings(savedMultiplotRings);
 
-  // Caches now point into freshly-built containers; consumers may dereference again
   m_layoutValid = true;
 
-  // Update user interface
   Q_EMIT widgetCountChanged();
 }
 
@@ -2063,12 +1962,10 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
   (void)frame;
 
   for (const auto& group : m_lastFrame.groups) {
-    // Append group widgets
     const auto key = SerialStudio::getDashboardWidget(group);
     if (key != SerialStudio::DashboardNoWidget)
       m_widgetGroups[key].append(group);
 
-    // Append fallback 3D plot widget
     if (key == SerialStudio::DashboardPlot3D && !pro) {
       auto& bucket = m_widgetGroups[key];
       if (!bucket.isEmpty() && bucket.last().groupId == group.groupId)
@@ -2084,7 +1981,6 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
     }
 
 #ifdef BUILD_COMMERCIAL
-    // Painter (Pro): GPL builds fall back to a data grid so the group still renders
     if (key == SerialStudio::DashboardPainter && !pro) {
       auto& bucket = m_widgetGroups[key];
       if (!bucket.isEmpty() && bucket.last().groupId == group.groupId)
@@ -2099,23 +1995,19 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
     }
 #endif
 
-    // Append multiplot & 3D plot to accelerometer widget
     if (key == SerialStudio::DashboardAccelerometer) {
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
       if (pro)
         m_widgetGroups[SerialStudio::DashboardPlot3D].append(group);
     }
 
-    // Append multiplot to gyro widget
     if (key == SerialStudio::DashboardGyroscope)
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
 
-    // Parse group datasets into widget maps and LED panel
     DataModel::Group ledPanel;
     for (const auto& dataset : group.datasets)
       processDatasetIntoWidgetMaps(dataset, ledPanel);
 
-    // Group-level LED panel inherits parent uniqueId so workspace refs resolve.
     if (ledPanel.datasets.size() > 0) {
       ledPanel.widget   = "led-panel";
       ledPanel.groupId  = group.groupId;
@@ -2149,11 +2041,9 @@ void UI::Dashboard::registerWidgets()
   Q_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
   Q_ASSERT(m_widgetCount == 0);
 
-  // Begin batch update on the registry (defers batchUpdateCompleted signal)
   auto& registry = WidgetRegistry::instance();
   registry.beginBatchUpdate();
 
-  // Prepare for fresh widget registration
   m_terminalWidgetId = kInvalidWidgetId;
 #ifdef BUILD_COMMERCIAL
   m_notificationLogWidgetId = kInvalidWidgetId;
@@ -2161,7 +2051,6 @@ void UI::Dashboard::registerWidgets()
   m_clockWidgetId     = kInvalidWidgetId;
   m_stopwatchWidgetId = kInvalidWidgetId;
 
-  // Register group-level widgets
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
     const auto key   = i.key();
     const auto count = widgetCount(key);
@@ -2169,21 +2058,17 @@ void UI::Dashboard::registerWidgets()
       const auto& group = i.value().at(j);
       auto widgetId     = registry.createWidget(key, group.title, group.groupId, -1, true);
 
-      // Store terminal widget ID for incremental updates
       if (key == SerialStudio::DashboardTerminal)
         m_terminalWidgetId = widgetId;
 
 #ifdef BUILD_COMMERCIAL
-      // Store notification log widget ID for incremental updates
       if (key == SerialStudio::DashboardNotificationLog)
         m_notificationLogWidgetId = widgetId;
 #endif
 
-      // Store clock widget ID for incremental updates
       if (key == SerialStudio::DashboardClock)
         m_clockWidgetId = widgetId;
 
-      // Store stopwatch widget ID for incremental updates
       if (key == SerialStudio::DashboardStopwatch)
         m_stopwatchWidgetId = widgetId;
 
@@ -2191,7 +2076,6 @@ void UI::Dashboard::registerWidgets()
     }
   }
 
-  // Register dataset-level widgets
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
     const auto key   = i.key();
     const auto count = widgetCount(key);
@@ -2202,7 +2086,6 @@ void UI::Dashboard::registerWidgets()
     }
   }
 
-  // End batch update (emits batchUpdateCompleted if changes occurred)
   registry.endBatchUpdate();
 }
 
@@ -2214,23 +2097,19 @@ void UI::Dashboard::buildDatasetReferences()
   Q_ASSERT(!m_lastFrame.groups.empty());
   Q_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
 
-  // Traverse all group-level datasets
   for (auto& groupList : m_widgetGroups) {
     for (auto& group : groupList)
       for (auto& dataset : group.datasets)
         m_datasetReferences[dataset.uniqueId].append(&dataset);
   }
 
-  // Traverse all widget-level datasets
   for (auto& datasetList : m_widgetDatasets)
     for (auto& dataset : datasetList)
       m_datasetReferences[dataset.uniqueId].append(&dataset);
 
-  // Traverse all datasets
   for (auto& dataset : m_datasets)
     m_datasetReferences[dataset.uniqueId].append(&dataset);
 
-  // For edge cases, register any dataset that has not been added
   for (auto& group : m_lastFrame.groups) {
     for (auto& dataset : group.datasets) {
       auto& list = m_datasetReferences[dataset.uniqueId];
@@ -2242,14 +2121,15 @@ void UI::Dashboard::buildDatasetReferences()
 
 /**
  * @brief Rebuilds the dataset reference map after the frame layout has changed.
+ *        Any push_back/erase on m_lastFrame.groups shifts elements and dangles the
+ *        &dataset pointers stored here, so every such mutation must call this; the
+ *        early-out guards buildDatasetReferences(), which asserts on an empty frame.
  */
 void UI::Dashboard::rebuildDatasetReferences()
 {
-  // A push_back/erase on m_lastFrame.groups dangles stored &dataset pointers
   m_datasetReferences.clear();
   m_valuePushes.clear();
 
-  // buildDatasetReferences() asserts on an empty frame; nothing to map then
   if (m_lastFrame.groups.empty())
     return;
 
@@ -2268,7 +2148,6 @@ UI::Dashboard::ValuePush UI::Dashboard::makeValuePush(
   ValuePush push;
   push.uniqueId = dataset.uniqueId;
 
-  // Poisoned id keeps the old per-frame handleMissingDataset trigger for unmapped UIDs
   const auto ref_it = m_datasetReferences.constFind(dataset.uniqueId);
   if (ref_it == m_datasetReferences.cend()) {
     push.uniqueId = std::numeric_limits<int>::min();
@@ -2294,7 +2173,6 @@ void UI::Dashboard::buildValuePushes()
 
   m_valuePushes.clear();
 
-  // String values are observable in DataGrid rows and in m_lastFrame (serialized by the API)
   QSet<const DataModel::Dataset*> string_targets;
   for (auto& group : m_lastFrame.groups)
     for (auto& dataset : group.datasets)
@@ -2307,7 +2185,6 @@ void UI::Dashboard::buildValuePushes()
         string_targets.insert(&dataset);
   }
 
-  // One table per source, row-major (group, dataset), mirroring updateDashboardData's frame walk
   for (auto it = m_sourceRawFrames.cbegin(); it != m_sourceRawFrames.cend(); ++it) {
     auto& table = m_valuePushes[it.key()];
     for (const auto& group : it.value().groups)
@@ -2328,7 +2205,6 @@ void UI::Dashboard::updateDataSeries(int sourceId)
   Q_ASSERT(m_widgetCount > 0 || m_widgetMap.isEmpty());
   Q_ASSERT(!m_sourceRawFrames.isEmpty());
 
-  // Cache widget counts
   const int gpsCount   = widgetCount(SerialStudio::DashboardGPS);
   const int fftCount   = widgetCount(SerialStudio::DashboardFFT);
   const int plotCount  = widgetCount(SerialStudio::DashboardPlot);
@@ -2338,7 +2214,6 @@ void UI::Dashboard::updateDataSeries(int sourceId)
   const int waterfallCount = widgetCount(SerialStudio::DashboardWaterfall);
 #endif
 
-  // Resize data points if needed
   if (m_gpsValues.size() != gpsCount) [[unlikely]]
     configureGpsSeries();
   if (m_fftValues.size() != fftCount) [[unlikely]]
@@ -2354,7 +2229,6 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     configureWaterfallSeries();
 #endif
 
-  // Delegate to per-type update helpers
   updateGpsSeries(sourceId);
   updateFftSeries(sourceId);
   updateLineSeries(sourceId);
@@ -2362,7 +2236,6 @@ void UI::Dashboard::updateDataSeries(int sourceId)
   updateWaterfallSeries(sourceId);
 #endif
 
-  // Sweep mode: every curve shares one window aligned to the trigger-source curve
   auto feedMultiSweep = [this](const MultiPush& p) {
     if (!p.sweep || !p.sweep->enabled || p.timeCurves.empty())
       return;
@@ -2378,7 +2251,6 @@ void UI::Dashboard::updateDataSeries(int sourceId)
       p.sweep->back[j].appendDecimated(st, *p.timeCurves[j].value);
   };
 
-  // Update multi-plots from the pre-resolved push table (no map lookups)
   Q_ASSERT(static_cast<int>(m_multiplotPushes.size()) == multiCount);
   for (const auto& p : m_multiplotPushes) {
     if (!*p.activeFlag)
@@ -2387,18 +2259,15 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    // Time multiplots append (display time, value) into each curve's decimating ring
     for (const auto& tc : p.timeCurves)
       tc.ring->appendDecimated(m_plotDisplayTimeSec, *tc.value);
 
     feedMultiSweep(p);
 
-    // Sample/dataset multiplots push into the Y rings
     for (const auto& s : p.samples)
       s.first->push(*s.second);
   }
 
-  // Update 3D plots
 #ifdef BUILD_COMMERCIAL
   updatePlot3DSeries(sourceId);
 #endif
@@ -2412,7 +2281,6 @@ void UI::Dashboard::updateFftSeries(int sourceId)
   Q_ASSERT(static_cast<int>(m_fftPushes.size()) == m_fftValues.size());
   Q_ASSERT(m_activeFFTPlots.size() == m_fftValues.size());
 
-  // Hotpath: walk the pre-resolved push table (no map lookups)
   for (const auto& p : m_fftPushes) {
     if (!*p.activeFlag)
       continue;
@@ -2432,12 +2300,10 @@ void UI::Dashboard::updateGpsSeries(int sourceId)
   Q_ASSERT(static_cast<int>(m_gpsPushes.size()) == m_gpsValues.size());
   Q_ASSERT(m_widgetGroups.contains(SerialStudio::DashboardGPS) || m_gpsPushes.empty());
 
-  // Hotpath: walk the pre-resolved push table (no map lookups, no field-name scans)
   for (const auto& p : m_gpsPushes) {
     if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    // Non-numeric samples degrade to NaN, mirroring the old per-dataset field scan
     const double lat = *p.lat.numeric ? *p.lat.value : kNoGpsFix;
     const double lon = *p.lon.numeric ? *p.lon.value : kNoGpsFix;
     const double alt = *p.alt.numeric ? *p.alt.value : kNoGpsFix;
@@ -2457,13 +2323,11 @@ void UI::Dashboard::updatePlot3DSeries(int sourceId)
   Q_ASSERT(static_cast<int>(m_plot3DPushes.size()) == m_plot3DRings.size());
   Q_ASSERT(m_points > 0);
 
-  // Hotpath: O(1) ring overwrite, replacing the per-frame O(points) erase-front vector shift
   const auto maxPoints = static_cast<std::size_t>(points());
   for (const auto& p : m_plot3DPushes) {
     if (sourceId >= 0 && p.sourceId != sourceId)
       continue;
 
-    // Track live point-count changes the way the old self-sizing vector did
     if (p.ring->capacity() != maxPoints) [[unlikely]]
       p.ring->resize(maxPoints);
 
@@ -2483,7 +2347,6 @@ void UI::Dashboard::updateLineSeries(int sourceId)
   Q_ASSERT(m_pltValues.size() == widgetCount(SerialStudio::DashboardPlot));
   Q_ASSERT(m_activePlots.size() == widgetCount(SerialStudio::DashboardPlot));
 
-  // Hotpath: walk pre-resolved push tables (no allocations, no lookups)
   auto fire = [sourceId](const LinePush& p) {
     for (const auto& c : p.consumers) {
       if (sourceId >= 0 && c.sourceId != sourceId)
@@ -2502,7 +2365,6 @@ void UI::Dashboard::updateLineSeries(int sourceId)
   for (const auto& p : m_xLinePushes)
     fire(p);
 
-  // Sweep mode triggers on the plotted value itself
   auto feedSweep = [this](const TimePush& p) {
     if (!p.sweep || !p.sweep->enabled || p.sweep->back.empty())
       return;
@@ -2512,7 +2374,6 @@ void UI::Dashboard::updateLineSeries(int sourceId)
       p.sweep->back[0].appendDecimated(st, *p.value);
   };
 
-  // Time plots append (display time, value) into their decimating ring
   for (const auto& p : m_timePushes) {
     for (const auto& c : p.consumers) {
       if (sourceId >= 0 && c.sourceId != sourceId)
@@ -2529,16 +2390,17 @@ void UI::Dashboard::updateLineSeries(int sourceId)
 
 /**
  * @brief Initializes the GPS series structure for all GPS widgets.
+ *        Two passes are deliberate: the push table stores raw pointers into m_gpsValues,
+ *        and those addresses are stable only after that vector stops growing, so all
+ *        series are allocated first and the pushes resolved in a second pass.
  */
 void UI::Dashboard::configureGpsSeries()
 {
-  // Release existing GPS buffers
   m_gpsValues.clear();
   m_gpsValues.squeeze();
   m_gpsPushes.clear();
   m_gpsPushes.shrink_to_fit();
 
-  // Allocate and pre-fill series for each GPS widget
   const int gpsCount = widgetCount(SerialStudio::DashboardGPS);
   for (int i = 0; i < gpsCount; ++i) {
     DSP::GpsSeries series;
@@ -2561,7 +2423,6 @@ void UI::Dashboard::configureGpsSeries()
     m_gpsValues.append(series);
   }
 
-  // Buffer addresses are stable only once m_gpsValues stops growing; resolve in a second pass
   m_gpsPushes.reserve(static_cast<std::size_t>(gpsCount));
   for (int i = 0; i < gpsCount; ++i) {
     const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
@@ -2591,17 +2452,18 @@ void UI::Dashboard::configureGpsSeries()
 
 /**
  * @brief Configures the FFT series data structure for the dashboard.
+ *        Two passes are deliberate: the push table stores raw pointers into m_fftValues,
+ *        and those addresses are stable only after that vector stops growing, so all
+ *        buffers are allocated first and the pushes resolved in a second pass.
  */
 void UI::Dashboard::configureFftSeries()
 {
-  // Release existing FFT buffers
   m_fftValues.clear();
   m_fftValues.squeeze();
   m_activeFFTPlots.clear();
   m_fftPushes.clear();
   m_fftPushes.shrink_to_fit();
 
-  // Allocate ring buffers sized to each dataset's FFT sample count
   const int fftCount = widgetCount(SerialStudio::DashboardFFT);
   for (int i = 0; i < fftCount; ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
@@ -2609,7 +2471,6 @@ void UI::Dashboard::configureFftSeries()
     m_activeFFTPlots.insert(i, true);
   }
 
-  // Buffer addresses are stable only once m_fftValues stops growing; resolve in a second pass
   m_fftPushes.reserve(static_cast<std::size_t>(fftCount));
   for (int i = 0; i < fftCount; ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
@@ -2632,7 +2493,6 @@ void UI::Dashboard::updateWaterfallSeries(int sourceId)
   Q_ASSERT(static_cast<int>(m_waterfallPushes.size()) == m_waterfallValues.size());
   Q_ASSERT(m_activeWaterfalls.size() == m_waterfallValues.size());
 
-  // Hotpath: walk the pre-resolved push table (no map lookups)
   for (const auto& p : m_waterfallPushes) {
     if (!*p.activeFlag)
       continue;
@@ -2646,17 +2506,18 @@ void UI::Dashboard::updateWaterfallSeries(int sourceId)
 
 /**
  * @brief Configures the waterfall series data structure for the dashboard.
+ *        Two passes are deliberate: the push table stores raw pointers into
+ *        m_waterfallValues, and those addresses are stable only after that vector stops
+ *        growing, so all buffers are allocated first and the pushes resolved in a second.
  */
 void UI::Dashboard::configureWaterfallSeries()
 {
-  // Release existing buffers
   m_waterfallValues.clear();
   m_waterfallValues.squeeze();
   m_activeWaterfalls.clear();
   m_waterfallPushes.clear();
   m_waterfallPushes.shrink_to_fit();
 
-  // Allocate ring buffers sized to each dataset's FFT sample count
   const int waterfallCount = widgetCount(SerialStudio::DashboardWaterfall);
   for (int i = 0; i < waterfallCount; ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardWaterfall, i);
@@ -2664,7 +2525,6 @@ void UI::Dashboard::configureWaterfallSeries()
     m_activeWaterfalls.insert(i, true);
   }
 
-  // Buffer addresses are stable only once m_waterfallValues stops growing; second pass
   m_waterfallPushes.reserve(static_cast<std::size_t>(waterfallCount));
   for (int i = 0; i < waterfallCount; ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardWaterfall, i);
@@ -2680,7 +2540,9 @@ void UI::Dashboard::configureWaterfallSeries()
 #endif
 
 /**
- * @brief Registers an X-axis data buffer for a dataset's custom X source.
+ * @brief Registers an X-axis data buffer for a dataset's custom X source. The AxisData is
+ *        left unfilled on purpose so the XY ring grows from empty; a seeded (0,0) point
+ *        would draw a false first line segment.
  */
 void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
 {
@@ -2700,7 +2562,6 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
   if (!m_datasets.contains(xSource))
     return;
 
-  // Unfilled so the XY ring grows from empty; no seeded (0,0) point draws a false first line.
   DSP::AxisData xAxis(points() + 1);
   m_xAxisData.insert(xSource, xAxis);
 }
@@ -2781,7 +2642,6 @@ void UI::Dashboard::restorePlotTimeRings(QHash<int, DSP::TimeRing>& snapshot)
     auto& live = ringIt.value();
     auto& kept = savedIt.value();
 
-    // Same capacity AND interval: splice. Otherwise replay through the new decimator.
     if (live.time.capacity() == kept.time.capacity() && qFuzzyCompare(live.interval, kept.interval))
       live = std::move(kept);
     else
@@ -2811,7 +2671,6 @@ void UI::Dashboard::restoreMultiplotTimeRings(QHash<int, std::vector<DSP::TimeRi
     auto& live = ringIt.value();
     auto& kept = savedIt.value();
 
-    // Walk paired curves; per-curve splice when shape matches, replay otherwise.
     const std::size_t count = std::min(live.size(), kept.size());
     for (std::size_t j = 0; j < count; ++j)
       if (live[j].time.capacity() == kept[j].time.capacity()
@@ -2863,7 +2722,6 @@ void UI::Dashboard::configureLineSeries()
 {
   Q_ASSERT(m_points > 0);
 
-  // Release existing plot buffers
   m_xAxisData.clear();
   m_yAxisData.clear();
   m_plotTimeRings.clear();
@@ -2875,33 +2733,26 @@ void UI::Dashboard::configureLineSeries()
   m_xLinePushes.clear();
   m_timePushes.clear();
 
-  // Reset default X-axis data
   m_pltXAxis = DSP::AxisData(points() + 1);
   m_pltXAxis.fillRange(0, 1);
 
-  // Construct X/Y axis data arrays
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
     const auto& datasets = i.value();
 
-    // Register axis data for each plottable dataset
     for (auto d = datasets.begin(); d != datasets.end(); ++d) {
       if (!d->plt)
         continue;
 
-      // Y-axis keyed by uniqueId for sibling separation; unfilled to skip the (0,0) phantom.
       DSP::AxisData yAxis(points() + 1);
       m_yAxisData.insert(d->uniqueId, yAxis);
 
-      // Register X-axis
       registerXAxisIfNeeded(*d);
     }
   }
 
-  // Construct plot values structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
-    // Time X-axis: decimating ring spanning the window, viewport-decimated at render
     if (useTimeXAxis(yDataset)) {
       const int cap = timeRingCapacity(m_plotTimeRange);
       m_plotTimeRings.insert(i, DSP::TimeRing(cap, m_plotTimeRange));
@@ -2915,7 +2766,6 @@ void UI::Dashboard::configureLineSeries()
       series.y = &m_yAxisData[yDataset.uniqueId];
       m_pltValues.append(series);
     }
-    // Use custom X-axis source if available (Pro feature)
 #ifdef BUILD_COMMERCIAL
     else if (const auto& tk2 = Licensing::CommercialToken::current();
              m_datasets.contains(yDataset.xAxisId) && tk2.isValid() && SS_LICENSE_GUARD()
@@ -2929,7 +2779,6 @@ void UI::Dashboard::configureLineSeries()
       m_pltValues.append(series);
     }
 
-    // Only use Y-axis data, use samples/points as X-axis
     else {
       DSP::LineSeries series;
       series.x = &m_pltXAxis;
@@ -2937,18 +2786,15 @@ void UI::Dashboard::configureLineSeries()
       m_pltValues.append(series);
     }
 
-    // Enable real-time updates for the plot
     m_activePlots.insert(i, true);
   }
 
-  // Build the pre-resolved push tables consumed on the hotpath
   QHash<int, std::size_t> yByUid;
   QHash<int, std::size_t> xByXAxisId;
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
     const LinePush::Consumer consumer{yDataset.sourceId, &m_activePlots[i]};
 
-    // Time plots append (display time, value) into their decimating ring
     if (useTimeXAxis(yDataset)) {
       auto rIt = m_plotTimeRings.find(i);
       if (rIt != m_plotTimeRings.end()) {
@@ -2964,7 +2810,6 @@ void UI::Dashboard::configureLineSeries()
       continue;
     }
 
-    // Y push entry: one per uniqueId
     auto yIt = m_yAxisData.find(yDataset.uniqueId);
     if (yIt != m_yAxisData.end()) {
       auto cacheIt = yByUid.find(yDataset.uniqueId);
@@ -2980,7 +2825,6 @@ void UI::Dashboard::configureLineSeries()
       }
     }
 
-    // X push entry: one per xAxisId
 #ifdef BUILD_COMMERCIAL
     const auto& tk = Licensing::CommercialToken::current();
     const int xAxisId =
@@ -3013,6 +2857,9 @@ void UI::Dashboard::configureLineSeries()
 #ifdef BUILD_COMMERCIAL
 /**
  * @brief Initializes internal data structures for 3D trajectory plot widgets.
+ *        Two passes are deliberate: the push table stores raw pointers into m_plot3DRings,
+ *        and those addresses are stable only after that vector stops growing, so all rings
+ *        are allocated first and the pushes resolved in a second pass.
  */
 void UI::Dashboard::configurePlot3DSeries()
 {
@@ -3020,12 +2867,10 @@ void UI::Dashboard::configurePlot3DSeries()
 
   const int plot3DCount = widgetCount(SerialStudio::DashboardPlot3D);
 
-  // Snapshot vectors handed to the widgets; capacity primed so read-time fills never reallocate
   m_plotData3D.clear();
   m_plotData3D.squeeze();
   m_plotData3D.resize(plot3DCount);
 
-  // O(1) overwrite rings consumed by the hotpath
   m_plot3DRings.clear();
   m_plot3DRings.squeeze();
   m_plot3DPushes.clear();
@@ -3037,7 +2882,6 @@ void UI::Dashboard::configurePlot3DSeries()
     m_plotData3D[i].reserve(static_cast<std::size_t>(points()));
   }
 
-  // Buffer addresses are stable only once m_plot3DRings stops growing; second pass
   m_plot3DPushes.reserve(static_cast<std::size_t>(plot3DCount));
   for (int i = 0; i < plot3DCount; ++i) {
     const auto& group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
@@ -3073,22 +2917,18 @@ void UI::Dashboard::configureMultiLineSeries()
 {
   Q_ASSERT(m_points > 0);
 
-  // Release existing multiplot buffers
   m_multipltValues.clear();
   m_multipltValues.squeeze();
   m_activeMultiplots.clear();
   m_multiplotTimeRings.clear();
   m_multiplotSweep.clear();
 
-  // Reset default X-axis data
   m_multipltXAxis = DSP::AxisData(points() + 1);
   m_multipltXAxis.fillRange(0, 1);
 
-  // Construct multi-plot values structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i) {
     const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
 
-    // Shared X is a placeholder for time multiplots (the widget reads the time rings)
     DSP::MultiLineSeries series;
     series.x = &m_multipltXAxis;
     for (size_t j = 0; j < group.datasets.size(); ++j)
@@ -3097,7 +2937,6 @@ void UI::Dashboard::configureMultiLineSeries()
     m_multipltValues.append(series);
     m_activeMultiplots.insert(i, true);
 
-    // Time multiplots retain a decimating ring per curve
     if (useTimeXAxisGroup(group)) {
       const int cap = timeRingCapacity(m_plotTimeRange);
       std::vector<DSP::TimeRing> rings;
@@ -3113,7 +2952,6 @@ void UI::Dashboard::configureMultiLineSeries()
     }
   }
 
-  // Build the pre-resolved push table consumed on the hotpath
   buildMultiplotPushes();
 }
 
@@ -3138,7 +2976,6 @@ void UI::Dashboard::buildMultiplotPushes()
     auto swIt  = m_multiplotSweep.find(i);
     push.sweep = (swIt != m_multiplotSweep.end()) ? &swIt.value() : nullptr;
 
-    // Time multiplots append (display time, value) into each curve's decimating ring
     auto rIt = m_multiplotTimeRings.find(i);
     if (rIt != m_multiplotTimeRings.end()) {
       auto& rings        = rIt.value();
@@ -3147,7 +2984,6 @@ void UI::Dashboard::buildMultiplotPushes()
         push.timeCurves.push_back({&rings[j], &group.datasets[j].numericValue});
     }
 
-    // Sample/dataset multiplots push each curve value into its Y ring
     else {
       auto& multiSeries   = m_multipltValues[i];
       const size_t yCount = multiSeries.y.size();
@@ -3169,15 +3005,12 @@ void UI::Dashboard::buildMultiplotPushes()
  */
 void UI::Dashboard::configureActions(const DataModel::Frame& frame)
 {
-  // Stop if frame is not valid
   if (frame.groups.size() <= 0)
     return;
 
-  // Tear down previous actions and timers
   m_actions.clear();
   m_actions.squeeze();
 
-  // Stop and release all existing timers
   for (auto it = m_timers.begin(); it != m_timers.end(); ++it) {
     if (it.value()) {
       disconnect(it.value());
@@ -3186,57 +3019,46 @@ void UI::Dashboard::configureActions(const DataModel::Frame& frame)
     }
   }
 
-  // Clear all timers
   m_timers.clear();
   m_repeatCounters.clear();
 
-  // Load actions from the new frame
   for (const auto& action : frame.actions)
     m_actions.append(action);
 
-  // Configure timers
   if (!IO::ConnectionManager::instance().isConnected()) {
     Q_EMIT actionStatusChanged();
     return;
   }
 
-  // Execute actions & start timers (if needed)
   for (int i = 0; i < m_actions.count(); ++i) {
-    // Action does not have a timer, skip
     const auto& action = m_actions[i];
     if (action.timerMode == DataModel::TimerMode::Off)
       continue;
 
-    // Obtain the interval
     const auto interval = action.timerIntervalMs;
     if (interval <= 0) {
       qWarning() << "Interval for action" << action.title << "must be greater than 0!";
       continue;
     }
 
-    // Configure the timer
     auto* timer = new QTimer(this);
     timer->setInterval(interval);
     timer->setTimerType(Qt::PreciseTimer);
     connect(timer, &QTimer::timeout, this, [this, i]() { activateAction(i, false); });
 
-    // Auto-start for RepeatNTimes: init counter and start
     const bool isRepeat = action.timerMode == DataModel::TimerMode::RepeatNTimes;
     if (isRepeat && action.autoExecuteOnConnect) {
       m_repeatCounters[i] = qMax(1, action.repeatCount);
       timer->start();
     }
 
-    // Auto-start for other timer modes
     else if (!isRepeat
              && (action.timerMode == DataModel::TimerMode::AutoStart
                  || action.autoExecuteOnConnect))
       timer->start();
 
-    // Register the timer
     m_timers.insert(i, timer);
   }
 
-  // Notify UI about the new action set
   Q_EMIT actionStatusChanged();
 }

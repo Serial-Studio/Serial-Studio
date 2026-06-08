@@ -186,7 +186,6 @@ Token Lexer::next()
   const int line  = m_line;
   const int start = m_pos;
 
-  // Identifier or keyword
   if (c.isLetter() || c == QLatin1Char('_')) {
     while (m_pos < m_src.size()
            && (m_src[m_pos].isLetterOrNumber() || m_src[m_pos] == QLatin1Char('_')))
@@ -194,7 +193,6 @@ Token Lexer::next()
     return {Tok::Ident, m_src.mid(start, m_pos - start), line};
   }
 
-  // Numeric literal (decimal, hex, or octal)
   if (c.isDigit()) {
     while (m_pos < m_src.size()
            && (m_src[m_pos].isLetterOrNumber() || m_src[m_pos] == QLatin1Char('.')
@@ -471,7 +469,6 @@ bool Parser::parseOneof(DataModel::ProtoMessage& msg, ParseError& err)
  */
 bool Parser::parseFieldTag(int& tag, ParseError& err)
 {
-  // An out-of-spec tag corrupts the dispatch table (colliding/skipped fields); reject it.
   bool ok        = false;
   const int next = m_cur.text.toInt(&ok);
   if (!ok || next < 1 || next > kMaxProtoFieldTag) {
@@ -558,7 +555,6 @@ bool Parser::parseField(DataModel::ProtoMessage& msg, ParseError& err)
     return false;
   }
 
-  // Support dotted names like `pkg.Type` and a leading dot for absolute references.
   QString typeName = m_cur.text;
   advance();
   while (m_cur.type == Tok::Dot) {
@@ -629,7 +625,6 @@ bool Parser::parseMessage(const QString& parentQualified,
                           ParseError& err,
                           int depth)
 {
-  // Bound recursion: a crafted .proto with deep nesting would otherwise overflow the stack.
   if (depth > kMaxMessageNestingDepth) {
     err = {m_cur.line,
            QObject::tr("Message nesting too deep (limit %1)").arg(kMaxMessageNestingDepth)};
@@ -911,7 +906,6 @@ void DataModel::ProtoImporter::importProto()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -1036,7 +1030,6 @@ QJsonObject DataModel::ProtoImporter::generateProject() const
   project[Keys::Title]   = projectTitle;
   project[Keys::Actions] = QJsonArray();
 
-  // Build groups + per-occurrence dispatch records for every top-level message
   QJsonArray groups;
   QVector<DispatchRecord> dispatchRecords;
   int groupIdCounter = 0;
@@ -1115,7 +1108,6 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
     const bool isNumeric = isNumericScalar(field.scalar) && field.scalar != ProtoScalar::Bool;
     const bool isText = (field.scalar == ProtoScalar::String || field.scalar == ProtoScalar::Bytes);
 
-    // Bool -> LED, text -> log only, numeric -> plot history
     if (field.scalar == ProtoScalar::Bool) {
       d.led     = true;
       d.ledHigh = 1;
@@ -1139,7 +1131,6 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
 
   groupsOut.append(serialize(group));
 
-  // Recurse for each MessageRef field, recording child indices for parent dispatch
   for (const auto& field : message.fields) {
     if (field.scalar != ProtoScalar::MessageRef)
       continue;
@@ -1180,7 +1171,6 @@ QString DataModel::ProtoImporter::selectGroupWidget(const ProtoMessage& message)
   if (n <= 1)
     return SerialStudio::groupWidgetId(SerialStudio::NoGroupWidget);
 
-  // MultiPlot when 2-8 numeric non-bool scalars share the same wire type
   bool uniformNumeric     = (n >= 2 && n <= 8);
   ProtoScalar firstScalar = ProtoScalar::Int32;
   bool firstSet           = false;
@@ -1267,19 +1257,19 @@ static int wireTypeFor(DataModel::ProtoScalar s)
     case S::SInt32:
     case S::SInt64:
     case S::EnumRef:
-      return 0;  // varint
+      return 0;
     case S::Fixed64:
     case S::SFixed64:
     case S::Double:
-      return 1;  // 64-bit
+      return 1;
     case S::String:
     case S::Bytes:
     case S::MessageRef:
-      return 2;  // length-delimited
+      return 2;
     case S::Fixed32:
     case S::SFixed32:
     case S::Float:
-      return 5;  // 32-bit
+      return 5;
   }
   return 2;
 }
@@ -1717,7 +1707,6 @@ const DataModel::ProtoMessage* DataModel::ProtoImporter::findMessage(const QStri
   while (needle.startsWith(QLatin1Char('.')))
     needle.remove(0, 1);
 
-  // Exact qualified match across top-level + every nested level.
   std::function<const ProtoMessage*(const ProtoMessage&)> walk =
     [&](const ProtoMessage& m) -> const ProtoMessage* {
     if (m.qualifiedName == needle || m.name == needle)

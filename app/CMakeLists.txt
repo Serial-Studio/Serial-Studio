@@ -575,6 +575,10 @@ if(BUILD_COMMERCIAL)
     src/MQTT/PublisherScriptEditor.h
     src/IO/Drivers/Audio.h
     src/IO/Drivers/CANBus.h
+    src/IO/Drivers/CanBackends.h
+    src/IO/Drivers/GsUsbCanBackend.h
+    src/IO/Drivers/SlcanBackend.h
+    src/IO/Drivers/SeeedCanBackend.h
     src/IO/Drivers/Modbus.h
     src/IO/Drivers/HID.h
     src/IO/Drivers/USB.h
@@ -657,6 +661,10 @@ if(BUILD_COMMERCIAL)
     src/MQTT/PublisherScriptEditor.cpp
     src/IO/Drivers/Audio.cpp
     src/IO/Drivers/CANBus.cpp
+    src/IO/Drivers/CanBackends.cpp
+    src/IO/Drivers/GsUsbCanBackend.cpp
+    src/IO/Drivers/SlcanBackend.cpp
+    src/IO/Drivers/SeeedCanBackend.cpp
     src/IO/Drivers/Modbus.cpp
     src/IO/Drivers/HID.cpp
     src/IO/Drivers/USB.cpp

@@ -80,7 +80,6 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
  */
 void Widgets::Plot::resolveXAxis(const DataModel::Dataset& yDataset)
 {
-  // Time X-axis (free): relative seconds, monotonic like the sample index
   if (UI::Dashboard::instance().useTimeXAxis(yDataset)) {
     m_timeAxis      = true;
     m_monotonicData = true;
@@ -98,7 +97,6 @@ void Widgets::Plot::resolveXAxis(const DataModel::Dataset& yDataset)
   const auto xAxisId = -1;
 #endif
 
-  // Custom dataset X-axis (Pro)
   const auto& datasets = UI::Dashboard::instance().datasets();
   if (datasets.contains(xAxisId)) {
     m_monotonicData      = false;
@@ -110,7 +108,6 @@ void Widgets::Plot::resolveXAxis(const DataModel::Dataset& yDataset)
     return;
   }
 
-  // Default: sample index
   m_monotonicData = true;
   m_xLabel        = tr("Samples");
 }
@@ -478,18 +475,14 @@ void Widgets::Plot::pushSweepConfig()
  */
 void Widgets::Plot::updateData()
 {
-  // Share workspace data
   static thread_local DSP::DownsampleWorkspace ws;
 
-  // Stop if widget is disabled
   if (!isEnabled())
     return;
 
-  // Only obtain data if widget data is still valid
   if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
     return;
 
-  // Sweep mode: decimate the held sweep over the [0, T] window
   if (m_timeAxis && m_sweepEnabled) {
     const auto& ring = UI::Dashboard::instance().plotSweep(m_index).display(0);
     (void)DSP::downsampleWindowAbsolute(
@@ -497,7 +490,6 @@ void Widgets::Plot::updateData()
     return;
   }
 
-  // Time axis: decimate the visible window of the time ring to render columns
   if (m_timeAxis) {
     const auto& ring = UI::Dashboard::instance().plotTimeRing(m_index);
     (void)DSP::downsampleTimeWindow(
@@ -505,29 +497,23 @@ void Widgets::Plot::updateData()
     return;
   }
 
-  // Obtain plot data
   const auto& plotData = UI::Dashboard::instance().plotData(m_index);
 
-  // Downsample data that only has one Y point per X point
   if (m_monotonicData) {
     (void)DSP::downsampleMonotonic(plotData, m_dataW, m_dataH, m_data, &ws);
     return;
   }
 
-  // Draw directly on complex plots (such as Lorenz Attractor)
   const auto& X = *plotData.x;
   const auto& Y = *plotData.y;
 
-  // Resize series array if needed
   const qsizetype count = std::min(X.size(), Y.size());
   if (m_data.size() != count)
     m_data.resize(count);
 
-  // Update plot data points, avoid queue operations overhead
   if (X.capacity() == 0 || Y.capacity() == 0)
     return;
 
-  // Obtain raw pointers and queue states for faster iteration
   QPointF* out            = m_data.data();
   const auto* xData       = X.raw();
   const auto* yData       = Y.raw();
@@ -595,7 +581,6 @@ void Widgets::Plot::updateRange()
     return;
   }
 
-  // Time axis: sweep mode spans [0, timebase], rolling mode spans [-T, 0]
   if (m_timeAxis) {
     const double range    = UI::Dashboard::instance().plotTimeRange();
     const double timebase = m_timebaseMs * 0.001;
@@ -629,19 +614,15 @@ void Widgets::Plot::updateRange()
  */
 void Widgets::Plot::calculateAutoScaleRange()
 {
-  // Validate that the dataset exists
   if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
     return;
 
-  // Initialize parameters
   bool xChanged = false;
   bool yChanged = false;
 
-  // Obtain scale range for Y-axis
   const auto& dy = GET_DATASET(SerialStudio::DashboardPlot, m_index);
   yChanged = computeMinMaxValues(m_minY, m_maxY, dy, true, [](const QPointF& p) { return p.y(); });
 
-  // Obtain range scale for X-axis (time mode is anchored in updateData)
 #ifdef BUILD_COMMERCIAL
   if (const auto& tk2 = Licensing::CommercialToken::current();
       !m_timeAxis && tk2.isValid() && SS_LICENSE_GUARD()
@@ -656,7 +637,6 @@ void Widgets::Plot::calculateAutoScaleRange()
     }
   }
 
-  // X-axis data source set to samples, use [0, points] as range
   else if (!m_timeAxis) {
     const auto points = UI::Dashboard::instance().points();
 
@@ -681,18 +661,15 @@ bool Widgets::Plot::computeMinMaxValues(double& min,
                                         const bool addPadding,
                                         Extractor extractor)
 {
-  // Store previous values
   bool ok             = true;
   const auto prevMinY = min;
   const auto prevMaxY = max;
 
-  // If the data is empty, set the range to 0-1
   if (m_data.isEmpty()) {
     min = 0;
     max = 1;
   }
 
-  // Obtain min/max values from datasets
   else {
     ok &= DSP::notEqual(dataset.pltMin, dataset.pltMax);
     if (ok) {
@@ -701,9 +678,7 @@ bool Widgets::Plot::computeMinMaxValues(double& min,
     }
   }
 
-  // Set the min and max to the lowest and highest values
   if (!ok) {
-    // Get minimum and maximum values from data
     min = std::numeric_limits<double>::max();
     max = std::numeric_limits<double>::lowest();
 
@@ -740,21 +715,18 @@ void Widgets::Plot::padDerivedRange(double& min, double& max, const bool addPadd
  */
 void Widgets::Plot::applyAxisPadding(double& min, double& max, const bool addPadding)
 {
-  // If no finite values found, use default range
   if (!std::isfinite(min) || !std::isfinite(max)) {
     min = 0;
     max = 1;
     return;
   }
 
-  // If min and max are equal at zero, fall back to [-1, 1]
   if (DSP::almostEqual(min, max) && DSP::isZero(min)) {
     min = -1;
     max = 1;
     return;
   }
 
-  // If min and max are equal but non-zero, expand by 10% of |min|
   if (DSP::almostEqual(min, max)) {
     const double absValue = qAbs(min);
     min                   = min - absValue * 0.1;
@@ -762,7 +734,6 @@ void Widgets::Plot::applyAxisPadding(double& min, double& max, const bool addPad
     return;
   }
 
-  // If the min and max are not the same, set the range to 10% more
   if (addPadding) {
     double range  = max - min;
     min          -= range * 0.1;

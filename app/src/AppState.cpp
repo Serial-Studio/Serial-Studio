@@ -184,11 +184,9 @@ void AppState::onProjectFileCleared()
  */
 IO::FrameConfig AppState::deriveFrameConfig() const
 {
-  // QuickPlot and ConsoleOnly share a simple default config
   IO::FrameConfig cfg;
   cfg.operationMode = m_operationMode;
 
-  // QuickPlot: LF first (most common -> single KMP scan), then CRLF, CR.
   if (m_operationMode == SerialStudio::QuickPlot) {
     cfg.startSequences    = {};
     cfg.finishSequences   = {QByteArray("\n"), QByteArray("\r\n"), QByteArray("\r")};
@@ -197,7 +195,6 @@ IO::FrameConfig AppState::deriveFrameConfig() const
     return cfg;
   }
 
-  // Console: disable frame extraction
   if (m_operationMode == SerialStudio::ConsoleOnly) {
     cfg.startSequences    = {};
     cfg.finishSequences   = {};
@@ -206,7 +203,6 @@ IO::FrameConfig AppState::deriveFrameConfig() const
     return cfg;
   }
 
-  // Fall back to defaults if no sources are defined
   const auto& sources = DataModel::ProjectModel::instance().sources();
   if (sources.empty()) {
     cfg.startSequences    = {QByteArray("/*")};
@@ -216,27 +212,22 @@ IO::FrameConfig AppState::deriveFrameConfig() const
     return cfg;
   }
 
-  // Read delimiters and checksum from source[0]
   cfg.frameDetection = static_cast<SerialStudio::FrameDetection>(sources[0].frameDetection);
 
-  // Read IO configuration
   QByteArray startSeq;
   QByteArray finishSeq;
   DataModel::read_io_settings(
     startSeq, finishSeq, cfg.checksumAlgorithm, DataModel::serialize(sources[0]));
 
-  // Apply start/end delimiters
   cfg.startSequences  = startSeq.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{startSeq};
   cfg.finishSequences = finishSeq.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{finishSeq};
 
-  // Downgrade detection when required delimiters are empty.
   if ((cfg.frameDetection == SerialStudio::StartDelimiterOnly
        || cfg.frameDetection == SerialStudio::StartAndEndDelimiter)
       && cfg.startSequences.isEmpty()) [[unlikely]]
     cfg.frameDetection =
       cfg.finishSequences.isEmpty() ? SerialStudio::NoDelimiters : SerialStudio::EndDelimiterOnly;
 
-  // Downgrade to no delimiters in case end delimiter is empty
   if (cfg.frameDetection == SerialStudio::EndDelimiterOnly && cfg.finishSequences.isEmpty())
     [[unlikely]]
     cfg.frameDetection = SerialStudio::NoDelimiters;

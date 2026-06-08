@@ -103,7 +103,6 @@ void AI::CommandRegistry::load()
  */
 AI::Safety AI::CommandRegistry::safetyOf(const QString& commandName) const
 {
-  // Device-gated names track the toggle; AlwaysConfirm keeps per-call approval mandatory.
   if (m_deviceGated.contains(commandName))
     return m_deviceControlAllowed ? Safety::AlwaysConfirm : Safety::Blocked;
 

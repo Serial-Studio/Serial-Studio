@@ -69,7 +69,6 @@ void Sessions::DatabaseWorker::requestCancel()
  */
 void Sessions::DatabaseWorker::openDatabase(const QString& filePath)
 {
-  // Drop any prior connection on this worker thread
   closeDatabase();
   m_cancelRequested.store(false, std::memory_order_release);
 
@@ -97,12 +96,10 @@ void Sessions::DatabaseWorker::openDatabase(const QString& filePath)
     return;
   }
 
-  // WAL: writer + readers coexist without locks
   QSqlQuery pragma(m_db);
   pragma.exec("PRAGMA journal_mode=WAL");
   pragma.exec("PRAGMA busy_timeout=5000");
 
-  // Schema migration + initial caches
   ensureSchemaInternal();
   refreshSessionListInternal();
   refreshTagListInternal();
@@ -123,7 +120,6 @@ void Sessions::DatabaseWorker::closeDatabase()
   m_passwordHash.clear();
   m_locked = false;
 
-  // No live qApp means static destruction at exit(); QtSql is half-finalized, OS reclaims the file
   if (QCoreApplication::instance()) {
     if (m_db.isOpen()) {
       QSqlQuery checkpoint(m_db);
@@ -239,7 +235,6 @@ void Sessions::DatabaseWorker::setSessionNotes(int sessionId, const QString& not
     return;
   }
 
-  // Refresh the row's cached notes so QML rebinds without a full list refetch
   for (auto& v : m_sessionList) {
     auto m = v.toMap();
     if (m.value("session_id").toInt() == sessionId) {
@@ -477,7 +472,6 @@ void Sessions::DatabaseWorker::storeProjectMetadata(const QString& projectJson,
   q.bindValue(0, now);
   ok = ok && q.exec();
 
-  // First-write-wins: preserve the original creation stamp across saves
   q.prepare("INSERT INTO project_metadata (key, value) VALUES ('created_at', ?) "
             "ON CONFLICT(key) DO NOTHING");
   q.bindValue(0, now);

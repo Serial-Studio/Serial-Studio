@@ -37,14 +37,12 @@ static void openSafeLibs(lua_State* L)
     lua_pop(L, 1);
   }
 
-  // Strip filesystem loaders: dofile/loadfile/load run arbitrary code off disk
   static const char* const kUnsafe[] = {"dofile", "loadfile", "load"};
   for (const char* name : kUnsafe) {
     lua_pushnil(L);
     lua_setglobal(L, name);
   }
 
-  // Strip string.dump: bytecode exfiltration vector pairs with unsafe loaders
   lua_getglobal(L, "string");
   if (lua_istable(L, -1)) {
     lua_pushnil(L);
@@ -82,7 +80,6 @@ bool MQTT::PublisherScript::compile(const QString& source, int language, QString
   }
 
   if (language == Lua) {
-    // Tear down any previous Lua state and the JS pair to reclaim memory
     destroyLua();
     resetJs();
 
@@ -115,7 +112,6 @@ bool MQTT::PublisherScript::compile(const QString& source, int language, QString
     return true;
   }
 
-  // JavaScript path
   destroyLua();
   if (!m_jsEngine) {
     m_jsEngine = std::make_unique<QJSEngine>();
@@ -127,7 +123,6 @@ bool MQTT::PublisherScript::compile(const QString& source, int language, QString
 
   m_jsFunction = QJSValue();
 
-  // Wrap in an IIFE so top-level vars don't leak across recompiles
   const QString wrapped = QStringLiteral("(function(){\n%1\n})();").arg(source);
   const auto result     = m_jsEngine->evaluate(wrapped, QStringLiteral("mqtt-script.js"));
   if (result.isError()) {
@@ -209,7 +204,6 @@ bool MQTT::PublisherScript::run(const QByteArray& frame, QByteArray& payloadOut,
     return false;
   }
 
-  // JavaScript path
   if (!m_jsEngine || !m_jsWatchdog || !m_jsFunction.isCallable())
     return false;
 

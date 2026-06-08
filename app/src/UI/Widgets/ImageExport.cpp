@@ -92,7 +92,6 @@ void Widgets::VideoExportWorker::closeResources()
  */
 void Widgets::VideoExportWorker::closeGroup(int groupId)
 {
-  // Drain any pending frames before stopping so the recorder picks them up
   processData();
 
   auto it = m_sessions.find(groupId);
@@ -117,7 +116,6 @@ void Widgets::VideoExportWorker::processItems(const std::vector<ImageExportItem>
     if (img.isNull())
       continue;
 
-    // Convert to RGB32 so QVideoFrame accepts the buffer directly
     if (img.format() != QImage::Format_RGB32)
       img = img.convertToFormat(QImage::Format_RGB32);
 
@@ -135,7 +133,6 @@ void Widgets::VideoExportWorker::processItems(const std::vector<ImageExportItem>
     if (!session.frameInput || !session.recording)
       continue;
 
-    // Reject frames whose resolution changed mid-stream
     if (img.size() != session.frameSize) {
       img = img.scaled(session.frameSize, Qt::KeepAspectRatio, Qt::SmoothTransformation)
               .convertToFormat(QImage::Format_RGB32);
@@ -155,7 +152,6 @@ void Widgets::VideoExportWorker::processItems(const std::vector<ImageExportItem>
     if (!frame.map(QVideoFrame::WriteOnly))
       continue;
 
-    // RGB32 <-> BGRA8888: copy line-by-line (strides may differ)
     const qsizetype dstStride = frame.bytesPerLine(0);
     const qsizetype srcStride = img.bytesPerLine();
     const qsizetype copyBytes = std::min(dstStride, srcStride);
@@ -166,7 +162,6 @@ void Widgets::VideoExportWorker::processItems(const std::vector<ImageExportItem>
 
     frame.unmap();
 
-    // Real-time pacing: elapsed-microseconds frame timestamps
     const auto elapsedUs =
       std::chrono::duration_cast<std::chrono::microseconds>(item.timestamp - session.startTime)
         .count();
@@ -207,7 +202,6 @@ bool Widgets::VideoExportWorker::ensureSession(int groupId,
   session.recorder       = std::make_unique<QMediaRecorder>();
   session.frameInput     = std::make_unique<QVideoFrameInput>();
 
-  // QMediaCaptureSession routes the pushed frames to the recorder.
   session.captureSession->setVideoFrameInput(session.frameInput.get());
   session.captureSession->setRecorder(session.recorder.get());
 
@@ -220,7 +214,6 @@ bool Widgets::VideoExportWorker::ensureSession(int groupId,
 
   session.recorder->record();
 
-  // Wait for QMediaRecorder to transition to RecordingState
   QEventLoop loop;
   QTimer timeoutTimer;
   timeoutTimer.setSingleShot(true);
@@ -262,7 +255,6 @@ void Widgets::VideoExportWorker::stopSession(VideoSession& session)
   session.recording = false;
   session.recorder->stop();
 
-  // Wait for .mp4 muxer to flush its moov atom
   if (session.recorder->recorderState() != QMediaRecorder::StoppedState) {
     QEventLoop loop;
     QTimer timeoutTimer;
@@ -280,11 +272,9 @@ void Widgets::VideoExportWorker::stopSession(VideoSession& session)
     loop.exec();
   }
 
-  // Drop empty output files
   if (session.frameCount == 0)
     QFile::remove(session.outputPath);
 
-  // Detach inputs before tearing down (QMediaCaptureSession holds raw pointers)
   if (session.captureSession) {
     session.captureSession->setRecorder(nullptr);
     session.captureSession->setVideoFrameInput(nullptr);
@@ -411,7 +401,6 @@ void Widgets::ImageExport::enqueueImage(const QByteArray& data,
                                         const QString& groupTitle,
                                         const QString& projectTitle)
 {
-  // Replayed frames are never re-encoded
   if (SerialStudio::isAnyPlayerOpen())
     return;
 

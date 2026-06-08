@@ -102,7 +102,6 @@ static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& col
  */
 Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false), m_persistSettings(true)
 {
-  // Set built-in theme files (others available as extensions)
   // clang-format off
   const QStringList themes = {
       QStringLiteral("default"),
@@ -111,16 +110,13 @@ Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false), m_persi
   };
   // clang-format on
 
-  // Load theme files
   for (const auto& theme : std::as_const(themes)) {
-    // Try to read theme file
     QFile file(QStringLiteral(":/themes/%1.json").arg(theme));
     if (!file.open(QFile::ReadOnly)) {
       qWarning() << "Failed to open theme resource:" << theme;
       continue;
     }
 
-    // Try to parse JSON data
     QJsonParseError parseError;
     const auto document = QJsonDocument::fromJson(file.readAll(), &parseError);
     if (parseError.error != QJsonParseError::NoError || document.isNull()) {
@@ -128,31 +124,25 @@ Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false), m_persi
       continue;
     }
 
-    // Obtain theme title
     const auto title = document.object().value("title").toString();
     if (title.isEmpty()) {
       qWarning() << "Theme" << theme << "has no title, skipping";
       continue;
     }
 
-    // Insert theme data
     m_themes.insert(title, document.object());
     m_availableThemes.append(title);
   }
 
-  // Add fallback theme if required
   if (m_availableThemes.isEmpty()) {
     qCritical() << "No themes loaded! Adding fallback";
     m_availableThemes.append("Fallback");
   }
 
-  // Load user-installed themes from addons directory
   loadUserThemes();
 
-  // Append "System" theme as last option
   m_availableThemes.append(QStringLiteral("System"));
 
-  // Restore theme by name, with legacy index-based migration
   int themeIndex       = 0;
   const auto savedName = m_settings.value("ApplicationThemeName").toString();
   if (!savedName.isEmpty()) {
@@ -168,17 +158,14 @@ Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false), m_persi
     m_settings.remove("ApplicationTheme");
   }
 
-  // Load theme
   setTheme(themeIndex);
 
-  // Load localized theme names
   updateLocalizedThemeNames();
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
           &Misc::ThemeManager::updateLocalizedThemeNames);
 
-  // Install event filter only once
   qApp->installEventFilter(this);
 }
 
@@ -288,34 +275,28 @@ QColor Misc::ThemeManager::alarmColorForSeverity(int severity) const
  */
 void Misc::ThemeManager::setTheme(const int index)
 {
-  // Clamp index to valid range
   int filteredIndex = index;
   if (index < 0 || index >= m_availableThemes.count())
     filteredIndex = 0;
 
-  // Persist by name so addon changes don't shift the selected theme
   m_theme     = filteredIndex;
   m_themeName = m_availableThemes.at(filteredIndex);
   if (m_persistSettings)
     m_settings.setValue("ApplicationThemeName", m_themeName);
 
-  // Load theme (dark/light) automagically
   if (m_themeName == QStringLiteral("System")) {
     loadSystemTheme();
     return;
   }
 
-  // Guard against re-entrant calls from ApplicationPaletteChange events
   m_applyingTheme = true;
 
-  // Load actual theme data
   auto data      = m_themes.value(m_themeName);
   m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
 
-  // Set application palette
   m_palette.setColor(QPalette::Mid, getColor("mid"));
   m_palette.setColor(QPalette::Dark, getColor("dark"));
   m_palette.setColor(QPalette::Text, getColor("text"));
@@ -338,10 +319,8 @@ void Misc::ThemeManager::setTheme(const int index)
   m_palette.setColor(QPalette::PlaceholderText, getColor("placeholder_text"));
   m_palette.setColor(QPalette::HighlightedText, getColor("highlighted_text"));
 
-  // Notify QML bindings synchronously
   Q_EMIT themeChanged();
 
-  // Defer palette application so deleteLater() runs before ApplicationPaletteChange events
   const auto palette = m_palette;
   const auto bg      = getColor(QStringLiteral("base"));
   const auto fg      = getColor(QStringLiteral("text"));
@@ -374,15 +353,12 @@ void Misc::ThemeManager::setSettingsPersistent(const bool persistent)
  */
 void Misc::ThemeManager::loadSystemTheme()
 {
-  // Guard re-entry from ApplicationPaletteChange triggered by the setters below
   m_applyingTheme = true;
 
-  // Get system color scheme
   qApp->setPalette(QPalette());
   qApp->styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
   const auto scheme = qApp->styleHints()->colorScheme();
 
-  // Get theme name to load
   QString resolved;
   if (scheme == Qt::ColorScheme::Dark)
     resolved = QStringLiteral("Fluent Dark");
@@ -391,10 +367,8 @@ void Misc::ThemeManager::loadSystemTheme()
   else
     resolved = QStringLiteral("Fluent Light");
 
-  // Load theme data
   const auto data = m_themes.value(resolved);
 
-  // Set theme data
   m_themeName    = QStringLiteral("System");
   m_theme        = m_availableThemes.indexOf(m_themeName);
   m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
@@ -402,7 +376,6 @@ void Misc::ThemeManager::loadSystemTheme()
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
 
-  // Notify QML bindings synchronously
   Q_EMIT themeChanged();
 
   m_applyingTheme = false;
@@ -417,7 +390,6 @@ void Misc::ThemeManager::loadSystemTheme()
  */
 void Misc::ThemeManager::updateLocalizedThemeNames()
 {
-  // Rebuild theme names list using current UI language
   m_availableThemeNames.clear();
   const auto lang = Translator::instance().language();
 
@@ -508,7 +480,6 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
 
 bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
 {
-  // Reload theme when the system palette changes and "System" is selected
   if (event->type() == QEvent::ApplicationPaletteChange && m_themeName == QStringLiteral("System")
       && !m_applyingTheme) {
     loadSystemTheme();
@@ -527,7 +498,6 @@ bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
  */
 void Misc::ThemeManager::loadUserThemes()
 {
-  // Remove previously loaded user themes
   for (const auto& name : std::as_const(m_userThemeNames)) {
     m_themes.remove(name);
     m_availableThemes.removeAll(name);
@@ -535,7 +505,6 @@ void Misc::ThemeManager::loadUserThemes()
 
   m_userThemeNames.clear();
 
-  // Scan addons themes directory
   const auto themesDir = Misc::WorkspaceManager::instance().path("Extensions/theme");
   QDir dir(themesDir);
   if (!dir.exists())
@@ -599,7 +568,6 @@ void Misc::ThemeManager::onExtensionInstalled(const QString& id)
   loadUserThemes();
   m_availableThemes.append(QStringLiteral("System"));
 
-  // Only auto-switch to the newly installed theme if it's a theme extension
   const auto& ext    = Misc::ExtensionManager::instance();
   const auto info    = ext.selectedExtension();
   const bool isTheme = id.isEmpty() || info.value("type").toString() == QStringLiteral("theme");
@@ -620,7 +588,6 @@ void Misc::ThemeManager::onExtensionInstalled(const QString& id)
     }
   }
 
-  // Preserve current selection index
   const int idx = m_availableThemes.indexOf(m_themeName);
   if (idx >= 0)
     m_theme = idx;
@@ -647,7 +614,6 @@ void Misc::ThemeManager::onExtensionUninstalled(const QString& id)
   else
     setTheme(0);
 
-  // Update localized names
   updateLocalizedThemeNames();
   Q_EMIT languageChanged();
 }

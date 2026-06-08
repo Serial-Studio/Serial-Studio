@@ -252,7 +252,6 @@ void BenchmarkRunner::buildPhases(
 {
   m_phases.clear();
 
-  // The data pipeline always runs: it is the lower bound every parser path builds on.
   m_phases.push_back({-1, false, false, false, true, kDataPipelineFps, tr("Data pipeline")});
 
   if (parsers)
@@ -413,7 +412,6 @@ void BenchmarkRunner::start(int framesIndex,
   if (m_running)
     return;
 
-  // Guard against an empty schedule: a section and a variant must both be chosen.
   if (!(parsers || dataExport || dashboard) || !(numeric || mixed))
     return;
 
@@ -448,15 +446,12 @@ void BenchmarkRunner::start(int framesIndex,
  */
 void BenchmarkRunner::beginSession()
 {
-  // Snapshot the project so the synthetic benchmark project can be reverted afterwards.
   m_savedMode        = AppState::instance().operationMode();
   m_savedProjectPath = AppState::instance().projectFilePath();
 
-  // Pin a fixed 10 s plot window so the dashboard phase has a defined axis range to render.
   m_savedPlotTimeRange = UI::Dashboard::instance().plotTimeRange();
   UI::Dashboard::instance().setPlotTimeRange(10.0);
 
-  // Snapshot consumer toggles: HotpathBenchmark forces them on/off; restored verbatim afterward.
   m_savedCsvExport = CSV::Export::instance().exportEnabled();
   m_savedApiServer = API::Server::instance().enabled();
 #ifdef BUILD_COMMERCIAL
@@ -467,7 +462,6 @@ void BenchmarkRunner::beginSession()
   m_savedGrpcServer = API::GRPC::GRPCServer::instance().enabled();
 #endif
 
-  // Redirect every exporter into a temp workspace, isolating output from the user's real data.
   m_tempWorkspace = std::make_unique<QTemporaryDir>();
   if (m_tempWorkspace->isValid())
     Misc::WorkspaceManager::instance().setTemporaryPath(m_tempWorkspace->path());
@@ -478,14 +472,11 @@ void BenchmarkRunner::beginSession()
  */
 void BenchmarkRunner::endSession()
 {
-  // Restore the workspace path; destroying the QTemporaryDir deletes every generated file.
   Misc::WorkspaceManager::instance().clearTemporaryPath();
   m_tempWorkspace.reset();
 
-  // Restore the user's plot window.
   UI::Dashboard::instance().setPlotTimeRange(m_savedPlotTimeRange);
 
-  // Restore consumer toggles to the user's pre-benchmark choices.
   CSV::Export::instance().setExportEnabled(m_savedCsvExport);
   API::Server::instance().setEnabled(m_savedApiServer);
 #ifdef BUILD_COMMERCIAL
@@ -496,11 +487,9 @@ void BenchmarkRunner::endSession()
   API::GRPC::GRPCServer::instance().setEnabled(m_savedGrpcServer);
 #endif
 
-  // Drop setupProject()'s headless API mode before the reload so a failed reload is not silent.
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
   DataModel::FrameParser::instance().setSuppressMessageBoxes(false);
 
-  // Reload the user's project, or fall back to the prior mode with a clean dashboard.
   if (!m_savedProjectPath.isEmpty()) {
     AppState::instance().setOperationMode(SerialStudio::ProjectFile);
     (void)DataModel::ProjectModel::instance().openJsonFile(m_savedProjectPath);

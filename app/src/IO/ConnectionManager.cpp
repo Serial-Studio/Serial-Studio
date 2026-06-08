@@ -83,14 +83,11 @@ IO::ConnectionManager::ConnectionManager()
   , m_usbUi(std::make_unique<IO::Drivers::USB>())
 #endif
 {
-  // Re-evaluate configuration when bus type changes
   connect(this, &ConnectionManager::busTypeChanged, this, &ConnectionManager::configurationChanged);
 
-  // Configuration changes may affect connected state
   connect(
     this, &ConnectionManager::configurationChanged, this, &ConnectionManager::connectedChanged);
 
-  // Debounce project autosaves triggered by UI-driver edits (e.g. typing in port fields)
   m_uiDriverSaveTimer.setSingleShot(true);
   m_uiDriverSaveTimer.setInterval(750);
   connect(&m_uiDriverSaveTimer, &QTimer::timeout, this, [] {
@@ -107,7 +104,6 @@ IO::ConnectionManager::ConnectionManager()
     (void)model.saveJsonFile(false);
   });
 
-  // Disconnect all devices on application quit
   connect(qApp, &QApplication::aboutToQuit, this, &ConnectionManager::disconnectAllDevices);
 }
 
@@ -300,7 +296,6 @@ IO::HAL_Driver* IO::ConnectionManager::driver(int deviceId) const
  */
 IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
 {
-  // Find the matching source entry
   const auto& sources             = DataModel::ProjectModel::instance().sources();
   const DataModel::Source* srcPtr = nullptr;
   for (const auto& src : sources) {
@@ -313,7 +308,6 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
   if (!srcPtr)
     return nullptr;
 
-  // Apply saved connectionSettings to the UI driver
   const auto busType = static_cast<SerialStudio::BusType>(srcPtr->busType);
   HAL_Driver* uiDrv  = uiDriverForBusType(busType);
   if (!uiDrv)
@@ -325,7 +319,6 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
     m_syncingFromProject = false;
   }
 
-  // Start BLE discovery so the editor's device list populates
   if (busType == SerialStudio::BusType::BluetoothLE) {
     auto* ble = qobject_cast<IO::Drivers::BluetoothLE*>(uiDrv);
     if (ble && ble->deviceCount() == 0)
@@ -517,7 +510,6 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
   if (payload.isEmpty())
     return;
 
-  // Forward payload to console, API server, and frame builder
   static auto& console      = Console::Handler::instance();
   static auto& server       = API::Server::instance();
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
@@ -548,17 +540,14 @@ void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayl
   if (fullPayload.isEmpty())
     return;
 
-  // Cache singleton references for the hotpath
   static auto& console      = Console::Handler::instance();
   static auto& server       = API::Server::instance();
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
 
-  // Forward full payload to console and API for display
   const auto captured = makeCapturedData(fullPayload);
   server.hotpathTxData(captured->data);
   console.hotpathRxData(captured->data);
 
-  // Route each source's data through per-source frame building
   for (auto it = sourcePayloads.constBegin(); it != sourcePayloads.constEnd(); ++it)
     frameBuilder.hotpathRxSourceFrame(it.key(), makeCapturedData(it.value(), captured->timestamp));
 
@@ -634,7 +623,6 @@ void IO::ConnectionManager::connectDevice()
   }
 #endif
 
-  // Wait cursor while drivers run their synchronous open() handshake
   QApplication::setOverrideCursor(Qt::WaitCursor);
 
   connectDevice(0);
@@ -651,7 +639,6 @@ void IO::ConnectionManager::connectDevice()
  */
 void IO::ConnectionManager::disconnectDevice()
 {
-  // Wait cursor while drivers tear down (BLE/Modbus/Audio finalizers can stall briefly)
   QApplication::setOverrideCursor(Qt::WaitCursor);
 
   disconnectDevice(0);
@@ -709,7 +696,6 @@ void IO::ConnectionManager::wireUiDriver(IO::HAL_Driver* driver)
  */
 void IO::ConnectionManager::setupExternalConnections()
 {
-  // Restore persisted bus type selection
   auto savedBusType = m_settings.value("IOManager/busType", 0).toInt();
   if (savedBusType < 0 || savedBusType >= availableBuses().count())
     savedBusType = 0;
@@ -719,7 +705,6 @@ void IO::ConnectionManager::setupExternalConnections()
 
   setBusType(static_cast<SerialStudio::BusType>(savedBusType));
 
-  // Let drivers that need post-construction init run it now
   m_uartUi->setupExternalConnections();
 #ifdef BUILD_COMMERCIAL
   m_modbusUi->setupExternalConnections();
@@ -727,13 +712,11 @@ void IO::ConnectionManager::setupExternalConnections()
   m_usbUi->setupExternalConnections();
 #endif
 
-  // Refresh bus name translations when language changes
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
           &IO::ConnectionManager::busListChanged);
 
-  // Rebuild DeviceManagers inline with project source-list changes (DirectConnection)
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::sourceStructureChanged,
           this,
@@ -746,7 +729,6 @@ void IO::ConnectionManager::setupExternalConnections()
           &IO::ConnectionManager::onProjectSourceChanged,
           Qt::DirectConnection);
 
-  // Recreate FrameReader when frame config changes (delimiters, detection mode)
   connect(
     &AppState::instance(),
     &AppState::frameConfigChanged,
@@ -754,14 +736,12 @@ void IO::ConnectionManager::setupExternalConnections()
     [this](const IO::FrameConfig&) { resetFrameReader(); },
     Qt::QueuedConnection);
 
-  // Rebuild when operation mode changes
   connect(&AppState::instance(),
           &AppState::operationModeChanged,
           this,
           &IO::ConnectionManager::rebuildDevices,
           Qt::QueuedConnection);
 
-  // Wire UI drivers for save + sync + forward
   wireUiDriver(m_uartUi.get());
   wireUiDriver(m_networkUi.get());
   wireUiDriver(m_bluetoothLEUi.get());
@@ -775,7 +755,6 @@ void IO::ConnectionManager::setupExternalConnections()
   wireUiDriver(m_usbUi.get());
 #endif
 
-  // Notify when device lists change so the editor refreshes
   auto clearEditing = [this]() {
     Q_EMIT deviceListRefreshed();
   };
@@ -861,7 +840,6 @@ void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
   if (!driver)
     return;
 
-  // Locate the device id whose live driver matches the caller
   int deviceId = -1;
   for (const auto& [id, dm] : m_devices) {
     if (dm && dm->driver() == driver) {
@@ -873,10 +851,8 @@ void IO::ConnectionManager::disconnectDevice(HAL_Driver* driver)
   if (deviceId < 0)
     return;
 
-  // Close just this source
   disconnectDevice(deviceId);
 
-  // Full teardown only if no sources remain connected
   if (!isConnected()) {
     DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
     Q_EMIT driverChanged();
@@ -956,7 +932,6 @@ void IO::ConnectionManager::setChecksumAlgorithm(const QString& algorithm)
  */
 void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 {
-  // Fast path: reconcile source[0].busType so project.new resets stay in sync
   if (m_busType == type && m_devices.find(0) != m_devices.end()) {
     const auto opMode = AppState::instance().operationMode();
     auto& model       = DataModel::ProjectModel::instance();
@@ -971,32 +946,27 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
   m_busType = type;
   m_settings.setValue("IOManager/busType", static_cast<int>(type));
 
-  // Persist user's manual selection for mode-switch restore
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     m_settings.setValue("IOManager/userBusType", static_cast<int>(type));
 
   auto driver = createDriver(type);
 
-  // Start BLE discovery when selected
   if (type == SerialStudio::BusType::BluetoothLE) {
     if (m_bluetoothLEUi->operatingSystemSupported())
       m_bluetoothLEUi->startDiscovery();
   }
 
   if (driver) {
-    // Copy UI-config driver properties into the fresh live driver
     HAL_Driver* uiDriver = activeUiDriver();
     if (uiDriver)
       for (const auto& prop : uiDriver->driverProperties())
         driver->setDriverProperty(prop.key, prop.value);
 
-    // Re-evaluate configurationOk when the live driver changes
     connect(driver.get(),
             &IO::HAL_Driver::configurationChanged,
             this,
             &IO::ConnectionManager::configurationChanged);
 
-    // BLE uses deviceConnectedChanged instead of open/close signals
     if (type == SerialStudio::BusType::BluetoothLE) {
       auto* ble = qobject_cast<IO::Drivers::BluetoothLE*>(driver.get());
       if (ble)
@@ -1006,7 +976,6 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
                 &IO::ConnectionManager::connectedChanged);
     }
 
-    // Create DeviceManager and replace previous device 0
     auto dm = std::make_unique<DeviceManager>(0, std::move(driver), buildFrameConfig(0), this);
     wireDevice(dm.get());
 
@@ -1016,7 +985,6 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 
     m_devices[0] = std::move(dm);
   } else {
-    // No driver for this bus type: remove device 0 entirely
     auto existing = m_devices.find(0);
     if (existing != m_devices.end()) {
       if (existing->second)
@@ -1029,7 +997,6 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
   Q_EMIT driverChanged();
   Q_EMIT busTypeChanged();
 
-  // Keep source[0].busType in sync for single-source projects
   const auto opMode = AppState::instance().operationMode();
   auto& model       = DataModel::ProjectModel::instance();
   if (opMode == SerialStudio::ProjectFile && model.sources().size() == 1) {
@@ -1045,15 +1012,15 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Mirrors all properties from the active UI-config driver to the live DeviceManager driver.
+ * @brief Mirrors all properties from the active UI-config driver to the live DeviceManager driver;
+ * the live driver is signal-blocked to suppress its fan-out (the UI driver's configurationChanged
+ * still notifies downstream, so nothing is lost).
  */
 void IO::ConnectionManager::syncUiDriverToLive()
 {
-  // Re-entrancy guard: skip while syncing from project
   if (m_syncingFromProject)
     return;
 
-  // Only sync in single-source or non-ProjectFile modes
   const auto& srcs = DataModel::ProjectModel::instance().sources();
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile && srcs.size() > 1)
     return;
@@ -1066,14 +1033,15 @@ void IO::ConnectionManager::syncUiDriverToLive()
   if (!liveDriver || liveDriver == uiDriver)
     return;
 
-  // Block live-driver fan-out (UI driver's configurationChanged still notifies downstream).
   QSignalBlocker blocker(liveDriver);
   for (const auto& prop : uiDriver->driverProperties())
     liveDriver->setDriverProperty(prop.key, prop.value);
 }
 
 /**
- * @brief Applies source[0]'s busType and connectionSettings to the matching UI-config driver.
+ * @brief Applies source[0]'s busType and connectionSettings to the matching UI-config driver;
+ * unsaved projects (empty json path) are skipped so API-configured hardware settings aren't
+ * clobbered.
  */
 void IO::ConnectionManager::syncUiDriverFromSource0()
 {
@@ -1084,7 +1052,6 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
   if (opMode != SerialStudio::ProjectFile || srcs.size() != 1)
     return;
 
-  // Skip unsaved projects to preserve API-configured hardware settings
   if (model.jsonFilePath().isEmpty())
     return;
 
@@ -1099,7 +1066,6 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
     Q_EMIT busTypeChanged();
   }
 
-  // Apply saved connection settings to the UI driver
   HAL_Driver* uiDriver = uiDriverForBusType(newType);
   if (uiDriver && !src.connectionSettings.isEmpty())
     uiDriver->applyConnectionSettings(src.connectionSettings);
@@ -1109,14 +1075,14 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
 }
 
 /**
- * @brief Connects a DeviceManager's output signals to ConnectionManager's routing slots.
+ * @brief Connects a DeviceManager's output signals to ConnectionManager's routing slots; the hops
+ * are DirectConnection to avoid per-frame postEvent overhead on the main-thread hotpath hop.
  */
 void IO::ConnectionManager::wireDevice(DeviceManager* dm)
 {
   Q_ASSERT(dm);
   Q_ASSERT(dm->driver());
 
-  // DirectConnection: avoid per-frame postEvent overhead on main-thread hop
   connect(dm,
           &IO::DeviceManager::frameReady,
           this,
@@ -1135,41 +1101,33 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
  */
 void IO::ConnectionManager::onUiDriverConfigurationChanged()
 {
-  // Re-entrancy guard: skip while applying project settings
   if (m_syncingFromProject)
     return;
 
-  // Only persist in single-source ProjectFile mode
   const auto opMode = AppState::instance().operationMode();
   auto& model       = DataModel::ProjectModel::instance();
 
   if (opMode != SerialStudio::ProjectFile || model.sources().size() != 1)
     return;
 
-  // Resolve the active UI driver for the current bus type
   HAL_Driver* uiDriver = activeUiDriver();
   if (!uiDriver)
     return;
 
-  // Discard signals from non-active UI drivers (bus type mismatch)
   if (sender() && sender() != uiDriver)
     return;
 
-  // Snapshot driver properties into a JSON object
   QJsonObject settings;
   for (const auto& prop : uiDriver->driverProperties())
     settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
 
-  // Append stable hardware identifiers for cross-platform device matching
   const auto deviceId = uiDriver->deviceIdentifier();
   if (!deviceId.isEmpty())
     settings.insert(QStringLiteral("deviceId"), deviceId);
 
-  // Persist connection settings and bus type into source[0]
   model.setSource0ConnectionSettings(settings);
   model.setSource0BusType(static_cast<int>(m_busType));
 
-  // Debounce the file-system save so per-keystroke edits don't thrash disk I/O
   if (!model.jsonFilePath().isEmpty())
     m_uiDriverSaveTimer.start();
 }
@@ -1187,11 +1145,9 @@ void IO::ConnectionManager::buildDeviceForSource(const DataModel::Source& src,
   if (!driver)
     return;
 
-  // Apply saved connection settings (port, baud, device index, etc.)
   if (!src.connectionSettings.isEmpty())
     driver->applyConnectionSettings(src.connectionSettings);
 
-  // Wrap driver in a DeviceManager (owns driver + thread + FrameReader)
   auto* rawDriver = driver.get();
   auto dm         = std::make_unique<DeviceManager>(
     src.sourceId, std::move(driver), buildFrameConfig(src.sourceId), this);
@@ -1211,11 +1167,9 @@ void IO::ConnectionManager::buildDeviceForSource(const DataModel::Source& src,
  */
 void IO::ConnectionManager::rebuildDevices()
 {
-  // Snapshot current state before rebuilding
   const auto opMode       = AppState::instance().operationMode();
   const bool wasConnected = isConnected();
 
-  // Only rebuild device 0 if it has saved connectionSettings
   bool willRebuildDevice0 = (opMode != SerialStudio::ProjectFile);
   bool didChangeBusType   = false;
   if (opMode == SerialStudio::ProjectFile) {
@@ -1228,7 +1182,6 @@ void IO::ConnectionManager::rebuildDevices()
       const bool busTypeChanged = m_busType != static_cast<SerialStudio::BusType>(src.busType);
       willRebuildDevice0 = missingPrimary || busTypeChanged || !src.connectionSettings.isEmpty();
 
-      // Keep m_busType in sync so setBusType() fast-path matches the live driver
       if (busTypeChanged && willRebuildDevice0) {
         m_busType = static_cast<SerialStudio::BusType>(src.busType);
         m_settings.setValue("IOManager/busType", static_cast<int>(m_busType));
@@ -1239,7 +1192,6 @@ void IO::ConnectionManager::rebuildDevices()
     }
   }
 
-  // Tear down devices that will be rebuilt
   for (auto it = m_devices.begin(); it != m_devices.end();) {
     const bool skipPrimary = (it->first == 0 && !willRebuildDevice0);
     if (skipPrimary) {
@@ -1255,14 +1207,12 @@ void IO::ConnectionManager::rebuildDevices()
     it = m_devices.erase(it);
   }
 
-  // Create DeviceManagers from project sources
   if (opMode == SerialStudio::ProjectFile) {
     const auto& sources = DataModel::ProjectModel::instance().sources();
     for (const auto& src : sources)
       buildDeviceForSource(src, willRebuildDevice0);
   }
 
-  // Notify QML and dependent systems that the device topology changed
   Q_EMIT configurationChanged();
   Q_EMIT driverChanged();
   Q_EMIT connectedChanged();
@@ -1271,7 +1221,6 @@ void IO::ConnectionManager::rebuildDevices()
   if (didChangeBusType)
     Q_EMIT busTypeChanged();
 
-  // Sync UI drivers (ProjectFile) or restore user bus type (other modes)
   if (opMode == SerialStudio::ProjectFile) {
     QMetaObject::invokeMethod(
       this, &IO::ConnectionManager::syncUiDriverFromSource0, Qt::QueuedConnection);
@@ -1285,7 +1234,6 @@ void IO::ConnectionManager::rebuildDevices()
       this, [this, restored] { setBusType(restored); }, Qt::QueuedConnection);
   }
 
-  // Restore the prior connected state if any
   if (wasConnected)
     QMetaObject::invokeMethod(this, [this] { connectDevice(); }, Qt::QueuedConnection);
 }
@@ -1371,7 +1319,6 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::CapturedDa
   server.hotpathTxData(data->data);
   console.hotpathRxDeviceData(deviceId, data->data);
 
-  // Route incoming data to file transfer protocols
   if (fileTx.active()) [[unlikely]]
     fileTx.onRawDataReceived(data->data);
 
@@ -1400,11 +1347,9 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 {
   const auto opMode = AppState::instance().operationMode();
 
-  // QuickPlot/ConsoleOnly have fixed configs: use AppState
   if (opMode == SerialStudio::QuickPlot || opMode == SerialStudio::ConsoleOnly)
     return AppState::instance().frameConfig();
 
-  // ProjectFile mode: read from source settings
   FrameConfig cfg;
   cfg.operationMode = opMode;
 
@@ -1413,7 +1358,6 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
     if (src.sourceId != deviceId)
       continue;
 
-    // Extract delimiter/checksum from the source's JSON representation
     QByteArray start, end;
     QString checksum;
     DataModel::read_io_settings(start, end, checksum, DataModel::serialize(src));
@@ -1423,7 +1367,6 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
     cfg.checksumAlgorithm = checksum;
     cfg.frameDetection    = static_cast<SerialStudio::FrameDetection>(src.frameDetection);
 
-    // Downgrade frame detection when delimiters are empty
     if ((cfg.frameDetection == SerialStudio::StartDelimiterOnly
          || cfg.frameDetection == SerialStudio::StartAndEndDelimiter)
         && cfg.startSequences.isEmpty()) [[unlikely]]
@@ -1437,7 +1380,6 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
     return cfg;
   }
 
-  // Fall back to defaults when no source matches
   cfg.startSequences    = {QByteArray("/*")};
   cfg.finishSequences   = {QByteArray("*/")};
   cfg.checksumAlgorithm = QString();

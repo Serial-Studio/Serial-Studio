@@ -26,8 +26,26 @@
 #include <QLoggingCategory>
 #include <stdexcept>
 
+#include "IO/Drivers/CanBackends.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
+
+//--------------------------------------------------------------------------------------------------
+// Synthetic (libusb/serial) CAN backend plugin helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the Qt CAN plugins plus every supported synthetic backend.
+ */
+static QStringList enumerateCanPlugins()
+{
+  QStringList list = QCanBus::instance()->plugins();
+  for (const auto& backend : IO::Drivers::CanBackends::all())
+    if (backend.supported)
+      list.append(backend.key);
+
+  return list;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
@@ -39,7 +57,7 @@
 IO::Drivers::CANBus::CANBus()
   : m_device(nullptr), m_canFD(false), m_pluginIndex(0), m_interfaceIndex(0), m_bitrate(500000)
 {
-  m_pluginList = QCanBus::instance()->plugins();
+  m_pluginList = enumerateCanPlugins();
 
   m_canFD          = m_settings.value("CanBusDriver/canFD", false).toBool();
   m_bitrate        = m_settings.value("CanBusDriver/bitrate", 500000).toUInt();
@@ -147,7 +165,9 @@ bool IO::Drivers::CANBus::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes a CAN frame ([ID_hi, ID_lo, DLC, payload...]) to the bus.
+ * @brief Writes a CAN frame ([ID_hi, ID_lo, DLC, payload...]) to the bus, capping DLC at the
+ * format limit (8 classic, 64 FD). Extended-ID (29-bit, set when the ID exceeds 0x7FF) and CAN
+ * FD rate-switch are orthogonal flags and are applied independently.
  */
 qint64 IO::Drivers::CANBus::write(const QByteArray& data)
 {
@@ -160,7 +180,6 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
   if (data.length() < 3)
     return 0;
 
-  // Parse CAN ID, DLC, and payload from the input buffer
   try {
     quint32 can_id = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
 
@@ -174,7 +193,6 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
 
     QCanBusFrame frame(can_id, payload);
 
-    // Extended ID (29-bit) and CAN FD (rate-switch) are orthogonal flags.
     if (can_id > 0x7FF)
       frame.setExtendedFrameFormat(true);
 
@@ -217,7 +235,10 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   QString interface = m_interfaceList.at(m_interfaceIndex);
 
   QString error;
-  m_device = QCanBus::instance()->createDevice(plugin, interface, &error);
+  if (const auto* backend = IO::Drivers::CanBackends::find(plugin))
+    m_device = backend->create(interface);
+  else
+    m_device = QCanBus::instance()->createDevice(plugin, interface, &error);
 
   if (!m_device) {
     Misc::Utilities::showMessageBox(
@@ -420,6 +441,9 @@ QStringList IO::Drivers::CANBus::bitrateList() const
  */
 QString IO::Drivers::CANBus::pluginDisplayName(const QString& plugin) const
 {
+  if (const auto* backend = IO::Drivers::CanBackends::find(plugin))
+    return backend->displayName;
+
   if (plugin == "socketcan")
     return "SocketCAN";
 
@@ -515,7 +539,8 @@ void IO::Drivers::CANBus::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles incoming CAN bus frames and publishes them as [ID_hi, ID_lo, DLC, payload...].
+ * @brief Drains every available CAN frame and publishes each as [ID_hi, ID_lo, DLC, payload...]
+ * zero-padded to a fixed 11 bytes; payloads larger than 64 bytes are dropped as malformed.
  */
 void IO::Drivers::CANBus::onFramesReceived()
 {
@@ -525,7 +550,6 @@ void IO::Drivers::CANBus::onFramesReceived()
   if (!isOpen())
     return;
 
-  // Process all available frames from the CAN bus device
   try {
     while (m_device->framesAvailable() > 0) {
       const QCanBusFrame frame = m_device->readFrame();
@@ -533,12 +557,10 @@ void IO::Drivers::CANBus::onFramesReceived()
       if (!frame.isValid())
         continue;
 
-      // Skip oversized payloads
       const QByteArray payload = frame.payload();
       if (payload.size() > 64)
         continue;
 
-      // Build output: [ID_hi, ID_lo, DLC, data...] padded to 11 bytes
       QByteArray data;
       data.reserve(11);
 
@@ -604,6 +626,9 @@ QString IO::Drivers::CANBus::noInterfacesHint(const QString& plugin) const
 {
   const QString driverName = pluginDisplayName(plugin);
 
+  if (IO::Drivers::CanBackends::find(plugin))
+    return tr("Connect a %1 adapter, then refresh").arg(driverName);
+
 #if defined(Q_OS_LINUX)
   if (plugin == "socketcan")
     return tr("Load SocketCAN kernel modules first");
@@ -643,7 +668,6 @@ void IO::Drivers::CANBus::refreshInterfaces()
   m_interfaceList.clear();
   m_interfaceError.clear();
 
-  // Abort if no valid plugin is selected
   if (m_pluginList.isEmpty() || m_pluginIndex >= m_pluginList.count()) {
     m_interfaceError = tr("No CAN driver selected");
     Q_EMIT interfaceErrorChanged();
@@ -651,25 +675,27 @@ void IO::Drivers::CANBus::refreshInterfaces()
     return;
   }
 
-  // Query available interfaces from the selected plugin
   QString plugin = m_pluginList[m_pluginIndex];
-  QString error;
 
-  const QList<QCanBusDeviceInfo> interfaces = QCanBus::instance()->availableDevices(plugin, &error);
+  if (const auto* backend = IO::Drivers::CanBackends::find(plugin)) {
+    m_interfaceList = backend->availableInterfaces();
+  } else {
+    QString error;
+    const QList<QCanBusDeviceInfo> interfaces =
+      QCanBus::instance()->availableDevices(plugin, &error);
 
-  if (!error.isEmpty())
-    qWarning() << "CAN plugin error:" << plugin << error;
+    if (!error.isEmpty())
+      qWarning() << "CAN plugin error:" << plugin << error;
 
-  for (const QCanBusDeviceInfo& info : interfaces)
-    m_interfaceList.append(info.name());
+    for (const QCanBusDeviceInfo& info : interfaces)
+      m_interfaceList.append(info.name());
+  }
 
-  // Provide a platform-specific hint when no interfaces are found
   if (m_interfaceList.isEmpty() && m_interfaceError.isEmpty()) {
     m_interfaceError = noInterfacesHint(plugin);
     Q_EMIT interfaceErrorChanged();
   }
 
-  // Clamp index if the selected interface was removed
   if (m_interfaceIndex >= m_interfaceList.count()) {
     m_interfaceIndex = 0;
     m_settings.setValue("CanBusDriver/interfaceIndex", 0);
@@ -683,13 +709,11 @@ void IO::Drivers::CANBus::refreshInterfaces()
  */
 void IO::Drivers::CANBus::refreshPlugins()
 {
-  const QStringList currentPlugins = QCanBus::instance()->plugins();
+  const QStringList currentPlugins = enumerateCanPlugins();
 
-  // Update only if the plugin list changed
   if (m_pluginList != currentPlugins) {
     m_pluginList = currentPlugins;
 
-    // Clamp index if the selected plugin was removed
     if (m_pluginIndex >= m_pluginList.count()) {
       m_pluginIndex = m_pluginList.isEmpty()
                       ? 0
@@ -760,7 +784,9 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
 }
 
 /**
- * @brief Applies a single CAN Bus configuration change by key.
+ * @brief Applies a single CAN Bus configuration change by key. The bitrate value is overloaded:
+ * a value >= 10000 is a raw bitrate in bits/s, anything smaller is treated as an index into
+ * bitrateList().
  */
 void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& value)
 {
@@ -782,7 +808,6 @@ void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& 
   if (key != QLatin1String("bitrate"))
     return;
 
-  // Bitrate accepts either a raw rate or an index into bitrateList()
   const auto v = value.toUInt();
   if (v >= 10000) {
     setBitrate(static_cast<quint32>(v));

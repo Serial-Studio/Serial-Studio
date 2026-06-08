@@ -72,7 +72,6 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
   , m_plan(nullptr)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index)) {
-    // Clamp fftSamples: project JSON is user-controlled, unbounded would OOM
     static constexpr int kMaxFftSamples = 65536;
     const auto& dataset                 = GET_DATASET(SerialStudio::DashboardFFT, m_index);
     const int clampedSamples            = qBound(8, dataset.fftSamples, kMaxFftSamples);
@@ -83,7 +82,6 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
     m_minY                              = -100;
     m_maxX                              = m_samplingRate / 2;
 
-    // Allocate FFT buffers and build Blackman-Harris window
     m_samples.resize(m_size);
     m_fftOutput.resize(m_size);
     m_window.resize(m_size);
@@ -91,14 +89,12 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
     for (unsigned int i = 0; i < windowSize; ++i)
       m_window[i] = blackman_harris_coeff(i, windowSize);
 
-    // Create FFT plan
     m_plan = kiss_fft_alloc(m_size, 0, nullptr, nullptr);
     if (!m_plan) {
       qWarning() << "FFT plan allocation failed for size:" << m_size;
       return;
     }
 
-    // Configure input normalization from user-defined scale
     double minVal = dataset.fftMin;
     double maxVal = dataset.fftMax;
     if (std::isfinite(minVal) && std::isfinite(maxVal)) {
@@ -383,7 +379,6 @@ void Widgets::FFTPlot::updateData()
   if (!VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
     return;
 
-  // Fetch time-domain data
   const auto& data  = UI::Dashboard::instance().fftData(m_index);
   const int newSize = static_cast<int>(data.size());
   if (newSize != m_size && !rebuildFftPlan(newSize))
@@ -392,7 +387,6 @@ void Widgets::FFTPlot::updateData()
   if (newSize <= 0)
     return;
 
-  // Normalize time-domain input samples into [-1, 1] range
   const double* in       = data.raw();
   std::size_t idx        = data.frontIndex();
   const std::size_t mask = data.storageMask();
@@ -406,7 +400,6 @@ void Widgets::FFTPlot::updateData()
     idx              = (idx + 1) & mask;
   }
 
-  // Run FFT, smooth the resulting spectrum, and downsample for the line series
   kiss_fft(m_plan, m_samples.data(), m_fftOutput.data());
   const int spectrumSize = static_cast<size_t>(m_size) / 2;
   computeSmoothedSpectrum(spectrumSize);

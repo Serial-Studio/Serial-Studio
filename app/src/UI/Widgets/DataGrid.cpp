@@ -252,11 +252,9 @@ void Widgets::DataGrid::rebuildRows()
  */
 QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset) const
 {
-  // Leave the cell empty so the QML side can paint its placeholder
   if (dataset.value.isEmpty())
     return QString();
 
-  // The hotpath already parsed the value; isNumeric/numericValue arrive with the string
   QString value = dataset.isNumeric ? FMT_VAL(dataset.numericValue, dataset) : dataset.value;
   if (!dataset.units.isEmpty())
     value += QStringLiteral(" ") + dataset.units;

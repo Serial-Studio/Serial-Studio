@@ -61,6 +61,13 @@ Widgets.SmartWindow {
   property bool toolbarVisibleBeforeFullScreen: true
 
   //
+  // True while the toolbar bar (not the titlebar) occupies a layout slot
+  //
+  readonly property bool toolbarBarShown: root.toolbarVisible
+                                          && !(Cpp_UI_Dashboard.autoHideToolbar
+                                               && root.dashboardVisible)
+
+  //
   // Wraps any QML disconnect entry point so device-initiated drops can be told apart.
   //
   function userDisconnect() {
@@ -497,11 +504,7 @@ Widgets.SmartWindow {
 
         property int titlebarHeight: Cpp_NativeWindow.titlebarHeight(root)
         property int slotHeight: active
-                                 ? titlebarHeight
-                                   + (root.toolbarVisible
-                                      && !(Cpp_UI_Dashboard.autoHideToolbar
-                                           && root.dashboardVisible)
-                                      ? 64 + 16 : 0)
+                                 ? titlebarHeight + (root.toolbarBarShown ? 64 + 16 : 0)
                                  : 0
 
         Layout.minimumHeight: slotHeight
@@ -535,12 +538,12 @@ Widgets.SmartWindow {
         id: stack
 
         z: 1
-        Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
         initialItem: app.runtimeMode ? dashboardLoader : consoleSetupLoader
         Layout.minimumWidth: consoleSetupLoader.item ? consoleSetupLoader.item.contentMinWidth : 0
         Layout.minimumHeight: consoleSetupLoader.item ? consoleSetupLoader.item.contentMinHeight : 0
+        Layout.topMargin: (root.visibility === Window.FullScreen || !root.toolbarBarShown) ? -6 : -1
 
         data: [
           Loader {

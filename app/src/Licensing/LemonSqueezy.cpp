@@ -38,11 +38,12 @@ static constexpr quint64 STORE_ID = 170454;
 static constexpr quint64 PRDCT_ID = 496241;
 
 /**
- * @brief Derives a feature tier from the Lemon Squeezy variant name.
+ * @brief Derives a feature tier from the Lemon Squeezy variant name; any
+ * non-empty variant that is not Enterprise maps to Pro on purpose, so a legacy
+ * variant such as "Hobbyist" still unlocks the full feature set.
  */
 static Licensing::FeatureTier tierFromVariant(const QString& variant)
 {
-  // Match the leading word of the variant name to a tier
   const auto lower = variant.toLower();
 
   if (lower.startsWith("enterprise"))
@@ -51,7 +52,6 @@ static Licensing::FeatureTier tierFromVariant(const QString& variant)
   if (lower.startsWith("pro") || lower.startsWith("team"))
     return Licensing::FeatureTier::Pro;
 
-  // Legacy "Hobbyist" variants fall through to Pro on purpose: any valid token = full feature set
   if (!lower.isEmpty())
     return Licensing::FeatureTier::Pro;
 
@@ -74,11 +74,9 @@ Licensing::LemonSqueezy::LemonSqueezy()
   , m_silentValidation(true)
   , m_gracePeriod(0)
 {
-  // Configure data encryption
   m_simpleCrypt.setKey(MachineID::instance().machineSpecificKey());
   m_simpleCrypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
 
-  // Read settings
   readSettings();
 }
 
@@ -218,34 +216,27 @@ void Licensing::LemonSqueezy::buy()
  */
 void Licensing::LemonSqueezy::activate()
 {
-  // Skip if license key format is invalid
   if (!canActivate())
     return;
 
-  // Avoid repeat activation requests
   if (busy())
     return;
 
-  // Enable busy status
   m_busy = true;
   Q_EMIT busyChanged();
 
-  // Obtain machine ID & build JSON payload
   QJsonObject payload;
   payload.insert("license_key", license());
   payload.insert("instance_name", MachineID::instance().machineId());
 
-  // Generate the JSON data
   auto url         = QUrl("https://api.lemonsqueezy.com/v1/licenses/activate");
   auto payloadData = QJsonDocument(payload).toJson(QJsonDocument::Compact);
 
-  // Setup network request
   QNetworkRequest req(url);
   req.setTransferTimeout(15 * 1000);
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  // Send the activation request
   auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
@@ -262,34 +253,27 @@ void Licensing::LemonSqueezy::activate()
  */
 void Licensing::LemonSqueezy::validate()
 {
-  // Skip if license key format is invalid
   if (!canActivate())
     return;
 
-  // Avoid repeat validation requests
   if (busy())
     return;
 
-  // Enable busy status
   m_busy = true;
   Q_EMIT busyChanged();
 
-  // Obtain machine ID & build JSON payload
   QJsonObject payload;
   payload.insert("license_key", license());
   payload.insert("instance_id", instanceId());
 
-  // Generate the JSON data
   auto url         = QUrl("https://api.lemonsqueezy.com/v1/licenses/validate");
   auto payloadData = QJsonDocument(payload).toJson(QJsonDocument::Compact);
 
-  // Setup network request
   QNetworkRequest req(url);
   req.setTransferTimeout(15 * 1000);
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  // Send the activation request
   auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
@@ -308,34 +292,27 @@ void Licensing::LemonSqueezy::validate()
  */
 void Licensing::LemonSqueezy::deactivate()
 {
-  // Skip if license is not active
   if (!isActivated())
     return;
 
-  // Avoid repeat requests
   if (busy())
     return;
 
-  // Enable busy status
   m_busy = true;
   Q_EMIT busyChanged();
 
-  // Obtain machine ID & build JSON payload
   QJsonObject payload;
   payload.insert("license_key", license());
   payload.insert("instance_id", instanceId());
 
-  // Generate the JSON data
   auto url         = QUrl("https://api.lemonsqueezy.com/v1/licenses/deactivate");
   auto payloadData = QJsonDocument(payload).toJson(QJsonDocument::Compact);
 
-  // Setup network request
   QNetworkRequest req(url);
   req.setTransferTimeout(15 * 1000);
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/vnd.api+json");
   req.setRawHeader("Accept", "application/vnd.api+json");
 
-  // Send the activation request
   auto* reply = m_manager.post(req, payloadData);
   connect(reply, &QNetworkReply::finished, this, [this, reply]() {
     if (reply->error() != QNetworkReply::NoError)
@@ -376,26 +353,24 @@ void Licensing::LemonSqueezy::setLicense(const QString& license)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Loads and decrypts cached licensing data from QSettings.
+ * @brief Loads and decrypts cached licensing data from QSettings; the offline
+ * grace period is recomputed from the last check, with monotonicNow() flooring
+ * the clock so rewinding the system time cannot extend it.
  */
 void Licensing::LemonSqueezy::readSettings()
 {
-  // Obtain encrypted JSON data
   m_settings.beginGroup("licensing");
   auto license = m_settings.value("license", "").toString();
   auto data    = m_settings.value("data", "").toString();
   auto dt      = m_settings.value("lastCheck", "").toString();
   m_settings.endGroup();
 
-  // Data is empty abort
   if (data.isEmpty() || license.isEmpty())
     return;
 
-  // Descrypt data
   m_license          = m_simpleCrypt.decryptToString(license);
   auto decryptedData = m_simpleCrypt.decryptToByteArray(data);
 
-  // Offline grace from last check; monotonicNow() floors the clock so rewinding can't extend it.
   m_gracePeriod = 0;
   if (!dt.isEmpty()) {
     auto dateTime  = m_simpleCrypt.decryptToString(dt);
@@ -405,7 +380,6 @@ void Licensing::LemonSqueezy::readSettings()
       m_gracePeriod = qMax(0, 30 - lastCheck.daysTo(currentDt));
   }
 
-  // Parse data & validate it
   readValidationResponse(decryptedData, true);
   Q_EMIT licenseChanged();
 }
@@ -415,10 +389,8 @@ void Licensing::LemonSqueezy::readSettings()
  */
 void Licensing::LemonSqueezy::writeSettings()
 {
-  // Get JSON data
   auto json = QJsonDocument(m_licensingData).toJson(QJsonDocument::Compact);
 
-  // Write encrypted data if JSON is valid
   if (!json.isEmpty() && canActivate()) {
     m_settings.beginGroup("licensing");
     m_settings.setValue("license", m_simpleCrypt.encryptToString(m_license));
@@ -426,7 +398,6 @@ void Licensing::LemonSqueezy::writeSettings()
     m_settings.endGroup();
   }
 
-  // Data is empty
   else {
     m_settings.beginGroup("licensing");
     m_settings.setValue("data", "");
@@ -443,7 +414,6 @@ QDateTime Licensing::LemonSqueezy::monotonicNow()
 {
   auto effective = QDateTime::currentDateTime();
 
-  // A backward clock yields a stored high-watermark ahead of "now"; use the watermark instead.
   m_settings.beginGroup("licensing");
   const auto stored = m_settings.value("lastSeen", "").toString();
   m_settings.endGroup();
@@ -453,7 +423,6 @@ QDateTime Licensing::LemonSqueezy::monotonicNow()
       effective = seen;
   }
 
-  // Advance the high-watermark so it only ever moves forward.
   const auto encoded = m_simpleCrypt.encryptToString(effective.toString(Qt::RFC2822Date));
   m_settings.beginGroup("licensing");
   m_settings.setValue("lastSeen", encoded);
@@ -463,11 +432,12 @@ QDateTime Licensing::LemonSqueezy::monotonicNow()
 }
 
 /**
- * @brief Clears all in-memory licensing state and optionally the stored license key.
+ * @brief Clears in-memory licensing state and optionally the stored license key;
+ * the on-disk blob is only rewritten when persist is set, so a failed cache
+ * restore cannot erase a license a later live verdict could still confirm.
  */
 void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense, const bool persist)
 {
-  // Reset all in-memory licensing state
   m_busy           = false;
   m_seatLimit      = -1;
   m_seatUsage      = -1;
@@ -492,7 +462,6 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense, const b
   Q_EMIT activatedChanged();
   Q_EMIT licenseDataChanged();
 
-  // A failed cache restore must not erase the on-disk blob; only a live verdict persists.
   if (persist)
     writeSettings();
 }
@@ -828,14 +797,12 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
  */
 void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
 {
-  // Data is empty, log & abort
   if (data.isEmpty()) {
     qWarning() << "[LemonSqueezy] Empty activation response";
     clearLicenseCache();
     return;
   }
 
-  // Parse reply as JSON
   QJsonParseError parseError;
   auto doc = QJsonDocument::fromJson(data, &parseError);
   if (parseError.error != QJsonParseError::NoError) {
@@ -844,17 +811,14 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
     return;
   }
 
-  // Obtain JSON object
   auto json        = doc.object();
   auto error       = json.value("error");
   auto meta        = json.value("meta").toObject();
   auto deactivated = json.value("deactivated").toBool(false);
 
-  // Parse meta object
   auto storeId   = meta.value("store_id").toInteger();
   auto productId = meta.value("product_id").toInteger();
 
-  // Non-null error
   if (!error.isNull()) {
     qWarning() << "[LemonSqueezy] Deactivation error:" << error.toString();
     Misc::Utilities::showMessageBox(
@@ -863,7 +827,6 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
     return;
   }
 
-  // Validate that store ID and product ID match
   if (storeId != STORE_ID || productId != PRDCT_ID) {
     qWarning() << "[LemonSqueezy] Store ID or Product ID mismatch";
     Misc::Utilities::showMessageBox(
@@ -874,7 +837,6 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
     return;
   }
 
-  // Check that the product was deactivated
   if (!deactivated) {
     qWarning() << "[LemonSqueezy] Deactivation failed";
     Misc::Utilities::showMessageBox(tr("Could not deactivate your license at this time."),
@@ -884,7 +846,6 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
     return;
   }
 
-  // De-activate the product
   clearLicenseCache(true);
   Q_EMIT activatedChanged();
   Misc::Utilities::showMessageBox(

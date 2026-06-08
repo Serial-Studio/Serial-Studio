@@ -193,25 +193,21 @@ void Sessions::HtmlReport::render(const ReportData& data,
                                   std::vector<DatasetSeries> series,
                                   const HtmlReportOptions& opts)
 {
-  // Guard against invalid inputs up front
   if (!data.valid || opts.outputPath.isEmpty()) {
     Q_EMIT finished(QString(), false);
     return;
   }
 
-  // Capture inputs for later (async PDF path needs them alive)
   m_data   = data;
   m_series = std::move(series);
   m_opts   = opts;
 
 #  ifndef SERIAL_STUDIO_WITH_WEBENGINE
-  // No WebEngine -> always emit HTML; users print from the browser
   m_opts.format = HtmlReportOptions::Format::Html;
 #  endif
 
   Q_EMIT progress(tr("Assembling report…"), 0.10);
 
-  // Build the single HTML string used for both outputs
   m_htmlCache = buildHtml();
   if (m_htmlCache.isEmpty()) {
     Q_EMIT finished(QString(), false);
@@ -220,7 +216,6 @@ void Sessions::HtmlReport::render(const ReportData& data,
 
   Q_EMIT progress(tr("Writing output…"), 0.30);
 
-  // Resolve sibling output paths (e.g. foo.pdf -> foo.html for "Both" mode)
   const QFileInfo outInfo(opts.outputPath);
   const QString stem = outInfo.completeBaseName();
   const QString dir  = outInfo.absolutePath();
@@ -231,7 +226,6 @@ void Sessions::HtmlReport::render(const ReportData& data,
                        ? opts.outputPath
                        : QStringLiteral("%1/%2.html").arg(dir, stem);
 
-  // Write the HTML artifact whenever the user asked for it
   bool htmlOk = true;
   if (m_opts.format == HtmlReportOptions::Format::Html
       || m_opts.format == HtmlReportOptions::Format::Both) {
@@ -239,14 +233,12 @@ void Sessions::HtmlReport::render(const ReportData& data,
     m_htmlWritten = htmlOk;
   }
 
-  // HTML-only path finishes synchronously
   if (m_opts.format == HtmlReportOptions::Format::Html) {
     Q_EMIT finished(m_htmlPath, htmlOk);
     return;
   }
 
 #  ifdef SERIAL_STUDIO_WITH_WEBENGINE
-  // Otherwise fire the async PDF render (fails fast if HTML write errored)
   if (!htmlOk && m_opts.format == HtmlReportOptions::Format::Both) {
     Q_EMIT finished(m_htmlPath, false);
     return;
@@ -266,7 +258,6 @@ void Sessions::HtmlReport::render(const ReportData& data,
  */
 QString Sessions::HtmlReport::buildHtml() const
 {
-  // Load static template assets from qrc
   QString html           = readResource(QStringLiteral(":/templates/reports/session-report.html"));
   const QString css      = readResource(QStringLiteral(":/templates/reports/session-report.css"));
   const QString js       = readResource(QStringLiteral(":/templates/reports/session-report.js"));
@@ -276,14 +267,12 @@ QString Sessions::HtmlReport::buildHtml() const
   if (html.isEmpty() || css.isEmpty() || js.isEmpty() || chartJs.isEmpty())
     return QString();
 
-  // Per-section HTML fragments (skipped sections leave an empty string)
   const QString coverHtml    = m_opts.includeCover ? buildCoverSection() : QString();
   const QString metadataHtml = m_opts.includeMetadata ? buildMetadataSection() : QString();
   const QString summaryHtml  = m_opts.includeStats ? buildSummarySection() : QString();
   const QString chartsHtml =
     (m_opts.includeCharts && !m_series.empty()) ? buildChartsSection() : QString();
 
-  // Template expansion (multi-pass replace, one per placeholder)
   html.replace(QStringLiteral("{{CHART_JS}}"), chartJs);
   html.replace(QStringLiteral("{{REPORT_CSS}}"), css);
   html.replace(QStringLiteral("{{REPORT_JS}}"), js);
@@ -297,12 +286,10 @@ QString Sessions::HtmlReport::buildHtml() const
   html.replace(QStringLiteral("{{CHARTS_SECTION}}"), chartsHtml);
   html.replace(QStringLiteral("{{REPORT_DATA_JSON}}"), buildReportDataJson());
 
-  // Expand the @media print placeholders last
   html.replace(QStringLiteral("{{PAGE_SIZE_CSS}}"), pageSizeCssValue());
   html.replace(QStringLiteral("{{PRINT_FOOTER_LEFT}}"), buildPrintFooterLeft());
   html.replace(QStringLiteral("{{PRINT_FOOTER_RIGHT}}"), buildPrintFooterRight());
 
-  // Pin the chart card to the landscape printable area
   const auto chartMm = chartPagePrintableSize();
   html.replace(QStringLiteral("{{CHART_PAGE_WIDTH_MM}}"), QString::number(chartMm.width(), 'f', 1));
   html.replace(QStringLiteral("{{CHART_PAGE_HEIGHT_MM}}"),
@@ -333,7 +320,6 @@ QString Sessions::HtmlReport::buildCoverLogoMarkup() const
     return QStringLiteral("<img src=\"%1\" alt=\"\">").arg(dataUri);
   }
 
-  // Inline SVG: prefer Qt resource, fall back to filesystem read
   QString markup = readResource(m_opts.logoPath);
   if (!markup.isEmpty())
     return markup;
@@ -350,7 +336,6 @@ QString Sessions::HtmlReport::buildCoverLogoMarkup() const
  */
 QString Sessions::HtmlReport::buildCoverSection() const
 {
-  // Logo markup: raster files become base64 data URIs, SVGs are inlined verbatim
   const QString logoMarkup = buildCoverLogoMarkup();
 
   const QString title =
@@ -361,7 +346,6 @@ QString Sessions::HtmlReport::buildCoverSection() const
 
   const QString subtitleLeft = escapeHtml(formatDate(m_data.startedAt));
 
-  // Footer strip at the bottom of the cover: author + generation timestamp
   QString authorLine;
   if (!m_opts.authorName.isEmpty())
     authorLine = QStringLiteral("<div>%1 <span class=\"author\">%2</span></div>")
@@ -380,7 +364,6 @@ QString Sessions::HtmlReport::buildCoverSection() const
                             ? QString()
                             : QStringLiteral("<div class=\"logo\">%1</div>").arg(logoMarkup);
 
-  // Cover facts strip: at-a-glance document identity
   const QString facts =
     QStringLiteral(
       "<div class=\"cover-facts\">"
@@ -447,14 +430,12 @@ QString Sessions::HtmlReport::buildMetadataSection() const
     {tr("Parameters logged"),                                   QString::number(m_data.datasets.size())},
   };
 
-  // Assemble <dt>/<dd> pairs
   QString defs;
   for (const auto& row : rows) {
     defs +=
       QStringLiteral("<dt>%1</dt><dd>%2</dd>").arg(escapeHtml(row.label), escapeHtml(row.value));
   }
 
-  // Tag chips (render nothing when the session has no tags)
   QString tagsBlock;
   if (!m_data.tags.isEmpty()) {
     QString chips;
@@ -465,7 +446,6 @@ QString Sessions::HtmlReport::buildMetadataSection() const
                   .arg(escapeHtml(tr("Classification")), chips);
   }
 
-  // Notes block (wrapped, styled callout)
   QString notesBlock;
   if (!m_data.notes.trimmed().isEmpty()) {
     notesBlock = QStringLiteral("<div class=\"notes-label\">%1</div>"
@@ -493,12 +473,10 @@ QString Sessions::HtmlReport::buildSummarySection() const
   if (m_data.datasets.empty())
     return QString();
 
-  // Drop the units column entirely when no parameter carries a unit
   const bool anyUnits = std::any_of(m_data.datasets.begin(),
                                     m_data.datasets.end(),
                                     [](const DatasetStats& d) { return !d.units.isEmpty(); });
 
-  // Table header: data-sort-type drives the JS comparator
   QString header = QStringLiteral("<thead><tr>")
                  + QStringLiteral("<th class=\"align-left\" data-sort-type=\"text\">%1</th>")
                      .arg(escapeHtml(tr("Parameter")));
@@ -518,7 +496,6 @@ QString Sessions::HtmlReport::buildSummarySection() const
                    escapeHtml(tr("Mean")),
                    escapeHtml(tr("Std. Deviation")));
 
-  // One row per dataset; data-sort-value preserves raw numeric order
   QString body;
   for (const auto& ds : m_data.datasets) {
     QString fullName =
@@ -587,7 +564,6 @@ QString Sessions::HtmlReport::buildChartsSection() const
     const QString units =
       s.units.isEmpty() ? QString() : QStringLiteral(" (%1)").arg(escapeHtml(s.units));
 
-    // Subtitle with real sample count (not the decimated point count)
     const double duration = s.timesSec.empty() ? 0.0 : s.timesSec.back();
     const QString sub     = tr("%1 samples over %2 seconds")
                           .arg(QString::number(static_cast<qulonglong>(s.totalSamples)),
@@ -601,7 +577,6 @@ QString Sessions::HtmlReport::buildChartsSection() const
                .arg(escapeHtml(fullName), units, escapeHtml(sub), QString::number(s.uniqueId));
   }
 
-  // Screen-only overlay chart, hidden in print via @media print
   const QString overlay =
     m_series.size() >= 2
       ? QStringLiteral("<section class=\"section screen-only overlay-section\">"
@@ -629,7 +604,6 @@ QString Sessions::HtmlReport::buildChartsSection() const
  */
 QString Sessions::HtmlReport::buildReportDataJson() const
 {
-  // Index DatasetStats by uniqueId so each series carries its population-wide stats
   std::map<int, const DatasetStats*> statsByUid;
   for (const auto& d : m_data.datasets)
     statsByUid.emplace(d.uniqueId, &d);
@@ -656,7 +630,6 @@ QString Sessions::HtmlReport::buildReportDataJson() const
     entry["times"]  = times;
     entry["values"] = values;
 
-    // Per-series stats payload: only emitted when the dataset has numeric samples
     const auto it = statsByUid.find(s.uniqueId);
     if (it != statsByUid.end() && it->second->numericSamples > 0) {
       QJsonObject stats;
@@ -673,7 +646,6 @@ QString Sessions::HtmlReport::buildReportDataJson() const
   style["lineWidth"] = m_opts.lineWidth > 0 ? m_opts.lineWidth : 1.4;
   style["lineStyle"] = m_opts.lineStyle.isEmpty() ? QStringLiteral("solid") : m_opts.lineStyle;
 
-  // Per-chart annotation toggle + translated labels rendered by the JS plugin
   QJsonObject statsLabels;
   statsLabels["min"]  = tr("Min");
   statsLabels["max"]  = tr("Max");
@@ -688,7 +660,6 @@ QString Sessions::HtmlReport::buildReportDataJson() const
   root["style"]   = style;
   root["options"] = options;
 
-  // Compact form: whitespace would bloat the inline blob for big sessions
   return QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
 }
 
@@ -711,12 +682,10 @@ QString Sessions::HtmlReport::pageSizeCssValue() const
  */
 QSizeF Sessions::HtmlReport::chartPagePrintableSize() const
 {
-  // Landscape paper dimensions, matching startPrinting()
   QSizeF paper = QPageSize(m_opts.pageSize).size(QPageSize::Millimeter);
   if (paper.width() < paper.height())
     paper = QSizeF(paper.height(), paper.width());
 
-  // Subtract the 16 mm margin on each side
   const double printableW = std::max(50.0, paper.width() - 32.0);
   const double printableH = std::max(50.0, paper.height() - 32.0);
   return QSizeF(printableW, printableH);
@@ -730,7 +699,6 @@ QString Sessions::HtmlReport::buildPrintFooterLeft() const
   const QString docPart =
     m_opts.documentTitle.isEmpty() ? tr("Session Report") : m_opts.documentTitle;
 
-  // CSS content:"..." strings need doubled backslashes; escape newline and quote
   // code-verify off
   QString s = QStringLiteral("Serial Studio · %1").arg(docPart);
   s.replace('\\', QStringLiteral("\\\\"));
@@ -745,14 +713,12 @@ QString Sessions::HtmlReport::buildPrintFooterLeft() const
  */
 QString Sessions::HtmlReport::buildPrintFooterRight() const
 {
-  // Escape characters that would break the CSS string literal
   auto cssEscape = [](QString s) {
     s.replace('\\', QStringLiteral("\\\\"));
     s.replace('"', QStringLiteral("\\\""));
     return s;
   };
 
-  // English fallback as a safe default if the translation is malformed
   QString fallback = QStringLiteral("\"Page \" counter(page) \" of \" counter(pages)");
 
   const QString tmpl = tr("Page %1 of %2");
@@ -827,13 +793,11 @@ void Sessions::HtmlReport::startPdfRender(const QString& html, const QString& pd
 
   Q_EMIT progress(tr("Loading rendering engine…"), 0.45);
 
-  // Reuse the global default profile to avoid a WebEngine cold-start per export
   m_page = new QWebEnginePage(QWebEngineProfile::defaultProfile(), this);
 
   connect(m_page, &QWebEnginePage::loadFinished, this, &HtmlReport::onLoadFinished);
   connect(m_page, &QWebEnginePage::pdfPrintingFinished, this, &HtmlReport::onPdfPrintingFinished);
 
-  // baseUrl resolves any future relative references against qrc
   m_page->setHtml(html, QUrl(QStringLiteral("qrc:/templates/reports/")));
 }
 
@@ -877,7 +841,6 @@ void Sessions::HtmlReport::probeReadiness()
                             return;
                           }
 
-                          // Chain the next probe from inside this callback so only one is in flight
                           QTimer::singleShot(100, this, &HtmlReport::probeReadiness);
                         });
 }

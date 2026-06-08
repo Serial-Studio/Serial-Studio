@@ -126,7 +126,6 @@ QString Misc::BackupManager::snapshot(const QString& label)
   if (serialised.isEmpty())
     return {};
 
-  // Hash bare payload (no wrapper) so dedup ignores the always-changing takenAt.
   const auto payloadBytes = QJsonDocument(serialised).toJson(QJsonDocument::Compact);
   const auto newHash      = QCryptographicHash::hash(payloadBytes, QCryptographicHash::Sha1);
 
@@ -139,11 +138,9 @@ QString Misc::BackupManager::snapshot(const QString& label)
 
   const auto bytes = QJsonDocument(serialised).toJson(QJsonDocument::Compact);
 
-  // Seed dedup state from newest on-disk snapshot (bare-payload hash; see helper).
   if (m_lastContentHash.isEmpty())
     seedDedupFromNewest(dir);
 
-  // Same content as the last snapshot? Return the existing path; do not write a duplicate.
   if (!m_lastContentHash.isEmpty() && newHash == m_lastContentHash)
     return m_lastSnapshotPath;
 
@@ -194,7 +191,6 @@ bool Misc::BackupManager::restore(const QString& path)
   if (err.error != QJsonParseError::NoError || !doc.isObject())
     return false;
 
-  // Reject snapshots written by a newer format than this build understands.
   auto obj = doc.object();
   if (obj.contains(kBackupMetaKey)) {
     const auto meta = obj.value(kBackupMetaKey).toObject();
@@ -210,14 +206,12 @@ bool Misc::BackupManager::restore(const QString& path)
 
   auto& pm = DataModel::ProjectModel::instance();
 
-  // Capture project file association before load: loadFromJsonDocument overwrites m_filePath.
   const auto originalPath = pm.jsonFilePath();
 
   pm.setSuppressMessageBoxes(true);
   const bool ok = pm.loadFromJsonDocument(projectDoc, originalPath);
   pm.setSuppressMessageBoxes(false);
 
-  // Persist to disk so a crash before the next manual save can't leave stale content unmodified.
   if (ok && !originalPath.isEmpty())
     (void)pm.apiSaveJsonFile(originalPath);
 
@@ -242,7 +236,6 @@ QVariantList Misc::BackupManager::list(int limit) const
   const auto entries = d.entryInfoList(QStringList{QStringLiteral("*.ssproj")},
                                        QDir::Files | QDir::NoDotAndDotDot,
                                        QDir::Time | QDir::Reversed);
-  // QDir::Time | QDir::Reversed gives newest first (Reversed flips ascending->descending).
 
   int taken = 0;
   for (const auto& info : entries) {
@@ -317,7 +310,6 @@ QVariantMap Misc::BackupManager::summarize(const QString& path) const
   const auto project = doc.object();
   out.insert(QStringLiteral("title"), project.value(QStringLiteral("title")).toString());
 
-  // Surface the wrapper so the AI / recovery dialog can warn on incompatible snapshots.
   if (project.contains(kBackupMetaKey))
     out.insert(QStringLiteral("backupMeta"),
                project.value(kBackupMetaKey).toObject().toVariantMap());
@@ -360,7 +352,6 @@ QVariantMap Misc::BackupManager::currentSummary() const
 
   out.insert(QStringLiteral("groupTitles"), groupTitles);
 
-  // Same signature as summarize() so the recovery dialog can flag a parser-only restore.
   const auto sources = pm.serializeToJson().value(QStringLiteral("sources")).toArray();
   out.insert(QStringLiteral("parserHash"), parserSignature(sources));
   return out;
@@ -399,7 +390,6 @@ void Misc::BackupManager::onProjectFileChanged()
 {
   m_debounceTimer->stop();
 
-  // Drop the previous project's last-hash so re-seeding picks up the new backup dir.
   m_lastContentHash.clear();
   m_lastSnapshotPath.clear();
   (void)snapshot(QStringLiteral("load"));

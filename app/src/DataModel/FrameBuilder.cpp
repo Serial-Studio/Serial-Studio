@@ -110,7 +110,6 @@ DataModel::FrameBuilder::FrameBuilder()
   , m_framePoolHint(0)
   , m_framePoolGeneration(1)
 {
-  // Pre-allocate frame pool: reused across sub-frames so steady-state publishing won't malloc.
   m_framePool.reserve(kFramePoolSize);
   for (int i = 0; i < kFramePoolSize; ++i)
     m_framePool.emplace_back(std::make_shared<PooledFrameSlot>());
@@ -122,7 +121,6 @@ DataModel::FrameBuilder::FrameBuilder()
           [this] { syncFromProjectModel(); });
 #endif
 
-  // Tear down engines before static destruction: QJSEngine depends on live Qt.
   if (auto* app = QCoreApplication::instance())
     connect(app, &QCoreApplication::aboutToQuit, this, [this]() { destroyTransformEngines(); });
 }
@@ -156,24 +154,22 @@ void DataModel::FrameBuilder::invalidateFramePool() noexcept
 
 /**
  * @brief Probes for a free pool slot (the pool holds its only reference) and returns its index,
- *        or kInvalidSlotIdx when every slot is pinned by a consumer.
+ *        or kInvalidSlotIdx when every slot is pinned by a consumer. All aliases are created and
+ *        released on this thread, so the use_count()==1 probe is exact without a mutex.
  */
 size_t DataModel::FrameBuilder::claimPoolSlot() noexcept
 {
   const size_t n    = m_framePool.size();
   const size_t hint = m_framePoolHint.load(std::memory_order_relaxed);
 
-  // Power-of-two pool size: the modulo below strength-reduces to a mask
   SS_ASSUME(n == static_cast<size_t>(kFramePoolSize));
 
   for (size_t k = 0; k < n; ++k) {
     const size_t idx = (hint + k) % n;
 
-    // All aliases are created and released on this thread, so the count-1 probe is exact
     if (m_framePool[idx].use_count() != 1)
       continue;
 
-    // Hint points at the claimed slot: an instantly-released slot stays L1-hot frame to frame
     m_framePoolHint.store(idx, std::memory_order_relaxed);
     return idx;
   }
@@ -230,13 +226,11 @@ bool DataModel::FrameBuilder::preparePooledSlot(PooledFrameSlot* slot, const Dat
 {
   Q_ASSERT(slot != nullptr);
 
-  // Memo fast path: same template frame bound under the current generation
   if (slot->generation == m_framePoolGeneration && slot->matchedSrc == &src) [[likely]] {
     Q_ASSERT(compare_frames(slot->frame.data, src));
     return true;
   }
 
-  // Same-generation same-source slots are structure-identical: bind without a full assign
   if (slot->generation == m_framePoolGeneration && slot->frame.data.sourceId == src.sourceId
       && compare_frames(slot->frame.data, src)) {
     bindSlotTemplate(slot, src);
@@ -258,9 +252,10 @@ SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
 {
   const size_t idx = claimPoolSlot();
   if (idx == kInvalidSlotIdx) [[unlikely]] {
-    // Pool exhausted: log once, fall back to heap allocation so the producer never blocks
     notePoolExhausted();
-    return std::make_shared<TimestampedFrame>(src, ts);
+    auto heap                 = std::make_shared<TimestampedFrame>(src, ts);
+    heap->structureGeneration = m_framePoolGeneration;
+    return heap;
   }
 
   const auto& slotOwner = m_framePool[idx];
@@ -269,10 +264,10 @@ SS_HOT DataModel::TimestampedFramePtr DataModel::FrameBuilder::acquireFrame(
   if (preparePooledSlot(slotRaw, src)) [[likely]]
     copy_frame_values(slotRaw->frame.data, src);
 
-  slotRaw->frame.timestamp = ts;
+  slotRaw->frame.timestamp           = ts;
+  slotRaw->frame.structureGeneration = m_framePoolGeneration;
   Q_ASSERT(slotRaw->frame.data.groups.size() == src.groups.size());
 
-  // Aliasing ctor: one incref, no allocation; keeps the slot alive past FrameBuilder teardown
   return TimestampedFramePtr(slotOwner, &slotRaw->frame);
 }
 
@@ -355,31 +350,26 @@ const DataModel::DataTableStore& DataModel::FrameBuilder::tableStore() const noe
  */
 void DataModel::FrameBuilder::setupExternalConnections()
 {
-  // Handle connection/disconnection events
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::connectedChanged,
           this,
           &DataModel::FrameBuilder::onConnectedChanged);
 
-  // Mode switches retarget the pool at a different logical frame; stale slots must full-assign
   connect(&AppState::instance(),
           &AppState::operationModeChanged,
           this,
           &DataModel::FrameBuilder::onOperationModeChanged);
 
-  // Wipe transform engines on source-delete: IDs renumber, stale refs would misfire.
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::sourceDeleted,
           this,
           &DataModel::FrameBuilder::onSourceRemoved);
 
-  // Periodic GC for the transform Lua/JS engines
   connect(&Misc::TimerEvents::instance(),
           &Misc::TimerEvents::timeout1Hz,
           this,
           &DataModel::FrameBuilder::collectTransformEngineGarbage);
 
-  // Player transitions rebuild transforms/table store and refresh the cached player-open flag
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [this] {
     m_playerOpen = SerialStudio::isAnyPlayerOpen();
     if (CSV::Player::instance().isOpen())
@@ -392,7 +382,6 @@ void DataModel::FrameBuilder::setupExternalConnections()
   });
 
 #ifdef BUILD_COMMERCIAL
-  // Session player bypasses ConnectionManager; rebuild engines on its openChanged.
   connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, [this] {
     m_playerOpen = SerialStudio::isAnyPlayerOpen();
     if (Sessions::Player::instance().isOpen())
@@ -400,7 +389,6 @@ void DataModel::FrameBuilder::setupExternalConnections()
   });
 #endif
 
-  // Cache the consumer-enabled fan-out; polling five singletons per frame costs the hotpath
   connect(&CSV::Export::instance(), &CSV::Export::enabledChanged, this, [this] {
     refreshAnyAsyncSink();
   });
@@ -463,7 +451,6 @@ void DataModel::FrameBuilder::syncFromProjectModel()
   m_sourceFrames.clear();
   m_sourceFrameCounters.clear();
 
-  // New project context: re-injected script engines (parsers, dialogs) re-set this flag
   m_externalTableApiUsers = false;
   m_captureFlagsDirty     = true;
 
@@ -604,22 +591,17 @@ void DataModel::FrameBuilder::onConnectedChanged()
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
            && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
 
-  // Short-circuit non-transitions: ConnectionManager re-emits connectedChanged on UI tweaks.
   const bool nowConnected = IO::ConnectionManager::instance().isConnected();
   if (nowConnected == m_lastConnectedState)
     return;
 
-  // Reset quick-plot channel count
   m_lastConnectedState = nowConnected;
   m_quickPlotChannels  = -1;
 
-  // Session boundary: stale pool slots must full-assign instead of fast-path matching
   invalidateFramePool();
 
-  // Re-arm the parser-load circuit breaker
   parseBudgetReset();
 
-  // Clear per-source frames and transform engines on disconnect
   if (!nowConnected) {
     m_sourceFrames.clear();
     m_sourceFrameCounters.clear();
@@ -628,17 +610,14 @@ void DataModel::FrameBuilder::onConnectedChanged()
     return;
   }
 
-  // Not in project mode, dont fire actions or configure frame parser
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
 
-  // Reload parser scripts and recompile transforms for the new session
   Q_ASSERT(!m_frame.title.isEmpty());
   DataModel::FrameParser::instance().readCode();
   compileTransforms();
   initializeTableStore();
 
-  // Execute actions
   const auto& actions = m_frame.actions;
   for (const auto& action : actions)
     if (action.autoExecuteOnConnect) {
@@ -647,7 +626,6 @@ void DataModel::FrameBuilder::onConnectedChanged()
         qWarning() << "[FrameBuilder] Auto-execute writeData() failed for action:" << action.title;
     }
 
-  // Pre-build per-source frames so the dashboard configures immediately
   const auto& sources = DataModel::ProjectModel::instance().sources();
   if (sources.size() > 1) {
     for (const auto& src : sources)
@@ -656,14 +634,12 @@ void DataModel::FrameBuilder::onConnectedChanged()
     return;
   }
 
-  // Single-source image-only projects also need upfront configuration
   const bool allImageGroups =
     !m_frame.groups.empty()
     && std::all_of(m_frame.groups.begin(), m_frame.groups.end(), [](const DataModel::Group& g) {
          return g.widget == QLatin1String("image");
        });
 
-  // Reead first frame for image data
   if (allImageGroups)
     hotpathTxFrame(acquireFrame(m_frame));
 }
@@ -684,7 +660,6 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
   if (parseBudgetSkipFrame()) [[unlikely]]
     return;
 
-  // The QPC read is dead weight while the budget guard is disabled (throughput benchmark)
   const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
 
   const int published = trySpanLane(0, false, m_frame, data);
@@ -707,7 +682,6 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
     TransformFrameInfo info;
     info.sourceId = 0;
 
-    // Frame metadata is only consumed by transforms; skip the counter + clock math without them
     if (!m_transformEngines.empty()) {
       info.frameNumber = ++m_sourceFrameCounters[0];
       info.timestampMs =
@@ -734,7 +708,6 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
   if (parseBudgetSkipFrame()) [[unlikely]]
     return;
 
-  // The QPC read is dead weight while the budget guard is disabled (throughput benchmark)
   const auto t0 = m_parseBudgetEnabled ? BudgetClock::now() : BudgetClock::time_point{};
 
   if (trySpanLane(sourceId, true, ensureSourceFrame(sourceId), data) >= 0) {
@@ -743,7 +716,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
   }
 
   QList<QStringList> multiChannels;
-  decodeProjectChannels(sourceId, /*applyPerSourceOverride=*/true, data, multiChannels);
+  decodeProjectChannels(sourceId, true, data, multiChannels);
 
   const auto step = capturedFrameStep(data);
   for (int i = 0; i < multiChannels.size(); ++i) {
@@ -756,7 +729,6 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
     TransformFrameInfo info;
     info.sourceId = sourceId;
 
-    // Frame metadata is only consumed by transforms; skip the counter + clock math without them
     if (!m_transformEngines.empty()) {
       info.frameNumber = ++m_sourceFrameCounters[sourceId];
       info.timestampMs =
@@ -764,7 +736,6 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
     }
 
     applyDatasetValues(srcFrame, channels, info);
-    // Pooled fan-out: one TimestampedFramePtr per parsed frame, slot released with its last alias.
     hotpathTxFrame(acquireFrame(srcFrame, frameTs));
   }
 
@@ -804,7 +775,6 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
   TransformFrameInfo info;
   info.sourceId = sourceId;
 
-  // Frame metadata is only consumed by transforms; skip the counter + clock math without them
   if (!m_transformEngines.empty()) [[unlikely]] {
     info.frameNumber = ++m_sourceFrameCounters[sourceId];
     info.timestampMs =
@@ -814,9 +784,9 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
 
   const size_t idx = claimPoolSlot();
   if (idx == kInvalidSlotIdx) [[unlikely]] {
-    // Pool exhausted: heap fallback keeps the producer non-blocking (rare, alloc accepted)
     notePoolExhausted();
-    auto heap = std::make_shared<TimestampedFrame>(frame, data->timestamp);
+    auto heap                 = std::make_shared<TimestampedFrame>(frame, data->timestamp);
+    heap->structureGeneration = m_framePoolGeneration;
     applyDatasetValuesSpans(heap->data, m_spanScratch.data(), tokens, info);
     hotpathTxFrame(heap);
     return 1;
@@ -825,7 +795,6 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
   const auto& slotOwner = m_framePool[idx];
   auto* slotRaw         = slotOwner.get();
 
-  // Structure sync + memo; the flattened table makes the per-dataset walk pointer-only
   (void)preparePooledSlot(slotRaw, frame);
   applyDatasetValuesSpans(slotRaw->flat.data(),
                           static_cast<qsizetype>(slotRaw->flat.size()),
@@ -833,7 +802,8 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
                           tokens,
                           info);
 
-  slotRaw->frame.timestamp = data->timestamp;
+  slotRaw->frame.timestamp           = data->timestamp;
+  slotRaw->frame.structureGeneration = m_framePoolGeneration;
   hotpathTxFrame(TimestampedFramePtr(slotOwner, &slotRaw->frame));
   return 1;
 }
@@ -847,13 +817,11 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
  */
 bool DataModel::FrameBuilder::parseBudgetSkipFrame()
 {
-  // Disabled by the throughput benchmark: a 100%-duty run would trip this interactive throttle.
   if (!m_parseBudgetEnabled) [[unlikely]]
     return false;
 
   const auto now = BudgetClock::now();
 
-  // Lazily start the window on the first call.
   if (m_parseBudgetWindowStart == BudgetClock::time_point{}) [[unlikely]] {
     m_parseBudgetWindowStart = now;
     m_parseBudgetUsedNs      = 0;
@@ -861,7 +829,6 @@ bool DataModel::FrameBuilder::parseBudgetSkipFrame()
     return false;
   }
 
-  // Roll the window forward once kParseBudgetWindowMs elapses.
   const auto windowNs =
     std::chrono::duration_cast<std::chrono::nanoseconds>(now - m_parseBudgetWindowStart).count();
   if (windowNs >= static_cast<qint64>(kParseBudgetWindowMs) * 1'000'000LL) {
@@ -947,13 +914,11 @@ void DataModel::FrameBuilder::decodeProjectChannels(int sourceId,
                                                     const IO::CapturedDataPtr& data,
                                                     QList<QStringList>& outChannels)
 {
-  // Player playback: replayed rows arrive pre-CSV; reuse the QuickPlot comma split.
   if (m_playerOpen) [[unlikely]] {
     DataModel::splitQuickPlotChannels(data->data, outChannels);
     return;
   }
 
-  // Shared decoder seam (DataModel::decodeAndParseFrame).
   decodeAndParseFrame(data->data,
                       resolveDecoderMethod(sourceId, applyPerSourceOverride),
                       DataModel::FrameParser::instance(),
@@ -1043,7 +1008,9 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
 }
 
 /**
- * @brief Span twin of applyDatasetValue: in-place writes keep the producer allocation-free.
+ * @brief Span twin of applyDatasetValue: in-place writes keep the producer allocation-free. The
+ *        span lane never runs during playback, so unlike its twin it needs no final-value player
+ *        check before applying the transform.
  */
 SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
                                                            const QByteArrayView* spans,
@@ -1062,8 +1029,10 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
     if (idx <= 0 || idx > count) [[unlikely]]
       return;
 
-    // Restates the guard above; never assume idx range before the bounds check on a parsed frame
+    // code-verify off
+    // Restates the guard above; never assume idx range before the bounds check on a parsed frame.
     SS_ASSUME(idx >= 1 && idx <= count);
+    // code-verify on
 
     const QByteArrayView token = spans[idx - 1];
     DataModel::assign_utf8_in_place(dataset.value, token);
@@ -1077,7 +1046,6 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
     m_tableStore.setDatasetRaw(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
 
-  // The span lane never runs during playback, so no final-value player check is needed here
   if (!dataset.transformCode.isEmpty()) [[unlikely]] {
     const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
     const auto result = applyTransform(dataset.transformLanguage, dataset.uniqueId, input, info);
@@ -1103,7 +1071,6 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValueSpan(Dataset& dataset,
  */
 bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
 {
-  // Recompute the capture flag only when one of its inputs moved (epoch poll + dirty flag)
   static auto& parser = DataModel::FrameParser::instance();
   const int epoch     = parser.engineEpoch();
   if (m_captureFlagsDirty || epoch != m_seenEngineEpoch) [[unlikely]] {
@@ -1111,7 +1078,6 @@ bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
     refreshDatasetCaptureFlag();
   }
 
-  // Refresh per-source engine cache on sourceId change: one map lookup per rotation.
   if (info.sourceId != m_engineCacheSourceId) [[unlikely]] {
     m_engineCacheSourceId = info.sourceId;
     auto luaIt            = m_transformEngines.find({info.sourceId, SerialStudio::Lua});
@@ -1120,7 +1086,6 @@ bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
     m_jsEngineForSource   = (jsIt != m_transformEngines.end()) ? &jsIt->second : nullptr;
   }
 
-  // Frame-level JS watchdog: one arm/disarm per frame; the budget covers the whole frame.
   const bool armJsWatchdog = (m_jsEngineForSource != nullptr);
   if (armJsWatchdog) [[unlikely]] {
     Q_ASSERT(m_jsEngineForSource->jsWatchdog);
@@ -1128,7 +1093,6 @@ bool DataModel::FrameBuilder::beginDatasetPass(const TransformFrameInfo& info)
     m_jsEngineForSource->jsWatchdog->arm();
   }
 
-  // Re-entrancy guard: pin engine storage while cached pointers into it are live
   ++m_compileGuard;
   return armJsWatchdog;
 }
@@ -1154,7 +1118,6 @@ void DataModel::FrameBuilder::endDatasetPass(bool armedJsWatchdog)
           .arg(kTransformWatchdogMs));
   }
 
-  // Drain any project mutation a transform queued, now that hot pointers have been released
   if (m_compileGuard == 0 && m_compilePending) [[unlikely]] {
     m_compilePending = false;
     QMetaObject::invokeMethod(this, [this] { compileTransforms(); }, Qt::QueuedConnection);
@@ -1181,11 +1144,9 @@ void DataModel::FrameBuilder::applyDatasetValues(DataModel::Frame& frame,
                                                  const QStringList& channels,
                                                  const TransformFrameInfo& info)
 {
-  // Obtain number of channels
   const auto* channelData = channels.data();
   const int channelCount  = channels.size();
 
-  // Final-value replay (CSV/MDF4) reads recorded values by export-schema column for this source.
   const std::unordered_map<int, int>* replayColumns = nullptr;
   if (SerialStudio::isFinalValuePlayerOpen()) [[unlikely]] {
     const auto it = m_replayColumnMap.find(info.sourceId);
@@ -1240,7 +1201,6 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValuesSpans(
   Q_ASSERT(datasets != nullptr);
   Q_ASSERT(spans != nullptr);
 
-  // No-alias contract: flat dataset-pointer table and span scratch are distinct, never written here
   const bool armedWatchdog = beginDatasetPass(info);
 
   SS_NO_UNROLL
@@ -1340,7 +1300,6 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
   Q_ASSERT(!channels.isEmpty());
   Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
 
-  // Covers the audio variant too: this is its only call site
   invalidateFramePool();
 
 #ifdef BUILD_COMMERCIAL
@@ -1421,12 +1380,10 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
   if (!audioPtr)
     return;
 
-  // Obtain the audio sample format
   const auto& audio     = *audioPtr;
   const auto format     = audio.config().capture.format;
   const auto sampleRate = audio.config().sampleRate;
 
-  // Derive value range from the audio sample format
   double maxValue = 1.0;
   double minValue = 0.0;
   switch (format) {
@@ -1454,13 +1411,11 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
       break;
   }
 
-  // FFT size: next power-of-two covering at least 50 ms of samples
   const int targetSamples = static_cast<int>(sampleRate * 0.05);
   int fftSamples          = 256;
   while (fftSamples < targetSamples && fftSamples < 8192)
     fftSamples *= 2;
 
-  // Build datasets with FFT enabled; per-dataset plot only when mono
   const bool multipleChannels = channels.count() > 1;
   int index                   = 1;
   std::vector<DataModel::Dataset> datasets;
@@ -1492,7 +1447,6 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
     ++index;
   }
 
-  // Assemble audio group and frame
   DataModel::Group group;
   group.groupId  = 0;
   group.uniqueId = runtime_group_unique_id(0);
@@ -1516,7 +1470,9 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Publishes a fully constructed DataModel frame to all registered output modules.
+ * @brief Publishes a fully constructed DataModel frame to all registered output modules. The
+ *        dashboard draws the pooled slot directly; async sinks (gated on the cached m_anyAsyncSink
+ *        flag) get one detached copy so a slow-export backlog can never pin the pool.
  */
 void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
@@ -1524,15 +1480,12 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
   Q_ASSERT(!frame->data.groups.empty());
   Q_ASSERT(!frame->data.title.isEmpty());
 
-  // Dashboard keeps only the latest frame, so its pooled slot recycles fast regardless of sinks.
   static auto& dashboard = UI::Dashboard::instance();
   dashboard.hotpathRxFrame(frame);
 
-  // Cached consumer flag: async sinks get a detached copy so backlogs can't pin the pool
   if (!m_anyAsyncSink)
     return;
 
-  // Export-side singleton guards live behind the early return; only paying sinks reach them
   static auto& csvExport     = CSV::Export::instance();
   static auto& mdf4Export    = MDF4::Export::instance();
   static auto& pluginsServer = API::Server::instance();
@@ -1544,11 +1497,9 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
 #endif
 
-  // Generate export frame
   const auto detached =
     std::make_shared<DataModel::TimestampedFrame>(frame->data, frame->timestamp);
 
-  // Distribute export frame to data export subsystems
   csvExport.hotpathTxFrame(detached);
   mdf4Export.hotpathTxFrame(detached);
   pluginsServer.hotpathTxFrame(detached);
@@ -1566,7 +1517,8 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens the safe Lua libraries needed by transforms and strips dangerous globals.
+ * @brief Opens the safe Lua libraries needed by transforms and strips dangerous globals, including
+ *        string.dump whose bytecode serialization paired with a loader is a sandbox-escape vector.
  */
 static void openSafeLibsForTransform(lua_State* L)
 {
@@ -1580,19 +1532,16 @@ static void openSafeLibsForTransform(lua_State* L)
     {    nullptr,           nullptr}
   };
 
-  // Load safe libraries
   for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
     luaL_requiref(L, lib->name, lib->func, 1);
     lua_pop(L, 1);
   }
 
-  // Remove dangerous functions from base library
   for (const char* name : {"dofile", "loadfile", "load"}) {
     lua_pushnil(L);
     lua_setglobal(L, name);
   }
 
-  // Strip string.dump: bytecode serialization paired with the loader is unsafe.
   lua_getglobal(L, "string");
   if (lua_istable(L, -1)) {
     lua_pushnil(L);
@@ -1643,11 +1592,11 @@ void DataModel::FrameBuilder::setReplayColumnMap(
 
 /**
  * @brief Compiles per-dataset transforms into one shared Lua/JS engine per source, caching function
- * refs.
+ * refs. Defers when a frame is in flight (m_compileGuard > 0): mutating m_transformEngines while a
+ * dataset pass holds hot pointers into it would dangle them.
  */
 void DataModel::FrameBuilder::compileTransforms()
 {
-  // Defer if a frame is in flight: mutating m_transformEngines under hot pointers dangles them
   if (m_compileGuard > 0) [[unlikely]] {
     m_compilePending = true;
     return;
@@ -1656,7 +1605,6 @@ void DataModel::FrameBuilder::compileTransforms()
   destroyTransformEngines();
   Q_ASSERT(m_transformEngines.empty());
 
-  // Group transforms by (sourceId, transformLanguage). ProjectModel resolves unset (-1)
   std::map<EngineKey, std::vector<TransformEntry>> byKey;
   for (const auto& group : m_frame.groups) {
     for (const auto& ds : group.datasets) {
@@ -1670,7 +1618,6 @@ void DataModel::FrameBuilder::compileTransforms()
   if (byKey.empty())
     return;
 
-  // Compile one engine per (source, language) key
   for (auto& [key, entries] : byKey) {
     auto [it, inserted] = m_transformEngines.emplace(key, TransformEngine{});
     Q_ASSERT(inserted);
@@ -1699,7 +1646,6 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
   if (!L) [[unlikely]]
     return;
 
-  // Replace default panic (which aborts) with one that throws -> caller's catch
   lua_atpanic(L, [](lua_State* state) -> int {
     const char* msg = lua_tostring(state, -1);
     qWarning() << "[FrameBuilder] Lua transform panic:" << (msg ? msg : "<unknown>");
@@ -1708,41 +1654,30 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
 
   openSafeLibsForTransform(L);
 
-  // Re-add Lua 5.1 / 5.2 names that 5.4 dropped (math.log10, math.pow, bit32, ...)
   DataModel::installLuaCompat(L);
 
-  // Inject table/dataset/variant API before any user code runs
   injectTableApiLua(L);
 
-  // Expose deviceWrite(data, sourceId) for closed-loop control from transforms
   DataModel::DeviceWriteApi::installLua(L, sourceId);
 
-  // Expose actionFire(actionId) for firing dashboard actions from transforms
   DataModel::ActionFireApi::installLua(L);
 
-  // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installLua(L);
 
-  // Expose apiCall(method, params?): gated to a read-only allow-list by default
   DataModel::ScriptApiCall::installLua(L, sourceId);
 
-  // Notification API: gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(L);
 
-  // Stash engine pointer in registry so the watchdog hook can find it.
   lua_pushlightuserdata(L, &engine);
   lua_setfield(L, LUA_REGISTRYINDEX, "__ss_transform__");
 
-  // Install instruction-count watchdog
   lua_sethook(L, &FrameBuilder::transformLuaWatchdogHook, LUA_MASKCOUNT, kTransformHookInstrCount);
 
-  // Arm the deadline while the user's compile-time chunk runs
   engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
 
   for (const auto& entry : entries)
     compileTransformsLuaEntry(L, engine, entry);
 
-  // Disarm the deadline: subsequent arming happens per-call
   engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
   engine.luaState    = L;
 }
@@ -1754,18 +1689,15 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
                                                         TransformEngine& engine,
                                                         const TransformEntry& entry)
 {
-  // Each dataset runs in its own _ENV table; reads fall through to _G via metatable
   const int baseTop = lua_gettop(L);
 
   try {
-    // 1. Build per-dataset env { __index = _G }
-    lua_newtable(L);                 // env
-    lua_createtable(L, 0, 1);        // mt
-    lua_pushglobaltable(L);          // _G
-    lua_setfield(L, -2, "__index");  // mt.__index = _G
-    lua_setmetatable(L, -2);         // setmetatable(env, mt)
+    lua_newtable(L);
+    lua_createtable(L, 0, 1);
+    lua_pushglobaltable(L);
+    lua_setfield(L, -2, "__index");
+    lua_setmetatable(L, -2);
 
-    // 2. Load the user's chunk
     const QByteArray utf8 = entry.code.toUtf8();
     const QByteArray chunkName =
       QByteArray("=transform[") + QByteArray::number(entry.uniqueId) + "]";
@@ -1776,11 +1708,9 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
       return;
     }
 
-    // 3. Re-target chunk._ENV (upvalue 1 of a main chunk in Lua 5.4) at the per-dataset env
     lua_pushvalue(L, -2);
     lua_setupvalue(L, -2, 1);
 
-    // 4. Execute the chunk
     if (lua_pcall(L, 0, 0, 0) != LUA_OK) {
       qWarning() << "[FrameBuilder] Transform runtime error for dataset" << entry.uniqueId << ":"
                  << lua_tostring(L, -1);
@@ -1788,7 +1718,6 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
       return;
     }
 
-    // 5. Look the transform up in the per-dataset env (not _G)
     lua_getfield(L, -1, "transform");
     if (!lua_isfunction(L, -1)) {
       qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
@@ -1797,22 +1726,18 @@ void DataModel::FrameBuilder::compileTransformsLuaEntry(lua_State* L,
       return;
     }
 
-    // 6. Detect whether transform declares an `info` parameter (lua_getinfo with ">" pops)
     bool acceptsInfo = false;
     lua_pushvalue(L, -1);
     lua_Debug ar;
     if (lua_getinfo(L, ">u", &ar) != 0) [[likely]]
       acceptsInfo = (ar.nparams >= 2);
 
-    // 7. Release any previous ref for this dataset before overwriting
     auto existingIt = engine.luaRefs.find(entry.uniqueId);
     if (existingIt != engine.luaRefs.end()) [[unlikely]]
       luaL_unref(L, LUA_REGISTRYINDEX, existingIt->second.ref);
 
-    // 8. Store the function ref; the per-dataset env stays alive via its _ENV upvalue
     engine.luaRefs[entry.uniqueId] = LuaTransformRef{luaL_ref(L, LUA_REGISTRYINDEX), acceptsInfo};
 
-    // Pop the env table
     lua_pop(L, 1);
     Q_ASSERT(lua_gettop(L) == baseTop);
   } catch (const std::exception& e) {
@@ -1836,33 +1761,25 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
 {
   auto* js = new QJSEngine();
 
-  // Inject table/dataset/variant API before any user code runs
   injectTableApiJS(js);
 
-  // Expose deviceWrite(data, sourceId?) for closed-loop control from transforms
   DataModel::DeviceWriteApi::installJS(js, sourceId);
 
-  // Expose actionFire(actionId) for firing dashboard actions from transforms
   DataModel::ActionFireApi::installJS(js);
 
-  // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installJS(js);
 
-  // Expose apiCall(method, params?): gated to a read-only allow-list by default
   DataModel::ScriptApiCall::installJS(js, sourceId);
 
-  // Notification API: gated internally on the active license tier
   DataModel::NotificationCenter::installScriptApi(js);
 
   for (const auto& entry : entries) {
-    // Single-line IIFE prefix keeps user code on line 1 for accurate engine lineNumber
     const QString wrapped =
       QStringLiteral("(function() {%1\n"
                      ";return (typeof transform === 'function') ? transform : null;\n"
                      "})();")
         .arg(entry.code);
 
-    // Evaluate the IIFE: its return value is the transform function
     auto evalResult = js->evaluate(wrapped);
     if (evalResult.isError()) {
       qWarning() << "[FrameBuilder] Transform compile error for"
@@ -1872,14 +1789,12 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
       continue;
     }
 
-    // Reject if the IIFE didn't yield a callable transform function
     if (!evalResult.isCallable()) {
       qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
                  << "transform code does not define transform()";
       continue;
     }
 
-    // function.length = formal param count; 1-arg transforms skip the info-object build.
     const bool acceptsInfo        = (evalResult.property(QStringLiteral("length")).toInt() >= 2);
     engine.jsRefs[entry.uniqueId] = JsTransformRef{evalResult, acceptsInfo};
   }
@@ -1911,36 +1826,29 @@ void DataModel::FrameBuilder::collectTransformEngineGarbage()
  */
 void DataModel::FrameBuilder::destroyTransformEngines()
 {
-  // Invalidate the per-source engine cache before any pointer-bearing storage moves.
   m_engineCacheSourceId = -1;
   m_luaEngineForSource  = nullptr;
   m_jsEngineForSource   = nullptr;
   m_captureFlagsDirty   = true;
 
-  // Drop the (interned-string) lookup cache before any owning Lua state closes
   m_tableStore.clearLookupCache();
 
   for (auto& [id, engine] : m_transformEngines) {
-    // Clear JS function refs before deleting the engine.
     engine.jsRefs.clear();
 
-    // Release each Lua registry ref before closing the state
     if (engine.luaState)
       for (const auto& [uid, ref] : engine.luaRefs)
         luaL_unref(engine.luaState, LUA_REGISTRYINDEX, ref.ref);
 
     engine.luaRefs.clear();
 
-    // Release Lua state
     if (engine.luaState) {
       lua_close(engine.luaState);
       engine.luaState = nullptr;
     }
 
-    // Unregister the watchdog before freeing the engine: it can never touch a freed engine.
     engine.jsWatchdog.reset();
 
-    // Release JS engine (refs already cleared above)
     delete engine.jsEngine;
     engine.jsEngine = nullptr;
   }
@@ -1993,7 +1901,6 @@ QVariant DataModel::FrameBuilder::applyTransformLua(TransformEngine& engine,
   const bool acceptsInfo = transform.acceptsInfo;
   engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
 
-  // C++-boundary exception guard
   try {
     lua_rawgeti(L, LUA_REGISTRYINDEX, transform.ref);
     if (rawValue.typeId() == QMetaType::Double) {
@@ -2003,7 +1910,6 @@ QVariant DataModel::FrameBuilder::applyTransformLua(TransformEngine& engine,
       lua_pushlstring(L, utf8.constData(), static_cast<size_t>(utf8.size()));
     }
 
-    // 2nd arg { frameNumber, sourceId, timestampMs }
     int argCount = 1;
     if (acceptsInfo) {
       lua_createtable(L, 0, 3);
@@ -2068,7 +1974,8 @@ QVariant DataModel::FrameBuilder::applyTransformLua(TransformEngine& engine,
 }
 
 /**
- * @brief Calls the cached JS transform function for @p uniqueId under the watchdog timer.
+ * @brief Calls the cached JS transform function for @p uniqueId under the watchdog timer, which is
+ *        armed once per frame in beginDatasetPass rather than per call (unlike the Lua deadline).
  */
 QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
                                                    int uniqueId,
@@ -2079,14 +1986,12 @@ QVariant DataModel::FrameBuilder::applyTransformJs(TransformEngine& engine,
   if (refIt == engine.jsRefs.end())
     return rawValue;
 
-  // Watchdog is armed once per frame in applyDatasetValues, not per call.
   QJSValueList args;
   if (rawValue.typeId() == QMetaType::Double)
     args << QJSValue(SerialStudio::toDouble(rawValue));
   else
     args << QJSValue(rawValue.toString());
 
-  // 2nd arg { frameNumber, sourceId, timestampMs }: only built when the transform takes it.
   if (refIt->second.acceptsInfo) {
     QJSValue jsInfo = engine.jsEngine->newObject();
     jsInfo.setProperty(QStringLiteral("frameNumber"),
@@ -2153,7 +2058,6 @@ void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
  */
 static int luaTableGet(lua_State* L)
 {
-  // Retrieve the DataTableStore pointer from upvalue
   auto* store = static_cast<DataModel::DataTableStore*>(lua_touserdata(L, lua_upvalueindex(1)));
   Q_ASSERT(store);
 
@@ -2287,7 +2191,6 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 {
   Q_ASSERT(L);
 
-  // Someone can now read dataset registers, so the hotpath must keep capturing them
   m_externalTableApiUsers = true;
   m_captureFlagsDirty     = true;
 
@@ -2320,20 +2223,16 @@ void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
 {
   Q_ASSERT(js);
 
-  // Someone can now read dataset registers, so the hotpath must keep capturing them
   m_externalTableApiUsers = true;
   m_captureFlagsDirty     = true;
 
-  // Create bridge parented to the engine (destroyed when engine is deleted)
   auto* bridge  = new DataModel::TableApiBridge(js);
   bridge->store = &m_tableStore;
 
-  // Install as __ss global property
   auto global    = js->globalObject();
   auto bridgeVal = js->newQObject(bridge);
   global.setProperty(QStringLiteral("__ss"), bridgeVal);
 
-  // Thin JS wrappers so user code calls clean function names
   QString jsApi =
     QStringLiteral("function tableGet(t, r)       { return __ss.tableGet(t, r); }\n"
                    "function tableSet(t, r, v)    { __ss.tableSet(t, r, v); }\n"

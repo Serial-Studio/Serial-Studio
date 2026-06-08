@@ -78,20 +78,17 @@ inline JsonValidator::ValidationResult JsonValidator::parseAndValidate(const QBy
 {
   ValidationResult result;
 
-  // Validation Step 1: Check file size limit
   if (data.size() > limits.maxFileSize) [[unlikely]] {
     result.errorMessage = QString("JSON data exceeds maximum size limit of %1 MB")
                             .arg(limits.maxFileSize / (1024 * 1024));
     return result;
   }
 
-  // Validation Step 2: Check for empty input
   if (data.isEmpty()) [[unlikely]] {
     result.errorMessage = "JSON data is empty";
     return result;
   }
 
-  // Validation Step 3: Parse JSON syntax
   QJsonParseError parseError;
   result.document = QJsonDocument::fromJson(data, &parseError);
 
@@ -102,7 +99,6 @@ inline JsonValidator::ValidationResult JsonValidator::parseAndValidate(const QBy
     return result;
   }
 
-  // Validation Step 4: Validate structure depth and array sizes
   if (!validateStructure(result.document.isArray() ? QJsonValue(result.document.array())
                                                    : QJsonValue(result.document.object()),
                          limits)) [[unlikely]] {
@@ -113,7 +109,6 @@ inline JsonValidator::ValidationResult JsonValidator::parseAndValidate(const QBy
     return result;
   }
 
-  // All validations passed
   result.valid = true;
   return result;
 }
@@ -125,17 +120,14 @@ inline bool JsonValidator::validateStructure(const QJsonValue& value,
                                              const Limits& limits,
                                              int currentDepth)
 {
-  // Check recursion depth limit
   if (currentDepth > limits.maxDepth) [[unlikely]]
     return false;
 
-  // Dispatch based on type
   if (value.isObject())
     return validateObject(value.toObject(), limits, currentDepth);
   else if (value.isArray())
     return validateArray(value.toArray(), limits, currentDepth);
 
-  // Primitives are always valid
   return true;
 }
 
@@ -144,11 +136,9 @@ inline bool JsonValidator::validateStructure(const QJsonValue& value,
  */
 inline bool JsonValidator::validateObject(const QJsonObject& obj, const Limits& limits, int depth)
 {
-  // Check recursion depth limit
   if (depth > limits.maxDepth) [[unlikely]]
     return false;
 
-  // Recursively validate each property value
   for (auto it = obj.constBegin(); it != obj.constEnd(); ++it)
     if (!validateStructure(it.value(), limits, depth + 1)) [[unlikely]]
       return false;
@@ -161,15 +151,12 @@ inline bool JsonValidator::validateObject(const QJsonObject& obj, const Limits& 
  */
 inline bool JsonValidator::validateArray(const QJsonArray& arr, const Limits& limits, int depth)
 {
-  // Check recursion depth limit
   if (depth > limits.maxDepth) [[unlikely]]
     return false;
 
-  // Check array size limit
   if (arr.size() > limits.maxArraySize) [[unlikely]]
     return false;
 
-  // Recursively validate each element
   for (const auto& element : arr)
     if (!validateStructure(element, limits, depth + 1)) [[unlikely]]
       return false;

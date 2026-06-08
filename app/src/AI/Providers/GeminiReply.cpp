@@ -133,14 +133,12 @@ void AI::GeminiReply::onSseError(const QString& reason)
  */
 void AI::GeminiReply::processChunk(const QJsonObject& chunk)
 {
-  // Top-level error envelope (some failures arrive on the stream)
   if (chunk.contains(QStringLiteral("error"))) {
     const auto err = chunk.value(QStringLiteral("error")).toObject();
     finishWithError(err.value(QStringLiteral("message")).toString());
     return;
   }
 
-  // Prompt-level block (whole prompt rejected before generation)
   const auto promptFeedback = chunk.value(QStringLiteral("promptFeedback")).toObject();
   const auto promptBlock    = promptFeedback.value(QStringLiteral("blockReason")).toString();
   if (!promptBlock.isEmpty()) {
@@ -178,7 +176,6 @@ void AI::GeminiReply::processChunk(const QJsonObject& chunk)
     }
   }
 
-  // Candidate-level fatal finishReasons (no usable output)
   const auto finishReason           = candidate.value(QStringLiteral("finishReason")).toString();
   static const QSet<QString> kFatal = {QStringLiteral("SAFETY"),
                                        QStringLiteral("RECITATION"),

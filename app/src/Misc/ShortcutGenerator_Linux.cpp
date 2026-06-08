@@ -113,7 +113,6 @@ bool Misc::ShortcutGenerator::writeLinuxDesktop(const QString& outputPath,
     return false;
   }
 
-  // Refresh the desktop database when shipping into the user-applications dir
   const QString applicationsDir = QDir::homePath() + QStringLiteral("/.local/share/applications");
   if (QFileInfo(outputPath).absolutePath() == applicationsDir) {
     const QString tool = QStandardPaths::findExecutable(QStringLiteral("update-desktop-database"));

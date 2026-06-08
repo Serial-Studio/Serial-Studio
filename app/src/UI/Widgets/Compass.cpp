@@ -131,7 +131,6 @@ void Widgets::Compass::updateData()
   if (!std::isfinite(dataset.numericValue))
     return;
 
-  // Wrap-clamp to [0, 360); fold negatives and values > 360 back into the rose
   double v = std::fmod(dataset.numericValue, 360.0);
   if (v < 0.0)
     v += 360.0;

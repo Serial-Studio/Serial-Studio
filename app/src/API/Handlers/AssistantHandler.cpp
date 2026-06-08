@@ -372,14 +372,12 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
   QJsonObject inner = params;
   inner.remove(QStringLiteral("kind"));
 
-  // Default an absent `values` to [0.0] so transform apply() doubles as a compile-only path.
   if (kind == QStringLiteral("transform") && !inner.contains(QStringLiteral("values"))) {
     QJsonArray defaults;
     defaults.append(0.0);
     inner.insert(QStringLiteral("values"), defaults);
   }
 
-  // frame_parser without bytes: fall back to dryCompile (syntax + parse() presence only).
   QString effectiveDry = dryInner;
   if (kind == QStringLiteral("frame_parser") && !inner.contains(QStringLiteral("inputBytes"))
       && !inner.contains(QStringLiteral("inputBytesHex")))
@@ -389,7 +387,6 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
   const auto dryResp = forward(effectiveDry, QStringLiteral("inner"), inner);
   steps.append(toStep(QStringLiteral("dryRun"), dryResp));
 
-  // Painter dryRun and frame-parser dryCompile both signal compile failure via result.ok=false.
   const bool reportedOk = !dryResp.result.contains(QStringLiteral("ok"))
                        || dryResp.result.value(QStringLiteral("ok")).toBool(true);
   if (!dryResp.success || !reportedOk) {
@@ -402,7 +399,6 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
                                       data);
   }
 
-  // setCode endpoints don't accept dry-run-only fields; strip them before forwarding.
   QJsonObject setParams = inner;
   setParams.remove(QStringLiteral("values"));
   setParams.remove(QStringLiteral("inputBytes"));
@@ -733,7 +729,6 @@ API::CommandResponse API::Handlers::AssistantHandler::workspaceAddTile(const QSt
 
   QJsonArray steps;
 
-  // Step 1: resolve dataset (optional)
   int gid = -1, did = -1, uid = -1;
   const bool hasDataset =
     params.contains(QStringLiteral("dataset")) || params.contains(Keys::UniqueId);
@@ -744,13 +739,11 @@ API::CommandResponse API::Handlers::AssistantHandler::workspaceAddTile(const QSt
       return stepFailure(id, dsResp, steps);
   }
 
-  // Step 2: resolve or create the workspace
   int workspaceId   = -1;
   const auto wsResp = resolveOrCreateWorkspace(params, workspaceId, steps);
   if (!wsResp.success)
     return stepFailure(id, wsResp, steps);
 
-  // Step 3: ensure customize mode
   const auto custResp = ensureCustomizeMode();
   steps.append(toStep(QStringLiteral("workspace.setCustomizeMode"), custResp));
   if (!custResp.success)
@@ -766,7 +759,6 @@ API::CommandResponse API::Handlers::AssistantHandler::workspaceAddTile(const QSt
       return stepFailure(id, rngResp, steps);
   }
 
-  // Step 6: addWidget. If no dataset was provided, gid must come from params.
   if (!hasDataset) {
     if (!params.contains(QStringLiteral("groupId")))
       return CommandResponse::makeError(
@@ -904,7 +896,6 @@ API::CommandResponse API::Handlers::AssistantHandler::restore(const QString& id,
       QStringLiteral("Provide one of: path, timestamp, or label. Use "
                      "assistant.listCheckpoints to discover available references."));
 
-  // Snapshot the current state first so this restore is itself reversible.
   const auto reverse = Misc::BackupManager::instance().snapshot(QStringLiteral("pre-restore"));
 
   if (!Misc::BackupManager::instance().restore(path))

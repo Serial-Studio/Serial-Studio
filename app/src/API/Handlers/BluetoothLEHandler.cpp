@@ -39,7 +39,6 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
   auto& registry   = CommandRegistry::instance();
   const auto empty = emptySchema();
 
-  // Mutation commands
   registry.registerCommand(QStringLiteral("io.ble.startDiscovery"),
                            QStringLiteral("Start scanning for Bluetooth LE devices"),
                            empty,
@@ -73,7 +72,6 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
   }),
     &setCharacteristicIndex);
 
-  // Query commands
   registry.registerCommand(QStringLiteral("io.ble.listDevices"),
                            QStringLiteral("Get list of discovered Bluetooth LE devices"),
                            empty,
@@ -323,20 +321,17 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getConfiguration(const Q
 
   QJsonObject result;
 
-  // Device info
   result[QStringLiteral("deviceIndex")] = ble->deviceIndex();
   const auto& deviceNames               = ble->deviceNames();
   if (ble->deviceIndex() >= 0 && ble->deviceIndex() < deviceNames.count())
     result[QStringLiteral("deviceName")] = deviceNames.at(ble->deviceIndex());
 
-  // Characteristic info
   result[QStringLiteral("characteristicIndex")] = ble->characteristicIndex();
   const auto& characteristicNames               = ble->characteristicNames();
   if (ble->characteristicIndex() >= 0 && ble->characteristicIndex() < characteristicNames.count())
     result[QStringLiteral("characteristicName")] =
       characteristicNames.at(ble->characteristicIndex());
 
-  // Connection status
   result[QStringLiteral("isOpen")]          = ble->isOpen();
   result[QStringLiteral("configurationOk")] = ble->configurationOk();
 

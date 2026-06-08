@@ -35,7 +35,6 @@
  */
 Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
 {
-  // Set fallback mono font to system font
   QString monoFont;
 #ifdef Q_OS_LINUX
   monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
@@ -47,11 +46,9 @@ Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
   monoFont = QStringLiteral("Courier");
 #endif
 
-  // Register all Geist Mono variants
   QFontDatabase::addApplicationFont(":/fonts/GeistMono-Bold.ttf");
   QFontDatabase::addApplicationFont(":/fonts/GeistMono-Medium.ttf");
 
-  // Use the Regular variant as the default mono font
   const auto id = QFontDatabase::addApplicationFont(":/fonts/GeistMono-Regular.ttf");
   if (id != -1) {
     const auto families = QFontDatabase::applicationFontFamilies(id);
@@ -59,10 +56,8 @@ Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
       monoFont = families.at(0);
   }
 
-  // Set the UI font to the system default
   m_uiFont = QApplication::font();
 
-  // Configure bold font
   m_boldUiFont = m_uiFont;
 #ifdef Q_OS_LINUX
   m_boldUiFont.setWeight(QFont::DemiBold);
@@ -70,23 +65,19 @@ Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
   m_boldUiFont.setBold(true);
 #endif
 
-  // Setup monospace font
   m_monoFont = QFont(monoFont);
   m_monoFont.setFixedPitch(true);
   m_monoFont.setStyleHint(QFont::Monospace);
   m_monoFont.setPointSizeF(m_uiFont.pointSizeF());
 
-  // Verify that the font was loaded correctly
   if (m_monoFont.family() != monoFont)
     m_monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 
-  // Load widget font settings (default family is the monospace font on first run)
   m_widgetFontFamily = m_settings.value("CommonFonts/FontFamily", m_monoFont.family()).toString();
   m_widgetFontScale =
     SerialStudio::toDouble(m_settings.value("CommonFonts/FontScale", kScaleNormal));
   m_widgetFontScale = qBound(0.5, m_widgetFontScale, 3.0);
 
-  // Validate saved font family exists; fall back to default mono font if not found
   const auto fonts  = availableFonts();
   m_widgetFontIndex = fonts.indexOf(m_widgetFontFamily);
   if (m_widgetFontIndex < 0) {
@@ -200,7 +191,6 @@ int Misc::CommonFonts::widgetFontIndex() const
  */
 QStringList Misc::CommonFonts::availableFonts() const
 {
-  // Collect non-private font families and sort them
   QStringList families;
   for (const QString& family : QFontDatabase::families()) {
     if (family.startsWith(QLatin1Char('.')))
@@ -212,15 +202,12 @@ QStringList Misc::CommonFonts::availableFonts() const
     families.append(family);
   }
 
-  // Sort font list
   families.sort(Qt::CaseInsensitive);
 
-  // Pin the default widget font (monoFont) to the top of the list
   const QString mono = m_monoFont.family();
   families.removeAll(mono);
   families.prepend(mono);
 
-  // Return obtained font list
   return families;
 }
 

@@ -75,11 +75,9 @@ void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
   Q_ASSERT(!filePath.isEmpty());
   Q_ASSERT(m_maxRetries > 0);
 
-  // Abort any existing transfer
   if (isActive())
     cancelTransfer();
 
-  // Open file and initialize transfer state
   m_file.setFileName(filePath);
   if (!m_file.open(QIODevice::ReadOnly)) {
     Q_EMIT finished(false, tr("Cannot open file: %1").arg(m_file.errorString()));
@@ -151,7 +149,6 @@ bool IO::Protocols::XMODEM::handleAckByte(quint8 ch)
                            .arg(m_retryCount)
                            .arg(m_maxRetries));
 
-    // Rewind by actual bytes read: fixed blockSize over-rewinds the final partial block.
     m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
     if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
       m_file.close();
@@ -203,7 +200,6 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
     const quint8 ch = static_cast<quint8>(byte);
 
     switch (m_state) {
-      // Waiting for receiver to send 'C' (CRC mode)
       case State::WaitingForStart:
         if (ch == kCRC) {
           m_timeoutTimer.stop();
@@ -213,14 +209,12 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
         }
         break;
 
-      // Waiting for ACK/NAK after a data block
       case State::WaitingForAck:
         if (!handleAckByte(ch))
           return;
 
         break;
 
-      // Waiting for ACK after EOT
       case State::WaitingForEOTAck:
         handleEotAckByte(ch);
         break;
@@ -295,10 +289,8 @@ void IO::Protocols::XMODEM::sendBlock()
   Q_ASSERT(m_file.isOpen());
   Q_ASSERT(m_state == State::SendingBlocks);
 
-  // Snapshot file position so NAK/timeout retries seek back precisely.
   m_lastBlockStart = m_file.pos();
 
-  // Read next block; send EOT if file is exhausted
   int blockSize   = m_use1K ? 1024 : 128;
   QByteArray data = m_file.read(blockSize);
   if (data.isEmpty()) {
@@ -313,11 +305,9 @@ void IO::Protocols::XMODEM::sendBlock()
 
   m_lastBlockBytes = data.size();
 
-  // Pad incomplete block with SUB (0x1A)
   while (data.size() < blockSize)
     data.append(static_cast<char>(0x1A));
 
-  // Build, send, and update progress
   QByteArray packet = buildBlock(data, m_blockNumber);
   Q_EMIT writeRequested(packet);
 
@@ -373,7 +363,6 @@ void IO::Protocols::XMODEM::handleTimeout()
   if (!isActive())
     return;
 
-  // Abort if retries exhausted
   ++m_retryCount;
   if (m_retryCount >= m_maxRetries) {
     sendCancel();
@@ -389,7 +378,6 @@ void IO::Protocols::XMODEM::handleTimeout()
   if (m_state == State::WaitingForEOTAck) {
     sendEOT();
   } else if (m_state == State::WaitingForAck) {
-    // Use the recorded last-block position; see the NAK path for rationale.
     m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
     if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
       m_file.close();
@@ -413,7 +401,6 @@ QByteArray IO::Protocols::XMODEM::buildBlock(const QByteArray& data, quint8 bloc
   QByteArray packet;
   packet.reserve(data.size() + 5);
 
-  // Header: SOH (128) or STX (1K), block number, complement
   if (data.size() == 1024)
     packet.append(static_cast<char>(kSTX));
   else
@@ -423,7 +410,6 @@ QByteArray IO::Protocols::XMODEM::buildBlock(const QByteArray& data, quint8 bloc
   packet.append(static_cast<char>(~blockNum));
   packet.append(data);
 
-  // Append CRC-16
   quint16 crc = CRC::crc16(reinterpret_cast<const quint8*>(data.constData()), data.size());
   packet.append(static_cast<char>((crc >> 8) & 0xFF));
   packet.append(static_cast<char>(crc & 0xFF));

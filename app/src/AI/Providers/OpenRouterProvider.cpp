@@ -20,6 +20,12 @@
 #include "AI/Providers/OpenAIProvider.h"
 #include "AI/Providers/OpenAIReply.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+static const char* const kOpenRouterEndpoint = "https://openrouter.ai/api/v1/chat/completions";
+
 namespace detail {
 
 /**
@@ -49,8 +55,6 @@ private:
 };
 
 }  // namespace detail
-
-static const char* const kOpenRouterEndpoint = "https://openrouter.ai/api/v1/chat/completions";
 
 //--------------------------------------------------------------------------------------------------
 // Construction and provider metadata
@@ -176,7 +180,6 @@ AI::Reply* AI::OpenRouterProvider::sendMessage(const QJsonArray& history,
     return new detail::ImmediateErrorReplyOR(
       QObject::tr("No OpenRouter API key set. Open Manage Keys to add one."));
 
-  // Flatten Anthropic-shaped system blocks into a single string
   const auto systemBlocks = ContextBuilder::buildSystemArray(false);
   QString systemText;
   for (const auto& v : systemBlocks) {
@@ -191,10 +194,9 @@ AI::Reply* AI::OpenRouterProvider::sendMessage(const QJsonArray& history,
   }
 
   QJsonObject body;
-  body[QStringLiteral("model")]  = currentModel();
-  body[QStringLiteral("stream")] = true;
-  body[QStringLiteral("messages")] =
-    OpenAIProvider::translateHistory(history, systemText, /*useDeveloperRole=*/false);
+  body[QStringLiteral("model")]    = currentModel();
+  body[QStringLiteral("stream")]   = true;
+  body[QStringLiteral("messages")] = OpenAIProvider::translateHistory(history, systemText, false);
   if (!tools.isEmpty()) {
     body[QStringLiteral("tools")] = OpenAIProvider::translateTools(tools);
     body[QStringLiteral("tool_choice")] =

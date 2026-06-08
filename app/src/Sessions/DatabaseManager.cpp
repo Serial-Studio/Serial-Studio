@@ -66,7 +66,6 @@ static QString sanitiseTitleForPath(const QString& title)
   safe.remove(QStringLiteral(".."));
   safe = safe.simplified();
 
-  // Strip trailing dots and spaces (invalid as file/dir names on Windows)
   int keep = 0;
   for (int i = safe.size(); i > 0; --i) {
     const QChar c = safe.at(i - 1);
@@ -180,14 +179,12 @@ void Sessions::DatabaseManager::shutdown()
   if (m_worker)
     m_worker->requestCancel();
 
-  // No live qApp: worker loop is dead, BlockingQueuedConnection cannot deliver; fall to delete
   if (QCoreApplication::instance() && m_thread->isRunning() && m_worker) {
     QMetaObject::invokeMethod(m_worker, "closeDatabase", Qt::BlockingQueuedConnection);
     m_thread->quit();
     m_thread->wait(5000);
   }
 
-  // Thread is dead, delete worker directly (deleteLater would never fire)
   delete m_worker;
   m_worker = nullptr;
 
@@ -422,7 +419,6 @@ void Sessions::DatabaseManager::openDatabase()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -582,7 +578,6 @@ void Sessions::DatabaseManager::setSelectedSessionNotes(const QString& notes)
   if (selectedSessionNotes() == notes)
     return;
 
-  // Optimistic local update so QML rebinds without waiting for the worker
   for (auto& v : m_sessionList) {
     auto m = v.toMap();
     if (m.value("session_id").toInt() == m_selectedSessionId) {
@@ -820,7 +815,6 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
     opts.format = HtmlReportOptions::Format::Pdf;
 
 #  ifndef SERIAL_STUDIO_WITH_WEBENGINE
-  // No WebEngine -> users print from the browser; coerce to HTML up front
   opts.format = HtmlReportOptions::Format::Html;
 #  endif
 
@@ -885,7 +879,6 @@ void Sessions::DatabaseManager::requestPdfOutputPath(int sessionId, HtmlReportOp
   dialog->setFileMode(QFileDialog::AnyFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog,
           &QFileDialog::fileSelected,
           this,
@@ -920,7 +913,6 @@ void Sessions::DatabaseManager::requestPdfOutputPath(int sessionId, HtmlReportOp
  */
 void Sessions::DatabaseManager::renderReportFromPayload(const ReportPayloadPtr& payload)
 {
-  // Stale payload from a superseded request: drop silently
   if (!m_pendingPdfActive)
     return;
 
@@ -1002,7 +994,6 @@ void Sessions::DatabaseManager::pickReportLogo()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Deferred via queued invoke so QFileDialog::done() unwinds before the slot runs.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;

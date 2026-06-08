@@ -371,9 +371,9 @@ static LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
       continue;
     }
 
-    if (lang == Language::Lua && isLuaIdentChar(c, /*first=*/true)) {
+    if (lang == Language::Lua && isLuaIdentChar(c, true)) {
       int j = i;
-      while (j < n && isLuaIdentChar(line[j], /*first=*/false))
+      while (j < n && isLuaIdentChar(line[j], false))
         ++j;
 
       const QString word = line.mid(i, j - i).toString();
@@ -406,7 +406,6 @@ static LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
  */
 static QStringList splitLines(const QString& text)
 {
-  // Use Qt::KeepEmptyParts to retain trailing empty line semantics.
   return text.split(QLatin1Char('\n'), Qt::KeepEmptyParts);
 }
 
@@ -481,11 +480,9 @@ static QString reformatOne(const QString& raw,
 {
   QString trimmed = rtrim(raw);
 
-  // Preserve leading whitespace for lines inside a multiline string/comment.
   if (info.startsInsideMultiline)
     return trimmed;
 
-  // Pure-whitespace lines collapse to empty.
   const int lead = leadingWhitespaceCount(QStringView(trimmed));
   if (lead == trimmed.size())
     return QString();

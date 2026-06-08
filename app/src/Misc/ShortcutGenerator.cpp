@@ -148,7 +148,6 @@ QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
     args << resolvedProject;
   }
 
-  // --runtime implies hide-toolbar and quit-on-disconnect.
   args << QStringLiteral("--runtime");
   if (fullscreen)
     args << QStringLiteral("--fullscreen");
@@ -171,7 +170,6 @@ QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
   if (consoleExport)
     args << QStringLiteral("--console-export");
 
-  // Operator-mode taskbar layout
   const QString tbm = taskbarMode.toLower();
   if (tbm == QStringLiteral("autohide") || tbm == QStringLiteral("hidden"))
     args << QStringLiteral("--taskbar-mode") << tbm;
@@ -181,7 +179,6 @@ QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
     args << taskbarButtons.join(QLatin1Char(','));
   }
 
-  // Empty themeName == "Same as Serial Studio": inherit whatever the user has set globally
   const QString trimmedTheme = themeName.trimmed();
   if (!trimmedTheme.isEmpty())
     args << QStringLiteral("--theme") << trimmedTheme;
@@ -225,7 +222,6 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
     QUrl(outputPath).isLocalFile() ? QUrl(outputPath).toLocalFile() : outputPath;
 
 #  if defined(Q_OS_MAC)
-  // Force .app suffix so revealFile targets the bundle the writer produces.
   if (!resolvedPath.endsWith(QStringLiteral(".app"), Qt::CaseInsensitive))
     resolvedPath += QStringLiteral(".app");
 #  endif
@@ -245,7 +241,6 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
                                     taskbarButtons,
                                     themeName);
 
-  // Pass shortcut path so a relaunch can offer to delete it if the project is gone
   args << QStringLiteral("--shortcut-path") << resolvedPath;
 
   QString resolvedIcon = iconPath;
@@ -264,7 +259,6 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
     return;
   }
 
-  // `open -R` selects the .app bundle in Finder; revealFile would step into it.
 #  if defined(Q_OS_MAC)
   QProcess::startDetached(QStringLiteral("/usr/bin/open"), {QStringLiteral("-R"), resolvedPath});
 #  else
@@ -375,7 +369,6 @@ QString Misc::ShortcutGenerator::extractDefaultIcon() const
 
   const QString dst = dir + QLatin1Char('/') + file;
 
-  // Re-extract whenever the cached copy is missing or has a different size.
   QFile in(src);
   if (!in.open(QIODevice::ReadOnly))
     return QFileInfo::exists(dst) ? dst : QString();

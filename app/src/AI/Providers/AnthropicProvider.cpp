@@ -72,7 +72,6 @@ static QJsonObject sanitizeBlock(QJsonObject block)
     const auto name               = block.value(QStringLiteral("name")).toString();
     block[QStringLiteral("name")] = anthropicToolName(name);
   } else if (type == QStringLiteral("tool_result")) {
-    // Anthropic strict-rejects extra keys on tool_result blocks
     block.remove(QStringLiteral("_tool_name"));
     block.remove(QStringLiteral("_gemini_response"));
   }
@@ -207,7 +206,6 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
   body[QStringLiteral("stream")]     = true;
   body[QStringLiteral("system")]     = ContextBuilder::buildSystemArray();
 
-  // Adaptive thinking + effort:medium (Sonnet 4.6 / Opus 4.6+); Haiku 4.5 rejects both
   if (caps.thinking) {
     QJsonObject thinking;
     thinking[QStringLiteral("type")]    = QStringLiteral("adaptive");
@@ -219,7 +217,6 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
     body[QStringLiteral("output_config")]  = outputConfig;
   }
 
-  // Sanitize tool names against Anthropic's ^[a-zA-Z0-9_-]+ constraint
   if (!tools.isEmpty()) {
     QJsonArray sanitizedTools;
     for (const auto& v : tools) {
@@ -230,7 +227,6 @@ AI::Reply* AI::AnthropicProvider::sendMessage(const QJsonArray& history,
     }
     body[QStringLiteral("tools")] = sanitizedTools;
 
-    // Forced-summary round: keep the schema (history holds tool_use) but forbid new calls
     if (forbidToolUse) {
       QJsonObject toolChoice;
       toolChoice[QStringLiteral("type")]  = QStringLiteral("none");

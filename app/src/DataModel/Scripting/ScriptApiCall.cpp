@@ -63,6 +63,13 @@ static constexpr double kBucketSize   = 100.0;
 
 static std::atomic<bool> s_allowFullSurface{false};
 
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Recursion guard: mirrors JsonValidator's 128 cap so a self-referencing table can't blow up
+constexpr int kMaxJsonDepth = 64;
+
 /**
  * @brief Read-only command families safely callable from user scripts without opt-in.
  */
@@ -174,12 +181,6 @@ int DataModel::ScriptApiCall::maxBodyBytes()
 {
   return kMaxBodyBytes;
 }
-
-//--------------------------------------------------------------------------------------------------
-// Recursion guard: mirrors JsonValidator's 128 cap so a self-referencing table can't blow up
-//--------------------------------------------------------------------------------------------------
-
-constexpr int kMaxJsonDepth = 64;
 
 //--------------------------------------------------------------------------------------------------
 // Lua <-> QJsonValue conversion
@@ -413,7 +414,6 @@ QVariantMap DataModel::ScriptApiCallBridge::call(const QJSValue& methodVal,
     return out;
   }
 
-  // Run unknown-command lookup before the allow-list so scripts get UNKNOWN_COMMAND + did_you_mean
   if (!API::CommandRegistry::instance().hasCommand(method)) {
     const auto unknown = dispatchApiCall(method, QJsonObject());
     out.insert(QStringLiteral("ok"), false);
@@ -586,7 +586,6 @@ static int luaApiCall(lua_State* L)
     return 1;
   }
 
-  // Run unknown-command lookup before the allow-list so scripts get UNKNOWN_COMMAND + did_you_mean
   if (!API::CommandRegistry::instance().hasCommand(method)) {
     pushApiResult(L, dispatchApiCall(method, QJsonObject()));
     return 1;

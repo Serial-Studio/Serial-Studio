@@ -45,11 +45,9 @@ static constexpr std::chrono::milliseconds kAudioClockResync{50};
  */
 static bool deviceListsDiffer(const QVector<ma_device_info>& a, const QVector<ma_device_info>& b)
 {
-  // Size mismatch is an immediate difference
   if (a.size() != b.size())
     return true;
 
-  // Check each device ID and name for equality
   for (int i = 0; i < a.size(); ++i) {
     if (memcmp(&a[i].id, &b[i].id, sizeof(ma_device_id)) != 0)
       return true;
@@ -75,13 +73,11 @@ static IO::Drivers::Audio::AudioDeviceInfo extractCapabilities(ma_context* conte
   const QSet<ma_format> defaultFormats = {
     ma_format_u8, ma_format_s16, ma_format_s24, ma_format_s32, ma_format_f32};
 
-  // Query full device info from the backend
   ma_device_info fullInfo = {};
   auto r                  = ma_context_get_device_info(context, type, &info.id, &fullInfo);
   if (r != MA_SUCCESS)
     fullInfo = info;
 
-  // Parse native data formats
   QSet<int> sampleRates;
   QSet<ma_format> formats;
   QSet<int> channelCounts = {1};
@@ -104,7 +100,6 @@ static IO::Drivers::Audio::AudioDeviceInfo extractCapabilities(ma_context* conte
       sampleRates.insert(static_cast<int>(f.sampleRate));
   }
 
-  // Apply fallback defaults for empty sets
   if (formats.isEmpty())
     formats = defaultFormats;
 
@@ -119,7 +114,6 @@ static IO::Drivers::Audio::AudioDeviceInfo extractCapabilities(ma_context* conte
   caps.supportedSampleRates   = sampleRates.values();
   caps.supportedChannelCounts = channelCounts.values();
 
-  // Sort for consistent UI display
   std::sort(caps.supportedFormats.begin(), caps.supportedFormats.end());
   std::sort(caps.supportedSampleRates.begin(), caps.supportedSampleRates.end());
   std::sort(caps.supportedChannelCounts.begin(), caps.supportedChannelCounts.end());
@@ -140,7 +134,6 @@ static bool checkAndUpdateDeviceList(ma_context* context,
                                      const std::function<void()>& configurationChanged,
                                      QVector<IO::Drivers::Audio::AudioDeviceInfo>& capabilities)
 {
-  // Safe to replace lists while no device is active
   if (!isOpen) {
     if (deviceListsDiffer(newList, currentList)) {
       currentList = newList;
@@ -155,7 +148,6 @@ static bool checkAndUpdateDeviceList(ma_context* context,
     return false;
   }
 
-  // Verify the active device is still present in the new list
   bool stillConnected = false;
   if (selectedIndex >= 0 && selectedIndex < currentList.size()) {
     const ma_device_id& currentId = currentList[selectedIndex].id;
@@ -167,7 +159,6 @@ static bool checkAndUpdateDeviceList(ma_context* context,
     }
   }
 
-  // Active device was unplugged, disconnect and refresh
   if (!stillConnected) {
     IO::ConnectionManager::instance().disconnectDevice();
     currentList = newList;
@@ -180,7 +171,6 @@ static bool checkAndUpdateDeviceList(ma_context* context,
     return true;
   }
 
-  // Active device still present, no update needed
   return false;
 }
 
@@ -270,7 +260,9 @@ static bool packCsvSample(ma_format format, const QByteArray& token, QVector<qui
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the Audio driver and initializes the MiniAudio backend.
+ * @brief Constructs the Audio driver and initializes the MiniAudio backend;
+ * configureInput/configureOutput sync m_config at the end, so no separate
+ * sync call is needed here.
  */
 IO::Drivers::Audio::Audio()
   : m_init(false)
@@ -287,7 +279,6 @@ IO::Drivers::Audio::Audio()
   , m_inputWorkerTimer(nullptr)
   , m_sampleClockValid(false)
 {
-  // Manually select backend for each operating system
 #if defined(Q_OS_WIN)
   ma_backend backend[] = {ma_backend_wasapi};
 #elif defined(Q_OS_APPLE)
@@ -298,38 +289,31 @@ IO::Drivers::Audio::Audio()
 #  error "Unsupported platform"
 #endif
 
-  // Initialize Mini Audio
   m_config = ma_device_config_init(ma_device_type_duplex);
   m_init   = ma_context_init(backend, 1, nullptr, &m_context) == MA_SUCCESS;
   if (!m_init)
     qWarning("Failed to initialize miniaudio context");
 
-  // Configure the CSV ouput buffer
   m_csvData.reserve(96 * 1024);
   m_csvBuffer.setBuffer(&m_csvData);
   m_csvBuffer.open(QIODevice::WriteOnly);
 
-  // Configure the CSV stream
   m_csvStream.setRealNumberPrecision(6);
   m_csvStream.setDevice(&m_csvBuffer);
   m_csvStream.setRealNumberNotation(QTextStream::FixedNotation);
 
-  // Initialize maps to connect user friendly strings to actual values
   generateLists();
   refreshAudioDevices();
 
-  // configureInput/configureOutput sync m_config at the end; no separate sync call needed
   restoreSettings();
   configureInput();
   configureOutput();
 
-  // Refresh devices every second
   connect(&Misc::TimerEvents::instance(),
           &Misc::TimerEvents::timeout1Hz,
           this,
           &Audio::refreshAudioDevices);
 
-  // Update lists when language changes
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
@@ -351,30 +335,28 @@ IO::Drivers::Audio::~Audio()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the audio device and releases all associated resources.
+ * @brief Closes the audio device and releases all associated resources;
+ * draining the SPSC queues is safe because ma_device_uninit above already
+ * joined the audio (producer) thread.
  */
 void IO::Drivers::Audio::closeDevice()
 {
   if (!m_isOpen)
     return;
 
-  // Stop and uninit MiniAudio device
   ma_device_uninit(&m_device);
 
-  // Stop and delete timer in its own thread
   if (m_inputWorkerTimer) {
     QMetaObject::invokeMethod(m_inputWorkerTimer, "stop", Qt::QueuedConnection);
     QMetaObject::invokeMethod(m_inputWorkerTimer, "deleteLater", Qt::QueuedConnection);
     m_inputWorkerTimer = nullptr;
   }
 
-  // Terminate input thread cleanly
   if (m_inputWorkerThread.isRunning()) {
     m_inputWorkerThread.quit();
     m_inputWorkerThread.wait();
   }
 
-  // Drain SPSC queues; ma_device_uninit above joined the audio thread
   {
     QByteArray dropped;
     while (m_inputQueue.try_dequeue(dropped)) {
@@ -386,7 +368,6 @@ void IO::Drivers::Audio::closeDevice()
     }
   }
 
-  // Invalidate the sample clock so the next open reseeds from wall time
   m_sampleClockValid = false;
 
   m_isOpen = false;
@@ -453,17 +434,17 @@ bool IO::Drivers::Audio::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes a CSV-formatted audio frame into the internal output queue.
+ * @brief Writes a CSV-formatted audio frame into the internal output queue;
+ * the lock-free SPSC enqueue is safe because the main thread is the sole
+ * producer of this queue.
  */
 qint64 IO::Drivers::Audio::write(const QByteArray& data)
 {
-  // Abort if output device is not ready
   if (!m_isOpen || m_config.playback.channels <= 0) {
     qWarning() << "Output device not available or misconfigured.";
     return 0;
   }
 
-  // Verify CSV column count matches the playback channel count
   const int channels            = m_config.playback.channels;
   const ma_format format        = m_config.playback.format;
   const QList<QByteArray> parts = data.trimmed().split(',');
@@ -473,13 +454,11 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
     return 0;
   }
 
-  // Pack each channel value into native sample bytes
   QVector<quint8> frame;
   for (int i = 0; i < channels; ++i)
     if (!packCsvSample(format, parts[i], frame))
       return 0;
 
-  // Enqueue frame for playback (lock-free SPSC: main thread is the only producer)
   if (!m_outputQueue.try_enqueue(std::move(frame))) [[unlikely]] {
     qWarning() << "Audio output queue full -- dropping frame";
     return 0;
@@ -995,7 +974,6 @@ void IO::Drivers::Audio::configureInput()
   if (!validateInput())
     return;
 
-  // Abort if capabilities are empty
   const AudioDeviceInfo& caps = m_inputCapabilities[m_selectedInputDevice];
   if (caps.supportedSampleRates.isEmpty() || caps.supportedFormats.isEmpty()
       || caps.supportedChannelCounts.isEmpty()) {
@@ -1003,14 +981,12 @@ void IO::Drivers::Audio::configureInput()
     return;
   }
 
-  // Clamp indices to valid range
   // clang-format off
   m_selectedSampleRate = qBound(0, m_selectedSampleRate, caps.supportedSampleRates.size() - 1);
   m_selectedInputSampleFormat = qBound(0, m_selectedInputSampleFormat, caps.supportedFormats.size() - 1);
   m_selectedInputChannelConfiguration = qBound(0, m_selectedInputChannelConfiguration, caps.supportedChannelCounts.size() - 1);
   // clang-format on
 
-  // Apply selected parameters to the MiniAudio config
   // clang-format off
   const int sampleRate = caps.supportedSampleRates[m_selectedSampleRate];
   const ma_format format = caps.supportedFormats[m_selectedInputSampleFormat];
@@ -1021,7 +997,6 @@ void IO::Drivers::Audio::configureInput()
   m_config.capture.format   = format;
   m_config.capture.channels = channels;
 
-  // Sync parameters and notify UI
   syncInputParameters();
   Q_EMIT configurationChanged();
 }
@@ -1034,7 +1009,6 @@ void IO::Drivers::Audio::configureOutput()
   if (!validateOutput())
     return;
 
-  // Abort if capabilities are empty
   const AudioDeviceInfo& caps = m_outputCapabilities[m_selectedOutputDevice];
   if (caps.supportedSampleRates.isEmpty() || caps.supportedFormats.isEmpty()
       || caps.supportedChannelCounts.isEmpty()) {
@@ -1042,13 +1016,11 @@ void IO::Drivers::Audio::configureOutput()
     return;
   }
 
-  // Clamp indices to valid range
   // clang-format off
   m_selectedOutputSampleFormat = qBound(0, m_selectedOutputSampleFormat, caps.supportedFormats.size() - 1);
   m_selectedOutputChannelConfiguration = qBound(0, m_selectedOutputChannelConfiguration, caps.supportedChannelCounts.size() - 1);
   // clang-format on
 
-  // Apply selected parameters to the MiniAudio config
   // clang-format off
   const ma_format format = caps.supportedFormats[m_selectedOutputSampleFormat];
   const int channels = caps.supportedChannelCounts[m_selectedOutputChannelConfiguration];
@@ -1057,7 +1029,6 @@ void IO::Drivers::Audio::configureOutput()
   m_config.playback.format   = format;
   m_config.playback.channels = channels;
 
-  // Sync parameters and notify UI
   syncOutputParameters();
   Q_EMIT configurationChanged();
 }
@@ -1067,11 +1038,13 @@ void IO::Drivers::Audio::configureOutput()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Converts raw audio input into CSV-formatted text and emits it.
+ * @brief Converts raw audio input into CSV-formatted text and emits it;
+ * draining the queue lock-free is safe (audio thread is the sole producer),
+ * and the timestamp advances by frameStep * totalFrames so input jitter never
+ * shifts the sample timeline.
  */
 void IO::Drivers::Audio::processInputBuffer()
 {
-  // Drain all enqueued chunks lock-free (audio thread is sole producer)
   QByteArray raw;
   QByteArray chunk;
   while (m_inputQueue.try_dequeue(chunk))
@@ -1080,7 +1053,6 @@ void IO::Drivers::Audio::processInputBuffer()
   if (raw.isEmpty())
     return;
 
-  // Validate frame alignment
   const int channels       = m_config.capture.channels;
   const ma_format format   = m_config.capture.format;
   const int bytesPerSample = ma_get_bytes_per_sample(format);
@@ -1090,10 +1062,8 @@ void IO::Drivers::Audio::processInputBuffer()
 
   const int totalFrames = raw.size() / frameSize;
 
-  // Rewind the reusable CSV buffer
   m_csvBuffer.seek(0);
 
-  // Convert each audio frame to comma-separated channel values
   const char* ptr = raw.constData();
   for (int i = 0; i < totalFrames; ++i) {
     for (int ch = 0; ch < channels; ++ch) {
@@ -1139,7 +1109,6 @@ void IO::Drivers::Audio::processInputBuffer()
     m_csvStream << '\n';
   }
 
-  // Flush and emit only the actual written portion
   m_csvStream.flush();
   const auto length = m_csvBuffer.pos();
   const auto frameStep =
@@ -1147,7 +1116,6 @@ void IO::Drivers::Audio::processInputBuffer()
              std::chrono::duration_cast<std::chrono::nanoseconds>(
                std::chrono::duration<double>(1.0 / static_cast<double>(m_config.sampleRate))));
 
-  // Continuous sample clock: advance by frameStep * totalFrames so jitter never shifts the timeline
   const auto now       = IO::CapturedData::SteadyClock::now();
   const auto wallFirst = now - (frameStep * std::max(0, totalFrames - 1));
   if (!m_sampleClockValid || std::chrono::abs(m_nextSampleTime - wallFirst) > kAudioClockResync) {
@@ -1172,7 +1140,6 @@ void IO::Drivers::Audio::refreshAudioDevices()
   if (!m_init)
     return;
 
-  // Query available devices from the MiniAudio backend
   ma_uint32 inputCount          = 0;
   ma_uint32 outputCount         = 0;
   ma_device_info* inputDevices  = nullptr;
@@ -1194,7 +1161,6 @@ void IO::Drivers::Audio::refreshAudioDevices()
   const QVector<ma_device_info> newOutputDevices(outputDevices, outputDevices + outputCount);
   // clang-format on
 
-  // Update list of input devices
   checkAndUpdateDeviceList(
     &m_context,
     ma_device_type_capture,
@@ -1206,7 +1172,6 @@ void IO::Drivers::Audio::refreshAudioDevices()
     [this] { Q_EMIT configurationChanged(); },
     m_inputCapabilities);
 
-  // Update list of output devices
   checkAndUpdateDeviceList(
     &m_context,
     ma_device_type_playback,
@@ -1218,13 +1183,11 @@ void IO::Drivers::Audio::refreshAudioDevices()
     [this] { Q_EMIT configurationChanged(); },
     m_outputCapabilities);
 
-  // Update fallback input device index if needed
   if (m_selectedInputDevice < 0 && newInputDevices.count() > 0) {
     m_selectedInputDevice = 0;
     Q_EMIT inputSettingsChanged();
   }
 
-  // Update fallback output device index if needed
   if (m_selectedOutputDevice < 0 && newOutputDevices.count() > 0) {
     m_selectedOutputDevice = 0;
     Q_EMIT outputSettingsChanged();
@@ -1245,7 +1208,6 @@ void IO::Drivers::Audio::syncInputParameters()
 
   const auto& caps = m_inputCapabilities[m_selectedInputDevice];
 
-  // Match current sample rate, fallback to 44.1 KHz (22 KHz on Windows)
   m_selectedSampleRate = caps.supportedSampleRates.indexOf(m_config.sampleRate);
   if (m_selectedSampleRate < 0) {
 #ifdef Q_OS_WIN
@@ -1258,12 +1220,10 @@ void IO::Drivers::Audio::syncInputParameters()
 
   // clang-format off
 
-  // Match current format, fallback to first available
   m_selectedInputSampleFormat = caps.supportedFormats.indexOf(m_config.capture.format);
   if (m_selectedInputSampleFormat < 0)
     m_selectedInputSampleFormat = 0;
 
-  // Match current channel count, fallback to first available
   m_selectedInputChannelConfiguration = caps.supportedChannelCounts.indexOf(m_config.capture.channels);
   if (m_selectedInputChannelConfiguration < 0)
     m_selectedInputChannelConfiguration = 0;
@@ -1285,12 +1245,10 @@ void IO::Drivers::Audio::syncOutputParameters()
 
   // clang-format off
 
-  // Match current format, fallback to first available
   m_selectedOutputSampleFormat = caps.supportedFormats.indexOf(m_config.playback.format);
   if (m_selectedOutputSampleFormat < 0)
     m_selectedOutputSampleFormat = 0;
 
-  // Match current channel count, fallback to first available
   m_selectedOutputChannelConfiguration = caps.supportedChannelCounts.indexOf(m_config.playback.channels);
   if (m_selectedOutputChannelConfiguration < 0)
     m_selectedOutputChannelConfiguration = 0;
@@ -1305,30 +1263,29 @@ void IO::Drivers::Audio::syncOutputParameters()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Audio callback handler for processing input and output streams.
+ * @brief Audio callback handler for processing input and output streams; runs
+ * on the realtime audio thread, so input is handed to the main-thread consumer
+ * via the SPSC queue and dropped on full rather than blocking, to avoid
+ * underrun.
  */
 void IO::Drivers::Audio::handleCallback(void* output, const void* input, ma_uint32 frameCount)
 {
-  // Capture parameters for byte arithmetic
   const ma_format format         = m_config.capture.format;
   const ma_uint32 channels       = m_config.capture.channels;
   const ma_uint32 bytesPerSample = ma_get_bytes_per_sample(format);
   const ma_uint32 bytesPerFrame  = bytesPerSample * channels;
 
-  // Hand input off to main-thread consumer via SPSC queue; drop on full to avoid underrun
   if (input && channels > 0 && format != ma_format_unknown) {
     const char* inputPtr = reinterpret_cast<const char*>(input);
     QByteArray chunk(inputPtr, static_cast<int>(frameCount * bytesPerFrame));
     (void)m_inputQueue.try_enqueue(std::move(chunk));
   }
 
-  // Drain queued output frames, zero-fill if queue is empty
   if (output && m_config.playback.channels > 0 && m_config.playback.format != ma_format_unknown) {
     char* out = reinterpret_cast<char*>(output);
     const ma_uint32 outBytesPerFrame =
       ma_get_bytes_per_sample(m_config.playback.format) * m_config.playback.channels;
 
-    // Write one queued frame per output slot
     QVector<quint8> frame;
     for (ma_uint32 i = 0; i < frameCount; ++i, out += outBytesPerFrame) {
       if (!m_outputQueue.try_dequeue(frame)) [[unlikely]] {
@@ -1439,21 +1396,17 @@ QJsonObject IO::Drivers::Audio::deviceIdentifier() const
   if (m_selectedInputDevice < 0 || m_selectedInputDevice >= m_inputDevices.size())
     return id;
 
-  // Device name
   id.insert(QStringLiteral("inputDeviceName"),
             QString::fromUtf8(m_inputDevices[m_selectedInputDevice].name));
 
-  // Actual sample rate value
   const auto rates = sampleRates();
   if (m_selectedSampleRate >= 0 && m_selectedSampleRate < rates.size())
     id.insert(QStringLiteral("sampleRateValue"), rates.at(m_selectedSampleRate).toInt());
 
-  // Format name string
   const auto fmts = inputSampleFormats();
   if (m_selectedInputSampleFormat >= 0 && m_selectedInputSampleFormat < fmts.size())
     id.insert(QStringLiteral("formatName"), fmts.at(m_selectedInputSampleFormat));
 
-  // Channel count
   if (validateInput()) {
     const auto& caps = m_inputCapabilities[m_selectedInputDevice];
     if (m_selectedInputChannelConfiguration >= 0
@@ -1473,7 +1426,6 @@ bool IO::Drivers::Audio::selectByIdentifier(const QJsonObject& id)
   if (id.isEmpty())
     return false;
 
-  // Match device by name
   const auto saved_name = id.value(QStringLiteral("inputDeviceName")).toString();
   if (saved_name.isEmpty())
     return false;
@@ -1489,10 +1441,8 @@ bool IO::Drivers::Audio::selectByIdentifier(const QJsonObject& id)
   if (device_idx < 0)
     return false;
 
-  // Select the device (resets sub-settings to defaults)
   setSelectedInputDevice(device_idx);
 
-  // Restore sample rate by value
   const int saved_rate = id.value(QStringLiteral("sampleRateValue")).toInt();
   if (saved_rate > 0) {
     const auto rates = sampleRates();
@@ -1504,7 +1454,6 @@ bool IO::Drivers::Audio::selectByIdentifier(const QJsonObject& id)
     }
   }
 
-  // Restore format by name
   const auto saved_fmt = id.value(QStringLiteral("formatName")).toString();
   if (!saved_fmt.isEmpty()) {
     const auto fmts = inputSampleFormats();
@@ -1516,7 +1465,6 @@ bool IO::Drivers::Audio::selectByIdentifier(const QJsonObject& id)
     }
   }
 
-  // Restore channel config by count
   const int saved_ch = id.value(QStringLiteral("channelCount")).toInt();
   if (saved_ch > 0 && validateInput()) {
     const auto& caps = m_inputCapabilities[m_selectedInputDevice];
@@ -1539,7 +1487,6 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
   if (settings.isEmpty() || isOpen())
     return;
 
-  // Resolve input device by stable name first, fall back to saved index
   const auto deviceId     = settings.value(QStringLiteral("deviceId")).toObject();
   const auto savedDevName = deviceId.value(QStringLiteral("inputDeviceName")).toString();
   const int savedDevIndex = settings.value(QStringLiteral("inputDevice")).toInt(-1);
@@ -1560,11 +1507,9 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
   if (deviceIndex < 0 || deviceIndex >= m_inputCapabilities.size())
     return;
 
-  // Bind the input device without cascading the sub-setting reset
   m_selectedInputDevice = deviceIndex;
   const auto& caps      = m_inputCapabilities[deviceIndex];
 
-  // Resolve sample rate by Hz first, fall back to saved index, then to OS default
   const int savedRateHz    = deviceId.value(QStringLiteral("sampleRateValue")).toInt(0);
   const int savedRateIndex = settings.value(QStringLiteral("sampleRate")).toInt(-1);
 
@@ -1586,7 +1531,6 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
   if (rateIndex < 0)
     rateIndex = 0;
 
-  // Resolve sample format by name first, fall back to saved index
   const auto savedFmtName = deviceId.value(QStringLiteral("formatName")).toString();
   const int savedFmtIndex = settings.value(QStringLiteral("inputFormat")).toInt(-1);
   const auto fmtNames     = inputSampleFormats();
@@ -1601,7 +1545,6 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
   if (fmtIndex < 0)
     fmtIndex = 0;
 
-  // Resolve channel count by value first, fall back to saved index
   const int savedChCount = deviceId.value(QStringLiteral("channelCount")).toInt(0);
   const int savedChIndex = settings.value(QStringLiteral("inputChannels")).toInt(-1);
 
@@ -1615,7 +1558,6 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
   if (chIndex < 0)
     chIndex = 0;
 
-  // Commit all four indices atomically and rebuild m_config in one shot
   m_selectedSampleRate                = rateIndex;
   m_selectedInputSampleFormat         = fmtIndex;
   m_selectedInputChannelConfiguration = chIndex;
@@ -1633,7 +1575,6 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
  */
 void IO::Drivers::Audio::persistSettings()
 {
-  // Persist input by stable identifiers (name, Hz, format name, channel count)
   if (validateInput()) {
     const auto& caps = m_inputCapabilities[m_selectedInputDevice];
     m_settings.setValue(QStringLiteral("AudioDriver/inputDeviceName"),
@@ -1654,7 +1595,6 @@ void IO::Drivers::Audio::persistSettings()
                           caps.supportedChannelCounts[m_selectedInputChannelConfiguration]);
   }
 
-  // Persist output by stable identifiers (name, format name, channel count)
   if (validateOutput()) {
     const auto& caps = m_outputCapabilities[m_selectedOutputDevice];
     m_settings.setValue(QStringLiteral("AudioDriver/outputDeviceName"),
@@ -1677,7 +1617,6 @@ void IO::Drivers::Audio::persistSettings()
  */
 void IO::Drivers::Audio::restoreSettings()
 {
-  // Resolve input device by saved name, fall back to first available
   const auto inName = m_settings.value(QStringLiteral("AudioDriver/inputDeviceName")).toString();
   if (!inName.isEmpty()) {
     for (int i = 0; i < m_inputDevices.size(); ++i) {
@@ -1692,7 +1631,6 @@ void IO::Drivers::Audio::restoreSettings()
       && !m_inputDevices.isEmpty())
     m_selectedInputDevice = 0;
 
-  // Resolve input sub-settings against the selected device's capabilities
   if (validateInput()) {
     const auto& caps = m_inputCapabilities[m_selectedInputDevice];
 
@@ -1719,7 +1657,6 @@ void IO::Drivers::Audio::restoreSettings()
     }
   }
 
-  // Resolve output device by saved name, fall back to first available
   const auto outName = m_settings.value(QStringLiteral("AudioDriver/outputDeviceName")).toString();
   if (!outName.isEmpty()) {
     for (int i = 0; i < m_outputDevices.size(); ++i) {
@@ -1734,7 +1671,6 @@ void IO::Drivers::Audio::restoreSettings()
       && !m_outputDevices.isEmpty())
     m_selectedOutputDevice = 0;
 
-  // Resolve output sub-settings against the selected device's capabilities
   if (validateOutput()) {
     const auto& caps = m_outputCapabilities[m_selectedOutputDevice];
 

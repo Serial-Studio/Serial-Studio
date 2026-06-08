@@ -633,21 +633,17 @@ API::CommandResponse API::Handlers::ModbusHandler::getConfiguration(const QStrin
 
   QJsonObject result;
 
-  // Protocol info
   result[QStringLiteral("protocolIndex")] = modbus->protocolIndex();
   const auto& protocolList                = modbus->protocolList();
   if (modbus->protocolIndex() < protocolList.count())
     result[QStringLiteral("protocolName")] = protocolList.at(modbus->protocolIndex());
 
-  // Common settings
   result[QStringLiteral("slaveAddress")] = modbus->slaveAddress();
   result[QStringLiteral("pollInterval")] = modbus->pollInterval();
 
-  // TCP settings
   result[QStringLiteral("host")] = modbus->host();
   result[QStringLiteral("port")] = modbus->port();
 
-  // RTU settings
   result[QStringLiteral("serialPortIndex")] = modbus->serialPortIndex();
   const auto& portList                      = modbus->serialPortList();
   if (modbus->serialPortIndex() < portList.count())
@@ -670,11 +666,9 @@ API::CommandResponse API::Handlers::ModbusHandler::getConfiguration(const QStrin
   if (modbus->stopBitsIndex() < stopBitsList.count())
     result[QStringLiteral("stopBitsValue")] = stopBitsList.at(modbus->stopBitsIndex());
 
-  // Connection status
   result[QStringLiteral("isOpen")]          = modbus->isOpen();
   result[QStringLiteral("configurationOk")] = modbus->configurationOk();
 
-  // Register groups
   result[QStringLiteral("registerGroupCount")] = modbus->registerGroupCount();
 
   return CommandResponse::makeSuccess(id, result);

@@ -856,6 +856,7 @@
         <file>ai/skills/dashboard_layout.md</file>
         <file>ai/skills/debugging.md</file>
         <file>ai/skills/api_semantics.md</file>
+        <file>ai/skills/workspace_design.md</file>
         <file>ai/search_index.json</file>
         <file>icons/taskbar/ai.svg</file>
         <file>icons/project-editor/toolbar/protobuf.svg</file>

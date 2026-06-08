@@ -27,7 +27,6 @@ void API::Handlers::HIDHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  // setDeviceIndex schema
   {
     QJsonObject props;
     QJsonObject prop;
@@ -46,7 +45,6 @@ void API::Handlers::HIDHandler::registerCommands()
                              &setDeviceIndex);
   }
 
-  // getDeviceList schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
@@ -57,7 +55,6 @@ void API::Handlers::HIDHandler::registerCommands()
                              &getDeviceList);
   }
 
-  // getConfiguration schema (no params)
   {
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");

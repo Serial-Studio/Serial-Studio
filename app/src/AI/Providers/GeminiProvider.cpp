@@ -104,7 +104,6 @@ QString AI::GeminiProvider::defaultModel() const
  */
 QString AI::GeminiProvider::modelDisplayName(const QString& modelId) const
 {
-  // Free tier covers 2.5 Flash + 2.0 Flash; 2.5 Pro is paid
   if (modelId == QStringLiteral("gemini-2.5-flash"))
     return QStringLiteral("2.5 Flash (Free)");
 
@@ -161,7 +160,6 @@ QJsonObject AI::GeminiProvider::translateBlock(const QJsonObject& block)
   }
 
   if (type == QStringLiteral("tool_result")) {
-    // Gemini wraps tool results in functionResponse with structured payload
     QJsonObject responseObj;
     const auto preParsed = block.value(QStringLiteral("_gemini_response")).toObject();
     if (!preParsed.isEmpty()) {
@@ -177,7 +175,6 @@ QJsonObject AI::GeminiProvider::translateBlock(const QJsonObject& block)
     }
 
     QJsonObject fr;
-    // _tool_name is stamped by Conversation::recordToolResult for this transport
     fr[QStringLiteral("name")]     = block.value(QStringLiteral("_tool_name")).toString();
     fr[QStringLiteral("response")] = responseObj;
 
@@ -281,7 +278,6 @@ AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history,
     return new AI::detail::ImmediateErrorReply(
       QObject::tr("No Gemini API key set. Open Manage Keys to add one."));
 
-  // Flatten the system blocks into a single string for system_instruction
   const auto systemBlocks = ContextBuilder::buildSystemArray(false);
   QString systemText;
   for (const auto& v : systemBlocks) {
@@ -313,7 +309,6 @@ AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history,
   if (!translatedTools.isEmpty()) {
     body[QStringLiteral("tools")] = translatedTools;
 
-    // Forced-summary round: Gemini forbids new calls via functionCallingConfig.mode=NONE
     if (forbidToolUse) {
       QJsonObject fnConfig;
       fnConfig[QStringLiteral("mode")] = QStringLiteral("NONE");
@@ -323,7 +318,6 @@ AI::Reply* AI::GeminiProvider::sendMessage(const QJsonArray& history,
     }
   }
 
-  // Endpoint: /v1beta/models/<model>:streamGenerateContent?key=<key>&alt=sse
   QUrl url(QStringLiteral(
              "https://generativelanguage.googleapis.com/v1beta/models/%1:streamGenerateContent")
              .arg(currentModel()));

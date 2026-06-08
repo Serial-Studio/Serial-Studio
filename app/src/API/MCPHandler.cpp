@@ -201,7 +201,6 @@ API::MCP::MCPResponse API::MCPHandler::processRequest(const MCP::MCPRequest& req
   if (method == MCP::Method::Ping)
     return handlePing(request);
 
-  // Require an initialized session for all methods except init/ping
   auto it = m_sessions.find(sessionId);
   if (it == m_sessions.end() || !it->initialized) {
     return MCP::MCPResponse::makeError(

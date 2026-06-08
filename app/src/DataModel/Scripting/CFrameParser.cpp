@@ -154,7 +154,6 @@ QString DataModel::CFrameParser::buildDescriptor(const QString& templateId,
 {
   Q_ASSERT(!templateId.isEmpty());
 
-  // QJsonObject stores keys sorted, so compact serialization is byte-stable
   QJsonObject descriptor;
   descriptor.insert(kTemplateKey, templateId);
   descriptor.insert(kParamsKey, params);

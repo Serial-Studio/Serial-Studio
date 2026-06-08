@@ -62,15 +62,12 @@ AI::Assistant::Assistant()
   rebuildProviders();
   restoreModelSelections();
 
-  // Restore previously-selected provider; clamp to a valid index.
   const int storedProvider = m_settings.value(QStringLiteral("ai/currentProvider"), 0).toInt();
   if (storedProvider >= 0 && storedProvider < kProviderCount)
     m_currentProvider = storedProvider;
 
-  // Restore the auto-approve toggle (default off).
   m_autoApproveEdits = m_settings.value(QStringLiteral("ai/autoApproveEdits"), false).toBool();
 
-  // Restore the device-control gate (default off) and push it to the safety registry.
   m_allowDeviceControl = m_settings.value(QStringLiteral("ai/allowDeviceControl"), false).toBool();
   CommandRegistry::instance().setDeviceControlAllowed(m_allowDeviceControl);
 
@@ -108,7 +105,6 @@ bool AI::Assistant::hasAnyKey() const
   if (m_vault.hasAnyKey())
     return true;
 
-  // The Local provider doesn't need an API key; treat its presence as "ready"
   return m_local != nullptr;
 }
 
@@ -259,7 +255,6 @@ QStringList AI::Assistant::providerNames() const
  */
 bool AI::Assistant::hasKey(int providerIdx) const
 {
-  // The Local provider is always "ready": it needs a base URL, not an API key
   if (static_cast<ProviderId>(providerIdx) == ProviderId::Local)
     return m_local != nullptr;
 
@@ -598,13 +593,11 @@ void AI::Assistant::restoreModelSelections()
     if (!p)
       continue;
 
-    // Local provider's model list arrives asynchronously; trust the stored id
     if (i == static_cast<int>(ProviderId::Local)) {
       p->setCurrentModel(stored);
       continue;
     }
 
-    // Drop stored model ids no longer offered by the provider
     if (!p->availableModels().contains(stored)) {
       qCInfo(serialStudioAI) << "Discarding stale model id" << stored << "for provider" << i
                              << "-- not in availableModels";

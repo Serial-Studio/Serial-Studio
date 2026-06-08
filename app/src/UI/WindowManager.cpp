@@ -358,11 +358,9 @@ static void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
   if (n <= 0)
     return;
 
-  // Clamp degenerate availW/availH to 1: 0 denominator -> qSqrt(inf) -> INT_MIN on int cast.
   const double safeW = qMax(1, env.availW);
   const double safeH = qMax(1, env.availH);
 
-  // Compute grid dimensions based on aspect ratio
   int cols, rows;
   if (env.isLandscape) {
     cols = qCeil(qSqrt(static_cast<double>(n) * safeW / safeH));
@@ -377,14 +375,12 @@ static void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
   cols = qBound(1, cols, n);
   rows = qBound(1, rows, n);
 
-  // Grow grid until cells >= n; 2*n bound guards against inputs escaping the clamps above.
   for (int guard = 0; guard < 2 * n && cols * rows < n; ++guard)
     if (env.isLandscape)
       cols++;
     else
       rows++;
 
-  // Distribute available space evenly across cells
   const int spacingForSizing = qMax(env.spacing, 0);
   const int totalSpacingW    = (cols - 1) * spacingForSizing;
   const int totalSpacingH    = (rows - 1) * spacingForSizing;
@@ -396,7 +392,6 @@ static void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
   const int extraW    = totalCellsW % cols;
   const int extraH    = totalCellsH % rows;
 
-  // Build column and row position tables
   QVector<int> colWidths(cols), colXs(cols);
   QVector<int> rowHeights(rows), rowYs(rows);
 
@@ -414,7 +409,6 @@ static void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
     runningY      += rowHeights[r] + env.spacing;
   }
 
-  // Stretch partial last row to fill full width
   const int windowsInLastRow   = n - (rows - 1) * cols;
   const bool hasPartialLastRow = windowsInLastRow > 0 && windowsInLastRow < cols;
   QVector<int> lastRowWidths, lastRowXs;
@@ -436,7 +430,6 @@ static void tileGrid(const QList<QQuickItem*>& wins, const TileEnv& env)
     }
   }
 
-  // Place each window in its grid cell
   for (int i = 0; i < n; ++i) {
     const int row = i / cols;
     const int col = i % cols;
@@ -504,21 +497,17 @@ UI::WindowManager::WindowManager(QQuickItem* parent)
   , m_resizeWindow(nullptr)
   , m_focusedWindow(nullptr)
 {
-  // Configure item flags for mouse event handling
   setEnabled(true);
   setAcceptHoverEvents(true);
   setFlag(ItemHasContents, false);
   setFiltersChildMouseEvents(true);
   setAcceptedMouseButtons(Qt::AllButtons);
 
-  // Restore persisted wallpaper
   m_backgroundImage = m_settings.value("WindowManager_Wallpaper").toString();
 
-  // Re-layout when canvas dimensions change
   connect(this, &UI::WindowManager::widthChanged, this, &UI::WindowManager::triggerLayoutUpdate);
   connect(this, &UI::WindowManager::heightChanged, this, &UI::WindowManager::triggerLayoutUpdate);
 
-  // Register with the global session registry
   UISessionRegistry::instance().registerWindowManager(this);
 }
 
@@ -613,7 +602,6 @@ const QVector<int>& UI::WindowManager::windowOrder() const
  */
 QJsonObject UI::WindowManager::serializeLayout() const
 {
-  // Each entry carries the stable (widgetType, relativeIndex) key and a legacy id
   QJsonObject layout;
   QJsonArray geometries;
   for (int id : m_windowOrder) {
@@ -639,11 +627,9 @@ QJsonObject UI::WindowManager::serializeLayout() const
 
   layout["geometries"] = geometries;
 
-  // Canvas snapshot (Pro notice/actions panel can change available space)
   layout["canvasWidth"]  = static_cast<int>(width());
   layout["canvasHeight"] = static_cast<int>(height());
 
-  // windowOrder = legacy integer array; windowOrderTyped = authoritative stable form
   QJsonArray orderArray;
   QJsonArray orderTypedArray;
   for (int id : m_windowOrder) {
@@ -756,14 +742,11 @@ bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
   const int savedCanvasH = layout["canvasHeight"].toInt(0);
   m_userReordered        = layout["userReordered"].toBool(false);
 
-  // Translate saved (widgetType, relativeIndex) keys into current-session windowIds
   const QHash<StableKey, int> stableLookup = buildStableKeyToWindowId();
 
-  // Window order
   if (layout.contains("windowOrderTyped") || layout.contains("windowOrder"))
     m_windowOrder = resolveSavedOrder(layout, stableLookup);
 
-  // Manual-mode geometries (auto-mode recomputes them from scratch)
   m_manualGeometries.clear();
   m_manualMargins.clear();
   m_pendingGeometries.clear();
@@ -781,13 +764,11 @@ bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
     Q_EMIT geometryChanged(nullptr);
   }
 
-  // Apply layout mode
   if (m_autoLayoutEnabled != autoLayout) {
     m_autoLayoutEnabled = autoLayout;
     Q_EMIT autoLayoutEnabledChanged();
   }
 
-  // Tile windows or mark layout as restored
   if (autoLayout)
     loadLayout();
   else
@@ -808,7 +789,6 @@ void UI::WindowManager::preloadPendingGeometries(const QJsonObject& layout)
   if (layout.isEmpty() || !layout.contains("geometries"))
     return;
 
-  // Only preload manual-mode layouts; auto-layout recomputes geometries
   if (layout["autoLayout"].toBool(true))
     return;
 
@@ -821,7 +801,6 @@ void UI::WindowManager::preloadPendingGeometries(const QJsonObject& layout)
   m_manualCanvasWidth     = marginCanvasW;
   m_manualCanvasHeight    = marginCanvasH;
 
-  // Preload runs before delegates mount; m_windows is empty so resolution is purely via Dashboard
   const QHash<StableKey, int> stableLookup = buildStableKeyToWindowId();
 
   const QJsonArray geometries = layout["geometries"].toArray();
@@ -850,7 +829,6 @@ void UI::WindowManager::preloadPendingGeometries(const QJsonObject& layout)
  */
 void UI::WindowManager::reconcileWindowOrder(const QVector<int>& taskbarOrder)
 {
-  // Build the set of windowIds the taskbar currently presents
   QSet<int> taskbarSet;
   taskbarSet.reserve(taskbarOrder.size());
   for (int id : taskbarOrder)
@@ -860,7 +838,6 @@ void UI::WindowManager::reconcileWindowOrder(const QVector<int>& taskbarOrder)
   reconciled.reserve(taskbarOrder.size());
   QSet<int> seen;
 
-  // Honor user drag order for windows still present; drop the rest
   if (m_userReordered) {
     for (int id : std::as_const(m_windowOrder)) {
       if (taskbarSet.contains(id) && !seen.contains(id)) {
@@ -870,7 +847,6 @@ void UI::WindowManager::reconcileWindowOrder(const QVector<int>& taskbarOrder)
     }
   }
 
-  // Append remaining taskbar entries in taskbar order
   for (int id : taskbarOrder) {
     if (!seen.contains(id)) {
       reconciled.append(id);
@@ -883,7 +859,6 @@ void UI::WindowManager::reconcileWindowOrder(const QVector<int>& taskbarOrder)
 
   m_windowOrder = std::move(reconciled);
 
-  // Tile only when all windows are registered; otherwise wait for registerWindow
   if (m_windowOrder.size() == taskbarOrder.size())
     triggerLayoutUpdate();
 }
@@ -894,7 +869,6 @@ void UI::WindowManager::reconcileWindowOrder(const QVector<int>& taskbarOrder)
  */
 void UI::WindowManager::clear()
 {
-  // Reset all tracking state
   m_zCounter = 1;
   m_windowZ.clear();
   m_windows.clear();
@@ -915,9 +889,6 @@ void UI::WindowManager::clear()
   m_manualMargins.clear();
   m_pendingGeometries.clear();
 
-  // m_autoLayoutEnabled is a user preference owned by restoreLayout(); don't touch it here
-
-  // Notify listeners of reset
   Q_EMIT zCounterChanged();
   Q_EMIT snapIndicatorChanged();
 }
@@ -941,17 +912,14 @@ void UI::WindowManager::loadLayout()
  */
 void UI::WindowManager::autoLayout()
 {
-  // Validate canvas dimensions before tiling
   const int canvasW = static_cast<int>(width());
   const int canvasH = static_cast<int>(height());
   if (canvasW <= 0 || canvasH <= 0)
     return;
 
-  // A maximized window owns the canvas; skip retiling
   if (anyWindowMaximized(m_windows))
     return;
 
-  // Collect visible normal-state windows in display order
   QList<QQuickItem*> windows;
   for (int id : std::as_const(m_windowOrder)) {
     auto* win = m_windows.value(id);
@@ -962,7 +930,6 @@ void UI::WindowManager::autoLayout()
   if (windows.isEmpty())
     return;
 
-  // Build the tiling environment and dispatch to the per-count helper
   TileEnv env;
   env.margin      = 0;
   env.spacing     = -1;
@@ -971,7 +938,6 @@ void UI::WindowManager::autoLayout()
   env.isLandscape = env.availW >= env.availH;
   dispatchTile(windows, env);
 
-  // Ensure all windows are visible after tiling
   for (auto* win : std::as_const(m_windows))
     if (win && !win->isVisible() && (win->state() == "normal" || win->state() == "maximized"))
       win->setVisible(true);
@@ -984,18 +950,15 @@ void UI::WindowManager::autoLayout()
  */
 void UI::WindowManager::cascadeLayout()
 {
-  // Obtain canvas dimensions and validate
   const int canvasW = static_cast<int>(width());
   const int canvasH = static_cast<int>(height());
 
   if (canvasW <= 0 || canvasH <= 0)
     return;
 
-  // A maximized window owns the canvas; skip cascading
   if (anyWindowMaximized(m_windows))
     return;
 
-  // Collect visible normal-state windows
   QList<QQuickItem*> visibleWindows;
   for (int id : std::as_const(m_windowOrder)) {
     auto* win = m_windows.value(id);
@@ -1006,7 +969,6 @@ void UI::WindowManager::cascadeLayout()
   if (visibleWindows.isEmpty())
     return;
 
-  // Cascade layout constants
   const int margin         = 8;
   const int cascadeOffsetX = 26;
   const int cascadeOffsetY = 26;
@@ -1014,7 +976,6 @@ void UI::WindowManager::cascadeLayout()
   const int availableW = canvasW - 2 * margin;
   const int availableH = canvasH - 2 * margin;
 
-  // Position each window with diagonal offset
   for (int i = 0; i < visibleWindows.size(); ++i) {
     QQuickItem* win = visibleWindows[i];
     if (!win)
@@ -1069,7 +1030,6 @@ void UI::WindowManager::cascadeLayout()
     win->setHeight(winH);
   }
 
-  // Ensure all windows are visible after cascading
   for (auto* win : std::as_const(m_windows)) {
     if (win && !win->isVisible()) {
       if (win->state() == "normal" || win->state() == "maximized")
@@ -1093,7 +1053,6 @@ void UI::WindowManager::clearBackgroundImage()
  */
 void UI::WindowManager::selectBackgroundImage()
 {
-  // Configure and show the image picker dialog
   auto* dialog = new QFileDialog(qApp->activeWindow(),
                                  tr("Select Background Image"),
                                  QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
@@ -1102,7 +1061,6 @@ void UI::WindowManager::selectBackgroundImage()
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-  // Defer to next tick; macOS NSSavePanel KVO callback must unwind first.
   connect(dialog, &QFileDialog::fileSelected, this, [this](const QString& path) {
     if (path.isEmpty())
       return;
@@ -1124,7 +1082,6 @@ void UI::WindowManager::bringToFront(QQuickItem* item)
   if (!item)
     return;
 
-  // Promote window above its peers; manager Z stays 0 so hover descends past _wm
   m_windowZ[item] = ++m_zCounter;
   item->setZ(m_windowZ[item]);
 
@@ -1148,13 +1105,11 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem* item)
   if (!item)
     return;
 
-  // Track window and assign initial Z order
   m_windows[id] = item;
   m_windowOrder.append(id);
   m_windowZ[item] = ++m_zCounter;
   item->setZ(m_windowZ[item]);
 
-  // Apply pending saved geometry before first paint to avoid minimumSize flash
   auto pending = m_pendingGeometries.find(id);
   if (pending != m_pendingGeometries.end()) {
     item->setX(pending.value().x());
@@ -1173,7 +1128,6 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem* item)
  */
 void UI::WindowManager::unregisterWindow(QQuickItem* item)
 {
-  // Remove window from tracking maps and order list
   m_windowZ.remove(item);
   m_windowOrder.removeAll(getIdForWindow(item));
   for (auto it = m_windows.begin(); it != m_windows.end(); ++it) {
@@ -1183,7 +1137,6 @@ void UI::WindowManager::unregisterWindow(QQuickItem* item)
     }
   }
 
-  // Trigger layout update to redistribute remaining windows
   triggerLayoutUpdate();
 }
 
@@ -1215,7 +1168,6 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
       m_manualCanvasHeight = 0;
     }
 
-    // Restore maximized windows before re-tiling
     for (auto* win : std::as_const(m_windows))
       if (win->state() == "maximized")
         QMetaObject::invokeMethod(win, "restoreClicked");
@@ -1340,14 +1292,12 @@ void UI::WindowManager::applyManualSnap()
  */
 void UI::WindowManager::constrainWindows()
 {
-  // Validate canvas dimensions
   const int canvasW = static_cast<int>(width());
   const int canvasH = static_cast<int>(height());
 
   if (canvasW <= 0 || canvasH <= 0)
     return;
 
-  // Clamp each window to fit within canvas bounds
   for (auto* win : std::as_const(m_windows)) {
     if (!win)
       continue;
@@ -1423,7 +1373,6 @@ void UI::WindowManager::constrainWindows()
     }
   }
 
-  // Ensure constrained windows remain visible
   for (auto* win : std::as_const(m_windows)) {
     if (win && !win->isVisible()) {
       if (win->state() == "normal" || win->state() == "maximized")
@@ -1443,11 +1392,9 @@ void UI::WindowManager::triggerLayoutUpdate()
   const bool sizeChanged =
     sizeValid && (canvasW != m_lastCanvasWidth || canvasH != m_lastCanvasHeight);
 
-  // Auto-layout mode: re-tile all windows
   if (autoLayoutEnabled())
     autoLayout();
 
-  // Manual mode: cascade new windows or constrain existing ones
   else {
     bool hasUninitializedWindows = false;
     for (auto* win : std::as_const(m_windows)) {
@@ -1494,7 +1441,6 @@ int UI::WindowManager::getIdForWindow(QQuickItem* item) const
  */
 QQuickItem* UI::WindowManager::findOverlapTarget(const QRect& dragRect) const
 {
-  // Track the candidate with the greatest intersection area
   QQuickItem* best = nullptr;
   qint64 bestArea  = 0;
 
@@ -1539,11 +1485,9 @@ QRect UI::WindowManager::extractGeometry(QQuickItem* item) const
 UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* target,
                                                                   const QPointF& pos) const
 {
-  // Only normal-state windows can be resized
   if (target->state() != "normal")
     return ResizeEdge::None;
 
-  // Map mouse position to window-local coordinates
   const int kResizeMargin = 8;
   QPointF localPos        = target->mapFromItem(this, pos);
   const int x             = static_cast<int>(localPos.x());
@@ -1551,13 +1495,11 @@ UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* ta
   const int w             = static_cast<int>(target->width());
   const int h             = static_cast<int>(target->height());
 
-  // Check proximity to each edge
   const bool nearLeft   = x <= kResizeMargin;
   const bool nearRight  = x >= w - kResizeMargin;
   const bool nearTop    = y <= kResizeMargin;
   const bool nearBottom = y >= h - kResizeMargin;
 
-  // Return corner or edge closest to cursor
   if (nearLeft && nearTop)
     return ResizeEdge::TopLeft;
 
@@ -1738,24 +1680,20 @@ QQuickItem* UI::WindowManager::manualResizeTargetAt(const QPointF& pos) const
  */
 void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
 {
-  // Compute movement delta from the initial press position
   const QPoint currentPos = event->pos();
   const QPoint delta      = currentPos - m_initialMousePos;
   const int dragDistance  = delta.manhattanLength();
 
-  // No focused window or non-normal state, pass through
   if (!m_focusedWindow || m_focusedWindow->state() != "normal") {
     QQuickItem::mouseMoveEvent(event);
     return;
   }
 
-  // Drag window to new position
   if (m_dragWindow && dragDistance >= 20) {
     handleDragMove(event, delta);
     return;
   }
 
-  // Resize window along the active edge
   if (m_resizeWindow) {
     handleResizeMove(event, delta);
     return;
@@ -1770,7 +1708,6 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
 void UI::WindowManager::updateManualSnapIndicator(
   int newX, int newY, int w, int h, int canvasW, int canvasH)
 {
-  // Detect snap region from the closest edge or corner
   const auto snap = computeSnapRect(newX, newY, newX + w, newY + h, canvasW, canvasH);
   if (snap.has_value()) {
     m_snapIndicator        = *snap;
@@ -1779,7 +1716,6 @@ void UI::WindowManager::updateManualSnapIndicator(
     return;
   }
 
-  // No snap region: hide the indicator if it was visible
   if (m_snapIndicatorVisible) {
     m_snapIndicatorVisible = false;
     Q_EMIT snapIndicatorChanged();
@@ -1798,7 +1734,6 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
   const int canvasW = static_cast<int>(width());
   const int canvasH = static_cast<int>(height());
 
-  // Shrink near-fullscreen window back to implicit size
   if ((w >= canvasW - 20 || h >= canvasH - 20) && !autoLayoutEnabled()) {
     w = static_cast<int>(m_dragWindow->implicitWidth());
     h = static_cast<int>(m_dragWindow->implicitHeight());
@@ -1806,24 +1741,20 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
     m_dragWindow->setHeight(h);
   }
 
-  // Clamp and apply position
   newX = qBound(0, newX, canvasW - w);
   newY = qBound(0, newY, canvasH - h);
   m_dragWindow->setX(newX);
   m_dragWindow->setY(newY);
 
-  // Manual layout uses edge-based snap indicators
   if (!autoLayoutEnabled()) {
     updateManualSnapIndicator(newX, newY, w, h, canvasW, canvasH);
     event->accept();
     return;
   }
 
-  // Auto-layout: pick the tile with the largest overlap with the drag rect
   const QRect dragRect(newX, newY, w, h);
   m_targetWindow = findOverlapTarget(dragRect);
 
-  // Snap to target window if hovering over a different one
   if (m_targetWindow && m_targetWindow != m_dragWindow) {
     m_dragWindow->setWidth(qMin(w, static_cast<int>(m_targetWindow->width())));
     m_dragWindow->setHeight(qMin(h, static_cast<int>(m_targetWindow->height())));
@@ -1834,7 +1765,6 @@ void UI::WindowManager::handleDragMove(QMouseEvent* event, const QPoint& delta)
     return;
   }
 
-  // No valid target, hide snap indicator
   if (m_snapIndicatorVisible) {
     m_snapIndicatorVisible = false;
     Q_EMIT snapIndicatorChanged();
@@ -1912,10 +1842,8 @@ QRect UI::WindowManager::computeResizedGeometry(const QPoint& delta) const
  */
 void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta)
 {
-  // Compute target geometry from the active edge and the mouse delta
   QRect geometry = computeResizedGeometry(delta);
 
-  // Clamp geometry to canvas bounds
   const QRect unclamped = geometry;
   geometry.setX(qMax(0, geometry.x()));
   geometry.setY(qMax(0, geometry.y()));
@@ -1925,7 +1853,6 @@ void UI::WindowManager::handleResizeMove(QMouseEvent* event, const QPoint& delta
   if (geometry.bottom() > int(height()) - 1)
     geometry.setHeight(int(height()) - geometry.y());
 
-  // Only apply if clamping did not alter the result
   if (geometry == unclamped) {
     m_resizeWindow->setX(geometry.x());
     m_resizeWindow->setY(geometry.y());
@@ -1944,7 +1871,6 @@ bool UI::WindowManager::startManualPress(const QPointF& pos, Qt::MouseButton but
   if (autoLayoutEnabled())
     return false;
 
-  // Reset interaction state before hit-testing
   m_dragWindow      = nullptr;
   m_targetWindow    = nullptr;
   m_resizeWindow    = nullptr;
@@ -1952,7 +1878,6 @@ bool UI::WindowManager::startManualPress(const QPointF& pos, Qt::MouseButton but
   m_resizeEdge      = ResizeEdge::None;
   m_initialMousePos = pos.toPoint();
 
-  // A top window's resize edge wins over a lower window's body
   m_focusedWindow = manualResizeTargetAt(m_initialMousePos);
   if (!m_focusedWindow)
     m_focusedWindow = topmostWindowAt(m_initialMousePos);
@@ -1960,10 +1885,8 @@ bool UI::WindowManager::startManualPress(const QPointF& pos, Qt::MouseButton but
   if (!m_focusedWindow)
     return false;
 
-  // First click on an unfocused window may grab its body; once focused only the caption drags
   const bool wasFocused = m_taskbar && m_taskbar->activeWindow() == m_focusedWindow;
 
-  // Raise + focus the window the user actually pressed
   if (m_taskbar)
     m_taskbar->setActiveWindow(m_focusedWindow);
 
@@ -1972,7 +1895,6 @@ bool UI::WindowManager::startManualPress(const QPointF& pos, Qt::MouseButton but
   if (button != Qt::LeftButton || m_focusedWindow->state() != "normal")
     return false;
 
-  // Start a resize when the press is on an edge
   m_resizeEdge = detectResizeEdge(m_focusedWindow, m_initialMousePos);
   if (m_resizeEdge != ResizeEdge::None) {
     m_resizeWindow    = m_focusedWindow;
@@ -1981,7 +1903,6 @@ bool UI::WindowManager::startManualPress(const QPointF& pos, Qt::MouseButton but
     return true;
   }
 
-  // Caption window-control buttons keep working: never consume a press over them
   const auto local     = m_focusedWindow->mapFromItem(this, m_initialMousePos);
   const int captionH   = m_focusedWindow->property("captionHeight").toInt();
   const int externcW   = m_focusedWindow->property("externControlWidth").toInt();
@@ -1992,11 +1913,9 @@ bool UI::WindowManager::startManualPress(const QPointF& pos, Qt::MouseButton but
   if (onControls)
     return false;
 
-  // An already-focused body press falls through so widget content stays interactive
   if (wasFocused && local.y() > captionH)
     return false;
 
-  // Start a body/caption drag of the raised window
   m_dragWindow      = m_focusedWindow;
   m_initialGeometry = extractGeometry(m_focusedWindow);
   if (m_snapIndicatorVisible) {
@@ -2028,14 +1947,12 @@ bool UI::WindowManager::childMouseEventFilter(QQuickItem* item, QEvent* event)
  */
 void UI::WindowManager::mousePressEvent(QMouseEvent* event)
 {
-  // Bare-canvas manual presses route here; child windows use childMouseEventFilter
   if (!autoLayoutEnabled()) {
     if (startManualPress(event->pos(), event->button())) {
       event->accept();
       return;
     }
 
-    // Right-click on empty canvas opens the desktop context menu (parity with auto mode)
     if (event->button() == Qt::RightButton && !m_focusedWindow) {
       if (m_taskbar)
         m_taskbar->setActiveWindow(nullptr);
@@ -2049,7 +1966,6 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     return;
   }
 
-  // Clear previous interaction state before hit-testing
   m_dragWindow      = nullptr;
   m_targetWindow    = nullptr;
   m_resizeWindow    = nullptr;
@@ -2062,7 +1978,6 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     Q_EMIT snapIndicatorChanged();
   }
 
-  // Auto-layout reaches here: pick the topmost window under the cursor
   m_focusedWindow = topmostWindowAt(m_initialMousePos);
 
   if (!m_focusedWindow) {
@@ -2078,7 +1993,6 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
   if (m_taskbar)
     m_taskbar->setActiveWindow(m_focusedWindow);
 
-  // Determine if click is on the caption bar
   bool captionClick     = false;
   const int captionH    = m_focusedWindow->property("captionHeight").toInt();
   const int externcW    = m_focusedWindow->property("externControlWidth").toInt();
@@ -2093,7 +2007,6 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     }
   }
 
-  // Start resize or drag for normal-state windows
   if (m_focusedWindow->state() == "normal") {
     m_resizeEdge = detectResizeEdge(m_focusedWindow, m_initialMousePos);
     if (m_resizeEdge != ResizeEdge::None && !autoLayoutEnabled()) {
@@ -2158,17 +2071,14 @@ void UI::WindowManager::commitManualGeometry(QQuickItem* window)
  */
 void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
 {
-  // Finalize drag/resize: apply snap, swap order, or commit geometry
   if (autoLayoutEnabled()) {
     const bool reordered = tryReorderDraggedWindow();
     loadLayout();
 
-    // Persist reordered windowOrder via Taskbar's geometryChanged hook
     if (reordered && m_dragWindow)
       Q_EMIT geometryChanged(m_dragWindow);
   }
 
-  // Manual layout: snap window to indicator region or emit geometry change
   else {
     applyManualSnap();
     if (m_dragWindow)
@@ -2177,17 +2087,14 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
       commitManualGeometry(m_resizeWindow);
   }
 
-  // Release mouse and reset cursor
   ungrabMouse();
   unsetCursor();
 
-  // Hide snap indicator
   if (m_snapIndicatorVisible) {
     m_snapIndicatorVisible = false;
     Q_EMIT snapIndicatorChanged();
   }
 
-  // Clear all interaction state
   m_dragWindow      = nullptr;
   m_targetWindow    = nullptr;
   m_resizeWindow    = nullptr;
@@ -2203,14 +2110,12 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
  */
 void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent* event)
 {
-  // Hit-test for a window under the cursor
   m_focusedWindow = topmostWindowAt(event->pos());
   if (!m_focusedWindow) {
     QQuickItem::mouseDoubleClickEvent(event);
     return;
   }
 
-  // Only toggle maximize/restore for clicks in the title bar area
   const int captionH  = m_focusedWindow->property("captionHeight").toInt();
   const int externcW  = m_focusedWindow->property("externControlWidth").toInt();
   const int buttonsW  = m_focusedWindow->property("windowControlsWidth").toInt();

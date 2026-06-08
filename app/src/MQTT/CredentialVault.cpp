@@ -114,7 +114,6 @@ void MQTT::CredentialVault::setCredentials(const QString& host,
   else
     m_settings.setValue(key + QStringLiteral("/pass"), m_simpleCrypt.encryptToString(password));
 
-  // Drop the host:port entry entirely once both slots are gone
   if (username.isEmpty() && password.isEmpty())
     m_settings.remove(key);
 

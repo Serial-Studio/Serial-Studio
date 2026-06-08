@@ -68,18 +68,15 @@ void DataModel::read_io_settings(QByteArray& frameStart,
                                  QString& checksum,
                                  const QJsonObject& obj)
 {
-  // Obtain frame delimiters
   auto fEndStr   = ss_jsr(obj, Keys::FrameEnd, "").toString();
   auto fStartStr = ss_jsr(obj, Keys::FrameStart, "").toString();
   auto isHex     = ss_jsr(obj, Keys::HexadecimalDelimiters, false).toBool();
 
-  // Read checksum method
   if (obj.contains(Keys::ChecksumAlgorithm))
     checksum = obj.value(Keys::ChecksumAlgorithm).toString();
   else
     checksum = ss_jsr(obj, Keys::Checksum, "").toString();
 
-  // Convert hex + escape strings (e.g. "0A 0D", or "\\n0D") to raw bytes
   if (isHex) {
     QString resolvedEnd   = SerialStudio::resolveEscapeSequences(fEndStr);
     QString resolvedStart = SerialStudio::resolveEscapeSequences(fStartStr);
@@ -87,7 +84,6 @@ void DataModel::read_io_settings(QByteArray& frameStart,
     frameEnd              = QByteArray::fromHex(resolvedEnd.remove(' ').toUtf8());
   }
 
-  // Resolve escape sequences (e.g. "\\n") and encode to UTF-8 bytes
   else {
     frameEnd   = SerialStudio::resolveEscapeSequences(fEndStr).toUtf8();
     frameStart = SerialStudio::resolveEscapeSequences(fStartStr).toUtf8();
@@ -313,7 +309,6 @@ bool DataModel::read(Dataset& d, const QJsonObject& obj)
  */
 QByteArray DataModel::get_tx_bytes(const Action& action)
 {
-  // Convert action payload to bytes
   QByteArray b;
   const auto enc = static_cast<SerialStudio::TextEncoding>(action.txEncoding);
   if (action.binaryData)

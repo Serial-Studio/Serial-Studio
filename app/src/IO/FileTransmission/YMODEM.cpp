@@ -54,11 +54,9 @@ QString IO::Protocols::YMODEM::protocolName() const
  */
 void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
 {
-  // Abort any existing transfer
   if (isActive())
     cancelTransfer();
 
-  // Open file and initialize transfer state
   m_file.setFileName(filePath);
   if (!m_file.open(QIODevice::ReadOnly)) {
     Q_EMIT finished(false, tr("Cannot open file: %1").arg(m_file.errorString()));
@@ -157,7 +155,6 @@ bool IO::Protocols::YMODEM::handleDataAckByte(quint8 ch)
 
     Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
 
-    // Rewind by actual bytes read: fixed 1024 over-rewinds the final partial block.
     m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
     if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
       m_file.close();
@@ -189,7 +186,6 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
     const quint8 ch = static_cast<quint8>(byte);
 
     switch (m_yState) {
-      // Receiver sends 'C' to start: send block 0 (filename + size)
       case YState::WaitingForInitialC:
         if (ch == kCRC) {
           m_timeoutTimer.stop();
@@ -197,12 +193,10 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
         }
         break;
 
-      // Waiting for ACK of block 0
       case YState::WaitingForBlock0Ack:
         handleBlock0AckByte(ch);
         break;
 
-      // Receiver sends 'C' after ACK of block 0: start data blocks
       case YState::WaitingForDataC:
         if (ch == kCRC) {
           m_timeoutTimer.stop();
@@ -212,14 +206,12 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
         }
         break;
 
-      // Waiting for ACK/NAK of a data block
       case YState::WaitingForDataAck:
         if (!handleDataAckByte(ch))
           return;
 
         break;
 
-      // YMODEM requires two EOTs: first one gets NAK, second gets ACK
       case YState::WaitingForFirstEOTResponse:
         if (ch == kNAK || ch == kACK) {
           m_timeoutTimer.stop();
@@ -234,7 +226,6 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
         handleSecondEotAckByte(ch);
         break;
 
-      // Receiver sends 'C' after final EOT: send empty block 0
       case YState::WaitingForEndBatchC:
         if (ch == kCRC) {
           m_timeoutTimer.stop();
@@ -242,7 +233,6 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
         }
         break;
 
-      // Waiting for ACK of the empty end-of-batch block 0
       case YState::WaitingForEndBatchAck:
         if (ch == kACK) {
           m_timeoutTimer.stop();
@@ -269,12 +259,10 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
  */
 void IO::Protocols::YMODEM::sendBlock0()
 {
-  // Build block 0 payload: filename + size in a 128-byte block.
   QFileInfo info(m_filePath);
   QByteArray fileNameUtf8  = info.fileName().toUtf8();
   const QByteArray sizeStr = QByteArray::number(m_fileSize);
 
-  // Truncate long filenames: 24 bytes reserved for size string + terminators.
   static constexpr int kMaxFileNameBytes = 128 - 24;
   if (fileNameUtf8.size() > kMaxFileNameBytes)
     fileNameUtf8.truncate(kMaxFileNameBytes);
@@ -286,7 +274,6 @@ void IO::Protocols::YMODEM::sendBlock0()
   payload.append(sizeStr);
   payload.append('\0');
 
-  // Pad to 128 bytes and send
   while (payload.size() < 128)
     payload.append('\0');
 
@@ -320,10 +307,8 @@ void IO::Protocols::YMODEM::sendEndOfBatch()
  */
 void IO::Protocols::YMODEM::sendDataBlock()
 {
-  // Snapshot file position for precise rewind on NAK/timeout.
   m_lastBlockStart = m_file.pos();
 
-  // Read next 1K block; send EOT if file is exhausted
   QByteArray data = m_file.read(1024);
   if (data.isEmpty()) {
     m_yState = YState::WaitingForFirstEOTResponse;
@@ -335,7 +320,6 @@ void IO::Protocols::YMODEM::sendDataBlock()
 
   m_lastBlockBytes = data.size();
 
-  // Pad incomplete block and send
   while (data.size() < 1024)
     data.append(static_cast<char>(0x1A));
 

@@ -25,13 +25,11 @@
  */
 Widgets::Output::Panel::Panel(int index, QQuickItem* parent) : QQuickItem(parent)
 {
-  // Validate widget index and retrieve group configuration
   if (!VALIDATE_WIDGET(SerialStudio::DashboardOutputPanel, index))
     return;
 
   const auto& group = GET_GROUP(SerialStudio::DashboardOutputPanel, index);
 
-  // Build QML-visible property maps for each output widget
   m_outputWidgets = group.outputWidgets;
 
   for (const auto& ow : m_outputWidgets) {
@@ -115,7 +113,6 @@ QVariantList Widgets::Output::Panel::geometry() const
  */
 void Widgets::Output::Panel::updateLayout(qreal width, qreal height)
 {
-  // Compute available area after subtracting margins
   const qreal margin = 4.0;
   const qreal gap    = 4.0;
   const qreal w      = width - 2 * margin;
@@ -124,10 +121,8 @@ void Widgets::Output::Panel::updateLayout(qreal width, qreal height)
   if (w <= 0 || h <= 0)
     return;
 
-  // Run layout algorithm
   auto rects = PanelLayout::compute(m_outputWidgets, w, h, gap);
 
-  // Convert layout rects to QML-visible geometry maps
   QVariantList geo;
   geo.reserve(rects.size());
   for (const auto& r : rects) {
@@ -139,7 +134,6 @@ void Widgets::Output::Panel::updateLayout(qreal width, qreal height)
     geo.append(map);
   }
 
-  // Emit only if geometry actually changed
   if (geo != m_geometry) {
     m_geometry = geo;
     Q_EMIT geometryChanged();

@@ -96,20 +96,21 @@ static void openSafeLibs(lua_State* L)
     lua_pop(L, 1);
   }
 
-  // Remove dangerous functions from base library
   static const char* const kUnsafe[] = {"dofile", "loadfile", "load"};
   for (const char* name : kUnsafe) {
     lua_pushnil(L);
     lua_setglobal(L, name);
   }
 
-  // Strip string.dump: bytecode exfiltration vector pairs with unsafe loaders.
+  // code-verify off
+  // Strip string.dump: bytecode exfiltration vector that pairs with unsafe loaders.
   lua_getglobal(L, "string");
   if (lua_istable(L, -1)) {
     lua_pushnil(L);
     lua_setfield(L, -2, "dump");
   }
   lua_pop(L, 1);
+  // code-verify on
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -153,40 +154,29 @@ void DataModel::LuaScriptEngine::createState()
   m_state = luaL_newstate();
   Q_ASSERT(m_state != nullptr);
 
-  // Replace default panic (which aborts) with one that throws -> guardedPcall catches
   lua_atpanic(m_state, luaPanicHandler);
 
   openSafeLibs(m_state);
 
-  // Re-add Lua 5.1 / 5.2 names that 5.4 dropped (math.log10, math.pow, bit32, ...)
   DataModel::installLuaCompat(m_state);
 
-  // Expose notify* + level constants (gated on the active license tier)
   DataModel::NotificationCenter::installScriptApi(m_state);
 
-  // Expose tableGet / tableSet / datasetGetRaw / datasetGetFinal
   DataModel::FrameBuilder::instance().injectTableApiLua(m_state);
 
-  // Expose deviceWrite(data, sourceId?) bound to this engine's source by default
   DataModel::DeviceWriteApi::installLua(m_state, m_sourceId);
 
-  // Expose actionFire(actionId) for firing dashboard actions from the parser
   DataModel::ActionFireApi::installLua(m_state);
 
-  // Expose dashboard.* helpers (clearPlots, setPlotPoints, UI toggles, setActiveWorkspace)
   DataModel::DashboardApi::installLua(m_state);
 
-  // Expose apiCall(method, params?): gated to a read-only allow-list by default
   DataModel::ScriptApiCall::installLua(m_state, m_sourceId);
 
-  // Store 'this' pointer in the Lua registry for the watchdog hook
   lua_pushlightuserdata(m_state, this);
   lua_setfield(m_state, LUA_REGISTRYINDEX, "__ss_engine__");
 
-  // Install instruction-count watchdog hook
   lua_sethook(m_state, watchdogHook, LUA_MASKCOUNT, kHookInstructionCount);
 
-  // Deadline armed per-call; fresh state re-arms the circuit breaker
   m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
   m_loaded              = false;
   m_disabled            = false;
@@ -254,16 +244,13 @@ void DataModel::LuaScriptEngine::watchdogHook(lua_State* L, lua_Debug* ar)
 {
   Q_UNUSED(ar)
 
-  // Retrieve the engine pointer from the registry
   lua_getfield(L, LUA_REGISTRYINDEX, "__ss_engine__");
   auto* self = static_cast<LuaScriptEngine*>(lua_touserdata(L, -1));
   lua_pop(L, 1);
 
-  // No engine pointer stored, so ignore (defensive, shouldn't happen)
   if (!self) [[unlikely]]
     return;
 
-  // Deadline reached -> abort the current Lua call
   if (self->m_deadline.hasExpired()) [[unlikely]]
     luaL_error(L, "execution timed out after %d ms", kRuntimeWatchdogMs);
 }
@@ -306,7 +293,8 @@ void DataModel::LuaScriptEngine::resetTimeoutCounter() noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Validates and loads a Lua frame parser script.
+ * @brief Validates and loads a Lua frame parser script, caching parse() in the
+ *        registry so the hotpath skips a global lookup on every frame.
  */
 bool DataModel::LuaScriptEngine::loadScript(const QString& script,
                                             int sourceId,
@@ -319,7 +307,6 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
   m_sourceId = sourceId;
   createState();
 
-  // C++-boundary exception guard: a thrown Lua error during load must not crash the host
   try {
     const QByteArray utf8 = script.toUtf8();
     const auto fileName   = QStringLiteral("parser_%1.lua").arg(sourceId).toUtf8();
@@ -348,7 +335,6 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
     if (sourceId == 0 && !probeParseFunction(sourceId, showMessageBoxes))
       return false;
 
-    // Cache parse() in the registry so the hotpath skips a global lookup on every frame.
     lua_getglobal(m_state, "parse");
     m_parseRef = luaL_ref(m_state, LUA_REGISTRYINDEX);
 
@@ -360,7 +346,6 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
     qWarning() << "[LuaScriptEngine] Source" << sourceId << "load uncaught non-std exception";
   }
 
-  // Escaped Lua/C++ error: drop the half-built state and report a clean load failure
   destroyState();
   createState();
   return false;
@@ -495,7 +480,6 @@ QList<QStringList> DataModel::LuaScriptEngine::parseLuaText(const char* data, qs
   if (!m_loaded || m_disabled)
     return {};
 
-  // C++-boundary exception guard: a thrown Lua error must not crash the host
   try {
     lua_rawgeti(m_state, LUA_REGISTRYINDEX, m_parseRef);
     lua_pushlstring(m_state, data, static_cast<size_t>(len));
@@ -561,7 +545,6 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
   if (!m_loaded || m_disabled)
     return {};
 
-  // C++-boundary exception guard: a thrown Lua error must not crash the host
   try {
     lua_rawgeti(m_state, LUA_REGISTRYINDEX, m_parseRef);
 
@@ -604,13 +587,14 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Converts the Lua value at stack top to a QString without coercing numeric strings.
+ * @brief Converts the Lua value at stack top to a QString without coercing numeric
+ *        strings: strings pass through verbatim (no strtod/reformat) to match the JS
+ *        engine; only real numbers are formatted.
  */
 QString DataModel::LuaScriptEngine::luaValueToString()
 {
   Q_ASSERT(m_state != nullptr);
 
-  // Strings pass through verbatim (no strtod/reformat), matching JS; only real numbers format.
   switch (lua_type(m_state, -1)) {
     case LUA_TSTRING:
       return QString::fromUtf8(lua_tostring(m_state, -1));
@@ -703,7 +687,6 @@ QList<QStringList> DataModel::LuaScriptEngine::convertResult()
     return results;
   }
 
-  // Fused single-pass 1D conversion; bail to the classifier on the first nested table
   const int scanLen = qMin(len, kMaxElements);
   QStringList scalars;
   scalars.reserve(scanLen);

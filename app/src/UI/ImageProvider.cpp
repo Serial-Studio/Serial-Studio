@@ -58,10 +58,8 @@ void UI::ImageProvider::setGlobal(UI::ImageProvider* provider)
  */
 QImage UI::ImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
-  // Extract the provider key by stripping the version suffix
   const QString key = id.section(QLatin1Char('/'), 0, 0);
 
-  // Look up the cached image under a read lock
   QReadLocker locker(&m_lock);
   const auto it = m_images.constFind(key);
   if (it == m_images.cend())

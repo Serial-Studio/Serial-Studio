@@ -114,7 +114,6 @@ void Misc::TimerEvents::startTimers()
  */
 void Misc::TimerEvents::setFPS(int hz)
 {
-  // Clamp the value and update if changed
   hz = qBound(1, hz, 240);
 
   if (m_uiTimerHz != hz) {

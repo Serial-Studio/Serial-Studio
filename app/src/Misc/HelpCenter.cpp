@@ -47,10 +47,8 @@ static const QString kBase = QStringLiteral("https://raw.githubusercontent.com/%
  */
 Misc::HelpCenter::HelpCenter() : m_loading(false), m_currentIndex(-1), m_pendingPreloads(0)
 {
-  // Bound every fetch so a stalled connection cannot pin the loading state
   m_nam.setTransferTimeout(15 * 1000);
 
-  // Build initial theme colors JSON and react to theme changes
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
@@ -158,18 +156,15 @@ const QString& Misc::HelpCenter::themeColors() const noexcept
  */
 void Misc::HelpCenter::setCurrentIndex(int index)
 {
-  // Guard against redundant selection
   if (m_currentIndex == index)
     return;
 
   m_currentIndex = index;
   Q_EMIT currentIndexChanged();
 
-  // Clear previous content
   m_pageContent.clear();
   Q_EMIT pageContentChanged();
 
-  // Fetch content for the newly selected page
   if (index >= 0 && index < m_filteredPages.count())
     fetchPage(index);
 }
@@ -193,7 +188,6 @@ void Misc::HelpCenter::setSearchFilter(const QString& filter)
  */
 bool Misc::HelpCenter::navigateToPage(const QString& link)
 {
-  // Normalize the link by stripping fragment and extension
   auto normalized    = link.trimmed();
   const auto hashIdx = normalized.indexOf('#');
   if (hashIdx >= 0)
@@ -205,7 +199,6 @@ bool Misc::HelpCenter::navigateToPage(const QString& link)
   if (normalized.isEmpty())
     return false;
 
-  // Search in filtered pages first, then all pages
   for (int i = 0; i < m_filteredPages.count(); ++i) {
     const auto page  = m_filteredPages.at(i).toMap();
     const auto id    = page.value("id").toString();
@@ -222,7 +215,6 @@ bool Misc::HelpCenter::navigateToPage(const QString& link)
     }
   }
 
-  // If filter is active, clear it and try again in the full list
   if (!m_searchFilter.isEmpty()) {
     setSearchFilter(QString());
     return navigateToPage(link);
@@ -237,11 +229,9 @@ bool Misc::HelpCenter::navigateToPage(const QString& link)
  */
 void Misc::HelpCenter::showPage(const QString& pageId)
 {
-  // Clear search filter so all pages are visible
   if (!m_searchFilter.isEmpty())
     setSearchFilter(QString());
 
-  // Manifest already loaded, navigate immediately
   if (!m_allPages.isEmpty()) {
     if (!pageId.isEmpty())
       navigateToPage(pageId);
@@ -249,7 +239,6 @@ void Misc::HelpCenter::showPage(const QString& pageId)
     return;
   }
 
-  // Store pending page and fetch manifest
   m_pendingPageId = pageId;
   fetchManifest();
 }
@@ -269,13 +258,11 @@ void Misc::HelpCenter::onManifestReply()
 
   reply->deleteLater();
 
-  // Parse the manifest
   if (reply->error() == QNetworkReply::NoError) {
     const auto doc = QJsonDocument::fromJson(reply->readAll());
     m_allPages     = doc.array();
     applyFilter();
 
-    // Navigate to pending page or auto-select first
     if (!m_pendingPageId.isEmpty()) {
       navigateToPage(m_pendingPageId);
       m_pendingPageId.clear();
@@ -284,11 +271,9 @@ void Misc::HelpCenter::onManifestReply()
     else if (!m_filteredPages.isEmpty())
       setCurrentIndex(0);
 
-    // Preload all page contents for full-text search
     preloadAllPages();
   }
 
-  // Clear loading state
   m_loading = false;
   Q_EMIT loadingChanged();
 }
@@ -307,19 +292,16 @@ void Misc::HelpCenter::onPageReply()
   if (reply->error() == QNetworkReply::NoError) {
     const auto raw = QString::fromUtf8(reply->readAll());
 
-    // Store in memory
     const auto id = reply->property("pageId").toString();
     if (!id.isEmpty())
       m_pageContents.insert(id, raw);
 
-    // Expose raw markdown to QML
     m_pageContent = raw;
   }
 
   else
     m_pageContent = tr("Failed to load page: %1").arg(reply->errorString());
 
-  // Reset loading flag
   m_loading = false;
   Q_EMIT loadingChanged();
   Q_EMIT pageContentChanged();
@@ -397,7 +379,6 @@ void Misc::HelpCenter::fetchPage(int index)
   const auto id   = page.value("id").toString();
   const auto file = page.value("file").toString();
 
-  // Check in-memory content first
   const auto it = m_pageContents.constFind(id);
   if (it != m_pageContents.constEnd()) {
     m_pageContent = *it;
@@ -405,7 +386,6 @@ void Misc::HelpCenter::fetchPage(int index)
     return;
   }
 
-  // Fetch from network
   m_loading = true;
   Q_EMIT loadingChanged();
 
@@ -422,7 +402,6 @@ void Misc::HelpCenter::fetchPage(int index)
  */
 void Misc::HelpCenter::preloadAllPages()
 {
-  // Fetch all pages not yet in cache for full-text search
   m_pendingPreloads = 0;
 
   for (const auto& entry : std::as_const(m_allPages)) {
@@ -433,7 +412,6 @@ void Misc::HelpCenter::preloadAllPages()
     if (m_pageContents.contains(id))
       continue;
 
-    // Fetch from network
     ++m_pendingPreloads;
     auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(file));
     auto url     = QUrl::fromEncoded((kBase + encoded).toUtf8());
@@ -462,7 +440,6 @@ void Misc::HelpCenter::onPreloadReply()
       m_pageContents.insert(id, raw);
   }
 
-  // When all preloads finish, re-apply filter so content search is available
   --m_pendingPreloads;
   if (m_pendingPreloads <= 0 && !m_searchFilter.isEmpty())
     applyFilter();
@@ -481,12 +458,10 @@ void Misc::HelpCenter::onThemeChanged()
   static const auto* t = &Misc::ThemeManager::instance();
   const auto& colors   = t->colors();
 
-  // Determine if this is a dark theme by checking background luminance
   const auto bgHex = colors.value(QStringLiteral("groupbox_background")).toString();
   const QColor bgCol(bgHex);
   const bool isDark = bgCol.isValid() && bgCol.lightnessF() < 0.5;
 
-  // Build JSON object with the colors the WebView needs
   QJsonObject obj;
   obj[QStringLiteral("text")]      = colors.value(QStringLiteral("text")).toString();
   obj[QStringLiteral("bg")]        = colors.value(QStringLiteral("groupbox_background")).toString();

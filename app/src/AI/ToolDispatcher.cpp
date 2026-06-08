@@ -223,6 +223,7 @@ static QJsonObject scriptPropsBag()
                        QStringList{QStringLiteral("frame_parser"),
                                    QStringLiteral("transform"),
                                    QStringLiteral("painter"),
+                                   QStringLiteral("output_widget"),
                                    QStringLiteral("end_to_end")});
   props[QStringLiteral("code")] =
     makeProperty(QStringLiteral("string"), QStringLiteral("Script source to validate/apply."));
@@ -268,6 +269,13 @@ static QJsonObject scriptPropsBag()
                  QStringLiteral("[end_to_end only] Multiple pre-extracted frame bodies."));
   props[QStringLiteral("values")] =
     makeProperty(QStringLiteral("array"), QStringLiteral("Sample values for transform tests."));
+  props[QStringLiteral("inputValue")] =
+    makeProperty(QStringLiteral("string"),
+                 QStringLiteral("[output_widget] Optional sample value to run transmit() "
+                                "against so runtime errors and the produced bytes surface."));
+  props[QStringLiteral("hex")] =
+    makeProperty(QStringLiteral("boolean"),
+                 QStringLiteral("[output_widget] Treat inputValue as space-separated hex bytes."));
   props[QStringLiteral("groupId")] = makeProperty(
     QStringLiteral("integer"), QStringLiteral("Target group id for transform/painter."));
   props[Keys::DatasetId] =
@@ -971,6 +979,9 @@ static QString scriptingDocKindForScriptKind(const QString& kind, int language)
   if (kind == QStringLiteral("painter"))
     return QStringLiteral("painter_js");
 
+  if (kind == QStringLiteral("output_widget"))
+    return QStringLiteral("output_widget_js");
+
   return {};
 }
 
@@ -1107,6 +1118,16 @@ static QString dryRunCommandForKind(const QString& kind,
 
   if (kind == QStringLiteral("painter"))
     return QStringLiteral("project.painter.dryRun");
+
+  if (kind == QStringLiteral("output_widget")) {
+    if (args.contains(QStringLiteral("inputValue")))
+      dryArgs[QStringLiteral("inputValue")] = args.value(QStringLiteral("inputValue")).toString();
+
+    if (args.contains(QStringLiteral("hex")))
+      dryArgs[QStringLiteral("hex")] = args.value(QStringLiteral("hex")).toBool();
+
+    return QStringLiteral("project.outputWidget.dryRun");
+  }
 
   if (kind == QStringLiteral("end_to_end")) {
     seedEndToEndDryArgs(args, dryArgs, language);
@@ -1280,7 +1301,11 @@ static QJsonObject executeScriptApply(const QJsonObject& args)
   out[QStringLiteral("ok")]    = false;
   out[QStringLiteral("error")] = QStringLiteral("unsupported_apply_kind");
   out[QStringLiteral("hint")] =
-    QStringLiteral("assistant.script.apply supports frame_parser, transform, and painter.");
+    kind == QStringLiteral("output_widget")
+      ? QStringLiteral("output_widget is dry-run only here: validate with "
+                       "assistant.script.dryRun{kind:'output_widget'}, then apply via "
+                       "project.outputWidget.update{groupId, widgetId, transmitFunction}.")
+      : QStringLiteral("assistant.script.apply supports frame_parser, transform, and painter.");
   return out;
 }
 
@@ -1889,14 +1914,12 @@ QJsonObject AI::ToolDispatcher::listCategories() const
     counts[scope]       += 1;
   }
 
-  // Always advertise the meta scope even if it isn't in the registry.
   if (!counts.contains(QStringLiteral("meta")))
     counts[QStringLiteral("meta")] = 6;
 
   counts[QStringLiteral("assistant")] = assistantToolDefs().size();
   counts[QStringLiteral("fs")]        = fsToolDefs().size();
 
-  // Sort scopes (build vector first since QJsonValueRef is non-swappable)
   std::vector<QJsonObject> rows;
   rows.reserve(counts.size());
   for (auto it = counts.constBegin(); it != counts.constEnd(); ++it) {
@@ -1987,7 +2010,6 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
                                                const QJsonObject& args,
                                                bool autoConfirmSafe)
 {
-  // Validate the args envelope
   Misc::JsonValidator::Limits limits;
   limits.maxFileSize  = 1 * 1024 * 1024;
   limits.maxDepth     = 32;
@@ -2001,13 +2023,11 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
     return reply;
   }
 
-  // Read-only previews (dryRun:true) bypass the Confirm gate; Blocked still blocks.
   const auto safety        = AI::CommandRegistry::instance().safetyOf(name);
   const bool isDryRunQuery = args.value(QStringLiteral("dryRun")).toBool(false);
   if (safety == Safety::Blocked)
     return makeBlockedReply(name);
 
-  // Confirm gates require explicit user approval (autoConfirmSafe=true).
   if ((safety == Safety::Confirm || safety == Safety::AlwaysConfirm) && !autoConfirmSafe
       && !isDryRunQuery) {
     Q_EMIT confirmationRequested(name, args);
@@ -2031,7 +2051,6 @@ QJsonObject AI::ToolDispatcher::executeCommand(const QString& name,
   if (isFsTool(name))
     return executeFsTool(name, args);
 
-  // Forward to API::CommandRegistry
   const auto callId   = QUuid::createUuid().toString(QUuid::WithoutBraces);
   const auto response = API::CommandRegistry::instance().execute(name, callId, args);
 
@@ -2077,7 +2096,6 @@ static QJsonObject runSafeCommand(const QString& name)
  */
 QJsonObject AI::ToolDispatcher::getSnapshot() const
 {
-  // Curated read-only commands; missing ones (e.g. commercial-only) are skipped.
   static const QStringList kStatusCommands = {
     QStringLiteral("project.getStatus"),
     QStringLiteral("io.getStatus"),

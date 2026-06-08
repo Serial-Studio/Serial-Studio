@@ -86,9 +86,6 @@ class Taskbar : public QQuickItem {
              READ activeWindow
              WRITE setActiveWindow
              NOTIFY activeWindowChanged)
-  Q_PROPERTY(QVariantList groupModel
-             READ groupModel
-             NOTIFY fullModelChanged)
   Q_PROPERTY(QVariantList workspaceModel
              READ workspaceModel
              NOTIFY workspaceModelChanged)
@@ -133,7 +130,6 @@ public:
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] int activeGroupIndex() const;
   [[nodiscard]] QString searchFilter() const;
-  [[nodiscard]] QVariantList groupModel() const;
   [[nodiscard]] QVariantList allWidgets() const;
   [[nodiscard]] QVariantList searchResults() const;
   [[nodiscard]] QVariantList workspaceModel() const;
@@ -181,7 +177,6 @@ private slots:
   void onClockToggled();
   void onStopwatchToggled();
   void onRegistryCleared();
-  void onBatchUpdateCompleted();
   void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo& info);
   void onWidgetDestroyed(UI::WidgetID id);
   void onFocusCycleTick();
