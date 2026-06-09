@@ -1935,15 +1935,20 @@ static void appendReferenceMetaTools(QJsonArray& out)
 {
   {
     auto kindProp =
-      stringProp(QStringLiteral("Which scripting reference to fetch. Each returns the canonical "
-                                "API surface, idiomatic patterns, and worked examples for that "
-                                "scripting context."),
+      stringProp(QStringLiteral("Which scripting reference to fetch. The first six return the "
+                                "canonical API surface, idiomatic patterns, and worked examples "
+                                "for that scripting context. sdk_js / sdk_lua return the actual "
+                                "generated SerialStudio SDK source -- the authoritative listing "
+                                "of every callable (io.*, tableGet, deviceWrite, notify*, delay, "
+                                "SerialStudio.Hex, ...); fetch these to confirm exact signatures."),
                  QJsonArray{QStringLiteral("frame_parser_js"),
                             QStringLiteral("frame_parser_lua"),
                             QStringLiteral("transform_js"),
                             QStringLiteral("transform_lua"),
                             QStringLiteral("output_widget_js"),
-                            QStringLiteral("painter_js")});
+                            QStringLiteral("painter_js"),
+                            QStringLiteral("sdk_js"),
+                            QStringLiteral("sdk_lua")});
     auto schema = objectSchemaWithProperty(QStringLiteral("kind"), kindProp, true);
     out.append(makeMetaTool(QStringLiteral("meta.fetchScriptingDocs"),
                             QStringLiteral("Fetch the Serial Studio scripting reference for one "

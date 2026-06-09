@@ -38,6 +38,7 @@
 #include "Console/Handler.h"
 #include "CSV/Export.h"
 #include "CSV/Player.h"
+#include "DataModel/Editors/ControlScriptEditor.h"
 #include "DataModel/Editors/FrameParserModel.h"
 #include "DataModel/Editors/JsCodeEditor.h"
 #include "DataModel/Editors/OutputCodeEditor.h"
@@ -46,6 +47,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ControlScript.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
@@ -354,6 +356,7 @@ void Misc::ModuleManager::registerQmlTypes()
 #endif
 
   qmlRegisterType<DataModel::JsCodeEditor>("SerialStudio", 1, 0, "JsCodeEditor");
+  qmlRegisterType<DataModel::ControlScriptEditor>("SerialStudio", 1, 0, "ControlScriptEditor");
   qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
   qmlRegisterType<DataModel::ProjectEditor>("SerialStudio", 1, 0, "ProjectEditor");
   qmlRegisterType<DataModel::OutputCodeEditor>("SerialStudio", 1, 0, "OutputCodeEditor");
@@ -438,6 +441,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   DataModel::ProjectModel::instance().setupExternalConnections();
   Misc::BackupManager::instance().setupExternalConnections();
   DataModel::FrameBuilder::instance().setupExternalConnections();
+  DataModel::ControlScript::instance().setupExternalConnections();
   Console::Export::instance().setupExternalConnections();
   Console::Handler::instance().setupExternalConnections();
   IO::FileTransmission::instance().setupExternalConnections();
@@ -508,6 +512,7 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   ctx->setContextProperty("Cpp_Misc_Translator", &Misc::Translator::instance());
   ctx->setContextProperty("Cpp_JSON_ProjectModel", &DataModel::ProjectModel::instance());
   ctx->setContextProperty("Cpp_JSON_ProjectEditor", &DataModel::ProjectEditor::instance());
+  ctx->setContextProperty("Cpp_ControlScript", &DataModel::ControlScript::instance());
   ctx->setContextProperty("Cpp_JSON_ProtoImporter", &DataModel::ProtoImporter::instance());
   ctx->setContextProperty("Cpp_JSON_FrameBuilder", &DataModel::FrameBuilder::instance());
   ctx->setContextProperty("Cpp_Notifications", &DataModel::NotificationCenter::instance());

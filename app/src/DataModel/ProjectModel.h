@@ -45,6 +45,10 @@ class ProjectModel : public QObject {
   Q_PROPERTY(QString title
              READ title
              NOTIFY titleChanged)
+  Q_PROPERTY(QString controlScriptCode
+             READ  controlScriptCode
+             WRITE setControlScriptCode
+             NOTIFY controlScriptChanged)
   Q_PROPERTY(QString jsonFilePath
              READ jsonFilePath
              NOTIFY jsonFileChanged)
@@ -111,6 +115,7 @@ class ProjectModel : public QObject {
 
 signals:
   void titleChanged();
+  void controlScriptChanged();
   void saveStatusChanged();
   void pointCountChanged();
   void plotTimeRangeChanged();
@@ -192,6 +197,7 @@ public:
   [[nodiscard]] int groupUniqueIdForGroupId(int groupId) const;
 
   [[nodiscard]] const QString& title() const noexcept;
+  [[nodiscard]] QString controlScriptCode() const;
   [[nodiscard]] const QString& jsonFilePath() const noexcept;
   [[nodiscard]] int frameParserLanguage() const;
   [[nodiscard]] int frameParserLanguage(int sourceId) const;
@@ -265,6 +271,7 @@ public slots:
   void importProjectFromJson(const QJsonObject& project, const QString& suggestedFileName);
 
   void setTitle(const QString& title);
+  void setControlScriptCode(const QString& code);
   void setPointCount(const int points);
   void setPlotTimeRange(const double seconds);
   void clearJsonFilePath();
@@ -501,6 +508,7 @@ private:
   bool m_silentReload;
   QString m_filePath;
   bool m_suppressMessageBoxes;
+  QString m_controlScriptCode;
 
   std::vector<DataModel::Group> m_groups;
   std::vector<DataModel::Action> m_actions;

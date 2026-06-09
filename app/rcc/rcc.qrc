@@ -632,6 +632,10 @@
         <file>scripts/output/simple_command.js</file>
         <file>scripts/output/slcan_command.js</file>
         <file>scripts/output/templates.json</file>
+        <file>scripts/control/default_template.js</file>
+        <file>api/SerialStudio.js</file>
+        <file>api/SerialStudio.lua</file>
+        <file>api/sdk-symbols.json</file>
         <file>scripts/mqtt/js/aws_iot.js</file>
         <file>scripts/mqtt/js/home_assistant.js</file>
         <file>scripts/mqtt/js/influxdb.js</file>
@@ -857,6 +861,7 @@
         <file>ai/skills/debugging.md</file>
         <file>ai/skills/api_semantics.md</file>
         <file>ai/skills/workspace_design.md</file>
+        <file>ai/skills/control_script.md</file>
         <file>ai/search_index.json</file>
         <file>icons/taskbar/ai.svg</file>
         <file>icons/project-editor/toolbar/protobuf.svg</file>

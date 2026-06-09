@@ -34,8 +34,7 @@
 /**
  * @brief Single entry in the well-known BLE UUID table.
  */
-struct BleKnownUuid
-{
+struct BleKnownUuid {
   const char* uuid;
   const char* name;
 };
@@ -334,7 +333,7 @@ static QString rawUuidName(const QBluetoothUuid& uuid)
   const quint16 u16 = uuid.toUInt16(&ok);
   if (ok)
     return QStringLiteral("0x")
-           + QString::number(u16, 16).rightJustified(4, QLatin1Char('0')).toUpper();
+         + QString::number(u16, 16).rightJustified(4, QLatin1Char('0')).toUpper();
 
   return uuid.toString(QUuid::WithoutBraces).toUpper();
 }
@@ -351,8 +350,8 @@ static QString bleServiceName(const QBluetoothUuid& uuid)
   bool ok           = false;
   const quint16 u16 = uuid.toUInt16(&ok);
   if (ok) {
-    const QString sig
-      = QBluetoothUuid::serviceClassToString(static_cast<QBluetoothUuid::ServiceClassUuid>(u16));
+    const QString sig =
+      QBluetoothUuid::serviceClassToString(static_cast<QBluetoothUuid::ServiceClassUuid>(u16));
     if (!sig.isEmpty())
       return sig;
   }
@@ -377,8 +376,8 @@ static QString bleCharacteristicName(const QLowEnergyCharacteristic& characteris
   bool ok           = false;
   const quint16 u16 = uuid.toUInt16(&ok);
   if (ok) {
-    const QString sig
-      = QBluetoothUuid::characteristicToString(static_cast<QBluetoothUuid::CharacteristicType>(u16));
+    const QString sig =
+      QBluetoothUuid::characteristicToString(static_cast<QBluetoothUuid::CharacteristicType>(u16));
     if (!sig.isEmpty())
       return sig;
   }
@@ -545,6 +544,46 @@ qint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
 
   qWarning() << "Failed to write data to BLE device: ensure that a characteristic is selected";
   return 0;
+}
+
+/**
+ * @brief Writes to a UUID-resolved characteristic for split read/write devices.
+ */
+qint64 IO::Drivers::BluetoothLE::writeCharacteristic(const QString& uuid, const QByteArray& data)
+{
+  const QBluetoothUuid target(uuid);
+  if (target.isNull()) {
+    qWarning() << "BLE writeCharacteristic: invalid UUID" << uuid;
+    return 0;
+  }
+
+  QLowEnergyService* service = m_service;
+  if (!service) {
+    for (auto* inst : std::as_const(s_instances))
+      if (inst != this && inst->m_deviceIndex == m_deviceIndex && inst->m_service) {
+        service = inst->m_service;
+        break;
+      }
+  }
+
+  if (!service) {
+    qWarning() << "BLE writeCharacteristic: no active service for the selected device";
+    return 0;
+  }
+
+  const auto characteristic = service->characteristic(target);
+  if (!characteristic.isValid()) {
+    qWarning() << "BLE writeCharacteristic: characteristic" << uuid << "not found in service";
+    return 0;
+  }
+
+  const auto props = characteristic.properties();
+  const auto mode  = (props & QLowEnergyCharacteristic::WriteNoResponse)
+                     ? QLowEnergyService::WriteWithoutResponse
+                     : QLowEnergyService::WriteWithResponse;
+
+  service->writeCharacteristic(characteristic, data, mode);
+  return data.length();
 }
 
 /**
@@ -888,6 +927,44 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
   }
 
   Q_EMIT characteristicIndexChanged();
+}
+
+/**
+ * @brief Selects the discovered service whose UUID matches, by delegating to selectService.
+ */
+bool IO::Drivers::BluetoothLE::selectServiceByUuid(const QString& uuid)
+{
+  const QBluetoothUuid target(uuid);
+  if (target.isNull())
+    return false;
+
+  for (int i = 0; i < m_serviceUuids.count(); ++i) {
+    if (QBluetoothUuid(m_serviceUuids.at(i)) == target) {
+      selectService(i + 1);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * @brief Subscribes to the notify characteristic with the given UUID, by index delegation.
+ */
+bool IO::Drivers::BluetoothLE::setNotifyCharacteristicByUuid(const QString& uuid)
+{
+  const QBluetoothUuid target(uuid);
+  if (target.isNull())
+    return false;
+
+  for (int i = 0; i < m_characteristics.count(); ++i) {
+    if (m_characteristics.at(i).uuid() == target) {
+      setCharacteristicIndex(i + 1);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------

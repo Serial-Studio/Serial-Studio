@@ -12,6 +12,7 @@
 #include "UI/Widgets/Output/Base.h"
 
 #include "DataModel/NotificationCenter.h"
+#include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/ConnectionManager.h"
 #include "Licensing/CommercialToken.h"
 
@@ -34,7 +35,7 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   , m_watchdog(&m_jsEngine, kTransmitWatchdogMs, QStringLiteral("transmit"))
 {
   m_rateLimiter.start();
-  installProtocolHelpers(m_jsEngine);
+  DataModel::ScriptApiCall::installAll(&m_jsEngine, m_sourceId);
 
   if (!config.transmitFunction.isEmpty()) {
     const auto wrapped =
@@ -192,63 +193,9 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Installs protocol-aware helper functions into the JS engine.
+ * @brief Installs the full SerialStudio SDK (protocol helpers included) into the engine.
  */
 void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
 {
-  // clang-format off
-  static const QString kHelpers = QStringLiteral(
-
-    "function modbusWriteRegister(address, value) {"
-    "  var a = address & 0xFFFF;"
-    "  var v = Math.round(value) & 0xFFFF;"
-    "  return String.fromCharCode("
-    "    (a >> 8) & 0xFF, a & 0xFF,"
-    "    (v >> 8) & 0xFF, v & 0xFF);"
-    "}"
-
-    "function modbusWriteCoil(address, on) {"
-    "  return modbusWriteRegister(address, on ? 0xFF00 : 0x0000);"
-    "}"
-
-    "function modbusWriteFloat(address, value) {"
-    "  var buf = new ArrayBuffer(4);"
-    "  new DataView(buf).setFloat32(0, value, false);"
-    "  var b = new Uint8Array(buf);"
-    "  var a = address & 0xFFFF;"
-    "  return String.fromCharCode("
-    "    (a >> 8) & 0xFF, a & 0xFF,"
-    "    b[0], b[1], b[2], b[3]);"
-    "}"
-
-    "function canSendFrame(id, payload) {"
-    "  var canId = id & 0xFFFF;"
-    "  var data = '';"
-    "  if (typeof payload === 'string')"
-    "    data = payload;"
-    "  else if (Array.isArray(payload)) {"
-    "    for (var i = 0; i < payload.length; i++)"
-    "      data += String.fromCharCode(payload[i] & 0xFF);"
-    "  }"
-    "  var dlc = data.length;"
-    "  return String.fromCharCode("
-    "    (canId >> 8) & 0xFF, canId & 0xFF, dlc) + data;"
-    "}"
-
-    "function canSendValue(id, value, bytes) {"
-    "  bytes = bytes || 2;"
-    "  var arr = [];"
-    "  var v = Math.round(value);"
-    "  for (var i = bytes - 1; i >= 0; i--)"
-    "    arr.push((v >> (i * 8)) & 0xFF);"
-    "  return canSendFrame(id, arr);"
-    "}"
-  );
-  // clang-format on
-
-  auto result = engine.evaluate(kHelpers);
-  if (result.isError())
-    qWarning() << "Failed to install protocol helpers:" << result.toString();
-
-  DataModel::NotificationCenter::installScriptApi(&engine);
+  DataModel::ScriptApiCall::installAll(&engine, 0);
 }

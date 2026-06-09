@@ -1,0 +1,16 @@
+-- Hand-maintained SDK prelude (Lua). Prepended to the generated wrappers by
+-- scripts/generate-sdk.py.
+--
+-- Unlike JavaScript, the Lua bridge functions are installed by the host as
+-- native C closures (they capture per-source state), so there is no glue to
+-- define here. This block documents the globals each engine may provide:
+--
+--   Data tables / dataset access (FrameBuilder):
+--     tableGet(table, row)        tableSet(table, row, value)
+--     datasetGetRaw(uniqueId)     datasetGetFinal(uniqueId)
+--     mqttPublish(topic, payload, qos, retain)   -- commercial builds only
+--
+--   Device output:
+--     deviceWrite(data, sourceId)   actionFire(actionId)
+--
+-- Whether a given global exists depends on which engine is running the script.

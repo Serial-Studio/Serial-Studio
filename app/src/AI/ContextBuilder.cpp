@@ -108,6 +108,10 @@ QString AI::ContextBuilder::roleBlock()
            "frame execution order, transform/painter cycle, tableGet edge cases, "
            "frame-parser batching timestamps. Load when a behavior/timing question "
            "is about to send you down a rabbit hole.\n"
+           "  control_script    -> the project setup()/loop() control script, the "
+           "SerialStudio.js/.lua SDK (io.ble.writeCharacteristic(uuid, hex, "
+           "SerialStudio.Hex), delay(ms)), controlscript.* management. Load for "
+           "device automation, wake-up handshakes, polling, keep-alives.\n"
            "  tool_discovery    -> meta.* (always relevant when you're hunting for a "
            "command you don't recognise)\n"
            "  behavioral        -> conversational tone AND the undo/recovery flow "
@@ -252,7 +256,9 @@ QString AI::ContextBuilder::roleBlock()
            "  meta.describeCommand     full schema for one command\n"
            "  meta.executeCommand      run a command not in your essentials list\n"
            "  meta.fetchHelp           authoritative GitHub docs\n"
-           "  meta.fetchScriptingDocs  scripting reference per kind\n"
+           "  meta.fetchScriptingDocs  scripting reference per kind (incl. sdk_js / "
+           "sdk_lua -- the actual generated SerialStudio SDK source listing every "
+           "callable: io.*, tableGet, deviceWrite, notify*, delay, SerialStudio.Hex, ...)\n"
            "  meta.howTo               canned multi-step recipes\n"
            "  meta.snapshot            composite status across all subsystems\n"
            "  project.snapshot         composite read of the active project (sources, "
@@ -636,9 +642,9 @@ QString AI::ContextBuilder::howToRecipe(const QString& task)
       "a skill that is listed but not registered as a resource).\n"
       "\n"
       "4. Scripting docs: meta.fetchScriptingDocs for frame_parser_js, frame_parser_lua, "
-      "transform_js, transform_lua, painter_js, output_widget_js. PASS if each is non-"
-      "empty. For output_widget_js, confirm the entry point is transmit(value) -- NOT "
-      "output(state).\n"
+      "transform_js, transform_lua, painter_js, output_widget_js, sdk_js, sdk_lua. PASS if "
+      "each is non-empty. For output_widget_js, confirm the entry point is transmit(value) "
+      "-- NOT output(state). sdk_js/sdk_lua return the generated SDK source itself.\n"
       "\n"
       "5. Frame-parser dry-run (expect extractedCount 1): assistant.script.dryRun"
       "{kind:'frame_parser', language:0, code:'function parse(frame, sep){ return "
@@ -677,6 +683,12 @@ QString AI::ContextBuilder::howToRecipe(const QString& task)
  */
 QString AI::ContextBuilder::scriptingDocFor(const QString& kind)
 {
+  if (kind == QLatin1String("sdk_js"))
+    return readResource(QStringLiteral(":/api/SerialStudio.js"));
+
+  if (kind == QLatin1String("sdk_lua"))
+    return readResource(QStringLiteral(":/api/SerialStudio.lua"));
+
   static const QSet<QString> kAllowed = {QStringLiteral("frame_parser_js"),
                                          QStringLiteral("frame_parser_lua"),
                                          QStringLiteral("transform_js"),
@@ -710,6 +722,7 @@ QStringList AI::ContextBuilder::skillIds()
     QStringLiteral("dashboard_layout"),
     QStringLiteral("debugging"),
     QStringLiteral("api_semantics"),
+    QStringLiteral("control_script"),
   };
 }
 

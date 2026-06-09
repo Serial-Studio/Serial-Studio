@@ -30,7 +30,6 @@
 #include <QJavascriptHighlighter>
 #include <QJsonObject>
 #include <QLineNumberArea>
-#include <QLuaCompleter>
 #include <QLuaHighlighter>
 #include <QMessageBox>
 #include <QTextCursor>
@@ -38,6 +37,7 @@
 #include <QUrl>
 
 #include "DataModel/Editors/CodeFormatter.h"
+#include "DataModel/Editors/SerialStudioCompleter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
@@ -175,10 +175,10 @@ void DataModel::JsCodeEditor::setLanguage(const int language)
 
   if (language == 1) {
     m_widget.setHighlighter(new QLuaHighlighter());
-    m_widget.setCompleter(new QLuaCompleter(&m_widget));
+    m_widget.setCompleter(new DataModel::SerialStudioCompleter(true, &m_widget));
   } else {
     m_widget.setHighlighter(new QJavascriptHighlighter());
-    m_widget.setCompleter(nullptr);
+    m_widget.setCompleter(new DataModel::SerialStudioCompleter(false, &m_widget));
   }
 
   Q_EMIT languageChanged();

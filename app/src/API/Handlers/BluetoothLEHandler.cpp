@@ -36,6 +36,15 @@
  */
 void API::Handlers::BluetoothLEHandler::registerCommands()
 {
+  registerSelectionCommands();
+  registerQueryCommands();
+}
+
+/**
+ * @brief Register discovery, device/service/characteristic selection, and write commands.
+ */
+void API::Handlers::BluetoothLEHandler::registerSelectionCommands()
+{
   auto& registry   = CommandRegistry::instance();
   const auto empty = emptySchema();
 
@@ -71,6 +80,55 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
        QStringLiteral("Index of the BLE characteristic to select")}
   }),
     &setCharacteristicIndex);
+
+  registry.registerCommand(
+    QStringLiteral("io.ble.selectServiceByUuid"),
+    QStringLiteral("Select the BLE service whose UUID matches (params: serviceUuid - 16-bit "
+                   "short form like 'fff0' or full 128-bit UUID). Robust alternative to "
+                   "selectService by index. The device must be connected."),
+    makeSchema({
+      {QStringLiteral("serviceUuid"),
+       QStringLiteral("string"),
+       QStringLiteral("Service UUID (short or full form)")}
+  }),
+    &selectServiceByUuid);
+
+  registry.registerCommand(
+    QStringLiteral("io.ble.setNotifyCharacteristic"),
+    QStringLiteral("Subscribe to the notify characteristic with the given UUID for incoming "
+                   "data (params: characteristicUuid - e.g. 'fff2'). Pairs with "
+                   "io.ble.writeCharacteristic for split read/write devices. A service must be "
+                   "selected first."),
+    makeSchema({
+      {QStringLiteral("characteristicUuid"),
+       QStringLiteral("string"),
+       QStringLiteral("Notify characteristic UUID (short or full form)")}
+  }),
+    &setNotifyCharacteristic);
+
+  registry.registerCommand(
+    QStringLiteral("io.ble.writeCharacteristic"),
+    QStringLiteral("Write raw bytes to a BLE characteristic resolved by UUID, independent of "
+                   "the selected notify characteristic (params: characteristicUuid - 16-bit "
+                   "short form like 'fff1' or full 128-bit UUID; data - base64-encoded bytes). "
+                   "Lets a control script drive split read/write devices. The device must be "
+                   "connected and the owning service selected."),
+    makeSchema({
+      {QStringLiteral("characteristicUuid"),
+       QStringLiteral("string"),
+       QStringLiteral("Target characteristic UUID (short or full form)")                                      },
+      {              QStringLiteral("data"), QStringLiteral("string"),  QStringLiteral("Base64-encoded bytes")}
+  }),
+    &writeCharacteristic);
+}
+
+/**
+ * @brief Register the list/get query commands.
+ */
+void API::Handlers::BluetoothLEHandler::registerQueryCommands()
+{
+  auto& registry   = CommandRegistry::instance();
+  const auto empty = emptySchema();
 
   registry.registerCommand(QStringLiteral("io.ble.listDevices"),
                            QStringLiteral("Get list of discovered Bluetooth LE devices"),
@@ -198,6 +256,33 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectService(const QStr
 }
 
 /**
+ * @brief Select a BLE service by UUID
+ */
+API::CommandResponse API::Handlers::BluetoothLEHandler::selectServiceByUuid(
+  const QString& id, const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("serviceUuid"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: serviceUuid"));
+  }
+
+  const QString uuid = params.value(QStringLiteral("serviceUuid")).toString();
+  auto* ble          = IO::ConnectionManager::instance().bluetoothLE();
+
+  if (!ble->selectServiceByUuid(uuid)) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("No discovered service matches UUID '%1' (is the device connected?)")
+        .arg(uuid));
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("serviceUuid")] = uuid;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
  * @brief Select BLE characteristic by index
  */
 API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
@@ -228,6 +313,81 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
   QJsonObject result;
   result[QStringLiteral("characteristicIndex")] = characteristicIndex;
   result[QStringLiteral("characteristicName")]  = characteristicNames.at(characteristicIndex);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Subscribe to a notify characteristic by UUID
+ */
+API::CommandResponse API::Handlers::BluetoothLEHandler::setNotifyCharacteristic(
+  const QString& id, const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("characteristicUuid"))) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::MissingParam,
+      QStringLiteral("Missing required parameter: characteristicUuid"));
+  }
+
+  const QString uuid = params.value(QStringLiteral("characteristicUuid")).toString();
+  auto* ble          = IO::ConnectionManager::instance().bluetoothLE();
+
+  if (!ble->setNotifyCharacteristicByUuid(uuid)) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("No characteristic matches UUID '%1' (is a service selected?)").arg(uuid));
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("characteristicUuid")] = uuid;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Write raw bytes to a BLE characteristic resolved by UUID
+ */
+API::CommandResponse API::Handlers::BluetoothLEHandler::writeCharacteristic(
+  const QString& id, const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("characteristicUuid"))) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::MissingParam,
+      QStringLiteral("Missing required parameter: characteristicUuid"));
+  }
+
+  if (!params.contains(QStringLiteral("data"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: data"));
+  }
+
+  const QString uuid    = params.value(QStringLiteral("characteristicUuid")).toString();
+  const QString dataStr = params.value(QStringLiteral("data")).toString();
+  const QByteArray data = QByteArray::fromBase64(dataStr.toUtf8());
+
+  if (data.isEmpty() && !dataStr.isEmpty()) {
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Invalid base64 data"));
+  }
+
+  auto* ble = IO::ConnectionManager::instance().bluetoothLE();
+  if (!ble->isOpen()) {
+    return CommandResponse::makeError(
+      id, ErrorCode::ExecutionError, QStringLiteral("Not connected"));
+  }
+
+  const qint64 bytesWritten = ble->writeCharacteristic(uuid, data);
+  if (bytesWritten <= 0 && !data.isEmpty()) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("Failed to write to characteristic '%1' (not found or no active service)")
+        .arg(uuid));
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("bytesWritten")] = bytesWritten;
   return CommandResponse::makeSuccess(id, result);
 }
 

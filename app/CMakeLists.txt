@@ -245,6 +245,7 @@ set(SOURCES
   src/API/Handlers/CSVExportHandler.cpp
   src/API/Handlers/ProjectHandler.cpp
   src/API/Handlers/ConsoleHandler.cpp
+  src/API/Handlers/ControlScriptHandler.cpp
   src/API/Handlers/CSVPlayerHandler.cpp
   src/API/Handlers/ExtensionHandler.cpp
   src/API/Handlers/DashboardHandler.cpp
@@ -268,6 +269,8 @@ set(SOURCES
   src/IO/FileTransmission/YMODEM.cpp
   src/IO/FileTransmission/ZMODEM.cpp
   src/IO/FrameReader.cpp
+  src/DataModel/Scripting/ControlScript.cpp
+  src/DataModel/Scripting/ControlScriptWorker.cpp
   src/DataModel/Scripting/FrameParser.cpp
   src/DataModel/Scripting/FrameParserPipeline.cpp
   src/DataModel/Scripting/JsScriptEngine.cpp
@@ -287,6 +290,8 @@ set(SOURCES
   src/DataModel/Scripting/NativeTemplates/MapTemplates.cpp
   src/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   src/DataModel/Editors/JsCodeEditor.cpp
+  src/DataModel/Editors/ControlScriptEditor.cpp
+  src/DataModel/Editors/SerialStudioCompleter.cpp
   src/DataModel/Editors/FrameParserModel.cpp
   src/DataModel/Editors/CodeFormatter.cpp
   src/DataModel/Editors/OutputCodeEditor.cpp
@@ -361,6 +366,7 @@ set(HEADERS
   src/API/Handlers/CSVExportHandler.h
   src/API/Handlers/ProjectHandler.h
   src/API/Handlers/ConsoleHandler.h
+  src/API/Handlers/ControlScriptHandler.h
   src/API/Handlers/CSVPlayerHandler.h
   src/API/Handlers/ExtensionHandler.h
   src/API/Handlers/DashboardHandler.h
@@ -393,6 +399,8 @@ set(HEADERS
   src/IO/FileTransmission/ZMODEM.h
   src/IO/FrameReader.h
   src/DataModel/Scripting/FrameParser.h
+  src/DataModel/Scripting/ControlScript.h
+  src/DataModel/Scripting/ControlScriptWorker.h
   src/DataModel/Scripting/FrameParserPipeline.h
   src/DataModel/Scripting/IScriptEngine.h
   src/DataModel/Scripting/JsScriptEngine.h
@@ -407,6 +415,8 @@ set(HEADERS
   src/DataModel/Scripting/CFrameParser.h
   src/DataModel/Scripting/NativeTemplates/NativeTemplate.h
   src/DataModel/Editors/JsCodeEditor.h
+  src/DataModel/Editors/ControlScriptEditor.h
+  src/DataModel/Editors/SerialStudioCompleter.h
   src/DataModel/Editors/FrameParserModel.h
   src/DataModel/Editors/CodeFormatter.h
   src/DataModel/Editors/OutputCodeEditor.h
@@ -498,6 +508,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/ProjectView.qml
   qml/ProjectEditor/Views/SourceView.qml
   qml/ProjectEditor/Views/SourceFrameParserView.qml
+  qml/ProjectEditor/Views/ControlScriptView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
   qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml
   qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml

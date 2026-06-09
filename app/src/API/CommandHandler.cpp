@@ -25,6 +25,7 @@
 #include "API/Handlers/AssistantHandler.h"
 #include "API/Handlers/BluetoothLEHandler.h"
 #include "API/Handlers/ConsoleHandler.h"
+#include "API/Handlers/ControlScriptHandler.h"
 #include "API/Handlers/CSVExportHandler.h"
 #include "API/Handlers/CSVPlayerHandler.h"
 #include "API/Handlers/DashboardHandler.h"
@@ -230,6 +231,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::DataTablesHandler::registerCommands();
   Handlers::WorkspacesHandler::registerCommands();
   Handlers::ScriptsHandler::registerCommands();
+  Handlers::ControlScriptHandler::registerCommands();
   Handlers::AssistantHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL

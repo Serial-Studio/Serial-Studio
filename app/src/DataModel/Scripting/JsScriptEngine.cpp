@@ -233,17 +233,7 @@ DataModel::JsScriptEngine::JsScriptEngine()
 {
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
-  DataModel::NotificationCenter::installScriptApi(&m_engine);
-
-  DataModel::FrameBuilder::instance().injectTableApiJS(&m_engine);
-
-  DataModel::DeviceWriteApi::installJS(&m_engine, m_sourceId);
-
-  DataModel::ActionFireApi::installJS(&m_engine);
-
-  DataModel::DashboardApi::installJS(&m_engine);
-
-  DataModel::ScriptApiCall::installJS(&m_engine, m_sourceId);
+  DataModel::ScriptApiCall::installAll(&m_engine, m_sourceId);
 }
 
 /**

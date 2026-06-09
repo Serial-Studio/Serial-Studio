@@ -613,6 +613,7 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_workspacesRootItem(nullptr)
   , m_selectedWorkspaceId(-1)
   , m_mqttPublisherItem(nullptr)
+  , m_controlScriptItem(nullptr)
   , m_treeModel(nullptr)
   , m_selectionModel(nullptr)
   , m_groupModel(nullptr)
@@ -1169,6 +1170,7 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_systemDatasetsItem = nullptr;
   m_workspacesRootItem = nullptr;
   m_mqttPublisherItem  = nullptr;
+  m_controlScriptItem  = nullptr;
 
   QHash<QString, bool> expandedStates;
   if (m_treeModel)
@@ -1629,6 +1631,30 @@ void DataModel::ProjectEditor::appendMqttPublisherTreeItem(QStandardItem* root)
 }
 
 /**
+ * @brief Appends the project-global control-script node to the tree.
+ */
+void DataModel::ProjectEditor::appendControlScriptTreeItem(QStandardItem* root)
+{
+  Q_ASSERT(root != nullptr);
+
+  const QString q         = m_treeSearchQuery.trimmed();
+  const bool filterActive = !q.isEmpty();
+  if (filterActive && !tr("Control Script").contains(q, Qt::CaseInsensitive))
+    return;
+
+  auto* item = new QStandardItem(tr("Control Script"));
+  item->setData(tr("Control Script"), TreeViewText);
+  item->setData("qrc:/icons/project-editor/treeview/code.svg", TreeViewIcon);
+  item->setData(-1, TreeViewFrameIndex);
+  item->setData(KindControlScript, TreeItemKind);
+  item->setData(-1, TreeItemId);
+  item->setData(-1, TreeItemParentId);
+
+  root->appendRow(item);
+  m_controlScriptItem = item;
+}
+
+/**
  * @brief Rebuilds the MQTT Publisher form model from the live Publisher singleton.
  */
 void DataModel::ProjectEditor::buildMqttPublisherModel()
@@ -2036,6 +2062,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 #ifdef BUILD_COMMERCIAL
   appendMqttPublisherTreeItem(root);
 #endif
+  appendControlScriptTreeItem(root);
   appendActionTreeItems(root);
   appendGroupTreeItems(root, expandedStates);
   appendSharedMemoryTreeItems(root, expandedStates);
@@ -4433,6 +4460,18 @@ bool DataModel::ProjectEditor::selectMqttPublisherItem(QStandardItem* item)
 }
 
 /**
+ * @brief Switches to the control-script view when its tree node is selected.
+ */
+bool DataModel::ProjectEditor::selectControlScriptItem(QStandardItem* item)
+{
+  if (item != m_controlScriptItem || item == nullptr)
+    return false;
+
+  setCurrentView(ControlScriptView);
+  return true;
+}
+
+/**
  * @brief Switches the active editor view based on the newly selected tree item.
  */
 void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& current,
@@ -4472,6 +4511,9 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
     return;
 
   if (selectMqttPublisherItem(item))
+    return;
+
+  if (selectControlScriptItem(item))
     return;
 
   if (m_rootItems.contains(item)) {

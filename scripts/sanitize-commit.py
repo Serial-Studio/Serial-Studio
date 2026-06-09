@@ -11,6 +11,7 @@
 #  - code-verify.py --check   -> regenerate .code-report
 #  - black                    -> format Python under app/, examples/, tests/, scripts/
 #  - documentation-verify.py  -> Markdown AI-narration scan
+#  - generate-sdk.py          -> regenerate SerialStudio.js / .lua from api-schema.json
 #  - build_search_index.py    -> refresh AI assistant BM25 index
 #
 # Sanitize only: committing and pushing are left to the developer.
@@ -173,6 +174,11 @@ def main() -> int:
         "Running documentation-verify",
         root / "scripts" / "documentation-verify.py",
         "--quiet",
+    )
+
+    run_python_step(
+        "Regenerating SerialStudio SDK (JS/Lua)",
+        root / "scripts" / "generate-sdk.py",
     )
 
     run_python_step(

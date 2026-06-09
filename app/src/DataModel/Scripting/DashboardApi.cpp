@@ -394,13 +394,4 @@ void DataModel::DashboardApi::installJS(QJSEngine* js)
   auto* bridge   = new DataModel::DashboardBridge(js);
   auto bridgeVal = js->newQObject(bridge);
   global.setProperty(QStringLiteral("__ss_db"), bridgeVal);
-
-  js->evaluate(QStringLiteral(
-    "function clearPlots()                       { return __ss_db.clearPlots(); }\n"
-    "function setPlotPoints(n)                   { return __ss_db.setPlotPoints(n); }\n"
-    "function setTerminalVisible(v)              { return __ss_db.setTerminalVisible(v); }\n"
-    "function setNotificationLogVisible(v)       { return __ss_db.setNotificationLogVisible(v); }\n"
-    "function setClockVisible(v)                 { return __ss_db.setClockVisible(v); }\n"
-    "function setStopwatchVisible(v)             { return __ss_db.setStopwatchVisible(v); }\n"
-    "function setActiveWorkspace(idOrName)       { return __ss_db.setActiveWorkspace(idOrName); }\n"));
 }

@@ -43,6 +43,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectEditor.h"
+#include "DataModel/Scripting/ControlScript.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
@@ -1628,6 +1629,9 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   if (m_apiCallAllowFullSurface)
     json.insert(Keys::ApiCallAllowFullSurface, true);
 
+  if (!m_controlScriptCode.isEmpty())
+    json.insert(Keys::ControlScriptCode, m_controlScriptCode);
+
   QJsonArray groupArray;
   for (const auto& group : std::as_const(m_groups))
     groupArray.append(DataModel::serialize(group));
@@ -1766,9 +1770,11 @@ void DataModel::ProjectModel::newJsonFile()
   m_pointCount              = 100;
   m_plotTimeRange           = 10.0;
   m_nextUniqueId            = 1;
-  m_frameDecoder            = SerialStudio::PlainText;
-  m_frameDetection          = SerialStudio::EndDelimiterOnly;
-  m_widgetSettings          = QJsonObject();
+  m_controlScriptCode       = "";
+  DataModel::ControlScript::instance().setCode(m_controlScriptCode);
+  m_frameDecoder   = SerialStudio::PlainText;
+  m_frameDetection = SerialStudio::EndDelimiterOnly;
+  m_widgetSettings = QJsonObject();
 
   DataModel::Source defaultSource;
   defaultSource.sourceId              = 0;
@@ -1796,6 +1802,7 @@ void DataModel::ProjectModel::newJsonFile()
   Q_EMIT customizeWorkspacesChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
+  Q_EMIT controlScriptChanged();
 
   if (wasLocked)
     Q_EMIT lockedChanged();
@@ -1819,6 +1826,28 @@ void DataModel::ProjectModel::setTitle(const QString& title)
     setModified(true);
     Q_EMIT titleChanged();
   }
+}
+
+/**
+ * @brief Returns the project setup()/loop() control script source.
+ */
+QString DataModel::ProjectModel::controlScriptCode() const
+{
+  return m_controlScriptCode;
+}
+
+/**
+ * @brief Stages a new control script and pushes it to the live runtime.
+ */
+void DataModel::ProjectModel::setControlScriptCode(const QString& code)
+{
+  if (m_controlScriptCode == code)
+    return;
+
+  m_controlScriptCode = code;
+  DataModel::ControlScript::instance().setCode(code);
+  setModified(true);
+  Q_EMIT controlScriptChanged();
 }
 
 /**
@@ -2038,6 +2067,9 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   m_apiCallAllowFullSurface = ss_jsr(json, Keys::ApiCallAllowFullSurface, false).toBool();
   DataModel::ScriptApiCall::setAllowFullSurface(m_apiCallAllowFullSurface);
+
+  m_controlScriptCode = ss_jsr(json, Keys::ControlScriptCode, "").toString();
+  DataModel::ControlScript::instance().setCode(m_controlScriptCode);
 
   loadProjectRootScalars(json);
   loadProjectArrays(json, legacyParserCode);
@@ -2710,6 +2742,7 @@ void DataModel::ProjectModel::emitProjectLoadedSignals()
   Q_EMIT customizeWorkspacesChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
+  Q_EMIT controlScriptChanged();
 
   if (!m_silentReload)
     Q_EMIT sourceStructureChanged();

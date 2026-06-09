@@ -217,10 +217,6 @@ void DataModel::DeviceWriteApi::installJS(QJSEngine* js, int defaultSourceId)
     bridge         = new DataModel::DeviceWriteBridge(js);
     auto bridgeVal = js->newQObject(bridge);
     global.setProperty(QStringLiteral("__ss_dw"), bridgeVal);
-
-    js->evaluate(QStringLiteral("function deviceWrite(data, sourceId) {\n"
-                                "  return __ss_dw.write(data, sourceId);\n"
-                                "}\n"));
   }
 
   bridge->defaultSourceId = defaultSourceId;
@@ -356,8 +352,4 @@ void DataModel::ActionFireApi::installJS(QJSEngine* js)
   auto* bridge   = new DataModel::ActionFireBridge(js);
   auto bridgeVal = js->newQObject(bridge);
   global.setProperty(QStringLiteral("__ss_af"), bridgeVal);
-
-  js->evaluate(QStringLiteral("function actionFire(actionId) {\n"
-                              "  return __ss_af.fire(actionId);\n"
-                              "}\n"));
 }

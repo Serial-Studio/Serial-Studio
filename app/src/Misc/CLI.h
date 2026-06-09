@@ -47,6 +47,10 @@ struct CliOptions {
   };
   QCommandLineOption headlessOpt{"headless", "Run without GUI (headless/server mode)"};
   QCommandLineOption apiServerOpt{"api-server", "Enable API server on startup (port 7777)"};
+  QCommandLineOption dumpApiSchemaOpt{
+    "dump-api-schema",
+    "Write the API command registry to a JSON file and exit (SDK generator input)",
+    "file"};
   QCommandLineOption projectOpt{
     {"p", "project"},
     "Loads the specified project file", "file"
@@ -185,6 +189,7 @@ private:
   void registerOptions();
 
   ProcessResult runHotpathBenchmark();
+  ProcessResult dumpApiSchema(const QString& path);
 
   void setupUartConnection();
   void setupTcpConnection(const QString& tcpAddress);

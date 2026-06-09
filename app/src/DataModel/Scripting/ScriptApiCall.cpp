@@ -29,6 +29,7 @@
 #include <map>
 #include <mutex>
 #include <QByteArray>
+#include <QFile>
 #include <QJSEngine>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -42,6 +43,10 @@
 #include "API/CommandHandler.h"
 #include "API/CommandProtocol.h"
 #include "API/CommandRegistry.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/NotificationCenter.h"
+#include "DataModel/Scripting/DashboardApi.h"
+#include "DataModel/Scripting/DeviceWriteApi.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -76,19 +81,33 @@ constexpr int kMaxJsonDepth = 64;
 static const QSet<QString>& safeMethods()
 {
   static const QSet<QString> kSet = {
-    QStringLiteral("system.info"),         QStringLiteral("system.ping"),
-    QStringLiteral("system.commands"),     QStringLiteral("project.get"),
-    QStringLiteral("project.snapshot"),    QStringLiteral("project.title"),
-    QStringLiteral("project.dataset.get"), QStringLiteral("project.dataset.list"),
-    QStringLiteral("project.group.get"),   QStringLiteral("project.group.list"),
-    QStringLiteral("project.source.get"),  QStringLiteral("project.source.list"),
-    QStringLiteral("workspace.get"),       QStringLiteral("workspace.list"),
-    QStringLiteral("workspace.active"),    QStringLiteral("dashboard.getStatus"),
-    QStringLiteral("dashboard.getData"),   QStringLiteral("dashboard.snapshot"),
-    QStringLiteral("dashboard.values"),    QStringLiteral("notification.list"),
-    QStringLiteral("notification.post"),   QStringLiteral("sessions.list"),
-    QStringLiteral("sessions.get"),        QStringLiteral("data_tables.list"),
+    QStringLiteral("system.info"),
+    QStringLiteral("system.ping"),
+    QStringLiteral("system.commands"),
+    QStringLiteral("project.get"),
+    QStringLiteral("project.snapshot"),
+    QStringLiteral("project.title"),
+    QStringLiteral("project.dataset.get"),
+    QStringLiteral("project.dataset.list"),
+    QStringLiteral("project.group.get"),
+    QStringLiteral("project.group.list"),
+    QStringLiteral("project.source.get"),
+    QStringLiteral("project.source.list"),
+    QStringLiteral("workspace.get"),
+    QStringLiteral("workspace.list"),
+    QStringLiteral("workspace.active"),
+    QStringLiteral("dashboard.getStatus"),
+    QStringLiteral("dashboard.getData"),
+    QStringLiteral("dashboard.snapshot"),
+    QStringLiteral("dashboard.values"),
+    QStringLiteral("notification.list"),
+    QStringLiteral("notification.post"),
+    QStringLiteral("sessions.list"),
+    QStringLiteral("sessions.get"),
+    QStringLiteral("data_tables.list"),
     QStringLiteral("data_tables.get"),
+    QStringLiteral("controlscript.get"),
+    QStringLiteral("controlscript.getStatus"),
   };
   return kSet;
 }
@@ -666,7 +685,19 @@ static int luaApiCallList(lua_State* L)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Installs apiCall() / apiCallList() as Lua globals scoped to @p sourceId.
+ * @brief Loads a cached copy of a generated SDK resource (SerialStudio.js / .lua).
+ */
+static QByteArray loadSdk(const QString& path)
+{
+  QFile file(path);
+  if (file.open(QFile::ReadOnly))
+    return file.readAll();
+
+  return {};
+}
+
+/**
+ * @brief Installs apiCall() / apiCallList() plus the SerialStudio SDK as Lua globals.
  */
 void DataModel::ScriptApiCall::installLua(lua_State* L, int sourceId)
 {
@@ -678,6 +709,10 @@ void DataModel::ScriptApiCall::installLua(lua_State* L, int sourceId)
 
   lua_pushcfunction(L, luaApiCallList);
   lua_setglobal(L, "apiCallList");
+
+  static const QByteArray sdk = loadSdk(QStringLiteral(":/api/SerialStudio.lua"));
+  if (!sdk.isEmpty())
+    (void)luaL_dostring(L, sdk.constData());
 }
 
 /**
@@ -688,16 +723,48 @@ void DataModel::ScriptApiCall::installJS(QJSEngine* js, int sourceId)
   Q_ASSERT(js);
 
   auto global       = js->globalObject();
-  auto existingProp = global.property(QStringLiteral("__ss_api"));
+  auto existingProp = global.property(QStringLiteral("__ss_bridge"));
   if (existingProp.isQObject()
       && qobject_cast<DataModel::ScriptApiCallBridge*>(existingProp.toQObject()))
     return;
 
   auto* bridge   = new DataModel::ScriptApiCallBridge(sourceId, js);
   auto bridgeVal = js->newQObject(bridge);
-  global.setProperty(QStringLiteral("__ss_api"), bridgeVal);
+  global.setProperty(QStringLiteral("__ss_bridge"), bridgeVal);
 
-  js->evaluate(
-    QStringLiteral("function apiCall(method, params) { return __ss_api.call(method, params); }\n"
-                   "function apiCallList()            { return __ss_api.listCommands(); }\n"));
+  static const QByteArray sdk = loadSdk(QStringLiteral(":/api/SerialStudio.js"));
+  if (!sdk.isEmpty())
+    js->evaluate(QString::fromUtf8(sdk));
+}
+
+/**
+ * @brief Installs every host bridge and the full SDK into a QJSEngine in one call.
+ */
+void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId)
+{
+  Q_ASSERT(js);
+
+  DataModel::NotificationCenter::installScriptApi(js);
+  DataModel::FrameBuilder::instance().injectTableApiJS(js);
+  DataModel::DeviceWriteApi::installJS(js, sourceId);
+  DataModel::ActionFireApi::installJS(js);
+  DataModel::DashboardApi::installJS(js);
+
+  installJS(js, sourceId);
+}
+
+/**
+ * @brief Installs every host bridge and the full SDK into a Lua state in one call.
+ */
+void DataModel::ScriptApiCall::installAll(lua_State* L, int sourceId)
+{
+  Q_ASSERT(L);
+
+  DataModel::NotificationCenter::installScriptApi(L);
+  DataModel::FrameBuilder::instance().injectTableApiLua(L);
+  DataModel::DeviceWriteApi::installLua(L, sourceId);
+  DataModel::ActionFireApi::installLua(L);
+  DataModel::DashboardApi::installLua(L);
+
+  installLua(L, sourceId);
 }

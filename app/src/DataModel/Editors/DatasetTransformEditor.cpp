@@ -29,16 +29,17 @@
 #include <QHBoxLayout>
 #include <QJavascriptHighlighter>
 #include <QJSEngine>
-#include <QLuaCompleter>
 #include <QLuaHighlighter>
 #include <QMenu>
 #include <QShortcut>
 #include <QTextCursor>
 
 #include "DataModel/Editors/CodeFormatter.h"
+#include "DataModel/Editors/SerialStudioCompleter.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/Scripting/LuaCompat.h"
+#include "DataModel/Scripting/ScriptApiCall.h"
 #include "DataModel/Scripting/ScriptTemplates.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
@@ -456,10 +457,10 @@ void DataModel::DatasetTransformEditor::applyLanguage(int language)
 
   if (language == SerialStudio::Lua) {
     m_editor->setHighlighter(new QLuaHighlighter());
-    m_editor->setCompleter(new QLuaCompleter(m_editor));
+    m_editor->setCompleter(new DataModel::SerialStudioCompleter(true, m_editor));
   } else {
     m_editor->setHighlighter(new QJavascriptHighlighter());
-    m_editor->setCompleter(nullptr);
+    m_editor->setCompleter(new DataModel::SerialStudioCompleter(false, m_editor));
   }
 }
 
@@ -587,8 +588,7 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
   }
 
   QJSEngine jsEngine;
-  DataModel::NotificationCenter::installScriptApi(&jsEngine);
-  DataModel::FrameBuilder::instance().injectTableApiJS(&jsEngine);
+  DataModel::ScriptApiCall::installAll(&jsEngine, 0);
   auto evalResult = jsEngine.evaluate(code);
   if (evalResult.isError())
     return false;
@@ -682,8 +682,7 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
   }
 
   QJSEngine jsEngine;
-  DataModel::NotificationCenter::installScriptApi(&jsEngine);
-  DataModel::FrameBuilder::instance().injectTableApiJS(&jsEngine);
+  DataModel::ScriptApiCall::installAll(&jsEngine, 0);
   auto evalResult = jsEngine.evaluate(code);
   if (evalResult.isError())
     return tr("Error: %1").arg(evalResult.property("message").toString());

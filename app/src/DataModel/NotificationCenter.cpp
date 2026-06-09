@@ -606,13 +606,11 @@ void DataModel::NotificationCenter::installScriptApi(lua_State* L)
 }
 
 /**
- * @brief Installs notify* globals + Info/Warning/Critical constants into a QJSEngine.
+ * @brief Installs the __nc bridge (Pro only); the SDK prelude exposes notify* globals.
  */
 void DataModel::NotificationCenter::installScriptApi(QJSEngine* js)
 {
   Q_ASSERT(js);
-
-  js->evaluate(QStringLiteral("var Info = 0, Warning = 1, Critical = 2;\n"));
 
   if (isProTierActive()) {
     auto* nc = &instance();
@@ -621,49 +619,5 @@ void DataModel::NotificationCenter::installScriptApi(QJSEngine* js)
     auto global    = js->globalObject();
     auto bridgeVal = js->newQObject(nc);
     global.setProperty(QStringLiteral("__nc"), bridgeVal);
-
-    js->evaluate(
-      QStringLiteral("function __ssNotifyArgs(args) {\n"
-                     "  // Accept (title), (title, subtitle), or (channel, title, subtitle).\n"
-                     "  // 1 arg  -> title on 'Dashboard' channel\n"
-                     "  // 2 args -> (title, subtitle) on 'Dashboard' channel\n"
-                     "  // 3 args -> (channel, title, subtitle)\n"
-                     "  if (args.length <= 1)\n"
-                     "    return ['Dashboard', args[0] || '', ''];\n"
-                     "  if (args.length === 2)\n"
-                     "    return ['Dashboard', args[0] || '', args[1] || ''];\n"
-                     "  return [args[0] || '', args[1] || '', args[2] || ''];\n"
-                     "}\n"
-                     "function notify(level) {\n"
-                     "  var rest = Array.prototype.slice.call(arguments, 1);\n"
-                     "  var a = __ssNotifyArgs(rest);\n"
-                     "  __nc.post(level, a[0], a[1], a[2]);\n"
-                     "}\n"
-                     "function notifyInfo() {\n"
-                     "  var a = __ssNotifyArgs(arguments);\n"
-                     "  __nc.postInfo(a[0], a[1], a[2]);\n"
-                     "}\n"
-                     "function notifyWarning() {\n"
-                     "  var a = __ssNotifyArgs(arguments);\n"
-                     "  __nc.postWarning(a[0], a[1], a[2]);\n"
-                     "}\n"
-                     "function notifyCritical() {\n"
-                     "  var a = __ssNotifyArgs(arguments);\n"
-                     "  __nc.postCritical(a[0], a[1], a[2]);\n"
-                     "}\n"
-                     "function notifyClear() {\n"
-                     "  var a = __ssNotifyArgs(arguments);\n"
-                     "  __nc.resolve(a[0], a[1], a[2]);\n"
-                     "}\n"));
-  } else {
-    js->evaluate(QStringLiteral("function __ssNoPro() {\n"
-                                "  throw new Error('notify() requires a Pro license. "
-                                "See https://serial-studio.com/pricing');\n"
-                                "}\n"
-                                "var notify = __ssNoPro;\n"
-                                "var notifyInfo = __ssNoPro;\n"
-                                "var notifyWarning = __ssNoPro;\n"
-                                "var notifyCritical = __ssNoPro;\n"
-                                "var notifyClear = __ssNoPro;\n"));
   }
 }

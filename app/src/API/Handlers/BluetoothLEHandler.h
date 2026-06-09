@@ -33,10 +33,16 @@ public:
   static void registerCommands();
 
 private:
+  static void registerSelectionCommands();
+  static void registerQueryCommands();
+
   static CommandResponse startDiscovery(const QString& id, const QJsonObject& params);
   static CommandResponse selectDevice(const QString& id, const QJsonObject& params);
   static CommandResponse selectService(const QString& id, const QJsonObject& params);
+  static CommandResponse selectServiceByUuid(const QString& id, const QJsonObject& params);
   static CommandResponse setCharacteristicIndex(const QString& id, const QJsonObject& params);
+  static CommandResponse setNotifyCharacteristic(const QString& id, const QJsonObject& params);
+  static CommandResponse writeCharacteristic(const QString& id, const QJsonObject& params);
 
   static CommandResponse getDeviceList(const QString& id, const QJsonObject& params);
   static CommandResponse getServiceList(const QString& id, const QJsonObject& params);

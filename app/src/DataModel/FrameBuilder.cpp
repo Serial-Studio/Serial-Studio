@@ -1761,17 +1761,7 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
 {
   auto* js = new QJSEngine();
 
-  injectTableApiJS(js);
-
-  DataModel::DeviceWriteApi::installJS(js, sourceId);
-
-  DataModel::ActionFireApi::installJS(js);
-
-  DataModel::DashboardApi::installJS(js);
-
-  DataModel::ScriptApiCall::installJS(js, sourceId);
-
-  DataModel::NotificationCenter::installScriptApi(js);
+  DataModel::ScriptApiCall::installAll(js, sourceId);
 
   for (const auto& entry : entries) {
     const QString wrapped =
@@ -2217,7 +2207,7 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 }
 
 /**
- * @brief Injects the same four API globals into a QJSEngine via a `TableApiBridge` QObject.
+ * @brief Installs the __ss table-API bridge; the SDK prelude exposes the friendly globals.
  */
 void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
 {
@@ -2232,16 +2222,4 @@ void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
   auto global    = js->globalObject();
   auto bridgeVal = js->newQObject(bridge);
   global.setProperty(QStringLiteral("__ss"), bridgeVal);
-
-  QString jsApi =
-    QStringLiteral("function tableGet(t, r)       { return __ss.tableGet(t, r); }\n"
-                   "function tableSet(t, r, v)    { __ss.tableSet(t, r, v); }\n"
-                   "function datasetGetRaw(uid)   { return __ss.datasetGetRaw(uid); }\n"
-                   "function datasetGetFinal(uid) { return __ss.datasetGetFinal(uid); }\n");
-#ifdef BUILD_COMMERCIAL
-  jsApi +=
-    QStringLiteral("function mqttPublish(t, p, q, r) { return __ss.mqttPublish(t, p, q, r); }\n");
-#endif
-
-  js->evaluate(jsApi);
 }

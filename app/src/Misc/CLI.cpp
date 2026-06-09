@@ -23,9 +23,14 @@
 
 #include <cstring>
 #include <QApplication>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QSettings>
 #include <QTimer>
 
+#include "API/CommandHandler.h"
+#include "API/CommandRegistry.h"
 #include "API/Server.h"
 #include "AppInfo.h"
 #include "AppState.h"
@@ -80,6 +85,7 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.fullscreenOpt);
   m_parser.addOption(m_opts.headlessOpt);
   m_parser.addOption(m_opts.apiServerOpt);
+  m_parser.addOption(m_opts.dumpApiSchemaOpt);
   m_parser.addOption(m_opts.projectOpt);
   m_parser.addOption(m_opts.quickPlotOpt);
   m_parser.addOption(m_opts.fpsOpt);
@@ -158,8 +164,15 @@ QString CLI::argvValueFor(int argc, char** argv, const char* flag)
  */
 bool CLI::isCliEarlyExit(int argc, char** argv)
 {
-  static const char* const kFlags[] = {
-    "-v", "--version", "-h", "--help", "-r", "--reset", "--activate", "--deactivate"};
+  static const char* const kFlags[] = {"-v",
+                                       "--version",
+                                       "-h",
+                                       "--help",
+                                       "-r",
+                                       "--reset",
+                                       "--activate",
+                                       "--deactivate",
+                                       "--dump-api-schema"};
 
   for (const char* flag : kFlags)
     if (argvHasFlag(argc, argv, flag))
@@ -204,6 +217,9 @@ CLI::ProcessResult CLI::process(QApplication& app)
   if (m_parser.isSet(m_opts.benchmarkHotpathOpt) || m_parser.isSet(m_opts.benchmarkFramesOpt)
       || m_parser.isSet(m_opts.benchmarkSecondsOpt) || m_parser.isSet(m_opts.minFpsOpt))
     return runHotpathBenchmark();
+
+  if (m_parser.isSet(m_opts.dumpApiSchemaOpt))
+    return dumpApiSchema(m_parser.value(m_opts.dumpApiSchemaOpt));
 
 #ifdef BUILD_COMMERCIAL
   if (m_parser.isSet(m_opts.activateOpt)) {
@@ -257,6 +273,40 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
 
   const int rc = Benchmark::HotpathBenchmark::runAndReport(frames, minFps, seconds, output);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
+}
+
+/**
+ * @brief Dumps the API command registry to a JSON file for the SDK generator.
+ */
+CLI::ProcessResult CLI::dumpApiSchema(const QString& path)
+{
+  (void)API::CommandHandler::instance();
+  const auto& commands = API::CommandRegistry::instance().commands();
+
+  QJsonArray array;
+  for (auto it = commands.constBegin(); it != commands.constEnd(); ++it) {
+    const auto& def = it.value();
+
+    QJsonObject entry;
+    entry.insert(QStringLiteral("name"), def.name);
+    entry.insert(QStringLiteral("description"), def.description);
+    entry.insert(QStringLiteral("properties"),
+                 def.inputSchema.value(QStringLiteral("properties")).toObject());
+    entry.insert(QStringLiteral("required"),
+                 def.inputSchema.value(QStringLiteral("required")).toArray());
+    array.append(entry);
+  }
+
+  QFile file(path);
+  if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
+    qWarning() << "Failed to open" << path << "for writing";
+    return ProcessResult::ExitFailure;
+  }
+
+  file.write(QJsonDocument(array).toJson(QJsonDocument::Indented));
+  file.close();
+  qDebug() << "Wrote" << array.size() << "commands to" << path;
+  return ProcessResult::ExitSuccess;
 }
 
 //---------------------------------------------------------------------------------------------------

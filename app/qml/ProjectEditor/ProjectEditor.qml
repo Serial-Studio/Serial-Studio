@@ -225,6 +225,7 @@ Widgets.SmartWindow {
               case ProjectEditor.WorkspacesView:        return "Views/WorkspacesView.qml"
               case ProjectEditor.WorkspaceView:         return "Views/WorkspaceView.qml"
               case ProjectEditor.MqttPublisherView:     return "Views/MqttPublisherView.qml"
+              case ProjectEditor.ControlScriptView:     return "Views/ControlScriptView.qml"
               }
               return ""
             }

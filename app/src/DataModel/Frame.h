@@ -126,6 +126,7 @@ inline constexpr KeyView Groups("groups");
 inline constexpr KeyView Actions("actions");
 inline constexpr KeyView Datasets("datasets");
 inline constexpr KeyView OutputWidgets("outputWidgets");
+inline constexpr KeyView ControlScriptCode("controlScriptCode");
 
 // Output widget keys
 inline constexpr KeyView OutputType("outputType");
@@ -667,6 +668,7 @@ struct alignas(8) Frame {
   std::vector<Action> actions;              ///< Triggerable actions
   std::vector<Source> sources;              ///< Sources/devices the frame was assembled from
   bool containsCommercialFeatures = false;  ///< Feature gating flag
+  QString controlScriptCode;                ///< Project setup()/loop() control script
 };
 
 static_assert(sizeof(Frame) % alignof(Frame) == 0, "Unaligned Frame struct");
@@ -692,6 +694,7 @@ inline void clear_frame(Frame& frame) noexcept
   frame.sources.shrink_to_fit();
   frame.containsCommercialFeatures = false;
   frame.schemaVersion              = 0;
+  frame.controlScriptCode.clear();
 }
 
 /**
@@ -1031,6 +1034,9 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Groups, groupArray);
   obj.insert(Keys::Actions, actionArray);
 
+  if (!f.controlScriptCode.isEmpty())
+    obj.insert(Keys::ControlScriptCode, f.controlScriptCode);
+
   if (!f.writerVersion.isEmpty() || !f.writerVersionAtCreation.isEmpty() || f.schemaVersion > 0) {
     obj.insert(Keys::SchemaVersion, f.schemaVersion > 0 ? f.schemaVersion : kSchemaVersion);
     if (!f.writerVersion.isEmpty())
@@ -1245,6 +1251,7 @@ inline void normalizeDatasetRanges(Dataset& d)
   f.schemaVersion           = ss_jsr(obj, Keys::SchemaVersion, 0).toInt();
   f.writerVersion           = ss_jsr(obj, Keys::WriterVersion, "").toString();
   f.writerVersionAtCreation = ss_jsr(obj, Keys::WriterVersionAtCreation, "").toString();
+  f.controlScriptCode       = ss_jsr(obj, Keys::ControlScriptCode, "").toString();
 
   bool ok = true;
   for (qsizetype i = 0; i < groups.count(); ++i) {

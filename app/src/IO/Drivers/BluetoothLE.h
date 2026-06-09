@@ -104,6 +104,8 @@ public:
   [[nodiscard]] bool operatingSystemSupported() const;
   [[nodiscard]] bool adapterAvailable() const;
 
+  [[nodiscard]] qint64 writeCharacteristic(const QString& uuid, const QByteArray& data);
+
   [[nodiscard]] int deviceCount() const;
   [[nodiscard]] int deviceIndex() const;
   [[nodiscard]] int characteristicIndex() const;
@@ -120,6 +122,8 @@ public slots:
   void selectDevice(const int index);
   void selectService(const int index);
   void setCharacteristicIndex(const int index);
+  bool selectServiceByUuid(const QString& uuid);
+  bool setNotifyCharacteristicByUuid(const QString& uuid);
 
 private slots:
   void configureCharacteristics();

@@ -180,6 +180,7 @@ public:
     WorkspacesView,
     WorkspaceView,
     MqttPublisherView,
+    ControlScriptView,
   };
   Q_ENUM(CurrentView)
 
@@ -240,6 +241,7 @@ public:
     KindAction,
     KindOutputWidget,
     KindMqttPublisher,
+    KindControlScript,
   };
   Q_ENUM(ItemKind)
 
@@ -378,6 +380,7 @@ private:
   bool selectDataTableItem(QStandardItem* item);
   bool selectWorkspaceTreeItem(QStandardItem* item);
   bool selectMqttPublisherItem(QStandardItem* item);
+  bool selectControlScriptItem(QStandardItem* item);
   void syncDatasetItemCache(int groupId, int datasetId);
   void appendDriverPropertyRows(const DataModel::Source& source);
   void applyGroupSourceEdit(int srcIdx, int groupId);
@@ -408,6 +411,7 @@ private:
   void appendSharedMemoryTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
   void appendWorkspaceTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
   void appendMqttPublisherTreeItem(QStandardItem* root);
+  void appendControlScriptTreeItem(QStandardItem* root);
   void appendDatasetChildren(QStandardItem* groupItem, const DataModel::Group& group);
   void appendOutputWidgetChildren(QStandardItem* groupItem, const DataModel::Group& group);
 
@@ -473,6 +477,7 @@ private:
   int m_selectedWorkspaceId;
 
   QStandardItem* m_mqttPublisherItem;
+  QStandardItem* m_controlScriptItem;
 
   QString m_treeSearchQuery;
   QString m_lastJsonFilePath;
