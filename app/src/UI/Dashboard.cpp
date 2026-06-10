@@ -131,13 +131,9 @@ UI::Dashboard::Dashboard()
   , m_updateRequired(false)
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
-  , m_terminalWidgetId(kInvalidWidgetId)
   , m_notificationLogEnabled(false)
-  , m_notificationLogWidgetId(kInvalidWidgetId)
   , m_clockEnabled(false)
-  , m_clockWidgetId(kInvalidWidgetId)
   , m_stopwatchEnabled(false)
-  , m_stopwatchWidgetId(kInvalidWidgetId)
   , m_autoHideToolbar(false)
   , m_persistSettings(true)
   , m_updateRetryInProgress(false)
@@ -249,24 +245,7 @@ UI::Dashboard& UI::Dashboard::instance()
  */
 bool UI::Dashboard::available() const
 {
-  if (!streamAvailable())
-    return false;
-
-  if (totalWidgetCount() > 0)
-    return true;
-
-#ifdef BUILD_COMMERCIAL
-  if (m_notificationLogEnabled)
-    return true;
-#endif
-
-  if (m_clockEnabled)
-    return true;
-
-  if (m_stopwatchEnabled)
-    return true;
-
-  return false;
+  return streamAvailable() && totalWidgetCount() > 0;
 }
 
 /**
@@ -947,13 +926,6 @@ void UI::Dashboard::resetData(const bool notify)
 
   WidgetRegistry::instance().clear();
 
-  m_terminalWidgetId = kInvalidWidgetId;
-#ifdef BUILD_COMMERCIAL
-  m_notificationLogWidgetId = kInvalidWidgetId;
-#endif
-  m_clockWidgetId     = kInvalidWidgetId;
-  m_stopwatchWidgetId = kInvalidWidgetId;
-
   m_fftValues.clear();
   m_pltValues.clear();
   m_multipltValues.clear();
@@ -1129,42 +1101,6 @@ void UI::Dashboard::setPlotTimeRange(const double seconds)
 }
 
 /**
- * @brief Removes the terminal widget from the registry and internal structures.
- */
-void UI::Dashboard::removeTerminalWidget()
-{
-  auto& registry = WidgetRegistry::instance();
-
-  if (m_terminalWidgetId != kInvalidWidgetId) {
-    registry.destroyWidget(m_terminalWidgetId);
-    m_terminalWidgetId = kInvalidWidgetId;
-  }
-
-  m_widgetGroups.remove(SerialStudio::DashboardTerminal);
-
-  auto& groups = m_lastFrame.groups;
-  groups.erase(std::remove_if(groups.begin(),
-                              groups.end(),
-                              [](const DataModel::Group& g) { return g.widget == "terminal"; }),
-               groups.end());
-
-  m_widgetMap.clear();
-  m_widgetCount = 0;
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
-    const auto count = widgetCount(i.key());
-    for (int j = 0; j < count; ++j)
-      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-  }
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
-    const auto count = widgetCount(i.key());
-    for (int j = 0; j < count; ++j)
-      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-  }
-
-  rebuildDatasetReferences();
-}
-
-/**
  * @brief Toggles whether dashboard preference changes are written to QSettings.
  */
 void UI::Dashboard::setSettingsPersistent(const bool persistent)
@@ -1172,8 +1108,13 @@ void UI::Dashboard::setSettingsPersistent(const bool persistent)
   m_persistSettings = persistent;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Dashboard tools (terminal, notification log, clock, stopwatch)
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Enables or disables the terminal widget.
+ * @brief Shows or hides the terminal tool window. The widget itself is always registered;
+ *        the flag only drives external-window visibility, so no rebuild occurs.
  */
 void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
@@ -1184,77 +1125,11 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
   if (m_persistSettings)
     m_settings.setValue("Dashboard/TerminalEnabled", m_terminalEnabled);
 
-  if (!m_sourceRawFrames.isEmpty() && m_widgetCount > 0) {
-    auto& registry = WidgetRegistry::instance();
-    if (enabled) {
-      DataModel::Group terminal;
-      terminal.widget   = "terminal";
-      terminal.title    = tr("Console");
-      terminal.groupId  = static_cast<int>(m_lastFrame.groups.size());
-      terminal.uniqueId = DataModel::runtime_group_unique_id(terminal.groupId);
-
-      m_lastFrame.groups.push_back(terminal);
-      m_widgetGroups[SerialStudio::DashboardTerminal].append(terminal);
-
-      m_terminalWidgetId = registry.createWidget(
-        SerialStudio::DashboardTerminal, terminal.title, terminal.groupId, -1, true);
-      m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardTerminal, 0));
-
-      rebuildDatasetReferences();
-    } else {
-      removeTerminalWidget();
-    }
-  }
-
-  Q_EMIT widgetCountChanged();
   Q_EMIT terminalEnabledChanged();
 }
 
-//--------------------------------------------------------------------------------------------------
-// Notification log widget (Pro-only)
-//--------------------------------------------------------------------------------------------------
-
 /**
- * @brief Removes the notification log widget from the registry and internal structures.
- */
-void UI::Dashboard::removeNotificationLogWidget()
-{
-#ifdef BUILD_COMMERCIAL
-  auto& registry = WidgetRegistry::instance();
-
-  if (m_notificationLogWidgetId != kInvalidWidgetId) {
-    registry.destroyWidget(m_notificationLogWidgetId);
-    m_notificationLogWidgetId = kInvalidWidgetId;
-  }
-
-  m_widgetGroups.remove(SerialStudio::DashboardNotificationLog);
-
-  auto& groups = m_lastFrame.groups;
-  groups.erase(
-    std::remove_if(groups.begin(),
-                   groups.end(),
-                   [](const DataModel::Group& g) { return g.widget == "notification-log"; }),
-    groups.end());
-
-  m_widgetMap.clear();
-  m_widgetCount = 0;
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
-    const auto count = widgetCount(i.key());
-    for (int j = 0; j < count; ++j)
-      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-  }
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
-    const auto count = widgetCount(i.key());
-    for (int j = 0; j < count; ++j)
-      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-  }
-
-  rebuildDatasetReferences();
-#endif
-}
-
-/**
- * @brief Enables or disables the notification log widget.
+ * @brief Shows or hides the notification log tool window (Pro-only widget).
  */
 void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
 {
@@ -1265,78 +1140,11 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
   if (m_persistSettings)
     m_settings.setValue("Dashboard/NotificationLogEnabled", m_notificationLogEnabled);
 
-#ifdef BUILD_COMMERCIAL
-  if (!m_sourceRawFrames.isEmpty()) {
-    auto& registry = WidgetRegistry::instance();
-    if (enabled) {
-      DataModel::Group notif;
-      notif.widget   = "notification-log";
-      notif.title    = tr("Notifications");
-      notif.groupId  = static_cast<int>(m_lastFrame.groups.size());
-      notif.uniqueId = DataModel::runtime_group_unique_id(notif.groupId);
-
-      m_lastFrame.groups.push_back(notif);
-      m_widgetGroups[SerialStudio::DashboardNotificationLog].append(notif);
-
-      m_notificationLogWidgetId = registry.createWidget(
-        SerialStudio::DashboardNotificationLog, notif.title, notif.groupId, -1, true);
-      m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardNotificationLog, 0));
-
-      rebuildDatasetReferences();
-    } else {
-      removeNotificationLogWidget();
-    }
-  }
-#endif
-
-  Q_EMIT widgetCountChanged();
   Q_EMIT notificationLogEnabledChanged();
-
-  Q_EMIT updated();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Clock widget
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Removes the clock widget from the registry and internal structures.
- */
-void UI::Dashboard::removeClockWidget()
-{
-  auto& registry = WidgetRegistry::instance();
-
-  if (m_clockWidgetId != kInvalidWidgetId) {
-    registry.destroyWidget(m_clockWidgetId);
-    m_clockWidgetId = kInvalidWidgetId;
-  }
-
-  m_widgetGroups.remove(SerialStudio::DashboardClock);
-
-  auto& groups = m_lastFrame.groups;
-  groups.erase(std::remove_if(groups.begin(),
-                              groups.end(),
-                              [](const DataModel::Group& g) { return g.widget == "clock"; }),
-               groups.end());
-
-  m_widgetMap.clear();
-  m_widgetCount = 0;
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
-    const auto count = widgetCount(i.key());
-    for (int j = 0; j < count; ++j)
-      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-  }
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
-    const auto count = widgetCount(i.key());
-    for (int j = 0; j < count; ++j)
-      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-  }
-
-  rebuildDatasetReferences();
 }
 
 /**
- * @brief Enables or disables the clock widget.
+ * @brief Shows or hides the clock tool window.
  */
 void UI::Dashboard::setClockEnabled(const bool enabled)
 {
@@ -1347,76 +1155,11 @@ void UI::Dashboard::setClockEnabled(const bool enabled)
   if (m_persistSettings)
     m_settings.setValue("Dashboard/ClockEnabled", m_clockEnabled);
 
-  if (!m_sourceRawFrames.isEmpty()) {
-    auto& registry = WidgetRegistry::instance();
-    if (enabled) {
-      DataModel::Group clock;
-      clock.widget   = "clock";
-      clock.title    = tr("Clock");
-      clock.groupId  = static_cast<int>(m_lastFrame.groups.size());
-      clock.uniqueId = DataModel::runtime_group_unique_id(clock.groupId);
-
-      m_lastFrame.groups.push_back(clock);
-      m_widgetGroups[SerialStudio::DashboardClock].append(clock);
-
-      m_clockWidgetId =
-        registry.createWidget(SerialStudio::DashboardClock, clock.title, clock.groupId, -1, true);
-      m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardClock, 0));
-
-      rebuildDatasetReferences();
-    } else {
-      removeClockWidget();
-    }
-  }
-
-  Q_EMIT widgetCountChanged();
   Q_EMIT clockEnabledChanged();
-
-  Q_EMIT updated();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Stopwatch widget
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Removes the stopwatch widget from the registry and internal structures.
- */
-void UI::Dashboard::removeStopwatchWidget()
-{
-  auto& registry = WidgetRegistry::instance();
-
-  if (m_stopwatchWidgetId != kInvalidWidgetId) {
-    registry.destroyWidget(m_stopwatchWidgetId);
-    m_stopwatchWidgetId = kInvalidWidgetId;
-  }
-
-  m_widgetGroups.remove(SerialStudio::DashboardStopwatch);
-
-  auto& groups = m_lastFrame.groups;
-  groups.erase(std::remove_if(groups.begin(),
-                              groups.end(),
-                              [](const DataModel::Group& g) { return g.widget == "stopwatch"; }),
-               groups.end());
-
-  m_widgetMap.clear();
-  m_widgetCount = 0;
-  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
-    const auto count = widgetCount(i.key());
-    for (int j = 0; j < count; ++j)
-      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-  }
-  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
-    const auto count = widgetCount(i.key());
-    for (int j = 0; j < count; ++j)
-      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
-  }
-
-  rebuildDatasetReferences();
 }
 
 /**
- * @brief Enables or disables the stopwatch widget.
+ * @brief Shows or hides the stopwatch tool window.
  */
 void UI::Dashboard::setStopwatchEnabled(const bool enabled)
 {
@@ -1427,32 +1170,7 @@ void UI::Dashboard::setStopwatchEnabled(const bool enabled)
   if (m_persistSettings)
     m_settings.setValue("Dashboard/StopwatchEnabled", m_stopwatchEnabled);
 
-  if (!m_sourceRawFrames.isEmpty()) {
-    auto& registry = WidgetRegistry::instance();
-    if (enabled) {
-      DataModel::Group stopwatch;
-      stopwatch.widget   = "stopwatch";
-      stopwatch.title    = tr("Stopwatch");
-      stopwatch.groupId  = static_cast<int>(m_lastFrame.groups.size());
-      stopwatch.uniqueId = DataModel::runtime_group_unique_id(stopwatch.groupId);
-
-      m_lastFrame.groups.push_back(stopwatch);
-      m_widgetGroups[SerialStudio::DashboardStopwatch].append(stopwatch);
-
-      m_stopwatchWidgetId = registry.createWidget(
-        SerialStudio::DashboardStopwatch, stopwatch.title, stopwatch.groupId, -1, true);
-      m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardStopwatch, 0));
-
-      rebuildDatasetReferences();
-    } else {
-      removeStopwatchWidget();
-    }
-  }
-
-  Q_EMIT widgetCountChanged();
   Q_EMIT stopwatchEnabledChanged();
-
-  Q_EMIT updated();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1897,47 +1615,35 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 
   m_lastFrame = frame;
 
-  if (m_terminalEnabled) {
-    DataModel::Group terminal;
-    terminal.widget   = "terminal";
-    terminal.title    = tr("Console");
-    terminal.groupId  = m_lastFrame.groups.size();
-    terminal.uniqueId = DataModel::runtime_group_unique_id(terminal.groupId);
-
-    m_lastFrame.groups.push_back(terminal);
-  }
+  DataModel::Group terminal;
+  terminal.widget   = "terminal";
+  terminal.title    = tr("Console");
+  terminal.groupId  = m_lastFrame.groups.size();
+  terminal.uniqueId = DataModel::runtime_group_unique_id(terminal.groupId);
+  m_lastFrame.groups.push_back(terminal);
 
 #ifdef BUILD_COMMERCIAL
-  if (m_notificationLogEnabled) {
-    DataModel::Group notif;
-    notif.widget   = "notification-log";
-    notif.title    = tr("Notifications");
-    notif.groupId  = m_lastFrame.groups.size();
-    notif.uniqueId = DataModel::runtime_group_unique_id(notif.groupId);
-
-    m_lastFrame.groups.push_back(notif);
-  }
+  DataModel::Group notif;
+  notif.widget   = "notification-log";
+  notif.title    = tr("Notifications");
+  notif.groupId  = m_lastFrame.groups.size();
+  notif.uniqueId = DataModel::runtime_group_unique_id(notif.groupId);
+  m_lastFrame.groups.push_back(notif);
 #endif
 
-  if (m_clockEnabled) {
-    DataModel::Group clock;
-    clock.widget   = "clock";
-    clock.title    = tr("Clock");
-    clock.groupId  = m_lastFrame.groups.size();
-    clock.uniqueId = DataModel::runtime_group_unique_id(clock.groupId);
+  DataModel::Group clock;
+  clock.widget   = "clock";
+  clock.title    = tr("Clock");
+  clock.groupId  = m_lastFrame.groups.size();
+  clock.uniqueId = DataModel::runtime_group_unique_id(clock.groupId);
+  m_lastFrame.groups.push_back(clock);
 
-    m_lastFrame.groups.push_back(clock);
-  }
-
-  if (m_stopwatchEnabled) {
-    DataModel::Group stopwatch;
-    stopwatch.widget   = "stopwatch";
-    stopwatch.title    = tr("Stopwatch");
-    stopwatch.groupId  = m_lastFrame.groups.size();
-    stopwatch.uniqueId = DataModel::runtime_group_unique_id(stopwatch.groupId);
-
-    m_lastFrame.groups.push_back(stopwatch);
-  }
+  DataModel::Group stopwatch;
+  stopwatch.widget   = "stopwatch";
+  stopwatch.title    = tr("Stopwatch");
+  stopwatch.groupId  = m_lastFrame.groups.size();
+  stopwatch.uniqueId = DataModel::runtime_group_unique_id(stopwatch.groupId);
+  m_lastFrame.groups.push_back(stopwatch);
 
   buildWidgetGroups(frame, pro);
 
@@ -2049,34 +1755,12 @@ void UI::Dashboard::registerWidgets()
   auto& registry = WidgetRegistry::instance();
   registry.beginBatchUpdate();
 
-  m_terminalWidgetId = kInvalidWidgetId;
-#ifdef BUILD_COMMERCIAL
-  m_notificationLogWidgetId = kInvalidWidgetId;
-#endif
-  m_clockWidgetId     = kInvalidWidgetId;
-  m_stopwatchWidgetId = kInvalidWidgetId;
-
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
     const auto key   = i.key();
     const auto count = widgetCount(key);
     for (int j = 0; j < count; ++j) {
       const auto& group = i.value().at(j);
-      auto widgetId     = registry.createWidget(key, group.title, group.groupId, -1, true);
-
-      if (key == SerialStudio::DashboardTerminal)
-        m_terminalWidgetId = widgetId;
-
-#ifdef BUILD_COMMERCIAL
-      if (key == SerialStudio::DashboardNotificationLog)
-        m_notificationLogWidgetId = widgetId;
-#endif
-
-      if (key == SerialStudio::DashboardClock)
-        m_clockWidgetId = widgetId;
-
-      if (key == SerialStudio::DashboardStopwatch)
-        m_stopwatchWidgetId = widgetId;
-
+      (void)registry.createWidget(key, group.title, group.groupId, -1, true);
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
     }
   }

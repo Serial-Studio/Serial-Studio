@@ -53,6 +53,10 @@ struct ScanState {
  */
 struct LineInfo {
   bool startsInsideMultiline = false;
+  bool hasCode               = false;
+  bool opensHanging          = false;
+  bool startsWithOpenBrace   = false;
+  bool startsWithElse        = false;
   int outdentLeading         = 0;
   int netDelta               = 0;
 };
@@ -63,6 +67,7 @@ struct LineInfo {
 struct ScanResult {
   QList<LineInfo> infos;
   QList<int> depthAtStart;
+  QList<int> hangAtStart;
 };
 
 }  // namespace detail
@@ -75,6 +80,37 @@ using detail::ScanState;
 //--------------------------------------------------------------------------------------------------
 // Helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns true when ch can begin or continue a JavaScript identifier.
+ */
+static bool isJsIdentChar(QChar ch, bool first)
+{
+  if (ch == QLatin1Char('_') || ch == QLatin1Char('$'))
+    return true;
+
+  if (ch.isLetter())
+    return true;
+
+  if (!first && ch.isDigit())
+    return true;
+
+  return false;
+}
+
+/**
+ * @brief Returns the JS keywords whose brace-free "(...)"-terminated headers hang the next line.
+ */
+static const QSet<QString>& jsHangingKeywords()
+{
+  static const QSet<QString> kSet = {
+    QStringLiteral("if"),
+    QStringLiteral("for"),
+    QStringLiteral("while"),
+    QStringLiteral("else"),
+  };
+  return kSet;
+}
 
 /**
  * @brief Returns true when ch can begin or continue a Lua identifier.
@@ -307,6 +343,91 @@ static bool tryEnterStringLiteral(
 }
 
 /**
+ * @brief Token-level facts accumulated while scanning one line of code.
+ */
+struct TokenTrack {
+  bool sawCode         = false;
+  bool lastTokenIsWord = false;
+  int parenDelta       = 0;
+  QChar firstCodeChar;
+  QChar lastCodeChar;
+  QString firstWord;
+  QString lastWord;
+};
+
+/**
+ * @brief Records a consumed code character (or final character of a word) in the track.
+ */
+static void markCode(TokenTrack& tk, QChar c, bool isWord)
+{
+  if (tk.firstCodeChar.isNull())
+    tk.firstCodeChar = c;
+
+  tk.lastCodeChar    = c;
+  tk.lastTokenIsWord = isWord;
+  tk.sawCode         = true;
+}
+
+/**
+ * @brief Consumes a Lua identifier, applying block open/close keyword deltas; returns next index.
+ */
+static int consumeLuaWord(QStringView line, int i, TokenTrack& tk, LineInfo& info)
+{
+  int j = i;
+  while (j < line.size() && isLuaIdentChar(line[j], false))
+    ++j;
+
+  const QString word = line.mid(i, j - i).toString();
+  if (luaCloseKeywords().contains(word)) {
+    if (!tk.sawCode)
+      ++info.outdentLeading;
+
+    --info.netDelta;
+  }
+
+  if (luaOpenKeywords().contains(word))
+    ++info.netDelta;
+
+  if (tk.firstWord.isEmpty())
+    tk.firstWord = word;
+
+  tk.lastWord = word;
+  markCode(tk, line[j - 1], true);
+  return j;
+}
+
+/**
+ * @brief Consumes a JavaScript identifier and records it in the track; returns next index.
+ */
+static int consumeJsWord(QStringView line, int i, TokenTrack& tk)
+{
+  int j = i;
+  while (j < line.size() && isJsIdentChar(line[j], false))
+    ++j;
+
+  if (tk.firstWord.isEmpty())
+    tk.firstWord = line.mid(i, j - i).toString();
+
+  tk.lastWord = line.mid(i, j - i).toString();
+  markCode(tk, line[j - 1], true);
+  return j;
+}
+
+/**
+ * @brief Flags the line as a hanging header when its code is a brace-free JS control statement.
+ */
+static void finalizeJsHanging(const TokenTrack& tk, LineInfo& info)
+{
+  const bool headerParen = tk.lastCodeChar == QLatin1Char(')') && tk.parenDelta == 0
+                        && jsHangingKeywords().contains(tk.firstWord);
+  const bool trailingKeyword =
+    tk.lastTokenIsWord
+    && (tk.lastWord == QLatin1String("else") || tk.lastWord == QLatin1String("do"));
+  info.opensHanging   = headerParen || trailingKeyword;
+  info.startsWithElse = (tk.firstWord == QLatin1String("else"));
+}
+
+/**
  * @brief Computes outdent/indent deltas for a single line and updates the carry-over state.
  */
 static LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
@@ -314,20 +435,7 @@ static LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
   LineInfo info;
   info.startsInsideMultiline = (state.in != ScanIn::Code);
 
-  bool sawOpenerOrCode = false;
-
-  auto registerCloser = [&](bool& sawCode) {
-    if (!sawCode)
-      ++info.outdentLeading;
-
-    --info.netDelta;
-    sawCode = true;
-  };
-
-  auto registerOpener = [&](bool& sawCode) {
-    ++info.netDelta;
-    sawCode = true;
-  };
+  TokenTrack tk;
 
   int i       = 0;
   const int n = line.size();
@@ -355,48 +463,55 @@ static LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
       continue;
     }
 
-    if (tryEnterStringLiteral(line, i, lang, state, sawOpenerOrCode))
-      continue;
-
     const QChar c = line[i];
+    if (tryEnterStringLiteral(line, i, lang, state, tk.sawCode)) {
+      markCode(tk, c, false);
+      continue;
+    }
 
     if (c == QLatin1Char('{')) {
-      registerOpener(sawOpenerOrCode);
+      ++info.netDelta;
+      markCode(tk, c, false);
       ++i;
       continue;
     }
     if (c == QLatin1Char('}')) {
-      registerCloser(sawOpenerOrCode);
+      if (!tk.sawCode)
+        ++info.outdentLeading;
+
+      --info.netDelta;
+      markCode(tk, c, false);
       ++i;
       continue;
     }
 
     if (lang == Language::Lua && isLuaIdentChar(c, true)) {
-      int j = i;
-      while (j < n && isLuaIdentChar(line[j], false))
-        ++j;
-
-      const QString word = line.mid(i, j - i).toString();
-      const bool isClose = luaCloseKeywords().contains(word);
-      const bool isOpen  = luaOpenKeywords().contains(word);
-      if (isClose)
-        registerCloser(sawOpenerOrCode);
-
-      if (isOpen)
-        registerOpener(sawOpenerOrCode);
-
-      if (!isClose && !isOpen)
-        sawOpenerOrCode = true;
-
-      i = j;
+      i = consumeLuaWord(line, i, tk, info);
       continue;
     }
 
-    if (!c.isSpace())
-      sawOpenerOrCode = true;
+    if (lang == Language::JavaScript && isJsIdentChar(c, true)) {
+      i = consumeJsWord(line, i, tk);
+      continue;
+    }
+
+    if (!c.isSpace()) {
+      if (c == QLatin1Char('('))
+        ++tk.parenDelta;
+
+      if (c == QLatin1Char(')'))
+        --tk.parenDelta;
+
+      markCode(tk, c, false);
+    }
 
     ++i;
   }
+
+  info.hasCode             = tk.sawCode;
+  info.startsWithOpenBrace = (tk.firstCodeChar == QLatin1Char('{'));
+  if (lang == Language::JavaScript)
+    finalizeJsHanging(tk, info);
 
   return info;
 }
@@ -435,6 +550,42 @@ static int leadingWhitespaceCount(QStringView line)
 }
 
 /**
+ * @brief Carry-over hanging-indent state threaded across lines.
+ */
+struct HangState {
+  int pending  = 0;
+  int prevLine = 0;
+};
+
+/**
+ * @brief Returns the hanging-indent level for a line and advances the carried hang state; a
+ *        bare "else" re-attaches to the innermost brace-free "if" via the prev-line level.
+ */
+static int applyHanging(const LineInfo& info, HangState& hang)
+{
+  if (info.startsInsideMultiline) {
+    if (info.hasCode)
+      hang.pending = 0;
+
+    return 0;
+  }
+
+  if (!info.hasCode)
+    return hang.pending;
+
+  if (info.startsWithOpenBrace)
+    hang.pending = 0;
+
+  int lineHang = hang.pending;
+  if (info.startsWithElse && hang.pending == 0 && info.outdentLeading == 0 && hang.prevLine > 0)
+    lineHang = hang.prevLine - 1;
+
+  hang.pending  = info.opensHanging ? lineHang + 1 : 0;
+  hang.prevLine = lineHang;
+  return lineHang;
+}
+
+/**
  * @brief Builds per-line LineInfo and depth-at-start arrays, threading scanner state across lines.
  */
 static ScanResult scanAllLines(const QStringList& lines, Language lang)
@@ -442,14 +593,17 @@ static ScanResult scanAllLines(const QStringList& lines, Language lang)
   ScanResult result;
   result.infos.reserve(lines.size());
   result.depthAtStart.reserve(lines.size());
+  result.hangAtStart.reserve(lines.size());
 
   ScanState state;
+  HangState hang;
   int depth = 0;
   for (const auto& raw : lines) {
     const QString trimmed = rtrim(raw);
     LineInfo info         = analyzeLine(QStringView(trimmed), lang, state);
     result.infos.append(info);
     result.depthAtStart.append(depth);
+    result.hangAtStart.append(applyHanging(info, hang));
     depth += info.netDelta;
     if (depth < 0)
       depth = 0;
@@ -471,12 +625,10 @@ static QString computeIndent(int depth, int outdentLeading, int indentSpaces)
 }
 
 /**
- * @brief Reformats one line based on its scanner state and depth.
+ * @brief Reformats one line based on its scanner state, brace depth and hanging indent.
  */
-static QString reformatOne(const QString& raw,
-                           const LineInfo& info,
-                           int depthAtStart,
-                           int indentSpaces)
+static QString reformatOne(
+  const QString& raw, const LineInfo& info, int depthAtStart, int hangAtStart, int indentSpaces)
 {
   QString trimmed = rtrim(raw);
 
@@ -488,7 +640,7 @@ static QString reformatOne(const QString& raw,
     return QString();
 
   const QString body = trimmed.mid(lead);
-  return computeIndent(depthAtStart, info.outdentLeading, indentSpaces) + body;
+  return computeIndent(depthAtStart + hangAtStart, info.outdentLeading, indentSpaces) + body;
 }
 
 namespace DataModel::CodeFormatter {
@@ -507,7 +659,8 @@ QString formatDocument(const QString& source, Language language, int indentSpace
   QStringList out;
   out.reserve(lines.size());
   for (int i = 0; i < lines.size(); ++i)
-    out.append(reformatOne(lines[i], scan.infos[i], scan.depthAtStart[i], indentSpaces));
+    out.append(reformatOne(
+      lines[i], scan.infos[i], scan.depthAtStart[i], scan.hangAtStart[i], indentSpaces));
 
   return out.join(QLatin1Char('\n'));
 }
@@ -534,7 +687,8 @@ QString formatLineRange(
   const ScanResult scan = scanAllLines(lines, language);
 
   for (int i = firstLine; i <= lastLine; ++i)
-    lines[i] = reformatOne(lines[i], scan.infos[i], scan.depthAtStart[i], indentSpaces);
+    lines[i] =
+      reformatOne(lines[i], scan.infos[i], scan.depthAtStart[i], scan.hangAtStart[i], indentSpaces);
 
   return lines.join(QLatin1Char('\n'));
 }

@@ -8,6 +8,8 @@
 
 #include "DataModel/Editors/OutputCodeEditor.h"
 
+#include <QAbstractItemView>
+#include <QCompleter>
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
@@ -19,6 +21,7 @@
 #include <QTextDocument>
 
 #include "DataModel/Editors/CodeFormatter.h"
+#include "DataModel/Editors/SerialStudioCompleter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/ScriptTemplates.h"
@@ -48,11 +51,13 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
   setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
 
   m_widget.setTabReplace(true);
-  m_widget.setTabReplaceSize(4);
+  m_widget.setTabReplaceSize(2);
   m_widget.setAutoIndentation(true);
   m_widget.setHighlighter(new QJavascriptHighlighter());
   m_widget.setFont(Misc::CommonFonts::instance().monoFont());
   m_widget.setLayoutDirection(Qt::LeftToRight);
+  m_widget.setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
+  m_widget.setCompleter(new DataModel::SerialStudioCompleter(false, &m_widget));
 
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),
@@ -467,9 +472,24 @@ void DataModel::OutputCodeEditor::onThemeChanged()
 void DataModel::OutputCodeEditor::renderWidget()
 {
   if (isVisible()) {
+    syncWidgetPosition();
     m_pixmap = m_widget.grab();
     update();
   }
+}
+
+/**
+ * @brief Aligns the hidden widget's top-level position with the item's on-screen position so
+ *        completer popups and drag auto-scroll resolve correct global coordinates.
+ */
+void DataModel::OutputCodeEditor::syncWidgetPosition()
+{
+  if (!window())
+    return;
+
+  const QPoint global = mapToGlobal(QPointF(0, 0)).toPoint();
+  if (m_widget.pos() != global)
+    m_widget.move(global);
 }
 
 /**
@@ -497,11 +517,32 @@ void DataModel::OutputCodeEditor::paint(QPainter* painter)
 }
 
 /**
- * @brief Forwards key-press events to the backing QCodeEditor widget.
+ * @brief Routes ShortcutOverride to the editor widget so editing keys (undo, copy, paste...)
+ *        are handled natively instead of being consumed by QML Shortcut bindings.
+ */
+bool DataModel::OutputCodeEditor::event(QEvent* event)
+{
+  if (event->type() == QEvent::ShortcutOverride) {
+    QCoreApplication::sendEvent(&m_widget, event);
+    if (event->isAccepted())
+      return true;
+  }
+
+  return QQuickPaintedItem::event(event);
+}
+
+/**
+ * @brief Forwards key presses to the completer popup when visible, else to the editor widget.
  */
 void DataModel::OutputCodeEditor::keyPressEvent(QKeyEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
+  auto* completer = m_widget.completer();
+  if (completer && completer->popup() && completer->popup()->isVisible())
+    QCoreApplication::sendEvent(completer->popup(), event);
+  else
+    QCoreApplication::sendEvent(&m_widget, event);
+
+  renderWidget();
 }
 
 /**
@@ -518,6 +559,7 @@ void DataModel::OutputCodeEditor::keyReleaseEvent(QKeyEvent* event)
 void DataModel::OutputCodeEditor::inputMethodEvent(QInputMethodEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
+  renderWidget();
 }
 
 /**
@@ -550,6 +592,7 @@ void DataModel::OutputCodeEditor::mousePressEvent(QMouseEvent* event)
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
   forceActiveFocus();
+  renderWidget();
 }
 
 /** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number
@@ -565,6 +608,7 @@ void DataModel::OutputCodeEditor::mouseMoveEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number
@@ -580,6 +624,7 @@ void DataModel::OutputCodeEditor::mouseReleaseEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /** @brief Forwards double-click events to the backing widget after offsetting for the line-number
@@ -595,6 +640,7 @@ void DataModel::OutputCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /**
@@ -603,6 +649,7 @@ void DataModel::OutputCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
 void DataModel::OutputCodeEditor::wheelEvent(QWheelEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
+  renderWidget();
 }
 
 /**

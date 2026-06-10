@@ -34,7 +34,7 @@
 /**
  * @brief Constructs AppState and restores the saved operation mode.
  */
-AppState::AppState() : m_operationMode(SerialStudio::QuickPlot)
+AppState::AppState() : m_ephemeralSession(false), m_operationMode(SerialStudio::QuickPlot)
 {
   const int saved   = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
   const int clamped = (saved >= SerialStudio::ProjectFile && saved <= SerialStudio::QuickPlot)
@@ -125,6 +125,15 @@ void AppState::restoreLastProject()
 }
 
 /**
+ * @brief Marks the session as ephemeral (operator runs) so QSettings writes are skipped,
+ *        keeping the main application's last project and operation mode untouched.
+ */
+void AppState::setEphemeralSession(bool ephemeral)
+{
+  m_ephemeralSession = ephemeral;
+}
+
+/**
  * @brief Sets the operation mode, persists it, and emits derived config changes.
  */
 void AppState::setOperationMode(SerialStudio::OperationMode mode)
@@ -133,7 +142,9 @@ void AppState::setOperationMode(SerialStudio::OperationMode mode)
     return;
 
   m_operationMode = mode;
-  m_settings.setValue("operation_mode", static_cast<int>(mode));
+  if (!m_ephemeralSession)
+    m_settings.setValue("operation_mode", static_cast<int>(mode));
+
   m_frameConfig = deriveFrameConfig();
 
   Q_EMIT operationModeChanged();
@@ -152,7 +163,9 @@ void AppState::onProjectLoaded()
   const QString path = DataModel::ProjectModel::instance().jsonFilePath();
   if (m_projectFilePath != path) {
     m_projectFilePath = path;
-    m_settings.setValue("project_file_path", path);
+    if (!m_ephemeralSession)
+      m_settings.setValue("project_file_path", path);
+
     Q_EMIT projectFileChanged();
   }
 
@@ -171,7 +184,9 @@ void AppState::onProjectFileCleared()
     return;
 
   m_projectFilePath.clear();
-  m_settings.remove("project_file_path");
+  if (!m_ephemeralSession)
+    m_settings.remove("project_file_path");
+
   Q_EMIT projectFileChanged();
 }
 

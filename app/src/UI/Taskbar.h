@@ -171,10 +171,6 @@ public slots:
   void setWorkspaceWidgets(int workspaceId, const QVariantList& windowIds);
 
 private slots:
-  void onTerminalToggled();
-  void onNotificationLogToggled();
-  void onClockToggled();
-  void onStopwatchToggled();
   void onRegistryCleared();
   void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo& info);
   void onWidgetDestroyed(UI::WidgetID id);
@@ -185,11 +181,9 @@ private:
   void connectToRegistry();
   void startFocusCycle();
   void mapWidgetToWindow(UI::WidgetID wid, int windowId);
-  void cloneSpecialOverviewRow(int widgetType);
   void populateTaskbarFromWorkspace(int groupId);
   void populateTaskbarFromGroup(int groupId);
   void removeWorkspaceTaskbarRow(int windowId);
-  void removeOverviewByType(int widgetType);
   void selectGroupAfterRebuild();
   void appendGroupChildItem(QStandardItem* groupItem,
                             int groupId,

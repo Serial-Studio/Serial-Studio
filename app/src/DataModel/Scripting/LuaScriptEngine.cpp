@@ -158,6 +158,8 @@ void DataModel::LuaScriptEngine::createState()
 
   openSafeLibs(m_state);
 
+  DataModel::installLuaConsole(m_state);
+
   DataModel::installLuaCompat(m_state);
 
   DataModel::NotificationCenter::installScriptApi(m_state);

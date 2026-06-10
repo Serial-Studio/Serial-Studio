@@ -43,6 +43,25 @@ against Lua 5.1/5.2 conventions still work:
 - Top-level `local` declarations stay scoped to your script (each source
   has its own Lua state).
 
+## Console logging
+
+`print(...)` and a JS-style `console` table route to the application
+console — the same sink as JS `console.log`. Nothing goes to stdout.
+
+```lua
+print("frame:", frame)          -- debug level
+console.log("parsed", n)        -- debug
+console.debug("raw byte", b)    -- debug
+console.info("fix acquired")    -- info
+console.warn("crc mismatch")    -- warning (also raises an app notification)
+console.error("bad header")     -- critical (also raises an app notification)
+```
+
+Arguments are joined tab-separated; `__tostring` metamethods are honored.
+Logging formats and allocates on every call, so gate per-frame logging
+behind a condition while debugging and remove it from parsers that run at
+kHz rates.
+
 ## Performance
 
 Native Lua is fast, but a hand-written split loop runs as interpreted

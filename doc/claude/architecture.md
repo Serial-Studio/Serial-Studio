@@ -125,6 +125,19 @@ reconfigure and the per-frame walk is pointer-only.
   `dashboard ingest costs N.NNx` / `HOTPATH_DASHBOARD_INGEST_COST`. Optimize against that
   number; the historical `dashboard costs N.NNx` line compares two different projects.
 
+## Dashboard Tools — External Windows Only
+
+The four tools (terminal/Console, notification log [Pro], clock, stopwatch) are **never canvas
+widgets**. `reconfigureDashboard` registers them in the widget map unconditionally (predicate:
+`SerialStudio::isDashboardTool`); `Taskbar::rebuildModel` skips them, so they never appear in
+workspaces, search, or saved canvas layouts. The `Dashboard::*Enabled` flags are pure
+view-state: setters persist to QSettings and emit only their own changed signal — **toggling a
+tool must not emit `widgetCountChanged` or touch the widget map** (that re-introduces the
+full dashboard rebuild this design removed). `DashboardCanvas.qml::syncToolWindows` maps each
+flag to an `ExternalWidgetWindow`; a user closing the window flips the flag back, so
+enabled == window visible. Tool windows are excluded from the per-project `externalWindows`
+widgetSettings entry (their flags already persist globally).
+
 ## Hotpath Benchmark — The 256 kHz CI Gate
 
 256 kHz is a CI gate, not a slogan. `--benchmark-hotpath` (`Benchmark::HotpathBenchmark`) drives the

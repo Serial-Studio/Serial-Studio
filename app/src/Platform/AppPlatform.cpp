@@ -58,6 +58,15 @@
 #include <QFileOpenEvent>
 #include <QWheelEvent>
 
+#ifdef Q_OS_LINUX
+#  include <QDBusConnection>
+#  include <QDBusInterface>
+#endif
+
+#ifdef Q_OS_MACOS
+#  include <IOKit/pwr_mgt/IOPMLib.h>
+#endif
+
 #ifdef SERIAL_STUDIO_WITH_WEBENGINE
 #  include <QtWebEngineQuick>
 #endif
@@ -266,7 +275,8 @@ static void enableWorkingSetPrivilege()
 }
 
 /**
- * @brief Opts the process out of EcoQoS throttling and prevents idle sleep.
+ * @brief Opts the process out of EcoQoS throttling; idle-sleep inhibition lives in
+ *        inhibitIdleSleep().
  */
 static void enableWindowsPerformanceMode()
 {
@@ -280,7 +290,6 @@ static void enableWindowsPerformanceMode()
   SetProcessInformation(GetCurrentProcess(), ProcessPowerThrottling, &state, sizeof(state));
 #  endif
 
-  SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
   enableWorkingSetPrivilege();
 }
 
@@ -447,6 +456,44 @@ void prepareEnvironment(int& argc, char**& argv, const QString& shortcutPath)
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-namespace-sandbox");
 #  endif
   QtWebEngineQuick::initialize();
+#endif
+}
+
+/**
+ * @brief Tells the OS to keep the system and display awake for the lifetime of the
+ *        process: long recording sessions must survive an untouched laptop. Every
+ *        inhibition below is process-scoped, so the OS releases it on exit; call
+ *        after QApplication exists (the Linux path needs the session D-Bus).
+ */
+void inhibitIdleSleep()
+{
+#if defined(Q_OS_WIN)
+  (void)SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
+#elif defined(Q_OS_MACOS)
+  static IOPMAssertionID assertion = kIOPMNullAssertionID;
+  if (assertion == kIOPMNullAssertionID)
+    (void)IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleDisplaySleep,
+                                      kIOPMAssertionLevelOn,
+                                      CFSTR("Serial Studio data acquisition session"),
+                                      &assertion);
+#elif defined(Q_OS_LINUX)
+  if (!QDBusConnection::sessionBus().isConnected())
+    return;
+
+  const auto app    = QStringLiteral("Serial Studio");
+  const auto reason = QStringLiteral("Data acquisition session in progress");
+
+  QDBusInterface screenSaver(QStringLiteral("org.freedesktop.ScreenSaver"),
+                             QStringLiteral("/org/freedesktop/ScreenSaver"),
+                             QStringLiteral("org.freedesktop.ScreenSaver"));
+  if (screenSaver.isValid())
+    (void)screenSaver.call(QStringLiteral("Inhibit"), app, reason);
+
+  QDBusInterface powerManagement(QStringLiteral("org.freedesktop.PowerManagement"),
+                                 QStringLiteral("/org/freedesktop/PowerManagement/Inhibit"),
+                                 QStringLiteral("org.freedesktop.PowerManagement.Inhibit"));
+  if (powerManagement.isValid())
+    (void)powerManagement.call(QStringLiteral("Inhibit"), app, reason);
 #endif
 }
 

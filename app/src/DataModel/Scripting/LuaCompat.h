@@ -32,4 +32,11 @@ namespace DataModel {
  */
 void installLuaCompat(lua_State* L);
 
+/**
+ * @brief Replaces print() and installs a JS-style console table (log, debug,
+ * info, warn, error) that route script output through the Qt message handler,
+ * making it visible in the application console instead of stdout.
+ */
+void installLuaConsole(lua_State* L);
+
 }  // namespace DataModel

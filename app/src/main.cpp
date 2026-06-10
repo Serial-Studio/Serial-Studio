@@ -27,6 +27,7 @@
 #include <QStyleFactory>
 
 #include "AppInfo.h"
+#include "AppState.h"
 #include "Misc/CLI.h"
 #include "Misc/CrashTracker.h"
 #include "Misc/GraphicsBackend.h"
@@ -137,6 +138,8 @@ int main(int argc, char** argv)
       break;
   }
 
+  Platform::AppPlatform::inhibitIdleSleep();
+
   Q_INIT_RESOURCE(rcc);
   Q_INIT_RESOURCE(translations);
 
@@ -145,6 +148,8 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_COMMERCIAL
   cli.applyThemeOverride();
+  if (cli.runtimeMode())
+    AppState::instance().setEphemeralSession(true);
 #endif
 
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("module-manager-bootstrap"));

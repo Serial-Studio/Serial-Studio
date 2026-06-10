@@ -130,6 +130,11 @@ if(WITH_WEBENGINE)
   list(APPEND QT_LIBS Qt6::WebEngineQuick)
 endif()
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  list(APPEND QT_MODULES DBus)
+  list(APPEND QT_LIBS Qt6::DBus)
+endif()
+
 if(BUILD_COMMERCIAL)
   set(QT_MODULES
     ${QT_MODULES}
@@ -478,6 +483,7 @@ set(QML_SOURCES
   qml/Dialogs/HelpCenter.qml
   qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
   qml/MainWindow/Panes/Dashboard/DashboardLayout.qml
+  qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml
   qml/MainWindow/Panes/Dashboard/StartMenu.qml
   qml/MainWindow/Panes/Dashboard/Taskbar.qml
   qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml
@@ -1277,6 +1283,7 @@ if(WIN32)
     WIN32_EXECUTABLE TRUE
   )
 elseif(APPLE)
+  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE "-framework IOKit")
   set_target_properties(
     ${PROJECT_EXECUTABLE} PROPERTIES
     MACOSX_BUNDLE TRUE

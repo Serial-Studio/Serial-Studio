@@ -142,6 +142,15 @@ the framing config in this order:
 4. Is `checksumAlgorithm` non-empty when the test bytes don't carry
    a checksum? Validation would reject every frame silently.
 
+### "Where do script logs go?"
+
+JS `console.log` and Lua `print()` / `console.log/debug/info/warn/error`
+(frame parsers AND transforms, both languages) all land in the application
+console and the runtime log; `console.warn` / `console.error` additionally
+raise app notifications. Nothing goes to stdout. If a user reports that
+`print()` shows nothing, the script isn't running — check the parser
+compiled (project.validate) and that frames are arriving.
+
 ### "tableGet returns 0 / nothing in my transform"
 
 `tableGet(table, register)` and `datasetGetRaw/Final(uid)` return

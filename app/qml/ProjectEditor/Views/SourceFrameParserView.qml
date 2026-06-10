@@ -56,45 +56,9 @@ Widgets.Pane {
   }
 
   //
-  // Shortcuts
+  // Shortcuts (editing keys are native via ShortcutOverride; New/Open/Save bind window-level)
   //
   Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: frameParser.selectAll()
-    sequences: [StandardKey.SelectAll]
-  } Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: frameParser.reload(true)
-    sequences: [StandardKey.New]
-  } Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: frameParser.import()
-    sequences: [StandardKey.Open]
-  } Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: frameParser.undo()
-    sequences: [StandardKey.Undo]
-  } Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: frameParser.redo()
-    sequences: [StandardKey.Redo]
-  } Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: frameParser.cut()
-    sequences: [StandardKey.Cut]
-  } Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: frameParser.copy()
-    sequences: [StandardKey.Copy]
-  } Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: frameParser.paste()
-    sequences: [StandardKey.Paste]
-  } Shortcut {
-    enabled: frameParser.activeFocus
-    onActivated: Cpp_JSON_ProjectModel.saveJsonFile()
-    sequences: [StandardKey.Save, StandardKey.SaveAs]
-  } Shortcut {
     enabled: frameParser.activeFocus
     onActivated: frameParser.formatSelection()
     sequences: ["Ctrl+I"]

@@ -227,6 +227,7 @@ Item {
           required property int index
           required property string title
           required property string value
+          required property var widgets
 
           width: ListView.view.width
           height: root.rowHeight
@@ -320,6 +321,36 @@ Item {
               ToolTip.text: rowItem.value
               ToolTip.visible: valueHover.hovered && valueLabel.truncated
                                && rowItem.value.length > 0
+            }
+
+            //
+            // One flat icon button per dashboard widget showing this dataset;
+            // clicking pops that widget into an external window
+            //
+            Repeater {
+              model: rowItem.widgets
+
+              delegate: ToolButton {
+                required property var modelData
+
+                flat: true
+                icon.width: 16
+                icon.height: 16
+                background: null
+                Layout.fillHeight: true
+                icon.color: "transparent"
+                opacity: hovered ? 1 : 0.6
+                icon.source: modelData.icon
+                Layout.preferredWidth: root.rowHeight
+                onClicked: {
+                  if (root.windowRoot && root.windowRoot.externalWidgetRequested)
+                    root.windowRoot.externalWidgetRequested(modelData.windowId)
+                }
+
+                ToolTip.delay: 600
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Open %1 in a separate window").arg(modelData.title)
+              }
             }
           }
         }

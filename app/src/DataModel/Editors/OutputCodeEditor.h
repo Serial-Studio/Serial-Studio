@@ -71,6 +71,10 @@ private slots:
   void resizeWidget();
 
 private:
+  void syncWidgetPosition();
+
+private:
+  bool event(QEvent* event) override;
   void paint(QPainter* painter) override;
   void keyPressEvent(QKeyEvent* event) override;
   void keyReleaseEvent(QKeyEvent* event) override;

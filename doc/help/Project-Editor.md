@@ -282,7 +282,7 @@ function parse(frame) {
 - The function has to be named `parse` and has to accept exactly one argument.
 - It has to return a table (Lua) or array (JavaScript). Each element maps to a dataset frame index.
 - Global variables declared outside `parse()` persist between calls. Useful for stateful protocols.
-- Use `print()` (Lua) or `console.log()` (JavaScript) to print debug messages to the Serial Studio terminal.
+- Use `console.log()` (both languages) or `print()` (Lua shorthand) to print debug messages to the Serial Studio terminal. The full `console` table (`log`, `debug`, `info`, `warn`, `error`) is available in JavaScript and Lua alike; `warn` and `error` also raise application notifications.
 
 **Example: binary protocol (Lua).**
 

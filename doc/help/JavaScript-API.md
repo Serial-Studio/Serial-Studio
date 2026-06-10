@@ -867,7 +867,7 @@ If you have an existing JavaScript parser and want to switch to Lua for better p
 | `value << 8` | `value << 8` (same in Lua 5.4) |
 | `JSON.parse(frame)` | Manual extraction (see JSON template) |
 | `try { } catch(e) { }` | `pcall(function() ... end)` |
-| `console.log(x)` | `print(x)` |
+| `console.log(x)` | `console.log(x)` or `print(x)` |
 
 > **Key difference:** Lua tables are 1-indexed. Binary frame byte tables start at index 1, not 0. The `#` operator returns the table length.
 
@@ -896,7 +896,7 @@ function parse(frame) {
 }
 ```
 
-Output appears in Serial Studio's console/terminal panel.
+Output appears in Serial Studio's console/terminal panel. Lua provides the same `console` table as JavaScript (`console.log`, `console.debug`, `console.info`, `console.warn`, `console.error`), with `print()` as shorthand for `console.log()`; in both languages, `console.warn` and `console.error` also raise application notifications. Arguments are joined with tab separators.
 
 ## Performance Tips
 

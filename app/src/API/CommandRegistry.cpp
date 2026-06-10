@@ -21,9 +21,12 @@
 
 #include "API/CommandRegistry.h"
 
+#include <QCoreApplication>
 #include <QJsonArray>
 #include <QSet>
 
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 #include "Misc/BackupManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -168,6 +171,27 @@ static const QSet<QString>& destructiveCommandSet()
 }
 
 /**
+ * @brief Queues a single FrameBuilder re-sync on the event loop so the live dashboard
+ *        picks up programmatic project edits; a burst of mutating commands (project.batch,
+ *        rapid tool calls) collapses into one apply.
+ */
+static void scheduleProjectApply()
+{
+  static bool pending = false;
+  if (pending)
+    return;
+
+  pending = true;
+  QMetaObject::invokeMethod(
+    QCoreApplication::instance(),
+    [] {
+      pending = false;
+      DataModel::FrameBuilder::instance().syncFromProjectModel();
+    },
+    Qt::QueuedConnection);
+}
+
+/**
  * @brief Execute a registered command
  */
 API::CommandResponse API::CommandRegistry::execute(const QString& name,
@@ -182,9 +206,15 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
   if (!isDryRun && destructiveCommandSet().contains(name))
     preMutationBackup = Misc::BackupManager::instance().snapshot(QStringLiteral("pre-") + name);
 
+  const qint64 epochBefore = DataModel::ProjectModel::instance().mutationEpoch();
+
   try {
     auto response = m_commands[name].handler(id, params);
     attachErrorMetadata(name, response);
+
+    if (!isDryRun && response.success
+        && DataModel::ProjectModel::instance().mutationEpoch() != epochBefore)
+      scheduleProjectApply();
 
     if (!preMutationBackup.isEmpty() && response.success
         && !response.result.contains(QStringLiteral("backupPath"))) {

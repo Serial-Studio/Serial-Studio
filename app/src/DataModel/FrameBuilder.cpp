@@ -1795,6 +1795,8 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
 
   openSafeLibsForTransform(L);
 
+  DataModel::installLuaConsole(L);
+
   DataModel::installLuaCompat(L);
 
   injectTableApiLua(L);

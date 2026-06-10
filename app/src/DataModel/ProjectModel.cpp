@@ -32,6 +32,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJSValue>
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QSaveFile>
@@ -1147,7 +1148,9 @@ void DataModel::ProjectModel::setMqttPublisher(const QJsonObject& config)
 }
 
 /**
- * @brief Stages a single widget setting and marks the project dirty.
+ * @brief Stages a single widget setting and marks the project dirty. QML callers pass JS
+ *        arrays/objects as QJSValue-wrapped variants, which QJsonValue::fromVariant silently
+ *        turns into null, so they are unwrapped first.
  */
 void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
@@ -1156,8 +1159,12 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
 
+  auto normalized = value;
+  if (normalized.userType() == qMetaTypeId<QJSValue>())
+    normalized = normalized.value<QJSValue>().toVariant();
+
   auto obj            = m_widgetSettings.value(widgetId).toObject();
-  const auto newValue = QJsonValue::fromVariant(value);
+  const auto newValue = QJsonValue::fromVariant(normalized);
   if (obj.value(key) == newValue)
     return;
 

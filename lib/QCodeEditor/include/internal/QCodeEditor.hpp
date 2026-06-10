@@ -18,6 +18,16 @@ class QCodeEditor : public QTextEdit
 
 public:
   /**
+   * @brief Language used to drive auto-indentation heuristics.
+   */
+  enum class LanguageHint
+  {
+    Generic,
+    JavaScript,
+    Lua
+  };
+
+  /**
    * @brief Constructor.
    * @param widget Pointer to parent widget.
    */
@@ -39,6 +49,14 @@ public:
    * @param highlighter Pointer to syntax highlighter.
    */
   void setHighlighter(QStyleSyntaxHighlighter *highlighter);
+
+  /**
+   * @brief Method for getting the current highlighter.
+   * The editor does not own it; callers replacing a
+   * highlighter are responsible for releasing the old one.
+   * @return Pointer to the active syntax highlighter.
+   */
+  QStyleSyntaxHighlighter *highlighter() const;
 
   /**
    * @brief Method for setting syntax sty.e.
@@ -82,6 +100,19 @@ public:
    * Default: 4
    */
   int tabReplaceSize() const;
+
+  /**
+   * @brief Method for setting the language used by the
+   * auto-indentation heuristics (brace-free control
+   * statement headers, Lua block keywords).
+   */
+  void setLanguageHint(LanguageHint hint);
+
+  /**
+   * @brief Method for getting the auto-indentation language.
+   * Default: LanguageHint::Generic
+   */
+  LanguageHint languageHint() const;
 
   /**
    * @brief Method for setting auto indentation enabled.
@@ -279,6 +310,50 @@ private:
    */
   int getIndentationSpaces();
 
+  /**
+   * @brief Returns the extra indentation levels (0 or 1) the
+   * line following the cursor should receive when Return is
+   * pressed: after an unclosed bracket or after a brace-free
+   * control-statement header in the hinted language.
+   */
+  int newLineIndentBoost() const;
+
+  /**
+   * @brief Removes one indentation level before a '}' typed
+   * on a line that only contains whitespace so far.
+   */
+  void dedentClosingBrace();
+
+  /**
+   * @brief Indents (or unindents) every line spanned by the
+   * current selection by one tab-replace unit.
+   */
+  void changeBlockIndent(bool increase);
+
+  /**
+   * @brief Toggles the line comment token ("//" or "--",
+   * from the language hint) on every selected line.
+   */
+  void toggleLineComment();
+
+  /**
+   * @brief Returns the dotted completion prefix left of the
+   * cursor (identifier characters and '.', e.g. "io.getLat").
+   */
+  QString completionPrefix() const;
+
+  /**
+   * @brief Returns true when the given trimmed line is a
+   * brace-free JS control-statement header ("if (x)", "else").
+   */
+  static bool isJsHangingHeader(const QString &line);
+
+  /**
+   * @brief Returns true when the given trimmed line opens a
+   * Lua block ("if x then", "for ... do", "function f(...)").
+   */
+  static bool isLuaBlockHeader(const QString &line);
+
   QStyleSyntaxHighlighter *m_highlighter;
   QSyntaxStyle *m_syntaxStyle;
   QLineNumberArea *m_lineNumberArea;
@@ -290,4 +365,5 @@ private:
   bool m_autoParentheses;
   bool m_replaceTab;
   QString m_tabReplace;
+  LanguageHint m_languageHint;
 };

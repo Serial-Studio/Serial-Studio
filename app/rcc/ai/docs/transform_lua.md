@@ -67,6 +67,14 @@ Same shim as the parser API:
 - Full `bit32` library.
 - `unpack(t)` for `table.unpack(t)`.
 
+## Console logging
+
+Same API as the parser: `print(...)` plus `console.log/debug/info/warn/error`
+all land in the application console (`warn`/`error` also raise app
+notifications); nothing goes to stdout. Transforms run on every frame for
+every dataset — latch or rate-limit logging with a local flag, and remove it
+from shipped projects.
+
 ## Examples
 
 ### EMA smoothing

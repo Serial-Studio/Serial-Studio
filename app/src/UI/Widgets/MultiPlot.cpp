@@ -80,12 +80,16 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
 
   for (size_t i = 0; i < group.datasets.size(); ++i) {
     const auto& dataset = group.datasets[i];
+    const bool isString = !dataset.isNumeric && !dataset.value.isEmpty();
 
     m_drawOrders.append(i);
-    m_visibleCurves.append(true);
+    m_stringCurves.append(isString);
+    m_visibleCurves.append(!isString);
     m_labels.append(dataset.title);
-    m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
-    m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
+    if (!isString) {
+      m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
+      m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
+    }
   }
 
   m_yLabel                 = group.title;
@@ -558,6 +562,8 @@ void Widgets::MultiPlot::updateData()
   if (!isEnabled() || !VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
+  syncStringCurves();
+
   if (m_timeAxis && m_sweepEnabled) {
     const auto& engine        = UI::Dashboard::instance().multiplotSweep(m_index);
     const qsizetype plotCount = static_cast<qsizetype>(engine.front.size());
@@ -786,6 +792,39 @@ void Widgets::MultiPlot::applyDerivedYBounds()
 //--------------------------------------------------------------------------------------------------
 // Curve management
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Auto-hides curves whose dataset currently reports a non-numeric string value
+ *        (and restores them once numeric data returns) so a text channel in the group
+ *        cannot flatten the curves or skew the autoscale range; visibility toggles made
+ *        by the user while a curve's numeric state is unchanged are left untouched.
+ */
+void Widgets::MultiPlot::syncStringCurves()
+{
+  Q_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index));
+  Q_ASSERT(m_stringCurves.size() == m_visibleCurves.size());
+
+  const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  const qsizetype count =
+    qMin(static_cast<qsizetype>(group.datasets.size()), m_stringCurves.size());
+
+  bool changed = false;
+  for (qsizetype i = 0; i < count; ++i) {
+    const auto& dataset = group.datasets[static_cast<size_t>(i)];
+    const bool isString = !dataset.isNumeric && !dataset.value.isEmpty();
+    if (isString == m_stringCurves[i])
+      continue;
+
+    m_stringCurves[i] = isString;
+    if (m_visibleCurves[i] == isString) {
+      m_visibleCurves[i] = !isString;
+      changed            = true;
+    }
+  }
+
+  if (changed)
+    Q_EMIT curvesChanged();
+}
 
 /**
  * @brief Modifies the visibility state of a specific curve in the multi-plot.

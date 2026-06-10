@@ -22,13 +22,23 @@
 #pragma once
 
 #include <QAbstractListModel>
-#include <QPair>
 #include <QQuickItem>
+#include <QVariant>
 #include <QVector>
 
 #include "DataModel/Frame.h"
 
 namespace Widgets {
+
+/**
+ * @brief Single DataGrid row: dataset title, formatted value, and one
+ *        {windowId, icon, title} map per dashboard widget showing the dataset.
+ */
+struct DataGridRow {
+  QString title;
+  QString value;
+  QVariantList widgets;
+};
 
 /**
  * @brief List model backing the DataGrid's rows with per-row dataChanged() updates.
@@ -42,6 +52,7 @@ public:
   enum Role {
     TitleRole = Qt::UserRole + 1,
     ValueRole,
+    WidgetsRole,
   };
 
   explicit DataGridRowsModel(QObject* parent = nullptr);
@@ -50,11 +61,11 @@ public:
   [[nodiscard]] QVariant data(const QModelIndex& index, int role) const override;
   [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
-  void reset(const QVector<QPair<QString, QString>>& rows);
+  void reset(const QVector<DataGridRow>& rows);
   bool updateRow(int row, const QString& title, const QString& value);
 
 private:
-  QVector<QPair<QString, QString>> m_rows;
+  QVector<DataGridRow> m_rows;
 };
 
 /**
@@ -98,6 +109,7 @@ private slots:
 
 private:
   [[nodiscard]] QString formatValue(const DataModel::Dataset& dataset) const;
+  [[nodiscard]] QVariantList datasetWidgets(const DataModel::Dataset& dataset) const;
   void rebuildRows();
 
 private:

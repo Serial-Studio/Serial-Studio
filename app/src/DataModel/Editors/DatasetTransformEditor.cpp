@@ -449,19 +449,31 @@ void DataModel::DatasetTransformEditor::onThemeChanged()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Switches the syntax highlighter and auto-completer for the language.
+ * @brief Switches the syntax highlighter and auto-completer for the language, releasing the
+ *        previous pair (the editor widget swaps without taking ownership).
  */
 void DataModel::DatasetTransformEditor::applyLanguage(int language)
 {
   m_language = language;
 
+  auto* old_completer   = m_editor->completer();
+  auto* old_highlighter = m_editor->highlighter();
+
   if (language == SerialStudio::Lua) {
     m_editor->setHighlighter(new QLuaHighlighter());
+    m_editor->setLanguageHint(QCodeEditor::LanguageHint::Lua);
     m_editor->setCompleter(new DataModel::SerialStudioCompleter(true, m_editor));
   } else {
     m_editor->setHighlighter(new QJavascriptHighlighter());
+    m_editor->setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
     m_editor->setCompleter(new DataModel::SerialStudioCompleter(false, m_editor));
   }
+
+  if (old_completer)
+    old_completer->deleteLater();
+
+  if (old_highlighter)
+    old_highlighter->deleteLater();
 }
 
 /**

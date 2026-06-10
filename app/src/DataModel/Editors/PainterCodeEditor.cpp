@@ -10,6 +10,8 @@
 
 #  include "DataModel/Editors/PainterCodeEditor.h"
 
+#  include <QAbstractItemView>
+#  include <QCompleter>
 #  include <QCoreApplication>
 #  include <QDir>
 #  include <QFile>
@@ -30,6 +32,7 @@
 #  include <QVariantMap>
 
 #  include "DataModel/Editors/CodeFormatter.h"
+#  include "DataModel/Editors/SerialStudioCompleter.h"
 #  include "DataModel/ProjectEditor.h"
 #  include "DataModel/ProjectModel.h"
 #  include "DataModel/Scripting/ScriptTemplates.h"
@@ -64,6 +67,8 @@ DataModel::PainterCodeEditor::PainterCodeEditor(QQuickItem* parent)
   m_widget.setHighlighter(new QJavascriptHighlighter());
   m_widget.setFont(Misc::CommonFonts::instance().monoFont());
   m_widget.setLayoutDirection(Qt::LeftToRight);
+  m_widget.setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
+  m_widget.setCompleter(new DataModel::SerialStudioCompleter(false, &m_widget));
 
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),
@@ -528,9 +533,24 @@ void DataModel::PainterCodeEditor::onThemeChanged()
 void DataModel::PainterCodeEditor::renderWidget()
 {
   if (isVisible()) {
+    syncWidgetPosition();
     m_pixmap = m_widget.grab();
     update();
   }
+}
+
+/**
+ * @brief Aligns the hidden widget's top-level position with the item's on-screen position so
+ *        completer popups and drag auto-scroll resolve correct global coordinates.
+ */
+void DataModel::PainterCodeEditor::syncWidgetPosition()
+{
+  if (!window())
+    return;
+
+  const QPoint global = mapToGlobal(QPointF(0, 0)).toPoint();
+  if (m_widget.pos() != global)
+    m_widget.move(global);
 }
 
 /**
@@ -558,11 +578,32 @@ void DataModel::PainterCodeEditor::paint(QPainter* painter)
 }
 
 /**
- * @brief Forwards key-press events to the backing widget.
+ * @brief Routes ShortcutOverride to the editor widget so editing keys (undo, copy, paste...)
+ *        are handled natively instead of being consumed by QML Shortcut bindings.
+ */
+bool DataModel::PainterCodeEditor::event(QEvent* event)
+{
+  if (event->type() == QEvent::ShortcutOverride) {
+    QCoreApplication::sendEvent(&m_widget, event);
+    if (event->isAccepted())
+      return true;
+  }
+
+  return QQuickPaintedItem::event(event);
+}
+
+/**
+ * @brief Forwards key presses to the completer popup when visible, else to the editor widget.
  */
 void DataModel::PainterCodeEditor::keyPressEvent(QKeyEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
+  auto* completer = m_widget.completer();
+  if (completer && completer->popup() && completer->popup()->isVisible())
+    QCoreApplication::sendEvent(completer->popup(), event);
+  else
+    QCoreApplication::sendEvent(&m_widget, event);
+
+  renderWidget();
 }
 
 /**
@@ -579,6 +620,7 @@ void DataModel::PainterCodeEditor::keyReleaseEvent(QKeyEvent* event)
 void DataModel::PainterCodeEditor::inputMethodEvent(QInputMethodEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
+  renderWidget();
 }
 
 /**
@@ -612,6 +654,7 @@ void DataModel::PainterCodeEditor::mousePressEvent(QMouseEvent* event)
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
   forceActiveFocus();
+  renderWidget();
 }
 
 /**
@@ -628,6 +671,7 @@ void DataModel::PainterCodeEditor::mouseMoveEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /**
@@ -644,6 +688,7 @@ void DataModel::PainterCodeEditor::mouseReleaseEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /**
@@ -660,6 +705,7 @@ void DataModel::PainterCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /**
@@ -668,6 +714,7 @@ void DataModel::PainterCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
 void DataModel::PainterCodeEditor::wheelEvent(QWheelEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
+  renderWidget();
 }
 
 /**

@@ -21,7 +21,9 @@
 
 #include "DataModel/Editors/JsCodeEditor.h"
 
+#include <QAbstractItemView>
 #include <QApplication>
+#include <QCompleter>
 #include <QCoreApplication>
 #include <QDesktopServices>
 #include <QFile>
@@ -64,11 +66,13 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
 
   m_widget.setTabReplace(true);
-  m_widget.setTabReplaceSize(4);
+  m_widget.setTabReplaceSize(2);
   m_widget.setAutoIndentation(true);
   m_widget.setHighlighter(new QJavascriptHighlighter());
   m_widget.setFont(Misc::CommonFonts::instance().monoFont());
   m_widget.setLayoutDirection(Qt::LeftToRight);
+  m_widget.setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
+  m_widget.setCompleter(new DataModel::SerialStudioCompleter(false, &m_widget));
 
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),
@@ -164,7 +168,8 @@ int DataModel::JsCodeEditor::language() const noexcept
 }
 
 /**
- * @brief Switches the syntax highlighter and completer for the language.
+ * @brief Switches the syntax highlighter and completer for the language, releasing the
+ *        previous pair (the editor widget swaps without taking ownership).
  */
 void DataModel::JsCodeEditor::setLanguage(const int language)
 {
@@ -173,13 +178,24 @@ void DataModel::JsCodeEditor::setLanguage(const int language)
 
   m_language = language;
 
+  auto* old_completer   = m_widget.completer();
+  auto* old_highlighter = m_widget.highlighter();
+
   if (language == 1) {
     m_widget.setHighlighter(new QLuaHighlighter());
+    m_widget.setLanguageHint(QCodeEditor::LanguageHint::Lua);
     m_widget.setCompleter(new DataModel::SerialStudioCompleter(true, &m_widget));
   } else {
     m_widget.setHighlighter(new QJavascriptHighlighter());
+    m_widget.setLanguageHint(QCodeEditor::LanguageHint::JavaScript);
     m_widget.setCompleter(new DataModel::SerialStudioCompleter(false, &m_widget));
   }
+
+  if (old_completer)
+    old_completer->deleteLater();
+
+  if (old_highlighter)
+    old_highlighter->deleteLater();
 
   Q_EMIT languageChanged();
 }
@@ -582,9 +598,24 @@ void DataModel::JsCodeEditor::onThemeChanged()
 void DataModel::JsCodeEditor::renderWidget()
 {
   if (isVisible()) {
+    syncWidgetPosition();
     m_pixmap = m_widget.grab();
     update();
   }
+}
+
+/**
+ * @brief Aligns the hidden widget's top-level position with the item's on-screen position so
+ *        completer popups and drag auto-scroll resolve correct global coordinates.
+ */
+void DataModel::JsCodeEditor::syncWidgetPosition()
+{
+  if (!window())
+    return;
+
+  const QPoint global = mapToGlobal(QPointF(0, 0)).toPoint();
+  if (m_widget.pos() != global)
+    m_widget.move(global);
 }
 
 /**
@@ -612,11 +643,32 @@ void DataModel::JsCodeEditor::paint(QPainter* painter)
 }
 
 /**
- * @brief Forwards key-press events to the backing QCodeEditor widget.
+ * @brief Routes ShortcutOverride to the editor widget so editing keys (undo, copy, paste...)
+ *        are handled natively instead of being consumed by QML Shortcut bindings.
+ */
+bool DataModel::JsCodeEditor::event(QEvent* event)
+{
+  if (event->type() == QEvent::ShortcutOverride) {
+    QCoreApplication::sendEvent(&m_widget, event);
+    if (event->isAccepted())
+      return true;
+  }
+
+  return QQuickPaintedItem::event(event);
+}
+
+/**
+ * @brief Forwards key presses to the completer popup when visible, else to the editor widget.
  */
 void DataModel::JsCodeEditor::keyPressEvent(QKeyEvent* event)
 {
-  QCoreApplication::sendEvent(&m_widget, event);
+  auto* completer = m_widget.completer();
+  if (completer && completer->popup() && completer->popup()->isVisible())
+    QCoreApplication::sendEvent(completer->popup(), event);
+  else
+    QCoreApplication::sendEvent(&m_widget, event);
+
+  renderWidget();
 }
 
 /**
@@ -633,6 +685,7 @@ void DataModel::JsCodeEditor::keyReleaseEvent(QKeyEvent* event)
 void DataModel::JsCodeEditor::inputMethodEvent(QInputMethodEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
+  renderWidget();
 }
 
 /**
@@ -665,6 +718,7 @@ void DataModel::JsCodeEditor::mousePressEvent(QMouseEvent* event)
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
   forceActiveFocus();
+  renderWidget();
 }
 
 /** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number
@@ -680,6 +734,7 @@ void DataModel::JsCodeEditor::mouseMoveEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number
@@ -695,6 +750,7 @@ void DataModel::JsCodeEditor::mouseReleaseEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /** @brief Forwards double-click events to the backing widget after offsetting for the line-number
@@ -710,6 +766,7 @@ void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
                    event->modifiers(),
                    event->pointingDevice());
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  renderWidget();
 }
 
 /**
@@ -718,6 +775,7 @@ void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
 void DataModel::JsCodeEditor::wheelEvent(QWheelEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
+  renderWidget();
 }
 
 /**

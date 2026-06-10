@@ -464,6 +464,20 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
 }
 
 /**
+ * @brief Returns true when the widget is a dashboard tool (terminal, notification log,
+ *        clock, stopwatch); tools live in external windows, never on the canvas.
+ */
+bool SerialStudio::isDashboardTool(const SerialStudio::DashboardWidget w)
+{
+#ifdef BUILD_COMMERCIAL
+  if (w == DashboardNotificationLog)
+    return true;
+#endif
+
+  return w == DashboardTerminal || w == DashboardClock || w == DashboardStopwatch;
+}
+
+/**
  * @brief Retrieves a list of dashboard widgets for a specified JSON dataset.
  */
 QList<SerialStudio::DashboardWidget> SerialStudio::getDashboardWidgets(

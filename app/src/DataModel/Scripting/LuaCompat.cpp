@@ -244,3 +244,83 @@ void DataModel::installLuaCompat(lua_State* L)
 
   lua_pop(L, 1);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Console logging API
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Lua C closure that logs its arguments tab-separated through the Qt message
+ *        system (so output lands in the application console, like JS console.log);
+ *        the message type travels in the closure's first upvalue so one function
+ *        serves print() and every console.* level.
+ */
+static int luaConsoleLog(lua_State* L)
+{
+  Q_ASSERT(L != nullptr);
+
+  const int argc = lua_gettop(L);
+  QByteArray message;
+  for (int i = 1; i <= argc; ++i) {
+    size_t length    = 0;
+    const char* text = luaL_tolstring(L, i, &length);
+    Q_ASSERT(text != nullptr);
+    if (i > 1)
+      message.append('\t');
+
+    message.append(text, static_cast<qsizetype>(length));
+    lua_pop(L, 1);
+  }
+
+  switch (static_cast<QtMsgType>(lua_tointeger(L, lua_upvalueindex(1)))) {
+    case QtInfoMsg:
+      qInfo().noquote() << QString::fromUtf8(message);
+      break;
+    case QtWarningMsg:
+      qWarning().noquote() << QString::fromUtf8(message);
+      break;
+    case QtCriticalMsg:
+      qCritical().noquote() << QString::fromUtf8(message);
+      break;
+    default:
+      qDebug().noquote() << QString::fromUtf8(message);
+      break;
+  }
+
+  return 0;
+}
+
+/**
+ * @brief Installs a JS-style console table and replaces print() so script output is
+ *        visible in the application console instead of stdout.
+ */
+void DataModel::installLuaConsole(lua_State* L)
+{
+  Q_ASSERT(L != nullptr);
+
+  static constexpr struct {
+    const char* name;
+    QtMsgType type;
+  } kLevels[] = {
+    {  "log",    QtDebugMsg},
+    {"debug",    QtDebugMsg},
+    { "info",     QtInfoMsg},
+    { "warn",  QtWarningMsg},
+    {"error", QtCriticalMsg}
+  };
+
+  constexpr int kLevelCount = static_cast<int>(sizeof(kLevels) / sizeof(kLevels[0]));
+
+  lua_createtable(L, 0, kLevelCount);
+  for (const auto& level : kLevels) {
+    lua_pushinteger(L, static_cast<lua_Integer>(level.type));
+    lua_pushcclosure(L, luaConsoleLog, 1);
+    lua_setfield(L, -2, level.name);
+  }
+
+  lua_setglobal(L, "console");
+
+  lua_pushinteger(L, static_cast<lua_Integer>(QtDebugMsg));
+  lua_pushcclosure(L, luaConsoleLog, 1);
+  lua_setglobal(L, "print");
+}

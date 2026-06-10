@@ -21,6 +21,7 @@
 
 #include "DataModel/Editors/SerialStudioCompleter.h"
 
+#include <algorithm>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -77,7 +78,8 @@ static QStringList sdkSymbols()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds a completer merging the language keywords with all SDK symbols.
+ * @brief Builds a completer merging the language keywords with all SDK symbols. The merged
+ *        list must be sorted to honour the CaseInsensitivelySortedModel lookup contract.
  */
 DataModel::SerialStudioCompleter::SerialStudioCompleter(bool lua, QObject* parent)
   : QCompleter(parent)
@@ -85,10 +87,13 @@ DataModel::SerialStudioCompleter::SerialStudioCompleter(bool lua, QObject* paren
   QStringList list = languageKeywords(lua);
   list.append(sdkSymbols());
   list.removeDuplicates();
+  std::sort(list.begin(), list.end(), [](const QString& a, const QString& b) {
+    return QString::compare(a, b, Qt::CaseInsensitive) < 0;
+  });
 
   setModel(new QStringListModel(list, this));
   setCompletionColumn(0);
   setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-  setCaseSensitivity(Qt::CaseSensitive);
+  setCaseSensitivity(Qt::CaseInsensitive);
   setWrapAround(true);
 }

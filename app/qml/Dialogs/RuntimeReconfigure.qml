@@ -98,7 +98,8 @@ Widgets.SmartDialog {
 
           Label {
             Layout.fillWidth: true
-            wrapMode: Label.Wrap
+            Layout.maximumWidth: 320
+            wrapMode: Text.WordWrap
             font: Cpp_Misc_CommonFonts.uiFont
             text: root.isLost
                   ? qsTr("Check the cable, power, and that no other application "

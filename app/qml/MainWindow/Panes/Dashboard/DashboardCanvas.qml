@@ -47,6 +47,233 @@ Item {
   property alias backgroundImage: _wm.backgroundImage
 
   //
+  // External widget windows, keyed by windowId and parented to the canvas so they
+  // survive workspace switches; they only close when widget indices remap
+  //
+  property var externalWidgetWindows: ({})
+
+  //
+  // Suppresses open-state persistence during forced closes, restores, and app
+  // teardown so only user-driven open/close actions rewrite the saved set
+  //
+  property bool persistExternalWindows: true
+
+  function openExternalWidgetWindow(windowId) {
+    const existing = externalWidgetWindows[windowId]
+    if (existing) {
+      existing.displayWindow()
+      return
+    }
+
+    const win = externalWidgetWindowComponent.createObject(root, {
+      "widgetIndex": windowId
+    })
+
+    if (!win)
+      return
+
+    externalWidgetWindows[windowId] = win
+    win.externalWidgetRequested.connect(root.openExternalWidgetWindow)
+    win.closing.connect(function() {
+      const toolType = SerialStudio.isDashboardTool(win.stableType) ? win.stableType : -1
+      delete root.externalWidgetWindows[windowId]
+      win.destroy()
+      if (root.persistExternalWindows && !app.quitting) {
+        if (toolType >= 0)
+          root.setToolEnabled(toolType, false)
+        else
+          root.saveExternalWindowStates()
+      }
+    })
+
+    if (persistExternalWindows)
+      saveExternalWindowStates()
+  }
+
+  function closeExternalWidgetWindows() {
+    persistExternalWindows = false
+    const windows = externalWidgetWindows
+    externalWidgetWindows = {}
+    for (const id in windows)
+      windows[id].close()
+
+    persistExternalWindows = true
+  }
+
+  //
+  // Writes the stable identities of the open external windows into the project
+  // file so they reopen on project reload
+  //
+  function saveExternalWindowStates() {
+    if (Cpp_AppState.operationMode !== SerialStudio.ProjectFile)
+      return
+
+    let states = []
+    for (const id in externalWidgetWindows) {
+      const win = externalWidgetWindows[id]
+      if (SerialStudio.isDashboardTool(win.stableType))
+        continue
+
+      states.push({
+        "widgetType": win.stableType,
+        "relativeIndex": win.stableIndex
+      })
+    }
+
+    Cpp_JSON_ProjectModel.saveWidgetSetting("externalWindows", "data", states)
+  }
+
+  //
+  // Reopens the external windows recorded in the project, resolving each stable
+  // identity to its current windowId; unresolvable entries are skipped, not pruned
+  //
+  function restoreExternalWindowStates() {
+    if (Cpp_AppState.operationMode !== SerialStudio.ProjectFile)
+      return
+
+    const states = Cpp_JSON_ProjectModel.widgetSettings("externalWindows")["data"]
+    if (!states || !states.length)
+      return
+
+    persistExternalWindows = false
+    const count = Cpp_UI_Dashboard.totalWidgetCount
+    for (let i = 0; i < states.length; ++i) {
+      if (SerialStudio.isDashboardTool(states[i]["widgetType"]))
+        continue
+
+      for (let id = 0; id < count; ++id) {
+        if (Cpp_UI_Dashboard.widgetType(id) === states[i]["widgetType"]
+            && Cpp_UI_Dashboard.relativeIndex(id) === states[i]["relativeIndex"]) {
+          root.openExternalWidgetWindow(id)
+          break
+        }
+      }
+    }
+
+    persistExternalWindows = true
+  }
+
+  //
+  // Dashboard tools (console, notifications, clock, stopwatch) only exist as
+  // external windows; their enabled flags map one-to-one to window visibility
+  //
+  readonly property var dashboardTools: [
+    SerialStudio.DashboardTerminal,
+    SerialStudio.DashboardNotificationLog,
+    SerialStudio.DashboardClock,
+    SerialStudio.DashboardStopwatch
+  ]
+
+  function toolEnabled(type) {
+    switch (type) {
+    case SerialStudio.DashboardTerminal:        return Cpp_UI_Dashboard.terminalEnabled
+    case SerialStudio.DashboardNotificationLog: return Cpp_UI_Dashboard.notificationLogEnabled
+    case SerialStudio.DashboardClock:           return Cpp_UI_Dashboard.clockEnabled
+    case SerialStudio.DashboardStopwatch:       return Cpp_UI_Dashboard.stopwatchEnabled
+    }
+
+    return false
+  }
+
+  function setToolEnabled(type, enabled) {
+    switch (type) {
+    case SerialStudio.DashboardTerminal:
+      Cpp_UI_Dashboard.terminalEnabled = enabled
+      break
+    case SerialStudio.DashboardNotificationLog:
+      Cpp_UI_Dashboard.notificationLogEnabled = enabled
+      break
+    case SerialStudio.DashboardClock:
+      Cpp_UI_Dashboard.clockEnabled = enabled
+      break
+    case SerialStudio.DashboardStopwatch:
+      Cpp_UI_Dashboard.stopwatchEnabled = enabled
+      break
+    }
+  }
+
+  //
+  // Opens or closes each tool window so visibility matches its enabled flag
+  //
+  function syncToolWindows() {
+    const count = Cpp_UI_Dashboard.totalWidgetCount
+    for (let i = 0; i < dashboardTools.length; ++i) {
+      const type = dashboardTools[i]
+
+      let windowId = -1
+      for (let id = 0; id < count; ++id) {
+        if (Cpp_UI_Dashboard.widgetType(id) === type) {
+          windowId = id
+          break
+        }
+      }
+
+      if (windowId < 0)
+        continue
+
+      const win = externalWidgetWindows[windowId]
+      if (toolEnabled(type) && !win)
+        openExternalWidgetWindow(windowId)
+
+      else if (!toolEnabled(type) && win) {
+        persistExternalWindows = false
+        win.close()
+        persistExternalWindows = true
+      }
+    }
+  }
+
+  Component {
+    id: externalWidgetWindowComponent
+
+    ExternalWidgetWindow {}
+  }
+
+  //
+  // Debounces restore until the dashboard rebuild settles
+  //
+  Timer {
+    id: externalWindowRestoreTimer
+
+    interval: 250
+    repeat: false
+    onTriggered: {
+      root.restoreExternalWindowStates()
+      root.syncToolWindows()
+    }
+  }
+
+  Connections {
+    target: Cpp_UI_Dashboard
+
+    function onDataReset() {
+      root.closeExternalWidgetWindows()
+      externalWindowRestoreTimer.restart()
+    }
+
+    function onWidgetCountChanged() {
+      root.closeExternalWidgetWindows()
+      externalWindowRestoreTimer.restart()
+    }
+
+    function onTerminalEnabledChanged() {
+      root.syncToolWindows()
+    }
+
+    function onNotificationLogEnabledChanged() {
+      root.syncToolWindows()
+    }
+
+    function onClockEnabledChanged() {
+      root.syncToolWindows()
+    }
+
+    function onStopwatchEnabledChanged() {
+      root.syncToolWindows()
+    }
+  }
+
+  //
   // Desktop context menu
   //
   Menu {
@@ -155,6 +382,9 @@ Item {
         }
 
         Component.onCompleted: root.taskBar.registerWindow(widgetIndex, this)
+
+        onExternalWindowClicked: root.openExternalWidgetWindow(widgetIndex)
+        onExternalWidgetRequested: (windowId) => root.openExternalWidgetWindow(windowId)
       }
 
       onCountChanged: {

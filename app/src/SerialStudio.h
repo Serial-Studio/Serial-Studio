@@ -252,6 +252,7 @@ public:
 
   // clang-format off
   Q_INVOKABLE [[nodiscard]] static bool isGroupWidget(const SerialStudio::DashboardWidget widget);
+  Q_INVOKABLE [[nodiscard]] static bool isDashboardTool(const SerialStudio::DashboardWidget w);
   Q_INVOKABLE [[nodiscard]] static bool isDatasetWidget(const SerialStudio::DashboardWidget widget);
   Q_INVOKABLE [[nodiscard]] static QString dashboardWidgetTitle(const SerialStudio::DashboardWidget w);
   Q_INVOKABLE [[nodiscard]] static SerialStudio::DashboardWidget getDashboardWidget(const DataModel::Group& group);

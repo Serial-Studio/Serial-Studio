@@ -229,10 +229,6 @@ private:
   void reconfigureDashboard(const DataModel::Frame& frame);
   void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
                                     DataModel::Group& ledPanel);
-  void removeTerminalWidget();
-  void removeNotificationLogWidget();
-  void removeClockWidget();
-  void removeStopwatchWidget();
   void handleMissingDataset(const DataModel::Frame& frame);
   void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
 
@@ -371,13 +367,9 @@ private:
   bool m_updateRequired;
   bool m_showActionPanel;
   bool m_terminalEnabled;
-  WidgetID m_terminalWidgetId;
   bool m_notificationLogEnabled;
-  WidgetID m_notificationLogWidgetId;
   bool m_clockEnabled;
-  WidgetID m_clockWidgetId;
   bool m_stopwatchEnabled;
-  WidgetID m_stopwatchWidgetId;
   bool m_autoHideToolbar;
   bool m_persistSettings;
 

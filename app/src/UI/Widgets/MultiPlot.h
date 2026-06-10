@@ -187,6 +187,7 @@ private slots:
 
 private:
   void pushSweepConfig();
+  void syncStringCurves();
   [[nodiscard]] bool computeRangeFromDatasets();
   void scanCurvesForRange();
   void padDerivedRange();
@@ -206,6 +207,7 @@ private:
   QStringList m_colors;
   QStringList m_labels;
   QList<int> m_drawOrders;
+  QList<bool> m_stringCurves;
   QList<bool> m_visibleCurves;
   QList<QList<QPointF>> m_data;
   QList<QPointF> m_renderData;

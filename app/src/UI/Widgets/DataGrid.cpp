@@ -53,22 +53,25 @@ QVariant Widgets::DataGridRowsModel::data(const QModelIndex& index, int role) co
 
   switch (role) {
     case TitleRole:
-      return m_rows.at(index.row()).first;
+      return m_rows.at(index.row()).title;
     case ValueRole:
-      return m_rows.at(index.row()).second;
+      return m_rows.at(index.row()).value;
+    case WidgetsRole:
+      return m_rows.at(index.row()).widgets;
     default:
       return {};
   }
 }
 
 /**
- * @brief Maps the role enum to the names QML uses to bind ("title", "value").
+ * @brief Maps the role enum to the names QML uses to bind ("title", "value", "widgets").
  */
 QHash<int, QByteArray> Widgets::DataGridRowsModel::roleNames() const
 {
   static const QHash<int, QByteArray> kNames = {
-    {TitleRole, "title"},
-    {ValueRole, "value"},
+    {  TitleRole,   "title"},
+    {  ValueRole,   "value"},
+    {WidgetsRole, "widgets"},
   };
   return kNames;
 }
@@ -77,7 +80,7 @@ QHash<int, QByteArray> Widgets::DataGridRowsModel::roleNames() const
  * @brief Replaces every row with @p rows. Use only when the row set itself changes
  *        (project edit, dataset added or removed) -- tears down all delegates.
  */
-void Widgets::DataGridRowsModel::reset(const QVector<QPair<QString, QString>>& rows)
+void Widgets::DataGridRowsModel::reset(const QVector<DataGridRow>& rows)
 {
   beginResetModel();
   m_rows = rows;
@@ -97,13 +100,13 @@ bool Widgets::DataGridRowsModel::updateRow(int row, const QString& title, const 
   QVector<int> roles;
   roles.reserve(2);
 
-  if (entry.first != title) {
-    entry.first = title;
+  if (entry.title != title) {
+    entry.title = title;
     roles.append(TitleRole);
   }
 
-  if (entry.second != value) {
-    entry.second = value;
+  if (entry.value != value) {
+    entry.value = value;
     roles.append(ValueRole);
   }
 
@@ -238,14 +241,45 @@ void Widgets::DataGrid::rebuildRows()
   }
 
   const auto& group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
-  QVector<QPair<QString, QString>> rows;
+  QVector<DataGridRow> rows;
   rows.reserve(static_cast<int>(group.datasets.size()));
 
   for (const auto& dataset : group.datasets)
-    rows.append({dataset.title, formatValue(dataset)});
+    rows.append({dataset.title, formatValue(dataset), datasetWidgets(dataset)});
 
   m_rowsModel->reset(rows);
   m_lastRowCount = rows.size();
+}
+
+/**
+ * @brief Builds the icon-button metadata for every dashboard widget displaying
+ *        @p dataset: one {windowId, icon, title} map per widget, in dashboard order,
+ *        so the QML side stays a plain Repeater.
+ */
+QVariantList Widgets::DataGrid::datasetWidgets(const DataModel::Dataset& dataset) const
+{
+  Q_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index));
+
+  QVariantList widgets;
+  const auto& map = UI::Dashboard::instance().widgetMap();
+  for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
+    const auto type = it.value().first;
+    if (!SerialStudio::isDatasetWidget(type))
+      continue;
+
+    const auto& shown = GET_DATASET(type, it.value().second);
+    if (shown.sourceId != dataset.sourceId || shown.groupId != dataset.groupId
+        || shown.datasetId != dataset.datasetId)
+      continue;
+
+    QVariantMap entry;
+    entry.insert(QStringLiteral("windowId"), it.key());
+    entry.insert(QStringLiteral("icon"), SerialStudio::dashboardWidgetIcon(type));
+    entry.insert(QStringLiteral("title"), SerialStudio::dashboardWidgetTitle(type));
+    widgets.append(entry);
+  }
+
+  return widgets;
 }
 
 /**
@@ -256,7 +290,10 @@ QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset) const
   if (dataset.value.isEmpty())
     return QString();
 
-  QString value = dataset.isNumeric ? FMT_VAL(dataset.numericValue, dataset) : dataset.value;
+  if (!dataset.isNumeric)
+    return dataset.value;
+
+  QString value = FMT_VAL(dataset.numericValue, dataset);
   if (!dataset.units.isEmpty())
     value += QStringLiteral(" ") + dataset.units;
 
