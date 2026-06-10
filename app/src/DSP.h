@@ -389,53 +389,100 @@ struct TimeRing {
   AxisData time;
   AxisData value;
   double interval;
-  double lastEmit;
-  double accExtreme;
-  double accTime;
-  bool accValid;
+  double nextEmit;
+  double accMin;
+  double accMax;
+  double accMinTime;
+  double accMaxTime;
+  int cellSlots;
 
   /**
-   * @brief Constructs the ring with `capacity` slots covering `windowSec` seconds.
+   * @brief Constructs the ring with `capacity` slots covering `windowSec` seconds. Each
+   *        grid cell may retain two slots (min + max), so the interval reserves both to
+   *        keep a saturated source spanning the full window.
    */
   explicit TimeRing(int capacity = 1, double windowSec = 1.0)
     : time(static_cast<std::size_t>(capacity < 1 ? 1 : capacity))
     , value(static_cast<std::size_t>(capacity < 1 ? 1 : capacity))
-    , interval(windowSec / std::max(1, capacity))
-    , lastEmit(0.0)
-    , accExtreme(0.0)
-    , accTime(0.0)
-    , accValid(false)
+    , interval(2.0 * windowSec / std::max(1, capacity))
+    , nextEmit(0.0)
+    , accMin(0.0)
+    , accMax(0.0)
+    , accMinTime(0.0)
+    , accMaxTime(0.0)
+    , cellSlots(0)
   {}
 
   /**
-   * @brief Clears retained samples and the decimation accumulator.
+   * @brief Clears retained samples and the decimation cell state.
    */
   void clear()
   {
     time.clear();
     value.clear();
-    accValid = false;
-    lastEmit = 0.0;
+    cellSlots = 0;
+    nextEmit  = 0.0;
   }
 
   /**
-   * @brief Appends one (time, value), decimating to one peak-preserving slot per interval.
+   * @brief Appends one (time, value), decimating to a min/max envelope pair per cell on an
+   *        absolute time grid, replacing the drifting peak-pick that aliased high-rate
+   *        bipolar signals into shimmer. The open cell's slots update in place so the
+   *        newest sample is visible immediately at any input rate.
    */
   void appendDecimated(double t, double v)
   {
-    if (!accValid || std::abs(v) > std::abs(accExtreme)) {
-      accExtreme = v;
-      accTime    = t;
+    Q_ASSERT(interval > 0.0);
+    Q_ASSERT(time.capacity() == value.capacity());
+
+    if (time.size() == 0 || t >= nextEmit) {
+      nextEmit   = (std::floor(t / interval) + 1.0) * interval;
+      accMin     = v;
+      accMax     = v;
+      accMinTime = t;
+      accMaxTime = t;
+      cellSlots  = 1;
+      time.push(t);
+      value.push(v);
+      return;
     }
 
-    accValid = true;
-
-    if (time.size() == 0 || (t - lastEmit) >= interval) {
-      time.push(accTime);
-      value.push(accExtreme);
-      lastEmit = t;
-      accValid = false;
+    bool changed = false;
+    if (v < accMin) {
+      accMin     = v;
+      accMinTime = t;
+      changed    = true;
     }
+
+    if (v > accMax) {
+      accMax     = v;
+      accMaxTime = t;
+      changed    = true;
+    }
+
+    if (!changed)
+      return;
+
+    const bool minFirst = accMinTime <= accMaxTime;
+    const double t0     = minFirst ? accMinTime : accMaxTime;
+    const double v0     = minFirst ? accMin : accMax;
+    const double t1     = minFirst ? accMaxTime : accMinTime;
+    const double v1     = minFirst ? accMax : accMin;
+
+    if (cellSlots == 1 && (t1 > t0 || v1 != v0) && time.capacity() > 1) {
+      time.push(t1);
+      value.push(v1);
+      cellSlots = 2;
+    }
+
+    const std::size_t n = time.size();
+    if (cellSlots == 2) {
+      time[n - 2]  = t0;
+      value[n - 2] = v0;
+    }
+
+    time[n - 1]  = t1;
+    value[n - 1] = v1;
   }
 };
 
@@ -1018,9 +1065,9 @@ inline bool downsampleMonotonic(
 
 /**
  * @brief Decimate the visible [xLo, xHi] slice of a monotonic time ring to render columns.
- *        Times are rebased so the newest sample sits at 0 (axis is [-T, 0]); the forward
- *        linear scan that finds the visible span is correct only because the ring is
- *        monotonic non-decreasing.
+ *        Times are rebased so the newest sample sits at 0 (axis [-T, 0]); the linear span
+ *        scan requires monotonic time. Buckets sit on an absolute column-width lattice:
+ *        a newest-anchored grid re-bucketed every render and shimmered like heat haze.
  */
 inline bool downsampleTimeWindow(const AxisData& timeX,
                                  const AxisData& valueY,
@@ -1077,13 +1124,20 @@ inline bool downsampleTimeWindow(const AxisData& timeX,
 
   const ssfp_t span        = std::max<ssfp_t>(1e-12, xHi - xLo);
   const auto scaleX        = static_cast<ssfp_t>(w - 1) / span;
+  const ssfp_t colWidth    = span / static_cast<ssfp_t>(std::max(1, w - 1));
+  const ssfp_t anchorShift = newest - std::floor(newest / colWidth) * colWidth;
+
+  auto xBkt = [&](std::size_t i) -> ssfp_t {
+    return tRel(lo + i) + anchorShift;
+  };
+
   const DownsampleBounds b = dsScanFiniteRange(visible, xWin, yWin);
   if (b.firstFinite == visible)
     return false;
 
   const auto scaleY = static_cast<ssfp_t>(h) / std::max<ssfp_t>(1e-12, b.ymax - b.ymin);
 
-  dsAccumulateBuckets(visible, w, xLo, scaleX, xWin, yWin, ws);
+  dsAccumulateBuckets(visible, w, xLo, scaleX, xBkt, yWin, ws);
 
   out.reserve(w * 3 / 2 + 8);
   for (std::size_t c = 0; c < C; ++c) {

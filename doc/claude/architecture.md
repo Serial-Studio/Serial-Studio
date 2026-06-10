@@ -381,20 +381,27 @@ of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `K
   as a user option** (kept only as a migration sentinel: deserialize maps `-1 -> -2`,
   `migrateLegacyXAxisIds` maps legacy index/samples -> Time). Time is free; dataset-as-X stays
   Pro/Trial-gated. **Time plots do NOT use the raw sample ring.** They use a per-curve
-  `DSP::TimeRing` (`DSP.h`): a bounded `(time, value)` ring that **decimates on ingest** to one
-  representative sample per `interval = windowSec / capacity` second. The decimator keeps the
-  **larger-magnitude** sample seen during the interval (`appendDecimated` in `DSP.h`), so
-  transients survive even at extreme zoom-out. Capacity is sized in `Dashboard.cpp` by
+  `DSP::TimeRing` (`DSP.h`): a bounded `(time, value)` ring that **decimates on ingest** to a
+  **min/max envelope pair** per `interval = 2 * windowSec / capacity` second cell (two slots
+  reserved per cell so a saturated source still spans the window). Cell boundaries sit on an
+  **absolute time grid** and `appendDecimated` (`DSP.h`) maintains the open cell's slots in
+  place, so both envelope edges survive, slot contents are independent of sampling phase (no
+  beat aliasing / shimmer -- the old drifting single peak-pick had both), and the newest
+  sample is visible immediately at any input rate. Capacity is sized in `Dashboard.cpp` by
   `timeRingCapacity(plotTimeRangeSec)`: `min(plotTimeRange * kAssumedMaxRateHz, kMaxTimeRingSamples)`
   with a floor of `kDefaultPlotBuckets` (`50000` Hz assumption, `262144` cap, `1024` floor). Storage
   is `m_plotTimeRings` / `m_multiplotTimeRings` (keyed by widget index; the multiplot one is a
   `std::vector<TimeRing>` per curve). The hotpath appends `numericValue` at `m_plotDisplayTimeSec`
   via `m_timePushes` (single plots) and `m_multiplotPushes` with its `TimeCurve` list (multi). The
   widget side calls `Dashboard::plotTimeRing(idx)` / `multiplotTimeRings(idx)` and renders through
-  `DSP::downsampleTimeWindow(ring.time, ring.value, ...)`: no envelope, just a viewport decimation
-  of the already-decimated ring. This is why 10 s of 48 kHz audio works: the ring caps at
-  `kMaxTimeRingSamples` and `appendDecimated` collapses bursts into peak-preserving slots, bounded
-  memory/CPU, axis fixed at `[-T, 0]` (never recompute the axis from raw extremes). **Display
+  `DSP::downsampleTimeWindow(ring.time, ring.value, ...)`: a viewport decimation of the
+  already-decimated ring whose pixel columns are bucketed on an **absolute column-width lattice**
+  (anchor quantized to the column width, drawing still uses true newest-rebased positions), so
+  per-column sample membership stays stable as the window slides -- a newest-anchored bucket grid
+  re-grouped every render and shimmered like heat haze. This is why 10 s of 48 kHz audio works:
+  the ring caps at `kMaxTimeRingSamples` and `appendDecimated` collapses bursts into bounded
+  envelope slots, bounded memory/CPU, axis fixed at `[-T, 0]` (never recompute the axis from raw
+  extremes). **Display
   clock** (`m_plotDisplayTimeSec`, `hotpathRxFrame`): sources without a cadence stamp many frames
   at one coarse wall-clock tick (~15 ms on Windows), which would compress them onto a single
   decimator interval and lose temporal spread; the display clock spreads same-timestamp frames
